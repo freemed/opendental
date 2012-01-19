@@ -32,8 +32,8 @@ namespace OpenDental {
 		private bool IsTabMode;
 		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
 		public static Font tabOrderFont = new Font("Times New Roman",12f,FontStyle.Regular,GraphicsUnit.Pixel);
-		///<summary>List of every image stored in memory to cut back loading time for drawing.  Directly matches the list of SheetFieldDefs because PK's will not always exist.</summary>
-		private List<Image> ImageList;
+		private Bitmap DoubleBuffer;
+		private Graphics DoubleBufferG;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -67,7 +67,6 @@ namespace OpenDental {
 			if(Height>SystemInformation.WorkingArea.Height){
 				Height=SystemInformation.WorkingArea.Height;
 			}
-			ImageList=new List<Image>();
 		}
 
 		private void FormSheetDefEdit_Load(object sender,EventArgs e) {
@@ -99,19 +98,11 @@ namespace OpenDental {
 				panelMain.Width=SheetDefCur.Width;
 				panelMain.Height=SheetDefCur.Height;
 			}
-			FillImageList();
 			FillFieldList();
+			RefreshDoubleBuffer();
 			panelMain.Refresh();
 			panelMain.Focus();
 			//textDescription.Focus();
-		}
-
-		private void FillImageList() {
-			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
-				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
-					AddImageToList(SheetDefCur.SheetFieldDefs[i]);
-				}
-			}
 		}
 
 		private void FillFieldList(){
@@ -122,30 +113,27 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.StaticText){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldValue);
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image){
 					listFields.Items.Add(Lan.g(this,"Image:")+SheetDefCur.SheetFieldDefs[i].FieldName);
-					if(!ImageExists(SheetDefCur.SheetFieldDefs[i])) {
-						AddImageToList(SheetDefCur.SheetFieldDefs[i]);
-					}
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
 					listFields.Items.Add(Lan.g(this,"Line:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle){
 					listFields.Items.Add(Lan.g(this,"Rect:")
 						+SheetDefCur.SheetFieldDefs[i].XPos.ToString()+","
 						+SheetDefCur.SheetFieldDefs[i].YPos.ToString()+","
 						+"W:"+SheetDefCur.SheetFieldDefs[i].Width.ToString()+","
 						+"H:"+SheetDefCur.SheetFieldDefs[i].Height.ToString());
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.SigBox){
 					listFields.Items.Add(Lan.g(this,"Signature Box"));
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
 					txt=//Lan.g(this,"Check:")+
 						SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+
 						SheetDefCur.SheetFieldDefs[i].FieldName;
@@ -154,7 +142,7 @@ namespace OpenDental {
 					}
 					listFields.Items.Add(txt);
 				}
-				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField) {
+				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField){
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+SheetDefCur.SheetFieldDefs[i].FieldName);
 				}
 				else {
@@ -197,17 +185,25 @@ namespace OpenDental {
 			//if(Width<1 || Height<1) {
 			//	return;
 			//}
-			Bitmap doubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
-			Graphics g=Graphics.FromImage(doubleBuffer);
-			g.FillRectangle(Brushes.White,0,0,doubleBuffer.Width,doubleBuffer.Height);
-			DrawFields(g);
-			e.Graphics.DrawImage(doubleBuffer,0,0);
-			g.Dispose();
-			doubleBuffer.Dispose();
-			doubleBuffer=null;
+			//Bitmap doubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
+			//Graphics g=Graphics.FromImage(doubleBuffer);
+			//g.FillRectangle(Brushes.White,0,0,doubleBuffer.Width,doubleBuffer.Height);
+			//DrawFields(g);
+			//e.Graphics.DrawImage(doubleBuffer,0,0);
+			//g.Dispose();
+			//doubleBuffer.Dispose();
+			//doubleBuffer=null;
+			e.Graphics.DrawImage(DoubleBuffer,0,0);
+			DrawFields(e.Graphics,false);	
 		}
 
-		private void DrawFields(Graphics g){
+		private void RefreshDoubleBuffer() {
+			DoubleBufferG.FillRectangle(Brushes.White,0,0,DoubleBuffer.Width,DoubleBuffer.Height);
+			DrawFields(DoubleBufferG,true);
+		}
+
+		///<summary>If drawImages is true then only image fields will be drawn. Otherwise, all fields but images will be drawn.</summary>
+		private void DrawFields(Graphics g,bool drawImages){
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.CompositingQuality=CompositingQuality.HighQuality;//This has to be here or the line thicknesses are wrong.
 			//g.InterpolationMode=InterpolationMode.High;//This doesn't seem to help
@@ -228,14 +224,25 @@ namespace OpenDental {
 					continue;
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
-					Image img=null;
-					img=GetImageFromList(SheetDefCur.SheetFieldDefs[i]);
-					if(img==null) {//Should never happen.
-						continue;
+					if(drawImages) {
+						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
+						Image img=null;
+						if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
+							img=Properties.Resources.Patient_Info;
+						}
+						else if(File.Exists(filePathAndName)) {
+							img=Image.FromFile(filePathAndName);
+						}
+						else {
+							continue;
+						}
+						g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+							SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					}
-					g.DrawImage(img,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
-						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					continue;
+				}
+				if(drawImages) {
+					continue;//Only draw the images for the background.
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
 					if(listFields.SelectedIndices.Contains(i)){
@@ -367,52 +374,6 @@ namespace OpenDental {
 			}
 		}
 
-		private void AddImageToList(SheetFieldDef def) {
-			string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),def.FieldName);
-			Image img=null;
-			if(def.FieldName=="Patient Info.gif") {
-				img=Properties.Resources.Patient_Info;
-			}
-			else if(File.Exists(filePathAndName)) {
-				img=Image.FromFile(filePathAndName);
-			}
-			else {//Couldn't load image, nothing else to do.
-				return;
-			}
-			img.Tag=def.FieldName;
-			ImageList.Add(img);
-		}
-
-		///<summary>Returns the image from memory based on the FieldName of the SheetFieldDef.</summary>
-		private Image GetImageFromList(SheetFieldDef def) {
-			for(int i=0;i<ImageList.Count;i++) {
-				if(ImageList[i].Tag.ToString()==def.FieldName) {
-					return ImageList[i];
-				}
-			}
-			return null;
-		}
-
-		///<summary>Removes the image from memory based on the FieldName of the SheetFieldDef.</summary>
-		private void RemoveImageFromList(SheetFieldDef def) {
-			for(int i=0;i<ImageList.Count;i++) {
-				if(ImageList[i].Tag.ToString()==def.FieldName) {
-					ImageList[i].Dispose();
-					ImageList.RemoveAt(i);
-				}
-			}
-		}
-
-		///<summary>Returns if the static image is in memory already or not.</summary>
-		private bool ImageExists(SheetFieldDef def) {
-			for(int i=0;i<ImageList.Count;i++) {
-				if(ImageList[i].Tag.ToString()==def.FieldName) {
-					return true;
-				}
-			}
-			return false;
-		}
-
 		private void butEdit_Click(object sender,EventArgs e) {
 			FormSheetDef FormS=new FormSheetDef();
 			FormS.SheetDefCur=SheetDefCur;
@@ -434,6 +395,7 @@ namespace OpenDental {
 				panelMain.Height=SheetDefCur.Height;
 			}
 			FillFieldList();
+			RefreshDoubleBuffer();
 			panelMain.Refresh();
 		}
 
@@ -513,8 +475,8 @@ namespace OpenDental {
 				return;
 			}
 			SheetDefCur.SheetFieldDefs.Insert(0,FormS.SheetFieldDefCur);
-			AddImageToList(FormS.SheetFieldDefCur);
 			FillFieldList();
+			RefreshDoubleBuffer();
 			panelMain.Refresh();
 		}
 
@@ -632,6 +594,7 @@ namespace OpenDental {
 
 		///<summary>Only for editing fields that already exist.</summary>
 		private void LaunchEditWindow(SheetFieldDef field){
+			bool refreshBuffer=false;
 			//not every field will have been saved to the database, so we can't depend on SheetFieldDefNum.
 			int idx=SheetDefCur.SheetFieldDefs.IndexOf(field);
 			switch(field.FieldType){
@@ -693,8 +656,8 @@ namespace OpenDental {
 					}
 					if(FormSI.SheetFieldDefCur==null) {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
-						RemoveImageFromList(field);
-						}
+					}
+					refreshBuffer=true;
 					break;
 				case SheetFieldType.Line:
 					FormSheetFieldLine FormSL=new FormSheetFieldLine();
@@ -768,6 +731,9 @@ namespace OpenDental {
 				return;
 			}
 			FillFieldList();
+			if(refreshBuffer) {//Only when image was edited.
+				RefreshDoubleBuffer();
+			}
 			if(listFields.Items.Count-1>=idx){
 				listFields.SelectedIndex=idx;//reselect the item.
 			}
@@ -918,6 +884,21 @@ namespace OpenDental {
 			//}
 		}
 
+		private void panelMain_Resize(object sender,EventArgs e) {
+			if(DoubleBuffer!=null && panelMain.Size==DoubleBuffer.Size) {
+				return;
+			}
+			if(DoubleBufferG!=null) {
+				DoubleBufferG.Dispose();
+			}
+			if(DoubleBuffer!=null) {
+				DoubleBuffer.Dispose();
+			}
+			DoubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
+			DoubleBufferG=Graphics.FromImage(DoubleBuffer);
+			panelMain.Refresh();
+		}
+
 		///<summary>Used To renumber TabOrder on controls</summary>
 		private void RenumberTabOrderHelper() {
 			for(int i=0;i<ListSheetFieldDefsTabOrder.Count;i++) {
@@ -944,6 +925,7 @@ namespace OpenDental {
 		}
 
 		private void FormSheetDefEdit_KeyDown(object sender,KeyEventArgs e) {
+			bool refreshBuffer=false;
 			e.Handled=true;
 			if(e.Control){
 				CtrlIsDown=true;
@@ -966,11 +948,17 @@ namespace OpenDental {
 					return;
 				}
 				for(int i=listFields.SelectedIndices.Count-1;i>=0;i--) {//iterate backwards through list
+					if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].FieldType==SheetFieldType.Image) {
+						refreshBuffer=true;
+					}
 					SheetDefCur.SheetFieldDefs.RemoveAt(listFields.SelectedIndices[i]);
 				}
 				FillFieldList();
 			}
 			for(int i=0;i<listFields.SelectedIndices.Count;i++){
+				if(SheetDefCur.SheetFieldDefs[listFields.SelectedIndices[i]].FieldType==SheetFieldType.Image) {
+					refreshBuffer=true;
+				}
 				switch(e.KeyCode){
 					case Keys.Up:
 						if(e.Shift)
@@ -999,6 +987,9 @@ namespace OpenDental {
 					default:
 						break;
 				}
+			}
+			if(refreshBuffer) {//Only when an image was selected.
+				RefreshDoubleBuffer();
 			}
 			panelMain.Refresh();
 		}
