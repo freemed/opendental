@@ -243,23 +243,23 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="DELETE FROM recalltrigger";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (1,1,"+ProcedureCodes.GetCodeNum("D0415")+")";
+			//command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (1,1,"+ProcedureCodes.GetCodeNum("D0415")+")";//collection of microorg for culture
+			//Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (1,1,"+ProcedureCodes.GetCodeNum("D0150")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (2,1,"+ProcedureCodes.GetCodeNum("D0150")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (2,4,"+ProcedureCodes.GetCodeNum("D0274")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (3,4,"+ProcedureCodes.GetCodeNum("D0274")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (3,5,"+ProcedureCodes.GetCodeNum("D0330")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (4,5,"+ProcedureCodes.GetCodeNum("D0330")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (4,6,"+ProcedureCodes.GetCodeNum("D0210")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (5,6,"+ProcedureCodes.GetCodeNum("D0210")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (5,1,"+ProcedureCodes.GetCodeNum("D1110")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (6,1,"+ProcedureCodes.GetCodeNum("D1110")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (6,1,"+ProcedureCodes.GetCodeNum("D1120")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (7,1,"+ProcedureCodes.GetCodeNum("D1120")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (7,3,"+ProcedureCodes.GetCodeNum("D4910")+")";
 			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (8,3,"+ProcedureCodes.GetCodeNum("D4910")+")";
-			Db.NonQ(command);
-			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (9,3,"+ProcedureCodes.GetCodeNum("D4341")+")";
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (8,3,"+ProcedureCodes.GetCodeNum("D4341")+")";
 			Db.NonQ(command);
 			//Update the special types in preference table.
 			command="UPDATE preference SET ValueString='1' WHERE PrefName='RecallTypeSpecialProphy'";
