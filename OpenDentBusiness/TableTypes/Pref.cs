@@ -29,6 +29,8 @@ namespace OpenDentBusiness {
 		AccountingIncomeAccount,
 		///<summary></summary>
 		AccountingLockDate,
+		///<summary>Enum:AccountingSoftware 0=None, 1=Open Dental, 2=QuickBooks</summary>
+		AccountingSoftware,
 		///<summary></summary>
 		AccountShowPaymentNums,
 		///<summary></summary>
@@ -254,6 +256,9 @@ namespace OpenDentBusiness {
 		ProcGroupNoteDoesAggregate,
 		ProgramVersion,
 		ProviderIncomeTransferShows,
+		QuickBooksCompanyFile,
+		QuickBooksDepositAccounts,
+		QuickBooksIncomeAccount,
 		RandomPrimaryKeys,
 		RecallAdjustDown,
 		RecallAdjustRight,
@@ -377,6 +382,13 @@ namespace OpenDentBusiness {
 	public enum SearchBehaviorCriteria {
 		ProviderTime,
 		ProviderTimeOperatory
+	}
+
+	///<summary>Used by pref "AccountingSoftware".  0=None, 1=Open Dental, 2=QuickBooks</summary>
+	public enum AccountingSoftware {
+		None,
+		OpenDental,
+		QuickBooks
 	}
 	
 
