@@ -1,8 +1,10 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.Bridges;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -19,6 +21,8 @@ namespace OpenDental{
 		private ImageList imageListMain;
 		///<summary>Upon closing with OK, this will be the selected account.</summary>
 		public Account SelectedAccount;
+		public bool IsQuickBooks;
+		public List<string> SelectedAccountsQB;
 
 		///<summary></summary>
 		public FormAccountPick()
@@ -144,7 +148,15 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountPick_Load(object sender,EventArgs e) {
-			FillGrid();
+			if(IsQuickBooks) {
+				SelectedAccountsQB=new List<string>();
+				FillGridQB();
+				checkInactive.Visible=false;
+				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+			}
+			else {
+				FillGrid();
+			}
 		}
 
 		private void FillGrid(){
@@ -193,8 +205,37 @@ namespace OpenDental{
 			gridMain.EndUpdate();
 		}
 
+		private void FillGridQB(){
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("TableChartOfAccountsQB","Description"),200);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			//Get the list of accounts from QuickBooks.
+			Cursor.Current=Cursors.WaitCursor;
+			QuickBooks.OpenConnection(8,0,PrefC.GetString(PrefName.QuickBooksCompanyFile));
+			QuickBooks.QueryListOfAccounts();
+			QuickBooks.DoRequests();
+			QuickBooks.CloseConnection();
+			Cursor.Current=Cursors.Default;
+			List<string> accountList=QuickBooks.GetListOfAccounts();
+			for(int i=0;i<accountList.Count;i++){
+				row=new ODGridRow();
+				row.Cells.Add(accountList[i]);
+				row.Tag=accountList[i];
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+		}
+
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			SelectedAccount=((Account)gridMain.Rows[e.Row].Tag).Clone();
+			if(IsQuickBooks) {
+				SelectedAccountsQB.Add((string)gridMain.Rows[e.Row].Tag);
+			}
+			else {
+				SelectedAccount=((Account)gridMain.Rows[e.Row].Tag).Clone();
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -207,7 +248,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an account first.");
 				return;
 			}
-			SelectedAccount=((Account)gridMain.Rows[gridMain.GetSelectedIndex()].Tag).Clone();
+			if(IsQuickBooks) {
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					SelectedAccountsQB.Add((string)(gridMain.Rows[gridMain.SelectedIndices[i]].Tag));
+				}
+			}
+			else {
+				SelectedAccount=((Account)gridMain.Rows[gridMain.GetSelectedIndex()].Tag).Clone();
+			}
 			DialogResult=DialogResult.OK;
 		}
 
