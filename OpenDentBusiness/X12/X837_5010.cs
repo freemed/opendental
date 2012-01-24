@@ -524,7 +524,7 @@ namespace OpenDentBusiness
 				EndSegment(sw);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
 				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeonDental(clearhouse) || IsDentiCal(clearhouse)) {//Required by Emdeon and Denti-Cal.
+				if(IsEmdeonDental(clearhouse) || billProv.NationalProvID.Length>1) {//Required by Emdeon and Denti-Cal.
 					WriteProv_REFG2orLU(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -812,12 +812,12 @@ namespace OpenDentBusiness
 					pwk01="DA";//Dental Models
 				}
 				string pwk02="  ";
-				if(claim.AttachedFlags.Contains("Mail")) {
-					pwk02="BM";//By Mail
+				if(IsDentiCal(clearhouse)) {
+					pwk02="FT";//"File Transfer". Might be electronic or mail, but Dentail requires a value of FT here.
 				}
 				else {
-					if(IsDentiCal(clearhouse)) {
-						pwk02="FT";//"File Transfer", but is really electronic.
+					if(claim.AttachedFlags.Contains("Mail")) {
+						pwk02="BM";//By Mail
 					}
 					else {
 						pwk02="EL";//Elect
@@ -1048,14 +1048,16 @@ namespace OpenDentBusiness
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
 						WritePRV_PE(sw,provTreat);
 						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
-						//todo: is StateLicense validated?
-						if(provTreat.StateLicense!="") {
-							sw.Write("REF"+s
-								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-								+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification:
-							EndSegment(sw);//REF03 and REF04 are not used.
+						if(provTreat.NationalProvID.Length<2 || IsEmdeonDental(clearhouse)) {
+							//todo: is StateLicense validated?
+							if(provTreat.StateLicense!="") {
+								sw.Write("REF"+s
+									+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+									+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification:
+								EndSegment(sw);//REF03 and REF04 are not used.
+							}
+							WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 						}
-						WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 					}
 					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
 					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
@@ -1752,7 +1754,7 @@ namespace OpenDentBusiness
 			}
 		}
 
-		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov. Writes 0 or to 1 G2 or LU segment. Returns the number of segments written.</summary>
+		///<summary>This is depedent only on the electronic payor id # rather than the clearinghouse. Used for billing prov and also for treating prov.</summary>
 		private static void WriteProv_REFG2orLU(StreamWriter sw,Provider prov,string payorID) {
 			string segmentType="G2";
 			string provID="";
