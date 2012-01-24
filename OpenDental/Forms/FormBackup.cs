@@ -553,7 +553,11 @@ namespace OpenDental{
 			try{
 				string dbtopath=ODFileUtils.CombinePaths(textBackupToPath.Text,dbName);
 				if(Directory.Exists(dbtopath)){// D:\opendental
-					Directory.Delete(dbtopath,true);
+					int loopCount=1;
+					while(Directory.Exists(dbtopath+"backup_"+loopCount)){
+						loopCount++;
+					}
+				  Directory.Move(dbtopath,dbtopath+"backup_"+loopCount);
 				}
 				string fromPath=ODFileUtils.CombinePaths(textBackupFromPath.Text,dbName);
 				string toPath=textBackupToPath.Text;
@@ -741,11 +745,11 @@ namespace OpenDental{
 			}
 			//pointless to save defaults
 			string dbName=MiscData.GetCurrentDatabase();
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,dbName))){// D:\opendental
+			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,dbName))){// D:\opendental\
 				MessageBox.Show(Lan.g(this,"Restore FROM path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName))) {// C:\mysql\data\opendental
+			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName))) {// C:\mysql\data\opendental\
 				MessageBox.Show(Lan.g(this,"Restore TO path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
@@ -756,9 +760,9 @@ namespace OpenDental{
 				}
 				string atozFull=textBackupRestoreAtoZToPath.Text;// C:\OpenDentalData\
 				//remove the trailing \
-				atozFull=atozFull.Substring(0,atozFull.Length-1);// C:\OpenDentalData
+				atozFull=atozFull.Substring(0,atozFull.Length-1);// C:\OpenDentalData\
 				string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);// OpenDentalData
-				if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,atozDir))){// D:\OpenDentalData
+				if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,atozDir))){// D:\OpenDentalData\
 					MsgBox.Show(this,"Restore A-Z images FROM path is invalid.");
 					return;
 				}
@@ -767,8 +771,7 @@ namespace OpenDental{
 			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
 			if(MessageBox.Show(Lan.g(this,"Restore from backup created on")+"\r\n"
 				+dirInfo.LastWriteTime.ToString("dddd")+"  "+dirInfo.LastWriteTime.ToString()
-				,"",MessageBoxButtons.OKCancel,MessageBoxIcon.Question)==DialogResult.Cancel)
-			{
+				,"",MessageBoxButtons.OKCancel,MessageBoxIcon.Question)==DialogResult.Cancel) {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
