@@ -978,6 +978,10 @@ namespace OpenDental {
 					MsgBox.Show(this,"Not allowed to delete a list unless it's empty.");
 					return;
 				}
+				if(TaskLists.GetMailboxUserNum(TaskListsList[clickedI].TaskListNum)!=0) {
+					MsgBox.Show(this,"Not allowed to delete task list because it is attached to a user inbox.");
+					return;
+				}
 				if(!MsgBox.Show(this,true,"Delete this empty list?")) {
 					return;
 				}
