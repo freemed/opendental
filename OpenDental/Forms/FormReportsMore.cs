@@ -773,6 +773,9 @@ namespace OpenDental {
 		}
 
 		private void butDashboard_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			WinDashboard win=new WinDashboard();
 			win.Show();
