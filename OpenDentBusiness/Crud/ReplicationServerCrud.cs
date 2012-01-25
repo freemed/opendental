@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				replicationServer.RangeEnd            = PIn.Long  (table.Rows[i]["RangeEnd"].ToString());
 				replicationServer.AtoZpath            = PIn.String(table.Rows[i]["AtoZpath"].ToString());
 				replicationServer.UpdateBlocked       = PIn.Bool  (table.Rows[i]["UpdateBlocked"].ToString());
+				replicationServer.SlaveMonitor        = PIn.String(table.Rows[i]["SlaveMonitor"].ToString());
 				retVal.Add(replicationServer);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ReplicationServerNum,";
 			}
-			command+="Descript,ServerId,RangeStart,RangeEnd,AtoZpath,UpdateBlocked) VALUES(";
+			command+="Descript,ServerId,RangeStart,RangeEnd,AtoZpath,UpdateBlocked,SlaveMonitor) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(replicationServer.ReplicationServerNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (replicationServer.RangeStart)+","
 				+    POut.Long  (replicationServer.RangeEnd)+","
 				+"'"+POut.String(replicationServer.AtoZpath)+"',"
-				+    POut.Bool  (replicationServer.UpdateBlocked)+")";
+				+    POut.Bool  (replicationServer.UpdateBlocked)+","
+				+"'"+POut.String(replicationServer.SlaveMonitor)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"RangeStart          =  "+POut.Long  (replicationServer.RangeStart)+", "
 				+"RangeEnd            =  "+POut.Long  (replicationServer.RangeEnd)+", "
 				+"AtoZpath            = '"+POut.String(replicationServer.AtoZpath)+"', "
-				+"UpdateBlocked       =  "+POut.Bool  (replicationServer.UpdateBlocked)+" "
+				+"UpdateBlocked       =  "+POut.Bool  (replicationServer.UpdateBlocked)+", "
+				+"SlaveMonitor        = '"+POut.String(replicationServer.SlaveMonitor)+"' "
 				+"WHERE ReplicationServerNum = "+POut.Long(replicationServer.ReplicationServerNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(replicationServer.UpdateBlocked != oldReplicationServer.UpdateBlocked) {
 				if(command!=""){ command+=",";}
 				command+="UpdateBlocked = "+POut.Bool(replicationServer.UpdateBlocked)+"";
+			}
+			if(replicationServer.SlaveMonitor != oldReplicationServer.SlaveMonitor) {
+				if(command!=""){ command+=",";}
+				command+="SlaveMonitor = '"+POut.String(replicationServer.SlaveMonitor)+"'";
 			}
 			if(command==""){
 				return;

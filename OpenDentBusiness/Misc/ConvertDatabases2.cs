@@ -8471,7 +8471,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'QuickBooksIncomeAccount','')";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ReplicationFailureAtServer_id','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ReplicationFailureAtServer_id','')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8510,3 +8525,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 			
 				
+
+				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar2(255)";
+					Db.NonQ(command);
+				}
+				*/

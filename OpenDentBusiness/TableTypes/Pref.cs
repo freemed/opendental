@@ -300,6 +300,7 @@ namespace OpenDentBusiness {
 		RegistrationKeyIsDisabled,
 		RegistrationNumberClaim,
 		RenaissanceLastBatchNumber,
+		ReplicationFailureAtServer_id,
 		ReportFolderName,
 		ReportsPPOwriteoffDefaultToProcDate,
 		ReportsShowPatNum,

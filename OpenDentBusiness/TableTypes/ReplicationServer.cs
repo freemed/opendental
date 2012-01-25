@@ -20,6 +20,8 @@ namespace OpenDentBusiness{
 		public string AtoZpath;
 		///<summary>If true, then this server cannot initiate an update.  Typical for satellite servers.</summary>
 		public bool UpdateBlocked;
+		///<summary>The description or name of the comptuer that will monitor replication for this server.</summary>
+		public string SlaveMonitor;
 
 		public ReplicationServer Copy() {
 			return (ReplicationServer)this.MemberwiseClone();
