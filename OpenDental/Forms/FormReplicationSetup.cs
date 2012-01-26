@@ -44,6 +44,8 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","UpdateBlocked"),100);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormReplicationSetup","SlaveMonitor"),100);
+			gridMain.Columns.Add(col);
 
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -55,6 +57,7 @@ namespace OpenDental {
 				row.Cells.Add(ReplicationServers.Listt[i].RangeEnd.ToString("n0"));
 				row.Cells.Add(ReplicationServers.Listt[i].AtoZpath);
 				row.Cells.Add(ReplicationServers.Listt[i].UpdateBlocked ? "X" : "");
+				row.Cells.Add(ReplicationServers.Listt[i].SlaveMonitor.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

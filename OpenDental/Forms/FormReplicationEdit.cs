@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -27,6 +28,7 @@ namespace OpenDental {
 			}
 			textAtoZpath.Text=RepServ.AtoZpath;
 			checkUpdateBlocked.Checked=RepServ.UpdateBlocked;
+			textSlaveMonitor.Text=RepServ.SlaveMonitor;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -84,6 +86,7 @@ namespace OpenDental {
 			RepServ.RangeEnd=rangeEnd;
 			RepServ.AtoZpath=textAtoZpath.Text;
 			RepServ.UpdateBlocked=checkUpdateBlocked.Checked;
+			RepServ.SlaveMonitor=textSlaveMonitor.Text;
 			if(RepServ.IsNew) {
 				ReplicationServers.Insert(RepServ);
 			}
@@ -95,6 +98,10 @@ namespace OpenDental {
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void butThisComputer_Click(object sender,EventArgs e) {
+			textSlaveMonitor.Text=Dns.GetHostName();
 		}
 
 		

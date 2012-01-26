@@ -29,10 +29,10 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.textUsername = new System.Windows.Forms.TextBox();
 			this.textPassword = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
+			this.textUsername = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.butSynch = new OpenDental.UI.Button();
 			this.butTest = new OpenDental.UI.Button();
 			this.butSetRanges = new OpenDental.UI.Button();
@@ -95,22 +95,6 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Force Synch";
 			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(530,18);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(111,18);
-			this.label4.TabIndex = 66;
-			this.label4.Text = "MySQL Username";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textUsername
-			// 
-			this.textUsername.Location = new System.Drawing.Point(641,18);
-			this.textUsername.Name = "textUsername";
-			this.textUsername.Size = new System.Drawing.Size(125,20);
-			this.textUsername.TabIndex = 67;
-			// 
 			// textPassword
 			// 
 			this.textPassword.Location = new System.Drawing.Point(641,40);
@@ -126,6 +110,22 @@ namespace OpenDental{
 			this.label5.TabIndex = 68;
 			this.label5.Text = "Password";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textUsername
+			// 
+			this.textUsername.Location = new System.Drawing.Point(641,18);
+			this.textUsername.Name = "textUsername";
+			this.textUsername.Size = new System.Drawing.Size(125,20);
+			this.textUsername.TabIndex = 67;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(530,18);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(111,18);
+			this.label4.TabIndex = 66;
+			this.label4.Text = "MySQL Username";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butSynch
 			// 
@@ -193,7 +193,7 @@ namespace OpenDental{
 			// 
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(17,42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -234,8 +234,8 @@ namespace OpenDental{
 			this.Name = "FormReplicationSetup";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Replication Setup";
-			this.Load += new System.EventHandler(this.FormReplicationSetup_Load);
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormReplicationSetup_FormClosing);
+			this.Load += new System.EventHandler(this.FormReplicationSetup_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);

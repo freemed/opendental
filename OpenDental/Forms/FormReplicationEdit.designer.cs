@@ -40,6 +40,10 @@ namespace OpenDental{
 			this.textServerId = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textSlaveMonitor = new System.Windows.Forms.TextBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.butThisComputer = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -144,7 +148,7 @@ namespace OpenDental{
 			// 
 			this.label7.Location = new System.Drawing.Point(258,200);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(396,48);
+			this.label7.Size = new System.Drawing.Size(368,48);
 			this.label7.TabIndex = 100;
 			this.label7.Text = "Use this option carefully. It really will block the ability of the server to upda" +
     "te database versions, and it\'s possible that this could prevent startup of the p" +
@@ -169,7 +173,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(33,262);
+			this.butDelete.Location = new System.Drawing.Point(24,333);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(86,24);
 			this.butDelete.TabIndex = 70;
@@ -193,7 +197,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(478,262);
+			this.butOK.Location = new System.Drawing.Point(488,333);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -208,18 +212,62 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(579,262);
+			this.butCancel.Location = new System.Drawing.Point(579,333);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textSlaveMonitor
+			// 
+			this.textSlaveMonitor.Location = new System.Drawing.Point(238,251);
+			this.textSlaveMonitor.Name = "textSlaveMonitor";
+			this.textSlaveMonitor.Size = new System.Drawing.Size(306,20);
+			this.textSlaveMonitor.TabIndex = 103;
+			this.textSlaveMonitor.WordWrap = false;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(10,251);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(226,18);
+			this.label9.TabIndex = 102;
+			this.label9.Text = "Slave Monitor";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(238,274);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(306,41);
+			this.label10.TabIndex = 100;
+			this.label10.Text = "Enter the name of the computer that will constantly monitor the health of the rep" +
+    "lication process. This machine should stay on at all times.";
+			// 
+			// butThisComputer
+			// 
+			this.butThisComputer.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butThisComputer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butThisComputer.Autosize = true;
+			this.butThisComputer.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butThisComputer.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butThisComputer.CornerRadius = 4F;
+			this.butThisComputer.Location = new System.Drawing.Point(550,251);
+			this.butThisComputer.Name = "butThisComputer";
+			this.butThisComputer.Size = new System.Drawing.Size(87,24);
+			this.butThisComputer.TabIndex = 3;
+			this.butThisComputer.Text = "This Computer";
+			this.butThisComputer.Click += new System.EventHandler(this.butThisComputer_Click);
+			// 
 			// FormReplicationEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(678,309);
+			this.ClientSize = new System.Drawing.Size(678,372);
+			this.Controls.Add(this.textSlaveMonitor);
+			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
+			this.Controls.Add(this.label10);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.checkUpdateBlocked);
 			this.Controls.Add(this.textAtoZpath);
@@ -234,6 +282,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textDescript);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butThisComputer);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormReplicationEdit";
@@ -264,5 +313,9 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkUpdateBlocked;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.TextBox textSlaveMonitor;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.Label label10;
+		private UI.Button butThisComputer;
 	}
 }
