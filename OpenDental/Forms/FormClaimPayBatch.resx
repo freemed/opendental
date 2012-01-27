@@ -118,18 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="labelInstruct2.Text" xml:space="preserve">
-    <value>In the lower grid, find the first claim on the EOB.  
+    <value>Before coming to this window, you will have entered payments for each of the claims from the Account module of each patient.
 
-If it's not there (for a supplemental payment, for example), close this window, find the claim in the Account module of the patient, open it, and enter the amounts paid.  Then, return here.  That claim will now be in the lower grid.
+Highlight one or more paid claims in the lower grid, and click Attach.
 
-In the lower grid, double click on the claim.  Enter payment amounts for each procedure, including deductibles and writeoffs.  Clicking OK attaches the claim to this payment.
+Claims that were marked received with zero payment will not show in the lower grid because they cannot be attached to a payment.
 
-Procedures with no payment amount cannot be attached to the payment, but can be marked received.  If there was no payment at all on the claim, then mark the claim received with zero payments, and it will drop off the bottom grid.
+As you go, you can reorder items in the upper grid to match the EOB.  You may close this window at any time, and all changes will be preserved until you return.
 
-Continue entering claims.  Reorder items in the upper grid as needed to match the EOB.  You may close this window at any time, and all changes will be preserved until you return.
-
-If the Amount at the UL matches the Total Payments at the right, then closing this window will automatically lock the payment.  If major changes need to be made after locking, then the payment will need to be deleted and reentered.
-</value>
+If the Amount at the UL matches the Total Payments at the right, then closing this window will automatically lock the payment.  If major changes need to be made after locking, then the payment will need to be deleted and reentered.</value>
   </data>
   <metadata name="menuRightAttached.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

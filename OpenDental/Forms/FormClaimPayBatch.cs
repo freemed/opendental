@@ -62,6 +62,7 @@ namespace OpenDental{
 		private Label label1;
 		private UI.Button butView;
 		private TextBox textEobIsScanned;
+		private UI.Button butAttach;
 		///<summary>Set to true if the batch list was accessed originally by going through a claim.  This disables the GotoAccount feature.  It also causes OK/Cancel buttons to show so that user can cancel out of a brand new check creation.</summary>
 		public bool IsFromClaim;
 
@@ -123,6 +124,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butView = new OpenDental.UI.Button();
 			this.textEobIsScanned = new System.Windows.Forms.TextBox();
+			this.butAttach = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -367,6 +369,7 @@ namespace OpenDental{
 			this.gridOut.Location = new System.Drawing.Point(230,387);
 			this.gridOut.Name = "gridOut";
 			this.gridOut.ScrollValue = 0;
+			this.gridOut.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridOut.Size = new System.Drawing.Size(660,243);
 			this.gridOut.TabIndex = 99;
 			this.gridOut.Title = "All Outstanding Claims";
@@ -383,7 +386,7 @@ namespace OpenDental{
 			this.butDetach.CornerRadius = 4F;
 			this.butDetach.Image = global::OpenDental.Properties.Resources.down;
 			this.butDetach.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDetach.Location = new System.Drawing.Point(519,357);
+			this.butDetach.Location = new System.Drawing.Point(537,357);
 			this.butDetach.Name = "butDetach";
 			this.butDetach.Size = new System.Drawing.Size(79,24);
 			this.butDetach.TabIndex = 101;
@@ -455,7 +458,7 @@ namespace OpenDental{
 			this.labelInstruct2.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.labelInstruct2.Location = new System.Drawing.Point(10,27);
 			this.labelInstruct2.Name = "labelInstruct2";
-			this.labelInstruct2.Size = new System.Drawing.Size(207,465);
+			this.labelInstruct2.Size = new System.Drawing.Size(207,527);
 			this.labelInstruct2.TabIndex = 105;
 			this.labelInstruct2.Text = resources.GetString("labelInstruct2.Text");
 			// 
@@ -528,11 +531,28 @@ namespace OpenDental{
 			this.textEobIsScanned.Size = new System.Drawing.Size(72,20);
 			this.textEobIsScanned.TabIndex = 110;
 			// 
+			// butAttach
+			// 
+			this.butAttach.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAttach.Autosize = true;
+			this.butAttach.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAttach.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAttach.CornerRadius = 4F;
+			this.butAttach.Image = global::OpenDental.Properties.Resources.up;
+			this.butAttach.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAttach.Location = new System.Drawing.Point(452,357);
+			this.butAttach.Name = "butAttach";
+			this.butAttach.Size = new System.Drawing.Size(79,24);
+			this.butAttach.TabIndex = 111;
+			this.butAttach.Text = "Attach";
+			this.butAttach.Click += new System.EventHandler(this.butAttach_Click);
+			// 
 			// FormClaimPayBatch
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(902,676);
+			this.Controls.Add(this.butAttach);
 			this.Controls.Add(this.textEobIsScanned);
 			this.Controls.Add(this.butView);
 			this.Controls.Add(this.label1);
@@ -572,6 +592,7 @@ namespace OpenDental{
 				labelInstruct1.Visible=false;
 				labelInstruct2.Visible=false;
 				gridOut.Visible=false;
+				butAttach.Visible=false;
 			}
 			else {
 				butOK.Visible=false;
@@ -595,6 +616,7 @@ namespace OpenDental{
 				gridOut.Visible=false;
 				labelInstruct1.Visible=false;
 				labelInstruct2.Visible=false;
+				butAttach.Visible=false;
 			}
 			if(EobAttaches.Exists(ClaimPaymentCur.ClaimPaymentNum)) {
 				textEobIsScanned.Text=Lan.g(this,"Yes");
@@ -707,6 +729,25 @@ namespace OpenDental{
 			FillClaimPayment();
 		}
 
+		private void butAttach_Click(object sender,EventArgs e) {
+			if(gridOut.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"Please select at least one paid claim from the Outstanding Claims grid below.");
+				return;
+			}
+			for(int i=0;i<gridOut.SelectedIndices.Length;i++) {
+				if(ClaimsOutstanding[gridOut.SelectedIndices[i]].InsPayAmt==0){
+					MsgBox.Show(this,"All selected claims must have payments entered.  Unpaid claims cannot be attached.");
+					return;
+				}
+			}
+			int paymentRow=ClaimsAttached.Count;//1-indexed
+			for(int i=0;i<gridOut.SelectedIndices.Length;i++) {
+				paymentRow++;
+				ClaimProcs.AttachToPayment(ClaimsOutstanding[gridOut.SelectedIndices[i]].ClaimNum,ClaimPaymentCur.ClaimPaymentNum,ClaimPaymentCur.CheckDate,paymentRow);
+			}
+			FillGrids();	
+		}
+
 		private void butDetach_Click(object sender,EventArgs e) {
 			if(gridAttached.SelectedIndices.Length==0) {
 				MsgBox.Show(this,"Please select a claim from the attached claims grid above.");
@@ -798,7 +839,7 @@ namespace OpenDental{
 			//bring up claimedit window
 			//after returning from the claim edit window, use a query to get a list of all the claimprocs that have amounts entered for that claim, but have ClaimPaymentNumber of 0.
 			//Set all those claimprocs to be attached.
-			Claim claimCur=Claims.GetClaim(ClaimsOutstanding[gridOut.GetSelectedIndex()].ClaimNum);
+			Claim claimCur=Claims.GetClaim(ClaimsOutstanding[e.Row].ClaimNum);
 			FormClaimEdit FormCE=new FormClaimEdit(claimCur,Patients.GetPat(claimCur.PatNum),Patients.GetFamily(claimCur.PatNum));
 			FormCE.IsFromBatchWindow=true;
 			FormCE.ShowDialog();
@@ -950,6 +991,8 @@ namespace OpenDental{
 				}
 			}
 		}
+
+		
 
 	
 

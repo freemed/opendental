@@ -289,6 +289,7 @@ namespace OpenDentBusiness {
 		RecallShowIfDaysSecondReminder,
 		RecallStatusEmailed,
 		RecallStatusMailed,
+		///<summary>Used if younger than 12 on the recall date.</summary>
 		RecallTypeSpecialChildProphy,
 		RecallTypeSpecialPerio,
 		RecallTypeSpecialProphy,
