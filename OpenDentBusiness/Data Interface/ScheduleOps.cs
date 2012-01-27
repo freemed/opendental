@@ -32,10 +32,16 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<ScheduleOp>>(MethodBase.GetCurrentMethod(),schedules);
 			}
-			string command="SELECT * FROM scheduleop ";
-			command+="WHERE ScheduleNum IN ( ";
+			if(schedules.Count==0) {
+				return new List<ScheduleOp>();
+			}
+			string command="SELECT * FROM scheduleop "
+				+"WHERE ScheduleNum IN ( ";
 			for(int i=0;i<schedules.Count;i++) {
-				command+=(i>0?",":"")+schedules[i].ScheduleNum.ToString();
+				if(i>0) {
+					command+=",";
+				}
+				command+=schedules[i].ScheduleNum.ToString();
 			}
 			command+=")";
 			return Crud.ScheduleOpCrud.SelectMany(command);
