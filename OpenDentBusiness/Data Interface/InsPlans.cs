@@ -923,7 +923,11 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),planNum);
 				return;
 			}
-			string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.Long(planNum);
+			//string command="SELECT PatNum FROM patplan WHERE PlanNum="+POut.Long(planNum);
+			//The left join will get extra info about each plan, namely the PlanNum.  No need for a GROUP BY.  The PlanNum is used to filter.
+			string command=@"SELECT PatNum FROM patplan 
+					LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum
+					WHERE inssub.PlanNum="+POut.Long(planNum);
 			DataTable table=Db.GetTable(command);
 			List<long> patnums=new List<long>();
 			for(int i=0;i<table.Rows.Count;i++) {

@@ -178,7 +178,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
 			} 
-			string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
+			//string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
+			//The left join will get extra info about each plan, namely the PlanNum.  No need for a GROUP BY.  The PlanNum is used to filter.
+			string command=@"SELECT * FROM patplan 
+				LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum
+				WHERE inssub.PlanNum="+POut.Long(planNum);
 			return Crud.PatPlanCrud.SelectMany(command).ToArray();
 		}
 
