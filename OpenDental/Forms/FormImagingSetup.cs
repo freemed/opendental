@@ -36,6 +36,7 @@ namespace OpenDental{
 		private Label label6;
 		private Label label5;
 		private Label label7;
+		private UI.Button butSetScanner;
 		private CheckBox checkBinned;
 		//private ComputerPref computerPrefs;
 
@@ -105,6 +106,7 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
+			this.butSetScanner = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -138,7 +140,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label12);
 			this.groupBox1.Controls.Add(this.label13);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(20,13);
+			this.groupBox1.Location = new System.Drawing.Point(20,45);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(484,79);
 			this.groupBox1.TabIndex = 17;
@@ -160,7 +162,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label25);
 			this.groupBox2.Controls.Add(this.slider);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(20,190);
+			this.groupBox2.Location = new System.Drawing.Point(20,222);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(484,96);
 			this.groupBox2.TabIndex = 18;
@@ -196,7 +198,7 @@ namespace OpenDental{
 			// 
 			this.groupBox3.Controls.Add(this.label37);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(20,292);
+			this.groupBox3.Location = new System.Drawing.Point(20,324);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(484,43);
 			this.groupBox3.TabIndex = 19;
@@ -220,7 +222,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.label3);
 			this.groupBox4.Controls.Add(this.label2);
 			this.groupBox4.Controls.Add(this.upDownExposure);
-			this.groupBox4.Location = new System.Drawing.Point(21,341);
+			this.groupBox4.Location = new System.Drawing.Point(21,373);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(484,137);
 			this.groupBox4.TabIndex = 21;
@@ -316,9 +318,9 @@ namespace OpenDental{
 			this.butMounts.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMounts.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMounts.CornerRadius = 4F;
-			this.butMounts.Location = new System.Drawing.Point(544,21);
+			this.butMounts.Location = new System.Drawing.Point(544,53);
 			this.butMounts.Name = "butMounts";
-			this.butMounts.Size = new System.Drawing.Size(79,26);
+			this.butMounts.Size = new System.Drawing.Size(79,24);
 			this.butMounts.TabIndex = 20;
 			this.butMounts.Text = "Setup Mounts";
 			this.butMounts.Visible = false;
@@ -333,9 +335,9 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(548,453);
+			this.butCancel.Location = new System.Drawing.Point(548,484);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -348,9 +350,9 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(548,415);
+			this.butOK.Location = new System.Drawing.Point(548,446);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -363,7 +365,7 @@ namespace OpenDental{
 			this.groupBoxMultiPageScan.Controls.Add(this.label6);
 			this.groupBoxMultiPageScan.Controls.Add(this.label5);
 			this.groupBoxMultiPageScan.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBoxMultiPageScan.Location = new System.Drawing.Point(20,98);
+			this.groupBoxMultiPageScan.Location = new System.Drawing.Point(20,130);
 			this.groupBoxMultiPageScan.Name = "groupBoxMultiPageScan";
 			this.groupBoxMultiPageScan.Size = new System.Drawing.Size(484,86);
 			this.groupBoxMultiPageScan.TabIndex = 17;
@@ -416,10 +418,26 @@ namespace OpenDental{
 			this.label5.Text = "Scanning Resolution (suggested 150 dpi)";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butSetScanner
+			// 
+			this.butSetScanner.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butSetScanner.Autosize = true;
+			this.butSetScanner.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSetScanner.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetScanner.CornerRadius = 4F;
+			this.butSetScanner.Location = new System.Drawing.Point(21,12);
+			this.butSetScanner.Name = "butSetScanner";
+			this.butSetScanner.Size = new System.Drawing.Size(110,24);
+			this.butSetScanner.TabIndex = 22;
+			this.butSetScanner.Text = "Set Default Scanner";
+			this.butSetScanner.Visible = false;
+			this.butSetScanner.Click += new System.EventHandler(this.butSetScanner_Click);
+			// 
 			// FormImagingSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(650,502);
+			this.ClientSize = new System.Drawing.Size(650,532);
+			this.Controls.Add(this.butSetScanner);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.butMounts);
 			this.Controls.Add(this.groupBox3);
@@ -499,6 +517,10 @@ namespace OpenDental{
 		private void butMounts_Click(object sender,EventArgs e) {
 			FormMountDefs FormM=new FormMountDefs();
 			FormM.ShowDialog();
+		}
+
+		private void butSetScanner_Click(object sender,EventArgs e) {
+			EZTwain.SelectImageSource(this.Handle);
 		}
 
 

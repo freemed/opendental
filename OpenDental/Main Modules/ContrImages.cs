@@ -1424,10 +1424,7 @@ namespace OpenDental{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-				bool wPIXTypes=EZTwain.SelectImageSource(this.Handle);
-				if(!wPIXTypes) {//user clicked Cancel
-					return;
-				}
+				//Use default scanner. Selection is available in Setup Imaging.
 				hdib=EZTwain.AcquireMemory(this.Handle);
 				double xdpi=EZTwain.DIB_XResolution(hdib);
 				double ydpi=EZTwain.DIB_XResolution(hdib);
@@ -1512,7 +1509,7 @@ namespace OpenDental{
 		private void ToolBarScanMulti_Click() {
 			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
-			//it will always use the system default scanner.  No mechanism for picking scanner.
+			//Use default scanner. Selection is available in Setup Imaging.
 			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if true, this will bring up the scanner interface for the selected scanner a few lines down
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
 			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
