@@ -2922,8 +2922,14 @@ namespace OpenDental {
 					ClaimCur.ClaimType="P";
 					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
 					sub=InsSubs.GetSub(ClaimCur.InsSubNum2,subList);
-					ClaimCur.PlanNum2=sub.PlanNum;//might be 0 if no sec ins
-					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
+					if(sub.PlanNum>0 && InsPlans.RefreshOne(sub.PlanNum).IsMedical) {
+						ClaimCur.PlanNum2=0;//no sec ins
+						ClaimCur.PatRelat2=Relat.Self;
+					}
+					else {
+						ClaimCur.PlanNum2=sub.PlanNum;//might be 0 if no sec ins
+						ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
+					}
 					break;
 				case "S":
 					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,2);

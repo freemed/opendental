@@ -2542,7 +2542,7 @@ namespace OpenDental{
 				return;
 			}
 #if DEBUG
-			string file=@"E:\My Documents\Bridge Info\Trojan\ETW\Planout.txt";
+			string file=@"C:\Trojan\ETW\Planout.txt";
 #else
 			RegistryKey regKey=Registry.LocalMachine.OpenSubKey("Software\\TROJAN BENEFIT SERVICE");
 			if(regKey==null) {//dmg Unix OS will exit here.
