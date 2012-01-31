@@ -238,6 +238,7 @@ namespace OpenDental{
 		private MenuItem menuItemPayerIDs;
 		private MenuItem menuItemTestLatency;
 		private FormLogOn FormLogOn_;
+		private System.Windows.Forms.Timer timerReplicationMonitor;
 		///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
 		private bool IsFormLogOnLastActive;
 
@@ -468,6 +469,7 @@ namespace OpenDental{
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
+			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1228,13 +1230,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
-			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
-			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
-			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4, "chart32.gif");
-			this.imageList32.Images.SetKeyName(5, "Images32.gif");
-			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
+			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
+			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
+			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
+			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4,"chart32.gif");
+			this.imageList32.Images.SetKeyName(5,"Images32.gif");
+			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -1244,9 +1246,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
+			this.panelSplitter.Location = new System.Drawing.Point(71,542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
+			this.panelSplitter.Size = new System.Drawing.Size(769,7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -1274,11 +1276,11 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
-			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
-			this.imageListMain.Images.SetKeyName(2, "email.gif");
-			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4, "label.gif");
+			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
+			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
+			this.imageListMain.Images.SetKeyName(2,"email.gif");
+			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4,"label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1321,14 +1323,14 @@ namespace OpenDental{
 			// 
 			// butBigPhones
 			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butBigPhones.Autosize = true;
 			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(143, 565);
+			this.butBigPhones.Location = new System.Drawing.Point(143,565);
 			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(75, 24);
+			this.butBigPhones.Size = new System.Drawing.Size(75,24);
 			this.butBigPhones.TabIndex = 52;
 			this.butBigPhones.Text = "Big Phones";
 			this.butBigPhones.Visible = false;
@@ -1336,9 +1338,9 @@ namespace OpenDental{
 			// 
 			// lightSignalGrid1
 			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
 			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
@@ -1348,13 +1350,18 @@ namespace OpenDental{
 			this.timerLogoff.Interval = 15000;
 			this.timerLogoff.Tick += new System.EventHandler(this.timerLogoff_Tick);
 			// 
+			// timerReplicationMonitor
+			// 
+			this.timerReplicationMonitor.Interval = 10000;
+			this.timerReplicationMonitor.Tick += new System.EventHandler(this.timerReplicationMonitor_Tick);
+			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 585);
+			this.ClientSize = new System.Drawing.Size(982,585);
 			this.Controls.Add(this.butBigPhones);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu;
@@ -1671,6 +1678,7 @@ namespace OpenDental{
 			}
 			dateTimeLastActivity=DateTime.Now;
 			timerLogoff.Enabled=true;
+			timerReplicationMonitor.Enabled=true;
 			Plugins.HookAddCode(this,"FormOpenDental.Load_end");
 		}
 
@@ -4657,6 +4665,17 @@ namespace OpenDental{
 			FormMobile.SynchFromMain(false);
 		}
 
+		private void timerReplicationMonitor_Tick(object sender,EventArgs e) {
+			//this timer doesn't get turned on until after user successfully logs in.
+			//Jordan todo: test to see if user is using replication
+			//if(ReplicationServers.Listt
+			//if(){
+			//	return;
+			//}
+
+			//Michael todo: Poll slave.
+		}
+
 		#region Logoff
 		///<summary>This is set to 15 seconds.  This interval must be longer than the interval of the timer in FormLogoffWarning (10s), or it will go into a loop.</summary>
 		private void timerLogoff_Tick(object sender,EventArgs e) {
@@ -4928,6 +4947,8 @@ namespace OpenDental{
 			//This step is necessary so that graphics memory does not fill up.
 			Dispose();
 		}
+
+		
 
 		
 
