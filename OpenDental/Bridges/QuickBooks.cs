@@ -71,7 +71,7 @@ namespace OpenDental.Bridges {
 			}
 		}
 
-		///<summary>Adds an account query to the request message.  A QB connection must be open before calling this method.</summary>
+		///<summary>Adds an account query to the request message.  A QB connection must be open before calling this method. Requires connection with version 8.0</summary>
 		public static void QueryListOfAccounts() {
 			if(!connectionOpen) {
 				return;

@@ -46,7 +46,7 @@ namespace OpenDental{
 		private Panel panelOD;
 		private GroupBox groupQB;
 		private Label labelDepositsQB;
-		private ListBox listAccountsQB;
+		private ListBox listBoxAccountsQB;
 		private UI.Button butRemoveAccountsQB;
 		private UI.Button butChangeIncomeAccountQB;
 		private TextBox textIncomeAccountQB;
@@ -62,7 +62,7 @@ namespace OpenDental{
 		///<summary>Arraylist of AccountingAutoPays.</summary>
 		private List<AccountingAutoPay> payList;
 		private AccountingSoftware AcctSoftware;
-		private List<string> QuickBooksAccounts;
+		private List<string> listAccountsQB;
 
 		///<summary></summary>
 		public FormAccountingSetup()
@@ -115,7 +115,7 @@ namespace OpenDental{
 			this.labelWarning = new System.Windows.Forms.Label();
 			this.labelCompanyFile = new System.Windows.Forms.Label();
 			this.textCompanyFileQB = new System.Windows.Forms.TextBox();
-			this.listAccountsQB = new System.Windows.Forms.ListBox();
+			this.listBoxAccountsQB = new System.Windows.Forms.ListBox();
 			this.textIncomeAccountQB = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.labelDepositsQB = new System.Windows.Forms.Label();
@@ -282,7 +282,7 @@ namespace OpenDental{
 			this.groupQB.Controls.Add(this.butBrowseQB);
 			this.groupQB.Controls.Add(this.labelCompanyFile);
 			this.groupQB.Controls.Add(this.textCompanyFileQB);
-			this.groupQB.Controls.Add(this.listAccountsQB);
+			this.groupQB.Controls.Add(this.listBoxAccountsQB);
 			this.groupQB.Controls.Add(this.butRemoveAccountsQB);
 			this.groupQB.Controls.Add(this.butChangeIncomeAccountQB);
 			this.groupQB.Controls.Add(this.textIncomeAccountQB);
@@ -335,11 +335,11 @@ namespace OpenDental{
 			// 
 			// listAccountsQB
 			// 
-			this.listAccountsQB.FormattingEnabled = true;
-			this.listAccountsQB.Location = new System.Drawing.Point(182, 145);
-			this.listAccountsQB.Name = "listAccountsQB";
-			this.listAccountsQB.Size = new System.Drawing.Size(230, 108);
-			this.listAccountsQB.TabIndex = 44;
+			this.listBoxAccountsQB.FormattingEnabled = true;
+			this.listBoxAccountsQB.Location = new System.Drawing.Point(182, 145);
+			this.listBoxAccountsQB.Name = "listAccountsQB";
+			this.listBoxAccountsQB.Size = new System.Drawing.Size(230, 108);
+			this.listBoxAccountsQB.TabIndex = 44;
 			// 
 			// textIncomeAccountQB
 			// 
@@ -638,9 +638,9 @@ namespace OpenDental{
 		}
 
 		private void FillAccountListQB() {
-			listAccountsQB.Items.Clear();
-			for(int i=0;i<QuickBooksAccounts.Count;i++) {
-			  listAccountsQB.Items.Add(QuickBooksAccounts[i]);
+			listBoxAccountsQB.Items.Clear();
+			for(int i=0;i<listAccountsQB.Count;i++) {
+			  listBoxAccountsQB.Items.Add(listAccountsQB[i]);
 			}
 		}
 
@@ -709,17 +709,17 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 			  return;
 			}
-			QuickBooksAccounts.AddRange(FormA.SelectedAccountsQB);
+			listAccountsQB.AddRange(FormA.SelectedAccountsQB);
 			FillAccountListQB();
 		}
 
 		private void butRemoveAccountsQB_Click(object sender,EventArgs e) {
-			if(listAccountsDep.SelectedIndex==-1){
+			if(listBoxAccountsQB.SelectedIndex==-1){
 			  MsgBox.Show(this,"Please select an item first.");
 			  return;
 			}
-			//depAL.RemoveAt(listAccountsDep.SelectedIndex);
-			//FillDepList();
+			listAccountsQB.RemoveAt(listBoxAccountsQB.SelectedIndex);
+			FillAccountListQB();
 		}
 
 		private void butChangeIncomeAccountQB_Click(object sender,EventArgs e) {
@@ -727,13 +727,17 @@ namespace OpenDental{
 				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
 				return;
 			}
+			if(Prefs.UpdateString(PrefName.QuickBooksCompanyFile,textCompanyFileQB.Text)) {
+				DataValid.SetInvalid(InvalidType.Prefs);
+			}
 			FormAccountPick FormA=new FormAccountPick();
+			FormA.IsQuickBooks=true;
 			FormA.ShowDialog();
 			if(FormA.DialogResult!=DialogResult.OK) {
 			  return;
 			}
-			//PickedDepAccountNum=FormA.SelectedAccount.AccountNum;
-			//textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
+			listAccountsQB.Add(FormA.SelectedAccountsQB[0]);
+			textIncomeAccountQB.Text=FormA.SelectedAccountsQB[0];
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -798,15 +802,16 @@ namespace OpenDental{
 			panelQB.Location=new Point(27,27);
 			panelQB.Size=new Size(519,606);
 			groupAutomaticPayment.Visible=false;
-			//Update the grids for this layout.
+			textCompanyFileQB.Text=PrefC.GetString(PrefName.QuickBooksCompanyFile);
+			textIncomeAccountQB.Text=PrefC.GetString(PrefName.QuickBooksIncomeAccount);
 			string depStr=PrefC.GetString(PrefName.QuickBooksDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
-			QuickBooksAccounts=new List<string>();
+			listAccountsQB=new List<string>();
 			for(int i=0;i<depStrArray.Length;i++) {
 				if(depStrArray[i]=="") {
 					continue;
 				}
-				QuickBooksAccounts.Add(depStrArray[i]);
+				listAccountsQB.Add(depStrArray[i]);
 			}
 			FillAccountListQB();
 		}
@@ -862,11 +867,11 @@ namespace OpenDental{
 			else {
 				//QuickBooks-----------------------------------------------------------------------------------
 				string depStr="";
-				for(int i=0;i<listAccountsQB.Items.Count;i++) {
+				for(int i=0;i<listBoxAccountsQB.Items.Count;i++) {
 					if(i>0) {
 						depStr+=",";
 					}
-					depStr+=listAccountsQB.Items[i].ToString();
+					depStr+=listBoxAccountsQB.Items[i].ToString();
 				}
 				if(Prefs.UpdateString(PrefName.QuickBooksCompanyFile,textCompanyFileQB.Text)
 					| Prefs.UpdateString(PrefName.QuickBooksDepositAccounts,depStr)
