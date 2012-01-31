@@ -608,15 +608,12 @@ namespace OpenDental.Bridges {
 						ben.CoverageLevel=BenefitCoverageLevel.Individual;
 						troj.BenefitList.Add(ben.Copy());
 						break;
-					case "PREV"://eg 100% or 'Incentive begins at 70%'
-						if(rowVal.EndsWith("%")) {
-							percent=ConvertPercentToInt(rowVal);//PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
-						}
-						else if(rowVal.ToLower()=="not covered") {
+					case "PREV"://eg 100% or 'Incentive begins at 70%' or '80% Endo Major see notes'
+						if(rowVal.ToLower()=="not covered") {
 							percent=0;
 						}
 						else {
-							break;
+							percent=ConvertPercentToInt(rowVal);//remove %
 						}
 						if(percent<0 || percent>100) {
 							break;
@@ -635,14 +632,11 @@ namespace OpenDental.Bridges {
 						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "BASIC":
-						if(rowVal.EndsWith("%")) {
-							percent=ConvertPercentToInt(rowVal);//PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
-						}
-						else if(rowVal.ToLower()=="not covered") {
+						if(rowVal.ToLower()=="not covered") {
 							percent=0;
 						}
 						else {
-							break;
+							percent=ConvertPercentToInt(rowVal);//remove %
 						}
 						if(percent<0 || percent>100) {
 							break;
@@ -673,14 +667,11 @@ namespace OpenDental.Bridges {
 						troj.BenefitList.Add(ben.Copy());
 						break;
 					case "MAJOR":
-						if(rowVal.EndsWith("%")) {
-							percent=ConvertPercentToInt(rowVal);//PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
-						}
-						else if(rowVal.ToLower()=="not covered") {
+						if(rowVal.ToLower()=="not covered") {
 							percent=0;
 						}
 						else {
-							break;
+							percent=ConvertPercentToInt(rowVal);//remove %
 						}
 						if(percent<0 || percent>100) {
 							break;
@@ -699,14 +690,11 @@ namespace OpenDental.Bridges {
 						//troj.BenefitList.Add(ben.Copy());//later
 						break;
 					case "CROWNS"://Examples: Paid Major, or 80%.  We will only process percentages.
-						if(rowVal.EndsWith("%")) {
-							percent=ConvertPercentToInt(rowVal);//PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
-						}
-						else if(rowVal.ToLower()=="not covered") {
+						if(rowVal.ToLower()=="not covered") {
 							percent=0;
 						}
 						else {
-							break;
+							percent=ConvertPercentToInt(rowVal);//remove %
 						}
 						if(percent<0 || percent>100) {
 							break;
@@ -734,14 +722,11 @@ namespace OpenDental.Bridges {
 						}
 						break;
 					case "ORPCT":
-						if(rowVal.EndsWith("%")) {
-							percent=ConvertPercentToInt(rowVal);//PIn.Int(rowVal.Substring(0,rowVal.Length-1));//remove %
-						}
-						else if(rowVal.ToLower()=="not covered") {
+						if(rowVal.ToLower()=="not covered") {
 							percent=0;
 						}
 						else {
-							break;
+							percent=ConvertPercentToInt(rowVal);//remove %
 						}
 						if(percent<0 || percent>100) {
 							break;
@@ -788,13 +773,13 @@ namespace OpenDental.Bridges {
 			return troj;
 		}
 
-		///<summary>Takes a string percentage and returns the integer value.  Ex: Pass '70%' or 'Incentive begins at 70%', both will return 70</summary>
+		///<summary>Takes a string percentage and returns the integer value.  Returns -1 if no match.</summary>
 		private static int ConvertPercentToInt(string percent) {
 			Match regMatch=Regex.Match(percent,@"([0-9]+)\%");
 			if(regMatch.Success) {
 				return PIn.Int(regMatch.Groups[1].Value);
 			}
-			return 0;//If no percentage within string return 0 to keep from failing.  User will be able to manually enter later.
+			return -1;
 		}
 
 
