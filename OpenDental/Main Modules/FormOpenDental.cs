@@ -4769,19 +4769,26 @@ namespace OpenDental{
 				Security.CurUser=null;
 				Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
 			}
-			//Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
-			//So we make a copy of the collection before iterating through to close each form.
-			List<Form> listForms=new List<Form>();
-			for(int f=0;f<Application.OpenForms.Count;f++) {
-				listForms.Add(Application.OpenForms[f]);
-			}
-			for(int f=0;f<listForms.Count;f++) {
-				if(listForms[f]!=this) {//don't close the main form
-					listForms[f].Close();
-					listForms[f].Dispose();
+			////Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
+			////So we make a copy of the collection before iterating through to close each form.
+			//List<Form> listForms=new List<Form>();
+			//for(int f=0;f<Application.OpenForms.Count;f++) {
+			//  listForms.Add(Application.OpenForms[f]);
+			//}
+			//for(int f=0;f<listForms.Count;f++) {
+			//  if(listForms[f]!=this) {//don't close the main form
+			//    listForms[f].Close();
+			//    listForms[f].Dispose();
+			//  }
+			//}
+			//Application.DoEvents();//so that the window background will refresh.
+			for(int f=Application.OpenForms.Count-1;f>=0;f--) {
+				if(Application.OpenForms[f]==this) {// main form
+					continue;
 				}
+				Application.OpenForms[f].Close();
+				Application.OpenForms[f].Hide();
 			}
-			Application.DoEvents();//so that the window background will refresh.
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
 			}
