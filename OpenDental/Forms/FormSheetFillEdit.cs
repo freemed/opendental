@@ -540,14 +540,7 @@ namespace OpenDental {
 			{
 				Patient pat=Patients.GetPat(SheetCur.PatNum);
 				if(SheetCur.SheetType==SheetTypeEnum.LabSlip) {
-					SheetParameter parameter=SheetParameter.GetParamByName(SheetCur.Parameters,"LabCaseNum");
-					Laboratory lab=Laboratories.GetOne(LabCases.GetOne(PIn.Long(parameter.ParamValue.ToString())).LaboratoryNum);
-					if(lab!=null && lab.Email!="") {
-						FormS.EmailPatOrLabAddress=lab.Email;
-						FormS.IsForLab=true;
-						FormS.EmailPatOrLab=true;
-						FormS.PaperCopies--;
-					}
+					FormS.IsForLab=true;//Changes label to "E-mail to Lab:"
 				}
 				else if(pat.Email!="") {
 					FormS.EmailPatOrLabAddress=pat.Email;
