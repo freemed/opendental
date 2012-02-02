@@ -197,6 +197,7 @@ namespace OpenDental{
 			// 
 			this.textToday.Location = new System.Drawing.Point(485,64);
 			this.textToday.Name = "textToday";
+			this.textToday.ReadOnly = true;
 			this.textToday.Size = new System.Drawing.Size(100,20);
 			this.textToday.TabIndex = 42;
 			// 
