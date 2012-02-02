@@ -8318,6 +8318,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_0_5();
 		}
 
+		///<summary>Oracle compatible: 02/02/2012</summary>
 		private static void To12_0_5() {
 			if(FromVersion<new Version("12.0.5.0")) {
 				string command;
@@ -8331,14 +8332,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="DELETE FROM toolbutitem WHERE ProgramNum="+POut.Long(programNum);
 					Db.NonQ(command);
 				}
-				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
 					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 					+"'0')";
-				Db.NonQ32(command);
+					Db.NonQ32(command);
+				}
+				else {//oracle
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+					Db.NonQ32(command);
+				}
 				command="SELECT * FROM program WHERE ProgName='Apixia'";
 				table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
 					+") VALUES("
 					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
@@ -8347,6 +8360,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ32(command);
 				command="UPDATE preference SET ValueString = '12.0.5.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
+				}
+				else {
+				command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					+") VALUES("
+					+"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					+"'"+table.Rows[0]["ProgramNum"].ToString()+"', "
+					+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+					+"'0')";
+				Db.NonQ32(command);
+				command="UPDATE preference SET ValueString = '12.0.5.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+				}
 			}
 			To12_0_6();
 		}
