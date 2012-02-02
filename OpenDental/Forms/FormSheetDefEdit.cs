@@ -32,8 +32,8 @@ namespace OpenDental {
 		private bool IsTabMode;
 		private List<SheetFieldDef> ListSheetFieldDefsTabOrder;
 		public static Font tabOrderFont = new Font("Times New Roman",12f,FontStyle.Regular,GraphicsUnit.Pixel);
-		private Bitmap DoubleBuffer;
-		private Graphics DoubleBufferG;
+		private Bitmap BmBackground;
+		private Graphics GraphicsBackground;
 
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
@@ -181,29 +181,24 @@ namespace OpenDental {
 		}
 
 		private void panelMain_Paint(object sender,PaintEventArgs e) {
-			//if(IsUpdating) return;
-			//if(Width<1 || Height<1) {
-			//	return;
-			//}
-			//Bitmap doubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
-			//Graphics g=Graphics.FromImage(doubleBuffer);
-			//g.FillRectangle(Brushes.White,0,0,doubleBuffer.Width,doubleBuffer.Height);
-			//DrawFields(g);
-			//e.Graphics.DrawImage(doubleBuffer,0,0);
-			//g.Dispose();
-			//doubleBuffer.Dispose();
-			//doubleBuffer=null;
-			e.Graphics.DrawImage(DoubleBuffer,0,0);
-			DrawFields(e.Graphics,false);	
+			Bitmap doubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
+			Graphics g=Graphics.FromImage(doubleBuffer);
+			g.DrawImage(BmBackground,0,0);
+			DrawFields(g,false);
+			e.Graphics.DrawImage(doubleBuffer,0,0);
+			g.Dispose();
+			doubleBuffer.Dispose();
+			doubleBuffer=null;
 		}
 
+		///<summary>Whenever a user might have edited or moved a background image, this gets called.</summary>
 		private void RefreshDoubleBuffer() {
-			DoubleBufferG.FillRectangle(Brushes.White,0,0,DoubleBuffer.Width,DoubleBuffer.Height);
-			DrawFields(DoubleBufferG,true);
+			GraphicsBackground.FillRectangle(Brushes.White,0,0,BmBackground.Width,BmBackground.Height);
+			DrawFields(GraphicsBackground,true);
 		}
 
 		///<summary>If drawImages is true then only image fields will be drawn. Otherwise, all fields but images will be drawn.</summary>
-		private void DrawFields(Graphics g,bool drawImages){
+		private void DrawFields(Graphics g,bool onlyDrawImages){
 			g.SmoothingMode=SmoothingMode.HighQuality;
 			g.CompositingQuality=CompositingQuality.HighQuality;//This has to be here or the line thicknesses are wrong.
 			//g.InterpolationMode=InterpolationMode.High;//This doesn't seem to help
@@ -224,7 +219,7 @@ namespace OpenDental {
 					continue;
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Image) {
-					if(drawImages) {
+					if(onlyDrawImages) {
 						string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),SheetDefCur.SheetFieldDefs[i].FieldName);
 						Image img=null;
 						if(SheetDefCur.SheetFieldDefs[i].FieldName=="Patient Info.gif") {
@@ -241,7 +236,7 @@ namespace OpenDental {
 					}
 					continue;
 				}
-				if(drawImages) {
+				if(onlyDrawImages) {
 					continue;//Only draw the images for the background.
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
@@ -885,17 +880,17 @@ namespace OpenDental {
 		}
 
 		private void panelMain_Resize(object sender,EventArgs e) {
-			if(DoubleBuffer!=null && panelMain.Size==DoubleBuffer.Size) {
+			if(BmBackground!=null && panelMain.Size==BmBackground.Size) {
 				return;
 			}
-			if(DoubleBufferG!=null) {
-				DoubleBufferG.Dispose();
+			if(GraphicsBackground!=null) {
+				GraphicsBackground.Dispose();
 			}
-			if(DoubleBuffer!=null) {
-				DoubleBuffer.Dispose();
+			if(BmBackground!=null) {
+				BmBackground.Dispose();
 			}
-			DoubleBuffer=new Bitmap(panelMain.Width,panelMain.Height);
-			DoubleBufferG=Graphics.FromImage(DoubleBuffer);
+			BmBackground=new Bitmap(panelMain.Width,panelMain.Height);
+			GraphicsBackground=Graphics.FromImage(BmBackground);
 			panelMain.Refresh();
 		}
 

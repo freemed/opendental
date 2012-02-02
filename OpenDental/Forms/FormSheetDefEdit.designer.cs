@@ -13,13 +13,13 @@ namespace OpenDental{
 			if(disposing && (components != null)) {
 				components.Dispose();
 			}
-			if(DoubleBufferG!=null) {
-				DoubleBufferG.Dispose();
-				DoubleBufferG=null;
+			if(GraphicsBackground!=null) {
+				GraphicsBackground.Dispose();
+				GraphicsBackground=null;
 			}
-			if(DoubleBuffer!=null) {
-				DoubleBuffer.Dispose();
-				DoubleBuffer=null;
+			if(BmBackground!=null) {
+				BmBackground.Dispose();
+				BmBackground=null;
 			}
 			base.Dispose(disposing);
 		}
