@@ -39,6 +39,10 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				MsgBox.Show(this,"You must go to Setup, Show Features, and activate EHR before entering keys.");
+				return;
+			}
 			if(textYear.Text==""){
 				MessageBox.Show("Please enter a year.");
 				return;
