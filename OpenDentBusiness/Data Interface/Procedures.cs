@@ -248,6 +248,25 @@ namespace OpenDentBusiness {
 			return result;
 		}
 
+		///<summary>Gets all procedures associated with corresponding claimprocs. Returns empty procedure list if an empty list was passed in.</summary>
+		public static List<Procedure> GetProcsFromClaimProcs(List<ClaimProc> listClaimProc) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),listClaimProc);
+			}
+			if(listClaimProc.Count==0) {
+				return new List<Procedure>();
+			}
+			string command="SELECT * FROM procedurelog WHERE ProcNum IN (";
+			for(int i=0;i<listClaimProc.Count;i++) {
+				if(i>0) {
+					command+=",";
+				}
+				command+=listClaimProc[i].ProcNum;
+			}
+			command+=")";
+			return Crud.ProcedureCrud.SelectMany(command);
+		}
+
 		///<summary>Gets a string in M/yy format for the most recent completed procedure in the specified code range.  Gets directly from the database.</summary>
 		public static string GetRecentProcDateString(long patNum,DateTime aptDate,string procCodeRange) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

@@ -1840,9 +1840,12 @@ namespace OpenDentBusiness
 					warning+=",";
 				warning+="Attachment ID missing";
 			}
-			List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);
+			//List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);
+			//List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
+			//List<Procedure> procList=Procedures.Refresh(claim.PatNum);
+			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
-			List<Procedure> procList=Procedures.Refresh(claim.PatNum);
+			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);
 			Procedure proc;
 			ProcedureCode procCode;
 			bool princDiagExists=false;
