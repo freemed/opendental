@@ -1883,7 +1883,7 @@ namespace OpenDentBusiness {
 			else {
 				int numberFixed=0;
 				for(int i=0;i<table.Rows.Count;i++) {
-					PatPlan patPlan=PatPlans.GetPatPlan(PIn.Int(table.Rows[i][1].ToString()),0);
+					PatPlan patPlan=PatPlans.GetPatPlan(PIn.Long(table.Rows[i][1].ToString()),0);
 					if(patPlan!=null) {//Unlikely but possible if plan gets deleted by a user during this check.
 						PatPlans.SetOrdinal(patPlan.PatPlanNum,1);
 						numberFixed++;
