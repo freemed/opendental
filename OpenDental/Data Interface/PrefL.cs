@@ -140,7 +140,9 @@ namespace OpenDental {
 					//Just go straight to downloading and running the Setup.exe.
 					string manpath=ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt");
 					if(MessageBox.Show(Lan.g("Prefs","The expected version information was not found in this file: ")+manpath+".  "
-						+Lan.g("Prefs","There is probably a permission issue on that folder which should be fixed."),
+						+Lan.g("Prefs","There is probably a permission issue on that folder which should be fixed. ")
+						+"\r\n\r\n"+Lan.g("Prefs","The suggested solution is to return to the computer where the update was just run.  Go to Help | Update | Setup, and click the Recopy button.")
+						+"\r\n\r\n"+Lan.g("Prefs","If, instead, you click OK in this window, then a fresh Setup file will be downloaded and run."),						
 						"",MessageBoxButtons.OKCancel)!=DialogResult.OK)//they don't want to download again.
 					{
 						Application.Exit();
