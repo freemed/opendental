@@ -37,6 +37,10 @@ namespace OpenDental{
 		private OpenDental.UI.SignatureBoxWrapper signatureBoxWrapper;
 		private Commlog CommlogCur;
 		private bool IsStartingUp;
+		private UI.Button butNow;
+		private UI.Button butNowEnd;
+		private TextBox textDateTimeEnd;
+		private Label labelDateTimeEnd;
 		private bool SigChanged;
 
 		///<summary></summary>
@@ -80,11 +84,15 @@ namespace OpenDental{
 			this.labelCommlogNum = new System.Windows.Forms.Label();
 			this.textCommlogNum = new System.Windows.Forms.TextBox();
 			this.signatureBoxWrapper = new OpenDental.UI.SignatureBoxWrapper();
+			this.butNow = new OpenDental.UI.Button();
+			this.butNowEnd = new OpenDental.UI.Button();
+			this.textDateTimeEnd = new System.Windows.Forms.TextBox();
+			this.labelDateTimeEnd = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(1,35);
+			this.label1.Location = new System.Drawing.Point(1,33);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(81,18);
 			this.label1.TabIndex = 0;
@@ -93,7 +101,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(80,56);
+			this.label6.Location = new System.Drawing.Point(80,80);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(82,16);
 			this.label6.TabIndex = 5;
@@ -150,7 +158,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(81,173);
+			this.label2.Location = new System.Drawing.Point(81,197);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(82,16);
 			this.label2.TabIndex = 18;
@@ -159,7 +167,7 @@ namespace OpenDental{
 			// 
 			// listType
 			// 
-			this.listType.Location = new System.Drawing.Point(82,74);
+			this.listType.Location = new System.Drawing.Point(82,98);
 			this.listType.Name = "listType";
 			this.listType.Size = new System.Drawing.Size(120,95);
 			this.listType.TabIndex = 20;
@@ -167,7 +175,7 @@ namespace OpenDental{
 			// 
 			// textDateTime
 			// 
-			this.textDateTime.Location = new System.Drawing.Point(82,33);
+			this.textDateTime.Location = new System.Drawing.Point(82,31);
 			this.textDateTime.Name = "textDateTime";
 			this.textDateTime.Size = new System.Drawing.Size(205,20);
 			this.textDateTime.TabIndex = 21;
@@ -175,7 +183,7 @@ namespace OpenDental{
 			// 
 			// listMode
 			// 
-			this.listMode.Location = new System.Drawing.Point(215,74);
+			this.listMode.Location = new System.Drawing.Point(215,98);
 			this.listMode.Name = "listMode";
 			this.listMode.Size = new System.Drawing.Size(73,95);
 			this.listMode.TabIndex = 23;
@@ -183,7 +191,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(214,57);
+			this.label3.Location = new System.Drawing.Point(214,81);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(82,16);
 			this.label3.TabIndex = 22;
@@ -192,7 +200,7 @@ namespace OpenDental{
 			// 
 			// listSentOrReceived
 			// 
-			this.listSentOrReceived.Location = new System.Drawing.Point(303,74);
+			this.listSentOrReceived.Location = new System.Drawing.Point(303,98);
 			this.listSentOrReceived.Name = "listSentOrReceived";
 			this.listSentOrReceived.Size = new System.Drawing.Size(87,43);
 			this.listSentOrReceived.TabIndex = 25;
@@ -200,7 +208,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(302,56);
+			this.label4.Location = new System.Drawing.Point(302,80);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(142,16);
 			this.label4.TabIndex = 24;
@@ -210,7 +218,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(82,193);
+			this.textNote.Location = new System.Drawing.Point(82,217);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
@@ -274,17 +282,63 @@ namespace OpenDental{
 			// 
 			this.signatureBoxWrapper.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.signatureBoxWrapper.LabelText = null;
-			this.signatureBoxWrapper.Location = new System.Drawing.Point(83,408);
+			this.signatureBoxWrapper.Location = new System.Drawing.Point(82,432);
 			this.signatureBoxWrapper.Name = "signatureBoxWrapper";
 			this.signatureBoxWrapper.Size = new System.Drawing.Size(364,81);
 			this.signatureBoxWrapper.TabIndex = 106;
 			this.signatureBoxWrapper.SignatureChanged += new System.EventHandler(this.signatureBoxWrapper_SignatureChanged);
+			// 
+			// butNow
+			// 
+			this.butNow.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNow.Autosize = true;
+			this.butNow.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNow.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNow.CornerRadius = 4F;
+			this.butNow.Location = new System.Drawing.Point(293,31);
+			this.butNow.Name = "butNow";
+			this.butNow.Size = new System.Drawing.Size(48,21);
+			this.butNow.TabIndex = 107;
+			this.butNow.Text = "Now";
+			// 
+			// butNowEnd
+			// 
+			this.butNowEnd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNowEnd.Autosize = true;
+			this.butNowEnd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNowEnd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNowEnd.CornerRadius = 4F;
+			this.butNowEnd.Location = new System.Drawing.Point(293,55);
+			this.butNowEnd.Name = "butNowEnd";
+			this.butNowEnd.Size = new System.Drawing.Size(48,21);
+			this.butNowEnd.TabIndex = 110;
+			this.butNowEnd.Text = "Now";
+			// 
+			// textDateTimeEnd
+			// 
+			this.textDateTimeEnd.Location = new System.Drawing.Point(82,55);
+			this.textDateTimeEnd.Name = "textDateTimeEnd";
+			this.textDateTimeEnd.Size = new System.Drawing.Size(205,20);
+			this.textDateTimeEnd.TabIndex = 109;
+			// 
+			// labelDateTimeEnd
+			// 
+			this.labelDateTimeEnd.Location = new System.Drawing.Point(1,57);
+			this.labelDateTimeEnd.Name = "labelDateTimeEnd";
+			this.labelDateTimeEnd.Size = new System.Drawing.Size(81,18);
+			this.labelDateTimeEnd.TabIndex = 108;
+			this.labelDateTimeEnd.Text = "End";
+			this.labelDateTimeEnd.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(662,594);
+			this.Controls.Add(this.butNowEnd);
+			this.Controls.Add(this.textDateTimeEnd);
+			this.Controls.Add(this.labelDateTimeEnd);
+			this.Controls.Add(this.butNow);
 			this.Controls.Add(this.signatureBoxWrapper);
 			this.Controls.Add(this.textCommlogNum);
 			this.Controls.Add(this.labelCommlogNum);
