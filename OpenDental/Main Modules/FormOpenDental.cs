@@ -2234,8 +2234,14 @@ namespace OpenDental{
 			CommlogCur.PatNum = CurPatNum;
 			CommlogCur.CommDateTime = DateTime.Now;
 			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			CommlogCur.Mode_=CommItemMode.Phone;
-			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
+				CommlogCur.Mode_=CommItemMode.None;
+				CommlogCur.SentOrReceived=CommSentOrReceived.Neither;
+			}
+			else {
+				CommlogCur.Mode_=CommItemMode.Phone;
+				CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			}
 			CommlogCur.UserNum=Security.CurUser.UserNum;
 			FormCommItem FormCI = new FormCommItem(CommlogCur);
 			FormCI.IsNew = true;
@@ -3390,11 +3396,25 @@ namespace OpenDental{
 		}
 
 		private void phoneSmall_GoToChanged(object sender,EventArgs e) {
-			if(phoneSmall.GotoPatNum!=0) {
-				CurPatNum=phoneSmall.GotoPatNum;
-				Patient pat=Patients.GetPat(CurPatNum);
+			if(phoneSmall.GotoPatNum==0) {
+				return;
+			}
+			CurPatNum=phoneSmall.GotoPatNum;
+			Patient pat=Patients.GetPat(CurPatNum);
+			RefreshCurrentModule();
+			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
+			Commlog CommlogCur = new Commlog();
+			CommlogCur.PatNum = CurPatNum;
+			CommlogCur.CommDateTime = DateTime.Now;
+			CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+			CommlogCur.Mode_=CommItemMode.Phone;
+			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI = new FormCommItem(CommlogCur);
+			FormCI.IsNew = true;
+			FormCI.ShowDialog();
+			if(FormCI.DialogResult == DialogResult.OK) {
 				RefreshCurrentModule();
-				FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
 			}
 		}
 

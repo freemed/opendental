@@ -126,7 +126,7 @@ namespace OpenDentBusiness {
 		DateLastAging,
 		DefaultClaimForm,
 		DefaultProcedurePlaceService,
-		///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.</summary>
+		///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.  Used by OD HQ.</summary>
 		DistributorKey,
 		DockPhonePanelShow,
 		DocPath,
