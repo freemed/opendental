@@ -200,12 +200,23 @@ namespace OpenDentBusiness{
 		///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
 		public static bool DepositsLinked(){
 			//No need to check RemotingRole; no call to db.
-			string depAccounts=PrefC.GetString(PrefName.AccountingDepositAccounts);
-			if(depAccounts==""){
-				return false;
+			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
+				string depAccounts=PrefC.GetString(PrefName.QuickBooksDepositAccounts);
+				if(depAccounts=="") {
+					return false;
+				}
+				if(PrefC.GetString(PrefName.QuickBooksIncomeAccount)=="") {
+					return false;
+				}
 			}
-			if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0){
-				return false;
+			else {
+				string depAccounts=PrefC.GetString(PrefName.AccountingDepositAccounts);
+				if(depAccounts=="") {
+					return false;
+				}
+				if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0) {
+					return false;
+				}
 			}
 			//might add a few more checks later.
 			return true;
@@ -238,6 +249,21 @@ namespace OpenDentBusiness{
 			}
 			long[] retVal=new long[depAL.Count];
 			depAL.CopyTo(retVal);
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static List<string> GetDepositAccountsQB() {
+			//No need to check RemotingRole; no call to db.
+			string depStr=PrefC.GetString(PrefName.QuickBooksDepositAccounts);
+			string[] depStrArray=depStr.Split(new char[] { ',' });
+			List<string> retVal=new List<string>();
+			for(int i=0;i<depStrArray.Length;i++) {
+				if(depStrArray[i]=="") {
+					continue;
+				}
+				retVal.Add(depStrArray[i]);
+			}
 			return retVal;
 		}
 

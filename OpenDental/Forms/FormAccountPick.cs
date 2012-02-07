@@ -214,12 +214,8 @@ namespace OpenDental{
 			ODGridRow row;
 			//Get the list of accounts from QuickBooks.
 			Cursor.Current=Cursors.WaitCursor;
-			QuickBooks.OpenConnection(8,0,PrefC.GetString(PrefName.QuickBooksCompanyFile));
-			QuickBooks.QueryListOfAccounts();
-			QuickBooks.DoRequests();
-			QuickBooks.CloseConnection();
-			Cursor.Current=Cursors.Default;
 			List<string> accountList=QuickBooks.GetListOfAccounts();
+			Cursor.Current=Cursors.Default;
 			for(int i=0;i<accountList.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(accountList[i]);

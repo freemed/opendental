@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.Bridges;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -48,6 +49,8 @@ namespace OpenDental{
 		private TextBox textDepositAccount;
 		///<summary>Only used if linking to accounts</summary>
 		private long[] DepositAccounts;
+		///<summary>Only used if linking to QB account.</summary>
+		private List<string> DepositAccountsQB;
 
 		///<summary></summary>
 		public FormDepositEdit(Deposit depositCur)
@@ -430,13 +433,21 @@ namespace OpenDental{
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
 				if(Accounts.DepositsLinked()) {
-					DepositAccounts=Accounts.GetDepositAccounts();
-					for(int i=0;i<DepositAccounts.Length;i++){
-						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
+						DepositAccountsQB=Accounts.GetDepositAccountsQB();
+						for(int i=0;i<DepositAccountsQB.Count;i++) {
+							comboDepositAccount.Items.Add(DepositAccountsQB[i]);
+						}
+					}
+					else {
+						DepositAccounts=Accounts.GetDepositAccounts();
+						for(int i=0;i<DepositAccounts.Length;i++) {
+							comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+						}
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
-				else{
+				else {
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 				}
@@ -449,7 +460,7 @@ namespace OpenDental{
 				//They need to detach it from within the transaction
 				//Might be enhanced later to allow, but that's very complex.
 				Transaction trans=Transactions.GetAttachedToDeposit(DepositCur.DepositNum);
-				if(trans==null){
+				if(trans==null || PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks){
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 					textDepositAccount.Visible=false;
@@ -711,34 +722,51 @@ namespace OpenDental{
 						return false;
 					}
 				}
-				Deposits.Insert(DepositCur);
-				if(Accounts.DepositsLinked() && DepositCur.Amount>0){
-					//create a transaction here
-					Transaction trans=new Transaction();
-					trans.DepositNum=DepositCur.DepositNum;
-					trans.UserNum=Security.CurUser.UserNum;
-					Transactions.Insert(trans);
-					//first the deposit entry
-					JournalEntry je=new JournalEntry();
-					je.AccountNum=DepositAccounts[comboDepositAccount.SelectedIndex];
-					je.CheckNumber=Lan.g(this,"DEP");
-					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
-					je.DebitAmt=DepositCur.Amount;
-					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
-					je.TransactionNum=trans.TransactionNum;
-					JournalEntries.Insert(je);
-					//then, the income entry
-					je=new JournalEntry();
-					je.AccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
-					//je.CheckNumber=;
-					je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
-					je.CreditAmt=DepositCur.Amount;
-					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
-					je.TransactionNum=trans.TransactionNum;
-					JournalEntries.Insert(je);
+				if(Accounts.DepositsLinked() && DepositCur.Amount>0) {
+					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
+						//Create a deposit within QuickBooks.
+						try {
+							Cursor.Current=Cursors.WaitCursor;
+							QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
+								,PrefC.GetString(PrefName.QuickBooksIncomeAccount),DepositCur.Amount);
+							Cursor.Current=Cursors.Default;
+						}
+						catch(Exception ex) {
+							Cursor.Current=Cursors.Default;
+							if(MessageBox.Show(ex.Message+"\r\n\r\nContinue anyway?","QuickBooks Deposit Create Failed",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+								return false;
+							}
+						}
+					}
+					else {
+						//create a transaction here
+						Transaction trans=new Transaction();
+						trans.DepositNum=DepositCur.DepositNum;
+						trans.UserNum=Security.CurUser.UserNum;
+						Transactions.Insert(trans);
+						//first the deposit entry
+						JournalEntry je=new JournalEntry();
+						je.AccountNum=DepositAccounts[comboDepositAccount.SelectedIndex];
+						je.CheckNumber=Lan.g(this,"DEP");
+						je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
+						je.DebitAmt=DepositCur.Amount;
+						je.Memo=Lan.g(this,"Deposit");
+						je.Splits=Accounts.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
+						je.TransactionNum=trans.TransactionNum;
+						JournalEntries.Insert(je);
+						//then, the income entry
+						je=new JournalEntry();
+						je.AccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
+						//je.CheckNumber=;
+						je.DateDisplayed=DepositCur.DateDeposit;//it would be nice to add security here.
+						je.CreditAmt=DepositCur.Amount;
+						je.Memo=Lan.g(this,"Deposit");
+						je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
+						je.TransactionNum=trans.TransactionNum;
+						JournalEntries.Insert(je);
+					}
 				}
+				Deposits.Insert(DepositCur);
 			}
 			else{
 				Deposits.Update(DepositCur);

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interop.QBFC10;
+using OpenDentBusiness;
 
 namespace OpenDental.Bridges {
 	///<summary>Contains all logic for QuickBook connections and requests to the QB company file.</summary>
 	public class QuickBooks {
-		private static QBSessionManager sessionManager;
-		private static IMsgSetRequest requestMsgSet;
-		private static IMsgSetResponse responseMsgSet;
-		private static bool sessionBegun;
-		private static bool connectionOpen;
+		private static QBSessionManager SessionManager;
+		private static IMsgSetRequest RequestMsgSet;
+		private static IMsgSetResponse ResponseMsgSet;
+		private static bool SessionBegun;
+		private static bool ConnectionOpen;
 
 		///<summary></summary>
 		public QuickBooks() {
@@ -19,35 +20,35 @@ namespace OpenDental.Bridges {
 		}
 		
 		///<summary>Creates a new QB connection and begins the session.  Session will be left open until CloseConnection is called.  Major and minor version refer to the implementation version of the paticular QB request you are trying to run.  The connection will fail if the version you pass in does not support the type of request you are trying to run.</summary>
-		public static void OpenConnection(short majorVer,short minorVer,string companyPath) {
-			sessionManager=new QBSessionManager();
+		private static void OpenConnection(short majorVer,short minorVer,string companyPath) {
+			SessionManager=new QBSessionManager();
 			//Create the message set request object to hold our request.
-			requestMsgSet=sessionManager.CreateMsgSetRequest("US",majorVer,minorVer);
-			requestMsgSet.Attributes.OnError=ENRqOnError.roeContinue;
+			RequestMsgSet=SessionManager.CreateMsgSetRequest("US",majorVer,minorVer);
+			RequestMsgSet.Attributes.OnError=ENRqOnError.roeContinue;
 			//Connect to QuickBooks and begin a session
-			sessionManager.OpenConnection("","Open Dental");
-			connectionOpen=true;
-			sessionManager.BeginSession(companyPath,ENOpenMode.omDontCare);
-			sessionBegun=true;
+			SessionManager.OpenConnection("","Open Dental");
+			ConnectionOpen=true;
+			SessionManager.BeginSession(companyPath,ENOpenMode.omDontCare);
+			SessionBegun=true;
 		}
 
 		///<summary>Runs the request that has been built.  QB connection must be open before calling this method.</summary>
-		public static void DoRequests() {
-			if(!connectionOpen) {
+		private static void DoRequests() {
+			if(!ConnectionOpen) {
 				return;
 			}
-			responseMsgSet=sessionManager.DoRequests(requestMsgSet);
+			ResponseMsgSet=SessionManager.DoRequests(RequestMsgSet);
 		}
 
 		///<summary>Ends the session and then closes the connection.</summary>
-		public static void CloseConnection() {
-			if(sessionBegun) {
-				sessionManager.EndSession();
-				sessionBegun=false;
+		private static void CloseConnection() {
+			if(SessionBegun) {
+				SessionManager.EndSession();
+				SessionBegun=false;
 			}
-			if(connectionOpen) {
-				sessionManager.CloseConnection();
-				connectionOpen=false;
+			if(ConnectionOpen) {
+				SessionManager.CloseConnection();
+				ConnectionOpen=false;
 			}
 		}
 		
@@ -56,39 +57,43 @@ namespace OpenDental.Bridges {
 			try {
 				OpenConnection(1,0,companyPath);
 				//Send the empty request and get the response from QuickBooks.
-				responseMsgSet=sessionManager.DoRequests(requestMsgSet);
+				ResponseMsgSet=SessionManager.DoRequests(RequestMsgSet);
 				CloseConnection();
 				return "Connection to QuickBooks was successful.";
 			}
 			catch(Exception e) {
-				if(sessionBegun) {
-					sessionManager.EndSession();
+				if(SessionBegun) {
+					SessionManager.EndSession();
 				}
-				if(connectionOpen) {
-					sessionManager.CloseConnection();
+				if(ConnectionOpen) {
+					SessionManager.CloseConnection();
 				}
 				return "Error: "+e.Message;
 			}
 		}
 
-		///<summary>Adds an account query to the request message.  A QB connection must be open before calling this method. Requires connection with version 8.0</summary>
-		public static void QueryListOfAccounts() {
-			if(!connectionOpen) {
-				return;
-			}
-			//Build the account query add append it to the request message.
-			IAccountQuery AccountQueryRq=requestMsgSet.AppendAccountQueryRq();
-			//Filters
-			AccountQueryRq.ORAccountListQuery.AccountListFilter.ActiveStatus.SetValue(ENActiveStatus.asActiveOnly);
-		}
-
-		///<summary>Returns list of all active accounts.  QueryListOfAccounts must have been part of your request.</summary>
+		///<summary>Returns list of all active accounts.</summary>
 		public static List<string> GetListOfAccounts() {
 			List<string> accountList=new List<string>();
-			if(responseMsgSet==null) {
+			try {
+				OpenConnection(8,0,PrefC.GetString(PrefName.QuickBooksCompanyFile));
+				QueryListOfAccounts();
+				DoRequests();
+				CloseConnection();
+			}
+			catch(Exception e) {
+				if(SessionBegun) {
+					SessionManager.EndSession();
+				}
+				if(ConnectionOpen) {
+					SessionManager.CloseConnection();
+				}
+				throw e;
+			}
+			if(ResponseMsgSet==null) {
 				return accountList;
 			}
-			IResponseList responseList=responseMsgSet.ResponseList;
+			IResponseList responseList=ResponseMsgSet.ResponseList;
 			if(responseList==null) {
 				return accountList;
 			}
@@ -115,6 +120,73 @@ namespace OpenDental.Bridges {
 				}
 			}
 			return accountList;
+		}
+
+		///<summary>Adds an account query to the request message.  A QB connection must be open before calling this method. Requires connection with version 8.0</summary>
+		private static void QueryListOfAccounts() {
+			if(!ConnectionOpen) {
+				return;
+			}
+			//Build the account query add append it to the request message.
+			IAccountQuery AccountQueryRq=RequestMsgSet.AppendAccountQueryRq();
+			//Filters
+			AccountQueryRq.ORAccountListQuery.AccountListFilter.ActiveStatus.SetValue(ENActiveStatus.asActiveOnly);
+		}
+
+		///<summary>Creates a deposit within QuickBooks.</summary>
+		public static void CreateDeposit(string depositAcct,string incomeAcct,double amount) {
+			try {
+				OpenConnection(9,0,PrefC.GetString(PrefName.QuickBooksCompanyFile));
+				BuildDepositAddRq(depositAcct,incomeAcct,amount);
+				DoRequests();
+				CloseConnection();
+				ValidateDepositAddRs();
+			}
+			catch(Exception e) {
+				if(SessionBegun) {
+					SessionManager.EndSession();
+				}
+				if(ConnectionOpen) {
+					SessionManager.CloseConnection();
+				}
+				throw e;
+			}
+		}
+
+		///<summary>Creates a deposit within QuickBooks.  A QB connection must be open before calling this method. Requires connection with version 9.0</summary>
+		private static void BuildDepositAddRq(string depositAcct,string incomeAcct,double amount) {
+			if(!ConnectionOpen) {
+				return;
+			}
+			//Build the deposit add request and append it to the request message.
+			IDepositAdd DepositAddRq=RequestMsgSet.AppendDepositAddRq();
+			//Set field value for FullName.
+			DepositAddRq.DepositToAccountRef.FullName.SetValue(depositAcct);
+			//Set deposit info attributes.
+			IDepositLineAdd DepositLineAdd1=DepositAddRq.DepositLineAddList.Append();
+			//Set field value for income account
+			DepositLineAdd1.ORDepositLineAdd.DepositInfo.AccountRef.FullName.SetValue(incomeAcct);
+			//Set field value for Amount
+			DepositLineAdd1.ORDepositLineAdd.DepositInfo.Amount.SetValue(Math.Round(amount,2));
+		}
+
+		///<summary>Checks if the status code for the deposit is "ok".</summary>
+		private static void ValidateDepositAddRs() {
+			if(ResponseMsgSet == null) {
+				return;
+			}
+			IResponseList responseList = ResponseMsgSet.ResponseList;
+			if(responseList == null) {
+				return;
+			}
+			//if we sent only one request, there is only one response, we'll walk the list for this sample
+			for(int i=0;i<responseList.Count;i++) {
+				IResponse response = responseList.GetAt(i);
+				//check the status code of the response, 0=ok, >0 is warning
+				if(response.StatusCode > 0) {
+					throw new Exception(response.StatusMessage);
+				}
+			}
 		}
 
 		#region Entities (payees)

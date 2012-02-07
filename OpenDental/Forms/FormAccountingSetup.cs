@@ -709,8 +709,10 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 			  return;
 			}
-			listAccountsQB.AddRange(FormA.SelectedAccountsQB);
-			FillAccountListQB();
+			if(FormA.SelectedAccountsQB!=null) {
+				listAccountsQB.AddRange(FormA.SelectedAccountsQB);
+				FillAccountListQB();
+			}
 		}
 
 		private void butRemoveAccountsQB_Click(object sender,EventArgs e) {
@@ -736,8 +738,9 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 			  return;
 			}
-			listAccountsQB.Add(FormA.SelectedAccountsQB[0]);
-			textIncomeAccountQB.Text=FormA.SelectedAccountsQB[0];
+			if(FormA.SelectedAccountsQB!=null && FormA.SelectedAccountsQB.Count>0) {
+				textIncomeAccountQB.Text=FormA.SelectedAccountsQB[0];
+			}
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
