@@ -150,8 +150,8 @@ namespace OpenDental{
 		private void FormAccountPick_Load(object sender,EventArgs e) {
 			if(IsQuickBooks) {
 				SelectedAccountsQB=new List<string>();
-				FillGridQB();
 				checkInactive.Visible=false;
+				FillGridQB();
 				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 			}
 			else {
@@ -214,7 +214,13 @@ namespace OpenDental{
 			ODGridRow row;
 			//Get the list of accounts from QuickBooks.
 			Cursor.Current=Cursors.WaitCursor;
-			List<string> accountList=QuickBooks.GetListOfAccounts();
+			List<string> accountList=new List<string>();
+			try {
+				accountList=QuickBooks.GetListOfAccounts();
+			}
+			catch(Exception e) {
+				MessageBox.Show(e.Message);
+			}
 			Cursor.Current=Cursors.Default;
 			for(int i=0;i<accountList.Count;i++){
 				row=new ODGridRow();

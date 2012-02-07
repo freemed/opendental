@@ -387,9 +387,8 @@ namespace OpenDentBusiness {
 		ProviderTimeOperatory
 	}
 
-	///<summary>Used by pref "AccountingSoftware".  0=None, 1=Open Dental, 2=QuickBooks</summary>
+	///<summary>Used by pref "AccountingSoftware".  0=OpenDental, 1=QuickBooks</summary>
 	public enum AccountingSoftware {
-		None,
 		OpenDental,
 		QuickBooks
 	}

@@ -460,7 +460,7 @@ namespace OpenDental{
 				//They need to detach it from within the transaction
 				//Might be enhanced later to allow, but that's very complex.
 				Transaction trans=Transactions.GetAttachedToDeposit(DepositCur.DepositNum);
-				if(trans==null || PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks){
+				if(trans==null){
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 					textDepositAccount.Visible=false;
@@ -733,7 +733,7 @@ namespace OpenDental{
 						}
 						catch(Exception ex) {
 							Cursor.Current=Cursors.Default;
-							if(MessageBox.Show(ex.Message+"\r\n\r\nContinue anyway?","QuickBooks Deposit Create Failed",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+							if(MessageBox.Show(ex.Message+"\r\n\r\nA deposit has not been created in QuickBooks, continue anyway?","QuickBooks Deposit Create Failed",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
 								return false;
 							}
 						}
