@@ -84,6 +84,11 @@ namespace OpenDentBusiness{
 			return Database;
 		}
 
+		///<summary>From local variable.  Does not query the database.</summary>
+		public static string GetServerName() {
+			return ServerName;
+		}
+
 		#region Constructors
 		public DataConnection(bool isLow) {
 			string connectStr=ConnectionString;

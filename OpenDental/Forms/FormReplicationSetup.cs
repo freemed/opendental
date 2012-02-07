@@ -25,6 +25,10 @@ namespace OpenDental {
 				//not allowed to uncheck it
 				checkRandomPrimaryKeys.Enabled=false;
 			}
+			if(PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)>0) {
+				groupBoxReplicationFailure.Visible=true;
+				textReplicaitonFailureAtServer_id.Text=PrefC.GetInt(PrefName.ReplicationFailureAtServer_id).ToString();
+			}
 			FillGrid();
 		}
 
@@ -46,7 +50,6 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","SlaveMonitor"),100);
 			gridMain.Columns.Add(col);
-
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<ReplicationServers.Listt.Count;i++){
@@ -217,6 +220,10 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.Default;
 			MessageBox.Show(Lan.g(this,"Database synch completed successfully."));
+		}
+
+		private void butResetReplicationFailureAtServer_id_Click(object sender,EventArgs e) {
+			Prefs.UpdateInt(PrefName.ReplicationFailureAtServer_id,0);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

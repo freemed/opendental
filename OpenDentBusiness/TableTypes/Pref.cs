@@ -301,6 +301,7 @@ namespace OpenDentBusiness {
 		RegistrationKeyIsDisabled,
 		RegistrationNumberClaim,
 		RenaissanceLastBatchNumber,
+		///<summary>If replication has failed, this indicates the server_id.  No computer will be able to connect to this single server until this flag is cleared.</summary>
 		ReplicationFailureAtServer_id,
 		ReportFolderName,
 		ReportsPPOwriteoffDefaultToProcDate,

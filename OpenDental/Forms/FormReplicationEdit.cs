@@ -31,6 +31,10 @@ namespace OpenDental {
 			textSlaveMonitor.Text=RepServ.SlaveMonitor;
 		}
 
+		private void butThisComputer_Click(object sender,EventArgs e) {
+			textSlaveMonitor.Text=Dns.GetHostName();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(RepServ.IsNew) {
 				DialogResult=DialogResult.Cancel;
@@ -76,7 +80,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if((textRangeStart.Text !="" || textRangeEnd.Text !="") && rangeEnd-rangeStart<999999){
+			if((textRangeStart.Text !="" || textRangeEnd.Text !="") && rangeEnd-rangeStart<999999) {
 				MsgBox.Show(this,"The end of the range must be at least 999,999 greater than the start of the range.");
 				return;
 			}
@@ -100,12 +104,9 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butThisComputer_Click(object sender,EventArgs e) {
-			textSlaveMonitor.Text=Dns.GetHostName();
-		}
 
-		
 
-		
 	}
+
+		
 }

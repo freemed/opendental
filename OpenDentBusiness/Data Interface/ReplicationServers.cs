@@ -181,6 +181,15 @@ namespace OpenDentBusiness{
 				return false;
 			}
 		}
+
+		///<summary>Get the status of the replication server.</summary>
+		public static DataTable GetSlaveStatus() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SHOW SLAVE STATUS";
+			return Db.GetTable(command);
+		}
 		
 
 	}

@@ -39,7 +39,12 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.groupBoxReplicationFailure = new System.Windows.Forms.GroupBox();
+			this.butClearReplicationFailureAtServer_id = new OpenDental.UI.Button();
+			this.label6 = new System.Windows.Forms.Label();
+			this.textReplicaitonFailureAtServer_id = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
+			this.groupBoxReplicationFailure.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// checkRandomPrimaryKeys
@@ -56,7 +61,7 @@ namespace OpenDental{
 			// 
 			this.label1.Location = new System.Drawing.Point(113,510);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(551,35);
+			this.label1.Size = new System.Drawing.Size(550,35);
 			this.label1.TabIndex = 61;
 			this.label1.Text = resources.GetString("label1.Text");
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -65,7 +70,7 @@ namespace OpenDental{
 			// 
 			this.label2.Location = new System.Drawing.Point(113,552);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(503,35);
+			this.label2.Size = new System.Drawing.Size(431,35);
 			this.label2.TabIndex = 63;
 			this.label2.Text = "Use the Test button to generate and display some sample key values for this compu" +
     "ter.  The displayed values should fall within the range set above.";
@@ -218,10 +223,59 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// groupBoxReplicationFailure
+			// 
+			this.groupBoxReplicationFailure.Controls.Add(this.butClearReplicationFailureAtServer_id);
+			this.groupBoxReplicationFailure.Controls.Add(this.label6);
+			this.groupBoxReplicationFailure.Controls.Add(this.textReplicaitonFailureAtServer_id);
+			this.groupBoxReplicationFailure.ForeColor = System.Drawing.Color.Red;
+			this.groupBoxReplicationFailure.Location = new System.Drawing.Point(550,537);
+			this.groupBoxReplicationFailure.Name = "groupBoxReplicationFailure";
+			this.groupBoxReplicationFailure.Size = new System.Drawing.Size(323,50);
+			this.groupBoxReplicationFailure.TabIndex = 67;
+			this.groupBoxReplicationFailure.TabStop = false;
+			this.groupBoxReplicationFailure.Text = "Replication Failure Detected";
+			this.groupBoxReplicationFailure.Visible = false;
+			// 
+			// butClearReplicationFailureAtServer_id
+			// 
+			this.butClearReplicationFailureAtServer_id.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClearReplicationFailureAtServer_id.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClearReplicationFailureAtServer_id.Autosize = true;
+			this.butClearReplicationFailureAtServer_id.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClearReplicationFailureAtServer_id.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearReplicationFailureAtServer_id.CornerRadius = 4F;
+			this.butClearReplicationFailureAtServer_id.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.butClearReplicationFailureAtServer_id.Location = new System.Drawing.Point(248,19);
+			this.butClearReplicationFailureAtServer_id.Name = "butClearReplicationFailureAtServer_id";
+			this.butClearReplicationFailureAtServer_id.Size = new System.Drawing.Size(69,24);
+			this.butClearReplicationFailureAtServer_id.TabIndex = 2;
+			this.butClearReplicationFailureAtServer_id.Text = "Clear";
+			this.butClearReplicationFailureAtServer_id.Click += new System.EventHandler(this.butResetReplicationFailureAtServer_id_Click);
+			// 
+			// label6
+			// 
+			this.label6.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.label6.Location = new System.Drawing.Point(6,22);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(155,18);
+			this.label6.TabIndex = 66;
+			this.label6.Text = "Replication Failure at Server_id";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textReplicaitonFailureAtServer_id
+			// 
+			this.textReplicaitonFailureAtServer_id.Location = new System.Drawing.Point(167,22);
+			this.textReplicaitonFailureAtServer_id.Name = "textReplicaitonFailureAtServer_id";
+			this.textReplicaitonFailureAtServer_id.ReadOnly = true;
+			this.textReplicaitonFailureAtServer_id.Size = new System.Drawing.Size(75,20);
+			this.textReplicaitonFailureAtServer_id.TabIndex = 67;
+			// 
 			// FormReplicationSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(885,668);
+			this.Controls.Add(this.groupBoxReplicationFailure);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butTest);
@@ -238,6 +292,8 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormReplicationSetup_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBoxReplicationFailure.ResumeLayout(false);
+			this.groupBoxReplicationFailure.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -259,5 +315,9 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textPassword;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox textUsername;
+		private System.Windows.Forms.GroupBox groupBoxReplicationFailure;
+		private UI.Button butClearReplicationFailureAtServer_id;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.TextBox textReplicaitonFailureAtServer_id;
 	}
 }

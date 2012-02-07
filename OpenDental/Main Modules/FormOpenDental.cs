@@ -1474,6 +1474,11 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
+				MsgBox.Show(this,"Replication has stopped. All copies of Open Dental for this server have been shut down. Please restore your database with a copy from this server's replication master. From a workstation on that master database, clear the Replication Failure at Server_id value from Setup | Replication. Then wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup."
+					+"\r\n\r\nOpen Dental: 503-363-5432.");
+				Application.Exit();
+			}	
 			Cursor=Cursors.WaitCursor;
 			Splash=new FormSplash();
 			if(CommandLineArgs.Length==0) {
@@ -1548,7 +1553,7 @@ namespace OpenDental{
 				ProcedureCodes.ResetADAdescriptions();
 				Prefs.UpdateBool(PrefName.ADAdescriptionsReset,true);
 			}
-			Splash.Dispose();			
+			Splash.Dispose();
 			//Choose a default DirectX format when no DirectX format has been specified and running in DirectX tooth chart mode.
 			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.DirectX && ComputerPrefs.LocalComputer.DirectXFormat=="") {
@@ -1707,6 +1712,7 @@ namespace OpenDental{
 					return false;
 				}
 			}
+//todo: Replication
 			//if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
 			//ClientWeb version can be older than this version, but that will be caught in a moment.
 			if(!PrefL.ConvertDB()){
@@ -4687,13 +4693,42 @@ namespace OpenDental{
 
 		private void timerReplicationMonitor_Tick(object sender,EventArgs e) {
 			//this timer doesn't get turned on until after user successfully logs in.
-			//Jordan todo: test to see if user is using replication
-			//if(ReplicationServers.Listt
-			//if(){
-			//	return;
-			//}
-
-			//Michael todo: Poll slave.
+			if(ReplicationServers.Listt.Count==0) {//Listt will be automatically refreshed if null.
+				return;//user must not be using any replication
+			}
+			bool isSlaveMonitor=false;
+			for(int i=0;i<ReplicationServers.Listt.Count;i++) {
+				if(ReplicationServers.Listt[i].SlaveMonitor.ToString()!=Dns.GetHostName()) {
+					isSlaveMonitor=true;
+				}
+			}
+			if(!isSlaveMonitor) {
+				return;
+			}
+			DataTable table=ReplicationServers.GetSlaveStatus();
+			if(table.Rows.Count==0) {
+				return;
+			}
+			if(table.Rows[0]["Replicate_Do_Db"].ToString()!=DataConnection.GetDatabaseName()) {//if the database we're connected to is not even involved in replication
+				return;
+			}
+			string status=table.Rows[0]["Slave_SQL_Running"].ToString();
+			if(status=="Yes") {
+				return;
+			}
+			//Shut down all copies of OD and set ReplicationFailureAtServer_id to this server_id
+			//No workstations will be able to connect to this single server while this flag is set.
+			Prefs.UpdateInt(PrefName.ReplicationFailureAtServer_id,ReplicationServers.Server_id);
+			//shut down all workstations on all servers
+			FormOpenDental.signalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
+			Signalod sig=new Signalod();
+			sig.ITypes=((int)InvalidType.ShutDownNow).ToString();
+			sig.SigType=SignalType.Invalid;
+			Signalods.Insert(sig);
+			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
+			timerReplicationMonitor.Enabled=false;
+			MessageBox.Show("Replication has stopped. All copies of Open Dental for this server will now shut down.  Please restore your database with a copy from this server's replication master.  From a workstation on that master database, go to Setup | Replication and click the Clear button at the lower right.  Then, wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup.\r\n\r\nOpen Dental: 503-363-5432.\r\n\r\nPlease print this page for future reference.");
+			Application.Exit();
 		}
 
 		#region Logoff
