@@ -1502,6 +1502,11 @@ namespace OpenDental{
 			else{
 				invalidTypes.Add(InvalidType.Signals);//so when mouse moves over light buttons, it won't crash
 			}
+			if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
+				MsgBox.Show(this,"Replication has stopped. All copies of Open Dental for this server have been shut down. Please restore your database with a copy from this server's replication master. From a workstation on that master database, clear the Replication Failure at Server_id value from Setup | Replication. Then wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup."
+					+"\r\n\r\nOpen Dental: 503-363-5432.");
+				Application.Exit();
+			}	
 			Plugins.LoadAllPlugins(this);//moved up from right after optimizing tooth chart graphics.  New position might cause problems.
 			//It was moved because RefreshLocalData()=>RefreshLocalDataPostCleanup()=>ContrChart2.InitializeLocalData()=>LayoutToolBar() has a hook.
 			RefreshLocalData(invalidTypes.ToArray());
@@ -1707,11 +1712,6 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
-				MsgBox.Show(this,"Replication has stopped. All copies of Open Dental for this server have been shut down. Please restore your database with a copy from this server's replication master. From a workstation on that master database, clear the Replication Failure at Server_id value from Setup | Replication. Then wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup."
-					+"\r\n\r\nOpen Dental: 503-363-5432.");
-				Application.Exit();
-			}	
 			//if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
 			//ClientWeb version can be older than this version, but that will be caught in a moment.
 			if(!PrefL.ConvertDB()){
