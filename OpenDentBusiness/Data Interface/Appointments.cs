@@ -593,7 +593,7 @@ namespace OpenDentBusiness{
 			DataTable tableAppt=GetPeriodApptsTable(dateStart,dateEnd,0,false);
 			retVal.Tables.Add(tableAppt);//parameters[0],parameters[1],"0","0"));
 			retVal.Tables.Add(GetPeriodEmployeeSchedTable(dateStart,dateEnd));
-			retVal.Tables.Add(GetPeriodWaitingRoomTable(dateStart,dateEnd));
+			retVal.Tables.Add(GetPeriodWaitingRoomTable());
 			retVal.Tables.Add(GetPeriodSchedule(dateStart,dateEnd));
 			retVal.Tables.Add(GetApptFields(tableAppt));
 			retVal.Tables.Add(GetPatFields(tableAppt));
@@ -1213,9 +1213,9 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		public static DataTable GetPeriodWaitingRoomTable(DateTime dateStart,DateTime dateEnd) {
+		public static DataTable GetPeriodWaitingRoomTable() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
 			//DateTime dateStart=PIn.PDate(strDateStart);
 			//DateTime dateEnd=PIn.PDate(strDateEnd);
@@ -1225,14 +1225,11 @@ namespace OpenDentBusiness{
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("patName");
 			table.Columns.Add("waitTime");
-			if(dateStart!=dateEnd) {
-				return table;
-			}
 			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,"+DbHelper.Now()+" dateTimeNow "
 				+"FROM appointment,patient "
 				+"WHERE appointment.PatNum=patient.PatNum "
-				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(dateStart)+" "
-				+"AND DateTimeArrived > "+POut.Date(dateStart)+" "//midnight earlier today
+				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(DateTime.Now)+" "
+				+"AND DateTimeArrived > "+POut.Date(DateTime.Now)+" "//midnight earlier today
 				+"AND DateTimeArrived < "+DbHelper.Now()+" "
 				+"AND "+DbHelper.DateColumn("DateTimeArrived")+"="+DbHelper.DateColumn("AptDateTime")+" ";//prevents people from getting "stuck" in waiting room.
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
