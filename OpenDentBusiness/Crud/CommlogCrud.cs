@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				commlog.Signature      = PIn.String(table.Rows[i]["Signature"].ToString());
 				commlog.SigIsTopaz     = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
 				commlog.DateTStamp     = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				commlog.DateTimeEnd    = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
 				retVal.Add(commlog);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CommlogNum,";
 			}
-			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,IsStatementSent,UserNum,Signature,SigIsTopaz) VALUES(";
+			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,IsStatementSent,UserNum,Signature,SigIsTopaz,DateTimeEnd) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(commlog.CommlogNum)+",";
 			}
@@ -112,8 +113,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (commlog.IsStatementSent)+","
 				+    POut.Long  (commlog.UserNum)+","
 				+"'"+POut.String(commlog.Signature)+"',"
-				+    POut.Bool  (commlog.SigIsTopaz)+")";
+				+    POut.Bool  (commlog.SigIsTopaz)+","
 				//DateTStamp can only be set by MySQL
+				+    POut.DateT (commlog.DateTimeEnd)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -135,8 +137,9 @@ namespace OpenDentBusiness.Crud{
 				+"IsStatementSent=  "+POut.Bool  (commlog.IsStatementSent)+", "
 				+"UserNum        =  "+POut.Long  (commlog.UserNum)+", "
 				+"Signature      = '"+POut.String(commlog.Signature)+"', "
-				+"SigIsTopaz     =  "+POut.Bool  (commlog.SigIsTopaz)+" "
+				+"SigIsTopaz     =  "+POut.Bool  (commlog.SigIsTopaz)+", "
 				//DateTStamp can only be set by MySQL
+				+"DateTimeEnd    =  "+POut.DateT (commlog.DateTimeEnd)+" "
 				+"WHERE CommlogNum = "+POut.Long(commlog.CommlogNum);
 			Db.NonQ(command);
 		}
@@ -185,6 +188,10 @@ namespace OpenDentBusiness.Crud{
 				command+="SigIsTopaz = "+POut.Bool(commlog.SigIsTopaz)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(commlog.DateTimeEnd != oldCommlog.DateTimeEnd) {
+				if(command!=""){ command+=",";}
+				command+="DateTimeEnd = "+POut.DateT(commlog.DateTimeEnd)+"";
+			}
 			if(command==""){
 				return;
 			}

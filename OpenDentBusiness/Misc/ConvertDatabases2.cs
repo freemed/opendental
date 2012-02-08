@@ -8512,7 +8512,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE commlog ADD DateTimeEnd datetime NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE commlog ADD DateTimeEnd date";
+					Db.NonQ(command);
+					command="UPDATE commlog SET DateTimeEnd = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateTimeEnd IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE commlog MODIFY DateTimeEnd NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8551,12 +8562,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 				
 
-				/*				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar(255) NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE replicationserver ADD SlaveMonitor varchar2(255)";
-					Db.NonQ(command);
-				}
-				*/
+				
+
+				

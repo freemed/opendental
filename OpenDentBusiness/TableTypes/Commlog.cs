@@ -33,6 +33,9 @@ namespace OpenDentBusiness{
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>Date and time when commlog ended.  Mainly for internal use.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime DateTimeEnd;
 
 		///<summary></summary>
 		public Commlog Copy(){
