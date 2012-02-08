@@ -1035,7 +1035,7 @@ namespace OpenDental{
 		/// <summary>Refreshes list from db, then fills the treeview.  Set keepSelection to true in order to keep the current selection active.</summary>
 		private void FillDocList(bool keepSelection){
 			ImageNodeId nodeIdSelection=new ImageNodeId();
-			if(keepSelection) {
+			if(keepSelection && treeDocuments.SelectedNode!=null) {
 				nodeIdSelection=(ImageNodeId)treeDocuments.SelectedNode.Tag;
 			}
 			//(keepSelection?GetNodeIdentifier(treeDocuments.SelectedNode):"");
