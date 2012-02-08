@@ -1747,7 +1747,15 @@ namespace OpenDental{
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
-				MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste("Replication has stopped. All copies of Open Dental for this server will now shut down.  Please restore your database with a copy from this server's replication master.  From a workstation on that master database, go to Setup | Replication and click the Clear button at the lower right.  Then, wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup.\r\n\r\nOpen Dental: 503-363-5432\r\n\r\nPlease print this page for future reference.");
+				MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste(@"Replication has stopped.  Open Dental cannot be run on this server until the following steps are taken:
+1. Stop MySQL on this server.
+2. On this server's master, go to Setup | Replication, and click the Clear button at the lower right.
+3. Rename the current database.
+4. Copy the database from the master to this server.
+5. Wipe out all loose files in this server's mysql data directory which do not reside in a subfolder.
+6. Start MySQL and replication.
+Open Dental: 503-363-5432
+Please print this page for future reference.");
 				MsgReplicationFailure.ShowDialog();
 				return false;
 			}	
@@ -4726,7 +4734,15 @@ namespace OpenDental{
 			Signalods.Insert(sig);
 			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
 			timerReplicationMonitor.Enabled=false;
-			MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste("Replication has stopped. All copies of Open Dental for this server will now shut down.  Please restore your database with a copy from this server's replication master.  From a workstation on that master database, go to Setup | Replication and click the Clear button at the lower right.  Then, wipe out all loose files in your local (slave) mysql data directory which do not reside in a subfolder before you start using the restored backup.\r\n\r\nOpen Dental: 503-363-5432.\r\n\r\nPlease print this page for future reference.");
+			MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste(@"Replication has stopped.  Open Dental cannot be run on this server until the following steps are taken:
+1. Stop MySQL on this server.
+2. On this server's master, go to Setup | Replication, and click the Clear button at the lower right.
+3. Rename the current database.
+4. Copy the database from the master to this server.
+5. Wipe out all loose files in this server's mysql data directory which do not reside in a subfolder.
+6. Start MySQL and replication.
+Open Dental: 503-363-5432
+Please print this page for future reference.");
 			MsgReplicationFailure.ShowDialog();
 			Application.Exit();
 		}
