@@ -4830,6 +4830,9 @@ namespace OpenDental{
 						case "DPCpost":
 							row.Cells.Add(table.Rows[i]["orionDPCpost"].ToString());
 							break;
+						case "Length":
+							row.Cells.Add(table.Rows[i]["length"].ToString());
+							break;
 						default:
 							row.Cells.Add("");
 							break;

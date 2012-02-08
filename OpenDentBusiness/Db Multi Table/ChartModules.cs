@@ -53,6 +53,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("FormPatNum");
 			table.Columns.Add("HideGraphics");
+			table.Columns.Add("length");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
 			table.Columns.Add("orionDateScheduleBy");
@@ -189,6 +190,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
 					row["LabCaseNum"]=0;
+					row["length"]="";
 					if(componentsToLoad.ShowProcNotes) {
 						#region note-----------------------------------------------------------------------------------------------------------
 						row["user"]="";
@@ -354,7 +356,7 @@ namespace OpenDentBusiness {
 			}
 			if(componentsToLoad.ShowCommLog) {//TODO: refine to use show Family
 				#region Commlog
-				command="SELECT CommlogNum,CommDateTime,CommType,Note,commlog.PatNum,UserNum,p1.FName,"
+				command="SELECT CommlogNum,CommDateTime,commlog.DateTimeEnd,CommType,Note,commlog.PatNum,UserNum,p1.FName,"
 				+"CASE WHEN Signature!='' THEN 1 ELSE 0 END SigPresent "
 				+"FROM patient p1,patient p2,commlog "
 				+"WHERE commlog.PatNum=p1.PatNum "
@@ -387,6 +389,12 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=0;
+					row["length"]="";
+					if(PIn.DateT(rawComm.Rows[i]["DateTimeEnd"].ToString()).Year>1880) {
+						DateTime startTime=PIn.DateT(rawComm.Rows[i]["CommDateTime"].ToString());
+						DateTime endTime=PIn.DateT(rawComm.Rows[i]["DateTimeEnd"].ToString());
+						row["length"]=(endTime-startTime).ToStringHmm();
+					}
 					row["note"]=rawComm.Rows[i]["Note"].ToString();
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
@@ -458,6 +466,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
 					row["HideGraphics"]="";
 					row["LabCaseNum"] = 0;
+					row["length"]="";
 					row["note"] = "";
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
@@ -549,6 +558,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=0;
+					row["length"]="";
 					row["note"]=rawRx.Rows[i]["Notes"].ToString();
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
@@ -632,6 +642,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
+					row["length"]="";
 					row["note"]=rawLab.Rows[i]["Instructions"].ToString();
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
@@ -726,6 +737,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=0;
+					row["length"]="";
 					txt="";
 					if(!rawTask.Rows[i]["Descript"].ToString().StartsWith("==") && rawTask.Rows[i]["UserNum"].ToString()!="") {
 						txt+=Userods.GetName(PIn.Long(rawTask.Rows[i]["UserNum"].ToString()))+" - ";
@@ -871,6 +883,10 @@ namespace OpenDentBusiness {
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
 				row["LabCaseNum"]=0;
+				row["length"]="";
+				if(rawApt.Rows[i]["Pattern"].ToString()!="") {
+					row["length"]=new TimeSpan(0,rawApt.Rows[i]["Pattern"].ToString().Length*5,0).ToStringHmm();
+				}
 				row["note"]=rawApt.Rows[i]["Note"].ToString();
 				row["orionDateScheduleBy"]="";
 				row["orionDateStopClock"]="";
@@ -943,6 +959,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=0;
+					row["length"]="";
 					row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
@@ -1025,6 +1042,7 @@ namespace OpenDentBusiness {
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
 					row["LabCaseNum"]=0;
+					row["length"]="";
 					row["note"]="";
 					row["orionDateScheduleBy"]="";
 					row["orionDateStopClock"]="";
