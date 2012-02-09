@@ -1458,32 +1458,40 @@ namespace OpenDental{
 			formChooseDb.NoShow=noShow;//either unknown or yes
 			formChooseDb.GetConfig();
 			formChooseDb.GetCmdLine();
-			if(formChooseDb.NoShow==YN.Yes) {
-				if(!formChooseDb.TryToConnect()) {
+			while(true) {//Most users will loop through once.  If user tries to connect to a db with replication failure, they will loop through again.
+				if(formChooseDb.NoShow==YN.Yes) {
+					if(!formChooseDb.TryToConnect()) {
+						formChooseDb.ShowDialog();
+						if(formChooseDb.DialogResult==DialogResult.Cancel) {
+							Application.Exit();
+							return;
+						}
+					}
+				}
+				else {
 					formChooseDb.ShowDialog();
 					if(formChooseDb.DialogResult==DialogResult.Cancel) {
 						Application.Exit();
 						return;
 					}
 				}
-			}
-			else {
-				formChooseDb.ShowDialog();
-				if(formChooseDb.DialogResult==DialogResult.Cancel) {
+				Cursor=Cursors.WaitCursor;
+				Splash=new FormSplash();
+				if(CommandLineArgs.Length==0) {
+					Splash.Show();
+				}
+				if(!PrefsStartup()){//looks for the AtoZ folder here, but would like to eventually move that down to after login
+					Cursor=Cursors.Default;
+					Splash.Dispose();
 					Application.Exit();
 					return;
 				}
-			}
-			Cursor=Cursors.WaitCursor;
-			Splash=new FormSplash();
-			if(CommandLineArgs.Length==0) {
-				Splash.Show();
-			}
-			if(!PrefsStartup()){//looks for the AtoZ folder here, but would like to eventually move that down to after login
-				Cursor=Cursors.Default;
-				Splash.Dispose();
-				Application.Exit();
-				return;
+				if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
+					MsgBox.Show(this,"This database is temporarily unavailable.  Please connect instead to your alternate database at the other location.");
+					formChooseDb.NoShow=YN.No;//This ensures they will get a choose db window next time through the loop.
+					continue;
+				}
+				break;
 			}
 			if(Programs.UsingEcwTight()) {
 				Splash.Dispose();//We don't show splash screen when bridging to eCW.
@@ -1746,19 +1754,6 @@ namespace OpenDental{
 				}
 				Cache.Refresh(InvalidType.Prefs);
 			}
-			if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
-				MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste(@"Replication has stopped.  Open Dental cannot be run on this server until the following steps are taken:
-1. Stop MySQL on this server.
-2. On this server's master, go to Setup | Replication, and click the Clear button at the lower right.
-3. Rename the current database.
-4. Copy the database from the master to this server.
-5. Wipe out all loose files in this server's mysql data directory which do not reside in a subfolder.
-6. Start MySQL and replication.
-Open Dental: 503-363-5432
-Please print this page for future reference.");
-				MsgReplicationFailure.ShowDialog();
-				return false;
-			}	
 			Lans.RefreshCache();//automatically skips if current culture is en-US
 			LanguageForeigns.Refresh(CultureInfo.CurrentCulture.Name,CultureInfo.CurrentCulture.TwoLetterISOLanguageName);//automatically skips if current culture is en-US
 			//menuItemMergeDatabases.Visible=PrefC.GetBool(PrefName.RandomPrimaryKeys");
@@ -4734,16 +4729,7 @@ Please print this page for future reference.");
 			Signalods.Insert(sig);
 			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
 			timerReplicationMonitor.Enabled=false;
-			MsgBoxCopyPaste MsgReplicationFailure=new MsgBoxCopyPaste(@"Replication has stopped.  Open Dental cannot be run on this server until the following steps are taken:
-1. Stop MySQL on this server.
-2. On this server's master, go to Setup | Replication, and click the Clear button at the lower right.
-3. Rename the current database.
-4. Copy the database from the master to this server.
-5. Wipe out all loose files in this server's mysql data directory which do not reside in a subfolder.
-6. Start MySQL and replication.
-Open Dental: 503-363-5432
-Please print this page for future reference.");
-			MsgReplicationFailure.ShowDialog();
+			MsgBox.Show(this,"This database is temporarily unavailable.  Please connect instead to your alternate database at the other location.");
 			Application.Exit();
 		}
 
