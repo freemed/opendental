@@ -8513,7 +8513,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE commlog ADD DateTimeEnd datetime NOT NULL";
+					command="ALTER TABLE commlog ADD DateTimeEnd datetime DEFAULT '0001-01-01' NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
