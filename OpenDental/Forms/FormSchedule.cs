@@ -437,6 +437,10 @@ namespace OpenDental{
 				butDelete.Enabled=false;
 				groupCopy.Enabled=false;
 				groupPaste.Enabled=false;
+				if(PrefC.GetBool(PrefName.DistributorKey)) {//if this is OD HQ
+					checkPractice.Checked=false;
+					checkPractice.Enabled=false;
+				}
 			}
 			DateTime dateFrom=new DateTime(DateTime.Today.Year,DateTime.Today.Month,1);
 			textDateFrom.Text=dateFrom.ToShortDateString();

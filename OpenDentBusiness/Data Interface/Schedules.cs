@@ -418,7 +418,7 @@ namespace OpenDentBusiness{
 				+"AND SchedDate <= "+POut.Date(dateEnd)+" "
 				+"AND (";
 			string orClause="";//this is guaranteed to be non empty by the time the command is assembled.
-			if(includePractice && !PrefC.GetBool(PrefName.DistributorKey)){
+			if(includePractice){
 				orClause="SchedType=0 ";
 			}
 			for(int i=0;i<provNums.Count;i++){
