@@ -146,10 +146,10 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Commlog>>(MethodBase.GetCurrentMethod(),guarantor);
 			}
-			string command="SELECT * FROM commlog "
-				+"WHERE PatNum IN (SELECT PatNum FROM patient WHERE Guarantor="+POut.Long(guarantor)+") "
-				+"AND CommDateTime<"+POut.Date(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))+" "
-				+"AND DateTimeEnd!="+POut.Date(new DateTime(1,1,1));
+			string command="SELECT commlog.* FROM commlog "
+				+"LEFT JOIN patient ON commlog.PatNum=patient.PatNum AND patient.Guarantor="+POut.Long(guarantor)+" "
+				+"WHERE commlog.CommDateTime<"+POut.Date(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))+" "
+				+"AND "+DbHelper.Year("commlog.DateTimeEnd")+">1";
 			return Crud.CommlogCrud.SelectMany(command);
 		}
 

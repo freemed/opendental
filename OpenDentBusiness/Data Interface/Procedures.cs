@@ -310,11 +310,11 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Procedure>(MethodBase.GetCurrentMethod(),guarantor);
 			}
-			string command="SELECT * FROM procedurelog "
-				+"WHERE PatNum IN (SELECT PatNum FROM patient WHERE Guarantor="+POut.Long(guarantor)+") "
-				+"AND ProcDate!="+POut.Date(new DateTime(1,1,1))+" "
-				+"AND ProcStatus="+POut.Int((int)ProcStat.C)+" "
-				+"ORDER BY ProcDate";
+			string command="SELECT procedurelog.* FROM procedurelog "
+				+"LEFT JOIN patient ON procedurelog.PatNum=patient.PatNum AND patient.Guarantor="+POut.Long(guarantor)+" "
+				+"WHERE "+DbHelper.Year("procedurelog.ProcDate")+">1 "
+				+"AND procedurelog.ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"ORDER BY procedurelog.ProcDate";
 			command=DbHelper.LimitOrderBy(command,1);
 			return Crud.ProcedureCrud.SelectOne(command);
 		}
