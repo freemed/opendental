@@ -8609,6 +8609,22 @@ namespace OpenDental{
 		}
 
 		private void gridChartViews_CellClick(object sender,ODGridClickEventArgs e) {
+			ChartViewsCellClicked(e);
+		}
+
+		private void gridChartViews_DoubleClick(object sender,ODGridClickEventArgs e) {
+			ChartViewsDoubleClicked(e);
+		}
+
+		private void gridCustomerViews_CellClick(object sender,ODGridClickEventArgs e) {
+			ChartViewsCellClicked(e);
+		}
+
+		private void gridCustomerViews_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			ChartViewsDoubleClicked(e);
+		}
+
+		private void ChartViewsCellClicked(ODGridClickEventArgs e) {
 			SetChartView(ChartViews.Listt[e.Row]);
 			gridChartViews.SetSelected(e.Row,true);
 			if(IsDistributorKey) {
@@ -8616,12 +8632,12 @@ namespace OpenDental{
 			}
 		}
 
-		private void gridChartViews_DoubleClick(object sender,ODGridClickEventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)){
+		private void ChartViewsDoubleClicked(ODGridClickEventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
 			int count=gridChartViews.Rows.Count;
-			FormChartView FormC=new FormChartView(); 
+			FormChartView FormC=new FormChartView();
 			FormC.ChartViewCur=ChartViews.Listt[e.Row];
 			FormC.ShowDialog();
 			FillChartViewsGrid();
@@ -8636,7 +8652,7 @@ namespace OpenDental{
 				gridChartViews.SetSelected(FormC.ChartViewCur.ItemOrder,true);
 				SetChartView(ChartViews.Listt[FormC.ChartViewCur.ItemOrder]);
 			}
-			else if(gridChartViews.Rows.Count>0){
+			else if(gridChartViews.Rows.Count>0) {
 				for(int i=0;i<ChartViews.Listt.Count;i++) {
 					ChartViews.Listt[i].ItemOrder=i;
 					ChartViews.Update(ChartViews.Listt[i]);
@@ -8656,14 +8672,6 @@ namespace OpenDental{
 			if(IsDistributorKey) {
 				gridCustomerViews.SetSelected(gridChartViews.GetSelectedIndex(),true);
 			}
-		}
-
-		private void gridCustomerViews_CellClick(object sender,ODGridClickEventArgs e) {
-			gridChartViews_CellClick(sender,e);
-		}
-
-		private void gridCustomerViews_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			gridChartViews_DoubleClick(sender,e);
 		}
 
 		private void butChartViewAdd_Click(object sender,EventArgs e) {
