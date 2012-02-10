@@ -3517,7 +3517,8 @@ namespace OpenDental{
 				}
 				butSend.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 				if(ClaimCur.ClaimType=="PreAuth") {
-					PatPlan patPlan1=PatPlans.GetPatPlan(PatCur.PatNum,1);
+					InsSub insSubClaim=InsSubs.GetOne(ClaimCur.InsSubNum);
+					PatPlan patPlan1=PatPlans.GetPatPlan(insSubClaim.Subscriber,1);
 					if(ClaimCur.InsSubNum!=patPlan1.InsSubNum) {
 						butSend.Enabled=false;//Do not allow the user to send secondary predeterminations because there is no format that supports such a transaction in ITRANS.
 					}
