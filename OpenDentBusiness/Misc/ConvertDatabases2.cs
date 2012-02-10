@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("12.1.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("12.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -8524,18 +8524,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE commlog MODIFY DateTimeEnd NOT NULL";
 					Db.NonQ(command);
 				}
-
-
-
-
-
 				command="UPDATE preference SET ValueString = '12.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To12_2_0();
+			To12_2_0();
 		}
 
+		private static void To12_2_0() {
+			if(FromVersion<new Version("12.2.0.0")) {
+				string command;
 
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '12.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To12_3_0();
+		}
 
 
 
