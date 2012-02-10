@@ -305,6 +305,20 @@ namespace OpenDentBusiness {
 			return date.ToString("M/yy");
 		}
 
+		///<summary>Gets the first completed procedure within the family.  Used to determine the earliest date the family became a customer.</summary>
+		public static Procedure GetFirstCompletedProcForFamily(long guarantor) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Procedure>(MethodBase.GetCurrentMethod(),guarantor);
+			}
+			string command="SELECT * FROM procedurelog "
+				+"WHERE PatNum IN (SELECT PatNum FROM patient WHERE Guarantor="+POut.Long(guarantor)+") "
+				+"AND ProcDate!="+POut.Date(new DateTime(1,1,1))+" "
+				+"AND ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"ORDER BY ProcDate";
+			command=DbHelper.LimitOrderBy(command,1);
+			return Crud.ProcedureCrud.SelectOne(command);
+		}
+
 		///<summary>Gets a list (procsMultApts is a struct of type ProcDesc(aptNum, string[], and production) of all the procedures attached to the specified appointments.  Then, use GetProcsOneApt to pull procedures for one appointment from this list.  This process requires only one call to the database. "myAptNums" is the list of appointments to get procedures for.</summary>
 		public static List<Procedure> GetProcsMultApts(List<long> myAptNums) {
 			//No need to check RemotingRole; no call to db.

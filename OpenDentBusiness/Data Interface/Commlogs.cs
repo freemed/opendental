@@ -130,7 +130,6 @@ namespace OpenDentBusiness{
 			return PIn.Int(Db.GetScalar(command));
 		}
 
-		
 		public static void RecallUndo(DateTime date) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),date);
@@ -140,6 +139,18 @@ namespace OpenDentBusiness{
 				+"WHERE "+DbHelper.DateColumn("CommDateTime")+" = "+POut.Date(date)+" "
 				+"AND (SELECT ItemValue FROM definition WHERE definition.DefNum=commlog.CommType) ='"+CommItemTypeAuto.RECALL.ToString()+"'";
 			Db.NonQ(command);
+		}
+
+		///<summary>Gets all commlogs for family before this month that contain a DateTimeEnd entry.  Used internally to keep track of how long calls last.</summary>
+		public static List<Commlog> GetTimedCommlogsForPat(long guarantor) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Commlog>>(MethodBase.GetCurrentMethod(),guarantor);
+			}
+			string command="SELECT * FROM commlog "
+				+"WHERE PatNum IN (SELECT PatNum FROM patient WHERE Guarantor="+POut.Long(guarantor)+") "
+				+"AND CommDateTime<"+POut.Date(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))+" "
+				+"AND DateTimeEnd!="+POut.Date(new DateTime(1,1,1));
+			return Crud.CommlogCrud.SelectMany(command);
 		}
 
 	}
