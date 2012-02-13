@@ -5147,6 +5147,36 @@ namespace OpenDental{
 						avgCount++;
 					}
 				}
+				if(month1Span.Hours>=3) {
+					textMonth1.BackColor=Color.Red;
+					textMonth1.ForeColor=Color.White;
+					textMonth1.Font=new Font(textMonth1.Font,FontStyle.Bold);
+				}
+				else {
+					textMonth1.ForeColor=Color.Black;
+					textMonth1.BackColor=Color.WhiteSmoke;
+					textMonth1.Font=new Font(textMonth1.Font,FontStyle.Regular);
+				}
+				if(month2Span.Hours>=3) {
+					textMonth2.BackColor=Color.Red;
+					textMonth2.ForeColor=Color.White;
+					textMonth2.Font=new Font(textMonth2.Font,FontStyle.Bold);
+				}
+				else {
+					textMonth2.ForeColor=Color.Black;
+					textMonth2.BackColor=Color.WhiteSmoke;
+					textMonth2.Font=new Font(textMonth2.Font,FontStyle.Regular);
+				}
+				if(month3Span.Hours>=3) {
+					textMonth3.BackColor=Color.Red;
+					textMonth3.ForeColor=Color.White;
+					textMonth3.Font=new Font(textMonth3.Font,FontStyle.Bold);
+				}
+				else {
+					textMonth3.ForeColor=Color.Black;
+					textMonth3.BackColor=Color.WhiteSmoke;
+					textMonth3.Font=new Font(textMonth3.Font,FontStyle.Regular);
+				}
 				//Set the text of the boxes.
 				textMonth1.Text=month1Span.ToStringHmm();
 				textMonth2.Text=month2Span.ToStringHmm();
