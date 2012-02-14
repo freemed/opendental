@@ -95,11 +95,11 @@ namespace OpenDental{
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboCompare2 = new System.Windows.Forms.ComboBox();
 			this.groupProcCodeSetup = new System.Windows.Forms.GroupBox();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butProcTools = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butExport = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butShowHiddenDefault = new OpenDental.UI.Button();
 			this.butAll = new OpenDental.UI.Button();
 			this.butEditCategories = new OpenDental.UI.Button();
@@ -288,20 +288,6 @@ namespace OpenDental{
 			this.groupProcCodeSetup.TabStop = false;
 			this.groupProcCodeSetup.Text = "Procedure Codes";
 			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(187,8);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(553,674);
-			this.gridMain.TabIndex = 19;
-			this.gridMain.Title = "Procedures";
-			this.gridMain.TranslationName = "TableProcedures";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
-			// 
 			// butProcTools
 			// 
 			this.butProcTools.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -365,6 +351,20 @@ namespace OpenDental{
 			this.butNew.TabIndex = 22;
 			this.butNew.Text = "&New";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(187,8);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.Size = new System.Drawing.Size(553,674);
+			this.gridMain.TabIndex = 19;
+			this.gridMain.Title = "Procedures";
+			this.gridMain.TranslationName = "TableProcedures";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
 			// 
 			// butShowHiddenDefault
 			// 
@@ -1034,11 +1034,11 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
-			if(gridMain.GetSelectedIndex()==-1){
+			if(gridMain.SelectedCell.Y==-1){
 				MsgBox.Show(this,"Please select a procedure code first.");
 				return;
 			}
-			SelectedCodeNum=PIn.Long(ProcTable.Rows[gridMain.GetSelectedIndex()]["CodeNum"].ToString());
+			SelectedCodeNum=PIn.Long(ProcTable.Rows[gridMain.SelectedCell.Y]["CodeNum"].ToString());
 			DialogResult=DialogResult.OK;
 		}
 
