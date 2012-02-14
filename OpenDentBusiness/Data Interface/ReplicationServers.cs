@@ -22,6 +22,9 @@ namespace OpenDentBusiness{
 				}
 				return server_id;
 			}
+			set{
+				server_id=value;
+			}
 		}
 
 		public static List<ReplicationServer> Listt {

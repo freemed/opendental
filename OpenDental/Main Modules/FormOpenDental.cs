@@ -1489,6 +1489,7 @@ namespace OpenDental{
 				if(ReplicationServers.Server_id!=0 && ReplicationServers.Server_id==PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)) {
 					MsgBox.Show(this,"This database is temporarily unavailable.  Please connect instead to your alternate database at the other location.");
 					formChooseDb.NoShow=YN.No;//This ensures they will get a choose db window next time through the loop.
+					ReplicationServers.Server_id=-1;
 					continue;
 				}
 				break;
