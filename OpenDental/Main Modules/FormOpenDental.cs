@@ -4843,8 +4843,8 @@ namespace OpenDental{
 				if(Application.OpenForms[f]==this) {// main form
 					continue;
 				}
-				Application.OpenForms[f].Close();
 				Application.OpenForms[f].Hide();
+				Application.OpenForms[f].Close();
 			}
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Security.CurUser=oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
