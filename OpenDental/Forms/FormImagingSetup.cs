@@ -430,7 +430,6 @@ namespace OpenDental{
 			this.butSetScanner.Size = new System.Drawing.Size(110,24);
 			this.butSetScanner.TabIndex = 22;
 			this.butSetScanner.Text = "Set Default Scanner";
-			this.butSetScanner.Visible = false;
 			this.butSetScanner.Click += new System.EventHandler(this.butSetScanner_Click);
 			// 
 			// FormImagingSetup
@@ -489,6 +488,15 @@ namespace OpenDental{
 			textScanningResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
 		}
 
+		private void butMounts_Click(object sender,EventArgs e) {
+			FormMountDefs FormM=new FormMountDefs();
+			FormM.ShowDialog();
+		}
+
+		private void butSetScanner_Click(object sender,EventArgs e) {
+			EZTwain.SelectImageSource(this.Handle);
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(  textDoc.errorProvider1.GetError(textDoc)!=""
 				|| textScanningResolution.errorProvider1.GetError(textScanningResolution)!="")
@@ -514,14 +522,7 @@ namespace OpenDental{
 			DialogResult=DialogResult.Cancel;
 		}
 
-		private void butMounts_Click(object sender,EventArgs e) {
-			FormMountDefs FormM=new FormMountDefs();
-			FormM.ShowDialog();
-		}
-
-		private void butSetScanner_Click(object sender,EventArgs e) {
-			EZTwain.SelectImageSource(this.Handle);
-		}
+		
 
 
 		
