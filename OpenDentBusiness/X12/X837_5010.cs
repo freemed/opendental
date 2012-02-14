@@ -231,28 +231,10 @@ namespace OpenDentBusiness
 				}
 				//2000A CUR: (medical,instituational,dental) Foreign Currency Information. Situational. We do not need to specify because united states dollars are default.
 				//2010AA NM1: 85 (medical,institutional,dental) Billing Provider Name.
-				sw.Write("NM1"+s
-					+"85"+s);//NM101 2/3 Entity Identifier Code: 85=Billing Provider.
 				if(medType==EnumClaimMedType.Institutional) {
-					sw.Write("2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+					billProv.IsNotPerson=true;//Required by X12 specification. Cannot send a person as the billing provider.
 				}
-				else { //(medical,dental)
-					sw.Write((billProv.IsNotPerson?"2":"1")+s);//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
-				}
-				sw.Write(Sout(billProv.LName,60)+s);//NM103 1/60 Name Last or Organization Name:
-				if(medType==EnumClaimMedType.Institutional) {
-					sw.Write(s//NM104 1/35 Name First: Not used.
-						+s);//NM105 1/25 Name Middle: Not used.
-				}
-				else { //(medical,dental)
-					sw.Write(Sout(billProv.FName,35)+s//NM104 1/35 Name First: Situational. Required when NM102=1. Might be blank.
-						+Sout(billProv.MI,25)+s);//NM105 1/25 Name Middle: Since this is situational there is no minimum length.
-				}
-				sw.Write(s//NM106 1/10 Name Prefix: Not Used.
-					+s//NM107 1/10 Name Suffix: Not Used in instituational. Situational in medical and dental, but we don't support.
-					+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=Centers for Medicare and Medicaid Services National Provider Identifier (NPI).
-					+Sout(billProv.NationalProvID,80));//NM109 2/80 Identification Code: NPI. Validated.
-				EndSegment(sw);//NM110 through NM112 Not Used.
+				WriteNM1Provider("85",sw,billProv);
 				//2010AA N3: (medical,institutional,dental) Billing Provider Address.
 				string billingAddress1="";
 				string billingAddress2="";
@@ -991,8 +973,8 @@ namespace OpenDentBusiness
 					WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
 					if(claim.ProvTreat!=claim.ProvBill) {
-						//2010B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider.
-						WriteNM1_82(sw,provTreat);
+						//2310B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider. Person only, non-person not allowed.
+						WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
 						//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
 						WritePRV_PE(sw,provTreat);
 						//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
@@ -1014,8 +996,8 @@ namespace OpenDentBusiness
 				#endregion 2310 Claim Providers (medical)
 				#region 2310 Claim Providers (inst)
 				if(medType==EnumClaimMedType.Institutional) {
-					//2310A NM1: 71 (institutional) Attending Provider Name. Situational.
-					WriteNM1_71(sw,provTreat);
+					//2310A NM1: 71 (institutional) Attending Provider Name. Situational. Always a person according to the specification (cannot be non-person).
+					WriteNM1Provider("71",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
 					//2310A PRV: AT (institutional) Attending Provider Specialty Information. Situational.
 					//2310A REF: (institutional) Attending Provider Secondary Identification. Situational.
 					//2310B NM1: 72 (institutional) Operating Physician Name. Situational. For surgical procedure codes.
@@ -1044,7 +1026,7 @@ namespace OpenDentBusiness
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
 					if(claim.ProvTreat!=claim.ProvBill) {
 						//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider. Emdeon will reject the claim if this segment is the same as the billing provider for all claims in the batch.
-						WriteNM1_82(sw,provTreat);
+						WriteNM1Provider("82",sw,provTreat);
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
 						WritePRV_PE(sw,provTreat);
 						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
@@ -1550,17 +1532,7 @@ namespace OpenDentBusiness
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 							//2420A NM1: 82 (medical) Rendering Provider Name. Only if different from the claim.
 							provTreat=Providers.GetProv(proc.ProvNum);
-							sw.Write("NM1"+s
-								+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
-								+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-								+Sout(provTreat.LName,60)+s//NM103 1/60 Name Last or Organization Name:
-								+Sout(provTreat.FName,35)+s//NM104 1/35 Name First:
-								+Sout(provTreat.MI,25)+s//NM105 1/25 Name Middle:
-								+s//NM106 1/10 Name Prefix: Not used.
-								+s//NM107 1/10 Name Suffix: Situational. Not Supported.
-								+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=NPI. After NPI date, so always use NPI.
-								+Sout(provTreat.NationalProvID,80,2));//NM109 2/80 Identification Code: NPI validated.
-							EndSegment(sw);//NM110 through NM112 not used.
+							WriteNM1Provider("82",sw,provTreat);
 							//2420A PRV: (medical) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
 								+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
@@ -1606,18 +1578,8 @@ namespace OpenDentBusiness
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
 							provTreat=Providers.GetProv(proc.ProvNum);
-							//2420C NM1: 82 (institutional) Rendering Provider Name. Situational. Only if different than claim attending (treating) prov.
-							sw.Write("NM1"+s
-								+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
-								+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person. Validated.
-								+Sout(provTreat.LName,60)+s//NM103 1/60 Name Last or Organization Name:
-								+Sout(provTreat.FName,35)+s//NM104 1/35 Name First:
-								+Sout(provTreat.MI,25)+s//NM105 1/25 Name Middle:
-								+s//NM106 1/10 Name Prefix: Not used.
-								+s//NM107 1/10 Name Suffix: Situational. Not supported.
-								+"XX"+s//NM108 1/2 Identification Code Qualifer: XX=Centers for Medicare and Medicaid Services National Provider Identifier (NPI).
-								+Sout(provTreat.NationalProvID,80,2));//NM109 2/80 Identification Code: ID. NPI validated.
-							EndSegment(sw);//NM110 through NM112 not used.
+							//2420C NM1: 82 (institutional) Rendering Provider Name. Situational. Only if different than claim attending (treating) prov. Person only, non-person not allowed.
+							WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
 							//2420C REF: Rendering Provider Secondary Identification. Situational.
 							sw.Write("REF"+s
 								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
@@ -1635,17 +1597,7 @@ namespace OpenDentBusiness
 						{
 							//2420A NM1: 82 (dental) Rendering Provider Name. Only if different from the claim.
 							provTreat=Providers.GetProv(proc.ProvNum);
-							sw.Write("NM1"+s
-								+"82"+s//NM101 2/3 Entity Identifier Code: 82=Rendering Provider.
-								+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-								+Sout(provTreat.LName,60)+s//NM103 1/60 Name Last or Organization Name:
-								+Sout(provTreat.FName,35)+s//NM104 1/35 Name First:
-								+Sout(provTreat.MI,25)+s//NM105 1/25 Name Middle:
-								+s//NM106 1/10 Name Prefix: Not used.
-								+s//NM107 1/10 Name Suffix: Situational. Not Supported.
-								+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=NPI. After NPI date, so always use NPI.
-								+Sout(provTreat.NationalProvID,80,2));//NM109 2/80 Identification Code: NPI validated.
-							EndSegment(sw);//NM110 through NM112 not used.
+							WriteNM1Provider("82",sw,provTreat);
 							//2420A PRV: (dental) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
 								+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
@@ -1783,44 +1735,33 @@ namespace OpenDentBusiness
 		///<summary>A referring provider.  The loop has different numbers depending on med/inst/dent.</summary>
 		private static void WriteNM1_DN(StreamWriter sw,long referringProv) {
 			Referral referral=Referrals.GetReferral(referringProv);
-			if(referral==null || referral.NotPerson || !referral.IsDoctor) {
+			if(referral==null || !referral.IsDoctor) {//Could be null if referringProv=0 (common)
 				return;
 			}
-			WriteNM1Provider("DN",sw,referral.FName,referral.MName,referral.LName,referral.NationalProvID);
+			WriteNM1Provider("DN",sw,referral.FName,referral.MName,referral.LName,referral.NationalProvID,false);
 		}
 
-		///<summary>A rendering provider. The loop has different numbers depending on med/inst/dent</summary>
-		private static void WriteNM1_82(StreamWriter sw,Provider provTreat) {
-			if(provTreat==null) {
-				return;
-			}
-			WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID);
+		///<summary>A generic function that is reused because there are many identical provider NM1 segments within the X12 specification.</summary>
+		private static void WriteNM1Provider(string entityIdentifierCode,StreamWriter sw,Provider prov) {
+			WriteNM1Provider(entityIdentifierCode,sw,prov.FName,prov.MI,prov.LName,prov.NationalProvID,prov.IsNotPerson);
 		}
 
-		///<summary>An attending/treating provider.</summary>
-		private static void WriteNM1_71(StreamWriter sw,Provider provTreat) {
-			if(provTreat==null) {
-				return;
-			}
-			WriteNM1Provider("71",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID);
-		}
-
-		///<summary>A generic function that is reused because there are many identical provider NM1 segments within the X12 specification. Returns number of segments written.</summary>
-		private static void WriteNM1Provider(string entityIdentifierCode,StreamWriter sw,string FName,string middleName,string LName,string NPI) {
+		///<summary>A generic function that is reused because there are many identical provider NM1 segments within the X12 specification.</summary>
+		private static void WriteNM1Provider(string entityIdentifierCode,StreamWriter sw,string FName,string middleName,string LName,string NPI,bool isNotPerson) {
 			if(LName=="") {
 				return;
 			}
 			sw.Write("NM1"+s
 				+entityIdentifierCode+s//NM101 2/3 Entity Identifier Code: Used to identify the type of provider being specified.
-				+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
+				+(isNotPerson?"2":"1")+s//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person.
 				+Sout(LName,60));//NM103 1/60 Name Last or Organization Name:
-			if(FName!="" || middleName!="" || NPI.Length>1) {
+			if((FName!="" && !isNotPerson) || (middleName!="" && !isNotPerson) || NPI.Length>1) {
 				sw.Write(s//end of NM103.
-					+Sout(FName,35));//NM104 1/35 Name First:
+					+(isNotPerson?"":Sout(FName,35)));//NM104 1/35 Name First:
 			}
-			if(middleName!="" || NPI.Length>1) {
+			if((middleName!="" && !isNotPerson) || NPI.Length>1) {
 				sw.Write(s//end of NM104.
-					+Sout(middleName,25));//NM105 1/25 Name Middle:
+					+(isNotPerson?"":Sout(middleName,25)));//NM105 1/25 Name Middle:
 			}
 			if(NPI.Length>1) {
 				sw.Write(s//end of NM105.
@@ -2144,22 +2085,51 @@ namespace OpenDentBusiness
 			//if(clearhouse.Eformat==ElectronicClaimFormat.X12){//not needed since this is always true
 			X12Validate.ISA(clearhouse,strb);
 			if(clearhouse.GS03.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
+				Comma(strb);
 				strb.Append("Clearinghouse GS03");
 			}
 			List<X12TransactionItem> claimItems=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[0].ProvBill1)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
+			Provider referringProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ReferringProv)];
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
+			if(claim.MedType==EnumClaimMedType.Medical) {
+				if(referringProv.IsNotPerson) {
+					Comma(strb);
+					strb.Append("Referring Prov must be a person.");
+				}
+				if(treatProv.IsNotPerson && claim.ProvTreat!=claim.ProvBill) {
+					Comma(strb);
+					strb.Append("Treat Prov must be a person.");
+				}
+			}
+			else if(claim.MedType==EnumClaimMedType.Institutional) {
+				if(referringProv.IsNotPerson && claim.ReferringProv!=claim.ProvTreat) {
+					Comma(strb);
+					strb.Append("Referring Prov must be a person.");
+				}
+				if(!billProv.IsNotPerson) {
+					Comma(strb);
+					strb.Append("Billing Prov cannot be a person.");
+				}
+				if(treatProv.IsNotPerson) {
+					Comma(strb);
+					strb.Append("Treat Prov must be a person.");
+				}
+			}
+			else if(claim.MedType==EnumClaimMedType.Dental) {
+				if(referringProv.IsNotPerson) {
+					Comma(strb);
+					strb.Append("Referring Prov must be a person.");
+				}
+			}
 			//billProv
 			if(billProv.LName=="") {
 				Comma(strb);
 				strb.Append("Billing Prov LName");
 			}
-			if(!billProv.IsNotPerson && billProv.FName=="") {//this is allowed to be blank if it's a non-person.
+			if(billProv.FName=="" && !billProv.IsNotPerson) {//this is allowed to be blank if it's a non-person.
 				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}
@@ -2217,19 +2187,19 @@ namespace OpenDentBusiness
 			//treatProv
 			if(treatProv.LName=="") {
 				Comma(strb);
-				strb.Append("Treating Prov LName for claim");
+				strb.Append("Treating Prov LName");
 			}
-			if(treatProv.FName=="") {
+			if(treatProv.FName=="" && !treatProv.IsNotPerson) {
 				Comma(strb);
-				strb.Append("Treating Prov FName for claim");
+				strb.Append("Treating Prov FName");
 			}
 			if(treatProv.SSN.Length<2) {
 				Comma(strb);
-				strb.Append("Treating Prov SSN/TIN for claim");
+				strb.Append("Treating Prov SSN/TIN");
 			}
 			if(treatProv.NationalProvID.Length<2) {
 				Comma(strb);
-				strb.Append("Treating Prov NPI for claim");
+				strb.Append("Treating Prov NPI");
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 				if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
@@ -2393,12 +2363,9 @@ namespace OpenDentBusiness
 					strb.Append("PatientStatusCode");
 				}
 			}
-			if(claim.MedType==EnumClaimMedType.Institutional) {
-//todo js 9/11/11 why is this just institutional?
-				if(claim.DateService.Year<1880) {
-					Comma(strb);
-					strb.Append("DateService");
-				}
+			if(claim.DateService.Year<1880) {
+				Comma(strb);
+				strb.Append("DateService");
 			}
 			if(claim.MedType==EnumClaimMedType.Institutional
 				|| claim.MedType==EnumClaimMedType.Medical) 
@@ -2408,9 +2375,6 @@ namespace OpenDentBusiness
 					strb.Append("Predeterm number not allowed");
 				}
 			}
-			//List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);
-			//List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
-			//List<Procedure> procList=Procedures.Refresh(claim.PatNum);
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);
@@ -2487,34 +2451,36 @@ namespace OpenDentBusiness
 				//Providers
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
+					if(claim.MedType==EnumClaimMedType.Institutional) {
+						if(treatProv.IsNotPerson) {
+							Comma(strb);
+							strb.Append("Treat Prov must be a person for proc "+procCode.ProcCode);
+						}
+					}
 					if(treatProv.LName=="") {
 						Comma(strb);
-						strb.Append("Treating Prov LName for proc "+procCode.ProcCode);
+						strb.Append("Treat Prov LName for proc "+procCode.ProcCode);
 					}
-					if(treatProv.FName=="") {
+					if(treatProv.FName=="" && !treatProv.IsNotPerson) {
 						Comma(strb);
-						strb.Append("Treating Prov FName for proc "+procCode.ProcCode);
-					}
-					if(treatProv.IsNotPerson) {
-						Comma(strb);
-						strb.Append("Treating Prov IsNotPerson for proc "+procCode.ProcCode);//required to be a person
+						strb.Append("Treat Prov FName for proc "+procCode.ProcCode);
 					}
 					if(treatProv.SSN.Length<2) {
 						Comma(strb);
-						strb.Append("Treating Prov SSN/TIN for proc "+procCode.ProcCode);
+						strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode);
 					}
 					if(treatProv.NationalProvID.Length<2) {
 						Comma(strb);
-						strb.Append("Treating Prov NPI for proc "+procCode.ProcCode);
+						strb.Append("Treat Prov NPI for proc "+procCode.ProcCode);
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 						if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
 							Comma(strb);
-							strb.Append("Treating Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
+							strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
 						}
 						if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 							Comma(strb);
-							strb.Append("Treating Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
+							strb.Append("Treat Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
 						}
 					}
 					//will add any other checks as needed. Can't think of any others at the moment.
@@ -2524,14 +2490,6 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Princ Diagnosis");
 			}
-
-			/*
-						if(==""){
-							Comma(strb);
-							strb.Append("";
-						}*/
-
-			//return strb.ToString();
 			queueItem.Warnings=warning;
 			queueItem.MissingData=strb.ToString();
 		}
