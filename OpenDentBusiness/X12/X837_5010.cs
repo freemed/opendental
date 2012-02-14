@@ -1735,7 +1735,7 @@ namespace OpenDentBusiness
 		///<summary>A referring provider.  The loop has different numbers depending on med/inst/dent.</summary>
 		private static void WriteNM1_DN(StreamWriter sw,long referringProv) {
 			Referral referral=Referrals.GetReferral(referringProv);
-			if(referral==null || !referral.IsDoctor) {//Could be null if referringProv=0 (common)
+			if(referral==null || !referral.IsDoctor || referral.NotPerson) {//Could be null if referringProv=0 (common)
 				return;
 			}
 			WriteNM1Provider("DN",sw,referral.FName,referral.MName,referral.LName,referral.NationalProvID,false);
@@ -2091,11 +2091,11 @@ namespace OpenDentBusiness
 			List<X12TransactionItem> claimItems=Claims.GetX12TransactionInfo(((ClaimSendQueueItem)queueItem).ClaimNum);//just to get prov. Needs work.
 			Provider billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[0].ProvBill1)];
 			Provider treatProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ProvTreat)];
-			Provider referringProv=ProviderC.ListLong[Providers.GetIndexLong(claim.ReferringProv)];
+			Referral referral=Referrals.GetReferral(claim.ReferringProv);
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
 			if(claim.MedType==EnumClaimMedType.Medical) {
-				if(referringProv.IsNotPerson) {
+				if(referral!=null && referral.IsDoctor && referral.NotPerson) {
 					Comma(strb);
 					strb.Append("Referring Prov must be a person.");
 				}
@@ -2105,7 +2105,7 @@ namespace OpenDentBusiness
 				}
 			}
 			else if(claim.MedType==EnumClaimMedType.Institutional) {
-				if(referringProv.IsNotPerson && claim.ReferringProv!=claim.ProvTreat) {
+				if(referral!=null && referral.IsDoctor && referral.NotPerson && claim.ReferringProv!=claim.ProvTreat) {
 					Comma(strb);
 					strb.Append("Referring Prov must be a person.");
 				}
@@ -2119,7 +2119,7 @@ namespace OpenDentBusiness
 				}
 			}
 			else if(claim.MedType==EnumClaimMedType.Dental) {
-				if(referringProv.IsNotPerson) {
+				if(referral!=null && referral.IsDoctor && referral.NotPerson) {
 					Comma(strb);
 					strb.Append("Referring Prov must be a person.");
 				}
