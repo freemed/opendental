@@ -969,6 +969,7 @@ namespace OpenDental {
 			}
 			checkAllProviders.Checked = true;
 			listProviders.Visible = false;
+			//If you change listStatus, be sure the change is reflected in BuildPatStatList.
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Patient"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","NonPatient"));
 			listStatus.Items.Add(Lan.g("enumPatientStatus","Inactive"));
@@ -1135,9 +1136,29 @@ namespace OpenDental {
 			patStat = "patient.patStatus in (";
 			for(int i = 0;i < listStatus.SelectedIndices.Count;i++) {
 				if(i > 0) {
-					patStat += ",";
+					patStat+=",";
 				}
-				patStat += "'" + listStatus.SelectedIndices[i] + "'";
+				//patStat += "'" + listStatus.SelectedIndices[i] + "'";
+				switch(i) {
+					case 0:
+						patStat+=(int)PatientStatus.Patient;
+						break;
+					case 1:
+						patStat+=(int)PatientStatus.NonPatient;
+						break;
+					case 2:
+						patStat+=(int)PatientStatus.Inactive;
+						break;
+					case 3:
+						patStat+=(int)PatientStatus.Archived;
+						break;
+					case 4:
+						patStat+=(int)PatientStatus.Deceased;
+						break;
+					case 5:
+						patStat+=(int)PatientStatus.Prospective;
+						break;
+				}
 			}
 			patStat += ") ";
 			return patStat;
