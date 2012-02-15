@@ -3919,33 +3919,35 @@ namespace OpenDental {
 			else {
 				string columnDate="";
 				Font headerFont=new Font("Arial",8);
-				yPos+=30;
+				yPos+=15;
 				xPos+=(int)(ApptDrawing.TimeWidth)+30;//30 for margins.
 				int xCenter=0;
+				int day=WeekStartDate.Day;
 				for(int i=0;i<7;i++) {
 					switch(i) {
 						case 0:
-							columnDate="Monday";
+							columnDate="Monday-"+day;
 							break;
 						case 1:
-							columnDate="Tuesday";
+							columnDate="Tuesday-"+day;
 							break;
 						case 2:
-							columnDate="Wednesday";
+							columnDate="Wednesday-"+day;
 							break;
 						case 3:
-							columnDate="Thursday";
+							columnDate="Thursday-"+day;
 							break;
 						case 4:
-							columnDate="Friday";
+							columnDate="Friday-"+day;
 							break;
 						case 5:
-							columnDate="Saturday";
+							columnDate="Saturday-"+day;
 							break;
 						case 6:
-							columnDate="Sunday";
+							columnDate="Sunday-"+day;
 							break;
 					}
+					day++;
 					xCenter=(int)((ApptDrawing.ColDayWidth/2)-(g.MeasureString(columnDate,headerFont).Width/2));
 					g.DrawString(columnDate,headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
 					xPos+=ApptDrawing.ColDayWidth;
