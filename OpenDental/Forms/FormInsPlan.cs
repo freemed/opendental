@@ -2157,16 +2157,27 @@ namespace OpenDental{
 			if(!IsNewPlan && !MsgBox.Show(this,true,"Are you sure you want to use the selected plan?  You should NOT use this if the patient is changing insurance.  Use the Drop button instead.")) {
 				return;
 			}
-			PlanCur=FormIP.SelectedPlan;
+			if(FormIP.SelectedPlan.PlanNum==0) {//user clicked Blank
+				PlanCur=new InsPlan();
+				PlanCur.PlanNum=PlanNumOriginal;
+			}
+			else {//user selected an existing plan
+				PlanCur=FormIP.SelectedPlan;
+			}
 			FillFormWithPlanCur();
 			//We need to pass patPlanNum in to RefreshForPlan to get patient level benefits:
 			long patPlanNum=0;
 			if(PatPlanCur!=null){
 				patPlanNum=PatPlanCur.PatPlanNum;
 			}
-			benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
+			if(FormIP.SelectedPlan.PlanNum==0){//user clicked blank
+				benefitList=new List<Benefit>();
+			}
+			else {//user selected an existing plan
+				benefitList=Benefits.RefreshForPlan(PlanCur.PlanNum,patPlanNum);
+			}
 			FillBenefits();
-			if(IsNewPlan) {
+			if(IsNewPlan || FormIP.SelectedPlan.PlanNum==0) {//New plan or user clicked blank.
 				//Leave benefitListOld alone so that it will trigger deletion of the orphaned benefits later.
 			}
 			else{

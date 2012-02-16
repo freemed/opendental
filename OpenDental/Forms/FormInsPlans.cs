@@ -544,6 +544,7 @@ namespace OpenDental{
 		}
 
 		private void butBlank_Click(object sender, System.EventArgs e) {
+			//this button is normally not visible.  It's only set visible when IsSelectMode.
 			SelectedPlan=new InsPlan();
 			DialogResult=DialogResult.OK;
 		}
