@@ -722,6 +722,7 @@ namespace OpenDental{
 						return false;
 					}
 				}
+				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0) {
 					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
 						//Create a deposit within QuickBooks.
@@ -766,7 +767,6 @@ namespace OpenDental{
 						JournalEntries.Insert(je);
 					}
 				}
-				Deposits.Insert(DepositCur);
 			}
 			else{
 				Deposits.Update(DepositCur);
