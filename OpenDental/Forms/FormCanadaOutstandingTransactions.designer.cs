@@ -28,10 +28,11 @@ namespace OpenDental{
 			this.radioVersion2 = new System.Windows.Forms.RadioButton();
 			this.radioVersion4Itrans = new System.Windows.Forms.RadioButton();
 			this.radioVersion4ToCarrier = new System.Windows.Forms.RadioButton();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.groupOfficeNumber = new System.Windows.Forms.GroupBox();
 			this.listOfficeNumbers = new System.Windows.Forms.ListBox();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupCarrier.SuspendLayout();
 			this.groupOfficeNumber.SuspendLayout();
 			this.SuspendLayout();
@@ -41,16 +42,16 @@ namespace OpenDental{
 			this.listCarriers.FormattingEnabled = true;
 			this.listCarriers.Location = new System.Drawing.Point(6,19);
 			this.listCarriers.Name = "listCarriers";
-			this.listCarriers.Size = new System.Drawing.Size(280,95);
+			this.listCarriers.Size = new System.Drawing.Size(307,95);
 			this.listCarriers.TabIndex = 107;
 			// 
 			// groupCarrier
 			// 
 			this.groupCarrier.Controls.Add(this.listCarriers);
 			this.groupCarrier.Enabled = false;
-			this.groupCarrier.Location = new System.Drawing.Point(29,81);
+			this.groupCarrier.Location = new System.Drawing.Point(29,117);
 			this.groupCarrier.Name = "groupCarrier";
-			this.groupCarrier.Size = new System.Drawing.Size(293,120);
+			this.groupCarrier.Size = new System.Drawing.Size(319,120);
 			this.groupCarrier.TabIndex = 109;
 			this.groupCarrier.TabStop = false;
 			this.groupCarrier.Text = "Carrier";
@@ -58,7 +59,7 @@ namespace OpenDental{
 			// radioVersion2
 			// 
 			this.radioVersion2.AutoSize = true;
-			this.radioVersion2.Location = new System.Drawing.Point(12,12);
+			this.radioVersion2.Location = new System.Drawing.Point(12,48);
 			this.radioVersion2.Name = "radioVersion2";
 			this.radioVersion2.Size = new System.Drawing.Size(69,17);
 			this.radioVersion2.TabIndex = 110;
@@ -70,7 +71,7 @@ namespace OpenDental{
 			// 
 			this.radioVersion4Itrans.AutoSize = true;
 			this.radioVersion4Itrans.Checked = true;
-			this.radioVersion4Itrans.Location = new System.Drawing.Point(12,35);
+			this.radioVersion4Itrans.Location = new System.Drawing.Point(12,71);
 			this.radioVersion4Itrans.Name = "radioVersion4Itrans";
 			this.radioVersion4Itrans.Size = new System.Drawing.Size(171,17);
 			this.radioVersion4Itrans.TabIndex = 111;
@@ -82,14 +83,45 @@ namespace OpenDental{
 			// radioVersion4ToCarrier
 			// 
 			this.radioVersion4ToCarrier.AutoSize = true;
-			this.radioVersion4ToCarrier.Location = new System.Drawing.Point(12,58);
+			this.radioVersion4ToCarrier.Location = new System.Drawing.Point(12,94);
 			this.radioVersion4ToCarrier.Name = "radioVersion4ToCarrier";
-			this.radioVersion4ToCarrier.Size = new System.Drawing.Size(159,17);
+			this.radioVersion4ToCarrier.Size = new System.Drawing.Size(259,17);
 			this.radioVersion4ToCarrier.TabIndex = 112;
 			this.radioVersion4ToCarrier.TabStop = true;
-			this.radioVersion4ToCarrier.Text = "Version 4 To Specific Carrier";
+			this.radioVersion4ToCarrier.Text = "Version 4 To Specific Carrier (not commonly used)";
 			this.radioVersion4ToCarrier.UseVisualStyleBackColor = true;
 			this.radioVersion4ToCarrier.Click += new System.EventHandler(this.radioVersion4ToCarrier_Click);
+			// 
+			// groupOfficeNumber
+			// 
+			this.groupOfficeNumber.Controls.Add(this.listOfficeNumbers);
+			this.groupOfficeNumber.Location = new System.Drawing.Point(29,237);
+			this.groupOfficeNumber.Name = "groupOfficeNumber";
+			this.groupOfficeNumber.Size = new System.Drawing.Size(319,70);
+			this.groupOfficeNumber.TabIndex = 113;
+			this.groupOfficeNumber.TabStop = false;
+			this.groupOfficeNumber.Text = "Office Number";
+			// 
+			// listOfficeNumbers
+			// 
+			this.listOfficeNumbers.FormattingEnabled = true;
+			this.listOfficeNumbers.Location = new System.Drawing.Point(6,19);
+			this.listOfficeNumbers.Name = "listOfficeNumbers";
+			this.listOfficeNumbers.Size = new System.Drawing.Size(307,43);
+			this.listOfficeNumbers.TabIndex = 0;
+			// 
+			// textBox1
+			// 
+			this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textBox1.Location = new System.Drawing.Point(12,12);
+			this.textBox1.Multiline = true;
+			this.textBox1.Name = "textBox1";
+			this.textBox1.ReadOnly = true;
+			this.textBox1.Size = new System.Drawing.Size(336,32);
+			this.textBox1.TabIndex = 114;
+			this.textBox1.Text = "The outstanding transactions request should be run for both version 2 and version" +
+    " 4.";
 			// 
 			// butOK
 			// 
@@ -99,7 +131,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(166,279);
+			this.butOK.Location = new System.Drawing.Point(192,312);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -114,35 +146,18 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(247,279);
+			this.butCancel.Location = new System.Drawing.Point(273,312);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// groupOfficeNumber
-			// 
-			this.groupOfficeNumber.Controls.Add(this.listOfficeNumbers);
-			this.groupOfficeNumber.Location = new System.Drawing.Point(29,201);
-			this.groupOfficeNumber.Name = "groupOfficeNumber";
-			this.groupOfficeNumber.Size = new System.Drawing.Size(293,70);
-			this.groupOfficeNumber.TabIndex = 113;
-			this.groupOfficeNumber.TabStop = false;
-			this.groupOfficeNumber.Text = "Office Number";
-			// 
-			// listOfficeNumbers
-			// 
-			this.listOfficeNumbers.FormattingEnabled = true;
-			this.listOfficeNumbers.Location = new System.Drawing.Point(6,19);
-			this.listOfficeNumbers.Name = "listOfficeNumbers";
-			this.listOfficeNumbers.Size = new System.Drawing.Size(280,43);
-			this.listOfficeNumbers.TabIndex = 0;
-			// 
 			// FormCanadaOutstandingTransactions
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(351,316);
+			this.ClientSize = new System.Drawing.Size(360,352);
+			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.groupOfficeNumber);
 			this.Controls.Add(this.radioVersion4ToCarrier);
 			this.Controls.Add(this.radioVersion4Itrans);
@@ -153,7 +168,7 @@ namespace OpenDental{
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Name = "FormCanadaOutstandingTransactions";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Outstanding Transactions Request";
+			this.Text = "Outstanding Transactions Request (ROT)";
 			this.Load += new System.EventHandler(this.FormCanadaOutstandingTransactions_Load);
 			this.groupCarrier.ResumeLayout(false);
 			this.groupOfficeNumber.ResumeLayout(false);
@@ -173,5 +188,6 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioVersion4ToCarrier;
 		private System.Windows.Forms.GroupBox groupOfficeNumber;
 		private System.Windows.Forms.ListBox listOfficeNumbers;
+		private System.Windows.Forms.TextBox textBox1;
 	}
 }
