@@ -12,11 +12,20 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PaySplit[]>(MethodBase.GetCurrentMethod(),patNum);
 			}
+			/*This query was too slow
 			string command=
 				"SELECT DISTINCT paysplit.* FROM paysplit,payment "
 				+"WHERE paysplit.PayNum=payment.PayNum "
 				+"AND (paysplit.PatNum = '"+POut.Long(patNum)+"' OR payment.PatNum = '"+POut.Long(patNum)+"') "
-				+"ORDER BY ProcDate";
+				+"ORDER BY ProcDate";*/
+			//this query goes 10 times faster for very large databases
+			string command=@"select DISTINCT paysplitunion.* FROM "
+				+"(SELECT DISTINCT paysplit.* FROM paysplit,payment "
+				+"WHERE paysplit.PayNum=payment.PayNum and payment.PatNum='"+POut.Long(patNum)+"' "
+				+"UNION "
+				+"SELECT DISTINCT paysplit.* FROM paysplit,payment "
+				+"WHERE paysplit.PayNum = payment.PayNum AND paysplit.PatNum='"+POut.Long(patNum)+"') AS paysplitunion "
+				+"ORDER BY paysplitunion.ProcDate";
 			return Crud.PaySplitCrud.SelectMany(command).ToArray();
 		}
 
