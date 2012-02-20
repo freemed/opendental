@@ -5123,8 +5123,6 @@ namespace OpenDental{
 				labelMonth3.Text="";
 			}
 			else {
-				//List quick.
-
 				//Monthly call time breakdown.
 				DateTime startDate=new DateTime(1,1,1);
 				Procedure firstProc=Procedures.GetFirstCompletedProcForFamily(PatCur.Guarantor);
@@ -9126,6 +9124,7 @@ namespace OpenDental{
 			proc.BaseUnits=ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
 			Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
 			listCommonProcs.SelectedIndex=-1;
+			FillProgNotes();
 		}
 
 		private void butBig_Click(object sender,EventArgs e) {

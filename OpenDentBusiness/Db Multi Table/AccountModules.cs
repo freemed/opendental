@@ -755,7 +755,7 @@ namespace OpenDentBusiness {
 			command="SELECT MAX(CheckNum) CheckNum,paysplit.ClinicNum,MAX(DatePay) DatePay,paysplit.PatNum,MAX(payment.PatNum) patNumPayment_,MAX(PayAmt) PayAmt,"//MAX function used to preserve behavior in Oracle.
 				+"paysplit.PayNum,paysplit.PayPlanNum,"
 				+"MAX(PayType) PayType,MAX(ProcDate) ProcDate,"+DbHelper.GroupConcat("ProcNum")+" ProcNums_, "
-				+"MAX(ProvNum) ProvNum,SUM(SplitAmt) splitAmt_,MAX(payment.PayNote) PayNote,SplitNum,MAX(paysplit.UnearnedType) UnearnedType "//Column names with MAX left the same as they should not be considered aggregate (even though they are).
+				+"MAX(ProvNum) ProvNum,SUM(SplitAmt) splitAmt_,MAX(payment.PayNote) PayNote,MAX(paysplit.UnearnedType) UnearnedType "//Column names with MAX left the same as they should not be considered aggregate (even though they are).
 				+"FROM paysplit "
 				+"LEFT JOIN payment ON paysplit.PayNum=payment.PayNum "
 				+"WHERE (";
@@ -765,7 +765,7 @@ namespace OpenDentBusiness {
 				}
 				command+="paysplit.PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
-			command+=") GROUP BY DatePay,paysplit.PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum,SplitNum ORDER BY DatePay";//ProcDate ORDER BY ProcDate";
+			command+=") GROUP BY DatePay,paysplit.PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum ORDER BY DatePay";//ProcDate ORDER BY ProcDate";
 			rawPay=dcon.GetTable(command);
 			double payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
@@ -816,7 +816,7 @@ namespace OpenDentBusiness {
 					row["description"]+=rawPay.Rows[i]["PayNote"].ToString();
 				}
 				if(PrefC.GetBool(PrefName.AccountShowPaymentNums)) {
-					row["description"]+="\r\n"+Lans.g("AccountModule","Payment Number: ")+rawPay.Rows[i]["SplitNum"].ToString();
+					row["description"]+="\r\n"+Lans.g("AccountModule","Payment Number: ")+rawPay.Rows[i]["PayNum"].ToString();
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
