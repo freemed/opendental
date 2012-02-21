@@ -129,6 +129,9 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			command="SELECT PatNum,ProcDate FROM claimproc WHERE ProcNum IN (";
 			for(int i=0;i<table.Rows.Count;i++) {
+				if(table.Rows[i]["ProcNum"].ToString()=="0") {
+					continue;
+				}
 				if(i>0) {
 					command+=",";
 				}
