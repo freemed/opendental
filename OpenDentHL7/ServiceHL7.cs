@@ -156,7 +156,12 @@ namespace OpenDentHL7 {
 			//else if(msg.MsgType==MessageType.DFT) {
 				//ADT.ProcessMessage(msg);
 			//}
-			File.Delete(fullPath);
+			try {
+				File.Delete(fullPath);
+			}
+			catch(Exception ex) {
+				EventLog.WriteEntry("Delete failed for "+fullPath+"\r\n"+ex.Message,EventLogEntryType.Error);
+			}
 		}
 
 		protected override void OnStop() {
