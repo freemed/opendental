@@ -327,6 +327,7 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>If no provider is found for spot then the operatory provider is returned.</summary>
 		public static long GetAssignedProvNumForSpot(List<Schedule> listForPeriod,Operatory op,bool isSecondary,DateTime aptDateTime) {
 			//No need to check RemotingRole; no call to db.
 			//first, look for a sched assigned specifically to that spot

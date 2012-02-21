@@ -3465,10 +3465,16 @@ namespace OpenDental {
 							Patients.Update(PatCur,patOld);
 						}
 					}
-					if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
-						apt.ProvNum=curOp.ProvDentist;
+					//if(curOp.ProvDentist!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+					//  apt.ProvNum=curOp.ProvDentist;
+					//}
+					//apt.ProvHyg=curOp.ProvHygienist;
+					long assignedDent=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,false,apt.AptDateTime);
+					long assignedHyg=Schedules.GetAssignedProvNumForSpot(SchedListPeriod,curOp,true,apt.AptDateTime);
+					if(assignedDent!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+					  apt.ProvNum=assignedDent;
 					}
-					apt.ProvHyg=curOp.ProvHygienist;
+					apt.ProvHyg=assignedHyg;
 					apt.IsHygiene=curOp.IsHygiene;
 					if(curOp.ClinicNum==0){
 						apt.ClinicNum=PatCur.ClinicNum;

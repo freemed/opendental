@@ -812,10 +812,17 @@ namespace OpenDental{
 				}
 				AptCur.Op=ContrAppt.SheetClickedonOp;
 				Operatory curOp=Operatories.GetOperatory(AptCur.Op);
-				if(curOp.ProvDentist!=0) {
-					AptCur.ProvNum=curOp.ProvDentist;
+				//if(curOp.ProvDentist!=0) {
+				//  AptCur.ProvNum=curOp.ProvDentist;
+				//}
+				//AptCur.ProvHyg=curOp.ProvHygienist;
+				List<Schedule> schedListPeriod=Schedules.RefreshDayEdit(AptCur.AptDateTime);
+				long assignedDent=Schedules.GetAssignedProvNumForSpot(schedListPeriod,curOp,false,AptCur.AptDateTime);
+				long assignedHyg=Schedules.GetAssignedProvNumForSpot(schedListPeriod,curOp,true,AptCur.AptDateTime);
+				if(assignedDent!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+					AptCur.ProvNum=assignedDent;
 				}
-				AptCur.ProvHyg=curOp.ProvHygienist;
+				AptCur.ProvHyg=assignedHyg;
 				AptCur.IsHygiene=curOp.IsHygiene;
 				if(curOp.ClinicNum!=0){
 					AptCur.ClinicNum=curOp.ClinicNum;
