@@ -81,24 +81,29 @@ namespace OpenDental {
 				textShowInTerminal.Text=SheetCur.ShowInTerminal.ToString();
 			}
 			LayoutFields();
-			if(!SheetCur.IsNew && !Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
+			if(SheetCur.IsNew){
+				return;
+			}
+			//from here on, only applies to existing sheets.
+			if(!Security.IsAuthorized(Permissions.SheetEdit,SheetCur.DateTimeSheet)){
 				panelMain.Enabled=false;
 				butOK.Enabled=false;
+				butDelete.Enabled=false;
+				return;
 			}
-			else if(!SheetCur.IsNew) {
-				bool isSigned=false;
-				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-					if(SheetCur.SheetFields[i].FieldType==SheetFieldType.SigBox
-						&& SheetCur.SheetFields[i].FieldValue.Length>1) 
-					{
-						isSigned=true;
-						break;
-					}
+			//So user has permission
+			bool isSigned=false;
+			for(int i=0;i<SheetCur.SheetFields.Count;i++) {
+				if(SheetCur.SheetFields[i].FieldType==SheetFieldType.SigBox
+					&& SheetCur.SheetFields[i].FieldValue.Length>1) 
+				{
+					isSigned=true;
+					break;
 				}
-				if(isSigned) {
-					panelMain.Enabled=false;
-					butUnlock.Visible=true;
-				}
+			}
+			if(isSigned) {
+				panelMain.Enabled=false;
+				butUnlock.Visible=true;
 			}
 		}
 
@@ -643,21 +648,9 @@ namespace OpenDental {
 		}
 
 		private void butUnlock_Click(object sender,EventArgs e) {
-			//we already know the user has permission
+			//we already know the user has permission, because otherwise, button is not visible.
 			panelMain.Enabled=true;
 			butUnlock.Visible=false;
-		}
-
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(SheetCur.IsNew){
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Delete?")){
-				return;
-			}
-			Sheets.DeleteObject(SheetCur.SheetNum);
-			DialogResult=DialogResult.OK;
 		}
 
 		private bool TryToSaveData(){
@@ -883,6 +876,19 @@ namespace OpenDental {
 			return true;
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(SheetCur.IsNew){
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,true,"Delete?")){
+				return;
+			}
+			Sheets.DeleteObject(SheetCur.SheetNum);
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" deleted from "+SheetCur.DateTimeSheet.ToShortDateString());
+			DialogResult=DialogResult.OK;
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(!VerifyRequiredFields()){
 				return;
@@ -890,6 +896,7 @@ namespace OpenDental {
 			if(!TryToSaveData()){
 				return;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 
