@@ -285,6 +285,7 @@ namespace OpenDental {
 				}
 				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
+					long provider=Patients.GetProvNum(patCur);
 					Payment paymentCur=new Payment();
 					paymentCur.DateEntry=nowDateTime.Date;
 					paymentCur.PayDate=GetPayDate(PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["LatestPayment"].ToString()),
@@ -296,13 +297,23 @@ namespace OpenDental {
 					paymentCur.PayNote=resultText;
 					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
+					DataTable dt=Patients.GetPaymentStartingBalances(patCur.Guarantor,paymentCur.PayNum);
+					double highestAmt=0;
+					for(int j=0;j<dt.Rows.Count;j++) {//Apply the payment towards the provider that the family owes the most money to.
+						double afterIns=PIn.Double(dt.Rows[j]["AfterIns"].ToString());
+						if(highestAmt>=afterIns) {
+							continue;
+						}
+						highestAmt=afterIns;
+						provider=PIn.Long(dt.Rows[j]["ProvNum"].ToString());
+					}
 					PaySplit split=new PaySplit();
 					split.PatNum=paymentCur.PatNum;
 					split.ClinicNum=paymentCur.ClinicNum;
 					split.PayNum=paymentCur.PayNum;
 					split.ProcDate=paymentCur.PayDate;
 					split.DatePay=paymentCur.PayDate;
-					split.ProvNum=Patients.GetProvNum(patCur);
+					split.ProvNum=provider;
 					split.SplitAmt=paymentCur.PayAmt;
 					split.PayPlanNum=PIn.Long(table.Rows[i]["PayPlanNum"].ToString());
 					PaySplits.Insert(split);
