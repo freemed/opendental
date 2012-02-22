@@ -244,6 +244,9 @@ namespace OpenDentBusiness {
 			string command="SELECT * FROM phoneempdefault WHERE ComputerName='"+POut.String(computerName)+"'";
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null) {//we found that computername entered as an override
+				if(ped.IsPrivateScreen) {
+					return 0;
+				}
 				command="SELECT ClockStatus FROM phone "
 					+"WHERE Extension = "+POut.Long(ped.PhoneExt);
 				try {
@@ -276,9 +279,14 @@ namespace OpenDentBusiness {
 			}
 			//make sure the extension isn't overridden with a computername
 			//Example: this is computer .204, and ext 104 has a computername override. This computer should not save screenshot on behalf of 104.
-			command="SELECT COUNT(*) FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
-				+"AND ComputerName!=''";//there exists a computername override for the extension
-			if(Db.GetScalar(command)!="0") {
+			//command="SELECT COUNT(*) FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension)+" "
+			//	+"AND ComputerName!=''";//there exists a computername override for the extension
+			//if(Db.GetScalar(command)!="0") {
+			//	return 0;
+			//}
+			command="SELECT * FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension);
+			ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
+			if(ped!=null && ped.IsPrivateScreen) {
 				return 0;
 			}
 			command="SELECT ClockStatus FROM phone "
