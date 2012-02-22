@@ -2854,6 +2854,7 @@ namespace OpenDental{
 						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This patient might already exist.  Continue anyway?")) {
 							return;
 						}
+						break;
 					}
 				}
 			}
