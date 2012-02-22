@@ -2432,6 +2432,9 @@ namespace OpenDental{
 				return;
 			}
 			IsDragging=true;
+			if(treeDocuments.SelectedNode==null) {
+				return;
+			}
 			if(((ImageNodeId)treeDocuments.SelectedNode.Tag).NodeType==ImageNodeType.None) {
 				return;
 			}
@@ -2475,6 +2478,9 @@ namespace OpenDental{
 			bool wasDragging=IsDragging;
 			IsMouseDown=false;
 			IsDragging=false;
+			if(treeDocuments.SelectedNode==null) {
+				return;
+			}
 			ImageNodeId nodeId=(ImageNodeId)treeDocuments.SelectedNode.Tag;
 			if(nodeId.NodeType==ImageNodeType.None) {
 				return;
