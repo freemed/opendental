@@ -579,7 +579,7 @@ namespace OpenDentBusiness
 					clm01=Sout(claim.ClaimNum.ToString(),17);//Denti-Cal has a maximum of 17 chars here. We only specify the claimnum because if random primary keys is enabled then the keys could be long. The patnum can be decerned from the claimnum.
 				}
 				sw.Write("CLM"+s
-					+Sout(clm01,38)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id.  
+					+Sout(clm01,20)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id. Carriers are not required to handle more than 20 char. 
 //todo: add field to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+s//CLM02 1/18 Monetary Amount:
 					+s//CLM03 1/2 Claim Filing Indicator Code: Not used.
