@@ -304,6 +304,8 @@ namespace OpenDental{
 		private Label labelCommonProc;
 		private DateTime ShowDateEnd;
 		private Label label2;
+		private Label labelMonth0;
+		private TextBox textMonth0;
 		private bool IsDistributorKey;
 		[DllImport("wininet.dll",CharSet = CharSet.Auto,SetLastError = true)]
 		static extern bool InternetSetCookie(string lpszUrlName,string lbszCookieName,string lpszCookieData);
@@ -560,6 +562,8 @@ namespace OpenDental{
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.button1 = new OpenDental.UI.Button();
 			this.textTreatmentNotes = new OpenDental.ODtextBox();
+			this.labelMonth0 = new System.Windows.Forms.Label();
+			this.textMonth0 = new System.Windows.Forms.TextBox();
 			this.groupBox2.SuspendLayout();
 			this.tabControlImages.SuspendLayout();
 			this.panelImages.SuspendLayout();
@@ -2887,6 +2891,8 @@ namespace OpenDental{
 			// 
 			// tabCustomer
 			// 
+			this.tabCustomer.Controls.Add(this.labelMonth0);
+			this.tabCustomer.Controls.Add(this.textMonth0);
 			this.tabCustomer.Controls.Add(this.label2);
 			this.tabCustomer.Controls.Add(this.labelCommonProc);
 			this.tabCustomer.Controls.Add(this.labelTimes);
@@ -2910,9 +2916,9 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(340, 137);
+			this.label2.Location = new System.Drawing.Point(340, 163);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(170, 66);
+			this.label2.Size = new System.Drawing.Size(170, 41);
 			this.label2.TabIndex = 60;
 			this.label2.Text = "(Avg is based on entire family call history excluding first two months)";
 			// 
@@ -2963,7 +2969,7 @@ namespace OpenDental{
 			// 
 			// labelMonthAvg
 			// 
-			this.labelMonthAvg.Location = new System.Drawing.Point(340, 109);
+			this.labelMonthAvg.Location = new System.Drawing.Point(340, 135);
 			this.labelMonthAvg.Name = "labelMonthAvg";
 			this.labelMonthAvg.Size = new System.Drawing.Size(72, 20);
 			this.labelMonthAvg.TabIndex = 54;
@@ -2972,7 +2978,7 @@ namespace OpenDental{
 			// 
 			// textMonthAvg
 			// 
-			this.textMonthAvg.Location = new System.Drawing.Point(413, 110);
+			this.textMonthAvg.Location = new System.Drawing.Point(413, 136);
 			this.textMonthAvg.Name = "textMonthAvg";
 			this.textMonthAvg.ReadOnly = true;
 			this.textMonthAvg.Size = new System.Drawing.Size(50, 20);
@@ -3247,6 +3253,23 @@ namespace OpenDental{
 			this.textTreatmentNotes.TabIndex = 187;
 			this.textTreatmentNotes.TextChanged += new System.EventHandler(this.textTreatmentNotes_TextChanged);
 			this.textTreatmentNotes.Leave += new System.EventHandler(this.textTreatmentNotes_Leave);
+			// 
+			// labelMonth0
+			// 
+			this.labelMonth0.Location = new System.Drawing.Point(340, 109);
+			this.labelMonth0.Name = "labelMonth0";
+			this.labelMonth0.Size = new System.Drawing.Size(72, 20);
+			this.labelMonth0.TabIndex = 62;
+			this.labelMonth0.Text = "month 0";
+			this.labelMonth0.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textMonth0
+			// 
+			this.textMonth0.Location = new System.Drawing.Point(413, 110);
+			this.textMonth0.Name = "textMonth0";
+			this.textMonth0.ReadOnly = true;
+			this.textMonth0.Size = new System.Drawing.Size(50, 20);
+			this.textMonth0.TabIndex = 61;
 			// 
 			// ContrChart
 			// 
@@ -5141,25 +5164,33 @@ namespace OpenDental{
 				if(firstProc!=null) {
 					startDate=firstProc.ProcDate;
 				}
+				DateTime month0=DateTime.Now;
 				DateTime month1=DateTime.Now.AddMonths(-1);
 				DateTime month2=DateTime.Now.AddMonths(-2);
 				DateTime month3=DateTime.Now.AddMonths(-3);
 				//Set the month labels.
+				labelMonth0.Text=CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month0.Month);
 				labelMonth1.Text=CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month1.Month);
 				labelMonth2.Text=CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month2.Month);
 				labelMonth3.Text=CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month3.Month);
 				List<Commlog>	commlogsList=Commlogs.GetTimedCommlogsForPat(PatCur.Guarantor);
+				TimeSpan month0Span=new TimeSpan();
 				TimeSpan month1Span=new TimeSpan();
 				TimeSpan month2Span=new TimeSpan();
 				TimeSpan month3Span=new TimeSpan();
 				TimeSpan totalSpan=new TimeSpan();
 				int avgCount=0;
+				bool addToAvg=true;
 				//Add up the length of time each call took within the corresponding month.
 				for(int i=0;i<commlogsList.Count;i++) {
 					DateTime tempDateTime=commlogsList[i].CommDateTime;
 					DateTime tempTimeEnd=commlogsList[i].DateTimeEnd;
 					TimeSpan tempSpan=tempTimeEnd-tempDateTime;
-					if(tempDateTime.Year==month1.Year && tempDateTime.Month==month1.Month) {
+					if(tempDateTime.Year==month0.Year && tempDateTime.Month==month0.Month) {
+						month0Span=month0Span.Add(tempSpan);
+						addToAvg=false;//Avg should not include this months numbers.
+					}
+					else if(tempDateTime.Year==month1.Year && tempDateTime.Month==month1.Month) {
 						month1Span=month1Span.Add(tempSpan);
 					}
 					else if(tempDateTime.Year==month2.Year && tempDateTime.Month==month2.Month) {
@@ -5169,10 +5200,22 @@ namespace OpenDental{
 						month3Span=month3Span.Add(tempSpan);
 					}
 					//Take current commlog and see if its greater than or equal to two months after first completed proc date.
-					if(new DateTime(tempDateTime.Year,tempDateTime.Month,1)>=new DateTime(startDate.AddMonths(2).Year,startDate.AddMonths(2).Month,1)) {
+					if(new DateTime(tempDateTime.Year,tempDateTime.Month,1)>=new DateTime(startDate.AddMonths(2).Year,startDate.AddMonths(2).Month,1)
+						&& addToAvg) {
 						totalSpan=totalSpan.Add(tempSpan);
 						avgCount++;
 					}
+					addToAvg=true;
+				}
+				if(month0Span.Hours>=3) {
+					textMonth0.BackColor=Color.Red;
+					textMonth0.ForeColor=Color.White;
+					textMonth0.Font=new Font(textMonth1.Font,FontStyle.Bold);
+				}
+				else {
+					textMonth0.ForeColor=Color.Black;
+					textMonth0.BackColor=SystemColors.Control;
+					textMonth0.Font=new Font(textMonth1.Font,FontStyle.Regular);
 				}
 				if(month1Span.Hours>=3) {
 					textMonth1.BackColor=Color.Red;
@@ -5205,6 +5248,7 @@ namespace OpenDental{
 					textMonth3.Font=new Font(textMonth3.Font,FontStyle.Regular);
 				}
 				//Set the text of the boxes.
+				textMonth0.Text=month0Span.ToStringHmm();
 				textMonth1.Text=month1Span.ToStringHmm();
 				textMonth2.Text=month2Span.ToStringHmm();
 				textMonth3.Text=month3Span.ToStringHmm();

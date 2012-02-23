@@ -141,15 +141,14 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Gets all commlogs for family before this month that contain a DateTimeEnd entry.  Used internally to keep track of how long calls last.</summary>
+		///<summary>Gets all commlogs for family that contain a DateTimeEnd entry.  Used internally to keep track of how long calls lasted.</summary>
 		public static List<Commlog> GetTimedCommlogsForPat(long guarantor) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Commlog>>(MethodBase.GetCurrentMethod(),guarantor);
 			}
 			string command="SELECT commlog.* FROM commlog "
-				+"LEFT JOIN patient ON commlog.PatNum=patient.PatNum AND patient.Guarantor="+POut.Long(guarantor)+" "
-				+"WHERE commlog.CommDateTime<"+POut.Date(new DateTime(DateTime.Now.Year,DateTime.Now.Month,1))+" "
-				+"AND "+DbHelper.Year("commlog.DateTimeEnd")+">1";
+				+"INNER JOIN patient ON commlog.PatNum=patient.PatNum AND patient.Guarantor="+POut.Long(guarantor)+" "
+				+"WHERE "+DbHelper.Year("commlog.DateTimeEnd")+">1";
 			return Crud.CommlogCrud.SelectMany(command);
 		}
 
