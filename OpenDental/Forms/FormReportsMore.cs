@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Forms;
@@ -436,6 +437,14 @@ namespace OpenDental {
 			if(UsingArizonaPrimaryCare()) {
 				labelArizonaPrimaryCare.Visible=true;
 				listArizonaPrimaryCare.Visible=true;
+			}
+			//Notify user if partial batch ins payments exist.
+			List<ClaimPayment> listClaimPay=ClaimPayments.GetForDateRange(DateTime.Now.AddMonths(-1),DateTime.Now,0);
+			for(int i=0;i<listClaimPay.Count;i++) {
+				if(listClaimPay[i].IsPartial) {
+					MsgBox.Show(this,"Reports will not be accurate until partial insurance payments are completed.");
+					break;
+				}
 			}
 		}
 
