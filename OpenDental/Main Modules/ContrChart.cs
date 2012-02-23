@@ -13,6 +13,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
@@ -304,6 +305,8 @@ namespace OpenDental{
 		private DateTime ShowDateEnd;
 		private Label label2;
 		private bool IsDistributorKey;
+		[DllImport("wininet.dll",CharSet = CharSet.Auto,SetLastError = true)]
+		static extern bool InternetSetCookie(string lpszUrlName,string lbszCookieName,string lpszCookieData);
 	
 		///<summary></summary>
 		public ContrChart(){
@@ -3555,9 +3558,18 @@ namespace OpenDental{
 							//ecwEx.InitClass oExInit=new ecwEx.InitClass();
 							strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
 							//oExInit.getAppServer();
-							webBrowserEcw.Url=new Uri("http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
+							string path="http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
 								+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
-								+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString());
+								+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString();
+							//set cookie
+							if(!String.IsNullOrEmpty(Bridges.ECW.JSessionId)) {
+								InternetSetCookie("http://"+strAppServer,null,"JSESSIONID = "+Bridges.ECW.JSessionId);
+							}
+							if(!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO)) {
+								InternetSetCookie("http://"+strAppServer,null,"JSESSIONIDSSO = "+Bridges.ECW.JSessionIdSSO);
+							}
+							//navigate
+							webBrowserEcw.Navigate(path); 
 							labelECWerror.Visible=false;
 						}
 					}
