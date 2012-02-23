@@ -319,6 +319,8 @@ namespace OpenDental{
 		private UI.Button butBatch;
 		private Label labelBatch;
 		private List<InsSub> SubList;
+		private ComboBox comboCustomTracking;
+		private Label label88;
 		///<summary>If this claim edit window is accessed from the batch ins window, then set this to true to hide the batch button in this window and prevent loop.</summary>
 		public bool IsFromBatchWindow;
 
@@ -617,6 +619,8 @@ namespace OpenDental{
 			this.label87 = new System.Windows.Forms.Label();
 			this.butBatch = new OpenDental.UI.Button();
 			this.labelBatch = new System.Windows.Forms.Label();
+			this.comboCustomTracking = new System.Windows.Forms.ComboBox();
+			this.label88 = new System.Windows.Forms.Label();
 			this.groupProsth.SuspendLayout();
 			this.groupOrtho.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -641,7 +645,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(256,69);
+			this.label3.Location = new System.Drawing.Point(256,72);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(94,15);
 			this.label3.TabIndex = 2;
@@ -650,7 +654,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(2,135);
+			this.label6.Location = new System.Drawing.Point(2,131);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(108,16);
 			this.label6.TabIndex = 5;
@@ -659,7 +663,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(5,115);
+			this.label8.Location = new System.Drawing.Point(5,111);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(104,16);
 			this.label8.TabIndex = 7;
@@ -668,7 +672,7 @@ namespace OpenDental{
 			// 
 			// labelDateService
 			// 
-			this.labelDateService.Location = new System.Drawing.Point(3,96);
+			this.labelDateService.Location = new System.Drawing.Point(3,92);
 			this.labelDateService.Name = "labelDateService";
 			this.labelDateService.Size = new System.Drawing.Size(107,16);
 			this.labelDateService.TabIndex = 8;
@@ -677,7 +681,7 @@ namespace OpenDental{
 			// 
 			// labelPredeterm
 			// 
-			this.labelPredeterm.Location = new System.Drawing.Point(214,131);
+			this.labelPredeterm.Location = new System.Drawing.Point(214,134);
 			this.labelPredeterm.Name = "labelPredeterm";
 			this.labelPredeterm.Size = new System.Drawing.Size(138,16);
 			this.labelPredeterm.TabIndex = 11;
@@ -784,7 +788,7 @@ namespace OpenDental{
 			// 
 			// textPredeterm
 			// 
-			this.textPredeterm.Location = new System.Drawing.Point(351,127);
+			this.textPredeterm.Location = new System.Drawing.Point(351,130);
 			this.textPredeterm.Name = "textPredeterm";
 			this.textPredeterm.Size = new System.Drawing.Size(170,20);
 			this.textPredeterm.TabIndex = 1;
@@ -818,7 +822,7 @@ namespace OpenDental{
 			// 
 			// label21
 			// 
-			this.label21.Location = new System.Drawing.Point(249,89);
+			this.label21.Location = new System.Drawing.Point(249,92);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(102,15);
 			this.label21.TabIndex = 93;
@@ -889,7 +893,7 @@ namespace OpenDental{
 			// comboProvBill
 			// 
 			this.comboProvBill.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProvBill.Location = new System.Drawing.Point(351,65);
+			this.comboProvBill.Location = new System.Drawing.Point(351,68);
 			this.comboProvBill.Name = "comboProvBill";
 			this.comboProvBill.Size = new System.Drawing.Size(100,21);
 			this.comboProvBill.TabIndex = 97;
@@ -897,7 +901,7 @@ namespace OpenDental{
 			// comboProvTreat
 			// 
 			this.comboProvTreat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProvTreat.Location = new System.Drawing.Point(351,86);
+			this.comboProvTreat.Location = new System.Drawing.Point(351,89);
 			this.comboProvTreat.Name = "comboProvTreat";
 			this.comboProvTreat.Size = new System.Drawing.Size(100,21);
 			this.comboProvTreat.TabIndex = 99;
@@ -3035,14 +3039,14 @@ namespace OpenDental{
 			// 
 			// textPriorAuth
 			// 
-			this.textPriorAuth.Location = new System.Drawing.Point(351,107);
+			this.textPriorAuth.Location = new System.Drawing.Point(351,110);
 			this.textPriorAuth.Name = "textPriorAuth";
 			this.textPriorAuth.Size = new System.Drawing.Size(170,20);
 			this.textPriorAuth.TabIndex = 141;
 			// 
 			// labelPriorAuth
 			// 
-			this.labelPriorAuth.Location = new System.Drawing.Point(194,111);
+			this.labelPriorAuth.Location = new System.Drawing.Point(194,114);
 			this.labelPriorAuth.Name = "labelPriorAuth";
 			this.labelPriorAuth.Size = new System.Drawing.Size(158,16);
 			this.labelPriorAuth.TabIndex = 142;
@@ -3169,7 +3173,7 @@ namespace OpenDental{
 			// 
 			// textDateService
 			// 
-			this.textDateService.Location = new System.Drawing.Point(111,93);
+			this.textDateService.Location = new System.Drawing.Point(111,89);
 			this.textDateService.Name = "textDateService";
 			this.textDateService.Size = new System.Drawing.Size(82,20);
 			this.textDateService.TabIndex = 119;
@@ -3203,14 +3207,14 @@ namespace OpenDental{
 			// 
 			// textDateSent
 			// 
-			this.textDateSent.Location = new System.Drawing.Point(111,113);
+			this.textDateSent.Location = new System.Drawing.Point(111,109);
 			this.textDateSent.Name = "textDateSent";
 			this.textDateSent.Size = new System.Drawing.Size(82,20);
 			this.textDateSent.TabIndex = 6;
 			// 
 			// textDateRec
 			// 
-			this.textDateRec.Location = new System.Drawing.Point(111,133);
+			this.textDateRec.Location = new System.Drawing.Point(111,129);
 			this.textDateRec.Name = "textDateRec";
 			this.textDateRec.Size = new System.Drawing.Size(82,20);
 			this.textDateRec.TabIndex = 7;
@@ -3371,12 +3375,32 @@ namespace OpenDental{
 			this.labelBatch.TabIndex = 151;
 			this.labelBatch.Text = "Don\'t create a new check until payments for all claims have been entered.";
 			// 
+			// comboCustomTracking
+			// 
+			this.comboCustomTracking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCustomTracking.Location = new System.Drawing.Point(351,47);
+			this.comboCustomTracking.MaxDropDownItems = 100;
+			this.comboCustomTracking.Name = "comboCustomTracking";
+			this.comboCustomTracking.Size = new System.Drawing.Size(170,21);
+			this.comboCustomTracking.TabIndex = 153;
+			// 
+			// label88
+			// 
+			this.label88.Location = new System.Drawing.Point(252,50);
+			this.label88.Name = "label88";
+			this.label88.Size = new System.Drawing.Size(97,17);
+			this.label88.TabIndex = 152;
+			this.label88.Text = "Custom Tracking";
+			this.label88.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormClaimEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.AutoScroll = true;
 			this.ClientSize = new System.Drawing.Size(984,913);
 			this.ControlBox = false;
+			this.Controls.Add(this.comboCustomTracking);
+			this.Controls.Add(this.label88);
 			this.Controls.Add(this.labelBatch);
 			this.Controls.Add(this.butBatch);
 			this.Controls.Add(this.comboClaimForm);
