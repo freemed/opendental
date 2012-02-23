@@ -523,7 +523,7 @@ namespace OpenDental {
 				}
 				double myPointsRemain=PIn.Double(textMyPointsRemain.Text);
 				if(myPointsRemain<0){
-					MsgBox.Show(this,"You have gone over your allotted 100 points.");
+					MsgBox.Show(this,"You have gone over your allotted points.");
 					return false;
 				}
 			}
