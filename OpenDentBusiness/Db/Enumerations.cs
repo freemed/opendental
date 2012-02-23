@@ -153,71 +153,7 @@ namespace OpenDentBusiness{
 		Cn
 	}
 		//?new?
-	///<summary>Definition Category. Go to the definition setup window in the program to see how each of these categories is used.</summary>
-	public enum DefCat{
-		///<summary>0- Colors to display in Account module.</summary>
-		AccountColors,
-		///<summary>1- Adjustment types.</summary>
-		AdjTypes,
-		///<summary>2- Appointment confirmed types.</summary>
-		ApptConfirmed,
-		///<summary>3- Procedure quick add list for appointments.</summary>
-		ApptProcsQuickAdd,
-		///<summary>4- Billing types.</summary>
-		BillingTypes,
-		///<summary>5- Not used.</summary>
-		ClaimFormats,
-		///<summary>6- Not used.</summary>
-		DunningMessages,
-		///<summary>7- Not used.</summary>
-		FeeSchedNamesOld,
-		///<summary>8- Medical notes for quick paste.</summary>
-		MedicalNotes,
-		///<summary>9- No longer used</summary>
-		OperatoriesOld,
-		///<summary>10- Payment types.</summary>
-		PaymentTypes,
-		///<summary>11- Procedure code categories.</summary>
-		ProcCodeCats,
-		///<summary>12- Progress note colors.</summary>
-		ProgNoteColors,
-		///<summary>13- Statuses for recall, unscheduled, and next appointments.</summary>
-		RecallUnschedStatus,
-		///<summary>14- Service notes for quick paste.</summary>
-		ServiceNotes,
-		///<summary>15- Discount types.</summary>
-		DiscountTypes,
-		///<summary>16- Diagnosis types.</summary>
-		Diagnosis,
-		///<summary>17- Colors to display in the Appointments module.</summary>
-		AppointmentColors,
-		///<summary>18- Image categories.</summary>
-		ImageCats,
-		///<summary>19- Quick add notes for the ApptPhoneNotes, which is getting phased out.</summary>
-		ApptPhoneNotes,
-		///<summary>20- Treatment plan priority names.</summary>
-		TxPriorities,
-		///<summary>21- Miscellaneous color options.</summary>
-		MiscColors,
-		///<summary>22- Colors for the graphical tooth chart.</summary>
-		ChartGraphicColors,
-		///<summary>23- Categories for the Contact list.</summary>
-		ContactCategories,
-		///<summary>24- Categories for Letter Merge.</summary>
-		LetterMergeCats,
-		///<summary>25- Types of Schedule Blockouts.</summary>
-		BlockoutTypes,
-		///<summary>26- Categories of procedure buttons in Chart module</summary>
-		ProcButtonCats,
-		///<Summary>27- Types of commlog entries.</Summary>
-		CommLogTypes,
-		///<summary>28- Categories of Supplies</summary>
-		SupplyCats,
-		///<summary>29- Types of unearned income used in accrual accounting.</summary>
-		PaySplitUnearnedType,
-		///<summary>30- Prognosis types.</summary>
-		Prognosis
-	}
+	
 	//public enum StudentStat{None,Full,Part};
 	///<summary>Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment.</summary>
 	public enum TreatmentArea{
