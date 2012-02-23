@@ -245,6 +245,7 @@ namespace OpenDentBusiness {
 			PhoneEmpDefault ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null) {//we found that computername entered as an override
 				if(ped.IsPrivateScreen) {
+					Phones.SetScreenshot(ped.PhoneExt,"",null);
 					return 0;
 				}
 				command="SELECT ClockStatus FROM phone "
@@ -287,6 +288,7 @@ namespace OpenDentBusiness {
 			command="SELECT * FROM phoneempdefault WHERE PhoneExt= "+POut.Long(extension);
 			ped=Crud.PhoneEmpDefaultCrud.SelectOne(command);
 			if(ped!=null && ped.IsPrivateScreen) {
+				Phones.SetScreenshot(ped.PhoneExt,"",null);
 				return 0;
 			}
 			command="SELECT ClockStatus FROM phone "
