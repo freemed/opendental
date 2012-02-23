@@ -319,7 +319,7 @@ namespace OpenDentBusiness{
 			if(!isPreauth) {
 				command+="AND claim.ClaimType!='Preauth' ";
 			}
-			command+="ORDER BY carrier.Phone,insplan.PlanNum, carrier.Phone,insplan.PlanNum";
+			command+="ORDER BY carrier.Phone,insplan.PlanNum";
 			object[] parameters={command};
 			if(RemotingClient.RemotingRole==RemotingRole.ClientDirect) {//this is a temporary safe fix
 				Plugins.HookAddCode(null,"Claims.GetOutInsClaims_beforequeryrun",parameters);
