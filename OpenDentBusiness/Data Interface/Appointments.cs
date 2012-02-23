@@ -1226,9 +1226,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("patName");
 			table.Columns.Add("waitTime");
 			string command="SELECT DateTimeArrived,DateTimeSeated,LName,FName,Preferred,"+DbHelper.Now()+" dateTimeNow "
-				+"FROM appointment,patient "
-				+"WHERE appointment.PatNum=patient.PatNum "
-				+"AND "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(DateTime.Now)+" "
+				+"FROM appointment "
+				+"JOIN patient ON appointment.PatNum=patient.PatNum "
+				+"WHERE "+DbHelper.DateColumn("AptDateTime")+" = "+POut.Date(DateTime.Now)+" "
 				+"AND DateTimeArrived > "+POut.Date(DateTime.Now)+" "//midnight earlier today
 				+"AND DateTimeArrived < "+DbHelper.Now()+" "
 				+"AND "+DbHelper.DateColumn("DateTimeArrived")+"="+DbHelper.DateColumn("AptDateTime")+" ";//prevents people from getting "stuck" in waiting room.
@@ -1238,7 +1238,8 @@ namespace OpenDentBusiness{
 			else{
 				command+="AND TIME(DateTimeSeated) = 0 ";
 			}
-			command+="ORDER BY AptDateTime";
+			command+="AND AptStatus IN ("+POut.Int((int)ApptStatus.Scheduled)+","+POut.Int((int)ApptStatus.ASAP)+") "//None of the other statuses
+				+"ORDER BY AptDateTime";
 			DataTable raw=dcon.GetTable(command);
 			TimeSpan timeArrived;
 			//DateTime timeSeated;
