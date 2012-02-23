@@ -3419,7 +3419,14 @@ namespace OpenDental{
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
 				if(PatCur==null) {
-					ToolBarMain.Buttons["Rx"].Enabled=false;
+					if(UsingEcwTight()) {
+						if(!Environment.Is64BitOperatingSystem) {
+							ToolBarMain.Buttons["Rx"].Enabled=false;
+						}
+					}
+					else {
+						ToolBarMain.Buttons["Rx"].Enabled=false;
+					}
 					ToolBarMain.Buttons["LabCase"].Enabled=false;
 					ToolBarMain.Buttons["Perio"].Enabled = false;
 					ToolBarMain.Buttons["Ortho"].Enabled = false;
@@ -3446,7 +3453,14 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+			if(UsingEcwTight()) {
+				if(!Environment.Is64BitOperatingSystem) {
+					ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+				}
+			}
+			else {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ortho Chart"),-1,"","Ortho"));
@@ -3535,7 +3549,14 @@ namespace OpenDental{
 				//tabPlanned.Enabled=false;
 				toothChart.Enabled=false;
 				gridProg.Enabled=false;
-				ToolBarMain.Buttons["Rx"].Enabled=false;
+				if(UsingEcwTight()) {
+					if(!Environment.Is64BitOperatingSystem) {
+						ToolBarMain.Buttons["Rx"].Enabled=false;
+					}
+				}
+				else {
+					ToolBarMain.Buttons["Rx"].Enabled=false;
+				}
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
 				ToolBarMain.Buttons["Ortho"].Enabled = false;
@@ -3560,7 +3581,14 @@ namespace OpenDental{
 				//groupPlanned.Enabled=true;
 				toothChart.Enabled=true;
 				gridProg.Enabled=true;
-				ToolBarMain.Buttons["Rx"].Enabled=true;
+				if(UsingEcwTight()) {
+					if(!Environment.Is64BitOperatingSystem) {
+						ToolBarMain.Buttons["Rx"].Enabled=true;
+					}
+				}
+				else {
+					ToolBarMain.Buttons["Rx"].Enabled=true;
+				}
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
 				ToolBarMain.Buttons["Ortho"].Enabled = true;
