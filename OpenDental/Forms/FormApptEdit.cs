@@ -1211,10 +1211,10 @@ namespace OpenDental{
 				butAddComm.Visible=false;
 				if(HL7Msgs.MessageWasSent(AptCur.AptNum)) {
 					butComplete.Text="Revise";
-					if(!Security.IsAuthorized(Permissions.Setup,true)) {
-						butComplete.Enabled=false;
-						butPDF.Enabled=false;
-					}
+					//if(!Security.IsAuthorized(Permissions.Setup,true)) {
+					//	butComplete.Enabled=false;
+					//	butPDF.Enabled=false;
+					//}
 					butOK.Enabled=false;
 					gridProc.Enabled=false;
 					listQuickAdd.Enabled=false;
@@ -2319,7 +2319,8 @@ namespace OpenDental{
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {
-			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.				
+			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.	
+			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
 			Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",true);
 			MsgBox.Show(this,"Notes PDF sent.");
