@@ -140,6 +140,8 @@ namespace OpenDentBusiness{
 		public string AdmissionSourceCode;
 		///<summary>Used for inst claims. Two digit.  X12 2300 CL103.  UB04 17.  Should only be required for IP, but X12 clearly states required for all.</summary>
 		public string PatientStatusCode;
+		///<summary>FK to definition.DefNum. Most users will leave this blank.  Some offices may set up tracking statuses such as 'review', 'hold', 'riskmanage', etc.</summary>
+		public long CustomTracking;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]

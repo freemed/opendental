@@ -8527,6 +8527,31 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.1.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_1_7();
+		}
+
+		private static void To12_1_7() {
+			if(FromVersion<new Version("12.1.7.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CustomTracking bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim ADD INDEX (CustomTracking)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CustomTracking number(20)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CustomTracking = 0 WHERE CustomTracking IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CustomTracking NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX claim_CustomTracking ON claim (CustomTracking)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.1.7.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_2_0();
 		}
 
@@ -8568,6 +8593,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+				
+
 				
 
 				
