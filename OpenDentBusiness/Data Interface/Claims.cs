@@ -330,9 +330,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Called from claimsend window and from Claim edit window.  Use 0 to get all waiting claims, or an actual claimnum to get just one claim.</summary>
-		public static ClaimSendQueueItem[] GetQueueList(long claimNum,long clinicNum) {
+		public static ClaimSendQueueItem[] GetQueueList(long claimNum,long clinicNum,long customTracking) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ClaimSendQueueItem[]>(MethodBase.GetCurrentMethod(),claimNum,clinicNum);
+				return Meth.GetObject<ClaimSendQueueItem[]>(MethodBase.GetCurrentMethod(),claimNum,clinicNum,customTracking);
 			}
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
@@ -350,6 +350,9 @@ namespace OpenDentBusiness{
 			}
 			if(clinicNum>0) {
 				command+="AND claim.ClinicNum="+POut.Long(clinicNum)+" ";
+			}
+			if(customTracking>0) {
+				command+="AND claim.CustomTracking="+POut.Long(customTracking)+" ";
 			}
 			command+="ORDER BY patient.LName";
 			DataTable table=Db.GetTable(command);

@@ -264,7 +264,7 @@ namespace OpenDental{
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			//This is VERY new.  Only allowed and visible for one category so far: supply cats.
+			//This is VERY new.  Only allowed and visible for two categories so far: supply cats and claim custom tracking.
 			if(IsNew){
 				DialogResult=DialogResult.Cancel;
 				return;

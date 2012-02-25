@@ -3744,6 +3744,15 @@ namespace OpenDental{
 				if(Clinics.List[i].ClinicNum==ClaimCur.ClinicNum)
 					comboClinic.SelectedIndex=i+1;
 			}
+			comboCustomTracking.Items.Clear();
+			comboCustomTracking.Items.Add(Lan.g(this,"none"));
+			comboCustomTracking.SelectedIndex=0;
+			for(int i=0;i<DefC.Long[(int)DefCat.ClaimCustomTracking].Length;i++) {
+				comboCustomTracking.Items.Add(DefC.Long[(int)DefCat.ClaimCustomTracking][i].ItemName);
+				if(ClaimCur.CustomTracking==DefC.Long[(int)DefCat.ClaimCustomTracking][i].DefNum) {	
+					comboCustomTracking.SelectedIndex=i+1;
+				}
+			}
 			comboProvBill.Items.Clear();
 			for(int i=0;i<ProviderC.ListShort.Count;i++){
 				comboProvBill.Items.Add(ProviderC.ListShort[i].Abbr);
@@ -4960,7 +4969,7 @@ namespace OpenDental{
 				return;
 			}
 			UpdateClaim();
-			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum);
+			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum,0);
 			if(listQueue[0].NoSendElect) {
 				MsgBox.Show(this,"This carrier is marked to not receive e-claims.");
 				//Later: we need to let user send anyway, using all 0's for electronic id.
@@ -5150,7 +5159,7 @@ namespace OpenDental{
 			}
 			UpdateClaim();
 			if(comboClaimStatus.SelectedIndex==2){//waiting to send
-				ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum);
+				ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum,0);
 				if(listQueue[0].NoSendElect) {
 					DialogResult=DialogResult.OK;
 					return;
@@ -5470,6 +5479,10 @@ namespace OpenDental{
 			}
 			//planNum
 			ClaimCur.SpecialProgramCode=(EnumClaimSpecialProgram)comboSpecialProgram.SelectedIndex;
+			ClaimCur.CustomTracking=0;
+			if(comboCustomTracking.SelectedIndex!=0) {
+				ClaimCur.CustomTracking=DefC.Long[(int)DefCat.ClaimCustomTracking][comboCustomTracking.SelectedIndex-1].DefNum;
+			}
 			//patRelats will always be selected
 			ClaimCur.PatRelat=(Relat)comboPatRelat.SelectedIndex;
 			ClaimCur.PatRelat2=(Relat)comboPatRelat2.SelectedIndex;

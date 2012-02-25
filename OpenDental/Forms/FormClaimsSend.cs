@@ -54,6 +54,8 @@ namespace OpenDental{
 		int headingPrintH;
 		private ComboBox comboClinic;
 		private Label labelClinic;
+		private ComboBox comboCustomTracking;
+		private Label labelCustomTracking;
 		private ContextMenu contextMenuEclaims;
 		//private ContextMenu contextMenuHist;
 
@@ -100,16 +102,18 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.contextMenuEclaims = new System.Windows.Forms.ContextMenu();
+			this.comboCustomTracking = new System.Windows.Forms.ComboBox();
+			this.labelCustomTracking = new System.Windows.Forms.Label();
 			this.panelHistory.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label6
 			// 
-			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label6.Location = new System.Drawing.Point(107,-44);
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label6.Location = new System.Drawing.Point(107, -44);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(112,44);
+			this.label6.Size = new System.Drawing.Size(112, 44);
 			this.label6.TabIndex = 21;
 			this.label6.Text = "Insurance Claims";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -118,17 +122,17 @@ namespace OpenDental{
 			// 
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList1.Images.SetKeyName(0,"");
-			this.imageList1.Images.SetKeyName(1,"");
-			this.imageList1.Images.SetKeyName(2,"");
-			this.imageList1.Images.SetKeyName(3,"");
-			this.imageList1.Images.SetKeyName(4,"");
-			this.imageList1.Images.SetKeyName(5,"");
-			this.imageList1.Images.SetKeyName(6,"");
+			this.imageList1.Images.SetKeyName(0, "");
+			this.imageList1.Images.SetKeyName(1, "");
+			this.imageList1.Images.SetKeyName(2, "");
+			this.imageList1.Images.SetKeyName(3, "");
+			this.imageList1.Images.SetKeyName(4, "");
+			this.imageList1.Images.SetKeyName(5, "");
+			this.imageList1.Images.SetKeyName(6, "");
 			// 
 			// calendarTo
 			// 
-			this.calendarTo.Location = new System.Drawing.Point(196,29);
+			this.calendarTo.Location = new System.Drawing.Point(196, 29);
 			this.calendarTo.MaxSelectionCount = 1;
 			this.calendarTo.Name = "calendarTo";
 			this.calendarTo.TabIndex = 42;
@@ -137,7 +141,7 @@ namespace OpenDental{
 			// 
 			// calendarFrom
 			// 
-			this.calendarFrom.Location = new System.Drawing.Point(6,29);
+			this.calendarFrom.Location = new System.Drawing.Point(6, 29);
 			this.calendarFrom.MaxSelectionCount = 1;
 			this.calendarFrom.Name = "calendarFrom";
 			this.calendarFrom.TabIndex = 39;
@@ -146,18 +150,18 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(196,5);
+			this.label2.Location = new System.Drawing.Point(196, 5);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(72,18);
+			this.label2.Size = new System.Drawing.Size(72, 18);
 			this.label2.TabIndex = 36;
 			this.label2.Text = "To";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(1,5);
+			this.label1.Location = new System.Drawing.Point(1, 5);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(75,18);
+			this.label1.Size = new System.Drawing.Size(75, 18);
 			this.label1.TabIndex = 34;
 			this.label1.Text = "From";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -165,9 +169,9 @@ namespace OpenDental{
 			// panelSplitter
 			// 
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.SizeNS;
-			this.panelSplitter.Location = new System.Drawing.Point(2,398);
+			this.panelSplitter.Location = new System.Drawing.Point(2, 398);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(961,6);
+			this.panelSplitter.Size = new System.Drawing.Size(961, 6);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -185,9 +189,9 @@ namespace OpenDental{
 			this.panelHistory.Controls.Add(this.textDateFrom);
 			this.panelHistory.Controls.Add(this.label2);
 			this.panelHistory.Controls.Add(this.textDateTo);
-			this.panelHistory.Location = new System.Drawing.Point(0,403);
+			this.panelHistory.Location = new System.Drawing.Point(0, 403);
 			this.panelHistory.Name = "panelHistory";
-			this.panelHistory.Size = new System.Drawing.Size(972,286);
+			this.panelHistory.Size = new System.Drawing.Size(972, 286);
 			this.panelHistory.TabIndex = 51;
 			// 
 			// gridHistory
@@ -195,11 +199,11 @@ namespace OpenDental{
 			this.gridHistory.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridHistory.HScrollVisible = false;
-			this.gridHistory.Location = new System.Drawing.Point(4,31);
+			this.gridHistory.Location = new System.Drawing.Point(4, 31);
 			this.gridHistory.Name = "gridHistory";
 			this.gridHistory.ScrollValue = 0;
 			this.gridHistory.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridHistory.Size = new System.Drawing.Size(959,252);
+			this.gridHistory.Size = new System.Drawing.Size(959, 252);
 			this.gridHistory.TabIndex = 33;
 			this.gridHistory.Title = "History";
 			this.gridHistory.TranslationName = "TableClaimHistory";
@@ -209,31 +213,31 @@ namespace OpenDental{
 			// 
 			this.panel1.BackColor = System.Drawing.SystemColors.ControlDark;
 			this.panel1.Controls.Add(this.ToolBarHistory);
-			this.panel1.Location = new System.Drawing.Point(387,0);
+			this.panel1.Location = new System.Drawing.Point(387, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(576,27);
+			this.panel1.Size = new System.Drawing.Size(576, 27);
 			this.panel1.TabIndex = 44;
 			// 
 			// ToolBarHistory
 			// 
 			this.ToolBarHistory.BackColor = System.Drawing.SystemColors.Control;
 			this.ToolBarHistory.ImageList = this.imageList1;
-			this.ToolBarHistory.Location = new System.Drawing.Point(1,1);
+			this.ToolBarHistory.Location = new System.Drawing.Point(1, 1);
 			this.ToolBarHistory.Name = "ToolBarHistory";
-			this.ToolBarHistory.Size = new System.Drawing.Size(575,25);
+			this.ToolBarHistory.Size = new System.Drawing.Size(575, 25);
 			this.ToolBarHistory.TabIndex = 43;
 			this.ToolBarHistory.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarHistory_ButtonClick);
 			// 
 			// butDropTo
 			// 
-			this.butDropTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDropTo.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDropTo.Autosize = true;
 			this.butDropTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDropTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDropTo.CornerRadius = 4F;
-			this.butDropTo.Location = new System.Drawing.Point(352,4);
+			this.butDropTo.Location = new System.Drawing.Point(352, 4);
 			this.butDropTo.Name = "butDropTo";
-			this.butDropTo.Size = new System.Drawing.Size(22,23);
+			this.butDropTo.Size = new System.Drawing.Size(22, 23);
 			this.butDropTo.TabIndex = 41;
 			this.butDropTo.Text = "V";
 			this.butDropTo.UseVisualStyleBackColor = true;
@@ -241,14 +245,14 @@ namespace OpenDental{
 			// 
 			// butDropFrom
 			// 
-			this.butDropFrom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDropFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDropFrom.Autosize = true;
 			this.butDropFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDropFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDropFrom.CornerRadius = 4F;
-			this.butDropFrom.Location = new System.Drawing.Point(162,4);
+			this.butDropFrom.Location = new System.Drawing.Point(162, 4);
 			this.butDropFrom.Name = "butDropFrom";
-			this.butDropFrom.Size = new System.Drawing.Size(22,23);
+			this.butDropFrom.Size = new System.Drawing.Size(22, 23);
 			this.butDropFrom.TabIndex = 40;
 			this.butDropFrom.Text = "V";
 			this.butDropFrom.UseVisualStyleBackColor = true;
@@ -256,33 +260,33 @@ namespace OpenDental{
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(79,6);
+			this.textDateFrom.Location = new System.Drawing.Point(79, 6);
 			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(81,20);
+			this.textDateFrom.Size = new System.Drawing.Size(81, 20);
 			this.textDateFrom.TabIndex = 35;
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(269,6);
+			this.textDateTo.Location = new System.Drawing.Point(269, 6);
 			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(81,20);
+			this.textDateTo.Size = new System.Drawing.Size(81, 20);
 			this.textDateTo.TabIndex = 37;
 			// 
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(74,26);
+			this.comboClinic.Location = new System.Drawing.Point(74, 26);
 			this.comboClinic.MaxDropDownItems = 40;
 			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(160,21);
+			this.comboClinic.Size = new System.Drawing.Size(160, 21);
 			this.comboClinic.TabIndex = 53;
 			this.comboClinic.SelectionChangeCommitted += new System.EventHandler(this.comboClinic_SelectionChangeCommitted);
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(7,29);
+			this.labelClinic.Location = new System.Drawing.Point(7, 29);
 			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(65,14);
+			this.labelClinic.Size = new System.Drawing.Size(65, 14);
 			this.labelClinic.TabIndex = 52;
 			this.labelClinic.Text = "Clinic Filter";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
@@ -290,11 +294,11 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(4,49);
+			this.gridMain.Location = new System.Drawing.Point(4, 49);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(959,350);
+			this.gridMain.Size = new System.Drawing.Size(959, 350);
 			this.gridMain.TabIndex = 32;
 			this.gridMain.Title = "Claims Waiting to Send";
 			this.gridMain.TranslationName = "TableQueue";
@@ -304,16 +308,37 @@ namespace OpenDental{
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageList1;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
+			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(971,25);
+			this.ToolBarMain.Size = new System.Drawing.Size(971, 25);
 			this.ToolBarMain.TabIndex = 31;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// comboCustomTracking
+			// 
+			this.comboCustomTracking.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCustomTracking.Location = new System.Drawing.Point(384, 26);
+			this.comboCustomTracking.MaxDropDownItems = 40;
+			this.comboCustomTracking.Name = "comboCustomTracking";
+			this.comboCustomTracking.Size = new System.Drawing.Size(160, 21);
+			this.comboCustomTracking.TabIndex = 55;
+			this.comboCustomTracking.SelectionChangeCommitted += new System.EventHandler(this.comboCustomTracking_SelectionChangeCommitted);
+			// 
+			// labelCustomTracking
+			// 
+			this.labelCustomTracking.Location = new System.Drawing.Point(240, 29);
+			this.labelCustomTracking.Name = "labelCustomTracking";
+			this.labelCustomTracking.Size = new System.Drawing.Size(142, 14);
+			this.labelCustomTracking.TabIndex = 54;
+			this.labelCustomTracking.Text = "Custom Tracking Filter";
+			this.labelCustomTracking.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			// 
 			// FormClaimsSend
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(971,691);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(971, 691);
+			this.Controls.Add(this.comboCustomTracking);
+			this.Controls.Add(this.labelCustomTracking);
 			this.Controls.Add(this.comboClinic);
 			this.Controls.Add(this.labelClinic);
 			this.Controls.Add(this.gridMain);
@@ -350,12 +375,17 @@ namespace OpenDental{
 				labelClinic.Visible=false;
 			}
 			else {
-				comboClinic.Items.Add(Lan.g(this,"All"));
+				comboClinic.Items.Add(Lan.g(this,"all"));
 				comboClinic.SelectedIndex=0;
 				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
 			}
+			comboCustomTracking.Items.Add(Lan.g(this,"all"));
+			for(int i=0;i<DefC.Long[(int)DefCat.ClaimCustomTracking].Length;i++) {
+				comboCustomTracking.Items.Add(DefC.Long[(int)DefCat.ClaimCustomTracking][i].ItemName);
+			}
+			comboCustomTracking.SelectedIndex=0;
 			if(PrefC.RandomKeys && !PrefC.GetBool(PrefName.EasyNoClinics)){//using random keys and clinics
 				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
 			}
@@ -440,10 +470,14 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			long clinicNum=0;
+			long customTracking=0;
 			if(!PrefC.GetBool(PrefName.EasyNoClinics) && comboClinic.SelectedIndex!=0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			listQueue=Claims.GetQueueList(0,clinicNum);
+			if(comboCustomTracking.SelectedIndex!=0) {
+				customTracking=DefC.Long[(int)DefCat.ClaimCustomTracking][comboCustomTracking.SelectedIndex-1].DefNum;
+			}
+			listQueue=Claims.GetQueueList(0,clinicNum,customTracking);
 			for(int i=0;i<listQueue.Length;i++) {
 				Eclaims.Eclaims.GetMissingData(listQueue[i]);
 			}
@@ -801,6 +835,10 @@ namespace OpenDental{
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void comboCustomTracking_SelectionChangeCommitted(object sender,EventArgs e) {
 			FillGrid();
 		}
 

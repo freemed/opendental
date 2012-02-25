@@ -617,11 +617,11 @@ namespace OpenDentBusiness
 					+(sub.AssignBen?"Y":"N")+s//CLM08 1/1 Yes/No Condition or Response Code: We do not support W.
 					+(sub.ReleaseInfo?"Y":"I"));//CLM09 1/1 Release of Information Code: Y or I(which is equivalent to No)
 				if(medType==EnumClaimMedType.Medical || medType==EnumClaimMedType.Dental) {
-					if(claim.AccidentDate.Year>1880 || claim.SpecialProgramCode!=EnumClaimSpecialProgram.None || claim.ClaimType=="PreAuth") {//if val for 11,12, or 19
+					if(claim.AccidentDate.Year>1880 || claim.SpecialProgramCode!=EnumClaimSpecialProgram.none || claim.ClaimType=="PreAuth") {//if val for 11,12, or 19
 						sw.Write(s+s//end of CLM09. CLM10 not used
 							+GetRelatedCauses(claim));//CLM11 2/3:2/3:2/3:2/2:2/3 Related Causes Information: Situational. Accident related, including state. Might be blank.
 					}
-					if(claim.SpecialProgramCode!=EnumClaimSpecialProgram.None || claim.ClaimType=="PreAuth") {//if val for 12, or 19
+					if(claim.SpecialProgramCode!=EnumClaimSpecialProgram.none || claim.ClaimType=="PreAuth") {//if val for 12, or 19
 						sw.Write(s//nothing for CLM11.
 							+GetSpecialProgramCode(claim.SpecialProgramCode));//CLM12 2/3 Special Program Code: Situational. Example EPSTD.
 					}

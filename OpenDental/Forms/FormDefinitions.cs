@@ -75,36 +75,36 @@ namespace OpenDental{
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(686,638);
+			this.butClose.Location = new System.Drawing.Point(686, 638);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 3;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// label14
 			// 
-			this.label14.Location = new System.Drawing.Point(92,604);
+			this.label14.Location = new System.Drawing.Point(92, 604);
 			this.label14.Name = "label14";
-			this.label14.Size = new System.Drawing.Size(100,18);
+			this.label14.Size = new System.Drawing.Size(100, 18);
 			this.label14.TabIndex = 22;
 			this.label14.Text = "Guidelines";
 			this.label14.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textGuide
 			// 
-			this.textGuide.Location = new System.Drawing.Point(198,604);
+			this.textGuide.Location = new System.Drawing.Point(198, 604);
 			this.textGuide.Multiline = true;
 			this.textGuide.Name = "textGuide";
 			this.textGuide.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textGuide.Size = new System.Drawing.Size(460,63);
+			this.textGuide.Size = new System.Drawing.Size(460, 63);
 			this.textGuide.TabIndex = 2;
 			// 
 			// groupEdit
@@ -114,71 +114,71 @@ namespace OpenDental{
 			this.groupEdit.Controls.Add(this.butUp);
 			this.groupEdit.Controls.Add(this.butAdd);
 			this.groupEdit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupEdit.Location = new System.Drawing.Point(198,549);
+			this.groupEdit.Location = new System.Drawing.Point(198, 549);
 			this.groupEdit.Name = "groupEdit";
-			this.groupEdit.Size = new System.Drawing.Size(460,51);
+			this.groupEdit.Size = new System.Drawing.Size(460, 51);
 			this.groupEdit.TabIndex = 1;
 			this.groupEdit.TabStop = false;
 			this.groupEdit.Text = "Edit Items";
 			// 
 			// butHide
 			// 
-			this.butHide.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHide.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butHide.Autosize = true;
 			this.butHide.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHide.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHide.CornerRadius = 4F;
-			this.butHide.Location = new System.Drawing.Point(138,18);
+			this.butHide.Location = new System.Drawing.Point(138, 18);
 			this.butHide.Name = "butHide";
-			this.butHide.Size = new System.Drawing.Size(79,24);
+			this.butHide.Size = new System.Drawing.Size(79, 24);
 			this.butHide.TabIndex = 10;
 			this.butHide.Text = "&Hide";
 			this.butHide.Click += new System.EventHandler(this.butHide_Click);
 			// 
 			// butDown
 			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDown.Autosize = true;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(346,18);
+			this.butDown.Location = new System.Drawing.Point(346, 18);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79,24);
+			this.butDown.Size = new System.Drawing.Size(79, 24);
 			this.butDown.TabIndex = 9;
 			this.butDown.Text = "&Down";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
 			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butUp.Autosize = true;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(242,18);
+			this.butUp.Location = new System.Drawing.Point(242, 18);
 			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(79,24);
+			this.butUp.Size = new System.Drawing.Size(79, 24);
 			this.butUp.TabIndex = 8;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(34,18);
+			this.butAdd.Location = new System.Drawing.Point(34, 18);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79,24);
+			this.butAdd.Size = new System.Drawing.Size(79, 24);
 			this.butAdd.TabIndex = 6;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -186,12 +186,12 @@ namespace OpenDental{
 			// tbDefs
 			// 
 			this.tbDefs.BackColor = System.Drawing.SystemColors.Window;
-			this.tbDefs.Location = new System.Drawing.Point(199,6);
+			this.tbDefs.Location = new System.Drawing.Point(199, 6);
 			this.tbDefs.Name = "tbDefs";
 			this.tbDefs.ScrollValue = 1;
 			this.tbDefs.SelectedIndices = new int[0];
 			this.tbDefs.SelectionMode = System.Windows.Forms.SelectionMode.None;
-			this.tbDefs.Size = new System.Drawing.Size(459,538);
+			this.tbDefs.Size = new System.Drawing.Size(459, 538);
 			this.tbDefs.TabIndex = 19;
 			// 
 			// listCategory
@@ -205,6 +205,7 @@ namespace OpenDental{
             "Billing Types",
             "Blockout Types",
             "Chart Graphic Colors",
+            "Claim Custom Tracking",
             "Commlog Types",
             "Contact Categories",
             "Diagnosis",
@@ -220,26 +221,26 @@ namespace OpenDental{
             "Recall/Unsch Status",
             "Supply Categories",
             "Treat\' Plan Priorities"});
-			this.listCategory.Location = new System.Drawing.Point(22,36);
+			this.listCategory.Location = new System.Drawing.Point(22, 36);
 			this.listCategory.Name = "listCategory";
-			this.listCategory.Size = new System.Drawing.Size(147,303);
+			this.listCategory.Size = new System.Drawing.Size(147, 316);
 			this.listCategory.TabIndex = 0;
 			this.listCategory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listCategory_MouseDown);
 			// 
 			// label13
 			// 
-			this.label13.Location = new System.Drawing.Point(22,18);
+			this.label13.Location = new System.Drawing.Point(22, 18);
 			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(162,17);
+			this.label13.Size = new System.Drawing.Size(162, 17);
 			this.label13.TabIndex = 17;
 			this.label13.Text = "Select Category:";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormDefinitions
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(789,675);
+			this.ClientSize = new System.Drawing.Size(789, 675);
 			this.Controls.Add(this.label14);
 			this.Controls.Add(this.textGuide);
 			this.Controls.Add(this.butClose);
@@ -281,21 +282,22 @@ namespace OpenDental{
 			lookupCat[5]=DefCat.BillingTypes;
 			lookupCat[6]=DefCat.BlockoutTypes;
 			lookupCat[7]=DefCat.ChartGraphicColors;
-			lookupCat[8]=DefCat.CommLogTypes;
-			lookupCat[9]=DefCat.ContactCategories;
-			lookupCat[10]=DefCat.Diagnosis;
-			lookupCat[11]=DefCat.ImageCats;
-			lookupCat[12]=DefCat.LetterMergeCats;
-			lookupCat[13]=DefCat.MiscColors;
-			lookupCat[14]=DefCat.PaymentTypes;
-			lookupCat[15]=DefCat.PaySplitUnearnedType;
-			lookupCat[16]=DefCat.ProcButtonCats;
-			lookupCat[17]=DefCat.ProcCodeCats;
-			lookupCat[18]=DefCat.ProgNoteColors;
-			lookupCat[19]=DefCat.Prognosis;
-			lookupCat[20]=DefCat.RecallUnschedStatus;
-			lookupCat[21]=DefCat.SupplyCats;
-			lookupCat[22]=DefCat.TxPriorities;
+			lookupCat[8]=DefCat.ClaimCustomTracking;
+			lookupCat[9]=DefCat.CommLogTypes;
+			lookupCat[10]=DefCat.ContactCategories;
+			lookupCat[11]=DefCat.Diagnosis;
+			lookupCat[12]=DefCat.ImageCats;
+			lookupCat[13]=DefCat.LetterMergeCats;
+			lookupCat[14]=DefCat.MiscColors;
+			lookupCat[15]=DefCat.PaymentTypes;
+			lookupCat[16]=DefCat.PaySplitUnearnedType;
+			lookupCat[17]=DefCat.ProcButtonCats;
+			lookupCat[18]=DefCat.ProcCodeCats;
+			lookupCat[19]=DefCat.ProgNoteColors;
+			lookupCat[20]=DefCat.Prognosis;
+			lookupCat[21]=DefCat.RecallUnschedStatus;
+			lookupCat[22]=DefCat.SupplyCats;
+			lookupCat[23]=DefCat.TxPriorities;			
 			for(int i=0;i<listCategory.Items.Count;i++){
 				listCategory.Items[i]=Lan.g(this,(string)listCategory.Items[i]);
 				if((int)lookupCat[i]==SelectedCat){
@@ -373,74 +375,81 @@ namespace OpenDental{
 					FormDefEdit.CanEditName=false;
 					FormDefEdit.HelpText=Lan.g(this,"These colors will be used on the graphical tooth chart to draw restorations.");
 					break;
-				case 8://"Commlog Types"
+				case 8://"Custom Tracking":
+					butHide.Visible=false;
+					FormDefEdit.CanDelete=true;
+					FormDefEdit.CanHide=false;
+					FormDefEdit.EnableColor=false;
+					FormDefEdit.HelpText=Lan.g(this,"Some offices may set up claim tracking statuses such as 'review', 'hold', 'riskmanage', etc.");
+					break;
+				case 9://"Commlog Types"
 					FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"APPT,FIN,RECALL,MISC");
 					FormDefEdit.HelpText=Lan.g(this,"Changes affect all current commlog entries.  In the second column, you can optionally specify APPT,FIN,RECALL,or MISC. Only one of each. This helps automate new entries.");
 					break;
-				case 9://"Contact Categories":
+				case 10://"Contact Categories":
 					//SelectedCat=(int)DefCat.ContactCategories;
 					FormDefEdit.HelpText=Lan.g(this,"You can add as many categories as you want.  Changes affect all current contact records.");
 					break;
-				case 10://"Diagnosis":
+				case 11://"Diagnosis":
 					//SelectedCat=16;
 					FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"1 or 2 letter abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"The diagnosis list is shown when entering a procedure.  Ones that are less used should go lower on the list.  The abbreviation is shown in the progress notes.  BE VERY CAREFUL.  Changes affect all patients.");
 					break;
-				case 11://"Image Categories":
+				case 12://"Image Categories":
 					//SelectedCat=18;
 					//FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"Usage");
 					FormDefEdit.HelpText=Lan.g(this,"These are the categories that will be available in the image and chart modules.  If you hide a category, images in that category will be hidden, so only hide a category if you are certain it has never been used.  Multiple categories can be set to show in the Chart module, but only one category should set for patient pictures, statements, and tooth chart. Affects all patient records.");
 					break;
-				case 12://"Letter Merge Cats"
+				case 13://"Letter Merge Cats"
 					//SelectedCat=(int)DefCat.LetterMergeCats;
 					FormDefEdit.HelpText=Lan.g(this,"Categories for Letter Merge.  You can safely make any changes you want.");
 					break;
-				case 13://"Misc Colors":
+				case 14://"Misc Colors":
 					//SelectedCat=21;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.CanEditName=false;
 					FormDefEdit.HelpText="";
 					break;
-				case 14://"Payment Types":
+				case 15://"Payment Types":
 					//SelectedCat=10;
 					FormDefEdit.HelpText=Lan.g(this,"Types of payments that patients might make. Any changes will affect all patients.");
 					break;
-				case 15://paysplit unearned types
+				case 16://paysplit unearned types
 					FormDefEdit.HelpText=Lan.g(this,"Usually only used by offices that use accrual basis accounting instead of cash basis accounting. Any changes will affect all patients.");
 					break;
-				case 16://"Proc Button Categories":
+				case 17://"Proc Button Categories":
 					FormDefEdit.HelpText=Lan.g(this,"These are similar to the procedure code categories, but are only used for organizing and grouping the procedure buttons in the Chart module.");
 					break;
-				case 17://"Proc Code Categories":
+				case 18://"Proc Code Categories":
 					//SelectedCat=11;
 					FormDefEdit.HelpText=Lan.g(this,"These are the categories for organizing procedure codes. They do not have to follow ADA categories.  There is no relationship to insurance categories which are setup in the Ins Categories section.  Does not affect any patient records.");
 					break;
-				case 18://"Prog Notes Colors":
+				case 19://"Prog Notes Colors":
 					//SelectedCat=12;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.CanEditName=false;
 					FormDefEdit.HelpText=Lan.g(this,"Changes color of text for different types of entries in the Chart Module Progress Notes.");
 					break;
-				case 19://"Prognosis":
+				case 20://"Prognosis":
 					//Nothing special. Might add HelpText later.
 					FormDefEdit.HelpText=Lan.g(this,"");
 					break;
-				case 20://"Recall/Unsch Status":
+				case 21://"Recall/Unsch Status":
 					//SelectedCat=13;
 					FormDefEdit.EnableValue=true;
 					FormDefEdit.ValueText=Lan.g(this,"Abbreviation");
 					FormDefEdit.HelpText=Lan.g(this,"Recall/Unsched Status.  Abbreviation must be 7 characters or less.  Changes affect all patients.");
 					break;
-				case 21://Supply Categories
+				case 22://Supply Categories
 					butHide.Visible=false;
 					FormDefEdit.CanDelete=true;
 					FormDefEdit.CanHide=false;
 					FormDefEdit.HelpText=Lan.g(this,"The categories for inventory supplies.");
 					break;
-				case 22://"Treat' Plan Priorities":
+				case 23://"Treat' Plan Priorities":
 					//SelectedCat=20;
 					FormDefEdit.EnableColor=true;
 					FormDefEdit.HelpText=Lan.g(this,"Priorities available for selection in the Treatment Plan module.  They can be simple numbers or descriptive abbreviations 7 letters or less.  Changes affect all procedures where the definition is used.");

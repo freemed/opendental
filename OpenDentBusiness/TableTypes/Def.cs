@@ -122,7 +122,9 @@ namespace OpenDentBusiness {
 		///<summary>29- Types of unearned income used in accrual accounting.</summary>
 		PaySplitUnearnedType,
 		///<summary>30- Prognosis types.</summary>
-		Prognosis
+		Prognosis,
+		///<summary>31- Custom Tracking, statuses such as 'review', 'hold', 'riskmanage', etc.</summary>
+		ClaimCustomTracking
 	}
 
 	
