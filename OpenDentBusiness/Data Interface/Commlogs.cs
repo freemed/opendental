@@ -28,6 +28,18 @@ namespace OpenDentBusiness{
 			return Crud.CommlogCrud.SelectOne(commlogNum);
 		}
 
+		///<summary>If a commlog exists with today's date for the current user and has no stop time, then that commlog is returned so it can be reopened.  Otherwise, return null.</summary>
+		public static Commlog GetIncompleteEntry(long userNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Commlog>(MethodBase.GetCurrentMethod(),userNum);
+			}
+			//no need for Oracle compatibility
+			string command="SELECT * FROM commlog WHERE DATE(CommDateTime)=CURDATE() "
+				+"AND UserNum="+POut.Long(userNum)+" "
+				+"AND DateTimeEnd < '1880-01-01' LIMIT 1";
+			return Crud.CommlogCrud.SelectOne(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(Commlog comm) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
