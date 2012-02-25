@@ -335,7 +335,6 @@ namespace OpenDental{
 			// FormCommItem
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(662, 594);
 			this.Controls.Add(this.butNowEnd);
 			this.Controls.Add(this.textDateTimeEnd);
@@ -362,10 +361,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.label1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "FormCommItem";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Communication Item";
 			this.Load += new System.EventHandler(this.FormCommItem_Load);
