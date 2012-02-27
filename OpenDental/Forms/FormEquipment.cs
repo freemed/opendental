@@ -37,12 +37,8 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void textDateStart_KeyDown(object sender,KeyEventArgs e) {
-			//FillGrid();
-		}
-
-		private void textDateEnd_KeyDown(object sender,KeyEventArgs e) {
-			//FillGrid();
+		private void textSn_TextChanged(object sender,EventArgs e) {
+			FillGrid();
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -82,7 +78,7 @@ namespace OpenDental {
 			if(radioSold.Checked){
 				display=EnumEquipmentDisplayMode.Sold;
 			}
-			listEquip=Equipments.GetList(fromDate,toDate,display);
+			listEquip=Equipments.GetList(fromDate,toDate,display,textSnDesc.Text);
 			gridMain.BeginUpdate();
 			if(radioPurchased.Checked) {
 				gridMain.HScrollVisible=true;

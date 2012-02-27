@@ -10,29 +10,30 @@ namespace OpenDentBusiness{
 	public class Equipments {
 
 		///<summary></summary>
-		public static List<Equipment> GetList(DateTime fromDate,DateTime toDate,EnumEquipmentDisplayMode display) {
+		public static List<Equipment> GetList(DateTime fromDate,DateTime toDate,EnumEquipmentDisplayMode display,string snDesc) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Equipment>>(MethodBase.GetCurrentMethod(),fromDate,toDate,display);
+				return Meth.GetObject<List<Equipment>>(MethodBase.GetCurrentMethod(),fromDate,toDate,display,snDesc);
 			}
 			string command="";
 			if(display==EnumEquipmentDisplayMode.Purchased){
 				command="SELECT * FROM equipment "
 					+"WHERE DatePurchased >= "+POut.Date(fromDate)
 					+" AND DatePurchased <= "+POut.Date(toDate)
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			if(display==EnumEquipmentDisplayMode.Sold) {
 				command="SELECT * FROM equipment "
 					+"WHERE DateSold >= "+POut.Date(fromDate)
 					+" AND DateSold <= "+POut.Date(toDate)
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			if(display==EnumEquipmentDisplayMode.All) {
 				command="SELECT * FROM equipment "
-					+"WHERE (DatePurchased >= "+POut.Date(fromDate)
-					+" AND DatePurchased <= "+POut.Date(toDate)+")"
-					+" OR (DateSold >= "+POut.Date(fromDate)
-					+" AND DateSold <= "+POut.Date(toDate)+")"
+					+"WHERE ((DatePurchased >= "+POut.Date(fromDate)+" AND DatePurchased <= "+POut.Date(toDate)+")"
+						+" OR (DateSold >= "+POut.Date(fromDate)+" AND DateSold <= "+POut.Date(toDate)+"))"
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			return Crud.EquipmentCrud.SelectMany(command);
