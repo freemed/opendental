@@ -118,6 +118,7 @@ namespace OpenDental{
 			this.labelSoftware = new System.Windows.Forms.Label();
 			this.panelQB = new System.Windows.Forms.Panel();
 			this.groupQB = new System.Windows.Forms.GroupBox();
+			this.labelQuickBooksTitle = new System.Windows.Forms.Label();
 			this.labelConnectQB = new System.Windows.Forms.Label();
 			this.labelIncomeAccountQB = new System.Windows.Forms.Label();
 			this.labelWarning = new System.Windows.Forms.Label();
@@ -135,7 +136,6 @@ namespace OpenDental{
 			this.panelOD = new System.Windows.Forms.Panel();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.labelQuickBooksTitle = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupAutomaticPayment.SuspendLayout();
 			this.panelQB.SuspendLayout();
@@ -380,10 +380,20 @@ namespace OpenDental{
 			this.groupQB.TabStop = false;
 			this.groupQB.Text = "QuickBooks";
 			// 
+			// labelQuickBooksTitle
+			// 
+			this.labelQuickBooksTitle.Location = new System.Drawing.Point(15, 20);
+			this.labelQuickBooksTitle.Name = "labelQuickBooksTitle";
+			this.labelQuickBooksTitle.Size = new System.Drawing.Size(478, 34);
+			this.labelQuickBooksTitle.TabIndex = 53;
+			this.labelQuickBooksTitle.Text = "QuickBooks and the QuickBooks Foundation Class must be installed on this computer" +
+    ". \r\nGo to the QuickBooks page on our website to download the QBFC installer.";
+			this.labelQuickBooksTitle.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// labelConnectQB
 			// 
 			this.labelConnectQB.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelConnectQB.Location = new System.Drawing.Point(15, 72);
+			this.labelConnectQB.Location = new System.Drawing.Point(15, 82);
 			this.labelConnectQB.Name = "labelConnectQB";
 			this.labelConnectQB.Size = new System.Drawing.Size(397, 46);
 			this.labelConnectQB.TabIndex = 52;
@@ -393,7 +403,7 @@ namespace OpenDental{
 			// 
 			// labelIncomeAccountQB
 			// 
-			this.labelIncomeAccountQB.Location = new System.Drawing.Point(12, 296);
+			this.labelIncomeAccountQB.Location = new System.Drawing.Point(12, 306);
 			this.labelIncomeAccountQB.Name = "labelIncomeAccountQB";
 			this.labelIncomeAccountQB.Size = new System.Drawing.Size(168, 19);
 			this.labelIncomeAccountQB.TabIndex = 51;
@@ -418,7 +428,7 @@ namespace OpenDental{
 			this.butConnectQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butConnectQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butConnectQB.CornerRadius = 4F;
-			this.butConnectQB.Location = new System.Drawing.Point(418, 83);
+			this.butConnectQB.Location = new System.Drawing.Point(418, 93);
 			this.butConnectQB.Name = "butConnectQB";
 			this.butConnectQB.Size = new System.Drawing.Size(75, 24);
 			this.butConnectQB.TabIndex = 49;
@@ -432,7 +442,7 @@ namespace OpenDental{
 			this.butBrowseQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBrowseQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBrowseQB.CornerRadius = 4F;
-			this.butBrowseQB.Location = new System.Drawing.Point(418, 47);
+			this.butBrowseQB.Location = new System.Drawing.Point(418, 57);
 			this.butBrowseQB.Name = "butBrowseQB";
 			this.butBrowseQB.Size = new System.Drawing.Size(75, 24);
 			this.butBrowseQB.TabIndex = 48;
@@ -441,7 +451,7 @@ namespace OpenDental{
 			// 
 			// labelCompanyFile
 			// 
-			this.labelCompanyFile.Location = new System.Drawing.Point(12, 49);
+			this.labelCompanyFile.Location = new System.Drawing.Point(12, 59);
 			this.labelCompanyFile.Name = "labelCompanyFile";
 			this.labelCompanyFile.Size = new System.Drawing.Size(105, 19);
 			this.labelCompanyFile.TabIndex = 46;
@@ -450,7 +460,7 @@ namespace OpenDental{
 			// 
 			// textCompanyFileQB
 			// 
-			this.textCompanyFileQB.Location = new System.Drawing.Point(123, 49);
+			this.textCompanyFileQB.Location = new System.Drawing.Point(123, 59);
 			this.textCompanyFileQB.Name = "textCompanyFileQB";
 			this.textCompanyFileQB.Size = new System.Drawing.Size(289, 20);
 			this.textCompanyFileQB.TabIndex = 47;
@@ -458,7 +468,7 @@ namespace OpenDental{
 			// listBoxAccountsQB
 			// 
 			this.listBoxAccountsQB.FormattingEnabled = true;
-			this.listBoxAccountsQB.Location = new System.Drawing.Point(182, 181);
+			this.listBoxAccountsQB.Location = new System.Drawing.Point(182, 191);
 			this.listBoxAccountsQB.Name = "listBoxAccountsQB";
 			this.listBoxAccountsQB.Size = new System.Drawing.Size(230, 108);
 			this.listBoxAccountsQB.TabIndex = 44;
@@ -470,7 +480,7 @@ namespace OpenDental{
 			this.butRemoveAccountsQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRemoveAccountsQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRemoveAccountsQB.CornerRadius = 4F;
-			this.butRemoveAccountsQB.Location = new System.Drawing.Point(418, 210);
+			this.butRemoveAccountsQB.Location = new System.Drawing.Point(418, 220);
 			this.butRemoveAccountsQB.Name = "butRemoveAccountsQB";
 			this.butRemoveAccountsQB.Size = new System.Drawing.Size(75, 24);
 			this.butRemoveAccountsQB.TabIndex = 43;
@@ -484,7 +494,7 @@ namespace OpenDental{
 			this.butChangeIncomeAccountQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butChangeIncomeAccountQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butChangeIncomeAccountQB.CornerRadius = 4F;
-			this.butChangeIncomeAccountQB.Location = new System.Drawing.Point(418, 293);
+			this.butChangeIncomeAccountQB.Location = new System.Drawing.Point(418, 303);
 			this.butChangeIncomeAccountQB.Name = "butChangeIncomeAccountQB";
 			this.butChangeIncomeAccountQB.Size = new System.Drawing.Size(75, 24);
 			this.butChangeIncomeAccountQB.TabIndex = 42;
@@ -493,7 +503,7 @@ namespace OpenDental{
 			// 
 			// textIncomeAccountQB
 			// 
-			this.textIncomeAccountQB.Location = new System.Drawing.Point(182, 295);
+			this.textIncomeAccountQB.Location = new System.Drawing.Point(182, 305);
 			this.textIncomeAccountQB.Name = "textIncomeAccountQB";
 			this.textIncomeAccountQB.ReadOnly = true;
 			this.textIncomeAccountQB.Size = new System.Drawing.Size(230, 20);
@@ -506,7 +516,7 @@ namespace OpenDental{
 			this.butAddAccountsQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddAccountsQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddAccountsQB.CornerRadius = 4F;
-			this.butAddAccountsQB.Location = new System.Drawing.Point(418, 180);
+			this.butAddAccountsQB.Location = new System.Drawing.Point(418, 190);
 			this.butAddAccountsQB.Name = "butAddAccountsQB";
 			this.butAddAccountsQB.Size = new System.Drawing.Size(75, 24);
 			this.butAddAccountsQB.TabIndex = 39;
@@ -515,7 +525,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(3, 181);
+			this.label7.Location = new System.Drawing.Point(3, 191);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(177, 53);
 			this.label7.TabIndex = 38;
@@ -524,7 +534,7 @@ namespace OpenDental{
 			// 
 			// labelDepositsQB
 			// 
-			this.labelDepositsQB.Location = new System.Drawing.Point(12, 142);
+			this.labelDepositsQB.Location = new System.Drawing.Point(12, 152);
 			this.labelDepositsQB.Name = "labelDepositsQB";
 			this.labelDepositsQB.Size = new System.Drawing.Size(492, 27);
 			this.labelDepositsQB.TabIndex = 33;
@@ -570,16 +580,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// labelQuickBooksTitle
-			// 
-			this.labelQuickBooksTitle.Location = new System.Drawing.Point(15, 16);
-			this.labelQuickBooksTitle.Name = "labelQuickBooksTitle";
-			this.labelQuickBooksTitle.Size = new System.Drawing.Size(492, 27);
-			this.labelQuickBooksTitle.TabIndex = 53;
-			this.labelQuickBooksTitle.Text = "QuickBooks needs to be installed on this computer and it must have access to the " +
-    "company file.";
-			this.labelQuickBooksTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// FormAccountingSetup
 			// 
