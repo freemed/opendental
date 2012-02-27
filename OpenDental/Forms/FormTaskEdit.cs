@@ -1181,7 +1181,9 @@ namespace OpenDental{
 				//No more automation here
 			}
 			else {
-				TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);//no matter why it was closed
+				if(Security.CurUser!=null) {//Because tasks are modal, user may log off and this form may close with no user.
+					TaskUnreads.SetRead(Security.CurUser.UserNum,TaskCur.TaskNum);//no matter why it was closed
+				}
 			}
 			if(DialogResult==DialogResult.OK) {
 				return;

@@ -212,6 +212,12 @@ namespace OpenDental {
 		}
 
 		private void FillGrid(){
+			if(Security.CurUser==null) {
+				gridMain.BeginUpdate();
+				gridMain.Rows.Clear();
+				gridMain.EndUpdate();
+				return;
+			}
 			long parent;
 			DateTime date;
 			if(TreeHistory==null){
