@@ -192,7 +192,7 @@ namespace OpenDental{
 		public List<ClaimProcHist> LoopList;
 		private Label labelEndTime;
 		private OpenDental.UI.Button butNow;
-		private TextBox textDate;
+		private ValidDate textDate;
 		private TextBox textTimeEnd;
 		private Label labelScheduleBy;
 		private OrionProc OrionProcCur;
@@ -310,7 +310,7 @@ namespace OpenDental{
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.textTimeStart = new System.Windows.Forms.TextBox();
 			this.textTimeEnd = new System.Windows.Forms.TextBox();
-			this.textDate = new System.Windows.Forms.TextBox();
+			this.textDate = new OpenDental.ValidDate();
 			this.butNow = new OpenDental.UI.Button();
 			this.textDateTP = new OpenDental.ValidDate();
 			this.label27 = new System.Windows.Forms.Label();
@@ -4003,6 +4003,7 @@ namespace OpenDental{
 
 		private bool EntriesAreValid(){
 			if(  textDateTP.errorProvider1.GetError(textDateTP)!=""
+				|| textDate.errorProvider1.GetError(textDate)!=""
 				|| textProcFee.errorProvider1.GetError(textProcFee)!=""
 				|| textDateOriginalProsth.errorProvider1.GetError(textDateOriginalProsth)!=""
 				){
@@ -4011,13 +4012,6 @@ namespace OpenDental{
 			}
 			if(textDate.Text==""){
 				MessageBox.Show(Lan.g(this,"Please enter a date first."));
-				return false;
-			}
-			try{
-				DateTime.Parse(textDate.Text);
-			}
-			catch{
-				MessageBox.Show(Lan.g(this,"Date invalid."));
 				return false;
 			}
 			if(Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
