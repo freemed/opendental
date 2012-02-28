@@ -617,32 +617,72 @@ namespace OpenDental{
 			List<string> fields;
 			double feeAmt=0;
 			string codeText="";
-			for(int i=1;i<lines.Length;i++){
-				fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.RemoveEmptyEntries);//half the 'fields' will be commas
-				fields=new List<string>();
-				for(int f=0;f<fieldArray.Length;f++) {
-					if(fieldArray[f]==",") {
+			bool formatQuotes=false;
+			if(lines.Length>1) {
+				if(lines[1].Substring(0,1)=="\"") {
+					formatQuotes=true;
+				}
+			}
+			if(formatQuotes) {//Original format - fields are surrounded by quotes (except first row, above)
+				for(int i=1;i<lines.Length;i++) {
+					//fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.RemoveEmptyEntries);//Removing emtpy entries will misalign the columns
+					fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.None);//half the 'fields' will be commas.
+					fields=new List<string>();
+					for(int f=0;f<fieldArray.Length;f++) {
+						if(fieldArray[f]==",") {
+							continue;
+						}
+						fields.Add(fieldArray[f]);
+					}
+					if(fields.Count<4) {
+						skippedMalformed++;
 						continue;
 					}
-					fields.Add(fieldArray[f]);
+					if(importAllowed) {
+						feeAmt=PIn.Double(fields[3]);
+					}
+					else {
+						feeAmt=PIn.Double(fields[2]);
+					}
+					codeText=fields[0];
+					if(!ProcedureCodes.IsValidCode(codeText)) {
+						skippedCode++;
+						continue;
+					}
+					Fees.Import(fields[0],feeAmt,feesched.FeeSchedNum);
+					imported++;
 				}
-				if(fields.Count<4) {
-					skippedMalformed++;
-					continue;
+			}
+			else {//New format - fields are delimited by commas only (no quotes)
+				for(int i=1;i<lines.Length;i++) {
+					fieldArray=lines[i].Split(new string[1] { "," },StringSplitOptions.None);
+					fields=new List<string>();
+					for(int f=0;f<fieldArray.Length;f++) {
+						fields.Add(fieldArray[f]);
+					}
+					if(fields.Count<4) {
+						skippedMalformed++;
+						continue;
+					}
+					if(fields.Count>10) {
+						MsgBox.Show(this,"Import aborted. Commas are not allowed in text fields. Check your descriptions for commas and try again.");
+						Cursor=Cursors.Default;
+						return;
+					}
+					if(importAllowed) {
+						feeAmt=PIn.Double(fields[3]);
+					}
+					else {
+						feeAmt=PIn.Double(fields[2]);
+					}
+					codeText=fields[0];
+					if(!ProcedureCodes.IsValidCode(codeText)) {
+						skippedCode++;
+						continue;
+					}
+					Fees.Import(fields[0],feeAmt,feesched.FeeSchedNum);
+					imported++;
 				}
-				if(importAllowed) {
-					feeAmt=PIn.Double(fields[3]);
-				}
-				else {
-					feeAmt=PIn.Double(fields[2]);
-				}
-				codeText=fields[0];
-				if(!ProcedureCodes.IsValidCode(codeText)) {
-					skippedCode++;
-					continue;
-				}
-				Fees.Import(fields[0],feeAmt,feesched.FeeSchedNum);
-				imported++;
 			}
 			DataValid.SetInvalid(InvalidType.Fees);
 			Cursor=Cursors.Default;
