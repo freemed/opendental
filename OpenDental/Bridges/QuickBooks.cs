@@ -167,7 +167,7 @@ namespace OpenDental.Bridges {
 			//Set field value for income account
 			DepositLineAdd1.ORDepositLineAdd.DepositInfo.AccountRef.FullName.SetValue(incomeAcct);
 			//Set field value for Amount
-			DepositLineAdd1.ORDepositLineAdd.DepositInfo.Amount.SetValue(Math.Round(amount,2));
+			DepositLineAdd1.ORDepositLineAdd.DepositInfo.Amount.SetAsString(amount.ToString("F"));
 		}
 
 		///<summary>Checks if the status code for the deposit is "ok".</summary>
