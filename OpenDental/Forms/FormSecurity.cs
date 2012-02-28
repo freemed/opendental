@@ -471,6 +471,10 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.EhrEmergencyAccess);
 					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.RefAttachAdd);
+					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.RefAttachDelete);
+					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.ReferralAdd);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);

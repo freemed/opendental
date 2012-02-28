@@ -138,7 +138,11 @@ namespace OpenDentBusiness{
 		///<summary>54</summary>
 		ReferralAdd,
 		///<summary>55</summary>
-		InsPlanChangeSubsc
+		InsPlanChangeSubsc,
+		///<summary>56</summary>
+		RefAttachAdd,
+		///<summary>57</summary>
+		RefAttachDelete
 	}
 
 	

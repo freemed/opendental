@@ -8674,7 +8674,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE claim ADD OrigRefNum varchar2(255)";
 					Db.NonQ(command);
 				}
-
+				//Add RefAttachDelete permission to everyone------------------------------------------------------
+				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
+				DataTable table=Db.GetTable(command);
+				long groupNum;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.RefAttachDelete)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.RefAttachDelete)+")";
+						Db.NonQ32(command);
+					}
+				}
+				//Add RefAttachAdd permission to everyone------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.RefAttachAdd)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.RefAttachAdd)+")";
+						Db.NonQ32(command);
+					}
+				}
 
 
 
