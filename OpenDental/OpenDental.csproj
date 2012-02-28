@@ -348,6 +348,24 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\FormReferenceEntryEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReferenceEntryEdit.designer.cs">
+      <DependentUpon>FormReferenceEntryEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReferenceEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReferenceEdit.designer.cs">
+      <DependentUpon>FormReferenceEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReferenceSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormReferenceSelect.designer.cs">
+      <DependentUpon>FormReferenceSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormBillingClinic.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2389,6 +2407,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReferenceEntryEdit.resx">
+      <DependentUpon>FormReferenceEntryEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReferenceEdit.resx">
+      <DependentUpon>FormReferenceEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormReferenceSelect.resx">
+      <DependentUpon>FormReferenceSelect.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBillingClinic.resx">

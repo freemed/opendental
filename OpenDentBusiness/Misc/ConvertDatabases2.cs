@@ -8558,7 +8558,70 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To12_2_0() {
 			if(FromVersion<new Version("12.2.0.0")) {
 				string command;
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS custrefentry";
+					Db.NonQ(command);
+					command=@"CREATE TABLE custrefentry (
+						CustRefEntryNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNumCust bigint NOT NULL,
+						PatNumRef bigint NOT NULL,
+						DateEntry date NOT NULL DEFAULT '0001-01-01',
+						Note varchar(255) NOT NULL,
+						INDEX(PatNumCust),
+						INDEX(PatNumRef)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE custrefentry'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE custrefentry (
+						CustRefEntryNum number(20) NOT NULL,
+						PatNumCust number(20) NOT NULL,
+						PatNumRef number(20) NOT NULL,
+						DateEntry date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						Note varchar2(255),
+						CONSTRAINT custrefentry_CustRefEntryNum PRIMARY KEY (CustRefEntryNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX custrefentry_PatNumCust ON custrefentry (PatNumCust)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX custrefentry_PatNumRef ON custrefentry (PatNumRef)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS custreference";
+					Db.NonQ(command);
+					command=@"CREATE TABLE custreference (
+						CustReferenceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						DateMostRecent date NOT NULL DEFAULT '0001-01-01',
+						Note varchar(255) NOT NULL,
+						IsBadRef tinyint NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE custreference'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE custreference (
+						CustReferenceNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateMostRecent date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						Note varchar2(255),
+						IsBadRef number(3) NOT NULL,
+						CONSTRAINT custreference_CustReferenceNum PRIMARY KEY (CustReferenceNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX custreference_PatNum ON custreference (PatNum)";
+					Db.NonQ(command);
+				}
+				//Create a customer reference object for every customer in the db.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO custreference (PatNum) SELECT PatNum FROM patient";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8593,6 +8656,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+				
+
 				
 
 				

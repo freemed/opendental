@@ -700,6 +700,8 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\CustReference.cs" />
+    <Compile Include="TableTypes\CustRefEntry.cs" />
     <Compile Include="TableTypes\EobAttach.cs" />
     <Compile Include="TableTypes\DashboardAR.cs" />
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
