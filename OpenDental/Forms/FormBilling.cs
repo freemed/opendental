@@ -869,6 +869,7 @@ namespace OpenDental{
 					str=str.Replace("[nameFL]",pat.GetNameFL());
 					str=str.Replace("[namePref]",pat.Preferred);
 					str=str.Replace("[PatNum]",pat.PatNum.ToString());
+					message.BodyText=str;
 					attach=new EmailAttach();
 					attach.DisplayedFileName="Statement.pdf";
 					attach.ActualFileName=fileName;
