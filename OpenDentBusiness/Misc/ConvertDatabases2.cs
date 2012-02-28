@@ -8634,6 +8634,46 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE appointment MODIFY ColorOverride NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD DateResent date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD DateResent date";
+					Db.NonQ(command);
+					command="UPDATE claim SET DateResent = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateResent IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY DateResent NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD CorrectionType tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD CorrectionType number(3)";
+					Db.NonQ(command);
+					command="UPDATE claim SET CorrectionType = 0 WHERE CorrectionType IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE claim MODIFY CorrectionType NOT NULL";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD ClaimIdentifier varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD ClaimIdentifier varchar2(255)";
+					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE claim ADD OrigRefNum varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE claim ADD OrigRefNum varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8675,6 +8715,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 				
 
-				
 
-				

@@ -142,6 +142,14 @@ namespace OpenDentBusiness{
 		public string PatientStatusCode;
 		///<summary>FK to definition.DefNum. Most users will leave this blank.  Some offices may set up tracking statuses such as 'review', 'hold', 'riskmanage', etc.</summary>
 		public long CustomTracking;
+		///<summary>Used for historical purposes only, not sent electronically. Automatically set when CorrectionType is not original and the claim is resent.</summary>
+		public DateTime DateResent;
+		///<summary>X12 CLM05-3. Usually set to original, but can be used to resubmit claims.</summary>
+		public ClaimCorrectionType CorrectionType;
+		///<summary>X12 CLM01. Unique identifier for the claim within the current database. Defaults to PatNum/ClaimNum, but can be edited by user.</summary>
+		public string ClaimIdentifier;
+		///<summary>X12 2300 REF (F8). Used when resending claims to refer to the original claim. The user must type this value in after reading it from the original claim response report.</summary>
+		public string OrigRefNum;
 
 		///<summary>Not a data column.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
