@@ -8622,7 +8622,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO custreference (PatNum) SELECT PatNum FROM patient";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE appointment ADD ColorOverride int NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE appointment ADD ColorOverride number(11)";
+					Db.NonQ(command);
+					command="UPDATE appointment SET ColorOverride = 0 WHERE ColorOverride IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE appointment MODIFY ColorOverride NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -8656,6 +8667,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+				
+
 				
 
 				

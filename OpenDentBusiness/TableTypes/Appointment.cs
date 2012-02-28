@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 
 namespace OpenDentBusiness{
 	
@@ -65,6 +66,8 @@ namespace OpenDentBusiness{
 		public DateTime DateTimeAskedToArrive;
 		///<summary>Stores XML for the procs colors</summary>
 		public String ProcsColored;
+		///<summary>If set to anything but 0, then this will override the graphic color for the appointment.</summary>
+		public Color ColorOverride;
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Clone(){
