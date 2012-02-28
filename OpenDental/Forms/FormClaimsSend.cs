@@ -382,10 +382,16 @@ namespace OpenDental{
 				}
 			}
 			comboCustomTracking.Items.Add(Lan.g(this,"all"));
-			for(int i=0;i<DefC.Long[(int)DefCat.ClaimCustomTracking].Length;i++) {
-				comboCustomTracking.Items.Add(DefC.Long[(int)DefCat.ClaimCustomTracking][i].ItemName);
-			}
 			comboCustomTracking.SelectedIndex=0;
+			if(DefC.Long[(int)DefCat.ClaimCustomTracking].Length==0){
+				labelCustomTracking.Visible=false;
+				comboCustomTracking.Visible=false;
+			}
+			else{
+				for(int i=0;i<DefC.Long[(int)DefCat.ClaimCustomTracking].Length;i++) {
+					comboCustomTracking.Items.Add(DefC.Long[(int)DefCat.ClaimCustomTracking][i].ItemName);
+				}
+			}
 			if(PrefC.RandomKeys && !PrefC.GetBool(PrefName.EasyNoClinics)){//using random keys and clinics
 				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
 			}
