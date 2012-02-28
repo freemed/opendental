@@ -39,8 +39,11 @@ namespace OpenDentBusiness.UI {
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNote) {
 				backColor=DefC.Long[(int)DefCat.AppointmentColors][7].ItemColor;
 			}
-			else if(PIn.Long(dataRoww["AptStatus"].ToString()) == (int)ApptStatus.PtNoteCompleted) {
-				backColor = DefC.Long[(int)DefCat.AppointmentColors][10].ItemColor;
+			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNoteCompleted) {
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][10].ItemColor;
+			}
+			else if(PIn.Int(dataRoww["ColorOverride"].ToString()) != 0) {
+				backColor=Color.FromArgb(PIn.Int(dataRoww["ColorOverride"].ToString()));
 			}
 			else {
 				backColor=provColor;

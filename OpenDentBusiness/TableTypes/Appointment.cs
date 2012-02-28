@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	
@@ -67,7 +68,19 @@ namespace OpenDentBusiness{
 		///<summary>Stores XML for the procs colors</summary>
 		public String ProcsColored;
 		///<summary>If set to anything but 0, then this will override the graphic color for the appointment.</summary>
+		[XmlIgnore]
 		public Color ColorOverride;
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("ColorOverride",typeof(int))]
+		public int ColorOverrideXml {
+			get {
+				return ColorOverride.ToArgb();
+			}
+			set {
+				ColorOverride=Color.FromArgb(value);
+			}
+		}
 
 		///<summary>Returns a copy of the appointment.</summary>
     public Appointment Clone(){

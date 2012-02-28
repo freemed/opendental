@@ -639,6 +639,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("billingType");
 			table.Columns.Add("chartNumber");
 			table.Columns.Add("chartNumAndName");
+			table.Columns.Add("ColorOverride");
 			table.Columns.Add("confirmed");
 			table.Columns.Add("Confirmed");
 			table.Columns.Add("contactMethods");
@@ -680,7 +681,7 @@ namespace OpenDentBusiness{
 				+"patient.ApptModNote,AptDateTime,appointment.AptNum,AptStatus,Assistant,"
 				+"patient.BillingType,patient.BirthDate,"
 				+"carrier1.CarrierName carrierName1,carrier2.CarrierName carrierName2,"
-				+"patient.ChartNumber,patient.City,Confirmed,patient.CreditType,DateTimeChecked,"
+				+"patient.ChartNumber,patient.City,appointment.ColorOverride,Confirmed,patient.CreditType,DateTimeChecked,"
 				+"DateTimeDue,DateTimeRecd,DateTimeSent,DateTimeAskedToArrive,"
 				+"guar.FamFinUrgNote,patient.FName,patient.Guarantor,"
 				+"COUNT(AllergyNum) hasAllergy,"
@@ -909,6 +910,7 @@ namespace OpenDentBusiness{
 				row["chartNumAndName"]+=raw.Rows[i]["ChartNumber"].ToString()+" "
 					+PatientLogic.GetNameLF(raw.Rows[i]["LName"].ToString(),raw.Rows[i]["FName"].ToString(),
 					raw.Rows[i]["Preferred"].ToString(),raw.Rows[i]["MiddleI"].ToString());
+				row["ColorOverride"]=raw.Rows[i]["ColorOverride"].ToString();
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.Long(raw.Rows[i]["Confirmed"].ToString()));
 				row["Confirmed"]=raw.Rows[i]["Confirmed"].ToString();
 				row["contactMethods"]="";

@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:ToothPaintingType </summary>
 		public ToothPaintingType PaintType;
 		///<summary>If set to anything but 0, then this will override the graphic color for all procedures of this code, regardless of the status.</summary>
-		//[XmlIgnore]
+		[XmlIgnore]
 		public Color GraphicColor;
 		///<summary>When creating treatment plans, this description will be used instead of the technical description.</summary>
 		//[XmlIgnore]
@@ -87,6 +87,17 @@ namespace OpenDentBusiness{
 			ProcTime="/X/";
 			//procCode.ProcCat=DefC.Short[(long)DefCat.ProcCodeCats][0].DefNum;
 			GraphicColor=Color.FromArgb(0);
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("GraphicColor",typeof(int))]
+		public int GraphicColorXml {
+			get {
+				return GraphicColor.ToArgb();
+			}
+			set {
+				GraphicColor=Color.FromArgb(value);
+			}
 		}
 
 		//[XmlElement(DataType="string",ElementName="ProcCatDescript")]
