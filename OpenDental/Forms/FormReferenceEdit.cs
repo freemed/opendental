@@ -9,9 +9,12 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormReferenceEdit:Form {
-		public FormReferenceEdit() {
+		private CustReference RefCur;
+
+		public FormReferenceEdit(CustReference refCur) {
 			InitializeComponent();
 			Lan.F(this);
+			RefCur=refCur;
 		}
 
 		private void FormReferenceEdit_Load(object sender,EventArgs e) {

@@ -177,6 +177,8 @@
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
     <Compile Include="Crud\CreditCardCrud.cs" />
+    <Compile Include="Crud\CustRefEntryCrud.cs" />
+    <Compile Include="Crud\CustReferenceCrud.cs" />
     <Compile Include="Crud\DashboardARCrud.cs" />
     <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
@@ -343,6 +345,8 @@
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
+    <Compile Include="Data Interface\CustRefEntries.cs" />
+    <Compile Include="Data Interface\CustReferences.cs" />
     <Compile Include="Data Interface\DashboardARs.cs" />
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>

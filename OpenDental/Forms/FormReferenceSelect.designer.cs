@@ -50,6 +50,7 @@ namespace OpenDental{
 			this.checkBadRefs = new System.Windows.Forms.CheckBox();
 			this.groupFilter = new System.Windows.Forms.GroupBox();
 			this.checkUsedRefs = new System.Windows.Forms.CheckBox();
+			this.butGetAll = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupFilter.SuspendLayout();
 			this.SuspendLayout();
@@ -323,10 +324,24 @@ namespace OpenDental{
 			this.checkUsedRefs.Text = "Used references only";
 			this.checkUsedRefs.Click += new System.EventHandler(this.checkUsedRefs_Click);
 			// 
+			// butGetAll
+			// 
+			this.butGetAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butGetAll.Autosize = true;
+			this.butGetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGetAll.CornerRadius = 4F;
+			this.butGetAll.Location = new System.Drawing.Point(969, 317);
+			this.butGetAll.Name = "butGetAll";
+			this.butGetAll.Size = new System.Drawing.Size(75, 23);
+			this.butGetAll.TabIndex = 46;
+			this.butGetAll.Text = "Get All";
+			// 
 			// FormReference
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1072, 601);
+			this.Controls.Add(this.butGetAll);
 			this.Controls.Add(this.groupFilter);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.groupBox2);
@@ -372,5 +387,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSpecialty;
 		private System.Windows.Forms.GroupBox groupFilter;
 		private System.Windows.Forms.CheckBox checkUsedRefs;
+		private UI.Button butGetAll;
 	}
 }

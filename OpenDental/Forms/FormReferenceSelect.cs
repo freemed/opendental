@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormReference:Form {
-		private Patient PatCur;
+		private List<CustReference> CustRefList;
 
 		public FormReference() {
 			InitializeComponent();
@@ -17,7 +17,7 @@ namespace OpenDental {
 		}
 
 		private void FormReference_Load(object sender,EventArgs e) {
-
+			FillMain();
 		}
 
 		private void FillMain() {
@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-
+			FormReferenceEdit FormRE=new FormReferenceEdit(CustRefList[e.Row]);
 		}
 
 		private void checkUsedRefs_Click(object sender,EventArgs e) {
