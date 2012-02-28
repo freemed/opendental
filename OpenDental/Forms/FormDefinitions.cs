@@ -542,6 +542,9 @@ namespace OpenDental{
 		}
 
 		private void tbDefs_CellClicked(object sender, CellEventArgs e){
+			if(tbDefs.Cell.GetLength(1)==0) {//Last row was deleted.
+				return;
+			}
 			//Can't move this logic into the Table control because we never want to paint on col 3
 			if(DefsIsSelected){
 				if(DefsSelected==e.Row){
