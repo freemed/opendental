@@ -131,6 +131,17 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		/// <summary>GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.</summary>
+		public static string GetPickListByFieldName(string FieldName) {
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].FieldName==FieldName) {
+					return Listt[i].PickList;
+				}
+			}
+			return "";
+		}
+
 
 	}
 }
