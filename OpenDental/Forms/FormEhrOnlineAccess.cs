@@ -36,7 +36,7 @@ namespace OpenDental {
 		private void butGiveAccess_Click(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
 			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
-				MessageBox.Show("Synch must be setup first from the Tools menu, Mobile and Patient Portal Synch.");
+				MessageBox.Show("Synch must be setup first from the Tools menu, Mobile and Patient Portal Synch.  Interval must not be blank or zero.");
 				return;
 			}
 			//we won't check PrefName.MobileSyncWorkstationName because we are forcing the synch
