@@ -261,6 +261,9 @@ namespace OpenDental{
 		}
 
 		private void butAddFrom_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.RefAttachAdd)) {
+				return;
+			}
 			FormReferralSelect FormRS=new FormReferralSelect();
 			FormRS.IsSelectionMode=true;
 			FormRS.ShowDialog();
@@ -285,6 +288,7 @@ namespace OpenDental{
 			}
 			refattach.ItemOrder=order+1;
 			RefAttaches.Insert(refattach);
+			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From added.");
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {
@@ -294,6 +298,9 @@ namespace OpenDental{
 		}
 
 		private void butAddTo_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.RefAttachAdd)) {
+				return;
+			}
 			FormReferralSelect FormRS=new FormReferralSelect();
 			FormRS.IsSelectionMode=true;
 			FormRS.ShowDialog();
@@ -317,6 +324,7 @@ namespace OpenDental{
 			refattach.ItemOrder=order+1;
 			refattach.ProcNum=ProcNum;
 			RefAttaches.Insert(refattach);
+			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred To added.");
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum) {

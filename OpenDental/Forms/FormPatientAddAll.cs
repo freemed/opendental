@@ -145,6 +145,10 @@ namespace OpenDental {
 			comboPriProv3.SelectedIndex=defaultindex;
 			comboPriProv4.SelectedIndex=defaultindex;
 			comboPriProv5.SelectedIndex=defaultindex;
+			if(!Security.IsAuthorized(Permissions.RefAttachAdd,true)) {
+				textReferral.Enabled=false;
+				textReferralFName.Enabled=false;
+			}
 			FillComboZip();
 			ResetSubscriberLists();
 		}
@@ -1358,6 +1362,7 @@ namespace OpenDental {
 				refAttach.ReferralNum=selectedReferral.ReferralNum;
 				refAttach.PatNum=guar.PatNum;
 				RefAttaches.Insert(refAttach);
+				SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,refAttach.PatNum,"Referred From added.");
 			}
 			//Patient #2-----------------------------------------------------------------------------------------------------
 			Patient pat2=null;
@@ -1402,6 +1407,7 @@ namespace OpenDental {
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat2.PatNum;
 					RefAttaches.Insert(refAttach);
+					SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,refAttach.PatNum,"Referred From added.");
 				}
 			}
 			//Patient #3-----------------------------------------------------------------------------------------------------
@@ -1442,6 +1448,7 @@ namespace OpenDental {
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat3.PatNum;
 					RefAttaches.Insert(refAttach);
+					SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,refAttach.PatNum,"Referred From added.");
 				}
 			}
 			//Patient #4-----------------------------------------------------------------------------------------------------
@@ -1482,6 +1489,7 @@ namespace OpenDental {
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat4.PatNum;
 					RefAttaches.Insert(refAttach);
+					SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,refAttach.PatNum,"Referred From added.");
 				}
 			}
 			//Patient #5-----------------------------------------------------------------------------------------------------
@@ -1522,6 +1530,7 @@ namespace OpenDental {
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat5.PatNum;
 					RefAttaches.Insert(refAttach);
+					SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,refAttach.PatNum,"Referred From added.");
 				}
 			}
 			//Insurance------------------------------------------------------------------------------------------------------------

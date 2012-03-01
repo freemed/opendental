@@ -1624,6 +1624,7 @@ namespace OpenDental {
 						ra.RefDate=DateTime.Today;
 						ra.ReferralNum=((Referral)rows[i].ImpValObj).ReferralNum;
 						RefAttaches.Insert(ra);
+						SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From added.");
 						break;
 					//AddressSameForFam already set, but not really importable by itself
 					case "Address":
