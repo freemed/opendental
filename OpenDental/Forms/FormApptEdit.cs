@@ -2174,13 +2174,26 @@ namespace OpenDental{
 				field=new ApptField();
 				field.AptNum=AptCur.AptNum;
 				field.FieldName=DS.Tables["ApptFields"].Rows[e.Row]["FieldName"].ToString();
-				FormApptFieldEdit formAF=new FormApptFieldEdit(field);
-				formAF.IsNew=true;
-				formAF.ShowDialog();
+				if(ApptFieldDefs.Listt[e.Row].FieldType==ApptFieldType.Text) {
+					FormApptFieldEdit formAF=new FormApptFieldEdit(field);
+					formAF.IsNew=true;
+					formAF.ShowDialog();
+				}
+				else if(ApptFieldDefs.Listt[e.Row].FieldType==ApptFieldType.PickList) {
+					FormApptFieldPickEdit formAF=new FormApptFieldPickEdit(field);
+					formAF.IsNew=true;
+					formAF.ShowDialog();
+				}
 			}
 			else {
-				FormApptFieldEdit formAF=new FormApptFieldEdit(field);
-				formAF.ShowDialog();
+				if(ApptFieldDefs.Listt[e.Row].FieldType==ApptFieldType.Text) {
+					FormApptFieldEdit formAF=new FormApptFieldEdit(field);
+					formAF.ShowDialog();
+				}
+				else if(ApptFieldDefs.Listt[e.Row].FieldType==ApptFieldType.PickList) {
+					FormApptFieldPickEdit formAF=new FormApptFieldPickEdit(field);
+					formAF.ShowDialog();
+				}
 			}
 			DS.Tables.Remove("ApptFields");
 			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["ApptFields"].Copy());
