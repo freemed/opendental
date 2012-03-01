@@ -297,15 +297,15 @@ namespace OpenDentBusiness{
 				+"account.Inactive, account.AccountColor ORDER BY AcctType, Description";
 			DataTable rawTable=Db.GetTable(command);
 			AccountType aType;
-			double debit=0;
-			double credit=0;
+			decimal debit=0;
+			decimal credit=0;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				row=table.NewRow();
 				aType=(AccountType)PIn.Long(rawTable.Rows[i]["AcctType"].ToString());
 				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
-				debit=PIn.Double(rawTable.Rows[i]["SumDebit"].ToString());
-				credit=PIn.Double(rawTable.Rows[i]["SumCredit"].ToString());
+				debit=PIn.Decimal(rawTable.Rows[i]["SumDebit"].ToString());
+				credit=PIn.Decimal(rawTable.Rows[i]["SumCredit"].ToString());
 				if(DebitIsPos(aType)) {
 					row["balance"]=(debit-credit).ToString("N");
 				}
@@ -332,11 +332,11 @@ namespace OpenDentBusiness{
 				+" AND (AcctType=3 OR AcctType=4) "//income or expenses
 				+"GROUP BY AcctType ORDER BY AcctType";//income first, but could return zero rows.
 			rawTable=Db.GetTable(command);
-			double balance=0;
+			decimal balance=0;
 			for(int i=0;i<rawTable.Rows.Count;i++){
 				aType=(AccountType)PIn.Long(rawTable.Rows[i]["AcctType"].ToString());
-				debit=PIn.Double(rawTable.Rows[i]["SumDebit"].ToString());
-				credit=PIn.Double(rawTable.Rows[i]["SumCredit"].ToString());
+				debit=PIn.Decimal(rawTable.Rows[i]["SumDebit"].ToString());
+				credit=PIn.Decimal(rawTable.Rows[i]["SumCredit"].ToString());
 				//this works for both income and expenses, because we are subracting expenses, so signs cancel
 				balance+=credit-debit;
 			}
@@ -367,8 +367,8 @@ namespace OpenDentBusiness{
 				aType=(AccountType)PIn.Long(rawTable.Rows[i]["AcctType"].ToString());
 				row["type"]=Lans.g("enumAccountType",aType.ToString());
 				row["Description"]=rawTable.Rows[i]["Description"].ToString();
-				debit=PIn.Double(rawTable.Rows[i]["SumDebit"].ToString());
-				credit=PIn.Double(rawTable.Rows[i]["SumCredit"].ToString());
+				debit=PIn.Decimal(rawTable.Rows[i]["SumDebit"].ToString());
+				credit=PIn.Decimal(rawTable.Rows[i]["SumCredit"].ToString());
 				if(DebitIsPos(aType)) {
 					row["balance"]=(debit-credit).ToString("N");
 				}
