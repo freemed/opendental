@@ -3910,6 +3910,26 @@ namespace OpenDental{
 			else{
 				textOrthoDate.Text=ClaimCur.OrthoDate.ToShortDateString();
 			}
+			if(ClaimCur.DateResent.Year>1880) {
+				textDateResent.Text=ClaimCur.DateResent.ToShortDateString();
+			}
+			string[] claimCorrectionTypeNames=Enum.GetNames(typeof(ClaimCorrectionType));
+			Array claimCorrectionTypeValues=Enum.GetValues(typeof(ClaimCorrectionType));
+			comboCorrectionType.Items.Clear();
+			for(int i=0;i<claimCorrectionTypeNames.Length;i++) {
+				comboCorrectionType.Items.Add(claimCorrectionTypeNames[i]);
+				if((ClaimCorrectionType)claimCorrectionTypeValues.GetValue(i)==ClaimCur.CorrectionType) {
+					comboCorrectionType.SelectedIndex=i;
+				}
+			}
+			if(ClaimCur.ClaimIdentifier=="" || ClaimCur.ClaimIdentifier==null) {
+				//There is always a claimnum and patnum associated with the claim before this window is called, even for new claims.
+				textClaimIdentifier.Text=ClaimCur.PatNum.ToString()+"/"+ClaimCur.ClaimNum.ToString();
+			}
+			else {
+				textClaimIdentifier.Text=ClaimCur.ClaimIdentifier;
+			}
+			textOrigRefNum.Text=ClaimCur.OrigRefNum;
 			//Canadian------------------------------------------------------------------
 			//(there's also a FillCanadian section for fields that do not collide with USA fields)
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
@@ -4681,6 +4701,8 @@ namespace OpenDental{
 			}
 			Claim newClaim=ClaimCur.Copy();
 			Claims.Insert(newClaim);
+			newClaim.ClaimIdentifier=newClaim.PatNum.ToString()+"/"+newClaim.ClaimNum.ToString();
+			Claims.Update(newClaim);
 			//now this claim has been precisely duplicated, except it has a new ClaimNum.  So there are no attached claimprocs.
 			for(int i=0;i<gridProc.SelectedIndices.Length;i++){
 				ClaimProcsForClaim[gridProc.SelectedIndices[i]].ClaimNum=newClaim.ClaimNum;
@@ -5298,6 +5320,7 @@ namespace OpenDental{
 		private bool ClaimIsValid(){
 			if(  textDateService.errorProvider1.GetError(textDateSent)!=""
 				|| textDateSent.errorProvider1.GetError(textDateSent)!=""
+				|| textDateResent.errorProvider1.GetError(textDateResent)!=""
 				|| textDateRec.errorProvider1.GetError(textDateRec)!=""
 				|| textPriorDate.errorProvider1.GetError(textPriorDate)!=""
 				|| textDedApplied.errorProvider1.GetError(textDedApplied)!=""
@@ -5623,6 +5646,10 @@ namespace OpenDental{
 			else{
 				ClaimCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
+			ClaimCur.DateResent=PIn.Date(textDateResent.Text);
+			ClaimCur.CorrectionType=(ClaimCorrectionType)Enum.GetValues(typeof(ClaimCorrectionType)).GetValue(comboCorrectionType.SelectedIndex);
+			ClaimCur.ClaimIdentifier=textClaimIdentifier.Text;
+			ClaimCur.OrigRefNum=textOrigRefNum.Text;
 			//attachments
 			ClaimCur.Radiographs=PIn.Byte(textRadiographs.Text);
 			ClaimCur.AttachedImages=PIn.Int(textAttachImages.Text);

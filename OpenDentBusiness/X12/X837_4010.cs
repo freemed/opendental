@@ -1840,6 +1840,24 @@ namespace OpenDentBusiness
 					warning+=",";
 				warning+="Attachment ID missing";
 			}
+			if(claim.CorrectionType!=ClaimCorrectionType.Original && claim.OrigRefNum.Trim()=="") {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Original reference num needed when correction type is not set to original");
+			}
+			if(claim.ClaimIdentifier.Trim()=="") {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Claim identifier missing");
+			}
+			if(Claims.ClaimIdentifierInUse(claim.ClaimIdentifier,claim.ClaimNum)) {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Claim identifier already in use for another claim");
+			}
 			//List<ClaimProc> claimProcList=ClaimProcs.Refresh(patient.PatNum);
 			//List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			//List<Procedure> procList=Procedures.Refresh(claim.PatNum);

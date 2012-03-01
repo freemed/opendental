@@ -2376,15 +2376,18 @@ namespace OpenDentBusiness
 					strb.Append("Predeterm number not allowed");
 				}
 			}
-			if(claim.ClaimIdentifier.Trim()=="") {
-				Comma(strb);
-				strb.Append("Claim identifier missing");
-			}
 			if(claim.CorrectionType!=ClaimCorrectionType.Original && claim.OrigRefNum.Trim()=="") {
 				Comma(strb);
 				strb.Append("Original reference num needed when correction type is not set to original");
 			}
-
+			if(claim.ClaimIdentifier.Trim()=="") {
+				Comma(strb);
+				strb.Append("Claim identifier missing");
+			}
+			if(Claims.ClaimIdentifierInUse(claim.ClaimIdentifier,claim.ClaimNum)) {
+				Comma(strb);
+				strb.Append("Claim identifier already in use for another claim");
+			}
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);

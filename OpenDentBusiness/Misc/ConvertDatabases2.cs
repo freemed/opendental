@@ -8665,7 +8665,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					command="ALTER TABLE claim ADD ClaimIdentifier varchar2(255)";
 					Db.NonQ(command);
-				} 
+				}
+				command="UPDATE claim SET ClaimIdentifier="+DbHelper.Concat(new string[] {"PatNum","'/'","ClaimNum"});
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE claim ADD OrigRefNum varchar(255) NOT NULL";
 					Db.NonQ(command);
@@ -8750,5 +8752,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
+
 
 

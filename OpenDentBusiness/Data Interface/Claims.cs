@@ -430,6 +430,14 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static bool ClaimIdentifierInUse(string claimIdentifier,long claimNumExclude) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),claimIdentifier);
+			}
+			string command="SELECT COUNT(*) FROM claim WHERE ClaimIdentifier='"+POut.String(claimIdentifier)+"' AND ClaimNum<>"+POut.Long(claimNumExclude);
+			return (Db.GetTable(command).Rows[0][0].ToString()!="0");
+		}
+
 	}//end class Claims
 
 	///<summary>This is an odd class.  It holds data for the X12 (4010 only) generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.  Not an actual database table.</summary>
