@@ -48,6 +48,8 @@ namespace OpenDentBusiness.Crud{
 				apptFieldDef=new ApptFieldDef();
 				apptFieldDef.ApptFieldDefNum= PIn.Long  (table.Rows[i]["ApptFieldDefNum"].ToString());
 				apptFieldDef.FieldName      = PIn.String(table.Rows[i]["FieldName"].ToString());
+				apptFieldDef.FieldType      = (ApptFieldType)PIn.Int(table.Rows[i]["FieldType"].ToString());
+				apptFieldDef.PickList       = PIn.String(table.Rows[i]["PickList"].ToString());
 				retVal.Add(apptFieldDef);
 			}
 			return retVal;
@@ -88,12 +90,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ApptFieldDefNum,";
 			}
-			command+="FieldName) VALUES(";
+			command+="FieldName,FieldType,PickList) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(apptFieldDef.ApptFieldDefNum)+",";
 			}
 			command+=
-				 "'"+POut.String(apptFieldDef.FieldName)+"')";
+				 "'"+POut.String(apptFieldDef.FieldName)+"',"
+				+    POut.Int   ((int)apptFieldDef.FieldType)+","
+				+"'"+POut.String(apptFieldDef.PickList)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -106,7 +110,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ApptFieldDef in the database.</summary>
 		internal static void Update(ApptFieldDef apptFieldDef){
 			string command="UPDATE apptfielddef SET "
-				+"FieldName      = '"+POut.String(apptFieldDef.FieldName)+"' "
+				+"FieldName      = '"+POut.String(apptFieldDef.FieldName)+"', "
+				+"FieldType      =  "+POut.Int   ((int)apptFieldDef.FieldType)+", "
+				+"PickList       = '"+POut.String(apptFieldDef.PickList)+"' "
 				+"WHERE ApptFieldDefNum = "+POut.Long(apptFieldDef.ApptFieldDefNum);
 			Db.NonQ(command);
 		}
@@ -117,6 +123,14 @@ namespace OpenDentBusiness.Crud{
 			if(apptFieldDef.FieldName != oldApptFieldDef.FieldName) {
 				if(command!=""){ command+=",";}
 				command+="FieldName = '"+POut.String(apptFieldDef.FieldName)+"'";
+			}
+			if(apptFieldDef.FieldType != oldApptFieldDef.FieldType) {
+				if(command!=""){ command+=",";}
+				command+="FieldType = "+POut.Int   ((int)apptFieldDef.FieldType)+"";
+			}
+			if(apptFieldDef.PickList != oldApptFieldDef.PickList) {
+				if(command!=""){ command+=",";}
+				command+="PickList = '"+POut.String(apptFieldDef.PickList)+"'";
 			}
 			if(command==""){
 				return;

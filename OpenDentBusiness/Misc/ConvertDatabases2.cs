@@ -8713,6 +8713,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE apptfielddef ADD FieldType tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE apptfielddef ADD FieldType number(3)";
+					Db.NonQ(command);
+					command="UPDATE apptfielddef SET FieldType = 0 WHERE FieldType IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE apptfielddef MODIFY FieldType NOT NULL";
+					Db.NonQ(command);
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE apptfielddef ADD PickList varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE apptfielddef ADD PickList varchar2(255)";
+					Db.NonQ(command);
+				}
 
 
 
