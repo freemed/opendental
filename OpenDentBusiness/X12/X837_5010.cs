@@ -376,24 +376,25 @@ namespace OpenDentBusiness
 				EndSegment(sw);
 				//2000B SBR: (medical,institutional,dental) Subscriber Information.
 				sw.Write("SBR"+s);
-				string claimType="";
-				if(claim.ClaimType=="PreAuth") {
-					if(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)==2 && claim.PlanNum2!=0) {
-						isSecondaryPreauth=true;
-						claimType="S";//secondary
-					}
-					else {
-						claimType="P";//primary
-					}
-				}
-				else if(claim.ClaimType=="P") {
-					claimType="P";//primary
+				string claimType="P";
+				if(claim.ClaimType=="P") {
+					claimType="P";//primary claim
 				}
 				else if(claim.ClaimType=="S") {
-					claimType="S";//secondary
+					claimType="S";//secondary claim
 				}
-				else {
-					claimType="T";//tertiary
+				else { //preAuth, other, capitation claims
+					switch(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) {
+						case 1://primary claim
+							claimType="P";
+							break;
+						case 2://seondary claim
+							claimType="S";
+							break;
+						case 3://tertiary claim
+							claimType="T";
+							break;
+					}
 				}
 				sw.Write(claimType+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: 
 				//todo: what about Cap?
@@ -1400,8 +1401,7 @@ namespace OpenDentBusiness
 						if(proc.PlaceService!=claim.PlaceService) {
 							placeService=GetPlaceService(proc.PlaceService);
 						}
-						//SV303 1/2 Facility Code Value: Location Code if different from claim.
-						sw.Write(placeService+s
+						sw.Write(placeService+s//SV303 1/2 Facility Code Value: Location Code if different from claim.
 							+GetArea(proc,procCode)+s//SV304 Oral Cavity Designation: SV304-1 1/3 Oral Cavity Designation Code: Area. SV304-2 through SV304-5 are situational and we do not use.
 							+proc.Prosthesis+s//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
 							+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
@@ -2376,6 +2376,15 @@ namespace OpenDentBusiness
 					strb.Append("Predeterm number not allowed");
 				}
 			}
+			if(claim.ClaimIdentifier.Trim()=="") {
+				Comma(strb);
+				strb.Append("Claim identifier missing");
+			}
+			if(claim.CorrectionType!=ClaimCorrectionType.Original && claim.OrigRefNum.Trim()=="") {
+				Comma(strb);
+				strb.Append("Original reference num needed when correction type is not set to original");
+			}
+
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
 			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);
