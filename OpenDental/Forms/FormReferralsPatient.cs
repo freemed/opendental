@@ -288,7 +288,7 @@ namespace OpenDental{
 			}
 			refattach.ItemOrder=order+1;
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From added.");
+			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred From "+Referrals.GetNameFL(refattach.ReferralNum));
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++){
 				if(RefAttachList[i].RefAttachNum==refattach.RefAttachNum) {
@@ -324,7 +324,7 @@ namespace OpenDental{
 			refattach.ItemOrder=order+1;
 			refattach.ProcNum=ProcNum;
 			RefAttaches.Insert(refattach);
-			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred To added.");
+			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred To "+Referrals.GetNameFL(refattach.ReferralNum));
 			FillGrid();
 			for(int i=0;i<RefAttachList.Count;i++) {
 				if(RefAttachList[i].ReferralNum==refattach.ReferralNum) {
