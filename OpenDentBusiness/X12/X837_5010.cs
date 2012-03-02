@@ -377,18 +377,27 @@ namespace OpenDentBusiness
 				//2000B SBR: (medical,institutional,dental) Subscriber Information.
 				sw.Write("SBR"+s);
 				string claimType="P";
-				if(claim.ClaimType=="P") {
+				if(claim.ClaimType=="PreAuth") {
+					if(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)==2 && claim.PlanNum2!=0) {
+						isSecondaryPreauth=true;
+						claimType="S";//secondary
+					}
+					else {
+						claimType="P";//primary
+					}
+				}
+				else if(claim.ClaimType=="P") {
 					claimType="P";//primary claim
 				}
 				else if(claim.ClaimType=="S") {
 					claimType="S";//secondary claim
 				}
-				else { //preAuth, other, capitation claims
+				else { //other or cap.  Also used for medical.
 					switch(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) {
 						case 1://primary claim
 							claimType="P";
 							break;
-						case 2://seondary claim
+						case 2://secondary claim
 							claimType="S";
 							break;
 						case 3://tertiary claim
@@ -575,9 +584,9 @@ namespace OpenDentBusiness
 				#endregion
 				#region Claim CLM
 				//2300 CLM: (medical,institutional,dental) Claim Information.
-				string clm01=claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString();//By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness.
+				string clm01=claim.ClaimIdentifier;//Typically PatNum/ClaimNum. Check for uniqueness is performed in UI.
 				if(IsDentiCal(clearhouse)) {
-					clm01=Sout(claim.ClaimNum.ToString(),17);//Denti-Cal has a maximum of 17 chars here. We only specify the claimnum because if random primary keys is enabled then the keys could be long. The patnum can be decerned from the claimnum.
+					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here.
 				}
 				sw.Write("CLM"+s
 					+Sout(clm01,20)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id. Carriers are not required to handle more than 20 char. 
@@ -1097,8 +1106,18 @@ namespace OpenDentBusiness
 					else if(claim.ClaimType=="P") {
 						sw.Write("S"+s);
 					}
-					else {
-						sw.Write("T"+s);//T=Tertiary
+					else {//other or cap.  Also used for medical.
+						switch(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) {
+							case 1://primary claim
+								claimType="S";
+								break;
+							case 2://secondary claim
+								claimType="P";
+								break;
+							case 3://tertiary claim
+								claimType="P";//the best we can do for now without adding more tables and getting very complicated.
+								break;
+						}
 					}
 					sw.Write(GetRelat(claim.PatRelat2)+s//SBR02 2/2 Individual Relationship Code:
 						+Sout(otherPlan.GroupNum,50)+s);//SBR03 1/50 Reference Identification:
@@ -2268,6 +2287,12 @@ namespace OpenDentBusiness
 					&& claim.PatRelat2==Relat.Self) {//and relat is self
 					Comma(strb);
 					strb.Append("Secondary Relationship");
+				}
+			}
+			else { //other insurance not specified
+				if(claim.ClaimType=="S") {
+					Comma(strb);
+					strb.Append("Secondary claim missing other insurance");
 				}
 			}
 			//Provider Idents:
