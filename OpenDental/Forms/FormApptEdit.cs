@@ -2568,6 +2568,18 @@ namespace OpenDental{
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
 			if(butComplete.Text=="Complete") {
+				//check to make sure that the appointment and all attached procedures are marked complete as required.
+				bool procsAreComplete=true;
+				for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++) {
+					string procStat=DS.Tables["Procedure"].Rows[i]["status"].ToString();
+					if(procStat!="C") {
+						procsAreComplete=false;
+					}
+				}
+				if(comboStatus.SelectedIndex!=1 || !procsAreComplete) {
+					MsgBox.Show(this,"The appointment and attached procedures must have statuses all set to complete first.");
+					return;
+				}
 				//user can only get this far if aptNum matches visit num previously passed in by eCW.
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send attached procedures to eClinicalWorks and exit?")) {
 					return;
