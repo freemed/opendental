@@ -53,14 +53,14 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,showBadRefs,showUsed,city,state,zip,areaCode,specialty,superFam,lname,fname,patnum,age);
 			}
 			string phonedigits="";
-			for(int i=0;i<areaCode.Length;i++){
-				if(Regex.IsMatch(areaCode[i].ToString(),"[0-9]")){
+			for(int i=0;i<areaCode.Length;i++) {
+				if(Regex.IsMatch(areaCode[i].ToString(),"[0-9]")) {
 					phonedigits=phonedigits+areaCode[i];
 				}
 			}
 			string regexp="";
-			for(int i=0;i<phonedigits.Length;i++){
-				if(i!=0){
+			for(int i=0;i<phonedigits.Length;i++) {
+				if(i!=0) {
 					regexp+="[^0-9]*";//zero or more intervening digits that are not numbers
 				}
 				regexp+=phonedigits[i];
@@ -76,39 +76,44 @@ namespace OpenDentBusiness{
 			table.Columns.Add("State");
 			table.Columns.Add("City");
 			table.Columns.Add("Zip");
-			table.Columns.Add("specialty");
+			table.Columns.Add("Specialty");
 			table.Columns.Add("age");
-			table.Columns.Add("superFam");//Number of super family members.
+			table.Columns.Add("SuperFamily");
 			table.Columns.Add("DateMostRecent");
-			table.Columns.Add("timesUsed");
+			table.Columns.Add("TimesUsed");
 			table.Columns.Add("IsBadRef");
 			List<DataRow> rows=new List<DataRow>();
-			string command=" WHERE CustReferenceNum<>0 ";//Just something to always have in the where clause.
+			string command=@"SELECT * FROM (SELECT cr.*,p.LName,p.FName,p.HmPhone,p.State,p.City,p.Zip,p.Birthdate,pf.FieldValue,
+				(SELECT COUNT(*) FROM patient tempp WHERE tempp.SuperFamily=p.SuperFamily AND tempp.SuperFamily<>0) AS SuperFamily,
+				(SELECT COUNT(*) FROM custrefentry tempcre WHERE tempcre.PatNumRef=cr.PatNum) AS TimesUsed
+				FROM custreference cr
+				INNER JOIN patient p ON cr.PatNum=p.PatNum
+				LEFT JOIN patfield pf ON cr.PatNum=pf.PatNum AND pf.FieldName='Specialty' 
+				WHERE cr.CustReferenceNum<>0 ";//This just makes the following AND statements brainless.
 			if(age > 0) {
-				command+="AND Birthdate <"+POut.Date(DateTime.Now.AddYears(-age))+" ";
+				command+="AND p.Birthdate <"+POut.Date(DateTime.Now.AddYears(-age))+" ";
 			}
 			if(regexp!="") {
-				command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"') ";
+				command+="AND (p.HmPhone REGEXP '"+POut.String(regexp)+"' "
+					+"OR p.WkPhone REGEXP '"+POut.String(regexp)+"' "
+					+"OR p.WirelessPhone REGEXP '"+POut.String(regexp)+"') ";
 			}
-			command+=(lname.Length>0?"AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%') ":"")
-					+(fname.Length>0?"AND (FName LIKE '"+POut.String(fname)+"%' OR Preferred LIKE '"+POut.String(fname)+"%') ":"")
-					+(city.Length>0?"AND City LIKE '"+POut.String(city)+"%' ":"")
-					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")
-					+(zip.Length>0?"AND Zip LIKE '"+POut.String(zip)+"%' ":"")
-					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"");
+			command+=(lname.Length>0?"AND (p.LName LIKE '"+POut.String(lname)+"%' OR p.Preferred LIKE '"+POut.String(lname)+"%') ":"")
+					+(fname.Length>0?"AND (p.FName LIKE '"+POut.String(fname)+"%' OR p.Preferred LIKE '"+POut.String(fname)+"%') ":"")
+					+(city.Length>0?"AND p.City LIKE '"+POut.String(city)+"%' ":"")
+					+(state.Length>0?"AND p.State LIKE '"+POut.String(state)+"%' ":"")
+					+(zip.Length>0?"AND p.Zip LIKE '"+POut.String(zip)+"%' ":"")
+					+(patnum.Length>0?"AND p.PatNum LIKE '"+POut.String(patnum)+"%' ":"")
+					+(specialty.Length>0?"AND pf.FieldValue LIKE '"+POut.String(specialty)+"%' ":"");
+			if(limit) {
+				command=DbHelper.LimitOrderBy(command,40);
+			}
+			command+=@") AS tempcustref WHERE PatNum<>0 ";//Once again just making AND statements brainless.
 			if(superFam>0) {
-				command+="";//do something for super fam.
-			}
-			if(specialty.Length>0) {
-				command+="";//do something for specialty.
+				command+="AND SuperFamily>"+POut.Int(superFam)+" ";
 			}
 			if(showUsed) {
-				command+="";//do something for count>0
-			}
-			if(limit){
-				command=DbHelper.LimitOrderBy(command,40);//Might need to be more than 40.
+				command+="AND TimesUsed>0 ";
 			}
 			DataTable rawtable=Db.GetTable(command);
 			for(int i=0;i<rawtable.Rows.Count;i++) {
@@ -121,21 +126,25 @@ namespace OpenDentBusiness{
 				row["State"]=rawtable.Rows[i]["State"].ToString();
 				row["City"]=rawtable.Rows[i]["City"].ToString();
 				row["Zip"]=rawtable.Rows[i]["Zip"].ToString();
-				row["specialty"]="";//Figure out the specialty.
-				row["age"]=Patients.DateToAge(PIn.Date(table.Rows[i]["Birthdate"].ToString())).ToString();
-				row["superFam"]="";//Figure out the superFam
+				row["Specialty"]=rawtable.Rows[i]["FieldValue"].ToString();
+				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();
+				row["SuperFamily"]=rawtable.Rows[i]["SuperFamily"].ToString();
 				row["DateMostRecent"]=PIn.DateT(rawtable.Rows[i]["DateMostRecent"].ToString()).ToShortDateString();
-				row["timesUsed"]="";//Figure out the timesUsed
-				row["IsBadRef"]="";
-				if(showBadRefs) {
-					row["IsBadRef"]=rawtable.Rows[i]["IsBadRef"].ToString();
-				}
+				row["TimesUsed"]=rawtable.Rows[i]["TimesUsed"].ToString();
+				row["IsBadRef"]=rawtable.Rows[i]["IsBadRef"].ToString();
 				rows.Add(row);
 			}
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
 			return table;
+		}
+
+		///<summary>Returns FName 'Preferred' M LName.  This is here because I get names by patnum a lot with references.</summary>
+		public static string GetCustNameFL(long patNum) {
+			//Calls to the db happen in the other s classes.
+			Patient pat=Patients.GetLim(patNum);
+			return Patients.GetNameFL(pat.LName,pat.FName,pat.Preferred,pat.MiddleI);
 		}
 
 

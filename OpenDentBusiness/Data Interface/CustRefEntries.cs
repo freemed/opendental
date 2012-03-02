@@ -53,6 +53,15 @@ namespace OpenDentBusiness{
 			return Crud.CustRefEntryCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all the entries for the reference.</summary>
+		public static List<CustRefEntry> GetEntryListForReference(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<List<CustRefEntry>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM custrefentry WHERE PatNumRef="+POut.Long(patNum);
+			return Crud.CustRefEntryCrud.SelectMany(command);
+		}
+
 
 
 	}

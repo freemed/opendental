@@ -174,6 +174,9 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Guardians",0,category));
 				//list.Add(new DisplayField("Arrive Early",0,category));
 				//list.Add(new DisplayField("Super Head",0,category));
+				if(PrefC.GetBool(PrefName.DistributorKey)) {
+					list.Add(new DisplayField("References",0,category));
+				}
 			}
 			else if(category==DisplayFieldCategory.AccountModule) {
 				list.Add(new DisplayField("Date",65,category));
@@ -212,6 +215,7 @@ namespace OpenDentBusiness {
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
 					list.Add(new DisplayField("Ehr Provider Keys",0,category));
+					list.Add(new DisplayField("References",0,category));
 				}
 				//different default list for eCW:
 				if(!Programs.UsingEcwTight()) {
@@ -359,6 +363,9 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Guardians",0,category));
 				list.Add(new DisplayField("Arrive Early",0,category));
 				list.Add(new DisplayField("Super Head",0,category));
+				if(PrefC.GetBool(PrefName.DistributorKey)) {
+					list.Add(new DisplayField("References",0,category));
+				}
 			}
 			else if(category==DisplayFieldCategory.AccountModule){
 				list.Add(new DisplayField("Date",65,category));
@@ -397,6 +404,7 @@ namespace OpenDentBusiness {
 				if(PrefC.GetBool(PrefName.DistributorKey)) {
 					list.Add(new DisplayField("Registration Keys",0,category));
 					list.Add(new DisplayField("Ehr Provider Keys",0,category));
+					list.Add(new DisplayField("References",0,category));
 				}
 				list.Add(new DisplayField("Premedicate",0,category));
 				list.Add(new DisplayField("Problems",0,category));

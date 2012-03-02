@@ -478,7 +478,25 @@ namespace OpenDental{
 					FormRE.PatNum=PatCur.PatNum;
 					FormRE.ShowDialog();
 				}
-				else{//patfield
+				else if(gridPat.Rows[e.Row].Tag.ToString()=="References") {
+					FormReference FormR=new FormReference();
+					FormR.ShowDialog();
+					if(FormR.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					for(int i=0;i<FormR.SelectedCustRefs.Count;i++) {
+						CustRefEntry custEntry=new CustRefEntry();
+						custEntry.DateEntry=DateTime.Now;
+						custEntry.PatNumCust=PatCur.PatNum;
+						custEntry.PatNumRef=FormR.SelectedCustRefs[i].PatNum;
+						CustRefEntries.Insert(custEntry);
+					}
+				}
+				else if(gridPat.Rows[e.Row].Tag.GetType()==typeof(CustRefEntry)) {
+					FormReferenceEntryEdit FormRE=new FormReferenceEntryEdit((CustRefEntry)gridPat.Rows[e.Row].Tag);
+					FormRE.ShowDialog();
+				}
+				else {//patfield
 					string tag=gridPat.Rows[e.Row].Tag.ToString();
 					tag=tag.Substring(8);//strips off all but the number: PatField1
 					int index=PIn.Int(tag);
@@ -508,7 +526,7 @@ namespace OpenDental{
 							FormPF.ShowDialog();
 						}
 					}
-					else{
+					else {
 						if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
 							FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
 							FormPF.ShowDialog();
@@ -850,6 +868,30 @@ namespace OpenDental{
 						}
 						else{
 							row.Cells.Add(PatCur.AskToArriveEarly.ToString());
+						}
+						break;
+					case "References":
+						List<CustRefEntry> custREList=CustRefEntries.GetEntryListForCustomer(PatCur.PatNum);
+						if(custREList.Count==0) {
+							row.Cells.Add(Lan.g("TablePatient","None"));
+							row.Tag="References";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+						}
+						else {
+							row.Cells.Add(Lan.g("TablePatient",""));
+							row.Tag="References";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+							gridPat.Rows.Add(row);
+						}
+						for(int i=0;i<custREList.Count;i++) {
+							row=new ODGridRow();
+							row.Cells.Add(custREList[i].DateEntry.ToShortDateString());
+							row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
+							row.Tag=custREList[i];
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+							if(i<custREList.Count-1) {
+								gridPat.Rows.Add(row);
+							}
 						}
 						break;
 				}

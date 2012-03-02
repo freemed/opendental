@@ -18,10 +18,8 @@ namespace OpenDental {
 		}
 
 		private void FormReferenceEdit_Load(object sender,EventArgs e) {
-			Patient patCust=Patients.GetLim(CustRefEntryCur.PatNumCust);
-			Patient patRef=Patients.GetLim(CustRefEntryCur.PatNumRef);
-			textCustomer.Text=Patients.GetNameFL(patCust.LName,patCust.FName,patCust.Preferred,patCust.MiddleI);
-			textReferredTo.Text=Patients.GetNameFL(patRef.LName,patRef.FName,patRef.Preferred,patRef.MiddleI);
+			textCustomer.Text=CustReferences.GetCustNameFL(CustRefEntryCur.PatNumCust);
+			textReferredTo.Text=CustReferences.GetCustNameFL(CustRefEntryCur.PatNumRef);
 			if(CustRefEntryCur.DateEntry.Year>1880) {
 				textDateEntry.Text=CustRefEntryCur.DateEntry.ToShortDateString();
 			}

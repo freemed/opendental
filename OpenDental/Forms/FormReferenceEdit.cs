@@ -20,8 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormReferenceEdit_Load(object sender,EventArgs e) {
-			Patient patCur=Patients.GetLim(RefCur.PatNum);
-			textName.Text=Patients.GetNameFL(patCur.LName,patCur.FName,patCur.Preferred,patCur.MiddleI);
+			textName.Text=CustReferences.GetCustNameFL(RefCur.PatNum);
 			textNote.Text=RefCur.Note;
 			checkBadRef.Checked=RefCur.IsBadRef;
 			if(RefCur.DateMostRecent.Year>1880) {
@@ -31,22 +30,23 @@ namespace OpenDental {
 		}
 
 		private void FillMain() {
-			RefEntryList=CustRefEntries.GetEntryListForCustomer(RefCur.PatNum);
+			RefEntryList=CustRefEntries.GetEntryListForReference(RefCur.PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("PatNum",50);
+			ODGridColumn col=new ODGridColumn("PatNum",65);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Last Name",75);
+			col=new ODGridColumn("Last Name",120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("First Name",75);
+			col=new ODGridColumn("First Name",120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Date Entry",50);
+			col=new ODGridColumn("Date Entry",0);
+			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<RefEntryList.Count;i++) {
 				row=new ODGridRow();
-				Patient pat=Patients.GetLim(RefEntryList[i].PatNumRef);
+				Patient pat=Patients.GetLim(RefEntryList[i].PatNumCust);
 				row.Cells.Add(pat.PatNum.ToString());
 				row.Cells.Add(pat.LName);
 				row.Cells.Add(pat.FName);

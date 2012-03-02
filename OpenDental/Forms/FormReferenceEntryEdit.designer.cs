@@ -135,7 +135,7 @@ namespace OpenDental{
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(131, 16);
 			this.label2.TabIndex = 136;
-			this.label2.Text = "Referred To";
+			this.label2.Text = "Referenced To";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butDeleteAll

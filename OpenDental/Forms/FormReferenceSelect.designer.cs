@@ -67,7 +67,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(904, 565);
+			this.butOK.Location = new System.Drawing.Point(983, 630);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(985, 565);
+			this.butCancel.Location = new System.Drawing.Point(1064, 630);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -94,14 +94,14 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = true;
+			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(768, 577);
+			this.gridMain.Size = new System.Drawing.Size(847, 642);
 			this.gridMain.TabIndex = 11;
-			this.gridMain.Title = "Select a Reference";
+			this.gridMain.Title = "Select  References";
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
@@ -131,7 +131,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.textCity);
 			this.groupBox2.Controls.Add(this.label7);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(791, 12);
+			this.groupBox2.Location = new System.Drawing.Point(870, 12);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(269, 228);
 			this.groupBox2.TabIndex = 10;
@@ -333,7 +333,7 @@ namespace OpenDental{
 			this.groupFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupFilter.Controls.Add(this.checkUsedRefs);
 			this.groupFilter.Controls.Add(this.checkBadRefs);
-			this.groupFilter.Location = new System.Drawing.Point(791, 246);
+			this.groupFilter.Location = new System.Drawing.Point(870, 246);
 			this.groupFilter.Name = "groupFilter";
 			this.groupFilter.Size = new System.Drawing.Size(269, 65);
 			this.groupFilter.TabIndex = 45;
@@ -357,7 +357,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butGetAll);
 			this.groupBox1.Controls.Add(this.butSearch);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(791, 317);
+			this.groupBox1.Location = new System.Drawing.Point(870, 317);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(269, 76);
 			this.groupBox1.TabIndex = 47;
@@ -406,7 +406,7 @@ namespace OpenDental{
 			// FormReference
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(1072, 601);
+			this.ClientSize = new System.Drawing.Size(1151, 666);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupFilter);
 			this.Controls.Add(this.gridMain);

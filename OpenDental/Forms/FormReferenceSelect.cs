@@ -11,7 +11,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormReference:Form {
 		private DataTable RefTable;
-		public List<long> SelectedCustRef;
+		public List<CustReference> SelectedCustRefs;
 
 		public FormReference() {
 			InitializeComponent();
@@ -45,24 +45,28 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("HmPhone",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("State",55);
+			col=new ODGridColumn("State",45);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("City",80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Zip Code",60);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Specialty",70);
+			col=new ODGridColumn("Specialty",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Age",60);
+			col=new ODGridColumn("Age",40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("SuperFam Members",50);
+			col=new ODGridColumn("Super",50);
+			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Last Ref Date",50);
+			col=new ODGridColumn("Last Used",70);
+			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Times Used",50);
+			col=new ODGridColumn("Times Used",70);
+			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
 			if(checkBadRefs.Checked) {
-				col=new ODGridColumn("Bad Ref",50);
+				col=new ODGridColumn("Bad",50);
+				col.TextAlign=HorizontalAlignment.Center;
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -76,11 +80,11 @@ namespace OpenDental {
 				row.Cells.Add(RefTable.Rows[i]["State"].ToString());
 				row.Cells.Add(RefTable.Rows[i]["City"].ToString());
 				row.Cells.Add(RefTable.Rows[i]["Zip"].ToString());
-				row.Cells.Add(RefTable.Rows[i]["specialty"].ToString());
+				row.Cells.Add(RefTable.Rows[i]["Specialty"].ToString());
 				row.Cells.Add(RefTable.Rows[i]["age"].ToString());
-				row.Cells.Add(RefTable.Rows[i]["superFam"].ToString());
+				row.Cells.Add(RefTable.Rows[i]["SuperFamily"].ToString());
 				row.Cells.Add(RefTable.Rows[i]["DateMostRecent"].ToString());
-				row.Cells.Add(RefTable.Rows[i]["timesUsed"].ToString());
+				row.Cells.Add(RefTable.Rows[i]["TimesUsed"].ToString());
 				if(checkBadRefs.Checked) {
 					row.Cells.Add(RefTable.Rows[i]["IsBadRef"].ToString());
 				}
@@ -251,9 +255,12 @@ namespace OpenDental {
 				MsgBox.Show(this,"Select at least one reference.");
 				return;
 			}
-			SelectedCustRef=new List<long>();
+			SelectedCustRefs=new List<CustReference>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				SelectedCustRef.Add(PIn.Long(RefTable.Rows[i]["CustRefNum"].ToString()));
+				CustReference custRef=CustReferences.GetOne(PIn.Long(RefTable.Rows[gridMain.SelectedIndices[i]]["CustReferenceNum"].ToString()));
+				custRef.DateMostRecent=DateTime.Now;
+				CustReferences.Update(custRef);
+				SelectedCustRefs.Add(custRef);
 			}
 			DialogResult=DialogResult.OK;
 		}
