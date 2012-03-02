@@ -43,6 +43,15 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM custrefentry WHERE CustRefEntryNum = "+POut.Long(custRefEntryNum);
 			Db.NonQ(command);
 		}
+		
+		///<summary>Gets all the entries for the customer.</summary>
+		public static List<CustRefEntry> GetEntryListForCustomer(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<List<CustRefEntry>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM custrefentry WHERE PatNumCust="+POut.Long(patNum);
+			return Crud.CustRefEntryCrud.SelectMany(command);
+		}
 
 
 

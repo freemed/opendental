@@ -50,9 +50,13 @@ namespace OpenDental{
 			this.checkBadRefs = new System.Windows.Forms.CheckBox();
 			this.groupFilter = new System.Windows.Forms.GroupBox();
 			this.checkUsedRefs = new System.Windows.Forms.CheckBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkRefresh = new System.Windows.Forms.CheckBox();
 			this.butGetAll = new OpenDental.UI.Button();
+			this.butSearch = new OpenDental.UI.Button();
 			this.groupBox2.SuspendLayout();
 			this.groupFilter.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -94,12 +98,14 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(768, 577);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Select a Reference";
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridMain_KeyDown);
 			// 
 			// groupBox2
 			// 
@@ -146,7 +152,9 @@ namespace OpenDental{
 			this.textSuperFamily.Location = new System.Drawing.Point(163, 119);
 			this.textSuperFamily.Name = "textSuperFamily";
 			this.textSuperFamily.Size = new System.Drawing.Size(90, 20);
-			this.textSuperFamily.TabIndex = 30;
+			this.textSuperFamily.TabIndex = 6;
+			this.textSuperFamily.TextChanged += new System.EventHandler(this.textSuperFamily_TextChanged);
+			this.textSuperFamily.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textSuperFamily_KeyDown);
 			// 
 			// label5
 			// 
@@ -162,14 +170,18 @@ namespace OpenDental{
 			this.textSpecialty.Location = new System.Drawing.Point(163, 99);
 			this.textSpecialty.Name = "textSpecialty";
 			this.textSpecialty.Size = new System.Drawing.Size(90, 20);
-			this.textSpecialty.TabIndex = 28;
+			this.textSpecialty.TabIndex = 5;
+			this.textSpecialty.TextChanged += new System.EventHandler(this.textSpecialty_TextChanged);
+			this.textSpecialty.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textSpecialty_KeyDown);
 			// 
 			// textAge
 			// 
 			this.textAge.Location = new System.Drawing.Point(163, 199);
 			this.textAge.Name = "textAge";
 			this.textAge.Size = new System.Drawing.Size(90, 20);
-			this.textAge.TabIndex = 26;
+			this.textAge.TabIndex = 10;
+			this.textAge.TextChanged += new System.EventHandler(this.textAge_TextChanged);
+			this.textAge.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textAge_KeyDown);
 			// 
 			// label2
 			// 
@@ -185,7 +197,9 @@ namespace OpenDental{
 			this.textAreaCode.Location = new System.Drawing.Point(163, 79);
 			this.textAreaCode.Name = "textAreaCode";
 			this.textAreaCode.Size = new System.Drawing.Size(90, 20);
-			this.textAreaCode.TabIndex = 2;
+			this.textAreaCode.TabIndex = 4;
+			this.textAreaCode.TextChanged += new System.EventHandler(this.textAreaCode_TextChanged);
+			this.textAreaCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textAreaCode_KeyDown);
 			// 
 			// label4
 			// 
@@ -210,14 +224,18 @@ namespace OpenDental{
 			this.textLName.Location = new System.Drawing.Point(163, 139);
 			this.textLName.Name = "textLName";
 			this.textLName.Size = new System.Drawing.Size(90, 20);
-			this.textLName.TabIndex = 0;
+			this.textLName.TabIndex = 7;
+			this.textLName.TextChanged += new System.EventHandler(this.textLName_TextChanged);
+			this.textLName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textLName_KeyDown);
 			// 
 			// textZip
 			// 
 			this.textZip.Location = new System.Drawing.Point(163, 59);
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(90, 20);
-			this.textZip.TabIndex = 6;
+			this.textZip.TabIndex = 3;
+			this.textZip.TextChanged += new System.EventHandler(this.textZip_TextChanged);
+			this.textZip.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textZip_KeyDown);
 			// 
 			// label3
 			// 
@@ -242,14 +260,18 @@ namespace OpenDental{
 			this.textFName.Location = new System.Drawing.Point(163, 159);
 			this.textFName.Name = "textFName";
 			this.textFName.Size = new System.Drawing.Size(90, 20);
-			this.textFName.TabIndex = 1;
+			this.textFName.TabIndex = 8;
+			this.textFName.TextChanged += new System.EventHandler(this.textFName_TextChanged);
+			this.textFName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFName_KeyDown);
 			// 
 			// textPatNum
 			// 
 			this.textPatNum.Location = new System.Drawing.Point(163, 179);
 			this.textPatNum.Name = "textPatNum";
 			this.textPatNum.Size = new System.Drawing.Size(90, 20);
-			this.textPatNum.TabIndex = 7;
+			this.textPatNum.TabIndex = 9;
+			this.textPatNum.TextChanged += new System.EventHandler(this.textPatNum_TextChanged);
+			this.textPatNum.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textPatNum_KeyDown);
 			// 
 			// label9
 			// 
@@ -265,7 +287,9 @@ namespace OpenDental{
 			this.textState.Location = new System.Drawing.Point(163, 39);
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(90, 20);
-			this.textState.TabIndex = 5;
+			this.textState.TabIndex = 2;
+			this.textState.TextChanged += new System.EventHandler(this.textState_TextChanged);
+			this.textState.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textState_KeyDown);
 			// 
 			// label8
 			// 
@@ -281,7 +305,9 @@ namespace OpenDental{
 			this.textCity.Location = new System.Drawing.Point(163, 19);
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(90, 20);
-			this.textCity.TabIndex = 4;
+			this.textCity.TabIndex = 1;
+			this.textCity.TextChanged += new System.EventHandler(this.textCity_TextChanged);
+			this.textCity.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textCity_KeyDown);
 			// 
 			// label7
 			// 
@@ -298,7 +324,7 @@ namespace OpenDental{
 			this.checkBadRefs.Location = new System.Drawing.Point(9, 38);
 			this.checkBadRefs.Name = "checkBadRefs";
 			this.checkBadRefs.Size = new System.Drawing.Size(187, 17);
-			this.checkBadRefs.TabIndex = 42;
+			this.checkBadRefs.TabIndex = 12;
 			this.checkBadRefs.Text = "Include bad references";
 			this.checkBadRefs.Click += new System.EventHandler(this.checkBadRefs_Click);
 			// 
@@ -320,9 +346,34 @@ namespace OpenDental{
 			this.checkUsedRefs.Location = new System.Drawing.Point(9, 19);
 			this.checkUsedRefs.Name = "checkUsedRefs";
 			this.checkUsedRefs.Size = new System.Drawing.Size(187, 17);
-			this.checkUsedRefs.TabIndex = 43;
+			this.checkUsedRefs.TabIndex = 11;
 			this.checkUsedRefs.Text = "Used references only";
 			this.checkUsedRefs.Click += new System.EventHandler(this.checkUsedRefs_Click);
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.checkRefresh);
+			this.groupBox1.Controls.Add(this.butGetAll);
+			this.groupBox1.Controls.Add(this.butSearch);
+			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox1.Location = new System.Drawing.Point(791, 317);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(269, 76);
+			this.groupBox1.TabIndex = 47;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Search";
+			// 
+			// checkRefresh
+			// 
+			this.checkRefresh.Checked = true;
+			this.checkRefresh.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkRefresh.Location = new System.Drawing.Point(43, 51);
+			this.checkRefresh.Name = "checkRefresh";
+			this.checkRefresh.Size = new System.Drawing.Size(195, 18);
+			this.checkRefresh.TabIndex = 11;
+			this.checkRefresh.Text = "Refresh while typing";
+			this.checkRefresh.UseVisualStyleBackColor = true;
 			// 
 			// butGetAll
 			// 
@@ -331,17 +382,32 @@ namespace OpenDental{
 			this.butGetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGetAll.CornerRadius = 4F;
-			this.butGetAll.Location = new System.Drawing.Point(969, 317);
+			this.butGetAll.Location = new System.Drawing.Point(163, 19);
 			this.butGetAll.Name = "butGetAll";
 			this.butGetAll.Size = new System.Drawing.Size(75, 23);
-			this.butGetAll.TabIndex = 46;
+			this.butGetAll.TabIndex = 10;
 			this.butGetAll.Text = "Get All";
+			this.butGetAll.Click += new System.EventHandler(this.butGetAll_Click);
+			// 
+			// butSearch
+			// 
+			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSearch.Autosize = true;
+			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.CornerRadius = 4F;
+			this.butSearch.Location = new System.Drawing.Point(43, 19);
+			this.butSearch.Name = "butSearch";
+			this.butSearch.Size = new System.Drawing.Size(75, 23);
+			this.butSearch.TabIndex = 7;
+			this.butSearch.Text = "&Search";
+			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
 			// FormReference
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1072, 601);
-			this.Controls.Add(this.butGetAll);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.groupFilter);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.groupBox2);
@@ -354,6 +420,7 @@ namespace OpenDental{
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.groupFilter.ResumeLayout(false);
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -387,6 +454,9 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textSpecialty;
 		private System.Windows.Forms.GroupBox groupFilter;
 		private System.Windows.Forms.CheckBox checkUsedRefs;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.CheckBox checkRefresh;
 		private UI.Button butGetAll;
+		private UI.Button butSearch;
 	}
 }
