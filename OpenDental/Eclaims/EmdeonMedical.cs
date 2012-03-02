@@ -34,14 +34,14 @@ namespace OpenDental.Eclaims
 				batchFile=Path.Combine(clearhouse.ExportPath,"claims"+batchNum+".txt");
 				byte[] fileBytes=File.ReadAllBytes(batchFile);
 				string fileBytesBase64=Convert.ToBase64String(fileBytes);
-				string messageType="MCT";//medical
-				if(medType==EnumClaimMedType.Institutional) {
-					messageType="HCT";
-				}
-				else if(medType==EnumClaimMedType.Dental) {
-					//messageType="DCT";//not used/tested yet, but planned for future.
-				}
 				if(clearhouse.ISA15=="P") {//production interface
+					string messageType="MCD";//medical
+					if(medType==EnumClaimMedType.Institutional) {
+						messageType="HCD";
+					}
+					else if(medType==EnumClaimMedType.Dental) {
+						//messageType="DCD";//not used/tested yet, but planned for future.
+					}
 					EmdeonITS.ITSWS itsws=new EmdeonITS.ITSWS();
 					itsws.Url=emdeonITSUrl;
 					EmdeonITS.ITSReturn response=itsws.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
@@ -50,6 +50,13 @@ namespace OpenDental.Eclaims
 					}
 				}
 				else {//test interface
+					string messageType="MCT";//medical
+					if(medType==EnumClaimMedType.Institutional) {
+						messageType="HCT";
+					}
+					else if(medType==EnumClaimMedType.Dental) {
+						//messageType="DCT";//not used/tested yet, but planned for future.
+					}
 					EmdeonITSTest.ITSWS itswsTest=new EmdeonITSTest.ITSWS();
 					itswsTest.Url=emdeonITSUrlTest;
 					EmdeonITSTest.ITSReturn responseTest=itswsTest.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
@@ -81,14 +88,14 @@ namespace OpenDental.Eclaims
 				if(!Directory.Exists(clearhouse.ResponsePath)) {
 					throw new Exception("Clearinghouse response path is invalid.");
 				}
-				string[] messageTypes=new string[] { 
-					"MCT", //Medical
-					"HCT", //Institutional
-					//"DCT"  //Dental. Planned for future.
-				};
 				bool reportsDownloaded=false;
-				for(int i=0;i<messageTypes.Length;i++) {
-					if(clearhouse.ISA15=="P") {//production interface
+				if(clearhouse.ISA15=="P") {//production interface
+					string[] messageTypes=new string[] { 
+						"MCD", //Medical
+						"HCD", //Institutional
+						//"DCD"  //Dental. Planned for future.
+					};
+					for(int i=0;i<messageTypes.Length;i++) {
 						EmdeonITS.ITSWS itsws=new EmdeonITS.ITSWS();
 						itsws.Url=emdeonITSUrl;
 						//Download the most up to date reports, but do not delete them from the server yet.
@@ -108,7 +115,14 @@ namespace OpenDental.Eclaims
 							throw new Exception("Failed to get reports from Emdeon. Error message from Emdeon: "+response.Response);
 						}
 					}
-					else { //test interface
+				}
+				else { //test interface
+					string[] messageTypes=new string[] { 
+						"MCT", //Medical
+						"HCT", //Institutional
+						//"DCT"  //Dental. Planned for future.
+					};
+					for(int i=0;i<messageTypes.Length;i++) {
 						EmdeonITSTest.ITSWS itswsTest=new EmdeonITSTest.ITSWS();
 						itswsTest.Url=emdeonITSUrlTest;
 						//Download the most up to date reports, but do not delete them from the server yet.
