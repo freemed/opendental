@@ -46,15 +46,25 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
-		///<summary>Returns null if not found.</summary>
-		public static Userod GetUserByName(string userName) {
+		///<summary>Returns null if not found.  isEcwTight is not case sensitive.</summary>
+		public static Userod GetUserByName(string userName,bool isEcwTight) {
 			//No need to check RemotingRole; no call to db.
 			if(UserodC.Listt==null) {
 				RefreshCache();
 			}
 			for(int i=0;i<UserodC.Listt.Count;i++) {
-				if(UserodC.Listt[i].UserName==userName) {
-					return UserodC.Listt[i];
+				if(UserodC.Listt[i].IsHidden){
+					continue;
+				}
+				if(isEcwTight) {
+					if(UserodC.Listt[i].UserName.ToLower()==userName.ToLower()) {
+						return UserodC.Listt[i];
+					}
+				}
+				else {
+					if(UserodC.Listt[i].UserName==userName) {//exact
+						return UserodC.Listt[i];
+					}
 				}
 			}
 			return null;
@@ -87,14 +97,14 @@ namespace OpenDentBusiness {
 		}
 
 
-		///<summary>Only used in one place on the server when first attempting to log on.  The password will be hashed and checked against the one in the database.  Password is required, so empty string will return null.  Returns a user object if user and password are valid.  Otherwise, returns null.  If usingEcw, password will actually be the hash.</summary>
-		public static Userod CheckUserAndPassword(string username, string password,bool usingEcw){
+		///<summary>Only used in one place on the server when first attempting to log on.  The password will be hashed and checked against the one in the database.  Password is required, so empty string will return null.  Returns a user object if user and password are valid.  Otherwise, returns null.  If usingEcw, password will actually be the hash.  If usingEcw, then the username is not case sensitive.</summary>
+		public static Userod CheckUserAndPassword(string username,string password,bool usingEcw) {
 			//No need to check RemotingRole; no call to db.
 			if(password==""){
 				return null;
 			}
 			RefreshCache();
-			Userod user=GetUserByName(username);
+			Userod user=GetUserByName(username,usingEcw);
 			if(user==null){
 				return null;
 			}
@@ -409,10 +419,10 @@ namespace OpenDentBusiness {
 				return false;
 			}
 			string command="SELECT COUNT(*) FROM userod WHERE ";
-			if(Programs.UsingEcwTight()){
-				command+="BINARY ";//allows different usernames based on capitalization.
+			//if(Programs.UsingEcwTight()){
+			//	command+="BINARY ";//allows different usernames based on capitalization.//we no longer allow this
 				//Does not need to be tested under Oracle because eCW users do not use Oracle.
-			}
+			//}
 			command+="UserName='"+POut.String(username)+"' "
 				+"AND UserNum !="+POut.Long(excludeUserNum);
 			DataTable table=Db.GetTable(command);

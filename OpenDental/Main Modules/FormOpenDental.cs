@@ -1578,7 +1578,7 @@ namespace OpenDental{
 				}
 				else {
 					if(odUser!="" && odPassword!=""){//if a username and password were passed in
-						Userod user=Userods.GetUserByName(odUser);
+						Userod user=Userods.GetUserByName(odUser,Programs.UsingEcwTight());
 						if(user!=null){
 							if(Userods.CheckTypedPassword(odPassword,user.Password)){//password matches
 								Security.CurUser=user.Copy();
@@ -4530,7 +4530,7 @@ namespace OpenDental{
 				myOutlookBar.Invalidate();
 				UnselectActive();
 				allNeutral();
-				Userod user=Userods.GetUserByName(userName);
+				Userod user=Userods.GetUserByName(userName,true);
 				if(user==null) {
 					if(Programs.UsingEcwTight() && userName!="") {
 						user=new Userod();
