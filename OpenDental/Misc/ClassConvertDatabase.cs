@@ -67,6 +67,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"This replication server is blocked from performing updates.");
 				return false;
 			}
+			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
+				&& !ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
+			{
+				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
+				return false;
+			}
 #if DEBUG
 			if(!silent && MessageBox.Show("You are in Debug mode.  Your database can now be converted"+"\r"
 				+"from version"+" "+FromVersion.ToString()+"\r"
