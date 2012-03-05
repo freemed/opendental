@@ -1289,6 +1289,7 @@ namespace OpenDental{
 				butPDF.Visible=false;
 			}
 			FillProcedures();
+			SetProceduresForECW();
 			FillPatient();//Must be after FillProcedures(), so that the initial amount for the appointment can be calculated.
 			FillTime();
 			FillComm();
@@ -1298,6 +1299,22 @@ namespace OpenDental{
 			#if DEBUG
 				Text="AptNum"+AptCur.AptNum;
 			#endif
+		}
+
+		private void SetProceduresForECW() {
+			if(!Programs.UsingEcwTight()){
+			  return;
+			}
+			//this is a method that attaches very specific kinds of procedures to appt
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++) {//loop through procs
+				if(DS.Tables["Procedure"].Rows[i]["ProcStatus"].ToString()!=((int)ProcStat.C).ToString()){//must be complete proc
+					continue;
+				}
+				if(PIn.DateT(DS.Tables["Procedure"].Rows[i]["ProcDate"].ToString()).Date!=AptCur.AptDateTime.Date) {//must have same date as appt
+					continue;
+				}
+				gridProc.SetSelected(i,true);//harmless if already selected.
+			}
 		}
 
 		private void butPickDentist_Click(object sender,EventArgs e) {

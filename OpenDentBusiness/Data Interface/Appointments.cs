@@ -1464,6 +1464,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("priority");
 			table.Columns.Add("Priority");
 			table.Columns.Add("ProcCode");
+			table.Columns.Add("ProcDate");
 			table.Columns.Add("ProcNum");
 			table.Columns.Add("ProcStatus");
 			table.Columns.Add("ProvNum");
@@ -1477,7 +1478,7 @@ namespace OpenDentBusiness{
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT AbbrDesc,procedurecode.ProcCode,AptNum,LaymanTerm,"
 				+"PlannedAptNum,Priority,ProcFee,ProcNum,ProcStatus, "
-				+"procedurecode.Descript,procedurelog.CodeNum,procedurelog.ProvNum,Surf,ToothNum,ToothRange,TreatArea "
+				+"procedurecode.Descript,procedurelog.CodeNum,ProcDate,procedurelog.ProvNum,Surf,ToothNum,ToothRange,TreatArea "
 				+"FROM procedurelog LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 				+"WHERE PatNum="+patNum//sort later
 			//1. All TP procs
@@ -1536,6 +1537,7 @@ namespace OpenDentBusiness{
 				row["priority"]=DefC.GetName(DefCat.TxPriorities,PIn.Long(rawProc.Rows[i]["Priority"].ToString()));
 				row["Priority"]=rawProc.Rows[i]["Priority"].ToString();
 				row["ProcCode"]=rawProc.Rows[i]["ProcCode"].ToString();
+				row["ProcDate"]=rawProc.Rows[i]["ProcDate"].ToString();//eg 2012-02-19
 				row["ProcNum"]=rawProc.Rows[i]["ProcNum"].ToString();
 				row["ProcStatus"]=rawProc.Rows[i]["ProcStatus"].ToString();
 				row["ProvNum"]=rawProc.Rows[i]["ProvNum"].ToString();
