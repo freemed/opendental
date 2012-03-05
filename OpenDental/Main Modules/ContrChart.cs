@@ -4512,6 +4512,30 @@ namespace OpenDental{
 							continue;//do not allow this row to be added if there is no data to in the row.
 						}
 						break;
+					case "References":
+						List<CustRefEntry> custREList=CustRefEntries.GetEntryListForCustomer(PatCur.PatNum);
+						if(custREList.Count==0) {
+							row.Cells.Add(Lan.g("TablePatient","None"));
+							row.Tag="References";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+						}
+						else {
+							row.Cells.Add(Lan.g("TablePatient",""));
+							row.Tag="References";
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+							gridPtInfo.Rows.Add(row);
+						}
+						for(int i=0;i<custREList.Count;i++) {
+							row=new ODGridRow();
+							row.Cells.Add(custREList[i].DateEntry.ToShortDateString());
+							row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
+							row.Tag=custREList[i];
+							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
+							if(i<custREList.Count-1) {
+								gridPtInfo.Rows.Add(row);
+							}
+						}
+						break;
 				}
 				if(fields[f].InternalName=="PatFields"
 					|| fields[f].InternalName=="Premedicate"
@@ -7890,6 +7914,28 @@ namespace OpenDental{
 					FormRE.PatNum=PatCur.PatNum;
 					FormRE.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
+					return;
+				}
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="References") {
+					FormReference FormR=new FormReference();
+					FormR.ShowDialog();
+					if(FormR.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					for(int i=0;i<FormR.SelectedCustRefs.Count;i++) {
+						CustRefEntry custEntry=new CustRefEntry();
+						custEntry.DateEntry=DateTime.Now;
+						custEntry.PatNumCust=PatCur.PatNum;
+						custEntry.PatNumRef=FormR.SelectedCustRefs[i].PatNum;
+						CustRefEntries.Insert(custEntry);
+					}
+					FillPtInfo();
+					return;
+				}
+				if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(CustRefEntry)) {
+					FormReferenceEntryEdit FormRE=new FormReferenceEntryEdit((CustRefEntry)gridPtInfo.Rows[e.Row].Tag);
+					FormRE.ShowDialog();
+					FillPtInfo();
 					return;
 				}
 				else {//patfield

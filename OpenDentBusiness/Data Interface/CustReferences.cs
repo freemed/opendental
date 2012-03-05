@@ -60,10 +60,10 @@ namespace OpenDentBusiness{
 			}
 			string regexp="";
 			for(int i=0;i<phonedigits.Length;i++) {
-				if(i!=0) {
-					regexp+="[^0-9]*";//zero or more intervening digits that are not numbers
+				if(i<1) {
+					regexp="^[^0-9]?";//Allows phone to start with "("
 				}
-				regexp+=phonedigits[i];
+				regexp+=phonedigits[i]+"[^0-9]*";
 			}
 			DataTable table=new DataTable();
 			DataRow row;
@@ -94,9 +94,7 @@ namespace OpenDentBusiness{
 				command+="AND p.Birthdate <"+POut.Date(DateTime.Now.AddYears(-age))+" ";
 			}
 			if(regexp!="") {
-				command+="AND (p.HmPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR p.WkPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR p.WirelessPhone REGEXP '"+POut.String(regexp)+"') ";
+				command+="AND (p.HmPhone REGEXP '"+POut.String(regexp)+"' )";
 			}
 			command+=(lname.Length>0?"AND (p.LName LIKE '"+POut.String(lname)+"%' OR p.Preferred LIKE '"+POut.String(lname)+"%') ":"")
 					+(fname.Length>0?"AND (p.FName LIKE '"+POut.String(fname)+"%' OR p.Preferred LIKE '"+POut.String(fname)+"%') ":"")
@@ -104,7 +102,8 @@ namespace OpenDentBusiness{
 					+(state.Length>0?"AND p.State LIKE '"+POut.String(state)+"%' ":"")
 					+(zip.Length>0?"AND p.Zip LIKE '"+POut.String(zip)+"%' ":"")
 					+(patnum.Length>0?"AND p.PatNum LIKE '"+POut.String(patnum)+"%' ":"")
-					+(specialty.Length>0?"AND pf.FieldValue LIKE '"+POut.String(specialty)+"%' ":"");
+					+(specialty.Length>0?"AND pf.FieldValue LIKE '"+POut.String(specialty)+"%' ":"")
+					+(showBadRefs?"":"AND cr.IsBadRef=0 ");
 			if(limit) {
 				command=DbHelper.LimitOrderBy(command,40);
 			}
@@ -129,7 +128,11 @@ namespace OpenDentBusiness{
 				row["Specialty"]=rawtable.Rows[i]["FieldValue"].ToString();
 				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();
 				row["SuperFamily"]=rawtable.Rows[i]["SuperFamily"].ToString();
-				row["DateMostRecent"]=PIn.DateT(rawtable.Rows[i]["DateMostRecent"].ToString()).ToShortDateString();
+				DateTime recentDate=PIn.DateT(rawtable.Rows[i]["DateMostRecent"].ToString());
+				row["DateMostRecent"]="";
+				if(recentDate.Year>1880) {
+					row["DateMostRecent"]=recentDate.ToShortDateString();
+				}
 				row["TimesUsed"]=rawtable.Rows[i]["TimesUsed"].ToString();
 				row["IsBadRef"]=rawtable.Rows[i]["IsBadRef"].ToString();
 				rows.Add(row);
