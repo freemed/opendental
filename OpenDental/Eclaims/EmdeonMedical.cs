@@ -46,7 +46,7 @@ namespace OpenDental.Eclaims
 					itsws.Url=emdeonITSUrl;
 					EmdeonITS.ITSReturn response=itsws.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
 					if(response.ErrorCode!=0) { //Batch submission successful.
-						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+" for the following reason: "+response.Response);
+						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+". Error number from Emdeon: "+response.ErrorCode+". Error message from Emdeon: "+response.Response);
 					}
 				}
 				else {//test interface
@@ -61,7 +61,7 @@ namespace OpenDental.Eclaims
 					itswsTest.Url=emdeonITSUrlTest;
 					EmdeonITSTest.ITSReturn responseTest=itswsTest.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
 					if(responseTest.ErrorCode!=0) { //Batch submission successful.
-						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+" for the following reason: "+responseTest.Response);
+						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+". Error number from Emdeon: "+responseTest.ErrorCode+". Error message from Emdeon: "+responseTest.Response);
 					}
 				}
 			}
@@ -112,7 +112,7 @@ namespace OpenDental.Eclaims
 							itsws.GetFile(clearhouse.LoginID,clearhouse.Password,messageTypes[i]+"D");
 						}
 						else if(response.ErrorCode!=209) { //Report retrieval failure, excluding the error that can be returned when the mailbox is empty.
-							throw new Exception("Failed to get reports from Emdeon. Error message from Emdeon: "+response.Response);
+							throw new Exception("Failed to get reports. Error number from Emdeon: "+response.ErrorCode+". Error message from Emdeon: "+response.Response);
 						}
 					}
 				}
@@ -139,7 +139,7 @@ namespace OpenDental.Eclaims
 							itswsTest.GetFile(clearhouse.LoginID,clearhouse.Password,messageTypes[i]+"D");
 						}
 						else if(responseTest.ErrorCode!=209) { //Report retrieval failure, excluding the error that can be returned when the mailbox is empty.
-							throw new Exception("Failed to get reports from Emdeon. Error message from Emdeon: "+responseTest.Response);
+							throw new Exception("Failed to get reports. Error number from Emdeon: "+responseTest.ErrorCode+". Error message from Emdeon: "+responseTest.Response);
 						}
 					}
 				}
