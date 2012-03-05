@@ -1594,16 +1594,15 @@ FROM insplan";
 			return true;
 		}
 
-		///<summary>To prevent orphaned patients, if patFrom is a guarantor then all family members of patFrom 
-		///are moved into the family patTo belongs to, and then the merge of the two specified accounts is performed.</summary>
-		public static void MergeTwoPatients(long patTo,long patFrom,string atoZpath){
+		///<summary>To prevent orphaned patients, if patFrom is a guarantor then all family members of patFrom are moved into the family patTo belongs to, and then the merge of the two specified accounts is performed.  Returns false if the merge was canceled by the user.</summary>
+		public static bool MergeTwoPatients(long patTo,long patFrom,string atoZpath){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patTo,patFrom);
-				return;
+				return true;
 			}
 			if(patTo==patFrom) {
 				//Do not merge the same patient onto itself.
-				return;
+				return true;
 			}
 			string[] patNumForeignKeys=new string[]{
 				//This list is up to date as of 11/11/2011 up to version v11.2
@@ -1673,6 +1672,38 @@ FROM insplan";
 			Patient patientTo=Patients.GetPat(patTo);
 			string atozFrom=ImageStore.GetPatientFolder(patientFrom,atoZpath);
 			string atozTo=ImageStore.GetPatientFolder(patientTo,atoZpath);
+			//We need to test patfields before doing anything else because the user may wish to cancel and abort the merge.
+			PatField[] patToFields=PatFields.Refresh(patTo);
+			PatField[] patFromFields=PatFields.Refresh(patFrom);
+			for(int i=0;i<patFromFields.Length;i++) {
+				bool hasMatch=false;
+				for(int j=0;j<patToFields.Length;j++) {
+					//Check patient fields that are the same to see if they have different values.
+					if(patFromFields[i].FieldName==patToFields[j].FieldName) {
+						hasMatch=true;
+						if(patFromFields[i].FieldValue!=patToFields[j].FieldValue) {
+							//Get input from user on which value to use.
+							DialogResult result=MessageBox.Show("The two patients being merged have different values set for the patient field:\r\n\""+patFromFields[i].FieldName+"\"\r\n\r\n"
+								+"The merge into patient has the value: \""+patToFields[j].FieldValue+"\"\r\n"
+								+"The merge from patient has the value: \""+patFromFields[i].FieldValue+"\"\r\n\r\n"
+								+"Would you like to overwrite the merge into value with the merge from value?\r\n(Cancel will abort the merge)","Warning",MessageBoxButtons.YesNoCancel);
+							if(result==DialogResult.Yes) {
+								//User chose to use the merge from patient field info.
+								patFromFields[i].PatNum=patTo;
+								PatFields.Update(patFromFields[i]);
+								PatFields.Delete(patToFields[j]);
+							}
+							else if(result==DialogResult.Cancel) {
+								return false;
+							}
+						}
+					}
+				}
+				if(!hasMatch) {//The patient field does not exist in the merge into account.
+					patFromFields[i].PatNum=patTo;
+					PatFields.Update(patFromFields[i]);
+				}
+			}
 			//Move the patient documents within the 'patFrom' A to Z folder to the 'patTo' A to Z folder.
 			//We have to be careful here of documents with the same name. We have to rename such documents
 			//so that no documents are overwritten/lost.
@@ -1721,6 +1752,9 @@ FROM insplan";
 			//merge of the records between the two accounts.			
 			for(int i=0;i<patNumForeignKeys.Length;i++) {
 				string[] tableAndKeyName=patNumForeignKeys[i].Split(new char[] {'.'});
+				if(tableAndKeyName[0]=="patfield") {//Patfield taken care of above.
+					continue;
+				}
 				command="UPDATE "+tableAndKeyName[0]
 					+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)
 					+" WHERE "+tableAndKeyName[1]+"="+POut.Long(patFrom);
@@ -1744,6 +1778,7 @@ FROM insplan";
 				+"AND PatStatus<>"+((int)PatientStatus.Deceased)+" "
 				+DbHelper.LimitAnd(1);
 			Db.NonQ(command);
+			return true;
 		}
 
 		///<summary>LName, 'Preferred' FName M</summary>

@@ -82,12 +82,13 @@ namespace OpenDental {
 					this.Cursor=Cursors.WaitCursor;
 				}
 			}
-			Patients.MergeTwoPatients(patTo,patFrom,ImageStore.GetPreferredAtoZpath());
-			this.textPatientIDFrom.Text="";
-			this.textPatientNameFrom.Text="";
-			this.textPatFromBirthdate.Text="";
-			CheckUIState();
-			MsgBox.Show(this,"Patients merged successfully.");
+			if(Patients.MergeTwoPatients(patTo,patFrom,ImageStore.GetPreferredAtoZpath())) {
+				this.textPatientIDFrom.Text="";
+				this.textPatientNameFrom.Text="";
+				this.textPatFromBirthdate.Text="";
+				CheckUIState();
+				MsgBox.Show(this,"Patients merged successfully.");
+			}
 			this.Cursor=Cursors.Default;
 		}
 
