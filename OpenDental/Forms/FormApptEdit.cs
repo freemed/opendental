@@ -2593,8 +2593,8 @@ namespace OpenDental{
 						procsAreComplete=false;
 					}
 				}
-				if(comboStatus.SelectedIndex!=1 || !procsAreComplete) {
-					MsgBox.Show(this,"The appointment and attached procedures must have statuses all set to complete first.");
+				if(!procsAreComplete) {
+					MsgBox.Show(this,"The procedures must all have statuses set to complete first.");
 					return;
 				}
 				//user can only get this far if aptNum matches visit num previously passed in by eCW.
