@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 		public string PriorAuthorizationNumber;
 		///<summary>Enum:EnumClaimSpecialProgram  This is used to track EPSDT.</summary>
 		public EnumClaimSpecialProgram SpecialProgramCode;
-		///<summary>A three digit number used on 837I.  Aka Bill Code.</summary>
+		///<summary>A three digit number used on 837I.  Aka Bill Code.  UBO4 4.  Examples: 321,823,131,652.  The third digit is claim frequency code.  If this is used, then our CorrectionType should be 0=original.</summary>
 		public string UniformBillType;
 		///<summary>Enum:EnumClaimMedType 0=Dental, 1=Medical, 2=Institutional</summary>
 		public EnumClaimMedType MedType;
@@ -204,6 +204,25 @@ namespace OpenDentBusiness{
 		SpecialFederal_3=3,
 		Disability_5=5,
 		SecondOpinion_9=9
+	}
+
+	public enum ClaimCorrectionType {
+		///<summary>0 - X12 1. Use for claims that are not ongoing.</summary>
+		Original,
+		///<summary>1 - X12 7. Use to entirely replace an original claim. A claim reference number will be required.</summary>
+		Replacement,
+		///<summary>2 - X12 8. Use to undo an original claim. A claim reference number will be required.</summary>
+		Void
+		///<summary>X12 2. Use for first claim in a series of expected claims.</summary>
+		//FirstClaim,
+		///<summary>X12 3. Use when one or more claims for the same ongoing care have already been submitted.</summary>
+		//InterimContinuingClaim,
+		///<summary>X12 4. Use for a claim which is the last of a series of claims.</summary>
+		//InterimLastClaim,
+		///<summary>X12 5.</summary>
+		//LateCharge,
+		///<summary>X12 6. Nobody seems to use this.  What is it?  Use to make a correction to the original claim. A claim reference number will be required.</summary>
+		//Corrected,
 	}
 
 }

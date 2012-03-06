@@ -5372,6 +5372,10 @@ namespace OpenDental{
 					}
 				}
 			}
+			if(ClaimCur.UniformBillType!="" && ClaimCur.CorrectionType!=ClaimCorrectionType.Original) {
+				MsgBox.Show(this,"Correction type must be original when using type of bill.");
+				return false;
+			}
 			if(!CanadianWarnings()) {
 				return false;
 			}

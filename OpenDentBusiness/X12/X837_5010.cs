@@ -588,6 +588,16 @@ namespace OpenDentBusiness
 				if(IsDentiCal(clearhouse)) {
 					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here.
 				}
+				string claimFrequencyTypeCode="1";
+				if(claim.CorrectionType==ClaimCorrectionType.Original) {
+					claimFrequencyTypeCode="1";
+				}
+				else if(claim.CorrectionType==ClaimCorrectionType.Replacement) {
+					claimFrequencyTypeCode="7";
+				}
+				else if(claim.CorrectionType==ClaimCorrectionType.Void) {
+					claimFrequencyTypeCode="8";
+				}
 				sw.Write("CLM"+s
 					+Sout(clm01,20)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id. Carriers are not required to handle more than 20 char. 
 //todo: add field to allow user to override for claims based on preauths.
@@ -598,21 +608,19 @@ namespace OpenDentBusiness
 				if(medType==EnumClaimMedType.Medical) {
 					sw.Write(GetPlaceService(claim.PlaceService)+isa16//CLM05-1 1/2  Facility Code Value: Place of Service.
 						+"B"+isa16//CLM05-2 1/2 Facility Code Qualifier, B=Place of Service Codes.
-//todo: js 9/10/11 Consider supporting corrected and replacement.
-						+"1"+s);//CLM05-3 1/1 Claim Frequency Type Code: Code source 235: Claim Frequency Type Code. 1=original, 6=corrected, 7=replacement, 8=void(in limited jursidictions).  We currently only support 1-original.
+						+claimFrequencyTypeCode+s);//CLM05-3 1/1 Claim Frequency Type Code: 1=original, 7=replacement, 8=void(in limited jurisdictions).
 				}
 				else if(medType==EnumClaimMedType.Institutional) {
 					//claim.UniformBillType validated to be exactly 3 char
 					//Example: 771: 7=clinic, 7=FQHC, 1=Only claim.  713: 7=clinic, 1=rural health clinic, 3=continuing claim.
 					sw.Write(claim.UniformBillType.Substring(0,2)+isa16//CLM05-1 1/2  Facility Code Value: First and second position of UniformBillType.
 						+"A"+isa16//CLM05-2 1/2 Facility Code Qualifier, A=Uniform Billing Claim Form Bill Type.
-						+claim.UniformBillType.Substring(2)+s);//CLM05-3 1/1 Claim Frequency Type Code: Third position of UniformBillType.
+						+claim.UniformBillType.Substring(2,1)+s);//CLM05-3 1/1 Claim Frequency Type Code: Third position of UniformBillType.
 				}
 				else{//dental.
 					sw.Write(GetPlaceService(claim.PlaceService)+isa16//CLM05-1 1/2  Facility Code Value: Place of Service.
 						+"B"+isa16//CLM05-2 1/2 Facility Code Qualifier, B=Place of Service Codes.
-//todo: js 9/10/11 Consider supporting corrected and replacement.
-						+"1"+s);//CLM05-3 1/1 Claim Frequency Type Code: Code source 235: Claim Frequency Type Code. 1=original, 6=corrected, 7=replacement, 8=void(in limited jursidictions).  We currently only support 1-original.
+						+claimFrequencyTypeCode+s);//CLM05-3 1/1 Claim Frequency Type Code: 1=original, 7=replacement, 8=void(in limited jurisdictions).
 				}
 				if(medType==EnumClaimMedType.Medical) {
 					sw.Write("Y"+s);//CLM06 1/1 Yes/No Condition or Response Code: prov sig on file (always yes)
@@ -855,12 +863,18 @@ namespace OpenDentBusiness
 //todo: ServiceAuthException
 				//2300 REF: F5 (medical) Mandatory Medicare (Section 4081) Crossover Indicator. Situational. Required when submitter is Medicare and the claim is a Medigap or COB crossover claim. We do not use.
 				//2300 REF: EW (medical) Mammography Certification Number. Situational. We do not use.
-				//2300 REF: F8 (medical,institutional,dental) Payer Claim Control Number: Situational. Required if this is a replacement or a void. F8=Original Reference Number.
+				//2300 REF: F8 (medical,institutional,dental) Payer Claim Control Number: Situational. Required if this is a replacement or void claim. Might not be required for corrected, but we require anyway since it is required in 4010.
 					//aka Original Document Control Number/Internal Control Number (DCN/ICN).
 					//aka Transaction Control Number (TCN).  
 					//aka Claim Reference Number. 
 					//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
-//todo: Implement
+				if(claim.CorrectionType!=ClaimCorrectionType.Original 
+					|| claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8") { //correction, replacement or void.
+					sw.Write("REF"+s
+						+"F8"+s//REF01 2/3 Reference Identification Qualifier: F8=Original Reference Number.
+						+Sout(claim.OrigRefNum,50));//REF02 1/50 Reference Identification: Payer Claim Control Number.
+					EndSegment(sw);//REF03 and REF04 are not used.
+				}
 				//2300 REF: 9F (medical,institutional,dental) Referral Number. Situational. 
 				if(claim.RefNumString!="") {
 					sw.Write("REF"+s
@@ -2401,9 +2415,15 @@ namespace OpenDentBusiness
 					strb.Append("Predeterm number not allowed");
 				}
 			}
-			if(claim.CorrectionType!=ClaimCorrectionType.Original && claim.OrigRefNum.Trim()=="") {
+			if((claim.CorrectionType!=ClaimCorrectionType.Original)
+				&& claim.OrigRefNum.Trim()=="") {
 				Comma(strb);
 				strb.Append("Original reference num needed when correction type is not set to original");
+			}
+			if((claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8")//correction, replacement, void
+				&& claim.OrigRefNum.Trim()=="") {
+				Comma(strb);
+				strb.Append("Original reference num needed when type of bill ends in 6, 7 or 8");
 			}
 			if(claim.ClaimIdentifier.Trim()=="") {
 				Comma(strb);

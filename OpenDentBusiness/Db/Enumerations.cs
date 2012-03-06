@@ -1530,16 +1530,6 @@ namespace OpenDentBusiness{
 		EZTEC_OTHER_DS_OPEN
 	}
 
-	public enum ClaimCorrectionType {
-		///<summary>0</summary>
-		Original,
-		///<summary>1</summary>
-		Corrected,
-		///<summary>2</summary>
-		Replacement,
-		///<summary>3</summary>
-		Void
-	}
 	
 }
 
