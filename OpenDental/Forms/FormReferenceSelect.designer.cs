@@ -405,6 +405,7 @@ namespace OpenDental{
 			// 
 			// FormReference
 			// 
+			this.AcceptButton = this.butOK;
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1151, 666);
 			this.Controls.Add(this.groupBox1);
