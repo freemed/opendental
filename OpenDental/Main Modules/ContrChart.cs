@@ -6066,6 +6066,9 @@ namespace OpenDental{
 			else{
 				ProcCur.ProvNum=provPri;
 			}
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault!=0) {//override provnum if there is a default for this proc
+				ProcCur.ProvNum=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault;
+			}
 			if(newStatus==ProcStat.C) {
 				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);
 			}
@@ -6204,6 +6207,9 @@ namespace OpenDental{
 			}
 			else {
 				ProcCur.ProvNum=provPri;
+			}
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault!=0) {//override provnum if there is a default for this proc
+				ProcCur.ProvNum=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault;
 			}
 			if(newStatus==ProcStat.C) {
 				ProcCur.Note=ProcCodeNotes.GetNote(ProcCur.ProvNum,ProcCur.CodeNum);

@@ -836,8 +836,8 @@ namespace OpenDentBusiness {
 			Procedure changedProc;
 			for(int i=0;i<procList.Count;i++) {
 				changedProc=procList[i].Copy();
+				procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
 				if(apt.ProvHyg!=0) {//if the appointment has a hygiene provider
-					procCode=ProcedureCodes.GetProcCode(procList[i].CodeNum);
 					if(procCode.IsHygiene) {//hygiene proc
 						changedProc.ProvNum=apt.ProvHyg;
 					} 
@@ -847,6 +847,9 @@ namespace OpenDentBusiness {
 				} 
 				else {//same provider for every procedure
 					changedProc.ProvNum=apt.ProvNum;
+				}
+				if(procCode.ProvNumDefault!=0) {
+					changedProc.ProvNum=procCode.ProvNumDefault;//Override ProvNum if there is a default provider for procCode
 				}
 				changedProc.ClinicNum=apt.ClinicNum;
 				if(procList[i].ProcStatus==ProcStat.TP) {

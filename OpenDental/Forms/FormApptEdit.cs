@@ -1708,6 +1708,9 @@ namespace OpenDental{
 			else {
 				ProcCur.ProvNum=aptProvNum;
 			}
+			if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault!=0) {//Override provider for procedures with a default provider
+				ProcCur.ProvNum=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault;
+			}
 			ProcCur.Note="";
 			ProcCur.ClinicNum=pat.ClinicNum;
 			//dx
@@ -2049,7 +2052,12 @@ namespace OpenDental{
 				//priority
 				ProcCur.ProcStatus=ProcStat.TP;
 				//procnote
-				ProcCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;
+				if(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault==0) {//Override ProvNum if there is a default provider for this proc
+					ProcCur.ProvNum=ProviderC.ListShort[comboProvNum.SelectedIndex].ProvNum;//Normal behavior
+				}
+				else {
+					ProcCur.ProvNum=ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProvNumDefault;//New behavior for procs with default provider
+				}
 				//Dx
 				ProcCur.ClinicNum=AptCur.ClinicNum;
 				ProcCur.SiteNum=pat.SiteNum;

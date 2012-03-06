@@ -839,6 +839,14 @@ namespace OpenDental{
 			if(listCategory.SelectedIndex==-1) {
 				listCategory.SelectedIndex=0;
 			}
+			comboProvNumDefault.Items.Add("none");
+			comboProvNumDefault.SelectedIndex=0;
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
+				comboProvNumDefault.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ProviderC.ListShort[i].ProvNum==ProcCode.ProvNumDefault) {
+					comboProvNumDefault.SelectedIndex=i+1;//List starts with None at the top.
+				}
+			}
 			FillTime();
 			FillFees();
 			FillNotes();
@@ -1042,8 +1050,15 @@ namespace OpenDental{
 			ProcCode.BaseUnits=PIn.Int(textBaseUnits.Text.ToString());
 			ProcCode.DrugNDC=textDrugNDC.Text;
 			ProcCode.RevenueCodeDefault=textRevenueCode.Text;
-			if(listCategory.SelectedIndex!=-1)
+			if(listCategory.SelectedIndex!=-1) {
 				ProcCode.ProcCat=DefC.Short[(int)DefCat.ProcCodeCats][listCategory.SelectedIndex].DefNum;
+			}
+			if(comboProvNumDefault.SelectedIndex==0){
+				ProcCode.ProvNumDefault=0;
+			}
+			else{
+				ProcCode.ProvNumDefault=ProviderC.ListShort[comboProvNumDefault.SelectedIndex-1].ProvNum;
+			}
 			ProcedureCodes.Update(ProcCode);//whether new or not.
 			//if(DoSynchRecall){
 			//	Cursor=Cursors.WaitCursor;

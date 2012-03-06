@@ -8733,6 +8733,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE apptfielddef ADD PickList varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurecode ADD ProvNumDefault bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurecode ADD INDEX (ProvNumDefault)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurecode ADD ProvNumDefault number(20)";
+					Db.NonQ(command);
+					command="UPDATE procedurecode SET ProvNumDefault = 0 WHERE ProvNumDefault IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurecode MODIFY ProvNumDefault NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX procedurecode_ProvNumDefault ON procedurecode (ProvNumDefault)";
+					Db.NonQ(command);
+				}
 
 
 

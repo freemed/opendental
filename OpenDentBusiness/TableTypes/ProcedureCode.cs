@@ -78,6 +78,8 @@ namespace OpenDentBusiness{
 		public string DrugNDC;
 		///<summary>Gets copied to procedure.RevCode.  For 837I</summary>
 		public string RevenueCodeDefault;
+		///<summary>FK to provider.ProvNum.  0 for none. Otherwise, this provider will be used for this code instead of the normal provider.</summary>
+		public long ProvNumDefault;
 
 		
 		///<summary>Not a database column.  Only used for xml import function.</summary>
