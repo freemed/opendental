@@ -49,8 +49,12 @@ namespace OpenDental{
 		private TextBox textDepositAccount;
 		///<summary>Only used if linking to accounts</summary>
 		private long[] DepositAccounts;
+		private Label labelIncomeAccountQB;
+		private ComboBox comboIncomeAccountQB;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> DepositAccountsQB;
+		///<summary>Only used if linking to QB account.</summary>
+		private List<string> IncomeAccountsQB;
 
 		///<summary></summary>
 		public FormDepositEdit(Deposit depositCur)
@@ -100,6 +104,8 @@ namespace OpenDental{
 			this.comboDepositAccount = new System.Windows.Forms.ComboBox();
 			this.labelDepositAccount = new System.Windows.Forms.Label();
 			this.textDepositAccount = new System.Windows.Forms.TextBox();
+			this.labelIncomeAccountQB = new System.Windows.Forms.Label();
+			this.comboIncomeAccountQB = new System.Windows.Forms.ComboBox();
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
@@ -122,18 +128,18 @@ namespace OpenDental{
 			this.groupSelect.Controls.Add(this.listPayType);
 			this.groupSelect.Controls.Add(this.label2);
 			this.groupSelect.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupSelect.Location = new System.Drawing.Point(602,276);
+			this.groupSelect.Location = new System.Drawing.Point(602, 276);
 			this.groupSelect.Name = "groupSelect";
-			this.groupSelect.Size = new System.Drawing.Size(204,344);
+			this.groupSelect.Size = new System.Drawing.Size(204, 344);
 			this.groupSelect.TabIndex = 99;
 			this.groupSelect.TabStop = false;
 			this.groupSelect.Text = "Show";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(14,19);
+			this.label5.Location = new System.Drawing.Point(14, 19);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(118,15);
+			this.label5.Size = new System.Drawing.Size(118, 15);
 			this.label5.TabIndex = 104;
 			this.label5.Text = "Start Date";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -141,115 +147,135 @@ namespace OpenDental{
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(14,75);
+			this.comboClinic.Location = new System.Drawing.Point(14, 75);
 			this.comboClinic.MaxDropDownItems = 30;
 			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(180,21);
+			this.comboClinic.Size = new System.Drawing.Size(180, 21);
 			this.comboClinic.TabIndex = 94;
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(14,59);
+			this.labelClinic.Location = new System.Drawing.Point(14, 59);
 			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(102,15);
+			this.labelClinic.Size = new System.Drawing.Size(102, 15);
 			this.labelClinic.TabIndex = 93;
 			this.labelClinic.Text = "Clinic";
 			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// listPayType
 			// 
-			this.listPayType.Location = new System.Drawing.Point(14,127);
+			this.listPayType.Location = new System.Drawing.Point(14, 127);
 			this.listPayType.Name = "listPayType";
 			this.listPayType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listPayType.Size = new System.Drawing.Size(134,173);
+			this.listPayType.Size = new System.Drawing.Size(134, 173);
 			this.listPayType.TabIndex = 96;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(14,105);
+			this.label2.Location = new System.Drawing.Point(14, 105);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(171,18);
+			this.label2.Size = new System.Drawing.Size(171, 18);
 			this.label2.TabIndex = 97;
 			this.label2.Text = "Patient Payment Types";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(602,8);
+			this.label1.Location = new System.Drawing.Point(602, 8);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95,15);
+			this.label1.Size = new System.Drawing.Size(95, 15);
 			this.label1.TabIndex = 102;
 			this.label1.Text = "Date";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(602,95);
+			this.label3.Location = new System.Drawing.Point(602, 95);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(127,18);
+			this.label3.Size = new System.Drawing.Size(127, 18);
 			this.label3.TabIndex = 104;
 			this.label3.Text = "Bank Account Info";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textBankAccountInfo
 			// 
-			this.textBankAccountInfo.Location = new System.Drawing.Point(602,116);
+			this.textBankAccountInfo.Location = new System.Drawing.Point(602, 116);
 			this.textBankAccountInfo.Multiline = true;
 			this.textBankAccountInfo.Name = "textBankAccountInfo";
-			this.textBankAccountInfo.Size = new System.Drawing.Size(289,75);
+			this.textBankAccountInfo.Size = new System.Drawing.Size(289, 75);
 			this.textBankAccountInfo.TabIndex = 105;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(602,49);
+			this.label4.Location = new System.Drawing.Point(602, 49);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(127,18);
+			this.label4.Size = new System.Drawing.Size(127, 18);
 			this.label4.TabIndex = 106;
 			this.label4.Text = "Amount";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textAmount
 			// 
-			this.textAmount.Location = new System.Drawing.Point(602,70);
+			this.textAmount.Location = new System.Drawing.Point(602, 70);
 			this.textAmount.Name = "textAmount";
 			this.textAmount.ReadOnly = true;
-			this.textAmount.Size = new System.Drawing.Size(94,20);
+			this.textAmount.Size = new System.Drawing.Size(94, 20);
 			this.textAmount.TabIndex = 107;
 			// 
 			// comboDepositAccount
 			// 
 			this.comboDepositAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDepositAccount.FormattingEnabled = true;
-			this.comboDepositAccount.Location = new System.Drawing.Point(602,216);
+			this.comboDepositAccount.Location = new System.Drawing.Point(602, 212);
 			this.comboDepositAccount.Name = "comboDepositAccount";
-			this.comboDepositAccount.Size = new System.Drawing.Size(289,21);
+			this.comboDepositAccount.Size = new System.Drawing.Size(289, 21);
 			this.comboDepositAccount.TabIndex = 110;
 			// 
 			// labelDepositAccount
 			// 
-			this.labelDepositAccount.Location = new System.Drawing.Point(602,196);
+			this.labelDepositAccount.Location = new System.Drawing.Point(602, 192);
 			this.labelDepositAccount.Name = "labelDepositAccount";
-			this.labelDepositAccount.Size = new System.Drawing.Size(289,18);
+			this.labelDepositAccount.Size = new System.Drawing.Size(289, 18);
 			this.labelDepositAccount.TabIndex = 111;
 			this.labelDepositAccount.Text = "Deposit into Account";
 			this.labelDepositAccount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textDepositAccount
 			// 
-			this.textDepositAccount.Location = new System.Drawing.Point(602,241);
+			this.textDepositAccount.Location = new System.Drawing.Point(602, 241);
 			this.textDepositAccount.Name = "textDepositAccount";
 			this.textDepositAccount.ReadOnly = true;
-			this.textDepositAccount.Size = new System.Drawing.Size(289,20);
+			this.textDepositAccount.Size = new System.Drawing.Size(289, 20);
 			this.textDepositAccount.TabIndex = 112;
+			// 
+			// labelIncomeAccountQB
+			// 
+			this.labelIncomeAccountQB.Location = new System.Drawing.Point(602, 236);
+			this.labelIncomeAccountQB.Name = "labelIncomeAccountQB";
+			this.labelIncomeAccountQB.Size = new System.Drawing.Size(289, 11);
+			this.labelIncomeAccountQB.TabIndex = 114;
+			this.labelIncomeAccountQB.Text = "Income Account";
+			this.labelIncomeAccountQB.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelIncomeAccountQB.Visible = false;
+			// 
+			// comboIncomeAccountQB
+			// 
+			this.comboIncomeAccountQB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboIncomeAccountQB.FormattingEnabled = true;
+			this.comboIncomeAccountQB.Location = new System.Drawing.Point(602, 251);
+			this.comboIncomeAccountQB.Name = "comboIncomeAccountQB";
+			this.comboIncomeAccountQB.Size = new System.Drawing.Size(289, 21);
+			this.comboIncomeAccountQB.TabIndex = 113;
+			this.comboIncomeAccountQB.Visible = false;
 			// 
 			// gridIns
 			// 
 			this.gridIns.HScrollVisible = false;
-			this.gridIns.Location = new System.Drawing.Point(8,319);
+			this.gridIns.Location = new System.Drawing.Point(8, 319);
 			this.gridIns.Name = "gridIns";
 			this.gridIns.ScrollValue = 0;
 			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridIns.Size = new System.Drawing.Size(584,301);
+			this.gridIns.Size = new System.Drawing.Size(584, 301);
 			this.gridIns.TabIndex = 109;
 			this.gridIns.Title = "Insurance Payments";
 			this.gridIns.TranslationName = "TableDepositSlipIns";
@@ -259,11 +285,11 @@ namespace OpenDental{
 			// gridPat
 			// 
 			this.gridPat.HScrollVisible = false;
-			this.gridPat.Location = new System.Drawing.Point(8,12);
+			this.gridPat.Location = new System.Drawing.Point(8, 12);
 			this.gridPat.Name = "gridPat";
 			this.gridPat.ScrollValue = 0;
 			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridPat.Size = new System.Drawing.Size(584,299);
+			this.gridPat.Size = new System.Drawing.Size(584, 299);
 			this.gridPat.TabIndex = 100;
 			this.gridPat.Title = "Patient Payments";
 			this.gridPat.TranslationName = "TableDepositSlipPat";
@@ -272,7 +298,7 @@ namespace OpenDental{
 			// 
 			// butPrint
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPrint.Autosize = true;
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -280,23 +306,23 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(583,631);
+			this.butPrint.Location = new System.Drawing.Point(583, 631);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(81,26);
+			this.butPrint.Size = new System.Drawing.Size(81, 26);
 			this.butPrint.TabIndex = 108;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// textDate
 			// 
-			this.textDate.Location = new System.Drawing.Point(602,25);
+			this.textDate.Location = new System.Drawing.Point(602, 25);
 			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(94,20);
+			this.textDate.Size = new System.Drawing.Size(94, 20);
 			this.textDate.TabIndex = 103;
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -304,68 +330,68 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(7,631);
+			this.butDelete.Location = new System.Drawing.Point(7, 631);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(85,26);
+			this.butDelete.Size = new System.Drawing.Size(85, 26);
 			this.butDelete.TabIndex = 101;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butRefresh
 			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Autosize = true;
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(13,307);
+			this.butRefresh.Location = new System.Drawing.Point(13, 307);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,26);
+			this.butRefresh.Size = new System.Drawing.Size(75, 26);
 			this.butRefresh.TabIndex = 106;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(14,36);
+			this.textDateStart.Location = new System.Drawing.Point(14, 36);
 			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(94,20);
+			this.textDateStart.Size = new System.Drawing.Size(94, 20);
 			this.textDateStart.TabIndex = 105;
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(712,631);
+			this.butOK.Location = new System.Drawing.Point(712, 631);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(805,631);
+			this.butCancel.Location = new System.Drawing.Point(805, 631);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormDepositEdit
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(897,667);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(897, 667);
 			this.Controls.Add(this.textDepositAccount);
 			this.Controls.Add(this.labelDepositAccount);
 			this.Controls.Add(this.comboDepositAccount);
@@ -382,6 +408,8 @@ namespace OpenDental{
 			this.Controls.Add(this.groupSelect);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.labelIncomeAccountQB);
+			this.Controls.Add(this.comboIncomeAccountQB);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
@@ -434,10 +462,17 @@ namespace OpenDental{
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
 				if(Accounts.DepositsLinked()) {
 					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
+						labelIncomeAccountQB.Visible=true;
+						comboIncomeAccountQB.Visible=true;
 						DepositAccountsQB=Accounts.GetDepositAccountsQB();
 						for(int i=0;i<DepositAccountsQB.Count;i++) {
 							comboDepositAccount.Items.Add(DepositAccountsQB[i]);
 						}
+						IncomeAccountsQB=Accounts.GetIncomeAccountsQB();
+						for(int i=0;i<IncomeAccountsQB.Count;i++) {
+							comboIncomeAccountQB.Items.Add(IncomeAccountsQB[i]);
+						}
+						comboIncomeAccountQB.SelectedIndex=0;
 					}
 					else {
 						DepositAccounts=Accounts.GetDepositAccounts();
@@ -729,7 +764,7 @@ namespace OpenDental{
 						try {
 							Cursor.Current=Cursors.WaitCursor;
 							QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
-								,PrefC.GetString(PrefName.QuickBooksIncomeAccount),DepositCur.Amount);
+								,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount);
 							Cursor.Current=Cursors.Default;
 						}
 						catch(Exception ex) {

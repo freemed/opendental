@@ -267,6 +267,21 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static List<string> GetIncomeAccountsQB() {
+			//No need to check RemotingRole; no call to db.
+			string incomeStr=PrefC.GetString(PrefName.QuickBooksIncomeAccount);
+			string[] incomeStrArray=incomeStr.Split(new char[] { ',' });
+			List<string> retVal=new List<string>();
+			for(int i=0;i<incomeStrArray.Length;i++) {
+				if(incomeStrArray[i]=="") {
+					continue;
+				}
+				retVal.Add(incomeStrArray[i]);
+			}
+			return retVal;
+		}
+
 		///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
 		public static DataTable GetFullList(DateTime asOfDate, bool showInactive){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
