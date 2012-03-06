@@ -869,7 +869,7 @@ namespace OpenDentBusiness
 					//aka Claim Reference Number. 
 					//Seems to be required by Medicaid when voiding a claim or resubmitting a claim by setting the CLM05-3.
 				if(claim.CorrectionType!=ClaimCorrectionType.Original 
-					|| claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8") { //correction, replacement or void.
+					|| claim.UniformBillType.Length>2 && (claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8")) { //correction, replacement or void.
 					sw.Write("REF"+s
 						+"F8"+s//REF01 2/3 Reference Identification Qualifier: F8=Original Reference Number.
 						+Sout(claim.OrigRefNum,50));//REF02 1/50 Reference Identification: Payer Claim Control Number.
@@ -2420,7 +2420,8 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Original reference num needed when correction type is not set to original");
 			}
-			if((claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8")//correction, replacement, void
+			if(claim.UniformBillType.Length>2 
+				&& (claim.UniformBillType.Substring(2,1)=="6" || claim.UniformBillType.Substring(2,1)=="7" || claim.UniformBillType.Substring(2,1)=="8")//correction, replacement, void
 				&& claim.OrigRefNum.Trim()=="") {
 				Comma(strb);
 				strb.Append("Original reference num needed when type of bill ends in 6, 7 or 8");
