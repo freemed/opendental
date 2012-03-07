@@ -362,7 +362,7 @@ namespace OpenDentBusiness {
 				+"WHERE commlog.PatNum=p1.PatNum "
 				+"AND p1.Guarantor=p2.Guarantor "
 				+"AND p2.PatNum="+POut.Long(patNum)
-				+" AND IsStatementSent=0 ORDER BY CommDateTime";
+				+" ORDER BY CommDateTime";
 				DataTable rawComm=dcon.GetTable(command);
 				for(int i=0;i<rawComm.Rows.Count;i++) {
 					row=table.NewRow();
