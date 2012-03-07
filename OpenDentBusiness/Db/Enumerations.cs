@@ -594,9 +594,9 @@ namespace OpenDentBusiness{
 		///<summary>3</summary>
 		Phone,
 		///<summary>4</summary>
-		InPerson,
-		///<summary>5</summary>
-		AutoItem
+		InPerson
+		/////<summary>5</summary>
+		//AutoItem
 	}
 
 	///<summary>0=neither, 1=sent, 2=received.</summary>

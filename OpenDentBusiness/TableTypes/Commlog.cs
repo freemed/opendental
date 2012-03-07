@@ -22,8 +22,8 @@ namespace OpenDentBusiness{
 		public CommItemMode Mode_;
 		///<summary>Enum:CommSentOrReceived Neither=0,Sent=1,Received=2.</summary>
 		public CommSentOrReceived SentOrReceived;
-		///<Summary>No longer used.  Use the statement table instead.</Summary>
-		public bool IsStatementSent;
+		/////<Summary>No longer used.  Use the statement table instead.</Summary>
+		//public bool IsStatementSent;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
 		///<summary>Signature.  For details, see procedurelog.Signature.</summary>

@@ -8749,6 +8749,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX procedurecode_ProvNumDefault ON procedurecode (ProvNumDefault)";
 					Db.NonQ(command);
 				}
+				//Getting rid of AutoItem from CommLogItem enum.  Set all commlogs using AutoItem to None.
+				command="UPDATE commlog SET Mode_=0 WHERE Mode_=5";
+				Db.NonQ(command);
+				//Getting rid of IsStatementSent from commlog table.
+				command="ALTER TABLE commlog DROP COLUMN IsStatementSent";
+				Db.NonQ(command);
+
+
 
 
 

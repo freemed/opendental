@@ -46,19 +46,18 @@ namespace OpenDentBusiness.Crud{
 			Commlog commlog;
 			for(int i=0;i<table.Rows.Count;i++) {
 				commlog=new Commlog();
-				commlog.CommlogNum     = PIn.Long  (table.Rows[i]["CommlogNum"].ToString());
-				commlog.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				commlog.CommDateTime   = PIn.DateT (table.Rows[i]["CommDateTime"].ToString());
-				commlog.CommType       = PIn.Long  (table.Rows[i]["CommType"].ToString());
-				commlog.Note           = PIn.String(table.Rows[i]["Note"].ToString());
-				commlog.Mode_          = (CommItemMode)PIn.Int(table.Rows[i]["Mode_"].ToString());
-				commlog.SentOrReceived = (CommSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
-				commlog.IsStatementSent= PIn.Bool  (table.Rows[i]["IsStatementSent"].ToString());
-				commlog.UserNum        = PIn.Long  (table.Rows[i]["UserNum"].ToString());
-				commlog.Signature      = PIn.String(table.Rows[i]["Signature"].ToString());
-				commlog.SigIsTopaz     = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
-				commlog.DateTStamp     = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
-				commlog.DateTimeEnd    = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
+				commlog.CommlogNum    = PIn.Long  (table.Rows[i]["CommlogNum"].ToString());
+				commlog.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				commlog.CommDateTime  = PIn.DateT (table.Rows[i]["CommDateTime"].ToString());
+				commlog.CommType      = PIn.Long  (table.Rows[i]["CommType"].ToString());
+				commlog.Note          = PIn.String(table.Rows[i]["Note"].ToString());
+				commlog.Mode_         = (CommItemMode)PIn.Int(table.Rows[i]["Mode_"].ToString());
+				commlog.SentOrReceived= (CommSentOrReceived)PIn.Int(table.Rows[i]["SentOrReceived"].ToString());
+				commlog.UserNum       = PIn.Long  (table.Rows[i]["UserNum"].ToString());
+				commlog.Signature     = PIn.String(table.Rows[i]["Signature"].ToString());
+				commlog.SigIsTopaz    = PIn.Bool  (table.Rows[i]["SigIsTopaz"].ToString());
+				commlog.DateTStamp    = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				commlog.DateTimeEnd   = PIn.DateT (table.Rows[i]["DateTimeEnd"].ToString());
 				retVal.Add(commlog);
 			}
 			return retVal;
@@ -99,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="CommlogNum,";
 			}
-			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,IsStatementSent,UserNum,Signature,SigIsTopaz,DateTimeEnd) VALUES(";
+			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,UserNum,Signature,SigIsTopaz,DateTimeEnd) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(commlog.CommlogNum)+",";
 			}
@@ -110,7 +109,6 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(commlog.Note)+"',"
 				+    POut.Int   ((int)commlog.Mode_)+","
 				+    POut.Int   ((int)commlog.SentOrReceived)+","
-				+    POut.Bool  (commlog.IsStatementSent)+","
 				+    POut.Long  (commlog.UserNum)+","
 				+"'"+POut.String(commlog.Signature)+"',"
 				+    POut.Bool  (commlog.SigIsTopaz)+","
@@ -128,18 +126,17 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Commlog in the database.</summary>
 		internal static void Update(Commlog commlog){
 			string command="UPDATE commlog SET "
-				+"PatNum         =  "+POut.Long  (commlog.PatNum)+", "
-				+"CommDateTime   =  "+POut.DateT (commlog.CommDateTime)+", "
-				+"CommType       =  "+POut.Long  (commlog.CommType)+", "
-				+"Note           = '"+POut.String(commlog.Note)+"', "
-				+"Mode_          =  "+POut.Int   ((int)commlog.Mode_)+", "
-				+"SentOrReceived =  "+POut.Int   ((int)commlog.SentOrReceived)+", "
-				+"IsStatementSent=  "+POut.Bool  (commlog.IsStatementSent)+", "
-				+"UserNum        =  "+POut.Long  (commlog.UserNum)+", "
-				+"Signature      = '"+POut.String(commlog.Signature)+"', "
-				+"SigIsTopaz     =  "+POut.Bool  (commlog.SigIsTopaz)+", "
+				+"PatNum        =  "+POut.Long  (commlog.PatNum)+", "
+				+"CommDateTime  =  "+POut.DateT (commlog.CommDateTime)+", "
+				+"CommType      =  "+POut.Long  (commlog.CommType)+", "
+				+"Note          = '"+POut.String(commlog.Note)+"', "
+				+"Mode_         =  "+POut.Int   ((int)commlog.Mode_)+", "
+				+"SentOrReceived=  "+POut.Int   ((int)commlog.SentOrReceived)+", "
+				+"UserNum       =  "+POut.Long  (commlog.UserNum)+", "
+				+"Signature     = '"+POut.String(commlog.Signature)+"', "
+				+"SigIsTopaz    =  "+POut.Bool  (commlog.SigIsTopaz)+", "
 				//DateTStamp can only be set by MySQL
-				+"DateTimeEnd    =  "+POut.DateT (commlog.DateTimeEnd)+" "
+				+"DateTimeEnd   =  "+POut.DateT (commlog.DateTimeEnd)+" "
 				+"WHERE CommlogNum = "+POut.Long(commlog.CommlogNum);
 			Db.NonQ(command);
 		}
@@ -170,10 +167,6 @@ namespace OpenDentBusiness.Crud{
 			if(commlog.SentOrReceived != oldCommlog.SentOrReceived) {
 				if(command!=""){ command+=",";}
 				command+="SentOrReceived = "+POut.Int   ((int)commlog.SentOrReceived)+"";
-			}
-			if(commlog.IsStatementSent != oldCommlog.IsStatementSent) {
-				if(command!=""){ command+=",";}
-				command+="IsStatementSent = "+POut.Bool(commlog.IsStatementSent)+"";
 			}
 			if(commlog.UserNum != oldCommlog.UserNum) {
 				if(command!=""){ command+=",";}
