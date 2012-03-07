@@ -337,7 +337,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
-				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,MedType "
+				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,MedType,claim.DateService "
 				+"FROM claim "
 				+"Left join insplan on claim.PlanNum = insplan.PlanNum "
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
@@ -354,21 +354,22 @@ namespace OpenDentBusiness{
 			if(customTracking>0) {
 				command+="AND claim.CustomTracking="+POut.Long(customTracking)+" ";
 			}
-			command+="ORDER BY patient.LName";
+			command+="ORDER BY claim.DateService,patient.LName";
 			DataTable table=Db.GetTable(command);
 			ClaimSendQueueItem[] listQueue=new ClaimSendQueueItem[table.Rows.Count];
 			for(int i=0;i<table.Rows.Count;i++){
 				listQueue[i]=new ClaimSendQueueItem();
-				listQueue[i].ClaimNum        = PIn.Long   (table.Rows[i][0].ToString());
+				listQueue[i].ClaimNum        = PIn.Long  (table.Rows[i][0].ToString());
 				listQueue[i].NoSendElect     = PIn.Bool  (table.Rows[i][1].ToString());
 				listQueue[i].PatName         = PIn.String(table.Rows[i][2].ToString());
 				listQueue[i].ClaimStatus     = PIn.String(table.Rows[i][3].ToString());
 				listQueue[i].Carrier         = PIn.String(table.Rows[i][4].ToString());
-				listQueue[i].PatNum          = PIn.Long   (table.Rows[i][5].ToString());
+				listQueue[i].PatNum          = PIn.Long  (table.Rows[i][5].ToString());
 				string payorID=PIn.String(table.Rows[i]["ElectID"].ToString());
 				EnumClaimMedType medType=(EnumClaimMedType)PIn.Int(table.Rows[i]["MedType"].ToString());
 				listQueue[i].ClearinghouseNum=Clearinghouses.AutomateClearinghouseSelection(payorID,medType);
 				listQueue[i].MedType=medType;
+				listQueue[i].DateService     = PIn.Date  (table.Rows[i]["DateService"].ToString());
 			}
 			return listQueue;
 		}
@@ -474,6 +475,8 @@ namespace OpenDentBusiness{
 		public string MissingData;
 		///<summary></summary>
 		public string Warnings;
+		///<summary></summary>
+		public DateTime DateService;
 
 		public ClaimSendQueueItem Copy(){
 			return (ClaimSendQueueItem)MemberwiseClone();

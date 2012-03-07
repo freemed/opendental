@@ -293,7 +293,7 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(4, 49);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
@@ -489,24 +489,27 @@ namespace OpenDental{
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),190);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableQueue","Date Service"),80);//new column
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),100);
+			col=new ODGridColumn(Lan.g("TableQueue","Patient Name"),120);//was 190
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),220);//was 100
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Clinic"),80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","M/D"),40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);//4. This is position critical. See line 696.
+			col=new ODGridColumn(Lan.g("TableQueue","Clearinghouse"),80);//5. This is position critical. See SendEclaimsToClearinghouse().
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Warnings"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableQueue","Missing Info"),400);
+			col=new ODGridColumn(Lan.g("TableQueue","Missing Info"),300);//was 400
 			gridMain.Columns.Add(col);			 
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<listQueue.Length;i++){
 				row=new ODGridRow();
+				row.Cells.Add(listQueue[i].DateService.ToShortDateString());
 				row.Cells.Add(listQueue[i].PatName);
 				row.Cells.Add(listQueue[i].Carrier);
 				row.Cells.Add(Clinics.GetDesc(listQueue[i].ClinicNum));
@@ -733,7 +736,7 @@ namespace OpenDental{
 				if(clearinghouseNum!=0){//if they used the dropdown list to specify clearinghouse
 					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
 					for(int i=0;i<selectedindices.Length;i++) {
-						gridMain.Rows[selectedindices[i]].Cells[4].Text=clearDefault.Description;//show the changed clearinghouse
+						gridMain.Rows[selectedindices[i]].Cells[5].Text=clearDefault.Description;//show the changed clearinghouse
 					}
 					gridMain.Invalidate();
 				}
