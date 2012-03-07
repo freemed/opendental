@@ -8795,7 +8795,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE computerpref MODIFY ScanDocDuplex NOT NULL";
 					Db.NonQ(command);
 				}			
-				command="UPDATE computerpref SET ScanDocDuplex = 1";//Default to 
+				command="UPDATE computerpref SET ScanDocDuplex = 1";//Default to always attempt to scan duplex
 				Db.NonQ(command);	
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD ScanDocGrayscale tinyint NOT NULL";
@@ -8823,7 +8823,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE computerpref MODIFY ScanDocResolution NOT NULL";
 					Db.NonQ(command);
 				} 
-				command="UPDATE computerpref SET ScanDocResolution = "+PrefC.GetInt(PrefName.ScannerResolution).ToString();
+				command="SELECT ValueString FROM preference WHERE PrefName='ScannerResolution'";
+				int scannerRes=PIn.Int(Db.GetScalar(command));
+				command="UPDATE computerpref SET ScanDocResolution = "+POut.Int(scannerRes);
 				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE computerpref ADD ScanDocQuality tinyint unsigned NOT NULL";
@@ -8837,7 +8839,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE computerpref MODIFY ScanDocQuality NOT NULL";
 					Db.NonQ(command);
 				}
-				command="UPDATE computerpref SET ScanDocQuality = "+PrefC.GetInt(PrefName.ScannerCompression).ToString();
+				command="SELECT ValueString FROM preference WHERE PrefName='ScannerCompression'";
+				int scannerComp=PIn.Int(Db.GetScalar(command));
+				command="UPDATE computerpref SET ScanDocQuality = "+POut.Int(scannerComp);
 				Db.NonQ(command);
 
 

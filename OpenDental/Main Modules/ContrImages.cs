@@ -1426,6 +1426,10 @@ namespace OpenDental{
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
 //TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
 //TODO: set hideUI based on local pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
+//TODO: set duplex mode
+//TODO: set resolution for scanning
+//TODO: set grayscale
+//TODO: set quality
 				//Use default scanner. Selection is available in Setup Imaging.
 				hdib=EZTwain.AcquireMemory(this.Handle);
 				double xdpi=EZTwain.DIB_XResolution(hdib);
@@ -1514,6 +1518,10 @@ namespace OpenDental{
 			//Use default scanner. Selection is available in Setup Imaging.
 //TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
 //TODO: set hideUI based on local pref instead of global pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
+//TODO: set duplex mode
+//TODO: set resolution for scanning
+//TODO: set grayscale
+//TODO: set quality
 			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if false, this will bring up the scanner interface for the selected scanner a few lines down
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
 			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully

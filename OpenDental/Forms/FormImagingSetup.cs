@@ -88,7 +88,15 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImagingSetup));
 			this.label12 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.checkScanDocSelectSource = new System.Windows.Forms.CheckBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.checkScanDocGrayscale = new System.Windows.Forms.CheckBox();
+			this.checkScanDocDuplex = new System.Windows.Forms.CheckBox();
+			this.textScanDocResolution = new OpenDental.ValidNum();
 			this.textScanDocQuality = new OpenDental.ValidNum();
+			this.label6 = new System.Windows.Forms.Label();
+			this.checkScanDocShowOptions = new System.Windows.Forms.CheckBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
@@ -106,15 +114,7 @@ namespace OpenDental{
 			this.butMounts = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.textScanDocResolution = new OpenDental.ValidNum();
-			this.checkScanDocShowOptions = new System.Windows.Forms.CheckBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
 			this.butSetScanner = new OpenDental.UI.Button();
-			this.checkScanDocSelectSource = new System.Windows.Forms.CheckBox();
-			this.checkScanDocDuplex = new System.Windows.Forms.CheckBox();
-			this.checkScanDocGrayscale = new System.Windows.Forms.CheckBox();
-			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -152,14 +152,94 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Documents - Settings apply only to this workstation";
 			// 
+			// checkScanDocSelectSource
+			// 
+			this.checkScanDocSelectSource.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocSelectSource.Location = new System.Drawing.Point(32,19);
+			this.checkScanDocSelectSource.Name = "checkScanDocSelectSource";
+			this.checkScanDocSelectSource.Size = new System.Drawing.Size(256,18);
+			this.checkScanDocSelectSource.TabIndex = 23;
+			this.checkScanDocSelectSource.Text = "Show Select Scanner Window";
+			this.checkScanDocSelectSource.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocSelectSource.UseVisualStyleBackColor = true;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(345,133);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(246,15);
+			this.label7.TabIndex = 23;
+			this.label7.Text = "0-100. 100=No compression.  Typical setting: 40";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// checkScanDocGrayscale
+			// 
+			this.checkScanDocGrayscale.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocGrayscale.Location = new System.Drawing.Point(142,85);
+			this.checkScanDocGrayscale.Name = "checkScanDocGrayscale";
+			this.checkScanDocGrayscale.Size = new System.Drawing.Size(146,18);
+			this.checkScanDocGrayscale.TabIndex = 22;
+			this.checkScanDocGrayscale.Text = "Grayscale";
+			this.checkScanDocGrayscale.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocGrayscale.UseVisualStyleBackColor = true;
+			// 
+			// checkScanDocDuplex
+			// 
+			this.checkScanDocDuplex.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocDuplex.Location = new System.Drawing.Point(7,63);
+			this.checkScanDocDuplex.Name = "checkScanDocDuplex";
+			this.checkScanDocDuplex.Size = new System.Drawing.Size(281,18);
+			this.checkScanDocDuplex.TabIndex = 21;
+			this.checkScanDocDuplex.Text = "Multipage Scans Duplex (both sides)";
+			this.checkScanDocDuplex.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocDuplex.UseVisualStyleBackColor = true;
+			// 
+			// textScanDocResolution
+			// 
+			this.textScanDocResolution.Location = new System.Drawing.Point(273,107);
+			this.textScanDocResolution.MaxVal = 1000;
+			this.textScanDocResolution.MinVal = 51;
+			this.textScanDocResolution.Name = "textScanDocResolution";
+			this.textScanDocResolution.Size = new System.Drawing.Size(68,20);
+			this.textScanDocResolution.TabIndex = 20;
+			// 
 			// textScanDocQuality
 			// 
 			this.textScanDocQuality.Location = new System.Drawing.Point(273,131);
-			this.textScanDocQuality.MaxVal = 255;
+			this.textScanDocQuality.MaxVal = 100;
 			this.textScanDocQuality.MinVal = 0;
 			this.textScanDocQuality.Name = "textScanDocQuality";
 			this.textScanDocQuality.Size = new System.Drawing.Size(68,20);
 			this.textScanDocQuality.TabIndex = 20;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(345,107);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(199,19);
+			this.label6.TabIndex = 15;
+			this.label6.Text = "> 50. Typical setting: 150 dpi";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// checkScanDocShowOptions
+			// 
+			this.checkScanDocShowOptions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocShowOptions.Location = new System.Drawing.Point(7,41);
+			this.checkScanDocShowOptions.Name = "checkScanDocShowOptions";
+			this.checkScanDocShowOptions.Size = new System.Drawing.Size(281,18);
+			this.checkScanDocShowOptions.TabIndex = 8;
+			this.checkScanDocShowOptions.Text = "Show Scanner Options Window";
+			this.checkScanDocShowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocShowOptions.UseVisualStyleBackColor = true;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(84,108);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(186,19);
+			this.label5.TabIndex = 15;
+			this.label5.Text = "Resolution";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox2
 			// 
@@ -362,44 +442,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textScanDocResolution
-			// 
-			this.textScanDocResolution.Location = new System.Drawing.Point(273,107);
-			this.textScanDocResolution.MaxVal = 1000;
-			this.textScanDocResolution.MinVal = 51;
-			this.textScanDocResolution.Name = "textScanDocResolution";
-			this.textScanDocResolution.Size = new System.Drawing.Size(68,20);
-			this.textScanDocResolution.TabIndex = 20;
-			// 
-			// checkScanDocShowOptions
-			// 
-			this.checkScanDocShowOptions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocShowOptions.Location = new System.Drawing.Point(7,41);
-			this.checkScanDocShowOptions.Name = "checkScanDocShowOptions";
-			this.checkScanDocShowOptions.Size = new System.Drawing.Size(281,18);
-			this.checkScanDocShowOptions.TabIndex = 8;
-			this.checkScanDocShowOptions.Text = "Show Scanner Options Window";
-			this.checkScanDocShowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocShowOptions.UseVisualStyleBackColor = true;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(343,107);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(199,19);
-			this.label6.TabIndex = 15;
-			this.label6.Text = "Typical setting: 150 dpi";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(84,108);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(186,19);
-			this.label5.TabIndex = 15;
-			this.label5.Text = "Resolution";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// butSetScanner
 			// 
 			this.butSetScanner.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -413,48 +455,6 @@ namespace OpenDental{
 			this.butSetScanner.TabIndex = 22;
 			this.butSetScanner.Text = "Set Default Scanner";
 			this.butSetScanner.Click += new System.EventHandler(this.butSetScanner_Click);
-			// 
-			// checkScanDocSelectSource
-			// 
-			this.checkScanDocSelectSource.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocSelectSource.Location = new System.Drawing.Point(32,19);
-			this.checkScanDocSelectSource.Name = "checkScanDocSelectSource";
-			this.checkScanDocSelectSource.Size = new System.Drawing.Size(256,18);
-			this.checkScanDocSelectSource.TabIndex = 23;
-			this.checkScanDocSelectSource.Text = "Show Select Scanner Window";
-			this.checkScanDocSelectSource.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocSelectSource.UseVisualStyleBackColor = true;
-			// 
-			// checkScanDocDuplex
-			// 
-			this.checkScanDocDuplex.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocDuplex.Location = new System.Drawing.Point(7,63);
-			this.checkScanDocDuplex.Name = "checkScanDocDuplex";
-			this.checkScanDocDuplex.Size = new System.Drawing.Size(281,18);
-			this.checkScanDocDuplex.TabIndex = 21;
-			this.checkScanDocDuplex.Text = "Multipage Scans Duplex (both sides)";
-			this.checkScanDocDuplex.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocDuplex.UseVisualStyleBackColor = true;
-			// 
-			// checkScanDocGrayscale
-			// 
-			this.checkScanDocGrayscale.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocGrayscale.Location = new System.Drawing.Point(142,85);
-			this.checkScanDocGrayscale.Name = "checkScanDocGrayscale";
-			this.checkScanDocGrayscale.Size = new System.Drawing.Size(146,18);
-			this.checkScanDocGrayscale.TabIndex = 22;
-			this.checkScanDocGrayscale.Text = "Grayscale";
-			this.checkScanDocGrayscale.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocGrayscale.UseVisualStyleBackColor = true;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(345,133);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(246,15);
-			this.label7.TabIndex = 23;
-			this.label7.Text = "0-100. 100=No compression.  Typical setting: 40";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// FormImagingSetup
 			// 
@@ -493,10 +493,15 @@ namespace OpenDental{
 		private void FormImagingSetup_Load(object sender, System.EventArgs e) {
 			comboType.Items.Add("B");
 			comboType.Items.Add("D");
-			textScanDocQuality.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
+			checkScanDocSelectSource.Checked=ComputerPrefs.LocalComputer.ScanDocSelectSource;
+			checkScanDocShowOptions.Checked=ComputerPrefs.LocalComputer.ScanDocShowOptions;
+			checkScanDocDuplex.Checked=ComputerPrefs.LocalComputer.ScanDocDuplex;
+			checkScanDocGrayscale.Checked=ComputerPrefs.LocalComputer.ScanDocGrayscale;
+			textScanDocResolution.Text=ComputerPrefs.LocalComputer.ScanDocResolution.ToString();
+			textScanDocQuality.Text=ComputerPrefs.LocalComputer.ScanDocQuality.ToString();
+			//textScanDocQuality.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
 			slider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
 			slider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
-			//computerPrefs=ComputerPrefs.GetForLocalComputer();
 			upDownPort.Value=ComputerPrefs.LocalComputer.SensorPort;
 			comboType.Text=ComputerPrefs.LocalComputer.SensorType;
 			checkBinned.Checked=ComputerPrefs.LocalComputer.SensorBinned;
@@ -505,8 +510,8 @@ namespace OpenDental{
 				exposureLevelVal=(int)upDownExposure.Minimum;//Play it safe with the default exposure.
 			}
 			upDownExposure.Value=exposureLevelVal;
-			checkScanDocShowOptions.Checked=PrefC.GetBool(PrefName.ScannerSuppressDialog);
-			textScanDocResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
+			//checkScanDocShowOptions.Checked=PrefC.GetBool(PrefName.ScannerSuppressDialog);
+			//textScanDocResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
 		}
 
 		private void butMounts_Click(object sender,EventArgs e) {
@@ -525,11 +530,17 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textScanDocQuality.Text));
+			ComputerPrefs.LocalComputer.ScanDocSelectSource=checkScanDocSelectSource.Checked;
+			ComputerPrefs.LocalComputer.ScanDocShowOptions=checkScanDocShowOptions.Checked;
+			ComputerPrefs.LocalComputer.ScanDocDuplex=checkScanDocDuplex.Checked;
+			ComputerPrefs.LocalComputer.ScanDocGrayscale=checkScanDocGrayscale.Checked;
+			ComputerPrefs.LocalComputer.ScanDocResolution=PIn.Int(textScanDocResolution.Text);
+			ComputerPrefs.LocalComputer.ScanDocQuality=PIn.Byte(textScanDocResolution.Text);
+			//Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textScanDocQuality.Text));
 			Prefs.UpdateLong(PrefName.ImageWindowingMin,slider.MinVal);
 			Prefs.UpdateLong(PrefName.ImageWindowingMax,slider.MaxVal);
-			Prefs.UpdateBool(PrefName.ScannerSuppressDialog,checkScanDocShowOptions.Checked);
-			Prefs.UpdateLong(PrefName.ScannerResolution,PIn.Long(textScanDocResolution.Text));
+			//Prefs.UpdateBool(PrefName.ScannerSuppressDialog,checkScanDocShowOptions.Checked);
+			//Prefs.UpdateLong(PrefName.ScannerResolution,PIn.Long(textScanDocResolution.Text));
 			ComputerPrefs.LocalComputer.SensorType=comboType.Text;
 			ComputerPrefs.LocalComputer.SensorPort=(int)upDownPort.Value;
 			ComputerPrefs.LocalComputer.SensorExposure=(int)upDownExposure.Value;
