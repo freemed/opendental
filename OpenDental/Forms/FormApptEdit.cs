@@ -2593,22 +2593,24 @@ namespace OpenDental{
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
 			if(butComplete.Text=="Complete") {
-				//check to make sure that the appointment and all attached procedures are marked complete as required.
-				bool procsAreComplete=true;
-				for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++) {
-					string procStat=DS.Tables["Procedure"].Rows[i]["status"].ToString();
-					if(procStat!="C") {
-						procsAreComplete=false;
-					}
-				}
-				if(!procsAreComplete) {
-					MsgBox.Show(this,"The procedures must all have statuses set to complete first.");
-					return;
-				}
+				////check to make sure that the appointment and all attached procedures are marked complete as required.
+				//bool procsAreComplete=true;
+				//for(int i=0;i<gridProc.SelectedIndices.Length;i++) {
+				//  string procStat=gridProc.Rows[gridProc.SelectedIndices[i]].Cells[0].Text;
+				//  if(procStat!="C") {
+				//    procsAreComplete=false;
+				//    break;
+				//  }
+				//}
+				//if(!procsAreComplete) {
+				//  MsgBox.Show(this,"The procedures must all have statuses set to complete first.");
+				//  return;
+				//}
 				//user can only get this far if aptNum matches visit num previously passed in by eCW.
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send attached procedures to eClinicalWorks and exit?")) {
 					return;
 				}
+				comboStatus.SelectedIndex=1;//Set the appointment status to complete. This will trigger the procedures to be completed in UpdateToDB() as well.
 				if(!UpdateToDB()) {
 					return;
 				}
