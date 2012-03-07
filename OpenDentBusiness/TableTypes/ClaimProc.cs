@@ -42,10 +42,10 @@ namespace OpenDentBusiness{
 		///<summary>The allowed fee (not the override) is a complex calculation which is performed on the fly in Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  It is the amount that the percentage is based on.  If this carrier has a lower UCR than the office, then the allowed fee is where that is handled.  It can be pulled from an allowed fee schedule.  It is also where substitutions for posterior composites are handled.  The AllowedOverride allows the user to override the calculation.  -1 indicates blank.  A new use of this field is for when entering insurance payments.  On the eob, it will tell you what the allowed/UCR fee is.  The user will now be able to enter this information into the AllowedOverride field.  They will simultaneously pass the info to the allowed fee schedule.  AllowedOverride is never changed automatically by the program except to sometimes set it to -1 if NoBillIns.</summary>
 		public double AllowedOverride;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntUnsigned)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
 		public int Percentage;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  Can only be changed by user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntUnsigned)]
+		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
 		public int PercentOverride;
 		///<summary>-1 if blank. Calculated automatically. User cannot edit but can use CopayOverride instead.  Opposite of InsEst, because this is the patient portion estimate.  Two different uses: 1. For capitation, this automates calculation of writeoff. 2. For any other insurance, it gets deducted during calculation as shown in the edit window. Neither use directly affects patient balance.</summary>
 		public double CopayAmt;

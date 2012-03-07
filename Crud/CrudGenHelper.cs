@@ -290,7 +290,7 @@ namespace Crud {
 			else if(specialColType==CrudSpecialColType.DateTEntryEditable) {
 				dataTypeExpected="datetime";
 			}
-			else if(specialColType==CrudSpecialColType.TinyIntUnsigned) {
+			else if(specialColType==CrudSpecialColType.TinyIntSigned) {
 				dataTypeExpected="tinyint";
 			}
 			else if(specialColType==CrudSpecialColType.EnumAsString) {

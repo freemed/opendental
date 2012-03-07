@@ -63,6 +63,12 @@ namespace OpenDentBusiness.Crud{
 				computerPref.TaskY                  = PIn.Int   (table.Rows[i]["TaskY"].ToString());
 				computerPref.DirectXFormat          = PIn.String(table.Rows[i]["DirectXFormat"].ToString());
 				computerPref.RecentApptView         = PIn.Byte  (table.Rows[i]["RecentApptView"].ToString());
+				computerPref.ScanDocSelectSource    = PIn.Bool  (table.Rows[i]["ScanDocSelectSource"].ToString());
+				computerPref.ScanDocShowOptions     = PIn.Bool  (table.Rows[i]["ScanDocShowOptions"].ToString());
+				computerPref.ScanDocDuplex          = PIn.Bool  (table.Rows[i]["ScanDocDuplex"].ToString());
+				computerPref.ScanDocGrayscale       = PIn.Bool  (table.Rows[i]["ScanDocGrayscale"].ToString());
+				computerPref.ScanDocResolution      = PIn.Int   (table.Rows[i]["ScanDocResolution"].ToString());
+				computerPref.ScanDocQuality         = PIn.Byte  (table.Rows[i]["ScanDocQuality"].ToString());
 				retVal.Add(computerPref);
 			}
 			return retVal;
@@ -103,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ComputerPrefNum,";
 			}
-			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorBinned,SensorPort,SensorExposure,GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat,RecentApptView) VALUES(";
+			command+="ComputerName,GraphicsUseHardware,GraphicsSimple,SensorType,SensorBinned,SensorPort,SensorExposure,GraphicsDoubleBuffering,PreferredPixelFormatNum,AtoZpath,TaskKeepListHidden,TaskDock,TaskX,TaskY,DirectXFormat,RecentApptView,ScanDocSelectSource,ScanDocShowOptions,ScanDocDuplex,ScanDocGrayscale,ScanDocResolution,ScanDocQuality) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(computerPref.ComputerPrefNum)+",";
 			}
@@ -123,7 +129,13 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (computerPref.TaskX)+","
 				+    POut.Int   (computerPref.TaskY)+","
 				+"'"+POut.String(computerPref.DirectXFormat)+"',"
-				+    POut.Byte  (computerPref.RecentApptView)+")";
+				+    POut.Byte  (computerPref.RecentApptView)+","
+				+    POut.Bool  (computerPref.ScanDocSelectSource)+","
+				+    POut.Bool  (computerPref.ScanDocShowOptions)+","
+				+    POut.Bool  (computerPref.ScanDocDuplex)+","
+				+    POut.Bool  (computerPref.ScanDocGrayscale)+","
+				+    POut.Int   (computerPref.ScanDocResolution)+","
+				+    POut.Byte  (computerPref.ScanDocQuality)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -151,7 +163,13 @@ namespace OpenDentBusiness.Crud{
 				+"TaskX                  =  "+POut.Int   (computerPref.TaskX)+", "
 				+"TaskY                  =  "+POut.Int   (computerPref.TaskY)+", "
 				+"DirectXFormat          = '"+POut.String(computerPref.DirectXFormat)+"', "
-				+"RecentApptView         =  "+POut.Byte  (computerPref.RecentApptView)+" "
+				+"RecentApptView         =  "+POut.Byte  (computerPref.RecentApptView)+", "
+				+"ScanDocSelectSource    =  "+POut.Bool  (computerPref.ScanDocSelectSource)+", "
+				+"ScanDocShowOptions     =  "+POut.Bool  (computerPref.ScanDocShowOptions)+", "
+				+"ScanDocDuplex          =  "+POut.Bool  (computerPref.ScanDocDuplex)+", "
+				+"ScanDocGrayscale       =  "+POut.Bool  (computerPref.ScanDocGrayscale)+", "
+				+"ScanDocResolution      =  "+POut.Int   (computerPref.ScanDocResolution)+", "
+				+"ScanDocQuality         =  "+POut.Byte  (computerPref.ScanDocQuality)+" "
 				+"WHERE ComputerPrefNum = "+POut.Long(computerPref.ComputerPrefNum);
 			Db.NonQ(command);
 		}
@@ -222,6 +240,30 @@ namespace OpenDentBusiness.Crud{
 			if(computerPref.RecentApptView != oldComputerPref.RecentApptView) {
 				if(command!=""){ command+=",";}
 				command+="RecentApptView = "+POut.Byte(computerPref.RecentApptView)+"";
+			}
+			if(computerPref.ScanDocSelectSource != oldComputerPref.ScanDocSelectSource) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocSelectSource = "+POut.Bool(computerPref.ScanDocSelectSource)+"";
+			}
+			if(computerPref.ScanDocShowOptions != oldComputerPref.ScanDocShowOptions) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocShowOptions = "+POut.Bool(computerPref.ScanDocShowOptions)+"";
+			}
+			if(computerPref.ScanDocDuplex != oldComputerPref.ScanDocDuplex) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocDuplex = "+POut.Bool(computerPref.ScanDocDuplex)+"";
+			}
+			if(computerPref.ScanDocGrayscale != oldComputerPref.ScanDocGrayscale) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocGrayscale = "+POut.Bool(computerPref.ScanDocGrayscale)+"";
+			}
+			if(computerPref.ScanDocResolution != oldComputerPref.ScanDocResolution) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocResolution = "+POut.Int(computerPref.ScanDocResolution)+"";
+			}
+			if(computerPref.ScanDocQuality != oldComputerPref.ScanDocQuality) {
+				if(command!=""){ command+=",";}
+				command+="ScanDocQuality = "+POut.Byte(computerPref.ScanDocQuality)+"";
 			}
 			if(command==""){
 				return;

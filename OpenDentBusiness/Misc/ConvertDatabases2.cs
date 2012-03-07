@@ -8755,7 +8755,90 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//Getting rid of IsStatementSent from commlog table.
 				command="ALTER TABLE commlog DROP COLUMN IsStatementSent";
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocSelectSource tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocSelectSource number(3)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocSelectSource = 0 WHERE ScanDocSelectSource IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocSelectSource NOT NULL";
+					Db.NonQ(command);
+				}			
+				command="UPDATE computerpref SET ScanDocSelectSource = 1";//Default to show select scanner popup.
+				Db.NonQ(command);	
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocShowOptions tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocShowOptions number(3)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocShowOptions = 0 WHERE ScanDocShowOptions IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocShowOptions NOT NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE computerpref SET ScanDocShowOptions = 1";//Default to show scanner options when scanning.
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocDuplex tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocDuplex number(3)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocDuplex = 0 WHERE ScanDocDuplex IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocDuplex NOT NULL";
+					Db.NonQ(command);
+				}			
+				command="UPDATE computerpref SET ScanDocDuplex = 1";//Default to 
+				Db.NonQ(command);	
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocGrayscale tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocGrayscale number(3)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocGrayscale = 0 WHERE ScanDocGrayscale IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocGrayscale NOT NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE computerpref SET ScanDocGrayscale = 1";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocResolution int NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocResolution number(11)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocResolution = 0 WHERE ScanDocResolution IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocResolution NOT NULL";
+					Db.NonQ(command);
+				} 
+				command="UPDATE computerpref SET ScanDocResolution = "+PrefC.GetInt(PrefName.ScannerResolution).ToString();
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE computerpref ADD ScanDocQuality tinyint unsigned NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE computerpref ADD ScanDocQuality number(3)";
+					Db.NonQ(command);
+					command="UPDATE computerpref SET ScanDocQuality = 0 WHERE ScanDocQuality IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE computerpref MODIFY ScanDocQuality NOT NULL";
+					Db.NonQ(command);
+				}
+				command="UPDATE computerpref SET ScanDocQuality = "+PrefC.GetInt(PrefName.ScannerCompression).ToString();
+				Db.NonQ(command);
 
 
 
@@ -8796,6 +8879,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 				
-
 
 

@@ -12,7 +12,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.Label label13;
 		private System.ComponentModel.Container components = null;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
@@ -28,15 +27,17 @@ namespace OpenDental{
 		private NumericUpDown upDownPort;
 		private Label label4;
 		private Label label3;
-		private ValidNum textDoc;
+		private ValidNum textScanDocQuality;
 		private ComboBox comboType;
-		private GroupBox groupBoxMultiPageScan;
-		private ValidNum textScanningResolution;
-		private CheckBox checkBoxSuppressScanDialog;
+		private ValidNum textScanDocResolution;
+		private CheckBox checkScanDocShowOptions;
 		private Label label6;
 		private Label label5;
-		private Label label7;
 		private UI.Button butSetScanner;
+		private CheckBox checkScanDocSelectSource;
+		private CheckBox checkScanDocDuplex;
+		private Label label7;
+		private CheckBox checkScanDocGrayscale;
 		private CheckBox checkBinned;
 		//private ComputerPref computerPrefs;
 
@@ -50,8 +51,14 @@ namespace OpenDental{
 				this.groupBox1,
 				this.groupBox2,
 				this.groupBox3,
+				this.label1,
+				this.label2,
+				this.label3,
+				this.label4,
+				this.label5,
+				this.label6,
+				this.label7,
 				this.label12,
-				this.label13,
 				this.label25,
 				this.label37
 			});
@@ -80,9 +87,8 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImagingSetup));
 			this.label12 = new System.Windows.Forms.Label();
-			this.label13 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.textDoc = new OpenDental.ValidNum();
+			this.textScanDocQuality = new OpenDental.ValidNum();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
@@ -100,61 +106,60 @@ namespace OpenDental{
 			this.butMounts = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.groupBoxMultiPageScan = new System.Windows.Forms.GroupBox();
-			this.textScanningResolution = new OpenDental.ValidNum();
-			this.checkBoxSuppressScanDialog = new System.Windows.Forms.CheckBox();
-			this.label7 = new System.Windows.Forms.Label();
+			this.textScanDocResolution = new OpenDental.ValidNum();
+			this.checkScanDocShowOptions = new System.Windows.Forms.CheckBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.butSetScanner = new OpenDental.UI.Button();
+			this.checkScanDocSelectSource = new System.Windows.Forms.CheckBox();
+			this.checkScanDocDuplex = new System.Windows.Forms.CheckBox();
+			this.checkScanDocGrayscale = new System.Windows.Forms.CheckBox();
+			this.label7 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.upDownPort)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.upDownExposure)).BeginInit();
-			this.groupBoxMultiPageScan.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(14,15);
+			this.label12.Location = new System.Drawing.Point(17,133);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(467,15);
+			this.label12.Size = new System.Drawing.Size(254,15);
 			this.label12.TabIndex = 14;
-			this.label12.Text = "JPEG Compression - Quality After Scanning, 0-100. 100=No compression.  Typical se" +
-    "tting: 40.";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(14,58);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(464,19);
-			this.label13.TabIndex = 15;
-			this.label13.Text = "Suggested setting for scanning documents is Greyscale, 150 dpi.";
+			this.label12.Text = "JPEG Compression - Quality After Scanning";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.textDoc);
+			this.groupBox1.Controls.Add(this.checkScanDocSelectSource);
+			this.groupBox1.Controls.Add(this.label7);
+			this.groupBox1.Controls.Add(this.checkScanDocGrayscale);
+			this.groupBox1.Controls.Add(this.checkScanDocDuplex);
+			this.groupBox1.Controls.Add(this.textScanDocResolution);
+			this.groupBox1.Controls.Add(this.textScanDocQuality);
+			this.groupBox1.Controls.Add(this.label6);
+			this.groupBox1.Controls.Add(this.checkScanDocShowOptions);
 			this.groupBox1.Controls.Add(this.label12);
-			this.groupBox1.Controls.Add(this.label13);
+			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(20,45);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(484,79);
+			this.groupBox1.Size = new System.Drawing.Size(603,158);
 			this.groupBox1.TabIndex = 17;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Documents";
+			this.groupBox1.Text = "Documents - Settings apply only to this workstation";
 			// 
-			// textDoc
+			// textScanDocQuality
 			// 
-			this.textDoc.Location = new System.Drawing.Point(16,35);
-			this.textDoc.MaxVal = 255;
-			this.textDoc.MinVal = 0;
-			this.textDoc.Name = "textDoc";
-			this.textDoc.Size = new System.Drawing.Size(68,20);
-			this.textDoc.TabIndex = 20;
+			this.textScanDocQuality.Location = new System.Drawing.Point(273,131);
+			this.textScanDocQuality.MaxVal = 255;
+			this.textScanDocQuality.MinVal = 0;
+			this.textScanDocQuality.Name = "textScanDocQuality";
+			this.textScanDocQuality.Size = new System.Drawing.Size(68,20);
+			this.textScanDocQuality.TabIndex = 20;
 			// 
 			// groupBox2
 			// 
@@ -162,7 +167,7 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label25);
 			this.groupBox2.Controls.Add(this.slider);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(20,222);
+			this.groupBox2.Location = new System.Drawing.Point(20,212);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(484,96);
 			this.groupBox2.TabIndex = 18;
@@ -198,7 +203,7 @@ namespace OpenDental{
 			// 
 			this.groupBox3.Controls.Add(this.label37);
 			this.groupBox3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox3.Location = new System.Drawing.Point(20,324);
+			this.groupBox3.Location = new System.Drawing.Point(20,314);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(484,43);
 			this.groupBox3.TabIndex = 19;
@@ -222,7 +227,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.label3);
 			this.groupBox4.Controls.Add(this.label2);
 			this.groupBox4.Controls.Add(this.upDownExposure);
-			this.groupBox4.Location = new System.Drawing.Point(21,373);
+			this.groupBox4.Location = new System.Drawing.Point(21,363);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(484,137);
 			this.groupBox4.TabIndex = 21;
@@ -318,7 +323,7 @@ namespace OpenDental{
 			this.butMounts.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMounts.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMounts.CornerRadius = 4F;
-			this.butMounts.Location = new System.Drawing.Point(544,53);
+			this.butMounts.Location = new System.Drawing.Point(544,12);
 			this.butMounts.Name = "butMounts";
 			this.butMounts.Size = new System.Drawing.Size(79,24);
 			this.butMounts.TabIndex = 20;
@@ -357,65 +362,42 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// groupBoxMultiPageScan
+			// textScanDocResolution
 			// 
-			this.groupBoxMultiPageScan.Controls.Add(this.textScanningResolution);
-			this.groupBoxMultiPageScan.Controls.Add(this.checkBoxSuppressScanDialog);
-			this.groupBoxMultiPageScan.Controls.Add(this.label7);
-			this.groupBoxMultiPageScan.Controls.Add(this.label6);
-			this.groupBoxMultiPageScan.Controls.Add(this.label5);
-			this.groupBoxMultiPageScan.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBoxMultiPageScan.Location = new System.Drawing.Point(20,130);
-			this.groupBoxMultiPageScan.Name = "groupBoxMultiPageScan";
-			this.groupBoxMultiPageScan.Size = new System.Drawing.Size(484,86);
-			this.groupBoxMultiPageScan.TabIndex = 17;
-			this.groupBoxMultiPageScan.TabStop = false;
-			this.groupBoxMultiPageScan.Text = "Multi-Page Scanning";
+			this.textScanDocResolution.Location = new System.Drawing.Point(273,107);
+			this.textScanDocResolution.MaxVal = 1000;
+			this.textScanDocResolution.MinVal = 51;
+			this.textScanDocResolution.Name = "textScanDocResolution";
+			this.textScanDocResolution.Size = new System.Drawing.Size(68,20);
+			this.textScanDocResolution.TabIndex = 20;
 			// 
-			// textScanningResolution
+			// checkScanDocShowOptions
 			// 
-			this.textScanningResolution.Location = new System.Drawing.Point(273,41);
-			this.textScanningResolution.MaxVal = 1000;
-			this.textScanningResolution.MinVal = 51;
-			this.textScanningResolution.Name = "textScanningResolution";
-			this.textScanningResolution.Size = new System.Drawing.Size(68,20);
-			this.textScanningResolution.TabIndex = 20;
-			// 
-			// checkBoxSuppressScanDialog
-			// 
-			this.checkBoxSuppressScanDialog.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoxSuppressScanDialog.Location = new System.Drawing.Point(6,19);
-			this.checkBoxSuppressScanDialog.Name = "checkBoxSuppressScanDialog";
-			this.checkBoxSuppressScanDialog.Size = new System.Drawing.Size(281,18);
-			this.checkBoxSuppressScanDialog.TabIndex = 8;
-			this.checkBoxSuppressScanDialog.Text = "Suppress Scanner Dialog (normally checked)";
-			this.checkBoxSuppressScanDialog.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkBoxSuppressScanDialog.UseVisualStyleBackColor = true;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(17,65);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(464,19);
-			this.label7.TabIndex = 15;
-			this.label7.Text = "JPEG Compression from Documents will be used when scanning multiple pages.";
+			this.checkScanDocShowOptions.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocShowOptions.Location = new System.Drawing.Point(7,41);
+			this.checkScanDocShowOptions.Name = "checkScanDocShowOptions";
+			this.checkScanDocShowOptions.Size = new System.Drawing.Size(281,18);
+			this.checkScanDocShowOptions.TabIndex = 8;
+			this.checkScanDocShowOptions.Text = "Show Scanner Options Window";
+			this.checkScanDocShowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocShowOptions.UseVisualStyleBackColor = true;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(342,41);
+			this.label6.Location = new System.Drawing.Point(343,107);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(52,19);
+			this.label6.Size = new System.Drawing.Size(199,19);
 			this.label6.TabIndex = 15;
-			this.label6.Text = "dpi";
+			this.label6.Text = "Typical setting: 150 dpi";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(4,41);
+			this.label5.Location = new System.Drawing.Point(84,108);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(263,19);
+			this.label5.Size = new System.Drawing.Size(186,19);
 			this.label5.TabIndex = 15;
-			this.label5.Text = "Scanning Resolution (suggested 150 dpi)";
+			this.label5.Text = "Resolution";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butSetScanner
@@ -432,6 +414,48 @@ namespace OpenDental{
 			this.butSetScanner.Text = "Set Default Scanner";
 			this.butSetScanner.Click += new System.EventHandler(this.butSetScanner_Click);
 			// 
+			// checkScanDocSelectSource
+			// 
+			this.checkScanDocSelectSource.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocSelectSource.Location = new System.Drawing.Point(32,19);
+			this.checkScanDocSelectSource.Name = "checkScanDocSelectSource";
+			this.checkScanDocSelectSource.Size = new System.Drawing.Size(256,18);
+			this.checkScanDocSelectSource.TabIndex = 23;
+			this.checkScanDocSelectSource.Text = "Show Select Scanner Window";
+			this.checkScanDocSelectSource.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocSelectSource.UseVisualStyleBackColor = true;
+			// 
+			// checkScanDocDuplex
+			// 
+			this.checkScanDocDuplex.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocDuplex.Location = new System.Drawing.Point(7,63);
+			this.checkScanDocDuplex.Name = "checkScanDocDuplex";
+			this.checkScanDocDuplex.Size = new System.Drawing.Size(281,18);
+			this.checkScanDocDuplex.TabIndex = 21;
+			this.checkScanDocDuplex.Text = "Multipage Scans Duplex (both sides)";
+			this.checkScanDocDuplex.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocDuplex.UseVisualStyleBackColor = true;
+			// 
+			// checkScanDocGrayscale
+			// 
+			this.checkScanDocGrayscale.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocGrayscale.Location = new System.Drawing.Point(142,85);
+			this.checkScanDocGrayscale.Name = "checkScanDocGrayscale";
+			this.checkScanDocGrayscale.Size = new System.Drawing.Size(146,18);
+			this.checkScanDocGrayscale.TabIndex = 22;
+			this.checkScanDocGrayscale.Text = "Grayscale";
+			this.checkScanDocGrayscale.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkScanDocGrayscale.UseVisualStyleBackColor = true;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(345,133);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(246,15);
+			this.label7.TabIndex = 23;
+			this.label7.Text = "0-100. 100=No compression.  Typical setting: 40";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormImagingSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
@@ -441,7 +465,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butMounts);
 			this.Controls.Add(this.groupBox3);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupBoxMultiPageScan);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -462,8 +485,6 @@ namespace OpenDental{
 			this.groupBox4.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.upDownPort)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.upDownExposure)).EndInit();
-			this.groupBoxMultiPageScan.ResumeLayout(false);
-			this.groupBoxMultiPageScan.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -472,7 +493,7 @@ namespace OpenDental{
 		private void FormImagingSetup_Load(object sender, System.EventArgs e) {
 			comboType.Items.Add("B");
 			comboType.Items.Add("D");
-			textDoc.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
+			textScanDocQuality.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
 			slider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
 			slider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
 			//computerPrefs=ComputerPrefs.GetForLocalComputer();
@@ -484,8 +505,8 @@ namespace OpenDental{
 				exposureLevelVal=(int)upDownExposure.Minimum;//Play it safe with the default exposure.
 			}
 			upDownExposure.Value=exposureLevelVal;
-			checkBoxSuppressScanDialog.Checked=PrefC.GetBool(PrefName.ScannerSuppressDialog);
-			textScanningResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
+			checkScanDocShowOptions.Checked=PrefC.GetBool(PrefName.ScannerSuppressDialog);
+			textScanDocResolution.Text=PrefC.GetString(PrefName.ScannerResolution);
 		}
 
 		private void butMounts_Click(object sender,EventArgs e) {
@@ -498,17 +519,17 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(  textDoc.errorProvider1.GetError(textDoc)!=""
-				|| textScanningResolution.errorProvider1.GetError(textScanningResolution)!="")
+			if(  textScanDocQuality.errorProvider1.GetError(textScanDocQuality)!=""
+				|| textScanDocResolution.errorProvider1.GetError(textScanDocResolution)!="")
 			{
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textDoc.Text));
+			Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textScanDocQuality.Text));
 			Prefs.UpdateLong(PrefName.ImageWindowingMin,slider.MinVal);
 			Prefs.UpdateLong(PrefName.ImageWindowingMax,slider.MaxVal);
-			Prefs.UpdateBool(PrefName.ScannerSuppressDialog,checkBoxSuppressScanDialog.Checked);
-			Prefs.UpdateLong(PrefName.ScannerResolution,PIn.Long(textScanningResolution.Text));
+			Prefs.UpdateBool(PrefName.ScannerSuppressDialog,checkScanDocShowOptions.Checked);
+			Prefs.UpdateLong(PrefName.ScannerResolution,PIn.Long(textScanDocResolution.Text));
 			ComputerPrefs.LocalComputer.SensorType=comboType.Text;
 			ComputerPrefs.LocalComputer.SensorPort=(int)upDownPort.Value;
 			ComputerPrefs.LocalComputer.SensorExposure=(int)upDownExposure.Value;

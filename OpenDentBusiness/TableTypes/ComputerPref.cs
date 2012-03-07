@@ -44,6 +44,18 @@ namespace OpenDentBusiness {
 		public string DirectXFormat;
 		///<summary>The index of the most recent appt view for this computer.  Uses it when opening.</summary>
 		public byte RecentApptView;
+		///<summary>Show the select scanner dialog when scanning documents.</summary>
+		public bool ScanDocSelectSource;
+		///<summary>Show the scanner options dialog when scanning documents.</summary>
+		public bool ScanDocShowOptions;
+		///<summary>Attempt to scan in duplex mode when scanning multipage documents with an ADF.</summary>
+		public bool ScanDocDuplex;
+		///<summary>Scan in gray scale when scanning documents.</summary>
+		public bool ScanDocGrayscale;
+		///<summary>Scan at the specified resolution when scanning documents.</summary>
+		public int ScanDocResolution;
+		///<summary>0-100. Quality of jpeg after compression when scanning documents.  100 indicates full quality.  Opposite of compression.</summary>
+		public byte ScanDocQuality;
 
 
 		public ComputerPref Copy(){

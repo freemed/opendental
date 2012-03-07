@@ -1424,6 +1424,8 @@ namespace OpenDental{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
+//TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
+//TODO: set hideUI based on local pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
 				//Use default scanner. Selection is available in Setup Imaging.
 				hdib=EZTwain.AcquireMemory(this.Handle);
 				double xdpi=EZTwain.DIB_XResolution(hdib);
@@ -1510,11 +1512,14 @@ namespace OpenDental{
 			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			//Use default scanner. Selection is available in Setup Imaging.
-			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if true, this will bring up the scanner interface for the selected scanner a few lines down
+//TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
+//TODO: set hideUI based on local pref instead of global pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
+			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if false, this will bring up the scanner interface for the selected scanner a few lines down
 			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
 			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
 				EZTwain.SetPixelType(2);//24-bit Color
 				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
+				
 				EZTwain.AcquireMultipageFile(this.Handle,tempFile);
 			}
 			else {
