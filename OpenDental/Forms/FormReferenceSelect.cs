@@ -12,6 +12,7 @@ namespace OpenDental {
 	public partial class FormReference:Form {
 		private DataTable RefTable;
 		public List<CustReference> SelectedCustRefs;
+		public long GotoPatNum;
 
 		public FormReference() {
 			InitializeComponent();
@@ -104,6 +105,21 @@ namespace OpenDental {
 			CustReference refCur=CustReferences.GetOne(PIn.Long(RefTable.Rows[e.Row]["CustReferenceNum"].ToString()));
 			FormReferenceEdit FormRE=new FormReferenceEdit(refCur);
 			FormRE.ShowDialog();
+		}
+
+		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
+			if(e.Button!=MouseButtons.Right) {
+				return;
+			}
+			if(gridMain.SelectedIndices.Length!=1) {
+				return;
+			}
+			menuRightReferences.Show(gridMain,new Point(e.X,e.Y));
+		}
+
+		private void goToFamilyToolStripMenuItem_Click(object sender,EventArgs e) {
+			GotoPatNum=PIn.Long(RefTable.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString());
+			Close();
 		}
 
 		private void checkUsedRefs_Click(object sender,EventArgs e) {

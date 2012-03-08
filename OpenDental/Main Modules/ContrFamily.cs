@@ -481,6 +481,12 @@ namespace OpenDental{
 				else if(gridPat.Rows[e.Row].Tag.ToString()=="References") {
 					FormReference FormR=new FormReference();
 					FormR.ShowDialog();
+					if(FormR.GotoPatNum!=0) {
+						Patient pat=Patients.GetPat(FormR.GotoPatNum);
+						OnPatientSelected(FormR.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+						GotoModule.GotoFamily(FormR.GotoPatNum);
+						return;
+					}
 					if(FormR.DialogResult!=DialogResult.OK) {
 						return;
 					}

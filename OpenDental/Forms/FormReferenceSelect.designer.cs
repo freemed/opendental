@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
@@ -54,9 +55,12 @@ namespace OpenDental{
 			this.checkRefresh = new System.Windows.Forms.CheckBox();
 			this.butGetAll = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
+			this.menuRightReferences = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.goToAccountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupBox2.SuspendLayout();
 			this.groupFilter.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.menuRightReferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -106,6 +110,7 @@ namespace OpenDental{
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridMain_KeyDown);
+			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// groupBox2
 			// 
@@ -403,6 +408,20 @@ namespace OpenDental{
 			this.butSearch.Text = "&Search";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
+			// menuRightReferences
+			// 
+			this.menuRightReferences.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goToAccountToolStripMenuItem});
+			this.menuRightReferences.Name = "menuRightReferences";
+			this.menuRightReferences.Size = new System.Drawing.Size(153, 48);
+			// 
+			// goToAccountToolStripMenuItem
+			// 
+			this.goToAccountToolStripMenuItem.Name = "goToAccountToolStripMenuItem";
+			this.goToAccountToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.goToAccountToolStripMenuItem.Text = "Go to Family";
+			this.goToAccountToolStripMenuItem.Click += new System.EventHandler(this.goToFamilyToolStripMenuItem_Click);
+			// 
 			// FormReference
 			// 
 			this.AcceptButton = this.butOK;
@@ -422,6 +441,7 @@ namespace OpenDental{
 			this.groupBox2.PerformLayout();
 			this.groupFilter.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
+			this.menuRightReferences.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -459,5 +479,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkRefresh;
 		private UI.Button butGetAll;
 		private UI.Button butSearch;
+		private System.Windows.Forms.ContextMenuStrip menuRightReferences;
+		private System.Windows.Forms.ToolStripMenuItem goToAccountToolStripMenuItem;
 	}
 }
