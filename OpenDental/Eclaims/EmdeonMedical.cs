@@ -33,7 +33,15 @@ namespace OpenDental.Eclaims
 				//same directory which might be left if there is a permission issue when trying to delete the batch files after processing.
 				batchFile=Path.Combine(clearhouse.ExportPath,"claims"+batchNum+".txt");
 				byte[] fileBytes=File.ReadAllBytes(batchFile);
-				string fileBytesBase64=Convert.ToBase64String(fileBytes);
+				MemoryStream zipMemoryStream=new MemoryStream();
+				ZipFile tempZip=new ZipFile();
+				tempZip.AddFile(batchFile,"");
+				tempZip.Save(zipMemoryStream);
+				tempZip.Dispose();
+				zipMemoryStream.Position=0;
+				byte[] zipFileBytes=zipMemoryStream.GetBuffer();
+				string zipFileBytesBase64=Convert.ToBase64String(zipFileBytes);
+				zipMemoryStream.Dispose();
 				if(clearhouse.ISA15=="P") {//production interface
 					string messageType="MCD";//medical
 					if(medType==EnumClaimMedType.Institutional) {
@@ -44,7 +52,7 @@ namespace OpenDental.Eclaims
 					}
 					EmdeonITS.ITSWS itsws=new EmdeonITS.ITSWS();
 					itsws.Url=emdeonITSUrl;
-					EmdeonITS.ITSReturn response=itsws.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
+					EmdeonITS.ITSReturn response=itsws.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),zipFileBytesBase64);
 					if(response.ErrorCode!=0) { //Batch submission successful.
 						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+". Error number from Emdeon: "+response.ErrorCode+". Error message from Emdeon: "+response.Response);
 					}
@@ -59,7 +67,7 @@ namespace OpenDental.Eclaims
 					}
 					EmdeonITSTest.ITSWS itswsTest=new EmdeonITSTest.ITSWS();
 					itswsTest.Url=emdeonITSUrlTest;
-					EmdeonITSTest.ITSReturn responseTest=itswsTest.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),fileBytesBase64);
+					EmdeonITSTest.ITSReturn responseTest=itswsTest.PutFileExt(clearhouse.LoginID,clearhouse.Password,messageType,Path.GetFileName(batchFile),zipFileBytesBase64);
 					if(responseTest.ErrorCode!=0) { //Batch submission successful.
 						throw new Exception("Emdeon rejected all claims in the current batch file "+batchFile+". Error number from Emdeon: "+responseTest.ErrorCode+". Error message from Emdeon: "+responseTest.Response);
 					}
