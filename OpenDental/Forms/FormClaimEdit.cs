@@ -5101,8 +5101,15 @@ namespace OpenDental{
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {
-			if(!ClaimIsValid()){
+			SendClaim();
+		}
+
+		private void SendClaim() {
+			if(!ClaimIsValid()) {
 				return;
+			}
+			if(comboCorrectionType.SelectedIndex!=0) { //not original (replacement or void)
+				textDateResent.Text=DateTime.Now.ToShortDateString();
 			}
 			UpdateClaim();
 			ClaimSendQueueItem[] listQueue=Claims.GetQueueList(ClaimCur.ClaimNum,ClaimCur.ClinicNum,0);
@@ -5141,7 +5148,16 @@ namespace OpenDental{
 		}
 
 		private void butResend_Click(object sender,EventArgs e) {
-
+			FormClaimResend fcr=new FormClaimResend();
+			if(fcr.ShowDialog()==DialogResult.OK) {
+				if(fcr.IsClaimReplacement) {
+					comboCorrectionType.SelectedIndex=1;//replacement
+				}
+				else {
+					comboCorrectionType.SelectedIndex=0;//original
+				}
+				SendClaim();
+			}
 		}
 
 		private void butHistory_Click(object sender,EventArgs e) {

@@ -348,6 +348,12 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
+    <Compile Include="Forms\BasicTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BasicTemplate.designer.cs">
+      <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPatFieldCurrencyEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -813,11 +819,11 @@
     <Compile Include="Forms Reports\FormSearchPatNotes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BasicTemplate.cs">
+    <Compile Include="Forms\FormClaimResend.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\BasicTemplate.designer.cs">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
+    <Compile Include="Forms\FormClaimResend.designer.cs">
+      <DependentUpon>FormClaimResend.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPayConnectSetup.cs">
       <SubType>Form</SubType>
@@ -2420,6 +2426,9 @@
     <EmbeddedResource Include="Eclaims\FormTerminal.resx">
       <DependentUpon>FormTerminal.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\BasicTemplate.resx">
+      <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatFieldCurrencyEdit.resx">
       <DependentUpon>FormPatFieldCurrencyEdit.cs</DependentUpon>
@@ -4549,8 +4558,8 @@
       <DependentUpon>FormSearchPatNotes.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BasicTemplate.resx">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FormClaimResend.resx">
+      <DependentUpon>FormClaimResend.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAutomationConditionEdit.resx">
