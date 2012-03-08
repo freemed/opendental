@@ -1124,7 +1124,9 @@ namespace OpenDental{
 				labelStatus.Visible=false;
 				gridProc.Visible=false;
 				listQuickAdd.Visible=false;
-				textNote.Width = 400;
+				butAdd.Visible=false;
+				butDeleteProc.Visible=false;
+				//textNote.Width = 400;
 			}
 			else if ( AptCur.AptStatus == ApptStatus.PtNoteCompleted) {
 				labelApptNote.Text = "Completed Patient NOTE:";
@@ -1136,7 +1138,9 @@ namespace OpenDental{
 				labelStatus.Visible = false;
 				gridProc.Visible= false;
 				listQuickAdd.Visible = false;
-				textNote.Width = 400;
+				butAdd.Visible=false;
+				butDeleteProc.Visible=false;
+				//textNote.Width = 400;
 			}
 			else {
 				Text = Lan.g(this, "Edit Appointment") + " - " + DS.Tables["Patient"].Rows[0]["value"].ToString() + " on " + AptCur.AptDateTime.DayOfWeek + ", " + AptCur.AptDateTime ;

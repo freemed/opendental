@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
 using CodeBase;
@@ -14,7 +15,6 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkDone;
 		private OpenDental.UI.Button butCancel;
 		private System.ComponentModel.Container components = null;
-		private OpenDental.TableApptsOther tbApts;
 		///<summary>The result of the window.  In other words, which button was clicked to exit the window.</summary>
 		public OtherResult oResult;
 		private System.Windows.Forms.TextBox textApptModNote;
@@ -49,6 +49,7 @@ namespace OpenDental{
 		private Label label3;
 		private OpenDental.UI.Button butNote;
 		private OpenDental.UI.Button butRecallFamily;
+		private UI.ODGrid gridMain;
 		///<summary>If oResult=PinboardAndSearch, then when closing this form, this will contain the date to jump to when beginning the search.  If oResult=GoTo, then this will also contain the date.  Can't use DateTime type because C# complains about marshal by reference.</summary>
 		public string DateJumpToString;
 
@@ -57,7 +58,6 @@ namespace OpenDental{
 			InitializeComponent();
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);
-			tbApts.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbApts_CellDoubleClicked);
 			Lan.F(this);
 			for(int i=0;i<listFamily.Columns.Count;i++){
 				listFamily.Columns[i].Text=Lan.g(this,listFamily.Columns[i].Text);
@@ -79,7 +79,6 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptsOther));
 			this.checkDone = new System.Windows.Forms.CheckBox();
-			this.tbApts = new OpenDental.TableApptsOther();
 			this.butCancel = new OpenDental.UI.Button();
 			this.textApptModNote = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
@@ -99,6 +98,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.butNote = new OpenDental.UI.Button();
 			this.butRecallFamily = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
 			// 
 			// checkDone
@@ -106,117 +106,111 @@ namespace OpenDental{
 			this.checkDone.AutoCheck = false;
 			this.checkDone.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkDone.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.checkDone.Location = new System.Drawing.Point(29,145);
+			this.checkDone.Location = new System.Drawing.Point(12, 145);
 			this.checkDone.Name = "checkDone";
-			this.checkDone.Size = new System.Drawing.Size(210,16);
+			this.checkDone.Size = new System.Drawing.Size(210, 16);
 			this.checkDone.TabIndex = 1;
 			this.checkDone.TabStop = false;
 			this.checkDone.Text = "Planned Appt Done";
 			// 
-			// tbApts
-			// 
-			this.tbApts.BackColor = System.Drawing.SystemColors.Window;
-			this.tbApts.Location = new System.Drawing.Point(28,168);
-			this.tbApts.Name = "tbApts";
-			this.tbApts.ScrollValue = 1;
-			this.tbApts.SelectedIndices = new int[0];
-			this.tbApts.SelectionMode = System.Windows.Forms.SelectionMode.One;
-			this.tbApts.Size = new System.Drawing.Size(769,404);
-			this.tbApts.TabIndex = 2;
-			this.tbApts.TabStop = false;
-			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butCancel.Location = new System.Drawing.Point(834,620);
+			this.butCancel.Location = new System.Drawing.Point(837, 620);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 3;
 			this.butCancel.Text = "&Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textApptModNote
 			// 
+			this.textApptModNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textApptModNote.BackColor = System.Drawing.Color.White;
-			this.textApptModNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textApptModNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textApptModNote.ForeColor = System.Drawing.Color.Red;
-			this.textApptModNote.Location = new System.Drawing.Point(594,33);
+			this.textApptModNote.Location = new System.Drawing.Point(707, 36);
 			this.textApptModNote.Multiline = true;
 			this.textApptModNote.Name = "textApptModNote";
 			this.textApptModNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textApptModNote.Size = new System.Drawing.Size(202,36);
+			this.textApptModNote.Size = new System.Drawing.Size(202, 36);
 			this.textApptModNote.TabIndex = 44;
 			this.textApptModNote.Leave += new System.EventHandler(this.textApptModNote_Leave);
 			// 
 			// label1
 			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label1.Location = new System.Drawing.Point(429,37);
+			this.label1.Location = new System.Drawing.Point(542, 40);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(163,21);
+			this.label1.Size = new System.Drawing.Size(163, 21);
 			this.label1.TabIndex = 45;
 			this.label1.Text = "Appointment Module Note";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butGoTo
 			// 
-			this.butGoTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGoTo.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butGoTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butGoTo.Autosize = true;
 			this.butGoTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGoTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGoTo.CornerRadius = 4F;
 			this.butGoTo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butGoTo.Location = new System.Drawing.Point(50,620);
+			this.butGoTo.Location = new System.Drawing.Point(50, 620);
 			this.butGoTo.Name = "butGoTo";
-			this.butGoTo.Size = new System.Drawing.Size(106,24);
+			this.butGoTo.Size = new System.Drawing.Size(106, 24);
 			this.butGoTo.TabIndex = 46;
 			this.butGoTo.Text = "&Go To Appt";
 			this.butGoTo.Click += new System.EventHandler(this.butGoTo_Click);
 			// 
 			// butPin
 			// 
-			this.butPin.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPin.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butPin.Autosize = true;
 			this.butPin.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPin.CornerRadius = 4F;
 			this.butPin.Image = global::OpenDental.Properties.Resources.butPin;
 			this.butPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPin.Location = new System.Drawing.Point(165,620);
+			this.butPin.Location = new System.Drawing.Point(165, 620);
 			this.butPin.Name = "butPin";
-			this.butPin.Size = new System.Drawing.Size(134,24);
+			this.butPin.Size = new System.Drawing.Size(134, 24);
 			this.butPin.TabIndex = 47;
 			this.butPin.Text = "Copy To &Pinboard";
 			this.butPin.Click += new System.EventHandler(this.butPin_Click);
 			// 
 			// butNew
 			// 
-			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNew.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butNew.Autosize = true;
 			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(576,620);
+			this.butNew.Location = new System.Drawing.Point(576, 620);
 			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(125,24);
+			this.butNew.Size = new System.Drawing.Size(125, 24);
 			this.butNew.TabIndex = 48;
 			this.butNew.Text = "Create &New Appt";
 			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// label2
 			// 
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif",9F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(29,13);
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label2.Location = new System.Drawing.Point(12, 13);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(168,17);
+			this.label2.Size = new System.Drawing.Size(168, 17);
 			this.label2.TabIndex = 57;
 			this.label2.Text = "Recall for Family";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -232,9 +226,9 @@ namespace OpenDental{
 			this.listFamily.FullRowSelect = true;
 			this.listFamily.GridLines = true;
 			this.listFamily.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.listFamily.Location = new System.Drawing.Point(29,36);
+			this.listFamily.Location = new System.Drawing.Point(12, 36);
 			this.listFamily.Name = "listFamily";
-			this.listFamily.Size = new System.Drawing.Size(384,97);
+			this.listFamily.Size = new System.Drawing.Size(384, 97);
 			this.listFamily.TabIndex = 58;
 			this.listFamily.UseCompatibleStateImageBehavior = false;
 			this.listFamily.View = System.Windows.Forms.View.Details;
@@ -268,95 +262,118 @@ namespace OpenDental{
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.butOK.Location = new System.Drawing.Point(748,620);
+			this.butOK.Location = new System.Drawing.Point(751, 620);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 59;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butRecall
 			// 
-			this.butRecall.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecall.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRecall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butRecall.Autosize = true;
 			this.butRecall.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRecall.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRecall.CornerRadius = 4F;
 			this.butRecall.Image = global::OpenDental.Properties.Resources.butRecall;
 			this.butRecall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRecall.Location = new System.Drawing.Point(308,620);
+			this.butRecall.Location = new System.Drawing.Point(308, 620);
 			this.butRecall.Name = "butRecall";
-			this.butRecall.Size = new System.Drawing.Size(125,24);
+			this.butRecall.Size = new System.Drawing.Size(125, 24);
 			this.butRecall.TabIndex = 60;
 			this.butRecall.Text = "Schedule Recall";
 			this.butRecall.Click += new System.EventHandler(this.butRecall_Click);
 			// 
 			// textFinUrg
 			// 
+			this.textFinUrg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.textFinUrg.BackColor = System.Drawing.Color.White;
-			this.textFinUrg.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textFinUrg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textFinUrg.ForeColor = System.Drawing.Color.Red;
-			this.textFinUrg.Location = new System.Drawing.Point(594,75);
+			this.textFinUrg.Location = new System.Drawing.Point(707, 78);
 			this.textFinUrg.Multiline = true;
 			this.textFinUrg.Name = "textFinUrg";
 			this.textFinUrg.ReadOnly = true;
 			this.textFinUrg.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textFinUrg.Size = new System.Drawing.Size(202,81);
+			this.textFinUrg.Size = new System.Drawing.Size(202, 81);
 			this.textFinUrg.TabIndex = 63;
 			// 
 			// label3
 			// 
+			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.label3.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.label3.Location = new System.Drawing.Point(429,78);
+			this.label3.Location = new System.Drawing.Point(542, 81);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(163,21);
+			this.label3.Size = new System.Drawing.Size(163, 21);
 			this.label3.TabIndex = 64;
 			this.label3.Text = "Family Urgent Financial Notes";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butNote
 			// 
-			this.butNote.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNote.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butNote.Autosize = true;
 			this.butNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butNote.CornerRadius = 4F;
 			this.butNote.Image = ((System.Drawing.Image)(resources.GetObject("butNote.Image")));
 			this.butNote.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNote.Location = new System.Drawing.Point(442,620);
+			this.butNote.Location = new System.Drawing.Point(442, 620);
 			this.butNote.Name = "butNote";
-			this.butNote.Size = new System.Drawing.Size(125,24);
+			this.butNote.Size = new System.Drawing.Size(125, 24);
 			this.butNote.TabIndex = 65;
 			this.butNote.Text = "NO&TE for Patient";
 			this.butNote.Click += new System.EventHandler(this.butNote_Click);
 			// 
 			// butRecallFamily
 			// 
-			this.butRecallFamily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecallFamily.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRecallFamily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butRecallFamily.Autosize = true;
 			this.butRecallFamily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRecallFamily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRecallFamily.CornerRadius = 4F;
 			this.butRecallFamily.Image = global::OpenDental.Properties.Resources.butRecall;
 			this.butRecallFamily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRecallFamily.Location = new System.Drawing.Point(308,588);
+			this.butRecallFamily.Location = new System.Drawing.Point(308, 588);
 			this.butRecallFamily.Name = "butRecallFamily";
-			this.butRecallFamily.Size = new System.Drawing.Size(125,24);
+			this.butRecallFamily.Size = new System.Drawing.Size(125, 24);
 			this.butRecallFamily.TabIndex = 66;
 			this.butRecallFamily.Text = "Entire Family";
 			this.butRecallFamily.Click += new System.EventHandler(this.butRecallFamily_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12, 168);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(897, 398);
+			this.gridMain.TabIndex = 67;
+			this.gridMain.Title = "Appointments for Patient";
+			this.gridMain.TranslationName = "FormDisplayFields";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// FormApptsOther
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(924,658);
+			this.ClientSize = new System.Drawing.Size(924, 658);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butRecallFamily);
 			this.Controls.Add(this.butNote);
 			this.Controls.Add(this.label3);
@@ -371,7 +388,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textApptModNote);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.tbApts);
 			this.Controls.Add(this.checkDone);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -407,7 +423,8 @@ namespace OpenDental{
 			else{//much more typical
 				butOK.Visible=false;
 			}
-			Filltb();
+			FillFamily();
+			FillGrid();
 			CheckStatus();
 		}
 
@@ -423,7 +440,109 @@ namespace OpenDental{
 			}
 		}
 
-		private void Filltb(){
+		private void FillGrid() {
+			ApptList=Appointments.GetForPat(PatCur.PatNum);
+			List<PlannedAppt> plannedList=PlannedAppts.Refresh(PatCur.PatNum);
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g("FormChartView","Appt Status"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormChartView","Prov"),50);
+			gridMain.Columns.Add(col);
+			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+				col=new ODGridColumn(Lan.g("FormChartView","Clinic"),80);
+				gridMain.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g("FormChartView","Date"),70);//If the order changes, reflect the change for dateIndex below.
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormChartView","Time"),70);//Must immediately follow Date column.
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormChartView","Min"),40);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormChartView","Procedures"),150);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("FormChartView","Notes"),320);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			int dateIndex=3;
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
+				dateIndex=2;
+			}
+			for(int i=0;i<ApptList.Length;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ApptList[i].AptStatus.ToString());
+				row.Cells.Add(Providers.GetAbbr(ApptList[i].ProvNum));
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+					row.Cells.Add(Clinics.GetDesc(ApptList[i].ClinicNum));
+				}
+				row.Cells.Add("");//Date
+				row.Cells.Add("");//Time
+				if(ApptList[i].AptDateTime.Year > 1880) {
+					//only regular still scheduled appts
+					if(ApptList[i].AptStatus!=ApptStatus.Planned && ApptList[i].AptStatus!=ApptStatus.PtNote 
+						&& ApptList[i].AptStatus!=ApptStatus.PtNoteCompleted && ApptList[i].AptStatus!=ApptStatus.UnschedList 
+						&& ApptList[i].AptStatus!=ApptStatus.Broken) 
+					{
+						row.Cells[dateIndex].Text=ApptList[i].AptDateTime.ToString("d");
+						row.Cells[dateIndex+1].Text=ApptList[i].AptDateTime.ToString("t");
+						if(ApptList[i].AptDateTime < DateTime.Today) { //Past
+							row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor;
+							row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor;
+						}
+						else if(ApptList[i].AptDateTime.Date==DateTime.Today.Date) { //Today
+							row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor;
+							row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor;
+							row.Cells[0].Text=Lan.g(this,"Today");
+						}
+						else if(ApptList[i].AptDateTime > DateTime.Today) { //Future
+							row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor;
+							row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor;
+						}
+					}
+					else if(ApptList[i].AptStatus==ApptStatus.Planned) { //show line for planned appt
+						row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor;
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor;
+						string txt=Lan.g("enumApptStatus","Planned")+" ";
+						for(int p=0;p<plannedList.Count;p++) {
+							if(plannedList[p].AptNum==ApptList[i].AptNum) {
+								txt+="#"+plannedList[p].ItemOrder.ToString();
+							}
+						}
+						row.Cells[0].Text=txt;
+					}
+					else if(ApptList[i].AptStatus==ApptStatus.PtNote) {
+						row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor;
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor;
+						row.Cells[0].Text=Lan.g("enumApptStatus","PtNote");
+					}
+					else if(ApptList[i].AptStatus==ApptStatus.PtNoteCompleted) {
+						row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor;
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor;
+						row.Cells[0].Text=Lan.g("enumApptStatus","PtNoteCompleted");
+					}
+					else if(ApptList[i].AptStatus==ApptStatus.Broken) {
+						row.Cells[0].Text=Lan.g("enumApptStatus","Broken");
+						row.Cells[dateIndex].Text=ApptList[i].AptDateTime.ToString("d");
+						row.Cells[dateIndex+1].Text=ApptList[i].AptDateTime.ToString("t");
+						row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					}
+					else if(ApptList[i].AptStatus==ApptStatus.UnschedList) {
+						row.Cells[0].Text=Lan.g("enumApptStatus","UnschedList");
+						row.ColorBackG=DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor;
+						row.ColorText=DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor;
+					}
+				}
+				row.Cells.Add((ApptList[i].Pattern.Length * 5).ToString());
+				row.Cells.Add(ApptList[i].ProcDescript);
+				row.Cells.Add(ApptList[i].Note);
+				gridMain.Rows.Add(row);
+			}
+			gridMain.EndUpdate();
+		}
+
+		private void FillFamily(){
 			SelectedPatNum=PatCur.PatNum;//just in case user has selected a different family member
 			RecallList=Recalls.GetList(MiscUtils.ArrayToList<Patient>(FamCur.ListPats));
 			//Appointment[] aptsOnePat;
@@ -472,78 +591,7 @@ namespace OpenDental{
 				listFamily.Items.Add(item);
 			}
       checkDone.Checked=PatCur.PlannedIsDone;
-			ApptList=Appointments.GetForPat(PatCur.PatNum);
-			List<PlannedAppt> plannedList=PlannedAppts.Refresh(PatCur.PatNum);
-			tbApts.ResetRows(ApptList.Length);
-			tbApts.SetGridColor(Color.DarkGray);
-			for(int i=0;i<ApptList.Length; i++) {
-				tbApts.Cell[0, i] = ApptList[i].AptStatus.ToString();
-				if (ApptList[i].AptDateTime.Year > 1880) {
-					//only regular still scheduled appts
-					if(ApptList[i].AptStatus != ApptStatus.Planned && ApptList[i].AptStatus != ApptStatus.PtNote 
-						&& ApptList[i].AptStatus != ApptStatus.PtNoteCompleted && ApptList[i].AptStatus != ApptStatus.UnschedList 
-						&& ApptList[i].AptStatus != ApptStatus.Broken)
-					{
-						tbApts.Cell[1,i] = ApptList[i].AptDateTime.ToString("d");
-						tbApts.Cell[2,i] = ApptList[i].AptDateTime.ToString("t");
-						if(ApptList[i].AptDateTime < DateTime.Today) { //Past
-							tbApts.SetBackColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][11].ItemColor));
-							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][10].ItemColor));
-						}
-						else if(ApptList[i].AptDateTime.Date == DateTime.Today.Date) { //Today
-							tbApts.SetBackColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][9].ItemColor));
-							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][8].ItemColor));
-							tbApts.Cell[0,i] = Lan.g(this,"Today");
-						}
-						else if(ApptList[i].AptDateTime > DateTime.Today) { //Future
-							tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][13].ItemColor);
-							tbApts.SetTextColorRow(i,(DefC.Long[(int)DefCat.ProgNoteColors][12].ItemColor));
-						}
-					}
-					else if(ApptList[i].AptStatus == ApptStatus.Planned) { //show line for planned appt
-						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][16].ItemColor);
-						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][17].ItemColor);
-						string txt=Lan.g("enumApptStatus","Planned")+" ";
-						for(int p=0;p<plannedList.Count;p++) {
-							if(plannedList[p].AptNum==ApptList[i].AptNum) {
-								txt+="#"+plannedList[p].ItemOrder.ToString();
-							}
-						}
-						tbApts.Cell[0,i] =txt;
-					}
-					else if(ApptList[i].AptStatus ==ApptStatus.PtNote) {
-						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][18].ItemColor);
-						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][19].ItemColor);
-						tbApts.Cell[0,i] = Lan.g("enumApptStatus","PtNote");
-					}
-					else if(ApptList[i].AptStatus == ApptStatus.PtNoteCompleted) {
-						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][20].ItemColor);
-						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][21].ItemColor);
-						tbApts.Cell[0,i] = Lan.g("enumApptStatus","PtNoteCompleted");
-					}
-					else if(ApptList[i].AptStatus == ApptStatus.Broken){
-						tbApts.Cell[0,i] = Lan.g("enumApptStatus","Broken");
-						tbApts.Cell[1,i] = ApptList[i].AptDateTime.ToString("d");
-						tbApts.Cell[2,i] = ApptList[i].AptDateTime.ToString("t");
-						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor);
-						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor);
-					}
-					else if(ApptList[i].AptStatus == ApptStatus.UnschedList) {
-						tbApts.Cell[0,i] = Lan.g("enumApptStatus","UnschedList");
-						tbApts.SetTextColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][14].ItemColor);
-						tbApts.SetBackColorRow(i,DefC.Long[(int)DefCat.ProgNoteColors][15].ItemColor);
-					}
-				}
-				else {
-					tbApts.Cell[1, i] = "";
-					tbApts.Cell[2, i] = "";
-				}
-				tbApts.Cell[3, i] = (ApptList[i].Pattern.Length * 5).ToString();
-				tbApts.Cell[4,i]=ApptList[i].ProcDescript;
-				tbApts.Cell[5,i]=ApptList[i].Note;
-			}
 			textFinUrg.Text=FamCur.ListPats[0].FamFinUrgNote;
-			tbApts.LayoutTables();
 		}
 
 		private void listFamily_DoubleClick(object sender, System.EventArgs e) {
@@ -878,14 +926,14 @@ namespace OpenDental{
 		}
 
 		private void butPin_Click(object sender, System.EventArgs e) {
-			if(tbApts.SelectedRow==-1){
+			if(gridMain.GetSelectedIndex()==-1){
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			if(!OKtoSendToPinboard(ApptList[tbApts.SelectedRow])){
+			if(!OKtoSendToPinboard(ApptList[gridMain.GetSelectedIndex()])){
 				return;
 			}
-			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
+			AptNumsSelected.Add(ApptList[gridMain.GetSelectedIndex()].AptNum);
 			oResult=OtherResult.CopyToPinBoard;
 			DialogResult=DialogResult.OK;
 		}
@@ -926,9 +974,9 @@ namespace OpenDental{
 			return true;
 		}
 
-		private void tbApts_CellDoubleClicked(object sender, CellEventArgs e){
-			int currentSelection=tbApts.SelectedRow;
-			int currentScroll=tbApts.ScrollValue;
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			int currentSelection=e.Row;
+			int currentScroll=gridMain.ScrollValue;
 			FormApptEdit FormAE=new FormApptEdit(ApptList[e.Row].AptNum);
 			FormAE.PinIsVisible=true;
 			FormAE.ShowDialog();
@@ -943,9 +991,10 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 			else{
-				Filltb();
-				tbApts.SetSelected(currentSelection,true);
-				tbApts.ScrollValue=currentScroll;
+				FillFamily();
+				FillGrid();
+				gridMain.SetSelected(currentSelection,true);
+				gridMain.ScrollValue=currentScroll;
 			}
 		}
 
@@ -959,7 +1008,8 @@ namespace OpenDental{
 			PatCur=FamCur.GetPatient(newPatNum);
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
 			textApptModNote.Text=PatCur.ApptModNote;
-			Filltb();
+			FillFamily();
+			FillGrid();
 			CheckStatus();
 		}
 
@@ -972,16 +1022,16 @@ namespace OpenDental{
 		}
 
 		private void butGoTo_Click(object sender, System.EventArgs e) {
-			if(tbApts.SelectedRow==-1){
+			if(gridMain.GetSelectedIndex()==-1){
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			if(ApptList[tbApts.SelectedRow].AptDateTime.Year<1880){
+			if(ApptList[gridMain.GetSelectedIndex()].AptDateTime.Year<1880){
 				MessageBox.Show(Lan.g(this,"Unable to go to unscheduled appointment."));
 				return;
 			}
-			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
-			DateJumpToString=ApptList[tbApts.SelectedRow].AptDateTime.Date.ToShortDateString();
+			AptNumsSelected.Add(ApptList[gridMain.GetSelectedIndex()].AptNum);
+			DateJumpToString=ApptList[gridMain.GetSelectedIndex()].AptDateTime.Date.ToShortDateString();
 			oResult=OtherResult.GoTo;
 			DialogResult=DialogResult.OK;
 		}
@@ -989,11 +1039,11 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//only used when selecting from TaskList. oResult is completely ignored in this case.
 			//I didn't bother enabling double click. Maybe later.
-			if(tbApts.SelectedRow==-1){
+			if(gridMain.GetSelectedIndex()==-1){
 				MessageBox.Show(Lan.g(this,"Please select appointment first."));
 				return;
 			}
-			AptNumsSelected.Add(ApptList[tbApts.SelectedRow].AptNum);
+			AptNumsSelected.Add(ApptList[gridMain.GetSelectedIndex()].AptNum);
 			DialogResult=DialogResult.OK;
 		}
 
