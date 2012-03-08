@@ -8843,6 +8843,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				int scannerComp=PIn.Int(Db.GetScalar(command));
 				command="UPDATE computerpref SET ScanDocQuality = "+POut.Int(scannerComp);
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE timecardrule ADD BeforeTimeOfDay time NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE timecardrule ADD BeforeTimeOfDay date";
+					Db.NonQ(command);
+					command="UPDATE timecardrule SET BeforeTimeOfDay = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE BeforeTimeOfDay IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE timecardrule MODIFY BeforeTimeOfDay NOT NULL";
+					Db.NonQ(command);
+				}
+
 
 
 
@@ -8885,3 +8898,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
+
+
+				
