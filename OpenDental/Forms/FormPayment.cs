@@ -1217,9 +1217,10 @@ namespace OpenDental {
 			File.Delete(resultfile);//delete the old result file.
 			info.Arguments="";
 			double amt=PIn.Double(textAmount.Text);
-			if(amt>0) {
-				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" /LOCKAMOUNT ";
+			if(amt<0) {//X-Charge always wants a positive number, even for returns.
+				amt*=-1;
 			}
+			info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" /LOCKAMOUNT ";
 			CreditCard CCard=null;
 			List<CreditCard> creditCards=CreditCards.Refresh(PatCur.PatNum);
 			for(int i=0;i<creditCards.Count;i++) {
@@ -1307,6 +1308,7 @@ namespace OpenDental {
 			string line="";
 			bool showApprovedAmtNotice=false;
 			bool xAdjust=false;
+			bool xReturn=false;
 			bool xVoid=false;
 			double approvedAmt=0;
 			double additionalFunds=0;
@@ -1340,6 +1342,9 @@ namespace OpenDental {
 							needToken=false;//Don't update CCard due to failure
 							newCard=false;//Don't insert CCard due to failure
 							break;
+						}
+						if(tranType==1) {
+							xReturn=true;
 						}
 						if(tranType==6) {
 							xAdjust=true;
@@ -1395,7 +1400,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			if(showApprovedAmtNotice && !xVoid && !xAdjust) {
+			if(showApprovedAmtNotice && !xVoid && !xAdjust && !xReturn) {
 				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
 					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) {
 					textAmount.Text=approvedAmt.ToString("F");
@@ -1406,9 +1411,12 @@ namespace OpenDental {
 				textNote.Text="";
 				textAmount.Text=approvedAmt.ToString("F");
 			}
-			if(xVoid) {
-				if(IsNew) {
-					textAmount.Text="-"+approvedAmt.ToString("F");
+			else if(xReturn) {
+				textAmount.Text="-"+approvedAmt.ToString("F");
+			}
+			else if(xVoid) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"The void was successful, remove this payment entry from Open Dental?")) {
+					butDeleteAll_Click(sender,e);
 				}
 			}
 			if(additionalFunds>0) {
