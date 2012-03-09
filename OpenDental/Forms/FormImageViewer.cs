@@ -17,7 +17,6 @@ namespace OpenDental{
 		private System.Windows.Forms.PictureBox PictureBox1;
 		private System.ComponentModel.IContainer components;
 		private System.Windows.Forms.ImageList imageListTools;
-		private Timer timer1;
 		private Point MouseDownOrigin;
 		private bool MouseIsDown=false;
 		private Document displayedDoc=null;
@@ -57,6 +56,14 @@ namespace OpenDental{
 				{
 					components.Dispose();
 				}
+				if(backBuffGraph!=null) {
+					backBuffGraph.Dispose();
+					backBuffGraph=null;
+				}
+				if(backBuffer!=null) {
+					backBuffer.Dispose();
+					backBuffer=null;
+				}
 			}
 			base.Dispose( disposing );
 		}
@@ -72,7 +79,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormImageViewer));
 			this.imageListTools = new System.Windows.Forms.ImageList(this.components);
 			this.PictureBox1 = new System.Windows.Forms.PictureBox();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			((System.ComponentModel.ISupportInitialize)(this.PictureBox1)).BeginInit();
 			this.SuspendLayout();
@@ -99,12 +105,6 @@ namespace OpenDental{
 			this.PictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseDown);
 			this.PictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseMove);
 			this.PictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PictureBox1_MouseUp);
-			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 20;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// ToolBarMain
 			// 
@@ -176,23 +176,26 @@ namespace OpenDental{
 				ImageCurrent=null;
 				renderImage=null;
 			}
+			UpdatePictureBox();
 		}
 
 		private void FormImageViewer_Resize(object sender,System.EventArgs e) {
 			if(backBuffGraph!=null) {
 				backBuffGraph.Dispose();
+				backBuffGraph=null;
 			}
-			backBuffGraph=null;
 			if(backBuffer!=null) {
 				backBuffer.Dispose();
+				backBuffer=null;
 			}
-			backBuffer=null;
 			int width=PictureBox1.Bounds.Width;
 			int height=PictureBox1.Bounds.Height;
 			if(width>0 && height>0) {
 				backBuffer=new Bitmap(width,height);
 				backBuffGraph=Graphics.FromImage(backBuffer);
 			}
+			PictureBox1.Image=backBuffer;
+			UpdatePictureBox();
 		}
 
 		///<summary>Causes the toolbar to be laid out again.</summary>
@@ -225,6 +228,7 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
 			imageTranslation=new PointF(imageTranslation.X-p.X,imageTranslation.Y-p.Y);
 			zoomFactor=(float)Math.Pow(2,zoomLevel);
+			UpdatePictureBox();
 		}
 
 		private void OnZoomOut_Click() {
@@ -233,11 +237,13 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-imageTranslation.X,c.Y-imageTranslation.Y);
 			imageTranslation=new PointF(imageTranslation.X+p.X/2.0f,imageTranslation.Y+p.Y/2.0f);
 			zoomFactor=(float)Math.Pow(2,zoomLevel);
+			UpdatePictureBox();
 		}
 
 		private void OnWhite_Click(){
 			ImageCurrent=new Bitmap(1,1);
 			renderImage=new Bitmap(1,1);
+			UpdatePictureBox();
 		}
 
 		private void PictureBox1_MouseDown(object sender,MouseEventArgs e) {
@@ -252,6 +258,7 @@ namespace OpenDental{
 				if(ImageCurrent!=null) {
 					imageTranslation=new PointF(imageLocation.X+(e.Location.X-MouseDownOrigin.X),
 						imageLocation.Y+(e.Location.Y-MouseDownOrigin.Y));
+					UpdatePictureBox();
 				}
 			}
 		}
@@ -261,18 +268,15 @@ namespace OpenDental{
 			PictureBox1.Cursor=Cursors.Default;
 		}
 
-		private void timer1_Tick(object sender,EventArgs e) {
-			try{
+		private void UpdatePictureBox() {
+			try {
 				backBuffGraph.Clear(Pens.White.Color);
 				backBuffGraph.Transform=ContrImages.GetScreenMatrix(displayedDoc,ImageCurrent.Width,ImageCurrent.Height,imageZoom*zoomFactor,imageTranslation);
 				backBuffGraph.DrawImage(renderImage,0,0);
-				Graphics pbg=PictureBox1.CreateGraphics();
-				pbg.DrawImage(backBuffer,0,0);
-				pbg.Dispose();
+				PictureBox1.Refresh();
 			}
-			catch{
-				//Not being able to render the image is non-fatal and probably due to a simple change in state
-				//or rounding errors.
+			catch {
+				//Not being able to render the image is non-fatal and probably due to a simple change in state or rounding errors.
 			}
 		}
 
