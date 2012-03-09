@@ -361,7 +361,6 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 168);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(897, 398);
 			this.gridMain.TabIndex = 67;
 			this.gridMain.Title = "Appointments for Patient";
