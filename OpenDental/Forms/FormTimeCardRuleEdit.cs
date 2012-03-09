@@ -28,11 +28,17 @@ namespace OpenDental {
 			}
 			textOverHoursPerDay.Text=timeCardRule.OverHoursPerDay.ToStringHmm();
 			textAfterTimeOfDay.Text=timeCardRule.AfterTimeOfDay.ToStringHmm();
+			textBeforeTimeOfDay.Text=timeCardRule.BeforeTimeOfDay.ToStringHmm();
 		}
 
 		private void but5pm_Click(object sender,EventArgs e) {
 			DateTime dt=new DateTime(2010,1,1,17,0,0);
 			textAfterTimeOfDay.Text=dt.ToShortTimeString();
+		}
+
+		private void but6am_Click(object sender,EventArgs e) {
+			DateTime dt=new DateTime(2010,1,1,6,0,0);
+			textBeforeTimeOfDay.Text=dt.ToShortTimeString();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -86,8 +92,22 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if(overHoursPerDay==TimeSpan.Zero && afterTimeOfDay==TimeSpan.Zero) {
-				MsgBox.Show(this,"Hours or time of day must be entered.");
+			TimeSpan beforeTimeOfDay=TimeSpan.Zero;
+			if(textBeforeTimeOfDay.Text!="") {
+				try {
+					beforeTimeOfDay=DateTime.Parse(textBeforeTimeOfDay.Text).TimeOfDay;
+				}
+				catch {
+					MsgBox.Show(this,"Before time of day invalid.");
+					return;
+				}
+				if(beforeTimeOfDay==TimeSpan.Zero || beforeTimeOfDay.Days>0) {
+					MsgBox.Show(this,"Before time of day invalid.");
+					return;
+				}
+			}
+			if(overHoursPerDay==TimeSpan.Zero && afterTimeOfDay==TimeSpan.Zero && beforeTimeOfDay==TimeSpan.Zero) {
+				MsgBox.Show(this,"Either over hours, after or before time of day must be entered.");
 				return;
 			}
 			//save-------------------------------------------------
@@ -99,6 +119,7 @@ namespace OpenDental {
 			}
 			timeCardRule.OverHoursPerDay=overHoursPerDay;
 			timeCardRule.AfterTimeOfDay=afterTimeOfDay;
+			timeCardRule.BeforeTimeOfDay=beforeTimeOfDay;
 			if(timeCardRule.IsNew) {
 				TimeCardRules.Insert(timeCardRule);
 			}

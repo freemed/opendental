@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				timeCardRule.EmployeeNum    = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
 				timeCardRule.OverHoursPerDay= PIn.Time(table.Rows[i]["OverHoursPerDay"].ToString());
 				timeCardRule.AfterTimeOfDay = PIn.Time(table.Rows[i]["AfterTimeOfDay"].ToString());
+				timeCardRule.BeforeTimeOfDay= PIn.Time(table.Rows[i]["BeforeTimeOfDay"].ToString());
 				retVal.Add(timeCardRule);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="TimeCardRuleNum,";
 			}
-			command+="EmployeeNum,OverHoursPerDay,AfterTimeOfDay) VALUES(";
+			command+="EmployeeNum,OverHoursPerDay,AfterTimeOfDay,BeforeTimeOfDay) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(timeCardRule.TimeCardRuleNum)+",";
 			}
 			command+=
 				     POut.Long  (timeCardRule.EmployeeNum)+","
 				+    POut.Time  (timeCardRule.OverHoursPerDay)+","
-				+    POut.Time  (timeCardRule.AfterTimeOfDay)+")";
+				+    POut.Time  (timeCardRule.AfterTimeOfDay)+","
+				+    POut.Time  (timeCardRule.BeforeTimeOfDay)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE timecardrule SET "
 				+"EmployeeNum    =  "+POut.Long  (timeCardRule.EmployeeNum)+", "
 				+"OverHoursPerDay=  "+POut.Time  (timeCardRule.OverHoursPerDay)+", "
-				+"AfterTimeOfDay =  "+POut.Time  (timeCardRule.AfterTimeOfDay)+" "
+				+"AfterTimeOfDay =  "+POut.Time  (timeCardRule.AfterTimeOfDay)+", "
+				+"BeforeTimeOfDay=  "+POut.Time  (timeCardRule.BeforeTimeOfDay)+" "
 				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(timeCardRule.AfterTimeOfDay != oldTimeCardRule.AfterTimeOfDay) {
 				if(command!=""){ command+=",";}
 				command+="AfterTimeOfDay = "+POut.Time  (timeCardRule.AfterTimeOfDay)+"";
+			}
+			if(timeCardRule.BeforeTimeOfDay != oldTimeCardRule.BeforeTimeOfDay) {
+				if(command!=""){ command+=",";}
+				command+="BeforeTimeOfDay = "+POut.Time  (timeCardRule.BeforeTimeOfDay)+"";
 			}
 			if(command==""){
 				return;

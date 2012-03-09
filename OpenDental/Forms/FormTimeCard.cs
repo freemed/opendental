@@ -512,7 +512,7 @@ namespace OpenDental{
 			labelOvertime.Visible=false;
 			butCompute.Visible=false;
 			butAdj.Visible=false;
-			butDaily.Visible=false;
+			//butDaily.Visible=false;
 			FillMain(true);
 		}
 
@@ -974,6 +974,7 @@ namespace OpenDental{
 			}
 			//OT-------------------------------------------------------------------------------------------------------------
 			TimeSpan afterTime=TimeSpan.Zero;
+			TimeSpan beforeTime=TimeSpan.Zero;
 			TimeSpan overHours=TimeSpan.Zero;
 			//loop through timecardrules to find one rule of each kind.
 			for(int i=0;i<TimeCardRules.Listt.Count;i++){
@@ -988,8 +989,8 @@ namespace OpenDental{
 					}
 					afterTime=TimeCardRules.Listt[i].AfterTimeOfDay;
 				}
-				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero){
-					if(overHours > TimeSpan.Zero){//already found a match, and this is a second match
+				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero) {
+					if(overHours > TimeSpan.Zero) {//already found a match, and this is a second match
 						Cursor=Cursors.Default;
 						MsgBox.Show(this,"Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
 						return;
@@ -1000,6 +1001,19 @@ namespace OpenDental{
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
 					return;
+				}
+				if(beforeTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
+					return;
+				}
+				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
+				  if(beforeTime>TimeSpan.Zero) {
+				    Cursor=Cursors.Default;
+				    MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
+				    return;
+				  }
+					beforeTime=TimeCardRules.Listt[i].BeforeTimeOfDay;
 				}
 			}
 			//loop through all ClockEvents in this grid.
@@ -1051,7 +1065,16 @@ namespace OpenDental{
 						ClockEventList[i].OTimeAuto=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTime;//only a portion of the pairTotal is OT
 					}
 				}
-				else if(overHours != TimeSpan.Zero){
+				if(beforeTime!=TimeSpan.Zero) {
+					//test to see if this span is after specified time
+					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime){//the end time is before time, so the whole pairTotal is OT
+						ClockEventList[i].OTimeAuto=pairTotal;
+					}
+					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime){//only the first time is before time
+						ClockEventList[i].OTimeAuto=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
+					}
+				}
+				if(overHours != TimeSpan.Zero){
 					//test dailyTotal
 					if(dailyTotal > overHours){
 						ClockEventList[i].OTimeAuto=dailyTotal-overHours;

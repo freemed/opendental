@@ -19,6 +19,9 @@ namespace OpenDentBusiness{
 		///<summary>Typical example is 16:00 to indicate that all time worked after 4pm for specific employees is overtime.</summary>
 		[XmlIgnore]
 		public TimeSpan AfterTimeOfDay;
+		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is overtime.</summary>
+		[XmlIgnore]
+		public TimeSpan BeforeTimeOfDay;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OverHoursPerDay",typeof(long))]
@@ -39,6 +42,17 @@ namespace OpenDentBusiness{
 			}
 			set {
 				AfterTimeOfDay = TimeSpan.FromTicks(value);
+			}
+		}
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("BeforeTimeOfDay",typeof(long))]
+		public long BeforeTimeOfDayXml {
+			get {
+				return BeforeTimeOfDay.Ticks;
+			}
+			set {
+				BeforeTimeOfDay = TimeSpan.FromTicks(value);
 			}
 		}
 
