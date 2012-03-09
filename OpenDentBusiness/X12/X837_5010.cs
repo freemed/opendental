@@ -2128,6 +2128,8 @@ namespace OpenDentBusiness
 			Referral referral=Referrals.GetReferral(claim.ReferringProv);
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
+			List<PatPlan> patPlans=PatPlans.Refresh(claim.PatNum);
+			PatPlan patPlan=PatPlans.GetFromList(patPlans,claim.InsSubNum);
 			if(claim.MedType==EnumClaimMedType.Medical) {
 				if(referral!=null && referral.IsDoctor && referral.NotPerson) {
 					Comma(strb);
@@ -2263,7 +2265,15 @@ namespace OpenDentBusiness
 			if(IsDentiCal(clearhouse)) {
 				if(GetFilingCode(insPlan)!="MC") {
 					Comma(strb);
-					strb.Append("InsPlan Filing Code must be Medicaid for Denti-Cal.");
+					strb.Append("InsPlan Filing Code must be Medicaid for Denti-Cal");
+				}
+				if(sub.Subscriber!=claim.PatNum) {
+					Comma(strb);
+					strb.Append("Subscriber must be the same as the patient for Denti-Cal");
+				}
+				if(patPlan.Relationship!=Relat.Self) {
+					Comma(strb);
+					strb.Append("Insurance relationship must be self for Denti-Cal");
 				}
 				//We cannot perform this check, because the user must enter this ID in the carrier payor id box before this block is even triggered, defeating the purpose of this check.
 				//if(carrier.ElectID!="94146") {
@@ -2403,9 +2413,11 @@ namespace OpenDentBusiness
 					strb.Append("PatientStatusCode");
 				}
 			}
-			if(claim.DateService.Year<1880) {
-				Comma(strb);
-				strb.Append("DateService");
+			if(claim.ClaimType!="PreAuth") {
+				if(claim.DateService.Year<1880) {
+					Comma(strb);
+					strb.Append("DateService");
+				}
 			}
 			if(claim.MedType==EnumClaimMedType.Institutional
 				|| claim.MedType==EnumClaimMedType.Medical) 
