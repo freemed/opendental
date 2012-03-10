@@ -426,13 +426,21 @@ namespace OpenDental{
 			textMedName.Text=Medications.GetMedication(MedicationPatCur.MedicationNum).MedName;
 			textGenericName.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).MedName;
 			textMedNote.Text=Medications.GetGeneric(MedicationPatCur.MedicationNum).Notes;
+			comboProv.Items.Add(Lan.g(this,"none"));
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProv.Items.Add(ProviderC.ListShort[i].GetLongDesc());
-				if(MedicationPatCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
-					comboProv.SelectedIndex=i;
-				}
 			}
-			//if a provider was subsequently hidden or if none entered in the first place, the combobox may now be -1.
+			if(MedicationPatCur.ProvNum==0){
+				comboProv.SelectedIndex=0;
+			}
+			else{
+				for(int i=0;i<ProviderC.ListShort.Count;i++) {
+					if(MedicationPatCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
+						comboProv.SelectedIndex=i+1;
+					}
+				}
+				//if a provider was subsequently hidden, then the combobox may now be -1.
+			}
 			textPatNote.Text=MedicationPatCur.PatNote;
 			if(MedicationPatCur.DateStart.Year>1880) {
 				textDateStart.Text=MedicationPatCur.DateStart.ToShortDateString();
@@ -515,10 +523,13 @@ namespace OpenDental{
 			}
 			//MedicationPatCur.MedicationNum is already set before entering this window, or else changed up above.
 			if(comboProv.SelectedIndex==-1) {
-				//don't make any changes to provnum.  0 is ok, but should never happen.  ProvNum might also be for a hidden prov.
+				//don't make any changes to provnum.  ProvNum is a hidden prov.
+			}
+			else if(comboProv.SelectedIndex==0){
+				MedicationPatCur.ProvNum=0;
 			}
 			else {
-				MedicationPatCur.ProvNum=ProviderC.ListShort[comboProv.SelectedIndex].ProvNum;
+				MedicationPatCur.ProvNum=ProviderC.ListShort[comboProv.SelectedIndex-1].ProvNum;
 			}
 			MedicationPatCur.PatNote=textPatNote.Text;
 			MedicationPatCur.DateStart=PIn.Date(textDateStart.Text);
