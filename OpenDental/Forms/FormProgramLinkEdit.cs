@@ -278,8 +278,8 @@ namespace OpenDental{
 			this.label9.Size = new System.Drawing.Size(410,39);
 			this.label9.TabIndex = 61;
 			this.label9.Text = "For custom bridges, NOT for regular bridges, you can also include [LName], [FName" +
-    "], [PatNum], [ChartNumber], [WirelessPhone], or [HmPhone] in either of the two b" +
-    "oxes above.";
+    "], [PatNum], [ChartNumber], [WirelessPhone], [HmPhone], or [WkPhone] in either o" +
+    "f the two boxes above.";
 			// 
 			// gridMain
 			// 
