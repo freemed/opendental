@@ -995,13 +995,38 @@ namespace OpenDental{
 					grow=new ODGridRow();
 					grow.Cells.Add(tableAccount.Rows[p]["date"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["patient"].ToString());
-					grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
-					grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						if(Stmt.IsReceipt) {
+							grow.Cells.Add("");//Code: blank in Canada normally because this information is used on taxes and is considered a security concern.
+							grow.Cells.Add("");//Tooth: blank in Canada normally because this information is used on taxes and is considered a security concern.
+						}
+						else {
+							grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
+							grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
+						}
+					}
+					else {
+						grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
+						grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
+					}
 					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
 						if(tableAccount.Rows[p]["prov"].ToString().Trim()!=""){
 							grow.Cells.Add(tableAccount.Rows[p]["prov"].ToString()+" - "+tableAccount.Rows[p]["description"].ToString());
 						}
 						else{//No provider on this account row item, so don't put the extra leading characters.
+							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+						}
+					}
+					else if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						if(Stmt.IsReceipt) {
+							if(PIn.Long(tableAccount.Rows[p]["ProcNum"].ToString())==0) { 
+								grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
+							}
+							else {//Only clear description for procedures.
+								grow.Cells.Add("");//Description: blank in Canada normally because this information is used on taxes and is considered a security concern.
+							}
+						}
+						else {
 							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 						}
 					}
@@ -1034,21 +1059,33 @@ namespace OpenDental{
 			gridPat.Dispose();
 			//Future appointments---------------------------------------------------------------------------------------------
 			#region Future appointments
-			font=MigraDocHelper.CreateFont(9);
-			DataTable tableAppt=dataSet.Tables["appts"];
-			if(tableAppt.Rows.Count>0){
-				par=section.AddParagraph();
-				par.Format.Font=font;
-				par.AddText(Lan.g(this,"Scheduled Appointments:"));
-			}
-			for(int i=0;i<tableAppt.Rows.Count;i++){
-				par.AddLineBreak();
-				par.AddText(tableAppt.Rows[i]["descript"].ToString());
-			}
-			if(tableAppt.Rows.Count>0){
-				MigraDocHelper.InsertSpacer(section,10);
+			if(!Stmt.IsReceipt) {
+				font=MigraDocHelper.CreateFont(9);
+				DataTable tableAppt=dataSet.Tables["appts"];
+				if(tableAppt.Rows.Count>0) {
+					par=section.AddParagraph();
+					par.Format.Font=font;
+					par.AddText(Lan.g(this,"Scheduled Appointments:"));
+				}
+				for(int i=0;i<tableAppt.Rows.Count;i++) {
+					par.AddLineBreak();
+					par.AddText(tableAppt.Rows[i]["descript"].ToString());
+				}
+				if(tableAppt.Rows.Count>0) {
+					MigraDocHelper.InsertSpacer(section,10);
+				}
 			}
 			#endregion Future appointments
+			//Region specific static notes------------------------------------------------------------------------------------
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				if(Stmt.IsReceipt) {
+					font=MigraDocHelper.CreateFont(9);
+					par=section.AddParagraph();
+					par.Format.Font=font;
+					par.AddText("KEEP THIS RECEIPT FOR INCOME TAX PURPOSES");
+					MigraDocHelper.InsertSpacer(section,10);
+				}
+			}
 			//Note------------------------------------------------------------------------------------------------------------
 			font=MigraDocHelper.CreateFont(9);
 			par=section.AddParagraph();
