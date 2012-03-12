@@ -244,7 +244,7 @@ namespace OpenDental{
 		}
 
 		private void pd2_PrintPage(object sender, PrintPageEventArgs ev){//raised for each page to be printed.
-			FillDisplayStrings();
+			FillDisplayStrings(false);
 			int procLimit=ProcLimitForFormat();
 			//claimprocs is filled in FillDisplayStrings
 			if(ListClaimProcs.Count==0){
@@ -414,7 +414,7 @@ namespace OpenDental{
 		public string[][] FillRenaissance() {
 			//IsRenaissance=true;
 			int procLimit=8;
-			FillDisplayStrings();//claimprocs is filled in FillDisplayStrings
+			FillDisplayStrings(true);//claimprocs is filled in FillDisplayStrings
 														//, so this is just a little extra work
 			totalPages=(int)Math.Ceiling((double)ListClaimProcs.Count/(double)procLimit);
 			string[][] retVal=new string[totalPages][];
@@ -427,8 +427,8 @@ namespace OpenDental{
 			return retVal;
 		}
 
-		///<summary>Gets all necessary info from db based on ThisPatNum and ThisClaimNum.  Then fills displayStrings with the actual text that will display on claim.</summary>
-		private void FillDisplayStrings(){
+		///<summary>Gets all necessary info from db based on ThisPatNum and ThisClaimNum.  Then fills displayStrings with the actual text that will display on claim.  The isRenaissance flag is very temporary.</summary>
+		private void FillDisplayStrings(bool isRenaissance){
 			if(PrintBlank){
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 					ClaimFormCur=ClaimForms.GetClaimFormByUniqueId("OD6");//CDA claim form
@@ -753,11 +753,20 @@ namespace OpenDental{
 					case "SubscrZip":
 						displayStrings[i]=subsc.Zip;
 						break;
-					case "SubscrPhone":
-						string phone=subsc.HmPhone.Replace("(","");
-						phone=phone.Replace(")","    ");
-						phone=phone.Replace("-","  ");
-						displayStrings[i]=phone;
+					case "SubscrPhone"://needs work.  Only used for 1500
+						if(isRenaissance) {
+							//Expecting (XXX)XXX-XXXX
+							displayStrings[i]=subsc.HmPhone;
+							if(subsc.HmPhone.Length>14) {//Might have a note following the number.
+								displayStrings[i]=subsc.HmPhone.Substring(0,14);
+							}
+						}
+						else {
+							string phone=subsc.HmPhone.Replace("(","");
+							phone=phone.Replace(")","    ");
+							phone=phone.Replace("-","  ");
+							displayStrings[i]=phone;
+						}
 						break;
 					case "SubscrDOB":
 						if(ClaimFormCur.Items[i].FormatString=="") {
@@ -930,11 +939,20 @@ namespace OpenDental{
 					case "PatientZip":
 						displayStrings[i]=PatCur.Zip;
 						break;
-					case "PatientPhone":
-						string phonep=PatCur.HmPhone.Replace("(","");
-						phonep=phonep.Replace(")","    ");
-						phonep=phonep.Replace("-","  ");
-						displayStrings[i]=phonep;
+					case "PatientPhone"://needs work.  Only used for 1500
+						if(isRenaissance) {
+							//Expecting (XXX)XXX-XXXX
+							displayStrings[i]=PatCur.HmPhone;
+							if(PatCur.HmPhone.Length>14) {//Might have a note following the number.
+								displayStrings[i]=PatCur.HmPhone.Substring(0,14);
+							}
+						}
+						else {
+							string phonep=PatCur.HmPhone.Replace("(","");
+							phonep=phonep.Replace(")","    ");
+							phonep=phonep.Replace("-","  ");
+							displayStrings[i]=phonep;
+						}
 						break;
 					case "PatientDOB":
 						if(ClaimFormCur.Items[i].FormatString=="") {
