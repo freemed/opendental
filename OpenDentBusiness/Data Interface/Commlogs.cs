@@ -29,13 +29,16 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>If a commlog exists with today's date for the current user and has no stop time, then that commlog is returned so it can be reopened.  Otherwise, return null.</summary>
-		public static Commlog GetIncompleteEntry(long userNum) {
+		public static Commlog GetIncompleteEntry(long userNum,long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Commlog>(MethodBase.GetCurrentMethod(),userNum);
+				return Meth.GetObject<Commlog>(MethodBase.GetCurrentMethod(),userNum,patNum);
 			}
 			//no need for Oracle compatibility
 			string command="SELECT * FROM commlog WHERE DATE(CommDateTime)=CURDATE() "
 				+"AND UserNum="+POut.Long(userNum)+" "
+				+"AND PatNum="+POut.Long(patNum)+" "
+				+"AND (CommType=292 OR CommType=441) "//support call or chat, DefNums
+				+"AND Mode_="+POut.Int((int)CommItemMode.Phone)+" "//mode=phone
 				+"AND DateTimeEnd < '1880-01-01' LIMIT 1";
 			return Crud.CommlogCrud.SelectOne(command);
 		}

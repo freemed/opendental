@@ -3412,7 +3412,7 @@ namespace OpenDental{
 			Patient pat=Patients.GetPat(CurPatNum);
 			RefreshCurrentModule();
 			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber,pat.SiteNum);
-			Commlog commlog=Commlogs.GetIncompleteEntry(Security.CurUser.UserNum);
+			Commlog commlog=Commlogs.GetIncompleteEntry(Security.CurUser.UserNum,CurPatNum);
 			if(commlog==null) {
 				commlog = new Commlog();
 				commlog.PatNum = CurPatNum;
