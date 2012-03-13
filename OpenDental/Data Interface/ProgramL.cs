@@ -35,8 +35,12 @@ namespace OpenDental{
 				Apixia.SendData(prog,pat);
 				return;
 			}
-			if(prog.ProgName==ProgramName.Apteryx.ToString()) {
+			else if(prog.ProgName==ProgramName.Apteryx.ToString()) {
 				Apteryx.SendData(prog,pat);
+				return;
+			}
+			else if(prog.ProgName==ProgramName.BioPAK.ToString()) {
+				BioPAK.SendData(prog,pat);
 				return;
 			}
 			else if(prog.ProgName==ProgramName.Camsight.ToString()) {
@@ -153,6 +157,10 @@ namespace OpenDental{
 			}
 			else if(prog.ProgName==ProgramName.PTupdate.ToString()) {
 				PaperlessTechnology.SendData(prog,pat,true);
+				return;
+			}
+			else if(prog.ProgName==ProgramName.RayMage.ToString()) {
+				RayMage.SendData(prog,pat);
 				return;
 			}
 #if !DISABLE_WINDOWS_BRIDGES
