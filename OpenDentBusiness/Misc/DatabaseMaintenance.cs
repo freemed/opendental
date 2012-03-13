@@ -507,7 +507,7 @@ namespace OpenDentBusiness {
 				"610226",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
 				//appq
 				"628112",1,"02",claimTypes|reversalTypes|predeterminationTypes|cobTypes,canadianNetworkNumTelusB,
-				//alberta blue cross
+				//alberta blue cross (not on ITRANS carrier list but is needed).
 				"000090",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes,canadianNetworkNumABC,
 				//assumption life
 				"610191",1,"04",claimTypes,canadianNetworkNumTelusB,
@@ -519,6 +519,10 @@ namespace OpenDentBusiness {
 				"610146",1,"02",claimTypes|predeterminationTypes,canadianNetworkNumTelusB,
 				//beneplan
 				"400008",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
+				//boilermakers' national benefit plan
+				"000116",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//canadian benefit providers
+				"610202",1,"04",claimTypes|reversalTypes|predeterminationTypes|cobTypes,canadianNetworkNumTelusB,
 				//capitale
 				"600502",1,"04",claimTypes,canadianNetworkNumTelusB,
 				//cdcs
@@ -617,6 +621,10 @@ namespace OpenDentBusiness {
 				"000080",1,"04",claimTypes,canadianNetworkNumCSI,
 				//syndicat des fonctionnaires municipaux mtl
 				"610677",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//u.a. local 46 dental plan
+				"000115",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
+				//u.a. local 787 health trust fund dental plan
+				"000110",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
 				//wawanesa
 				"311109",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
 			};

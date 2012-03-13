@@ -8855,7 +8855,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE timecardrule MODIFY BeforeTimeOfDay NOT NULL";
 					Db.NonQ(command);
 				}
-
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='CSI' LIMIT 1";
+					long canadianNetworkNumCSI=PIn.Long(Db.GetScalar(command));
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000116'"; //boilermakers' national benefit plan
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Boilermakers\\' National Benefit Plan','45 McIntosh Drive','','Markham','ON','L3R 8C7','1-800-668-7547','000116','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,384)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000115'"; //u.a. local 46 dental plan
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('U.A. Local 46 Dental Plan','936 Warden Avenue','','Scarborough','ON','M1L 4C9','1-800-263-3564','000115','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,384)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000110'"; //u.a. local 787 Health Trust Fund Dental Plan
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('U.A. Local 787 Health Trust Fund Dental Plan','419 Deerhurst Drive','','Brampton','ON','L6T 5K3','1-204-985-3940','000110','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,384)";
+						Db.NonQ(command);
+					}
+				}
 
 
 
