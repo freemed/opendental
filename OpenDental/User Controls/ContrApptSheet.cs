@@ -69,8 +69,8 @@ namespace OpenDental {
 		}
 
 		private void ContrApptSheet_Layout(object sender,System.Windows.Forms.LayoutEventArgs e) {
-			Height=ApptDrawing.LineH*24*ApptDrawing.RowsPerHr;
-			Width=(int)(ApptDrawing.TimeWidth*2+ApptDrawing.ProvWidth*ApptDrawing.ProvCount+ApptDrawing.ColWidth*ApptDrawing.ColCount);
+			//Height=ApptDrawing.LineH*24*ApptDrawing.RowsPerHr;
+			//Width=(int)(ApptDrawing.TimeWidth*2+ApptDrawing.ProvWidth*ApptDrawing.ProvCount+ApptDrawing.ColWidth*ApptDrawing.ColCount);
 		}
 
 		///<summary></summary>
@@ -84,8 +84,11 @@ namespace OpenDental {
 				Shadow.Dispose();
 				Shadow=null;
 			}
-			if(Width<2)
+			Height=ApptDrawing.LineH*24*ApptDrawing.RowsPerHr;
+			Width=(int)(ApptDrawing.TimeWidth*2+ApptDrawing.ProvWidth*ApptDrawing.ProvCount+ApptDrawing.ColWidth*ApptDrawing.ColCount);
+			if(Width<2) {
 				return;
+			}
 			Shadow=new Bitmap(Width,Height);
 			if(ApptDrawing.RowsPerIncr==0)
 				ApptDrawing.RowsPerIncr=1;

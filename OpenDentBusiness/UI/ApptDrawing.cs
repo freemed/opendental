@@ -54,6 +54,8 @@ namespace OpenDentBusiness.UI {
 
 		///<summary>Draws the entire Appt background.  Used for main Appt module, for printing, and for mobile app.  Pass start and stop times of 12AM for 24 hours.  Set colsPerPage to VisOps.Count unless printing.  Set pageColumn to 0 unless printing.  Default fontSize is 8 unless printing.</summary>
 		public static void DrawAllButAppts(Graphics g,bool showRedTimeLine,DateTime startTime,DateTime stopTime,int colsPerPage,int pageColumn,int fontSize,bool isPrinting) {
+			//This will clear up the screen if the user clicked on a day where no providers are scheduled or any other scenario in which ColWidth will be 0.
+			g.FillRectangle(new SolidBrush(SystemColors.Control),0,0,ApptSheetWidth,ApptSheetHeight);
 			g.FillRectangle(new SolidBrush(Color.LightGray),0,0,TimeWidth,ApptSheetHeight);//L time bar
 			g.FillRectangle(new SolidBrush(Color.LightGray),TimeWidth+ColWidth*ColCount+ProvWidth*ProvCount,0,TimeWidth,ApptSheetHeight);//R time bar
 			DrawMainBackground(g,startTime,stopTime,colsPerPage,pageColumn);
