@@ -1264,7 +1264,9 @@ namespace OpenDental{
 				butComplete.Visible=true;
 				butPDF.Visible=true;
 				//for eCW, we need to hide some things--------------------
-				butDelete.Visible=false;
+				if(Bridges.ECW.AptNum==AptCur.AptNum) {
+					butDelete.Visible=false;
+				}
 				butPin.Visible=false;
 				butTask.Visible=false;
 				butAddComm.Visible=false;
