@@ -77,8 +77,9 @@ namespace OpenDentBusiness {
 			if(image==null) {//Any operation on a non-existant image produces a non-existant image.
 				return null;
 			}
-			if(doc==null) {//No doc implies no operations, implies that the image should be returned unaltered.
-				return (Bitmap)image.Clone();
+			if(doc==null) {//No doc implies no operations, implies that the image should be returned "unaltered".
+				//return (Bitmap)image.Clone();//this would keep the original resolution, which causes problems.
+				return new Bitmap(image);//resets the resolution to 96, just like it does for docs 20 lines down.
 			}
 			//CROP - Implies that the croping rectangle must be saved in raw-image-space coordinates, 
 			//with an origin of that equal to the upper left hand portion of the image.
