@@ -1240,7 +1240,9 @@ namespace OpenDentBusiness{
 			else{
 				command+="AND TIME(DateTimeSeated) = 0 ";
 			}
-			command+="AND AptStatus IN ("+POut.Int((int)ApptStatus.Scheduled)+","+POut.Int((int)ApptStatus.ASAP)+") "//None of the other statuses
+			command+="AND AptStatus IN ("+POut.Int((int)ApptStatus.Complete)+","
+																	 +POut.Int((int)ApptStatus.Scheduled)+","
+																	 +POut.Int((int)ApptStatus.ASAP)+") "//None of the other statuses
 				+"ORDER BY AptDateTime";
 			DataTable raw=dcon.GetTable(command);
 			TimeSpan timeArrived;
