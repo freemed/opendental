@@ -50,6 +50,19 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Returns table containing the total RegHours and OTimeHours for an employee.  Used only in the time card manage window.</summary>
+		public static DataTable GetTimeCardManageAdjustmentsForEmp(long empNum,DateTime fromDate,DateTime toDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),empNum,fromDate,toDate);
+			}
+			string command="SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(RegHours))) AS AdjReg,SEC_TO_TIME(SUM(TIME_TO_SEC(OTimeHours))) AS AdjOTime "
+				+"FROM timeadjust WHERE "
+				+"EmployeeNum = "+POut.Long(empNum)+" "
+				+"AND "+DbHelper.DateColumn("TimeEntry")+" >= "+POut.Date(fromDate)+" "
+				+"AND "+DbHelper.DateColumn("TimeEntry")+" <= "+POut.Date(toDate);
+			return Db.GetTable(command);
+		}
+
 		
 	
 

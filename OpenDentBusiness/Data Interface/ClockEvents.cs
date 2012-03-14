@@ -216,6 +216,24 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Returns clockevent information for all employees.  Used only in the time card manage window.</summary>
+		public static DataTable GetTimeCardManage(DateTime startDate,DateTime stopDate) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),startDate,stopDate);
+			}
+			string command="SELECT EmployeeNum,"
+				+"SEC_TO_TIME(SUM(TIME_TO_SEC(TimeDisplayed2))-SUM(TIME_TO_SEC(TimeDisplayed1))) AS TotalTime,"
+				+"SEC_TO_TIME(SUM(TIME_TO_SEC(CASE WHEN OTimeHours='-01:00:00' THEN OTimeAuto ELSE OTimeHours END))) AS OverTime,"
+				+"SEC_TO_TIME(SUM(TIME_TO_SEC(CASE WHEN AdjustIsOverridden='1' THEN Adjust ELSE AdjustAuto END))) AS Adjustments"
+				+" FROM clockevent"
+				+" WHERE TimeDisplayed1 >= "+POut.Date(startDate)
+				+" AND TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1)) //Adding a day takes it to midnight of the specified toDate
+				+" AND TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))
+				+" AND (ClockStatus = '0' OR ClockStatus = '1')"
+				+" GROUP BY EmployeeNum";
+			return Db.GetTable(command);
+		}
+
 
 	}
 

@@ -34,7 +34,7 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butPrint = new OpenDental.UI.Button();
+			this.butDetailedPreview = new OpenDental.UI.Button();
 			this.butPreview = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -162,22 +162,22 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butPrint
+			// butDetailedPreview
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(338, 652);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(86, 24);
-			this.butPrint.TabIndex = 20;
-			this.butPrint.Text = "Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			this.butDetailedPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDetailedPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDetailedPreview.Autosize = true;
+			this.butDetailedPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDetailedPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDetailedPreview.CornerRadius = 4F;
+			this.butDetailedPreview.Image = global::OpenDental.Properties.Resources.butPreview;
+			this.butDetailedPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDetailedPreview.Location = new System.Drawing.Point(103, 652);
+			this.butDetailedPreview.Name = "butDetailedPreview";
+			this.butDetailedPreview.Size = new System.Drawing.Size(122, 24);
+			this.butDetailedPreview.TabIndex = 116;
+			this.butDetailedPreview.Text = "&Detailed Preview";
+			this.butDetailedPreview.Click += new System.EventHandler(this.butDetailedPreview_Click);
 			// 
 			// butPreview
 			// 
@@ -189,11 +189,11 @@ namespace OpenDental{
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPreview.Location = new System.Drawing.Point(430, 652);
+			this.butPreview.Location = new System.Drawing.Point(12, 652);
 			this.butPreview.Name = "butPreview";
-			this.butPreview.Size = new System.Drawing.Size(122, 24);
-			this.butPreview.TabIndex = 116;
-			this.butPreview.Text = "Detailed P&review";
+			this.butPreview.Size = new System.Drawing.Size(85, 24);
+			this.butPreview.TabIndex = 117;
+			this.butPreview.Text = "P&review";
 			this.butPreview.Click += new System.EventHandler(this.butPreview_Click);
 			// 
 			// FormTimeCardManage
@@ -201,7 +201,7 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(891, 686);
 			this.Controls.Add(this.butPreview);
-			this.Controls.Add(this.butPrint);
+			this.Controls.Add(this.butDetailedPreview);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butCancel);
@@ -228,7 +228,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private UI.ODGrid gridMain;
-		private UI.Button butPrint;
+		private UI.Button butDetailedPreview;
 		private UI.Button butPreview;
 	}
 }
