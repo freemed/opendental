@@ -1541,7 +1541,7 @@ namespace OpenDental{
 					EZTwain.SetPixelType(2);//24-bit color
 				}
 				EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
-				EZTwain.AcquireMultipageFile(this.Handle,tempFile);//This is where the options dialog would come up. The settings above will not populate this window.
+				EZTwain.AcquireMultipageFile(this.Handle,tempFile);//This is where the options dialog will come up if enabled. This will ignore and override the settings above.
 			}
 			else {
 				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
@@ -1568,14 +1568,12 @@ namespace OpenDental{
 					message="Paper jam\r\n\r\nPlease check the scanner document feeder and ensure there path is clear of any paper jams.";
 				}
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DS_FAILURE) {//5
-					message="Duplex failure\r\n\r\nDuplex mode without scanner options window failed. Try enabling the scanner options window, or disabling duplex mode.";
+					message="Duplex failure\r\n\r\nDuplex mode without scanner options window failed. Try enabling the scanner options window or disabling duplex mode.";
 				}
-				else {//Not one of the known errors from above
-					MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Unknown error: ")+errorCode+" "+((EZTwainErrorCode)errorCode).ToString());
-					return;
+				else {
+					message=errorCode+" "+((EZTwainErrorCode)errorCode).ToString();
 				}
-				//One of the known errors from above was hit
-				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error message: "+message));
+				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error: "+message));
 				return;
 			}
 			ImageNodeId nodeId=new ImageNodeId(); 
