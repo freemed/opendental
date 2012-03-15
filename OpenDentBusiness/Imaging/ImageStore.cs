@@ -343,7 +343,7 @@ namespace OpenDentBusiness {
 			}
 			else {//Assume document
 				//Possible values 0-100?
-				qualityL=PrefC.GetLong(PrefName.ScannerCompression);
+				qualityL=(long)ComputerPrefs.LocalComputer.ScanDocQuality;
 			}
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
@@ -435,7 +435,7 @@ namespace OpenDentBusiness {
 			eob.ClaimPaymentNum=claimPaymentNum;
 			EobAttaches.Insert(eob);//creates filename and saves to db
 			eob=EobAttaches.GetOne(eob.EobAttachNum);
-			long qualityL=PrefC.GetLong(PrefName.ScannerCompression);
+			long qualityL=(long)ComputerPrefs.LocalComputer.ScanDocQuality;
 			ImageCodecInfo myImageCodecInfo;
 			ImageCodecInfo[] encoders;
 			encoders = ImageCodecInfo.GetImageEncoders();

@@ -1424,14 +1424,23 @@ namespace OpenDental{
 				//A user may have more than one scanning device. 
 				//The code below will allow the user to select one.
 				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-//TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
-//TODO: set hideUI based on local pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
-//TODO: set duplex mode
-//TODO: set resolution for scanning
-//TODO: set grayscale
-//TODO: set quality
-				//Use default scanner. Selection is available in Setup Imaging.
-				hdib=EZTwain.AcquireMemory(this.Handle);
+				if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
+					if(!EZTwain.SelectImageSource(this.Handle)) {
+						return;//User clicked cancel.
+					}
+				}
+				EZTwain.SetHideUI(!ComputerPrefs.LocalComputer.ScanDocShowOptions);
+				EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
+				if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
+					EZTwain.SetPixelType(1);//8-bit grayscale - only set if scanner dialog will not show
+				}
+				else {
+					EZTwain.SetPixelType(2);//24-bit color
+				}
+				EZTwain.SetJpegQuality(ComputerPrefs.LocalComputer.ScanDocQuality);
+				//hdib=EZTwain.AcquireMemory(this.Handle);//==Michael - EZTwain documentation recommends using EZTwain.SetXferMech(EZTwain.XFERMECH_MEMORY) and then EZTwain.Acquire instead (see next 2 lines)
+				EZTwain.SetXferMech(EZTwain.XFERMECH_MEMORY);
+				hdib=EZTwain.Acquire(this.Handle);//This is where the options dialog would come up. The settings above will not populate this window.
 				double xdpi=EZTwain.DIB_XResolution(hdib);
 				double ydpi=EZTwain.DIB_XResolution(hdib);
 				IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
@@ -1515,20 +1524,24 @@ namespace OpenDental{
 		private void ToolBarScanMulti_Click() {
 			string tempFile=Path.GetTempFileName().Replace(".tmp", ".pdf");
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
-			//Use default scanner. Selection is available in Setup Imaging.
-//TODO: if local pref - select scanner source is true, then EZTwain.SelectImageSource(this.Handle);
-//TODO: set hideUI based on local pref instead of global pref EZTwain.SetHideUI(PrefC.GetBool(ComputerPref.ScannerSuppressDialog));
-//TODO: set duplex mode
-//TODO: set resolution for scanning
-//TODO: set grayscale
-//TODO: set quality
-			EZTwain.SetHideUI(PrefC.GetBool(PrefName.ScannerSuppressDialog));//if false, this will bring up the scanner interface for the selected scanner a few lines down
-			EZTwain.SetJpegQuality((int)PrefC.GetLong(PrefName.ScannerCompression));
+			if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
+				if(!EZTwain.SelectImageSource(this.Handle)) {
+					return;//User clicked cancel.
+				}
+			}
+			//EZTwain.LogFile(7);//Writes at level 7 (very detailed) in the C:\eztwain.log text file. Useful for getting help from EZTwain support on their forum.
+			EZTwain.SetHideUI(!ComputerPrefs.LocalComputer.ScanDocShowOptions);
+			EZTwain.PDF_SetCompression((int)this.Handle,(int)ComputerPrefs.LocalComputer.ScanDocQuality);
 			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
-				EZTwain.SetPixelType(2);//24-bit Color
-				EZTwain.SetResolution((int)PrefC.GetLong(PrefName.ScannerResolution));
-				
-				EZTwain.AcquireMultipageFile(this.Handle,tempFile);
+				bool duplexEnabled=EZTwain.EnableDuplex(ComputerPrefs.LocalComputer.ScanDocDuplex);//This line seems to cause problems.
+				if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
+					EZTwain.SetPixelType(1);//8-bit grayscale
+				}
+				else {
+					EZTwain.SetPixelType(2);//24-bit color
+				}
+				EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
+				EZTwain.AcquireMultipageFile(this.Handle,tempFile);//This is where the options dialog would come up. The settings above will not populate this window.
 			}
 			else {
 				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
@@ -1542,19 +1555,27 @@ namespace OpenDental{
 					return;
 				}
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_JPEG_DLL) {//22
-					message="\r\nRequired file EZJpeg.dll is missing.";
+					message="Missing dll\r\n\r\nRequired file EZJpeg.dll is missing.";
 				}
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_0_PAGES) {//38
 					//message="\r\nScanning cancelled.";//do nothing
 					return;
 				}
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_NO_PDF) {//43
-					message="\r\nRequired file EZPdf.dll is missing.";
+					message="Missing dll\r\n\r\nRequired file EZPdf.dll is missing.";
 				}
 				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DEVICE_PAPERJAM) {//76
-					message="\r\nPaper jam.";
+					message="Paper jam\r\n\r\nPlease check the scanner document feeder and ensure there path is clear of any paper jams.";
 				}
-				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error code: ")+errorCode+" "+((EZTwainErrorCode)errorCode).ToString()+"\r\n"+message);
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DS_FAILURE) {//5
+					message="Duplex failure\r\n\r\nDuplex mode without scanner options window failed. Try enabling the scanner options window, or disabling duplex mode.";
+				}
+				else {//Not one of the known errors from above
+					MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Unknown error: ")+errorCode+" "+((EZTwainErrorCode)errorCode).ToString());
+					return;
+				}
+				//One of the known errors from above was hit
+				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error message: "+message));
 				return;
 			}
 			ImageNodeId nodeId=new ImageNodeId(); 
@@ -2116,7 +2137,7 @@ namespace OpenDental{
 						new Rectangle(0,0,pictureBoxMain.Width,pictureBoxMain.Height),
 						out ZoomImage,out ZoomLevel,out ZoomOverall,out PointTranslation);
 					RectCrop=new Rectangle(0,0,-1,-1);
-				}	
+				}
 			}
 			ImageSettingFlagsInvalidated |= settings;
 			//DocSelected is an individual document instance. Assigning a new document to DocForSettings here does not 

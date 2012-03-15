@@ -8843,6 +8843,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				int scannerComp=PIn.Int(Db.GetScalar(command));
 				command="UPDATE computerpref SET ScanDocQuality = "+POut.Int(scannerComp);
 				Db.NonQ(command);
+				command="DELETE FROM preference WHERE PrefName = 'ScannerCompression'";
+				Db.NonQ(command);
+				command="DELETE FROM preference WHERE PrefName = 'ScannerResolution'";
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE timecardrule ADD BeforeTimeOfDay time NOT NULL";
 					Db.NonQ(command);
