@@ -221,17 +221,38 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),startDate,stopDate);
 			}
-			string command="SELECT EmployeeNum,"
-				+"SEC_TO_TIME(SUM(TIME_TO_SEC(TimeDisplayed2))-SUM(TIME_TO_SEC(TimeDisplayed1))) AS TotalTime,"
-				+"SEC_TO_TIME(SUM(TIME_TO_SEC(CASE WHEN OTimeHours='-01:00:00' THEN OTimeAuto ELSE OTimeHours END))) AS OverTime,"
-				+"SEC_TO_TIME(SUM(TIME_TO_SEC(CASE WHEN AdjustIsOverridden='1' THEN Adjust ELSE AdjustAuto END))) AS Adjustments"
-				+" FROM clockevent"
-				+" WHERE TimeDisplayed1 >= "+POut.Date(startDate)
-				+" AND TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1)) //Adding a day takes it to midnight of the specified toDate
-				+" AND TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))
-				+" AND (ClockStatus = '0' OR ClockStatus = '1')"
-				+" GROUP BY EmployeeNum";
-			return Db.GetTable(command);
+			return Db.GetTable(GetTimeCardManageCommand(startDate,stopDate));
+		}
+
+		public static string GetTimeCardManageCommand(DateTime startDate,DateTime stopDate) {
+			string command=@"SELECT clockevent.EmployeeNum,employee.LName,SEC_TO_TIME((((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
+						+TIME_TO_SEC(tempclockevent.Adjustments))+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0)))
+						+(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0)))) AS tempTotalTime,
+					SEC_TO_TIME((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
+						+TIME_TO_SEC(tempclockevent.Adjustments)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0))) AS tempRegHrs,
+					SEC_TO_TIME(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0))) AS tempOverTime,
+					tempclockevent.Adjustments,
+					temptimeadjust.AdjReg,
+					temptimeadjust.AdjOTime	
+				FROM clockevent	
+				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(ce.TimeDisplayed2)),0)-IFNULL(SUM(TIME_TO_SEC(ce.TimeDisplayed1)),0)) AS TotalTime,
+					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.OTimeHours='-01:00:00' THEN ce.OTimeAuto ELSE ce.OTimeHours END)),0)) AS OverTime,
+					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS Adjustments 
+					FROM clockevent ce
+					WHERE ce.TimeDisplayed1 >= "+POut.Date(startDate)+@"
+					AND ce.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
+					AND ce.TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))+@"
+					AND (ce.ClockStatus = '0' OR ce.ClockStatus = '1')
+					GROUP BY ce.EmployeeNum) tempclockevent ON clockevent.EmployeeNum=tempclockevent.EmployeeNum
+				LEFT JOIN (SELECT timeadjust.EmployeeNum,SEC_TO_TIME(SUM(TIME_TO_SEC(timeadjust.RegHours))) AS AdjReg,
+					SEC_TO_TIME(SUM(TIME_TO_SEC(timeadjust.OTimeHours))) AdjOTime 
+					FROM timeadjust 
+					WHERE "+DbHelper.DateColumn("TimeEntry")+" >= "+POut.Date(startDate)+@" 
+					AND "+DbHelper.DateColumn("TimeEntry")+" <= "+POut.Date(stopDate)+@"
+					GROUP BY timeadjust.EmployeeNum) temptimeadjust ON clockevent.EmployeeNum=temptimeadjust.EmployeeNum
+				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0
+				GROUP BY EmployeeNum";
+			return command;
 		}
 
 

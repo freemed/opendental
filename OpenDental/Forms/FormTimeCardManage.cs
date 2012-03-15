@@ -56,22 +56,14 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<MainTable.Rows.Count;i++) {
-				//Get all the time adjustments for this employee.
-				DataTable adjTable=TimeAdjusts.GetTimeCardManageAdjustmentsForEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString()),DateStart,DateStop);
-				TimeSpan adjReg=PIn.Time(adjTable.Rows[0]["AdjReg"].ToString());
-				TimeSpan adjOTime=PIn.Time(adjTable.Rows[0]["AdjOTime"].ToString());
-				//Set the clockevent times.
-				TimeSpan totalTime=PIn.Time(MainTable.Rows[i]["TotalTime"].ToString());
-				TimeSpan overTime=PIn.Time(MainTable.Rows[i]["OverTime"].ToString());
-				TimeSpan adjust=PIn.Time(MainTable.Rows[i]["Adjustments"].ToString());
 				row=new ODGridRow();
 				row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
-				row.Cells.Add(((((totalTime-overTime)+adjust)+adjReg)+(overTime+adjOTime)).ToStringHmm());//Total = RegHrs + OTime
-				row.Cells.Add((((totalTime-overTime)+adjust)+adjReg).ToStringHmm());//RegHrs
-				row.Cells.Add((overTime+adjOTime).ToStringHmm());//OTime
-				row.Cells.Add(adjust.ToStringHmm());
-				row.Cells.Add(adjReg.ToStringHmm());
-				row.Cells.Add(adjOTime.ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["Adjustments"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).ToStringHmm());
 				row.Cells.Add("");
 				gridMain.Rows.Add(row);
 			}
@@ -117,11 +109,11 @@ namespace OpenDental {
 			FillMain();
 		}
 
-		private void butPreview_Click(object sender,EventArgs e) {
+		private void butReport_Click(object sender,EventArgs e) {
 			//Basically a preview of gridMain (every employee on one page), allow user to export as excel sheet or print it.
 		}
 
-		private void butDetailedPreview_Click(object sender,EventArgs e) {
+		private void butPrint_Click(object sender,EventArgs e) {
 			//A preview of every single emp on their own page will show up. User will print from there.
 		}
 
