@@ -35,7 +35,7 @@ namespace OpenDental{
 		private TextBox textDateStop;
 		private List<ClockEvent> ClockEventList;
 		private OpenDental.UI.Button butAdj;
-		private int SelectedPayPeriod;
+		public int SelectedPayPeriod;
 		private Label labelOvertime;
 		private TextBox textOvertime;
 		private OpenDental.UI.Button butCompute;
@@ -453,7 +453,9 @@ namespace OpenDental{
 			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
 				+(cannotEdit?" - You cannot modify your timecard":"");
 			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
-			SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
+			if(SelectedPayPeriod==0) {
+				SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
+			}
 			if(IsBreaks){
 				textOvertime.Visible=false;
 				labelOvertime.Visible=false;

@@ -225,19 +225,20 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetTimeCardManageCommand(DateTime startDate,DateTime stopDate) {
-			string command=@"SELECT clockevent.EmployeeNum,employee.LName,SEC_TO_TIME((((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
-						+TIME_TO_SEC(tempclockevent.Adjustments))+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0)))
+			string command=@"SELECT clockevent.EmployeeNum,employee.FName,employee.LName,
+					SEC_TO_TIME((((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
+						+TIME_TO_SEC(tempclockevent.AdjEvent))+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0)))
 						+(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0)))) AS tempTotalTime,
 					SEC_TO_TIME((TIME_TO_SEC(tempclockevent.TotalTime)-TIME_TO_SEC(tempclockevent.OverTime))
-						+TIME_TO_SEC(tempclockevent.Adjustments)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0))) AS tempRegHrs,
+						+TIME_TO_SEC(tempclockevent.AdjEvent)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjReg,0))) AS tempRegHrs,
 					SEC_TO_TIME(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0))) AS tempOverTime,
-					tempclockevent.Adjustments,
+					tempclockevent.AdjEvent,
 					temptimeadjust.AdjReg,
 					temptimeadjust.AdjOTime	
 				FROM clockevent	
-				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(ce.TimeDisplayed2)),0)-IFNULL(SUM(TIME_TO_SEC(ce.TimeDisplayed1)),0)) AS TotalTime,
+				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed2)),0)-IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed1)),0)) AS TotalTime,
 					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.OTimeHours='-01:00:00' THEN ce.OTimeAuto ELSE ce.OTimeHours END)),0)) AS OverTime,
-					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS Adjustments 
+					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent 
 					FROM clockevent ce
 					WHERE ce.TimeDisplayed1 >= "+POut.Date(startDate)+@"
 					AND ce.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
@@ -251,7 +252,8 @@ namespace OpenDentBusiness{
 					AND "+DbHelper.DateColumn("TimeEntry")+" <= "+POut.Date(stopDate)+@"
 					GROUP BY timeadjust.EmployeeNum) temptimeadjust ON clockevent.EmployeeNum=temptimeadjust.EmployeeNum
 				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0
-				GROUP BY EmployeeNum";
+				GROUP BY EmployeeNum
+				ORDER BY employee.LName";
 			return command;
 		}
 

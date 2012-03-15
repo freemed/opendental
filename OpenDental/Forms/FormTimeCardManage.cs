@@ -44,10 +44,10 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Adjustments"),100);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Reg Adjustments"),100);
+			col=new ODGridColumn(Lan.g(this,"Reg Adjust"),100);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"OT Adjustments"),100);
+			col=new ODGridColumn(Lan.g(this,"OT Adjust"),100);
 			col.TextAlign=HorizontalAlignment.Center;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Breaks?"),100);
@@ -61,7 +61,7 @@ namespace OpenDental {
 				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).ToStringHmm());
 				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).ToStringHmm());
 				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).ToStringHmm());
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["Adjustments"].ToString()).ToStringHmm());
+				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).ToStringHmm());
 				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).ToStringHmm());
 				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).ToStringHmm());
 				row.Cells.Add("");
@@ -87,6 +87,7 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			FormTimeCard FormTC=new FormTimeCard();
 			FormTC.EmployeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[e.Row]["EmployeeNum"].ToString()));
+			FormTC.SelectedPayPeriod=SelectedPayPeriod;
 			FormTC.ShowDialog();
 			FillMain();
 		}
@@ -111,6 +112,12 @@ namespace OpenDental {
 
 		private void butReport_Click(object sender,EventArgs e) {
 			//Basically a preview of gridMain (every employee on one page), allow user to export as excel sheet or print it.
+			ReportSimpleGrid rsg=new ReportSimpleGrid();
+			rsg.Query=ClockEvents.GetTimeCardManageCommand(DateStart,DateStop);
+			FormQuery FormQ=new FormQuery(rsg);
+			FormQ.textQuery.Text=ClockEvents.GetTimeCardManageCommand(DateStart,DateStop);
+			FormQ.SubmitQuery();
+			FormQ.ShowDialog();
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
