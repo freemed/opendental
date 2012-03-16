@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 			return retVal;															 
 		}
 
-		///<summary>Gets the fee schedule from the priinsplan, the patient, or the provider in that order.  Either returns a fee schedule (fk to definition.DefNum) or 0.</summary>
+		///<summary>Gets the fee schedule from the first insplan, the patient, or the provider in that order.  Either returns a fee schedule (fk to definition.DefNum) or 0.</summary>
 		public static long GetFeeSched(Patient pat,List<InsPlan> planList,List<PatPlan> patPlans,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
 			//there's not really a good place to put this function, so it's here.

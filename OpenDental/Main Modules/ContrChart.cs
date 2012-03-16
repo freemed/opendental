@@ -4182,6 +4182,7 @@ namespace OpenDental{
 				else {
 					row.Cells.Add(fields[f].Description);
 				}
+				int ordinal=0;
 				switch(fields[f].InternalName) {
 					case "Age":
 						row.Cells.Add(PatientLogic.DateToAgeString(PatCur.Birthdate));
@@ -4230,8 +4231,9 @@ namespace OpenDental{
 						break;
 					case "Pri Ins":
 						string name;
-						if(PatPlanList.Count>0) {
-							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+						ordinal=PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,PlanList,SubList);
+						if(ordinal>0) {
+							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,ordinal),SubList);
 							name=InsPlans.GetCarrierName(sub.PlanNum,PlanList);
 							if(PatPlanList[0].IsPending) {
 								name+=Lan.g("TableChartPtInfo"," (pending)");
@@ -4244,8 +4246,9 @@ namespace OpenDental{
 						row.Tag=null;
 						break;
 					case "Sec Ins":
-						if(PatPlanList.Count>1) {
-							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+						ordinal=PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,PlanList,SubList);
+						if(ordinal>0) {
+							InsSub sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,ordinal),SubList);
 							name=InsPlans.GetCarrierName(sub.PlanNum,PlanList);
 							if(PatPlanList[1].IsPending) {
 								name+=Lan.g("TableChartPtInfo"," (pending)");
@@ -8200,8 +8203,8 @@ namespace OpenDental{
 				else if(!MsgBox.Show(this,true,"Set appointment complete?")){
 					return;
 				}
-				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
-				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,PlanList,SubList)),SubList);
+				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,PlanList,SubList)),SubList);
 				Appointments.SetAptStatusComplete(apt.AptNum,sub1.PlanNum,sub2.PlanNum);
 				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,

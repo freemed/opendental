@@ -4337,8 +4337,8 @@ namespace OpenDental {
 					+ "Pt NOTE Set Complete");//shouldn't ever happen, but don't allow procedures to be completed from notes
 			}
 			else {
-				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
-				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,PlanList,SubList)),SubList);
+				InsSub sub2=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,PlanList,SubList)),SubList);
 				Appointments.SetAptStatusComplete(apt.AptNum,sub1.PlanNum,sub2.PlanNum);
 				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,pat.SiteNum,pat.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,

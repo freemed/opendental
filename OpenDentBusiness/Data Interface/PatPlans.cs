@@ -92,6 +92,35 @@ namespace OpenDentBusiness{
 			return 0;
 		}
 
+		///<summary>Returns the ordinal (1-based) for the patplan matching the given PriSecMed. Returns 0 if no match.</summary>
+		public static int GetOrdinal(PriSecMed priSecMed,List<PatPlan> PatPlanList,List<InsPlan> planList,List<InsSub> subList) {
+			//No need to check RemotingRole; no call to db.
+			int dentalOrdinal=0;
+			for(int i=0;i<PatPlanList.Count;i++) {
+				InsSub sub=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
+				InsPlan plan=InsPlans.GetPlan(sub.PlanNum,planList);
+				if(plan.IsMedical) {
+					if(priSecMed==PriSecMed.Medical) {
+						return PatPlanList[i].Ordinal;
+					}
+				}
+				else { //dental
+					dentalOrdinal++;
+					if(dentalOrdinal==1) {
+						if(priSecMed==PriSecMed.Primary) {
+							return PatPlanList[i].Ordinal;
+						}
+					}
+					else if(dentalOrdinal==2) {
+						if(priSecMed==PriSecMed.Secondary) {
+							return PatPlanList[i].Ordinal;
+						}
+					}
+				}
+			}
+			return 0;
+		}
+
 		///<summary>Will return null if subNum not found in the list.</summary>
 		public static PatPlan GetFromList(List<PatPlan> patPlans,long subNum) {
 			//No need to check RemotingRole; no call to db.
@@ -247,6 +276,17 @@ namespace OpenDentBusiness{
 		}
 		
 	}
+
+	/// <summary>This is only used in the GetOrdinal method above.</summary>
+	public enum PriSecMed {
+		///<summary>Lowest dental ordinal.</summary>
+		Primary,
+		///<summary>Second lowest dental ordinal</summary>
+		Secondary,
+		///<summary>Lowest medical ordinal</summary>
+		Medical
+	}
+
 }
 
 

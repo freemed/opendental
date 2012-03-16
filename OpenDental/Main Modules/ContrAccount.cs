@@ -2729,7 +2729,11 @@ namespace OpenDental {
 					if(procCode.IsCanadianLab) {
 						continue;
 					}
-					sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),SubList);
+					int ordinal=PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,InsPlanList,SubList);
+					if(ordinal==0) { //No primary dental plan. Must be a medical plan.  Use the first medical plan instead.
+						ordinal=1;
+					}
+					sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,ordinal),SubList);
 					if(Procedures.NeedsSent(proc.ProcNum,sub.InsSubNum,ClaimProcList)){
 						if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && countSelected==7) {//Canadian. en-CA or fr-CA
 							MsgBox.Show(this,"Only the first 7 procedures will be automatically selected.  You will need to create another claim for the remaining procedures.");
@@ -2756,7 +2760,11 @@ namespace OpenDental {
 			}
 			//At this point, all selected items are procedures.
 			InsCanadaValidateProcs(procsForPat,table);
-			Claim ClaimCur=CreateClaim("P",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
+			string claimType="P";
+			if(PatPlanList.Count==1 && PatPlans.GetOrdinal(PriSecMed.Medical,PatPlanList,InsPlanList,SubList)>0) {//if there's exactly one medical plan
+				claimType="Med";
+			}
+			Claim ClaimCur=CreateClaim(claimType,PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
 			ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			if(ClaimCur.ClaimNum==0){
 				ModuleSelected(PatCur.PatNum);
@@ -2772,19 +2780,19 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 				return;//will have already been deleted
 			}
-			if(PatPlans.GetInsSubNum(PatPlanList,2)>0 && !CultureInfo.CurrentCulture.Name.EndsWith("CA")){//don't create secondary claim for Canada
-				sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),SubList);
+			if(PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,InsPlanList,SubList)>0 //if there exists a secondary plan
+				&& !CultureInfo.CurrentCulture.Name.EndsWith("CA"))//And not Canada (don't create secondary claim for Canada)
+			{
+				sub=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,InsPlanList,SubList)),SubList);
 				plan=InsPlans.GetPlan(sub.PlanNum,InsPlanList);
-				if(!plan.IsMedical){
-					ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
-					if(ClaimCur.ClaimNum==0){
-						ModuleSelected(PatCur.PatNum);
-						return;
-					}
-					ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
-					ClaimCur.ClaimStatus="H";
-					ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age,SubList);
+				ClaimCur=CreateClaim("S",PatPlanList,InsPlanList,ClaimProcList,procsForPat,SubList);
+				if(ClaimCur.ClaimNum==0){
+					ModuleSelected(PatCur.PatNum);
+					return;
 				}
+				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+				ClaimCur.ClaimStatus="H";
+				ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age,SubList);
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -2822,24 +2830,17 @@ namespace OpenDental {
 			Relat relatOther=Relat.Self;
 			switch(claimType){
 				case "P":
-					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,1),subList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,planList,subList)),subList);
 					PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 					break;
 				case "S":
-					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,2),subList);
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,planList,subList)),subList);
 					PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 					break;
 				case "Med":
 					//It's already been verified that a med plan exists
-					for(int i=0;i<PatPlanList.Count;i++){
-						InsSub subTemp=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
-						InsPlan planTemp=InsPlans.GetPlan(subTemp.PlanNum,planList);
-						if(planTemp.IsMedical) {
-							SubCur=InsSubs.GetSub(PatPlanList[i].InsSubNum,subList);
-							PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
-							break;
-						}
-					}
+					SubCur=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Medical,PatPlanList,planList,subList)),subList);
+					PlanCur=InsPlans.GetPlan(SubCur.PlanNum,planList);
 					break;
 				case "Other":
 					FormClaimCreate FormCC=new FormClaimCreate(PatCur.PatNum);
@@ -2918,9 +2919,9 @@ namespace OpenDental {
 			ClaimCur.InsSubNum=SubCur.InsSubNum;
 			switch(claimType){
 				case "P":
-					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,1);
+					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,planList,subList));
 					ClaimCur.ClaimType="P";
-					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,2);
+					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,planList,subList));
 					sub=InsSubs.GetSub(ClaimCur.InsSubNum2,subList);
 					if(sub.PlanNum>0 && InsPlans.RefreshOne(sub.PlanNum).IsMedical) {
 						ClaimCur.PlanNum2=0;//no sec ins
@@ -2928,16 +2929,16 @@ namespace OpenDental {
 					}
 					else {
 						ClaimCur.PlanNum2=sub.PlanNum;//might be 0 if no sec ins
-						ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,2);
+						ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,planList,subList));
 					}
 					break;
 				case "S":
-					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,2);
+					ClaimCur.PatRelat=PatPlans.GetRelat(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,planList,subList));
 					ClaimCur.ClaimType="S";
-					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,1);
+					ClaimCur.InsSubNum2=PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,planList,subList));
 					sub=InsSubs.GetSub(ClaimCur.InsSubNum2,subList);
 					ClaimCur.PlanNum2=sub.PlanNum;
-					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,1);
+					ClaimCur.PatRelat2=PatPlans.GetRelat(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,planList,subList));
 					break;
 				case "Med":
 					ClaimCur.PatRelat=PatPlans.GetFromList(PatPlanList,SubCur.InsSubNum).Relationship;
@@ -3046,6 +3047,10 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Patient does not have insurance."));
 				return;
 			}
+			if(PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,InsPlanList,SubList)==0) {
+				MsgBox.Show(this,"The patient does not have any dental insurance plans.");
+				return;
+			}
 			if(gridAccount.SelectedIndices.Length==0){
 				MessageBox.Show(Lan.g(this,"Please select procedures first."));
 				return;
@@ -3087,6 +3092,10 @@ namespace OpenDental {
 			List<Procedure> procsForPat=Procedures.Refresh(PatCur.PatNum);
 			if(PatPlanList.Count<2){
 				MessageBox.Show(Lan.g(this,"Patient does not have secondary insurance."));
+				return;
+			}
+			if(PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,InsPlanList,SubList)==0) {
+				MsgBox.Show(this,"Patient does not have secondary insurance.");
 				return;
 			}
 			if(gridAccount.SelectedIndices.Length==0){

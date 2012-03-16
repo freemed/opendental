@@ -2954,10 +2954,10 @@ namespace OpenDental{
 				if(plan.IsMedical) {
 					row.Cells.Add("Med");
 				}
-				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,1)){
+				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,PlanList,SubList))){
 					row.Cells.Add("Pri");
 				}
-				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,2)) {
+				else if(ClaimProcsForProc[i].InsSubNum==PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,PatPlanList,PlanList,SubList))) {
 					row.Cells.Add("Sec");
 				}
 				else {

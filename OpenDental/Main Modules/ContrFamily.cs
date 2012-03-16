@@ -1620,22 +1620,26 @@ namespace OpenDental{
 			OpenDental.UI.ODGridColumn col;
 			col=new ODGridColumn("",150);
 			gridIns.Columns.Add(col);
-			for(int i=0;i<PatPlanList.Count;i++){
-				if(planArray[i].IsMedical){
+			int dentalOrdinal=1;
+			for(int i=0;i<PatPlanList.Count;i++) {
+				if(planArray[i].IsMedical) {
 					col=new ODGridColumn(Lan.g("TableCoverage","Medical"),170);
 					gridIns.Columns.Add(col);
 				}
-				else if(i==0){
-					col=new ODGridColumn(Lan.g("TableCoverage","Primary"),170);
-					gridIns.Columns.Add(col);
-				}
-				else if(i==1){
-					col=new ODGridColumn(Lan.g("TableCoverage","Secondary"),170);
-					gridIns.Columns.Add(col);
-				}
-				else{
-					col=new ODGridColumn(Lan.g("TableCoverage","Other"),170);
-					gridIns.Columns.Add(col);
+				else { //dental
+					if(dentalOrdinal==1) {
+						col=new ODGridColumn(Lan.g("TableCoverage","Primary"),170);
+						gridIns.Columns.Add(col);
+					}
+					else if(dentalOrdinal==2) {
+						col=new ODGridColumn(Lan.g("TableCoverage","Secondary"),170);
+						gridIns.Columns.Add(col);
+					}
+					else {
+						col=new ODGridColumn(Lan.g("TableCoverage","Other"),170);
+						gridIns.Columns.Add(col);
+					}
+					dentalOrdinal++;
 				}
 			}
 			OpenDental.UI.ODGridRow row=new ODGridRow();

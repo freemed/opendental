@@ -276,11 +276,11 @@ namespace OpenDental{
 					}
 				}
 				//Insurance-------------------------------------------------------------------------------------------------------------------
-				List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
-				long subNum=PatPlans.GetInsSubNum(patPlanList,1);
-				long patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				List<InsSub> subList=InsSubs.RefreshForFam(fam);
 				List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+				List<PatPlan> patPlanList=PatPlans.Refresh(pat.PatNum);
+				long subNum=PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,patPlanList,planList,subList));
+				long patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				InsSub sub=InsSubs.GetSub(subNum,subList);
 				InsPlan plan=null;
 				if(sub!=null) {
@@ -370,7 +370,7 @@ namespace OpenDental{
 							break;
 					}
 				}
-				subNum=PatPlans.GetInsSubNum(patPlanList,2);
+				subNum=PatPlans.GetInsSubNum(patPlanList,PatPlans.GetOrdinal(PriSecMed.Secondary,patPlanList,planList,subList));
 				patPlanNum=PatPlans.GetPatPlanNum(subNum,patPlanList);
 				sub=InsSubs.GetSub(subNum,subList);
 				if(sub!=null) {

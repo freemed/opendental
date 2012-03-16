@@ -2493,7 +2493,7 @@ namespace OpenDental{
 			Procedure procCur;
 			//Procedure procOld
 			//Find the primary plan------------------------------------------------------------------
-			long priSubNum=PatPlans.GetInsSubNum(PatPlanList,1);
+			long priSubNum=PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,InsPlanList,SubList));
 			InsSub prisub=InsSubs.GetSub(priSubNum,SubList);
 			long priPlanNum=prisub.PlanNum;
 			InsPlan priplan=InsPlans.GetPlan(priPlanNum,InsPlanList);//can handle a plannum=0

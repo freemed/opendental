@@ -562,7 +562,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary></summary>
+		///<summary>The plan nums that are passed in are simply saved in columns in the appt.  Those two fields are used by approximately one office right now.</summary>
 		public static void SetAptStatusComplete(long aptNum,long planNum1,long planNum2) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),aptNum,planNum1,planNum2);
