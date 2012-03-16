@@ -32,7 +32,8 @@ namespace OpenDental.Bridges{
 				info+=Cleanup(pat.ChartNumber);
 			}
 			info+="; "
-				+Cleanup(pat.GetNameLF())+"; "
+				+Cleanup(pat.LName)+";"
+				+Cleanup(pat.FName)+" "+Cleanup(pat.MiddleI)+"; "
 				+pat.Birthdate.ToShortDateString()+"; ";
 			bool hasMedicalAlert=false;
 			if(pat.MedUrgNote!=""){
