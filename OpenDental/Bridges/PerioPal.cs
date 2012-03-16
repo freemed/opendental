@@ -31,10 +31,10 @@ namespace OpenDental.Bridges{
 			else {
 				info+=Cleanup(pat.ChartNumber);
 			}
-			info+="; "
+			info+=";"
 				+Cleanup(pat.LName)+";"
-				+Cleanup(pat.FName)+" "+Cleanup(pat.MiddleI)+"; "
-				+pat.Birthdate.ToShortDateString()+"; ";
+				+Cleanup(pat.FName)+";"
+				+pat.Birthdate.ToShortDateString()+";";
 			bool hasMedicalAlert=false;
 			if(pat.MedUrgNote!=""){
 				hasMedicalAlert=true;
@@ -61,6 +61,7 @@ namespace OpenDental.Bridges{
 		private static string Cleanup(string input){
 			string retVal=input;
 			retVal=retVal.Replace(";","");//get rid of any semicolon
+			retVal=retVal.Replace(" ","");//get rid of any spaces
 			return retVal;
 		}
 
