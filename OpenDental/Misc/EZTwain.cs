@@ -42,128 +42,126 @@ namespace OpenDental{
 		}
 
 
-
-
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Testing123")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Testing123")]
 		public static extern
 			System.IntPtr Testing123(string s,int n,System.IntPtr h,double d,int u);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetAll")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetAll")]
 		public static extern
 			void ResetAll();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Acquire")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Acquire")]
 		public static extern
 			System.IntPtr Acquire(System.IntPtr hwndApp);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelectImageSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelectImageSource")]
 		public static extern
 			bool SelectImageSource(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToFilename")]
 		public static extern
 			int AcquireToFilename(System.IntPtr hwndApp,string sFileName);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMultipageFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMultipageFile")]
 		public static extern
 			int AcquireMultipageFile(System.IntPtr hwndApp,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToArray")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToArray")]
 		public static extern
 			int AcquireToArray(System.IntPtr hwnd,[MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int nMax);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireImagesToFiles")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireImagesToFiles")]
 		public static extern
 			int AcquireImagesToFiles(System.IntPtr hwndApp,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquirePagesToFiles")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquirePagesToFiles")]
 		public static extern
 			int AcquirePagesToFiles(System.IntPtr hwnd,int nPPF,string sFile);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMultipage")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMultipage")]
 		public static extern
 			int AcquireMultipage(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquiredFileCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquiredFileCount")]
 		public static extern
 			int AcquiredFileCount();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireCompressed")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireCompressed")]
 		public static extern
 			System.IntPtr AcquireCompressed(System.IntPtr hwndApp);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireCount")]
 		public static extern
 			int AcquireCount();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PromptToContinue")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PromptToContinue")]
 		public static extern
 			bool PromptToContinue(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetDefaultScanAnotherPagePrompt")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetDefaultScanAnotherPagePrompt")]
 		public static extern
 			int SetDefaultScanAnotherPagePrompt(int fYes);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DoSettingsDialog")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DoSettingsDialog")]
 		public static extern
 			int DoSettingsDialog(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableSourceUiOnly")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableSourceUiOnly")]
 		public static extern
 			bool EnableSourceUiOnly(System.IntPtr hwnd);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetMultiTransfer")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetMultiTransfer")]
 		public static extern
 			void SetMultiTransfer(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetMultiTransfer")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetMultiTransfer")]
 		public static extern
 			bool GetMultiTransfer();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetHideUI")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetHideUI")]
 		public static extern
 			void SetHideUI(bool bHide);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetHideUI")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetHideUI")]
 		public static extern
 			bool GetHideUI();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetStopOnEmpty")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetStopOnEmpty")]
 		public static extern
 			void SetStopOnEmpty(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetStopOnEmpty")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetStopOnEmpty")]
 		public static extern
 			bool GetStopOnEmpty();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableParent")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableParent")]
 		public static extern
 			void DisableParent(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDisableParent")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDisableParent")]
 		public static extern
 			bool GetDisableParent();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EasyVersion")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EasyVersion")]
 		public static extern
 			int EasyVersion();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EasyBuild")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EasyBuild")]
 		public static extern
 			int EasyBuild();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsAvailable")]
 		public static extern
 			bool IsAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsMultipageAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsMultipageAvailable")]
 		public static extern
 			bool IsMultipageAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_State")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_State")]
 		public static extern
 			int State();
 		public const int TWAIN_PRESESSION = 1;
@@ -174,287 +172,287 @@ namespace OpenDental{
 		public const int TWAIN_TRANSFER_READY = 6;
 		public const int TWAIN_TRANSFERRING = 7;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDone")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDone")]
 		public static extern
 			bool IsDone();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SourceName")]
 		private static extern
 			System.IntPtr SourceNamePtr();
 		public static string SourceName() { return Marshal.PtrToStringAnsi(SourceNamePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceName")]
 		public static extern
 			void GetSourceName(StringBuilder sName);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsValid(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Depth(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_BitsPerPixel(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PixelType(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Width(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Height(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetResolution(System.IntPtr hdib,double xdpi,double ydpi);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetResolutionInt(System.IntPtr hdib,int xdpi,int ydpi);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_XResolution(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_YResolution(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_XResolutionInt(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_YResolutionInt(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_PhysicalWidth(System.IntPtr hdib,int nUnits);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_PhysicalHeight(System.IntPtr hdib,int nUnits);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_RowBytes(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ColorCount(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_SamplesPerPixel(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_BitsPerSample(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsCompressed(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Compression(System.IntPtr hdib);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Size(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadData(System.IntPtr hdib,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata,int nbMax);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRow(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] prow);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRowRGB(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] prow);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRowGray(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] prow);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRowChannel(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] prow,int nChannel);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRowSample(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] prow,int nSample);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadPixelRGB(System.IntPtr hdib,int x,int y,[MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadPixelGray(System.IntPtr hdib,int x,int y,[MarshalAs(UnmanagedType.LPArray)] byte[] buffer);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadPixelChannel(System.IntPtr hdib,int x,int y,[MarshalAs(UnmanagedType.LPArray)] byte[] buffer,int nChannel);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_WriteRow(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_WriteRowChannel(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata,int nChannel);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_WriteRowSample(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] psrc,int nSample);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_WriteRowSafe(System.IntPtr hdib,int r,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata,int nbMax);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ReadRowSafe(System.IntPtr hdib,int nRow,[MarshalAs(UnmanagedType.LPArray)] byte[] prow,int nbMax);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Allocate(int nDepth,int nWidth,int nHeight);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Create(int nPixelType,int nWidth,int nHeight,int nDepth);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Free(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_FreeArray([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_InUseCount();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Copy(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_Equal(System.IntPtr hdib1,System.IntPtr hdib2);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_MaxError(System.IntPtr hdib1,System.IntPtr hdib2);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetGrayColorTable(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetColorTableRGB(System.IntPtr hdib,int i,int R,int G,int B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsVanilla(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsChocolate(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ColorTableR(System.IntPtr hdib,int i);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ColorTableG(System.IntPtr hdib,int i);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ColorTableB(System.IntPtr hdib,int i);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_FlipVertical(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_FlipHorizontal(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Rotate180(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Rotate90(System.IntPtr hOld,int nSteps);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_InPlaceRotate90(System.IntPtr hdib,int nSteps);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Fill(System.IntPtr hdib,int R,int G,int B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_FillRectWithColorAlpha(System.IntPtr hdib,int x,int y,int w,int h,int R,int G,int B,int A);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Negate(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_AdjustBC(System.IntPtr hdib,int nB,int nC);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_ApplyToneMap8(System.IntPtr hdib,[MarshalAs(UnmanagedType.LPArray)] byte[] map);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_AutoContrast(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Convolve(System.IntPtr hdibDst,System.IntPtr hdibKernel,double dNorm,int nOffset);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Correlate(System.IntPtr hdibDst,System.IntPtr hdibKernel);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_CrossCorrelate(System.IntPtr hdibDst,System.IntPtr hdibTemplate,double dScale,int nMin);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_HorizontalDifference(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_HorizontalCorrelation(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_VerticalCorrelation(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_MedianFilter(System.IntPtr hdib,int W,int H,int nStyle);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_MeanFilter(System.IntPtr hdib,int W,int H);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Smooth(System.IntPtr hdib,double sigma,double opacity);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Sobel(System.IntPtr hdib,int mode,int Thresh);
 		public const int SOBEL_HORIZONTAL = 0;
@@ -462,31 +460,31 @@ namespace OpenDental{
 		public const int SOBEL_SUM = 2;
 		public const int SOBEL_MAX = 3;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ScaledCopy(System.IntPtr hOld,int w,int h);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_Resize(System.IntPtr hdib,int w,int h);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ScaleToGray(System.IntPtr hdibOld,int nRatio);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Thumbnail(System.IntPtr hdibSource,int MaxWidth,int MaxHeight);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_Resample(System.IntPtr hOld,double xdpi,double ydpi);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_RegionCopy(System.IntPtr hOld,int leftx,int topy,int w,int h,int FillByte);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_AutoCrop(System.IntPtr hOld,int nOpts);
 
@@ -497,83 +495,83 @@ namespace OpenDental{
 		public const int AUTOCROP_CHECK_BACK = 16;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_GetCropRect(System.IntPtr hdib,int nOptions,out int cropx,out int cropy,out int cropw,out int croph);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_AutoDeskew(System.IntPtr hOld,int nOptions);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_DeskewAngle(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SkewByDegrees(System.IntPtr hdib,double dAngle);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ConvertToPixelType(System.IntPtr hOld,int nPT);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ConvertToFormat(System.IntPtr hOld,int nPT,int nBPP);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_SmartThreshold(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_SimpleThreshold(System.IntPtr hdib,int nT);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_SetConversionThreshold(int nT);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ConversionThreshold();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_FindAdaptiveGlobalThreshold(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ErrorDiffuse(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetConversionColorCount(int n);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ConversionColorCount();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SwapRedBlue(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_CreatePalette(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetColorModel(System.IntPtr hdib,int nCM);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_ColorModel(System.IntPtr hdib);
 		public const int EZT_CM_RGB = 0;
 		public const int EZT_CM_GRAY = 3;
 		public const int EZT_CM_CMYK = 5;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetColorCount(System.IntPtr hdib,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_Blt(System.IntPtr hdibDst,int dx,int dy,System.IntPtr hdibSrc,int sx,int sy,int w,int h,int uRop);
 		public const int EZT_ROP_COPY = 0;
@@ -582,45 +580,45 @@ namespace OpenDental{
 		public const int EZT_ROP_XOR = 3;
 		public const int EZT_ROP_ANDNOT = 0x12;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_BltMask(System.IntPtr hdibDst,int dx,int dy,System.IntPtr hdibSrc,int sx,int sy,int w,int h,int uRop,System.IntPtr hdibMask);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_PaintMask(System.IntPtr hdibDst,int dx,int dy,int R,int G,int B,int sx,int sy,int w,int h,int uRop,System.IntPtr hdibMask);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_DrawLine(System.IntPtr hdibDst,int x1,int y1,int x2,int y2,int R,int G,int B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_DrawText(System.IntPtr hdibDst,string sText,int leftx,int topy,int w,int h);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextColor(int R,int G,int B);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_TextColor();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_GetTextColor(out int pR,out int pG,out int pB);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextAngle(int nDegrees);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextHeight(int nH);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextFace(string sTypeface);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextFormat(int nFlags);
 		public const int EZT_TEXT_NORMAL = 0x0;
@@ -636,207 +634,207 @@ namespace OpenDental{
 		public const int EZT_TEXT_RIGHT = 0x2000;
 		public const int EZT_TEXT_WRAP = 0x4000;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetTextBackgroundColor(int R,int G,int B,int A);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_View(System.IntPtr hdib,string sTitle,System.IntPtr hwndParent);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_SetViewOption(string sOption,string sValue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_SetViewImage(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsViewOpen();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_ViewClose();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_DrawOnWindow(System.IntPtr hdib,System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_DrawToDC(System.IntPtr hdib,System.IntPtr hDC,int dx,int dy,int w,int h,int sx,int sy);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_SpecifyPrinter(string sPrinterName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_EnumeratePrinters();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="DIB_PrinterName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="DIB_PrinterName")]
 		private static extern
 			System.IntPtr DIB_PrinterNamePtr(int i);
 		public static string DIB_PrinterName(int i) { return Marshal.PtrToStringAnsi(DIB_PrinterNamePtr(i)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_GetPrinterName(int i,StringBuilder PrinterName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetPrintToFit(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_GetPrintToFit();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Print(System.IntPtr hdib,string sJobname);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintNoPrompt(System.IntPtr hdib,string sJobname);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PrintFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PrintFile")]
 		public static extern
 			int PrintFile(string sFilename,string sJobname,bool bNoPrompt);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintFile(string sFilename,string sJobname,bool bNoPrompt);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintArray([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int nCount,string sJobname,bool bNoPrompt);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SetNextPrintJobPageCount(int nPages);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintJobBegin(string sJobname,bool bUseDefaultPrinter);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintPage(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PrintJobEnd();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_PutOnClipboard(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_CanGetFromClipboard();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_GetFromClipboard();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_FromClipboard();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_OpenInDC(System.IntPtr hdib,System.IntPtr hdc);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_CloseInDC(System.IntPtr hdib,System.IntPtr hdc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToFilename(System.IntPtr hdib,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToBmp(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToBmpFile(System.IntPtr hdib,System.IntPtr fh);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToJpeg(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToPng(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToTiff(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToPdf(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToGif(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToDcx(System.IntPtr hdib,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_LoadFromFilename(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_FormatOfFile(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_SelectPageToLoad(int nPage);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_GetFilePageCount(string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_FilePageCount(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_LoadPage(string sFileName,int nPage);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_LoadArrayFromFilename([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int nMax,string sFilename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_LoadPagesFromFilename([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int index0,int nMax,string sFilename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_FormatOfBuffer([MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_PageCountOfBuffer([MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_BufferPageCount([MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_LoadFromBuffer([MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_LoadPageFromBuffer([MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes,int nPage);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_LoadArrayFromBuffer([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int nMax,[MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_LoadFaxData(System.IntPtr hdib,[MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nBytes,int nFlags);
 		public const int FAX_GROUP3_2D = 0x20;
@@ -847,33 +845,33 @@ namespace OpenDental{
 		public const int FAX_VANILLA = 0x400;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteToBuffer(System.IntPtr hdib,int nFormat,[MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nbMax);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteArrayToBuffer([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n,int nFormat,[MarshalAs(UnmanagedType.LPArray)] byte[] pBuffer,int nbMax);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ToDibSection(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_FromBitmap(System.IntPtr hbm,System.IntPtr hdc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DIB_IsBlank(System.IntPtr hdib,double dDarkness);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_Darkness(System.IntPtr hdibFull);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DIB_GetHistogram(System.IntPtr hdib,int nComponent,[MarshalAs(UnmanagedType.LPArray)] int[] histo);
 		public const int COMPONENT_GRAY = 0;
@@ -886,169 +884,169 @@ namespace OpenDental{
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ComponentCopy(System.IntPtr hdib,int nComponent);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_Avg(System.IntPtr hdib,int nComp);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_AvgRegion(System.IntPtr hdib,int nComp,int leftx,int topy,int w,int h);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_AvgRow(System.IntPtr hdib,int nComp,int rowy);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double DIB_AvgColumn(System.IntPtr hdib,int nComp,int colx);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_GetBrightRects(System.IntPtr hdib,int w,int h,int t,[MarshalAs(UnmanagedType.LPArray)] int[] xBlob,[MarshalAs(UnmanagedType.LPArray)] int[] yBlob,[MarshalAs(UnmanagedType.LPArray)] int[] wBlob,[MarshalAs(UnmanagedType.LPArray)] int[] hBlob,int nMax);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ProjectRows(System.IntPtr hdib,int nComp);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ProjectColumns(System.IntPtr hdib,int leftx,int topy,int w,int h,int nComp);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_Posterize(System.IntPtr hdib,int nLevels);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DIB_ForwardDCT(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteNativeToFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteNativeToFilename")]
 		public static extern
 			int WriteNativeToFilename(System.IntPtr hdib,string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadNativeFromFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadNativeFromFilename")]
 		public static extern
 			System.IntPtr LoadNativeFromFilename(string sFileName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NegotiateXferCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NegotiateXferCount")]
 		public static extern
 			int NegotiateXferCount(int nXfers);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibDepth")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibDepth")]
 		public static extern
 			int DibDepth(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibWidth")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibWidth")]
 		public static extern
 			int DibWidth(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibHeight")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibHeight")]
 		public static extern
 			int DibHeight(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibNumColors")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibNumColors")]
 		public static extern
 			int DibNumColors(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibRowBytes")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibRowBytes")]
 		public static extern
 			int DibRowBytes(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibReadRow")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibReadRow")]
 		public static extern
 			void DibReadRow(System.IntPtr hdib,int nRow,[MarshalAs(UnmanagedType.LPArray)] byte[] prow);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CreateDibPalette")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CreateDibPalette")]
 		public static extern
 			System.IntPtr CreateDibPalette(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DrawDibToDC")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DrawDibToDC")]
 		public static extern
 			void DrawDibToDC(System.IntPtr hDC,int dx,int dy,int w,int h,System.IntPtr hdib,int sx,int sy);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DOC_CreateEmpty();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DOC_Destroy(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DOC_ImageCount(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_IsModified(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DOC_SetModified(System.IntPtr hdoc,bool bIsMod);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="DOC_Filename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="DOC_Filename")]
 		private static extern
 			System.IntPtr DOC_FilenamePtr(System.IntPtr hdoc);
 		public static string DOC_Filename(System.IntPtr hdoc) { return Marshal.PtrToStringAnsi(DOC_FilenamePtr(hdoc)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_SetCurPos(System.IntPtr hdoc,int i);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DOC_CurPos(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DOC_OpenReadOnly(string sFilename);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DOC_OpenForUpdate(string sFilename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void DOC_Reset(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_WriteToFile(System.IntPtr hdoc,string filename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_Save(System.IntPtr hdoc);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_SaveAs(System.IntPtr hdoc,string filename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DOC_Image(System.IntPtr hdoc,int i);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_SetImage(System.IntPtr hdoc,int i,System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_AppendImage(System.IntPtr hdoc,System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr DOC_ExtractImages(System.IntPtr hdoc,int i,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_DeleteImage(System.IntPtr hdoc,int i);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_DeleteImages(System.IntPtr hdoc,int i,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_InsertImage(System.IntPtr hdoc,int i,System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_InsertImageArray(System.IntPtr hdoc,int i,[MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool DOC_MoveImage(System.IntPtr hdoc,int iOld,int iNew);
 
@@ -1064,88 +1062,88 @@ namespace OpenDental{
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsJpegAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsJpegAvailable")]
 		public static extern
 			bool IsJpegAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPngAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPngAvailable")]
 		public static extern
 			bool IsPngAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsTiffAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsTiffAvailable")]
 		public static extern
 			bool IsTiffAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPdfAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPdfAvailable")]
 		public static extern
 			bool IsPdfAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsGifAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsGifAvailable")]
 		public static extern
 			bool IsGifAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDcxAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDcxAvailable")]
 		public static extern
 			bool IsDcxAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFormatAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFormatAvailable")]
 		public static extern
 			bool IsFormatAvailable(int nFF);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatVersion")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatVersion")]
 		public static extern
 			int FormatVersion(int nFF);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFileExtensionAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFileExtensionAvailable")]
 		public static extern
 			bool IsFileExtensionAvailable(string sExt);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatFromExtension")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatFromExtension")]
 		public static extern
 			int FormatFromExtension(string sExt,int nFF);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtensionFromFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtensionFromFormat")]
 		private static extern
 			System.IntPtr ExtensionFromFormatPtr(int nFF,string sDefExt);
 		public static string ExtensionFromFormat(int nFF,string sDefExt) { return Marshal.PtrToStringAnsi(ExtensionFromFormatPtr(nFF,sDefExt)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtensionFromFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtensionFromFormat")]
 		public static extern
 			void GetExtensionFromFormat(int nFF,string sDefExt,StringBuilder szExtension);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetSaveFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetSaveFormat")]
 		public static extern
 			bool SetSaveFormat(int nFF);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSaveFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSaveFormat")]
 		public static extern
 			int GetSaveFormat();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetJpegQuality")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetJpegQuality")]
 		public static extern
 			void SetJpegQuality(int nQ);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetJpegQuality")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetJpegQuality")]
 		public static extern
 			int GetJpegQuality();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffStripSize")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffStripSize")]
 		public static extern
 			void SetTiffStripSize(int nBytes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffStripSize")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffStripSize")]
 		public static extern
 			int GetTiffStripSize();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffImageDescription")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffImageDescription")]
 		public static extern
 			bool SetTiffImageDescription(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffDocumentName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffDocumentName")]
 		public static extern
 			bool SetTiffDocumentName(string sText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffCompression")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffCompression")]
 		public static extern
 			bool SetTiffCompression(int nPT,int nComp);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffCompression")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffCompression")]
 		public static extern
 			int GetTiffCompression(int nPT);
 		public const int TIFF_COMP_NONE = 1;
@@ -1157,102 +1155,102 @@ namespace OpenDental{
 		public const int TIFF_COMP_PACKBITS = 32773;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagShort")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagShort")]
 		public static extern
 			bool SetTiffTagShort(int nTagId,int sValue);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagLong")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagLong")]
 		public static extern
 			bool SetTiffTagLong(int nTagId,int nValue);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagString")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagString")]
 		public static extern
 			bool SetTiffTagString(int nTagId,string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagDouble")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagDouble")]
 		public static extern
 			bool SetTiffTagDouble(int nTagId,double dValue);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagRational")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagRational")]
 		public static extern
 			bool SetTiffTagRational(int nTagId,double dValue);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagRationalArray")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagRationalArray")]
 		public static extern
 			bool SetTiffTagRationalArray(int nTagId,[MarshalAs(UnmanagedType.LPArray)] double[] dValues,int n);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagBytes")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagBytes")]
 		public static extern
 			bool SetTiffTagBytes(int nTagId,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata,int nBytes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagUndefined")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiffTagUndefined")]
 		public static extern
 			bool SetTiffTagUndefined(int nTagId,[MarshalAs(UnmanagedType.LPArray)] byte[] pdata,int nBytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetTiffTags")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetTiffTags")]
 		public static extern
 			void ResetTiffTags();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffTagAscii")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetTiffTagAscii")]
 		public static extern
 			bool GetTiffTagAscii(string sFilename,int nPage,int nTag,int nLen,StringBuilder buffer);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_TiffTagAscii")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_TiffTagAscii")]
 		private static extern
 			System.IntPtr TiffTagAsciiPtr(string sFilename,int nPage,int nTag);
 		public static string TiffTagAscii(string sFilename,int nPage,int nTag) { return Marshal.PtrToStringAnsi(TiffTagAsciiPtr(sFilename,nPage,nTag)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetFileAppendFlag")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetFileAppendFlag")]
 		public static extern
 			void SetFileAppendFlag(bool bAppend);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetFileAppendFlag")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetFileAppendFlag")]
 		public static extern
 			bool GetFileAppendFlag();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_IsOneOfOurs(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="PDF_DocumentProperty")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="PDF_DocumentProperty")]
 		private static extern
 			System.IntPtr PDF_DocumentPropertyPtr(string sFilename,string sProperty);
 		public static string PDF_DocumentProperty(string sFilename,string sProperty) { return Marshal.PtrToStringAnsi(PDF_DocumentPropertyPtr(sFilename,sProperty)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int PDF_GetDocumentProperty(string sFilename,string sProperty,StringBuilder buffer,int buflen);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfTitle")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfTitle")]
 		public static extern
 			bool SetPdfTitle(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfAuthor")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfAuthor")]
 		public static extern
 			bool SetPdfAuthor(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfSubject")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfSubject")]
 		public static extern
 			bool SetPdfSubject(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfKeywords")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfKeywords")]
 		public static extern
 			bool SetPdfKeywords(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfCreator")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPdfCreator")]
 		public static extern
 			bool SetPdfCreator(string sText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetTitle(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetAuthor(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetSubject(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetKeywords(string sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetCreator(string sText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetCompression(int nPT,int nComp);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int PDF_GetCompression(int nPT);
 		public const int COMPRESSION_DEFAULT = -1;
@@ -1260,43 +1258,43 @@ namespace OpenDental{
 		public const int COMPRESSION_FLATE = 5;
 		public const int COMPRESSION_JPEG = 7;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SelectPageSize(int nPaper);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int PDF_SelectedPageSize();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_SetPDFACompliance(int nLevel);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int PDF_GetPDFACompliance();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_IsEncrypted(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetOpenPassword(string sPassword);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetUserPassword(string sPassword);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetOwnerPassword(string sPassword);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetPermissions(int nPermission);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int PDF_GetPermissions();
 		public const int PDF_PERMIT_PRINT = 4;
@@ -1307,76 +1305,76 @@ namespace OpenDental{
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_DrawText(double leftx,double topy,string sText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_DrawInvisibleText(double leftx,double topy,string sText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetTextVisible(bool bVisible);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_GetTextVisible();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetTextSize(double dfs);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void PDF_SetTextHorizontalScaling(double dhs);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool PDF_WriteOcrText(string text,[MarshalAs(UnmanagedType.LPArray)] int[] ax,[MarshalAs(UnmanagedType.LPArray)] int[] ay,[MarshalAs(UnmanagedType.LPArray)] int[] aw,[MarshalAs(UnmanagedType.LPArray)] int[] ah,double xdpi,double ydpi);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteToFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteToFilename")]
 		public static extern
 			int WriteToFilename(System.IntPtr hdib,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadFromFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadFromFilename")]
 		public static extern
 			System.IntPtr LoadFromFilename(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadPage")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadPage")]
 		public static extern
 			System.IntPtr LoadPage(string sFileName,int nPage);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatOfFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FormatOfFile")]
 		public static extern
 			int FormatOfFile(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PagesInFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PagesInFile")]
 		public static extern
 			int PagesInFile(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PromptForOpenFilename")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PromptForOpenFilename")]
 		public static extern
 			bool PromptForOpenFilename(StringBuilder sFileName);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ViewFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ViewFile")]
 		public static extern
 			int ViewFile(string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetViewOption")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetViewOption")]
 		public static extern
 			bool SetViewOption(string sOption,string sValue);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsViewOpen")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsViewOpen")]
 		public static extern
 			bool IsViewOpen();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ViewClose")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ViewClose")]
 		public static extern
 			bool ViewClose();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLastViewPosition")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLastViewPosition")]
 		public static extern
 			bool GetLastViewPosition(out int pleft,out int ptop,out int pwidth,out int pheight);
 
@@ -1385,161 +1383,161 @@ namespace OpenDental{
 		public const int MULTIPAGE_PDF = 1;
 		public const int MULTIPAGE_DCX = 2;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetMultipageFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetMultipageFormat")]
 		public static extern
 			int SetMultipageFormat(int nFF);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetMultipageFormat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetMultipageFormat")]
 		public static extern
 			int GetMultipageFormat();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLazyWriting")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLazyWriting")]
 		public static extern
 			void SetLazyWriting(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLazyWriting")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLazyWriting")]
 		public static extern
 			bool GetLazyWriting();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int DIB_WriteArrayToFilename([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n,string sFileName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BeginMultipageFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BeginMultipageFile")]
 		public static extern
 			int BeginMultipageFile(string sFileName);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibWritePage")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DibWritePage")]
 		public static extern
 			int DibWritePage(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WritePageAndFree")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WritePageAndFree")]
 		public static extern
 			int WritePageAndFree(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndMultipageFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndMultipageFile")]
 		public static extern
 			int EndMultipageFile();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_MultipageCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_MultipageCount")]
 		public static extern
 			int MultipageCount();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsMultipageFileOpen")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsMultipageFileOpen")]
 		public static extern
 			bool IsMultipageFileOpen();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastOutputFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastOutputFile")]
 		private static extern
 			System.IntPtr LastOutputFilePtr();
 		public static string LastOutputFile() { return Marshal.PtrToStringAnsi(LastOutputFilePtr()); }
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetOutputPageCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetOutputPageCount")]
 		public static extern
 			void SetOutputPageCount(int nPages);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FileCopy")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FileCopy")]
 		public static extern
 			int FileCopy(string sInFile,string sOutFile,int nOptions);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool UPLOAD_IsAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_Version();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_MaxFiles();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool UPLOAD_AddFormField(string fieldName,string fieldValue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool UPLOAD_AddHeader(string header);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool UPLOAD_AddCookie(string cookie);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void UPLOAD_EnableProgressBar(bool bEnable);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool UPLOAD_IsEnabledProgressBar();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_DibToURL(System.IntPtr hdib,string URL,string fileName,string fieldName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_DibsToURL([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n,string URL,string fileName,string fieldName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_DibsSeparatelyToURL([MarshalAs(UnmanagedType.LPArray)] System.IntPtr[] ahdib,int n,string URL,string fileName,string fieldName);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_FilesToURL(string files,string URL,string fieldName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void UPLOAD_SetProxy(string hostport,string userpwd,bool bTunnel);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="UPLOAD_Response")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="UPLOAD_Response")]
 		private static extern
 			System.IntPtr UPLOAD_ResponsePtr();
 		public static string UPLOAD_Response() { return Marshal.PtrToStringAnsi(UPLOAD_ResponsePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int UPLOAD_ResponseLength();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void UPLOAD_GetResponse(StringBuilder ResponseText);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void UPLOAD_ClearResponse();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAppTitle")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAppTitle")]
 		public static extern
 			void SetAppTitle(string sAppTitle);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetApplicationKey")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetApplicationKey")]
 		public static extern
 			void SetApplicationKey(int nKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ApplicationLicense")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ApplicationLicense")]
 		public static extern
 			void ApplicationLicense(string sAppTitle,int nAppKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetVendorKey")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetVendorKey")]
 		public static extern
 			void SetVendorKey(string sVendorName,int nKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OrganizationLicense")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OrganizationLicense")]
 		public static extern
 			void OrganizationLicense(string sOrganization,int nKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RenewTrialLicense")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RenewTrialLicense")]
 		public static extern
 			bool RenewTrialLicense(int uKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SingleMachineLicense")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SingleMachineLicense")]
 		public static extern
 			bool SingleMachineLicense(string sMsg);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RegisterApp")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RegisterApp")]
 		public static extern
 			void RegisterApp(int nMajorNum,int nMinorNum,int nLanguage,int nCountry,string sVersion,string sMfg,string sFamily,string sAppTitle);
 
@@ -1628,135 +1626,135 @@ namespace OpenDental{
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetResultCode")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetResultCode")]
 		public static extern
 			int GetResultCode();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetConditionCode")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetConditionCode")]
 		public static extern
 			int GetConditionCode();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_UserClosedSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_UserClosedSource")]
 		public static extern
 			bool UserClosedSource();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ErrorBox")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ErrorBox")]
 		public static extern
 			void ErrorBox(string sMsg);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SuppressErrorMessages")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SuppressErrorMessages")]
 		public static extern
 			bool SuppressErrorMessages(bool bYes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ReportLastError")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ReportLastError")]
 		public static extern
 			void ReportLastError(string msg);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLastErrorText")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetLastErrorText")]
 		public static extern
 			void GetLastErrorText(StringBuilder sMsg);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastErrorText")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastErrorText")]
 		private static extern
 			System.IntPtr LastErrorTextPtr();
 		public static string LastErrorText() { return Marshal.PtrToStringAnsi(LastErrorTextPtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastErrorCode")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LastErrorCode")]
 		public static extern
 			int LastErrorCode();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ClearError")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ClearError")]
 		public static extern
 			void ClearError();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RecordError")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_RecordError")]
 		public static extern
 			void RecordError(int code,string note);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ReportLeaks")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ReportLeaks")]
 		public static extern
 			bool ReportLeaks();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Shutdown")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Shutdown")]
 		public static extern
 			void Shutdown();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadSourceManager")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LoadSourceManager")]
 		public static extern
 			bool LoadSourceManager();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenSourceManager")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenSourceManager")]
 		public static extern
 			bool OpenSourceManager(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenDefaultSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenDefaultSource")]
 		public static extern
 			bool OpenDefaultSource();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceList")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceList")]
 		public static extern
 			bool GetSourceList();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetNextSourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetNextSourceName")]
 		public static extern
 			bool GetNextSourceName(StringBuilder sName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NextSourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NextSourceName")]
 		private static extern
 			System.IntPtr NextSourceNamePtr();
 		public static string NextSourceName() { return Marshal.PtrToStringAnsi(NextSourceNamePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefaultSourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefaultSourceName")]
 		public static extern
 			bool GetDefaultSourceName(StringBuilder sName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DefaultSourceName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DefaultSourceName")]
 		private static extern
 			System.IntPtr DefaultSourceNamePtr();
 		public static string DefaultSourceName() { return Marshal.PtrToStringAnsi(DefaultSourceNamePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_OpenSource")]
 		public static extern
 			bool OpenSource(string sName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableSource")]
 		public static extern
 			bool EnableSource(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableSource")]
 		public static extern
 			bool DisableSource();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CloseSource")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CloseSource")]
 		public static extern
 			bool CloseSource();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CloseSourceManager")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CloseSourceManager")]
 		public static extern
 			bool CloseSourceManager(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_UnloadSourceManager")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_UnloadSourceManager")]
 		public static extern
 			bool UnloadSourceManager();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsTransferReady")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsTransferReady")]
 		public static extern
 			bool IsTransferReady();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndXfer")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndXfer")]
 		public static extern
 			bool EndXfer();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AbortAllPendingXfers")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AbortAllPendingXfers")]
 		public static extern
 			bool AbortAllPendingXfers();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXferCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXferCount")]
 		public static extern
 			bool SetXferCount(int nXfers);
 
@@ -1767,22 +1765,22 @@ namespace OpenDental{
 		public const int TWUN_TWIPS = 4;
 		public const int TWUN_PIXELS = 5;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentUnits")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentUnits")]
 		public static extern
 			int GetCurrentUnits();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetUnits")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetUnits")]
 		public static extern
 			bool SetUnits(int nUnits);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentUnits")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentUnits")]
 		public static extern
 			bool SetCurrentUnits(int nUnits);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBitDepth")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBitDepth")]
 		public static extern
 			int GetBitDepth();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBitDepth")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBitDepth")]
 		public static extern
 			bool SetBitDepth(int nBits);
 
@@ -1793,146 +1791,146 @@ namespace OpenDental{
 		public const int TWPT_CMY = 4;
 		public const int TWPT_CMYK = 5;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetPixelType")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetPixelType")]
 		public static extern
 			int GetPixelType();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPixelType")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPixelType")]
 		public static extern
 			bool SetPixelType(int nPixType);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentPixelType")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentPixelType")]
 		public static extern
 			bool SetCurrentPixelType(int nPixType);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentResolution")]
 		public static extern
 			double GetCurrentResolution();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetXResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetXResolution")]
 		public static extern
 			double GetXResolution();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetYResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetYResolution")]
 		public static extern
 			double GetYResolution();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetResolution")]
 		public static extern
 			bool SetResolution(double dRes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetResolutionInt")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetResolutionInt")]
 		public static extern
 			bool SetResolutionInt(int nRes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCurrentResolution")]
 		public static extern
 			bool SetCurrentResolution(double dRes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXResolution")]
 		public static extern
 			bool SetXResolution(double dxRes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetYResolution")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetYResolution")]
 		public static extern
 			bool SetYResolution(double dyRes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetContrast")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetContrast")]
 		public static extern
 			bool SetContrast(double dCon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBrightness")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBrightness")]
 		public static extern
 			bool SetBrightness(double dBri);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetThreshold")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetThreshold")]
 		public static extern
 			bool SetThreshold(double dThresh);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentThreshold")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrentThreshold")]
 		public static extern
 			double GetCurrentThreshold();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoDeskew")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoDeskew")]
 		public static extern
 			void SetAutoDeskew(int nMode);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoDeskew")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoDeskew")]
 		public static extern
 			int GetAutoDeskew();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBlankPageMode")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBlankPageMode")]
 		public static extern
 			void SetBlankPageMode(int nMode);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBlankPageMode")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBlankPageMode")]
 		public static extern
 			int GetBlankPageMode();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBlankPageThreshold")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetBlankPageThreshold")]
 		public static extern
 			void SetBlankPageThreshold(double dDarkness);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBlankPageThreshold")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBlankPageThreshold")]
 		public static extern
 			double GetBlankPageThreshold();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BlankDiscardCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BlankDiscardCount")]
 		public static extern
 			int BlankDiscardCount();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCrop")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCrop")]
 		public static extern
 			void SetAutoCrop(int nMode);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoCrop")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoCrop")]
 		public static extern
 			int GetAutoCrop();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCropOptions")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCropOptions")]
 		public static extern
 			void SetAutoCropOptions(int nOpts);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoCropOptions")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoCropOptions")]
 		public static extern
 			int GetAutoCropOptions();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCropSize")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoCropSize")]
 		public static extern
 			void SetAutoCropSize(double w,double h,int nUnits);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ClearAutoCropSize")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ClearAutoCropSize")]
 		public static extern
 			void ClearAutoCropSize();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoContrast")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoContrast")]
 		public static extern
 			void SetAutoContrast(int nMode);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoContrast")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoContrast")]
 		public static extern
 			int GetAutoContrast();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoOCR")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoOCR")]
 		public static extern
 			void SetAutoOCR(int nMode);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoOCR")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoOCR")]
 		public static extern
 			int GetAutoOCR();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoNegate")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoNegate")]
 		public static extern
 			void SetAutoNegate(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoNegate")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetAutoNegate")]
 		public static extern
 			bool GetAutoNegate();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXferMech")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetXferMech")]
 		public static extern
 			bool SetXferMech(int mech);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_XferMech")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_XferMech")]
 		public static extern
 			int XferMech();
 		public const int XFERMECH_NATIVE = 0;
 		public const int XFERMECH_FILE = 1;
 		public const int XFERMECH_MEMORY = 2;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SupportsFileXfer")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SupportsFileXfer")]
 		public static extern
 			bool SupportsFileXfer();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPaperSize")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPaperSize")]
 		public static extern
 			bool SetPaperSize(int nPaper);
 		public const int PAPER_NONE = 0;
@@ -1994,100 +1992,100 @@ namespace OpenDental{
 		public const int PAPER_USSTATEMENT = 52;
 		public const int PAPER_BUSINESSCARD = 53;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetPaperDimensions")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetPaperDimensions")]
 		public static extern
 			bool GetPaperDimensions(int nPaper,int nUnits,out double pdW,out double pdH);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_HasFeeder")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_HasFeeder")]
 		public static extern
 			bool HasFeeder();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ProbablyHasFlatbed")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ProbablyHasFlatbed")]
 		public static extern
 			bool ProbablyHasFlatbed();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFeederSelected")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFeederSelected")]
 		public static extern
 			bool IsFeederSelected();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelectFeeder")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelectFeeder")]
 		public static extern
 			bool SelectFeeder(bool bYes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsAutoFeedOn")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsAutoFeedOn")]
 		public static extern
 			bool IsAutoFeedOn();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoFeed")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoFeed")]
 		public static extern
 			bool SetAutoFeed(bool bYes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFeederLoaded")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsFeederLoaded")]
 		public static extern
 			bool IsFeederLoaded();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPaperDetectable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsPaperDetectable")]
 		public static extern
 			bool IsPaperDetectable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoScan")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoScan")]
 		public static extern
 			bool SetAutoScan(bool bYes);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDuplexSupport")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDuplexSupport")]
 		public static extern
 			int GetDuplexSupport();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableDuplex")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableDuplex")]
 		public static extern
 			bool EnableDuplex(bool bYes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDuplexEnabled")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsDuplexEnabled")]
 		public static extern
 			bool IsDuplexEnabled();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_HasControllableUI")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_HasControllableUI")]
 		public static extern
 			int HasControllableUI();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetIndicators")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetIndicators")]
 		public static extern
 			bool SetIndicators(bool bVisible);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetIndicators")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetIndicators")]
 		public static extern
 			bool GetIndicators();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Compression")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Compression")]
 		public static extern
 			int Compression();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCompression")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCompression")]
 		public static extern
 			bool SetCompression(int compression);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Tiled")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Tiled")]
 		public static extern
 			bool Tiled();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiled")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetTiled")]
 		public static extern
 			bool SetTiled(bool bTiled);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PlanarChunky")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PlanarChunky")]
 		public static extern
 			int PlanarChunky();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPlanarChunky")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPlanarChunky")]
 		public static extern
 			bool SetPlanarChunky(int shape);
 
 		public const int CHUNKY_PIXELS = 0;
 		public const int PLANAR_PIXELS = 1;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PixelFlavor")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_PixelFlavor")]
 		public static extern
 			int PixelFlavor();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPixelFlavor")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetPixelFlavor")]
 		public static extern
 			bool SetPixelFlavor(int flavor);
 
@@ -2095,75 +2093,75 @@ namespace OpenDental{
 		public const int VANILLA_PIXELS = 1;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLightPath")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLightPath")]
 		public static extern
 			bool SetLightPath(bool bTransmissive);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoBright")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetAutoBright")]
 		public static extern
 			bool SetAutoBright(bool bOn);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetGamma")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetGamma")]
 		public static extern
 			bool SetGamma(double dGamma);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetShadow")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetShadow")]
 		public static extern
 			bool SetShadow(double d);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetHighlight")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetHighlight")]
 		public static extern
 			bool SetHighlight(double d);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetRegion")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetRegion")]
 		public static extern
 			void SetRegion(double L,double T,double R,double B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetRegion")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetRegion")]
 		public static extern
 			void ResetRegion();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetImageLayout")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetImageLayout")]
 		public static extern
 			bool SetImageLayout(double L,double T,double R,double B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetImageLayout")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetImageLayout")]
 		public static extern
 			bool GetImageLayout(out double L,out double T,out double R,out double B);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefaultImageLayout")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefaultImageLayout")]
 		public static extern
 			bool GetDefaultImageLayout(out double L,out double T,out double R,out double B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetImageLayout")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetImageLayout")]
 		public static extern
 			bool ResetImageLayout();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetFrame")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetFrame")]
 		public static extern
 			bool SetFrame(double L,double T,double R,double B);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetGrayResponse")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetGrayResponse")]
 		public static extern
 			bool SetGrayResponse([MarshalAs(UnmanagedType.LPArray)] int[] pcurve);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetColorResponse")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetColorResponse")]
 		public static extern
 			bool SetColorResponse([MarshalAs(UnmanagedType.LPArray)] int[] pred,[MarshalAs(UnmanagedType.LPArray)] int[] pgreen,[MarshalAs(UnmanagedType.LPArray)] int[] pblue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetGrayResponse")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetGrayResponse")]
 		public static extern
 			bool ResetGrayResponse();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetColorResponse")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ResetColorResponse")]
 		public static extern
 			bool ResetColorResponse();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_IsAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_Version();
 
@@ -2177,26 +2175,26 @@ namespace OpenDental{
 		public const int EZBAR_ENGINE_LEADTOOLS = 3;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_IsEngineAvailable(int nEngine);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_SelectEngine(int nEngine);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_SelectedEngine();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_EngineName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_EngineName")]
 		private static extern
 			System.IntPtr BARCODE_EngineNamePtr(int nEngine);
 		public static string BARCODE_EngineName(int nEngine) { return Marshal.PtrToStringAnsi(BARCODE_EngineNamePtr(nEngine)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void BARCODE_SetLicenseKey(string sKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_ReadableCodes();
 		public const int EZBAR_EAN_13 = 0x1;
@@ -2212,18 +2210,18 @@ namespace OpenDental{
 		public const int EZBAR_CODE_93 = 0x400;
 		public const int EZBAR_ANY = -1;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_TypeName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_TypeName")]
 		private static extern
 			System.IntPtr BARCODE_TypeNamePtr(int nType);
 		public static string BARCODE_TypeName(int nType) { return Marshal.PtrToStringAnsi(BARCODE_TypeNamePtr(nType)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_SetDirectionFlags(int nDirFlags);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_GetDirectionFlags();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_AvailableDirectionFlags();
 
@@ -2235,125 +2233,125 @@ namespace OpenDental{
 		public const int EZBAR_HORIZONTAL = 0x3;
 		public const int EZBAR_VERTICAL = 0xC;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void BARCODE_SetZone(int x,int y,int w,int h);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void BARCODE_NoZone();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_Recognize(System.IntPtr hdib,int nMaxCount,int nType);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_Text")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="BARCODE_Text")]
 		private static extern
 			System.IntPtr BARCODE_TextPtr(int n);
 		public static string BARCODE_Text(int n) { return Marshal.PtrToStringAnsi(BARCODE_TextPtr(n)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_GetText(int n,StringBuilder Text);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int BARCODE_Type(int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool BARCODE_GetRect(int n,out double L,out double T,out double R,out double B);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_IsAvailable();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_Version();
 
 		public const int EZOCR_ENGINE_NONE = 0;
 		public const int EZOCR_ENGINE_TRANSYM = 1;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_IsEngineAvailable(int nEngine);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_SelectEngine(int nEngine);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_SelectedEngine();
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_SelectDefaultEngine();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="OCR_EngineName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="OCR_EngineName")]
 		private static extern
 			System.IntPtr OCR_EngineNamePtr(int nEngine);
 		public static string OCR_EngineName(int nEngine) { return Marshal.PtrToStringAnsi(OCR_EngineNamePtr(nEngine)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void OCR_SetEngineKey(string sKey);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void OCR_SetLineBreak(string sEOL);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_RecognizeDib(System.IntPtr hdib);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_RecognizeDibZone(System.IntPtr hdib,int x,int y,int w,int h);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="OCR_Text")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="OCR_Text")]
 		private static extern
 			System.IntPtr OCR_TextPtr();
 		public static string OCR_Text() { return Marshal.PtrToStringAnsi(OCR_TextPtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_GetText(StringBuilder TextBuffer,int nBufLen);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_TextLength();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int OCR_TextOrientation();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_GetCharPositions([MarshalAs(UnmanagedType.LPArray)] int[] charx,[MarshalAs(UnmanagedType.LPArray)] int[] chary);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_GetCharSizes([MarshalAs(UnmanagedType.LPArray)] int[] charw,[MarshalAs(UnmanagedType.LPArray)] int[] charh);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void OCR_GetResolution(out double xdpi,out double ydpi);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void OCR_ClearText();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_WritePage(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_WriteTextToPDF();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void OCR_SetAutoRotatePagesToPDF(bool bYes);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool OCR_GetAutoRotatePagesToPDF();
 
@@ -2365,311 +2363,311 @@ namespace OpenDental{
 		public const int TWON_RANGE = 6;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void CONTAINER_Free(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Copy(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_Equal(int hconA,int hconB);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Format(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_ItemCount(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_ItemType(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_TypeSize(int nItemType);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			void CONTAINER_GetStringValue(int hcon,int n,StringBuilder sText);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_FloatValue(int hcon,int n);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_IntValue(int hcon,int n);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="CONTAINER_StringValue")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="CONTAINER_StringValue")]
 		private static extern
 			System.IntPtr CONTAINER_StringValuePtr(int hcon,int n);
 		public static string CONTAINER_StringValue(int hcon,int n) { return Marshal.PtrToStringAnsi(CONTAINER_StringValuePtr(hcon,n)); }
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_ContainsValue(int hcon,double d);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_ContainsValueInt(int hcon,int n);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_FindValue(int hcon,double d);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_FindValueInt(int hcon,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_CurrentValue(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_DefaultValue(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_CurrentValueInt(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_DefaultValueInt(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_DefaultIndex(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_CurrentIndex(int hcon);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_MinValue(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_MaxValue(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_MinValueInt(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_MaxValueInt(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			double CONTAINER_StepSize(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_StepSizeInt(int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_OneValue(int nItemType,double dVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Range(int nItemType,double dMin,double dMax,double dStep);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Array(int nItemType,int nItems);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Enumeration(int nItemType,int nItems);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SetItem(int hcon,int n,double dVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SetItemInt(int hcon,int n,int nVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SetItemString(int hcon,int n,string sVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SetItemFrame(int hcon,int n,double l,double t,double r,double b);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_GetItemFrame(int hcon,int n,out double L,out double T,out double R,out double B);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SelectCurrentValue(int hcon,double dVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SelectCurrentItem(int hcon,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SelectDefaultValue(int hcon,double dVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_SelectDefaultItem(int hcon,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_DeleteItem(int hcon,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_InsertItem(int hcon,int n,double dVal);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			int CONTAINER_Wrap(int nFormat,System.IntPtr hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr CONTAINER_Unwrap(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			System.IntPtr CONTAINER_Handle(int hcon);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true)]
 		public static extern
 			bool CONTAINER_IsValid(int hcon);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsCapAvailable")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsCapAvailable")]
 		public static extern
 			bool IsCapAvailable(int uCap);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Get")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Get")]
 		public static extern
 			int Get(int uCap);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefault")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetDefault")]
 		public static extern
 			int GetDefault(int uCap);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrent")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCurrent")]
 		public static extern
 			int GetCurrent(int uCap);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Set")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Set")]
 		public static extern
 			bool Set(int uCap,int hcon);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Reset")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Reset")]
 		public static extern
 			bool Reset(int uCap);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_QuerySupport")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_QuerySupport")]
 		public static extern
 			int QuerySupport(int uCap);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapability")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapability")]
 		public static extern
 			bool SetCapability(int cap,double dValue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapString")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapString")]
 		public static extern
 			bool SetCapString(int cap,string sValue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapBool")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapBool")]
 		public static extern
 			bool SetCapBool(int cap,bool bValue);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapBool")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapBool")]
 		public static extern
 			bool GetCapBool(int cap,bool bDefault);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapFix32")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapFix32")]
 		public static extern
 			double GetCapFix32(int cap,double dDefault);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapUint16")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapUint16")]
 		public static extern
 			int GetCapUint16(int cap,int nDefault);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapUint32")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapUint32")]
 		public static extern
 			int GetCapUint32(int cap,int lDefault);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapFix32")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapFix32")]
 		public static extern
 			bool SetCapFix32(int Cap,double dVal);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapOneValue")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapOneValue")]
 		public static extern
 			bool SetCapOneValue(int Cap,int ItemType,int ItemVal);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapFix32R")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCapFix32R")]
 		public static extern
 			bool SetCapFix32R(int Cap,int Numerator,int Denominator);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapCurrent")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCapCurrent")]
 		public static extern
 			bool GetCapCurrent(int Cap,int ItemType,System.IntPtr pVal);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ToFix32")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ToFix32")]
 		public static extern
 			int ToFix32(double d);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ToFix32R")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ToFix32R")]
 		public static extern
 			int ToFix32R(int Numerator,int Denominator);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Fix32ToFloat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Fix32ToFloat")]
 		public static extern
 			double Fix32ToFloat(int nfix);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCustomDataToFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCustomDataToFile")]
 		public static extern
 			bool GetCustomDataToFile(string sFilename);
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCustomDataFromFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCustomDataFromFile")]
 		public static extern
 			bool SetCustomDataFromFile(string sFilename);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCustomData")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetCustomData")]
 		public static extern
 			bool SetCustomData([MarshalAs(UnmanagedType.LPArray)] byte[] data,int nbytes);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCustomData")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetCustomData")]
 		public static extern
 			int GetCustomData([MarshalAs(UnmanagedType.LPArray)] byte[] buffer,int bufsize);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CustomData")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_CustomData")]
 		private static extern
 			System.IntPtr CustomDataPtr();
 		public static string CustomData() { return Marshal.PtrToStringAnsi(CustomDataPtr()); }
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsExtendedInfoSupported")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsExtendedInfoSupported")]
 		public static extern
 			bool IsExtendedInfoSupported();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableExtendedInfo")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EnableExtendedInfo")]
 		public static extern
 			bool EnableExtendedInfo(int eiCode,bool enabled);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsExtendedInfoEnabled")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_IsExtendedInfoEnabled")]
 		public static extern
 			bool IsExtendedInfoEnabled(int eiCode);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableExtendedInfo")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DisableExtendedInfo")]
 		public static extern
 			void DisableExtendedInfo();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoItemCount")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoItemCount")]
 		public static extern
 			int ExtendedInfoItemCount(int eiCode);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoItemType")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoItemType")]
 		public static extern
 			int ExtendedInfoItemType(int eiCode);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoInt")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoInt")]
 		public static extern
 			int ExtendedInfoInt(int eiCode,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoFloat")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoFloat")]
 		public static extern
 			double ExtendedInfoFloat(int eiCode,int n);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtendedInfoString")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtendedInfoString")]
 		public static extern
 			bool GetExtendedInfoString(int eiCode,int n,StringBuilder Buffer,int Bufsize);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoString")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_ExtendedInfoString")]
 		private static extern
 			System.IntPtr ExtendedInfoStringPtr(int eiCode,int n);
 		public static string ExtendedInfoString(int eiCode,int n) { return Marshal.PtrToStringAnsi(ExtendedInfoStringPtr(eiCode,n)); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtendedInfoFrame")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetExtendedInfoFrame")]
 		public static extern
 			bool GetExtendedInfoFrame(int eiCode,int n,out double L,out double T,out double R,out double B);
 
@@ -2751,30 +2749,30 @@ namespace OpenDental{
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DS")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_DS")]
 		public static extern
 			bool DS(int DG,int DAT,int MSG,System.IntPtr pData);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Mgr")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Mgr")]
 		public static extern
 			bool Mgr(int DG,int DAT,int MSG,System.IntPtr pData);
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BeginAcquireMemory")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BeginAcquireMemory")]
 		public static extern
 			bool BeginAcquireMemory(System.IntPtr hwnd,int nRows);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMemoryBlock")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMemoryBlock")]
 		public static extern
 			System.IntPtr AcquireMemoryBlock();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndAcquireMemory")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EndAcquireMemory")]
 		public static extern
 			bool EndAcquireMemory();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireFile")]
 		public static extern
 			bool AcquireFile(System.IntPtr hwndApp,int nFF,string sFileName);
 		public const int TWAIN_FF_TIFF = 0;
@@ -2794,41 +2792,41 @@ namespace OpenDental{
 		public const int TWAIN_FF_DEJAVU = 14;
 		public const int TWAIN_FF_PDFA = 15;
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetImageReadyTimeout")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetImageReadyTimeout")]
 		public static extern
 			int SetImageReadyTimeout(int nSec);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AutoClickButton")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AutoClickButton")]
 		public static extern
 			void AutoClickButton(string sButtonName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BreakModalLoop")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BreakModalLoop")]
 		public static extern
 			void BreakModalLoop();
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EmptyMessageQueue")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_EmptyMessageQueue")]
 		public static extern
 			void EmptyMessageQueue();
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BuildName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_BuildName")]
 		private static extern
 			System.IntPtr BuildNamePtr();
 		public static string BuildName() { return Marshal.PtrToStringAnsi(BuildNamePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBuildName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetBuildName")]
 		public static extern
 			void GetBuildName(StringBuilder sName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceIdentity")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetSourceIdentity")]
 		public static extern
 			int GetSourceIdentity(System.IntPtr ptwid);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetImageInfo")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_GetImageInfo")]
 		public static extern
 			int GetImageInfo(System.IntPtr ptwinfo);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LogFile")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LogFile")]
 		public static extern
 			void LogFile(int fLog);
 		public const int EZT_LOG_ON = 1;
@@ -2836,52 +2834,52 @@ namespace OpenDental{
 		public const int EZT_LOG_DETAIL = 4;
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLogFolder")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLogFolder")]
 		public static extern
 			bool SetLogFolder(string sFolder);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLogName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SetLogName")]
 		public static extern
 			bool SetLogName(string sName);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LogFileName")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_LogFileName")]
 		private static extern
 			System.IntPtr LogFileNamePtr();
 		public static string LogFileName() { return Marshal.PtrToStringAnsi(LogFileNamePtr()); }
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteToLog")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_WriteToLog")]
 		public static extern
 			void WriteToLog(string sText);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelfTest")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_SelfTest")]
 		public static extern
 			int SelfTest(int f);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Blocked")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_Blocked")]
 		public static extern
 			bool Blocked();
 
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FreeNative")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_FreeNative")]
 		public static extern
 			void FreeNative(System.IntPtr hdib);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NegotiatePixelTypes")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_NegotiatePixelTypes")]
 		public static extern
 			bool NegotiatePixelTypes(int wPixMask);
 
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireNative")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireNative")]
 		public static extern
 			System.IntPtr AcquireNative(System.IntPtr hwndApp,int wPixMask);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMemory")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireMemory")]
 		public static extern
 			System.IntPtr AcquireMemory(System.IntPtr hwnd);
 
-		[DllImport("Eztwain3.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToClipboard")]
+		[DllImport("Eztwain4.dll",CharSet=CharSet.Ansi,ExactSpelling=true,EntryPoint="TWAIN_AcquireToClipboard")]
 		public static extern
 			bool AcquireToClipboard(System.IntPtr hwndApp,int wPixMask);
 
