@@ -1419,41 +1419,61 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			Bitmap bitmapScanned=null;
 			IntPtr hdib=IntPtr.Zero;
-			//Try catch here prevents a crash when a customer who has no scanner installed tries to scan.
-			try {
-				//A user may have more than one scanning device. 
-				//The code below will allow the user to select one.
-				xImageDeviceManager.Obfuscator.ActivateEZTwain();
-				if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
-					if(!EZTwain.SelectImageSource(this.Handle)) {
-						return;//User clicked cancel.
-					}
+			xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
+				if(!EZTwain.SelectImageSource(this.Handle)) {//dialog to select source
+					return;//User clicked cancel.
 				}
-				EZTwain.SetHideUI(!ComputerPrefs.LocalComputer.ScanDocShowOptions);
-				EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
-				if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
-					EZTwain.SetPixelType(1);//8-bit grayscale - only set if scanner dialog will not show
-				}
-				else {
-					EZTwain.SetPixelType(2);//24-bit color
-				}
-				EZTwain.SetJpegQuality(ComputerPrefs.LocalComputer.ScanDocQuality);
-				//hdib=EZTwain.AcquireMemory(this.Handle);//==Michael - EZTwain documentation recommends using EZTwain.SetXferMech(EZTwain.XFERMECH_MEMORY) and then EZTwain.Acquire instead (see next 2 lines)
-				EZTwain.SetXferMech(EZTwain.XFERMECH_MEMORY);
-				hdib=EZTwain.Acquire(this.Handle);//This is where the options dialog would come up. The settings above will not populate this window.
-				double xdpi=EZTwain.DIB_XResolution(hdib);
-				double ydpi=EZTwain.DIB_XResolution(hdib);
-				IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
-				bitmapScanned=Bitmap.FromHbitmap(hbitmap);
-				bitmapScanned.SetResolution((float)xdpi,(float)ydpi);
-				Clipboard.SetImage(bitmapScanned);//why do we do this?
 			}
-			catch(Exception ex) {
+			EZTwain.SetHideUI(!ComputerPrefs.LocalComputer.ScanDocShowOptions);
+			if(!EZTwain.OpenDefaultSource()) {//if it can't open the scanner successfully
 				Cursor=Cursors.Default;
-				MessageBox.Show("The image could not be acquired from the scanner. "+
-					"Please check to see that the scanner is properly connected to the computer. Specific error: "+ex.Message);
+				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
 				return;
 			}
+			EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
+			if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
+				EZTwain.SetPixelType(1);//8-bit grayscale - only set if scanner dialog will not show
+			}
+			else {
+				EZTwain.SetPixelType(2);//24-bit color
+			}
+			EZTwain.SetJpegQuality(ComputerPrefs.LocalComputer.ScanDocQuality);
+			EZTwain.SetXferMech(EZTwain.XFERMECH_MEMORY);
+			Cursor=Cursors.Default;
+			hdib=EZTwain.Acquire(this.Handle);//This is where the options dialog would come up. The settings above will not populate this window.
+			int errorCode=EZTwain.LastErrorCode();
+			if(errorCode!=0) {
+				string message="";
+				if(errorCode==(int)EZTwainErrorCode.EZTEC_USER_CANCEL) {//19
+					//message="\r\nScanning cancelled.";//do nothing
+					return;
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_JPEG_DLL) {//22
+					message="Missing dll\r\n\r\nRequired file EZJpeg.dll is missing.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_0_PAGES) {//38
+					//message="\r\nScanning cancelled.";//do nothing
+					return;
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_NO_PDF) {//43
+					message="Missing dll\r\n\r\nRequired file EZPdf.dll is missing.";
+				}
+				else if(errorCode==(int)EZTwainErrorCode.EZTEC_DEVICE_PAPERJAM) {//76
+					message="Paper jam\r\n\r\nPlease check the scanner document feeder and ensure there path is clear of any paper jams.";
+				}
+				else {
+					message=errorCode+" "+((EZTwainErrorCode)errorCode).ToString();
+				}
+				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error: "+message));
+				return;
+			}
+			double xdpi=EZTwain.DIB_XResolution(hdib);
+			double ydpi=EZTwain.DIB_XResolution(hdib);
+			IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
+			bitmapScanned=Bitmap.FromHbitmap(hbitmap);
+			bitmapScanned.SetResolution((float)xdpi,(float)ydpi);
+			Clipboard.SetImage(bitmapScanned);//We do this because a customer requested it, and some customers probably use it.
 			ImageType imgType;
 			if(scanType=="xray") {
 				imgType=ImageType.Radiograph;
@@ -1532,21 +1552,19 @@ namespace OpenDental{
 			//EZTwain.LogFile(7);//Writes at level 7 (very detailed) in the C:\eztwain.log text file. Useful for getting help from EZTwain support on their forum.
 			EZTwain.SetHideUI(!ComputerPrefs.LocalComputer.ScanDocShowOptions);
 			EZTwain.PDF_SetCompression((int)this.Handle,(int)ComputerPrefs.LocalComputer.ScanDocQuality);
-			if(EZTwain.OpenDefaultSource()) {//if it opens the scanner successfully
-				bool duplexEnabled=EZTwain.EnableDuplex(ComputerPrefs.LocalComputer.ScanDocDuplex);//This line seems to cause problems.
-				if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
-					EZTwain.SetPixelType(1);//8-bit grayscale
-				}
-				else {
-					EZTwain.SetPixelType(2);//24-bit color
-				}
-				EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
-				EZTwain.AcquireMultipageFile(this.Handle,tempFile);//This is where the options dialog will come up if enabled. This will ignore and override the settings above.
-			}
-			else {
+			if(!EZTwain.OpenDefaultSource()) {//if it can't open the scanner successfully
 				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
 				return;
 			}
+			bool duplexEnabled=EZTwain.EnableDuplex(ComputerPrefs.LocalComputer.ScanDocDuplex);//This line seems to cause problems.
+			if(ComputerPrefs.LocalComputer.ScanDocGrayscale) {
+				EZTwain.SetPixelType(1);//8-bit grayscale
+			}
+			else {
+				EZTwain.SetPixelType(2);//24-bit color
+			}
+			EZTwain.SetResolution(ComputerPrefs.LocalComputer.ScanDocResolution);
+			EZTwain.AcquireMultipageFile(this.Handle,tempFile);//This is where the options dialog will come up if enabled. This will ignore and override the settings above.
 			int errorCode=EZTwain.LastErrorCode();
 			if(errorCode!=0) {
 				string message="";

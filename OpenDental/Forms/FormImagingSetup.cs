@@ -40,6 +40,7 @@ namespace OpenDental{
 		private RadioButton radioScanDocUseOptionsBelow;
 		private RadioButton radioScanDocShowOptions;
 		private GroupBox groupScanningOptions;
+		private Label label8;
 		private CheckBox checkBinned;
 		//private ComputerPref computerPrefs;
 
@@ -119,6 +120,7 @@ namespace OpenDental{
 			this.butMounts = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.label8 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupScanningOptions.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -149,7 +151,7 @@ namespace OpenDental{
 			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox1.Location = new System.Drawing.Point(20, 45);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(603, 197);
+			this.groupBox1.Size = new System.Drawing.Size(622, 197);
 			this.groupBox1.TabIndex = 17;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Documents - Settings apply only to this workstation";
@@ -181,6 +183,7 @@ namespace OpenDental{
 			// 
 			// groupScanningOptions
 			// 
+			this.groupScanningOptions.Controls.Add(this.label8);
 			this.groupScanningOptions.Controls.Add(this.checkScanDocDuplex);
 			this.groupScanningOptions.Controls.Add(this.label5);
 			this.groupScanningOptions.Controls.Add(this.label6);
@@ -188,7 +191,7 @@ namespace OpenDental{
 			this.groupScanningOptions.Controls.Add(this.checkScanDocGrayscale);
 			this.groupScanningOptions.Location = new System.Drawing.Point(32, 100);
 			this.groupScanningOptions.Name = "groupScanningOptions";
-			this.groupScanningOptions.Size = new System.Drawing.Size(499, 90);
+			this.groupScanningOptions.Size = new System.Drawing.Size(584, 90);
 			this.groupScanningOptions.TabIndex = 24;
 			this.groupScanningOptions.TabStop = false;
 			this.groupScanningOptions.Text = "Scanning Options";
@@ -206,7 +209,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(52, 64);
+			this.label5.Location = new System.Drawing.Point(52, 66);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(186, 19);
 			this.label5.TabIndex = 15;
@@ -215,7 +218,7 @@ namespace OpenDental{
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(313, 63);
+			this.label6.Location = new System.Drawing.Point(313, 65);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(180, 19);
 			this.label6.TabIndex = 15;
@@ -224,7 +227,7 @@ namespace OpenDental{
 			// 
 			// textScanDocResolution
 			// 
-			this.textScanDocResolution.Location = new System.Drawing.Point(241, 63);
+			this.textScanDocResolution.Location = new System.Drawing.Point(241, 65);
 			this.textScanDocResolution.MaxVal = 1000;
 			this.textScanDocResolution.MinVal = 51;
 			this.textScanDocResolution.Name = "textScanDocResolution";
@@ -234,7 +237,7 @@ namespace OpenDental{
 			// checkScanDocGrayscale
 			// 
 			this.checkScanDocGrayscale.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkScanDocGrayscale.Location = new System.Drawing.Point(110, 41);
+			this.checkScanDocGrayscale.Location = new System.Drawing.Point(110, 47);
 			this.checkScanDocGrayscale.Name = "checkScanDocGrayscale";
 			this.checkScanDocGrayscale.Size = new System.Drawing.Size(146, 18);
 			this.checkScanDocGrayscale.TabIndex = 22;
@@ -485,6 +488,16 @@ namespace OpenDental{
 			this.butOK.TabIndex = 2;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(260, 9);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(260, 34);
+			this.label8.TabIndex = 23;
+			this.label8.Text = "If this setting causes your scanner to malfunction, use the \"Show Scanner Options" +
+    " Window\" instead";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormImagingSetup
 			// 
