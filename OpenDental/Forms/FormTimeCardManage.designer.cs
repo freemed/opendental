@@ -47,7 +47,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(804, 652);
+			this.butCancel.Location = new System.Drawing.Point(868, 652);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -152,11 +152,14 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(12, 66);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(867, 580);
+			this.gridMain.Size = new System.Drawing.Size(931, 580);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Employee Time Cards";
 			this.gridMain.TranslationName = "TableTimeCard";
@@ -172,11 +175,12 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(358, 652);
+			this.butPrint.Location = new System.Drawing.Point(390, 652);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(83, 24);
 			this.butPrint.TabIndex = 116;
 			this.butPrint.Text = "&Print";
+			this.butPrint.Visible = false;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// butReport
@@ -188,7 +192,7 @@ namespace OpenDental{
 			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReport.CornerRadius = 4F;
 			this.butReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butReport.Location = new System.Drawing.Point(447, 652);
+			this.butReport.Location = new System.Drawing.Point(479, 652);
 			this.butReport.Name = "butReport";
 			this.butReport.Size = new System.Drawing.Size(85, 24);
 			this.butReport.TabIndex = 117;
@@ -198,7 +202,7 @@ namespace OpenDental{
 			// FormTimeCardManage
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(891, 686);
+			this.ClientSize = new System.Drawing.Size(955, 686);
 			this.Controls.Add(this.butReport);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.gridMain);

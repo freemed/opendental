@@ -234,11 +234,14 @@ namespace OpenDentBusiness{
 					SEC_TO_TIME(TIME_TO_SEC(tempclockevent.OverTime)+TIME_TO_SEC(IFNULL(temptimeadjust.AdjOTime,0))) AS tempOverTime,
 					tempclockevent.AdjEvent,
 					temptimeadjust.AdjReg,
-					temptimeadjust.AdjOTime	
+					temptimeadjust.AdjOTime,
+					SEC_TO_TIME(TIME_TO_SEC(tempbreak.BreakTime)+TIME_TO_SEC(AdjEvent)) AS BreakTime,
+					tempclockevent.Note
 				FROM clockevent	
 				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed2)),0)-IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed1)),0)) AS TotalTime,
 					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.OTimeHours='-01:00:00' THEN ce.OTimeAuto ELSE ce.OTimeHours END)),0)) AS OverTime,
-					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent 
+					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent,
+					CASE WHEN "+DbHelper.DateColumn("TimeDisplayed2")+" = "+POut.Date(startDate)+@" THEN ce.Note ELSE """" END AS Note 
 					FROM clockevent ce
 					WHERE ce.TimeDisplayed1 >= "+POut.Date(startDate)+@"
 					AND ce.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
@@ -251,6 +254,13 @@ namespace OpenDentBusiness{
 					WHERE "+DbHelper.DateColumn("TimeEntry")+" >= "+POut.Date(startDate)+@" 
 					AND "+DbHelper.DateColumn("TimeEntry")+" <= "+POut.Date(stopDate)+@"
 					GROUP BY timeadjust.EmployeeNum) temptimeadjust ON clockevent.EmployeeNum=temptimeadjust.EmployeeNum
+				LEFT JOIN (SELECT ceb.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(UNIX_TIMESTAMP(ceb.TimeDisplayed2)),0)-IFNULL(SUM(UNIX_TIMESTAMP(ceb.TimeDisplayed1)),0)) AS BreakTime
+					FROM clockevent ceb
+					WHERE ceb.TimeDisplayed1 >= "+POut.Date(startDate)+@"
+					AND ceb.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
+					AND ceb.TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))+@"
+					AND ceb.ClockStatus = '2'
+					GROUP BY ceb.EmployeeNum) tempbreak ON clockevent.EmployeeNum=tempbreak.EmployeeNum
 				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0
 				GROUP BY EmployeeNum
 				ORDER BY employee.LName";

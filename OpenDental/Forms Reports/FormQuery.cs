@@ -822,12 +822,13 @@ namespace OpenDental{
 								+PIn.DateT(tableOut.Rows[i][j].ToString()).ToString("d");
 							break;
 						//TimeCardManage (H:mm)
-						case "temptotaltime":
-						case "tempreghrs":
-						case "tempovertime":
 						case "adjevent":
 						case "adjreg":
 						case "adjotime":
+						case "breaktime":
+						case "temptotaltime":
+						case "tempreghrs":
+						case "tempovertime":
 							tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).ToStringHmm();
 							break;
   					//double
