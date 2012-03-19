@@ -122,7 +122,6 @@ namespace OpenDentBusiness
 			Provider provTreat;//might be different for each proc
 			Provider billProv=null;
 			Clinic clinic=null;
-			bool isSecondaryPreauth=false;
 			seg=0;
 			#endregion Define Variables
 			#region Transaction Set Header
@@ -376,36 +375,29 @@ namespace OpenDentBusiness
 				EndSegment(sw);
 				//2000B SBR: (medical,institutional,dental) Subscriber Information.
 				sw.Write("SBR"+s);
-				string claimType="P";
+				bool claimIsPrimary=true;//we currently support only primary and secondary.  Plan2, if present, must be the opposite.
 				if(claim.ClaimType=="PreAuth") {
-					if(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)==2 && claim.PlanNum2!=0) {
-						isSecondaryPreauth=true;
-						claimType="S";//secondary
+					if(otherPlan!=null && PatPlans.GetOrdinal(claim.InsSubNum2,patPlans) < PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) { //When there are two plans and the secondary plan is in the primary ins position.
+						claimIsPrimary=false;
 					}
-					else {
-						claimType="P";//primary
+				}
+				else if(otherPlan!=null && (otherPlan.IsMedical || insPlan.IsMedical)) { //When there are two plans and at least one plan is medical.
+					if(PatPlans.GetOrdinal(claim.InsSubNum2,patPlans) < PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) { //The insurance plan order is determined by patplan.ordinal
+						claimIsPrimary=false;
 					}
 				}
 				else if(claim.ClaimType=="P") {
-					claimType="P";//primary claim
 				}
-				else if(claim.ClaimType=="S") {
-					claimType="S";//secondary claim
+				else if(claim.ClaimType=="S") { //Verification ensures that there are two plans associated with the claim in this case.
+					claimIsPrimary=false;
 				}
-				else { //other or cap.  Also used for medical.
-					switch(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) {
-						case 1://primary claim
-							claimType="P";
-							break;
-						case 2://secondary claim
-							claimType="S";
-							break;
-						case 3://tertiary claim
-							claimType="T";
-							break;
-					}
+				else if(claim.ClaimType=="Other") { //Also used for a medical claim with only one insurance.
+					//We always send medical plans as primary.  They are totally separate from the ordinals for dental.
 				}
-				sw.Write(claimType+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: 
+				else if(claim.ClaimType=="Cap") {
+					//todo: is secondary capitation possible?
+				}
+				sw.Write((claimIsPrimary?"P":"S")+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: 
 				//todo: what about Cap?
 				string relationshipCode="";//empty if patient is not subscriber.
 				if(patient.PatNum==subscriber.PatNum) {//if patient is the subscriber
@@ -600,7 +592,6 @@ namespace OpenDentBusiness
 				}
 				sw.Write("CLM"+s
 					+Sout(clm01,20)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id. Carriers are not required to handle more than 20 char. 
-//todo: add field to allow user to override for claims based on preauths.
 					+claim.ClaimFee.ToString()+s//CLM02 1/18 Monetary Amount:
 					+s//CLM03 1/2 Claim Filing Indicator Code: Not used.
 					+s);//CLM04 1/2 Non-Institutional Claim Type Code: Not used.
@@ -892,7 +883,13 @@ namespace OpenDentBusiness
 				}					
 				//2300 REF: 9A (medical,institutional,dental) Repriced Claim Number. Situational. We do not use. 
 				//2300 REF: 9C (medical,institutional,dental) Adjusted Repriced Claim Number. Situational. We do not use.
-				//2300 REF: D9 (medical,institutional,dental) Claim Identifier For Transmission Intermediaries. Situational. We do not use.
+				//2300 REF: D9 (medical,institutional,dental) Claim Identifier For Transmission Intermediaries. Situational.
+				if(IsClaimConnect(clearhouse)) { //Since this information has only been requested by ClaimConnect and is optional in the specification, we should only add specific clearinghouses here when requested.
+					sw.Write("REF"+s
+						+"D9"+s//REF01 2/3 Reference Identification Qualifier: D9=Claim Number.
+						+Sout(claim.ClaimIdentifier,20));//REF02 1/50 Reference Identification: Value Added Network Trace Number. From specification, maximum of 20 characters even though there is space for 50.
+					EndSegment(sw);//REF03 and REF04 are not used.
+				}
 				//2300 REF: LX (medical,institutional) Investigational Device Exemption Number. Situational. Required for FDA IDE.
 				//2300 REF: LU (institutional) Auto Accident State. Situational. Seems to me to be a duplicate of the info in CLM11.
 				//2300 REF: EA (medical,institutional) Medical Record Number. Situational. We do not use.
@@ -1105,34 +1102,7 @@ namespace OpenDentBusiness
 				if(claim.PlanNum2>0) {
 					//2320 SBR: Other Subscriber Information. Situational.
 					sw.Write("SBR"+s);
-					//SBR01 1/1 Payer Responsibility Sequence Number Code:
-					if(claim.ClaimType=="PreAuth") {
-						if(isSecondaryPreauth) {
-							sw.Write("P"+s);
-						}
-						else {
-							sw.Write("S"+s);
-						}
-					}
-					else if(claim.ClaimType=="S") {
-						sw.Write("P"+s);
-					}
-					else if(claim.ClaimType=="P") {
-						sw.Write("S"+s);
-					}
-					else {//other or cap.  Also used for medical.
-						switch(PatPlans.GetOrdinal(claim.InsSubNum,patPlans)) {
-							case 1://primary claim
-								claimType="S";
-								break;
-							case 2://secondary claim
-								claimType="P";
-								break;
-							case 3://tertiary claim
-								claimType="P";//the best we can do for now without adding more tables and getting very complicated.
-								break;
-						}
-					}
+					sw.Write((claimIsPrimary?"S":"P")+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: When the claim is primary then the other insurance is secondary, and vice versa.
 					sw.Write(GetRelat(claim.PatRelat2)+s//SBR02 2/2 Individual Relationship Code:
 						+Sout(otherPlan.GroupNum,50)+s);//SBR03 1/50 Reference Identification:
 					//SBR04 1/60 Name: Situational. Required when SBR03 is not specified.
@@ -1674,6 +1644,10 @@ namespace OpenDentBusiness
 				+groupControlNumber//GE02 1/9 Group Control Number: Must be identical to GS06.
 				+endSegment);
 			#endregion Trailers
+		}
+
+		private static bool IsClaimConnect(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="330989922");
 		}
 
 		private static bool IsDentiCal(Clearinghouse clearinghouse) {
@@ -2262,6 +2236,12 @@ namespace OpenDentBusiness
 				strb.Append("InsPlan Release of Info");
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+				if(patPlan.PatID!="") {
+					Comma(strb);
+					strb.Append("Create a new insurance plan instead of using the optional patient ID");
+				}
+			}
 			if(IsDentiCal(clearhouse)) {
 				if(GetFilingCode(insPlan)!="MC") {
 					Comma(strb);
@@ -2269,7 +2249,7 @@ namespace OpenDentBusiness
 				}
 				if(sub.Subscriber!=claim.PatNum) {
 					Comma(strb);
-					strb.Append("Subscriber must be the same as the patient for Denti-Cal");
+					strb.Append("Subscriber must be the same as the patient for Denti-Cal");//for everyone, we also check patplan.PatID.
 				}
 				if(patPlan.Relationship!=Relat.Self) {
 					Comma(strb);
@@ -2291,6 +2271,7 @@ namespace OpenDentBusiness
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
+				PatPlan patPlan2=PatPlans.GetFromList(patPlans,claim.InsSubNum2);
 				if(carrier2.Address=="") {
 					Comma(strb);
 					strb.Append("Secondary Carrier Address");
@@ -2311,6 +2292,12 @@ namespace OpenDentBusiness
 					&& claim.PatRelat2==Relat.Self) {//and relat is self
 					Comma(strb);
 					strb.Append("Secondary Relationship");
+				}
+				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+					if(patPlan2.PatID!="") {
+						Comma(strb);
+						strb.Append("Create a new insurance plan instead of using the optional patient ID for the other insurance plan");
+					}
 				}
 			}
 			else { //other insurance not specified
