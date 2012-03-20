@@ -289,7 +289,7 @@ namespace OpenDentBusiness {
 					if(datePeriod.Year==PIn.Date(tableWriteoff.Rows[j][0].ToString()).Year
 						&& datePeriod.Month==PIn.Date(tableWriteoff.Rows[j][0].ToString()).Month)
 					{
-						inswriteoff-=PIn.Decimal(tableWriteoff.Rows[j][1].ToString());
+						inswriteoff+=PIn.Decimal(tableWriteoff.Rows[j][1].ToString());
 					}
 				}
 				listInt.Add((int)(prod+adjust-inswriteoff));
