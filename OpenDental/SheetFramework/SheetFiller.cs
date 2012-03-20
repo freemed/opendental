@@ -1434,6 +1434,9 @@ namespace OpenDental{
 					case "LName":
 						field.FieldValue=pat.LName;
 						break;
+                    //examples: "problem:Hepatitis B"
+                    //          "medication:Sudafed"
+                    //          "allergy:Pen"
 				}
 			}
 		}
