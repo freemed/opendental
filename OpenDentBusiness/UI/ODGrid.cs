@@ -92,6 +92,7 @@ namespace OpenDental.UI {
 		private int RowsPrinted;
 		///<summary>If we are part way through drawing a note when we reach the end of a page, this will contain the remainder of the note still to be printed.  If it is empty string, then we are not in the middle of a note.</summary>
 		private string NoteRemaining;
+		private Point oldSelectedCell;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -1624,6 +1625,7 @@ namespace OpenDental.UI {
 				-vScroll.Value+1+titleHeight+headerHeight+RowLocs[selectedCell.Y]);
 			editBox.Text=Rows[selectedCell.Y].Cells[selectedCell.X].Text;
 			editBox.TextChanged+=new EventHandler(editBox_TextChanged);
+			editBox.LostFocus+=new EventHandler(editBox_LostFocus);
 			editBox.KeyDown+=new KeyEventHandler(editBox_KeyDown);
 			if(Columns[selectedCell.X].TextAlign==HorizontalAlignment.Right) {
 				editBox.TextAlign=HorizontalAlignment.Right;
@@ -1631,12 +1633,24 @@ namespace OpenDental.UI {
 			this.Controls.Add(editBox);
 			editBox.SelectAll();
 			editBox.Focus();
+			//Set the cell of the current editBox so that the value of that cell is saved when it looses focus (used for mouse click).
+			oldSelectedCell=new Point(selectedCell.X,selectedCell.Y);
+		}
+
+		void editBox_LostFocus(object sender,EventArgs e) {
+			//editBox_Leave wouldn't catch all scenarios
+			OnCellLeave(oldSelectedCell.X,oldSelectedCell.Y);//this is the only place where OnCellLeave gets called.
+			if(!editBox.Disposing || !editBox.IsDisposed) {
+				editBox.Dispose();
+				editBox=null;
+			}
 		}
 
 		void editBox_KeyDown(object sender,KeyEventArgs e) {
 			if(e.KeyCode==Keys.Enter) {
-				editBox.Dispose();
-				OnCellLeave(selectedCell.X,selectedCell.Y);
+				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
+				editBox=null;
+				//OnCellLeave(selectedCell.X,selectedCell.Y);
 				//find the next editable cell to the right.
 				int nextCellToRight=-1;
 				for(int i=selectedCell.X+1;i<columns.Count;i++) {
@@ -1668,7 +1682,8 @@ namespace OpenDental.UI {
 			if(e.KeyCode==Keys.Down) {
 				if(selectedCell.Y<rows.Count-1) {
 					editBox.Dispose();
-					OnCellLeave(selectedCell.X,selectedCell.Y);
+					editBox=null;
+					//OnCellLeave(selectedCell.X,selectedCell.Y);
 					selectedCell=new Point(selectedCell.X,selectedCell.Y+1);
 					CreateEditBox();
 				}
@@ -1676,7 +1691,8 @@ namespace OpenDental.UI {
 			if(e.KeyCode==Keys.Up) {
 				if(selectedCell.Y>0) {
 					editBox.Dispose();
-					OnCellLeave(selectedCell.X,selectedCell.Y);
+					editBox=null;
+					//OnCellLeave(selectedCell.X,selectedCell.Y);
 					selectedCell=new Point(selectedCell.X,selectedCell.Y-1);
 					CreateEditBox();
 				}
