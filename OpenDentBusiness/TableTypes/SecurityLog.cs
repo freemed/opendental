@@ -25,6 +25,8 @@ namespace OpenDentBusiness{
 		///<summary>PatNum-NameLF</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string PatientName;
+		///<summary>FK to relevant table.  Not implemented yet.  Table will be based on PermType.</summary>
+		public long FKey;
 
 		
 

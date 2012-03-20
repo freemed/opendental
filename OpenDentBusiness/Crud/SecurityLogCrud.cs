@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				securityLog.LogText       = PIn.String(table.Rows[i]["LogText"].ToString());
 				securityLog.PatNum        = PIn.Long  (table.Rows[i]["PatNum"].ToString());
 				securityLog.CompName      = PIn.String(table.Rows[i]["CompName"].ToString());
+				securityLog.FKey          = PIn.Long  (table.Rows[i]["FKey"].ToString());
 				retVal.Add(securityLog);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="SecurityLogNum,";
 			}
-			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName) VALUES(";
+			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName,FKey) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(securityLog.SecurityLogNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+    DbHelper.Now()+","
 				+"'"+POut.String(securityLog.LogText)+"',"
 				+    POut.Long  (securityLog.PatNum)+","
-				+"'"+POut.String(securityLog.CompName)+"')";
+				+"'"+POut.String(securityLog.CompName)+"',"
+				+    POut.Long  (securityLog.FKey)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				//LogDateTime not allowed to change
 				+"LogText       = '"+POut.String(securityLog.LogText)+"', "
 				+"PatNum        =  "+POut.Long  (securityLog.PatNum)+", "
-				+"CompName      = '"+POut.String(securityLog.CompName)+"' "
+				+"CompName      = '"+POut.String(securityLog.CompName)+"', "
+				+"FKey          =  "+POut.Long  (securityLog.FKey)+" "
 				+"WHERE SecurityLogNum = "+POut.Long(securityLog.SecurityLogNum);
 			Db.NonQ(command);
 		}
@@ -149,6 +152,10 @@ namespace OpenDentBusiness.Crud{
 			if(securityLog.CompName != oldSecurityLog.CompName) {
 				if(command!=""){ command+=",";}
 				command+="CompName = '"+POut.String(securityLog.CompName)+"'";
+			}
+			if(securityLog.FKey != oldSecurityLog.FKey) {
+				if(command!=""){ command+=",";}
+				command+="FKey = "+POut.Long(securityLog.FKey)+"";
 			}
 			if(command==""){
 				return;

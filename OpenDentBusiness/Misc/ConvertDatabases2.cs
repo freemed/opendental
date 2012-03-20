@@ -8981,7 +8981,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'BioPAK')";
 					Db.NonQ32(command);
 				}//end BioPAK Imaging bridge
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE securitylog ADD FKey bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE securitylog ADD INDEX (FKey)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE securitylog ADD FKey number(20)";
+					Db.NonQ(command);
+					command="UPDATE securitylog SET FKey = 0 WHERE FKey IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE securitylog MODIFY FKey NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX securitylog_FKey ON securitylog (FKey)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -9026,3 +9041,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
