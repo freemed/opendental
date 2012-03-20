@@ -8997,6 +8997,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX securitylog_FKey ON securitylog (FKey)";
 					Db.NonQ(command);
 				}
+				//This will be specific to eCW because we don't use IsStandalone anywhere else.
+				command=@"UPDATE programproperty SET PropertyDesc='eClinicalWorksMode' WHERE PropertyDesc='IsStandalone'";
+				Db.NonQ(command);
+
+
 
 
 
