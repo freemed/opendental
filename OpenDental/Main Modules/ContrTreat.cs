@@ -916,22 +916,22 @@ namespace OpenDental{
 				//standard predefined button
 				switch(e.Button.Tag.ToString()){
 					case "PreAuth":
-						OnPreAuth_Click();
+						ToolBarMainPreAuth_Click();
 						break;
 					case "Update":
-						OnUpdate_Click();
+						ToolBarMainUpdate_Click();
 						break;
 					case "Create":
-						OnCreate_Click();
+						ToolBarMainCreate_Click();
 						break;
 					case "Print":
-						OnPrint_Click();
+						ToolBarMainPrint_Click();
 						break;
 					case "Email":
-						OnEmail_Click();
+						ToolBarMainEmail_Click();
 						break;
 					case "Sign":
-						OnSign_Click();
+						ToolBarMainSign_Click();
 						break;
 				}
 			}
@@ -1805,7 +1805,7 @@ namespace OpenDental{
 			FillMain();
 		}
 
-		private void OnPrint_Click() {
+		private void ToolBarMainPrint_Click() {
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				if(checkShowDiscount.Checked || checkShowIns.Checked) {
 					if(MessageBox.Show(this,string.Format(Lan.g(this,"Do you want to remove insurance estimates and PPO discounts from printed treatment plan?")),"Open Dental",MessageBoxButtons.YesNo,MessageBoxIcon.Question) != DialogResult.No) {
@@ -1834,7 +1834,7 @@ namespace OpenDental{
 			#endif
 		}
 
-		private void OnEmail_Click() {
+		private void ToolBarMainEmail_Click() {
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				if(checkShowDiscount.Checked || checkShowIns.Checked) {
 					if(MessageBox.Show(this,string.Format(Lan.g(this,"Do you want to remove insurance estimates and PPO discounts from e-mailed treatment plan?")),"Open Dental",MessageBoxButtons.YesNo,MessageBoxIcon.Question) != DialogResult.No) {
@@ -2482,7 +2482,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnUpdate_Click() {
+		private void ToolBarMainUpdate_Click() {
 			if(gridPlans.SelectedIndices[0]!=0) {
 				MsgBox.Show(this,"The update fee utility only works on the current treatment plan, not any saved plans.");
 				return;
@@ -2543,7 +2543,7 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void OnCreate_Click(){
+		private void ToolBarMainCreate_Click(){
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"The default TP must be selected before saving a TP.  You can highlight some procedures in the default TP to save a TP with only those procedures in it.");
 				return;
@@ -2630,7 +2630,7 @@ namespace OpenDental{
 				#endregion Canadian Lab Fees
 			}
 			//Send TP DFT HL7 message to ECW with embedded PDF when using tight integration only.
-			if(Programs.UsingEcwTight()){
+			if(Programs.UsingEcwTightOrFull() && Bridges.ECW.AptNum!=0){
 				PrepImageForPrinting();
 				MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 				pdfRenderer.Document=CreateDocument();
@@ -2654,7 +2654,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void OnSign_Click() {
+		private void ToolBarMainSign_Click() {
 			if(gridPlans.SelectedIndices[0]==0) {
 				MsgBox.Show(this,"You may only sign a saved TP, not the default TP.");
 				return;
@@ -2680,7 +2680,7 @@ namespace OpenDental{
 			FillMain();
 		}
 
-		private void OnPreAuth_Click() {
+		private void ToolBarMainPreAuth_Click() {
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"You can only send a preauth from the current TP, not a saved TP.");
 				return;

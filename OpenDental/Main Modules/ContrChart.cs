@@ -3419,7 +3419,8 @@ namespace OpenDental{
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
 				if(PatCur==null) {
-					if(UsingEcwTight()) {
+					//if(UsingEcwTight()) {
+					if(UsingEcwTightOrFull()) {
 						if(!Environment.Is64BitOperatingSystem) {
 							ToolBarMain.Buttons["Rx"].Enabled=false;
 						}
@@ -3449,11 +3450,17 @@ namespace OpenDental{
 			return Programs.UsingEcwTight();
 		}
 
+		///<summary>This reduces the number of places where Programs.UsingEcwTightOrFull() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
+		private bool UsingEcwTightOrFull() {
+			return Programs.UsingEcwTightOrFull();
+		}
+
 		///<summary>Causes the toolbars to be laid out again.</summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			if(UsingEcwTight()) {
+			//if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull()) {
 				if(!Environment.Is64BitOperatingSystem) {
 					ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 				}
@@ -3549,7 +3556,8 @@ namespace OpenDental{
 				//tabPlanned.Enabled=false;
 				toothChart.Enabled=false;
 				gridProg.Enabled=false;
-				if(UsingEcwTight()) {
+				//if(UsingEcwTight()) {
+				if(UsingEcwTightOrFull()) {
 					if(!Environment.Is64BitOperatingSystem) {
 						ToolBarMain.Buttons["Rx"].Enabled=false;
 					}
@@ -3581,7 +3589,8 @@ namespace OpenDental{
 				//groupPlanned.Enabled=true;
 				toothChart.Enabled=true;
 				gridProg.Enabled=true;
-				if(UsingEcwTight()) {
+				//if(UsingEcwTight()) {
+				if(UsingEcwTightOrFull()) {
 					if(!Environment.Is64BitOperatingSystem) {
 						ToolBarMain.Buttons["Rx"].Enabled=true;
 					}
@@ -3595,8 +3604,11 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
-				if(UsingEcwTight()) {
-					ToolBarMain.Buttons["Commlog"].Enabled=true;
+				//if(UsingEcwTight()) {
+				if(UsingEcwTightOrFull()) {
+					if(UsingEcwTight()) {
+						ToolBarMain.Buttons["Commlog"].Enabled=true;
+					}
 					//the following sequence also gets repeated after exiting the Rx window to refresh.
 					String strAppServer="";
 					try {
@@ -3757,7 +3769,8 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
-			if(UsingEcwTight()) {
+			//if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull() && Bridges.ECW.UserId!=0) {
 				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
 				//refresh the right panel:
 				try {
@@ -3857,7 +3870,7 @@ namespace OpenDental{
 			RefreshModuleScreen();
 		}
 
-		///<summary>Only used for eCW.  Everyone else has the commlog button up in the main toolbar.</summary>
+		///<summary>Only used for eCW tight.  Everyone else has the commlog button up in the main toolbar.</summary>
 		private void Tool_Commlog_Click() {
 			Commlog CommlogCur = new Commlog();
 			CommlogCur.PatNum = PatCur.PatNum;
@@ -4852,7 +4865,7 @@ namespace OpenDental{
 			}
 			DataSetMain=null;
 			if(PatCur!=null){
-				if(Programs.UsingEcwTight()) {//ecw customers
+				if(UsingEcwTight()) {//ecw customers
 					ChartModuleComponentsToLoad componentsToLoad = new ChartModuleComponentsToLoad(
 					checkAppt.Checked,				        //showAppointments
 					false, //checkComm.Checked,	      //showCommLog
@@ -4871,7 +4884,7 @@ namespace OpenDental{
 					checkShowTP.Checked);			        //showTreatPlan
 					DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked,componentsToLoad);//showConditions
 				}
-				else {//non ecw customers
+				else {//all other customers and ecw full users
 					//DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked);
 					DataSetMain=ChartModules.GetAll(PatCur.PatNum,checkAudit.Checked,new ChartModuleComponentsToLoad(
 						checkAppt.Checked,				//showAppointments
@@ -8735,7 +8748,8 @@ namespace OpenDental{
 			if(panelNewH>panelImages.Bottom-toothChart.Bottom)
 				panelNewH=panelImages.Bottom-toothChart.Bottom;//keeps it from going too high
 			panelImages.Height=panelNewH;
-			if(UsingEcwTight()) {//this might belong in ChartLayoutHelper
+			//if(UsingEcwTight()) {//this might belong in ChartLayoutHelper
+			if(UsingEcwTightOrFull()) {//this might belong in ChartLayoutHelper
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1
 						-(panelImages.Height+2);
@@ -8780,7 +8794,8 @@ namespace OpenDental{
 			}
 			selectedImageTab=tabControlImages.SelectedIndex;
 			FillImages();//it will not actually fill the images unless panelImages is visible
-			if(UsingEcwTight()) {
+			//if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull()) {
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);
 				}

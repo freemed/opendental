@@ -307,6 +307,10 @@ namespace OpenDental{
 			else{
 				gridIns.Visible=true;
 			}
+			if(Programs.UsingEcwFull()) {
+				ToolBarMain.Buttons["Add"].Enabled=false;
+				ToolBarMain.Buttons["Delete"].Enabled=false;
+			}
 			FillPatientPicture();
 			FillPatientData();
 			FillFamilyData();

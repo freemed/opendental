@@ -146,6 +146,15 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
+		/// <summary>Returns true if using eCW in tight or full mode.</summary>
+		public static bool UsingEcwTightOrFull() {
+			//No need to check RemotingRole; no call to db.
+			if(UsingEcwTight() || UsingEcwFull()) {
+				return true;
+			}
+			return false;
+		}
+
 		/// <summary></summary>
 		public static bool UsingOrion {
 			//No need to check RemotingRole; no call to db.

@@ -78,7 +78,8 @@ namespace OpenDentHL7 {
 			}
 			//inform od via signal that this service is running
 			IsStandalone=true;//and for Mountainside
-			if(Programs.UsingEcwTight()){
+			//if(Programs.UsingEcwTight()){
+			if(Programs.UsingEcwTightOrFull()){
 				IsStandalone=false;
 			}
 			//#if DEBUG//just so I don't forget to remove it later.

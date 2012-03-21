@@ -671,7 +671,7 @@ namespace OpenDental{
 			if(SelectionModeOnly){
 				groupAddPt.Visible=false;
 			}
-			if(Programs.UsingEcwTight()) {
+			if(Programs.UsingEcwTightOrFull()) {
 				groupAddPt.Visible=false;
 			}
 			comboBillingType.Items.Add(Lan.g(this,"all"));

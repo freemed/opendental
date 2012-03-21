@@ -11,15 +11,15 @@ using OpenDental.UI;
 namespace OpenDental {
 	public class ChartLayoutHelper {
 		///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls within this class must pass through here. </summary>
-		private static bool UsingEcwTight() {
-			return Programs.UsingEcwTight();
+		private static bool UsingEcwTightOrFull() {
+			return Programs.UsingEcwTightOrFull();
 		}
 
 		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo,ToothChartWrapper toothChart,TextBox textTreatmentNotes) {
 			if(ProgramC.HListIsNull()) {
 				return;
 			}
-			if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull()) {
 				//gridProg.Width=524;
 				if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
 					int gridW=0;
@@ -87,7 +87,7 @@ namespace OpenDental {
 		{
 			tabProc.SelectedIndex=0;
 			tabProc.Height=259;
-			if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull()) {
 				toothChart.Location=new Point(524+2,26);
 				textTreatmentNotes.Location=new Point(524+2,toothChart.Bottom+1);
 				textTreatmentNotes.Size=new Size(411,40);//make it a bit smaller than usual
@@ -133,7 +133,7 @@ namespace OpenDental {
 		}
 
 		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize,Panel panelEcw,TextBox textTreatmentNotes,ToothChartWrapper toothChart) {
-			if(UsingEcwTight()) {
+			if(UsingEcwTightOrFull()) {
 				//gridProg.Width=524;
 				if(gridProg.Columns !=null && gridProg.Columns.Count>0) {
 					int gridW=0;

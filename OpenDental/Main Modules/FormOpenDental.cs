@@ -1494,7 +1494,8 @@ namespace OpenDental{
 				}
 				break;
 			}
-			if(Programs.UsingEcwTight()) {
+			//if(Programs.UsingEcwTight()) {
+			if(Programs.UsingEcwTightOrFull()) {
 				Splash.Dispose();//We don't show splash screen when bridging to eCW.
 			}
 			//We no longer do this shotgun approach because it can slow the loading time.
@@ -1573,18 +1574,21 @@ namespace OpenDental{
 				//MsgBox.Show(this,"Done optimizing tooth chart graphics.");
 			}
 			if(Security.CurUser==null) {//It could already be set if using web service because login from ChooseDatabase window.
-				if(Programs.UsingEcwTight() && odUser!="") {//only leave it null if a user was passed in on the commandline.  If starting OD manually, it will jump into the else.
+				//if(Programs.UsingEcwTight() && odUser!="") {//only leave it null if a user was passed in on the commandline.  If starting OD manually, it will jump into the else.
+				if(Programs.UsingEcwTightOrFull() && odUser!="") {//only leave it null if a user was passed in on the commandline.  If starting OD manually, it will jump into the else.
 					//leave user as null
 				}
 				else {
 					if(odUser!="" && odPassword!=""){//if a username and password were passed in
-						Userod user=Userods.GetUserByName(odUser,Programs.UsingEcwTight());
+						//Userod user=Userods.GetUserByName(odUser,Programs.UsingEcwTight());
+						Userod user=Userods.GetUserByName(odUser,Programs.UsingEcwTightOrFull());
 						if(user!=null){
 							if(Userods.CheckTypedPassword(odPassword,user.Password)){//password matches
 								Security.CurUser=user.Copy();
 								if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 									string pw=odPassword;
-									if(Programs.UsingEcwTight()) {//ecw requires hash, but non-ecw requires actual password
+									//if(Programs.UsingEcwTight()) {//ecw requires hash, but non-ecw requires actual password
+									if(Programs.UsingEcwTightOrFull()) {//ecw requires hash, but non-ecw requires actual password
 										pw=Userods.EncryptPassword(pw,true);
 									}
 									Security.PasswordTyped=pw;
@@ -1614,7 +1618,8 @@ namespace OpenDental{
 				userControlTasks1.InitializeOnStartup();
 			}
 			myOutlookBar.SelectedIndex=Security.GetModule(0);//for eCW, this fails silently.
-			if(Programs.UsingEcwTight()) {
+			//if(Programs.UsingEcwTight()) {
+			if(Programs.UsingEcwTightOrFull()) {
 				myOutlookBar.SelectedIndex=4;//Chart module
 				//ToolBarMain.Height=0;//this should force the modules further up on the screen
 				//ToolBarMain.Visible=false;
@@ -1917,6 +1922,16 @@ namespace OpenDental{
 					}
 					myOutlookBar.Buttons[6].Visible=false;
 				}
+				else if(Programs.UsingEcwFull()) {
+					//We might create a special Appt module for eCW full users so they can access Recall.
+					myOutlookBar.Buttons[0].Visible=false;//Appt
+					if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"ShowImagesModule")=="1") {
+						myOutlookBar.Buttons[5].Visible=true;
+					}
+					else {
+						myOutlookBar.Buttons[5].Visible=false;
+					}
+				}
 				if(Programs.UsingOrion) {
 					myOutlookBar.Buttons[0].Visible=false;//Appt module
 					myOutlookBar.Buttons[2].Visible=false;//Account module
@@ -1968,7 +1983,7 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuPatient;
 			ToolBarMain.Buttons.Add(button);
-			if(!Programs.UsingEcwTight()) {//eCW only gets Patient Select and Popups toolbar buttons
+			if(!Programs.UsingEcwTight()) {//eCW tight only gets Patient Select and Popups toolbar buttons
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),1,Lan.g(this,"New Commlog Entry"),"Commlog"));
 				button=new ODToolBarButton(Lan.g(this,"E-mail"),2,Lan.g(this,"Send E-mail"),"Email");
 				ToolBarMain.Buttons.Add(button);
@@ -2090,7 +2105,7 @@ namespace OpenDental{
 				return;
 			}
 			if(CurPatNum==0) {//Only on startup, I think.
-				if(!Programs.UsingEcwTight()) {//eCW only gets Patient Select and Popups toolbar buttons
+				if(!Programs.UsingEcwTight()) {//eCW tight only gets Patient Select and Popups toolbar buttons
 					ToolBarMain.Buttons["Email"].Enabled=false;
 					ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
@@ -4444,7 +4459,8 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public void ProcessCommandLine(string[] args) {
-			if(!Programs.UsingEcwTight() && args.Length==0){
+			//if(!Programs.UsingEcwTight() && args.Length==0){
+			if(!Programs.UsingEcwTightOrFull() && args.Length==0){
 				return;
 			}
 			/*string descript="";
@@ -4519,7 +4535,8 @@ namespace OpenDental{
 			Bridges.ECW.JSessionIdSSO=jSessionIdSSO;
 			//Username and password-----------------------------------------------------
 			//users are allowed to use ecw tight integration without command line.  They can manually launch Open Dental.
-			if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
+			//if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
+			if((Programs.UsingEcwTightOrFull() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
 				|| (userName!=""//if a username was passed in, but not in tight eCW mode
 				&& (Security.CurUser==null || Security.CurUser.UserName != userName))//and it's different from the current user
 			) {
@@ -4532,7 +4549,8 @@ namespace OpenDental{
 				allNeutral();
 				Userod user=Userods.GetUserByName(userName,true);
 				if(user==null) {
-					if(Programs.UsingEcwTight() && userName!="") {
+					//if(Programs.UsingEcwTight() && userName!="") {
+					if(Programs.UsingEcwTightOrFull() && userName!="") {
 						user=new Userod();
 						user.UserName=userName;
 						user.UserGroupNum=PIn.Long(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"DefaultUserGroup"));
@@ -4557,7 +4575,8 @@ namespace OpenDental{
 					}
 				}
 				//Can't use Userods.CheckPassword, because we only have the hashed password.
-				if(passHash!=user.Password || !Programs.UsingEcwTight())//password not accepted or not using eCW
+				//if(passHash!=user.Password || !Programs.UsingEcwTight())//password not accepted or not using eCW
+				if(passHash!=user.Password || !Programs.UsingEcwTightOrFull())//password not accepted or not using eCW
 				{
 					//So present logon screen
 					FormLogOn_=new FormLogOn();

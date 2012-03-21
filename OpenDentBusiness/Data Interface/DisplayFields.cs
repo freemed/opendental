@@ -218,7 +218,8 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("References",0,category));
 				}
 				//different default list for eCW:
-				if(!Programs.UsingEcwTight()) {
+				//if(!Programs.UsingEcwTight()) {
+				if(!Programs.UsingEcwTightOrFull()) {
 					list.Add(new DisplayField("Premedicate",0,category));
 					list.Add(new DisplayField("Problems",0,category));
 					list.Add(new DisplayField("Med Urgent",0,category));

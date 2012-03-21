@@ -1260,7 +1260,8 @@ namespace OpenDental{
 				tbTime.TopBorder[0,32]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
-			if(Programs.UsingEcwTight()) {
+			//if(Programs.UsingEcwTight()) {
+			if(Programs.UsingEcwTightOrFull()) {
 				butComplete.Visible=true;
 				butPDF.Visible=true;
 				//for eCW, we need to hide some things--------------------
@@ -1308,7 +1309,8 @@ namespace OpenDental{
 		}
 
 		private void SetProceduresForECW() {
-			if(!Programs.UsingEcwTight()){
+			//if(!Programs.UsingEcwTight()){
+			if(!Programs.UsingEcwTightOrFull()) {
 			  return;
 			}
 			//this is a method that attaches very specific kinds of procedures to appt
