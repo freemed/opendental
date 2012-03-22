@@ -1468,10 +1468,9 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error: "+message));
 				return;
 			}
-			if(hdib==(IntPtr)0) {
+			if(hdib==(IntPtr)0) {//This is down here because there might also be an informative error code that we would like to use above.
 				return;//User cancelled
 			}
-
 			double xdpi=EZTwain.DIB_XResolution(hdib);
 			double ydpi=EZTwain.DIB_XResolution(hdib);
 			IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
