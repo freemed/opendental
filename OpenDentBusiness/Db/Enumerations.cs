@@ -1190,66 +1190,6 @@ namespace OpenDentBusiness{
 		MutuallyDefined
 	}
 
-	///<summary>The _CA of some types should get stripped off when displaying to users.</summary>
-	public enum EtransType{
-		///<summary>0 X12-837.  Should we differenitate between different kinds of 837s and 4010 vs 5010?</summary>
-		ClaimSent,
-		///<summary>1 claim</summary>
-		ClaimPrinted,
-		///<summary>2 Canada. Type 01</summary>
-		Claim_CA,
-		///<summary>3 Renaissance</summary>
-		Claim_Ren,
-		///<summary>4 Canada. Type 11</summary>
-		ClaimAck_CA,
-		///<summary>5 Canada. Type 21</summary>
-		ClaimEOB_CA,
-		///<summary>6 Canada. Type 08</summary>
-		Eligibility_CA,
-		///<summary>7 Canada. Type 18. V02 type 10.</summary>
-		EligResponse_CA,
-		///<summary>8 Canada. Type 02</summary>
-		ClaimReversal_CA,
-		///<summary>9 Canada. Type 03</summary>
-		Predeterm_CA,
-		///<summary>10 Canada. Type 04</summary>
-		RequestOutstand_CA,
-		///<summary>11 Canada. Type 05</summary>
-		RequestSumm_CA,
-		///<summary>12 Canada. Type 06</summary>
-		RequestPay_CA,
-		///<summary>13 Canada. Type 07</summary>
-		ClaimCOB_CA,
-		///<summary>14 Canada. Type 12</summary>
-		ReverseResponse_CA,
-		///<summary>15 Canada. Type 13</summary>
-		PredetermAck_CA,
-		///<summary>16 Canada. Type 23</summary>
-		PredetermEOB_CA,
-		///<summary>17 Canada. Type 14</summary>
-		OutstandingAck_CA,
-		///<summary>18 Canada. Type 24</summary>
-		EmailResponse_CA,
-		///<summary>19 Canada. Type 16</summary>
-		PaymentResponse_CA,
-		///<summary>20 Canada. Type 15</summary>
-		SummaryResponse_CA,
-		///<summary>21 Ack from clearinghouse. X12-997.</summary>
-		Acknowledge_997,
-		///<summary>22 X12-277. Unsolicited claim status notification.</summary>
-		StatusNotify_277,
-		///<summary>23 Text report from clearinghouse in human readable format.</summary>
-		TextReport,
-		///<summary>24 X12-270.</summary>
-		BenefitInquiry270,
-		///<summary>25 X12-271</summary>
-		BenefitResponse271,
-		///<summary>26 When a Canadian message is sent, and an error comes back instead of a message.  This stores information about the error.  The etrans with this type is attached it to the original etrans as an ack.</summary>
-		AckError,
-		///<summary>27 X12-835. Not used yet.</summary>
-		ERA_835
-	}
-
 	///<summary></summary>
 	public enum ContactMethod{
 		///<summary>0</summary>

@@ -3450,7 +3450,7 @@ namespace OpenDental{
 		}
 
 		#region EligibilityCheckDentalXchange
-		//Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
+		//This is not our code.   Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
 		private void EligibilityCheckDentalXchange() {
 			Cursor = Cursors.WaitCursor;
 			OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 
