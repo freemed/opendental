@@ -17,6 +17,10 @@ namespace OpenDental {
 		private List<SheetFieldDef> AvailFields;
 		public bool IsReadOnly;
 		private List<string> radioButtonValues;
+		private List<AllergyDef> allergyList;
+		private List<Medication> medicationList;
+		///<summary>True if the sheet type is MedicalHistory.</summary>
+		private bool isMedHistSheet;
 
 		public FormSheetFieldCheckBox() {
 			InitializeComponent();
@@ -30,12 +34,28 @@ namespace OpenDental {
 			}
 			//not allowed to change sheettype or fieldtype once created.  So get all avail fields for this sheettype
 			AvailFields=SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.Check);
+			isMedHistSheet=SheetDefCur.SheetType==SheetTypeEnum.MedicalHistory;
 			listFields.Items.Clear();
-			for(int i=0;i<AvailFields.Count;i++){
+			for(int i=0;i<AvailFields.Count;i++) {
 				//static text is not one of the options.
 				listFields.Items.Add(AvailFields[i].FieldName);
-				if(SheetFieldDefCur.FieldName==AvailFields[i].FieldName){
+				//Sheets will have dynamic field names like "medication:Sudafed".  They will always start with a valid FieldName.
+				if(SheetFieldDefCur.FieldName.StartsWith(AvailFields[i].FieldName)) {
 					listFields.SelectedIndex=i;
+				}
+			}
+			if(isMedHistSheet) {
+				if(SheetFieldDefCur.FieldName.StartsWith("allergy:")) {
+					FillListMedical(MedicalListType.allergy);
+					SetListMedicalSelectedIndex(MedicalListType.allergy,SheetFieldDefCur.FieldName.Remove(0,8));
+				}
+				else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
+					FillListMedical(MedicalListType.medication);
+					SetListMedicalSelectedIndex(MedicalListType.medication,SheetFieldDefCur.FieldName.Remove(0,11));
+				}
+				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
+					FillListMedical(MedicalListType.problem);
+					SetListMedicalSelectedIndex(MedicalListType.problem,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
 			}
 			textXPos.Text=SheetFieldDefCur.XPos.ToString();
@@ -47,18 +67,95 @@ namespace OpenDental {
 			textTabOrder.Text=SheetFieldDefCur.TabOrder.ToString();
 		}
 
+		///<summary>Fills listMedical with the corresponding list type.</summary>
+		private void FillListMedical(MedicalListType medListType) {
+			switch(medListType) {
+				case MedicalListType.allergy:
+					if(allergyList==null) {
+						allergyList=AllergyDefs.GetAll(false);
+					}
+					listMedical.Items.Clear();
+					for(int i=0;i<allergyList.Count;i++) {
+						listMedical.Items.Add(allergyList[i].Description);
+					}
+					break;
+				case MedicalListType.medication:
+					if(medicationList==null) {
+						medicationList=Medications.GetList("");
+					}
+					listMedical.Items.Clear();
+					for(int i=0;i<medicationList.Count;i++) {
+						listMedical.Items.Add(Medications.GetDescription(medicationList[i].MedicationNum));
+					}
+					break;
+				case MedicalListType.problem:
+					listMedical.Items.Clear();
+					for(int i=0;i<DiseaseDefs.List.Length;i++) {
+						listMedical.Items.Add(DiseaseDefs.List[i].DiseaseName);
+					}
+					break;
+			}
+		}
+
+		///<summary>Loops through corresponding list and sets the index to the item matching fieldName passed in.  Only called on load.</summary>
+		private void SetListMedicalSelectedIndex(MedicalListType medListType,string fieldName) {
+			switch(medListType) {
+				case MedicalListType.allergy:
+					for(int i=0;i<allergyList.Count;i++) {
+						if(AllergyDefs.GetDescription(allergyList[i].AllergyDefNum)==fieldName) {
+							listMedical.SelectedIndex=i;
+						}
+					}
+					break;
+				case MedicalListType.medication:
+					for(int i=0;i<medicationList.Count;i++) {
+						if(Medications.GetDescription(medicationList[i].MedicationNum)==fieldName) {
+							listMedical.SelectedIndex=i;
+						}
+					}
+					break;
+				case MedicalListType.problem:
+					for(int i=0;i<DiseaseDefs.List.Length;i++) {
+						if(DiseaseDefs.List[i].DiseaseName==fieldName) {
+							listMedical.SelectedIndex=i;
+						}
+					}
+					break;
+			}
+		}
+
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
 			groupRadio.Visible=false;
 			groupRadioMisc.Visible=false;
 			checkRequired.Visible=false;
-			if(listFields.SelectedIndex==-1){
+			labelMedical.Visible=false;
+			listMedical.Visible=false;
+			if(listFields.SelectedIndex==-1) {
 				return;
 			}
-			if(AvailFields[listFields.SelectedIndex].FieldName=="misc"){
+			if(AvailFields[listFields.SelectedIndex].FieldName=="misc") {
 				groupRadioMisc.Visible=true;
 				checkRequired.Visible=true;
 			}
-			else{
+			else if(AvailFields[listFields.SelectedIndex].FieldName=="allergy") {
+				labelMedical.Visible=true;
+				listMedical.Visible=true;
+				labelMedical.Text="Allergies";
+				FillListMedical(MedicalListType.allergy);
+			}
+			else if(AvailFields[listFields.SelectedIndex].FieldName=="medication") {
+				labelMedical.Visible=true;
+				listMedical.Visible=true;
+				labelMedical.Text="Medications";
+				FillListMedical(MedicalListType.medication);
+			}
+			else if(AvailFields[listFields.SelectedIndex].FieldName=="problem") {
+				labelMedical.Visible=true;
+				listMedical.Visible=true;
+				labelMedical.Text="Problems";
+				FillListMedical(MedicalListType.problem);
+			}
+			else {
 				radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
 				if(radioButtonValues.Count==0) {
 					return;
@@ -109,7 +206,23 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a field name first.");
 				return;
 			}
+			if(isMedHistSheet && listMedical.SelectedIndex==-1) {
+				switch(AvailFields[listFields.SelectedIndex].FieldName) {
+					case "allergy":
+						MsgBox.Show(this,"Please select an allergy first.");
+						return;
+					case "medication":
+						MsgBox.Show(this,"Please select a medication first.");
+						return;
+					case "problem":
+						MsgBox.Show(this,"Please select a problem first.");
+						return;
+				}
+			}
 			SheetFieldDefCur.FieldName=AvailFields[listFields.SelectedIndex].FieldName;
+			if(isMedHistSheet) {
+				SheetFieldDefCur.FieldName+=":"+listMedical.SelectedItem;
+			}
 			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
@@ -132,14 +245,18 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		
 
-		
 
-		
 
-		
 
-		
+
+
+
+
+		private enum MedicalListType {
+			allergy,
+			medication,
+			problem
+		}
 	}
 }

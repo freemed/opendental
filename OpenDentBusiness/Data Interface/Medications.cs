@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command ="SELECT * from medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
+			string command ="SELECT * FROM medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
 			List<Medication> list=Crud.MedicationCrud.SelectMany(command);
 			HList=new Hashtable();
 			for(int i=0;i<list.Count;i++) {
@@ -33,6 +33,7 @@ namespace OpenDentBusiness{
 			return Crud.MedicationCrud.TableToList(table);
 		}
 
+		///<summary>Returns medications that contain the passed in string.  Blank for all.</summary>
 		public static List<Medication> GetList(string str) {
 			//No need to check RemotingRole; no call to db.
 			Refresh();
