@@ -1468,6 +1468,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Unable to scan. Please make sure you can scan using other software. Error: "+message));
 				return;
 			}
+			if(hdib==(IntPtr)0) {
+				return;//User cancelled
+			}
+
 			double xdpi=EZTwain.DIB_XResolution(hdib);
 			double ydpi=EZTwain.DIB_XResolution(hdib);
 			IntPtr hbitmap=EZTwain.DIB_ToDibSection(hdib);
@@ -1554,6 +1558,7 @@ namespace OpenDental{
 			EZTwain.PDF_SetCompression((int)this.Handle,(int)ComputerPrefs.LocalComputer.ScanDocQuality);
 			if(!EZTwain.OpenDefaultSource()) {//if it can't open the scanner successfully
 				MsgBox.Show(this,"Default scanner could not be opened.  Check that the default scanner works from Windows Control Panel and from Windows Fax and Scan.");
+				Cursor=Cursors.Default;
 				return;
 			}
 			bool duplexEnabled=EZTwain.EnableDuplex(ComputerPrefs.LocalComputer.ScanDocDuplex);//This line seems to cause problems.
