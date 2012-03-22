@@ -2103,7 +2103,6 @@ namespace OpenDentBusiness
 			InsPlan insPlan=InsPlans.GetPlan(claim.PlanNum,null);
 			InsSub sub=InsSubs.GetSub(claim.InsSubNum,null);
 			List<PatPlan> patPlans=PatPlans.Refresh(claim.PatNum);
-			PatPlan patPlan=PatPlans.GetFromList(patPlans,claim.InsSubNum);
 			if(claim.MedType==EnumClaimMedType.Medical) {
 				if(referral!=null && referral.IsDoctor && referral.NotPerson) {
 					Comma(strb);
@@ -2236,8 +2235,9 @@ namespace OpenDentBusiness
 				strb.Append("InsPlan Release of Info");
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
+			PatPlan patPlan=PatPlans.GetFromList(patPlans,claim.InsSubNum);//can be null
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-				if(patPlan.PatID!="") {
+				if(patPlan!=null && patPlan.PatID!="") {
 					Comma(strb);
 					strb.Append("Create a new insurance plan instead of using the optional patient ID");
 				}
@@ -2251,7 +2251,7 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Subscriber must be the same as the patient for Denti-Cal");//for everyone, we also check patplan.PatID.
 				}
-				if(patPlan.Relationship!=Relat.Self) {
+				if(claim.PatRelat!=Relat.Self) {
 					Comma(strb);
 					strb.Append("Insurance relationship must be self for Denti-Cal");
 				}
@@ -2271,7 +2271,6 @@ namespace OpenDentBusiness
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
-				PatPlan patPlan2=PatPlans.GetFromList(patPlans,claim.InsSubNum2);
 				if(carrier2.Address=="") {
 					Comma(strb);
 					strb.Append("Secondary Carrier Address");
@@ -2293,8 +2292,9 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Secondary Relationship");
 				}
+				PatPlan patPlan2=PatPlans.GetFromList(patPlans,claim.InsSubNum2);//can be null
 				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-					if(patPlan2.PatID!="") {
+					if(patPlan2!=null && patPlan2.PatID!="") {
 						Comma(strb);
 						strb.Append("Create a new insurance plan instead of using the optional patient ID for the other insurance plan");
 					}
