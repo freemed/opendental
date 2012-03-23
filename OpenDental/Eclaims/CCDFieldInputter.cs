@@ -57,7 +57,7 @@ namespace OpenDental.Eclaims {
 						ParseReconciliaiton_15(message);
 						break;
 					default:
-						throw new ApplicationException(this.ToString()+".CCDFieldInputter: Version 4 CCD Message type not recognized: "+msgType);
+						throw new ApplicationException("Invalid version 04 message type: "+msgType+Environment.NewLine+"Entire raw message:"+Environment.NewLine+message);
 				}
 			}
 			else {//version 02
@@ -82,7 +82,7 @@ namespace OpenDental.Eclaims {
 						ParsePredeterminationAck_v2_13(message);
 						break;
 					default:
-						throw new ApplicationException(this.ToString()+".CCDFieldInputter: Version 2 CCD Message type not recognized: "+msgType);
+						throw new ApplicationException("Invalid version 02 message type: "+msgType+Environment.NewLine+"Entire raw message:"+Environment.NewLine+message);
 				}
 			}
 		}
