@@ -45,6 +45,10 @@ namespace OpenDental{
 				MsgBox.Show(this,"This database is too old to easily convert in one step. Please upgrade to 2.1 if necessary, then to 2.8.  Then you will be able to upgrade to this version. We apologize for the inconvenience.");
 				return false;
 			}
+			if(FromVersion < new Version("6.6.2")) {
+				MsgBox.Show(this,"This database is too old to easily convert in one step. Please upgrade to 11.1 first.  Then you will be able to upgrade to this version. We apologize for the inconvenience.");
+				return false;
+			}
 			if(FromVersion < new Version("3.0.1")) {
 				MsgBox.Show(this,"This is an old database.  The conversion must be done using MySQL 4.1 (not MySQL 5.0) or it will fail.");
 			}
