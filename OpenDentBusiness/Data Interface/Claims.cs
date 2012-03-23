@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
-				+"carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
+				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
 				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow  "
 				+"FROM claim,patient,insplan,carrier,claimproc "
 				+"WHERE claimproc.ClaimNum = claim.ClaimNum "
@@ -91,7 +91,7 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
-				+"carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
+				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
 				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
