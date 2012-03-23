@@ -40,6 +40,8 @@ namespace OpenDental{
 			this.labelTabOrder = new System.Windows.Forms.Label();
 			this.listMedical = new System.Windows.Forms.ListBox();
 			this.labelMedical = new System.Windows.Forms.Label();
+			this.radioYes = new System.Windows.Forms.RadioButton();
+			this.radioNo = new System.Windows.Forms.RadioButton();
 			this.textTabOrder = new OpenDental.ValidNum();
 			this.butDelete = new OpenDental.UI.Button();
 			this.textHeight = new OpenDental.ValidNum();
@@ -211,6 +213,7 @@ namespace OpenDental{
 			this.listMedical.Size = new System.Drawing.Size(142, 446);
 			this.listMedical.TabIndex = 110;
 			this.listMedical.Visible = false;
+			this.listMedical.DoubleClick += new System.EventHandler(this.listMedical_DoubleClick);
 			// 
 			// labelMedical
 			// 
@@ -221,6 +224,32 @@ namespace OpenDental{
 			this.labelMedical.Text = "labelMedical";
 			this.labelMedical.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			this.labelMedical.Visible = false;
+			// 
+			// radioYes
+			// 
+			this.radioYes.Location = new System.Drawing.Point(476, 245);
+			this.radioYes.Name = "radioYes";
+			this.radioYes.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioYes.Size = new System.Drawing.Size(61, 17);
+			this.radioYes.TabIndex = 114;
+			this.radioYes.TabStop = true;
+			this.radioYes.Text = "Yes";
+			this.radioYes.UseVisualStyleBackColor = true;
+			this.radioYes.Visible = false;
+			this.radioYes.Click += new System.EventHandler(this.radioYes_Click);
+			// 
+			// radioNo
+			// 
+			this.radioNo.Location = new System.Drawing.Point(543, 245);
+			this.radioNo.Name = "radioNo";
+			this.radioNo.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioNo.Size = new System.Drawing.Size(61, 17);
+			this.radioNo.TabIndex = 115;
+			this.radioNo.TabStop = true;
+			this.radioNo.Text = "No";
+			this.radioNo.UseVisualStyleBackColor = true;
+			this.radioNo.Visible = false;
+			this.radioNo.Click += new System.EventHandler(this.radioNo_Click);
 			// 
 			// textTabOrder
 			// 
@@ -323,6 +352,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(675, 530);
+			this.Controls.Add(this.radioNo);
+			this.Controls.Add(this.radioYes);
 			this.Controls.Add(this.labelMedical);
 			this.Controls.Add(this.listMedical);
 			this.Controls.Add(this.textTabOrder);
@@ -382,5 +413,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelTabOrder;
 		private System.Windows.Forms.ListBox listMedical;
 		private System.Windows.Forms.Label labelMedical;
+		private System.Windows.Forms.RadioButton radioYes;
+		private System.Windows.Forms.RadioButton radioNo;
 	}
 }

@@ -1427,16 +1427,46 @@ namespace OpenDental{
 				switch(field.FieldName) {
 					case "Birthdate":
 						field.FieldValue=pat.Birthdate.ToShortDateString();
-						break;
+						continue;
 					case "FName":
 						field.FieldValue=pat.FName;
-						break;
+						continue;
 					case "LName":
 						field.FieldValue=pat.LName;
-						break;
-                    //examples: "problem:Hepatitis B"
-                    //          "medication:Sudafed"
-                    //          "allergy:Pen"
+						continue;
+				}
+				if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
+					List<Allergy> allergies=Allergies.GetAll(pat.PatNum,false);
+					for(int i=0;i<allergies.Count;i++) {
+						if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)
+							&& field.RadioButtonValue.StartsWith("Y:")) 
+						{
+							field.FieldValue="X";
+							break;
+						}
+					}
+				}
+				else if(field.FieldName.StartsWith("medication:")) {//"medication:Sudafed"
+					List<Medication> meds=Medications.GetMedicationsByPat(pat.PatNum);
+					for(int i=0;i<meds.Count;i++) {
+						if(Medications.GetDescription(meds[i].MedicationNum)==field.FieldName.Remove(0,11)
+							&& field.RadioButtonValue.StartsWith("Y:")) 
+						{
+							field.FieldValue="X";
+							break;
+						}
+					}
+				}
+				else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
+					List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
+					for(int i=0;i<diseases.Count;i++) {
+						if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
+							&& field.RadioButtonValue.StartsWith("Y:")) 
+						{
+							field.FieldValue="X";
+							break;
+						}
+					}
 				}
 			}
 		}

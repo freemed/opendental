@@ -513,6 +513,7 @@ namespace OpenDental {
 				return;
 			}
 			FormSheetFieldCheckBox FormS=new FormSheetFieldCheckBox();
+			FormS.IsNew=true;
 			FormS.SheetDefCur=SheetDefCur;
 			FormS.SheetFieldDefCur=SheetFieldDef.NewCheckBox("",0,0,11,11);
 			if(this.IsInternal){

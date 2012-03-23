@@ -219,8 +219,8 @@ namespace OpenDental {
 			Sheet sheet=null;
 			if(sheetNum!=0) {
 				sheet=Sheets.GetSheet(sheetNum);
-				if(sheet.SheetType!=SheetTypeEnum.PatientForm) {
-					MsgBox.Show(this,"For now, only sheets of type 'PatientForm' can be imported.");
+				if(sheet.SheetType!=SheetTypeEnum.PatientForm && sheet.SheetType!=SheetTypeEnum.MedicalHistory) {
+					MsgBox.Show(this,"For now, only sheets of type 'PatientForm' and 'MedicalHistory' can be imported.");
 					return;
 				}
 			}

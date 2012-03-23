@@ -21,6 +21,7 @@ namespace OpenDental {
 		private List<Medication> medicationList;
 		///<summary>True if the sheet type is MedicalHistory.</summary>
 		private bool isMedHistSheet;
+		public bool IsNew;
 
 		public FormSheetFieldCheckBox() {
 			InitializeComponent();
@@ -45,16 +46,29 @@ namespace OpenDental {
 				}
 			}
 			if(isMedHistSheet) {
+				radioYes.Checked=true;
 				if(SheetFieldDefCur.FieldName.StartsWith("allergy:")) {
 					FillListMedical(MedicalListType.allergy);
+					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")){
+						radioNo.Checked=true;
+						radioYes.Checked=false;
+					}
 					SetListMedicalSelectedIndex(MedicalListType.allergy,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
 					FillListMedical(MedicalListType.medication);
+					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")) {
+						radioNo.Checked=true;
+						radioYes.Checked=false;
+					}
 					SetListMedicalSelectedIndex(MedicalListType.medication,SheetFieldDefCur.FieldName.Remove(0,11));
 				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
 					FillListMedical(MedicalListType.problem);
+					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")) {
+						radioNo.Checked=true;
+						radioYes.Checked=false;
+					}
 					SetListMedicalSelectedIndex(MedicalListType.problem,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
 			}
@@ -67,7 +81,7 @@ namespace OpenDental {
 			textTabOrder.Text=SheetFieldDefCur.TabOrder.ToString();
 		}
 
-		///<summary>Fills listMedical with the corresponding list type.</summary>
+		///<summary>Fills listMedical with the corresponding list type.  This saves on load time by only filling necessary lists.</summary>
 		private void FillListMedical(MedicalListType medListType) {
 			switch(medListType) {
 				case MedicalListType.allergy:
@@ -130,30 +144,42 @@ namespace OpenDental {
 			checkRequired.Visible=false;
 			labelMedical.Visible=false;
 			listMedical.Visible=false;
+			radioYes.Visible=false;
+			radioNo.Visible=false;
 			if(listFields.SelectedIndex==-1) {
 				return;
+			}
+			if(isMedHistSheet) {
+				switch(AvailFields[listFields.SelectedIndex].FieldName) {
+					case "allergy":
+						radioYes.Visible=true;
+						radioNo.Visible=true;
+						labelMedical.Visible=true;
+						listMedical.Visible=true;
+						labelMedical.Text="Allergies";
+						FillListMedical(MedicalListType.allergy);
+						break;
+					case "medication":
+						radioYes.Visible=true;
+						radioNo.Visible=true;
+						labelMedical.Visible=true;
+						listMedical.Visible=true;
+						labelMedical.Text="Medications";
+						FillListMedical(MedicalListType.medication);
+						break;
+					case "problem":
+						radioYes.Visible=true;
+						radioNo.Visible=true;
+						labelMedical.Visible=true;
+						listMedical.Visible=true;
+						labelMedical.Text="Problems";
+						FillListMedical(MedicalListType.problem);
+						break;
+				}
 			}
 			if(AvailFields[listFields.SelectedIndex].FieldName=="misc") {
 				groupRadioMisc.Visible=true;
 				checkRequired.Visible=true;
-			}
-			else if(AvailFields[listFields.SelectedIndex].FieldName=="allergy") {
-				labelMedical.Visible=true;
-				listMedical.Visible=true;
-				labelMedical.Text="Allergies";
-				FillListMedical(MedicalListType.allergy);
-			}
-			else if(AvailFields[listFields.SelectedIndex].FieldName=="medication") {
-				labelMedical.Visible=true;
-				listMedical.Visible=true;
-				labelMedical.Text="Medications";
-				FillListMedical(MedicalListType.medication);
-			}
-			else if(AvailFields[listFields.SelectedIndex].FieldName=="problem") {
-				labelMedical.Visible=true;
-				listMedical.Visible=true;
-				labelMedical.Text="Problems";
-				FillListMedical(MedicalListType.problem);
 			}
 			else {
 				radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
@@ -183,6 +209,28 @@ namespace OpenDental {
 			SaveAndClose();
 		}
 
+		private void listMedical_DoubleClick(object sender,EventArgs e) {
+			SaveAndClose();
+		}
+
+		private void radioYes_Click(object sender,EventArgs e) {
+			if(radioYes.Checked) {
+				radioNo.Checked=false;
+			}
+			else {
+				radioNo.Checked=true;
+			}
+		}
+
+		private void radioNo_Click(object sender,EventArgs e) {
+			if(radioNo.Checked) {
+				radioYes.Checked=false;
+			}
+			else {
+				radioYes.Checked=true;
+			}
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			SheetFieldDefCur=null;
 			DialogResult=DialogResult.OK;
@@ -206,29 +254,53 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a field name first.");
 				return;
 			}
-			if(isMedHistSheet && listMedical.SelectedIndex==-1) {
-				switch(AvailFields[listFields.SelectedIndex].FieldName) {
-					case "allergy":
-						MsgBox.Show(this,"Please select an allergy first.");
+			string fieldName=AvailFields[listFields.SelectedIndex].FieldName;
+			string radioButtonValue="";
+			#region Medical History Sheet
+			if(isMedHistSheet && listMedical.Visible) {
+				if(listMedical.SelectedIndex==-1) {
+					switch(fieldName) {
+						case "allergy":
+							MsgBox.Show(this,"Please select an allergy first.");
+							return;
+						case "medication":
+							MsgBox.Show(this,"Please select a medication first.");
+							return;
+						case "problem":
+							MsgBox.Show(this,"Please select a problem first.");
+							return;
+					}
+				}
+				//Loop through to make sure they don't already have this exact check box.
+				for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
+					if(!IsNew && SheetDefCur.SheetFieldDefs[i].SheetFieldDefNum==SheetFieldDefCur.SheetFieldDefNum) {
+						continue;
+					}
+					if(radioNo.Checked && SheetDefCur.SheetFieldDefs[i].RadioButtonValue=="N:"+listMedical.SelectedItem) {
+						MsgBox.Show(this,"This exact field already exists on the current sheet.");
 						return;
-					case "medication":
-						MsgBox.Show(this,"Please select a medication first.");
+					}
+					if(radioYes.Checked && SheetDefCur.SheetFieldDefs[i].RadioButtonValue=="Y:"+listMedical.SelectedItem) {
+						MsgBox.Show(this,"This exact field already exists on the current sheet.");
 						return;
-					case "problem":
-						MsgBox.Show(this,"Please select a problem first.");
-						return;
+					}
+				}				
+				fieldName+=":"+listMedical.SelectedItem;//Medical check boxes will always have a radio button value.
+				if(radioNo.Checked) {
+					radioButtonValue="N:"+listMedical.SelectedItem;
+				}
+				else {
+					radioButtonValue="Y:"+listMedical.SelectedItem;
 				}
 			}
-			SheetFieldDefCur.FieldName=AvailFields[listFields.SelectedIndex].FieldName;
-			if(isMedHistSheet) {
-				SheetFieldDefCur.FieldName+=":"+listMedical.SelectedItem;
-			}
+			#endregion
+			SheetFieldDefCur.FieldName=fieldName;
 			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
 			SheetFieldDefCur.Height=PIn.Int(textHeight.Text);
 			SheetFieldDefCur.RadioButtonGroup="";
-			SheetFieldDefCur.RadioButtonValue="";
+			SheetFieldDefCur.RadioButtonValue=radioButtonValue;
 			if(groupRadio.Visible && listRadio.SelectedIndex>=0) {
 				SheetFieldDefCur.RadioButtonValue=radioButtonValues[listRadio.SelectedIndex];
 			}
