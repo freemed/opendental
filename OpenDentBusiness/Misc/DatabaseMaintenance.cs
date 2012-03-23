@@ -653,7 +653,11 @@ namespace OpenDentBusiness {
 						"CDAnetVersion='"+POut.String((string)carrierInfo[i+2])+"',"+
 						"CanadianSupportedTypes="+POut.Int((int)carrierInfo[i+3])+","+
 						"CanadianNetworkNum="+POut.Long((long)carrierInfo[i+4])+" "+
-						"WHERE IsCDA<>0 AND ElectID='"+POut.String((string)carrierInfo[i])+"'";
+						"WHERE IsCDA<>0 AND ElectID='"+POut.String((string)carrierInfo[i])+"' AND "+
+						"(CanadianEncryptionMethod<>"+POut.Int((int)carrierInfo[i+1])+" OR "+
+						"CDAnetVersion<>'"+POut.String((string)carrierInfo[i+2])+"' OR "+
+						"CanadianSupportedTypes<>"+POut.Int((int)carrierInfo[i+3])+" OR "+
+						"CanadianNetworkNum<>"+POut.Long((long)carrierInfo[i+4])+")";
 					numberFixed+=Db.NonQ32(command);
 				}
 				if(numberFixed!=0 || verbose) {
