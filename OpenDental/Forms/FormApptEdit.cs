@@ -734,6 +734,7 @@ namespace OpenDental{
 			this.butLab.Size = new System.Drawing.Size(46, 20);
 			this.butLab.TabIndex = 161;
 			this.butLab.Text = "Lab";
+			this.butLab.Click += new System.EventHandler(this.butLab_Click);
 			// 
 			// butPickHyg
 			// 
