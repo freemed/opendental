@@ -1552,9 +1552,9 @@ namespace OpenDental{
 			this.tabMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.tabMain.Controls.Add(this.tabGeneral);
+			this.tabMain.Controls.Add(this.tabMisc);
 			this.tabMain.Controls.Add(this.tabUB04);
 			this.tabMain.Controls.Add(this.tabCanadian);
-			this.tabMain.Controls.Add(this.tabMisc);
 			this.tabMain.Location = new System.Drawing.Point(2, 478);
 			this.tabMain.Name = "tabMain";
 			this.tabMain.SelectedIndex = 0;
