@@ -14,10 +14,12 @@ namespace OpenDental{
 	public class FormAuditOneType : System.Windows.Forms.Form{
 		private OpenDental.UI.ODGrid grid;
 		private long PatNum;
+		private Label label1;
 		private List <Permissions> PermTypes;
+		private long FKey;
 
 		///<summary>Supply the patient, types, and title.</summary>
-		public FormAuditOneType(long patNum,List<Permissions> permTypes,string title) {
+		public FormAuditOneType(long patNum,List<Permissions> permTypes,string title,long fKey) {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -26,6 +28,7 @@ namespace OpenDental{
 			Text=title;
 			PatNum=patNum;
 			PermTypes=new List<Permissions>(permTypes);
+			FKey=fKey;
 		}
 
 		#region Windows Form Designer generated code
@@ -37,28 +40,36 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAuditOneType));
 			this.grid = new OpenDental.UI.ODGrid();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// grid
 			// 
-			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Date Time",120,System.Windows.Forms.HorizontalAlignment.Left));
-			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("User",70,System.Windows.Forms.HorizontalAlignment.Left));
-			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Permission",110,System.Windows.Forms.HorizontalAlignment.Left));
-			this.grid.Columns.Add(new OpenDental.UI.ODGridColumn("Log Text",569,System.Windows.Forms.HorizontalAlignment.Left));
 			this.grid.HScrollVisible = false;
-			this.grid.Location = new System.Drawing.Point(8,12);
+			this.grid.Location = new System.Drawing.Point(8, 21);
 			this.grid.Name = "grid";
 			this.grid.ScrollValue = 0;
 			this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.grid.Size = new System.Drawing.Size(888,611);
+			this.grid.Size = new System.Drawing.Size(888, 602);
 			this.grid.TabIndex = 2;
 			this.grid.Title = "Audit Trail";
 			this.grid.TranslationName = "TableAudit";
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(8, 3);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(451, 15);
+			this.label1.TabIndex = 3;
+			this.label1.Text = "Changes made to this appointment before the update to 12.2 will not be reflected " +
+    "below.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormAuditOneType
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(905,634);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(905, 634);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.grid);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
@@ -79,8 +90,18 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			SecurityLog[] logList=SecurityLogs.Refresh(PatNum,PermTypes);
+			SecurityLog[] logList=SecurityLogs.Refresh(PatNum,PermTypes,FKey);
 			grid.BeginUpdate();
+			grid.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g("TableAudit","Date Time"),120);
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","User"),70);
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","Permission"),110);
+			grid.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableAudit","Log Text"),569);
+			grid.Columns.Add(col);
 			grid.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<logList.Length;i++){

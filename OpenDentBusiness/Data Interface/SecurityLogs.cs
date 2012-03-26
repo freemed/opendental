@@ -63,6 +63,11 @@ namespace OpenDentBusiness{
 
 		///<summary>Used when viewing various audit trails of specific types.</summary>
 		public static SecurityLog[] Refresh(long patNum,List<Permissions> permTypes) {
+			return Refresh(patNum,permTypes,0);
+		}
+
+		///<summary>Used when viewing various audit trails of specific types.</summary>
+		public static SecurityLog[] Refresh(long patNum,List<Permissions> permTypes,long fKey) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),patNum,permTypes);
 			}
@@ -75,18 +80,22 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM securitylog "
 				+"WHERE PatNum= '"+POut.Long(patNum)+"' "
-				+"AND ("+types+") "
-				+"ORDER BY LogDateTime";
+				+"AND ("+types+") ";
+			if(fKey>0) {
+				command+="AND FKey="+POut.Long(fKey)+" ";
+			}
+			command+="ORDER BY LogDateTime";
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
 				List[i]=new SecurityLog();
-				List[i].SecurityLogNum= PIn.Long   (table.Rows[i][0].ToString());
-				List[i].PermType      = (Permissions)PIn.Long(table.Rows[i][1].ToString());
-				List[i].UserNum       = PIn.Long   (table.Rows[i][2].ToString());
-				List[i].LogDateTime   = PIn.DateT (table.Rows[i][3].ToString());	
-				List[i].LogText       = PIn.String(table.Rows[i][4].ToString());
-				List[i].PatNum        = PIn.Long   (table.Rows[i][5].ToString());
+				List[i].SecurityLogNum= PIn.Long   (table.Rows[i]["SecurityLogNum"].ToString());
+				List[i].PermType      = (Permissions)PIn.Long(table.Rows[i]["PermType"].ToString());
+				List[i].UserNum       = PIn.Long   (table.Rows[i]["UserNum"].ToString());
+				List[i].LogDateTime   = PIn.DateT (table.Rows[i]["LogDateTime"].ToString());	
+				List[i].LogText       = PIn.String(table.Rows[i]["LogText"].ToString());
+				List[i].PatNum        = PIn.Long   (table.Rows[i]["PatNum"].ToString());
+				List[i].FKey					= PIn.Long   (table.Rows[i]["FKey"].ToString());
 			}
 			return List;
 		}
@@ -94,14 +103,21 @@ namespace OpenDentBusiness{
 		///<summary>PatNum can be 0.</summary>
 		public static void MakeLogEntry(Permissions permType,long patNum,string logText) {
 			//No need to check RemotingRole; no call to db.
+			MakeLogEntry(permType,patNum,logText,0);
+		}	
+
+		///<summary>PatNum can be 0.</summary>
+		public static void MakeLogEntry(Permissions permType,long patNum,string logText,long fKey) {
+			//No need to check RemotingRole; no call to db.
 			SecurityLog securityLog=new SecurityLog();
 			securityLog.PermType=permType;
 			securityLog.UserNum=Security.CurUser.UserNum;
 			securityLog.LogText=logText;//"From: "+Environment.MachineName+" - "+logText;
 			securityLog.CompName=Environment.MachineName;
 			securityLog.PatNum=patNum;
+			securityLog.FKey=fKey;
 			SecurityLogs.Insert(securityLog);
-		}	
+		}
 
 	}
 }

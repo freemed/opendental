@@ -8224,7 +8224,8 @@ namespace OpenDental{
 					PatCur.GetNameLF() + ", "
 					+ apt.ProcDescript + ", "
 					+ apt.AptDateTime.ToString() + ", "
-					+ "Set Complete");
+					+ "Set Complete",
+					apt.AptNum);
 				Recalls.Synch(PatCur.PatNum);
 				ModuleSelected(PatCur.PatNum);
 				return;

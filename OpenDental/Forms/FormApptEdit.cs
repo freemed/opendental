@@ -2630,7 +2630,8 @@ namespace OpenDental{
 				if(IsNew) {
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
 					+AptCur.AptDateTime.ToString()+", "
-					+AptCur.ProcDescript);
+					+AptCur.ProcDescript,
+					AptCur.AptNum);
 				}
 				DialogResult=DialogResult.OK;
 			}
@@ -2653,7 +2654,7 @@ namespace OpenDental{
 			perms.Add(Permissions.AppointmentCreate);
 			perms.Add(Permissions.AppointmentEdit);
 			perms.Add(Permissions.AppointmentMove);
-			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"All Appointments for")+pat.GetNameFL());
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"All Appointments for")+pat.GetNameFL(),AptCur.AptNum);
 			FormA.ShowDialog();
 		}
 
@@ -2730,7 +2731,8 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
 				"Delete for patient: "
 				+pat.GetNameLF()+", "
-				+AptCur.AptDateTime.ToString());
+				+AptCur.AptDateTime.ToString(),
+				AptCur.AptNum);
 			if(IsNew){
 				//The dialog is considered cancelled when a new appointment is immediately deleted.
 			  DialogResult=DialogResult.Cancel;
@@ -2751,12 +2753,14 @@ namespace OpenDental{
 			if(IsNew) {
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
 					+AptCur.AptDateTime.ToString()+", "
-					+AptCur.ProcDescript);
+					+AptCur.ProcDescript,
+					AptCur.AptNum);
 			}
 			else {
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,pat.GetNameLF()+", "
 					+AptCur.AptDateTime.ToShortDateString()+", "
-					+AptCur.ProcDescript);
+					+AptCur.ProcDescript,
+					AptCur.AptNum);
 			}
 			DialogResult=DialogResult.OK;
 		}

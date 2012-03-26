@@ -2480,7 +2480,8 @@ namespace OpenDental {
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,aptCur.PatNum,
 					Patients.GetLim(aptCur.PatNum).GetNameFL()+", "
 					+aptCur.AptDateTime.ToString()+", "
-					+aptCur.ProcDescript);
+					+aptCur.ProcDescript,
+					aptCur.AptNum);
 				List<Procedure> ProcList=Procedures.Refresh(aptCur.PatNum);
 				bool procAlreadyAttached=false;
 				for(int i=0;i<ProcList.Count;i++) {
@@ -2521,7 +2522,8 @@ namespace OpenDental {
 						+", From "
 						+aptOld.AptDateTime.ToString()+", "
 						+" To "
-						+aptCur.AptDateTime.ToString());
+						+aptCur.AptDateTime.ToString(),
+						aptCur.AptNum);
 				}
 				catch(ApplicationException ex) {
 					MessageBox.Show(ex.Message);
@@ -3167,7 +3169,8 @@ namespace OpenDental {
 				+" From "
 				+aptOld.AptDateTime.ToString()+", "
 				+" To "
-				+apt.AptDateTime.ToString());
+				+apt.AptDateTime.ToString(),
+				apt.AptNum);
 			RefreshModuleDataPatient(PatCur.PatNum);
 			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 			//RefreshModulePatient(PatCurNum);
@@ -4236,7 +4239,8 @@ namespace OpenDental {
 				pat.GetNameLF()+", "
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
 				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
-				+"Sent to Unscheduled List");
+				+"Sent to Unscheduled List",
+				PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 		}
@@ -4270,7 +4274,8 @@ namespace OpenDental {
 				pat.GetNameLF()+", "
 				+ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "
 				+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", "
-				+"Broke");
+				+"Broke",
+				PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			long provNum=PIn.Long(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
@@ -4334,7 +4339,8 @@ namespace OpenDental {
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,apt.PatNum,
 					pat.GetNameLF() + ", "
 					+ apt.AptDateTime.ToString() + ", "
-					+ "Pt NOTE Set Complete");//shouldn't ever happen, but don't allow procedures to be completed from notes
+					+ "Pt NOTE Set Complete",
+					apt.AptNum);//shouldn't ever happen, but don't allow procedures to be completed from notes
 			}
 			else {
 				InsSub sub1=InsSubs.GetSub(PatPlans.GetInsSubNum(PatPlanList,PatPlans.GetOrdinal(PriSecMed.Primary,PatPlanList,PlanList,SubList)),SubList);
@@ -4345,7 +4351,8 @@ namespace OpenDental {
 					pat.GetNameLF() + ", "
 					+ ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString() + ", "
 					+ apt.AptDateTime.ToString() + ", "
-					+ "Set Complete");
+					+ "Set Complete",
+					apt.AptNum);
 			}
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
@@ -4385,7 +4392,8 @@ namespace OpenDental {
 					PatCur.GetNameFL() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
-					+ "NOTE Deleted");
+					+ "NOTE Deleted",
+					PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			}
 			else {
 				if(!MsgBox.Show(this,true,"Delete Appointment?")) {
@@ -4411,7 +4419,8 @@ namespace OpenDental {
 					PatCur.GetNameFL() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["procs"].ToString() + ", "
 					+ ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString() + ", "
-					+ "Deleted");
+					+ "Deleted",
+					PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			}
 			Appointments.Delete(selectedAptNum);
 			ContrApptSingle.SelectedAptNum=-1;

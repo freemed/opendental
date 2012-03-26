@@ -678,7 +678,7 @@ namespace OpenDental{
 				}
 				Appointments.Update(apt,oldApt);
 				oResult=OtherResult.CreateNew;
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString());
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum);
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -738,7 +738,7 @@ namespace OpenDental{
 				else {
 					DateJumpToString=recall.DateDue.ToShortDateString();
 				}
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString());
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,apt.PatNum,apt.AptDateTime.ToString(),apt.AptNum);
 			}
 			string userMsg="";
 			if(noRecalls > 0){
