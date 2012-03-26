@@ -104,7 +104,7 @@ namespace OpenDentBusiness
 			string hasSubord="";//0 if no subordinate, 1 if at least one subordinate
 			Claim claim;
 			InsPlan insPlan;
-			InsPlan otherPlan=new InsPlan();
+			InsPlan otherPlan=null;
 			InsSub sub;
 			InsSub otherSub=new InsSub();
 			Patient patient;
@@ -1099,7 +1099,7 @@ namespace OpenDentBusiness
 				#endregion 2310 Claim Providers (dental)
 				#region 2320 Other subscriber information
 				//2320 Other subscriber------------------------------------------------------------------------------------------
-				if(claim.PlanNum2>0) {
+				if(otherPlan!=null) {
 					//2320 SBR: Other Subscriber Information. Situational.
 					sw.Write("SBR"+s);
 					sw.Write((claimIsPrimary?"S":"P")+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: When the claim is primary then the other insurance is secondary, and vice versa.
@@ -1215,8 +1215,12 @@ namespace OpenDentBusiness
 						+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person.
 					//NM103 1/60 Name Last or Organization Name:
 					if(IsEMS(clearhouse)) {
+						long employerNum=0;
+						if(otherPlan!=null) {
+							employerNum=otherPlan.EmployerNum;
+						}
 						//This is a special situation requested by EMS.  This tacks the employer onto the end of the carrier.
-						sw.Write(Sout(otherCarrier.CarrierName,30)+"|"+Sout(Employers.GetName(otherPlan.EmployerNum),30)+s);
+						sw.Write(Sout(otherCarrier.CarrierName,30)+"|"+Sout(Employers.GetName(employerNum),30)+s);
 					}
 					else if(IsDentiCal(clearhouse)) {
 						sw.Write("DENTICAL"+s);
