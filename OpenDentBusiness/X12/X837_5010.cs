@@ -1693,14 +1693,21 @@ namespace OpenDentBusiness
 
 		///<summary>Usually writes the contact information for Open Dental. But for inmediata and AOS clearinghouses, it writes practice contact info.</summary>
 		private static void Write1000A_PER(StreamWriter sw,Clearinghouse clearhouse) {
+			string name="OPEN DENTAL SOFTWARE";
 			string phone="8776861248";
 			if(clearhouse.SenderTIN!="") {
+				name=clearhouse.SenderName;
 				phone=clearhouse.SenderTelephone;
 			}
 			sw.Write("PER"+s
-				+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
-				+s//PER02 1/60 Name: Situational. Do not send since same as in NM1 segment for loop 1000A.
-				+"TE"+s//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+				+"IC"+s);//PER01 2/2 Contact Function Code: IC=Information Contact.
+			if(IsClaimConnect(clearhouse)) {
+				sw.Write(Sout(name,60)+s);//PER02 1/60 Name: Situational. For some reason ClaimConnect always wants this box filled in, even though the X12 speficiation says not to send if same as NM103 of loop 1000A.
+			}
+			else {
+				sw.Write(s);//PER02 1/60 Name: Situational. Do not send since same as NM103 for loop 1000A.
+			}
+			sw.Write("TE"+s//PER03 2/2 Communication Number Qualifier: TE=Telephone.
 				+phone);//PER04 1/256 Communication Number: Telephone Number. Validated to be exactly 10 digits.
 			EndSegment(sw);//PER05 through PER08 are situational. We do not use. PER09 is not used.
 		}
