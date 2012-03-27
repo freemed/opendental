@@ -9029,6 +9029,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE definition SET ItemOrder=7 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Completed Pt. Note Background'";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('AppointmentTimeIsLocked','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'AppointmentTimeIsLocked','0')";
+					Db.NonQ(command);
+				}
 
 
 

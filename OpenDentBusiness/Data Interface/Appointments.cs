@@ -575,6 +575,15 @@ namespace OpenDentBusiness{
 				+"WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
 		}
+
+		public static void SetAptTimeLocked() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
+			string command="UPDATE appointment SET TimeLocked="+POut.Bool(true);
+			Db.NonQ(command);
+		}
 		
 		public static Appointment TableToObject(DataTable table) {
 			//No need to check RemotingRole; no call to db.

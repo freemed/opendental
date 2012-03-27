@@ -48,6 +48,7 @@ namespace OpenDentBusiness {
 		AppointmentTimeArrivedTrigger,
 		AppointmentTimeDismissedTrigger,
 		AppointmentTimeIncrement,
+		AppointmentTimeIsLocked,
 		AppointmentTimeSeatedTrigger,
 		ApptBubbleDelay,
 		ApptExclamationShowForUnsentIns,

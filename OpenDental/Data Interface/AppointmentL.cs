@@ -420,6 +420,7 @@ namespace OpenDental{
 				}
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(procs[i]).AbbrDesc;
 			}
+			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			Appointments.Insert(AptCur);	
 			Procedure ProcCur;
 			List <PatPlan> patPlanList=PatPlans.Refresh(patCur.PatNum);

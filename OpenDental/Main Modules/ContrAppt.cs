@@ -2455,6 +2455,7 @@ namespace OpenDental {
 				LabCase lab=LabCases.GetForPlanned(aptCur.AptNum);
 				aptCur.NextAptNum=aptCur.AptNum;
 				aptCur.AptStatus=ApptStatus.Scheduled;
+				aptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 				try {
 					Appointments.Insert(aptCur);//now, aptnum is different.
 					for(int i=0;i<pinBoard.SelectedAppt.TableApptFields.Rows.Count;i++) {//Duplicate the appointment fields.
@@ -3479,6 +3480,7 @@ namespace OpenDental {
 					}
 					apt.ProvHyg=assignedHyg;
 					apt.IsHygiene=curOp.IsHygiene;
+					apt.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 					if(curOp.ClinicNum==0){
 						apt.ClinicNum=PatCur.ClinicNum;
 					}

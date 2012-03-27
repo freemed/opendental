@@ -782,6 +782,7 @@ namespace OpenDental{
 			AptCur.ProvHyg=PatCur.SecProv;
 			AptCur.AptStatus=ApptStatus.PtNote;
 			AptCur.ClinicNum=PatCur.ClinicNum;
+			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			if(InitialClick) {//initially double clicked on appt module
 				DateTime d;
 				if(ApptDrawing.IsWeeklyView) {
@@ -841,6 +842,7 @@ namespace OpenDental{
 			AptCur.ProvHyg=PatCur.SecProv;
 			AptCur.AptDateTime=DateTime.MinValue;//(was .Now) This is what triggers automatic deletion from db when clear pinboard is clicked.
 			AptCur.ClinicNum=PatCur.ClinicNum;
+			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			if(InitialClick){//initially double clicked on appt module
 				DateTime d;
 				if(ApptDrawing.IsWeeklyView){

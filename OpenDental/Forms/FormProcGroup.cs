@@ -955,6 +955,7 @@ namespace OpenDental{
 			AptCur.AptStatus=ApptStatus.Planned;
 			AptCur.AptDateTime=DateTime.Today;
 			AptCur.Pattern="/X/";
+			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			Appointments.Insert(AptCur);
 			PlannedAppt plannedAppt=new PlannedAppt();
 			plannedAppt.AptNum=AptCur.AptNum;
