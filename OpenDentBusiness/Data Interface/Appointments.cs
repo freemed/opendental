@@ -507,7 +507,7 @@ namespace OpenDentBusiness{
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),aptNums);
 			}
 			string command="SELECT patient.LName,patient.FName,patient.MiddleI,patient.Preferred,"
-				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,appointment.AptDateTime "
+				+"patient.Address,patient.Address2,patient.City,patient.State,patient.Zip,appointment.AptDateTime,appointment.ClinicNum "
 				+"FROM patient,appointment "
 				+"WHERE patient.PatNum=appointment.PatNum "
 				+"AND (";
