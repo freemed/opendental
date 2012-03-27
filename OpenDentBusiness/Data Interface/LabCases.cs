@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<LabCase>(MethodBase.GetCurrentMethod(),aptNum);
 			}
-			string command="SELECT labcase.* FROM labcase,appointment "
+			string command="SELECT * FROM labcase "
 				+"WHERE labcase.PlannedAptNum="+POut.Long(aptNum);
 			return Crud.LabCaseCrud.SelectOne(command);
 		}
