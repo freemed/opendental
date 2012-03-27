@@ -34,13 +34,13 @@ namespace OpenDentBusiness.UI {
 				penO=new Pen(Color.Black);
 			}
 			if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.Complete) {
-				backColor=DefC.Long[(int)DefCat.AppointmentColors][3].ItemColor;
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][2].ItemColor;
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNote) {
-				backColor=DefC.Long[(int)DefCat.AppointmentColors][7].ItemColor;
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][6].ItemColor;
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNoteCompleted) {
-				backColor=DefC.Long[(int)DefCat.AppointmentColors][10].ItemColor;
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][7].ItemColor;
 			}
 			else if(PIn.Int(dataRoww["ColorOverride"].ToString()) != 0) {
 				backColor=Color.FromArgb(PIn.Int(dataRoww["ColorOverride"].ToString()));
@@ -408,7 +408,7 @@ namespace OpenDentBusiness.UI {
 			}
 			SolidBrush brush=new SolidBrush(apptRows[elementI].ElementColor);
 			SolidBrush brushWhite=new SolidBrush(Color.White);
-			SolidBrush noteTitlebrush = new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][8].ItemColor);
+			SolidBrush noteTitlebrush = new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][5].ItemColor);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Near;
 			int charactersFitted;//not used, but required as 'out' param for measureString.

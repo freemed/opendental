@@ -9023,9 +9023,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE definition SET ItemOrder=4 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Blockout Text'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=5 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note Background'";
+				command="UPDATE definition SET ItemOrder=5 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note - Pt Name'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=6 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note - Pt Name'";
+				command="UPDATE definition SET ItemOrder=6 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note Background'";
 				Db.NonQ(command);
 				command="UPDATE definition SET ItemOrder=7 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Completed Pt. Note Background'";
 				Db.NonQ(command);

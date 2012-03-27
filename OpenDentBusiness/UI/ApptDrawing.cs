@@ -79,7 +79,7 @@ namespace OpenDentBusiness.UI {
 			try {
 				openBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][0].ItemColor);
 				closedBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][1].ItemColor);
-				holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][4].ItemColor);
+				holidayBrush=new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][3].ItemColor);
 			}
 			catch {//this is just for design-time
 				openBrush=new SolidBrush(Color.White);
@@ -287,7 +287,7 @@ namespace OpenDentBusiness.UI {
 					else {
 						g.DrawRectangle(penOutline,rect.X+1,rect.Y+2,rect.Width-2,rect.Height-3);
 					}
-					g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][5].ItemColor),rect);
+					g.DrawString(blockText,blockFont,new SolidBrush(DefC.Short[(int)DefCat.AppointmentColors][4].ItemColor),rect);
 				}
 				blockBrush.Dispose();
 				penOutline.Dispose();
