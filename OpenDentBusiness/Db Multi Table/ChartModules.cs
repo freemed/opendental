@@ -39,6 +39,7 @@ namespace OpenDentBusiness {
 			DataRow row;
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("aptDateTime",typeof(DateTime));
+			table.Columns.Add("AbbrDesc");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("clinic");
 			table.Columns.Add("CodeNum");
@@ -102,7 +103,7 @@ namespace OpenDentBusiness {
 				|| componentsToLoad.ShowReferred
 				|| componentsToLoad.ShowConditions){
 				#region Procedures
-				command="SELECT provider.Abbr,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
+				command="SELECT provider.Abbr,procedurecode.AbbrDesc,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
 				+"procedurecode.Descript,orionproc.DPC,orionproc.DPCpost,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
 				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTime,"
@@ -129,6 +130,7 @@ namespace OpenDentBusiness {
 				DataTable rawNotes=dcon.GetTable(command);
 				for(int i=0;i<rawProcs.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]=rawProcs.Rows[i]["AbbrDesc"].ToString();
 					row["aptDateTime"]=PIn.DateT(rawProcs.Rows[i]["AptDateTime"].ToString());
 					row["AptNum"]=0;
 					row["clinic"]=Clinics.GetDesc(PIn.Long(rawProcs.Rows[i]["ClinicNum"].ToString()));

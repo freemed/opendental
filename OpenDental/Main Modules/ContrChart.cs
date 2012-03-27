@@ -5133,6 +5133,9 @@ namespace OpenDental{
 						case "Length":
 							row.Cells.Add(table.Rows[i]["length"].ToString());
 							break;
+						case "Abbr":
+							row.Cells.Add(table.Rows[i]["AbbrDesc"].ToString());
+							break;
 						default:
 							row.Cells.Add("");
 							break;

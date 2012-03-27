@@ -1129,7 +1129,6 @@ namespace OpenDental{
 					ChartViewCur.OrionStatusFlags|=OrionStatus.A;
 				}
 			}
-			
 			if(!ChartViewCur.IsNew) {
 				ChartViews.Update(ChartViewCur);
 			}

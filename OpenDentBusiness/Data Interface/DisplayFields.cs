@@ -275,7 +275,7 @@ namespace OpenDentBusiness {
 		public static List<DisplayField> GetAllAvailableList(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db. 
 			List<DisplayField> list=new List<DisplayField>();
-			if(category==DisplayFieldCategory.None) {
+			if(category==DisplayFieldCategory.None) {//Currently only used for ChartViews
 				list.Add(new DisplayField("Date",67,category));
 				list.Add(new DisplayField("Time",40,category));
 				list.Add(new DisplayField("Th",27,category));
@@ -293,6 +293,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Date Entry",67,category));
 				list.Add(new DisplayField("Prognosis",60,category));
 				list.Add(new DisplayField("Length",40,category));
+				list.Add(new DisplayField("Abbr",50,category));
 				if(Programs.UsingOrion){
 					list.Add(new DisplayField("DPC",33,category));
 					list.Add(new DisplayField("Schedule By",72,category));
