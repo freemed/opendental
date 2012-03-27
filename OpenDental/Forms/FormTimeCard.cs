@@ -1070,10 +1070,10 @@ namespace OpenDental{
 				if(beforeTime!=TimeSpan.Zero) {
 					//test to see if this span is after specified time
 					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime){//the end time is before time, so the whole pairTotal is OT
-						ClockEventList[i].OTimeAuto=pairTotal;
+						ClockEventList[i].OTimeAuto+=pairTotal;
 					}
 					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime){//only the first time is before time
-						ClockEventList[i].OTimeAuto=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
+						ClockEventList[i].OTimeAuto+=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
 					}
 				}
 				if(overHours != TimeSpan.Zero){
