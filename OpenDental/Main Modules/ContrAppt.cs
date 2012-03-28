@@ -2515,6 +2515,7 @@ namespace OpenDental {
 				}
 			}//if planned appointment is on pinboard
 			else {//simple drag off pinboard to a new date/time
+				aptCur.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;//Causes the confirmation status to be reset.
 				try {
 					Appointments.Update(aptCur,aptOld);
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,aptCur.PatNum,
@@ -3152,6 +3153,7 @@ namespace OpenDental {
 			else{
 				apt.ClinicNum=curOp.ClinicNum;
 			}
+			apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;//Causes the confirmation status to be reset.
 			try {
 				Appointments.Update(apt,aptOld);
 			}
