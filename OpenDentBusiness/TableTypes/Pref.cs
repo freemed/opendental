@@ -263,6 +263,7 @@ namespace OpenDentBusiness {
 		RandomPrimaryKeys,
 		RecallAdjustDown,
 		RecallAdjustRight,
+		RecallAgeAdult,
 		RecallCardsShowReturnAdd,
 		///<summary>-1 indicates min for all dates</summary>
 		RecallDaysFuture,
