@@ -109,6 +109,15 @@ namespace OpenDentBusiness{
 			return medicationPatList;
 		}
 
+		///<summary>Get list of MedicationPats by MedicationNum for a particular patient.</summary>
+		public static List<MedicationPat> GetMedicationPatsByMedicationNum(long medicationNum,long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),medicationNum,patNum);
+			}
+			string command="SELECT * FROM medicationpat WHERE PatNum="+POut.Long(patNum)+" AND MedicationNum="+POut.Long(medicationNum);
+			return Crud.MedicationPatCrud.SelectMany(command);
+		}
+
 
 		///<summary>Changes the value of the DateTStamp column to the current time stamp for all medicationpats of a patient</summary>
 		public static void ResetTimeStamps(long patNum) {

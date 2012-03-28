@@ -1177,10 +1177,11 @@ namespace OpenDental {
 					row.FieldName=allergyList[i].FieldName.Remove(0,8);
 					//Figure out the current status of this allergy
 					row.OldValDisplay="";
-					row.OldValObj=typeof(string);
+					row.OldValObj=null;
 					for(int j=0;j<allergies.Count;j++) {
 						if(AllergyDefs.GetDescription(allergies[j].AllergyDefNum)==allergyList[i].FieldName.Remove(0,8)) {
 							row.OldValDisplay="X";
+							row.OldValObj=allergies[j];
 							break;
 						}
 					}
@@ -1189,10 +1190,10 @@ namespace OpenDental {
 						allergyList.Remove(oppositeBox);
 					}
 					row.NewValDisplay=fieldVal;
-					row.NewValObj=row.NewValDisplay;
+					row.NewValObj=allergyList[i];
 					row.ImpValDisplay=row.NewValDisplay;
-					row.ImpValObj=row.NewValObj;
-					row.ObjType=typeof(string);
+					row.ImpValObj=typeof(string);
+					row.ObjType=typeof(Allergy);
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.DoImport=true;
 					}
@@ -1238,10 +1239,11 @@ namespace OpenDental {
 					row.FieldName=medicationList[i].FieldName.Remove(0,11);
 					//Figure out the current status of this medication
 					row.OldValDisplay="";
-					row.OldValObj=typeof(string);
+					row.OldValObj=null;
 					for(int j=0;j<meds.Count;j++) {
 						if(Medications.GetDescription(meds[j].MedicationNum)==medicationList[i].FieldName.Remove(0,11)) {
 							row.OldValDisplay="X";
+							row.OldValObj=meds[j];
 							break;
 						}
 					}
@@ -1250,10 +1252,10 @@ namespace OpenDental {
 						medicationList.Remove(oppositeBox);
 					}
 					row.NewValDisplay=fieldVal;
-					row.NewValObj=row.NewValDisplay;
+					row.NewValObj=medicationList[i];
 					row.ImpValDisplay=row.NewValDisplay;
-					row.ImpValObj=row.NewValObj;
-					row.ObjType=typeof(string);
+					row.ImpValObj=typeof(string);
+					row.ObjType=typeof(Medication);
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.DoImport=true;
 					}
@@ -1299,10 +1301,11 @@ namespace OpenDental {
 					row.FieldName=problemList[i].FieldName.Remove(0,8);
 					//Figure out the current status of this allergy
 					row.OldValDisplay="";
-					row.OldValObj=typeof(string);
+					row.OldValObj=null;
 					for(int j=0;j<diseases.Count;j++) {
 						if(DiseaseDefs.GetName(diseases[j].DiseaseDefNum)==problemList[i].FieldName.Remove(0,8)) {
 							row.OldValDisplay="X";
+							row.OldValObj=diseases[j];
 							break;
 						}
 					}
@@ -1311,21 +1314,16 @@ namespace OpenDental {
 						problemList.Remove(oppositeBox);
 					}
 					row.NewValDisplay=fieldVal;
-					row.NewValObj=row.NewValDisplay;
+					row.NewValObj=problemList[i];
 					row.ImpValDisplay=row.NewValDisplay;
-					row.ImpValObj=row.NewValObj;
-					row.ObjType=typeof(string);
+					row.ImpValObj=typeof(string);
+					row.ObjType=typeof(Disease);
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.DoImport=true;
 					}
 					rows.Add(row);
 				}
 				#endregion
-				//Separator-------------------------------------------
-				row=new SheetImportRow();
-				row.FieldName="Misc";
-				row.IsSeparator=true;
-				rows.Add(row);
 			}
 			#endregion 
 		}
@@ -1639,7 +1637,11 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=referralSelected.GetNameFL();
 				rows[e.Row].ImpValObj=referralSelected;
 			}
-			else if(rows[e.Row].ObjType==typeof(string)) {
+			else if(rows[e.Row].ObjType==typeof(string)
+				|| rows[e.Row].ObjType==typeof(Allergy)
+				|| rows[e.Row].ObjType==typeof(Medication)
+				|| rows[e.Row].ObjType==typeof(Disease)) 
+			{
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
 				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
 				inputbox.ShowDialog();
@@ -1803,91 +1805,201 @@ namespace OpenDental {
 				MsgBox.Show(this,"No rows are set for import.");
 				return;
 			}
-			Patient patientOld=pat.Copy();
-			for(int i=0;i<rows.Count;i++) {
-				if(!rows[i].DoImport) {
-					continue;
+			#region Patient Form
+			if(SheetCur.SheetType==SheetTypeEnum.PatientForm) {
+				Patient patientOld=pat.Copy();
+				for(int i=0;i<rows.Count;i++) {
+					if(!rows[i].DoImport) {
+						continue;
+					}
+					switch(rows[i].FieldName) {
+						case "LName":
+							pat.LName=rows[i].ImpValDisplay;
+							break;
+						case "FName":
+							pat.FName=rows[i].ImpValDisplay;
+							break;
+						case "MiddleI":
+							pat.MiddleI=rows[i].ImpValDisplay;
+							break;
+						case "Preferred":
+							pat.Preferred=rows[i].ImpValDisplay;
+							break;
+						case "Gender":
+							pat.Gender=(PatientGender)rows[i].ImpValObj;
+							break;
+						case "Position":
+							pat.Position=(PatientPosition)rows[i].ImpValObj;
+							break;
+						case "Birthdate":
+							pat.Birthdate=(DateTime)rows[i].ImpValObj;
+							break;
+						case "SSN":
+							pat.SSN=rows[i].ImpValDisplay;
+							break;
+						case "WkPhone":
+							pat.WkPhone=rows[i].ImpValDisplay;
+							break;
+						case "WirelessPhone":
+							pat.WirelessPhone=rows[i].ImpValDisplay;
+							break;
+						case "Email":
+							pat.Email=rows[i].ImpValDisplay;
+							break;
+						case "PreferContactMethod":
+							pat.PreferContactMethod=(ContactMethod)rows[i].ImpValObj;
+							break;
+						case "PreferConfirmMethod":
+							pat.PreferConfirmMethod=(ContactMethod)rows[i].ImpValObj;
+							break;
+						case "PreferRecallMethod":
+							pat.PreferRecallMethod=(ContactMethod)rows[i].ImpValObj;
+							break;
+						case "referredFrom":
+							RefAttach ra=new RefAttach();
+							ra.IsFrom=true;
+							ra.ItemOrder=1;
+							ra.PatNum=pat.PatNum;
+							ra.RefDate=DateTime.Today;
+							ra.ReferralNum=((Referral)rows[i].ImpValObj).ReferralNum;
+							RefAttaches.Insert(ra);
+							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));//no security to block this action.
+							break;
+						//AddressSameForFam already set, but not really importable by itself
+						case "Address":
+							pat.Address=rows[i].ImpValDisplay;
+							break;
+						case "Address2":
+							pat.Address2=rows[i].ImpValDisplay;
+							break;
+						case "City":
+							pat.City=rows[i].ImpValDisplay;
+							break;
+						case "State":
+							pat.State=rows[i].ImpValDisplay;
+							break;
+						case "Zip":
+							pat.Zip=rows[i].ImpValDisplay;
+							break;
+						case "HmPhone":
+							pat.HmPhone=rows[i].ImpValDisplay;
+							break;
+
+						//ins1 and ins2 do not get imported.
+					}
 				}
-				switch(rows[i].FieldName){
-					case "LName":
-						pat.LName=rows[i].ImpValDisplay;
-						break;
-					case "FName":
-						pat.FName=rows[i].ImpValDisplay;
-						break;
-					case "MiddleI":
-						pat.MiddleI=rows[i].ImpValDisplay;
-						break;
-					case "Preferred":
-						pat.Preferred=rows[i].ImpValDisplay;
-						break;
-					case "Gender":
-						pat.Gender=(PatientGender)rows[i].ImpValObj;
-						break;
-					case "Position":
-						pat.Position=(PatientPosition)rows[i].ImpValObj;
-						break;
-					case "Birthdate":
-						pat.Birthdate=(DateTime)rows[i].ImpValObj;
-						break;
-					case "SSN":
-						pat.SSN=rows[i].ImpValDisplay;
-						break;
-					case "WkPhone":
-						pat.WkPhone=rows[i].ImpValDisplay;
-						break;
-					case "WirelessPhone":
-						pat.WirelessPhone=rows[i].ImpValDisplay;
-						break;
-					case "Email":
-						pat.Email=rows[i].ImpValDisplay;
-						break;
-					case "PreferContactMethod":
-						pat.PreferContactMethod=(ContactMethod)rows[i].ImpValObj;
-						break;
-					case "PreferConfirmMethod":
-						pat.PreferConfirmMethod=(ContactMethod)rows[i].ImpValObj;
-						break;
-					case "PreferRecallMethod":
-						pat.PreferRecallMethod=(ContactMethod)rows[i].ImpValObj;
-						break;
-					case "referredFrom":
-						RefAttach ra=new RefAttach();
-						ra.IsFrom=true;
-						ra.ItemOrder=1;
-						ra.PatNum=pat.PatNum;
-						ra.RefDate=DateTime.Today;
-						ra.ReferralNum=((Referral)rows[i].ImpValObj).ReferralNum;
-						RefAttaches.Insert(ra);
-						SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));//no security to block this action.
-						break;
-					//AddressSameForFam already set, but not really importable by itself
-					case "Address":
-						pat.Address=rows[i].ImpValDisplay;
-						break;
-					case "Address2":
-						pat.Address2=rows[i].ImpValDisplay;
-						break;
-					case "City":
-						pat.City=rows[i].ImpValDisplay;
-						break;
-					case "State":
-						pat.State=rows[i].ImpValDisplay;
-						break;
-					case "Zip":
-						pat.Zip=rows[i].ImpValDisplay;
-						break;
-					case "HmPhone":
-						pat.HmPhone=rows[i].ImpValDisplay;
-						break;
-					
-					//ins1 and ins2 do not get imported.
+				Patients.Update(pat,patientOld);
+				if(AddressSameForFam) {
+					Patients.UpdateAddressForFam(pat);
 				}
 			}
-			Patients.Update(pat,patientOld);
-			if(AddressSameForFam) {
-				Patients.UpdateAddressForFam(pat);
+			#endregion
+			#region Medical History
+			else if(SheetCur.SheetType==SheetTypeEnum.MedicalHistory) {
+				for(int i=0;i<rows.Count;i++) {
+					if(!rows[i].DoImport) {
+						continue;
+					}
+					if(rows[i].ObjType==null) {//Should never happen.
+						continue;
+					}
+					bool hasValue=false;
+					if(rows[i].ImpValDisplay!="") {
+						hasValue=true;
+					}
+					#region Allergies
+					if(rows[i].ObjType==typeof(Allergy)) {
+						//Patient has this allergy in the db so just update the value.
+						if(rows[i].OldValObj!=null) {
+							Allergy oldAllergy=(Allergy)rows[i].OldValObj;
+							oldAllergy.StatusIsActive=hasValue;
+							Allergies.Update(oldAllergy);
+							continue;
+						}
+						//Allergy does not exist for this patient yet so create one and set the active status accordingly.
+						List<AllergyDef> allergyList=AllergyDefs.GetAll(false);
+						SheetField allergySheet=(SheetField)rows[i].NewValObj;
+						//Find what allergy user wants to import.
+						for(int j=0;j<allergyList.Count;j++) {
+							if(allergyList[j].Description==allergySheet.FieldName.Remove(0,8)) {
+								Allergy newAllergy=new Allergy();
+								newAllergy.AllergyDefNum=allergyList[j].AllergyDefNum;
+								newAllergy.PatNum=pat.PatNum;
+								newAllergy.StatusIsActive=hasValue;
+								Allergies.Insert(newAllergy);
+								break;
+							}
+						}
+					}
+					#endregion
+					#region Medications
+					else if(rows[i].ObjType.GetType()==typeof(Medication)) {
+						//Patient has this medication in the db so leave it alone or set the stop date.
+						if(rows[i].OldValObj!=null) {
+							if(hasValue) {
+								continue;//Patient already has the medication.
+							}
+							//Set the stop date for the current medication(s).
+							Medication oldMed=(Medication)rows[i].OldValObj;
+							List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,pat.PatNum);
+							for(int j=0;j<patMeds.Count;j++) {
+								patMeds[j].DateStop=DateTime.Now;
+								MedicationPats.Update(patMeds[j]);
+							}
+							continue;
+						}
+						//Medication does not exist for this patient yet so create one.
+						List<Medication> medList=Medications.GetList("");
+						SheetField medSheet=(SheetField)rows[i].NewValObj;
+						//Find what allergy user wants to import.
+						for(int j=0;j<medList.Count;j++) {
+							if(Medications.GetDescription(medList[j].MedicationNum)==medSheet.FieldName.Remove(0,11)) {
+								MedicationPat medPat=new MedicationPat();
+								medPat.PatNum=pat.PatNum;
+								medPat.MedicationNum=medList[i].MedicationNum;
+								MedicationPats.Insert(medPat);
+								break;
+							}
+						}
+					}
+					#endregion
+					#region Diseases
+					else if(rows[i].ObjType.GetType()==typeof(Disease)) {
+						//Patient has this problem in the db so just update the value.
+						if(rows[i].OldValObj!=null) {
+							Disease oldDisease=(Disease)rows[i].OldValObj;
+							if(hasValue) {
+								oldDisease.ProbStatus=ProblemStatus.Active;
+							}
+							else {
+								oldDisease.ProbStatus=ProblemStatus.Inactive;
+							}
+							Diseases.Update(oldDisease);
+							continue;
+						}
+						//Problem does not exist for this patient yet so create one and set the problem status accordingly.
+						SheetField diseaseSheet=(SheetField)rows[i].NewValObj;
+						//Find what allergy user wants to import.
+						for(int j=0;j<DiseaseDefs.List.Length;j++) {
+							if(DiseaseDefs.List[i].DiseaseName==diseaseSheet.FieldName.Remove(0,8)) {
+								Disease newDisease=new Disease();
+								newDisease.PatNum=pat.PatNum;
+								newDisease.DiseaseDefNum=DiseaseDefs.List[i].DiseaseDefNum;
+								if(hasValue) {
+									newDisease.ProbStatus=ProblemStatus.Active;
+								}
+								else {
+									newDisease.ProbStatus=ProblemStatus.Inactive;
+								}
+								Diseases.Insert(newDisease);
+								break;
+							}
+						}
+					}
+					#endregion
+				}
 			}
+			#endregion
 			MsgBox.Show(this,"Done.");
 			DialogResult=DialogResult.OK;
 		}
