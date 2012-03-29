@@ -384,6 +384,35 @@ namespace OpenDentBusiness{
 			//don't forget to refresh procedurecodes.
 		}
 
+		///<summary>Returns true if any of the codes in the list fall within the code range.</summary>
+		public static bool IsCodeInRange(List<string> myCodes,string range) {
+			for(int i=0;i<myCodes.Count;i++) {
+				if(IsCodeInRange(myCodes[i],range)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		///<summary>Returns true if myCode is within the code range.  Ex: myCode="D####", range="D####-D####"</summary>
+		public static bool IsCodeInRange(string myCode,string range) {
+			string code1="";
+			string code2="";
+			if(range.Contains("-")) {
+				string[] codeSplit=range.Split('-');
+				code1=codeSplit[0].Trim();
+				code2=codeSplit[1].Trim();
+			}
+			else{
+				code1=range.Trim();
+				code2=range.Trim();
+			}
+			if(myCode.CompareTo(code1)<0 || myCode.CompareTo(code2)>0) {
+				return false;
+			}
+			return true;
+		}
+
 
 
 	}
