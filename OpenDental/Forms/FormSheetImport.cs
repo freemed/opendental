@@ -911,6 +911,7 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					else {//Current box is checked.  
@@ -919,6 +920,7 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -966,12 +968,13 @@ namespace OpenDental {
 							}
 							continue;
 						}
-						//Opposite box is checked, figure out if it's a Y or N box then remove it from the list to prevent duplicate rows.
+						//Opposite box is checked, figure out if it's a Y or N box.
 						if(oppositeBox.RadioButtonValue.StartsWith("Y:")) {
 							fieldVal="X";
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					else {//Current box is checked.  
@@ -980,6 +983,7 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1029,12 +1033,13 @@ namespace OpenDental {
 							}
 							continue;
 						}
-						//Opposite box is checked, figure out if it's a Y or N box then remove it from the list to prevent duplicate rows.
+						//Opposite box is checked, figure out if it's a Y or N box.
 						if(oppositeBox.RadioButtonValue.StartsWith("Y:")) {
 							fieldVal="X";
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					else {//Current box is checked.  
@@ -1043,6 +1048,7 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
+							row.DoImport=true;
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1254,7 +1260,7 @@ namespace OpenDental {
 				if(sheetFieldList[i].FieldName!=sheetFieldCur.FieldName) {
 					continue;
 				}
-				//This has to be the opposite check box.  Check if it has been checked.
+				//This has to be the opposite check box.
 				return sheetFieldList[i];
 			}
 			return null;
