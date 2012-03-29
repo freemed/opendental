@@ -180,7 +180,6 @@ namespace OpenDental{
 			this.butPrint.Size = new System.Drawing.Size(83, 24);
 			this.butPrint.TabIndex = 116;
 			this.butPrint.Text = "&Print";
-			this.butPrint.Visible = false;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// butReport
