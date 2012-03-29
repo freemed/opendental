@@ -28,9 +28,9 @@ namespace OpenDental.Bridges {
 			try {
 				VBbridges.Patterson.Launch(
 					Tidy(pat.FName,40),
-					Tidy(pat.MiddleI,1),
+					"",//Tidy(pat.MiddleI,1),//When there is no SSN and the name changes, Patterson creates a whole new patient record, which is troublesome for our customers.
 					Tidy(pat.LName,40),
-					Tidy(pat.Preferred,40),
+					"",//Tidy(pat.Preferred,40),//When there is no SSN and the name changes, Patterson creates a whole new patient record, which is troublesome for our customers.
 					Tidy(pat.Address,40),
 					Tidy(pat.City,30),
 					Tidy(pat.State,2),
