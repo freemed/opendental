@@ -920,7 +920,9 @@ namespace OpenDental{
 				stmt.HidePayment=false;
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
-				if(PrefC.GetBool(PrefName.BillingUseElectronic)) {
+				if(PrefC.GetString(PrefName.BillingUseElectronic)=="1"
+					|| PrefC.GetString(PrefName.BillingUseElectronic)=="2") 
+				{
 					stmt.Mode_=StatementMode.Electronic;
 					stmt.Intermingled=true;
 				}

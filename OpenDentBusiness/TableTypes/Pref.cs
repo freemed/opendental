@@ -97,6 +97,7 @@ namespace OpenDentBusiness {
 		BillingIgnoreInPerson,
 		BillingIncludeChanged,
 		BillingSelectBillingTypes,
+		/// <summary>0=no,1=EHG,2=POS(xml file)</summary>
 		BillingUseElectronic,
 		BirthdayPostcardMsg,
 		BrokenAppointmentAdjustmentType,

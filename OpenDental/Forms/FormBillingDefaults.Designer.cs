@@ -43,7 +43,6 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textVendorId = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.checkUseElectronic = new System.Windows.Forms.CheckBox();
 			this.textBillingEmailSubject = new System.Windows.Forms.TextBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
@@ -54,6 +53,7 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.label10 = new System.Windows.Forms.Label();
+			this.listElectBilling = new System.Windows.Forms.ListBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -97,6 +97,7 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.listElectBilling);
 			this.groupBox1.Controls.Add(this.textPassword);
 			this.groupBox1.Controls.Add(this.label6);
 			this.groupBox1.Controls.Add(this.textUserName);
@@ -108,7 +109,6 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.textVendorId);
 			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Controls.Add(this.checkUseElectronic);
 			this.groupBox1.Location = new System.Drawing.Point(12,188);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(635,132);
@@ -245,15 +245,6 @@ namespace OpenDental{
 			this.label2.Text = "Vendor ID";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkUseElectronic
-			// 
-			this.checkUseElectronic.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkUseElectronic.Location = new System.Drawing.Point(13,23);
-			this.checkUseElectronic.Name = "checkUseElectronic";
-			this.checkUseElectronic.Size = new System.Drawing.Size(176,16);
-			this.checkUseElectronic.TabIndex = 0;
-			this.checkUseElectronic.Text = "Use electronic billing";
-			// 
 			// textBillingEmailSubject
 			// 
 			this.textBillingEmailSubject.Location = new System.Drawing.Point(12,70);
@@ -364,6 +355,18 @@ namespace OpenDental{
     "tNum].";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// listElectBilling
+			// 
+			this.listElectBilling.FormattingEnabled = true;
+			this.listElectBilling.Items.AddRange(new object[] {
+            "No electronic billing",
+            "Dental X Change",
+            "Output to file"});
+			this.listElectBilling.Location = new System.Drawing.Point(12,19);
+			this.listElectBilling.Name = "listElectBilling";
+			this.listElectBilling.Size = new System.Drawing.Size(120,43);
+			this.listElectBilling.TabIndex = 255;
+			// 
 			// FormBillingDefaults
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -422,8 +425,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textVendorId;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.CheckBox checkUseElectronic;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.ListBox listElectBilling;
 	}
 }

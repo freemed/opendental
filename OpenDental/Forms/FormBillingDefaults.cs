@@ -18,7 +18,13 @@ namespace OpenDental {
 			textDays.Text=PrefC.GetLong(PrefName.BillingDefaultsLastDays).ToString();
 			checkIntermingled.Checked=PrefC.GetBool(PrefName.BillingDefaultsIntermingle);
 			textNote.Text=PrefC.GetString(PrefName.BillingDefaultsNote);
-			checkUseElectronic.Checked=PrefC.GetBool(PrefName.BillingUseElectronic);
+			listElectBilling.SelectedIndex=0;
+			if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
+				listElectBilling.SelectedIndex=1;
+			}
+			if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
+				listElectBilling.SelectedIndex=2;
+			}
 			textVendorId.Text=PrefC.GetString(PrefName.BillingElectVendorId);
 			textVendorPMScode.Text=PrefC.GetString(PrefName.BillingElectVendorPMSCode);
 			string cc=PrefC.GetString(PrefName.BillingElectCreditCardChoices);
@@ -69,10 +75,11 @@ namespace OpenDental {
 				}
 				cc+="A";
 			}
+			string billingUseElectronic=listElectBilling.SelectedIndex.ToString();
 			if(Prefs.UpdateLong(PrefName.BillingDefaultsLastDays,PIn.Long(textDays.Text))
 				| Prefs.UpdateBool(PrefName.BillingDefaultsIntermingle,checkIntermingled.Checked)
 				| Prefs.UpdateString(PrefName.BillingDefaultsNote,textNote.Text)
-				| Prefs.UpdateBool(PrefName.BillingUseElectronic,checkUseElectronic.Checked)
+				| Prefs.UpdateString(PrefName.BillingUseElectronic,billingUseElectronic)
 				| Prefs.UpdateString(PrefName.BillingEmailSubject,textBillingEmailSubject.Text)
 				| Prefs.UpdateString(PrefName.BillingEmailBodyText,textBillingEmailBody.Text)
 				| Prefs.UpdateString(PrefName.BillingElectVendorId,textVendorId.Text)

@@ -798,8 +798,12 @@ namespace OpenDental{
 			xmlSettings.IndentChars="   ";
 			StringBuilder strBuildElect=new StringBuilder();
 			XmlWriter writerElect=XmlWriter.Create(strBuildElect,xmlSettings);
-			//OpenDental.Bridges.Tesia_statements.GeneratePracticeInfo(writerElect);
-			OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
+			if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
+				OpenDental.Bridges.EHG_statements.GeneratePracticeInfo(writerElect);
+			}
+			else if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
+				OpenDental.Bridges.POS_statements.GeneratePracticeInfo(writerElect);
+			}
 			DataSet dataSet;
 			List<long> stateNumsElect=new List<long>();
 			for(int i=0;i<gridBill.SelectedIndices.Length;i++){
@@ -891,8 +895,12 @@ namespace OpenDental{
 				}
 				if(stmt.Mode_==StatementMode.Electronic) {
 					stateNumsElect.Add(stmt.StatementNum);
-					//OpenDental.Bridges.Tesia_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
-					OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+					if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
+						OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+					}
+					else if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
+						OpenDental.Bridges.POS_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+					}
 					sentelect++;
 					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
 					Application.DoEvents();
@@ -914,25 +922,40 @@ namespace OpenDental{
 			}
 			//finish up elect and send if needed------------------------------------------------------------
 			if(sentelect>0) {
-				//OpenDental.Bridges.Tesia_statements.GenerateWrapUp(writerElect);
-				OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
-				writerElect.Close();
-				try {
-					//OpenDental.Bridges.Tesia_statements.Send(strBuildElect.ToString());
-					OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
-					//CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
-					//msgbox.ShowDialog();
-					//loop through all statements and mark sent
+				if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
+					OpenDental.Bridges.EHG_statements.GenerateWrapUp(writerElect);
+					writerElect.Close();
+					try {
+						//OpenDental.Bridges.Tesia_statements.Send(strBuildElect.ToString());
+						OpenDental.Bridges.EHG_statements.Send(strBuildElect.ToString());
+						//CodeBase.MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(strBuildElect.ToString());
+						//msgbox.ShowDialog();
+						//loop through all statements and mark sent
+						for(int i=0;i<stateNumsElect.Count;i++) {
+							Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+						}
+					}
+					catch(Exception ex) {
+						MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ex.Message);
+						msgbox.ShowDialog();
+						//MessageBox.Show();
+						sentelect=0;
+						labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
+					}
+				}
+				if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
+					OpenDental.Bridges.POS_statements.GenerateWrapUp(writerElect);
+					writerElect.Close();
+					SaveFileDialog dlg=new SaveFileDialog();
+					dlg.FileName="Statements.xml";
+					if(dlg.ShowDialog()!=DialogResult.OK) {
+						sentelect=0;
+						labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
+					}
+					File.WriteAllText(dlg.FileName,strBuildElect.ToString());
 					for(int i=0;i<stateNumsElect.Count;i++) {
 						Statements.MarkSent(stateNumsElect[i],DateTime.Today);
 					}
-				}
-				catch(Exception ex) {
-					MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(ex.Message);
-					msgbox.ShowDialog();
-					//MessageBox.Show();
-					sentelect=0;
-					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
 				}
 			}
 			else {
