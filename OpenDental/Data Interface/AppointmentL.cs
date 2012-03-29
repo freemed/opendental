@@ -356,7 +356,7 @@ namespace OpenDental{
 			List<string> procs=RecallTypes.GetProcs(recallCur.RecallTypeNum);
 			string recallPattern=RecallTypes.GetTimePattern(recallCur.RecallTypeNum);
 			if(RecallTypes.IsSpecialRecallType(recallCur.RecallTypeNum)
-				&& patCur.Birthdate.AddYears(12) > ((recallCur.DateDue>DateTime.Today)?recallCur.DateDue:DateTime.Today)) //if pt's 12th birthday falls after recall date. ie younger than 12.
+				&& patCur.Birthdate.AddYears(PrefC.GetInt(PrefName.RecallAgeAdult)) > ((recallCur.DateDue>DateTime.Today)?recallCur.DateDue:DateTime.Today)) //if pt's 12th birthday falls after recall date. ie younger than RecallAgeAdult years old (used to be always 12).
 			{
 				for(int i=0;i<RecallTypeC.Listt.Count;i++) {
 					if(RecallTypeC.Listt[i].RecallTypeNum==RecallTypes.ChildProphyType) {
@@ -421,7 +421,7 @@ namespace OpenDental{
 				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(procs[i]).AbbrDesc;
 			}
 			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
-			Appointments.Insert(AptCur);	
+			Appointments.Insert(AptCur);
 			Procedure ProcCur;
 			List <PatPlan> patPlanList=PatPlans.Refresh(patCur.PatNum);
 			List <Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
