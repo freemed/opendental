@@ -32,6 +32,7 @@ namespace OpenDentBusiness{
 				//}
 				+DbHelper.DateColumn("DateTimeTrans")+" <= "+POut.Date(dateTo)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.Acknowledge_997)+" "
+				+"AND Etype!="+POut.Long((int)EtransType.Acknowledge_999)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitInquiry270)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitResponse271)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.AckError)+" "
@@ -509,6 +510,42 @@ namespace OpenDentBusiness{
 								Db.NonQ(command);
 							}
 						}
+					}
+					//none of the other fields make sense, because this ack could refer to many claims.
+				}
+				else if(Xobj.Is999()) {
+					X999 x999=new X999(messageText);
+					etrans.Etype=EtransType.Acknowledge_999;
+					etrans.BatchNumber=x999.GetBatchNumber();
+					Etranss.Insert(etrans);
+					string batchack=x999.GetBatchAckCode();
+					if(batchack=="A"||batchack=="R") {//accepted or rejected
+					  command="UPDATE etrans SET AckCode='"+batchack+"', "
+					    +"AckEtransNum="+POut.Long(etrans.EtransNum)
+					    +" WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
+					    +" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
+					    +" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
+					    +" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1))
+					    +" AND AckEtransNum=0";
+					  Db.NonQ(command);
+					}
+					else {//partially accepted
+					  List<int> transNums=x999.GetTransNums();
+					  string ack;
+					  for(int i=0;i<transNums.Count;i++) {
+					    ack=x999.GetAckForTrans(transNums[i]);
+					    if(ack=="A"||ack=="R") {//accepted or rejected
+					      command="UPDATE etrans SET AckCode='"+ack+"', "
+					        +"AckEtransNum="+POut.Long(etrans.EtransNum)
+					        +" WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
+					        +" AND TransSetNum="+POut.Long(transNums[i])
+					        +" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
+					        +" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
+					        +" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1))
+					        +" AND AckEtransNum=0";
+					      Db.NonQ(command);
+					    }
+					  }
 					}
 					//none of the other fields make sense, because this ack could refer to many claims.
 				}

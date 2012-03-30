@@ -91,6 +91,18 @@ namespace OpenDentBusiness
 			return false;
 		}
 
+		public bool Is999() {
+			//There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
+			//if acking multiple 
+			if(this.FunctGroups.Count!=1) {
+				return false;
+			}
+			if(this.FunctGroups[0].Transactions[0].Header.Get(1)=="999") {
+				return true;
+			}
+			return false;
+		}
+
 		public bool Is271() {
 			if(this.FunctGroups[0].Transactions[0].Header.Get(1)=="271") {
 				return true;

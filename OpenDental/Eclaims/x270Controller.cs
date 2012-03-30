@@ -85,7 +85,13 @@ namespace OpenDental.Eclaims {
 			etrans271.Etype=EtransType.TextReport;
 			if(X12object.IsX12(x12response)) {//this shouldn't need to be tested because it was tested above.
 				if(x271==null){
-					etrans271.Etype=EtransType.Acknowledge_997;
+					X12object Xobj=new X12object(x12response);
+					if(Xobj.Is997()) {
+						etrans271.Etype=EtransType.Acknowledge_997;
+					}
+					else if(Xobj.Is999()) {
+						etrans271.Etype=EtransType.Acknowledge_999;
+					}
 				}
 				else{
 					etrans271.Etype=EtransType.BenefitResponse271;
@@ -107,7 +113,18 @@ namespace OpenDental.Eclaims {
 				//don't show the 270 interface.
 				return;
 			}
-			else {
+			else if(etrans271.Etype==EtransType.Acknowledge_999) {
+				X999 x999=new X999(x12response);
+				string error999=x999.GetHumanReadable();
+				etrans.Note="Error: "+error999;//"Malformed document sent.  999 error returned.";
+				Etranss.Update(etrans);
+				MessageBox.Show(etrans.Note);
+				//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(etrans.Note);
+				//msgbox.ShowDialog();
+				//don't show the 270 interface.
+				return;
+			}
+			else { //271
 				string processingerror=x271.GetProcessingError();
 				if(processingerror != "") {
 					etrans.Note=processingerror;

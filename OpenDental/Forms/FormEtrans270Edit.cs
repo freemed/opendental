@@ -66,7 +66,7 @@ namespace OpenDental {
 		}
 
 		private void FormEtrans270Edit_Shown(object sender,EventArgs e) {
-			if(EtransAck271!=null && EtransAck271.Etype==EtransType.Acknowledge_997) {
+			if(EtransAck271!=null && (EtransAck271.Etype==EtransType.Acknowledge_997 || EtransAck271.Etype==EtransType.Acknowledge_999)) {
 				if(IsInitialResponse) {
 					MessageBox.Show(EtransCur.Note);
 				}
