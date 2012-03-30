@@ -53,6 +53,7 @@ namespace OpenDental{
 		private ComboBox comboIncomeAccountQB;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> DepositAccountsQB;
+		private UI.Button butSendQB;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> IncomeAccountsQB;
 
@@ -108,6 +109,7 @@ namespace OpenDental{
 			this.comboIncomeAccountQB = new System.Windows.Forms.ComboBox();
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
+			this.butSendQB = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.textDate = new OpenDental.ValidDate();
 			this.butDelete = new OpenDental.UI.Button();
@@ -296,6 +298,21 @@ namespace OpenDental{
 			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
 			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
 			// 
+			// butSendQB
+			// 
+			this.butSendQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSendQB.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butSendQB.Autosize = true;
+			this.butSendQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSendQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSendQB.CornerRadius = 4F;
+			this.butSendQB.Location = new System.Drawing.Point(816, 286);
+			this.butSendQB.Name = "butSendQB";
+			this.butSendQB.Size = new System.Drawing.Size(75, 24);
+			this.butSendQB.TabIndex = 115;
+			this.butSendQB.Text = "&Send QB";
+			this.butSendQB.Click += new System.EventHandler(this.butSendQB_Click);
+			// 
 			// butPrint
 			// 
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -306,9 +323,9 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(583, 631);
+			this.butPrint.Location = new System.Drawing.Point(511, 631);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(81, 26);
+			this.butPrint.Size = new System.Drawing.Size(81, 24);
 			this.butPrint.TabIndex = 108;
 			this.butPrint.Text = "&Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
@@ -332,7 +349,7 @@ namespace OpenDental{
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDelete.Location = new System.Drawing.Point(7, 631);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(85, 26);
+			this.butDelete.Size = new System.Drawing.Size(85, 24);
 			this.butDelete.TabIndex = 101;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
@@ -346,7 +363,7 @@ namespace OpenDental{
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(13, 307);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75, 26);
+			this.butRefresh.Size = new System.Drawing.Size(75, 24);
 			this.butRefresh.TabIndex = 106;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
@@ -368,7 +385,7 @@ namespace OpenDental{
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(712, 631);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
+			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -383,7 +400,7 @@ namespace OpenDental{
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(805, 631);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -392,6 +409,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(897, 667);
+			this.Controls.Add(this.butSendQB);
 			this.Controls.Add(this.textDepositAccount);
 			this.Controls.Add(this.labelDepositAccount);
 			this.Controls.Add(this.comboDepositAccount);
@@ -429,6 +447,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDepositEdit_Load(object sender, System.EventArgs e) {
+			butSendQB.Visible=false;
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)){
 					//we will check the date again when saving
@@ -461,24 +480,9 @@ namespace OpenDental{
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
 				if(Accounts.DepositsLinked()) {
-					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
-						labelIncomeAccountQB.Visible=true;
-						comboIncomeAccountQB.Visible=true;
-						DepositAccountsQB=Accounts.GetDepositAccountsQB();
-						for(int i=0;i<DepositAccountsQB.Count;i++) {
-							comboDepositAccount.Items.Add(DepositAccountsQB[i]);
-						}
-						IncomeAccountsQB=Accounts.GetIncomeAccountsQB();
-						for(int i=0;i<IncomeAccountsQB.Count;i++) {
-							comboIncomeAccountQB.Items.Add(IncomeAccountsQB[i]);
-						}
-						comboIncomeAccountQB.SelectedIndex=0;
-					}
-					else {
-						DepositAccounts=Accounts.GetDepositAccounts();
-						for(int i=0;i<DepositAccounts.Length;i++) {
-							comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
-						}
+					DepositAccounts=Accounts.GetDepositAccounts();
+					for(int i=0;i<DepositAccounts.Length;i++) {
+						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
@@ -513,6 +517,33 @@ namespace OpenDental{
 							break;
 						}
 					}
+				}
+			}
+			//If in QuickBooks mode, always show deposit and income accounts so that users can send old deposits into QB.
+			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks
+				&& Accounts.DepositsLinked()) 
+			{
+				//Don't show QB items if this is an old QB deposit. 
+				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {
+					if(!IsNew) {
+						butSendQB.Visible=true;//Only show button for old non QB deposits.
+					}
+					labelIncomeAccountQB.Visible=true;
+					comboIncomeAccountQB.Visible=true;
+					textDepositAccount.Visible=false;
+					labelDepositAccount.Text=Lan.g(this,"Deposit into Account");
+					comboDepositAccount.Enabled=true;
+					comboDepositAccount.Items.Clear();
+					DepositAccountsQB=Accounts.GetDepositAccountsQB();
+					for(int i=0;i<DepositAccountsQB.Count;i++) {
+						comboDepositAccount.Items.Add(DepositAccountsQB[i]);
+					}
+					comboDepositAccount.SelectedIndex=0;
+					IncomeAccountsQB=Accounts.GetIncomeAccountsQB();
+					for(int i=0;i<IncomeAccountsQB.Count;i++) {
+						comboIncomeAccountQB.Items.Add(IncomeAccountsQB[i]);
+					}
+					comboIncomeAccountQB.SelectedIndex=0;
 				}
 			}
 			textDate.Text=DepositCur.DateDeposit.ToShortDateString();
@@ -689,6 +720,46 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		private void butSendQB_Click(object sender,EventArgs e) {
+			if(CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex]
+					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,"",false)) 
+			{
+				MsgBox.Show(this,"Deposit was sent to QuickBooks.");
+			}
+		}
+
+		///<summary>Returns true if a deposit was created OR if the user clicked continue anyway on pop up.</summary>
+		private bool CreateDepositQB(string depositAccount,string incomeAccount,double amount,string memo,bool allowContinue) {
+			//We might allow memo to be set by user, but for now just use the payment types.
+			memo="";
+			//Memo will always be blank when sending an old deposit over to QB unless we create a new memo box.
+			for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
+				if(i>0) {
+					memo+=", ";
+				}
+				memo+=listPayType.SelectedIndices[i];
+			}
+			try {
+				Cursor.Current=Cursors.WaitCursor;
+				QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
+					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,memo);
+				Cursor.Current=Cursors.Default;
+			}
+			catch(Exception ex) {
+				Cursor.Current=Cursors.Default;
+				if(allowContinue) {
+					if(MessageBox.Show(ex.Message+"\r\n\r\nA deposit has not been created in QuickBooks, continue anyway?","QuickBooks Deposit Create Failed",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
+						return false;
+					}
+				}
+				else {
+					MessageBox.Show(ex.Message,"QuickBooks Deposit Create Failed");
+					return false;
+				}
+			}
+			return true;
+		}
+
 		private void butPrint_Click(object sender, System.EventArgs e) {
 			if(textDate.errorProvider1.GetError(textDate)!="") {
 				MsgBox.Show(this,"Please fix data entry errors first.");
@@ -760,18 +831,11 @@ namespace OpenDental{
 				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0) {
 					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
-						//Create a deposit within QuickBooks.
-						try {
-							Cursor.Current=Cursors.WaitCursor;
-							QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
-								,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount);
-							Cursor.Current=Cursors.Default;
-						}
-						catch(Exception ex) {
-							Cursor.Current=Cursors.Default;
-							if(MessageBox.Show(ex.Message+"\r\n\r\nA deposit has not been created in QuickBooks, continue anyway?","QuickBooks Deposit Create Failed",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
-								return false;
-							}
+						//Create a deposit in QuickBooks.
+						if(!CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex],IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex]
+							,DepositCur.Amount,"",true)) 
+						{
+							return false;
 						}
 					}
 					else {
