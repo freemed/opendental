@@ -46,10 +46,11 @@ namespace OpenDentBusiness.Crud{
 			HL7Msg hL7Msg;
 			for(int i=0;i<table.Rows.Count;i++) {
 				hL7Msg=new HL7Msg();
-				hL7Msg.HL7MsgNum= PIn.Long  (table.Rows[i]["HL7MsgNum"].ToString());
-				hL7Msg.HL7Status= (HL7MessageStatus)PIn.Int(table.Rows[i]["HL7Status"].ToString());
-				hL7Msg.MsgText  = PIn.String(table.Rows[i]["MsgText"].ToString());
-				hL7Msg.AptNum   = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				hL7Msg.HL7MsgNum = PIn.Long  (table.Rows[i]["HL7MsgNum"].ToString());
+				hL7Msg.HL7Status = (HL7MessageStatus)PIn.Int(table.Rows[i]["HL7Status"].ToString());
+				hL7Msg.MsgText   = PIn.String(table.Rows[i]["MsgText"].ToString());
+				hL7Msg.AptNum    = PIn.Long  (table.Rows[i]["AptNum"].ToString());
+				hL7Msg.DateTStamp= PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				retVal.Add(hL7Msg);
 			}
 			return retVal;
@@ -98,6 +99,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Int   ((int)hL7Msg.HL7Status)+","
 				+DbHelper.ParamChar+"paramMsgText,"
 				+    POut.Long  (hL7Msg.AptNum)+")";
+				//DateTStamp can only be set by MySQL
 			if(hL7Msg.MsgText==null) {
 				hL7Msg.MsgText="";
 			}
@@ -114,9 +116,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one HL7Msg in the database.</summary>
 		internal static void Update(HL7Msg hL7Msg){
 			string command="UPDATE hl7msg SET "
-				+"HL7Status=  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
-				+"MsgText  =  "+DbHelper.ParamChar+"paramMsgText, "
-				+"AptNum   =  "+POut.Long  (hL7Msg.AptNum)+" "
+				+"HL7Status =  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
+				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText, "
+				+"AptNum    =  "+POut.Long  (hL7Msg.AptNum)+" "
+				//DateTStamp can only be set by MySQL
 				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
 			if(hL7Msg.MsgText==null) {
 				hL7Msg.MsgText="";
@@ -140,6 +143,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="AptNum = "+POut.Long(hL7Msg.AptNum)+"";
 			}
+			//DateTStamp can only be set by MySQL
 			if(command==""){
 				return;
 			}

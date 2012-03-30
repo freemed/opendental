@@ -15,6 +15,9 @@ namespace OpenDentBusiness{
 		public string MsgText;
 		///<summary>FK to appointment.AptNum.  Many of the messages contain "Visit ID" which is equivalent to our AptNum.</summary>
 		public long AptNum;
+		///<summary>Used to determine which messages are old so that they can be cleaned up.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		public DateTime DateTStamp;
 		
 		public HL7Msg Copy(){
 			return (HL7Msg)this.MemberwiseClone();

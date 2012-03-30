@@ -9045,6 +9045,40 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'RecallAgeAdult','12')";
 					Db.NonQ(command);
 				}
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE hl7msg ADD INDEX (HL7Status)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX hl7msg_HL7Status ON hl7msg (HL7Status)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7msg ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE hl7msg SET DateTStamp = NOW()";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7msg ADD DateTStamp timestamp";
+					Db.NonQ(command);
+					command="UPDATE hl7msg SET DateTStamp = SYSTIMESTAMP";
+					Db.NonQ(command);
+				}
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE hl7msg ADD INDEX (DateTStamp)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX hl7msg_DateTStamp ON hl7msg (DateTStamp)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }
 
 
 
