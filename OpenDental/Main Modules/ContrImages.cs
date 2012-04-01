@@ -2014,14 +2014,21 @@ namespace OpenDental{
 			textNote.Cursor=Cursors.IBeam;
 		}
 
-		///<summary>Mouse selections were chosen to be implemented in this particular way, just to make the same code work the same way under both Windows and MONO.</summary>
+		///<summary></summary>
 		private void TreeDocuments_MouseDown(object sender,MouseEventArgs e) {
-			TreeNode node=treeDocuments.GetNodeAt(e.Location);
-			if(node==null){
-				NodeIdentifierDown=new ImageNodeId();
+			NodeIdentifierDown=new ImageNodeId();
+			TreeNode nodeOver=treeDocuments.GetNodeAt(e.Location);
+			if(nodeOver==null){
 				return;
 			}
-			NodeIdentifierDown=(ImageNodeId)node.Tag;
+			ImageNodeId nodeIdDown=(ImageNodeId)nodeOver.Tag;
+			if(nodeIdDown.NodeType==ImageNodeType.Doc
+				|| nodeIdDown.NodeType==ImageNodeType.Mount) 
+			{
+				//These are the only types that can be dragged.
+				NodeIdentifierDown=nodeIdDown;
+				TimeMouseMoved=new DateTime(1,1,1);//For time delay. This will be set the moment the mouse actually starts moving
+			}
 			//Always select the node on a mouse-down press for either right or left buttons.
 			//If the left button is pressed, then the document is either being selected or dragged, so
 			//setting the image at the beginning of the drag will either display the image as expected, or
@@ -2029,67 +2036,79 @@ namespace OpenDental{
 			//If the right button is pressed, then the user wants to view the properties of the image they are
 			//clicking on, so displaying the image (in a different thread) will give the user a chance to view
 			//the image corresponding to a delete, info display, etc...
-			SelectTreeNode(node);
-			//Remember that a new selection has begun, so that if the document is being dragged, the appropriate delay time can be used.
-			TimeMouseMoved=new DateTime(1,1,1);
+			SelectTreeNode(nodeOver);
 		}
 
 		private void TreeDocuments_MouseMove(object sender,System.Windows.Forms.MouseEventArgs e) {
-			TreeNode node=treeDocuments.GetNodeAt(e.Location);
-			if(node!=null
-				&& NodeIdentifierDown.NodeType!=ImageNodeType.None 
-				&& !NodeIdentifierDown.Equals((ImageNodeId)node.Tag))//The document is being moved probably.
-			{
-				treeDocuments.Cursor=Cursors.Hand;
-				if(TimeMouseMoved.Year==1) {
-					TimeMouseMoved=DateTime.Now;
-				}
-			}
-			else{
+			if(NodeIdentifierDown.NodeType==ImageNodeType.None) {
 				treeDocuments.Cursor=Cursors.Default;
+				return;
+			}
+			TreeNode nodeOver=treeDocuments.GetNodeAt(e.Location);
+			if(nodeOver==null){//unknown malfunction
+				treeDocuments.Cursor=Cursors.Default;
+				return;
+			}
+			if(NodeIdentifierDown.Equals((ImageNodeId)nodeOver.Tag)){//Over the original node
+				treeDocuments.Cursor=Cursors.Default;
+				return;
+			}
+			//Show drag
+			//Cursor cursorDrag=new System.Windows.Forms.Cursor();
+			treeDocuments.Cursor=Cursors.Hand;//need a better cursor than this
+			if(TimeMouseMoved.Year==1) {
+				TimeMouseMoved=DateTime.Now;
 			}
 		}
 
-		///<summary>Mouse selections were chosen to be implemented in this particular way, just to make the same code work the same way under both Windows and MONO.</summary>
+		///<summary></summary>
 		private void TreeDocuments_MouseUp(object sender,System.Windows.Forms.MouseEventArgs e) {
-			if(NodeIdentifierDown.NodeType==ImageNodeType.None){
+			treeDocuments.Cursor=Cursors.Default;
+			if(NodeIdentifierDown.NodeType==ImageNodeType.None) {
 				return;
 			}
-			TreeNode node=treeDocuments.GetNodeAt(e.Location);
-			TreeNode sourceNode=GetNodeById(NodeIdentifierDown);
-			TimeSpan timeSpanDrag=(TimeSpan)(DateTime.Now-TimeMouseMoved);
-			//Dragging a document?
-			if(e.Button==MouseButtons.Left//Dragging can only happen with the left mouse button.
-				&& GetCurrentFolderName(node)!=GetCurrentFolderName(GetNodeById(NodeIdentifierDown)) //Only necessary if the document in question has changed categories.
-				&& timeSpanDrag.Milliseconds>250) //Only takes effect if it happens over a period of time longer than .25 seconds.
-			{
-				treeDocuments.Cursor=Cursors.Default;
-				//Find the destination folder.
-				long destinationCategory;
-				if(node.Parent!=null) {
-					destinationCategory=DefC.Short[(int)DefCat.ImageCats][node.Parent.Index].DefNum;
-				}
-				else {
-					destinationCategory=DefC.Short[(int)DefCat.ImageCats][node.Index].DefNum;
-				}
-				//Update the object's document category in the database.
-				ImageNodeId nodeId=(ImageNodeId)treeDocuments.SelectedNode.Tag;
-				ImageNodeId nodeIdNew=new ImageNodeId();
-				if(nodeId.NodeType==ImageNodeType.Mount) {
-					Mount mount=Mounts.GetByNum(nodeId.PriKey);
-					mount.DocCategory=destinationCategory;
-					Mounts.Update(mount);
-					nodeIdNew=MakeIdMount(mount.MountNum);
-				}
-				else if(nodeId.NodeType==ImageNodeType.Doc){
-					Document doc=Documents.GetByNum(nodeId.PriKey);
-					doc.DocCategory=destinationCategory;
-					Documents.Update(doc);
-					nodeIdNew=MakeIdDoc(doc.DocNum);
-				}
-				FillDocList(true);
-				NodeIdentifierDown=nodeIdNew;
+			if(e.Button!=MouseButtons.Left){
+				return;//Dragging can only happen with the left mouse button.
 			}
+			TimeSpan timeSpanDrag=(TimeSpan)(DateTime.Now-TimeMouseMoved);
+			//if(timeSpanDrag.Milliseconds < 200) { //js 3/31/2012. Was 250
+			//	return;//Too short of a drag and drop.  Probably human error
+			//}
+			TreeNode nodeOver=treeDocuments.GetNodeAt(e.Location);
+			if(nodeOver==null) {
+				return;
+			}
+			ImageNodeId nodeOverId=(ImageNodeId)nodeOver.Tag;
+			long nodeOverCategoryDefNum=0;
+			if(nodeOverId.NodeType==ImageNodeType.Category){
+				nodeOverCategoryDefNum=DefC.Short[(int)DefCat.ImageCats][nodeOver.Index].DefNum;
+			}
+			else {
+				nodeOverCategoryDefNum=DefC.Short[(int)DefCat.ImageCats][nodeOver.Parent.Index].DefNum;
+			}
+			TreeNode nodeOriginal=GetNodeById(NodeIdentifierDown);
+			long nodeOriginalCategoryDefNum=0;
+			if(NodeIdentifierDown.NodeType==ImageNodeType.Category){
+				nodeOriginalCategoryDefNum=DefC.Short[(int)DefCat.ImageCats][nodeOriginal.Index].DefNum;
+			}
+			else {
+				nodeOriginalCategoryDefNum=DefC.Short[(int)DefCat.ImageCats][nodeOriginal.Parent.Index].DefNum;
+			}
+			if(nodeOverCategoryDefNum==nodeOriginalCategoryDefNum) {
+				return;//category hasn't changed
+			}
+			if(NodeIdentifierDown.NodeType==ImageNodeType.Mount) {
+				Mount mount=Mounts.GetByNum(NodeIdentifierDown.PriKey);
+				mount.DocCategory=nodeOverCategoryDefNum;
+				Mounts.Update(mount);
+			}
+			else if(NodeIdentifierDown.NodeType==ImageNodeType.Doc) {
+				Document doc=Documents.GetByNum(NodeIdentifierDown.PriKey);
+				doc.DocCategory=nodeOverCategoryDefNum;
+				Documents.Update(doc);
+			}
+			FillDocList(true);
+			NodeIdentifierDown=new ImageNodeId();
 		}
 
 		private void TreeDocuments_MouseLeave(object sender,EventArgs e) {
