@@ -105,6 +105,7 @@ namespace OpenDental{
 		private ComboBox comboTimeCardOvertimeFirstDayOfWeek;
 		private Label label16;
 		private CheckBox checkAppointmentTimeIsLocked;
+		private CheckBox checkTextMsgOkStatusTreatAsNo;
 		private bool IsLoading;
 
 		///<summary></summary>
@@ -219,6 +220,7 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
+			this.checkTextMsgOkStatusTreatAsNo = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -918,6 +920,7 @@ namespace OpenDental{
 			// tabFamily
 			// 
 			this.tabFamily.BackColor = System.Drawing.SystemColors.Window;
+			this.tabFamily.Controls.Add(this.checkTextMsgOkStatusTreatAsNo);
 			this.tabFamily.Controls.Add(this.label15);
 			this.tabFamily.Controls.Add(this.comboCobRule);
 			this.tabFamily.Controls.Add(this.checkInsDefaultShowUCRonClaims);
@@ -1048,6 +1051,7 @@ namespace OpenDental{
 			// 
 			// tabTreatPlan
 			// 
+			this.tabTreatPlan.BackColor = System.Drawing.SystemColors.Window;
 			this.tabTreatPlan.Controls.Add(this.label1);
 			this.tabTreatPlan.Controls.Add(this.textTreatNote);
 			this.tabTreatPlan.Controls.Add(this.checkTreatPlanShowCompleted);
@@ -1057,7 +1061,6 @@ namespace OpenDental{
 			this.tabTreatPlan.Size = new System.Drawing.Size(466, 479);
 			this.tabTreatPlan.TabIndex = 3;
 			this.tabTreatPlan.Text = "Treat\' Plan";
-			this.tabTreatPlan.UseVisualStyleBackColor = true;
 			// 
 			// tabChart
 			// 
@@ -1220,16 +1223,17 @@ namespace OpenDental{
 			// 
 			// tabImages
 			// 
+			this.tabImages.BackColor = System.Drawing.SystemColors.Window;
 			this.tabImages.Controls.Add(this.checkImagesModuleTreeIsCollapsed);
 			this.tabImages.Location = new System.Drawing.Point(4, 22);
 			this.tabImages.Name = "tabImages";
 			this.tabImages.Size = new System.Drawing.Size(466, 479);
 			this.tabImages.TabIndex = 5;
 			this.tabImages.Text = "Images";
-			this.tabImages.UseVisualStyleBackColor = true;
 			// 
 			// tabManage
 			// 
+			this.tabManage.BackColor = System.Drawing.SystemColors.Window;
 			this.tabManage.Controls.Add(this.comboTimeCardOvertimeFirstDayOfWeek);
 			this.tabManage.Controls.Add(this.label16);
 			this.tabManage.Controls.Add(this.checkRxSendNewToQueue);
@@ -1238,7 +1242,6 @@ namespace OpenDental{
 			this.tabManage.Size = new System.Drawing.Size(466, 479);
 			this.tabManage.TabIndex = 6;
 			this.tabManage.Text = "Manage";
-			this.tabManage.UseVisualStyleBackColor = true;
 			// 
 			// comboTimeCardOvertimeFirstDayOfWeek
 			// 
@@ -1290,6 +1293,17 @@ namespace OpenDental{
 			this.butOK.TabIndex = 7;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// checkTextMsgOkStatusTreatAsNo
+			// 
+			this.checkTextMsgOkStatusTreatAsNo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTextMsgOkStatusTreatAsNo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTextMsgOkStatusTreatAsNo.Location = new System.Drawing.Point(27, 135);
+			this.checkTextMsgOkStatusTreatAsNo.Name = "checkTextMsgOkStatusTreatAsNo";
+			this.checkTextMsgOkStatusTreatAsNo.Size = new System.Drawing.Size(413, 17);
+			this.checkTextMsgOkStatusTreatAsNo.TabIndex = 203;
+			this.checkTextMsgOkStatusTreatAsNo.Text = "Text Msg OK status, treat ?? as No instead of Yes";
+			this.checkTextMsgOkStatusTreatAsNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormModuleSetup
 			// 
@@ -1378,7 +1392,6 @@ namespace OpenDental{
 			comboSearchBehavior.SelectedIndex=PrefC.GetInt(PrefName.AppointmentSearchBehavior);
 			checkAppointmentTimeIsLocked.Checked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			//Family module-----------------------------------------------------------------------
-			//checkMedicalEclaimsEnabled.Checked=PrefC.GetBool(PrefName.MedicalEclaimsEnabled);
 			checkInsurancePlansShared.Checked=PrefC.GetBool(PrefName.InsurancePlansShared);
 			checkPPOpercentage.Checked=PrefC.GetBool(PrefName.InsDefaultPPOpercent);
 			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);
@@ -1388,6 +1401,7 @@ namespace OpenDental{
 				comboCobRule.Items.Add(Lan.g("enumEnumCobRule",Enum.GetNames(typeof(EnumCobRule))[i]));
 			}
 			comboCobRule.SelectedIndex=PrefC.GetInt(PrefName.InsDefaultCobRule);
+			checkTextMsgOkStatusTreatAsNo.Checked=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
 			//Account module-----------------------------------------------------------------------
 			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
 			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
@@ -1591,6 +1605,7 @@ namespace OpenDental{
 				| Prefs.UpdateInt(PrefName.InsDefaultCobRule,comboCobRule.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,checkMedicalFeeUsedForNewProcs.Checked)
 				| Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex)
+				| Prefs.UpdateBool(PrefName.TextMsgOkStatusTreatAsNo,checkTextMsgOkStatusTreatAsNo.Checked)
 				)
 			{
 				changed=true;
