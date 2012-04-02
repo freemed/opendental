@@ -1119,6 +1119,8 @@ namespace OpenDental {
 		}
 
 		private bool VerifyDesign(){
+			//Keep a temporary list of every medical check box so it saves time checking for duplicates.
+			List<SheetFieldDef> medChkBoxList=new List<SheetFieldDef>();
 			//Verify radio button groups.
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				SheetFieldDef field=SheetDefCur.SheetFieldDefs[i];
@@ -1139,6 +1141,24 @@ namespace OpenDental {
 							return false;
 						}
 					}
+				}
+				if(field.FieldType==SheetFieldType.CheckBox
+					&& (field.FieldName.StartsWith("allergy:"))
+						|| field.FieldName.StartsWith("medication:")
+						|| field.FieldName.StartsWith("problem:")) 
+				{
+					//Check for duplicate medical check boxes.
+					for(int j=0;j<medChkBoxList.Count;j++) {
+						if(medChkBoxList[j].FieldName==field.FieldName 
+						&& medChkBoxList[j].RadioButtonValue==field.RadioButtonValue) 
+						{
+							MessageBox.Show(Lan.g(this,"Duplicate check box found")+": '"+field.FieldName+" "+field.RadioButtonValue+"'. "
+								+Lan.g(this,"Only one of each type is allowed."));
+							return false;
+						}
+					}
+					//Not a duplicate so add it to the med chk box list.
+					medChkBoxList.Add(field);
 				}
 			}
 			return true;

@@ -1439,7 +1439,7 @@ namespace OpenDental{
 					List<Allergy> allergies=Allergies.GetAll(pat.PatNum,false);
 					for(int i=0;i<allergies.Count;i++) {
 						if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue.StartsWith("Y:")) 
+							&& field.RadioButtonValue=="Y") 
 						{
 							field.FieldValue="X";
 							break;
@@ -1450,7 +1450,7 @@ namespace OpenDental{
 					List<Medication> meds=Medications.GetMedicationsByPat(pat.PatNum);
 					for(int i=0;i<meds.Count;i++) {
 						if(Medications.GetDescription(meds[i].MedicationNum)==field.FieldName.Remove(0,11)
-							&& field.RadioButtonValue.StartsWith("Y:")) 
+							&& field.RadioButtonValue=="Y") 
 						{
 							field.FieldValue="X";
 							break;
@@ -1461,7 +1461,7 @@ namespace OpenDental{
 					List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
 					for(int i=0;i<diseases.Count;i++) {
 						if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue.StartsWith("Y:")) 
+							&& field.RadioButtonValue=="Y") 
 						{
 							field.FieldValue="X";
 							break;

@@ -49,7 +49,7 @@ namespace OpenDental {
 				radioYes.Checked=true;
 				if(SheetFieldDefCur.FieldName.StartsWith("allergy:")) {
 					FillListMedical(MedicalListType.allergy);
-					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")){
+					if(SheetFieldDefCur.RadioButtonValue=="N"){
 						radioNo.Checked=true;
 						radioYes.Checked=false;
 					}
@@ -57,7 +57,7 @@ namespace OpenDental {
 				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
 					FillListMedical(MedicalListType.medication);
-					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")) {
+					if(SheetFieldDefCur.RadioButtonValue=="N") {
 						radioNo.Checked=true;
 						radioYes.Checked=false;
 					}
@@ -65,7 +65,7 @@ namespace OpenDental {
 				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
 					FillListMedical(MedicalListType.problem);
-					if(SheetFieldDefCur.RadioButtonValue.StartsWith("N:")) {
+					if(SheetFieldDefCur.RadioButtonValue=="N") {
 						radioNo.Checked=true;
 						radioYes.Checked=false;
 					}
@@ -150,28 +150,21 @@ namespace OpenDental {
 				return;
 			}
 			if(isMedHistSheet) {
+				checkRequired.Visible=true;
+				radioYes.Visible=true;
+				radioNo.Visible=true;
+				labelMedical.Visible=true;
+				listMedical.Visible=true;
 				switch(AvailFields[listFields.SelectedIndex].FieldName) {
 					case "allergy":
-						radioYes.Visible=true;
-						radioNo.Visible=true;
-						labelMedical.Visible=true;
-						listMedical.Visible=true;
 						labelMedical.Text="Allergies";
 						FillListMedical(MedicalListType.allergy);
 						break;
 					case "medication":
-						radioYes.Visible=true;
-						radioNo.Visible=true;
-						labelMedical.Visible=true;
-						listMedical.Visible=true;
 						labelMedical.Text="Medications";
 						FillListMedical(MedicalListType.medication);
 						break;
 					case "problem":
-						radioYes.Visible=true;
-						radioNo.Visible=true;
-						labelMedical.Visible=true;
-						listMedical.Visible=true;
 						labelMedical.Text="Problems";
 						FillListMedical(MedicalListType.problem);
 						break;
@@ -270,27 +263,13 @@ namespace OpenDental {
 							MsgBox.Show(this,"Please select a problem first.");
 							return;
 					}
-				}
-				//Loop through to make sure they don't already have this exact check box.
-				for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
-					if(!IsNew && SheetDefCur.SheetFieldDefs[i].SheetFieldDefNum==SheetFieldDefCur.SheetFieldDefNum) {
-						continue;
-					}
-					if(radioNo.Checked && SheetDefCur.SheetFieldDefs[i].RadioButtonValue=="N:"+listMedical.SelectedItem) {
-						MsgBox.Show(this,"This exact field already exists on the current sheet.");
-						return;
-					}
-					if(radioYes.Checked && SheetDefCur.SheetFieldDefs[i].RadioButtonValue=="Y:"+listMedical.SelectedItem) {
-						MsgBox.Show(this,"This exact field already exists on the current sheet.");
-						return;
-					}
-				}				
+				}			
 				fieldName+=":"+listMedical.SelectedItem;//Medical check boxes will always have a radio button value.
 				if(radioNo.Checked) {
-					radioButtonValue="N:"+listMedical.SelectedItem;
+					radioButtonValue="N";
 				}
 				else {
-					radioButtonValue="Y:"+listMedical.SelectedItem;
+					radioButtonValue="Y";
 				}
 			}
 			#endregion
