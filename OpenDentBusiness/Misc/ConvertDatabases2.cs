@@ -9055,7 +9055,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ(command);
 					}
 				}
-				catch(Exception ex) { }
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE hl7msg ADD DateTStamp timestamp";
 					Db.NonQ(command);
@@ -9078,7 +9078,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ(command);
 					}
 				}
-				catch(Exception ex) { }
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('TextMsgOkStatusTreatAsNo','0')";
 					Db.NonQ(command);

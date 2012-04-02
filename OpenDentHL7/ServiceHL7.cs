@@ -174,9 +174,9 @@ namespace OpenDentHL7 {
 
 		private void TimerCallbackSendFunction(Object stateInfo) {
 			//does not happen for standalone
-			List<HL7Msg> list=HL7Msgs.GetAllPending();
+			List<HL7Msg> list=HL7Msgs.GetOnePending();
 			string filename;
-			for(int i=0;i<list.Count;i++) {
+			for(int i=0;i<list.Count;i++) {//Right now, there will only be 0 or 1 item in the list.
 				if(list[i].AptNum==0){
 					filename=ODFileUtils.CreateRandomFile(hl7FolderIn,".txt");
 				}
@@ -187,6 +187,7 @@ namespace OpenDentHL7 {
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.Update(list[i]);//set the status to sent.
+				//put delete here//This is inside the loop so that it happens less frequently.
 			}
 		}
 	}

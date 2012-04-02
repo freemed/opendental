@@ -9,12 +9,12 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class HL7Msgs{
 
-		public static List<HL7Msg> GetAllPending(){
+		public static List<HL7Msg> GetOnePending(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7Msg>>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT * FROM hl7msg WHERE HL7Status="+POut.Long((int)HL7MessageStatus.OutPending)+" "+DbHelper.LimitAnd(1);
-			return Crud.HL7MsgCrud.SelectMany(command);
+			return Crud.HL7MsgCrud.SelectMany(command);//Just 0 or 1 item in list for now.
 		}
 
 		///<summary></summary>
