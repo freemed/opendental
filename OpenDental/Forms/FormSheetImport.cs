@@ -881,6 +881,7 @@ namespace OpenDental {
 					if(i<1) {
 						allergies=Allergies.GetAll(pat.PatNum,true);
 					}
+					bool hasAllergy=false;
 					row=new SheetImportRow();
 					row.FieldName=allergyList[i].FieldName.Remove(0,8);
 					row.OldValDisplay="";
@@ -892,6 +893,7 @@ namespace OpenDental {
 								row.OldValDisplay="X";
 							}
 							row.OldValObj=allergies[j];
+							hasAllergy=true;
 							break;
 						}
 					}
@@ -911,7 +913,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasAllergy) {//Import if allergy doesn't exist yet.
+								row.DoImport=true;
+							}
 						}
 					}
 					else {//Current box is checked.  
@@ -920,7 +924,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasAllergy) {
+								row.DoImport=true;
+							}
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -946,6 +952,7 @@ namespace OpenDental {
 					if(i<1) {
 						meds=Medications.GetMedicationsByPat(pat.PatNum);
 					}
+					bool hasMed=false;
 					row=new SheetImportRow();
 					row.FieldName=medicationList[i].FieldName.Remove(0,11);
 					//Figure out the current status of this medication
@@ -953,8 +960,15 @@ namespace OpenDental {
 					row.OldValObj=null;
 					for(int j=0;j<meds.Count;j++) {
 						if(Medications.GetDescription(meds[j].MedicationNum)==medicationList[i].FieldName.Remove(0,11)) {
-							row.OldValDisplay="X";
+							List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,pat.PatNum);
+							for(int k=0;k<medList.Count;k++) {
+								//Check if medication is active.
+								if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
+									row.OldValDisplay="X";
+								}
+							}
 							row.OldValObj=meds[j];
+							hasMed=true;
 							break;
 						}
 					}
@@ -974,7 +988,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasMed) {//Import only if the med doesn't exist.
+								row.DoImport=true;
+							}
 						}
 					}
 					else {//Current box is checked.  
@@ -983,7 +999,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasMed) {
+								row.DoImport=true;
+							}
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1009,6 +1027,7 @@ namespace OpenDental {
 					if(i<1) {
 						diseases=Diseases.Refresh(pat.PatNum,false);
 					}
+					bool hasProblem=false;
 					row=new SheetImportRow();
 					row.FieldName=problemList[i].FieldName.Remove(0,8);
 					//Figure out the current status of this allergy
@@ -1016,10 +1035,11 @@ namespace OpenDental {
 					row.OldValObj=null;
 					for(int j=0;j<diseases.Count;j++) {
 						if(DiseaseDefs.GetName(diseases[j].DiseaseDefNum)==problemList[i].FieldName.Remove(0,8)) {
-							if(diseases[j].DateStop.Year < 1880 || diseases[j].DateStop > DateTime.Now) {
+							if(diseases[j].ProbStatus==ProblemStatus.Active) {
 								row.OldValDisplay="X";
 							}
 							row.OldValObj=diseases[j];
+							hasProblem=true;
 							break;
 						}
 					}
@@ -1039,7 +1059,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasProblem) {
+								row.DoImport=true;
+							}
 						}
 					}
 					else {//Current box is checked.  
@@ -1048,7 +1070,9 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							row.DoImport=true;
+							if(!hasProblem) {//Only import if problem doesn't exist.
+								row.DoImport=true;
+							}
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1705,6 +1729,9 @@ namespace OpenDental {
 								MedicationPat medPat=new MedicationPat();
 								medPat.PatNum=pat.PatNum;
 								medPat.MedicationNum=medList[j].MedicationNum;
+								if(!hasValue) {//Insert medication as inactive.
+									medPat.DateStop=DateTime.Now;
+								}
 								MedicationPats.Insert(medPat);
 								break;
 							}
