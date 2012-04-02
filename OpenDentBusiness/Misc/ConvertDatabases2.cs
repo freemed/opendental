@@ -9010,24 +9010,24 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			if(FromVersion<new Version("12.3.0.0")) {
 				string command;
 				//Removing Appointment Complete-Time bar, Patient Note Text and Completed Pt. Note Text.
-				command="DELETE FROM definition WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Appointment Complete-Time bar'";
+				command="DELETE FROM definition WHERE Category=17 AND ItemName='Appointment Complete-Time bar'";//Cat 17=AppointmentColors
 				Db.NonQ(command);
-				command="DELETE FROM definition WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note Text'";
+				command="DELETE FROM definition WHERE Category=17 AND ItemName='Patient Note Text'";
 				Db.NonQ(command);
-				command="DELETE FROM definition WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Completed Pt. Note Text'";
+				command="DELETE FROM definition WHERE Category=17 AND ItemName='Completed Pt. Note Text'";
+				Db.NonQ(command);
+				command="DELETE FROM definition WHERE Category=17 AND ItemName='Patient Note - Pt Name'";
 				Db.NonQ(command);
 				//Fix the ItemOrder of the AppointmentColors category
-				command="UPDATE definition SET ItemOrder=2 WHERE Category=17 AND ItemName='Appointment Complete-Background'";//cat 17=AppointmentColors
+				command="UPDATE definition SET ItemOrder=2 WHERE Category=17 AND ItemName='Appointment Complete-Background'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=3 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Holiday'";
+				command="UPDATE definition SET ItemOrder=3 WHERE Category=17 AND ItemName='Holiday'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=4 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Blockout Text'";
+				command="UPDATE definition SET ItemOrder=4 WHERE Category=17 AND ItemName='Blockout Text'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=5 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note - Pt Name'";
+				command="UPDATE definition SET ItemOrder=5 WHERE Category=17 AND ItemName='Patient Note Background'";
 				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=6 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Patient Note Background'";
-				Db.NonQ(command);
-				command="UPDATE definition SET ItemOrder=7 WHERE Category="+POut.Int((int)DefCat.AppointmentColors)+" AND ItemName='Completed Pt. Note Background'";
+				command="UPDATE definition SET ItemOrder=6 WHERE Category=17 AND ItemName='Completed Pt. Note Background'";
 				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('AppointmentTimeIsLocked','0')";

@@ -37,10 +37,10 @@ namespace OpenDentBusiness.UI {
 				backColor=DefC.Long[(int)DefCat.AppointmentColors][2].ItemColor;
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNote) {
-				backColor=DefC.Long[(int)DefCat.AppointmentColors][6].ItemColor;
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][5].ItemColor;
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNoteCompleted) {
-				backColor=DefC.Long[(int)DefCat.AppointmentColors][7].ItemColor;
+				backColor=DefC.Long[(int)DefCat.AppointmentColors][6].ItemColor;
 			}
 			else if(PIn.Int(dataRoww["ColorOverride"].ToString()) != 0) {
 				backColor=Color.FromArgb(PIn.Int(dataRoww["ColorOverride"].ToString()));
@@ -408,7 +408,7 @@ namespace OpenDentBusiness.UI {
 			}
 			SolidBrush brush=new SolidBrush(apptRows[elementI].ElementColor);
 			SolidBrush brushWhite=new SolidBrush(Color.White);
-			SolidBrush noteTitlebrush = new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][5].ItemColor);
+			//SolidBrush noteTitlebrush = new SolidBrush(DefC.Long[(int)DefCat.AppointmentColors][8].ItemColor);
 			StringFormat format=new StringFormat();
 			format.Alignment=StringAlignment.Near;
 			int charactersFitted;//not used, but required as 'out' param for measureString.
@@ -431,7 +431,7 @@ namespace OpenDentBusiness.UI {
 						confirmBrush.Dispose();
 					}
 					g.DrawImage(bitmap,drawLoc.X,drawLoc.Y);
-					DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
+					DisposeObjects(brush,brushWhite,format,bitmap);
 					return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 				}
 				else {
@@ -449,7 +449,7 @@ namespace OpenDentBusiness.UI {
 					g.MeasureString(text,baseFont,noteSize,format,out charactersFitted,out linesFilled);
 					rect=new RectangleF(drawLoc,noteSize);
 					g.DrawString(text,baseFont,brush,rect,format);
-					DisposeObjects(brush,brushWhite,noteTitlebrush,format);
+					DisposeObjects(brush,brushWhite,format);
 					return new Point(drawLoc.X,drawLoc.Y+linesFilled*ApptDrawing.LineH);
 				}
 			}
@@ -472,7 +472,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
+						DisposeObjects(brush,brushWhite,format,bitmap);
 						return new Point(drawLoc.X,drawLoc.Y+(int)noteSize.Height);
 					}
 					else {
@@ -496,7 +496,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
+						DisposeObjects(brush,brushWhite,format);
 						return new Point(drawLoc.X,drawLoc.Y+ApptDrawing.LineH);//move down a certain number of lines for next element.
 					}
 				}
@@ -516,7 +516,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
+						DisposeObjects(brush,brushWhite,format,bitmap);
 						return new Point(drawLoc.X-(int)noteSize.Width-2,drawLoc.Y);
 					}
 					else {
@@ -539,7 +539,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
+						DisposeObjects(brush,brushWhite,format);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);//Move to left.  Might also have to subtract a little from x to space out elements.
 					}
 				}
@@ -563,7 +563,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
+						DisposeObjects(brush,brushWhite,format,bitmap);
 						return new Point(drawLoc.X,drawLoc.Y-(int)noteSize.Height);
 					}
 					else {
@@ -587,7 +587,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
+						DisposeObjects(brush,brushWhite,format);
 						return new Point(drawLoc.X,drawLoc.Y-ApptDrawing.LineH);//move up a certain number of lines for next element.
 					}
 				}
@@ -607,7 +607,7 @@ namespace OpenDentBusiness.UI {
 							confirmBrush.Dispose();
 						}
 						g.DrawImage(bitmap,drawLocThis.X,drawLocThis.Y);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format,bitmap);
+						DisposeObjects(brush,brushWhite,format,bitmap);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);
 					}
 					else {
@@ -630,7 +630,7 @@ namespace OpenDentBusiness.UI {
 							g.DrawString(text,baseFont,brush,rect,format);
 						}
 						g.DrawRectangle(Pens.Black,rectBack.X,rectBack.Y,rectBack.Width,rectBack.Height);
-						DisposeObjects(brush,brushWhite,noteTitlebrush,format);
+						DisposeObjects(brush,brushWhite,format);
 						return new Point(drawLoc.X-(int)noteSize.Width-1,drawLoc.Y);//Move to left.  Subtract a little from x to space out elements.
 					}
 				}
