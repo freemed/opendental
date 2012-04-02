@@ -53,7 +53,9 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="DELETE FROM hl7msg WHERE HL7Status IN (1,3) AND DateTStamp < ADDDATE(CURDATE(),INTERVAL -2 WEEK)";
+			string command="DELETE FROM hl7msg "
+				+"WHERE HL7Status IN ("+POut.Long((int)HL7MessageStatus.OutSent)+","+POut.Long((int)HL7MessageStatus.InProcessed)+") "
+				+"AND DateTStamp < ADDDATE(CURDATE(),INTERVAL -2 WEEK)";
 			Db.NonQ(command);
 		}
 
