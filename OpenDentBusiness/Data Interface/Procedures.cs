@@ -471,8 +471,9 @@ namespace OpenDentBusiness {
 			command="SELECT COUNT(*) FROM procedurelog,procedurecode "
 				+"WHERE procedurelog.CodeNum=procedurecode.CodeNum "
 				+"AND procedurelog.ToothNum='"+toothNum+"' "
-				+"AND procedurelog.PatNum="+patNum.ToString()
-				+" AND procedurecode.PaintType=1";//extraction
+				+"AND procedurelog.PatNum="+patNum.ToString()+" "
+				+"AND procedurelog.ProcStatus <> "+POut.Int((int)ProcStat.D)+" "//Not deleted procedures
+				+"AND procedurecode.PaintType=1";//extraction
 			table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()!="0") {
 				return true;
