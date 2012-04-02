@@ -55,7 +55,7 @@ namespace OpenDental.Eclaims {
 					x271=new X271(x12response);
 				}
 			}
-			else {//neither a 997 nor a 271
+			else {//not a 997, 999 or 271
 				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
 				Etranss.Delete(etrans.EtransNum);
 				throw new ApplicationException(Lan.g("FormInsPlan","Error:")+"\r\n"+x12response);

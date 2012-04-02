@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 				if(Segments[i].SegmentID=="IK3") {
 					retVal+="Segment "+Segments[i].Get(1)+": "+GetSegmentSyntaxError(Segments[i].Get(4));
 				}
-				if(Segments[i].SegmentID=="AK4") {
+				if(Segments[i].SegmentID=="IK4") {
 					retVal+="Element "+Segments[i].Get(1)+": "+GetElementSyntaxError(Segments[i].Get(3));
 				}
 				//retVal+=GetRejectReason(Segments[i].Get(3))+", "

@@ -32,15 +32,15 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		///<summary>Maxes out at 999, then loops back to 1.  This is not a good key, but is a restriction of (canadian?).  So dates must also be used to isolate the correct BatchNumber key.  Specific to one clearinghouse.  Only used with e-claims.  Claim will have BatchNumber, and 997 will have matching BatchNumber. (In X12 lingo, it's a functional group number)</summary>
 		public int BatchNumber;
-		///<summary>A=Accepted, R=Rejected, blank if not able to parse.  More options will be added later.  The incoming 997 sets this flag automatically.  To find the 997, look for a matching BatchNumber with a similar date, since both the claims and the 997 will both have the same batch number.  The 997 does not have this flag set on itself.</summary>
+		///<summary>A=Accepted, R=Rejected, blank if not able to parse.  More options will be added later.  The incoming 997 or 999 sets this flag automatically.  To find the 997 or 999, look for a matching BatchNumber with a similar date, since both the claims and the 997 or 999 will both have the same batch number.  The 997 or 999 does not have this flag set on itself.</summary>
 		public string AckCode;
-		///<summary>For sent e-claims, within each batch (functional group), each carrier gets it's own transaction set.  Since 997s acknowledge transaction sets rather than batches, we need to keep track of which transaction set each claim is part of as well as which batch it's part of.  This field can't be set as part of 997, because one 997 refers to multiple trans sets.</summary>
+		///<summary>For sent e-claims, within each batch (functional group), each carrier gets it's own transaction set.  Since 997s and 999s acknowledge transaction sets rather than batches, we need to keep track of which transaction set each claim is part of as well as which batch it's part of.  This field can't be set as part of 997 or 999, because one 997 or 999 refers to multiple trans sets.</summary>
 		public int TransSetNum;
 		///<summary>Typical uses include indicating that the report was printed, the claim was resent, reason for rejection, etc.  For a 270, this contains the automatically generated short summary of the response.  The response could include the reason for failure, or it could be a short summary of the 271.</summary>
 		public string Note;
 		///<summary>FK to etransmessagetext.EtransMessageTextNum.  Can be 0 if there is no message text.  Multiple Etrans objects can refer to the same message text, very common in a batch.</summary>
 		public long EtransMessageTextNum;
-		///<summary>FK to etrans.EtransNum.  Only has a non-zero value if there exists an ack etrans, like a 997, 271, or ackError.  There can be only one ack for any given etrans, but one ack can apply to multiple etran's that were sent as one batch.</summary>
+		///<summary>FK to etrans.EtransNum.  Only has a non-zero value if there exists an ack etrans, like a 997, 999, 271, or ackError.  There can be only one ack for any given etrans, but one ack can apply to multiple etran's that were sent as one batch.</summary>
 		public long AckEtransNum;
 		///<summary>FK to insplan.PlanNum.  Used if EtransType.BenefitInquiry270 and BenefitResponse271 and Eligibility_CA.</summary>
 		public long PlanNum;

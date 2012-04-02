@@ -461,7 +461,7 @@ namespace OpenDentBusiness{
 			return GetEtrans(etrans.EtransNum);//Since the DateTimeTrans is set upon insert, we need to read the record again in order to get the date.
 		}
 
-		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, or StatusNotify_277.</summary>
+		///<summary>Etrans type will be figured out by this class.  Either TextReport, Acknowledge_997, Acknowledge_999, or StatusNotify_277.</summary>
 		public static void ProcessIncomingReport(DateTime dateTimeTrans,long clearinghouseNum,string messageText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dateTimeTrans,clearinghouseNum,messageText);
