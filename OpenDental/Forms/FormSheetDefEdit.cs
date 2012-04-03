@@ -844,7 +844,7 @@ namespace OpenDental {
 					Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
 					SheetFieldDef tempDef = SheetDefCur.SheetFieldDefs[i];//to speed this process up instead of referencing the array every time.
-					if(tempDef.FieldType==SheetFieldType.Line || tempDef.FieldType==SheetFieldType.Image) {
+					if(tempDef.FieldType==SheetFieldType.Line || tempDef.FieldType==SheetFieldType.Image || tempDef.FieldType==SheetFieldType.Rectangle) {
 						continue;//lines and images are currently not selectable by drag and drop. will require lots of calculations, completely possible, but complex.
 					}
 					if(tempDef.BoundsF.IntersectsWith(selectionBounds)){
