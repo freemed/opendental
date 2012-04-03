@@ -844,8 +844,15 @@ namespace OpenDental {
 					Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
 					SheetFieldDef tempDef = SheetDefCur.SheetFieldDefs[i];//to speed this process up instead of referencing the array every time.
-					if(tempDef.FieldType==SheetFieldType.Line || tempDef.FieldType==SheetFieldType.Image || tempDef.FieldType==SheetFieldType.Rectangle) {
+					if(tempDef.FieldType==SheetFieldType.Line || tempDef.FieldType==SheetFieldType.Image) {
 						continue;//lines and images are currently not selectable by drag and drop. will require lots of calculations, completely possible, but complex.
+					}
+					//If the selection is contained within the "hollow" portion of the rectangle, it shouldn't be selected.
+					if(tempDef.FieldType==SheetFieldType.Rectangle) {
+						Rectangle tempDefBounds=new Rectangle(tempDef.Bounds.X+4,tempDef.Bounds.Y+4,tempDef.Bounds.Width-8,tempDef.Bounds.Height-8);
+						if(tempDefBounds.Contains(selectionBounds)) {
+							continue;
+						}
 					}
 					if(tempDef.BoundsF.IntersectsWith(selectionBounds)){
 						listFields.SetSelected(i,true);//Add to selected indicies
