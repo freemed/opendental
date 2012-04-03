@@ -193,9 +193,10 @@ namespace OpenDentBusiness {
 					row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
 					row["LabCaseNum"]=0;
 					row["length"]="";
+					row["signature"]="";
+					row["user"]="";
 					if(componentsToLoad.ShowProcNotes) {
 						#region note-----------------------------------------------------------------------------------------------------------
-						row["user"]="";
 						row["note"]="";
 						dateT=PIn.DateT(rawProcs.Rows[i]["DateScheduleBy"].ToString());
 						if(dateT.Year<1880) {
@@ -238,13 +239,12 @@ namespace OpenDentBusiness {
 							row["orionIsOnCall"]="";
 						}
 						row["orionStatus2"]=((OrionStatus)PIn.Int(rawProcs.Rows[i]["Status2"].ToString())).ToString();
-						row["signature"]="";
 						if(isAuditMode) {//we will include all notes for each proc.  We will concat and make readable.
 							for(int n=0;n<rawNotes.Rows.Count;n++) {//loop through each note
 								if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 									continue;
 								}
-								if(row["Note"].ToString()!="") {//if there is an existing note
+								if(row["note"].ToString()!="") {//if there is an existing note
 									row["note"]+="\r\n------------------------------------------------------\r\n";//start a new line
 								}
 								row["note"]+=PIn.DateT(rawNotes.Rows[n]["EntryDateTime"].ToString()).ToString();
@@ -255,23 +255,32 @@ namespace OpenDentBusiness {
 								row["note"]+="\r\n"+rawNotes.Rows[n]["Note"].ToString();
 							}
 						}
-						else {//we just want the most recent note
+						else {//Not audit mode.  We just want the most recent note
 							for(int n=rawNotes.Rows.Count-1;n>=0;n--) {//loop through each note, backwards.
 								if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
 									continue;
 								}
-								row["user"]		 =Userods.GetName(PIn.Long(rawNotes.Rows[n]["UserNum"].ToString()));
-								row["note"]		 =rawNotes.Rows[n]["Note"].ToString();
-								if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
-									row["signature"]=Lans.g("ChartModule","Signed");
-								}
-								else {
-									row["signature"]="";
-								}
+								row["note"]=rawNotes.Rows[n]["Note"].ToString();
 								break;//out of note loop.
 							}
 						}
 						#endregion Note
+					}
+					//This section is closely related to notes, but must be filled for all procedures regardless of whether showing the actual note.
+					if(!isAuditMode) {//Audit mode is handled above by putting this info into the note section itself.
+						for(int n=rawNotes.Rows.Count-1;n>=0;n--) {//Loop through each note; backwards to get most recent note.
+							if(rawProcs.Rows[i]["ProcNum"].ToString() != rawNotes.Rows[n]["ProcNum"].ToString()) {
+								continue;
+							}
+							row["user"]=Userods.GetName(PIn.Long(rawNotes.Rows[n]["UserNum"].ToString()));
+							if(rawNotes.Rows[n]["SigPresent"].ToString()=="1") {
+								row["signature"]=Lans.g("ChartModule","Signed");
+							}
+							else {
+								row["signature"]="";
+							}
+							break;
+						}
 					}
 					row["PatNum"]="";
 					row["Priority"]=rawProcs.Rows[i]["Priority"].ToString();
