@@ -134,9 +134,15 @@ namespace OpenDental {
 					listFields.Items.Add(Lan.g(this,"Signature Box"));
 				}
 				else if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.CheckBox){
-					txt=//Lan.g(this,"Check:")+
-						SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": "+
-						SheetDefCur.SheetFieldDefs[i].FieldName;
+					txt=SheetDefCur.SheetFieldDefs[i].TabOrder.ToString()+": ";
+					if(SheetDefCur.SheetFieldDefs[i].FieldName.StartsWith("allergy:")
+						|| SheetDefCur.SheetFieldDefs[i].FieldName.StartsWith("problem:")) 
+					{
+						txt+=SheetDefCur.SheetFieldDefs[i].FieldName.Remove(0,8);
+					}
+					else {
+						txt+=SheetDefCur.SheetFieldDefs[i].FieldName;
+					}
 					if(SheetDefCur.SheetFieldDefs[i].RadioButtonValue!="") {
 						txt+=" - "+SheetDefCur.SheetFieldDefs[i].RadioButtonValue;
 					}
@@ -1158,7 +1164,7 @@ namespace OpenDental {
 				}
 				if(field.FieldType==SheetFieldType.CheckBox
 					&& (field.FieldName.StartsWith("allergy:"))
-						|| field.FieldName.StartsWith("medication:")
+						//|| field.FieldName.StartsWith("medication:")
 						|| field.FieldName.StartsWith("problem:"))
 				{
 					//Check for duplicate medical check boxes.

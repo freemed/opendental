@@ -18,7 +18,7 @@ namespace OpenDental {
 		public bool IsReadOnly;
 		private List<string> radioButtonValues;
 		private List<AllergyDef> allergyList;
-		private List<Medication> medicationList;
+		//private List<Medication> medicationList;
 		///<summary>True if the sheet type is MedicalHistory.</summary>
 		private bool isMedHistSheet;
 		public bool IsNew;
@@ -55,14 +55,14 @@ namespace OpenDental {
 					}
 					SetListMedicalSelectedIndex(MedicalListType.allergy,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
-				else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
-					FillListMedical(MedicalListType.medication);
-					if(SheetFieldDefCur.RadioButtonValue=="N") {
-						radioNo.Checked=true;
-						radioYes.Checked=false;
-					}
-					SetListMedicalSelectedIndex(MedicalListType.medication,SheetFieldDefCur.FieldName.Remove(0,11));
-				}
+				//else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
+				//  FillListMedical(MedicalListType.medication);
+				//  if(SheetFieldDefCur.RadioButtonValue=="N") {
+				//    radioNo.Checked=true;
+				//    radioYes.Checked=false;
+				//  }
+				//  SetListMedicalSelectedIndex(MedicalListType.medication,SheetFieldDefCur.FieldName.Remove(0,11));
+				//}
 				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
 					FillListMedical(MedicalListType.problem);
 					if(SheetFieldDefCur.RadioButtonValue=="N") {
@@ -93,15 +93,15 @@ namespace OpenDental {
 						listMedical.Items.Add(allergyList[i].Description);
 					}
 					break;
-				case MedicalListType.medication:
-					if(medicationList==null) {
-						medicationList=Medications.GetList("");
-					}
-					listMedical.Items.Clear();
-					for(int i=0;i<medicationList.Count;i++) {
-						listMedical.Items.Add(Medications.GetDescription(medicationList[i].MedicationNum));
-					}
-					break;
+				//case MedicalListType.medication:
+				//  if(medicationList==null) {
+				//    medicationList=Medications.GetList("");
+				//  }
+				//  listMedical.Items.Clear();
+				//  for(int i=0;i<medicationList.Count;i++) {
+				//    listMedical.Items.Add(Medications.GetDescription(medicationList[i].MedicationNum));
+				//  }
+				//  break;
 				case MedicalListType.problem:
 					listMedical.Items.Clear();
 					for(int i=0;i<DiseaseDefs.List.Length;i++) {
@@ -121,13 +121,13 @@ namespace OpenDental {
 						}
 					}
 					break;
-				case MedicalListType.medication:
-					for(int i=0;i<medicationList.Count;i++) {
-						if(Medications.GetDescription(medicationList[i].MedicationNum)==fieldName) {
-							listMedical.SelectedIndex=i;
-						}
-					}
-					break;
+				//case MedicalListType.medication:
+				//  for(int i=0;i<medicationList.Count;i++) {
+				//    if(Medications.GetDescription(medicationList[i].MedicationNum)==fieldName) {
+				//      listMedical.SelectedIndex=i;
+				//    }
+				//  }
+				//  break;
 				case MedicalListType.problem:
 					for(int i=0;i<DiseaseDefs.List.Length;i++) {
 						if(DiseaseDefs.List[i].DiseaseName==fieldName) {
@@ -141,6 +141,7 @@ namespace OpenDental {
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
 			groupRadio.Visible=false;
 			groupRadioMisc.Visible=false;
+			labelRequired.Visible=false;
 			checkRequired.Visible=false;
 			labelMedical.Visible=false;
 			listMedical.Visible=false;
@@ -150,6 +151,7 @@ namespace OpenDental {
 				return;
 			}
 			if(isMedHistSheet) {
+				labelRequired.Visible=true;
 				checkRequired.Visible=true;
 				radioYes.Visible=true;
 				radioNo.Visible=true;
@@ -160,10 +162,10 @@ namespace OpenDental {
 						labelMedical.Text="Allergies";
 						FillListMedical(MedicalListType.allergy);
 						break;
-					case "medication":
-						labelMedical.Text="Medications";
-						FillListMedical(MedicalListType.medication);
-						break;
+					//case "medication":
+					//  labelMedical.Text="Medications";
+					//  FillListMedical(MedicalListType.medication);
+					//  break;
 					case "problem":
 						labelMedical.Text="Problems";
 						FillListMedical(MedicalListType.problem);
@@ -172,6 +174,7 @@ namespace OpenDental {
 			}
 			if(AvailFields[listFields.SelectedIndex].FieldName=="misc") {
 				groupRadioMisc.Visible=true;
+				labelRequired.Visible=true;
 				checkRequired.Visible=true;
 			}
 			else {
@@ -180,6 +183,7 @@ namespace OpenDental {
 					return;
 				}
 				groupRadio.Visible=true;
+				labelRequired.Visible=true;
 				checkRequired.Visible=true;
 				listRadio.Items.Clear();
 				for(int i=0;i<radioButtonValues.Count;i++) {
@@ -256,9 +260,9 @@ namespace OpenDental {
 						case "allergy":
 							MsgBox.Show(this,"Please select an allergy first.");
 							return;
-						case "medication":
-							MsgBox.Show(this,"Please select a medication first.");
-							return;
+						//case "medication":
+						//  MsgBox.Show(this,"Please select a medication first.");
+						//  return;
 						case "problem":
 							MsgBox.Show(this,"Please select a problem first.");
 							return;

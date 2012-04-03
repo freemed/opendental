@@ -350,7 +350,7 @@ namespace OpenDentBusiness{
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("allergy"));
-				list.Add(NewCheck("medication"));
+				//list.Add(NewCheck("medication"));
 				list.Add(NewCheck("problem"));
 				list.Add(NewCheck("misc"));
 			}

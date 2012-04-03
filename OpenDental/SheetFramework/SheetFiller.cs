@@ -1446,17 +1446,17 @@ namespace OpenDental{
 						}
 					}
 				}
-				else if(field.FieldName.StartsWith("medication:")) {//"medication:Sudafed"
-					List<Medication> meds=Medications.GetMedicationsByPat(pat.PatNum);
-					for(int i=0;i<meds.Count;i++) {
-						if(Medications.GetDescription(meds[i].MedicationNum)==field.FieldName.Remove(0,11)
-							&& field.RadioButtonValue=="Y") 
-						{
-							field.FieldValue="X";
-							break;
-						}
-					}
-				}
+				//else if(field.FieldName.StartsWith("medication:")) {//"medication:Sudafed"
+				//  List<Medication> meds=Medications.GetMedicationsByPat(pat.PatNum);
+				//  for(int i=0;i<meds.Count;i++) {
+				//    if(Medications.GetDescription(meds[i].MedicationNum)==field.FieldName.Remove(0,11)
+				//      && field.RadioButtonValue=="Y") 
+				//    {
+				//      field.FieldValue="X";
+				//      break;
+				//    }
+				//  }
+				//}
 				else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
 					List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
 					for(int i=0;i<diseases.Count;i++) {
