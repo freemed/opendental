@@ -913,7 +913,14 @@ namespace OpenDental {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Line){
 					continue;
 				}
-				if(SheetDefCur.SheetFieldDefs[i].Bounds.Contains(x,y)){
+				Rectangle fieldDefBounds=SheetDefCur.SheetFieldDefs[i].Bounds;
+				if(fieldDefBounds.Contains(x,y)){
+					//Center of the rectangle will not be considered a hit.
+					if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Rectangle
+						&& new Rectangle(fieldDefBounds.X+4,fieldDefBounds.Y+4,fieldDefBounds.Width-8,fieldDefBounds.Height-8).Contains(x,y)) 
+					{
+						continue;
+					}
 					return SheetDefCur.SheetFieldDefs[i];
 				}
 			}
@@ -1145,7 +1152,7 @@ namespace OpenDental {
 				if(field.FieldType==SheetFieldType.CheckBox
 					&& (field.FieldName.StartsWith("allergy:"))
 						|| field.FieldName.StartsWith("medication:")
-						|| field.FieldName.StartsWith("problem:")) 
+						|| field.FieldName.StartsWith("problem:"))
 				{
 					//Check for duplicate medical check boxes.
 					for(int j=0;j<medChkBoxList.Count;j++) {
