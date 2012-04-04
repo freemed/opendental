@@ -906,6 +906,9 @@ namespace OpenDentBusiness {
 		public static List<Procedure> GetCanadianLabFees(long procNum,List<Procedure> procList){
 			//No need to check RemotingRole; no call to db.
 			List<Procedure> retVal=new List<Procedure>();
+			if(procNum==0) {
+				return retVal;
+			}
 			for(int i=0;i<procList.Count;i++) {
 				if(procList[i].ProcNumLab==procNum) {
 					retVal.Add(procList[i]);
