@@ -18,7 +18,7 @@ namespace OpenDental {
 		public bool IsReadOnly;
 		private List<string> radioButtonValues;
 		private List<AllergyDef> allergyList;
-		//private List<Medication> medicationList;
+		private List<string> inputMedList;
 		///<summary>True if the sheet type is MedicalHistory.</summary>
 		private bool isMedHistSheet;
 		public bool IsNew;
@@ -40,7 +40,7 @@ namespace OpenDental {
 			for(int i=0;i<AvailFields.Count;i++) {
 				//static text is not one of the options.
 				listFields.Items.Add(AvailFields[i].FieldName);
-				//Sheets will have dynamic field names like "medication:Sudafed".  They will always start with a valid FieldName.
+				//Sheets will have dynamic field names like "allergy:Pen".  They will always start with a valid FieldName.
 				if(SheetFieldDefCur.FieldName.StartsWith(AvailFields[i].FieldName)) {
 					listFields.SelectedIndex=i;
 				}
@@ -49,27 +49,19 @@ namespace OpenDental {
 				radioYes.Checked=true;
 				if(SheetFieldDefCur.FieldName.StartsWith("allergy:")) {
 					FillListMedical(MedicalListType.allergy);
-					if(SheetFieldDefCur.RadioButtonValue=="N"){
-						radioNo.Checked=true;
-						radioYes.Checked=false;
-					}
 					SetListMedicalSelectedIndex(MedicalListType.allergy,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
-				//else if(SheetFieldDefCur.FieldName.StartsWith("medication:")) {
-				//  FillListMedical(MedicalListType.medication);
-				//  if(SheetFieldDefCur.RadioButtonValue=="N") {
-				//    radioNo.Checked=true;
-				//    radioYes.Checked=false;
-				//  }
-				//  SetListMedicalSelectedIndex(MedicalListType.medication,SheetFieldDefCur.FieldName.Remove(0,11));
-				//}
+				else if(SheetFieldDefCur.FieldName.StartsWith("checkMed")) {
+					FillListMedical(MedicalListType.checkMed);
+					SetListMedicalSelectedIndex(MedicalListType.checkMed,SheetFieldDefCur.FieldName);
+				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
 					FillListMedical(MedicalListType.problem);
-					if(SheetFieldDefCur.RadioButtonValue=="N") {
-						radioNo.Checked=true;
-						radioYes.Checked=false;
-					}
 					SetListMedicalSelectedIndex(MedicalListType.problem,SheetFieldDefCur.FieldName.Remove(0,8));
+				}
+				if(SheetFieldDefCur.RadioButtonValue=="N") {
+					radioNo.Checked=true;
+					radioYes.Checked=false;
 				}
 			}
 			textXPos.Text=SheetFieldDefCur.XPos.ToString();
@@ -93,15 +85,20 @@ namespace OpenDental {
 						listMedical.Items.Add(allergyList[i].Description);
 					}
 					break;
-				//case MedicalListType.medication:
-				//  if(medicationList==null) {
-				//    medicationList=Medications.GetList("");
-				//  }
-				//  listMedical.Items.Clear();
-				//  for(int i=0;i<medicationList.Count;i++) {
-				//    listMedical.Items.Add(Medications.GetDescription(medicationList[i].MedicationNum));
-				//  }
-				//  break;
+				case MedicalListType.checkMed:
+					if(inputMedList==null) {
+						inputMedList=new List<string>();
+						for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
+							if(SheetDefCur.SheetFieldDefs[i].FieldName.StartsWith("inputMed")) {
+								inputMedList.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
+							}
+						}
+					}
+					listMedical.Items.Clear();
+					for(int i=0;i<inputMedList.Count;i++) {
+						listMedical.Items.Add(inputMedList[i]);
+					}
+					break;
 				case MedicalListType.problem:
 					listMedical.Items.Clear();
 					for(int i=0;i<DiseaseDefs.List.Length;i++) {
@@ -121,13 +118,13 @@ namespace OpenDental {
 						}
 					}
 					break;
-				//case MedicalListType.medication:
-				//  for(int i=0;i<medicationList.Count;i++) {
-				//    if(Medications.GetDescription(medicationList[i].MedicationNum)==fieldName) {
-				//      listMedical.SelectedIndex=i;
-				//    }
-				//  }
-				//  break;
+				case MedicalListType.checkMed:
+					for(int i=0;i<inputMedList.Count;i++) {
+						if(inputMedList[i].Substring(8,2)==fieldName.Substring(8,2)) {//Same numbers: inputMed## and checkMed##
+							listMedical.SelectedIndex=i;
+						}
+					}
+					break;
 				case MedicalListType.problem:
 					for(int i=0;i<DiseaseDefs.List.Length;i++) {
 						if(DiseaseDefs.List[i].DiseaseName==fieldName) {
@@ -162,10 +159,10 @@ namespace OpenDental {
 						labelMedical.Text="Allergies";
 						FillListMedical(MedicalListType.allergy);
 						break;
-					//case "medication":
-					//  labelMedical.Text="Medications";
-					//  FillListMedical(MedicalListType.medication);
-					//  break;
+					case "checkMed":
+						labelMedical.Text="inputMeds";
+						FillListMedical(MedicalListType.checkMed);
+					  break;
 					case "problem":
 						labelMedical.Text="Problems";
 						FillListMedical(MedicalListType.problem);
@@ -260,15 +257,20 @@ namespace OpenDental {
 						case "allergy":
 							MsgBox.Show(this,"Please select an allergy first.");
 							return;
-						//case "medication":
-						//  MsgBox.Show(this,"Please select a medication first.");
-						//  return;
+						case "checkMed":
+							MsgBox.Show(this,"Please select an inputMed InputField from the list.");
+							return;
 						case "problem":
 							MsgBox.Show(this,"Please select a problem first.");
 							return;
 					}
-				}			
-				fieldName+=":"+listMedical.SelectedItem;//Medical check boxes will always have a radio button value.
+				}
+				if(fieldName=="checkMed") {
+					fieldName+=inputMedList[listMedical.SelectedIndex].Substring(8,2);//inputMed##
+				}
+				else {
+					fieldName+=":"+listMedical.SelectedItem;
+				}
 				if(radioNo.Checked) {
 					radioButtonValue="N";
 				}
@@ -310,7 +312,7 @@ namespace OpenDental {
 
 		private enum MedicalListType {
 			allergy,
-			medication,
+			checkMed,
 			problem
 		}
 	}

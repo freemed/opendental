@@ -346,11 +346,12 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("Birthdate"));
 				list.Add(NewInput("FName"));
 				list.Add(NewInput("LName"));
+				list.Add(NewInput("inputMed"));
 				list.Add(NewInput("misc"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("allergy"));
-				//list.Add(NewCheck("medication"));
+				list.Add(NewCheck("checkMed"));
 				list.Add(NewCheck("problem"));
 				list.Add(NewCheck("misc"));
 			}

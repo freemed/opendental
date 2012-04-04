@@ -913,9 +913,6 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							if(!hasAllergy) {//Import if allergy doesn't exist yet.
-								row.DoImport=true;
-							}
 						}
 					}
 					else {//Current box is checked.  
@@ -924,9 +921,6 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							if(!hasAllergy) {
-								row.DoImport=true;
-							}
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1059,9 +1053,6 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							if(!hasProblem) {
-								row.DoImport=true;
-							}
 						}
 					}
 					else {//Current box is checked.  
@@ -1070,9 +1061,6 @@ namespace OpenDental {
 						}
 						else {
 							fieldVal="";
-							if(!hasProblem) {//Only import if problem doesn't exist.
-								row.DoImport=true;
-							}
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.

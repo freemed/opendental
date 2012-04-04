@@ -1164,11 +1164,10 @@ namespace OpenDental {
 				}
 				if(field.FieldType==SheetFieldType.CheckBox
 					&& (field.FieldName.StartsWith("allergy:"))
-						//|| field.FieldName.StartsWith("medication:")
+						|| field.FieldName.StartsWith("checkMed")
 						|| field.FieldName.StartsWith("problem:"))
 				{
-					//Check for duplicate medical check boxes.
-					for(int j=0;j<medChkBoxList.Count;j++) {
+					for(int j=0;j<medChkBoxList.Count;j++) {//Check for duplicates.
 						if(medChkBoxList[j].FieldName==field.FieldName 
 						&& medChkBoxList[j].RadioButtonValue==field.RadioButtonValue) 
 						{

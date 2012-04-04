@@ -1423,6 +1423,8 @@ namespace OpenDental{
 		}
 
 		private static void FillFieldsForMedicalHistory(Sheet sheet,Patient pat) {
+			List<SheetField> inputMedList=new List<SheetField>();
+			List<SheetField> checkMedList=new List<SheetField>();
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "Birthdate":
@@ -1446,29 +1448,63 @@ namespace OpenDental{
 						}
 					}
 				}
-				//else if(field.FieldName.StartsWith("medication:")) {//"medication:Sudafed"
-				//  List<Medication> meds=Medications.GetMedicationsByPat(pat.PatNum);
-				//  for(int i=0;i<meds.Count;i++) {
-				//    if(Medications.GetDescription(meds[i].MedicationNum)==field.FieldName.Remove(0,11)
-				//      && field.RadioButtonValue=="Y") 
-				//    {
-				//      field.FieldValue="X";
-				//      break;
-				//    }
-				//  }
-				//}
+				else if(field.FieldName.StartsWith("checkMed")) {
+					checkMedList.Add(field);
+				}
+				else if(field.FieldName.StartsWith("inputMed")) {
+					inputMedList.Add(field);
+				}
 				else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
 					List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
 					for(int i=0;i<diseases.Count;i++) {
 						if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue=="Y") 
-						{
+							&& field.RadioButtonValue=="Y") {
 							field.FieldValue="X";
 							break;
 						}
 					}
 				}
 			}
+			checkMedList.Sort(CompareSheetFieldNames);
+			inputMedList.Sort(CompareSheetFieldNames);
+			//Special logic for checkMed and inputMed.
+			if(inputMedList.Count>0) {
+				//Loop through the patients medications and fill in the input fields.  Max is 20 per sheet.
+				List<Medication> medList=Medications.GetMedicationsByPat(pat.PatNum);
+				for(int i=0;i<medList.Count;i++) {
+					if(i==inputMedList.Count) {
+						break;
+					}
+				 	List<MedicationPat> medPatList=MedicationPats.GetMedicationPatsByMedicationNum(medList[i].MedicationNum,pat.PatNum);
+					if(medPatList[0].DateStop.Year<1880 || medPatList[0].DateStop>DateTime.Now) {//Active medication
+						//Look for corresponding Y box.
+						for(int j=0;j<checkMedList.Count;j++) {
+							//If numbers are the same for inputMed## and checkMed## and is a yes box.
+							if(checkMedList[j].FieldName.Substring(8,2)==inputMedList[i].FieldName.Substring(8,2)
+								&& checkMedList[j].RadioButtonValue=="Y") 
+							{
+								checkMedList[j].FieldValue="X";
+							}
+						}
+					}
+					else {//Not active
+						//Look for corresponding N box.
+						for(int j=0;j<checkMedList.Count;j++) {
+							//If numbers are the same for inputMed## and checkMed## and is a yes box.
+							if(checkMedList[j].FieldName.Substring(8,2)==inputMedList[i].FieldName.Substring(8,2)
+								&& checkMedList[j].RadioButtonValue=="N") 
+							{
+								checkMedList[j].FieldValue="X";
+							}
+						}
+					}
+					inputMedList[i].FieldValue=Medications.GetDescription(medList[i].MedicationNum);
+				}
+			}
+		}
+
+		private static int CompareSheetFieldNames(SheetField input1,SheetField input2) {
+			return input1.FieldName.CompareTo(input2.FieldName);
 		}
 
 		private static void FillFieldsForLabCase(Sheet sheet,Patient pat,LabCase labcase) {

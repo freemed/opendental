@@ -16,6 +16,8 @@ namespace OpenDental {
 		public SheetDef SheetDefCur;
 		private List<SheetFieldDef> AvailFields;
 		public bool IsReadOnly;
+		///<summary>Only for medical history sheet.  If this field is not new, we want to keep the beginning of the FieldName. Ex: inputMed##</summary>
+		private string inputMedOld;
 
 		public FormSheetFieldInput() {
 			InitializeComponent();
@@ -27,13 +29,16 @@ namespace OpenDental {
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
+			if(SheetDefCur.SheetType==SheetTypeEnum.MedicalHistory && SheetFieldDefCur.FieldName.StartsWith("inputMed")) {
+				inputMedOld=SheetFieldDefCur.FieldName;
+			}
 			//not allowed to change sheettype or fieldtype once created.  So get all avail fields for this sheettype
 			AvailFields=SheetFieldsAvailable.GetList(SheetDefCur.SheetType,OutInCheck.In);
 			listFields.Items.Clear();
 			for(int i=0;i<AvailFields.Count;i++){
 				//static text is not one of the options.
 				listFields.Items.Add(AvailFields[i].FieldName);
-				if(SheetFieldDefCur.FieldName==AvailFields[i].FieldName){
+				if(SheetFieldDefCur.FieldName.StartsWith(AvailFields[i].FieldName)){
 					listFields.SelectedIndex=i;
 				}
 			}
@@ -59,6 +64,10 @@ namespace OpenDental {
 		}
 
 		private void listFields_DoubleClick(object sender,EventArgs e) {
+			SaveAndClose();
+		}
+
+		private void listMeds_DoubleClick(object sender,EventArgs e) {
 			SaveAndClose();
 		}
 
@@ -102,7 +111,43 @@ namespace OpenDental {
 				MsgBox.Show(this,"Font size is invalid.");
 				return;
 			}
-			SheetFieldDefCur.FieldName=AvailFields[listFields.SelectedIndex].FieldName;
+			string fieldName=AvailFields[listFields.SelectedIndex].FieldName;
+			if(SheetDefCur.SheetType==SheetTypeEnum.MedicalHistory && AvailFields[listFields.SelectedIndex].FieldName=="inputMed") {
+				if(inputMedOld==null) {
+					List<string> inputFieldNamesList=new List<string>();
+					//Loop through the current sheet and figure out how many inputMed sheet field defs there are. 
+					for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
+						if(SheetDefCur.SheetFieldDefs[i].FieldName.StartsWith("inputMed")
+						&& SheetDefCur.SheetFieldDefs[i]!=SheetFieldDefCur) 
+						{
+							inputFieldNamesList.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
+						}
+					}
+					if(inputFieldNamesList.Count>=20) {
+						MsgBox.Show(this,"Not allowed to have more than 20 medication input fields per sheet.");
+						return;
+					}
+					//Now figure out what number to use for the new inputMed##. Always loop through at least once in case none exist yet.
+					for(int i=0;i==0 || i<inputFieldNamesList.Count;i++) {
+						if(inputFieldNamesList.Contains("inputMed"+i.ToString("00"))) {
+							if(i==inputFieldNamesList.Count-1) {//Every number exists, so increment by 1 for the next number. 
+								i++;
+								fieldName+=i.ToString("00");
+								break;
+							}
+							continue;
+						}
+						//User could have deleted an inputMed in the middle of the "list" so we want to use that number instead of a count.
+						fieldName+=i.ToString("00");
+						break;
+					}
+				}
+				else {
+					//User double clicked on an inputMed field. We want the number to stay the same.
+					fieldName=inputMedOld;//inputMedOld is set on load.
+				}
+			}
+			SheetFieldDefCur.FieldName=fieldName;
 			SheetFieldDefCur.FontName=comboFontName.Text;
 			SheetFieldDefCur.FontSize=fontSize;
 			SheetFieldDefCur.FontIsBold=checkFontIsBold.Checked;
