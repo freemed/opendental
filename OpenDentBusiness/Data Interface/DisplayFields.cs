@@ -102,6 +102,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Date Entry",67,category));
 				//list.Add(new DisplayField("Prognosis",60,category));
 				//list.Add(new DisplayField("Length",40,category));
+				//list.Add(new DisplayField("Abbr",50,category));
 				//if(Programs.UsingOrion){
 					//list.Add(new DisplayField("DPC",33,category));
 					//list.Add(new DisplayField("Schedule By",72,category));

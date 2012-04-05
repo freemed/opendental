@@ -377,6 +377,7 @@ namespace OpenDentBusiness {
 				DataTable rawComm=dcon.GetTable(command);
 				for(int i=0;i<rawComm.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
@@ -461,6 +462,7 @@ namespace OpenDentBusiness {
 				DataTable rawForm = dcon.GetTable(command);
 				for(int i = 0;i < rawForm.Rows.Count;i++) {
 					row = table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"] = DateTime.MinValue;
 					row["AptNum"] = 0;
 					row["clinic"]="";
@@ -550,6 +552,7 @@ namespace OpenDentBusiness {
 				DataTable rawRx=dcon.GetTable(command);
 				for(int i=0;i<rawRx.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
@@ -622,6 +625,7 @@ namespace OpenDentBusiness {
 				DateTime duedate;
 				for(int i=0;i<rawLab.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
@@ -717,6 +721,7 @@ namespace OpenDentBusiness {
 				List<TaskNote> TaskNoteList=TaskNotes.RefreshForTasks(taskNums);
 				for(int i=0;i<rawTask.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
@@ -835,6 +840,7 @@ namespace OpenDentBusiness {
 			long apptStatus;
 			for(int i=0;i<rawApt.Rows.Count;i++) {
 				row=table.NewRow();
+				row["AbbrDesc"]="";
 				row["aptDateTime"]=DateTime.MinValue;
 				row["AptNum"]=rawApt.Rows[i]["AptNum"].ToString();
 				row["clinic"]="";
@@ -950,6 +956,7 @@ namespace OpenDentBusiness {
 				DataTable rawEmail=dcon.GetTable(command);
 				for(int i=0;i<rawEmail.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
@@ -1029,6 +1036,7 @@ namespace OpenDentBusiness {
 				//SheetTypeEnum sheetType;
 				for(int i=0;i<rawSheet.Rows.Count;i++) {
 					row=table.NewRow();
+					row["AbbrDesc"]="";
 					row["aptDateTime"]=DateTime.MinValue;
 					row["AptNum"]=0;
 					row["clinic"]="";
