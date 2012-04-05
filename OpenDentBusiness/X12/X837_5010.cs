@@ -395,10 +395,10 @@ namespace OpenDentBusiness
 					//We always send medical plans as primary.  They are totally separate from the ordinals for dental.
 				}
 				else if(claim.ClaimType=="Cap") {
+					//All captication claims are treated as primary claims.
 					//todo: is secondary capitation possible?
 				}
 				sw.Write((claimIsPrimary?"P":"S")+s);//SBR01 1/1 Payer Responsibility Sequence Number Code: 
-				//todo: what about Cap?
 				string relationshipCode="";//empty if patient is not subscriber.
 				if(patient.PatNum==subscriber.PatNum) {//if patient is the subscriber
 					relationshipCode="18";
@@ -419,8 +419,7 @@ namespace OpenDentBusiness
 					+GetFilingCode(insPlan));//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
 				EndSegment(sw);
 				if(medType==EnumClaimMedType.Medical) {
-					//TODO: Do we need to do this?
-					//2000B PAT: (medical) Patient Information. Situational. Required when the patient is the subscriber or considered to be the subscriber and at least one of the element requirements are met. We do not use.
+					//2000B PAT: (medical) Patient Information. Situational. Required when the patient is the subscriber or considered to be the subscriber and at least one of the element requirements are met. Element requirements include: when the patient is deceased and the date of death is available; or when the claim involves Medicare Durable Medical Equipment Regional Carriers Certificate of Medical Necessity (DMERC CMN) 02.03, 10.02, or DMA MAC 10.03; or when law requires to know if the patient is pregnant or not. We do not use, because we do not track death date, durable medical equipment information, nor do we know weather or not the patient is pregnant. Some of these fields may be necessary in the future, but not likely since our medical claims are usually pretty simple.
 				}
 				//2010BA NM1: IL (medical,institutional,dental) Subscriber Name.
 				sw.Write("NM1"+s
@@ -451,15 +450,9 @@ namespace OpenDentBusiness
 					EndSegment(sw);//N404 through N407 either not used or required for addresses outside of the United States.
 					//2010BA DMG: (medical,institutional,dental) Subscriber Demographic Information. Situational. Required when the patient is the subscriber.
 					sw.Write("DMG"+s
-						+"D8"+s);//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
-//todo: Validate subscriber BD?
-					if(subscriber.Birthdate.Year<1900) {
-						sw.Write("19000101"+s);//DMG02 1/35 Date Time Period: Birthdate.
-					}
-					else {
-						sw.Write(subscriber.Birthdate.ToString("yyyyMMdd")+s);//DMG02 1/35 Date Time Period: Birthdate.
-					}
-					sw.Write(GetGender(subscriber.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
+						+"D8"+s//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+						+subscriber.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The subscriber is the patient and the patient birtdate is validated, therefore the subscriber birthdate is validated.
+						+GetGender(subscriber.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
 					EndSegment(sw);
 				}
 				//2010BA REF: SY (medical,institutional,dental) Secondary Secondary Identification: Situational. Required when an additional identification number to that provided in NM109 of this loop is necessary. We do not use this.
@@ -546,9 +539,7 @@ namespace OpenDentBusiness
 							sw.Write(s+Sout(patient.MiddleI,25));//NM105 1/25 Name Middle
 						}
 					EndSegment(sw);
-						//NM106 not used. NM107, No suffix field in Open Dental. NM108 through NM112 not used.
-						//instead of including a patID here, the patient should get their own subsriber loop.
-//TODO: js 9/5/11 Treat like a subscriber whenever patID is present.  Test.
+					//NM106 not used. NM107, No suffix field in Open Dental. NM108 through NM112 not used.
 					//2010CA N3: (medical,institutional,dental) Patient Address.
 					sw.Write("N3"+s+
 						Sout(patient.Address,55));//N301 1/55 Address Information
@@ -1052,8 +1043,9 @@ namespace OpenDentBusiness
 						WritePRV_PE(sw,provTreat);
 						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
 						if(provTreat.NationalProvID.Length<2 || IsEmdeonDental(clearhouse)) {
-							//todo: is StateLicense validated?
-							if(provTreat.StateLicense!="") {
+							//The state licence number can be anywhere between 4 and 14 characters depending on state, and most states have more than one state license format. 
+							//Therefore, we only validate that the state license is present or not.
+							if(provTreat.StateLicense!="") { 
 								sw.Write("REF"+s
 									+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
 									+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification:
@@ -1328,7 +1320,7 @@ namespace OpenDentBusiness
 								+isa16//SV101-4 2/2 Procedure Modifier: Situational. We do not use.
 								+isa16//SV101-5 2/2 Procedure Modifier: Situational. We do not use.
 								+isa16//SV101-6 2/2 Procedure Modifier: Situational. We do not use.
-								+isa16+Sout(proc.ClaimNote,80));//SV301-7 1/80 Description: Situational.
+								+isa16+Sout(proc.ClaimNote,80));//SV101-7 1/80 Description: Situational.
 						}
 						sw.Write(s//SV101-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+s//SV102 1/18 Monetary Amount: Charge Amt.
