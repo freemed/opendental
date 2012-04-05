@@ -62,6 +62,7 @@ namespace OpenDental{
 			for(int i=0;i<listFamily.Columns.Count;i++){
 				listFamily.Columns[i].Text=Lan.g(this,listFamily.Columns[i].Text);
 			}
+			AptNumsSelected=new List<long>();
 		}
 
 		///<summary></summary>
@@ -409,7 +410,6 @@ namespace OpenDental{
 		}
 
 		private void FormApptsOther_Load(object sender, System.EventArgs e) {
-			AptNumsSelected=new List<long>();
 			Text=Lan.g(this,"Appointments for")+" "+PatCur.GetNameLF();
 			textApptModNote.Text=PatCur.ApptModNote;
 			if(SelectOnly){
@@ -628,6 +628,10 @@ namespace OpenDental{
 		}
 
 		private void butRecall_Click(object sender, System.EventArgs e) {
+			MakeRecallAppointment();
+		}
+
+		public void MakeRecallAppointment(){
 			List<Procedure> procList=Procedures.Refresh(PatCur.PatNum);
 			//List<Recall> recallList=Recalls.GetList(PatCur.PatNum);//get the recall for this pt
 			//if(recallList.Count==0){
@@ -696,6 +700,10 @@ namespace OpenDental{
 		}
 
 		private void butRecallFamily_Click(object sender,EventArgs e) {
+			MakeRecallFamily();
+		}
+
+		public void MakeRecallFamily(){
 			List<Procedure> procList;
 			List<Recall> recallList;//=Recalls.GetList(FamCur.ListPats
 			List <InsPlan> planList;
@@ -825,6 +833,10 @@ namespace OpenDental{
 		}
 
 		private void butNew_Click(object sender, System.EventArgs e) {
+			MakeAppointment();
+		}
+
+		public void MakeAppointment(){
 			Appointment AptCur=new Appointment();
 			AptCur.PatNum=PatCur.PatNum;
 			if(PatCur.DateFirstVisit.Year<1880
@@ -868,11 +880,33 @@ namespace OpenDental{
 				List<Schedule> schedListPeriod=Schedules.RefreshDayEdit(AptCur.AptDateTime);
 				long assignedDent=Schedules.GetAssignedProvNumForSpot(schedListPeriod,curOp,false,AptCur.AptDateTime);
 				long assignedHyg=Schedules.GetAssignedProvNumForSpot(schedListPeriod,curOp,true,AptCur.AptDateTime);
-				if(assignedDent!=0) {//if no dentist is assigned to op, then keep the original dentist.  All appts must have prov.
+				//the section below regarding providers is overly wordy because it's copied from ContrAppt.pinBoard_MouseUp to make maint easier.
+				if(assignedDent!=0) {
 					AptCur.ProvNum=assignedDent;
 				}
-				AptCur.ProvHyg=assignedHyg;
-				AptCur.IsHygiene=curOp.IsHygiene;
+				if(assignedHyg!=0) {//the hygienist will only be changed if the spot has a hygienist.
+					AptCur.ProvHyg=assignedHyg;
+				}
+				if(curOp.IsHygiene) {
+					AptCur.IsHygiene=true;
+				}
+				else {//op not marked as hygiene op
+					if(assignedDent==0) {//no dentist assigned
+						if(assignedHyg!=0) {//hyg is assigned (we don't really have to test for this)
+							AptCur.IsHygiene=true;
+						}
+					}
+					else {//dentist is assigned
+						if(assignedHyg==0) {//hyg is not assigned
+							AptCur.IsHygiene=false;
+						}
+						//if both dentist and hyg are assigned, it's tricky
+						//only explicitly set it if user has a dentist assigned to the op
+						if(curOp.ProvDentist!=0) {
+							AptCur.IsHygiene=false;
+						}
+					}
+				}
 				if(curOp.ClinicNum!=0){
 					AptCur.ClinicNum=curOp.ClinicNum;
 				}
