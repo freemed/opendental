@@ -1823,8 +1823,8 @@ namespace OpenDental{
 			textHmPhone.Text=PatCur.HmPhone;
 			textWkPhone.Text=PatCur.WkPhone;
 			textWirelessPhone.Text=PatCur.WirelessPhone;
-//todo: replace with patient.TxtMsgOK value
-			listTextOk.SelectedIndex=(int)YN.Unknown;
+//todo: uncomment:
+			//listTextOk.SelectedIndex=(int)patient.TxtMsgOk;
 			textEmail.Text=PatCur.Email;
 			textCreditType.Text=PatCur.CreditType;
 			if(PatCur.DateFirstVisit.Year < 1880){
