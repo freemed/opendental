@@ -262,6 +262,7 @@ namespace OpenDentBusiness {
 		RandomPrimaryKeys,
 		RecallAdjustDown,
 		RecallAdjustRight,
+		///<summary>Defaults to 12 for new customers.  The number in this field is considered adult.  Only used when automatically adding procedures to a new recall appointment.</summary>
 		RecallAgeAdult,
 		RecallCardsShowReturnAdd,
 		///<summary>-1 indicates min for all dates</summary>

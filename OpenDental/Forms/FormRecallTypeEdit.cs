@@ -50,8 +50,6 @@ namespace OpenDental{
 		private Label label4;
 		private List<RecallTrigger> TriggerList;
 		private Interval defaultIntervalOld;
-		private ValidNum validNum4;
-		private Label label13;
 		private Label label5;
 		private GroupBox groupAgeLimit;
 		private ValidNum textRecallAgeAdult;
@@ -123,13 +121,11 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
-			this.validNum4 = new OpenDental.ValidNum();
-			this.label13 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupAgeLimit = new System.Windows.Forms.GroupBox();
 			this.textRecallAgeAdult = new OpenDental.ValidNum();
-			this.label17 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
 			this.groupInterval.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAgeLimit.SuspendLayout();
@@ -369,7 +365,7 @@ namespace OpenDental{
 			// 
 			this.labelSpecial.Location = new System.Drawing.Point(386, 53);
 			this.labelSpecial.Name = "labelSpecial";
-			this.labelSpecial.Size = new System.Drawing.Size(320, 97);
+			this.labelSpecial.Size = new System.Drawing.Size(320, 22);
 			this.labelSpecial.TabIndex = 131;
 			this.labelSpecial.Text = "labelSpecial";
 			// 
@@ -472,31 +468,13 @@ namespace OpenDental{
     "this type.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// validNum4
-			// 
-			this.validNum4.Location = new System.Drawing.Point(160, 574);
-			this.validNum4.MaxVal = 127;
-			this.validNum4.MinVal = 0;
-			this.validNum4.Name = "validNum4";
-			this.validNum4.Size = new System.Drawing.Size(51, 20);
-			this.validNum4.TabIndex = 6;
-			// 
-			// label13
-			// 
-			this.label13.Location = new System.Drawing.Point(66, 574);
-			this.label13.Name = "label13";
-			this.label13.Size = new System.Drawing.Size(92, 19);
-			this.label13.TabIndex = 5;
-			this.label13.Text = "Adult Prophy Age";
-			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(11, 44);
+			this.label5.Location = new System.Drawing.Point(36, 30);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(209, 37);
+			this.label5.Size = new System.Drawing.Size(465, 37);
 			this.label5.TabIndex = 5;
-			this.label5.Text = "Age limit for prophy and flouride on a child\'s recall appointment.";
+			this.label5.Text = resources.GetString("label5.Text");
 			// 
 			// groupAgeLimit
 			// 
@@ -505,46 +483,45 @@ namespace OpenDental{
 			this.groupAgeLimit.Controls.Add(this.label8);
 			this.groupAgeLimit.Controls.Add(this.label17);
 			this.groupAgeLimit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupAgeLimit.Location = new System.Drawing.Point(59, 192);
+			this.groupAgeLimit.Location = new System.Drawing.Point(55, 121);
 			this.groupAgeLimit.Name = "groupAgeLimit";
-			this.groupAgeLimit.Size = new System.Drawing.Size(202, 84);
+			this.groupAgeLimit.Size = new System.Drawing.Size(448, 142);
 			this.groupAgeLimit.TabIndex = 116;
 			this.groupAgeLimit.TabStop = false;
-			this.groupAgeLimit.Text = "Age Limit";
+			this.groupAgeLimit.Text = "Child Prophy";
 			// 
 			// textRecallAgeAdult
 			// 
-			this.textRecallAgeAdult.Location = new System.Drawing.Point(105, 18);
+			this.textRecallAgeAdult.Location = new System.Drawing.Point(105, 80);
 			this.textRecallAgeAdult.MaxVal = 127;
 			this.textRecallAgeAdult.MinVal = 0;
 			this.textRecallAgeAdult.Name = "textRecallAgeAdult";
 			this.textRecallAgeAdult.Size = new System.Drawing.Size(51, 20);
 			this.textRecallAgeAdult.TabIndex = 6;
 			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(11, 18);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(92, 19);
-			this.label17.TabIndex = 5;
-			this.label17.Text = "Prophy/Flouride";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(162, 19);
+			this.label8.Location = new System.Drawing.Point(162, 81);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(74, 19);
 			this.label8.TabIndex = 5;
 			this.label8.Text = "Years";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(11, 80);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(92, 19);
+			this.label17.TabIndex = 5;
+			this.label17.Text = "Age Limit";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormRecallTypeEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(732, 666);
-			this.Controls.Add(this.validNum4);
-			this.Controls.Add(this.label13);
+			this.Controls.Add(this.groupAgeLimit);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label2);
@@ -556,7 +533,6 @@ namespace OpenDental{
 			this.Controls.Add(this.listTriggers);
 			this.Controls.Add(this.labelTriggers);
 			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.groupAgeLimit);
 			this.Controls.Add(this.groupInterval);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.butOK);
@@ -594,10 +570,12 @@ namespace OpenDental{
 			TriggerList=RecallTriggers.GetForType(RecallTypeCur.RecallTypeNum);//works if 0, too.
 			SetSpecialText();
 			FillTriggers();
-			if(!(RecallTypes.GetSpecialTypeStr(RecallTypeCur.RecallTypeNum)=="ChildProphy")){
+			if(PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)==RecallTypeCur.RecallTypeNum){
+				textRecallAgeAdult.Text=PrefC.GetInt(PrefName.RecallAgeAdult).ToString();
+			}
+			else{
 				groupAgeLimit.Visible=false;
 			}
-			textRecallAgeAdult.Text=PrefC.GetInt(PrefName.RecallAgeAdult).ToString();
 			textYears.Text=RecallTypeCur.DefaultInterval.Years.ToString();
 			textMonths.Text=RecallTypeCur.DefaultInterval.Months.ToString();
 			textWeeks.Text=RecallTypeCur.DefaultInterval.Weeks.ToString();
@@ -645,7 +623,7 @@ namespace OpenDental{
 				groupInterval.Visible=true;
 			}
 			else if(comboSpecial.SelectedIndex==2){//childProphy
-				labelSpecial.Text="Automatically used if a Prophy patient is under 12.  Does not include triggers or interval since the triggers and interval from the Prophy type are used instead.";
+				labelSpecial.Text="";//the description is now inside a special group box.
 				TriggerList.Clear();
 				listTriggers.Items.Clear();
 				textDays.Text="0";
@@ -791,7 +769,6 @@ namespace OpenDental{
 				|| textMonths.errorProvider1.GetError(textMonths)!=""
 				|| textWeeks.errorProvider1.GetError(textWeeks)!=""
 				|| textDays.errorProvider1.GetError(textDays)!=""
-				|| textRecallAgeAdult.errorProvider1.GetError(textRecallAgeAdult)!=""
 				){
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
@@ -803,8 +780,17 @@ namespace OpenDental{
 					return;
 				}
 			}*/
+			bool changed=false;
+			if(comboSpecial.SelectedIndex==2){//childProphy
+				if(textRecallAgeAdult.errorProvider1.GetError(textRecallAgeAdult)!=""){
+					MsgBox.Show(this,"Please fix data entry errors first.");
+					return;
+				}
+				if(Prefs.UpdateInt(PrefName.RecallAgeAdult,PIn.Int(textRecallAgeAdult.Text))) {
+					changed=true;
+				}
+			}
 			RecallTypeCur.Description=textDescription.Text;
-			Prefs.UpdateInt(PrefName.RecallAgeAdult,PIn.Int(textRecallAgeAdult.Text));
 			Interval interval=new Interval(
 				PIn.Int(textDays.Text),
 				PIn.Int(textWeeks.Text),
@@ -829,9 +815,9 @@ namespace OpenDental{
 				return;
 			}
 			RecallTriggers.SetForType(RecallTypeCur.RecallTypeNum,TriggerList);
-			bool changed=false;
-			if(comboSpecial.SelectedIndex==0){//none
-				if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==RecallTypeCur.RecallTypeNum){
+			//The combo for special type is allowed to be changed by user.  But since the field is in the pref table instead of in the RecallType table, there's extra work involved in saving the selection.
+			if(comboSpecial.SelectedIndex==0){//none:  If this recall type is now not any special type
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==RecallTypeCur.RecallTypeNum){//and it used to be the special prophy type
 					Prefs.UpdateLong(PrefName.RecallTypeSpecialProphy,0);
 					changed=true;
 				}
@@ -844,11 +830,11 @@ namespace OpenDental{
 					changed=true;
 				}
 			}
-			else if(comboSpecial.SelectedIndex==1){//Prophy
-				if(Prefs.UpdateLong(PrefName.RecallTypeSpecialProphy,RecallTypeCur.RecallTypeNum)){
+			else if(comboSpecial.SelectedIndex==1){//Prophy: If this recall type is now the prophy type.
+				if(Prefs.UpdateLong(PrefName.RecallTypeSpecialProphy,RecallTypeCur.RecallTypeNum)){//and it was already the prophy type
 					changed=true;
 				}
-				if(PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)==RecallTypeCur.RecallTypeNum){
+				if(PrefC.GetLong(PrefName.RecallTypeSpecialChildProphy)==RecallTypeCur.RecallTypeNum){//but it used to be the childprophy type.
 					Prefs.UpdateLong(PrefName.RecallTypeSpecialChildProphy,0);
 					changed=true;
 				}

@@ -356,7 +356,7 @@ namespace OpenDental{
 			List<string> procs=RecallTypes.GetProcs(recallCur.RecallTypeNum);
 			string recallPattern=RecallTypes.GetTimePattern(recallCur.RecallTypeNum);
 			if(RecallTypes.IsSpecialRecallType(recallCur.RecallTypeNum)
-				&& patCur.Birthdate.AddYears(PrefC.GetInt(PrefName.RecallAgeAdult)) > ((recallCur.DateDue>DateTime.Today)?recallCur.DateDue:DateTime.Today)) //if pt's 12th birthday falls after recall date. ie younger than RecallAgeAdult years old (used to be always 12).
+				&& patCur.Birthdate.AddYears(PrefC.GetInt(PrefName.RecallAgeAdult)) > ((recallCur.DateDue>DateTime.Today)?recallCur.DateDue:DateTime.Today)) //For example, if pt's 12th birthday falls after recall date.
 			{
 				for(int i=0;i<RecallTypeC.Listt.Count;i++) {
 					if(RecallTypeC.Listt[i].RecallTypeNum==RecallTypes.ChildProphyType) {
