@@ -192,6 +192,7 @@ namespace OpenDental{
 			this.comboSearchBehavior = new System.Windows.Forms.ComboBox();
 			this.checkAppointmentTimeIsLocked = new System.Windows.Forms.CheckBox();
 			this.tabFamily = new System.Windows.Forms.TabPage();
+			this.checkTextMsgOkStatusTreatAsNo = new System.Windows.Forms.CheckBox();
 			this.label15 = new System.Windows.Forms.Label();
 			this.comboCobRule = new System.Windows.Forms.ComboBox();
 			this.tabAccount = new System.Windows.Forms.TabPage();
@@ -220,7 +221,6 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
-			this.checkTextMsgOkStatusTreatAsNo = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabAppts.SuspendLayout();
 			this.tabFamily.SuspendLayout();
@@ -908,13 +908,12 @@ namespace OpenDental{
 			// 
 			this.checkAppointmentTimeIsLocked.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAppointmentTimeIsLocked.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkAppointmentTimeIsLocked.Location = new System.Drawing.Point(35, 236);
+			this.checkAppointmentTimeIsLocked.Location = new System.Drawing.Point(34, 236);
 			this.checkAppointmentTimeIsLocked.Name = "checkAppointmentTimeIsLocked";
 			this.checkAppointmentTimeIsLocked.Size = new System.Drawing.Size(406, 17);
 			this.checkAppointmentTimeIsLocked.TabIndex = 198;
 			this.checkAppointmentTimeIsLocked.Text = "Appointment time locked by default";
 			this.checkAppointmentTimeIsLocked.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkAppointmentTimeIsLocked.KeyUp += new System.Windows.Forms.KeyEventHandler(this.checkAppointmentTimeIsLocked_KeyUp);
 			this.checkAppointmentTimeIsLocked.MouseUp += new System.Windows.Forms.MouseEventHandler(this.checkAppointmentTimeIsLocked_MouseUp);
 			// 
 			// tabFamily
@@ -935,6 +934,17 @@ namespace OpenDental{
 			this.tabFamily.Size = new System.Drawing.Size(466, 479);
 			this.tabFamily.TabIndex = 1;
 			this.tabFamily.Text = "Family";
+			// 
+			// checkTextMsgOkStatusTreatAsNo
+			// 
+			this.checkTextMsgOkStatusTreatAsNo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTextMsgOkStatusTreatAsNo.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkTextMsgOkStatusTreatAsNo.Location = new System.Drawing.Point(27, 135);
+			this.checkTextMsgOkStatusTreatAsNo.Name = "checkTextMsgOkStatusTreatAsNo";
+			this.checkTextMsgOkStatusTreatAsNo.Size = new System.Drawing.Size(413, 17);
+			this.checkTextMsgOkStatusTreatAsNo.TabIndex = 203;
+			this.checkTextMsgOkStatusTreatAsNo.Text = "Text Msg OK status, treat ?? as No instead of Yes";
+			this.checkTextMsgOkStatusTreatAsNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label15
 			// 
@@ -1294,17 +1304,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// checkTextMsgOkStatusTreatAsNo
-			// 
-			this.checkTextMsgOkStatusTreatAsNo.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkTextMsgOkStatusTreatAsNo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkTextMsgOkStatusTreatAsNo.Location = new System.Drawing.Point(27, 135);
-			this.checkTextMsgOkStatusTreatAsNo.Name = "checkTextMsgOkStatusTreatAsNo";
-			this.checkTextMsgOkStatusTreatAsNo.Size = new System.Drawing.Size(413, 17);
-			this.checkTextMsgOkStatusTreatAsNo.TabIndex = 203;
-			this.checkTextMsgOkStatusTreatAsNo.Text = "Text Msg OK status, treat ?? as No instead of Yes";
-			this.checkTextMsgOkStatusTreatAsNo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormModuleSetup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -1528,6 +1527,14 @@ namespace OpenDental{
 			textAllergiesIndicateNone.Text=AllergyDefs.GetOne(formA.SelectedAllergyDefNum).Description;
 		}
 
+		private void checkAppointmentTimeIsLocked_MouseUp(object sender,MouseEventArgs e) {
+			if(checkAppointmentTimeIsLocked.Checked) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to lock appointment times for all existing appointments?")){
+					Appointments.SetAptTimeLocked();
+				}
+			}
+		}
+
 		private void comboCobRule_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to change the COB rule for all existing insurance plans?")) {
 				InsPlans.UpdateCobRuleForAll((EnumCobRule)comboCobRule.SelectedIndex);
@@ -1652,18 +1659,6 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-		}
-
-		private void checkAppointmentTimeIsLocked_MouseUp(object sender,MouseEventArgs e) {
-			if(checkAppointmentTimeIsLocked.Checked) {
-				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to lock appointment times for all existing appointments?")){
-					Appointments.SetAptTimeLocked();
-				}
-			}
-		}
-
-		private void checkAppointmentTimeIsLocked_KeyUp(object sender,KeyEventArgs e) {
-			
 		}
 
 		
