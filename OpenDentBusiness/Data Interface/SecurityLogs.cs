@@ -56,20 +56,10 @@ namespace OpenDentBusiness{
 
 		//there are no methods for deleting or changing log entries because that will never be allowed.
 
-		
-
-	
-  
-
-		///<summary>Used when viewing various audit trails of specific types.</summary>
-		public static SecurityLog[] Refresh(long patNum,List<Permissions> permTypes) {
-			return Refresh(patNum,permTypes,0);
-		}
-
-		///<summary>Used when viewing various audit trails of specific types.</summary>
+		///<summary>Used when viewing various audit trails of specific types.  Only implemented Appointments so far.</summary>
 		public static SecurityLog[] Refresh(long patNum,List<Permissions> permTypes,long fKey) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),patNum,permTypes);
+				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),patNum,permTypes,fKey);
 			}
 			string types="";
 			for(int i=0;i<permTypes.Count;i++){
@@ -80,11 +70,11 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM securitylog "
 				+"WHERE PatNum= '"+POut.Long(patNum)+"' "
-				+"AND ("+types+") ";
-			if(fKey>0) {
-				command+="AND FKey="+POut.Long(fKey)+" ";
-			}
-			command+="ORDER BY LogDateTime";
+				+"AND ("+types+") "
+				+"AND FKey="+POut.Long(fKey)+" "
+				+"ORDER BY LogDateTime";
+			return Crud.SecurityLogCrud.SelectMany(command).ToArray();
+			/*
 			DataTable table=Db.GetTable(command);
 			SecurityLog[] List=new SecurityLog[table.Rows.Count];
 			for(int i=0;i<List.Length;i++){
@@ -97,7 +87,7 @@ namespace OpenDentBusiness{
 				List[i].PatNum        = PIn.Long   (table.Rows[i]["PatNum"].ToString());
 				List[i].FKey					= PIn.Long   (table.Rows[i]["FKey"].ToString());
 			}
-			return List;
+			return List;*/
 		}
 
 		///<summary>PatNum can be 0.</summary>

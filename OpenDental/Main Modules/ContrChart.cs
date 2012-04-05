@@ -8225,10 +8225,7 @@ namespace OpenDental{
 				Appointments.SetAptStatusComplete(apt.AptNum,sub1.PlanNum,sub2.PlanNum);
 				ProcedureL.SetCompleteInAppt(apt,PlanList,PatPlanList,PatCur.SiteNum,PatCur.Age,SubList);//loops through each proc
 				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit, apt.PatNum,
-					PatCur.GetNameLF() + ", "
-					+ apt.ProcDescript + ", "
-					+ apt.AptDateTime.ToString() + ", "
-					+ "Set Complete",
+					apt.ProcDescript+", "+apt.AptDateTime.ToString()+", Set Complete",
 					apt.AptNum);
 				Recalls.Synch(PatCur.PatNum);
 				ModuleSelected(PatCur.PatNum);

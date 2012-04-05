@@ -57,11 +57,13 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.ForeColor = System.Drawing.Color.Firebrick;
 			this.label1.Location = new System.Drawing.Point(8, 3);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(451, 15);
+			this.label1.Size = new System.Drawing.Size(576, 15);
 			this.label1.TabIndex = 3;
-			this.label1.Text = "Changes made to this appointment before the update to 12.2 will not be reflected " +
+			this.label1.Text = "Changes made to this appointment before the update to 12.3 will not be reflected " +
     "below.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 

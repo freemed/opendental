@@ -1176,8 +1176,9 @@ namespace OpenDental{
 			}
 			for(int i=0;i<DefC.Short[(int)DefCat.ApptConfirmed].Length;i++) {
 				comboConfirmed.Items.Add(DefC.Short[(int)DefCat.ApptConfirmed][i].ItemName);
-				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed)
+				if(DefC.Short[(int)DefCat.ApptConfirmed][i].DefNum==AptCur.Confirmed) {
 					comboConfirmed.SelectedIndex=i;
+				}
 			}
 			checkTimeLocked.Checked=AptCur.TimeLocked;
 			textNote.Text=AptCur.Note;
@@ -2628,9 +2629,8 @@ namespace OpenDental{
 				Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",false);
 				CloseOD=true;
 				if(IsNew) {
-					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
-					+AptCur.AptDateTime.ToString()+", "
-					+AptCur.ProcDescript,
+					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,
+					AptCur.AptDateTime.ToString()+", "+AptCur.ProcDescript,
 					AptCur.AptNum);
 				}
 				DialogResult=DialogResult.OK;
@@ -2729,9 +2729,7 @@ namespace OpenDental{
 			}
 			Appointments.Delete(AptCur.AptNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
-				"Delete for patient: "
-				+pat.GetNameLF()+", "
-				+AptCur.AptDateTime.ToString(),
+				"Delete for date/time: "+AptCur.AptDateTime.ToString(),
 				AptCur.AptNum);
 			if(IsNew){
 				//The dialog is considered cancelled when a new appointment is immediately deleted.
@@ -2751,15 +2749,13 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,pat.GetNameLF()+", "
-					+AptCur.AptDateTime.ToString()+", "
-					+AptCur.ProcDescript,
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,
+					AptCur.AptDateTime.ToString()+", "+AptCur.ProcDescript,
 					AptCur.AptNum);
 			}
 			else {
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,pat.GetNameLF()+", "
-					+AptCur.AptDateTime.ToShortDateString()+", "
-					+AptCur.ProcDescript,
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
+					AptCur.AptDateTime.ToShortDateString()+", "+AptCur.ProcDescript,
 					AptCur.AptNum);
 			}
 			DialogResult=DialogResult.OK;
