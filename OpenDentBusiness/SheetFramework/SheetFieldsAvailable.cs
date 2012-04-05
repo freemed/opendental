@@ -346,14 +346,52 @@ namespace OpenDentBusiness{
 				list.Add(NewInput("Birthdate"));
 				list.Add(NewInput("FName"));
 				list.Add(NewInput("LName"));
-				list.Add(NewInput("inputMed"));
 				list.Add(NewInput("misc"));
+				list.Add(NewInput("inputMed1"));
+				list.Add(NewInput("inputMed2"));
+				list.Add(NewInput("inputMed3"));
+				list.Add(NewInput("inputMed4"));
+				list.Add(NewInput("inputMed5"));
+				list.Add(NewInput("inputMed6"));
+				list.Add(NewInput("inputMed7"));
+				list.Add(NewInput("inputMed8"));
+				list.Add(NewInput("inputMed9"));
+				list.Add(NewInput("inputMed10"));
+				list.Add(NewInput("inputMed11"));
+				list.Add(NewInput("inputMed12"));
+				list.Add(NewInput("inputMed13"));
+				list.Add(NewInput("inputMed14"));
+				list.Add(NewInput("inputMed15"));
+				list.Add(NewInput("inputMed16"));
+				list.Add(NewInput("inputMed17"));
+				list.Add(NewInput("inputMed18"));
+				list.Add(NewInput("inputMed19"));
+				list.Add(NewInput("inputMed20"));
 			}
 			else if(outInCheck==OutInCheck.Check) {
 				list.Add(NewCheck("allergy"));
-				list.Add(NewCheck("checkMed"));
 				list.Add(NewCheck("problem"));
 				list.Add(NewCheck("misc"));
+				list.Add(NewInput("checkMed1"));
+				list.Add(NewInput("checkMed2"));
+				list.Add(NewInput("checkMed3"));
+				list.Add(NewInput("checkMed4"));
+				list.Add(NewInput("checkMed5"));
+				list.Add(NewInput("checkMed6"));
+				list.Add(NewInput("checkMed7"));
+				list.Add(NewInput("checkMed8"));
+				list.Add(NewInput("checkMed9"));
+				list.Add(NewInput("checkMed10"));
+				list.Add(NewInput("checkMed11"));
+				list.Add(NewInput("checkMed12"));
+				list.Add(NewInput("checkMed13"));
+				list.Add(NewInput("checkMed14"));
+				list.Add(NewInput("checkMed15"));
+				list.Add(NewInput("checkMed16"));
+				list.Add(NewInput("checkMed17"));
+				list.Add(NewInput("checkMed18"));
+				list.Add(NewInput("checkMed19"));
+				list.Add(NewInput("checkMed20"));
 			}
 			return list;
 		}

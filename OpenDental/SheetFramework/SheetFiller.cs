@@ -1469,18 +1469,18 @@ namespace OpenDental{
 			inputMedList.Sort(CompareSheetFieldNames);
 			//Special logic for checkMed and inputMed.
 			if(inputMedList.Count>0) {
-				//Loop through the patients medications and fill in the input fields.  Max is 20 per sheet.
+				//Loop through the patients medications and fill in the input fields.
 				List<Medication> medList=Medications.GetMedicationsByPat(pat.PatNum);
 				for(int i=0;i<medList.Count;i++) {
 					if(i==inputMedList.Count) {
-						break;
+						break;//Pat has more medications than inputMed fields on sheet.
 					}
 				 	List<MedicationPat> medPatList=MedicationPats.GetMedicationPatsByMedicationNum(medList[i].MedicationNum,pat.PatNum);
 					if(medPatList[0].DateStop.Year<1880 || medPatList[0].DateStop>DateTime.Now) {//Active medication
 						//Look for corresponding Y box.
 						for(int j=0;j<checkMedList.Count;j++) {
 							//If numbers are the same for inputMed## and checkMed## and is a yes box.
-							if(checkMedList[j].FieldName.Substring(8,2)==inputMedList[i].FieldName.Substring(8,2)
+							if(checkMedList[j].FieldName.Remove(0,8)==inputMedList[i].FieldName.Remove(0,8)
 								&& checkMedList[j].RadioButtonValue=="Y") 
 							{
 								checkMedList[j].FieldValue="X";
@@ -1490,8 +1490,8 @@ namespace OpenDental{
 					else {//Not active
 						//Look for corresponding N box.
 						for(int j=0;j<checkMedList.Count;j++) {
-							//If numbers are the same for inputMed## and checkMed## and is a yes box.
-							if(checkMedList[j].FieldName.Substring(8,2)==inputMedList[i].FieldName.Substring(8,2)
+							//If numbers are the same for inputMed## and checkMed## and is a no box.
+							if(checkMedList[j].FieldName.Remove(0,8)==inputMedList[i].FieldName.Remove(0,8)
 								&& checkMedList[j].RadioButtonValue=="N") 
 							{
 								checkMedList[j].FieldValue="X";

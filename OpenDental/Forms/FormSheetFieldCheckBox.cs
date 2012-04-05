@@ -51,10 +51,6 @@ namespace OpenDental {
 					FillListMedical(MedicalListType.allergy);
 					SetListMedicalSelectedIndex(MedicalListType.allergy,SheetFieldDefCur.FieldName.Remove(0,8));
 				}
-				else if(SheetFieldDefCur.FieldName.StartsWith("checkMed")) {
-					FillListMedical(MedicalListType.checkMed);
-					SetListMedicalSelectedIndex(MedicalListType.checkMed,SheetFieldDefCur.FieldName);
-				}
 				else if(SheetFieldDefCur.FieldName.StartsWith("problem:")) {
 					FillListMedical(MedicalListType.problem);
 					SetListMedicalSelectedIndex(MedicalListType.problem,SheetFieldDefCur.FieldName.Remove(0,8));
@@ -85,20 +81,6 @@ namespace OpenDental {
 						listMedical.Items.Add(allergyList[i].Description);
 					}
 					break;
-				case MedicalListType.checkMed:
-					if(inputMedList==null) {
-						inputMedList=new List<string>();
-						for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
-							if(SheetDefCur.SheetFieldDefs[i].FieldName.StartsWith("inputMed")) {
-								inputMedList.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
-							}
-						}
-					}
-					listMedical.Items.Clear();
-					for(int i=0;i<inputMedList.Count;i++) {
-						listMedical.Items.Add(inputMedList[i]);
-					}
-					break;
 				case MedicalListType.problem:
 					listMedical.Items.Clear();
 					for(int i=0;i<DiseaseDefs.List.Length;i++) {
@@ -114,13 +96,6 @@ namespace OpenDental {
 				case MedicalListType.allergy:
 					for(int i=0;i<allergyList.Count;i++) {
 						if(AllergyDefs.GetDescription(allergyList[i].AllergyDefNum)==fieldName) {
-							listMedical.SelectedIndex=i;
-						}
-					}
-					break;
-				case MedicalListType.checkMed:
-					for(int i=0;i<inputMedList.Count;i++) {
-						if(inputMedList[i].Substring(8,2)==fieldName.Substring(8,2)) {//Same numbers: inputMed## and checkMed##
 							listMedical.SelectedIndex=i;
 						}
 					}
@@ -152,17 +127,15 @@ namespace OpenDental {
 				checkRequired.Visible=true;
 				radioYes.Visible=true;
 				radioNo.Visible=true;
-				labelMedical.Visible=true;
-				listMedical.Visible=true;
+				if(!AvailFields[listFields.SelectedIndex].FieldName.StartsWith("checkMed")) {
+					labelMedical.Visible=true;
+					listMedical.Visible=true;
+				}
 				switch(AvailFields[listFields.SelectedIndex].FieldName) {
 					case "allergy":
 						labelMedical.Text="Allergies";
 						FillListMedical(MedicalListType.allergy);
 						break;
-					case "checkMed":
-						labelMedical.Text="inputMeds";
-						FillListMedical(MedicalListType.checkMed);
-					  break;
 					case "problem":
 						labelMedical.Text="Problems";
 						FillListMedical(MedicalListType.problem);
@@ -251,24 +224,18 @@ namespace OpenDental {
 			string fieldName=AvailFields[listFields.SelectedIndex].FieldName;
 			string radioButtonValue="";
 			#region Medical History Sheet
-			if(isMedHistSheet && listMedical.Visible) {
-				if(listMedical.SelectedIndex==-1) {
+			if(isMedHistSheet) {
+				if(listMedical.Visible && listMedical.SelectedIndex==-1) {
 					switch(fieldName) {
 						case "allergy":
 							MsgBox.Show(this,"Please select an allergy first.");
-							return;
-						case "checkMed":
-							MsgBox.Show(this,"Please select an inputMed InputField from the list.");
 							return;
 						case "problem":
 							MsgBox.Show(this,"Please select a problem first.");
 							return;
 					}
 				}
-				if(fieldName=="checkMed") {
-					fieldName+=inputMedList[listMedical.SelectedIndex].Substring(8,2);//inputMed##
-				}
-				else {
+				if(!fieldName.StartsWith("checkMed")) {
 					fieldName+=":"+listMedical.SelectedItem;
 				}
 				if(radioNo.Checked) {
