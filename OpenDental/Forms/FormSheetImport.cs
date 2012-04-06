@@ -870,7 +870,7 @@ namespace OpenDental {
 				rows=new List<SheetImportRow>();
 				string fieldVal="";
 				List<Allergy> allergies=null;
-				//List<Medication> meds=null;
+				List<Medication> meds=null;
 				List<Disease> diseases=null;
 				SheetImportRow row;
 				rows.Add(CreateSeparator("Allergies"));
@@ -911,16 +911,10 @@ namespace OpenDental {
 						if(oppositeBox.RadioButtonValue=="Y") {
 							fieldVal="X";
 						}
-						else {
-							fieldVal="";
-						}
 					}
 					else {//Current box is checked.  
 						if(allergyList[i].RadioButtonValue=="Y") {
 							fieldVal="X";
-						}
-						else {
-							fieldVal="";
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -938,80 +932,117 @@ namespace OpenDental {
 					rows.Add(row);
 				}
 				#endregion
-				////Separator-------------------------------------------
-				//rows.Add(CreateSeparator("Medications"));
+				//Separator-------------------------------------------
+				rows.Add(CreateSeparator("Medications"));
 				#region Medications
-				//List<SheetField> medicationList=GetSheetFieldsByFieldName("medication:");
-				//for(int i=0;i<medicationList.Count;i++) {
-				//  if(i<1) {
-				//    meds=Medications.GetMedicationsByPat(pat.PatNum);
-				//  }
-				//  bool hasMed=false;
-				//  row=new SheetImportRow();
-				//  row.FieldName=medicationList[i].FieldName.Remove(0,11);
-				//  //Figure out the current status of this medication
-				//  row.OldValDisplay="";
-				//  row.OldValObj=null;
-				//  for(int j=0;j<meds.Count;j++) {
-				//    if(Medications.GetDescription(meds[j].MedicationNum)==medicationList[i].FieldName.Remove(0,11)) {
-				//      List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,pat.PatNum);
-				//      for(int k=0;k<medList.Count;k++) {
-				//        //Check if medication is active.
-				//        if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
-				//          row.OldValDisplay="X";
-				//        }
-				//      }
-				//      row.OldValObj=meds[j];
-				//      hasMed=true;
-				//      break;
-				//    }
-				//  }
-				//  SheetField oppositeBox=GetOppositeSheetFieldCheckBox(medicationList,medicationList[i]);
-				//  if(medicationList[i].FieldValue=="") {//Current box not checked.
-				//    if(oppositeBox==null || oppositeBox.FieldValue=="") {//No opposite box or both boxes are not checked.
-				//      //Create a blank row just in case they still want to import.
-				//      rows.Add(CreateImportRow(row.FieldName,"",row.OldValDisplay,row.OldValObj,"",medicationList[i],"","",false,false,typeof(Medication),false,false));
-				//      if(oppositeBox!=null) {
-				//        medicationList.Remove(oppositeBox);//Removes possible duplicate entry.
-				//      }
-				//      continue;
-				//    }
-				//    //Opposite box is checked, figure out if it's a Y or N box.
-				//    if(oppositeBox.RadioButtonValue=="Y") {
-				//      fieldVal="X";
-				//    }
-				//    else {
-				//      fieldVal="";
-				//      if(!hasMed) {//Import only if the med doesn't exist.
-				//        row.DoImport=true;
-				//      }
-				//    }
-				//  }
-				//  else {//Current box is checked.  
-				//    if(medicationList[i].RadioButtonValue=="Y") {
-				//      fieldVal="X";
-				//    }
-				//    else {
-				//      fieldVal="";
-				//      if(!hasMed) {
-				//        row.DoImport=true;
-				//      }
-				//    }
-				//  }
-				//  //Get rid of the opposite check box so field doesn't show up twice.
-				//  if(oppositeBox!=null) {
-				//    medicationList.Remove(oppositeBox);
-				//  }
-				//  row.NewValDisplay=fieldVal;
-				//  row.NewValObj=medicationList[i];
-				//  row.ImpValDisplay=row.NewValDisplay;
-				//  row.ImpValObj=typeof(string);
-				//  row.ObjType=typeof(Medication);
-				//  if(row.OldValDisplay!=row.NewValDisplay) {
-				//    row.DoImport=true;
-				//  }
-				//  rows.Add(row);
-				//}
+				List<SheetField> inputMedList=GetSheetFieldsByFieldName("inputMed");
+				List<SheetField> checkMedList=GetSheetFieldsByFieldName("checkMed");
+				List<SheetField> currentMedList=new List<SheetField>();
+				List<SheetField> newMedList=new List<SheetField>();
+				for(int i=0;i<inputMedList.Count;i++) {
+					if(inputMedList[i].FieldType==SheetFieldType.OutputText) {
+						currentMedList.Add(inputMedList[i]);
+					}
+					else {//User might have tried to type in a new medication they are taking.
+						newMedList.Add(inputMedList[i]);
+					}
+				}
+				for(int i=0;i<currentMedList.Count;i++) {
+					#region existing medications
+					if(i<1) {
+						meds=Medications.GetMedicationsByPat(pat.PatNum);
+					}
+					row=new SheetImportRow();
+					row.FieldName=currentMedList[i].FieldValue;//Will be the name of the drug.
+					//Figure out the current status of this medication
+					row.OldValDisplay="";
+					row.OldValObj=null;
+					for(int j=0;j<meds.Count;j++) {
+						if(Medications.GetDescription(meds[j].MedicationNum)==currentMedList[i].FieldValue) {
+							List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,pat.PatNum);
+							for(int k=0;k<medList.Count;k++) {
+								//Check if medication is active.
+								if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
+									row.OldValDisplay="X";
+								}
+							}
+							row.OldValObj=meds[j];
+							break;
+						}
+					}
+					//Figure out which corresponding checkbox is checked.
+					for(int j=0;j<checkMedList.Count;j++) {
+						if(checkMedList[j].FieldName.Remove(0,8)==currentMedList[i].FieldName.Remove(0,8)
+							&& checkMedList[j].FieldValue!="") 
+						{
+							if(checkMedList[j].RadioButtonValue=="Y") {
+								fieldVal="X";
+							}
+							break;
+						}
+					}
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=currentMedList[i];
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=typeof(string);
+					row.ObjType=typeof(Medication);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					rows.Add(row);
+					#endregion
+				}
+				for(int i=0;i<newMedList.Count;i++) {
+					#region medications the patient entered
+					if(newMedList[i].FieldValue=="") {//No medication entered by patient.
+						continue;
+					}
+					for(int j=0;j<checkMedList.Count;j++) {
+						if(checkMedList[j].FieldName.Remove(0,8)==newMedList[i].FieldName.Remove(0,8)
+							&& checkMedList[j].FieldValue!="") 
+						{
+							if(checkMedList[j].RadioButtonValue=="Y") {
+								fieldVal="X";
+							}
+							break;
+						}
+					}
+					row=new SheetImportRow();
+					row.FieldName=newMedList[i].FieldValue;//Whatever the patient typed in...
+					row.OldValDisplay="";
+					row.OldValObj=null;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=newMedList[i];
+					//Find out if medication the patient typed in exists, otherwise allow user to double click to choose a med.
+					List<Medication> medMatches=Medications.GetList(newMedList[i].FieldValue);
+					if(medMatches.Count==0) {//No medication matches for whatever the patient typed in.
+						medMatches=Medications.GetList("");//Let user pick from the entire list of medications.
+						row.NewValDisplay="No matches found";
+						row.ImpValDisplay=Lan.g(this,"[double click to pick]");
+						row.ImpValObj=medMatches;
+						row.IsFlaggedImp=true;
+						row.DoImport=false;//this will change to true after they pick a medication
+					}
+					else if(medMatches.Count==1) {
+						row.OldValDisplay="";
+						row.OldValObj=medMatches[0];
+						newMedList[i].FieldValue=Medications.GetDescription(medMatches[0].MedicationNum);
+						row.NewValObj=newMedList[i];
+						row.ImpValDisplay="X";
+						row.ImpValObj=typeof(string);
+						row.DoImport=true;
+					}
+					else {//Let the user double click to pick from the list of possible matches.
+						row.NewValDisplay="Multiple matches found";
+						row.ImpValDisplay=Lan.g(this,"[double click to pick]");
+						row.ImpValObj=medMatches;
+						row.IsFlaggedImp=true;
+						row.DoImport=false;//this will change to true after they pick a medication
+					}
+					row.ObjType=typeof(Medication);
+					rows.Add(row);
+					#endregion
+				}
 				#endregion
 				//Separator-------------------------------------------
 				rows.Add(CreateSeparator("Problems"));
@@ -1051,16 +1082,10 @@ namespace OpenDental {
 						if(oppositeBox.RadioButtonValue=="Y") {
 							fieldVal="X";
 						}
-						else {
-							fieldVal="";
-						}
 					}
 					else {//Current box is checked.  
 						if(problemList[i].RadioButtonValue=="Y") {
 							fieldVal="X";
-						}
-						else {
-							fieldVal="";
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1245,12 +1270,15 @@ namespace OpenDental {
 			return retVal;
 		}
 
-		///<summary>Returns all the sheet fields with FieldNames that start with the passed in string.  Only works for check boxes for now.</summary>
+		///<summary>Returns all the sheet fields with FieldNames that start with the passed in string.  Only works for check box, input and output fields for now.</summary>
 		private List<SheetField> GetSheetFieldsByFieldName(string fieldName) {
 			List<SheetField> retVal=new List<SheetField>();
 			if(SheetCur!=null) {
 				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
-					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox) {
+					if(SheetCur.SheetFields[i].FieldType!=SheetFieldType.CheckBox
+						&& SheetCur.SheetFields[i].FieldType!=SheetFieldType.InputField
+						&& SheetCur.SheetFields[i].FieldType!=SheetFieldType.OutputText) 
+					{
 						continue;
 					}
 					if(!SheetCur.SheetFields[i].FieldName.StartsWith(fieldName)) {
@@ -1393,7 +1421,6 @@ namespace OpenDental {
 			}
 			else if(rows[e.Row].ObjType==typeof(string)
 				|| rows[e.Row].ObjType==typeof(Allergy)
-				|| rows[e.Row].ObjType==typeof(Medication)
 				|| rows[e.Row].ObjType==typeof(Disease)) 
 			{
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
@@ -1422,6 +1449,44 @@ namespace OpenDental {
 				}
 				rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
 				rows[e.Row].ImpValObj=inputbox.textResult.Text;
+			}
+			else if(rows[e.Row].ObjType==typeof(Medication)) {
+				if(rows[e.Row].ImpValObj.GetType()==typeof(List<Medication>)) {//Make the user pick a medication.
+					FormSheetImportEnumPicker formMedList=new FormSheetImportEnumPicker("Possible Medications:");
+					List<Medication> medMatches=(List<Medication>)rows[e.Row].ImpValObj;
+					for(int i=0;i<medMatches.Count;i++) {
+						formMedList.comboResult.Items.Add(medMatches[i].MedName);
+					}
+					formMedList.comboResult.SelectedIndex=0;//There will always be at least one option.
+					formMedList.ShowDialog();
+					if(formMedList.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					int selectedI=formMedList.comboResult.SelectedIndex;
+					rows[e.Row].ImpValDisplay="X";
+					rows[e.Row].ImpValObj=typeof(string);
+					((SheetField)rows[e.Row].NewValObj).FieldValue=medMatches[formMedList.comboResult.SelectedIndex].MedName;
+					rows[e.Row].FieldName=medMatches[formMedList.comboResult.SelectedIndex].MedName;
+					rows[e.Row].NewValDisplay="X";
+					rows[e.Row].DoImport=true;
+					rows[e.Row].IsFlaggedImp=false;
+				}
+				else {
+					InputBox inputbox=new InputBox(rows[e.Row].FieldName);
+					inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
+					inputbox.ShowDialog();
+					if(inputbox.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					if(rows[e.Row].OldValDisplay==inputbox.textResult.Text) {//value is now same as original
+						rows[e.Row].DoImport=false;
+					}
+					else {
+						rows[e.Row].DoImport=true;
+					}
+					rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
+					rows[e.Row].ImpValObj=inputbox.textResult.Text;
+				}
 			}
 			/*else if(rows[e.Row].ObjType.IsGenericType){//==typeof(Nullable)) {
 				Type underlyingT=Nullable.GetUnderlyingType(rows[e.Row].ObjType);
@@ -1690,44 +1755,41 @@ namespace OpenDental {
 					}
 					#endregion
 					#region Medications
-					//else if(rows[i].ObjType==typeof(Medication)) {
-					//  //Patient has this medication in the db so leave it alone or set the stop date.
-					//  if(rows[i].OldValObj!=null) {
-					//    //Set the stop date for the current medication(s).
-					//    Medication oldMed=(Medication)rows[i].OldValObj;
-					//    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,pat.PatNum);
-					//    for(int j=0;j<patMeds.Count;j++) {
-					//      if(hasValue) {
-					//        //Check if med is currently inactive.
-					//        if(patMeds[j].DateStop.Year>1880 && patMeds[j].DateStop<=DateTime.Now) {
-					//          patMeds[j].DateStop=new DateTime(0001,1,1);//This will activate the med.
-					//        }
-					//      }
-					//      else {
-					//        //Set the med as inactive.
-					//        patMeds[j].DateStop=DateTime.Now;
-					//      }
-					//      MedicationPats.Update(patMeds[j]);
-					//    }
-					//    continue;
-					//  }
-					//  //Medication does not exist for this patient yet so create one.
-					//  List<Medication> medList=Medications.GetList("");
-					//  SheetField medSheet=(SheetField)rows[i].NewValObj;
-					//  //Find what allergy user wants to import.
-					//  for(int j=0;j<medList.Count;j++) {
-					//    if(Medications.GetDescription(medList[j].MedicationNum)==medSheet.FieldName.Remove(0,11)) {
-					//      MedicationPat medPat=new MedicationPat();
-					//      medPat.PatNum=pat.PatNum;
-					//      medPat.MedicationNum=medList[j].MedicationNum;
-					//      if(!hasValue) {//Insert medication as inactive.
-					//        medPat.DateStop=DateTime.Now;
-					//      }
-					//      MedicationPats.Insert(medPat);
-					//      break;
-					//    }
-					//  }
-					//}
+					else if(rows[i].ObjType==typeof(Medication)) {
+					  //Patient has this medication in the db so leave it alone or set the stop date.
+					  if(rows[i].OldValObj!=null) {
+					    //Set the stop date for the current medication(s).
+					    Medication oldMed=(Medication)rows[i].OldValObj;
+					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,pat.PatNum);
+					    for(int j=0;j<patMeds.Count;j++) {
+					      if(hasValue) {
+					        //Check if med is currently inactive.
+					        if(patMeds[j].DateStop.Year>1880 && patMeds[j].DateStop<=DateTime.Now) {
+					          patMeds[j].DateStop=new DateTime(0001,1,1);//This will activate the med.
+					        }
+					      }
+					      else {
+					        //Set the med as inactive.
+					        patMeds[j].DateStop=DateTime.Now;
+					      }
+					      MedicationPats.Update(patMeds[j]);
+					    }
+					    continue;
+					  }
+					  //Medication does not exist for this patient yet so create it.
+					  List<Medication> medList=Medications.GetList("");
+					  SheetField medSheet=(SheetField)rows[i].NewValObj;
+					  //Find what allergy user wants to import.
+					  for(int j=0;j<medList.Count;j++) {
+					    if(Medications.GetDescription(medList[j].MedicationNum)==medSheet.FieldValue) {
+					      MedicationPat medPat=new MedicationPat();
+					      medPat.PatNum=pat.PatNum;
+					      medPat.MedicationNum=medList[j].MedicationNum;
+					      MedicationPats.Insert(medPat);
+					      break;
+					    }
+					  }
+					}
 					#endregion
 					#region Diseases
 					else if(rows[i].ObjType==typeof(Disease)) {

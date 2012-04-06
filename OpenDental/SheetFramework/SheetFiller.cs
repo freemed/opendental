@@ -1499,12 +1499,19 @@ namespace OpenDental{
 						}
 					}
 					inputMedList[i].FieldValue=Medications.GetDescription(medList[i].MedicationNum);
+					inputMedList[i].FieldType=SheetFieldType.OutputText;//Don't try to import as a new medication.
 				}
 			}
 		}
 
 		private static int CompareSheetFieldNames(SheetField input1,SheetField input2) {
-			return input1.FieldName.CompareTo(input2.FieldName);
+			if(Convert.ToInt32(input1.FieldName.Remove(0,8)) < Convert.ToInt32(input2.FieldName.Remove(0,8))) {
+				return -1;
+			}
+			if(Convert.ToInt32(input1.FieldName.Remove(0,8)) > Convert.ToInt32(input2.FieldName.Remove(0,8))) {
+				return 1;
+			}
+			return 0;
 		}
 
 		private static void FillFieldsForLabCase(Sheet sheet,Patient pat,LabCase labcase) {
