@@ -219,6 +219,12 @@ namespace OpenDental {
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			#region Card Charge Loop
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				if(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()!="" &&
+					CreditCards.IsDuplicateXChargeToken(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString())) 
+				{
+					MessageBox.Show(Lan.g(this,"A duplicate token was found, the card cannot be charged for customer: ")+table.Rows[i]["PatName"].ToString());
+					continue;
+				}
 				insertPayment=false;
 				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
 				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
