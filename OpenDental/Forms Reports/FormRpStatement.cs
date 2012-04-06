@@ -992,6 +992,16 @@ namespace OpenDental{
 				gridPat.Rows.Clear();
 				//lineData=FamilyStatementDataList[famIndex].PatDataList[i].PatData;
 				for(int p=0;p<tableAccount.Rows.Count;p++){
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						if(Stmt.IsReceipt) {
+							if(tableAccount.Rows[p]["StatementNum"].ToString()!="0") {//Hide statement rows for Canadian receipts.
+								continue;
+							}
+							if(tableAccount.Rows[p]["ClaimNum"].ToString()!="0") {//Hide claim rows and claim payment rows for Canadian receipts.
+								continue;
+							}
+						}
+					}
 					grow=new ODGridRow();
 					grow.Cells.Add(tableAccount.Rows[p]["date"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["patient"].ToString());
