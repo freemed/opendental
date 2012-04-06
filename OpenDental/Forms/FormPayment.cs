@@ -1240,6 +1240,10 @@ namespace OpenDental {
 				//Have credit card on file
 				if(CCard.XChargeToken!="") {//Recurring charge
 					hasXToken=true;
+					if(CreditCards.IsDuplicateXChargeToken(CCard.XChargeToken)) {
+						MsgBox.Show(this,"This card shares a token with another card. Delete it from the Credit Card Manage window and re-add it.");
+						return;
+					}
 					/*       ***** An example of how recurring charges work***** 
 					C:\Program Files\X-Charge\XCharge.exe /TRANSACTIONTYPE:Purchase /LOCKTRANTYPE
 					/AMOUNT:10.00 /LOCKAMOUNT /XCACCOUNTID:XAW0JWtx5kjG8 /RECEIPT:RC001

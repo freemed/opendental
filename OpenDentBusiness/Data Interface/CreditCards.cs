@@ -155,5 +155,17 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Checks if token is in use.  This happened once and can cause the wrong card to be charged.</summary>
+		public static bool IsDuplicateXChargeToken(string token) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),token);
+			}
+			string command="SELECT COUNT(*) FROM creditcard WHERE XChargeToken='"+POut.String(token)+"'";
+			if(Db.GetCount(command)=="1") {
+				return false;
+			}
+			return true;
+		}
+
 	}
 }
