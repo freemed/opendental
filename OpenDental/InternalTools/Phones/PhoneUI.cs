@@ -80,8 +80,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.Training,extension);
@@ -93,8 +97,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
@@ -106,8 +114,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.WrapUp,extension);
@@ -120,8 +132,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			Phones.SetPhoneStatus(ClockStatusEnum.OfflineAssist,extension);
@@ -133,8 +149,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefault ped=PhoneEmpDefaults.GetByExtAndEmp(extension,employeeNum);
 			if(ped==null) {
@@ -153,8 +173,12 @@ namespace OpenDental {
 			//This even works if the person is still clocked out.
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.All);
 		}
@@ -163,8 +187,12 @@ namespace OpenDental {
 			//This even works if the person is still clocked in.
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.None);
 		}
@@ -172,8 +200,12 @@ namespace OpenDental {
 		public static void RinggroupsDefault(PhoneTile tile) {
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneAsterisks.SetToDefaultRingGroups(extension,employeeNum);
 		}
@@ -184,8 +216,12 @@ namespace OpenDental {
 			}
 			int extension=tile.PhoneCur.Extension;
 			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(!CheckSelectedUserPassword(employeeNum)) {
-				return;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
 			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
 			PhoneAsterisks.SetRingGroups(extension,AsteriskRingGroups.Backup);
