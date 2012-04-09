@@ -38,7 +38,7 @@ namespace OpenDental.Bridges {
 			writer.WriteStartElement("RecipientAddress");
 			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
-			writer.WriteElementString("Account",guar.PatNum.ToString());
+			writer.WriteElementString("Account",guar.ChartNumber;//.PatNum.ToString());//Only one customer is using this, so no need to give option.
 			writer.WriteElementString("Address1",guar.Address);
 			writer.WriteElementString("Address2",guar.Address2);
 			writer.WriteElementString("City",guar.City);
@@ -85,17 +85,14 @@ namespace OpenDental.Bridges {
 				credits+=PIn.Double(tableAccount.Rows[i]["creditsDouble"].ToString());
 			}
 			writer.WriteElementString("Credits",credits.ToString("F2"));
-			//on a regular printed statement, the amount due at the top might be different from the balance at the middle right.
-			//This is because of payment plan balances.
-			//But in e-bills, there is only one amount due.
-			//Insurance estimate is already subtracted, and payment plan balance is already added.
+			decimal payPlanDue=0;
 			double amountDue=guar.BalTotal;
-			//add payplan due amt:
 			for(int m=0;m<dataSet.Tables["misc"].Rows.Count;m++) {
 				if(dataSet.Tables["misc"].Rows[m]["descript"].ToString()=="payPlanDue") {
-					amountDue+=PIn.Double(dataSet.Tables["misc"].Rows[m]["value"].ToString());
+					payPlanDue+=PIn.Decimal(dataSet.Tables["misc"].Rows[m]["value"].ToString());//This will be an option once more users are using it.
 				}
 			}
+			writer.WriteElementString("PayPlanDue",payPlanDue.ToString("F2"));
 			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");//optional.
 				writer.WriteElementString("AmountDue",amountDue.ToString("F2"));
