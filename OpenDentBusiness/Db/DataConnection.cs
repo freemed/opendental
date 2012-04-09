@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 #if DEBUG
 		///<summary>milliseconds.</summary>
 		private static int delayForTesting=0;
-		private static bool logDebugQueries=false;
+		private static bool logDebugQueries=true;
 #endif
 
 		//For queries that do not use this flag, all queries are split into single commands. For those SQL commands which
