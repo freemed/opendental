@@ -878,10 +878,10 @@ namespace OpenDental {
 				//Get list of all the allergy check boxes
 				List<SheetField> allergyList=GetSheetFieldsByFieldName("allergy:");
 				for(int i=0;i<allergyList.Count;i++) {
+					fieldVal="";
 					if(i<1) {
 						allergies=Allergies.GetAll(pat.PatNum,true);
 					}
-					bool hasAllergy=false;
 					row=new SheetImportRow();
 					row.FieldName=allergyList[i].FieldName.Remove(0,8);
 					row.OldValDisplay="";
@@ -890,10 +890,12 @@ namespace OpenDental {
 					for(int j=0;j<allergies.Count;j++) {
 						if(AllergyDefs.GetDescription(allergies[j].AllergyDefNum)==allergyList[i].FieldName.Remove(0,8)) {
 							if(allergies[j].StatusIsActive) {
-								row.OldValDisplay="X";
+								row.OldValDisplay="Y";
+							}
+							else {
+								row.OldValDisplay="N";
 							}
 							row.OldValObj=allergies[j];
-							hasAllergy=true;
 							break;
 						}
 					}
@@ -909,12 +911,18 @@ namespace OpenDental {
 						}
 						//Opposite box is checked, figure out if it's a Y or N box.
 						if(oppositeBox.RadioButtonValue=="Y") {
-							fieldVal="X";
+							fieldVal="Y";
+						}
+						else {
+							fieldVal="N";
 						}
 					}
 					else {//Current box is checked.  
 						if(allergyList[i].RadioButtonValue=="Y") {
-							fieldVal="X";
+							fieldVal="Y";
+						}
+						else {
+							fieldVal="N";
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -949,13 +957,13 @@ namespace OpenDental {
 				}
 				for(int i=0;i<currentMedList.Count;i++) {
 					#region existing medications
+					fieldVal="";
 					if(i<1) {
 						meds=Medications.GetMedicationsByPat(pat.PatNum);
 					}
 					row=new SheetImportRow();
 					row.FieldName=currentMedList[i].FieldValue;//Will be the name of the drug.
-					//Figure out the current status of this medication
-					row.OldValDisplay="";
+					row.OldValDisplay="N";
 					row.OldValObj=null;
 					for(int j=0;j<meds.Count;j++) {
 						if(Medications.GetDescription(meds[j].MedicationNum)==currentMedList[i].FieldValue) {
@@ -963,7 +971,7 @@ namespace OpenDental {
 							for(int k=0;k<medList.Count;k++) {
 								//Check if medication is active.
 								if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
-									row.OldValDisplay="X";
+									row.OldValDisplay="Y";
 								}
 							}
 							row.OldValObj=meds[j];
@@ -976,7 +984,10 @@ namespace OpenDental {
 							&& checkMedList[j].FieldValue!="") 
 						{
 							if(checkMedList[j].RadioButtonValue=="Y") {
-								fieldVal="X";
+								fieldVal="Y";
+							}
+							else {
+								fieldVal="N";
 							}
 							break;
 						}
@@ -986,7 +997,7 @@ namespace OpenDental {
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=typeof(string);
 					row.ObjType=typeof(Medication);
-					if(row.OldValDisplay!=row.NewValDisplay) {
+					if(row.OldValDisplay!=row.NewValDisplay && row.NewValDisplay!="") {
 						row.DoImport=true;
 					}
 					rows.Add(row);
@@ -997,48 +1008,16 @@ namespace OpenDental {
 					if(newMedList[i].FieldValue=="") {//No medication entered by patient.
 						continue;
 					}
-					for(int j=0;j<checkMedList.Count;j++) {
-						if(checkMedList[j].FieldName.Remove(0,8)==newMedList[i].FieldName.Remove(0,8)
-							&& checkMedList[j].FieldValue!="") 
-						{
-							if(checkMedList[j].RadioButtonValue=="Y") {
-								fieldVal="X";
-							}
-							break;
-						}
-					}
 					row=new SheetImportRow();
 					row.FieldName=newMedList[i].FieldValue;//Whatever the patient typed in...
 					row.OldValDisplay="";
 					row.OldValObj=null;
-					row.NewValDisplay=fieldVal;
+					row.NewValDisplay="Y";
 					row.NewValObj=newMedList[i];
-					//Find out if medication the patient typed in exists, otherwise allow user to double click to choose a med.
-					List<Medication> medMatches=Medications.GetList(newMedList[i].FieldValue);
-					if(medMatches.Count==0) {//No medication matches for whatever the patient typed in.
-						medMatches=Medications.GetList("");//Let user pick from the entire list of medications.
-						row.NewValDisplay="No matches found";
-						row.ImpValDisplay=Lan.g(this,"[double click to pick]");
-						row.ImpValObj=medMatches;
-						row.IsFlaggedImp=true;
-						row.DoImport=false;//this will change to true after they pick a medication
-					}
-					else if(medMatches.Count==1) {
-						row.OldValDisplay="";
-						row.OldValObj=medMatches[0];
-						newMedList[i].FieldValue=Medications.GetDescription(medMatches[0].MedicationNum);
-						row.NewValObj=newMedList[i];
-						row.ImpValDisplay="X";
-						row.ImpValObj=typeof(string);
-						row.DoImport=true;
-					}
-					else {//Let the user double click to pick from the list of possible matches.
-						row.NewValDisplay="Multiple matches found";
-						row.ImpValDisplay=Lan.g(this,"[double click to pick]");
-						row.ImpValObj=medMatches;
-						row.IsFlaggedImp=true;
-						row.DoImport=false;//this will change to true after they pick a medication
-					}
+					row.ImpValDisplay=Lan.g(this,"[double click to pick]");
+					row.ImpValObj=new long();
+					row.IsFlaggedImp=true;
+					row.DoImport=false;//this will change to true after they pick a medication
 					row.ObjType=typeof(Medication);
 					rows.Add(row);
 					#endregion
@@ -1049,10 +1028,10 @@ namespace OpenDental {
 				#region Problems
 				List<SheetField> problemList=GetSheetFieldsByFieldName("problem:");
 				for(int i=0;i<problemList.Count;i++) {
+					fieldVal="";
 					if(i<1) {
 						diseases=Diseases.Refresh(pat.PatNum,false);
 					}
-					bool hasProblem=false;
 					row=new SheetImportRow();
 					row.FieldName=problemList[i].FieldName.Remove(0,8);
 					//Figure out the current status of this allergy
@@ -1064,7 +1043,6 @@ namespace OpenDental {
 								row.OldValDisplay="X";
 							}
 							row.OldValObj=diseases[j];
-							hasProblem=true;
 							break;
 						}
 					}
@@ -1080,12 +1058,18 @@ namespace OpenDental {
 						}
 						//Opposite box is checked, figure out if it's a Y or N box.
 						if(oppositeBox.RadioButtonValue=="Y") {
-							fieldVal="X";
+							fieldVal="Y";
+						}
+						else {
+							fieldVal="N";
 						}
 					}
 					else {//Current box is checked.  
 						if(problemList[i].RadioButtonValue=="Y") {
-							fieldVal="X";
+							fieldVal="Y";
+						}
+						else {
+							fieldVal="N";
 						}
 					}
 					//Get rid of the opposite check box so field doesn't show up twice.
@@ -1451,23 +1435,20 @@ namespace OpenDental {
 				rows[e.Row].ImpValObj=inputbox.textResult.Text;
 			}
 			else if(rows[e.Row].ObjType==typeof(Medication)) {
-				if(rows[e.Row].ImpValObj.GetType()==typeof(List<Medication>)) {//Make the user pick a medication.
-					FormSheetImportEnumPicker formMedList=new FormSheetImportEnumPicker("Possible Medications:");
-					List<Medication> medMatches=(List<Medication>)rows[e.Row].ImpValObj;
-					for(int i=0;i<medMatches.Count;i++) {
-						formMedList.comboResult.Items.Add(medMatches[i].MedName);
-					}
-					formMedList.comboResult.SelectedIndex=0;//There will always be at least one option.
-					formMedList.ShowDialog();
-					if(formMedList.DialogResult!=DialogResult.OK) {
+				if(rows[e.Row].ImpValObj.GetType()==typeof(long)) {
+					FormMedications FormM=new FormMedications();
+					FormM.IsSelectionMode=true;
+					FormM.textSearch.Text=rows[e.Row].FieldName;
+					FormM.ShowDialog();
+					if(FormM.DialogResult!=DialogResult.OK) {
 						return;
 					}
-					int selectedI=formMedList.comboResult.SelectedIndex;
-					rows[e.Row].ImpValDisplay="X";
-					rows[e.Row].ImpValObj=typeof(string);
-					((SheetField)rows[e.Row].NewValObj).FieldValue=medMatches[formMedList.comboResult.SelectedIndex].MedName;
-					rows[e.Row].FieldName=medMatches[formMedList.comboResult.SelectedIndex].MedName;
-					rows[e.Row].NewValDisplay="X";
+					rows[e.Row].ImpValDisplay="Y";
+					rows[e.Row].ImpValObj=FormM.SelectedMedicationNum;
+					string descript=Medications.GetDescription(FormM.SelectedMedicationNum);
+					rows[e.Row].FieldDisplay=descript;
+					((SheetField)rows[e.Row].NewValObj).FieldValue=descript;
+					rows[e.Row].NewValDisplay="Y";
 					rows[e.Row].DoImport=true;
 					rows[e.Row].IsFlaggedImp=false;
 				}
@@ -1762,20 +1743,26 @@ namespace OpenDental {
 					    Medication oldMed=(Medication)rows[i].OldValObj;
 					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,pat.PatNum);
 					    for(int j=0;j<patMeds.Count;j++) {
-					      if(hasValue) {
+					      if(rows[i].ImpValDisplay=="Y") {
 					        //Check if med is currently inactive.
 					        if(patMeds[j].DateStop.Year>1880 && patMeds[j].DateStop<=DateTime.Now) {
 					          patMeds[j].DateStop=new DateTime(0001,1,1);//This will activate the med.
 					        }
 					      }
-					      else {
-					        //Set the med as inactive.
-					        patMeds[j].DateStop=DateTime.Now;
-					      }
+								else if(rows[i].ImpValDisplay=="N") {
+									//Set the med as inactive.
+									patMeds[j].DateStop=DateTime.Now;
+								}
+								else {
+									continue;
+								}
 					      MedicationPats.Update(patMeds[j]);
 					    }
 					    continue;
 					  }
+						if(rows[i].ImpValDisplay=="" || (rows[i].OldValDisplay=="N" && rows[i].ImpValDisplay=="N")) {
+							continue;
+						}
 					  //Medication does not exist for this patient yet so create it.
 					  List<Medication> medList=Medications.GetList("");
 					  SheetField medSheet=(SheetField)rows[i].NewValObj;

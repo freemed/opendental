@@ -21,7 +21,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butAddGeneric;
 		private OpenDental.UI.Button butAddBrand;
 		private OpenDental.UI.ODGrid gridMain;
-		private TextBox textSearch;
+		public TextBox textSearch;
 		private Label label1;
 		///<summary>the number returned if using select mode.</summary>
 		public long SelectedMedicationNum;
