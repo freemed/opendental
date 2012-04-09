@@ -44,7 +44,33 @@ namespace OpenDentBusiness{
 
 	}
 
-	
+	///<summary></summary>
+	public enum CommItemMode {
+		///<summary>0- </summary>
+		None,
+		///<summary>1- </summary>
+		Email,
+		///<summary>2</summary>
+		Mail,
+		///<summary>3</summary>
+		Phone,
+		///<summary>4</summary>
+		InPerson,
+		/////<summary>5</summary>
+		//AutoItem//these were all deleted in version 12.2.1
+		///<summary>5</summary>
+		TxtMsg
+	}
+
+	///<summary>0=neither, 1=sent, 2=received.</summary>
+	public enum CommSentOrReceived {
+		///<summary>0</summary>
+		Neither,
+		///<summary>1</summary>
+		Sent,
+		///<summary>2</summary>
+		Received
+	}
 
 
 

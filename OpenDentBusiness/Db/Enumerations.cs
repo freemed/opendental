@@ -584,32 +584,6 @@ namespace OpenDentBusiness{
 	}*/
 
 	///<summary></summary>
-	public enum CommItemMode{
-		///<summary>0- </summary>
-		None,
-		///<summary>1- </summary>
-		Email,
-		///<summary>2</summary>
-		Mail,
-		///<summary>3</summary>
-		Phone,
-		///<summary>4</summary>
-		InPerson
-		/////<summary>5</summary>
-		//AutoItem
-	}
-
-	///<summary>0=neither, 1=sent, 2=received.</summary>
-	public enum CommSentOrReceived{
-		///<summary>0</summary>
-		Neither,
-		///<summary>1</summary>
-		Sent,
-		///<summary>2</summary>
-		Received
-	}
-
-	///<summary></summary>
 	public enum ToolBarsAvail{
 		///<summary>0</summary>
 		AccountModule,
@@ -802,7 +776,9 @@ namespace OpenDentBusiness{
 		///<summary>24</summary>
     Recall,
 		///<summary>25</summary>
-		Popup
+		Popup,
+		///<summary>26</summary>
+		TxtMsg
 	}
 
 	///<summary>For every type of electronic claim format that Open Dental can create, there will be an item in this enumeration.  All e-claim formats are hard coded due to complexity.</summary>

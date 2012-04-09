@@ -21,21 +21,14 @@ namespace OpenDentBusiness {
 
 	///<summary>Because this enum is stored in the database as strings rather than as numbers, we can do the order alphabetically and we can change it whenever we want.</summary>
 	public enum PrefName {
-		///<summary></summary>
 		AccountingCashIncomeAccount,
-		///<summary></summary>
 		AccountingDepositAccounts,
-		///<summary></summary>
 		AccountingIncomeAccount,
-		///<summary></summary>
 		AccountingLockDate,
 		///<summary>Enum:AccountingSoftware 0=None, 1=Open Dental, 2=QuickBooks</summary>
 		AccountingSoftware,
-		///<summary></summary>
 		AccountShowPaymentNums,
-		///<summary></summary>
 		ADAComplianceDateTime,
-		///<summary></summary>
 		ADAdescriptionsReset,
 		AgingCalculatedMonthlyInsteadOfDaily,
 		///<summary>FK to allergydef.AllergyDefNum</summary>
@@ -48,6 +41,7 @@ namespace OpenDentBusiness {
 		AppointmentTimeArrivedTrigger,
 		AppointmentTimeDismissedTrigger,
 		AppointmentTimeIncrement,
+		///<summary>Set to true if appointment times are locked by default.</summary>
 		AppointmentTimeIsLocked,
 		AppointmentTimeSeatedTrigger,
 		ApptBubbleDelay,
