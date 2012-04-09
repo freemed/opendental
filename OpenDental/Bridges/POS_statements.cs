@@ -38,7 +38,7 @@ namespace OpenDental.Bridges {
 			writer.WriteStartElement("RecipientAddress");
 			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
-			writer.WriteElementString("Account",guar.ChartNumber;//.PatNum.ToString());//Only one customer is using this, so no need to give option.
+			writer.WriteElementString("Account",guar.ChartNumber);//.PatNum.ToString());//Only one customer is using this, so no need to give option.
 			writer.WriteElementString("Address1",guar.Address);
 			writer.WriteElementString("Address2",guar.Address2);
 			writer.WriteElementString("City",guar.City);
