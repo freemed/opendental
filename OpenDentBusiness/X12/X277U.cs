@@ -5,8 +5,11 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-	///<summary>X12 277 Unsolicited Claim Status Notification</summary>
-	public class X277U{
+	///<summary>X12 277 Unsolicited Claim Status Notification. There is only one type of 277, but a 277 can be sent out unsolicited (without sending a request) or as a response to a 276 request.</summary>
+	public class X277U:X12object{
+
+		public X277U(string messageText):base(messageText) {
+		}
 
 		public static bool Is277U(X12object xobj) {
 			if(xobj.FunctGroups.Count!=1) {//Assume only one funct group allowed.  Is this too strict?
@@ -18,16 +21,111 @@ namespace OpenDentBusiness
 			return false;
 		}
 
+		///<summary>In X12 lingo, the batchNumber is known as the functional group.</summary>
+		public int GetBatchNumber() {
+			if(FunctGroups.Count!=1) {
+				return 0;
+			}
+			string batchNumStr=FunctGroups[0].Header.Get(6);
+			try {
+				return PIn.Int(batchNumStr);
+			}
+			catch {
+				return 0;
+			}
+		}
+
+		///<summary>Do this first to get a list of all trans nums that are contained within this 277.  Then, for each trans num, we can later retrieve the AckCode for that single trans num. The transaction numbers correspond to BHT03 from the 837.</summary>
+		public List<int> GetTransNums() {
+			List<int> retVal=new List<int>();
+			X12Segment seg;
+			int transNum=0;
+			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++) {
+				seg=FunctGroups[0].Transactions[0].Segments[i];
+				//Only one type of NM1 within the entire 277 has an Entity Identifier Code in NM101 of value 41=Submitter. The transaction numbers we are looking for are in the TRN segments right below these NM1 segments. Each NM1 segment with value 41 in NM101 is guaranteed to have exactly one TRN segment following immediately afterwards.
+				if(seg.SegmentID=="NM1" && seg.Get(1)=="41") {
+					i++;
+					seg=FunctGroups[0].Transactions[0].Segments[i];//a TRN segment.
+					transNum=0;
+					try {
+						transNum=PIn.Int(seg.Get(2));
+					}
+					catch {
+						transNum=0;
+					}
+					if(transNum!=0) {
+						retVal.Add(transNum);
+					}
+				}
+			}
+			return retVal;
+		}
+
+		///<summary>Use after GetTransNums.  Will return A=Accepted, R=Rejected, or "" if can't determine.</summary>
+		public string GetAckForTrans(int transNum) {
+			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++) {
+				X12Segment seg=FunctGroups[0].Transactions[0].Segments[i];
+				//Only one type of NM1 within the entire 277 has an Entity Identifier Code in NM101 of value 41=Submitter. The transaction numbers we are looking for are in the TRN segments right below these NM1 segments. Each NM1 segment with value 41 in NM101 is guaranteed to have exactly one TRN segment following immediately afterwards.
+				if(seg.SegmentID=="NM1" && seg.Get(1)=="41") {
+					i++;
+					seg=FunctGroups[0].Transactions[0].Segments[i];//a TRN segment.
+					int thisTransNum=0;
+					try {
+						thisTransNum=PIn.Int(seg.Get(2));
+					}
+					catch {
+						thisTransNum=0;
+					}
+					if(thisTransNum==transNum) {
+						//TODO:
+					}
+				}
+			}
+			return "";
+		}
+
+		///<summary>Will return "" if unable to determine.  But would normally return A=Accepted or R=Rejected or P=Partially accepted if only some of the transactions were accepted.</summary>
+		public string GetBatchAckCode() {
+			if(this.FunctGroups[0].Transactions.Count!=1) {
+				return "";
+			}
+			int totalClaimsAccepted=0;
+			int totalClaimsRejected=0;
+			for(int i=0;i<FunctGroups[0].Transactions[0].Segments.Count;i++) {
+				X12Segment seg=FunctGroups[0].Transactions[0].Segments[i];
+				if(seg.SegmentID!="QTY") {
+					continue;
+				}
+				string segQualifier=seg.Get(1);
+				if(segQualifier=="90") {
+					totalClaimsAccepted=PIn.Int(seg.Get(2));
+				}
+				else if(segQualifier=="AA") {
+					totalClaimsRejected=PIn.Int(seg.Get(2));
+				}
+			}
+			if(totalClaimsAccepted>0 && totalClaimsRejected>0) {
+				return "P";
+			}
+			if(totalClaimsAccepted>0) {
+				return "A";
+			}
+			if(totalClaimsRejected>0) {
+				return "R";
+			}
+			return "";
+		}
+
 		///<summary>This can take a 277 file of any length and convert it to a human readable format.  It can then be saved to a text file in the same folder as the original. The original file should be immediately archived if this is successful.  Actually includes extra functionality to make an 837 readable.</summary>
-		public static string MakeHumanReadable(X12object xobj){
+		public string GetHumanReadable() {
 			//List<string> messageLines=new List<string>();
 			//X12object xObj=new X12object(File.ReadAllText(fileName));
 			string rn="\r\n";
 			StringBuilder ret=new StringBuilder();
-			foreach(X12FunctionalGroup functGroup in xobj.FunctGroups){
+			foreach(X12FunctionalGroup functGroup in FunctGroups){
 				ret.Append("Functional Group");
 				if(functGroup.Header.Get(1)=="HN"){
-					ret.Append(" 277-Unsolicited Claim Status Notification");
+					ret.Append(" 277-Claim Status Notification");
 				}
 				ret.Append(rn);	
 				foreach(X12Transaction trans in functGroup.Transactions){
