@@ -3528,9 +3528,9 @@ namespace OpenDental{
 
 		private void RefreshModuleData(long patNum) {
 			if(patNum==0){
-			  PatCur=null;
-			  FamCur=null;
-			  return;
+				PatCur=null;
+				FamCur=null;
+				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
 			PatCur=FamCur.GetPatient(patNum);

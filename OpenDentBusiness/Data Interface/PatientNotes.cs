@@ -14,20 +14,20 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<PatientNote>(MethodBase.GetCurrentMethod(),patNum,guarantor);
 			}
-			string command="SELECT * FROM patientnote WHERE patnum ='"+POut.Long(patNum)+"'";
+			string command="SELECT COUNT(*) FROM patientnote WHERE patnum = '"+POut.Long(patNum)+"'";
 			DataTable table=Db.GetTable(command);
-			if(table==null){
+			if(table.Rows[0][0].ToString()=="0"){
 				InsertRow(patNum);
-				command ="SELECT * FROM patientnote WHERE patnum ='"+POut.Long(patNum)+"'";
 			}
+			command ="SELECT * FROM patientnote WHERE patnum ='"+POut.Long(patNum)+"'";
 			PatientNote Cur=Crud.PatientNoteCrud.SelectOne(command);
 			//fam financial note:
-			command = "SELECT famfinancial FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
+			command = "SELECT * FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
 			table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				InsertRow(guarantor);
-				command = "SELECT famfinancial FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
 			}
+			command = "SELECT famfinancial FROM patientnote WHERE patnum ='"+POut.Long(guarantor)+"'";
 			table=Db.GetTable(command);
 			Cur.FamFinancial= PIn.String(table.Rows[0][0].ToString());//overrides original FamFinancial value.
 			return Cur;
