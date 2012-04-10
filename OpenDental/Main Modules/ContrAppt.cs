@@ -3573,6 +3573,22 @@ namespace OpenDental {
 						RefreshModuleDataPatient(PatCur.PatNum);
 						OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 						//RefreshModulePatient(PatCurNum);
+						if(apt!=null && DoesOverlap(apt)) {
+							Appointment aptOld=apt.Clone();
+							MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
+							while(DoesOverlap(apt)) {
+								apt.Pattern=apt.Pattern.Substring(0,apt.Pattern.Length-1);
+								if(apt.Pattern.Length==1) {
+									break;
+								}
+							}
+							try {
+								Appointments.Update(apt,aptOld);
+							}
+							catch(ApplicationException ex) {
+								MessageBox.Show(ex.Message);
+							}
+						}
 						RefreshPeriod();
 						SetInvalid();
 					}
