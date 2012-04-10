@@ -23,7 +23,11 @@ namespace OpenDental {
 		}
 
 		private void butClear_Click(object sender,EventArgs e) {
-			comboResult.SelectedIndex=-1;
+			listResult.SelectedIndex=-1;
+			DialogResult=DialogResult.OK;
+		}
+
+		private void listResult_DoubleClick(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
 

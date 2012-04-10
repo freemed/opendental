@@ -978,11 +978,9 @@ namespace OpenDental {
 							break;
 						}
 					}
-					//Figure out which corresponding checkbox is checked.
-					for(int j=0;j<checkMedList.Count;j++) {
-						if(checkMedList[j].FieldName.Remove(0,8)==currentMedList[i].FieldName.Remove(0,8)
-							&& checkMedList[j].FieldValue!="") 
-						{
+					List<SheetField> relatedChkBoxes=GetRelatedMedicalCheckBoxes(checkMedList,currentMedList[i]);
+					for(int j=0;j<relatedChkBoxes.Count;j++) {//Figure out which corresponding checkbox is checked.
+						if(relatedChkBoxes[j].FieldValue!="") {//Patient checked this box.
 							if(checkMedList[j].RadioButtonValue=="Y") {
 								fieldVal="Y";
 							}
@@ -991,6 +989,16 @@ namespace OpenDental {
 							}
 							break;
 						}
+						//If sheet is only using N boxes and the patient already had this med marked as inactive and then they unchecked the N, so now we need to import it.
+						if(relatedChkBoxes.Count==1 && relatedChkBoxes[j].RadioButtonValue=="N" //Only using N boxes for this current medication.
+							&& row.OldValObj!=null && row.OldValDisplay=="N"											//Patient has this medication but is currently marked as inactive.
+							&& relatedChkBoxes[j].FieldValue=="")																	//Patient unchecked the medication so we activate it again.
+						{
+							fieldVal="Y";
+						}
+					}
+					if(relatedChkBoxes.Count==1 && relatedChkBoxes[0].RadioButtonValue=="N" && relatedChkBoxes[0].FieldValue=="" && row.OldValDisplay=="N" && row.OldValObj!=null) {
+						row.DoImport=true;
 					}
 					row.NewValDisplay=fieldVal;
 					row.NewValObj=currentMedList[i];
@@ -1040,7 +1048,7 @@ namespace OpenDental {
 					for(int j=0;j<diseases.Count;j++) {
 						if(DiseaseDefs.GetName(diseases[j].DiseaseDefNum)==problemList[i].FieldName.Remove(0,8)) {
 							if(diseases[j].ProbStatus==ProblemStatus.Active) {
-								row.OldValDisplay="X";
+								row.OldValDisplay="Y";
 							}
 							row.OldValObj=diseases[j];
 							break;
@@ -1290,6 +1298,17 @@ namespace OpenDental {
 			return null;
 		}
 
+		///<summary>Returns all checkboxes related to the inputMed passed in.</summary>
+		private List<SheetField> GetRelatedMedicalCheckBoxes(List<SheetField> checkMedList,SheetField inputMed) {
+			List<SheetField> checkBoxes=new List<SheetField>();
+			for(int i=0;i<checkMedList.Count;i++) {
+				if(checkMedList[i].FieldName.Remove(0,8)==inputMed.FieldName.Remove(0,8)) {
+					checkBoxes.Add(checkMedList[i]);
+				}
+			}
+			return checkBoxes;
+		}
+
 		private bool ContainsOneOfFields(params string[] fieldNames) {
 			if(SheetCur!=null) {
 				for(int i=0;i<SheetCur.SheetFields.Count;i++) {
@@ -1453,20 +1472,42 @@ namespace OpenDental {
 					rows[e.Row].IsFlaggedImp=false;
 				}
 				else {
-					InputBox inputbox=new InputBox(rows[e.Row].FieldName);
-					inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
-					inputbox.ShowDialog();
-					if(inputbox.DialogResult!=DialogResult.OK) {
+					FormSheetImportEnumPicker FormIEP=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
+					for(int i=0;i<Enum.GetNames(typeof(YN)).Length;i++) {
+						FormIEP.listResult.Items.Add(Enum.GetNames(typeof(YN))[i]);
+					}
+					FormIEP.listResult.SelectedIndex=0;//Unknown
+					if(rows[e.Row].ImpValDisplay=="Y") {
+						FormIEP.listResult.SelectedIndex=1;
+					}
+					if(rows[e.Row].ImpValDisplay=="N") {
+						FormIEP.listResult.SelectedIndex=2;
+					}
+					FormIEP.ShowDialog();
+					if(FormIEP.DialogResult!=DialogResult.OK) {
 						return;
 					}
-					if(rows[e.Row].OldValDisplay==inputbox.textResult.Text) {//value is now same as original
+					int selectedI=FormIEP.listResult.SelectedIndex;
+					switch(selectedI) {
+						case 0:
+							rows[e.Row].ImpValDisplay="";
+							break;
+						case 1:
+							rows[e.Row].ImpValDisplay="Y";
+							break;
+						case 2:
+							rows[e.Row].ImpValDisplay="N";
+							break;
+					}
+					if(rows[e.Row].OldValDisplay==rows[e.Row].ImpValDisplay) {//value is now same as original
 						rows[e.Row].DoImport=false;
 					}
 					else {
 						rows[e.Row].DoImport=true;
 					}
-					rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
-					rows[e.Row].ImpValObj=inputbox.textResult.Text;
+					if(selectedI==-1 || selectedI==0) {
+						rows[e.Row].DoImport=false;
+					}
 				}
 			}
 			/*else if(rows[e.Row].ObjType.IsGenericType){//==typeof(Nullable)) {
@@ -1523,14 +1564,14 @@ namespace OpenDental {
 				//Note.  This only works for zero-indexed enums.
 				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
 				for(int i=0;i<Enum.GetNames(rows[e.Row].ObjType).Length;i++) {
-					formEnum.comboResult.Items.Add(Enum.GetNames(rows[e.Row].ObjType)[i]);
+					formEnum.listResult.Items.Add(Enum.GetNames(rows[e.Row].ObjType)[i]);
 					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
-						formEnum.comboResult.SelectedIndex=i;
+						formEnum.listResult.SelectedIndex=i;
 					}
 				}
 				formEnum.ShowDialog();
 				if(formEnum.DialogResult==DialogResult.OK) {
-					int selectedI=formEnum.comboResult.SelectedIndex;
+					int selectedI=formEnum.listResult.SelectedIndex;
 					if(rows[e.Row].ImpValObj==null) {//was initially null
 						if(selectedI!=-1) {//an item was selected
 							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
