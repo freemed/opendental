@@ -1422,10 +1422,7 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=referralSelected.GetNameFL();
 				rows[e.Row].ImpValObj=referralSelected;
 			}
-			else if(rows[e.Row].ObjType==typeof(string)
-				|| rows[e.Row].ObjType==typeof(Allergy)
-				|| rows[e.Row].ObjType==typeof(Disease)) 
-			{
+			else if(rows[e.Row].ObjType==typeof(string)) {
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
 				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
 				inputbox.ShowDialog();
@@ -1433,13 +1430,13 @@ namespace OpenDental {
 					return;
 				}
 				if(rows[e.Row].FieldName=="addressAndHmPhoneIsSameEntireFamily") {
-					if(inputbox.textResult.Text==""){
-						AddressSameForFam=false;	
+					if(inputbox.textResult.Text=="") {
+						AddressSameForFam=false;
 					}
 					else if(inputbox.textResult.Text!="X") {
 						AddressSameForFam=true;
 					}
-					else{
+					else {
 						MsgBox.Show(this,"The only allowed values are X or blank.");
 						return;
 					}
@@ -1453,7 +1450,11 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
 				rows[e.Row].ImpValObj=inputbox.textResult.Text;
 			}
-			else if(rows[e.Row].ObjType==typeof(Medication)) {
+			else if(rows[e.Row].ObjType==typeof(Medication)
+				|| rows[e.Row].ObjType==typeof(Allergy)
+				|| rows[e.Row].ObjType==typeof(Disease)) 
+			{
+				//User entered medications will have a MedicationNum as the ImpValObj.
 				if(rows[e.Row].ImpValObj.GetType()==typeof(long)) {
 					FormMedications FormM=new FormMedications();
 					FormM.IsSelectionMode=true;
@@ -1744,20 +1745,31 @@ namespace OpenDental {
 					if(rows[i].ObjType==null) {//Should never happen.
 						continue;
 					}
-					bool hasValue=false;
-					if(rows[i].ImpValDisplay!="") {
-						hasValue=true;
+					YN hasValue=YN.Unknown;
+					if(rows[i].ImpValDisplay=="Y") {
+						hasValue=YN.Yes;
+					}
+					if(rows[i].ImpValDisplay=="N") {
+						hasValue=YN.No;
+					}
+					if(hasValue==YN.Unknown) {//Unknown, nothing to do.
+						continue;
 					}
 					#region Allergies
 					if(rows[i].ObjType==typeof(Allergy)) {
 						//Patient has this allergy in the db so just update the value.
 						if(rows[i].OldValObj!=null) {
 							Allergy oldAllergy=(Allergy)rows[i].OldValObj;
-							oldAllergy.StatusIsActive=hasValue;
+							if(hasValue==YN.Yes) {
+								oldAllergy.StatusIsActive=true;
+							}
+							else {
+								oldAllergy.StatusIsActive=false;
+							}
 							Allergies.Update(oldAllergy);
 							continue;
 						}
-						if(!hasValue) {
+						if(hasValue==YN.No) {//We never import allergies with inactive status.
 							continue;
 						}
 						//Allergy does not exist for this patient yet so create one.
@@ -1784,24 +1796,20 @@ namespace OpenDental {
 					    Medication oldMed=(Medication)rows[i].OldValObj;
 					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,pat.PatNum);
 					    for(int j=0;j<patMeds.Count;j++) {
-					      if(rows[i].ImpValDisplay=="Y") {
+					      if(hasValue==YN.Yes) {
 					        //Check if med is currently inactive.
 					        if(patMeds[j].DateStop.Year>1880 && patMeds[j].DateStop<=DateTime.Now) {
 					          patMeds[j].DateStop=new DateTime(0001,1,1);//This will activate the med.
 					        }
 					      }
-								else if(rows[i].ImpValDisplay=="N") {
-									//Set the med as inactive.
-									patMeds[j].DateStop=DateTime.Now;
-								}
 								else {
-									continue;
+									patMeds[j].DateStop=DateTime.Now;//Set the med as inactive.
 								}
 					      MedicationPats.Update(patMeds[j]);
 					    }
 					    continue;
 					  }
-						if(rows[i].ImpValDisplay=="" || (rows[i].OldValDisplay=="N" && rows[i].ImpValDisplay=="N")) {
+						if(hasValue==YN.No) {//Don't import medications with inactive status.
 							continue;
 						}
 					  //Medication does not exist for this patient yet so create it.
@@ -1824,7 +1832,7 @@ namespace OpenDental {
 						//Patient has this problem in the db so just update the value.
 						if(rows[i].OldValObj!=null) {
 							Disease oldDisease=(Disease)rows[i].OldValObj;
-							if(hasValue) {
+							if(hasValue==YN.Yes) {
 								oldDisease.ProbStatus=ProblemStatus.Active;
 							}
 							else {
@@ -1833,7 +1841,7 @@ namespace OpenDental {
 							Diseases.Update(oldDisease);
 							continue;
 						}
-						if(!hasValue) {
+						if(hasValue==YN.No) {//Don't create new problem with inactive status.
 							continue;
 						}
 						//Problem does not exist for this patient yet so create one.
