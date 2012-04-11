@@ -57,28 +57,32 @@ namespace OpenDental {
 			if(phoneList==null){
 				return;
 			}
+			int rows=4;
+			int columns=7;
 			float wh=21.4f;
-			float hTot=wh*3;
+			float hTot=wh*rows;
 			float x=0f;
 			float y=0f;
+			//Create a white "background" rectangle so that any empty squares (no employees) will show as white boxes instead of no color.
+			g.FillRectangle(new SolidBrush(Color.White),x,y,wh*columns,wh*rows);
 			for(int i=0;i<phoneList.Count;i++){
 				using(SolidBrush brush=new SolidBrush(phoneList[i].ColorBar)){
 					g.FillRectangle(brush,x*wh,y*wh,wh,wh);
 				}
 				x++;
-				if(x>=7){
+				if(x>=columns){
 					x=0f;
 					y++;
 				}
 			}
 			//horiz lines
-			for(int i=0;i<4;i++){
+			for(int i=0;i<rows+1;i++){
 				g.DrawLine(Pens.Black,0,i*wh,Width,i*wh);
 			}
 			//Very bottom
 			g.DrawLine(Pens.Black,0,Height-1,Width,Height-1);
 			//vert
-			for(int i=0;i<7;i++){
+			for(int i=0;i<columns;i++){
 				g.DrawLine(Pens.Black,i*wh,0,i*wh,hTot);
 			}
 			g.DrawLine(Pens.Black,Width-1,0,Width-1,hTot);

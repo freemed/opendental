@@ -20,7 +20,6 @@ namespace OpenDental {
 		///<summary>This is the difference between server time and local computer time.  Used to ensure that times displayed are accurate to the second.  This value is usally just a few seconds, but possibly a few minutes.</summary>
 		private TimeSpan timeDelta;
 		private int msgCount;
-		string pathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
 		private PhoneTile selectedTile;
 		///<summary>This thread fills labelMsg</summary>
 		private Thread workerThread;
@@ -175,14 +174,14 @@ namespace OpenDental {
 			bool isBold;
 			Color color;
 			try {
-				if(!Directory.Exists(pathPhoneMsg)) {
+				if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
 					s="msg path not found";
 					isBold=false;
 					color=Color.Black;
 					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
 					return;
 				}
-				msgCount=Directory.GetFiles(pathPhoneMsg,"*.txt").Length;
+				msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
 				if(msgCount==0) {
 					s="Phone Messages: 0";
 					isBold=false;

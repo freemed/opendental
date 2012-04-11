@@ -239,8 +239,12 @@ namespace OpenDental{
 		private MenuItem menuItemTestLatency;
 		private FormLogOn FormLogOn_;
 		private System.Windows.Forms.Timer timerReplicationMonitor;
+		private Label labelMsg;
 		///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
 		private bool IsFormLogOnLastActive;
+		private System.Windows.Forms.Timer timerMsgs;
+		///<summary>This thread fills labelMsg</summary>
+		private Thread ThreadVM;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -466,10 +470,12 @@ namespace OpenDental{
 			this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
 			this.timerPhoneWebCam = new System.Windows.Forms.Timer(this.components);
 			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
-			this.butBigPhones = new OpenDental.UI.Button();
-			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
+			this.labelMsg = new System.Windows.Forms.Label();
+			this.timerMsgs = new System.Windows.Forms.Timer(this.components);
+			this.butBigPhones = new OpenDental.UI.Button();
+			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1230,13 +1236,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
-			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
-			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
-			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4,"chart32.gif");
-			this.imageList32.Images.SetKeyName(5,"Images32.gif");
-			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
+			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
+			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
+			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
+			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4, "chart32.gif");
+			this.imageList32.Images.SetKeyName(5, "Images32.gif");
+			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -1246,9 +1252,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -1276,11 +1282,11 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
-			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
-			this.imageListMain.Images.SetKeyName(2,"email.gif");
-			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4,"label.gif");
+			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
+			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
+			this.imageListMain.Images.SetKeyName(2, "email.gif");
+			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4, "label.gif");
 			// 
 			// menuPatient
 			// 
@@ -1321,30 +1327,6 @@ namespace OpenDental{
 			this.timerWebHostSynch.Interval = 30000;
 			this.timerWebHostSynch.Tick += new System.EventHandler(this.timerWebHostSynch_Tick);
 			// 
-			// butBigPhones
-			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butBigPhones.Autosize = true;
-			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(143,565);
-			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(75,24);
-			this.butBigPhones.TabIndex = 52;
-			this.butBigPhones.Text = "Big Phones";
-			this.butBigPhones.Visible = false;
-			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
-			// 
-			// lightSignalGrid1
-			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
-			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
-			this.lightSignalGrid1.TabIndex = 20;
-			this.lightSignalGrid1.Text = "lightSignalGrid1";
-			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
 			// timerLogoff
 			// 
 			this.timerLogoff.Interval = 15000;
@@ -1355,13 +1337,55 @@ namespace OpenDental{
 			this.timerReplicationMonitor.Interval = 10000;
 			this.timerReplicationMonitor.Tick += new System.EventHandler(this.timerReplicationMonitor_Tick);
 			// 
+			// labelMsg
+			// 
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelMsg.Location = new System.Drawing.Point(71, 567);
+			this.labelMsg.Name = "labelMsg";
+			this.labelMsg.Size = new System.Drawing.Size(66, 20);
+			this.labelMsg.TabIndex = 53;
+			this.labelMsg.Text = "VM: 0";
+			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelMsg.Visible = false;
+			// 
+			// timerMsgs
+			// 
+			this.timerMsgs.Interval = 3000;
+			this.timerMsgs.Tick += new System.EventHandler(this.timerMsgs_Tick);
+			// 
+			// butBigPhones
+			// 
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBigPhones.Autosize = true;
+			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBigPhones.CornerRadius = 4F;
+			this.butBigPhones.Location = new System.Drawing.Point(143, 565);
+			this.butBigPhones.Name = "butBigPhones";
+			this.butBigPhones.Size = new System.Drawing.Size(75, 24);
+			this.butBigPhones.TabIndex = 52;
+			this.butBigPhones.Text = "Big Phones";
+			this.butBigPhones.Visible = false;
+			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
+			// 
+			// lightSignalGrid1
+			// 
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
+			this.lightSignalGrid1.Name = "lightSignalGrid1";
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
+			this.lightSignalGrid1.TabIndex = 20;
+			this.lightSignalGrid1.Text = "lightSignalGrid1";
+			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
+			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,585);
+			this.ClientSize = new System.Drawing.Size(982, 585);
+			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butBigPhones);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu;
@@ -2547,11 +2571,16 @@ namespace OpenDental{
 						butBigPhones.Visible=true;
 						butBigPhones.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width,panelSplitter.Bottom);
 						butBigPhones.BringToFront();
+						labelMsg.Visible=true;
+						labelMsg.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width-labelMsg.Width,panelSplitter.Bottom);
+						labelMsg.BringToFront();
+						timerMsgs.Enabled=true;
 					}
 					else{
 						phoneSmall.Visible=false;
 						//phonePanel.Visible=false;
 						butBigPhones.Visible=false;
+						labelMsg.Visible=false;
 						userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
 						userControlTasks1.Width=width;
 					}
@@ -2562,6 +2591,7 @@ namespace OpenDental{
 					phoneSmall.Visible=false;
 					//phonePanel.Visible=false;
 					butBigPhones.Visible=false;
+					labelMsg.Visible=false;
 					if(panelSplitter.Width>8) {//docking needs to be changed
 						panelSplitter.Width=7;
 						panelSplitter.Location=new Point(900,position.Y);
@@ -2581,6 +2611,7 @@ namespace OpenDental{
 				phoneSmall.Visible=false;
 				//phonePanel.Visible=false;
 				butBigPhones.Visible=false;
+				labelMsg.Visible=false;
 				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;
@@ -3450,6 +3481,62 @@ namespace OpenDental{
 					RefreshCurrentModule();
 				}
 			}
+		}
+
+		///<summary>This timer won't even tick unless pref DockPhonePanelShow is true.  3 sec tick.</summary>
+		private void timerMsgs_Tick(object sender,EventArgs e) {
+			ThreadVM=new Thread(new ThreadStart(this.ThreadVM_SetLabelMsg));
+			ThreadVM.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
+		}
+
+		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
+
+		///<summary>Always called using ThreadVM.</summary>
+		private void ThreadVM_SetLabelMsg() {
+			#if DEBUG
+				return;//Because path is not valid when Jordan is debugging from home.
+			#endif
+			string msg;
+			int msgCount;
+			bool isBold;
+			Color color;
+			try {
+				if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
+					msg="";
+					isBold=false;
+					color=Color.Black;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+					return;
+				}
+				msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
+				if(msgCount==0) {
+					msg="VM: 0";
+					isBold=false;
+					color=Color.Black;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+				}
+				else {
+					msg="VM: "+msgCount.ToString();
+					isBold=true;
+					color=Color.Firebrick;
+					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+				}
+			}
+			catch {
+				//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
+			}
+		}
+
+		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
+		private void SetString(String str,bool isBold,Color color) {
+			labelMsg.Text=str;
+			if(isBold) {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+			}
+			else {
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+			}
+			labelMsg.ForeColor=color;
 		}
 
 		/*private void moduleStaffBilling_GoToChanged(object sender,GoToEventArgs e) {
@@ -5042,6 +5129,9 @@ namespace OpenDental{
 			//earlier, this wasn't working.  But I haven't tested it since moving it from Closing to FormClosing.
 			if(ThreadCommandLine!=null) {
 				ThreadCommandLine.Abort();
+			}
+			if(ThreadVM!=null){
+				ThreadVM.Abort();
 			}
 		}
 

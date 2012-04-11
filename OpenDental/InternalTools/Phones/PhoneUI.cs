@@ -8,6 +8,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public class PhoneUI {
 		private static string langThis="Phone";
+		public static string PathPhoneMsg=@"\\192.168.0.197\Voicemail\default\998\INBOX";
 
 		public static void Manage(PhoneTile tile){
 			//if(selectedTile.PhoneCur==null) {//already validated
