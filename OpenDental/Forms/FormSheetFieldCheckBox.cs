@@ -127,16 +127,16 @@ namespace OpenDental {
 				checkRequired.Visible=true;
 				radioYes.Visible=true;
 				radioNo.Visible=true;
-				if(!AvailFields[listFields.SelectedIndex].FieldName.StartsWith("checkMed")) {
-					labelMedical.Visible=true;
-					listMedical.Visible=true;
-				}
 				switch(AvailFields[listFields.SelectedIndex].FieldName) {
 					case "allergy":
+						labelMedical.Visible=true;
+						listMedical.Visible=true;
 						labelMedical.Text="Allergies";
 						FillListMedical(MedicalListType.allergy);
 						break;
 					case "problem":
+						labelMedical.Visible=true;
+						listMedical.Visible=true;
 						labelMedical.Text="Problems";
 						FillListMedical(MedicalListType.problem);
 						break;
