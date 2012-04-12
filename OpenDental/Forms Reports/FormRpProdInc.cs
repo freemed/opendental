@@ -768,7 +768,7 @@ namespace OpenDental{
 			if(radioWriteoffPay.Checked){
 				report.Query+="SELECT claimproc.DateCP,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
-					+"carrier.CarrierName,"
+					+"procedurecode.Descript,"//might be null, which is ok.  Was: carrier.CarrierName
 					+"provider.Abbr,"
 					+"claimproc.ClinicNum,"
 					+"0,"
@@ -777,14 +777,14 @@ namespace OpenDental{
 					+"0,"
 					+"0,"
 					+"claimproc.ClaimNum "
-					+"FROM claimproc,insplan,patient,carrier,provider "
-					+"WHERE provider.ProvNum = claimproc.ProvNum "
-					+"AND claimproc.PlanNum = insplan.PlanNum "
-					+"AND claimproc.PatNum = patient.PatNum "
-					+"AND carrier.CarrierNum = insplan.CarrierNum "
+					+"FROM claimproc "
+					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "
+					+"LEFT JOIN provider ON provider.ProvNum = claimproc.ProvNum "
+					+"LEFT JOIN procedurelog ON procedurelog.ProcNum=claimproc.ProcNum "
+					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 					+whereProv
 					+whereClin
-					+"AND (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
 					+"AND claimproc.WriteOff > '.0001' "
 					+"AND claimproc.DateCP >= "+POut.Date(dateFrom)+" "
 					+"AND claimproc.DateCP <= "+POut.Date(dateTo)+" ";
@@ -792,7 +792,7 @@ namespace OpenDental{
 			else{
 				report.Query+="SELECT claimproc.ProcDate,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
-					+"carrier.CarrierName,"
+					+"procedurecode.Descript,"
 					+"provider.Abbr,"
 					+"claimproc.ClinicNum,"
 					+"0,"
@@ -801,14 +801,14 @@ namespace OpenDental{
 					+"0,"
 					+"0,"
 					+"claimproc.ClaimNum "
-					+"FROM claimproc,insplan,patient,carrier,provider "
-					+"WHERE provider.ProvNum = claimproc.ProvNum "
-					+"AND claimproc.PlanNum = insplan.PlanNum "
-					+"AND claimproc.PatNum = patient.PatNum "
-					+"AND carrier.CarrierNum = insplan.CarrierNum "
+					+"FROM claimproc "
+					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "
+					+"LEFT JOIN provider ON provider.ProvNum = claimproc.ProvNum "
+					+"LEFT JOIN procedurelog ON procedurelog.ProcNum=claimproc.ProcNum "
+					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"WHERE (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) "//received or supplemental or notreceived
 					+whereProv
 					+whereClin
-					+"AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) "//received or supplemental or notreceived
 					+"AND claimproc.WriteOff > '.0001' "
 					+"AND claimproc.ProcDate >= "+POut.Date(dateFrom)+" "
 					+"AND claimproc.ProcDate <= "+POut.Date(dateTo)+" ";
