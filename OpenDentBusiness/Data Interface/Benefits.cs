@@ -1520,49 +1520,42 @@ namespace OpenDentBusiness {
 			ArrayList AL=new ArrayList();//each object is a Benefit[]
 			Benefit[] row;
 			ArrayList refAL=new ArrayList();//each object is a Benefit from any random column. Used when searching for a type.
-			int col;
 			InsSub sub;
-			for(int i=0;i<bensForPat.Count;i++){
-				//determine the column
-				col=-1;
-				for(int j=0;j<patPlanList.Count;j++){
+			for(int i=0;i<bensForPat.Count;i++) {
+				for(int j=0;j<patPlanList.Count;j++) {//loop through columns
 					sub=InsSubs.GetSub(patPlanList[j].InsSubNum,subList);
-					if(patPlanList[j].PatPlanNum==bensForPat[i].PatPlanNum
-						|| sub.PlanNum==bensForPat[i].PlanNum)
+					if(patPlanList[j].PatPlanNum!=bensForPat[i].PatPlanNum
+						&& sub.PlanNum!=bensForPat[i].PlanNum) 
 					{
-						col=j;
-						break;
+						continue;//Benefit doesn't apply to this column
 					}
-				}
-				if(col==-1){
-					throw new Exception("col not found");//should never happen
-				}
-				//search refAL for a matching type that already exists
-				row=null;
-				for(int j=0;j<refAL.Count;j++){
-					if(((Benefit)refAL[j]).CompareTo(bensForPat[i])==0){//if the type is equivalent
-						row=(Benefit[])AL[j];
-						break;
+					//search refAL for a matching type that already exists
+					row=null;
+					for(int k=0;k<refAL.Count;k++) {
+						if(((Benefit)refAL[k]).CompareTo(bensForPat[i])==0) {//if the type is equivalent
+							row=(Benefit[])AL[k];
+							break;
+						}
 					}
-				}
-				//if no matching type found, add a row, and use that row
-				if(row==null){
+					//if no matching type found, add a row, and use that row
+					if(row==null) {
+						refAL.Add(bensForPat[i].Copy());
+						row=new Benefit[patPlanList.Count];
+						row[j]=bensForPat[i].Copy();
+						AL.Add(row);
+						continue;
+					}
+					//if the column for the matching row is null, then use that row
+					if(row[j]==null) {
+						row[j]=bensForPat[i].Copy();
+						continue;
+					}
+					//if not null, then add another row.
 					refAL.Add(bensForPat[i].Copy());
 					row=new Benefit[patPlanList.Count];
-					row[col]=bensForPat[i].Copy();
+					row[j]=bensForPat[i].Copy();
 					AL.Add(row);
-					continue;
 				}
-				//if the column for the matching row is null, then use that row
-				if(row[col]==null){
-					row[col]=bensForPat[i].Copy();
-					continue;
-				}
-				//if not null, then add another row.
-				refAL.Add(bensForPat[i].Copy());
-				row=new Benefit[patPlanList.Count];
-				row[col]=bensForPat[i].Copy();
-				AL.Add(row);
 			}
 			IComparer myComparer = new BenefitArraySorter();
 			AL.Sort(myComparer);
