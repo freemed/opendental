@@ -345,6 +345,7 @@ namespace OpenDentBusiness {
 		TimeCardOvertimeFirstDayOfWeek,
 		TimecardSecurityEnabled,
 		TimeCardsMakesAdjustmentsForOverBreaks,
+		///<summary>bool</summary>
 		TimeCardsUseDecimalInsteadOfColon,
 		TimecardUsersDontEditOwnCard,
 		TitleBarShowSite,

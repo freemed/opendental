@@ -68,13 +68,24 @@ namespace OpenDental {
 			for(int i=0;i<MainTable.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).TotalHours.ToString("n"));
-				row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).TotalHours.ToString("n"));
+				if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).TotalHours.ToString("n"));
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).TotalHours.ToString("n"));
+				}
+				else {
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempTotalTime"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempRegHrs"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["tempOverTime"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjEvent"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjReg"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["AdjOTime"].ToString()).ToStringHmm());
+					row.Cells.Add(PIn.Time(MainTable.Rows[i]["BreakTime"].ToString()).ToStringHmm());
+				}
 				row.Cells.Add(MainTable.Rows[i]["Note"].ToString());
 				gridMain.Rows.Add(row);
 			}

@@ -829,7 +829,12 @@ namespace OpenDental{
 						case "temptotaltime":
 						case "tempreghrs":
 						case "tempovertime":
-							tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).TotalHours.ToString("n");
+							if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+								tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).TotalHours.ToString("n");
+							}
+							else {
+								tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).ToStringHmm();
+							}
 							break;
   					//double
 						case "adjamt":
