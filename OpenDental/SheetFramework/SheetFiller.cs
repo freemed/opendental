@@ -1437,32 +1437,11 @@ namespace OpenDental{
 						field.FieldValue=pat.LName;
 						continue;
 				}
-				if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
-					List<Allergy> allergies=Allergies.GetAll(pat.PatNum,false);
-					for(int i=0;i<allergies.Count;i++) {
-						if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue=="Y") 
-						{
-							field.FieldValue="X";
-							break;
-						}
-					}
-				}
-				else if(field.FieldName.StartsWith("checkMed")) {
+				if(field.FieldName.StartsWith("checkMed")) {
 					checkMedList.Add(field);
 				}
 				else if(field.FieldName.StartsWith("inputMed")) {
 					inputMedList.Add(field);
-				}
-				else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
-					List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
-					for(int i=0;i<diseases.Count;i++) {
-						if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue=="Y") {
-							field.FieldValue="X";
-							break;
-						}
-					}
 				}
 			}
 			checkMedList.Sort(CompareSheetFieldNames);
@@ -1474,29 +1453,6 @@ namespace OpenDental{
 				for(int i=0;i<medList.Count;i++) {
 					if(i==inputMedList.Count) {
 						break;//Pat has more medications than inputMed fields on sheet.
-					}
-				 	List<MedicationPat> medPatList=MedicationPats.GetMedicationPatsByMedicationNum(medList[i].MedicationNum,pat.PatNum);
-					if(medPatList[0].DateStop.Year<1880 || medPatList[0].DateStop>DateTime.Now) {//Active medication
-						//Look for corresponding Y box.
-						for(int j=0;j<checkMedList.Count;j++) {
-							//If numbers are the same for inputMed## and checkMed## and is a yes box.
-							if(checkMedList[j].FieldName.Remove(0,8)==inputMedList[i].FieldName.Remove(0,8)
-								&& checkMedList[j].RadioButtonValue=="Y") 
-							{
-								checkMedList[j].FieldValue="X";
-							}
-						}
-					}
-					else {//Not active
-						//Look for corresponding N box.
-						for(int j=0;j<checkMedList.Count;j++) {
-							//If numbers are the same for inputMed## and checkMed## and is a no box.
-							if(checkMedList[j].FieldName.Remove(0,8)==inputMedList[i].FieldName.Remove(0,8)
-								&& checkMedList[j].RadioButtonValue=="N") 
-							{
-								checkMedList[j].FieldValue="X";
-							}
-						}
 					}
 					inputMedList[i].FieldValue=Medications.GetDescription(medList[i].MedicationNum);
 					inputMedList[i].FieldType=SheetFieldType.OutputText;//Don't try to import as a new medication.

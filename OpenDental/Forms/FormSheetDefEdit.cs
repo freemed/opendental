@@ -1139,8 +1139,9 @@ namespace OpenDental {
 		}
 
 		private bool VerifyDesign(){
-			//Keep a temporary list of every medical check box so it saves time checking for duplicates.
+			//Keep a temporary list of every medical input and check box so it saves time checking for duplicates.
 			List<SheetFieldDef> medChkBoxList=new List<SheetFieldDef>();
+			List<SheetFieldDef> inputMedList=new List<SheetFieldDef>();
 			//Verify radio button groups.
 			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
 				SheetFieldDef field=SheetDefCur.SheetFieldDefs[i];
@@ -1178,6 +1179,19 @@ namespace OpenDental {
 					}
 					//Not a duplicate so add it to the med chk box list.
 					medChkBoxList.Add(field);
+				}
+				else if(field.FieldType==SheetFieldType.InputField
+					&& field.FieldName.StartsWith("inputMed")) 
+				{
+					for(int j=0;j<inputMedList.Count;j++) {
+						if(inputMedList[j].FieldName==field.FieldName) 
+						{
+							MessageBox.Show(Lan.g(this,"Duplicate inputMed boxes found")+": '"+field.FieldName+"'. "
+								+Lan.g(this,"Only one of each is allowed."));
+							return false;
+						}
+					}
+					inputMedList.Add(field);
 				}
 			}
 			return true;
