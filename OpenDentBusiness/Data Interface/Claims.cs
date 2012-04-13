@@ -439,6 +439,23 @@ namespace OpenDentBusiness{
 			return (Db.GetTable(command).Rows[0][0].ToString()!="0");
 		}
 
+		///<summary>Returns the ClaimNum for the claim that has a claim identifier beginning with the specified claimIdentifier, but only if there is exactly one claim matched. Otherwise 0 is returned.</summary>
+		public static long GetClaimNumForIdentifier(string claimIdentifier) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<long>(MethodBase.GetCurrentMethod(),claimIdentifier);
+			}
+			//Our claim identifiers can be longer than 20 characters (mostly when using replication). When the claim identifier is sent out on the claim, it is truncated to 20
+			//characters. Therefore, if the claim identifier is longer than 20 characters, then it was truncated when sent out, so we have to look for claims beginning with the 
+			//claim identifier given instead of looking for an exact match. There is a slight chance that we will have more than one match, and in this case we will retrn null.
+			string command="SELECT ClaimNum FROM claim"
+				+" WHERE ClaimIdentifier LIKE CONCAT("+POut.String(claimIdentifier)+",'%')";
+			DataTable dtClaims=Db.GetTable(command);
+			if(dtClaims.Rows.Count!=1) {
+				return 0;
+			}
+			return PIn.Long(dtClaims.Rows[0][0].ToString());
+		}
+
 	}//end class Claims
 
 	///<summary>This is an odd class.  It holds data for the X12 (4010 only) generation process.  It replaces an older multi-dimensional array, so the names are funny, but helpful to prevent bugs.  Not an actual database table.</summary>

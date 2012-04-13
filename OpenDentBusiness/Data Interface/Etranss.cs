@@ -549,10 +549,50 @@ namespace OpenDentBusiness{
 					}
 					//none of the other fields make sense, because this ack could refer to many claims.
 				}
-				else if(X277U.Is277U(Xobj)) {
+				else if(X277.Is277(Xobj)) {
+					X277 x277=new X277(messageText);
 					etrans.Etype=EtransType.StatusNotify_277;
-					//later: analyze to figure out which e-claim is being referenced.
 					Etranss.Insert(etrans);
+					List<string> claimTrackingNumbers=x277.GetClaimTrackingNumbers();
+					for(int i=0;i<claimTrackingNumbers.Count;i++) {
+						string ackCode=x277.GetAckForTrans(claimTrackingNumbers[i]);
+						long claimNum=Claims.GetClaimNumForIdentifier(claimTrackingNumbers[i]);
+						//todo:
+						//locate the latest etrans entry for the claim based on DateTimeTrans with EType of ClaimSent or Claim_Ren and update the AckCode and AckEtransNum.
+						
+					}
+
+
+					//string batchack=x277.GetBatchAckCode();
+					//if(batchack=="A"||batchack=="R") {//accepted or rejected
+					//  command="UPDATE etrans SET AckCode='"+batchack+"', "
+					//    +"AckEtransNum="+POut.Long(etrans.EtransNum)
+					//    +" WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
+					//    +" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
+					//    +" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
+					//    +" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1))
+					//    +" AND AckEtransNum=0";
+					//  Db.NonQ(command);
+					//}
+					//else {//partially accepted
+					//  List<int> transNums=x999.GetTransNums();
+					//  string ack;
+					//  for(int i=0;i<transNums.Count;i++) {
+					//    ack=x999.GetAckForTrans(transNums[i]);
+					//    if(ack=="A"||ack=="R") {//accepted or rejected
+					//      command="UPDATE etrans SET AckCode='"+ack+"', "
+					//        +"AckEtransNum="+POut.Long(etrans.EtransNum)
+					//        +" WHERE BatchNumber="+POut.Long(etrans.BatchNumber)
+					//        +" AND TransSetNum="+POut.Long(transNums[i])
+					//        +" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
+					//        +" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
+					//        +" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1))
+					//        +" AND AckEtransNum=0";
+					//      Db.NonQ(command);
+					//    }
+					//  }
+					//}
+					////none of the other fields make sense, because this ack could refer to many claims.
 				}
 				else {//unknown type of X12 report.
 					etrans.Etype=EtransType.TextReport;
