@@ -58,7 +58,7 @@
 			this.labelMsg.Name = "labelMsg";
 			this.labelMsg.Size = new System.Drawing.Size(198, 20);
 			this.labelMsg.TabIndex = 27;
-			this.labelMsg.Text = "Phone Messages: 0";
+			this.labelMsg.Text = "Voice Mails: 0";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// menuNumbers

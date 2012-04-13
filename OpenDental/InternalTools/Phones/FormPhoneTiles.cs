@@ -179,13 +179,13 @@ namespace OpenDental {
 					}
 					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
 					if(msgCount==0) {
-						s="Phone Messages: 0";
+						s="Voice Mails: 0";
 						isBold=false;
 						color=Color.Black;
 						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
 					}
 					else {
-						s="Phone Messages: "+msgCount.ToString();
+						s="Voice Mails: "+msgCount.ToString();
 						isBold=true;
 						color=Color.Firebrick;
 						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
