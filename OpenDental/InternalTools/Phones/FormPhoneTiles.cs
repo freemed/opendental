@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
@@ -43,6 +44,8 @@ namespace OpenDental {
 					checkBoxAll.Visible=false;//so this will also be visible in debug
 				}
 			#endif
+			workerThread=new Thread(new ThreadStart(this.WorkerThread_SetLabelMsg));
+			workerThread.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
 			timeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			PhoneTile tile;
 			int x=0;
@@ -73,8 +76,6 @@ namespace OpenDental {
 			while(now.AddSeconds(1)>DateTime.Now) {
 				Application.DoEvents();
 			}
-			timerMsgs.Enabled=true;
-			//SetLabelMsg();
 		}
 
 		private void FillTiles(bool refreshList) {
@@ -157,47 +158,51 @@ namespace OpenDental {
 			formPED.ShowDialog();
 		}
 
-		private void timerMsgs_Tick(object sender,EventArgs e) {
-			//every 3 sec.
-			workerThread=new Thread(new ThreadStart(this.WorkerThread_SetLabelMsg));
-			workerThread.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
-		}
-
 		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
 
 		///<summary>Always called using worker thread.</summary>
 		private void WorkerThread_SetLabelMsg() {
-			#if DEBUG
-				//return;
-			#endif
-			string s;
-			bool isBold;
-			Color color;
-			try {
-				if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
-					s="msg path not found";
-					isBold=false;
-					color=Color.Black;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
-					return;
+#if DEBUG
+			//Because path is not valid when Jordan is debugging from home.
+#else
+			while(true) {
+				string s;
+				bool isBold;
+				Color color;
+				try {
+					if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
+						s="msg path not found";
+						isBold=false;
+						color=Color.Black;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+						return;
+					}
+					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
+					if(msgCount==0) {
+						s="Phone Messages: 0";
+						isBold=false;
+						color=Color.Black;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+					}
+					else {
+						s="Phone Messages: "+msgCount.ToString();
+						isBold=true;
+						color=Color.Firebrick;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+					}
 				}
-				msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
-				if(msgCount==0) {
-					s="Phone Messages: 0";
-					isBold=false;
-					color=Color.Black;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+				catch(ThreadAbortException) {//OnClosing will abort the thread.
+					return;//Exits the loop.
 				}
-				else {
-					s="Phone Messages: "+msgCount.ToString();
-					isBold=true;
-					color=Color.Firebrick;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { s,isBold,color });
+				catch(TargetInvocationException) {
+					//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
 				}
+				catch(Exception ex){
+					throw ex;
+				}
+				Thread.Sleep(3000);
 			}
-			catch {
-				//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
-			}
+#endif
 		}
 
 		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
@@ -296,6 +301,8 @@ namespace OpenDental {
 		private void FormPhoneTiles_FormClosing(object sender,FormClosingEventArgs e) {
 			if(workerThread!=null){
 				workerThread.Abort();
+				workerThread.Join();
+				workerThread=null;
 			}
 		}
 

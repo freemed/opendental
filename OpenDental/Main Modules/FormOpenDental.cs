@@ -242,7 +242,6 @@ namespace OpenDental{
 		private Label labelMsg;
 		///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
 		private bool IsFormLogOnLastActive;
-		private System.Windows.Forms.Timer timerMsgs;
 		///<summary>This thread fills labelMsg</summary>
 		private Thread ThreadVM;
 
@@ -473,7 +472,6 @@ namespace OpenDental{
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
 			this.labelMsg = new System.Windows.Forms.Label();
-			this.timerMsgs = new System.Windows.Forms.Timer(this.components);
 			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.SuspendLayout();
@@ -1349,11 +1347,6 @@ namespace OpenDental{
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelMsg.Visible = false;
 			// 
-			// timerMsgs
-			// 
-			this.timerMsgs.Interval = 3000;
-			this.timerMsgs.Tick += new System.EventHandler(this.timerMsgs_Tick);
-			// 
 			// butBigPhones
 			// 
 			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1671,6 +1664,8 @@ namespace OpenDental{
 						catch { }//for example, if working from home.
 					}
 				#endif
+				ThreadVM=new Thread(new ThreadStart(this.ThreadVM_SetLabelMsg));
+				ThreadVM.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
 			}
 			#if !TRIALONLY
 				if(PrefC.GetDate(PrefName.BackupReminderLastDateRun).AddMonths(1)<DateTime.Today) {
@@ -2574,7 +2569,6 @@ namespace OpenDental{
 						labelMsg.Visible=true;
 						labelMsg.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width-labelMsg.Width,panelSplitter.Bottom);
 						labelMsg.BringToFront();
-						timerMsgs.Enabled=true;
 					}
 					else{
 						phoneSmall.Visible=false;
@@ -3483,48 +3477,49 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>This timer won't even tick unless pref DockPhonePanelShow is true.  3 sec tick.</summary>
-		private void timerMsgs_Tick(object sender,EventArgs e) {
-			ThreadVM=new Thread(new ThreadStart(this.ThreadVM_SetLabelMsg));
-			ThreadVM.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
-		}
-
 		private delegate void DelegateSetString(String str,bool isBold,Color color);//typically at namespace level rather than class level
 
 		///<summary>Always called using ThreadVM.</summary>
 		private void ThreadVM_SetLabelMsg() {
-			#if DEBUG
-				return;//Because path is not valid when Jordan is debugging from home.
-			#endif
-			string msg;
-			int msgCount;
-			bool isBold;
-			Color color;
-			try {
-				if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
-					msg="";
-					isBold=false;
-					color=Color.Black;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
-					return;
+#if DEBUG
+			//Because path is not valid when Jordan is debugging from home.
+#else
+			while(true) {
+				string msg;
+				int msgCount;
+				bool isBold;
+				Color color;
+				try {
+					if(!Directory.Exists(PhoneUI.PathPhoneMsg)) {
+						msg="error";
+						isBold=false;
+						color=Color.Black;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+						return;
+					}
+					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
+					if(msgCount==0) {
+						msg="VM: 0";
+						isBold=false;
+						color=Color.Black;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+					}
+					else {
+						msg="VM: "+msgCount.ToString();
+						isBold=true;
+						color=Color.Firebrick;
+						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+					}
 				}
-				msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
-				if(msgCount==0) {
-					msg="VM: 0";
-					isBold=false;
-					color=Color.Black;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+				catch(ThreadAbortException) {//OnClosing will abort the thread.
+					return;//Exits the loop.
 				}
-				else {
-					msg="VM: "+msgCount.ToString();
-					isBold=true;
-					color=Color.Firebrick;
-					this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
+				catch(Exception ex){
+					throw ex;
 				}
+				Thread.Sleep(3000);
 			}
-			catch {
-				//because this.Invoke will fail sometimes if the form is quickly closed and reopened because form handle has not yet been created.
-			}
+#endif
 		}
 
 		///<summary>Called from worker thread using delegate and Control.Invoke</summary>
@@ -5130,8 +5125,10 @@ namespace OpenDental{
 			if(ThreadCommandLine!=null) {
 				ThreadCommandLine.Abort();
 			}
-			if(ThreadVM!=null){
+			if(ThreadVM!=null) {
 				ThreadVM.Abort();
+				ThreadVM.Join();
+				ThreadVM=null;
 			}
 		}
 
