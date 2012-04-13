@@ -1424,7 +1424,6 @@ namespace OpenDental{
 
 		private static void FillFieldsForMedicalHistory(Sheet sheet,Patient pat) {
 			List<SheetField> inputMedList=new List<SheetField>();
-			List<SheetField> checkMedList=new List<SheetField>();
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "Birthdate":
@@ -1437,17 +1436,37 @@ namespace OpenDental{
 						field.FieldValue=pat.LName;
 						continue;
 				}
-				if(field.FieldName.StartsWith("checkMed")) {
-					checkMedList.Add(field);
+				if(field.FieldType==SheetFieldType.CheckBox) {
+					if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
+						List<Allergy> allergies=Allergies.GetAll(pat.PatNum,false);
+						for(int i=0;i<allergies.Count;i++) {
+							if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)
+							&& field.RadioButtonValue=="Y") //We only worry about prefilling yes boxes.
+						{
+								field.FieldValue="X";
+								break;
+							}
+						}
+					}
+					else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
+						List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
+						for(int i=0;i<diseases.Count;i++) {
+							if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
+							&& field.RadioButtonValue=="Y") //We only worry about prefilling yes boxes.
+						{
+								field.FieldValue="X";
+								break;
+							}
+						}
+					}
 				}
-				else if(field.FieldName.StartsWith("inputMed")) {
+				else if(field.FieldType==SheetFieldType.InputField && field.FieldName.StartsWith("inputMed")) {
 					inputMedList.Add(field);
 				}
 			}
-			checkMedList.Sort(CompareSheetFieldNames);
-			inputMedList.Sort(CompareSheetFieldNames);
 			//Special logic for checkMed and inputMed.
 			if(inputMedList.Count>0) {
+				inputMedList.Sort(CompareSheetFieldNames);
 				//Loop through the patients medications and fill in the input fields.
 				List<Medication> medList=Medications.GetMedicationsByPat(pat.PatNum);
 				for(int i=0;i<medList.Count;i++) {
