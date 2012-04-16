@@ -92,8 +92,7 @@ namespace OpenDentBusiness
 		}
 
 		public bool Is999() {
-			//There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
-			//if acking multiple 
+			//There is only one transaction set (ST/SE) per functional group (GS/GE).
 			if(this.FunctGroups.Count!=1) {
 				return false;
 			}

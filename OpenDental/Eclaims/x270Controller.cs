@@ -55,7 +55,7 @@ namespace OpenDental.Eclaims {
 					x271=new X271(x12response);
 				}
 			}
-			else {//not a 997, 999 or 271
+			else {//not a 997, 999, 277 or 271
 				EtransMessageTexts.Delete(etrans.EtransMessageTextNum);
 				Etranss.Delete(etrans.EtransNum);
 				throw new ApplicationException(Lan.g("FormInsPlan","Error:")+"\r\n"+x12response);
@@ -92,6 +92,9 @@ namespace OpenDental.Eclaims {
 					else if(Xobj.Is999()) {
 						etrans271.Etype=EtransType.Acknowledge_999;
 					}
+					else if(X277.Is277(Xobj)) {
+						etrans271.Etype=EtransType.StatusNotify_277;
+					}
 				}
 				else{
 					etrans271.Etype=EtransType.BenefitResponse271;
@@ -117,6 +120,17 @@ namespace OpenDental.Eclaims {
 				X999 x999=new X999(x12response);
 				string error999=x999.GetHumanReadable();
 				etrans.Note="Error: "+error999;//"Malformed document sent.  999 error returned.";
+				Etranss.Update(etrans);
+				MessageBox.Show(etrans.Note);
+				//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(etrans.Note);
+				//msgbox.ShowDialog();
+				//don't show the 270 interface.
+				return;
+			}
+			else if(etrans271.Etype==EtransType.StatusNotify_277) { 
+				X277 x277=new X277(x12response);
+				string error277=x277.GetHumanReadable();
+				etrans.Note="Error: "+error277;//"Malformed document sent.  277 error returned.";
 				Etranss.Update(etrans);
 				MessageBox.Show(etrans.Note);
 				//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(etrans.Note);
