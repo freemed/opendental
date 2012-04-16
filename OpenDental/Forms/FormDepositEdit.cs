@@ -54,6 +54,8 @@ namespace OpenDental{
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> DepositAccountsQB;
 		private UI.Button butSendQB;
+		private TextBox textMemo;
+		private Label labelMemo;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> IncomeAccountsQB;
 
@@ -109,6 +111,8 @@ namespace OpenDental{
 			this.comboIncomeAccountQB = new System.Windows.Forms.ComboBox();
 			this.gridIns = new OpenDental.UI.ODGrid();
 			this.gridPat = new OpenDental.UI.ODGrid();
+			this.textMemo = new System.Windows.Forms.TextBox();
+			this.labelMemo = new System.Windows.Forms.Label();
 			this.butSendQB = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.textDate = new OpenDental.ValidDate();
@@ -130,16 +134,16 @@ namespace OpenDental{
 			this.groupSelect.Controls.Add(this.listPayType);
 			this.groupSelect.Controls.Add(this.label2);
 			this.groupSelect.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupSelect.Location = new System.Drawing.Point(602, 276);
+			this.groupSelect.Location = new System.Drawing.Point(602, 296);
 			this.groupSelect.Name = "groupSelect";
-			this.groupSelect.Size = new System.Drawing.Size(204, 344);
+			this.groupSelect.Size = new System.Drawing.Size(204, 324);
 			this.groupSelect.TabIndex = 99;
 			this.groupSelect.TabStop = false;
 			this.groupSelect.Text = "Show";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(14, 19);
+			this.label5.Location = new System.Drawing.Point(14, 14);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(118, 15);
 			this.label5.TabIndex = 104;
@@ -149,7 +153,7 @@ namespace OpenDental{
 			// comboClinic
 			// 
 			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(14, 75);
+			this.comboClinic.Location = new System.Drawing.Point(14, 67);
 			this.comboClinic.MaxDropDownItems = 30;
 			this.comboClinic.Name = "comboClinic";
 			this.comboClinic.Size = new System.Drawing.Size(180, 21);
@@ -157,7 +161,7 @@ namespace OpenDental{
 			// 
 			// labelClinic
 			// 
-			this.labelClinic.Location = new System.Drawing.Point(14, 59);
+			this.labelClinic.Location = new System.Drawing.Point(14, 51);
 			this.labelClinic.Name = "labelClinic";
 			this.labelClinic.Size = new System.Drawing.Size(102, 15);
 			this.labelClinic.TabIndex = 93;
@@ -166,7 +170,7 @@ namespace OpenDental{
 			// 
 			// listPayType
 			// 
-			this.listPayType.Location = new System.Drawing.Point(14, 127);
+			this.listPayType.Location = new System.Drawing.Point(14, 111);
 			this.listPayType.Name = "listPayType";
 			this.listPayType.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listPayType.Size = new System.Drawing.Size(134, 173);
@@ -174,7 +178,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(14, 105);
+			this.label2.Location = new System.Drawing.Point(14, 89);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(171, 18);
 			this.label2.TabIndex = 97;
@@ -192,7 +196,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(602, 95);
+			this.label3.Location = new System.Drawing.Point(602, 87);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(127, 18);
 			this.label3.TabIndex = 104;
@@ -201,15 +205,15 @@ namespace OpenDental{
 			// 
 			// textBankAccountInfo
 			// 
-			this.textBankAccountInfo.Location = new System.Drawing.Point(602, 116);
+			this.textBankAccountInfo.Location = new System.Drawing.Point(602, 108);
 			this.textBankAccountInfo.Multiline = true;
 			this.textBankAccountInfo.Name = "textBankAccountInfo";
-			this.textBankAccountInfo.Size = new System.Drawing.Size(289, 75);
+			this.textBankAccountInfo.Size = new System.Drawing.Size(289, 59);
 			this.textBankAccountInfo.TabIndex = 105;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(602, 49);
+			this.label4.Location = new System.Drawing.Point(602, 46);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(127, 18);
 			this.label4.TabIndex = 106;
@@ -218,7 +222,7 @@ namespace OpenDental{
 			// 
 			// textAmount
 			// 
-			this.textAmount.Location = new System.Drawing.Point(602, 70);
+			this.textAmount.Location = new System.Drawing.Point(602, 67);
 			this.textAmount.Name = "textAmount";
 			this.textAmount.ReadOnly = true;
 			this.textAmount.Size = new System.Drawing.Size(94, 20);
@@ -228,23 +232,23 @@ namespace OpenDental{
 			// 
 			this.comboDepositAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDepositAccount.FormattingEnabled = true;
-			this.comboDepositAccount.Location = new System.Drawing.Point(602, 212);
+			this.comboDepositAccount.Location = new System.Drawing.Point(602, 230);
 			this.comboDepositAccount.Name = "comboDepositAccount";
 			this.comboDepositAccount.Size = new System.Drawing.Size(289, 21);
 			this.comboDepositAccount.TabIndex = 110;
 			// 
 			// labelDepositAccount
 			// 
-			this.labelDepositAccount.Location = new System.Drawing.Point(602, 192);
+			this.labelDepositAccount.Location = new System.Drawing.Point(602, 215);
 			this.labelDepositAccount.Name = "labelDepositAccount";
-			this.labelDepositAccount.Size = new System.Drawing.Size(289, 18);
+			this.labelDepositAccount.Size = new System.Drawing.Size(289, 13);
 			this.labelDepositAccount.TabIndex = 111;
 			this.labelDepositAccount.Text = "Deposit into Account";
 			this.labelDepositAccount.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textDepositAccount
 			// 
-			this.textDepositAccount.Location = new System.Drawing.Point(602, 241);
+			this.textDepositAccount.Location = new System.Drawing.Point(602, 261);
 			this.textDepositAccount.Name = "textDepositAccount";
 			this.textDepositAccount.ReadOnly = true;
 			this.textDepositAccount.Size = new System.Drawing.Size(289, 20);
@@ -252,7 +256,7 @@ namespace OpenDental{
 			// 
 			// labelIncomeAccountQB
 			// 
-			this.labelIncomeAccountQB.Location = new System.Drawing.Point(602, 236);
+			this.labelIncomeAccountQB.Location = new System.Drawing.Point(602, 256);
 			this.labelIncomeAccountQB.Name = "labelIncomeAccountQB";
 			this.labelIncomeAccountQB.Size = new System.Drawing.Size(289, 11);
 			this.labelIncomeAccountQB.TabIndex = 114;
@@ -264,7 +268,7 @@ namespace OpenDental{
 			// 
 			this.comboIncomeAccountQB.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboIncomeAccountQB.FormattingEnabled = true;
-			this.comboIncomeAccountQB.Location = new System.Drawing.Point(602, 251);
+			this.comboIncomeAccountQB.Location = new System.Drawing.Point(602, 271);
 			this.comboIncomeAccountQB.Name = "comboIncomeAccountQB";
 			this.comboIncomeAccountQB.Size = new System.Drawing.Size(289, 21);
 			this.comboIncomeAccountQB.TabIndex = 113;
@@ -298,6 +302,25 @@ namespace OpenDental{
 			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
 			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
 			// 
+			// textMemo
+			// 
+			this.textMemo.Location = new System.Drawing.Point(602, 187);
+			this.textMemo.Multiline = true;
+			this.textMemo.Name = "textMemo";
+			this.textMemo.Size = new System.Drawing.Size(289, 23);
+			this.textMemo.TabIndex = 117;
+			this.textMemo.Visible = false;
+			// 
+			// labelMemo
+			// 
+			this.labelMemo.Location = new System.Drawing.Point(602, 169);
+			this.labelMemo.Name = "labelMemo";
+			this.labelMemo.Size = new System.Drawing.Size(127, 16);
+			this.labelMemo.TabIndex = 116;
+			this.labelMemo.Text = "Memo";
+			this.labelMemo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			this.labelMemo.Visible = false;
+			// 
 			// butSendQB
 			// 
 			this.butSendQB.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -306,7 +329,7 @@ namespace OpenDental{
 			this.butSendQB.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butSendQB.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butSendQB.CornerRadius = 4F;
-			this.butSendQB.Location = new System.Drawing.Point(816, 286);
+			this.butSendQB.Location = new System.Drawing.Point(816, 301);
 			this.butSendQB.Name = "butSendQB";
 			this.butSendQB.Size = new System.Drawing.Size(75, 24);
 			this.butSendQB.TabIndex = 115;
@@ -361,7 +384,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(13, 307);
+			this.butRefresh.Location = new System.Drawing.Point(13, 291);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(75, 24);
 			this.butRefresh.TabIndex = 106;
@@ -370,7 +393,7 @@ namespace OpenDental{
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(14, 36);
+			this.textDateStart.Location = new System.Drawing.Point(14, 31);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.Size = new System.Drawing.Size(94, 20);
 			this.textDateStart.TabIndex = 105;
@@ -409,6 +432,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(897, 667);
+			this.Controls.Add(this.textMemo);
+			this.Controls.Add(this.labelMemo);
 			this.Controls.Add(this.butSendQB);
 			this.Controls.Add(this.textDepositAccount);
 			this.Controls.Add(this.labelDepositAccount);
@@ -526,10 +551,12 @@ namespace OpenDental{
 				//Don't show QB items if this is an old QB deposit. 
 				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {
 					if(!IsNew) {
-						butSendQB.Visible=true;//Only show button for old non QB deposits.
+						butSendQB.Visible=true;//Only show button for old, non QB deposits.
 					}
 					labelIncomeAccountQB.Visible=true;
 					comboIncomeAccountQB.Visible=true;
+					labelMemo.Visible=true;
+					textMemo.Visible=true;
 					textDepositAccount.Visible=false;
 					labelDepositAccount.Text=Lan.g(this,"Deposit into Account");
 					comboDepositAccount.Enabled=true;
@@ -722,7 +749,7 @@ namespace OpenDental{
 
 		private void butSendQB_Click(object sender,EventArgs e) {
 			if(CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex]
-					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,"",false)) 
+					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,textMemo.Text,false)) 
 			{
 				MsgBox.Show(this,"Deposit was sent to QuickBooks.");
 			}
@@ -730,15 +757,6 @@ namespace OpenDental{
 
 		///<summary>Returns true if a deposit was created OR if the user clicked continue anyway on pop up.</summary>
 		private bool CreateDepositQB(string depositAccount,string incomeAccount,double amount,string memo,bool allowContinue) {
-			//We might allow memo to be set by user, but for now just use the payment types.
-			memo="";
-			//Memo will always be blank when sending an old deposit over to QB unless we create a new memo box.
-			for(int i=0;i<listPayType.SelectedIndices.Count;i++) {
-				if(i>0) {
-					memo+=", ";
-				}
-				memo+=listPayType.SelectedIndices[i];
-			}
 			try {
 				Cursor.Current=Cursors.WaitCursor;
 				QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
@@ -833,7 +851,7 @@ namespace OpenDental{
 					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
 						//Create a deposit in QuickBooks.
 						if(!CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex],IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex]
-							,DepositCur.Amount,"",true)) 
+							,DepositCur.Amount,textMemo.Text,true)) 
 						{
 							return false;
 						}
