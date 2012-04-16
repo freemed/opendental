@@ -1468,12 +1468,12 @@ namespace OpenDental{
 			if(inputMedList.Count>0) {
 				inputMedList.Sort(CompareSheetFieldNames);
 				//Loop through the patients medications and fill in the input fields.
-				List<Medication> medList=Medications.GetMedicationsByPat(pat.PatNum);
-				for(int i=0;i<medList.Count;i++) {
+				List<MedicationPat> medPatList=MedicationPats.Refresh(pat.PatNum,false);
+				for(int i=0;i<medPatList.Count;i++) {
 					if(i==inputMedList.Count) {
 						break;//Pat has more medications than inputMed fields on sheet.
 					}
-					inputMedList[i].FieldValue=Medications.GetDescription(medList[i].MedicationNum);
+					inputMedList[i].FieldValue=Medications.GetDescription(medPatList[i].MedicationNum);
 					inputMedList[i].FieldType=SheetFieldType.OutputText;//Don't try to import as a new medication.
 				}
 			}
