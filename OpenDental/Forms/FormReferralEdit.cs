@@ -941,6 +941,10 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Invalid phone"));
 				return;
 			}
+			if(textLName.Text=="") {
+				MsgBox.Show(this,"Please enter a last name.");
+				return;
+			}
 			RefCur.IsHidden=checkHidden.Checked;
 			RefCur.NotPerson=checkNotPerson.Checked;
 			RefCur.LName=textLName.Text;
