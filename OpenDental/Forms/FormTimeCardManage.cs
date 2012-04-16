@@ -16,7 +16,7 @@ namespace OpenDental {
 		private int SelectedPayPeriod;
 		private DateTime DateStart;
 		private DateTime DateStop;
-		private DataTable MainTable; 
+		private DataTable MainTable;
 		private int pagesPrinted;
 		private string totalTime;
 		private string overTime;
@@ -363,8 +363,7 @@ namespace OpenDental {
 			pagesPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			FormRpPrintPreview pView = new FormRpPrintPreview();
-			pView.printPreviewControl2.Document=pd;
+			PrintPreview pView=new PrintPreview(PrintSituation.Default,pd,gridMain.Rows.Count);
 			pView.ShowDialog();
 		}
 
