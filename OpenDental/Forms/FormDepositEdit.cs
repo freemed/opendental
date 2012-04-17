@@ -475,14 +475,21 @@ namespace OpenDental{
 
 		private void FormDepositEdit_Load(object sender, System.EventArgs e) {
 			butSendQB.Visible=false;
-			Cursor.Current=Cursors.WaitCursor;
-			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks
-				&& QuickBooks.TestConnection(PrefC.GetString(PrefName.QuickBooksCompanyFile))=="Connection to QuickBooks was successful."
-				&& Accounts.DepositsLinked()) 
+			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks	//QuickBooks is in use when the accounting software pref is set
+				&& Accounts.DepositsLinked())																										//and the QB account prefs are not blank.
 			{
 				IsQuickBooks=true;
+				//Only need to test if QB is installed when this is an old deposit that is attached to a transaction (non QB deposit).
+				if(Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null	&& !IsNew) {	
+					butSendQB.Visible=true;
+					Cursor.Current=Cursors.WaitCursor;//Without QB open in background this could take 8-10 seconds.
+					if(QuickBooks.TestConnection(PrefC.GetString(PrefName.QuickBooksCompanyFile))!="Connection to QuickBooks was successful.") {
+						IsQuickBooks=false;//QB is not installed on this computer so have the normal deposit window show.
+						butSendQB.Visible=false;
+					}
+					Cursor.Current=Cursors.Default;
+				}
 			}
-			Cursor.Current=Cursors.Default;
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)){
 					//we will check the date again when saving
@@ -555,10 +562,7 @@ namespace OpenDental{
 				}
 			}
 			if(IsQuickBooks) {//If in QuickBooks mode, always show deposit and income accounts so that users can send old deposits into QB.
-				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {//Don't show QB items if this is an old QB deposit. 
-					if(!IsNew) {
-						butSendQB.Visible=true;//Only show button for old, non QB deposits.
-					}
+				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {//Show QB items if new or this is an an old OD deposit.
 					labelIncomeAccountQB.Visible=true;
 					comboIncomeAccountQB.Visible=true;
 					labelMemo.Visible=true;
