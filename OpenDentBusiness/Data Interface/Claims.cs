@@ -447,10 +447,10 @@ namespace OpenDentBusiness{
 			//Our claim identifiers can be longer than 20 characters (mostly when using replication). When the claim identifier is sent out on the claim, it is truncated to 20
 			//characters. Therefore, if the claim identifier is longer than 20 characters, then it was truncated when sent out, so we have to look for claims beginning with the 
 			//claim identifier given if there is not an exact match.
-			string command="SELECT ClaimNum FROM claim WHERE ClaimIdentifier="+POut.String(claimIdentifier);
+			string command="SELECT ClaimNum FROM claim WHERE ClaimIdentifier='"+POut.String(claimIdentifier)+"'";
 			DataTable dtClaims=Db.GetTable(command);
 			if(dtClaims.Rows.Count==0) { //No exact match for the claim identifier. This will happen with replication sometimes.
-				command="SELECT ClaimNum FROM claim WHERE ClaimIdentifier LIKE CONCAT("+POut.String(claimIdentifier)+",'%')";
+				command="SELECT ClaimNum FROM claim WHERE ClaimIdentifier LIKE CONCAT('"+POut.String(claimIdentifier)+"','%')";
 				dtClaims=Db.GetTable(command);
 				//There is a slight chance that we will have more than one match, and in this case we will return 0.
 				if(dtClaims.Rows.Count!=1) {

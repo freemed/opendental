@@ -35,65 +35,75 @@ namespace OpenDental {
 
 		private void FillHeader() {
 			//Set the title of the window to include he reponding entity type and name (i.e. payor delta, clearinghouse emdeon, etc...)
-			for(int i=0;i<x277.FunctGroups[0].Transactions[0].Segments.Count;i++) {
-				X12Segment seg=x277.FunctGroups[0].Transactions[0].Segments[i];
-				if(seg.SegmentID=="NM1") {
-					if(seg.Get(1)=="AY") {
-						Text+="Clearinghouse "+seg.Get(3);
-						break;
-					}
-					else if(seg.Get(1)=="PR") {
-						Text+="Payer "+seg.Get(3);
-						break;
-					}
-				}
-			}
+			Text+=x277.GetInformationSourceType()+" "+x277.GetInformationSourceName();
 			//Fill the textboxes in the upper portion of the window.
-
+			textReceiptDate.Text=x277.GetInformationSourceReceiptDate().ToShortDateString();
+			textProcessDate.Text=x277.GetInformationSourceProcessDate().ToShortDateString();
+			textQuantityAccepted.Text=x277.GetQuantityAccepted().ToString();
+			textQuantityRejected.Text=x277.GetQuantityRejected().ToString();
+			textAmountAccepted.Text=x277.GetAmountAccepted().ToString("F");
+			textAmountRejected.Text=x277.GetAmountRejected().ToString("F");
 		}
 
 		private void FillGrid() {
-			//gridMain.BeginUpdate();
-			//gridMain.Columns.Clear();
-			//ODGridColumn col=new ODGridColumn(Lan.g(this,"Response"),420);
-			//gridMain.Columns.Add(col);
-			//gridMain.Rows.Clear();
-			//ODGridRow row;
-			//for(int i=0;i<listEB.Count;i++) {
-			//  row=new ODGridRow();
-			//  gridMain.Rows.Add(row);
-			//}
-			//gridMain.EndUpdate();
-		}
-
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//if(e.Col==0) {//raw benefit
-			//  //FormEtrans270EBraw FormE=new FormEtrans270EBraw();
-			//  //FormE.EB271val=listEB[e.Row];
-			//  //FormE.ShowDialog();
-			//  ////user can't make changes, so no need to refresh grid.
-			//}
-			//else {//generated benefit
-			//  if(listEB[e.Row].Benefitt==null) {//create new benefit
-			//    listEB[e.Row].Benefitt=new Benefit();
-			//    FormBenefitEdit FormB=new FormBenefitEdit(0,PlanNum);
-			//    FormB.IsNew=true;
-			//    FormB.BenCur=listEB[e.Row].Benefitt;
-			//    FormB.ShowDialog();
-			//    if(FormB.BenCur==null) {//user deleted or cancelled
-			//      listEB[e.Row].Benefitt=null;
-			//    }
-			//  }
-			//  else {//edit existing benefit
-			//    FormBenefitEdit FormB=new FormBenefitEdit(0,PlanNum);
-			//    FormB.BenCur=listEB[e.Row].Benefitt;
-			//    FormB.ShowDialog();
-			//    if(FormB.BenCur==null) {//user deleted
-			//      listEB[e.Row].Benefitt=null;
-			//    }
-			//  }
-			//  FillGrid();
-			//}
+			List<string> claimTrackingNumbers=x277.GetClaimTrackingNumbers();
+			//bool showInstBillType=false;
+			bool showServiceDateRange=false;
+			for(int i=0;i<claimTrackingNumbers.Count;i++) {
+				string[] claimInfo=x277.GetClaimInfo(claimTrackingNumbers[i]);
+				//if(claimInfo[5]!="") { //institutional type of bill
+				//  showInstBillType=true;
+				//}
+				if(claimInfo[7]!="") {//service date end
+					showServiceDateRange=true;
+				}
+			}
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col;
+			if(showServiceDateRange) {
+				col=new ODGridColumn(Lan.g(this,"ServDateFrom"),86,HorizontalAlignment.Center);
+				gridMain.Columns.Add(col);
+				col=new ODGridColumn(Lan.g(this,"ServDateTo"),80,HorizontalAlignment.Center);
+				gridMain.Columns.Add(col);
+			}
+			else {
+				col=new ODGridColumn(Lan.g(this,"ServiceDate"),80,HorizontalAlignment.Center);
+				gridMain.Columns.Add(col);
+			}
+			col=new ODGridColumn(Lan.g(this,"Status"),54,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"LName"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"FName"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),140);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"PayorControlNum"),0);
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
+			for(int i=0;i<claimTrackingNumbers.Count;i++) {
+				string[] claimInfo=x277.GetClaimInfo(claimTrackingNumbers[i]);
+			  ODGridRow row=new ODGridRow();
+				row.Cells.Add(new ODGridCell(claimInfo[6]));//service date start
+				if(showServiceDateRange) {					
+					row.Cells.Add(new ODGridCell(claimInfo[7]));//service date end
+				}
+				string claimStatus="";
+				if(claimInfo[3]=="A") {
+					claimStatus="Accepted";
+				}
+				else if(claimInfo[3]=="R") {
+					claimStatus="Rejected";
+				}
+				row.Cells.Add(new ODGridCell(claimStatus));//status
+				row.Cells.Add(new ODGridCell(claimInfo[0]));//lname
+				row.Cells.Add(new ODGridCell(claimInfo[1]));//fname
+				row.Cells.Add(new ODGridCell(claimTrackingNumbers[i]));//claim identifier
+				row.Cells.Add(new ODGridCell(claimInfo[4]));//payor control number
+			  gridMain.Rows.Add(row);
+			}			
+			gridMain.EndUpdate();
 		}
 
 		private void butRawMessage_Click(object sender,EventArgs e) {
@@ -169,32 +179,9 @@ namespace OpenDental {
 			//g.Dispose();
 		}
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			////This button is not visible if IsNew
-			//if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete entire request and response?")) {
-			//  return;
-			//}
-			//if(EtransAck271!=null) {
-			//  EtransMessageTexts.Delete(EtransAck271.EtransMessageTextNum);
-			//  Etranss.Delete(EtransAck271.EtransNum);
-			//}
-			//EtransMessageTexts.Delete(EtransCur.EtransMessageTextNum);
-			//Etranss.Delete(EtransCur.EtransNum);
-			DialogResult=DialogResult.OK;
-		}
-
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
 		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-		
-
-	
-
 		
 	}
 }

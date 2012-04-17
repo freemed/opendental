@@ -26,7 +26,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEtrans277Edit));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butRawMessage = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -53,11 +52,10 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(864,493);
+			this.gridMain.Size = new System.Drawing.Size(710,493);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Claim Status and Information";
 			this.gridMain.TranslationName = "FormEtrans270Edit";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 
@@ -67,27 +65,12 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(717,556);
+			this.butOK.Location = new System.Drawing.Point(644,557);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(798,556);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butPrint
 			// 
@@ -97,7 +80,7 @@ namespace OpenDental{
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Location = new System.Drawing.Point(572,556);
+			this.butPrint.Location = new System.Drawing.Point(526,557);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(75,24);
 			this.butPrint.TabIndex = 127;
@@ -113,7 +96,7 @@ namespace OpenDental{
 			this.butRawMessage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRawMessage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRawMessage.CornerRadius = 4F;
-			this.butRawMessage.Location = new System.Drawing.Point(773,32);
+			this.butRawMessage.Location = new System.Drawing.Point(619,32);
 			this.butRawMessage.Name = "butRawMessage";
 			this.butRawMessage.Size = new System.Drawing.Size(100,24);
 			this.butRawMessage.TabIndex = 116;
@@ -225,7 +208,7 @@ namespace OpenDental{
 			// FormEtrans277Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(882,589);
+			this.ClientSize = new System.Drawing.Size(728,589);
 			this.Controls.Add(this.textProcessDate);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textReceiptDate);
@@ -242,7 +225,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormEtrans277Edit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -256,7 +239,6 @@ namespace OpenDental{
 		#endregion
 
 		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.ODGrid gridMain;
 		private OpenDental.UI.Button butPrint;
 		private UI.Button butRawMessage;

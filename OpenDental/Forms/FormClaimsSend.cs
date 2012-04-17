@@ -826,6 +826,7 @@ namespace OpenDental{
 		private void toolBarButReports_Click(){
 			FormClaimReports FormC=new FormClaimReports();
 			FormC.ShowDialog();
+			FillHistory();//To show 277s after imported.
 		}
 
 		private void toolBarButOutstanding_Click() {
@@ -1092,6 +1093,12 @@ namespace OpenDental{
 
 		private void gridHistory_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			Etrans et=Etranss.GetEtrans(PIn.Long(tableHistory.Rows[e.Row]["EtransNum"].ToString()));
+			if(et.Etype==EtransType.StatusNotify_277) {
+				FormEtrans277Edit Form277=new FormEtrans277Edit();
+				Form277.EtransCur=et;
+				Form277.ShowDialog();
+				return;//No refresh needed because 277 are not editable, they are read only.
+			}
 			FormEtransEdit FormE=new FormEtransEdit();
 			FormE.EtransCur=et;
 			FormE.ShowDialog();

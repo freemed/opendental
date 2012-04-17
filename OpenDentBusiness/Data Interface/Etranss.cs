@@ -33,7 +33,6 @@ namespace OpenDentBusiness{
 				+DbHelper.DateColumn("DateTimeTrans")+" <= "+POut.Date(dateTo)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.Acknowledge_997)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.Acknowledge_999)+" "
-				+"AND Etype!="+POut.Long((int)EtransType.StatusNotify_277)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitInquiry270)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.BenefitResponse271)+" "
 				+"AND Etype!="+POut.Long((int)EtransType.AckError)+" "
@@ -556,17 +555,17 @@ namespace OpenDentBusiness{
 					Etranss.Insert(etrans);
 					List<string> claimTrackingNumbers=x277.GetClaimTrackingNumbers();
 					for(int i=0;i<claimTrackingNumbers.Count;i++) {
-						string ack=x277.GetAckForTrans(claimTrackingNumbers[i]);
+						string ack=x277.GetClaimInfo(claimTrackingNumbers[i])[3];
 						long claimNum=Claims.GetClaimNumForIdentifier(claimTrackingNumbers[i]);
 						//Locate the latest etrans entries for the claim based on DateTimeTrans with EType of ClaimSent or Claim_Ren and update the AckCode and AckEtransNum.
+						//We overwrite existing acks from 997s, 999s and older 277s.
 						command="UPDATE etrans SET AckCode='"+ack+"', "
 							+"AckEtransNum="+POut.Long(etrans.EtransNum)
 							+" WHERE EType IN (0,3) "//ClaimSent and Claim_Ren
 							+" AND ClaimNum="+POut.Long(claimNum)
 							+" AND ClearinghouseNum="+POut.Long(clearinghouseNum)
 							+" AND DateTimeTrans > "+POut.DateT(dateTimeTrans.AddDays(-14))
-							+" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1))
-							+" AND AckEtransNum=0";
+							+" AND DateTimeTrans < "+POut.DateT(dateTimeTrans.AddDays(1));
 						Db.NonQ(command);
 					}
 					////none of the other fields make sense, because this ack could refer to many claims.

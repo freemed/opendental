@@ -14,9 +14,11 @@ namespace OpenDentBusiness
 		///<summary>NM1 of loop 2100B.</summary>
 		private int segNumInfoReceiverNM101;
 		///<summary>NM1 of loop 2100C.</summary>
-		private List<int> segNumsBillingProviderNM101;
+		private List<int> segNumsBillingProviderNM1;
 		///<summary>NM1 of loop 2100D.</summary>
-		private List<int> segNumsPatientDetailNM101;
+		private List<int> segNumsPatientDetailNM1;
+		///<summary>TRN of loop 2200D.</summary>
+		private List<int> segNumsClaimTrackingNumberTRN;
 
 		public static bool Is277(X12object xobj) {
 			if(xobj.FunctGroups.Count!=1) {
@@ -32,8 +34,9 @@ namespace OpenDentBusiness
 			segments=FunctGroups[0].Transactions[0].Segments;
 			segNumInfoSourceNM101=-1;
 			segNumInfoReceiverNM101=-1;
-			segNumsBillingProviderNM101=new List<int>();
-			segNumsPatientDetailNM101=new List<int>();
+			segNumsBillingProviderNM1=new List<int>();
+			segNumsPatientDetailNM1=new List<int>();
+			segNumsClaimTrackingNumberTRN=new List<int>();
 			for(int i=0;i<segments.Count;i++) {
 				X12Segment seg=segments[i];
 				if(seg.SegmentID=="NM1") {
@@ -53,10 +56,16 @@ namespace OpenDentBusiness
 						i+=4;
 					}
 					else if(entityIdentifierCode=="85") {
-						segNumsBillingProviderNM101.Add(i);
+						segNumsBillingProviderNM1.Add(i);
 					}
 					else if(entityIdentifierCode=="QC") {
-						segNumsPatientDetailNM101.Add(i);
+						segNumsPatientDetailNM1.Add(i);
+					}
+				}
+				else if(seg.SegmentID=="TRN") {
+					//Every TRN segment after the first NM1 segment for the first patient is a claim status tracking number.
+					if(segNumsPatientDetailNM1.Count>0 && segNumsPatientDetailNM1[0]<i) {
+						segNumsClaimTrackingNumberTRN.Add(i);
 					}
 				}
 			}
@@ -65,7 +74,10 @@ namespace OpenDentBusiness
 		///<summary>NM101 of loop 2100A.</summary>
 		public string GetInformationSourceType() {
 			if(segNumInfoSourceNM101!=-1) {
-				return segments[segNumInfoSourceNM101].Get(1);
+				if(segments[segNumInfoSourceNM101].Get(1)=="AY") {
+					return "Clearinghouse";
+				}
+				return "Payor";
 			}
 			return "";
 		}
@@ -110,7 +122,7 @@ namespace OpenDentBusiness
 			return DateTime.MinValue;
 		}
 
-		///<summary>Returns -1 on error.</summary>
+		///<summary>Last STC segment in loop 2200B. Returns -1 on error.</summary>
 		private int GetSegNumLastSTC2200B() {
 			if(segNumInfoReceiverNM101!=-1) {
 				int segNum=segNumInfoReceiverNM101+2;
@@ -129,7 +141,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>QTY02 of loop 2200B.</summary>
-		public long GetAcceptedQuantity() {
+		public long GetQuantityAccepted() {
 			int segNum=GetSegNumLastSTC2200B();
 			if(segNum!=-1) {
 				segNum++;
@@ -144,7 +156,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>QTY02 of loop 2200B.</summary>
-		public long GetRejectedQuantity() {
+		public long GetQuantityRejected() {
 			int segNum=GetSegNumLastSTC2200B();
 			if(segNum!=-1) {
 				segNum++;
@@ -174,7 +186,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>AMT02 of loop 2200B.</summary>
-		public double GetAcceptedAmount() {
+		public double GetAmountAccepted() {
 			int segNum=GetSegNumLastSTC2200B();
 			if(segNum!=-1) {
 				segNum++;
@@ -196,7 +208,7 @@ namespace OpenDentBusiness
 		}
 
 		///<summary>AMT02 of loop 2200B.</summary>
-		public double GetRejectedAmount() {
+		public double GetAmountRejected() {
 			int segNum=GetSegNumLastSTC2200B();
 			if(segNum!=-1) {
 				segNum++;
@@ -228,63 +240,217 @@ namespace OpenDentBusiness
 			return 0;
 		}
 
-		///<summary>Do this first to get a list of all claim tracking numbers that are contained within this 277.  Then, for each claim tracking number, we can later retrieve the AckCode for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We allow more than just digits in our tracking numbers so we must return a list of strings.</summary>
+		///<summary>TRN02 in loop 2200D. Do this first to get a list of all claim tracking numbers that are contained within this 277.  Then, for each claim tracking number, we can later retrieve the AckCode for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
 		public List<string> GetClaimTrackingNumbers() {
 			List<string> retVal=new List<string>();
-			for(int i=0;i<segNumsPatientDetailNM101.Count;i++) {
-				//The specification says that there could be more than one tracking number per claim, but we only use the first one for each claim.
-				X12Segment seg=segments[segNumsPatientDetailNM101[i]+1];//TRN segment.
+			for(int i=0;i<segNumsClaimTrackingNumberTRN.Count;i++) {
+				X12Segment seg=segments[segNumsClaimTrackingNumberTRN[i]];//TRN segment.
 				retVal.Add(seg.Get(2));
 			}
 			return retVal;
 		}
 
-		///<summary>Use after GetClaimTrackingNumbers(). Will return A=Accepted, R=Rejected, or "" if can't determine.</summary>
-		public string GetAckForTrans(string trackingNumber) {
-			for(int i=0;i<segNumsPatientDetailNM101.Count;i++) {
-				//The specification says that there could be more than one tracking number per claim, but we only use the first one for each claim.
-				X12Segment seg=segments[segNumsPatientDetailNM101[i]+1];//TRN segment.
+		///<summary>Result will contain strings in the following order: Patient Last Name (NM103), Patient First Name (NM104), Patient Middle Name (NM105), Claim Status (STC03), Payor's Claim Control Number (REF02), Institutional Type of Bill (REF02), Claim Date Service Start (DTP03), Claim Date Service End (DTP03).</summary>
+		public string[] GetClaimInfo(string trackingNumber) {
+			string[] result=new string[8];
+			for(int i=0;i<result.Length;i++) {
+				result[i]="";
+			}
+			for(int i=0;i<segNumsClaimTrackingNumberTRN.Count;i++) {
+				int segNum=segNumsClaimTrackingNumberTRN[i];
+				X12Segment seg=segments[segNum];//TRN segment.
 				if(seg.Get(2)==trackingNumber) { //TRN02
-					//The X12 specification says that there can be more than one STC segment. I'm not sure why there would ever be more than one, but we will simply use the first one for now.
-					int segNum=segNumsPatientDetailNM101[i]+2;
+					//Locate the NM1 segment corresponding to the claim tracking number. One NM1 segment can be shared with multiple TRN segments.
+					//The strategy is to locate the NM1 segment furthest down in the message that is above the TRN segment for the tracking number.
+					int segNumNM1=segNumsPatientDetailNM1[segNumsPatientDetailNM1.Count-1];//very last NM1 segment
+					for(int j=0;j<segNumsPatientDetailNM1.Count-1;j++) {
+						if(segNum>segNumsPatientDetailNM1[j] && segNum<segNumsPatientDetailNM1[j+1]) {
+							segNumNM1=segNumsPatientDetailNM1[j];
+							break;
+						}
+					}
+					seg=segments[segNumNM1];//NM1 segment.
+					result[0]=seg.Get(3);//NM103 Last Name
+					result[1]=seg.Get(4);//NM104 First Name
+					result[2]=seg.Get(5);//NM105 Middle Name
+					segNum++;
+					seg=segments[segNum];//STC segment. At least one, maybe multiple, but we only care about the first one.
+					if(seg.Get(3)=="WQ") { //STC03 = WQ
+						result[3]="A";
+					}
+					else { //STC03 = U
+						result[3]="R";
+					}
+					//Skip the remaining STC segments (if any).
+					segNum++;
 					seg=segments[segNum];
-					while(seg.SegmentID=="TRN") { //Skip any additional TRN segments to locate the first STC segment.
+					while(seg.SegmentID=="STC") {
 						segNum++;
 						seg=segments[segNum];
 					}
-					if(seg.Get(3)=="WQ") { //STC03 = WQ
-						return "A";//accepted
+					while(seg.SegmentID=="REF") {
+						string refIdQualifier=seg.Get(1);
+						if(refIdQualifier=="1K") {
+							result[4]=seg.Get(2);//REF02 Payor's Claim Control Number.
+						}
+						else if(refIdQualifier=="D9") {
+							//REF02 Claim Identifier Number for Clearinghouse and Other Transmission Intermediary from the 837.
+							//When we send this it is the same as the claim identifier/claim tracking number, so we don't use this for now.
+						}
+						else if(refIdQualifier=="BLT") {
+							//REF02 Institutional Type of Bill that was sent in the 837.
+							result[5]=seg.Get(2);
+						}
+						segNum++;
+						seg=segments[segNum];
 					}
-					else { //STC03 = U
-						return "R";//rejected
+					//seg is now a DTP segment for the claim level service date since it is a required segment.
+					string dateServiceStr=seg.Get(3);
+					int dateServiceStartYear=PIn.Int(dateServiceStr.Substring(0,4));
+					int dateServiceStartMonth=PIn.Int(dateServiceStr.Substring(4,2));
+					int dateServiceStartDay=PIn.Int(dateServiceStr.Substring(6,2));
+					result[6]=(new DateTime(dateServiceStartYear,dateServiceStartMonth,dateServiceStartDay)).ToShortDateString();
+					if(seg.Get(2)=="RD8") { //Date range.
+						int dateServiceEndYear=PIn.Int(dateServiceStr.Substring(9,4));
+						int dateServiceEndMonth=PIn.Int(dateServiceStr.Substring(13,2));
+						int dateServiceEndDay=PIn.Int(dateServiceStr.Substring(15,2));
+						result[7]=(new DateTime(dateServiceEndYear,dateServiceEndMonth,dateServiceEndDay)).ToShortDateString();
 					}
 				}
 			}
-			return "";//cannot determine
+			return result;
 		}
 
 		public string GetHumanReadable() {
-			return "";
+			string result=
+				"Claim Status Reponse From "+GetInformationSourceType()+" "+GetInformationSourceName()+Environment.NewLine
+				+"Receipt Date: "+GetInformationSourceReceiptDate().ToShortDateString()+Environment.NewLine
+				+"Process Date: "+GetInformationSourceProcessDate().ToShortDateString()+Environment.NewLine
+				+"Quantity Accepted: "+GetQuantityAccepted()+Environment.NewLine
+				+"Quantity Rejected: "+GetQuantityRejected()+Environment.NewLine
+				+"Amount Accepted: "+GetAmountAccepted()+Environment.NewLine
+				+"Amount Rejected: "+GetAmountRejected()+Environment.NewLine
+				+"Individual Claim Status List: "+Environment.NewLine
+				+"Tracking Num  LName  FName  MName  Status  PayorControlNum  InstBillType DateServiceStart  DateServiceEnd";
+			List <string> claimTrackingNumbers=GetClaimTrackingNumbers();
+			for(int i=0;i<claimTrackingNumbers.Count;i++) {
+				string[] claimInfo=GetClaimInfo(claimTrackingNumbers[i]);
+				for(int j=0;j<claimInfo.Length;j++) {
+					result+=claimInfo[j]+"\\t";
+				}
+				result+=Environment.NewLine;
+			}
+			return result;
 		}
 
 	}
 }
 
+//EXAMPLE 1
+//ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
+//GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
+//ST*277*0001*005010X214~
+//BHT*0085*08*277X2140001*20060205*1635*TH~
+//HL*1**20*1~
+//NM1*AY*2*FIRST CLEARINGHOUSE*****46*CLHR00~
+//TRN*1*200102051635S00001ABCDEF~
+//DTP*050*D8*20060205~
+//DTP*009*D8*20060207~
+//HL*2*1*21*1~
+//NM1*41*2*BEST BILLING SERVICE*****46*S00001~
+//TRN*2*2002020542857~
+//STC*A0:16:PR*20060205*WQ*1000~
+//QTY*90*1~
+//QTY*AA*2~
+//AMT*YU*200~
+//AMT*YY*800~
+//HL*3*2*19*1~
+//NM1*85*2*SMITH CLINIC*****FI*123456789~
+//HL*4*3*PT~
+//NM1*QC*1*DOE*JOHN****MI*00ABCD1234~
+//TRN*2*4001/1339~
+//STC*A0:16:PR*20060205*WQ*200~
+//REF*1K*22029500123407X~
+//DTP*472*RD8*20060128-20060131~
+//HL*5*3*PT~
+//NM1*QC*1*DOE*JANE****MI*45613027602~
+//TRN*2*2890/4~
+//STC*A3:21:82*20060205*U*500~
+//DTP*472*D8*20060115~
+//SVC*HC:22305:22*350*****1~
+//STC*A3:122**U*******A3:153:82~
+//REF*FJ*11~
+//HL*6*3*PT~
+//NM1*QC*1*VEST*HELEN****MI*45602708901~
+//TRN*2*00000000000000000000~
+//STC*A3:401*20060205*U*300~
+//DTP*472*RD8*20060120-20060120~
+//SE*37*0001~
+//GE*1*17~
+//IEA*1*000000017~
 
+//EXAMPLE 2
+//ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
+//GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
+//ST*277*0002*005010X214~
+//BHT*0085*08*277X2140002*20060201*0405*TH~
+//HL*1**20*1~
+//NM1*AY*2*FIRST CLEARINGHOUSE*****46*CLHR00~
+//TRN*1*200201312005S00002XYZABC~
+//DTP*050*D8*20060131~
+//DTP*009*D8*20060201~
+//HL*2*1*21*0~
+//NM1*41*2*LAST BILLING SERVICE*****46*S00002~
+//TRN*2*20020131052389~
+//STC*A3:24:41**U~
+//QTY*AA*3~
+//AMT*YY*800~
+//SE*14*00002~
+//GE*1*17~
+//IEA*1*000000017~
 
+//EXAMPLE 3
+//ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
+//GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
 
+//ST*277*0003*005010X214~
+//BHT*0085*08*277X2140003*20060221*1025*TH~
+//HL*1**20*1~
+//NM1*PR*2*YOUR INSURANCE COMPANY*****PI*YIC01~
+//TRN*1*0091182~
+//DTP*050*D8*20060220~
+//DTP*009*D8*20060221~
+//HL*2*1*21*1~
+//NM1*41*1*JONES*HARRY*B**MD*46*S00003~
+//TRN*2*2002022045678~
+//STC*A1:19:PR*20060221*WQ*365.5~
+//QTY*90*3~
+//QTY*AA*2~
+//AMT*YU*200.5~
+//AMT*YY*165~
+//HL*3*2*19*1~
+//NM1*85*1*JONES*HARRY*B**MD*FI*234567894~
+//HL*4*3*PT~
+//NM1*QC*1*PATIENT*FEMALE****MI*2222222222~
+//TRN*2*PATIENT22222~
+//STC*A2:20:PR*20060221*WQ*100~
+//REF*1K*220216359803X~
+//DTP*472*RD8*20060214~
+//HL*5*3*PT~
+//NM1*QC*1*PATIENT*MALE****MI*3333333333~
+//TRN*2*PATIENT33333~
+//STC*A3:187:PR*20060221*U*65~
+//DTP*472*20090221~
+//HL*6*3*PT~
+//NM1*QC*1*JONES*LARRY****MI*4444444444~
+//TRN*2*JONES44444~
+//STC*A3:21:77*20060221*U*100~
+//DTP*472*D8*20060211~
+//HL*7*3*PT~
+//NM1*QC*1*JOHNSON*MARY****MI*5555555555~
+//TRN*2*JONHSON55555~
+//STC*A2:20:PR*20060221*WQ*50.0~
+//
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//GE*1*17~
+//IEA*1*000000017~
