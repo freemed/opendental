@@ -58,6 +58,8 @@ namespace OpenDental{
 		private Label labelMemo;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> IncomeAccountsQB;
+		///<summary>Checks if QB prefs are set and if a connection can successfully be made.</summary>
+		private bool IsQuickBooks;
 
 		///<summary></summary>
 		public FormDepositEdit(Deposit depositCur)
@@ -473,6 +475,14 @@ namespace OpenDental{
 
 		private void FormDepositEdit_Load(object sender, System.EventArgs e) {
 			butSendQB.Visible=false;
+			Cursor.Current=Cursors.WaitCursor;
+			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks
+				&& QuickBooks.TestConnection(PrefC.GetString(PrefName.QuickBooksCompanyFile))=="Connection to QuickBooks was successful."
+				&& Accounts.DepositsLinked()) 
+			{
+				IsQuickBooks=true;
+			}
+			Cursor.Current=Cursors.Default;
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)){
 					//we will check the date again when saving
@@ -544,12 +554,8 @@ namespace OpenDental{
 					}
 				}
 			}
-			//If in QuickBooks mode, always show deposit and income accounts so that users can send old deposits into QB.
-			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks
-				&& Accounts.DepositsLinked()) 
-			{
-				//Don't show QB items if this is an old QB deposit. 
-				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {
+			if(IsQuickBooks) {//If in QuickBooks mode, always show deposit and income accounts so that users can send old deposits into QB.
+				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {//Don't show QB items if this is an old QB deposit. 
 					if(!IsNew) {
 						butSendQB.Visible=true;//Only show button for old, non QB deposits.
 					}
@@ -848,9 +854,9 @@ namespace OpenDental{
 				}
 				Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0) {
-					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
-						//Create a deposit in QuickBooks.
-						if(!CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex],IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex]
+					if(IsQuickBooks) {//Create a deposit in QuickBooks.						
+						if(!CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex]
+							,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex]
 							,DepositCur.Amount,textMemo.Text,true)) 
 						{
 							return false;
