@@ -731,7 +731,7 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdLabels_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			PrintPreview printPreview=new OpenDental.UI.PrintPreview(PrintSituation.LabelSheet
+			FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.LabelSheet
 			  ,pd,(int)Math.Ceiling((double)gridMain.SelectedIndices.Length/30));
 			printPreview.ShowDialog();
 		}

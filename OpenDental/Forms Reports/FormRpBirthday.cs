@@ -37,7 +37,7 @@ namespace OpenDental
 		private int patientsPrinted;
 		private PrintDocument pd;
 		private TextBox textPostcardMsg;
-		private OpenDental.UI.PrintPreview printPreview;
+		private OpenDental.UI.FormPrintPreview printPreview;
 
 		///<summary></summary>
 		public FormRpBirthday()
@@ -415,7 +415,7 @@ namespace OpenDental
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
+			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,
 				(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
 			printPreview.ShowDialog();
 		}

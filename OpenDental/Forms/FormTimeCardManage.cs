@@ -363,7 +363,7 @@ namespace OpenDental {
 			pagesPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
-			PrintPreview pView=new PrintPreview(PrintSituation.Default,pd,gridMain.Rows.Count);
+			FormPrintPreview pView=new FormPrintPreview(PrintSituation.Default,pd,gridMain.Rows.Count);
 			pView.ShowDialog();
 		}
 

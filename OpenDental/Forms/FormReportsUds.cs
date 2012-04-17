@@ -61,7 +61,7 @@ namespace OpenDental {
 			Cursor.Current=Cursors.WaitCursor;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage+=new PrintPageEventHandler(this.pdAgeGender_PrintPage);
-			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
+			FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1);
 			printPreview.ShowDialog();
 		}
 

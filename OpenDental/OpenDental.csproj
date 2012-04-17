@@ -4132,8 +4132,8 @@
       <DependentUpon>PictureBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\PrintPreview.resx">
-      <DependentUpon>PrintPreview.cs</DependentUpon>
+    <EmbeddedResource Include="UI\FormPrintPreview.resx">
+      <DependentUpon>FormPrintPreview.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ContrApptSheet.resx">
@@ -4393,7 +4393,7 @@
     <Compile Include="UI\PinBoard.Designer.cs">
       <DependentUpon>PinBoard.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\PrintPreview.cs">
+    <Compile Include="UI\FormPrintPreview.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\SignatureBox.cs">

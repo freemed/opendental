@@ -48,7 +48,7 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetList.Count);
+				FormPrintPreview printPreview=new FormPrintPreview(sit,pd,SheetList.Count);
 				printPreview.ShowDialog();
 			#else
 				try {
@@ -128,7 +128,7 @@ namespace OpenDental {
 			//later: add a check here for print preview.
 			#if DEBUG
 				pd.DefaultPageSettings.Margins=new Margins(20,20,0,0);
-				UI.PrintPreview printPreview=new UI.PrintPreview(sit,pd,SheetList.Count);
+				FormPrintPreview printPreview=new FormPrintPreview(sit,pd,SheetList.Count);
 				printPreview.ShowDialog();
 			#else
 				try {

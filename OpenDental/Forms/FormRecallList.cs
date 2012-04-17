@@ -32,7 +32,7 @@ namespace OpenDental{
 		private int pagesPrinted;
 		private DataTable AddrTable;
 		private int patientsPrinted;
-		private OpenDental.UI.PrintPreview printPreview;
+		private OpenDental.UI.FormPrintPreview printPreview;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private OpenDental.UI.Button butSetStatus;
 		private System.Windows.Forms.ComboBox comboStatus;
@@ -1070,7 +1070,7 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdLabels_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.LabelSheet
+			printPreview=new FormPrintPreview(PrintSituation.LabelSheet
 				,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count/30));
 			//printPreview.Document=pd;
 			//printPreview.TotalPages=;
@@ -1187,7 +1187,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.Landscape=true;
 			}
 			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet));
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,totalPages);
+			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,totalPages);
 			printPreview.ShowDialog();
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Did all the postcards finish printing correctly?  Statuses will be changed and commlog entries made for all of the selected patients.  Click Yes only if postcards printed successfully.")) {
 				Cursor=Cursors.WaitCursor;

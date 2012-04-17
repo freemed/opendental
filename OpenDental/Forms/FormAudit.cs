@@ -439,8 +439,8 @@ namespace OpenDental{
 			}
 			headingPrinted=false;
 			#if DEBUG
-			PrintPreview printPreview=new PrintPreview(PrintSituation.Default,pd,1);
-			printPreview.ShowDialog();
+				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd,1);
+				printPreview.ShowDialog();
 			#else
 				try {
 					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {

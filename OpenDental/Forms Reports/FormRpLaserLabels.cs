@@ -43,7 +43,7 @@ namespace OpenDental {
 		private int insRange;
 		private int idxCus;
 		private string[] colName = new string[20];
-		private OpenDental.UI.PrintPreview printPreview;
+		private OpenDental.UI.FormPrintPreview printPreview;
 		private PrintDocument pd;
 		private OpenDental.UI.Button butOK;
 		private TabPage tabCustomLabels;
@@ -1204,7 +1204,7 @@ namespace OpenDental {
 				pd.PrintPage += new PrintPageEventHandler(this.pdLabels_PrintPage);
 				pd.OriginAtMargins = true;
 				pd.DefaultPageSettings.Margins = new Margins(0,0,0,0);
-				printPreview = new OpenDental.UI.PrintPreview(PrintSituation.LabelSheet
+				printPreview = new FormPrintPreview(PrintSituation.LabelSheet
 						,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count / 30));
 				printPreview.ShowDialog();
 			}

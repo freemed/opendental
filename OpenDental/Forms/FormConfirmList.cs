@@ -43,7 +43,7 @@ namespace OpenDental{
 		private DataTable table;
 		private PrintDocument pd;
 		private OpenDental.UI.Button butPrint;
-		private OpenDental.UI.PrintPreview printPreview;
+		private OpenDental.UI.FormPrintPreview printPreview;
 		private bool headingPrinted;
 		private int headingPrintH;
 		private ComboBox comboProv;
@@ -611,7 +611,7 @@ namespace OpenDental{
 			pd.PrintPage+=new PrintPageEventHandler(this.pdLabels_PrintPage);
 			pd.OriginAtMargins=true;
 			pd.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.LabelSheet
+			printPreview=new FormPrintPreview(PrintSituation.LabelSheet
 				,pd,(int)Math.Ceiling((double)AddrTable.Rows.Count/30));
 			printPreview.ShowDialog();
 		}
@@ -649,7 +649,7 @@ namespace OpenDental{
 				pd.DefaultPageSettings.PaperSize=new PaperSize("Postcard",850,1100);
 				pd.DefaultPageSettings.Landscape=true;
 			}
-			printPreview=new OpenDental.UI.PrintPreview(PrintSituation.Postcard,pd,
+			printPreview=new FormPrintPreview(PrintSituation.Postcard,pd,
 				(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)PrefC.GetLong(PrefName.RecallPostcardsPerSheet)));
 			printPreview.ShowDialog();
 		}
