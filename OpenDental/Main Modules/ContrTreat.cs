@@ -2511,7 +2511,7 @@ namespace OpenDental{
 				}
 				//Get fee schedule for medical or dental.
 				long feeSch;
-				if(isMed) {
+				if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
 					feeSch=Fees.GetMedFeeSched(PatCur,InsPlanList,PatPlanList,SubList);
 				}
 				else {
@@ -2524,7 +2524,10 @@ namespace OpenDental{
 				else {
 					insfee=Fees.GetAmount0(procCur.CodeNum,feeSch);
 				}
-				if(priplan!=null && priplan.PlanType=="p" && !isMed) {//PPO
+				if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed){
+					procCur.ProcFee=insfee;
+				}
+				else if(priplan!=null && priplan.PlanType=="p") {//PPO
 					standardfee=Fees.GetAmount0(procCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
 					if(standardfee>insfee) {
 						procCur.ProcFee=standardfee;
