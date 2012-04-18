@@ -3501,10 +3501,10 @@ namespace OpenDental{
 			Plugins.HookAddCode(this,"ContrChart.LayoutToolBar_end",PatCur);
 		}
 
-		///<summary></summary>
-		public void ModuleSelected(long patNum) {
+		///<summary>isFullRefresh is ONLY for eCW at this point.</summary>
+		public void ModuleSelected(long patNum,bool isFullRefresh) {
 			EasyHideClinicalData();
-			RefreshModuleData(patNum);
+			RefreshModuleData(patNum,isFullRefresh);
 			RefreshModuleScreen();
 			Plugins.HookAddCode(this,"ContrChart.ModuleSelected_end",patNum);
 		}
@@ -3525,11 +3525,15 @@ namespace OpenDental{
 			SubList=null;
 			Plugins.HookAddCode(this,"ContrChart.ModuleUnselected_end");
 		}
-
-		private void RefreshModuleData(long patNum) {
+		
+		///<summary>isFullRefresh is ONLY for eCW at this point.</summary>
+		private void RefreshModuleData(long patNum,bool isFullRefresh) {
 			if(patNum==0){
 				PatCur=null;
 				FamCur=null;
+				return;
+			}
+			if(!isFullRefresh) {
 				return;
 			}
 			FamCur=Patients.GetFamily(patNum);
@@ -3538,13 +3542,17 @@ namespace OpenDental{
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			PatPlanList=PatPlans.Refresh(patNum);
 			BenefitList=Benefits.Refresh(PatPlanList,SubList);
+//todo: track down where this is altered.  Optimize for eCW:
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
 			if(PrefC.UsingAtoZfolder) {
 				patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//GetImageFolder();
 			}
 			DocumentList=Documents.GetAllWithPat(patNum);
+//todo: might change for planned appt:
 			ApptList=Appointments.GetForPat(patNum);
+//todo: refresh as needed elsewhere:
 			ToothInitialList=ToothInitials.Refresh(patNum);
+//todo: optimize for Full mode:
 			PatFieldList=PatFields.Refresh(patNum);
 		}		
 
@@ -3790,7 +3798,7 @@ namespace OpenDental{
 				FormRxSelect FormRS=new FormRxSelect(PatCur);
 				FormRS.ShowDialog();
 				if(FormRS.DialogResult!=DialogResult.OK) return;
-				ModuleSelected(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum,false);
 				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,"Created prescription.");
 			}
 		}
@@ -3809,7 +3817,7 @@ namespace OpenDental{
 			if(FormL.DialogResult!=DialogResult.OK){
 				return;
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,false);
 		}
 
 		private void Tool_Perio_Click(){
@@ -3820,7 +3828,7 @@ namespace OpenDental{
 		private void Tool_Ortho_Click() {
 			FormOrthoChart FormOC=new FormOrthoChart(PatCur);
 			FormOC.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,false);
 		}
 
 		private void Tool_Anesthesia_Click() {
@@ -3851,7 +3859,7 @@ namespace OpenDental{
 			g.Dispose();
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,false);
 		}
 
 		private void Tool_ToothChart_Click() {
@@ -3883,7 +3891,7 @@ namespace OpenDental{
 			FormCI.IsNew = true;
 			FormCI.ShowDialog();
 			if(FormCI.DialogResult == DialogResult.OK) {
-				ModuleSelected(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum,false);
 			}
 		}
 
@@ -4011,46 +4019,46 @@ namespace OpenDental{
 					long launchRxNum=(long)type.InvokeMember("LaunchRxNum",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null);
 					FormRxEdit FormRXE=new FormRxEdit(PatCur,RxPats.GetRx(launchRxNum));
 					FormRXE.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.RxSelect) {
 					FormRxSelect FormRS=new FormRxSelect(PatCur);
 					FormRS.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Medical) {
 					FormMedical formM=new FormMedical(PatientNoteCur,PatCur);
 					formM.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.PatientEdit) {
 					FormPatientEdit formP=new FormPatientEdit(PatCur,FamCur);
 					formP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
 					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
 					formO.PatCur=PatCur;
 					formO.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedReconcile) {
 					FormMedicationReconcile FormMR=new FormMedicationReconcile();
 					FormMR.PatCur=PatCur;
 					FormMR.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Referrals) {
 					FormReferralsPatient formRP=new FormReferralsPatient();
 					formRP.PatNum=PatCur.PatNum;
 					formRP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatEdit) {
@@ -4058,7 +4066,7 @@ namespace OpenDental{
 					FormMedPat formMP=new FormMedPat();
 					formMP.MedicationPatCur=MedicationPats.GetOne(medicationPatNum);
 					formMP.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					Tool_EHR_Click(true);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.MedicationPatNew) {
@@ -4080,7 +4088,7 @@ namespace OpenDental{
 							FormMP.IsNew=true;
 							FormMP.ShowDialog();
 							if(FormMP.DialogResult==DialogResult.OK) {
-								ModuleSelected(PatCur.PatNum);
+								ModuleSelected(PatCur.PatNum,true);
 							}
 						}
 					}
@@ -4112,7 +4120,7 @@ namespace OpenDental{
 			g.Dispose();
 			FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 			FormS.ShowDialog();
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,false);
 		}
 
 		private void menuToothChart_Popup(object sender,EventArgs e) {
@@ -5876,7 +5884,7 @@ namespace OpenDental{
 					FormP.ProcList=procList;
 					FormP.ShowDialog();
 					if(FormP.DialogResult==DialogResult.OK){
-						ModuleSelected(PatCur.PatNum);
+						ModuleSelected(PatCur.PatNum,true);
 						FillProgNotes();
 					}
 					return;
@@ -5960,10 +5968,10 @@ namespace OpenDental{
 				FormP.ShowDialog();
 				if(FormP.DialogResult==DialogResult.OK)
 				{
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);//Why is this called here and down 3 lines? Do we need the Allocator, or should we return here?
 				}
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 			Reporting.Allocators.MyAllocator1_ProviderPayment.AllocateWithToolCheck(this.PatCur.Guarantor);
 		}
 
@@ -5975,14 +5983,14 @@ namespace OpenDental{
 			TaskObjectType GotoType=FormT.GotoType;
 			long keyNum=FormT.GotoKeyNum;
 			if(GotoType==TaskObjectType.None) {
-				ModuleSelected(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum,true);
 				return;
 			}
 			if(GotoType == TaskObjectType.Patient) {
 				if(keyNum != 0) {
 					Patient pat = Patients.GetPat(keyNum);
 					OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email != "",pat.ChartNumber);
-					ModuleSelected(pat.PatNum);
+					ModuleSelected(pat.PatNum,true);
 					return;
 				}
 			}
@@ -6477,7 +6485,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Not allowed to delete procedures due to security.")+"\r"
 					+skippedSecurity.ToString()+" "+Lan.g(this,"item(s) skipped."));
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		private void radioEntryEO_CheckedChanged(object sender,System.EventArgs e) {
@@ -7433,7 +7441,7 @@ namespace OpenDental{
 			//PatCur.NextAptNum=AptCur.AptNum;
 			PatCur.PlannedIsDone=false;
 			Patients.Update(PatCur,patOld);
-			ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them
+			ModuleSelected(PatCur.PatNum,true);//if procs were added in appt, then this will display them
 		}
 
 		///<summary></summary>
@@ -7448,7 +7456,7 @@ namespace OpenDental{
 			for(int i=0;i<gridPlanned.SelectedIndices.Length;i++){
 				Appointments.Delete(PIn.Long(DataSetMain.Tables["Planned"].Rows[gridPlanned.SelectedIndices[i]]["AptNum"].ToString()));
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		///<summary></summary>
@@ -7522,11 +7530,11 @@ namespace OpenDental{
 			FormAE.ShowDialog();
 			if(Programs.UsingOrion) {
 				if(FormAE.DialogResult==DialogResult.OK) {
-					ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+					ModuleSelected(PatCur.PatNum,true);//if procs were added in appt, then this will display them*/
 				}
 			}
 			else {
-				ModuleSelected(PatCur.PatNum);//if procs were added in appt, then this will display them*/
+				ModuleSelected(PatCur.PatNum,true);//if procs were added in appt, then this will display them*/
 			}
 			for(int i=0;i<DataSetMain.Tables["Planned"].Rows.Count;i++){
 				if(DataSetMain.Tables["Planned"].Rows[i]["AptNum"].ToString()==aptnum.ToString()){
@@ -7554,7 +7562,7 @@ namespace OpenDental{
 				PatCur.PlannedIsDone=false;
 				Patients.Update(PatCur,oldPat);
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 		#endregion
 
@@ -7917,7 +7925,7 @@ namespace OpenDental{
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="med") {
 					FormMedical FormM=new FormMedical(PatientNoteCur,PatCur);
 					FormM.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(RegistrationKey)) {
@@ -7931,7 +7939,7 @@ namespace OpenDental{
 					FormEhrProvKeysCustomer FormPK=new FormEhrProvKeysCustomer();
 					FormPK.Guarantor=PatCur.Guarantor;
 					FormPK.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Referral") {
@@ -7939,7 +7947,7 @@ namespace OpenDental{
 					FormReferralsPatient FormRE=new FormReferralsPatient();
 					FormRE.PatNum=PatCur.PatNum;
 					FormRE.ShowDialog();
-					ModuleSelected(PatCur.PatNum);
+					ModuleSelected(PatCur.PatNum,true);
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="References") {
@@ -8030,7 +8038,7 @@ namespace OpenDental{
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		private void toothChart_Click(object sender,EventArgs e) {
@@ -8228,7 +8236,7 @@ namespace OpenDental{
 					apt.ProcDescript+", "+apt.AptDateTime.ToString()+", Set Complete",
 					apt.AptNum);
 				Recalls.Synch(PatCur.PatNum);
-				ModuleSelected(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum,false);
 				return;
 			}
 			//Multiple procedures------------------------------------------------------------------------------------------------------
@@ -8320,7 +8328,7 @@ namespace OpenDental{
 			//	MessageBox.Show(Lan.g(this,".")+"\r\n"
 			//		+skipped.ToString()+" "+Lan.g(this,"procedures(s) skipped."));
 			//}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		private void menuItemEditSelected_Click(object sender,EventArgs e) {
@@ -8347,7 +8355,7 @@ namespace OpenDental{
 			FormP.ProcList=proclist;
 			FormP.ShowDialog();
 			if(FormP.DialogResult==DialogResult.OK){
-				ModuleSelected(PatCur.PatNum);
+				ModuleSelected(PatCur.PatNum,true);
 			}
 		}
 
@@ -8453,7 +8461,7 @@ namespace OpenDental{
 					Procedures.Update(changedProc,oldProc);
 				}
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		private void menuItemLabFee_Click(object sender,EventArgs e) {
@@ -8511,7 +8519,7 @@ namespace OpenDental{
 				procLab.ProcNumLab=procNumsReg[0];
 				Procedures.Update(procLab,procOld);
 			}
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		private void menuItemLabFeeDetach_Click(object sender,EventArgs e) {
@@ -8532,7 +8540,7 @@ namespace OpenDental{
 			Procedure procOld=procLab.Copy();
 			procLab.ProcNumLab=0;
 			Procedures.Update(procLab,procOld);
-			ModuleSelected(PatCur.PatNum);
+			ModuleSelected(PatCur.PatNum,true);
 		}
 
 		///<summary>Preview is only used for debugging.</summary>

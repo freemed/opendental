@@ -3197,7 +3197,7 @@ namespace OpenDental{
 					ContrChart2.InitializeOnStartup();
 					ContrChart2.Visible=true;
 					this.ActiveControl=this.ContrChart2;
-					ContrChart2.ModuleSelected(CurPatNum);
+					ContrChart2.ModuleSelected(CurPatNum,true);
 					break;
 				case 5:
 					ContrImages2.InitializeOnStartup();
@@ -3267,7 +3267,7 @@ namespace OpenDental{
 				ContrTreat2.ModuleSelected(CurPatNum);
 			}
 			if(ContrChart2.Visible){
-				ContrChart2.ModuleSelected(CurPatNum);
+				ContrChart2.ModuleSelected(CurPatNum,true);
 			}
 			if(ContrImages2.Visible){
 				ContrImages2.ModuleSelected(CurPatNum);
