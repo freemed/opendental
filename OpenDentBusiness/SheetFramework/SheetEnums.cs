@@ -100,7 +100,9 @@ namespace OpenDentBusiness {
 		PatientRegistration,
 		FinancialAgreement,
 		HIPAA,
-		MedicalHistory,
+		MedicalHistSimple,
+		MedicalHistNewPat,
+		MedicalHistUpdate,
 		LabSlip,
 		ExamSheet,
 		DepositSlip

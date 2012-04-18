@@ -46,8 +46,8 @@ namespace OpenDentBusiness{
 					return FinancialAgreement();
 				case SheetInternalType.HIPAA:
 					return HIPAA();
-				case SheetInternalType.MedicalHistory:
-					return MedicalHistory();
+				case SheetInternalType.MedicalHistSimple:
+					return MedicalHistSimple();
 				case SheetInternalType.LabSlip:
 					return LabSlip();
 				case SheetInternalType.ExamSheet:
@@ -817,9 +817,9 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			return sheet;
 		}
 
-		private static SheetDef MedicalHistory() {
+		private static SheetDef MedicalHistSimple() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.MedicalHistory);
-			sheet.Description="Medical History";
+			sheet.Description="Medical History Simple";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=850;
