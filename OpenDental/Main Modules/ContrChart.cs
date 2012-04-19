@@ -4876,7 +4876,7 @@ namespace OpenDental{
 				if(UsingEcwTight()) {//ecw customers
 					ChartModuleComponentsToLoad componentsToLoad = new ChartModuleComponentsToLoad(
 					checkAppt.Checked,				        //showAppointments
-					false, //checkComm.Checked,	      //showCommLog
+					checkComm.Checked,								//showCommLog.  The button is in a different toolbar.
 					checkShowC.Checked,               //showCompleted
 					checkShowCn.Checked,              //showConditions
 					false, //checkEmail.Checked,      //showEmail
