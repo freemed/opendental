@@ -1882,21 +1882,40 @@ namespace OpenDentBusiness {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
 			string log="";
-			command="SELECT InsSubNum FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
-			table=Db.GetTable(command);
 			if(isCheck) {
-				if(table.Rows.Count>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Pat plans found with invalid InsSubNums: ")+table.Rows.Count+"\r\n";
+			command="SELECT COUNT(*) FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
+			string countStr=Db.GetCount(command);
+				if(countStr!="0" || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans found with invalid InsSubNums: ")+countStr+"\r\n";
 				}
 			}
 			else {//fix
-				if(table.Rows.Count>0) {
-					long numberFixed=0;
-					for(int i=0;i<table.Rows.Count;i++) {
-						command="DELETE FROM patplan WHERE InsSubNum ="+table.Rows[i]["InsSubNum"];
-						numberFixed+=Db.NonQ(command);
-					}
-					log+=Lans.g("FormDatabaseMaintenance","Pat plans with invalid InsSubNums deleted: ")+numberFixed+"\r\n";
+				command="DELETE FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans with invalid InsSubNums deleted: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string PatPlanDeleteWithInvalidPatNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM patplan WHERE PatNum NOT IN (SELECT PatNum FROM patient)";
+				string countStr=Db.GetCount(command);
+				if(countStr!="0" || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans found with invalid PatNums: ")+countStr+"\r\n";
+				}
+			}
+			else {//fix
+				command="DELETE FROM patplan WHERE PatNum NOT IN (SELECT PatNum FROM patient)";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Pat plans with invalid PatNums deleted: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
@@ -1924,7 +1943,7 @@ namespace OpenDentBusiness {
 					}
 				}
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 0 to 1: ")+numberFixed+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan ordinals changed from 0 to 1: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
