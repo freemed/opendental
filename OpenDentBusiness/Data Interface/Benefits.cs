@@ -1663,6 +1663,7 @@ namespace OpenDentBusiness {
 					case FrequencyType.Exam:
 						if(benList[i].CodeNum==0
 						&& benList[i].BenefitType==InsBenefitType.Limitations
+						&& CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null
 						&& benList[i].CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum
 						&& benList[i].MonetaryAmt==-1
 						&& benList[i].PatPlanNum==0
