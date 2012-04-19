@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		public double PurchaseCost;
 		///<summary>.</summary>
 		public double MarketValue;
-		///<summary>.</summary>
+		///<summary>Freeform text.</summary>
 		public string Location;
 		///<summary>Security uses this date to lock older entries from accidental deletion.  Date, no time.</summary>
 		public DateTime DateEntry;

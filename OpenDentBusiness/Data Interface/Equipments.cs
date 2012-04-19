@@ -19,21 +19,21 @@ namespace OpenDentBusiness{
 				command="SELECT * FROM equipment "
 					+"WHERE DatePurchased >= "+POut.Date(fromDate)
 					+" AND DatePurchased <= "+POut.Date(toDate)
-					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%' OR Location LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			if(display==EnumEquipmentDisplayMode.Sold) {
 				command="SELECT * FROM equipment "
 					+"WHERE DateSold >= "+POut.Date(fromDate)
 					+" AND DateSold <= "+POut.Date(toDate)
-					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%' OR Location LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			if(display==EnumEquipmentDisplayMode.All) {
 				command="SELECT * FROM equipment "
 					+"WHERE ((DatePurchased >= "+POut.Date(fromDate)+" AND DatePurchased <= "+POut.Date(toDate)+")"
 						+" OR (DateSold >= "+POut.Date(fromDate)+" AND DateSold <= "+POut.Date(toDate)+"))"
-					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%')"
+					+" AND (SerialNumber LIKE '%"+POut.String(snDesc)+"%' OR Description LIKE '%"+POut.String(snDesc)+"%' OR Location LIKE '%"+POut.String(snDesc)+"%')"
 					+" ORDER BY DatePurchased";
 			}
 			return Crud.EquipmentCrud.SelectMany(command);
