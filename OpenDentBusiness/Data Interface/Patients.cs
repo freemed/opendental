@@ -489,11 +489,13 @@ namespace OpenDentBusiness{
 				+" GROUP BY PatNum,"
 				+" ORDER BY Guarantor!=PatNum,Birthdate,";
 			*/
+			Random rnd=new Random();
+			string rndStr=rnd.Next(1000000).ToString();
 			string command="SET @GuarNum="+POut.Long(guarNum)+";"
 				+"SET @ExcludePayNum="+POut.Long(excludePayNum)+";";
 			command+=@"
-				DROP TABLE IF EXISTS tempfambal;
-				CREATE TABLE tempfambal( 
+				DROP TABLE IF EXISTS tempfambal"+rndStr+@";
+				CREATE TABLE tempfambal"+rndStr+@"( 
 					FamBalNum int NOT NULL auto_increment,
 					PatNum bigint NOT NULL,
 					ProvNum bigint NOT NULL,
@@ -503,7 +505,7 @@ namespace OpenDentBusiness{
 					PRIMARY KEY (FamBalNum));
 				
 				/*Completed procedures*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,AmtBal)
 				SELECT patient.PatNum,procedurelog.ProvNum,procedurelog.ClinicNum,SUM(ProcFee)
 				FROM procedurelog,patient
 				WHERE patient.PatNum=procedurelog.PatNum
@@ -512,7 +514,7 @@ namespace OpenDentBusiness{
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 			
 				/*Received insurance payments*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,AmtBal)
 				SELECT patient.PatNum,claimproc.ProvNum,claimproc.ClinicNum,-SUM(InsPayAmt)-SUM(Writeoff)
 				FROM claimproc,patient
 				WHERE patient.PatNum=claimproc.PatNum
@@ -521,7 +523,7 @@ namespace OpenDentBusiness{
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Insurance estimates*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,InsEst)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,InsEst)
 				SELECT patient.PatNum,claimproc.ProvNum,claimproc.ClinicNum,SUM(InsPayEst)+SUM(Writeoff)
 				FROM claimproc,patient
 				WHERE patient.PatNum=claimproc.PatNum
@@ -530,7 +532,7 @@ namespace OpenDentBusiness{
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Adjustments*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,AmtBal)
 				SELECT patient.PatNum,adjustment.ProvNum,adjustment.ClinicNum,SUM(AdjAmt)
 				FROM adjustment,patient
 				WHERE patient.PatNum=adjustment.PatNum
@@ -538,7 +540,7 @@ namespace OpenDentBusiness{
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*Patient payments*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,AmtBal)
 				SELECT patient.PatNum,paysplit.ProvNum,paysplit.ClinicNum,-SUM(SplitAmt)
 				FROM paysplit,patient
 				WHERE patient.PatNum=paysplit.PatNum
@@ -548,21 +550,23 @@ namespace OpenDentBusiness{
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
 				/*payplan princ reduction*/
-				INSERT INTO tempfambal (PatNum,ProvNum,ClinicNum,AmtBal)
+				INSERT INTO tempfambal"+rndStr+@" (PatNum,ProvNum,ClinicNum,AmtBal)
 				SELECT patient.PatNum,payplancharge.ProvNum,payplancharge.ClinicNum,-SUM(Principal)
 				FROM payplancharge,patient
 				WHERE patient.PatNum=payplancharge.PatNum
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
-				SELECT tempfambal.PatNum,tempfambal.ProvNum,tempfambal.ClinicNum,SUM(AmtBal) StartBal,SUM(AmtBal-tempfambal.InsEst) AfterIns,FName,Preferred,'0' EndBal,
-					CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END AS IsNotGuar
-				FROM tempfambal,patient
-				WHERE tempfambal.PatNum=patient.PatNum
+				SELECT tempfambal"+rndStr+@".PatNum,tempfambal"+rndStr+@".ProvNum,tempfambal"+rndStr+@".ClinicNum,SUM(AmtBal) StartBal
+					,SUM(AmtBal-tempfambal"+rndStr+@".InsEst) AfterIns,FName,Preferred,'0' EndBal
+					,CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END AS IsNotGuar
+				FROM tempfambal"+rndStr+@",patient
+				WHERE tempfambal"+rndStr+@".PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
+				HAVING (StartBal>0.005 OR AfterIns>0.005)
 				ORDER BY IsNotGuar,Birthdate,ProvNum,FName,Preferred;
 
-				DROP TABLE IF EXISTS tempfambal";
+				DROP TABLE IF EXISTS tempfambal"+rndStr+@"";
 			return Db.GetTable(command);
 		}
 
