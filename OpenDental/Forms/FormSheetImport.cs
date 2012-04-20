@@ -464,13 +464,14 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid Relationship."));
 						}
 					}
-					row.ImpValDisplay="";
+					row.ImpValDisplay="[double click to pick]";
 					row.ImpValObj=null;
 					row.ObjType=typeof(Relat);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1Subscriber---------------------------------------------
@@ -489,13 +490,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj=row.NewValDisplay;
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1SubscriberID---------------------------------------------
@@ -514,13 +516,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1CarrierName---------------------------------------------
@@ -531,7 +534,7 @@ namespace OpenDental {
 					row.FieldDisplay="Carrier";
 					if(carrier1!=null) {
 						row.OldValDisplay=carrier1.CarrierName;
-						row.OldValObj="";
+						row.OldValObj=carrier1;
 					}
 					else {
 						row.OldValDisplay="";
@@ -539,13 +542,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1CarrierPhone---------------------------------------------
@@ -564,13 +568,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1EmployerName---------------------------------------------
@@ -581,20 +586,22 @@ namespace OpenDental {
 					row.FieldDisplay="Employer";
 					if(plan1==null) {
 						row.OldValDisplay="";
+						row.OldValObj="";
 					}
 					else {
 						row.OldValDisplay=Employers.GetName(plan1.EmployerNum);
+						row.OldValObj=Employers.GetEmployer(plan1.EmployerNum);
 					}
-					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1GroupName---------------------------------------------
@@ -612,13 +619,14 @@ namespace OpenDental {
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				//ins1GroupNum---------------------------------------------
@@ -636,13 +644,14 @@ namespace OpenDental {
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					rows.Add(row);
 				}
 				#endregion ins1
@@ -1281,6 +1290,19 @@ namespace OpenDental {
 			}
 			return retVal;
 		}
+		
+		///<summary>Returns one sheet field with the same FieldName. Returns null if not found.</summary>
+		private SheetImportRow GetImportRowByFieldName(string fieldName) {
+			if(rows==null) {
+				return null;
+			}
+			for(int i=0;i<rows.Count;i++) {
+				if(rows[i].FieldName==fieldName){
+					return rows[i];
+				}
+			}
+			return null;
+		}
 
 		///<summary>Loops through the list passed in returns the opposite check box.  Returns null if one is not found.</summary>
 		private SheetField GetOppositeSheetFieldCheckBox(List<SheetField> sheetFieldList,SheetField sheetFieldCur) {
@@ -1382,12 +1404,12 @@ namespace OpenDental {
 					return false;
 				}
 			}
-			if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
-			  //if(patPlanList.Count>0) {
-			  MsgBox.Show(this,"Insurance cannot be imported yet.");
-			  return false;
-			  //}
-			}
+			//if(row.FieldName.StartsWith("ins1") || row.FieldName.StartsWith("ins2")) {
+			//  //if(patPlanList.Count>0) {
+			//  MsgBox.Show(this,"Insurance cannot be imported yet.");
+			//  return false;
+			//  //}
+			//}
 			return true;
 		}
 
@@ -1422,6 +1444,7 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=referralSelected.GetNameFL();
 				rows[e.Row].ImpValObj=referralSelected;
 			}
+			#region string
 			else if(rows[e.Row].ObjType==typeof(string)) {
 				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
 				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
@@ -1450,6 +1473,83 @@ namespace OpenDental {
 				rows[e.Row].ImpValDisplay=inputbox.textResult.Text;
 				rows[e.Row].ImpValObj=inputbox.textResult.Text;
 			}
+			#endregion
+			#region Enum
+			else if(rows[e.Row].ObjType.IsEnum) {
+				//Note.  This only works for zero-indexed enums.
+				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
+				for(int i=0;i<Enum.GetNames(rows[e.Row].ObjType).Length;i++) {
+					formEnum.listResult.Items.Add(Enum.GetNames(rows[e.Row].ObjType)[i]);
+					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
+						formEnum.listResult.SelectedIndex=i;
+					}
+				}
+				formEnum.ShowDialog();
+				if(formEnum.DialogResult==DialogResult.OK) {
+					int selectedI=formEnum.listResult.SelectedIndex;
+					if(rows[e.Row].ImpValObj==null) {//was initially null
+						if(selectedI!=-1) {//an item was selected
+							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
+							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
+						}
+					}
+					else {//was not initially null
+						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
+							//There's no way for the user to set it to null, so we do not need to test that
+							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
+							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
+						}
+					}
+					if(selectedI==-1) {
+						rows[e.Row].DoImport=false;//impossible to import a null
+					}
+					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
+						rows[e.Row].DoImport=false;//so no need to import
+					}
+					else {
+						rows[e.Row].DoImport=true;
+					}
+				}
+			}
+			#endregion
+			#region DateTime
+			else if(rows[e.Row].ObjType==typeof(DateTime)) {//this is only for one field so far: Birthdate
+				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
+				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
+				inputbox.ShowDialog();
+				if(inputbox.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				DateTime enteredDate;
+				if(inputbox.textResult.Text=="") {
+					enteredDate=DateTime.MinValue;
+					rows[e.Row].ImpValObj=enteredDate;
+					rows[e.Row].ImpValDisplay="";
+				}
+				else {
+					try {
+						enteredDate=DateTime.Parse(inputbox.textResult.Text);
+					}
+					catch {
+						MsgBox.Show(this,"Invalid date");
+						return;
+					}
+					if(enteredDate.Year<1880 || enteredDate.Year>2050) {
+						MsgBox.Show(this,"Invalid date");
+						return;
+					}
+					rows[e.Row].ImpValObj=enteredDate;
+					rows[e.Row].ImpValDisplay=enteredDate.ToShortDateString();
+				}
+				if(rows[e.Row].ImpValDisplay==rows[e.Row].OldValDisplay) {//value is now same as original
+					rows[e.Row].DoImport=false;
+				}
+				else {
+					rows[e.Row].DoImport=true;
+				}
+			}
+			#endregion
+			#region Medication, Allergy or Disease
 			else if(rows[e.Row].ObjType==typeof(Medication)
 				|| rows[e.Row].ObjType==typeof(Allergy)
 				|| rows[e.Row].ObjType==typeof(Disease)) 
@@ -1511,128 +1611,126 @@ namespace OpenDental {
 					}
 				}
 			}
-			/*else if(rows[e.Row].ObjType.IsGenericType){//==typeof(Nullable)) {
-				Type underlyingT=Nullable.GetUnderlyingType(rows[e.Row].ObjType);
-				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
-				formEnum.ShowClearButton=true;
-				for(int i=0;i<Enum.GetNames(underlyingT).Length;i++) {
-					formEnum.comboResult.Items.Add(Enum.GetNames(underlyingT)[i]);
-					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
-						formEnum.comboResult.SelectedIndex=i;
-					}
-				}
-				formEnum.ShowDialog();
-				if(formEnum.DialogResult==DialogResult.OK) {
-					int selectedI=formEnum.comboResult.SelectedIndex;
-					if(rows[e.Row].ImpValObj==null) {//was initially null
-						if(selectedI!=-1) {//an item was selected
-							rows[e.Row].ImpValObj=Enum.ToObject(underlyingT,selectedI);
-							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
-						}
-					}
-					else {//was not initially null
-						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
-							if(selectedI==-1){
-								rows[e.Row].ImpValObj=null;
-								rows[e.Row].ImpValDisplay="";
-							}
-							else{
-								rows[e.Row].ImpValObj=Enum.ToObject(underlyingT,selectedI);
-								rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
-							}
-						}
-					}
-					if(patPlanList.Count>0) {
-						rows[e.Row].DoImport=false;//can't change an existing plan from here.
-					}
-					else if(selectedI==-1) {
-						if(rows[e.Row].OldValObj==null){
-							rows[e.Row].DoImport=false;//no change
-						}
-						else{
-							rows[e.Row].DoImport=true;
-						}
-					}
-					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
-						rows[e.Row].DoImport=false;//so no need to import
-					}
-					else {
-						rows[e.Row].DoImport=true;
-					}
-				}
-			}*/
-			else if(rows[e.Row].ObjType.IsEnum) {
-				//Note.  This only works for zero-indexed enums.
-				FormSheetImportEnumPicker formEnum=new FormSheetImportEnumPicker(rows[e.Row].FieldName);
-				for(int i=0;i<Enum.GetNames(rows[e.Row].ObjType).Length;i++) {
-					formEnum.listResult.Items.Add(Enum.GetNames(rows[e.Row].ObjType)[i]);
-					if(rows[e.Row].ImpValObj!=null && i==(int)rows[e.Row].ImpValObj) {
-						formEnum.listResult.SelectedIndex=i;
-					}
-				}
-				formEnum.ShowDialog();
-				if(formEnum.DialogResult==DialogResult.OK) {
-					int selectedI=formEnum.listResult.SelectedIndex;
-					if(rows[e.Row].ImpValObj==null) {//was initially null
-						if(selectedI!=-1) {//an item was selected
-							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
-							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
-						}
-					}
-					else {//was not initially null
-						if((int)rows[e.Row].ImpValObj!=selectedI) {//value was changed.
-							//There's no way for the user to set it to null, so we do not need to test that
-							rows[e.Row].ImpValObj=Enum.ToObject(rows[e.Row].ObjType,selectedI);
-							rows[e.Row].ImpValDisplay=rows[e.Row].ImpValObj.ToString();
-						}
-					}
-					if(selectedI==-1) {
-						rows[e.Row].DoImport=false;//impossible to import a null
-					}
-					else if((int)rows[e.Row].ImpValObj==(int)rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
-						rows[e.Row].DoImport=false;//so no need to import
-					}
-					else {
-						rows[e.Row].DoImport=true;
-					}
-				}
-			}
-			else if(rows[e.Row].ObjType==typeof(DateTime)) {//this is only for one field so far: Birthdate
-				InputBox inputbox=new InputBox(rows[e.Row].FieldName);
-				inputbox.textResult.Text=rows[e.Row].ImpValDisplay;
-				inputbox.ShowDialog();
-				if(inputbox.DialogResult!=DialogResult.OK) {
+			#endregion
+			#region Carrier
+			else if(rows[e.Row].ObjType==typeof(Carrier)) {
+				if(rows[e.Row].FieldName=="ins1CarrierPhone") {
+					MsgBox.Show(this,"Double click on the Carrier to set the phone.");
 					return;
 				}
-				DateTime enteredDate;
-				if(inputbox.textResult.Text=="") {
-					enteredDate=DateTime.MinValue;
-					rows[e.Row].ImpValObj=enteredDate;
-					rows[e.Row].ImpValDisplay="";
+				FormCarriers formC=new FormCarriers();
+				formC.IsSelectMode=true;
+				formC.ShowDialog();
+				if(formC.DialogResult!=DialogResult.OK) {
+					return;
 				}
-				else {
-					try {
-						enteredDate=DateTime.Parse(inputbox.textResult.Text);
-					}
-					catch {
-						MsgBox.Show(this,"Invalid date");
-						return;
-					}
-					if(enteredDate.Year<1880 || enteredDate.Year>2050) {
-						MsgBox.Show(this,"Invalid date");
-						return;
-					}
-					rows[e.Row].ImpValObj=enteredDate;
-					rows[e.Row].ImpValDisplay=enteredDate.ToShortDateString();
-				}
-				if(rows[e.Row].ImpValDisplay==rows[e.Row].OldValDisplay) {//value is now same as original
-					rows[e.Row].DoImport=false;
-				}
-				else {
-					rows[e.Row].DoImport=true;
+				Carrier impCarrier=formC.SelectedCarrier;
+				rows[e.Row].ImpValDisplay=impCarrier.CarrierName;
+				rows[e.Row].ImpValObj=impCarrier;
+				rows[e.Row].DoImport=true;
+				rows[e.Row].IsFlaggedImp=false;
+				SheetImportRow carrierPhoneRow=GetImportRowByFieldName("ins1CarrierPhone");
+				if(carrierPhoneRow!=null) {//Now update the carrierPhone if one exists.
+					carrierPhoneRow.ImpValDisplay=impCarrier.Phone;
+					carrierPhoneRow.DoImport=true;
 				}
 			}
+			#endregion
+			#region Employer
+			else if(rows[e.Row].ObjType==typeof(Employer)) {
+				//FormEmployers formE=new FormEmployers();
+				//formE.IsSelectMode=true;
+				//formE.ShowDialog();
+				//if(formE.DialogResult!=DialogResult.OK) {
+				//  return;
+				//}
+				//Employer impEmployer=formE.SelectedEmployer;
+				//rows[e.Row].ImpValDisplay=impEmployer.EmpName;
+				//rows[e.Row].ImpValObj=impEmployer;
+				//rows[e.Row].DoImport=true;
+				//rows[e.Row].IsFlaggedImp=false;
+			}
+			#endregion
+			#region InsPlan
+			else if(rows[e.Row].ObjType==typeof(InsPlan)) {
+				InsPlan plan;
+				string insStr="";
+				bool isPrimary=true;
+				if(rows[e.Row].FieldName.StartsWith("ins1")) {
+					insStr="ins1";
+				}
+				else {
+					insStr="ins2";
+					isPrimary=false;
+				}
+				if(rows[e.Row].ImpValObj.GetType()==typeof(InsPlan)) {//User already picked an ins plan.
+					plan=(InsPlan)rows[e.Row].ImpValObj;
+				}
+				else {
+					plan=new InsPlan();
+				}
+				//EIPW=edit ins plan window;//FormInsPlan.cs
+				//EIPW might require a subscriber to be set before loading...
+				//load the EIPW here
+				//if user cancelled out of EIPW, return;
+
+				//Load up every row related to the particular ins.
+				SheetImportRow subscriberRow=GetImportRowByFieldName(insStr+"Subscriber");
+				SheetImportRow subscriberIdRow=GetImportRowByFieldName(insStr+"SubscriberID");
+				SheetImportRow carrierNameRow=GetImportRowByFieldName(insStr+"CarrierName");
+				SheetImportRow carrierPhoneRow=GetImportRowByFieldName(insStr+"CarrierPhone");
+				SheetImportRow employerNameRow=GetImportRowByFieldName(insStr+"EmployerName");
+				SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
+				SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
+				//Set the values for the corresponding rows based on the selected plan.  
+				//The sheet could be missing one of these so we have to check for nulls.
+				if(subscriberRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(subscriberIdRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(carrierNameRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(carrierPhoneRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(employerNameRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(groupNameRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+				if(groupNumRow!=null) {
+					subscriberRow.ImpValObj=plan;
+				}
+
+
+
+
+				FormInsPlans formI=new FormInsPlans();
+				formI.IsSelectMode=true;
+				formI.ShowDialog();
+				if(formI.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				InsPlan impInsPlan=formI.SelectedPlan;
+
+				
+
+				//rows[e.Row].ImpValDisplay=impInsPlan.GroupName;
+				//rows[e.Row].ImpValObj=impInsPlan;
+				rows[e.Row].DoImport=true;
+				rows[e.Row].IsFlaggedImp=false;
+			}
+			#endregion
 			FillGrid();
+		}
+
+		///<summary>User double clicked on an ins1 or ins2 row so show the Edit Insurance Plan window.  
+		///Returns false if user cancels out of the window.  insStr should be "ins1" or "ins2"</summary>
+		private void PickInsPlan(SheetImportRow row,string insStr,bool isPrimary) {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -1704,8 +1802,8 @@ namespace OpenDental {
 							ra.PatNum=pat.PatNum;
 							ra.RefDate=DateTime.Today;
 							ra.ReferralNum=((Referral)rows[i].ImpValObj).ReferralNum;
-							RefAttaches.Insert(ra);
-							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));//no security to block this action.
+							RefAttaches.Insert(ra);//no security to block this action.
+							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,pat.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
 							break;
 						//AddressSameForFam already set, but not really importable by itself
 						case "Address":

@@ -386,6 +386,11 @@ namespace OpenDental{
 			SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
 			sheetdef.IsNew=true;
 			SheetDefs.InsertOrUpdate(sheetdef);
+			if(sheetdef.SheetType==SheetTypeEnum.MedicalHistory
+				&& (sheetdef.Description=="Medical History New Patient" || sheetdef.Description=="Medical History Update")) 
+			{
+				MsgBox.Show(this,"This is just a template, it may contain allergies and problems that do not exist in your setup.");
+			}
 			grid1.SetSelected(false);
 			FillGrid2();
 			for(int i=0;i<SheetDefC.Listt.Count;i++){

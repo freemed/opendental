@@ -48,6 +48,10 @@ namespace OpenDentBusiness{
 					return HIPAA();
 				case SheetInternalType.MedicalHistSimple:
 					return MedicalHistSimple();
+				case SheetInternalType.MedicalHistNewPat:
+					return MedicalHistNewPat();
+				case SheetInternalType.MedicalHistUpdate:
+					return MedicalHistUpdate();
 				case SheetInternalType.LabSlip:
 					return LabSlip();
 				case SheetInternalType.ExamSheet:
@@ -950,7 +954,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 
 		private static SheetDef MedicalHistNewPat() {
 			SheetDef sheet=new SheetDef(SheetTypeEnum.MedicalHistory);
-			sheet.Description="Medical History New Pat";
+			sheet.Description="Medical History New Patient";
 			sheet.FontName="Microsoft Sans Serif";
 			sheet.FontSize=10f;
 			sheet.Width=850;
@@ -996,6 +1000,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			y+=rowH+2;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List all medications or drugs you are now taking:",sheet.FontSize,sheet.FontName,false,x,y,292,rowH));
 			y+=rowH+1;
+			//Medication section goes here:
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+2,11,11));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",x+1,y+3,10,10));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("None",sheet.FontSize,sheet.FontName,false,x+13,y,37,rowH));
@@ -1004,6 +1009,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			y+=142;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List all medications or drugs you are allergic to:",sheet.FontSize,sheet.FontName,false,x,y,286,rowH));
 			y+=rowH+1;
+			//Allergy section goes here:
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+2,11,11));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",x+1,y+3,10,10));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("None",sheet.FontSize,sheet.FontName,false,x+13,y,37,rowH));
@@ -1012,6 +1018,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			y+=142;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List any medical conditions you may have including: asthma, bleeding problems, cancer, diabetes, heart murmur, heart trouble, high blood pressure, joint replacement, kidney disease, liver disease, pregnancy, psychiatric treatment, sinus trouble, stroke, ulcers, or history of  rheumatic fever or of taking fen-phen:",sheet.FontSize,sheet.FontName,false,x,y,682,55));
 			y+=56;
+			//Problem section goes here:
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+2,11,11));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewCheckBox("misc",x+1,y+3,10,10));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("None",sheet.FontSize,sheet.FontName,false,x+13,y,37,rowH));
