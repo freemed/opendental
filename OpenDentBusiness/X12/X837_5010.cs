@@ -1636,7 +1636,7 @@ namespace OpenDentBusiness
 				+transactionNum.ToString().PadLeft(4,'0'));//SE02 4/9 Transaction Set Control Number:
 			EndSegment(sw);
 			//Functional Group Trailer
-			sw.Write("GE"+s+transactionNum.ToString()+s//GE01 1/6 Number of Transaction Sets Included:
+			sw.Write("GE"+s+transactionNum.ToString()+s//GE01 1/6 Number of Transaction Sets Included.  Always 1 for us.
 				+groupControlNumber//GE02 1/9 Group Control Number: Must be identical to GS06.
 				+endSegment);
 			#endregion Trailers
