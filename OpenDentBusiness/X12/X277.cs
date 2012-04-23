@@ -60,12 +60,28 @@ namespace OpenDentBusiness
 					}
 					else if(entityIdentifierCode=="QC") {
 						segNumsPatientDetailNM1.Add(i);
-					}
-				}
-				else if(seg.SegmentID=="TRN") {
-					//Every TRN segment after the first NM1 segment for the first patient is a claim status tracking number.
-					if(segNumsPatientDetailNM1.Count>0 && segNumsPatientDetailNM1[0]<i) {
-						segNumsClaimTrackingNumberTRN.Add(i);
+						//Loop 2200D: There can be multiple TRN segments for each NM1*QC.
+						do {
+							i++;
+							segNumsClaimTrackingNumberTRN.Add(i);//a TRN segment is required at this location.
+							i++;
+							seg=segments[i];//at least one STC segment is required at this location.
+							while(seg.SegmentID=="STC") {//there may be multiple STC segments.
+								i++;
+								seg=segments[i];
+							}
+							//Followed by 0 to 3 situational REF segments.
+							for(int j=0;j<3 && (seg.SegmentID=="REF");j++) {
+								i++;
+								seg=segments[i];
+							}
+							//Followed by 0 or 1 DTP segments. 
+							if(seg.SegmentID=="DTP") {
+								i++;
+								seg=segments[i];
+							}
+							//An entire iteration of loop 2200D is now finished. If another iteration is present, it will begin with a TRN segment.
+						} while(seg.SegmentID=="TRN");
 					}
 				}
 			}
@@ -200,7 +216,7 @@ namespace OpenDentBusiness
 						seg=segments[segNum];
 					}
 					if(seg.SegmentID=="AMT" && seg.Get(1)=="YU") {
-						return long.Parse(seg.Get(2));
+						return double.Parse(seg.Get(2));
 					}
 				}
 			}
@@ -223,14 +239,14 @@ namespace OpenDentBusiness
 					}
 					if(seg.SegmentID=="AMT") {
 						if(seg.Get(1)=="YY") {
-							return long.Parse(seg.Get(2));
+							return double.Parse(seg.Get(2));
 						}
 						else {
 							segNum++;
 							if(segNum<segments.Count) {
 								seg=segments[segNum];
 								if(seg.SegmentID=="AMT" && seg.Get(1)=="YY") {
-									return long.Parse(seg.Get(2));
+									return double.Parse(seg.Get(2));
 								}
 							}
 						}
@@ -304,17 +320,19 @@ namespace OpenDentBusiness
 						segNum++;
 						seg=segments[segNum];
 					}
-					//seg is now a DTP segment for the claim level service date since it is a required segment.
-					string dateServiceStr=seg.Get(3);
-					int dateServiceStartYear=PIn.Int(dateServiceStr.Substring(0,4));
-					int dateServiceStartMonth=PIn.Int(dateServiceStr.Substring(4,2));
-					int dateServiceStartDay=PIn.Int(dateServiceStr.Substring(6,2));
-					result[6]=(new DateTime(dateServiceStartYear,dateServiceStartMonth,dateServiceStartDay)).ToShortDateString();
-					if(seg.Get(2)=="RD8") { //Date range.
-						int dateServiceEndYear=PIn.Int(dateServiceStr.Substring(9,4));
-						int dateServiceEndMonth=PIn.Int(dateServiceStr.Substring(13,2));
-						int dateServiceEndDay=PIn.Int(dateServiceStr.Substring(15,2));
-						result[7]=(new DateTime(dateServiceEndYear,dateServiceEndMonth,dateServiceEndDay)).ToShortDateString();
+					//The DTP segment for the date of service will not be present when an invalid date was originally sent to the carrier (even though the specifications have it marked as a required segment).
+					if(seg.SegmentID=="DTP") {
+						string dateServiceStr=seg.Get(3);
+						int dateServiceStartYear=PIn.Int(dateServiceStr.Substring(0,4));
+						int dateServiceStartMonth=PIn.Int(dateServiceStr.Substring(4,2));
+						int dateServiceStartDay=PIn.Int(dateServiceStr.Substring(6,2));
+						result[6]=(new DateTime(dateServiceStartYear,dateServiceStartMonth,dateServiceStartDay)).ToShortDateString();
+						if(dateServiceStr.Length==17) { //Date range.
+							int dateServiceEndYear=PIn.Int(dateServiceStr.Substring(9,4));
+							int dateServiceEndMonth=PIn.Int(dateServiceStr.Substring(13,2));
+							int dateServiceEndDay=PIn.Int(dateServiceStr.Substring(15,2));
+							result[7]=(new DateTime(dateServiceEndYear,dateServiceEndMonth,dateServiceEndDay)).ToShortDateString();
+						}
 					}
 				}
 			}
@@ -346,7 +364,7 @@ namespace OpenDentBusiness
 	}
 }
 
-//EXAMPLE 1
+//EXAMPLE 1 - From X12 Specification
 //ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
 //GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
 //ST*277*0001*005010X214~
@@ -389,7 +407,7 @@ namespace OpenDentBusiness
 //GE*1*17~
 //IEA*1*000000017~
 
-//EXAMPLE 2
+//EXAMPLE 2 - From X12 Specification
 //ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
 //GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
 //ST*277*0002*005010X214~
@@ -409,10 +427,9 @@ namespace OpenDentBusiness
 //GE*1*17~
 //IEA*1*000000017~
 
-//EXAMPLE 3
+//EXAMPLE 3 - From X12 Specification
 //ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
 //GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
-
 //ST*277*0003*005010X214~
 //BHT*0085*08*277X2140003*20060221*1025*TH~
 //HL*1**20*1~
@@ -435,12 +452,12 @@ namespace OpenDentBusiness
 //TRN*2*PATIENT22222~
 //STC*A2:20:PR*20060221*WQ*100~
 //REF*1K*220216359803X~
-//DTP*472*RD8*20060214~
+//DTP*472*D8*20060214~
 //HL*5*3*PT~
 //NM1*QC*1*PATIENT*MALE****MI*3333333333~
 //TRN*2*PATIENT33333~
 //STC*A3:187:PR*20060221*U*65~
-//DTP*472*20090221~
+//DTP*472*D8*20090221~
 //HL*6*3*PT~
 //NM1*QC*1*JONES*LARRY****MI*4444444444~
 //TRN*2*JONES44444~
@@ -449,8 +466,74 @@ namespace OpenDentBusiness
 //HL*7*3*PT~
 //NM1*QC*1*JOHNSON*MARY****MI*5555555555~
 //TRN*2*JONHSON55555~
-//STC*A2:20:PR*20060221*WQ*50.0~
-//
+//STC*A2:20:PR*20060221*WQ*50.5~
+//REF*1K*220216359806X~
+//DTP*472*D8*20060210~
+//HL*8*3*PT~
+//NM1*QC*1*MILLS*HARRIETT****MI*6666666666~
+//TRN*2*MILLS66666~
+//STC*A2:20:PR*20060221*WQ*50~
+//REF*1K*220216359807X~
+//DTP*472*D8*20060205~
+//SE*46*0003~
+//GE*1*17~
+//IEA*1*000000017~
 
+//EXAMPLE 4 - From X12 Specification
+//ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
+//GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
+//ST*277*0004*005010X214~
+//BHT*0085*08*277X2140004*20060321*1025*TH~
+//HL*1**20*1~
+//NM1*PR*2*OUR INSURANCE COMPANY*****PI*OIC02~
+//TRN*1*00911232~
+//DTP*050*D8*20060320~
+//DTP*009*D8*20060321~
+//HL*2*1*21*1~
+//NM1*41*1*KING*EWELL*B**MD*46*S00005~
+//TRN*2*200203207890~
+//STC*A1:19:PR*20060321*WQ*455~
+//QTY*90*3~
+//QTY*AA*5~
+//AMT*YU*155~
+//AMT*YY*300~
+//HL*3*2*19*1~
+//NM1*85*1*KING*EWELL*B**MD*XX*5365432101~
+//TRN*2*00098765432~
+//STC*A1:19:PR**WQ*305~
+//HL*4*3*PT~
+//NM1*QC*1*PATIENT*FEMALE****MI*2222222222~
+//TRN*2*PATIENT22222~
+//STC*A2:20:PR*20060321*WQ*55~
+//REF*1K*220216359803X~
+//DTP*472*D8*20060314~
+//HL*5*3*PT~
+//NM1*QC*1*PATIENT*MALE****MI*3333333333~
+//TRN*2*PATIENT33333~
+//STC*A3:187:PR*20060321*U*50~
+//HL*6*3*PT~
+//NM1*QC*1*JONES*MARY****MI*4444444444~
+//TRN*2*JONES44444~
+//STC*A3:116*20060321*U*100~
+//DTP*472*D8*20060311~
+//HL*7*3*PT~
+//NM1*QC*1*JOHNSON*JIMMY****MI*5555555555~
+//TRN*2*JOHNSON55555~
+//STC*A2:20:PR*20060321*WQ*50~
+//REF*1K*220216359806X~
+//DTP*472*D8*20060310~
+//HL*8*3*PT~
+//NM1*QC*1*MILLS*HALEY****MI*6666666666~
+//TRN*2*MILLS66666~
+//STC*A2:20:PR*20060321*WQ*50~
+//REF*1K*200216359807X~
+//DTP*472*D8*20060305~
+//HL*9*2*19*0~
+//NM1*85*1*REED*I*B**MD*FI*567012345~
+//TRN*2*00023456789~
+//STC*A3:24:85*20060321*U*150~
+//QTY*QC*3~
+//AMT*YY*150~
+//SE*53*0004~
 //GE*1*17~
 //IEA*1*000000017~

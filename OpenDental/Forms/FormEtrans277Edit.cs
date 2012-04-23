@@ -73,9 +73,9 @@ namespace OpenDental {
 			}
 			col=new ODGridColumn(Lan.g(this,"Status"),54,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"LName"),100);
+			col=new ODGridColumn(Lan.g(this,"LName"),showServiceDateRange?110:153);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"FName"),100);
+			col=new ODGridColumn(Lan.g(this,"FName"),showServiceDateRange?110:153);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),140);
 			gridMain.Columns.Add(col);
