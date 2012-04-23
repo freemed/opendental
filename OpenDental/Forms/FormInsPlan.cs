@@ -2023,7 +2023,7 @@ namespace OpenDental{
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(PatPlanCur.PatNum);
 			AdjAL=new ArrayList();//move selected claimprocs into ALAdj
 			for(int i=0;i<ClaimProcList.Count;i++) {
-				if(ClaimProcList[i].PlanNum==PlanCur.PlanNum
+				if(ClaimProcList[i].InsSubNum==SubCur.InsSubNum
 					&& ClaimProcList[i].Status==ClaimProcStatus.Adjustment) {
 					AdjAL.Add(ClaimProcList[i]);
 				}
