@@ -726,7 +726,7 @@ namespace OpenDental.Eclaims {
 						new FormCCDPrint(etrans,result,true);
 					}
 					catch(Exception ex) {
-						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+ex.Message);
+						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+Environment.NewLine+ex.ToString());
 					}
 				}
 			} while(!exit);
