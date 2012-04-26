@@ -241,7 +241,13 @@ namespace OpenDentBusiness{
 				LEFT JOIN (SELECT ce.EmployeeNum,SEC_TO_TIME(IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed2)),0)-IFNULL(SUM(UNIX_TIMESTAMP(ce.TimeDisplayed1)),0)) AS TotalTime,
 					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.OTimeHours='-01:00:00' THEN ce.OTimeAuto ELSE ce.OTimeHours END)),0)) AS OverTime,
 					SEC_TO_TIME(IFNULL(SUM(TIME_TO_SEC(CASE WHEN ce.AdjustIsOverridden='1' THEN ce.Adjust ELSE ce.AdjustAuto END)),0)) AS AdjEvent,
-					CASE WHEN "+DbHelper.DateColumn("TimeDisplayed2")+" = "+POut.Date(startDate)+@" THEN ce.Note ELSE """" END AS Note 
+					(SELECT CASE WHEN cev.Note !="""" THEN cev.Note ELSE """" END FROM clockevent cev 
+						WHERE cev.TimeDisplayed1 >= "+POut.Date(startDate)+@"
+						AND cev.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
+						AND cev.TimeDisplayed2 > "+POut.Date(new DateTime(0001,1,1))+@"
+						AND (cev.ClockStatus = '0' OR cev.ClockStatus = '1')
+						AND cev.EmployeeNum=ce.EmployeeNum
+						ORDER BY cev.TimeDisplayed2 LIMIT 1) AS Note
 					FROM clockevent ce
 					WHERE ce.TimeDisplayed1 >= "+POut.Date(startDate)+@"
 					AND ce.TimeDisplayed1 <= "+POut.Date(stopDate.AddDays(1))+@" 
