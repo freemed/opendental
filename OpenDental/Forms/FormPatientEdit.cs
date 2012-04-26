@@ -1823,8 +1823,7 @@ namespace OpenDental{
 			textHmPhone.Text=PatCur.HmPhone;
 			textWkPhone.Text=PatCur.WkPhone;
 			textWirelessPhone.Text=PatCur.WirelessPhone;
-//todo: uncomment:
-			//listTextOk.SelectedIndex=(int)patient.TxtMsgOk;
+			listTextOk.SelectedIndex=(int)PatCur.TxtMsgOk;
 			textEmail.Text=PatCur.Email;
 			textCreditType.Text=PatCur.CreditType;
 			if(PatCur.DateFirstVisit.Year < 1880){
@@ -2892,14 +2891,7 @@ namespace OpenDental{
 			PatCur.MedicaidID=textMedicaidID.Text;
 			PatCur.WkPhone=textWkPhone.Text;
 			PatCur.WirelessPhone=textWirelessPhone.Text;
-//todo uncomment 
-			/*PatCur.TxtMsgOk=YN.Unknown;
-			if(toolBarTxtMsg.Buttons["Y"].Pushed) {
-				PatCur.TxtMsgOk=YN.Yes;
-			}
-			if(toolBarTxtMsg.Buttons["N"].Pushed) {
-				PatCur.TxtMsgOk=YN.No;
-			}*/
+			PatCur.TxtMsgOk=(YN)listTextOk.SelectedIndex;
 			PatCur.Email=textEmail.Text;
 			//PatCur.RecallInterval=PIn.PInt(textRecall.Text);
 			PatCur.ChartNumber=textChartNumber.Text;

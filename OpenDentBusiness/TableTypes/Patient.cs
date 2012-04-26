@@ -162,7 +162,8 @@ namespace OpenDentBusiness{
 		public ContactMethod PreferContactConfidential;
 		///<summary>FK to patient.PatNum.  If this is the same as PatNum, then this is a SuperHead.  If zero, then not part of a superfamily.  Synched for entire family.  If family is part of a superfamily, then the guarantor for this family will show in the superfamily list in the Family module for anyone else who is in the superfamily.  Only a guarantor can be a superfamily head.</summary>
 		public long SuperFamily;
-
+		///<summary>Enum:YN</summary>
+		public YN TxtMsgOk;
 
 
 		//<summary>Decided not to add since this data is already available and synchronizing would take too much time.  Will add later.  Not editable. If the patient happens to have a future appointment, this will contain the date of that appointment.  Once appointment is set complete, this date is deleted.  If there is more than one appointment scheduled, this will only contain the earliest one.  Used mostly to exclude patients from recall lists.  If you want all future appointments, use Appointments.GetForPat() instead. You can loop through that list and exclude appointments with dates earlier than today.</summary>

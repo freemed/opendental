@@ -9089,7 +9089,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command="DELETE FROM preference WHERE PrefName='MedicalEclaimsEnabled'";
 				Db.NonQ(command);
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE patient ADD TxtMsgOk tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE patient ADD TxtMsgOk number(3)";
+					Db.NonQ(command);
+					command="UPDATE patient SET TxtMsgOk = 0 WHERE TxtMsgOk IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE patient MODIFY TxtMsgOk NOT NULL";
+					Db.NonQ(command);
+				}
 
 				
 
@@ -9138,4 +9149,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
 
