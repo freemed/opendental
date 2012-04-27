@@ -962,7 +962,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			int rowH=18;
 			int y=60;
 			int x=75;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical History",12f,sheet.FontName,true,345,y,180,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical History for New Patient",12f,sheet.FontName,true,312,y,275,20));
 			y=105;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Last Name:",sheet.FontSize,sheet.FontName,false,76,y,75,rowH));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,151,y,155,rowH));
@@ -999,7 +999,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			x=75;
 			y+=rowH+15;
 			#region medications
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List all medications or drugs you are now taking:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List all medications that you are now taking:",sheet.FontSize,sheet.FontName,false,x,y,400,rowH));
 			y+=rowH+8;
 			int inputW=327;
 			int inputGap=355;
@@ -1040,16 +1040,16 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			x=75;
 			y+=rowH+15;
 			#region allergies
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Check all medications or drugs you are allergic to:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Are you allergic to any of the following?",sheet.FontSize,sheet.FontName,false,x,y,400,rowH));
 			y+=rowH+3;
 			//x+=3;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=316;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x=75;
 			y+=rowH;
 			MedicalCheckboxRowYN(sheet,"allergy:","Anesthetic","Iodine",x,y);
@@ -1062,16 +1062,16 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			#endregion
 			y+=rowH+15;
 			#region problems
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Check any medical conditions you may have:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Do you have any of the following medical conditions?",sheet.FontSize,sheet.FontName,false,x,y,400,rowH));
 			y+=rowH+3;
 			//x+=3;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=316;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x=75;
 			y+=rowH;
 			MedicalCheckboxRowYN(sheet,"problem:","Asthma","Kidney Disease",x,y);
@@ -1162,7 +1162,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			int rowH=18;
 			int y=60;
 			int x=75;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical History",12f,sheet.FontName,true,345,y,180,20));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Medical History Update",12f,sheet.FontName,true,325,y,220,20));
 			y=105;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Last Name:",sheet.FontSize,sheet.FontName,false,76,y,75,rowH));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("LName",sheet.FontSize,sheet.FontName,false,151,y,155,rowH));
@@ -1199,57 +1199,98 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			x=75;
 			y+=rowH+15;
 			#region medications
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("List all medications or drugs you are now taking:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Mark any medications that you are no longer taking and add any new ones:",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH+8;
-			int inputW=327;
-			int inputGap=355;
+			int inputW=300;
+			int inputGap=329;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed1","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed1",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x+=inputGap;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed6","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed6",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x=75;
 			y+=rowH+4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed2","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed2",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x+=inputGap;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed7","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed7",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x=75;
 			y+=rowH+4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed3","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed3",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x+=inputGap;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed8","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed8",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x=75;
 			y+=rowH+4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed4","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed4",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x+=inputGap;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed9","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed9",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x=75;
 			y+=rowH+4;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed5","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed5",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
 			x+=inputGap;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRect(x,y+3,14,14));
+			x+=2;
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewRadioButton("checkMed10","N",x,y+5,11,11));
+			x+=24;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("inputMed10",sheet.FontSize,sheet.FontName,false,x,y,inputW,18));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y+18,inputW,0));
+			x=75;
 			#endregion
 			x=75;
 			y+=rowH+15;
 			#region allergies
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Check all medications or drugs you are allergic to:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Are you allergic to any of the following?",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH+3;
 			//x+=3;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=316;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x=75;
 			y+=rowH;
 			MedicalCheckboxRowYN(sheet,"allergy:","Anesthetic","Iodine",x,y);
@@ -1262,16 +1303,16 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			#endregion
 			y+=rowH+15;
 			#region problems
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Check any medical conditions you may have:",sheet.FontSize,sheet.FontName,false,x,y,312,rowH));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Do you have any of the following medical conditions?",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH+3;
 			//x+=3;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=316;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Y",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x+=21;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,14,14));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("N",sheet.FontSize,sheet.FontName,false,x,y,16,14));
 			x=75;
 			y+=rowH;
 			MedicalCheckboxRowYN(sheet,"problem:","Asthma","Kidney Disease",x,y);
@@ -1501,7 +1542,7 @@ Fam Urgent Fin Note: [famFinUrgNote]"
 			return sheet;
 		}
 
-		///<summary>This will add two allergy or medication check box rows.  Set the prefix string to "allergy:" or "problem:", item1 and item2 should be set to the desired allergy/med in the row. Leave item2 blank for just one check box in the row.</summary>
+		///<summary>This will add two check box rows.  Set the prefix string to "allergy:" or "problem:", item1 and item2 should be set to the desired allergy/med in the row. Leave item2 blank for just one check box in the row.</summary>
 		private static void MedicalCheckboxRowYN(SheetDef sheet,string prefix,string item1,string item2,int x,int y) {
 			int rectH=y+3;
 			int checkH=y+5;

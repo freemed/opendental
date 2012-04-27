@@ -1059,6 +1059,9 @@ namespace OpenDental {
 							if(diseases[j].ProbStatus==ProblemStatus.Active) {
 								row.OldValDisplay="Y";
 							}
+							else {
+								row.OldValDisplay="N";
+							}
 							row.OldValObj=diseases[j];
 							break;
 						}

@@ -1438,23 +1438,29 @@ namespace OpenDental{
 				}
 				if(field.FieldType==SheetFieldType.CheckBox) {
 					if(field.FieldName.StartsWith("allergy:")) {//"allergy:Pen"
-						List<Allergy> allergies=Allergies.GetAll(pat.PatNum,false);
+						List<Allergy> allergies=Allergies.GetAll(pat.PatNum,true);
 						for(int i=0;i<allergies.Count;i++) {
-							if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue=="Y") //We only worry about prefilling yes boxes.
-						{
-								field.FieldValue="X";
+							if(AllergyDefs.GetDescription(allergies[i].AllergyDefNum)==field.FieldName.Remove(0,8)) {
+								if(allergies[i].StatusIsActive && field.RadioButtonValue=="Y") {
+									field.FieldValue="X";
+								}
+								else if(!allergies[i].StatusIsActive && field.RadioButtonValue=="N") {
+									field.FieldValue="X";
+								}
 								break;
 							}
 						}
 					}
 					else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
-						List<Disease> diseases=Diseases.Refresh(pat.PatNum,true);
+						List<Disease> diseases=Diseases.Refresh(pat.PatNum,false);
 						for(int i=0;i<diseases.Count;i++) {
-							if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)
-							&& field.RadioButtonValue=="Y") //We only worry about prefilling yes boxes.
-						{
-								field.FieldValue="X";
+							if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)) {
+								if(diseases[i].ProbStatus==ProblemStatus.Active && field.RadioButtonValue=="Y") {
+									field.FieldValue="X";
+								}
+								else if(diseases[i].ProbStatus!=ProblemStatus.Active && field.RadioButtonValue=="N") {
+									field.FieldValue="X";
+								}
 								break;
 							}
 						}
