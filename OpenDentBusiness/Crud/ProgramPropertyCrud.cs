@@ -50,6 +50,7 @@ namespace OpenDentBusiness.Crud{
 				programProperty.ProgramNum        = PIn.Long  (table.Rows[i]["ProgramNum"].ToString());
 				programProperty.PropertyDesc      = PIn.String(table.Rows[i]["PropertyDesc"].ToString());
 				programProperty.PropertyValue     = PIn.String(table.Rows[i]["PropertyValue"].ToString());
+				programProperty.ComputerName      = PIn.String(table.Rows[i]["ComputerName"].ToString());
 				retVal.Add(programProperty);
 			}
 			return retVal;
@@ -90,14 +91,15 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProgramPropertyNum,";
 			}
-			command+="ProgramNum,PropertyDesc,PropertyValue) VALUES(";
+			command+="ProgramNum,PropertyDesc,PropertyValue,ComputerName) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(programProperty.ProgramPropertyNum)+",";
 			}
 			command+=
 				     POut.Long  (programProperty.ProgramNum)+","
 				+"'"+POut.String(programProperty.PropertyDesc)+"',"
-				+"'"+POut.String(programProperty.PropertyValue)+"')";
+				+"'"+POut.String(programProperty.PropertyValue)+"',"
+				+"'"+POut.String(programProperty.ComputerName)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -112,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE programproperty SET "
 				+"ProgramNum        =  "+POut.Long  (programProperty.ProgramNum)+", "
 				+"PropertyDesc      = '"+POut.String(programProperty.PropertyDesc)+"', "
-				+"PropertyValue     = '"+POut.String(programProperty.PropertyValue)+"' "
+				+"PropertyValue     = '"+POut.String(programProperty.PropertyValue)+"', "
+				+"ComputerName      = '"+POut.String(programProperty.ComputerName)+"' "
 				+"WHERE ProgramPropertyNum = "+POut.Long(programProperty.ProgramPropertyNum);
 			Db.NonQ(command);
 		}
@@ -131,6 +134,10 @@ namespace OpenDentBusiness.Crud{
 			if(programProperty.PropertyValue != oldProgramProperty.PropertyValue) {
 				if(command!=""){ command+=",";}
 				command+="PropertyValue = '"+POut.String(programProperty.PropertyValue)+"'";
+			}
+			if(programProperty.ComputerName != oldProgramProperty.ComputerName) {
+				if(command!=""){ command+=",";}
+				command+="ComputerName = '"+POut.String(programProperty.ComputerName)+"'";
 			}
 			if(command==""){
 				return;

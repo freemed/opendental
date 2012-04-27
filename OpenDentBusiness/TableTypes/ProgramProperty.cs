@@ -10,10 +10,12 @@ namespace OpenDentBusiness{
 		public long ProgramPropertyNum;
 		///<summary>FK to program.ProgramNum</summary>
 		public long ProgramNum;
-		///<summary>The description or prompt for this property.</summary>
+		///<summary>The description or prompt for this property.  Blank for workstation overrides of program path.</summary>
 		public string PropertyDesc;
-		///<summary>The value.</summary>
+		///<summary>The value.  </summary>
 		public string PropertyValue;
+		///<summary>The human-readable name of the computer on the network (not the IP address).  Only used when overriding program path.  Blank for typical Program Properties.</summary>
+		public string ComputerName;
 	}
 
 	
