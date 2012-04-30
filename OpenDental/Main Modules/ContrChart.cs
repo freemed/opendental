@@ -4769,7 +4769,7 @@ namespace OpenDental{
 			gridProg.Columns.Clear();
 			ODGridColumn col;
 			List<DisplayField> fields;
-			DisplayFields.RefreshCache();
+			//DisplayFields.RefreshCache();
 			if(gridChartViews.Rows.Count==0) {//No chart views, Use default values.
 				fields=DisplayFields.GetForCategory(DisplayFieldCategory.None);
 				gridProg.Title="Progress Notes";

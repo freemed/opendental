@@ -1336,7 +1336,7 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			DisplayFields.RefreshCache();
+			DisplayFields.RefreshCache();//probably needs to be removed.
 			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.TreatmentPlanModule);
 			for(int i=0;i<fields.Count;i++){
 				if(fields[i].Description==""){

@@ -722,7 +722,7 @@ namespace OpenDental{
 			gridProc.BeginUpdate();
 			gridProc.Columns.Clear();
 			ODGridColumn col;
-			DisplayFields.RefreshCache();
+			DisplayFields.RefreshCache();//probably needs to be removed
 			List<DisplayField> fields=DisplayFields.GetForCategory(DisplayFieldCategory.ProcedureGroupNote);
 			for(int i=0;i<fields.Count;i++) {
 				if(fields[i].Description=="") {
