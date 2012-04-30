@@ -987,7 +987,7 @@ namespace OpenDental{
 			//logic only works for column 4.
 			long codeNum=PIn.Long(ProcTable.Rows[e.Row]["CodeNum"].ToString());
 			long feesched=FeeSchedC.ListShort[listFeeSched.SelectedIndex].FeeSchedNum;
-			Fee fee=fee=Fees.GetFee(codeNum,feesched);
+			Fee fee=Fees.GetFee(codeNum,feesched);
 			string strOld="";
 			if(fee!=null){
 				strOld=fee.Amount.ToString("n");
@@ -1014,8 +1014,12 @@ namespace OpenDental{
 				gridMain.Rows[e.Row].Cells[e.Col].Text=dNew.ToString("n");//to standardize formatting.  They probably didn't type .00
 				//invalidate doesn't seem to be necessary here
 			}
-			if(strOld==""){//if no fee was originally entered
-				//and since it's no longer empty, then we need to insert a fee
+			if(strOld==""){//if no fee was originally entered and since it's no longer empty, then we need to insert a fee.
+				//Somehow duplicate fees were being inserted so double check that this fee does not already exist.
+				Fee tmpFee=Fees.GetFee(codeNum,feesched);//Looks in cache.
+				if(tmpFee!=null) {
+				  return;//Fee exists. Must be unknown bug.
+				}
 				fee=new Fee();
 				fee.FeeSched=feesched;
 				fee.CodeNum=codeNum;

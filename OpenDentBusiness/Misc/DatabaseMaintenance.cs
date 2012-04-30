@@ -1346,6 +1346,42 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string FeeDeleteDuplicates(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			command="SELECT FeeNum,FeeSched,CodeNum,Amount FROM fee GROUP BY FeeSched,CodeNum HAVING COUNT(CodeNum)>1";
+			table=Db.GetTable(command);
+			int count=table.Rows.Count;
+			string log="";
+			if(isCheck) {
+				if(count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Procedure codes with duplicate fee entries: ")+count+"\r\n";
+				}
+			}
+			else {//fix
+				long numberFixed=0;
+				for(int i=0;i<count;i++) {
+					if(i==0) {
+						log+=Lans.g("FormDatabaseMaintenance","The following procedure codes had duplicate fee entries.  Verify that the following amounts are correct:")+"\r\n";
+					}
+					//Make an entry in the log so that the user knows to verify the amount for this fee.
+					log+="Fee Schedule: "+FeeScheds.GetDescription(PIn.Long(table.Rows[i]["FeeSched"].ToString()))//No call to db.
+						+" - Code: "+ProcedureCodes.GetStringProcCode(PIn.Long(table.Rows[i]["CodeNum"].ToString()))//No call to db.
+						+" - Amount: "+PIn.Double(table.Rows[i]["Amount"].ToString()).ToString("n")+"\r\n";
+					//At least one fee needs to stay.  Each row in table is a random fee, so we'll just keep that one and delete the rest.
+					command="DELETE FROM fee WHERE FeeSched="+table.Rows[i]["FeeSched"].ToString()
+						+" AND CodeNum="+table.Rows[i]["CodeNum"].ToString()
+						+" AND FeeNum!="+table.Rows[i]["FeeNum"].ToString();//This is the random fee we will keep.
+					numberFixed+=Db.NonQ(command);
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Duplicate fees deleted: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string InnoDbMyISAM(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
