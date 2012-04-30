@@ -879,6 +879,33 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ClaimPaymentDetachMissingDeposit(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM claimpayment "
+					+"WHERE DepositNum != 0 " 
+					+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=claimpayment.DepositNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim payments attached to deposits that no longer exist: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE claimpayment SET DepositNum=0 "
+					+"WHERE DepositNum != 0 " 
+					+"AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=claimpayment.DepositNum)";
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claim payments detached from deposits that no longer exist: ")
+				  +numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimProcDateNotMatchCapComplete(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
