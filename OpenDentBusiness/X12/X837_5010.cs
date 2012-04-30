@@ -1315,12 +1315,20 @@ namespace OpenDentBusiness
 							//SV101 Composite Medical Procedure Identifier
 							+"HC"+isa16//SV101-1 2/2 Product/Service ID Qualifier: HC=Health Care.
 							+Sout(proc.MedicalCode));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
+						if(proc.CodeMod1!="" || proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod1));//SV101-3 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod2));//SV101-4 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod3));//SV101-5 2/2 Procedure Modifier: Situational.
+						}
+						if(proc.CodeMod4!="" || proc.ClaimNote!="") {
+							sw.Write(isa16+Sout(proc.CodeMod4));//SV101-6 2/2 Procedure Modifier: Situational.
+						}
 						if(proc.ClaimNote!="") {
-							sw.Write(isa16//SV101-3 2/2 Procedure Modifier: Situational. We do not use.
-								+isa16//SV101-4 2/2 Procedure Modifier: Situational. We do not use.
-								+isa16//SV101-5 2/2 Procedure Modifier: Situational. We do not use.
-								+isa16//SV101-6 2/2 Procedure Modifier: Situational. We do not use.
-								+isa16+Sout(proc.ClaimNote,80));//SV101-7 1/80 Description: Situational.
+							sw.Write(isa16+Sout(proc.ClaimNote,80));//SV101-7 1/80 Description: Situational.
 						}
 						sw.Write(s//SV101-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+s//SV102 1/18 Monetary Amount: Charge Amt.
@@ -2453,6 +2461,22 @@ namespace OpenDentBusiness
 					}
 					if(proc.IsPrincDiag && proc.DiagnosticCode!="") {
 						princDiagExists=true;
+					}
+					if(proc.CodeMod1.Length!=0 && proc.CodeMod1.Length!=2) {
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" mod1");
+					}
+					if(proc.CodeMod2.Length!=0 && proc.CodeMod2.Length!=2) {
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" mod2");
+					}
+					if(proc.CodeMod3.Length!=0 && proc.CodeMod3.Length!=2) {
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" mod3");
+					}
+					if(proc.CodeMod4.Length!=0 && proc.CodeMod4.Length!=2) {
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" mod4");
 					}
 				}
 				else if(claim.MedType==EnumClaimMedType.Institutional) {
