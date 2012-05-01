@@ -941,8 +941,8 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}

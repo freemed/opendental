@@ -458,8 +458,8 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat){
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
@@ -487,7 +487,7 @@ namespace OpenDental{
 					FormR.ShowDialog();
 					if(FormR.GotoPatNum!=0) {
 						Patient pat=Patients.GetPat(FormR.GotoPatNum);
-						OnPatientSelected(FormR.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+						OnPatientSelected(pat);
 						GotoModule.GotoFamily(FormR.GotoPatNum);
 						return;
 					}
@@ -584,7 +584,7 @@ namespace OpenDental{
 					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 				}*/
 				if(FormP.DialogResult==DialogResult.OK) {
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 				}
 			}
 			ModuleSelected(PatCur.PatNum);
@@ -994,8 +994,7 @@ namespace OpenDental{
 			//}
 			//tbFamily.SelectedRow=e.Row;
 			//tbFamily.ColorRow(e.Row,Color.DarkSalmon);
-			OnPatientSelected(FamCur.ListPats[e.Row].PatNum,FamCur.ListPats[e.Row].GetNameLF(),FamCur.ListPats[e.Row].Email!="",
-				FamCur.ListPats[e.Row].ChartNumber);
+			OnPatientSelected(FamCur.ListPats[e.Row]);
 			ModuleSelected(FamCur.ListPats[e.Row].PatNum);
 		}
 
@@ -1027,7 +1026,7 @@ namespace OpenDental{
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();
 			if(FormPE.DialogResult==DialogResult.OK){
-				OnPatientSelected(tempPat.PatNum,tempPat.GetNameLF(),tempPat.Email!="",tempPat.ChartNumber);
+				OnPatientSelected(tempPat);
 				ModuleSelected(tempPat.PatNum);
 			}
 			else{
@@ -1117,7 +1116,7 @@ namespace OpenDental{
 							Recalls.Update(RecallList[i]);
 						}
 					}
-					OnPatientSelected(0,"",false,"");
+					OnPatientSelected(null);
 					ModuleSelected(0);
 					//does not delete notes or plans, etc.
 				}
@@ -1413,8 +1412,7 @@ namespace OpenDental{
 		}
 
 		private void gridSuperFam_CellClick(object sender,ODGridClickEventArgs e) {
-			OnPatientSelected(SuperFamilyGuarantors[e.Row].PatNum,SuperFamilyGuarantors[e.Row].GetNameLF(),SuperFamilyGuarantors[e.Row].Email!="",
-				SuperFamilyGuarantors[e.Row].ChartNumber);
+			OnPatientSelected(SuperFamilyGuarantors[e.Row]);
 			ModuleSelected(SuperFamilyGuarantors[e.Row].PatNum);
 		}
 

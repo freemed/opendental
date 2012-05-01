@@ -99,44 +99,17 @@ namespace OpenDental{
 	
 	///<summary></summary>
 	public class PatientSelectedEventArgs{
-		private long patNum;
-		private string patName;
-		private bool hasEmail;
-		private string chartNumber;
+		private Patient pat;
 
 		///<summary></summary>
-		public PatientSelectedEventArgs(long patNum,string patName,bool hasEmail,string chartNumber) {
-			this.patNum=patNum;
-			this.patName=patName;
-			this.hasEmail=hasEmail;
-			this.chartNumber=chartNumber;
+		public PatientSelectedEventArgs(Patient pat){
+			this.pat=pat;
 		}
 
 		///<summary></summary>
-		public long PatNum {
+		public Patient Pat {
 			get{ 
-				return patNum;
-			}
-		}
-
-		///<summary></summary>
-		public string PatName {
-			get {
-				return patName;
-			}
-		}
-
-		///<summary>This is required in order to enable/disable the email button intelligently.</summary>
-		public bool HasEmail {
-			get {
-				return hasEmail;
-			}
-		}
-
-		///<summary>This is required in order to properly set the form title when user wants to see chart numbers.</summary>
-		public string ChartNumber {
-			get {
-				return chartNumber;
+				return pat;
 			}
 		}
 

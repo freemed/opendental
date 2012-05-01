@@ -781,8 +781,8 @@ namespace OpenDental{
 		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
@@ -794,7 +794,7 @@ namespace OpenDental{
 			FormCS.ShowDialog();
 			if(FormCS.GotoPatNum!=0 && FormCS.GotoClaimNum!=0) {
 				Patient pat=Patients.GetPat(FormCS.GotoPatNum);
-				OnPatientSelected(FormCS.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				OnPatientSelected(pat);
 				GotoModule.GotoClaim(FormCS.GotoClaimNum);
 			}
 			Cursor=Cursors.Default;
@@ -805,7 +805,7 @@ namespace OpenDental{
 			FormCPL.ShowDialog();
 			if(FormCPL.GotoPatNum!=0 && FormCPL.GotoClaimNum!=0) {
 				Patient pat=Patients.GetPat(FormCPL.GotoPatNum);
-				OnPatientSelected(FormCPL.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				OnPatientSelected(pat);
 				GotoModule.GotoClaim(FormCPL.GotoClaimNum);
 			}
 		}
@@ -866,7 +866,7 @@ namespace OpenDental{
 		}
 
 		private void formBilling_GoToChanged(object sender,PatientSelectedEventArgs e) {
-			OnPatientSelected(e.PatNum,e.PatName,e.HasEmail,e.ChartNumber);
+			OnPatientSelected(e.Pat);
 			GotoModule.GotoAccount(0);
 		}
 
@@ -896,7 +896,7 @@ namespace OpenDental{
 				return;
 			}
 			//ok signifies that a database was restored
-			OnPatientSelected(0,"",false,"");
+			OnPatientSelected(null);
 			//ParentForm.Text=PrefC.GetString(PrefName.MainWindowTitle");
 			DataValid.SetInvalid(true);
 			ModuleSelected(PatCurNum);
@@ -908,7 +908,7 @@ namespace OpenDental{
 			if(FormT.GotoType==TaskObjectType.Patient){
 				if(FormT.GotoKeyNum!=0){
 					Patient pat=Patients.GetPat(FormT.GotoKeyNum);
-					OnPatientSelected(FormT.GotoKeyNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+					OnPatientSelected(pat);
 					GotoModule.GotoAccount(0);
 				}
 			}
@@ -930,7 +930,7 @@ namespace OpenDental{
 						dateSelected=apt.AptDateTime;
 					}
 					Patient pat=Patients.GetPat(apt.PatNum);
-					OnPatientSelected(apt.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+					OnPatientSelected(pat);
 					GotoModule.GotoAppointment(dateSelected,apt.AptNum);
 				}
 			}

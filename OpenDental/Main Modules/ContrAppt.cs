@@ -1655,8 +1655,8 @@ namespace OpenDental {
 		}*/
 
 		///<summary>Sends the PatientSelected event on up to the main form.  The only result is that the main window now knows the new patNum and patName.  Does nothing else.  Does not trigger any other methods to run which might cause a loop.  Only called from RefreshModulePatient, but it's separate so that it's the same as in the other modules.</summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null) {
 				PatientSelected(this,eArgs);
 			}
@@ -2196,7 +2196,7 @@ namespace OpenDental {
 			//if aptNum is already in DS, then use that row.  Otherwise, get a new row.
 			//it will set pt to the last appt on the pinboard.
 			RefreshModuleDataPatient(PIn.Long(row["PatNum"].ToString()));
-			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			OnPatientSelected(PatCur);
 			//RefreshModulePatient(PIn.PInt(row["PatNum"].ToString()));
 			mouseIsDown=false;
 			boolAptMoved=false;
@@ -2207,7 +2207,7 @@ namespace OpenDental {
 			RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			RefreshModuleScreenPatient();
 			CancelPinMouseDown=false;
-			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			OnPatientSelected(PatCur);
 			//The line above can trigger a popup dialog which can cause the tempAppt to get stuck to the mouse
 			//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			//Since this is usually caused by user mouse, then it goes right into pinBoard_MouseDown().
@@ -2777,7 +2777,7 @@ namespace OpenDental {
 					,ContrApptSingle3[thisIndex].Location.Y);
 				RefreshModuleDataPatient(PIn.Long(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				RefreshModuleScreenPatient();
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(PIn.PInt(ContrApptSingle3[thisIndex].DataRoww["PatNum"].ToString()));
 				if(e.Button==MouseButtons.Right) {
 					//if(ApptDrawing.IsWeeklyView){
@@ -2994,7 +2994,7 @@ namespace OpenDental {
 				mouseIsDown=false;
 				TempApptSingle.Dispose();
 				RefreshModuleDataPatient(PatCur.PatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(PatCurNum);
 				RefreshPeriod();
 				bubbleAptNum=0;
@@ -3034,7 +3034,7 @@ namespace OpenDental {
 					ContrApptSheet2.DrawShadow();
 				}
 				RefreshModuleDataPatient(PatCur.PatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(PatCurNum);
 				TempApptSingle.Dispose();
 				return;
@@ -3243,7 +3243,7 @@ namespace OpenDental {
 				apt.ProcDescript+" from "+aptOld.AptDateTime.ToString()+", to "+apt.AptDateTime.ToString(),
 				apt.AptNum);
 			RefreshModuleDataPatient(PatCur.PatNum);
-			OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+			OnPatientSelected(PatCur);
 			//RefreshModulePatient(PatCurNum);
 			RefreshPeriod();
 			SetInvalid();
@@ -3499,7 +3499,7 @@ namespace OpenDental {
 				}
 				if(PatCur==null || FormPS.SelectedPatNum!=PatCur.PatNum) {//if the patient was changed
 					RefreshModuleDataPatient(FormPS.SelectedPatNum);
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 					//RefreshModulePatient(FormPS.SelectedPatNum);
 				}
 				Appointment apt;
@@ -3571,7 +3571,7 @@ namespace OpenDental {
 					}
 					if(FormAE.DialogResult==DialogResult.OK) {
 						RefreshModuleDataPatient(PatCur.PatNum);
-						OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+						OnPatientSelected(PatCur);
 						//RefreshModulePatient(PatCurNum);
 						if(apt!=null && DoesOverlap(apt)) {
 							Appointment aptOld=apt.Clone();
@@ -3642,14 +3642,14 @@ namespace OpenDental {
 				case OtherResult.CopyToPinBoard:
 					SendToPinBoard(FormAO.AptNumsSelected);
 					RefreshModuleDataPatient(FormAO.SelectedPatNum);
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
 				case OtherResult.NewToPinBoard:
 					SendToPinBoard(FormAO.AptNumsSelected);
 					RefreshModuleDataPatient(FormAO.SelectedPatNum);
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
@@ -3667,7 +3667,7 @@ namespace OpenDental {
 				case OtherResult.CreateNew:
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 					RefreshModuleDataPatient(FormAO.SelectedPatNum);
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 					//RefreshModulePatient(FormAO.SelectedPatNum);
 					Appointment apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 					if(apt!=null && DoesOverlap(apt)) {
@@ -3693,7 +3693,7 @@ namespace OpenDental {
 					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 					AppointmentL.DateSelected=PIn.Date(FormAO.DateJumpToString);
 					RefreshModuleDataPatient(FormAO.SelectedPatNum);
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 					//RefreshModulePatient(FormAO.SelectedPatNum);
 					RefreshPeriod();
 					break;
@@ -3739,7 +3739,7 @@ namespace OpenDental {
 			}
 			if(FormUnsched2.SelectedPatNum!=0) {
 				RefreshModuleDataPatient(FormUnsched2.SelectedPatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(FormUnsched2.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
@@ -3754,7 +3754,7 @@ namespace OpenDental {
 			}
 			if(FormA.SelectedPatNum!=0) {
 				RefreshModuleDataPatient(FormA.SelectedPatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(FormA.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
@@ -3790,7 +3790,7 @@ namespace OpenDental {
 			}
 			if(FormC.SelectedPatNum!=0) {
 				RefreshModuleDataPatient(FormC.SelectedPatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(FormC.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
@@ -3805,7 +3805,7 @@ namespace OpenDental {
 			}
 			if(FormTN.SelectedPatNum!=0) {
 				RefreshModuleDataPatient(FormTN.SelectedPatNum);
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(FormTN.SelectedPatNum);
 			}
 			Cursor=Cursors.Default;
@@ -4194,7 +4194,7 @@ namespace OpenDental {
 			}
 			else {
 				RefreshModuleDataPatient(PIn.Long(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
-				OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+				OnPatientSelected(PatCur);
 				//RefreshModulePatient(PIn.PInt(pinBoard.ApptList[pinBoard.SelectedIndex].DataRoww["PatNum"].ToString()));
 			}
 		}
@@ -5050,7 +5050,7 @@ namespace OpenDental {
 				//	PatientSelected(this,eArgs);
 				//}
 				//Contr_PatientSelected(this,eArgs);
-				OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+				OnPatientSelected(pat);
 				GotoModule.GotoAppointment(apt.AptDateTime,apt.AptNum);
 			}
 		}

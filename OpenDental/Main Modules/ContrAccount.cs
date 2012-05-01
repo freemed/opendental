@@ -2618,13 +2618,11 @@ namespace OpenDental {
 				return;
 			}
 			if(e.Row==FamCur.ListPats.Length){//last row
-				OnPatientSelected(FamCur.ListPats[0].PatNum,FamCur.ListPats[0].GetNameLF(),FamCur.ListPats[0].Email!="",
-					FamCur.ListPats[0].ChartNumber);
+				OnPatientSelected(FamCur.ListPats[0]);
 				ModuleSelected(FamCur.ListPats[0].PatNum,true);
 			}
 			else{
-				OnPatientSelected(FamCur.ListPats[e.Row].PatNum,FamCur.ListPats[e.Row].GetNameLF(),FamCur.ListPats[e.Row].Email!="",
-					FamCur.ListPats[e.Row].ChartNumber);
+				OnPatientSelected(FamCur.ListPats[e.Row]);
 				ModuleSelected(FamCur.ListPats[e.Row].PatNum);
 			}
 		}
@@ -2662,8 +2660,8 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
@@ -4006,7 +4004,7 @@ namespace OpenDental {
 			if(GotoType == TaskObjectType.Patient) {
 				if(keyNum != 0) {
 					Patient pat = Patients.GetPat(keyNum);
-					OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email != "",pat.ChartNumber);
+					OnPatientSelected(pat);
 					ModuleSelected(pat.PatNum);
 					return;
 				}

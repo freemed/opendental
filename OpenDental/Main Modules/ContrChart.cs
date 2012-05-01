@@ -3771,8 +3771,8 @@ namespace OpenDental{
 		}
 
 		///<summary></summary>
-		private void OnPatientSelected(long patNum,string patName,bool hasEmail,string chartNumber) {
-			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(patNum,patName,hasEmail,chartNumber);
+		private void OnPatientSelected(Patient pat) {
+			PatientSelectedEventArgs eArgs=new OpenDental.PatientSelectedEventArgs(pat);
 			if(PatientSelected!=null){
 				PatientSelected(this,eArgs);
 			}
@@ -5994,7 +5994,7 @@ namespace OpenDental{
 			if(GotoType == TaskObjectType.Patient) {
 				if(keyNum != 0) {
 					Patient pat = Patients.GetPat(keyNum);
-					OnPatientSelected(pat.PatNum,pat.GetNameLF(),pat.Email != "",pat.ChartNumber);
+					OnPatientSelected(pat);
 					ModuleSelected(pat.PatNum);
 					return;
 				}
@@ -7960,7 +7960,7 @@ namespace OpenDental{
 					FormR.ShowDialog();
 					if(FormR.GotoPatNum!=0) {
 						Patient pat=Patients.GetPat(FormR.GotoPatNum);
-						OnPatientSelected(FormR.GotoPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
+						OnPatientSelected(pat);
 						GotoModule.GotoFamily(FormR.GotoPatNum);
 						return;
 					}
@@ -8040,7 +8040,7 @@ namespace OpenDental{
 				FormP.IsNew=false;
 				FormP.ShowDialog();
 				if(FormP.DialogResult==DialogResult.OK) {
-					OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					OnPatientSelected(PatCur);
 				}
 			}
 			ModuleSelected(PatCur.PatNum);

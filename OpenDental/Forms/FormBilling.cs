@@ -67,7 +67,7 @@ namespace OpenDental{
 		protected void OnGoToChanged(long patNum) {
 			if(GoToChanged!=null) {
 				Patient pat=Patients.GetPat(patNum);
-				GoToChanged(this,new PatientSelectedEventArgs(patNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber));
+				GoToChanged(this,new PatientSelectedEventArgs(pat));
 			}
 		}
 
