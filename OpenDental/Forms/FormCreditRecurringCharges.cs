@@ -111,6 +111,44 @@ namespace OpenDental {
 			return new DateTime(nowMinusOneMonth.Year,nowMinusOneMonth.Month,dateStart.Day);//Previous month contains a legal date using dateStart's day.
 		}
 
+		///<summary>Tests the selected indicies with newly calculated pay dates.  If there's a date violation, a warning shows and false is returned.</summary>
+		private bool PaymentsWithinLockDate() {
+			//Check if user has the payment create permission in the first place to save time.
+			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)) {
+				return false;
+			}
+			List<string> warnings=new List<string>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				//Calculate what the new pay date will be.
+				DateTime newPayDate=GetPayDate(PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["LatestPayment"].ToString()),
+			      PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["DateStart"].ToString()));
+				//Test if the user can create a payment with the new pay date.
+				if(!Security.IsAuthorized(Permissions.PaymentCreate,newPayDate,true)) {
+					if(warnings.Count==0) {
+						warnings.Add("Lock date limitation is preventing the recurring charges from running:");
+					}
+					warnings.Add(newPayDate.ToShortDateString()+" - "
+						+table.Rows[i]["PatNum"].ToString()+": "
+						+table.Rows[i]["PatName"].ToString()+" - "
+						+PIn.Double(table.Rows[i]["FamBalTotal"].ToString()).ToString("c")+" - "
+						+PIn.Double(table.Rows[i]["ChargeAmt"].ToString()).ToString("c"));
+				}
+			}
+			if(warnings.Count>0) {
+				string msg="";
+				for(int i=0;i<warnings.Count;i++) {
+					if(i>0) {
+						msg+="\r\n";
+					}
+					msg+=warnings[i];
+				}
+				//Show the warning message.  This allows the user the ability to unhighlight rows or go change the date limitation.
+				MessageBox.Show(msg);
+				return false;
+			}
+			return true;
+		}
+
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			labelSelected.Text=Lan.g(this,"Selected=")+gridMain.SelectedIndices.Length.ToString();
 		}
@@ -209,7 +247,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Must select at least one recurring charge.");
 				return;
 			}
-			if(!Security.IsAuthorized(Permissions.PaymentCreate,nowDateTime.Date)) {
+			if(!PaymentsWithinLockDate()) {
 				return;
 			}
 			string recurringResultFile="Recurring charge results for "+DateTime.Now.ToShortDateString()+" ran at "+DateTime.Now.ToShortTimeString()+"\r\n\r\n";
