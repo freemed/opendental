@@ -1724,6 +1724,7 @@ namespace OpenDental{
 			if(nodeId.NodeType==ImageNodeType.Doc){
 				Document doc=Documents.GetByNum(nodeId.PriKey);
 				dlg.FileName=doc.FileName;
+				dlg.DefaultExt=Path.GetExtension(doc.FileName);
 				if(dlg.ShowDialog()!=DialogResult.OK) {
 					return;
 				}
@@ -1743,6 +1744,7 @@ namespace OpenDental{
 			if(nodeId.NodeType==ImageNodeType.Eob){
 				EobAttach eob=EobAttaches.GetOne(nodeId.PriKey);
 				dlg.FileName=eob.FileName;
+				dlg.DefaultExt=Path.GetExtension(eob.FileName);
 				if(dlg.ShowDialog()!=DialogResult.OK) {
 					return;
 				}
