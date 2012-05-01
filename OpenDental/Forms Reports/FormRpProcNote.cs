@@ -126,20 +126,36 @@ namespace OpenDental{
 			ReportLikeCrystal report=new ReportLikeCrystal();
 			report.AddTitle("INCOMPLETE PROCEDURE NOTES");
 			report.AddSubTitle(PrefC.GetString(PrefName.PracticeTitle));
-			report.Query=@"SELECT procedurelog.ProcDate,
+			report.Query=@"(SELECT procedurelog.ProcDate,
 				CONCAT(CONCAT(patient.LName,', '),patient.FName),
 				procedurecode.ProcCode,procedurecode.Descript,
 				procedurelog.ToothNum,procedurelog.Surf
 				FROM procedurelog,patient,procedurecode,procnote n1
 				WHERE procedurelog.PatNum = patient.PatNum
 				AND procedurelog.CodeNum = procedurecode.CodeNum
-				AND procedurelog.ProcStatus = 2
+				AND procedurelog.ProcStatus = "+POut.Int((int)ProcStat.C)+@"
 				AND procedurelog.ProcNum=n1.ProcNum "
 				+"AND n1.Note LIKE '%\"\"%' "//looks for ""
 				+@"AND n1.EntryDateTime=(SELECT MAX(n2.EntryDateTime)
 				FROM procnote n2
 				WHERE n1.ProcNum = n2.ProcNum)
-				ORDER BY procedurelog.ProcDate";
+				ORDER BY procedurelog.ProcDate)
+				UNION ALL
+				(SELECT procedurelog.ProcDate,
+				CONCAT(CONCAT(patient.LName,', '),patient.FName),
+				procedurecode.ProcCode,procedurecode.Descript,
+				procedurelog.ToothNum,procedurelog.Surf
+				FROM procedurelog,patient,procedurecode,procnote n1
+				WHERE procedurelog.PatNum = patient.PatNum
+				AND procedurelog.CodeNum = procedurecode.CodeNum
+				AND procedurelog.ProcStatus = "+POut.Int((int)ProcStat.EC)+@"
+				AND procedurelog.ProcNum=n1.ProcNum "
+				+"AND n1.Note LIKE '%\"\"%' "//looks for ""
+				+@"AND n1.EntryDateTime=(SELECT MAX(n2.EntryDateTime)
+				FROM procnote n2
+				WHERE n1.ProcNum = n2.ProcNum)
+				AND procedurecode.ProcCode='~GRP~'
+				ORDER BY procedurelog.ProcDate)";
 			report.AddColumn("Date",80,FieldValueType.Date);
 			report.AddColumn("Patient",120,FieldValueType.String);
 			report.AddColumn("Code",50,FieldValueType.String);
