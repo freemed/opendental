@@ -943,7 +943,7 @@ namespace OpenDental {
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=typeof(string);
 					row.ObjType=typeof(Allergy);
-					if(row.OldValDisplay!=row.NewValDisplay) {
+					if(row.OldValDisplay!=row.NewValDisplay && !(row.OldValDisplay=="" && row.NewValDisplay=="N")) {
 						row.DoImport=true;
 					}
 					rows.Add(row);
@@ -1101,7 +1101,7 @@ namespace OpenDental {
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=typeof(string);
 					row.ObjType=typeof(Disease);
-					if(row.OldValDisplay!=row.NewValDisplay) {
+					if(row.OldValDisplay!=row.NewValDisplay && !(row.OldValDisplay=="" && row.NewValDisplay=="N")) {
 						row.DoImport=true;
 					}
 					rows.Add(row);
