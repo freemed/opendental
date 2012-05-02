@@ -2154,13 +2154,18 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Tasklist"].Enabled=true;
 					ToolBarMain.Buttons["Label"].Enabled=true;
 				}
-				if(pat.TxtMsgOk==YN.Unknown) {
-					ToolBarMain.Buttons["TxtMsg"].Enabled=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+				if(pat.WirelessPhone=="") {
+					ToolBarMain.Buttons["Popups"].Enabled=true;
 				}
-				else{
-					ToolBarMain.Buttons["TxtMsg"].Enabled=(pat.TxtMsgOk==YN.Yes);
+				else {//Pat has a WirelessPhone
+					if(pat.TxtMsgOk==YN.Unknown) {
+						ToolBarMain.Buttons["TxtMsg"].Enabled=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+					}
+					else {
+						ToolBarMain.Buttons["TxtMsg"].Enabled=(pat.TxtMsgOk==YN.Yes);
+					}
+					ToolBarMain.Buttons["Popups"].Enabled=true;
 				}
-				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
 			Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
@@ -3876,6 +3881,7 @@ namespace OpenDental{
 			if(FormM.ShowDialog()!=DialogResult.OK) {
 				return;
 			}
+			FillPatientButton(Patients.GetPat(CurPatNum));
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Modules");
 		}
 
