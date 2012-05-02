@@ -28,6 +28,8 @@ namespace OpenDentBusiness{
 		public string ComputerName;
 		///<summary>Can only be used by management when handling personnel issues.</summary>
 		public bool IsPrivateScreen;
+		///<summary>Used to launch a task window instead of a commlog window when user clicks on name/phone number on the bottom left.</summary>
+		public bool IsTriageOperator;
 
 		///<summary></summary>
 		public PhoneEmpDefault Clone() {

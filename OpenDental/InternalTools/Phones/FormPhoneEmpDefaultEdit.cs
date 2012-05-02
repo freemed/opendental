@@ -46,6 +46,7 @@ namespace OpenDental{
 		private ValidNum textPhoneExt;
 		private ListBox listStatusOverride;
 		private Label label17;
+		private CheckBox checkIsTriageOperator;
 		public PhoneEmpDefault PedCur;
 
 		///<summary></summary>
@@ -106,6 +107,7 @@ namespace OpenDental{
 			this.label16 = new System.Windows.Forms.Label();
 			this.listStatusOverride = new System.Windows.Forms.ListBox();
 			this.label17 = new System.Windows.Forms.Label();
+			this.checkIsTriageOperator = new System.Windows.Forms.CheckBox();
 			this.textPhoneExt = new OpenDental.ValidNum();
 			this.textEmployeeNum = new OpenDental.ValidNum();
 			this.butDelete = new OpenDental.UI.Button();
@@ -222,7 +224,7 @@ namespace OpenDental{
 			// checkIsPrivateScreen
 			// 
 			this.checkIsPrivateScreen.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsPrivateScreen.Location = new System.Drawing.Point(4, 398);
+			this.checkIsPrivateScreen.Location = new System.Drawing.Point(3, 389);
 			this.checkIsPrivateScreen.Name = "checkIsPrivateScreen";
 			this.checkIsPrivateScreen.Size = new System.Drawing.Size(155, 20);
 			this.checkIsPrivateScreen.TabIndex = 33;
@@ -317,7 +319,7 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(162, 398);
+			this.label16.Location = new System.Drawing.Point(161, 386);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(194, 47);
 			this.label16.TabIndex = 43;
@@ -339,6 +341,17 @@ namespace OpenDental{
 			this.label17.TabIndex = 46;
 			this.label17.Text = "StatusOverride";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// checkIsTriageOperator
+			// 
+			this.checkIsTriageOperator.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsTriageOperator.Location = new System.Drawing.Point(3, 415);
+			this.checkIsTriageOperator.Name = "checkIsTriageOperator";
+			this.checkIsTriageOperator.Size = new System.Drawing.Size(155, 20);
+			this.checkIsTriageOperator.TabIndex = 48;
+			this.checkIsTriageOperator.Text = "Triage Operator";
+			this.checkIsTriageOperator.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkIsTriageOperator.UseVisualStyleBackColor = true;
 			// 
 			// textPhoneExt
 			// 
@@ -368,7 +381,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(28, 464);
+			this.butDelete.Location = new System.Drawing.Point(28, 467);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84, 24);
 			this.butDelete.TabIndex = 16;
@@ -383,7 +396,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(539, 464);
+			this.butOK.Location = new System.Drawing.Point(539, 467);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 8;
@@ -398,7 +411,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(632, 464);
+			this.butCancel.Location = new System.Drawing.Point(632, 467);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 9;
@@ -408,7 +421,8 @@ namespace OpenDental{
 			// FormPhoneEmpDefaultEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(724, 501);
+			this.ClientSize = new System.Drawing.Size(724, 504);
+			this.Controls.Add(this.checkIsTriageOperator);
 			this.Controls.Add(this.listStatusOverride);
 			this.Controls.Add(this.label17);
 			this.Controls.Add(this.textPhoneExt);
@@ -473,6 +487,7 @@ namespace OpenDental{
 			textNotes.Text=PedCur.Notes;
 			textComputerName.Text=PedCur.ComputerName;
 			checkIsPrivateScreen.Checked=PedCur.IsPrivateScreen;
+			checkIsTriageOperator.Checked=PedCur.IsTriageOperator;
 		}
 
 		private void checkIsPrivateScreen_Click(object sender,EventArgs e) {
@@ -525,6 +540,7 @@ namespace OpenDental{
 			PedCur.Notes=textNotes.Text;
 			PedCur.ComputerName=textComputerName.Text;
 			PedCur.IsPrivateScreen=checkIsPrivateScreen.Checked;
+			PedCur.IsTriageOperator=checkIsTriageOperator.Checked;
 			if(IsNew){
 				PhoneEmpDefaults.Insert(PedCur);
 			}

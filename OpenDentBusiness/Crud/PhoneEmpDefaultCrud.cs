@@ -46,16 +46,17 @@ namespace OpenDentBusiness.Crud{
 			PhoneEmpDefault phoneEmpDefault;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneEmpDefault=new PhoneEmpDefault();
-				phoneEmpDefault.EmployeeNum    = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phoneEmpDefault.NoGraph        = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
-				phoneEmpDefault.NoColor        = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
-				phoneEmpDefault.RingGroups     = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
-				phoneEmpDefault.EmpName        = PIn.String(table.Rows[i]["EmpName"].ToString());
-				phoneEmpDefault.PhoneExt       = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
-				phoneEmpDefault.StatusOverride = (PhoneEmpStatusOverride)PIn.Int(table.Rows[i]["StatusOverride"].ToString());
-				phoneEmpDefault.Notes          = PIn.String(table.Rows[i]["Notes"].ToString());
-				phoneEmpDefault.ComputerName   = PIn.String(table.Rows[i]["ComputerName"].ToString());
-				phoneEmpDefault.IsPrivateScreen= PIn.Bool  (table.Rows[i]["IsPrivateScreen"].ToString());
+				phoneEmpDefault.EmployeeNum     = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				phoneEmpDefault.NoGraph         = PIn.Bool  (table.Rows[i]["NoGraph"].ToString());
+				phoneEmpDefault.NoColor         = PIn.Bool  (table.Rows[i]["NoColor"].ToString());
+				phoneEmpDefault.RingGroups      = (AsteriskRingGroups)PIn.Int(table.Rows[i]["RingGroups"].ToString());
+				phoneEmpDefault.EmpName         = PIn.String(table.Rows[i]["EmpName"].ToString());
+				phoneEmpDefault.PhoneExt        = PIn.Int   (table.Rows[i]["PhoneExt"].ToString());
+				phoneEmpDefault.StatusOverride  = (PhoneEmpStatusOverride)PIn.Int(table.Rows[i]["StatusOverride"].ToString());
+				phoneEmpDefault.Notes           = PIn.String(table.Rows[i]["Notes"].ToString());
+				phoneEmpDefault.ComputerName    = PIn.String(table.Rows[i]["ComputerName"].ToString());
+				phoneEmpDefault.IsPrivateScreen = PIn.Bool  (table.Rows[i]["IsPrivateScreen"].ToString());
+				phoneEmpDefault.IsTriageOperator= PIn.Bool  (table.Rows[i]["IsTriageOperator"].ToString());
 				retVal.Add(phoneEmpDefault);
 			}
 			return retVal;
@@ -96,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmployeeNum,";
 			}
-			command+="NoGraph,NoColor,RingGroups,EmpName,PhoneExt,StatusOverride,Notes,ComputerName,IsPrivateScreen) VALUES(";
+			command+="NoGraph,NoColor,RingGroups,EmpName,PhoneExt,StatusOverride,Notes,ComputerName,IsPrivateScreen,IsTriageOperator) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phoneEmpDefault.EmployeeNum)+",";
 			}
@@ -109,7 +110,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)phoneEmpDefault.StatusOverride)+","
 				+"'"+POut.String(phoneEmpDefault.Notes)+"',"
 				+"'"+POut.String(phoneEmpDefault.ComputerName)+"',"
-				+    POut.Bool  (phoneEmpDefault.IsPrivateScreen)+")";
+				+    POut.Bool  (phoneEmpDefault.IsPrivateScreen)+","
+				+    POut.Bool  (phoneEmpDefault.IsTriageOperator)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -122,15 +124,16 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PhoneEmpDefault in the database.</summary>
 		internal static void Update(PhoneEmpDefault phoneEmpDefault){
 			string command="UPDATE phoneempdefault SET "
-				+"NoGraph        =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
-				+"NoColor        =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
-				+"RingGroups     =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
-				+"EmpName        = '"+POut.String(phoneEmpDefault.EmpName)+"', "
-				+"PhoneExt       =  "+POut.Int   (phoneEmpDefault.PhoneExt)+", "
-				+"StatusOverride =  "+POut.Int   ((int)phoneEmpDefault.StatusOverride)+", "
-				+"Notes          = '"+POut.String(phoneEmpDefault.Notes)+"', "
-				+"ComputerName   = '"+POut.String(phoneEmpDefault.ComputerName)+"', "
-				+"IsPrivateScreen=  "+POut.Bool  (phoneEmpDefault.IsPrivateScreen)+" "
+				+"NoGraph         =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
+				+"NoColor         =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
+				+"RingGroups      =  "+POut.Int   ((int)phoneEmpDefault.RingGroups)+", "
+				+"EmpName         = '"+POut.String(phoneEmpDefault.EmpName)+"', "
+				+"PhoneExt        =  "+POut.Int   (phoneEmpDefault.PhoneExt)+", "
+				+"StatusOverride  =  "+POut.Int   ((int)phoneEmpDefault.StatusOverride)+", "
+				+"Notes           = '"+POut.String(phoneEmpDefault.Notes)+"', "
+				+"ComputerName    = '"+POut.String(phoneEmpDefault.ComputerName)+"', "
+				+"IsPrivateScreen =  "+POut.Bool  (phoneEmpDefault.IsPrivateScreen)+", "
+				+"IsTriageOperator=  "+POut.Bool  (phoneEmpDefault.IsTriageOperator)+" "
 				+"WHERE EmployeeNum = "+POut.Long(phoneEmpDefault.EmployeeNum);
 			Db.NonQ(command);
 		}
@@ -173,6 +176,10 @@ namespace OpenDentBusiness.Crud{
 			if(phoneEmpDefault.IsPrivateScreen != oldPhoneEmpDefault.IsPrivateScreen) {
 				if(command!=""){ command+=",";}
 				command+="IsPrivateScreen = "+POut.Bool(phoneEmpDefault.IsPrivateScreen)+"";
+			}
+			if(phoneEmpDefault.IsTriageOperator != oldPhoneEmpDefault.IsTriageOperator) {
+				if(command!=""){ command+=",";}
+				command+="IsTriageOperator = "+POut.Bool(phoneEmpDefault.IsTriageOperator)+"";
 			}
 			if(command==""){
 				return;

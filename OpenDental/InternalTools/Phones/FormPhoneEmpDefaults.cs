@@ -58,30 +58,30 @@ namespace OpenDental{
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(823,546);
+			this.butClose.Location = new System.Drawing.Point(879, 546);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 11;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Location = new System.Drawing.Point(403,546);
+			this.butAdd.Location = new System.Drawing.Point(446, 546);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75,24);
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
 			this.butAdd.TabIndex = 12;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -92,10 +92,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(8,14);
+			this.gridMain.Location = new System.Drawing.Point(8, 14);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(890,524);
+			this.gridMain.Size = new System.Drawing.Size(946, 524);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Phone Settings";
 			this.gridMain.TranslationName = "";
@@ -103,8 +103,8 @@ namespace OpenDental{
 			// 
 			// FormPhoneEmpDefaults
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(910,582);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(966, 582);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
@@ -148,6 +148,8 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Private",50,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Triage",50,HorizontalAlignment.Center);
+			gridMain.Columns.Add(col);
 			ListPED=PhoneEmpDefaults.Refresh();
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -168,6 +170,7 @@ namespace OpenDental{
 				row.Cells.Add(ListPED[i].Notes);
 				row.Cells.Add(ListPED[i].ComputerName);
 				row.Cells.Add(ListPED[i].IsPrivateScreen?"X":"");
+				row.Cells.Add(ListPED[i].IsTriageOperator?"X":"");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
