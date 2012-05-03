@@ -1392,6 +1392,7 @@ namespace OpenDental{
 			this.butBigPhones.Size = new System.Drawing.Size(28, 24);
 			this.butBigPhones.TabIndex = 52;
 			this.butBigPhones.Text = "Big";
+			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
 			// labelWaitTime
 			// 
