@@ -3472,26 +3472,42 @@ namespace OpenDental{
 			RefreshCurrentModule();
 			FillPatientButton(pat);
 			Commlog commlog=Commlogs.GetIncompleteEntry(Security.CurUser.UserNum,CurPatNum);
-			if(commlog==null) {
-				commlog = new Commlog();
-				commlog.PatNum = CurPatNum;
-				commlog.CommDateTime = DateTime.Now;
-				commlog.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-				commlog.Mode_=CommItemMode.Phone;
-				commlog.SentOrReceived=CommSentOrReceived.Received;
-				commlog.UserNum=Security.CurUser.UserNum;
-				FormCommItem FormCI=new FormCommItem(commlog);
-				FormCI.IsNew = true;
-				FormCI.ShowDialog();
-				if(FormCI.DialogResult==DialogResult.OK) {
-					RefreshCurrentModule();
-				}
+			PhoneEmpDefault ped=PhoneEmpDefaults.GetByExtAndEmp(phoneSmall.Extension,Security.CurUser.EmployeeNum);
+			if(ped!=null && ped.IsTriageOperator) {
+				Task task=new Task();
+				task.TaskListNum=-1;//don't show it in any list yet.
+				Tasks.Insert(task);
+				Task taskOld=task.Copy();
+				task.KeyNum=CurPatNum;
+				task.ObjectType=TaskObjectType.Patient;
+				task.TaskListNum=1697;//Hardcoded for internal Triage task list.
+				task.UserNum=Security.CurUser.UserNum;
+				FormTaskEdit FormTE=new FormTaskEdit(task,taskOld);
+				FormTE.IsNew=true;
+				FormTE.Show();
 			}
-			else {
-				FormCommItem FormCI=new FormCommItem(commlog);
-				FormCI.ShowDialog();
-				if(FormCI.DialogResult==DialogResult.OK) {
-					RefreshCurrentModule();
+			else {//Not a triage operator.
+				if(commlog==null) {
+					commlog = new Commlog();
+					commlog.PatNum = CurPatNum;
+					commlog.CommDateTime = DateTime.Now;
+					commlog.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
+					commlog.Mode_=CommItemMode.Phone;
+					commlog.SentOrReceived=CommSentOrReceived.Received;
+					commlog.UserNum=Security.CurUser.UserNum;
+					FormCommItem FormCI=new FormCommItem(commlog);
+					FormCI.IsNew = true;
+					FormCI.ShowDialog();
+					if(FormCI.DialogResult==DialogResult.OK) {
+						RefreshCurrentModule();
+					}
+				}
+				else {
+					FormCommItem FormCI=new FormCommItem(commlog);
+					FormCI.ShowDialog();
+					if(FormCI.DialogResult==DialogResult.OK) {
+						RefreshCurrentModule();
+					}
 				}
 			}
 		}
