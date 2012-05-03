@@ -218,7 +218,6 @@ namespace OpenDental{
 		private MenuItem menuItem3;
 		private MenuItem menuApptFieldDefs;
 		private MenuItem menuItemWebForms;
-		private OpenDental.UI.Button butBigPhones;
 		private System.Windows.Forms.Timer timerPhoneWebCam;
 		private FormTerminalManager formTerminalManager;
 		private FormPhoneTiles formPhoneTiles;
@@ -239,9 +238,14 @@ namespace OpenDental{
 		private MenuItem menuItemTestLatency;
 		private FormLogOn FormLogOn_;
 		private System.Windows.Forms.Timer timerReplicationMonitor;
-		private Label labelMsg;
 		///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
 		private bool IsFormLogOnLastActive;
+		private Panel panelPhoneSmall;
+		private UI.Button butTriage;
+		private UI.Button butBigPhones;
+		private Label labelWaitTime;
+		private Label labelTriage;
+		private Label labelMsg;
 		///<summary>This thread fills labelMsg</summary>
 		private Thread ThreadVM;
 
@@ -321,8 +325,10 @@ namespace OpenDental{
 			menuItemDockBottom.Checked=true;
 			phoneSmall=new UserControlPhoneSmall();
 			phoneSmall.GoToChanged += new System.EventHandler(this.phoneSmall_GoToChanged);
-			phoneSmall.Visible=false;
-			this.Controls.Add(phoneSmall);
+			//phoneSmall.Visible=false;
+			//this.Controls.Add(phoneSmall);
+			panelPhoneSmall.Controls.Add(phoneSmall);
+			panelPhoneSmall.Visible=false;
 			//phonePanel=new UserControlPhonePanel();
 			//phonePanel.Visible=false;
 			//this.Controls.Add(phonePanel);
@@ -471,9 +477,14 @@ namespace OpenDental{
 			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
-			this.labelMsg = new System.Windows.Forms.Label();
-			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
+			this.panelPhoneSmall = new System.Windows.Forms.Panel();
+			this.butTriage = new OpenDental.UI.Button();
+			this.butBigPhones = new OpenDental.UI.Button();
+			this.labelWaitTime = new System.Windows.Forms.Label();
+			this.labelTriage = new System.Windows.Forms.Label();
+			this.labelMsg = new System.Windows.Forms.Label();
+			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// timerTimeIndic
@@ -1335,33 +1346,6 @@ namespace OpenDental{
 			this.timerReplicationMonitor.Interval = 10000;
 			this.timerReplicationMonitor.Tick += new System.EventHandler(this.timerReplicationMonitor_Tick);
 			// 
-			// labelMsg
-			// 
-			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelMsg.Location = new System.Drawing.Point(71, 567);
-			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(66, 20);
-			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "VM: 0";
-			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.labelMsg.Visible = false;
-			// 
-			// butBigPhones
-			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butBigPhones.Autosize = true;
-			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(143, 565);
-			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(75, 24);
-			this.butBigPhones.TabIndex = 52;
-			this.butBigPhones.Text = "Big Phones";
-			this.butBigPhones.Visible = false;
-			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
-			// 
 			// lightSignalGrid1
 			// 
 			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
@@ -1371,11 +1355,81 @@ namespace OpenDental{
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
 			// 
+			// panelPhoneSmall
+			// 
+			this.panelPhoneSmall.Controls.Add(this.butTriage);
+			this.panelPhoneSmall.Controls.Add(this.butBigPhones);
+			this.panelPhoneSmall.Controls.Add(this.labelWaitTime);
+			this.panelPhoneSmall.Controls.Add(this.labelTriage);
+			this.panelPhoneSmall.Controls.Add(this.labelMsg);
+			this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
+			this.panelPhoneSmall.Name = "panelPhoneSmall";
+			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 250);
+			this.panelPhoneSmall.TabIndex = 56;
+			// 
+			// butTriage
+			// 
+			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butTriage.Autosize = true;
+			this.butTriage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butTriage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTriage.CornerRadius = 4F;
+			this.butTriage.Location = new System.Drawing.Point(98, 0);
+			this.butTriage.Name = "butTriage";
+			this.butTriage.Size = new System.Drawing.Size(22, 24);
+			this.butTriage.TabIndex = 52;
+			this.butTriage.Text = "T";
+			// 
+			// butBigPhones
+			// 
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBigPhones.Autosize = true;
+			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBigPhones.CornerRadius = 4F;
+			this.butBigPhones.Location = new System.Drawing.Point(122, 0);
+			this.butBigPhones.Name = "butBigPhones";
+			this.butBigPhones.Size = new System.Drawing.Size(28, 24);
+			this.butBigPhones.TabIndex = 52;
+			this.butBigPhones.Text = "Big";
+			// 
+			// labelWaitTime
+			// 
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
+			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
+			this.labelWaitTime.Name = "labelWaitTime";
+			this.labelWaitTime.Size = new System.Drawing.Size(28, 20);
+			this.labelWaitTime.TabIndex = 53;
+			this.labelWaitTime.Text = "0m";
+			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelTriage
+			// 
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriage.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelTriage.Location = new System.Drawing.Point(41, 2);
+			this.labelTriage.Name = "labelTriage";
+			this.labelTriage.Size = new System.Drawing.Size(30, 20);
+			this.labelTriage.TabIndex = 53;
+			this.labelTriage.Text = "T:0";
+			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelMsg
+			// 
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelMsg.Location = new System.Drawing.Point(2, 2);
+			this.labelMsg.Name = "labelMsg";
+			this.labelMsg.Size = new System.Drawing.Size(40, 20);
+			this.labelMsg.TabIndex = 53;
+			this.labelMsg.Text = "VM:0";
+			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormOpenDental
 			// 
 			this.ClientSize = new System.Drawing.Size(982, 585);
-			this.Controls.Add(this.labelMsg);
-			this.Controls.Add(this.butBigPhones);
+			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1392,6 +1446,7 @@ namespace OpenDental{
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormOpenDental_KeyDown);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FormOpenDental_MouseMove);
 			this.Resize += new System.EventHandler(this.FormOpenDental_Resize);
+			this.panelPhoneSmall.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -2578,22 +2633,27 @@ namespace OpenDental{
 					panelSplitter.Visible=true;
 					if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
 						timerPhoneWebCam.Enabled=true;//the only place this happens
-						phoneSmall.Visible=true;
-						phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
+						//phoneSmall.Visible=true;
+						//phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
+						phoneSmall.Location=new Point(0,24);
 						userControlTasks1.Location=new Point(position.X+phoneSmall.Width,panelSplitter.Bottom);
 						userControlTasks1.Width=width-phoneSmall.Width;
-						butBigPhones.Visible=true;
-						butBigPhones.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width,panelSplitter.Bottom);
-						butBigPhones.BringToFront();
-						labelMsg.Visible=true;
-						labelMsg.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width-labelMsg.Width,panelSplitter.Bottom);
-						labelMsg.BringToFront();
+						//butBigPhones.Visible=true;
+						//butBigPhones.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width,panelSplitter.Bottom);
+						//butBigPhones.BringToFront();
+						//labelMsg.Visible=true;
+						//labelMsg.Location=new Point(position.X+phoneSmall.Width-butBigPhones.Width-labelMsg.Width,panelSplitter.Bottom);
+						//labelMsg.BringToFront();
+						panelPhoneSmall.Visible=true;
+						panelPhoneSmall.Location=new Point(position.X,panelSplitter.Bottom);
+						panelPhoneSmall.BringToFront();
 					}
 					else{
-						phoneSmall.Visible=false;
+						//phoneSmall.Visible=false;
 						//phonePanel.Visible=false;
-						butBigPhones.Visible=false;
-						labelMsg.Visible=false;
+						//butBigPhones.Visible=false;
+						//labelMsg.Visible=false;
+						panelPhoneSmall.Visible=false;
 						userControlTasks1.Location=new Point(position.X,panelSplitter.Bottom);
 						userControlTasks1.Width=width;
 					}
@@ -2601,10 +2661,11 @@ namespace OpenDental{
 					height=ClientSize.Height-panelSplitter.Height-userControlTasks1.Height-ToolBarMain.Height;
 				}
 				else {//docked Right
-					phoneSmall.Visible=false;
+					//phoneSmall.Visible=false;
 					//phonePanel.Visible=false;
-					butBigPhones.Visible=false;
-					labelMsg.Visible=false;
+					//butBigPhones.Visible=false;
+					//labelMsg.Visible=false;
+					panelPhoneSmall.Visible=false;
 					if(panelSplitter.Width>8) {//docking needs to be changed
 						panelSplitter.Width=7;
 						panelSplitter.Location=new Point(900,position.Y);
@@ -2621,10 +2682,11 @@ namespace OpenDental{
 				panelSplitter.Invalidate();
 			}
 			else {
-				phoneSmall.Visible=false;
+				//phoneSmall.Visible=false;
 				//phonePanel.Visible=false;
-				butBigPhones.Visible=false;
-				labelMsg.Visible=false;
+				//butBigPhones.Visible=false;
+				//labelMsg.Visible=false;
+				panelPhoneSmall.Visible=false;
 				panelSplitter.Visible=false;
 			}
 			ContrAccount2.Location=position;
