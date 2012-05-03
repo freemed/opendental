@@ -72,6 +72,7 @@ namespace OpenDental{
 		private UI.Button butManage;
 		private long PatCurNum;
 		//private bool InitializedOnStartup;
+		private FormTasks FormT;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -903,6 +904,15 @@ namespace OpenDental{
 		}
 
 		private void butTasks_Click(object sender, System.EventArgs e) {
+			if(FormT==null || FormT.IsDisposed) {
+				FormT=new FormTasks();
+			}
+			FormT.Show();
+			if(FormT.WindowState==FormWindowState.Minimized) {
+				FormT.WindowState=FormWindowState.Normal;
+			}
+			FormT.BringToFront();
+			/*  //This is the old code exactly how it was before making the task window non-modal in case issues arise.
 			FormTasks FormT=new FormTasks();
 			FormT.ShowDialog();
 			if(FormT.GotoType==TaskObjectType.Patient){
@@ -934,6 +944,7 @@ namespace OpenDental{
 					GotoModule.GotoAppointment(dateSelected,apt.AptNum);
 				}
 			}
+			*/
 		}
 
 		private void butSendRx_Click(object sender,EventArgs e) {
@@ -1461,6 +1472,9 @@ namespace OpenDental{
 
 
 	}
+
+	public delegate void OnPatientSelected(Patient pat);
+
 }
 
 
