@@ -319,9 +319,30 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		///<summary>Number of new and viewed tasks within the Triage task list.</summary>
+		public static int GetTriageTaskCount() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT COUNT(*) "
+				+"FROM task "
+				+"WHERE TaskListNum=1697 "//Triage task list.
+				+"AND TaskStatus<>2";//Not done (new or viewed).
+			return PIn.Int(Db.GetCount(command));
+		}
 
-
-
+		public static int GetTriageMinutesBehind() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT TIMESTAMPDIFF(MINUTE,DateTimeEntry,NOW()) "
+				+"FROM task "
+				+"WHERE TaskListNum=1697 "//Triage task list.
+				+"AND TaskStatus<>2 "//Not done (new or viewed).
+				+"ORDER BY DateTimeEntry DESC "
+				+"LIMIT 1";
+			return PIn.Int(Db.GetCount(command));
+		}
 
 	}
 
