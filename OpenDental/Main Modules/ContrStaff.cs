@@ -72,7 +72,7 @@ namespace OpenDental{
 		private UI.Button butManage;
 		private long PatCurNum;
 		//private bool InitializedOnStartup;
-		private FormTasks FormT;
+		private static FormTasks FormT;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -904,14 +904,7 @@ namespace OpenDental{
 		}
 
 		private void butTasks_Click(object sender, System.EventArgs e) {
-			if(FormT==null || FormT.IsDisposed) {
-				FormT=new FormTasks();
-			}
-			FormT.Show();
-			if(FormT.WindowState==FormWindowState.Minimized) {
-				FormT.WindowState=FormWindowState.Normal;
-			}
-			FormT.BringToFront();
+			LaunchTaskWindowWithList(0);
 			/*  //This is the old code exactly how it was before making the task window non-modal in case issues arise.
 			FormTasks FormT=new FormTasks();
 			FormT.ShowDialog();
@@ -945,6 +938,26 @@ namespace OpenDental{
 				}
 			}
 			*/
+		}
+
+		///<summary>Only used internally to launch the task window with the Triage task list.</summary>
+		public static void JumpToTriageTaskWindow() {
+			LaunchTaskWindowWithList(1697);//Triage list.
+		}
+
+		///<summary>Used to launch the task window preloaded with a certain task list open.  Pass 0 for default behavior.</summary>
+		private static void LaunchTaskWindowWithList(long taskListNum) {
+			if(FormT==null || FormT.IsDisposed) {
+				FormT=new FormTasks();
+			}
+			FormT.Show();
+			if(taskListNum>0) {
+				FormT.LaunchWithTaskList(taskListNum);
+			}
+			if(FormT.WindowState==FormWindowState.Minimized) {
+				FormT.WindowState=FormWindowState.Normal;
+			}
+			FormT.BringToFront();
 		}
 
 		private void butSendRx_Click(object sender,EventArgs e) {

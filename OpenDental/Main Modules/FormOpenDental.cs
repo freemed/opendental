@@ -1379,6 +1379,7 @@ namespace OpenDental{
 			this.butTriage.Size = new System.Drawing.Size(22, 24);
 			this.butTriage.TabIndex = 52;
 			this.butTriage.Text = "T";
+			this.butTriage.Click += new System.EventHandler(this.butTriage_Click);
 			// 
 			// butBigPhones
 			// 
@@ -3515,6 +3516,10 @@ namespace OpenDental{
 				formPhoneTiles.Show();
 				formPhoneTiles.BringToFront();
 			}
+		}
+
+		private void butTriage_Click(object sender,EventArgs e) {
+			ContrStaff.JumpToTriageTaskWindow();
 		}
 
 		private void phonePanel_GoToChanged(object sender,EventArgs e) {

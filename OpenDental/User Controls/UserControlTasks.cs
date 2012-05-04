@@ -118,6 +118,28 @@ namespace OpenDental {
 			gridMain.Invalidate();
 		}
 
+		///<summary>Used internally to open the task window with a specific task list loaded.</summary>
+		public void FillGridWithTaskList(long taskListNum) {
+			TaskList tlOne=TaskLists.GetOne(taskListNum);
+			tabContr.SelectedTab=tabMain;
+			if(TreeHistory==null) {
+				TreeHistory=new List<TaskList>();
+			}
+			TreeHistory.Clear();
+			TreeHistory.Add(tlOne);			
+			if(TaskListsList==null) {
+				TaskListsList=new List<TaskList>();
+			}
+			TaskListsList.Clear();
+			if(TasksList==null) {
+			  TasksList=new List<Task>();
+			}
+			TasksList.Clear();
+			TasksList=Tasks.RefreshChildren(taskListNum,false,cal.SelectionStart,Security.CurUser.UserNum,0);
+			FillTree();
+			FillGrid();
+		}
+
 		private void UserControlTasks_Load(object sender,System.EventArgs e) {
 			if(this.DesignMode){
 				return;

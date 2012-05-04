@@ -126,6 +126,11 @@ namespace OpenDental{
 			//DialogResult=DialogResult.OK;
 		}
 
+		///<summary>Used internally to open the task window with a specific task list loaded.</summary>
+		public void LaunchWithTaskList(long taskListNum) {
+			userControlTasks1.FillGridWithTaskList(taskListNum);
+		}
+
 		private void timer1_Tick(object sender,EventArgs e) {
 			if(Security.CurUser!=null) {//Possible if OD auto logged a user off and they left the task window open in the background.
 				userControlTasks1.RefreshTasks();
