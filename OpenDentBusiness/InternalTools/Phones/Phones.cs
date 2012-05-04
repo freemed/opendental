@@ -335,13 +335,12 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT TIMESTAMPDIFF(MINUTE,DateTimeEntry,NOW()) "
+			string command="SELECT MAX(TIMESTAMPDIFF(MINUTE,DateTimeEntry,NOW())) "
 				+"FROM task "
 				+"WHERE TaskListNum=1697 "//Triage task list.
 				+"AND TaskStatus<>2 "//Not done (new or viewed).
-				+"ORDER BY DateTimeEntry DESC "
 				+"LIMIT 1";
-			return PIn.Int(Db.GetCount(command));
+			return PIn.Int(Db.GetScalar(command));
 		}
 
 	}

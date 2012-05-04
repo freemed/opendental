@@ -477,13 +477,13 @@ namespace OpenDental{
 			this.timerWebHostSynch = new System.Windows.Forms.Timer(this.components);
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
-			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.panelPhoneSmall = new System.Windows.Forms.Panel();
-			this.butTriage = new OpenDental.UI.Button();
-			this.butBigPhones = new OpenDental.UI.Button();
 			this.labelWaitTime = new System.Windows.Forms.Label();
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
+			this.butTriage = new OpenDental.UI.Button();
+			this.butBigPhones = new OpenDental.UI.Button();
+			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1346,15 +1346,6 @@ namespace OpenDental{
 			this.timerReplicationMonitor.Interval = 10000;
 			this.timerReplicationMonitor.Tick += new System.EventHandler(this.timerReplicationMonitor_Tick);
 			// 
-			// lightSignalGrid1
-			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
-			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
-			this.lightSignalGrid1.TabIndex = 20;
-			this.lightSignalGrid1.Text = "lightSignalGrid1";
-			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
 			// panelPhoneSmall
 			// 
 			this.panelPhoneSmall.Controls.Add(this.butTriage);
@@ -1366,6 +1357,39 @@ namespace OpenDental{
 			this.panelPhoneSmall.Name = "panelPhoneSmall";
 			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 250);
 			this.panelPhoneSmall.TabIndex = 56;
+			// 
+			// labelWaitTime
+			// 
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
+			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
+			this.labelWaitTime.Name = "labelWaitTime";
+			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
+			this.labelWaitTime.TabIndex = 53;
+			this.labelWaitTime.Text = "0m";
+			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelTriage
+			// 
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriage.ForeColor = System.Drawing.Color.Black;
+			this.labelTriage.Location = new System.Drawing.Point(38, 2);
+			this.labelTriage.Name = "labelTriage";
+			this.labelTriage.Size = new System.Drawing.Size(36, 20);
+			this.labelTriage.TabIndex = 53;
+			this.labelTriage.Text = "T:0";
+			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelMsg
+			// 
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelMsg.Location = new System.Drawing.Point(2, 2);
+			this.labelMsg.Name = "labelMsg";
+			this.labelMsg.Size = new System.Drawing.Size(40, 20);
+			this.labelMsg.TabIndex = 53;
+			this.labelMsg.Text = "VM:0";
+			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butTriage
 			// 
@@ -1395,42 +1419,18 @@ namespace OpenDental{
 			this.butBigPhones.Text = "Big";
 			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
-			// labelWaitTime
+			// lightSignalGrid1
 			// 
-			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
-			this.labelWaitTime.Name = "labelWaitTime";
-			this.labelWaitTime.Size = new System.Drawing.Size(28, 20);
-			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "0m";
-			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelTriage
-			// 
-			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriage.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelTriage.Location = new System.Drawing.Point(41, 2);
-			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(30, 20);
-			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:0";
-			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelMsg
-			// 
-			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelMsg.Location = new System.Drawing.Point(2, 2);
-			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(40, 20);
-			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "VM:0";
-			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
+			this.lightSignalGrid1.Name = "lightSignalGrid1";
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
+			this.lightSignalGrid1.TabIndex = 20;
+			this.lightSignalGrid1.Text = "lightSignalGrid1";
+			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 585);
+			this.ClientSize = new System.Drawing.Size(982, 480);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
@@ -1723,6 +1723,7 @@ namespace OpenDental{
 				#endif
 				ThreadVM=new Thread(new ThreadStart(this.ThreadVM_SetLabelMsg));
 				ThreadVM.Start();//It's done this way because the file activity tends to lock the UI on slow connections.
+				FillTriageLabels();
 			}
 			#if !TRIALONLY
 				if(PrefC.GetDate(PrefName.BackupReminderLastDateRun).AddMonths(1)<DateTime.Today) {
@@ -2827,6 +2828,20 @@ namespace OpenDental{
 			Signalods.Insert(sig);
 		}
 
+		///<summary>Update the labels for the triage list.</summary>
+		private void FillTriageLabels() {
+			int count=Phones.GetTriageTaskCount();
+			int mins=Phones.GetTriageMinutesBehind();
+			labelTriage.Text="T:"+count.ToString();
+			labelWaitTime.Text=mins.ToString()+"m";
+			if(count>0) {//Triage show red so users notice more.
+				labelTriage.ForeColor=Color.Firebrick;
+			}
+			else {
+				labelTriage.ForeColor=Color.Black;
+			}
+		}
+
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
 			if(e.DateSelected.Year>1880){
 				AppointmentL.DateSelected=e.DateSelected;
@@ -3096,12 +3111,16 @@ namespace OpenDental{
 					}
 				}
 				if(areAnySignalsTasks || tasksPopup.Count>0) {
-					//if user has the Task dialog open, we can't easily tell it to refresh,
-					//So that dialog is responsible for auto refreshing every minute on a timer.
-					//Improve this.
 					if(userControlTasks1.Visible) {
 						userControlTasks1.RefreshTasks();
 					}
+					//See if FormTasks is currently open.
+					if(ContrManage2!=null && ContrManage2.FormT!=null && !ContrManage2.FormT.IsDisposed) {
+						ContrManage2.FormT.RefreshUserControlTasks();
+					}
+				}
+				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					FillTriageLabels();
 				}
 				List<int> itypes=Signalods.GetInvalidTypes(sigList);
 				InvalidType[] itypeArray=new InvalidType[itypes.Count];
@@ -3519,7 +3538,7 @@ namespace OpenDental{
 		}
 
 		private void butTriage_Click(object sender,EventArgs e) {
-			ContrStaff.JumpToTriageTaskWindow();
+			ContrManage2.JumpToTriageTaskWindow();
 		}
 
 		private void phonePanel_GoToChanged(object sender,EventArgs e) {

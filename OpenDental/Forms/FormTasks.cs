@@ -13,7 +13,6 @@ namespace OpenDental{
 		/////<summary>After closing, if this is not zero, then it will jump to the object specified in GotoKeyNum.</summary>
 		//public TaskObjectType GotoType;
 		private UserControlTasks userControlTasks1;
-		private Timer timer1;
 		private IContainer components;
 		/////<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		//public long GotoKeyNum;
@@ -51,17 +50,9 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTasks));
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
 			this.userControlTasks1 = new OpenDental.UserControlTasks();
 			this.SuspendLayout();
-			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 60000;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
 			// 
 			// userControlTasks1
 			// 
@@ -131,14 +122,23 @@ namespace OpenDental{
 			userControlTasks1.FillGridWithTaskList(taskListNum);
 		}
 
-		private void timer1_Tick(object sender,EventArgs e) {
-			if(Security.CurUser!=null) {//Possible if OD auto logged a user off and they left the task window open in the background.
+		///<summary>Simply tells the user task control to refresh the currently showing task list.</summary>
+		public void RefreshUserControlTasks() {
+			if(userControlTasks1!=null && !userControlTasks1.IsDisposed) {
 				userControlTasks1.RefreshTasks();
 			}
-			//this quick and dirty refresh is not as intelligent as the one used when tasks are docked.
-			//Sound notification of new task is controlled from main form completely
-			//independently of this visual refresh.
 		}
+
+		/* private void timer1_Tick(object sender,EventArgs e) {
+				if(Security.CurUser!=null) {//Possible if OD auto logged a user off and they left the task window open in the background.
+					userControlTasks1.RefreshTasks();
+				}
+				//this quick and dirty refresh is not as intelligent as the one used when tasks are docked.
+				//Sound notification of new task is controlled from main form completely
+				//independently of this visual refresh.
+			}
+		}
+		*/
 
 		
 

@@ -72,7 +72,8 @@ namespace OpenDental{
 		private UI.Button butManage;
 		private long PatCurNum;
 		//private bool InitializedOnStartup;
-		private static FormTasks FormT;
+		///<summary>This is public so that FormOpenDental can access it.</summary>
+		public FormTasks FormT;
 
 		///<summary></summary>
 		public ContrStaff(){
@@ -941,12 +942,12 @@ namespace OpenDental{
 		}
 
 		///<summary>Only used internally to launch the task window with the Triage task list.</summary>
-		public static void JumpToTriageTaskWindow() {
+		public void JumpToTriageTaskWindow() {
 			LaunchTaskWindowWithList(1697);//Triage list.
 		}
 
 		///<summary>Used to launch the task window preloaded with a certain task list open.  Pass 0 for default behavior.</summary>
-		private static void LaunchTaskWindowWithList(long taskListNum) {
+		private void LaunchTaskWindowWithList(long taskListNum) {
 			if(FormT==null || FormT.IsDisposed) {
 				FormT=new FormTasks();
 			}
