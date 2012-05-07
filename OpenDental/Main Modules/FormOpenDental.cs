@@ -2171,7 +2171,6 @@ namespace OpenDental{
 
 		///<Summary>Serves four functions.  1. Sends the new patient to the dropdown menu for select patient.  2. Changes which toolbar buttons are enabled.  3. Sets main form text. 4. Displays any popup.</Summary>
 		private void FillPatientButton(Patient pat){
-//todo: test this, maybe when program first starts up.
 			if(pat==null) {
 				pat=new Patient();
 			}
@@ -2201,6 +2200,7 @@ namespace OpenDental{
 			}
 			else {
 				if(!Programs.UsingEcwTight()) {
+					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					if(pat.Email!="") {
 						ToolBarMain.Buttons["Email"].Enabled=true;
 					}
@@ -2208,24 +2208,23 @@ namespace OpenDental{
 						ToolBarMain.Buttons["Email"].Enabled=false;
 					}
 					ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
-					ToolBarMain.Buttons["Commlog"].Enabled=true;
 					ToolBarMain.Buttons["Letter"].Enabled=true;
 					ToolBarMain.Buttons["Form"].Enabled=true;
 					ToolBarMain.Buttons["Tasklist"].Enabled=true;
 					ToolBarMain.Buttons["Label"].Enabled=true;
-				}
-				if(pat.WirelessPhone=="") {
-					ToolBarMain.Buttons["Popups"].Enabled=true;
-				}
-				else {//Pat has a WirelessPhone
-					if(pat.TxtMsgOk==YN.Unknown) {
-						ToolBarMain.Buttons["TxtMsg"].Enabled=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+					if(pat.WirelessPhone=="") {
+						ToolBarMain.Buttons["TxtMsg"].Enabled=false;
 					}
-					else {
-						ToolBarMain.Buttons["TxtMsg"].Enabled=(pat.TxtMsgOk==YN.Yes);
+					else {//Pat has a WirelessPhone
+						if(pat.TxtMsgOk==YN.Unknown) {
+							ToolBarMain.Buttons["TxtMsg"].Enabled=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+						}
+						else {
+							ToolBarMain.Buttons["TxtMsg"].Enabled=(pat.TxtMsgOk==YN.Yes);
+						}
 					}
-					ToolBarMain.Buttons["Popups"].Enabled=true;
 				}
+				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
 			ToolBarMain.Invalidate();
 			Text=PatientL.GetMainTitle(pat.GetNameLF(),pat.PatNum,pat.ChartNumber,pat.SiteNum);
@@ -2605,7 +2604,7 @@ namespace OpenDental{
 		}
 
 		private void OnTxtMsg_Click() {
-			MsgBox.Show(this,"Test");
+			MsgBox.Show(this,"This feature is not yet functional.");
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {
