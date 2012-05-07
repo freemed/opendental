@@ -331,16 +331,17 @@ namespace OpenDentBusiness {
 			return PIn.Int(Db.GetCount(command));
 		}
 
-		public static int GetTriageMinutesBehind() {
+		///<summary>Returns the time of the oldest task within the Triage task list.  Returns 0 if there is no tasks in the list.</summary>
+		public static DateTime GetTriageTime() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT MAX(TIMESTAMPDIFF(MINUTE,DateTimeEntry,NOW())) "
+			string command="SELECT IFNULL(MIN(DateTimeEntry),0) AS triageTime "
 				+"FROM task "
 				+"WHERE TaskListNum=1697 "//Triage task list.
 				+"AND TaskStatus<>2 "//Not done (new or viewed).
 				+"LIMIT 1";
-			return PIn.Int(Db.GetScalar(command));
+			return PIn.DateT(Db.GetScalar(command));
 		}
 
 	}

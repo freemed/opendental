@@ -248,6 +248,8 @@ namespace OpenDental{
 		private Label labelMsg;
 		///<summary>This thread fills labelMsg</summary>
 		private Thread ThreadVM;
+		///<summary>Holds the time for the oldest triage task.</summary>
+		private DateTime triageTime;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -2828,18 +2830,29 @@ namespace OpenDental{
 			Signalods.Insert(sig);
 		}
 
-		///<summary>Update the labels for the triage list.</summary>
+		///<summary>Update labels for the triage list.  Also updates the variable triageTime which is used to calculate mins behind.</summary>
 		private void FillTriageLabels() {
+			triageTime=Phones.GetTriageTime();//Update last triage time.
+			FillTriageMinutes();//Updates labelWaitTime.
 			int count=Phones.GetTriageTaskCount();
-			int mins=Phones.GetTriageMinutesBehind();
 			labelTriage.Text="T:"+count.ToString();
-			labelWaitTime.Text=mins.ToString()+"m";
 			if(count>0) {//Triage show red so users notice more.
 				labelTriage.ForeColor=Color.Firebrick;
 			}
 			else {
 				labelTriage.ForeColor=Color.Black;
 			}
+		}
+
+		///<summary>Update labelWaitTime for the triage list.  Gets called frequently, does not make a call to db.</summary>
+		private void FillTriageMinutes() {
+			if(triageTime.Year<1880) {
+				labelWaitTime.Text="0m";
+			}
+			else {
+				int mins=(DateTime.Now-triageTime).Minutes;
+				labelWaitTime.Text=mins.ToString()+"m";
+			}			
 		}
 
 		private void GotoModule_ModuleSelected(ModuleEventArgs e){
@@ -3029,6 +3042,9 @@ namespace OpenDental{
 		public void ProcessSignals(){
 			try {
 				List<Signalod> sigList=Signalods.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
+				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					FillTriageMinutes();
+				}
 				if(sigList.Count==0) {
 					return;
 				}
@@ -3119,7 +3135,7 @@ namespace OpenDental{
 						ContrManage2.FormT.RefreshUserControlTasks();
 					}
 				}
-				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				if(PrefC.GetBool(PrefName.DockPhonePanelShow) && areAnySignalsTasks) {
 					FillTriageLabels();
 				}
 				List<int> itypes=Signalods.GetInvalidTypes(sigList);
