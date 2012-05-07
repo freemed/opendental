@@ -1116,6 +1116,7 @@ namespace OpenDental {
 					if(TaskUnreads.IsUnread(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum)) {
 						TaskUnreads.SetRead(Security.CurUser.UserNum,TasksList[clickedI-TaskListsList.Count].TaskNum);
 					}
+					DataValid.SetInvalidTask(TasksList[clickedI-TaskListsList.Count].TaskNum,false);
 					//if already read, nothing else to do.  If done, nothing to do
 				}
 				else {

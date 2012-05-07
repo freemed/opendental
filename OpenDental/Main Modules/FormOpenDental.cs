@@ -1364,7 +1364,7 @@ namespace OpenDental{
 			// 
 			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(67, 2);
+			this.labelWaitTime.Location = new System.Drawing.Point(66, 2);
 			this.labelWaitTime.Name = "labelWaitTime";
 			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
 			this.labelWaitTime.TabIndex = 53;
@@ -1375,7 +1375,7 @@ namespace OpenDental{
 			// 
 			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(38, 2);
+			this.labelTriage.Location = new System.Drawing.Point(39, 2);
 			this.labelTriage.Name = "labelTriage";
 			this.labelTriage.Size = new System.Drawing.Size(36, 20);
 			this.labelTriage.TabIndex = 53;
@@ -1386,11 +1386,11 @@ namespace OpenDental{
 			// 
 			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelMsg.Location = new System.Drawing.Point(2, 2);
+			this.labelMsg.Location = new System.Drawing.Point(-1, 2);
 			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(40, 20);
+			this.labelMsg.Size = new System.Drawing.Size(44, 20);
 			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "VM:0";
+			this.labelMsg.Text = "V:0";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butTriage
@@ -1432,7 +1432,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 480);
+			this.ClientSize = new System.Drawing.Size(982, 417);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
@@ -3629,7 +3629,7 @@ namespace OpenDental{
 		///<summary>Always called using ThreadVM.</summary>
 		private void ThreadVM_SetLabelMsg() {
 #if DEBUG
-			//Because path is not valid when Jordan is debugging from home.
+      //Because path is not valid when Jordan is debugging from home.
 #else
 			while(true) {
 				string msg;
@@ -3646,13 +3646,13 @@ namespace OpenDental{
 					}
 					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
 					if(msgCount==0) {
-						msg="VM: 0";
+						msg="V:0";
 						isBold=false;
 						color=Color.Black;
 						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
 					}
 					else {
-						msg="VM: "+msgCount.ToString();
+						msg="V:"+msgCount.ToString();
 						isBold=true;
 						color=Color.Firebrick;
 						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
@@ -3673,10 +3673,10 @@ namespace OpenDental{
 		private void SetString(String str,bool isBold,Color color) {
 			labelMsg.Text=str;
 			if(isBold) {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,10f,FontStyle.Bold);
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.25f,FontStyle.Bold);
 			}
 			else {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.5f,FontStyle.Regular);
+				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.25f,FontStyle.Regular);
 			}
 			labelMsg.ForeColor=color;
 		}
