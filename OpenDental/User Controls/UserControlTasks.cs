@@ -939,9 +939,10 @@ namespace OpenDental {
 				}
 				else if(ClipTask!=null) {
 					Tasks.Delete(ClipTask.TaskNum);
+					DataValid.SetInvalidTask(ClipTask.TaskNum,false);
 				}
 			}
-			FillGrid();
+			//FillGrid();
 		}
 
 		private void Goto_Clicked() {
