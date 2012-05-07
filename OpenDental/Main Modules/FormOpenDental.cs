@@ -2790,22 +2790,32 @@ namespace OpenDental{
 		
 		///<summary>This is called when any local data becomes outdated.  It's purpose is to tell the other computers to update certain local data.</summary>
 		private void DataValid_BecameInvalid(OpenDental.ValidEventArgs e){
-			if(e.OnlyLocal){
+			if(e.OnlyLocal){//This is deprecated and doesn't seem to be used at all anymore.
 				if(!PrefsStartup()){//??
 					return;
 				}
 				RefreshLocalData(InvalidType.AllLocal);//does local computer only
 				return;
 			}
-			if(!e.ITypes.Contains((int)InvalidType.Date) 
-				&& !e.ITypes.Contains((int)InvalidType.Task)
-				&& !e.ITypes.Contains((int)InvalidType.TaskPopup)){
-				//local refresh for dates is handled within ContrAppt, not here
+			if(!e.ITypes.Contains((int)InvalidType.Date) //local refresh for dates is handled within ContrAppt, not here
+				&& !e.ITypes.Contains((int)InvalidType.Task)//Tasks are not "cached" data.
+				&& !e.ITypes.Contains((int)InvalidType.TaskPopup))
+			{
 				InvalidType[] itypeArray=new InvalidType[e.ITypes.Count];
 				for(int i=0;i<itypeArray.Length;i++){
 					itypeArray[i]=(InvalidType)e.ITypes[i];
 				}
 				RefreshLocalData(itypeArray);//does local computer
+			}
+			if(e.ITypes.Contains((int)InvalidType.Task) || e.ITypes.Contains((int)InvalidType.TaskPopup)) {
+				//One of the two task lists needs to be refreshed on this instance of OD
+				if(userControlTasks1.Visible) {
+					userControlTasks1.RefreshTasks();
+				}
+				//See if FormTasks is currently open.
+				if(ContrManage2!=null && ContrManage2.FormT!=null && !ContrManage2.FormT.IsDisposed) {
+					ContrManage2.FormT.RefreshUserControlTasks();
+				}
 			}
 			string itypeString="";
 			for(int i=0;i<e.ITypes.Count;i++){

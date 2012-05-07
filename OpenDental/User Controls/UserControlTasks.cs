@@ -754,7 +754,8 @@ namespace OpenDental {
 			}
 			Tasks.Update(task,oldTask);
 			TaskUnreads.SetRead(Security.CurUser.UserNum,task.TaskNum);
-			FillGrid();
+			DataValid.SetInvalidTask(task.TaskNum,false);
+			//FillGrid();
 		}
 
 		private void Edit_Clicked() {
@@ -1023,7 +1024,7 @@ namespace OpenDental {
 				Tasks.Delete(TasksList[clickedI-TaskListsList.Count].TaskNum);
 				DataValid.SetInvalidTask(TasksList[clickedI-TaskListsList.Count].TaskNum,false);
 			}
-			FillGrid();
+			//FillGrid();
 		}
 
 		///<summary>A recursive function that deletes the specified list and all children.</summary>
@@ -1132,7 +1133,7 @@ namespace OpenDental {
 					}
 					//no longer allowed to mark done from here
 				}
-				FillGrid();
+				//FillGrid();
 			}
 		}
 
