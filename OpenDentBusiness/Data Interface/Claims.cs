@@ -128,7 +128,10 @@ namespace OpenDentBusiness{
 			command+=claimNums+")";
 			//List<ClaimProc> tempClaimProcs=ClaimProcCrud.SelectMany(command);
 			DataTable table=Db.GetTable(command);
-			command="SELECT PatNum,ProcDate FROM claimproc WHERE ProcNum IN (";
+			command="SELECT claimproc.PatNum,claimproc.ProcDate"
+				+" FROM claimproc"
+				+" JOIN claim ON claimproc.ClaimNum=claim.ClaimNum"
+				+" WHERE ProcNum IN (";
 			bool firstEntry=true;
 			for(int i=0;i<table.Rows.Count;i++) {
 				if(table.Rows[i]["ProcNum"].ToString()=="0") {
@@ -142,8 +145,9 @@ namespace OpenDentBusiness{
 				}
 				command+=table.Rows[i]["ProcNum"].ToString();
 			}
-			command+=") AND ClaimNum NOT IN ("+claimNums+")"
-				+" GROUP BY ClaimNum,PatNum,ProcDate";
+			command+=") AND claimproc.ClaimNum NOT IN ("+claimNums+")"
+				+" AND ClaimType = 'S'"
+				+" GROUP BY claimproc.ClaimNum,claimproc.PatNum,claimproc.ProcDate";
 			DataTable secondaryClaims=Db.GetTable(command);
 			return secondaryClaims;
 		}
