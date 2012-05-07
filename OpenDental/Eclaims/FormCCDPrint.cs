@@ -379,54 +379,62 @@ namespace OpenDental.Eclaims {
 				doc.bounds=e.MarginBounds;
 				center=doc.bounds.X+doc.bounds.Width/2;
 				x=doc.StartElement();//Every printed page always starts on the first row and can choose to skip rows later if desired.
-				if(responseStatus=="R") {
-					PrintRejection(e.Graphics);
-				}
-				else if(transactionCode=="12") {
-					PrintReversalResponse_12(e.Graphics);
-				}
-				else if(transactionCode=="15") {
-					PrintSummaryReconciliation_15(e.Graphics);
-				}
-				else if(transactionCode=="16") {
-					PrintPaymentReconciliation_16(e.Graphics);
-				}				
-				else if(transactionCode=="24") {
-					PrintEmail_24(e.Graphics);
-				}
-				else {
-					switch(formId) {
-						default:
-							DefaultPrint(e.Graphics);
-							break;
-						case "01"://CDA EOB Form
-							PrintEOB(e.Graphics);
-							break;
-						case "02"://Dentaide Form
-							PrintDentaide(e.Graphics);
-							break;
-						case "03"://Claim Acknowledgement Form
-							PrintClaimAck(e.Graphics);
-							break;
-						case "04"://Employer Certified Form
-							PrintEmployerCertified(e.Graphics);
-							break;
-						case "05"://Plan Paper Claim Form
-							//Printed in an earlier step. This line should never be hit.
-							break;
-						case "06"://Predetermination Acknowledgement Form
-							PrintPredeterminationAck(e.Graphics);
-							break;
-						case "07"://Predetermination EOB Form
-							PrintEOB(e.Graphics);
-							break;
-						case "08"://Eligibility Form
-							PrintEligibility(e.Graphics);
-							break;
+				try {
+					if(responseStatus=="R") {
+						PrintRejection(e.Graphics);
 					}
+					else if(transactionCode=="12") {
+						PrintReversalResponse_12(e.Graphics);
+					}
+					else if(transactionCode=="15") {
+						PrintSummaryReconciliation_15(e.Graphics);
+					}
+					else if(transactionCode=="16") {
+						PrintPaymentReconciliation_16(e.Graphics);
+					}
+					else if(transactionCode=="24") {
+						PrintEmail_24(e.Graphics);
+					}
+					else {
+						switch(formId) {
+							default:
+								DefaultPrint(e.Graphics);
+								break;
+							case "01"://CDA EOB Form
+								PrintEOB(e.Graphics);
+								break;
+							case "02"://Dentaide Form
+								PrintDentaide(e.Graphics);
+								break;
+							case "03"://Claim Acknowledgement Form
+								PrintClaimAck(e.Graphics);
+								break;
+							case "04"://Employer Certified Form
+								PrintEmployerCertified(e.Graphics);
+								break;
+							case "05"://Plan Paper Claim Form
+								//Printed in an earlier step. This line should never be hit.
+								break;
+							case "06"://Predetermination Acknowledgement Form
+								PrintPredeterminationAck(e.Graphics);
+								break;
+							case "07"://Predetermination EOB Form
+								PrintEOB(e.Graphics);
+								break;
+							case "08"://Eligibility Form
+								PrintEligibility(e.Graphics);
+								break;
+						}
+					}
+					x=doc.StartElement();//Be sure to end last element always.
+					totalPages=doc.CalcTotalPages(e.Graphics);
 				}
-				x=doc.StartElement();//Be sure to end last element always.
-				totalPages=doc.CalcTotalPages(e.Graphics);
+				catch {
+					//Printing will fail if the user switched to Open Dental from another software system and Open Dental gets a response from ITRANS with 
+					//regards to a claim from their old system. In this situation we just want to show what information we have because we will not be able 
+					//to look up the old claim necessarily. This is also a more elegant way to show other printing errors than allowing an unhandled exception. 
+					DefaultPrint(e.Graphics);
+				}
 			}
 			e.Graphics.DrawRectangle(Pens.LightGray,e.MarginBounds);//Draw light border for context.
 			pagesPrinted++;
@@ -916,7 +924,7 @@ namespace OpenDental.Eclaims {
 		///<summary>For printing basic information about unknown/unsupported message formats (for debugging, etc.).</summary>
 		private void DefaultPrint(Graphics g) {
 			x=doc.StartElement(verticalLine);
-			text=isFrench?"ERREUR NON SOUTENUE DE FORMAT DE MESSAGE":"UNSUPPORTED MESSAGE FORMAT ERROR";
+			text=isFrench?"LES DONNÉES DE MESSAGE PREMIÈRES POUR LA RÉPONSE INVALIDE OU INCONNU":"RAW DATA FOR INVALID OR UNKNOWN RESPONSE";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement(verticalLine);
 			CCDField[] loadedFields=formData.GetLoadedFields();
