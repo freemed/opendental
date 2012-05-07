@@ -55,9 +55,9 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Gets all outstanding claims for the batch payment window.</summary>
-		public static List<ClaimPaySplit> GetOutstandingClaims() {
+		public static List<ClaimPaySplit> GetOutstandingClaims(string carrierName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<ClaimPaySplit>>(MethodBase.GetCurrentMethod(),carrierName);
 			}
 			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
 				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
@@ -70,7 +70,8 @@ namespace OpenDentBusiness{
 				+"AND (claim.ClaimStatus = 'S' "
 				+"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt>0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
 				+"AND ClaimType != 'PreAuth' "
-				+"AND claimproc.ClaimPaymentNum=0 ";
+				+"AND claimproc.ClaimPaymentNum=0 "
+				+"AND carrier.CarrierName LIKE '%"+carrierName+"%' ";
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY claim.ClaimNum ";
 			}
