@@ -5144,7 +5144,7 @@ namespace OpenDental{
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(listQueue[0].ClearinghouseNum);
 			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian) {
 				try {
-					Eclaims.Canadian.SendClaim(listQueue[0],true);//ignore the etransNum result
+					Eclaims.Canadian.SendClaim(listQueue[0],true);//Ignore the etransNum result. Physically print the form.
 				}
 				catch(Exception ex) {
 					Cursor=Cursors.Default;

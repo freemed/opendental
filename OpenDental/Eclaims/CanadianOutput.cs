@@ -280,7 +280,7 @@ namespace OpenDental.Eclaims {
 				throw new ApplicationException(result);
 			}
 			if(doPrint) {
-				new FormCCDPrint(etrans,result,true);//Print the form.
+				new FormCCDPrint(etrans,result,true);//Physically print the form.
 			}
 			//Now we will process the 'result' here to extract the important data.  Basically Yes or No on the eligibility.
 			//We might not do this for any other trans type besides eligibility.
@@ -516,7 +516,7 @@ namespace OpenDental.Eclaims {
 			if(resultIsError) {
 			  throw new ApplicationException(result);
 			}
-			new FormCCDPrint(etrans,result,true);//Print the response.
+			new FormCCDPrint(etrans,result,true);//Physically print the form.
 			if(etrans.AckCode=="R") {
 				throw new ApplicationException(Lan.g("CanadianOutput","Reversal was rejected by clearinghouse. The claim must be reversed manually."));
 			}
@@ -723,7 +723,7 @@ namespace OpenDental.Eclaims {
 				}
 				if(!exit) {
 					try {
-						new FormCCDPrint(etrans,result,true);
+						new FormCCDPrint(etrans,result,true);//Physically print the form.
 					}
 					catch(Exception ex) {
 						MessageBox.Show(Lan.g("CanadianOutput","Failed to display one of the ROT responses")+": "+Environment.NewLine+ex.ToString());
@@ -840,7 +840,7 @@ namespace OpenDental.Eclaims {
 				}
 				CCDField fieldG62=fieldInputter.GetFieldById("G62");//Last reconciliation page number.
 				totalPages=PIn.Int(fieldG62.valuestr);
-				new FormCCDPrint(etrans,result,true);
+				new FormCCDPrint(etrans,result,true);//Physically print the form.
 				pageNumber++;
 			} while(pageNumber<=totalPages);
 			return etransAcks;
@@ -949,7 +949,7 @@ namespace OpenDental.Eclaims {
 			if(resultIsError) {
 				throw new ApplicationException(result);
 			}
-			new FormCCDPrint(etrans,result,true);
+			new FormCCDPrint(etrans,result,true);//Physically print the form.
 			return etrans;
 		}
 
