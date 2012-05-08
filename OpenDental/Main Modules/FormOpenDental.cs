@@ -2212,8 +2212,8 @@ namespace OpenDental{
 					ToolBarMain.Buttons["Form"].Enabled=true;
 					ToolBarMain.Buttons["Tasklist"].Enabled=true;
 					ToolBarMain.Buttons["Label"].Enabled=true;
-					if(pat.WirelessPhone=="") {
-						ToolBarMain.Buttons["TxtMsg"].Enabled=false;
+					if(pat.WirelessPhone=="" || !Programs.IsEnabled(ProgramName.CallFire)) {
+						ToolBarMain.Buttons["TxtMsg"].Enabled=false;//Patient doesn't have a wireless # or CallFire is disabled
 					}
 					else {//Pat has a WirelessPhone
 						if(pat.TxtMsgOk==YN.Unknown) {
