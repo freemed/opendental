@@ -1106,6 +1106,7 @@ namespace OpenDental{
 					}
 					PatCur.PatStatus=PatientStatus.Deleted;
 					PatCur.ChartNumber="";
+					PatCur.ClinicNum=0;
 					Popups.MoveForDeletePat(PatCur);
 					PatCur.SuperFamily=0;
 					Patients.Update(PatCur,PatOld);
@@ -1130,6 +1131,7 @@ namespace OpenDental{
 				}
 				PatCur.PatStatus=PatientStatus.Deleted;
 				PatCur.ChartNumber="";
+				PatCur.ClinicNum=0;
 				Popups.MoveForDeletePat(PatCur);
 				PatCur.Guarantor=PatCur.PatNum;
 				PatCur.SuperFamily=0;

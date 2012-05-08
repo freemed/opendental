@@ -1827,6 +1827,28 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PatientDeletedWithClinicNumSet(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM patient WHERE ClinicNum!=0 AND PatStatus="+POut.Int((int)PatientStatus.Deleted);
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deleted patients with a clinic still set: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {//fix
+				command="UPDATE patient SET ClinicNum=0 WHERE ClinicNum!=0 AND PatStatus="+POut.Int((int)PatientStatus.Deleted);
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Deleted patients with clinics cleared: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PatientsNoClinicSet(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
