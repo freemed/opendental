@@ -26,5 +26,8 @@
     <Setting Name="OpenDental_EmdeonITS_ITSWS" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://its.emdeon.com/ITS/ITSWS.asmx</Value>
     </Setting>
+    <Setting Name="OpenDental_CallFireService_SMSService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://www.callfire.com/service/SMSService</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
