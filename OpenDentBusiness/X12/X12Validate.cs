@@ -66,12 +66,12 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>StringBuilder does not get altered if no invalid data.</summary>
-		public static void BillProv(Provider billProv,StringBuilder strb,bool isPerson) {
+		public static void BillProv(Provider billProv,StringBuilder strb) {
 			if(billProv.LName=="") {
 				Comma(strb);
 				strb.Append("Billing Prov LName");
 			}
-			if(isPerson && billProv.FName==""){//this is allowed to be blank if it's a non-person.
+			if(!billProv.IsNotPerson && billProv.FName==""){//if is a person, first name cannot be blank.
 				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}

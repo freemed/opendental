@@ -80,7 +80,7 @@ namespace OpenDentBusiness
 			seg++;
 			//2100B NM1: Information Receiver Name
 			strb.AppendLine("NM1*1P*"//NM101: 1P=Provider
-				+"1*"//NM102: 1=person,2=non-person
+				+(billProv.IsNotPerson?"2":"1")+"*"//NM102: 1=person,2=non-person
 				+Sout(billProv.LName,35)+"*"//NM103: Last name
 				+Sout(billProv.FName,25)+"*"//NM104: First name
 				+Sout(billProv.MI,25,1)+"*"//NM105: Middle name
@@ -307,7 +307,7 @@ IEA*1*000012145~";
 				}
 				strb.Append("Prov TIN 9 digits");
 			}
-			X12Validate.BillProv(billProv,strb,true);//always hardcoded to be a person
+			X12Validate.BillProv(billProv,strb);
 			if(clinic==null) {
 				X12Validate.PracticeAddress(strb);
 			}

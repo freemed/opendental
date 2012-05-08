@@ -1511,7 +1511,7 @@ namespace OpenDentBusiness
 					//2400 AMT N8 (institutional) Facility Tax Amount. Situational. Not supported.
 					//2400 K3: (medical,dental) File Information. Situational. Not supported.
 					//2400 NTE: ADD/DCP (medical) Line Note. Situational. We do not use.
-					//2400 NTE TPO (medical,institutional) Third Party Organization Notes. Situational. Not sent by providers. Not supported.
+					//2400 NTE: TPO (medical,institutional) Third Party Organization Notes. Situational. Not sent by providers. Not supported.
 					//2400 PS1: (medical) Purchased Service Information. Situational. We do not use.
 					//2400 HCP: (medical,institutional,dental) Line Pricing/Repricing Information. Situational. Not used by providers. Not supported.
 					#endregion Service AMT K3 NTE PS1 HCP
@@ -2149,7 +2149,7 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Billing Prov LName");
 			}
-			if(billProv.FName=="" && !billProv.IsNotPerson) {//this is allowed to be blank if it's a non-person.
+			if(billProv.FName=="" && !billProv.IsNotPerson) {//if is a person, first name cannot be blank.
 				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}
