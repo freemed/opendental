@@ -2604,7 +2604,9 @@ namespace OpenDental{
 		}
 
 		private void OnTxtMsg_Click() {
-			MsgBox.Show(this,"This feature is not yet functional.");
+			FormTxtMsgEdit FormTME=new FormTxtMsgEdit();
+			FormTME.PatCur=Patients.GetPat(CurPatNum);
+			FormTME.ShowDialog();
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {

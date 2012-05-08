@@ -87,6 +87,7 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'LinuxRelease|x86' ">
     <OutputPath>bin\x86\LinuxRelease\</OutputPath>
@@ -356,6 +357,12 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormTxtMsgEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTxtMsgEdit.designer.cs">
+      <DependentUpon>FormTxtMsgEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormEtrans277Edit.cs">
       <SubType>Form</SubType>
@@ -2388,6 +2395,11 @@
     <Compile Include="ReportingLikeCrystal\ReportObjectCollection.cs" />
     <Compile Include="ReportingLikeCrystal\Section.cs" />
     <Compile Include="ReportingLikeCrystal\SectionCollection.cs" />
+    <Compile Include="Service References\CallFireService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\GraphicsHelper.cs" />
     <Compile Include="SheetFramework\LabelSingle.cs" />
@@ -2444,6 +2456,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTxtMsgEdit.resx">
+      <DependentUpon>FormTxtMsgEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEtrans277Edit.resx">
       <DependentUpon>FormEtrans277Edit.cs</DependentUpon>
@@ -4477,6 +4492,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Service References\CallFireService\SMSService.wsdl" />
     <None Include="Web References\EmdeonITSTest\ITSReturn.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -4514,6 +4530,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\CallFireService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\CallFireService\configuration.svcinfo" />
+    <None Include="Service References\CallFireService\configuration91.svcinfo" />
     <None Include="Resources\UDS3b.gif" />
     <None Include="Resources\UDS3a.gif" />
     <None Include="Web References\MobileWeb\Mobile.disco" />
@@ -5273,6 +5295,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CallFireService\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
