@@ -340,6 +340,7 @@ namespace OpenDentBusiness {
 				+"FROM task "
 				+"WHERE TaskListNum=1697 "//Triage task list.
 				+"AND TaskStatus<>2 "//Not done (new or viewed).
+				+"AND TaskNum NOT IN (SELECT TaskNum FROM tasknote) "//Not waiting a call back.
 				+"LIMIT 1";
 			return PIn.DateT(Db.GetScalar(command));
 		}

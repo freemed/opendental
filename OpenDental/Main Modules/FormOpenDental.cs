@@ -2861,8 +2861,8 @@ namespace OpenDental{
 				labelWaitTime.Text="0m";
 			}
 			else {
-				int mins=(DateTime.Now-triageTime).Minutes;
-				labelWaitTime.Text=mins.ToString()+"m";
+				double mins=(DateTime.Now-triageTime).TotalMinutes;
+				labelWaitTime.Text=((int)mins).ToString()+"m";
 			}			
 		}
 
