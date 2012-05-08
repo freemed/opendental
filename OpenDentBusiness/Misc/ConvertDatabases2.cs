@@ -8897,13 +8897,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'"+POut.Long(programNum)+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.Long(programNum)+"', "
 						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 						+"'RayMage')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -8922,14 +8922,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'"+POut.Long(programNum)+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"'"+POut.Long(programNum)+"', "
 						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 						+"'RayMage')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 				}//end RayMage Imaging bridge
 				//Insert BioPAK Imaging Bridge
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -8947,13 +8947,13 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'"+POut.Long(programNum)+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"'"+POut.Long(programNum)+"', "
 						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 						+"'BioPAK')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 				}
 				else {//oracle
 					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
@@ -8972,14 +8972,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'"+POut.Long(programNum)+"', "
 						+"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
 						+"'0')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
 						+"VALUES ("
 						+"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 						+"'"+POut.Long(programNum)+"', "
 						+"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
 						+"'BioPAK')";
-					Db.NonQ32(command);
+					Db.NonQ(command);
 				}//end BioPAK Imaging bridge
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE securitylog ADD FKey bigint NOT NULL";
@@ -9109,9 +9109,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE programproperty ADD ComputerName varchar2(255)";
 					Db.NonQ(command);
 				}
-				
-
-
+				//Insert CallFire Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"'CallFire', "
+						+"'CallFire from www.callfire.com', "
+						+"'0', "
+						+"'',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'Key From CallFire', "
+						+"'')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+						+") VALUES("
+						+"(SELECT MAX(ProgramNum)+1 FROM program),"
+						+"'CallFire', "
+						+"'CallFire from www.callfire.com', "
+						+"'0', "
+						+"'',"
+						+"'', "
+						+"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+						+"'"+POut.Long(programNum)+"', "
+						+"'Key From CallFire', "
+						+"'')";
+					Db.NonQ(command);
+				}//end CallFire bridge
 
 
 
