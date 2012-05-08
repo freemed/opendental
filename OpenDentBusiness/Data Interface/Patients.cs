@@ -563,7 +563,7 @@ namespace OpenDentBusiness{
 				FROM tempfambal"+rndStr+@",patient
 				WHERE tempfambal"+rndStr+@".PatNum=patient.PatNum
 				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
-				HAVING (StartBal>0.005 OR AfterIns>0.005)
+				HAVING ((StartBal>0.005 OR StartBal<-0.005) OR (AfterIns>0.005 OR AfterIns<-0.005))
 				ORDER BY IsNotGuar,Birthdate,ProvNum,FName,Preferred;
 
 				DROP TABLE IF EXISTS tempfambal"+rndStr+@"";
