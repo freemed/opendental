@@ -35,6 +35,7 @@ namespace OpenDentBusiness{
 		Apixia,
 		Apteryx,
 		BioPAK,
+		CallFire,
 		Camsight,
 		Cerec,
 		CliniView,

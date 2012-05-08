@@ -2395,11 +2395,6 @@
     <Compile Include="ReportingLikeCrystal\ReportObjectCollection.cs" />
     <Compile Include="ReportingLikeCrystal\Section.cs" />
     <Compile Include="ReportingLikeCrystal\SectionCollection.cs" />
-    <Compile Include="Service References\CallFireService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\GraphicsHelper.cs" />
     <Compile Include="SheetFramework\LabelSingle.cs" />
@@ -2413,6 +2408,11 @@
     </Compile>
     <Compile Include="User Controls\ContrFamilyEcw.Designer.cs">
       <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\CallFireService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\EmdeonITSTest\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -4492,7 +4492,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <None Include="Service References\CallFireService\SMSService.wsdl" />
+    <None Include="Web References\CallFireService\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\CallFireService\SMSService.wsdl" />
     <None Include="Web References\EmdeonITSTest\ITSReturn.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -4530,12 +4534,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\CallFireService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\CallFireService\configuration.svcinfo" />
-    <None Include="Service References\CallFireService\configuration91.svcinfo" />
     <None Include="Resources\UDS3b.gif" />
     <None Include="Resources\UDS3a.gif" />
     <None Include="Web References\MobileWeb\Mobile.disco" />
@@ -5226,6 +5224,17 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_com_dentalxchange_webservices_WebServiceService</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="https://www.callfire.com/service/SMSService%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\CallFireService\</RelPath>
+      <UpdateFromURL>https://www.callfire.com/service/SMSService%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>OpenDental_CallFireService_SMSService</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -5295,9 +5304,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\CallFireService\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

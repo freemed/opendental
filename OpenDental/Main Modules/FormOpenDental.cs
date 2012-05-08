@@ -2607,6 +2607,9 @@ namespace OpenDental{
 			FormTxtMsgEdit FormTME=new FormTxtMsgEdit();
 			FormTME.PatCur=Patients.GetPat(CurPatNum);
 			FormTME.ShowDialog();
+			if(FormTME.DialogResult==DialogResult.OK) {
+				RefreshCurrentModule();
+			}
 		}
 
 		private void FormOpenDental_Resize(object sender,EventArgs e) {

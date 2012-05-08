@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormTxtMsgEdit:Form {
 		public Patient PatCur;
-
+		
 		public FormTxtMsgEdit() {
 			InitializeComponent();
 			Lan.F(this);
@@ -21,13 +21,24 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			string key=ProgramProperties.GetPropVal(ProgramName.CallFire,"Key From CallFire");
+			string msg=textWirelessPhone.Text+","+textMessage.Text.Replace(",","");//ph#,msg Commas in msg cause error.
+			try {
+				CallFireService.SMSService callFire=new CallFireService.SMSService();
+				callFire.sendSMSCampaign(
+					key,
+					new string[] {msg},
+					"Open Dental");
+			}
+			catch(Exception ex) {
+				MsgBox.Show(this,"Error sending text message.\r\n\r\n"+ex.Message);
+			}
 			Commlog commlog=new Commlog();
 			commlog.CommDateTime=DateTime.Now;
 			commlog.DateTStamp=DateTime.Now;
-//Should we create this commlog type if it doesn't exist or get it from a preference if we want to allow it to be variable?
-			commlog.CommType=DefC.GetByExactName(DefCat.CommLogTypes,"Text Message");//Returns 0 if category "Text Message" does not exist.
+			commlog.CommType=DefC.Short[(int)DefCat.CommLogTypes][0].DefNum;//The first one in the list.  We can enhance later.
 			commlog.Mode_=CommItemMode.TxtMsg;
-			commlog.Note=textMessage.Text;
+			commlog.Note=msg;//phone,note
 			commlog.PatNum=PatCur.PatNum;
 			commlog.SentOrReceived=CommSentOrReceived.Sent;
 			commlog.UserNum=Security.CurUser.UserNum;
