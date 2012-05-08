@@ -53,6 +53,10 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
 			SelectedPatNum=listPats[e.Row].PatNum;
+			//Security log for patient select.
+			Patient pat=Patients.GetPat(SelectedPatNum);
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"Web form import from: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()
+				+"\r\nUser selected pat: "+pat.LName+", "+pat.FName+" "+pat.Birthdate.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 
@@ -64,6 +68,10 @@ namespace OpenDental {
 				return;
 			}
 			SelectedPatNum=FormPs.SelectedPatNum;
+			//Security log for patient select.
+			Patient pat=Patients.GetPat(SelectedPatNum);
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"Web form imported from: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()
+				+"\r\nUser selected pat: "+pat.LName+", "+pat.FName+" "+pat.Birthdate.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
 

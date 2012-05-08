@@ -137,9 +137,18 @@ namespace OpenDental {
 							}
 							patNum=FormPpw.SelectedPatNum;//might be zero to indicate new patient
 						}
+						else {//A match was found so make a log entry what the match was.
+							Patient pat=Patients.GetPat(patNum);
+							//Security log for OD automatically importing a sheet into a patient.
+							SecurityLogs.MakeLogEntry(Permissions.SheetEdit,patNum,"Web form import from: "+lName+", "+fName+" "+bDate.ToShortDateString()
+								+"\r\nAuto imported into: "+pat.LName+", "+pat.FName+" "+pat.Birthdate.ToShortDateString());
+						}
 						if(patNum==0) {
 							Patient newPat=CreatePatient(lName,fName,bDate,arraySheets[i]);
 							patNum=newPat.PatNum;
+							//Security log for user creating a new patient.
+							SecurityLogs.MakeLogEntry(Permissions.SheetEdit,patNum,"Web form import from: "+lName+", "+fName+" "+bDate.ToShortDateString()
+								+"\r\nUser created new pat: "+newPat.LName+", "+newPat.FName+" "+newPat.Birthdate.ToShortDateString());
 						}
 						Sheet newSheet=CreateSheet(patNum,arraySheets[i]);
 						if(DataExistsInDb(newSheet)) {

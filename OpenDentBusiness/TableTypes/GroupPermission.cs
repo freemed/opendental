@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 		TimecardDeleteEntry,
 		///<summary>41. Uses date restrictions. All other equipment functions are covered by .Setup.</summary>
 		EquipmentDelete,
-		///<summary>42. Uses date restrictions.</summary>
+		///<summary>42. Uses date restrictions. Also used in audit trail to log web form importing.</summary>
 		SheetEdit,
 		///<summary>43. Uses date restrictions.</summary>
 		CommlogEdit,
