@@ -214,7 +214,7 @@ namespace OpenDental{
 			//all remaining programs:
 			try{
 				string cmdline=prog.CommandLine;
-				string path=prog.Path;
+				string path=Programs.GetProgramPath(prog);
 				if(pat!=null) {
 					cmdline=cmdline.Replace("[LName]",pat.LName);
 					cmdline=cmdline.Replace("[FName]",pat.FName);

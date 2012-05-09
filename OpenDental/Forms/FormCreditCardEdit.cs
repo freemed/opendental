@@ -175,6 +175,7 @@ namespace OpenDental {
 					(CreditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked || CreditCardOld.CCExpiration!=CreditCardCur.CCExpiration)) 
 				{ 
 					Program prog=Programs.GetCur(ProgramName.Xcharge);
+					string path=Programs.GetProgramPath(prog);
 					if(prog==null){
 						MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 						return;
@@ -186,7 +187,7 @@ namespace OpenDental {
 						}
 						return;
 					}
-					if(!File.Exists(prog.Path)){
+					if(!File.Exists(path)){
 						MsgBox.Show(this,"Path is not valid.");
 						if(Security.IsAuthorized(Permissions.Setup)){
 							FormXchargeSetup FormX=new FormXchargeSetup();
@@ -196,8 +197,8 @@ namespace OpenDental {
 					}
 					//Either update the exp date or update credit card number by deleting archive so new token can be created next time it's used.
 					ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
-					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
-					string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+					ProcessStartInfo info=new ProcessStartInfo(path);
+					string resultfile=Path.Combine(Path.GetDirectoryName(path),"XResult.txt");
 					File.Delete(resultfile);//delete the old result file.
 					if(CreditCardOld.CCNumberMasked!=CreditCardCur.CCNumberMasked) {//They changed card number which we have to delete archived token which will create a new one next time card is charged.
 						info.Arguments+="/TRANSACTIONTYPE:ARCHIVEVAULTDELETE ";

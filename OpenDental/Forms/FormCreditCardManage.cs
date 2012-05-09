@@ -61,7 +61,8 @@ namespace OpenDental {
 			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
 				if(Programs.IsEnabled(ProgramName.Xcharge)) {
 					Program prog=Programs.GetCur(ProgramName.Xcharge);
-					if(!File.Exists(prog.Path)){
+					string path=Programs.GetProgramPath(prog);
+					if(!File.Exists(path)){
 						MsgBox.Show(this,"Path is not valid.");
 						if(Security.IsAuthorized(Permissions.Setup)) {
 							FormXchargeSetup FormX=new FormXchargeSetup();
@@ -73,8 +74,8 @@ namespace OpenDental {
 					}
 					string user=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 					string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
-					ProcessStartInfo info=new ProcessStartInfo(prog.Path);
-					string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+					ProcessStartInfo info=new ProcessStartInfo(path);
+					string resultfile=Path.Combine(Path.GetDirectoryName(path),"XResult.txt");
 					File.Delete(resultfile);//delete the old result file.
 					info.Arguments="";
 					info.Arguments+="/TRANSACTIONTYPE:ArchiveVaultAdd /LOCKTRANTYPE ";

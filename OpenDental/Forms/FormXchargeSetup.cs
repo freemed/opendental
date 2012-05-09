@@ -28,7 +28,10 @@ namespace OpenDental{
 		private TextBox textPassword;
 		private Label labelPassword;
 		private TextBox textUser;
+		private TextBox textOverride;
+		private Label labelOverride;
 		private Label labelUser;
+		private string pathOverrideOld;
 
 		///<summary></summary>
 		public FormXchargeSetup()
@@ -75,44 +78,46 @@ namespace OpenDental{
 			this.labelPassword = new System.Windows.Forms.Label();
 			this.textUser = new System.Windows.Forms.TextBox();
 			this.labelUser = new System.Windows.Forms.Label();
+			this.textOverride = new System.Windows.Forms.TextBox();
+			this.labelOverride = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(353,330);
+			this.butCancel.Location = new System.Drawing.Point(353, 351);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(256,330);
+			this.butOK.Location = new System.Drawing.Point(256, 351);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// linkLabel1
 			// 
-			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(27,18);
-			this.linkLabel1.Location = new System.Drawing.Point(20,20);
+			this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(27, 18);
+			this.linkLabel1.Location = new System.Drawing.Point(20, 20);
 			this.linkLabel1.Name = "linkLabel1";
-			this.linkLabel1.Size = new System.Drawing.Size(425,16);
+			this.linkLabel1.Size = new System.Drawing.Size(425, 16);
 			this.linkLabel1.TabIndex = 3;
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "The X-Charge website is at www.open-dentx.com";
@@ -121,34 +126,34 @@ namespace OpenDental{
 			// 
 			// checkEnabled
 			// 
-			this.checkEnabled.Location = new System.Drawing.Point(21,70);
+			this.checkEnabled.Location = new System.Drawing.Point(21, 70);
 			this.checkEnabled.Name = "checkEnabled";
-			this.checkEnabled.Size = new System.Drawing.Size(104,18);
+			this.checkEnabled.Size = new System.Drawing.Size(104, 18);
 			this.checkEnabled.TabIndex = 4;
 			this.checkEnabled.Text = "Enabled";
 			this.checkEnabled.UseVisualStyleBackColor = true;
 			// 
 			// textPath
 			// 
-			this.textPath.Location = new System.Drawing.Point(20,224);
+			this.textPath.Location = new System.Drawing.Point(20, 213);
 			this.textPath.Name = "textPath";
-			this.textPath.Size = new System.Drawing.Size(410,20);
+			this.textPath.Size = new System.Drawing.Size(410, 20);
 			this.textPath.TabIndex = 7;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(18,203);
+			this.label3.Location = new System.Drawing.Point(18, 192);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(231,18);
+			this.label3.Size = new System.Drawing.Size(231, 18);
 			this.label3.TabIndex = 50;
 			this.label3.Text = "Program Path";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(18,254);
+			this.label1.Location = new System.Drawing.Point(18, 280);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(154,16);
+			this.label1.Size = new System.Drawing.Size(154, 16);
 			this.label1.TabIndex = 53;
 			this.label1.Text = "Payment Type";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -157,48 +162,66 @@ namespace OpenDental{
 			// 
 			this.comboPaymentType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboPaymentType.FormattingEnabled = true;
-			this.comboPaymentType.Location = new System.Drawing.Point(21,273);
+			this.comboPaymentType.Location = new System.Drawing.Point(21, 299);
 			this.comboPaymentType.MaxDropDownItems = 25;
 			this.comboPaymentType.Name = "comboPaymentType";
-			this.comboPaymentType.Size = new System.Drawing.Size(205,21);
+			this.comboPaymentType.Size = new System.Drawing.Size(205, 21);
 			this.comboPaymentType.TabIndex = 8;
 			// 
 			// textPassword
 			// 
-			this.textPassword.Location = new System.Drawing.Point(20,179);
+			this.textPassword.Location = new System.Drawing.Point(19, 169);
 			this.textPassword.Name = "textPassword";
-			this.textPassword.Size = new System.Drawing.Size(410,20);
+			this.textPassword.Size = new System.Drawing.Size(410, 20);
 			this.textPassword.TabIndex = 6;
 			// 
 			// labelPassword
 			// 
-			this.labelPassword.Location = new System.Drawing.Point(18,158);
+			this.labelPassword.Location = new System.Drawing.Point(17, 148);
 			this.labelPassword.Name = "labelPassword";
-			this.labelPassword.Size = new System.Drawing.Size(231,18);
+			this.labelPassword.Size = new System.Drawing.Size(231, 18);
 			this.labelPassword.TabIndex = 55;
 			this.labelPassword.Text = "Password";
 			this.labelPassword.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textUser
 			// 
-			this.textUser.Location = new System.Drawing.Point(20,134);
+			this.textUser.Location = new System.Drawing.Point(20, 125);
 			this.textUser.Name = "textUser";
-			this.textUser.Size = new System.Drawing.Size(410,20);
+			this.textUser.Size = new System.Drawing.Size(410, 20);
 			this.textUser.TabIndex = 5;
 			// 
 			// labelUser
 			// 
-			this.labelUser.Location = new System.Drawing.Point(18,113);
+			this.labelUser.Location = new System.Drawing.Point(18, 104);
 			this.labelUser.Name = "labelUser";
-			this.labelUser.Size = new System.Drawing.Size(231,18);
+			this.labelUser.Size = new System.Drawing.Size(231, 18);
 			this.labelUser.TabIndex = 57;
 			this.labelUser.Text = "User Id";
 			this.labelUser.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
+			// textOverride
+			// 
+			this.textOverride.Location = new System.Drawing.Point(20, 257);
+			this.textOverride.Name = "textOverride";
+			this.textOverride.Size = new System.Drawing.Size(410, 20);
+			this.textOverride.TabIndex = 58;
+			// 
+			// labelOverride
+			// 
+			this.labelOverride.Location = new System.Drawing.Point(18, 236);
+			this.labelOverride.Name = "labelOverride";
+			this.labelOverride.Size = new System.Drawing.Size(410, 18);
+			this.labelOverride.TabIndex = 59;
+			this.labelOverride.Text = "Local path override.  Usually left blank.";
+			this.labelOverride.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormXchargeSetup
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(480,381);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(480, 402);
+			this.Controls.Add(this.textOverride);
+			this.Controls.Add(this.labelOverride);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.labelUser);
 			this.Controls.Add(this.textPassword);
@@ -232,6 +255,8 @@ namespace OpenDental{
 			}
 			checkEnabled.Checked=prog.Enabled;
 			textPath.Text=prog.Path;
+			pathOverrideOld=ProgramProperties.GetLocalPathOverrideForProgram(prog.ProgramNum);
+			textOverride.Text=pathOverrideOld;
 			textUser.Text=ProgramProperties.GetPropVal(prog.ProgramNum,"Username");
 			textPassword.Text=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			string paymentType=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType");
@@ -251,7 +276,13 @@ namespace OpenDental{
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return;
 			}
-			if(!File.Exists(textPath.Text)){
+			if(textOverride.Text!="") {
+				if(!File.Exists(textOverride.Text)) {
+					MsgBox.Show(this,"Local override path is not valid.");
+					return;
+				}
+			}
+			else if(!File.Exists(textPath.Text)){
 				MsgBox.Show(this,"Path is not valid.");
 				return;
 			}
@@ -261,6 +292,10 @@ namespace OpenDental{
 			}
 			prog.Enabled=checkEnabled.Checked;
 			prog.Path=textPath.Text;
+			if(pathOverrideOld!=textOverride.Text) {
+				ProgramProperties.InsertOrUpdateLocalOverridePath(prog.ProgramNum,textOverride.Text);
+				ProgramProperties.RefreshCache();
+			}
 			Programs.Update(prog);
 			string paymentType=DefC.Short[(int)DefCat.PaymentTypes][comboPaymentType.SelectedIndex].DefNum.ToString();
 			ProgramProperties.SetProperty(prog.ProgramNum,"PaymentType",paymentType);

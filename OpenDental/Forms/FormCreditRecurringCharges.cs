@@ -22,6 +22,7 @@ namespace OpenDental {
 		private bool insertPayment;
 		private Program prog;
 		private DateTime nowDateTime;
+		private string xPath;
 
 		///<summary>Only works for XCharge so far.</summary>
 		public FormCreditRecurringCharges() {
@@ -32,6 +33,7 @@ namespace OpenDental {
 		private void FormRecurringCharges_Load(object sender,EventArgs e) {
 			nowDateTime=MiscData.GetNowDateTime();
 			prog=Programs.GetCur(ProgramName.Xcharge);
+			xPath=Programs.GetProgramPath(prog);
 			labelCharged.Text=Lan.g(this,"Charged=")+"0";
 			labelFailed.Text=Lan.g(this,"Failed=")+"0";
 			FillGrid();
@@ -53,7 +55,7 @@ namespace OpenDental {
 				}
 				return;
 			}
-			if(!File.Exists(prog.Path)) {
+			if(!File.Exists(path)) {
 				MsgBox.Show(this,"Path is not valid.");
 				if(Security.IsAuthorized(Permissions.Setup)){
 					FormXchargeSetup FormX=new FormXchargeSetup();
@@ -264,9 +266,9 @@ namespace OpenDental {
 					continue;
 				}
 				insertPayment=false;
-				ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+				ProcessStartInfo info=new ProcessStartInfo(path);
 				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
-				string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+				string resultfile=Path.Combine(Path.GetDirectoryName(path),"XResult.txt");
 				File.Delete(resultfile);//delete the old result file.
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
@@ -375,7 +377,7 @@ namespace OpenDental {
 			}
 			#endregion
 			try {
-				File.WriteAllText(Path.Combine(Path.GetDirectoryName(prog.Path),"RecurringChargeResult.txt"),recurringResultFile);
+				File.WriteAllText(Path.Combine(Path.GetDirectoryName(path),"RecurringChargeResult.txt"),recurringResultFile);
 			}
 			catch { } //Do nothing cause this is just for internal use.
 			FillGrid();

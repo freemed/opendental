@@ -94,6 +94,8 @@ namespace OpenDental {
 		private CheckBox checkRecurring;
 		private bool payConnectWarn;
 		private List<CreditCard> creditCards;
+		///<summary>The local override path or normal path for X-Charge.</summary>
+		private string xPath;
 
 		///<summary>PatCur and FamCur are not for the PatCur of the payment.  They are for the patient and family from which this window was accessed.</summary>
 		public FormPayment(Patient patCur,Family famCur,Payment paymentCur) {
@@ -1210,10 +1212,10 @@ namespace OpenDental {
 				[“/TRACK:track”] [/ZIP:zip] [/ADDRESS:address] [/RECEIPT:receipt] [/CLERK:clerk]
 				[/APPROVALCODE:approval] [/AUTOPROCESS] [/AUTOCLOSE] [/STAYONTOP] [/MID]
 				[/RESULTFILE:”C:\Program Files\X-Charge\LocalTran\XCResult.txt”*/
-			ProcessStartInfo info=new ProcessStartInfo(prog.Path);
+			ProcessStartInfo info=new ProcessStartInfo(xPath);
 			Patient pat=Patients.GetPat(PaymentCur.PatNum);
 			PatientNote patnote=PatientNotes.Refresh(pat.PatNum,pat.Guarantor);
-			string resultfile=Path.Combine(Path.GetDirectoryName(prog.Path),"XResult.txt");
+			string resultfile=Path.Combine(Path.GetDirectoryName(xPath),"XResult.txt");
 			File.Delete(resultfile);//delete the old result file.
 			info.Arguments="";
 			double amt=PIn.Double(textAmount.Text);
@@ -1469,6 +1471,7 @@ namespace OpenDental {
 
 		private bool HasXCharge() {
 			prog=Programs.GetCur(ProgramName.Xcharge);
+			xPath=Programs.GetProgramPath(prog);
 			if(prog==null) {
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return false;
@@ -1480,7 +1483,7 @@ namespace OpenDental {
 				}
 				return false;
 			}
-			if(!File.Exists(prog.Path)) {
+			if(!File.Exists(xPath)) {
 				MsgBox.Show(this,"Path is not valid.");
 				if(Security.IsAuthorized(Permissions.Setup)) {
 					FormXchargeSetup FormX=new FormXchargeSetup();
