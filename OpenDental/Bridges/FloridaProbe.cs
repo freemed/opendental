@@ -18,13 +18,14 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.  They also have an available file based method which passes more information like missing teeth, but we don't use it yet.  Their bridge specs are freely posted on their website.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat==null){
 				try{
-					Process.Start(ProgramCur.Path);//should start Florida Probe without bringing up a pt.
+					Process.Start(path);//should start Florida Probe without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 				return;
 			}
@@ -41,10 +42,10 @@ namespace OpenDental.Bridges{
 			//MessageBox.Show(info);
 			//not used yet: /inputfile "path to file"
 			try{
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

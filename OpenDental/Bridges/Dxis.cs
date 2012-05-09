@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//usage: C:\Dxis\Dxis.exe /i /t:UniqueID - Practice Name
 			//The UniqueID can be a combo of patient name and id.  I think we'll combine Lname,Fname,PatNum
 			if(pat==null){
@@ -27,13 +28,13 @@ namespace OpenDental.Bridges{
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			string info="/i /t:"+pat.LName+" "+pat.FName+" "+pat.PatNum.ToString()+" - "+PrefC.GetString(PrefName.PracticeTitle);
 			Process process=new Process();
-			process.StartInfo=new ProcessStartInfo(ProgramCur.Path,info);
+			process.StartInfo=new ProcessStartInfo(path,info);
 			try{
 				process.Start();
 				process.WaitForExit();//puts OD in sleep mode because the pano is so resource intensive.
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

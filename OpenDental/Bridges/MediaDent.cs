@@ -18,6 +18,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Launches the program by passing the name of a file with data in it.  </summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			//ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum); ;
 			string version4or5=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"MediaDent Version 4 or 5");
 			if(version4or5=="4") {
@@ -26,10 +27,10 @@ namespace OpenDental.Bridges {
 			}
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//should start Mediadent without bringing up a pt.
+					Process.Start(path);//should start Mediadent without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 			string infoFile=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Text file path");
@@ -63,15 +64,16 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			try {
-				Process.Start(ProgramCur.Path,"@"+infoFile);
+				Process.Start(path,"@"+infoFile);
 			}
 			catch {
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 
 		///<summary>Launches the program using command line.</summary>
 		private static void SendData4(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			//Usage: mediadent.exe /P<Patient Name> /D<Practitioner> /L<Language> /F<Image folder> /B<Birthdate>
 			//Example: mediadent.exe /PJan Met De Pet /DOtté Gunter /L1 /Fc:\Mediadent\patients\1011 /B27071973
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum); ;
@@ -95,10 +97,10 @@ namespace OpenDental.Bridges {
 			//MessageBox.Show(info);
 			//not used yet: /inputfile "path to file"
 			try {
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch {
-				MessageBox.Show(ProgramCur.Path+" "+info+" is not available.");
+				MessageBox.Show(path+" "+info+" is not available.");
 			}
 		}
 

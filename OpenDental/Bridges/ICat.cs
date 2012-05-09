@@ -19,12 +19,13 @@ namespace OpenDental.Bridges{
 
 		///<summary>Command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//Start iCat without bringing up a pt.
+					Process.Start(path);//Start iCat without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 				return;
 			}
@@ -158,6 +159,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Command line.</summary>
 		private static void SendDataWorkstation(Program ProgramCur,ArrayList ForProgram,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Enter 0 to use PatientNum, or 1 to use ChartNum");
 			string id="";
 			if(PPCur.PropertyValue=="0") {
@@ -167,7 +169,7 @@ namespace OpenDental.Bridges{
 				id=pat.ChartNumber;
 			}
 			//We are actually supposed to get the program path from the registry. We can enhance that later.
-			Process.Start(ProgramCur.Path,"PatientID"+id);
+			Process.Start(path,"PatientID"+id);
 		}
 
 		///<summary></summary>

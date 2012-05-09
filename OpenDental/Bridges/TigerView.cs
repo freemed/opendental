@@ -124,6 +124,7 @@ namespace OpenDental.Bridges {
 		///Advoids the kernal32.WritePrivateProfileString call
 		///</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"Tiger1.ini path");
 			iniFile=PPCur.PropertyValue;
@@ -160,20 +161,20 @@ namespace OpenDental.Bridges {
 				htKeyVals["PhHome"]=LimitLength(pat.HmPhone,13);
 				htKeyVals["PhWork"]=LimitLength(pat.WkPhone,13);
 				if(!WritePrivatePofileString2("Slave",htKeyVals,iniFile)){
-					MessageBox.Show(Lan.g(null,"Unable to start external program: ")+ProgramCur.Path);
+					MessageBox.Show(Lan.g(null,"Unable to start external program: ")+path);
 				}else{
 					try{
-						Process.Start(ProgramCur.Path,ProgramCur.CommandLine);
+						Process.Start(path,ProgramCur.CommandLine);
 					}catch{
-						MessageBox.Show(ProgramCur.Path+" is not available.");
+						MessageBox.Show(path+" is not available.");
 					}
 				}
 			}//if patient is loaded
 			else{
 				try{
-					Process.Start(ProgramCur.Path);//should start TigerView without bringing up a pt.
+					Process.Start(path);//should start TigerView without bringing up a pt.
 				}catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

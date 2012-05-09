@@ -17,6 +17,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Sends data for Patient.Cur by command line interface.</summary>
 		public static void SendData(Program ProgramCur, Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				return;
 			}
@@ -45,10 +46,10 @@ namespace OpenDental.Bridges {
 			}
 			//MessageBox.Show(info);
 			try {
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch {
-				MessageBox.Show(ProgramCur.Path+" is not available. Ensure that the program and image paths are valid.");
+				MessageBox.Show(path+" is not available. Ensure that the program and image paths are valid.");
 			}
 		}
 

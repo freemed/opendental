@@ -17,6 +17,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Sends data for Patient.Cur to the InfoFile and launches the program.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"InfoFile path");
 			string infoFile=PPCur.PropertyValue;
@@ -45,16 +46,16 @@ namespace OpenDental.Bridges{
 						else
 							sw.WriteLine("SX=M");
 					}
-					Process.Start(ProgramCur.Path,"@"+infoFile);
+					Process.Start(path,"@"+infoFile);
 				} catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}//if patient is loaded
 			else {
 				try {
-					Process.Start(ProgramCur.Path);//should start Dexis without bringing up a pt.
+					Process.Start(path);//should start Dexis without bringing up a pt.
 				} catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

@@ -22,13 +22,14 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using command line.  It is confirmed that there is no space after the -P or -N</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				try{
-					Process.Start(ProgramCur.Path);//should start Trophy without bringing up a pt.
+					Process.Start(path);//should start Trophy without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 				return;
 			}
@@ -69,10 +70,10 @@ namespace OpenDental.Bridges{
 				+" -N"+Tidy(pat.LName)+","+Tidy(pat.FName);
 			//MessageBox.Show(comline);
 			try{
-				Process.Start(ProgramCur.Path,comline);
+				Process.Start(path,comline);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

@@ -14,6 +14,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			Process pibridge;
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			try{
@@ -33,7 +34,7 @@ namespace OpenDental.Bridges {
 						pibridge=new Process();
 						pibridge.StartInfo.CreateNoWindow=false;
 						pibridge.StartInfo.UseShellExecute=true;
-						pibridge.StartInfo.FileName=ProgramCur.Path;
+						pibridge.StartInfo.FileName=path;
 						pibridge.StartInfo.Arguments="cmd=start";
 						pibridge.Start();
 						//We must now wait until progeny is completely initialized, or else the following commands will have no effect.
@@ -43,14 +44,14 @@ namespace OpenDental.Bridges {
 						pibridge=new Process();
 						pibridge.StartInfo.CreateNoWindow=false;
 						pibridge.StartInfo.UseShellExecute=true;
-						pibridge.StartInfo.FileName=ProgramCur.Path;
+						pibridge.StartInfo.FileName=path;
 						pibridge.StartInfo.Arguments="cmd=show";
 						pibridge.Start();
 					}
 					pibridge=new Process();
 					pibridge.StartInfo.CreateNoWindow=false;
 					pibridge.StartInfo.UseShellExecute=true;
-					pibridge.StartInfo.FileName=ProgramCur.Path;
+					pibridge.StartInfo.FileName=path;
 					pibridge.StartInfo.Arguments="cmd=open, id="+id+", first="+fname+", last="+lname;
 					pibridge.Start();
 				}//if patient is loaded
@@ -59,13 +60,13 @@ namespace OpenDental.Bridges {
 					pibridge=new Process();
 					pibridge.StartInfo.CreateNoWindow=false;
 					pibridge.StartInfo.UseShellExecute=true;
-					pibridge.StartInfo.FileName=ProgramCur.Path;
+					pibridge.StartInfo.FileName=path;
 					pibridge.StartInfo.Arguments="cmd=start";
 					pibridge.Start();
 				}
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

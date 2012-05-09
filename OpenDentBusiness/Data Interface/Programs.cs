@@ -163,6 +163,16 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Returns the local override path if available or returns original program path.  Always returns a valid path.</summary>
+		public static string GetProgramPath(Program program) {
+			//No need to check RemotingRole; no call to db.
+			string overridePath=ProgramProperties.GetLocalPathOverrideForProgram(program.ProgramNum);
+			if(overridePath!="") {
+				return overridePath;
+			}
+			return program.Path;
+		}
+
 
 	}
 

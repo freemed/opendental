@@ -12,6 +12,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat!=null){
 				string info="";				
@@ -27,18 +28,18 @@ namespace OpenDental.Bridges {
 				//cause confusion in the command line parameters for Sopro.
 				info+=" "+pat.LName.Replace("\"","")+" "+pat.FName.Replace("\"","");
 				try{
-					Process.Start(ProgramCur.Path,ProgramCur.CommandLine+info);
+					Process.Start(path,ProgramCur.CommandLine+info);
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available, or there is an error in the command line options.");
+					MessageBox.Show(path+" is not available, or there is an error in the command line options.");
 				}
 			}//if patient is loaded
 			else{
 				try{
-					Process.Start(ProgramCur.Path);//should start Sopro without bringing up a pt.
+					Process.Start(path);//should start Sopro without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

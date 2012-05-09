@@ -19,11 +19,12 @@ namespace OpenDental.Bridges{
 
 		///<summary>Sends data for the patient to linkage.xml and launches the program.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
-			if(!File.Exists(ProgramCur.Path)){
-				MessageBox.Show(ProgramCur.Path+" could not be found.");
+			string path=Programs.GetProgramPath(ProgramCur);
+			if(!File.Exists(path)){
+				MessageBox.Show(path+" could not be found.");
 				return;
 			}
-			string dir=Path.GetDirectoryName(ProgramCur.Path);
+			string dir=Path.GetDirectoryName(path);
 			string linkage=CodeBase.ODFileUtils.CombinePaths(dir,"linkage.xml");
 			if(File.Exists(linkage)){
 				File.Delete(linkage);
@@ -72,10 +73,10 @@ namespace OpenDental.Bridges{
 			}
 			try {
 				//whether there is a patient or not.
-				Process.Start(ProgramCur.Path);
+				Process.Start(path);
 			} 
 			catch {
-				MessageBox.Show("Error launching "+ProgramCur.Path);
+				MessageBox.Show("Error launching "+path);
 			}
 		}
 

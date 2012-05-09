@@ -19,6 +19,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//usage: C:\Program Files\CliniView\CliniView.exe -123;John;Smith;123456789;01/01/1980
 			//Critical not to have any spaces in argument string.
 			//We got this info directly from the programmers at CliniView
@@ -26,8 +27,8 @@ namespace OpenDental.Bridges{
 				MsgBox.Show("Cliniview","Please select a patient first.");
 				return;
 			}
-			if(!File.Exists(ProgramCur.Path)){
-				MessageBox.Show(ProgramCur.Path+" not found.");
+			if(!File.Exists(path)){
+				MessageBox.Show(path+" not found.");
 				return;
 			}
 			string info="-";
@@ -46,7 +47,7 @@ namespace OpenDental.Bridges{
 				+";"+pat.SSN//dashes already missing
 				+";"+pat.Birthdate.ToString("MM/dd/yyyy");
 			Process process=new Process();
-			process.StartInfo=new ProcessStartInfo(ProgramCur.Path,info);
+			process.StartInfo=new ProcessStartInfo(path,info);
 			try{
 				process.Start();
 			}

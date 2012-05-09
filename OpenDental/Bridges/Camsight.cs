@@ -19,6 +19,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using command line.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//usage: C:\cdm\cdm\cdmx\cdmx.exe ;patID;fname;lname;SSN;birthdate
 			//example: ;5001;John;Smith;123456789;01012000
 			//We did not get this information from Camsight.
@@ -26,8 +27,8 @@ namespace OpenDental.Bridges{
 				MsgBox.Show("Camsight","Please select a patient first.");
 				return;
 			}
-			if(!File.Exists(ProgramCur.Path)){
-				MessageBox.Show(ProgramCur.Path+" not found.");
+			if(!File.Exists(path)){
+				MessageBox.Show(path+" not found.");
 				return;
 			}
 			//List<ProgramProperty> listForProgram=ProgramProperties.GetListForProgram(ProgramCur.ProgramNum);
@@ -47,7 +48,7 @@ namespace OpenDental.Bridges{
 				+";"+pat.SSN//dashes already missing
 				+";"+pat.Birthdate.ToString("MM/dd/yyyy");
 			Process process=new Process();
-			process.StartInfo=new ProcessStartInfo(ProgramCur.Path,info);
+			process.StartInfo=new ProcessStartInfo(path,info);
 			try{
 				process.Start();
 			}

@@ -20,9 +20,10 @@ namespace OpenDental.Bridges{
 		//C:\DOLPHIN\DOLDB.EXE imports patient info from a file
 		///<summary>Launches the program using a command line tools.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			string pathDolDb=Path.Combine(ProgramCur.Path,"dolDb.exe");
-			string pathDolCtrl=Path.Combine(ProgramCur.Path,"dolCtrl.exe");
+			string pathDolDb=Path.Combine(path,"dolDb.exe");
+			string pathDolCtrl=Path.Combine(path,"dolCtrl.exe");
 			if(pat==null){
 				try{
 					Process.Start(pathDolCtrl);//should start Dolphin without bringing up a pt.

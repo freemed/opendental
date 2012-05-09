@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.  They also have an available file based method which passes more information, but we don't use it yet.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat!=null){
 				string info="-";
@@ -33,18 +34,18 @@ namespace OpenDental.Bridges{
 					+ClipTo(pat.SSN,15)+";"
 					+pat.Birthdate.ToString("MM/dd/yyyy")+";";
 				try{
-					Process.Start(ProgramCur.Path,info);
+					Process.Start(path,info);
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}//if patient is loaded
 			else{
 				try{
-					Process.Start(ProgramCur.Path);//should start ImageFX without bringing up a pt.
+					Process.Start(path);//should start ImageFX without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

@@ -21,19 +21,20 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program if necessary.  Then passes patient.Cur data using DDE.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				MessageBox.Show("Please select a patient first");
 				return;
 			}
-			if(!File.Exists(ProgramCur.Path)){
-				MessageBox.Show("Could not find "+ProgramCur.Path);
+			if(!File.Exists(path)){
+				MessageBox.Show("Could not find "+path);
 				return;
 			}
 			//Make sure the program is running
 			//Documentation says to include the -nostartup command line switch (to avoid optional program preference startup command).
 			if(Process.GetProcessesByName("Vipersoft").Length==0){
-				Process.Start(ProgramCur.Path,"-nostartup");
+				Process.Start(path,"-nostartup");
 				Thread.Sleep(TimeSpan.FromSeconds(4));
 			}
 			//Data is sent to the Vipersoft DDE Server by use of the XTYP_EXECUTE DDE message only.

@@ -21,19 +21,20 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program if necessary.  Then passes patient.Cur data using DDE.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				MessageBox.Show("Please select a patient first");
 				return;
 			}
 			//The path is available in the registry, but we'll just make the user enter it.
-			if(!File.Exists(ProgramCur.Path)){
-				MessageBox.Show("Could not find "+ProgramCur.Path);
+			if(!File.Exists(path)){
+				MessageBox.Show("Could not find "+path);
 				return;
 			}
 			//Make sure the program is running
 			if(Process.GetProcessesByName("DentalEye").Length==0){
-				Process.Start(ProgramCur.Path);
+				Process.Start(path);
 				Thread.Sleep(TimeSpan.FromSeconds(4));
 			}
 			//command="[Add][PatNum][Fname][Lname][Address|Address2|City, ST Zip][phone1][phone2][mobile phone][email][sex(M/F)][birthdate (YYYY-MM-DD)]"

@@ -20,12 +20,13 @@ Example of a name with special characters (in this case, spaces):
 C:\Program Files\MiDentView\Cmdlink.exe /ID=12345 /FN=Oscar /LN=De La Hoya /BD=10/01/1985 /Sex=M
 		 */
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//should start MiPACS without bringing up a pt.
+					Process.Start(path);//should start MiPACS without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 			string gender=(pat.Gender==PatientGender.Female)?"F":"M";//M for Male, F for Female, M for Unknown.
@@ -41,10 +42,10 @@ C:\Program Files\MiDentView\Cmdlink.exe /ID=12345 /FN=Oscar /LN=De La Hoya /BD=1
 				+ " /BD=" + pat.Birthdate.ToShortDateString() 
 				+ " /Sex=" + gender;
 			try {
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch {
-				MessageBox.Show(ProgramCur.Path + " is not available.");
+				MessageBox.Show(path + " is not available.");
 			}
 		}
 	}

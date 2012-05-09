@@ -18,13 +18,14 @@ namespace OpenDental.Bridges {
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			//Example CerPI.exe -<patNum>;<fname>;<lname>;<birthday DD.MM.YYYY>; (Date format specified in the windows Regional Settings)
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//should start Cerec without bringing up a pt.
+					Process.Start(path);//should start Cerec without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 				return;
 			}
@@ -37,10 +38,10 @@ namespace OpenDental.Bridges {
 			}
 			info+=pat.FName+";"+pat.LName+";"+pat.Birthdate.ToShortDateString()+";";
 			try {
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch {
-				MessageBox.Show(ProgramCur.Path+" is not available, or there is an error in the command line options.");
+				MessageBox.Show(path+" is not available, or there is an error in the command line options.");
 			}
 		}
 

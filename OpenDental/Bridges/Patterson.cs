@@ -17,6 +17,7 @@ namespace OpenDental.Bridges {
 
 		///<summary>Launches Patterson Imaging, logs user in, and opens current patient.</summary>
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				return;
 			}
@@ -44,7 +45,7 @@ namespace OpenDental.Bridges {
 					//LTidy(prov.ProvNum.ToString(),3),//Limit is 3 characters, but that would only be exceeded if they are using random primary keys or they have a lot of data, neither case is common.
 					Tidy(prov.FName,40),
 					Tidy(prov.LName,40),
-					ProgramCur.Path,
+					path,
 					ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Patterson Imaging ini")
 					);
 			}

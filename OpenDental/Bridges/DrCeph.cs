@@ -20,6 +20,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Uses a VB dll to launch.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null){
 				MessageBox.Show("Please select a patient first.");
 				return;
@@ -31,7 +32,7 @@ namespace OpenDental.Bridges{
 			//Make sure the program is running
 			if(Process.GetProcessesByName("DrCeph").Length==0) {
 				try{
-					Process.Start(ProgramCur.Path);
+					Process.Start(path);
 				}
 				catch{
 					MsgBox.Show("DrCeph","Program path not set properly.");

@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//mtconnector.exe -patid 123  -fname John  -lname Doe  -ssn 123456789  -dob 01/25/1962  -gender M
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
@@ -44,10 +45,10 @@ namespace OpenDental.Bridges{
 				info+="F";
 			}
 			try{
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 			
 		}

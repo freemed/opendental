@@ -380,6 +380,7 @@ namespace OpenDental{
 				butDelete.Enabled=false;
 			}
 			pathOverrideOld=ProgramProperties.GetLocalPathOverrideForProgram(ProgramCur.ProgramNum);
+			textOverride.Text=pathOverrideOld;
 			FillForm();
 		}
 
@@ -392,7 +393,6 @@ namespace OpenDental{
 			textProgDesc.Text=ProgramCur.ProgDesc;
 			checkEnabled.Checked=ProgramCur.Enabled;
 			textPath.Text=ProgramCur.Path;
-			textOverride.Text=ProgramProperties.GetLocalPathOverrideForProgram(ProgramCur.ProgramNum);
 			textCommandLine.Text=ProgramCur.CommandLine;
 			textPluginDllName.Text=ProgramCur.PluginDllName;
 			textNote.Text=ProgramCur.Note;

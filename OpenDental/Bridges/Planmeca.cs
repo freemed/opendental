@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			//DxStart.exe ”PatientID” ”FamilyName” ”FirstName” ”BirthDate”
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat==null){
@@ -37,10 +38,10 @@ namespace OpenDental.Bridges{
 				+"\""+pat.FName.Replace("\"","")+"\" "
 				+"\""+pat.Birthdate.ToString("dd/MM/yyyy")+"\"";//Planmeca is a Finland based company, so their date format is dd/MM/yyyy. We used to send date format "MM/dd/yyyy" for our American customers before 12/19/2011.
 			try{
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 			
 		}

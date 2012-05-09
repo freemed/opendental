@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat==null){
 				MessageBox.Show("Please select a patient first");
@@ -36,10 +37,10 @@ namespace OpenDental.Bridges{
 				+pat.FName.Replace("\"","")+"\"";
 			//MessageBox.Show(info);
 			try{
-				Process.Start(ProgramCur.Path,info);
+				Process.Start(path,info);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

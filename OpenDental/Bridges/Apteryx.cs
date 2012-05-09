@@ -18,6 +18,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat!=null){
 				//We remove double-quotes from the first and last name of the patient so extra double-quotes don't
@@ -44,18 +45,18 @@ namespace OpenDental.Bridges{
 				info+="\"";
 				try{
 					//commandline default is /p
-					Process.Start(ProgramCur.Path,ProgramCur.CommandLine+info);
+					Process.Start(path,ProgramCur.CommandLine+info);
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available, or there is an error in the command line options.");
+					MessageBox.Show(path+" is not available, or there is an error in the command line options.");
 				}
 			}//if patient is loaded
 			else{
 				try{
-					Process.Start(ProgramCur.Path);//should start Apteryx without bringing up a pt.
+					Process.Start(path);//should start Apteryx without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

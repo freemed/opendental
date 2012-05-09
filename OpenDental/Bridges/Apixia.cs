@@ -34,12 +34,13 @@ Should appear in the following file: C:/Program Files/Digirex/Switch.ini
 and should be accessed/opened by C:/Program Files/Digirex/digirex.ini
 		 */
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//should start Apixia without bringing up a pt.
+					Process.Start(path);//should start Apixia without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 			else {
@@ -60,15 +61,15 @@ and should be accessed/opened by C:/Program Files/Digirex/digirex.ini
 				+"ID="+pat.PriProv.ToString()+"\r\n"
 				+"Password=digirex";
 				// Write the string to a file.
-				string path=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Apixia Digital Imaging ini file");
-				StreamWriter iniFile = new System.IO.StreamWriter(path);
+				string iniPath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Apixia Digital Imaging ini file");
+				StreamWriter iniFile = new System.IO.StreamWriter(iniPath);
 				iniFile.WriteLine(iniString);
 				iniFile.Close();
 				try {
-					Process.Start(ProgramCur.Path);
+					Process.Start(path);
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}

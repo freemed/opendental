@@ -17,12 +17,13 @@ namespace OpenDental.Bridges{
 		}
 
 		public static void SendData(Program ProgramCur,Patient pat) {
+			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
 				try {
-					Process.Start(ProgramCur.Path);//should start rayMage without bringing up a pt.
+					Process.Start(path);//should start rayMage without bringing up a pt.
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 			else {
@@ -35,10 +36,10 @@ namespace OpenDental.Bridges{
 				}
 				info+="\" /NAME \""+pat.FName.Replace(" ","").Replace("\"","")+"\" /SURNAME \""+pat.LName.Replace(" ","").Replace("\"","")+"\"";
 				try {
-					Process.Start(ProgramCur.Path,ProgramCur.CommandLine+info);
+					Process.Start(path,ProgramCur.CommandLine+info);
 				}
 				catch {
-					MessageBox.Show(ProgramCur.Path+" is not available, or there is an error in the command line options.");
+					MessageBox.Show(path+" is not available, or there is an error in the command line options.");
 				}
 			}
 		}

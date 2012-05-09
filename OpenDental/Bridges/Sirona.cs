@@ -33,10 +33,11 @@ namespace OpenDental.Bridges{
 
 		///<summary>Sends data for Patient to a mailbox file and launches the program.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
 			if(pat!=null){
 				//read file C:\sidexis\sifiledb.ini
-				iniFile=Path.GetDirectoryName(ProgramCur.Path)+"\\sifiledb.ini";
+				iniFile=Path.GetDirectoryName(path)+"\\sifiledb.ini";
 				if(!File.Exists(iniFile)){
 					MessageBox.Show(iniFile+" could not be found. Is Sidexis installed properly?");
 					return;
@@ -168,10 +169,10 @@ namespace OpenDental.Bridges{
 			}//if patient is loaded
 			//Start Sidexis.exe whether patient loaded or not.
 			try{
-				Process.Start(ProgramCur.Path);
+				Process.Start(path);
 			}
 			catch{
-				MessageBox.Show(ProgramCur.Path+" is not available.");
+				MessageBox.Show(path+" is not available.");
 			}
 		}
 

@@ -19,6 +19,7 @@ namespace OpenDental.Bridges{
 
 		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
+			string path=Programs.GetProgramPath(ProgramCur);
 			ArrayList ForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);;
 			if(pat!=null){
 				ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram, "Storage Path");
@@ -35,18 +36,18 @@ namespace OpenDental.Bridges{
 				comline=comline.Replace("\"","");//gets rid of any quotes
 				comline=comline.Replace("'","");//gets rid of any single quotes
 				try{
-					Process.Start(ProgramCur.Path,comline);
+					Process.Start(path,comline);
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}//if patient is loaded
 			else{
 				try{
-					Process.Start(ProgramCur.Path);//should start Trophy without bringing up a pt.
+					Process.Start(path);//should start Trophy without bringing up a pt.
 				}
 				catch{
-					MessageBox.Show(ProgramCur.Path+" is not available.");
+					MessageBox.Show(path+" is not available.");
 				}
 			}
 		}
