@@ -55,7 +55,7 @@ namespace OpenDental {
 				}
 				return;
 			}
-			if(!File.Exists(path)) {
+			if(!File.Exists(xPath)) {
 				MsgBox.Show(this,"Path is not valid.");
 				if(Security.IsAuthorized(Permissions.Setup)){
 					FormXchargeSetup FormX=new FormXchargeSetup();
@@ -266,9 +266,9 @@ namespace OpenDental {
 					continue;
 				}
 				insertPayment=false;
-				ProcessStartInfo info=new ProcessStartInfo(path);
+				ProcessStartInfo info=new ProcessStartInfo(xPath);
 				long patNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
-				string resultfile=Path.Combine(Path.GetDirectoryName(path),"XResult.txt");
+				string resultfile=Path.Combine(Path.GetDirectoryName(xPath),"XResult.txt");
 				File.Delete(resultfile);//delete the old result file.
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
@@ -377,7 +377,7 @@ namespace OpenDental {
 			}
 			#endregion
 			try {
-				File.WriteAllText(Path.Combine(Path.GetDirectoryName(path),"RecurringChargeResult.txt"),recurringResultFile);
+				File.WriteAllText(Path.Combine(Path.GetDirectoryName(xPath),"RecurringChargeResult.txt"),recurringResultFile);
 			}
 			catch { } //Do nothing cause this is just for internal use.
 			FillGrid();
