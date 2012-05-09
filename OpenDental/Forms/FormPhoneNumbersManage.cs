@@ -62,6 +62,35 @@ namespace OpenDental {
 			textHmPhone.SelectionStart=cursor;		
 		}
 
+		private void listOther_DoubleClick(object sender,EventArgs e) {
+			int index=listOther.SelectedIndex;
+			if(index==-1) {
+				return;
+			}
+			InputBox input=new InputBox("Phone Number");
+			input.textResult.Text=otherList[index].PhoneNumberVal;
+			input.ShowDialog();
+			if(input.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			otherList[index].PhoneNumberVal=input.textResult.Text;
+			PhoneNumbers.Update(otherList[index]);
+			FillList();
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			InputBox input=new InputBox("Phone Number");
+			input.ShowDialog();
+			if(input.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			PhoneNumber phoneNumber=new PhoneNumber();
+			phoneNumber.PatNum=PatNum;
+			phoneNumber.PhoneNumberVal=input.textResult.Text;
+			PhoneNumbers.Insert(phoneNumber);
+			FillList();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(listOther.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a phone number first.");
