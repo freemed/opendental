@@ -480,11 +480,11 @@ namespace OpenDental{
 			this.timerLogoff = new System.Windows.Forms.Timer(this.components);
 			this.timerReplicationMonitor = new System.Windows.Forms.Timer(this.components);
 			this.panelPhoneSmall = new System.Windows.Forms.Panel();
+			this.butTriage = new OpenDental.UI.Button();
+			this.butBigPhones = new OpenDental.UI.Button();
 			this.labelWaitTime = new System.Windows.Forms.Label();
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
-			this.butTriage = new OpenDental.UI.Button();
-			this.butBigPhones = new OpenDental.UI.Button();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
@@ -1360,39 +1360,6 @@ namespace OpenDental{
 			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 250);
 			this.panelPhoneSmall.TabIndex = 56;
 			// 
-			// labelWaitTime
-			// 
-			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(66, 2);
-			this.labelWaitTime.Name = "labelWaitTime";
-			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
-			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "0m";
-			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelTriage
-			// 
-			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(39, 2);
-			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(36, 20);
-			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:0";
-			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelMsg
-			// 
-			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelMsg.Location = new System.Drawing.Point(-1, 2);
-			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(44, 20);
-			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "V:0";
-			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// butTriage
 			// 
 			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1421,6 +1388,39 @@ namespace OpenDental{
 			this.butBigPhones.Text = "Big";
 			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
+			// labelWaitTime
+			// 
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
+			this.labelWaitTime.Location = new System.Drawing.Point(66, 2);
+			this.labelWaitTime.Name = "labelWaitTime";
+			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
+			this.labelWaitTime.TabIndex = 53;
+			this.labelWaitTime.Text = "0m";
+			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelTriage
+			// 
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelTriage.ForeColor = System.Drawing.Color.Black;
+			this.labelTriage.Location = new System.Drawing.Point(37, 2);
+			this.labelTriage.Name = "labelTriage";
+			this.labelTriage.Size = new System.Drawing.Size(36, 20);
+			this.labelTriage.TabIndex = 53;
+			this.labelTriage.Text = "T:0";
+			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// labelMsg
+			// 
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelMsg.Location = new System.Drawing.Point(-1, 2);
+			this.labelMsg.Name = "labelMsg";
+			this.labelMsg.Size = new System.Drawing.Size(44, 20);
+			this.labelMsg.TabIndex = 53;
+			this.labelMsg.Text = "V:0";
+			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// lightSignalGrid1
 			// 
 			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
@@ -1432,7 +1432,7 @@ namespace OpenDental{
 			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982, 417);
+			this.ClientSize = new System.Drawing.Size(982, 564);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
