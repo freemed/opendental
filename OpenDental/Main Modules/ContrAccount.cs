@@ -3504,12 +3504,14 @@ namespace OpenDental {
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				string str;
 				str=PrefC.GetString(PrefName.BillingEmailSubject);
+				str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(guar.PatNum));
 				str=str.Replace("[nameF]",guar.GetNameFirst());
 				str=str.Replace("[nameFL]",guar.GetNameFL());
 				str=str.Replace("[namePref]",guar.Preferred);
 				str=str.Replace("[PatNum]",guar.PatNum.ToString());
 				message.Subject=str;
 				str=PrefC.GetString(PrefName.BillingEmailBodyText);
+				str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(guar.PatNum));
 				str=str.Replace("[nameF]",guar.GetNameFirst());
 				str=str.Replace("[nameFL]",guar.GetNameFL());
 				str=str.Replace("[namePref]",guar.Preferred);

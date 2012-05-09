@@ -53,6 +53,25 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Gets the masked CC# and exp date for all cards setup for monthly charges for the specified patient.  Only used for filling [CreditCardsOnFile] variable when emailing statements.</summary>
+		public static string GetMonthlyCardsOnFile(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string result="";
+			string command="SELECT * FROM creditcard WHERE PatNum="+POut.Long(patNum)
+				+" AND ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>"+DbHelper.Now()+") "//Recurring card is active.
+				+" AND ChargeAmt>0";
+			List<CreditCard> monthlyCards=Crud.CreditCardCrud.SelectMany(command);
+			for(int i=0;i<monthlyCards.Count;i++) {
+				if(i>0) {
+					result+=", ";
+				}
+				result+=monthlyCards[i].CCNumberMasked+" exp:"+monthlyCards[i].CCExpiration.ToString("MM/yy");
+			}
+			return result;
+		}
+
 		///<summary>Returns list of credit cards that are ready for a recurring charge.</summary>
 		public static DataTable GetRecurringChargeList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
