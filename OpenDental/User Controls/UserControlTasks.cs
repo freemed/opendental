@@ -945,6 +945,18 @@ namespace OpenDental {
 			//FillGrid();
 		}
 
+		private void SendToMe_Clicked() {
+			if(Security.CurUser.TaskListInBox==0) {
+				MsgBox.Show(this,"You do not have an inbox.");
+				return;
+			}
+			Task oldTask=TasksList[clickedI-TaskListsList.Count];
+			Task task=oldTask.Copy();
+			task.TaskListNum=Security.CurUser.TaskListInBox;
+			Tasks.Update(task,oldTask);
+			DataValid.SetInvalidTask(task.TaskNum,true);
+		}
+
 		private void Goto_Clicked() {
 			//not even allowed to get to this point unless a valid task
 			Task task=TasksList[clickedI-TaskListsList.Count];
@@ -1197,7 +1209,7 @@ namespace OpenDental {
 				menuItemSubscribe.Enabled=false;
 				menuItemUnsubscribe.Enabled=false;
 			}
-			//Goto---------------------------------------------------------------
+			//SendToMe/GoTo---------------------------------------------------------------
 			if(gridMain.SelectedIndices.Length>0 && clickedI >= TaskListsList.Count){//is task
 				Task task=TasksList[clickedI-TaskListsList.Count];
 				if(task.ObjectType==TaskObjectType.None) {
@@ -1206,9 +1218,11 @@ namespace OpenDental {
 				else {
 					menuItemGoto.Enabled=true;
 				}
+				menuItemSendToMe.Enabled=true;
 			}
 			else {
 				menuItemGoto.Enabled=false;//not a task
+				menuItemSendToMe.Enabled=false;
 			}
 		}
 
@@ -1260,6 +1274,10 @@ namespace OpenDental {
 
 		private void menuItemUnsubscribe_Click(object sender,EventArgs e) {
 			OnUnsubscribe_Click();
+		}
+
+		private void menuItemSendToMe_Click(object sender,EventArgs e) {
+			SendToMe_Clicked();
 		}
 
 		private void menuItemGoto_Click(object sender,System.EventArgs e) {

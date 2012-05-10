@@ -39,6 +39,8 @@ namespace OpenDental {
 			this.imageListTree = new System.Windows.Forms.ImageList(this.components);
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.menuEdit = new System.Windows.Forms.ContextMenu();
+			this.menuItemDone = new System.Windows.Forms.MenuItem();
+			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.menuItemEdit = new System.Windows.Forms.MenuItem();
 			this.menuItem6 = new System.Windows.Forms.MenuItem();
 			this.menuItemCut = new System.Windows.Forms.MenuItem();
@@ -49,14 +51,13 @@ namespace OpenDental {
 			this.menuItemSubscribe = new System.Windows.Forms.MenuItem();
 			this.menuItemUnsubscribe = new System.Windows.Forms.MenuItem();
 			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.menuItemSendToMe = new System.Windows.Forms.MenuItem();
 			this.menuItemGoto = new System.Windows.Forms.MenuItem();
 			this.checkShowFinished = new System.Windows.Forms.CheckBox();
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.textStartDate = new OpenDental.ValidDate();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.menuItemDone = new System.Windows.Forms.MenuItem();
-			this.menuItem4 = new System.Windows.Forms.MenuItem();
 			this.tabContr.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -72,88 +73,88 @@ namespace OpenDental {
 			this.tabContr.Controls.Add(this.tabDate);
 			this.tabContr.Controls.Add(this.tabWeek);
 			this.tabContr.Controls.Add(this.tabMonth);
-			this.tabContr.Location = new System.Drawing.Point(0,29);
+			this.tabContr.Location = new System.Drawing.Point(0, 29);
 			this.tabContr.Name = "tabContr";
 			this.tabContr.SelectedIndex = 0;
-			this.tabContr.Size = new System.Drawing.Size(941,23);
+			this.tabContr.Size = new System.Drawing.Size(941, 23);
 			this.tabContr.TabIndex = 5;
 			this.tabContr.Click += new System.EventHandler(this.tabContr_Click);
 			// 
 			// tabUser
 			// 
-			this.tabUser.Location = new System.Drawing.Point(4,22);
+			this.tabUser.Location = new System.Drawing.Point(4, 22);
 			this.tabUser.Name = "tabUser";
-			this.tabUser.Size = new System.Drawing.Size(933,0);
+			this.tabUser.Size = new System.Drawing.Size(933, 0);
 			this.tabUser.TabIndex = 5;
 			this.tabUser.Text = "for User";
 			this.tabUser.UseVisualStyleBackColor = true;
 			// 
 			// tabNew
 			// 
-			this.tabNew.Location = new System.Drawing.Point(4,22);
+			this.tabNew.Location = new System.Drawing.Point(4, 22);
 			this.tabNew.Name = "tabNew";
-			this.tabNew.Size = new System.Drawing.Size(933,0);
+			this.tabNew.Size = new System.Drawing.Size(933, 0);
 			this.tabNew.TabIndex = 6;
 			this.tabNew.Text = "New for User";
 			this.tabNew.UseVisualStyleBackColor = true;
 			// 
 			// tabOpenTickets
 			// 
-			this.tabOpenTickets.Location = new System.Drawing.Point(4,22);
+			this.tabOpenTickets.Location = new System.Drawing.Point(4, 22);
 			this.tabOpenTickets.Name = "tabOpenTickets";
-			this.tabOpenTickets.Size = new System.Drawing.Size(933,0);
+			this.tabOpenTickets.Size = new System.Drawing.Size(933, 0);
 			this.tabOpenTickets.TabIndex = 7;
 			this.tabOpenTickets.Text = "Open Tickets";
 			this.tabOpenTickets.UseVisualStyleBackColor = true;
 			// 
 			// tabMain
 			// 
-			this.tabMain.Location = new System.Drawing.Point(4,22);
+			this.tabMain.Location = new System.Drawing.Point(4, 22);
 			this.tabMain.Name = "tabMain";
-			this.tabMain.Size = new System.Drawing.Size(933,0);
+			this.tabMain.Size = new System.Drawing.Size(933, 0);
 			this.tabMain.TabIndex = 0;
 			this.tabMain.Text = "Main";
 			this.tabMain.UseVisualStyleBackColor = true;
 			// 
 			// tabRepeating
 			// 
-			this.tabRepeating.Location = new System.Drawing.Point(4,22);
+			this.tabRepeating.Location = new System.Drawing.Point(4, 22);
 			this.tabRepeating.Name = "tabRepeating";
-			this.tabRepeating.Size = new System.Drawing.Size(933,0);
+			this.tabRepeating.Size = new System.Drawing.Size(933, 0);
 			this.tabRepeating.TabIndex = 2;
 			this.tabRepeating.Text = "Repeating (setup)";
 			this.tabRepeating.UseVisualStyleBackColor = true;
 			// 
 			// tabDate
 			// 
-			this.tabDate.Location = new System.Drawing.Point(4,22);
+			this.tabDate.Location = new System.Drawing.Point(4, 22);
 			this.tabDate.Name = "tabDate";
-			this.tabDate.Size = new System.Drawing.Size(933,0);
+			this.tabDate.Size = new System.Drawing.Size(933, 0);
 			this.tabDate.TabIndex = 1;
 			this.tabDate.Text = "By Date";
 			this.tabDate.UseVisualStyleBackColor = true;
 			// 
 			// tabWeek
 			// 
-			this.tabWeek.Location = new System.Drawing.Point(4,22);
+			this.tabWeek.Location = new System.Drawing.Point(4, 22);
 			this.tabWeek.Name = "tabWeek";
-			this.tabWeek.Size = new System.Drawing.Size(933,0);
+			this.tabWeek.Size = new System.Drawing.Size(933, 0);
 			this.tabWeek.TabIndex = 3;
 			this.tabWeek.Text = "By Week";
 			this.tabWeek.UseVisualStyleBackColor = true;
 			// 
 			// tabMonth
 			// 
-			this.tabMonth.Location = new System.Drawing.Point(4,22);
+			this.tabMonth.Location = new System.Drawing.Point(4, 22);
 			this.tabMonth.Name = "tabMonth";
-			this.tabMonth.Size = new System.Drawing.Size(933,0);
+			this.tabMonth.Size = new System.Drawing.Size(933, 0);
 			this.tabMonth.TabIndex = 4;
 			this.tabMonth.Text = "By Month";
 			this.tabMonth.UseVisualStyleBackColor = true;
 			// 
 			// cal
 			// 
-			this.cal.Location = new System.Drawing.Point(2,53);
+			this.cal.Location = new System.Drawing.Point(2, 53);
 			this.cal.MaxSelectionCount = 1;
 			this.cal.Name = "cal";
 			this.cal.TabIndex = 6;
@@ -167,12 +168,12 @@ namespace OpenDental {
 			this.tree.ImageIndex = 0;
 			this.tree.ImageList = this.imageListTree;
 			this.tree.ItemHeight = 18;
-			this.tree.Location = new System.Drawing.Point(0,206);
+			this.tree.Location = new System.Drawing.Point(0, 206);
 			this.tree.Name = "tree";
 			this.tree.Scrollable = false;
 			this.tree.SelectedImageIndex = 0;
 			this.tree.ShowPlusMinus = false;
-			this.tree.Size = new System.Drawing.Size(941,98);
+			this.tree.Size = new System.Drawing.Size(941, 98);
 			this.tree.TabIndex = 7;
 			this.tree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tree_MouseDown);
 			// 
@@ -180,18 +181,18 @@ namespace OpenDental {
 			// 
 			this.imageListTree.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTree.ImageStream")));
 			this.imageListTree.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListTree.Images.SetKeyName(0,"TaskList.gif");
-			this.imageListTree.Images.SetKeyName(1,"checkBoxChecked.gif");
-			this.imageListTree.Images.SetKeyName(2,"checkBoxUnchecked.gif");
-			this.imageListTree.Images.SetKeyName(3,"TaskListHighlight.gif");
-			this.imageListTree.Images.SetKeyName(4,"checkBoxNew.gif");
+			this.imageListTree.Images.SetKeyName(0, "TaskList.gif");
+			this.imageListTree.Images.SetKeyName(1, "checkBoxChecked.gif");
+			this.imageListTree.Images.SetKeyName(2, "checkBoxUnchecked.gif");
+			this.imageListTree.Images.SetKeyName(3, "TaskListHighlight.gif");
+			this.imageListTree.Images.SetKeyName(4, "checkBoxNew.gif");
 			// 
 			// imageListMain
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"TaskListAdd.gif");
-			this.imageListMain.Images.SetKeyName(1,"Add.gif");
+			this.imageListMain.Images.SetKeyName(0, "TaskListAdd.gif");
+			this.imageListMain.Images.SetKeyName(1, "Add.gif");
 			// 
 			// menuEdit
 			// 
@@ -208,8 +209,20 @@ namespace OpenDental {
             this.menuItemSubscribe,
             this.menuItemUnsubscribe,
             this.menuItem3,
+            this.menuItemSendToMe,
             this.menuItemGoto});
 			this.menuEdit.Popup += new System.EventHandler(this.menuEdit_Popup);
+			// 
+			// menuItemDone
+			// 
+			this.menuItemDone.Index = 0;
+			this.menuItemDone.Text = "Done (affects all users)";
+			this.menuItemDone.Click += new System.EventHandler(this.menuItemDone_Click);
+			// 
+			// menuItem4
+			// 
+			this.menuItem4.Index = 1;
+			this.menuItem4.Text = "-";
 			// 
 			// menuItemEdit
 			// 
@@ -268,18 +281,24 @@ namespace OpenDental {
 			this.menuItem3.Index = 11;
 			this.menuItem3.Text = "-";
 			// 
+			// menuItemSendToMe
+			// 
+			this.menuItemSendToMe.Index = 12;
+			this.menuItemSendToMe.Text = "Send to Me";
+			this.menuItemSendToMe.Click += new System.EventHandler(this.menuItemSendToMe_Click);
+			// 
 			// menuItemGoto
 			// 
-			this.menuItemGoto.Index = 12;
+			this.menuItemGoto.Index = 13;
 			this.menuItemGoto.Text = "Go To";
 			this.menuItemGoto.Click += new System.EventHandler(this.menuItemGoto_Click);
 			// 
 			// checkShowFinished
 			// 
 			this.checkShowFinished.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkShowFinished.Location = new System.Drawing.Point(4,311);
+			this.checkShowFinished.Location = new System.Drawing.Point(4, 311);
 			this.checkShowFinished.Name = "checkShowFinished";
-			this.checkShowFinished.Size = new System.Drawing.Size(151,15);
+			this.checkShowFinished.Size = new System.Drawing.Size(151, 15);
 			this.checkShowFinished.TabIndex = 10;
 			this.checkShowFinished.Text = "Show Finished Tasks";
 			this.checkShowFinished.UseVisualStyleBackColor = true;
@@ -287,9 +306,9 @@ namespace OpenDental {
 			// 
 			// labelStartDate
 			// 
-			this.labelStartDate.Location = new System.Drawing.Point(155,311);
+			this.labelStartDate.Location = new System.Drawing.Point(155, 311);
 			this.labelStartDate.Name = "labelStartDate";
-			this.labelStartDate.Size = new System.Drawing.Size(83,17);
+			this.labelStartDate.Size = new System.Drawing.Size(83, 17);
 			this.labelStartDate.TabIndex = 12;
 			this.labelStartDate.Text = "Start Date";
 			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -297,9 +316,9 @@ namespace OpenDental {
 			// 
 			// textStartDate
 			// 
-			this.textStartDate.Location = new System.Drawing.Point(238,310);
+			this.textStartDate.Location = new System.Drawing.Point(238, 310);
 			this.textStartDate.Name = "textStartDate";
-			this.textStartDate.Size = new System.Drawing.Size(87,20);
+			this.textStartDate.Size = new System.Drawing.Size(87, 20);
 			this.textStartDate.TabIndex = 11;
 			this.textStartDate.Visible = false;
 			this.textStartDate.TextChanged += new System.EventHandler(this.textStartDate_TextChanged);
@@ -311,10 +330,10 @@ namespace OpenDental {
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(0,310);
+			this.gridMain.Location = new System.Drawing.Point(0, 310);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(941,200);
+			this.gridMain.Size = new System.Drawing.Size(941, 200);
 			this.gridMain.TabIndex = 9;
 			this.gridMain.Title = "Tasks";
 			this.gridMain.TranslationName = "TableTasks";
@@ -325,26 +344,15 @@ namespace OpenDental {
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
+			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(941,25);
+			this.ToolBarMain.Size = new System.Drawing.Size(941, 25);
 			this.ToolBarMain.TabIndex = 2;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
-			// menuItemDone
-			// 
-			this.menuItemDone.Index = 0;
-			this.menuItemDone.Text = "Done (affects all users)";
-			this.menuItemDone.Click += new System.EventHandler(this.menuItemDone_Click);
-			// 
-			// menuItem4
-			// 
-			this.menuItem4.Index = 1;
-			this.menuItem4.Text = "-";
-			// 
 			// UserControlTasks
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.textStartDate);
 			this.Controls.Add(this.labelStartDate);
@@ -355,7 +363,7 @@ namespace OpenDental {
 			this.Controls.Add(this.tabContr);
 			this.Controls.Add(this.ToolBarMain);
 			this.Name = "UserControlTasks";
-			this.Size = new System.Drawing.Size(941,510);
+			this.Size = new System.Drawing.Size(941, 510);
 			this.Load += new System.EventHandler(this.UserControlTasks_Load);
 			this.tabContr.ResumeLayout(false);
 			this.ResumeLayout(false);
@@ -397,5 +405,6 @@ namespace OpenDental {
 		private System.Windows.Forms.TabPage tabOpenTickets;
 		private System.Windows.Forms.MenuItem menuItemDone;
 		private System.Windows.Forms.MenuItem menuItem4;
+		private System.Windows.Forms.MenuItem menuItemSendToMe;
 	}
 }
