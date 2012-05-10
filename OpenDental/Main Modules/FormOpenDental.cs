@@ -1396,18 +1396,18 @@ namespace OpenDental{
 			this.labelWaitTime.Name = "labelWaitTime";
 			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
 			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "0m";
+			this.labelWaitTime.Text = "33m";
 			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelTriage
 			// 
 			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(37, 2);
+			this.labelTriage.Location = new System.Drawing.Point(34, 2);
 			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(36, 20);
+			this.labelTriage.Size = new System.Drawing.Size(38, 20);
 			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:0";
+			this.labelTriage.Text = "T:13";
 			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelMsg
@@ -1418,7 +1418,7 @@ namespace OpenDental{
 			this.labelMsg.Name = "labelMsg";
 			this.labelMsg.Size = new System.Drawing.Size(44, 20);
 			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "V:0";
+			this.labelMsg.Text = "V:16";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lightSignalGrid1
