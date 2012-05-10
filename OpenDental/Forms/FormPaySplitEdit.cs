@@ -64,6 +64,7 @@ namespace OpenDental
 		private System.Windows.Forms.TextBox textProcPaidHere;
 		//private Patient PatCur;
 		private Family FamCur;
+		private Procedure ProcCur;
 		//<summary>Used if changing the Patient from another family.</summary>
 		//private int OriginalPatNum;
 		private double ProcFee;
@@ -878,7 +879,7 @@ namespace OpenDental
 				//ComputeProcTotals();
 				return;
 			}
-			Procedure ProcCur=Procedures.GetOneProc(PaySplitCur.ProcNum,false);
+			ProcCur=Procedures.GetOneProc(PaySplitCur.ProcNum,false);
 			List<ClaimProc> ClaimProcList=ClaimProcs.Refresh(ProcCur.PatNum);
 			Adjustment[] AdjustmentList=Adjustments.Refresh(ProcCur.PatNum);
 			PaySplit[] PaySplitList=PaySplits.Refresh(ProcCur.PatNum);
@@ -967,6 +968,7 @@ namespace OpenDental
 			}
 			PaySplitCur.ProcNum=FormPS.SelectedProcNum;
 			FillProcedure();
+			textProcDate.Text=ProcCur.ProcDate.ToShortDateString();
 		}
 
 		private void butDetach_Click(object sender, System.EventArgs e) {
