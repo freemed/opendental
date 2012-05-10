@@ -1396,7 +1396,7 @@ namespace OpenDental{
 			this.labelWaitTime.Name = "labelWaitTime";
 			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
 			this.labelWaitTime.TabIndex = 53;
-			this.labelWaitTime.Text = "33m";
+			this.labelWaitTime.Text = "00m";
 			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelTriage
@@ -1407,7 +1407,7 @@ namespace OpenDental{
 			this.labelTriage.Name = "labelTriage";
 			this.labelTriage.Size = new System.Drawing.Size(38, 20);
 			this.labelTriage.TabIndex = 53;
-			this.labelTriage.Text = "T:13";
+			this.labelTriage.Text = "T:00";
 			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelMsg
@@ -1418,7 +1418,7 @@ namespace OpenDental{
 			this.labelMsg.Name = "labelMsg";
 			this.labelMsg.Size = new System.Drawing.Size(44, 20);
 			this.labelMsg.TabIndex = 53;
-			this.labelMsg.Text = "V:16";
+			this.labelMsg.Text = "V:00";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lightSignalGrid1
