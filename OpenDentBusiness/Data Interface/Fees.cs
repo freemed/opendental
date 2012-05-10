@@ -254,7 +254,12 @@ namespace OpenDentBusiness{
 				}
 				fee=Listt[i].Copy();
 				newVal=(double)fee.Amount*(1+(double)percent/100);
-				fee.Amount=Math.Round(newVal,round);
+				if(round>0) {
+					fee.Amount=Math.Round(newVal,round);
+				}
+				else {
+					fee.Amount=Math.Round(newVal,MidpointRounding.AwayFromZero);
+				}
 				Fees.Update(fee);
 			}
 		}
