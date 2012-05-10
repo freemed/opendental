@@ -48,6 +48,8 @@ namespace OpenDental{
 		private Label label17;
 		private CheckBox checkIsTriageOperator;
 		public PhoneEmpDefault PedCur;
+		///<summary>Will always be the override status upon load.</summary>
+		private PhoneEmpStatusOverride StatusOld;
 
 		///<summary></summary>
 		public FormPhoneEmpDefaultEdit()
@@ -468,6 +470,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPhoneEmpDefaultEdit_Load(object sender, System.EventArgs e) {
+			StatusOld=PedCur.StatusOverride;//We use this for testing when user clicks OK.
 			if(!IsNew){
 				textEmployeeNum.ReadOnly=true;
 			}
@@ -520,6 +523,26 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
+			//Using a switch statement in case we want special functionality for the other statuses later on.
+			switch((PhoneEmpStatusOverride)listStatusOverride.SelectedIndex) {
+				case PhoneEmpStatusOverride.None:
+					if(StatusOld==PhoneEmpStatusOverride.Unavailable) {
+						MsgBox.Show(this,"Change your status from unavailable by using the small phone panel.");
+						return;
+					}
+					break;
+				case PhoneEmpStatusOverride.OfflineAssist:
+					if(StatusOld==PhoneEmpStatusOverride.Unavailable) {
+						MsgBox.Show(this,"Change your status from unavailable by using the small phone panel.");
+						return;
+					}
+					break;
+				case PhoneEmpStatusOverride.Unavailable:
+					//We set ourselves unavailable from this window because we require an explination.
+					//This is the only status that will synch with the phone table, all others should be handled by the small phone panel.
+					Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,PedCur.PhoneExt);
+					break;
+			}
 			if(IsNew){
 				if(textEmployeeNum.Text==""){
 					MsgBox.Show(this,"Unique EmployeeNum is required.");

@@ -164,8 +164,8 @@ namespace OpenDental {
 			}
 			FormPhoneEmpDefaultEdit formPED=new FormPhoneEmpDefaultEdit();
 			formPED.PedCur=ped;
+			formPED.PedCur.StatusOverride=PhoneEmpStatusOverride.Unavailable;
 			formPED.ShowDialog();
-			Phones.SetPhoneStatus(ClockStatusEnum.Unavailable,extension);
 		}
 
 		//RingGroups---------------------------------------------------
