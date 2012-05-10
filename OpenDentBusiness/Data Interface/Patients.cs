@@ -2014,7 +2014,9 @@ FROM insplan";
 			if(SuperFamilyNum==0) {
 				return new List<Patient>();//return empty list
 			}
-			string command = "SELECT DISTINCT * FROM patient WHERE PatNum IN (SELECT Guarantor FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)+")";//should also work in Oracle
+			//Should also work in Oracle.
+			string command = "SELECT DISTINCT * FROM patient WHERE PatNum IN (SELECT Guarantor FROM patient WHERE SuperFamily="+POut.Long(SuperFamilyNum)+") "
+				+"AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
 			return Crud.PatientCrud.TableToList(Db.GetTable(command));
 		}
 
