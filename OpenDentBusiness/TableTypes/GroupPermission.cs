@@ -115,7 +115,7 @@ namespace OpenDentBusiness{
 		SheetEdit,
 		///<summary>43. Uses date restrictions.</summary>
 		CommlogEdit,
-		///<summary>44. Uses date restrictions.</summary>
+		///<summary>44. Uses global date restriction only.</summary>
 		ImageDelete,
 		///<summary>45. Uses date restrictions.</summary>
 		PerioEdit,

@@ -87,6 +87,7 @@ namespace OpenDentBusiness{
 					return false;	
 				}
 			}
+			//Check the global security lock------------------------------------------------------------------------------------
 			//the list below is NOT the list of permissions that take dates. See GroupPermissions.PermTakesDates().
 			if(  perm==Permissions.AdjustmentCreate
 				|| perm==Permissions.AdjustmentEdit
@@ -101,6 +102,7 @@ namespace OpenDentBusiness{
 				|| perm==Permissions.CommlogEdit
 				)
 			{
+				//If the global lock is date-based:
 				if(date.Year>1//if a valid date was passed in
 					&& date <= PrefC.GetDate(PrefName.SecurityLockDate))//and that date is earlier than the lock
 				{
@@ -113,6 +115,7 @@ namespace OpenDentBusiness{
 						return false;	
 					}
 				}
+				//If the global lock is days-based:
 				if(date.Year>1//if a valid date was passed in
 					&& PrefC.GetInt(PrefName.SecurityLockDays) > 0
 					&& date <= DateTime.Today.AddDays(-PrefC.GetInt(PrefName.SecurityLockDays)))//and that date is earlier than the lock
@@ -127,6 +130,7 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
+			//Check date/days limits on individual permission----------------------------------------------------------------
 			if(!GroupPermissions.PermTakesDates(perm)){
 				return true;
 			}
@@ -134,6 +138,7 @@ namespace OpenDentBusiness{
 			if(date>dateLimit){//authorized
 				return true;
 			}
+			//Prevents certain bugs when 1/1/1 dates are passed in and compared----------------------------------------------
 			//Handling of min dates.  There might be others, but we have to handle them individually to avoid introduction of bugs.
 			if(perm==Permissions.ClaimSentEdit//no date sent was entered before setting claim received
 				|| perm==Permissions.ProcComplEdit//a completed procedure with a min date.
