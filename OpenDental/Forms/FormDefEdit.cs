@@ -306,6 +306,11 @@ namespace OpenDental{
 						MsgBox.Show(this,"Valid values are blank or E.");
 						return;
 					}
+					if(checkHidden.Checked && Patients.IsBillingTypeInUse(DefCur.DefNum)) {
+						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning: Billing type is currently in use by patients.")) {
+							return;
+						}
+					}
 					break;
 				case DefCat.CommLogTypes:
 					if(textValue.Text!="" && textValue.Text!="MISC" && textValue.Text!="APPT" 

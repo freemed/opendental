@@ -1598,6 +1598,18 @@ FROM insplan";
 			return true;
 		}
 
+		///<summary>Used to check if a billing type is in use when user is trying to hide it.</summary>
+		public static bool IsBillingTypeInUse(long defNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),defNum);
+			}
+			string command ="SELECT COUNT(*) FROM patient WHERE BillingType="+POut.Long(defNum)+" AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 		///<summary>To prevent orphaned patients, if patFrom is a guarantor then all family members of patFrom are moved into the family patTo belongs to, and then the merge of the two specified accounts is performed.  Returns false if the merge was canceled by the user.</summary>
 		public static bool MergeTwoPatients(long patTo,long patFrom,string atoZpath){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

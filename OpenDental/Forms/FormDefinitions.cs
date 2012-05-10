@@ -624,6 +624,12 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select item first,"));
 				return;
 			}
+			//Warn the user if they are about to hide a billing type currently in use.
+			if(DefsList[DefsSelected].Category==DefCat.BillingTypes && Patients.IsBillingTypeInUse(DefsList[DefsSelected].DefNum)) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning: Billing type is currently in use by patients.")) {
+					return;
+				}
+			}
 			Defs.HideDef(DefsList[DefsSelected]);
 			changed=true;
 			FillDefs();
