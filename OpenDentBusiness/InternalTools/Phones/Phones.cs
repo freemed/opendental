@@ -319,16 +319,20 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<summary>Number of new and viewed tasks within the Triage task list.</summary>
-		public static int GetTriageTaskCount() {
+		///<summary>Gets list of TaskNums for new and viewed tasks within the Triage task list.</summary>
+		public static List<long> GetTriageTaskNums() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT COUNT(*) "
-				+"FROM task "
+			List<long> taskNums=new List<long>();
+			string command="SELECT * FROM task "
 				+"WHERE TaskListNum=1697 "//Triage task list.
 				+"AND TaskStatus<>2";//Not done (new or viewed).
-			return PIn.Int(Db.GetCount(command));
+			List<Task> triageList=Crud.TaskCrud.SelectMany(command);
+			for(int i=0;i<triageList.Count;i++) {
+				taskNums.Add(triageList[i].TaskNum);
+			}
+			return taskNums;
 		}
 
 		///<summary>Returns the time of the oldest task within the Triage task list.  Returns 0 if there is no tasks in the list.</summary>

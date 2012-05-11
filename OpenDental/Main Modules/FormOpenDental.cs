@@ -1403,7 +1403,7 @@ namespace OpenDental{
 			// 
 			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(34, 2);
+			this.labelTriage.Location = new System.Drawing.Point(31, 2);
 			this.labelTriage.Name = "labelTriage";
 			this.labelTriage.Size = new System.Drawing.Size(38, 20);
 			this.labelTriage.TabIndex = 53;
@@ -2848,14 +2848,37 @@ namespace OpenDental{
 		private void FillTriageLabels() {
 			triageTime=Phones.GetTriageTime();//Update last triage time.
 			FillTriageMinutes();//Updates labelWaitTime.
-			int count=Phones.GetTriageTaskCount();
-			labelTriage.Text="T:"+count.ToString();
+			int count=0;//Contains a count of tasks that do not have task notes attached.
+			int countExcluded=0;//Contains count of tasks with notes attached.  Only used for display purposes when count is 0.
+			List<long> taskNums=Phones.GetTriageTaskNums();
+			List<TaskNote> taskNotes=TaskNotes.RefreshForTasks(taskNums);
+			List<long> taskNumsNote=new List<long>();
+			for(int i=0;i<taskNotes.Count;i++) {//Make a list of all the TaskNums in the note list.
+				if(taskNumsNote.Contains(taskNotes[i].TaskNum)) {
+					continue;
+				}
+				taskNumsNote.Add(taskNotes[i].TaskNum);
+			}
+			for(int i=0;i<taskNums.Count;i++) {//Increase the corresponding counts.
+				if(taskNumsNote.Contains(taskNums[i])) {
+					countExcluded++;
+				}
+				else {
+					count++;
+				}
+			}
+			string countStr="0";
 			if(count>0) {//Triage show red so users notice more.
+				countStr=count.ToString();
 				labelTriage.ForeColor=Color.Firebrick;
 			}
 			else {
+				if(countExcluded>0) {
+					countStr="("+countExcluded.ToString()+")";
+				}
 				labelTriage.ForeColor=Color.Black;
 			}
+			labelTriage.Text="T:"+countStr;
 		}
 
 		///<summary>Update labelWaitTime for the triage list.  Gets called frequently, does not make a call to db.</summary>
