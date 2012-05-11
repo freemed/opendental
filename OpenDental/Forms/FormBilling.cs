@@ -882,6 +882,9 @@ namespace OpenDental{
 					message.Attachments.Add(attach);
 					try{
 						FormEmailMessageEdit.SendEmail(message);
+						message.SentOrReceived=CommSentOrReceived.Sent;
+						message.MsgDateTime=DateTime.Now;
+						EmailMessages.Insert(message);
 						emailed++;
 						labelEmailed.Text=Lan.g(this,"E-mailed=")+emailed.ToString();
 						Application.DoEvents();
