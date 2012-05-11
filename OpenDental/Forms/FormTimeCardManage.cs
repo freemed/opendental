@@ -451,6 +451,7 @@ namespace OpenDental {
 			g.DrawString(Lan.g(this,"Overtime")+": "+overTime+" ("+overTime2+")",fontHeader,brush,xPos,yPos);
 			pagesPrinted++;
 			if(gridMain.Rows.Count==pagesPrinted) {
+				pagesPrinted=0;
 				e.HasMorePages=false;
 			}
 			else {
