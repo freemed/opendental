@@ -1985,6 +1985,18 @@ namespace OpenDental{
 				}
 			}
 			FillCarrier(PlanCur.CarrierNum);
+			if(!Security.IsAuthorized(Permissions.CarrierCreate,true)) {
+				textCarrier.Enabled=false;
+				textPhone.Enabled=false;
+				textAddress.Enabled=false;
+				textAddress2.Enabled=false;
+				textCity.Enabled=false;
+				textState.Enabled=false;
+				textZip.Enabled=false;
+				textElectID.Enabled=false;
+				butSearch.Enabled=false;
+				checkNoSendElect.Enabled=false;
+			}
 			FillOtherSubscribers();
 			textPlanNote.Text=PlanCur.PlanNote;
 			if(PlanCur.DentaideCardSequence==0){

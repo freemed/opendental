@@ -137,6 +137,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Blockouts");
 				case Permissions.ChartModule:
 					return Lans.g("enumPermissions","Chart Module");
+				case Permissions.CarrierCreate:
+					return Lans.g("enumPermissions","Carrier Create");
 				case Permissions.ChooseDatabase:
 					return Lans.g("enumPermissions","Choose Database");
 				case Permissions.ClaimSentEdit:

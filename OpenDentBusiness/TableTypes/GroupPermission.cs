@@ -142,7 +142,9 @@ namespace OpenDentBusiness{
 		///<summary>56</summary>
 		RefAttachAdd,
 		///<summary>57</summary>
-		RefAttachDelete
+		RefAttachDelete,
+		///<summary>58</summary>
+		CarrierCreate
 	}
 
 	

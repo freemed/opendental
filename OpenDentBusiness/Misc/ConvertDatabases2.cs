@@ -9188,6 +9188,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						WHERE PermType=44";//ImageDelete
 					Db.NonQ(command);
 				}
+				//Add CarrierAdd permission to everyone------------------------------------------------------
+				command="SELECT DISTINCT UserGroupNum FROM grouppermission";
+				DataTable table=Db.GetTable(command);
+				long groupNum;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+",58)";//CarrierCreate
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,58)";//CarrierCreate
+						Db.NonQ32(command);
+					}
+				}
 
 
 

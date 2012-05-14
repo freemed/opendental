@@ -237,6 +237,9 @@ namespace OpenDental{
 				butCancel.Text=Lan.g(this,"Close");
 				butOK.Visible=false;
 			}
+			if(!Security.IsAuthorized(Permissions.CarrierCreate,true)) {
+				butAdd.Enabled=false;
+			}
 			Carriers.RefreshCache();
 			FillGrid();
 		}
