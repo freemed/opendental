@@ -924,7 +924,7 @@ namespace OpenDental.Eclaims {
 		///<summary>For printing basic information about unknown/unsupported message formats (for debugging, etc.).</summary>
 		private void DefaultPrint(Graphics g) {
 			x=doc.StartElement(verticalLine);
-			text=isFrench?"LES DONNÉES DE MESSAGE PREMIÈRES POUR LA RÉPONSE INVALIDE OU INCONNU":"RAW DATA FOR INVALID OR UNKNOWN RESPONSE";
+			text=isFrench?"DONNÉES BRUTES POUR UNE RÉPONSE INVALIDE OU INCONNU":"RAW DATA FOR INVALID OR UNKNOWN RESPONSE";
 			doc.DrawString(g,text,center-g.MeasureString(text,headingFont).Width/2,0,headingFont);
 			x=doc.StartElement(verticalLine);
 			CCDField[] loadedFields=formData.GetLoadedFields();
