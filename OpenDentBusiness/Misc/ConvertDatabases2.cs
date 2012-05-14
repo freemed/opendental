@@ -9003,6 +9003,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.2.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_2_17();
+		}
+
+		private static void To12_2_17() {
+			if(FromVersion<new Version("12.2.17.0")) {
+				string command="";
+				//Add the 1500 claim form field for prior authorization if it does not already exist. The unique ID is OD9.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9' LIMIT 1";
+				}
+				else {//oracle doesn't have LIMIT
+					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9') WHERE RowNum<=1";
+				}
+				long claimFormNum=PIn.Long(Db.GetScalar(command));
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO claimformitem (ClaimFormItemNum,ClaimFormNum,ImageFileName,FieldName,FormatString,XPos,YPos,Width,Height) "
+						+"VALUES (0,"+POut.Long(claimFormNum)+",'','PriorAuthString','','528','695','282','14')";
+				}
+				else {
+					command="INSERT INTO claimformitem (ClaimFormItemNum,ClaimFormNum,ImageFileName,FieldName,FormatString,XPos,YPos,Width,Height) "
+						+"VALUES ((SELECT MAX(ClaimFormItemNum)+1 FROM claimformitem),"+POut.Long(claimFormNum)+",'','PriorAuthString','','528','695','282','14')";
+				}
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '12.2.17.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_3_0();
 		}
 

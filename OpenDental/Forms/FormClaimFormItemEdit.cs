@@ -225,6 +225,7 @@ namespace OpenDental{
 				"IsMedicaidClaim",
 				"IsGroupHealthPlan",
 				"PreAuthString",
+				"PriorAuthString",
 				"PriInsCarrierName",
 				"PriInsAddress",
 				"PriInsAddress2",

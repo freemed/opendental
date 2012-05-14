@@ -609,6 +609,9 @@ namespace OpenDental{
 					case "PreAuthString":
 						displayStrings[i]=ClaimCur.PreAuthString;
 						break;
+					case "PriorAuthString":
+						displayStrings[i]=ClaimCur.PriorAuthorizationNumber;
+						break;
 					case "PriInsCarrierName":
 						displayStrings[i]=carrier.CarrierName;
 						break;
