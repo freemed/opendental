@@ -235,6 +235,7 @@ namespace OpenDentBusiness{
 				|| permType==Permissions.CommlogEdit
 				|| permType==Permissions.SheetEdit
 				|| permType==Permissions.PerioEdit
+				|| permType==Permissions.ImageDelete
 				)
 			{
 				return true;

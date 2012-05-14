@@ -9146,6 +9146,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"'')";
 					Db.NonQ(command);
 				}//end CallFire bridge
+				//ImageDelete was removed from global lock date.  Set the permission dates to the current lock dates.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"UPDATE grouppermission gp,preference pdate,preference pdays 
+						SET gp.NewerDate=pdate.ValueString,gp.NewerDays=pdays.ValueString
+						WHERE pdate.PrefName='SecurityLockDate'
+						AND pdays.PrefName='SecurityLockDays'
+						AND gp.PermType=44";//ImageDelete
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"UPDATE grouppermission
+						SET NewerDate=TO_DATE((SELECT ValueString FROM preference WHERE prefname='SecurityLockDate'),'yyyy-mm-dd')
+						,NewerDays=(SELECT ValueString FROM preference WHERE PrefName='SecurityLockDays')
+						WHERE PermType=44";//ImageDelete
+					Db.NonQ(command);
+				}
+
+
+
 
 
 
