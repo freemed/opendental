@@ -752,9 +752,15 @@ namespace OpenDental {
 			if(task.DateTimeFinished.Year<1880) {
 				task.DateTimeFinished=DateTime.Now;
 			}
-			Tasks.Update(task,oldTask);
-			TaskUnreads.SetRead(Security.CurUser.UserNum,task.TaskNum);
-			DataValid.SetInvalidTask(task.TaskNum,false);
+			try {
+				Tasks.Update(task,oldTask);
+				TaskUnreads.SetRead(Security.CurUser.UserNum,task.TaskNum);
+				DataValid.SetInvalidTask(task.TaskNum,false);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			//FillGrid();
 		}
 
@@ -953,8 +959,14 @@ namespace OpenDental {
 			Task oldTask=TasksList[clickedI-TaskListsList.Count];
 			Task task=oldTask.Copy();
 			task.TaskListNum=Security.CurUser.TaskListInBox;
-			Tasks.Update(task,oldTask);
-			DataValid.SetInvalidTask(task.TaskNum,true);
+			try {
+				Tasks.Update(task,oldTask);
+				DataValid.SetInvalidTask(task.TaskNum,true);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 		}
 
 		private void Goto_Clicked() {
