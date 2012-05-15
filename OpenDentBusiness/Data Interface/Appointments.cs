@@ -381,10 +381,10 @@ namespace OpenDentBusiness{
 		}
 
 
-		///<summary>Used in FormConfirmList</summary>
-		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,long provNum,long clinicNum) {
+		///<summary>Used in FormConfirmList.  The assumption is made that showRecall and showNonRecall will not both be false.</summary>
+		public static DataTable GetConfirmList(DateTime dateFrom,DateTime dateTo,long provNum,long clinicNum,bool showRecall,bool showNonRecall) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum,clinicNum);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,provNum,clinicNum,showRecall,showNonRecall);
 			}
 			DataTable table=new DataTable();
 			DataRow row;
@@ -426,6 +426,18 @@ namespace OpenDentBusiness{
 			}
 			if(clinicNum>0) {
 				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
+			}
+			if(showRecall && !showNonRecall) {
+				command+="AND AptNum NOT IN ("
+					+"SELECT AptNum FROM procedurelog "
+					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"AND procedurecode.IsHygiene=1) ";
+			}
+			else if(!showRecall && showNonRecall) {
+			  command+="AND AptNum IN ("
+					+"SELECT AptNum FROM procedurelog "
+					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"AND procedurecode.IsHygiene=1) ";
 			}
 			command+="ORDER BY AptDateTime";
 			DataTable rawtable=Db.GetTable(command);

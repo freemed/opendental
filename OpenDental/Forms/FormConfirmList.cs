@@ -51,6 +51,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butEmail;
 		private ComboBox comboClinic;
 		private Label labelClinic;
+		private ComboBox comboShowRecall;
 		///<summary>Only used if PinClicked=true</summary>
 		public long AptSelected;
 
@@ -78,6 +79,9 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboShowRecall = new System.Windows.Forms.ComboBox();
+			this.comboClinic = new System.Windows.Forms.ComboBox();
+			this.labelClinic = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textDateTo = new OpenDental.ValidDate();
@@ -92,8 +96,6 @@ namespace OpenDental{
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
-			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.labelClinic = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -122,7 +124,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(20, 34);
+			this.butRefresh.Location = new System.Drawing.Point(47, 12);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(84, 24);
 			this.butRefresh.TabIndex = 2;
@@ -132,6 +134,7 @@ namespace OpenDental{
 			// groupBox1
 			// 
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox1.Controls.Add(this.comboShowRecall);
 			this.groupBox1.Controls.Add(this.comboClinic);
 			this.groupBox1.Controls.Add(this.labelClinic);
 			this.groupBox1.Controls.Add(this.comboProv);
@@ -148,6 +151,37 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 1;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "View";
+			// 
+			// comboShowRecall
+			// 
+			this.comboShowRecall.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboShowRecall.FormattingEnabled = true;
+			this.comboShowRecall.Items.AddRange(new object[] {
+            "All",
+            "Recall Only",
+            "Exclude Recall"});
+			this.comboShowRecall.Location = new System.Drawing.Point(29, 38);
+			this.comboShowRecall.Name = "comboShowRecall";
+			this.comboShowRecall.Size = new System.Drawing.Size(121, 21);
+			this.comboShowRecall.TabIndex = 26;
+			// 
+			// comboClinic
+			// 
+			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboClinic.Location = new System.Drawing.Point(439, 36);
+			this.comboClinic.MaxDropDownItems = 40;
+			this.comboClinic.Name = "comboClinic";
+			this.comboClinic.Size = new System.Drawing.Size(181, 21);
+			this.comboClinic.TabIndex = 25;
+			// 
+			// labelClinic
+			// 
+			this.labelClinic.Location = new System.Drawing.Point(346, 40);
+			this.labelClinic.Name = "labelClinic";
+			this.labelClinic.Size = new System.Drawing.Size(91, 14);
+			this.labelClinic.TabIndex = 24;
+			this.labelClinic.Text = "Clinic";
+			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboProv
 			// 
@@ -183,9 +217,9 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(152, 40);
+			this.label2.Location = new System.Drawing.Point(161, 40);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(77, 14);
+			this.label2.Size = new System.Drawing.Size(68, 14);
 			this.label2.TabIndex = 12;
 			this.label2.Text = "To Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -319,24 +353,6 @@ namespace OpenDental{
 			this.butEmail.Text = "E-Mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
-			// comboClinic
-			// 
-			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(439, 36);
-			this.comboClinic.MaxDropDownItems = 40;
-			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(181, 21);
-			this.comboClinic.TabIndex = 25;
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Location = new System.Drawing.Point(346, 40);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(91, 14);
-			this.labelClinic.TabIndex = 24;
-			this.labelClinic.Text = "Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// FormConfirmList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -368,6 +384,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormConfirmList_Load(object sender, System.EventArgs e) {
+			comboShowRecall.SelectedIndex=0;//Default to show all.
 			textDateFrom.Text=AddWorkDays(1,DateTime.Today).ToShortDateString();
 			textDateTo.Text=AddWorkDays(2,DateTime.Today).ToShortDateString();
 			comboProv.Items.Add(Lan.g(this,"All"));
@@ -418,7 +435,15 @@ namespace OpenDental{
 			if(comboClinic.SelectedIndex > 0) {
 				clinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
-			table=Appointments.GetConfirmList(dateFrom,dateTo,provNum,clinicNum);
+			bool showRecalls=false;
+			bool showNonRecalls=false;
+			if(comboShowRecall.SelectedIndex==0 || comboShowRecall.SelectedIndex==1) {//All or Recall Only
+				showRecalls=true;
+			}
+			if(comboShowRecall.SelectedIndex==0 || comboShowRecall.SelectedIndex==2) {//All or Exclude Recalls
+				showNonRecalls=true;
+			}
+			table=Appointments.GetConfirmList(dateFrom,dateTo,provNum,clinicNum,showRecalls,showNonRecalls);
 			int scrollVal=grid.ScrollValue;
 			grid.BeginUpdate();
 			grid.Columns.Clear();

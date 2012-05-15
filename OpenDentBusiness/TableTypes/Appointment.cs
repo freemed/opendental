@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		public long Assistant;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;
-		///<summary>Set true if this is a hygiene appt.  The hygiene provider's color will show.</summary>
+		///<summary>Set true if this is a hygiene appt.  The only purpose of this flag is to cause the hygiene provider's color to show.  This flag is frequently not set even when it is a hygiene appointment because some offices want the dentist color on the appointments.</summary>
 		public bool IsHygiene;
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
