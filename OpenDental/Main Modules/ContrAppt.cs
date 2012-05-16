@@ -5225,9 +5225,11 @@ namespace OpenDental {
 			ProviderList=new List<Provider>();
 			listProviders.Items.Clear();
 			for(int i=0;i<ProviderC.ListShort.Count;i++) {
-				if(ProviderC.ListShort[i].IsSecondary) {
-					ProviderList.Add(ProviderC.ListShort[i]);
-					listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
+				if(ApptViewItemL.ProvIsInView(ProviderC.ListShort[i].ProvNum)) {
+					if(ProviderC.ListShort[i].IsSecondary) {
+						ProviderList.Add(ProviderC.ListShort[i]);
+						listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
+					}
 				}
 			}
 			if(pinBoard.SelectedAppt==null) {
@@ -5240,10 +5242,12 @@ namespace OpenDental {
 		private void butProvDentist_Click(object sender,EventArgs e) {
 			ProviderList=new List<Provider>();
 			listProviders.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Count;i++) {
-				if(!ProviderC.ListShort[i].IsSecondary) {
-					ProviderList.Add(ProviderC.ListShort[i]);
-					listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
+			for(int i=0;i<ProviderC.ListShort.Count;i++){
+				if(ApptViewItemL.ProvIsInView(ProviderC.ListShort[i].ProvNum)){
+					if(!ProviderC.ListShort[i].IsSecondary) {
+						ProviderList.Add(ProviderC.ListShort[i]);
+						listProviders.Items.Add(ProviderC.ListShort[i].Abbr);
+					}
 				}
 			}
 			if(pinBoard.SelectedAppt==null) {

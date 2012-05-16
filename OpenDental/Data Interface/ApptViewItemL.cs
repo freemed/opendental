@@ -187,7 +187,7 @@ namespace OpenDental{
 			return false;
 		}
 
-		///<summary>Only used in ApptViewItem setup. Must have run GetForCurView first.</summary>
+		///<summary>Only used in ApptViewItem setup and ContrAppt (for search function - search for appt with prov in this view). Must have run GetForCurView first.</summary>
 		public static bool ProvIsInView(long provNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<ForCurView.Count;i++) {
