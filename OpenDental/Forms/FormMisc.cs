@@ -532,6 +532,7 @@ namespace OpenDental{
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
+			comboShowID.Items.Add(Lan.g(this,"Birthdate"));
 			comboShowID.SelectedIndex=PrefC.GetInt(PrefName.ShowIDinTitleBar);
 			checkTasksCheckOnStartup.Checked=PrefC.GetBool(PrefName.TasksCheckOnStartup);
 			checkTaskListAlwaysShow.Checked=PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom);

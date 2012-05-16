@@ -74,24 +74,29 @@ namespace OpenDental{
 			return fam.ListPats[index-buttonLastFivePatNums.Count-2].PatNum;
 		}
 
-		///<summary>A simpler version which does not require as much data.</summary>
-		public static string GetMainTitle(string nameLF,long patNum,string chartNumber,long siteNum) {
+		///<summary>Accepts null.</summary>
+		public static string GetMainTitle(Patient pat) {
 			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
 			if(Security.CurUser!=null){
 				retVal+=" {"+Security.CurUser.UserName+"}";
 			}
-			if(patNum==0 || patNum==-1){
+			if(pat==null || pat.PatNum==0 || pat.PatNum==-1){
 				return retVal;
 			}
-			retVal+=" - "+nameLF;
+			retVal+=" - "+pat.GetNameLF();
 			if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==1) {
-				retVal+=" - "+patNum.ToString();
+				retVal+=" - "+pat.PatNum.ToString();
 			}
 			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==2) {
-				retVal+=" - "+chartNumber;
+				retVal+=" - "+pat.ChartNumber;
 			}
-			if(siteNum!=0){
-				retVal+=" - "+Sites.GetDescription(siteNum);
+			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==3) {
+				if(pat.Birthdate.Year>1880) {
+					retVal+=" - "+pat.Birthdate.ToShortDateString();
+				}
+			}
+			if(pat.SiteNum!=0){
+				retVal+=" - "+Sites.GetDescription(pat.SiteNum);
 			}
 			return retVal;
 		}

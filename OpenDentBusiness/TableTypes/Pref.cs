@@ -320,6 +320,7 @@ namespace OpenDentBusiness {
 		ShowFeatureEhr,
 		ShowFeatureMedicalInsurance,
 		ShowFeatureSuperfamilies,
+		///<summary>0=None, 1=PatNum, 2=ChartNumber, 3=Birthdate</summary>
 		ShowIDinTitleBar,
 		ShowProgressNotesInsteadofCommLog,
 		ShowUrgFinNoteInProgressNotes,
