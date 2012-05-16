@@ -141,7 +141,7 @@ namespace OpenDental{
 			this.listRingGroup.Location = new System.Drawing.Point(144, 144);
 			this.listRingGroup.Name = "listRingGroup";
 			this.listRingGroup.Size = new System.Drawing.Size(120, 43);
-			this.listRingGroup.TabIndex = 19;
+			this.listRingGroup.TabIndex = 4;
 			// 
 			// checkNoGraph
 			// 
@@ -149,7 +149,7 @@ namespace OpenDental{
 			this.checkNoGraph.Location = new System.Drawing.Point(3, 87);
 			this.checkNoGraph.Name = "checkNoGraph";
 			this.checkNoGraph.Size = new System.Drawing.Size(155, 20);
-			this.checkNoGraph.TabIndex = 20;
+			this.checkNoGraph.TabIndex = 2;
 			this.checkNoGraph.Text = "No Graph";
 			this.checkNoGraph.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkNoGraph.UseVisualStyleBackColor = true;
@@ -169,7 +169,7 @@ namespace OpenDental{
 			this.checkNoColor.Location = new System.Drawing.Point(3, 113);
 			this.checkNoColor.Name = "checkNoColor";
 			this.checkNoColor.Size = new System.Drawing.Size(155, 20);
-			this.checkNoColor.TabIndex = 25;
+			this.checkNoColor.TabIndex = 3;
 			this.checkNoColor.Text = "No Color";
 			this.checkNoColor.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkNoColor.UseVisualStyleBackColor = true;
@@ -179,7 +179,7 @@ namespace OpenDental{
 			this.textEmpName.Location = new System.Drawing.Point(144, 56);
 			this.textEmpName.Name = "textEmpName";
 			this.textEmpName.Size = new System.Drawing.Size(170, 20);
-			this.textEmpName.TabIndex = 27;
+			this.textEmpName.TabIndex = 1;
 			// 
 			// label6
 			// 
@@ -196,7 +196,7 @@ namespace OpenDental{
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.Size = new System.Drawing.Size(352, 51);
-			this.textNotes.TabIndex = 30;
+			this.textNotes.TabIndex = 7;
 			// 
 			// label3
 			// 
@@ -212,7 +212,7 @@ namespace OpenDental{
 			this.textComputerName.Location = new System.Drawing.Point(144, 358);
 			this.textComputerName.Name = "textComputerName";
 			this.textComputerName.Size = new System.Drawing.Size(213, 20);
-			this.textComputerName.TabIndex = 32;
+			this.textComputerName.TabIndex = 8;
 			// 
 			// label4
 			// 
@@ -229,7 +229,7 @@ namespace OpenDental{
 			this.checkIsPrivateScreen.Location = new System.Drawing.Point(3, 389);
 			this.checkIsPrivateScreen.Name = "checkIsPrivateScreen";
 			this.checkIsPrivateScreen.Size = new System.Drawing.Size(155, 20);
-			this.checkIsPrivateScreen.TabIndex = 33;
+			this.checkIsPrivateScreen.TabIndex = 9;
 			this.checkIsPrivateScreen.Text = "Private Screen";
 			this.checkIsPrivateScreen.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsPrivateScreen.UseVisualStyleBackColor = true;
@@ -333,7 +333,7 @@ namespace OpenDental{
 			this.listStatusOverride.Location = new System.Drawing.Point(144, 235);
 			this.listStatusOverride.Name = "listStatusOverride";
 			this.listStatusOverride.Size = new System.Drawing.Size(120, 43);
-			this.listStatusOverride.TabIndex = 47;
+			this.listStatusOverride.TabIndex = 6;
 			// 
 			// label17
 			// 
@@ -350,7 +350,7 @@ namespace OpenDental{
 			this.checkIsTriageOperator.Location = new System.Drawing.Point(3, 415);
 			this.checkIsTriageOperator.Name = "checkIsTriageOperator";
 			this.checkIsTriageOperator.Size = new System.Drawing.Size(155, 20);
-			this.checkIsTriageOperator.TabIndex = 48;
+			this.checkIsTriageOperator.TabIndex = 10;
 			this.checkIsTriageOperator.Text = "Triage Operator";
 			this.checkIsTriageOperator.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsTriageOperator.UseVisualStyleBackColor = true;
@@ -362,7 +362,7 @@ namespace OpenDental{
 			this.textPhoneExt.MinVal = 0;
 			this.textPhoneExt.Name = "textPhoneExt";
 			this.textPhoneExt.Size = new System.Drawing.Size(54, 20);
-			this.textPhoneExt.TabIndex = 45;
+			this.textPhoneExt.TabIndex = 5;
 			// 
 			// textEmployeeNum
 			// 
@@ -371,7 +371,7 @@ namespace OpenDental{
 			this.textEmployeeNum.MinVal = 0;
 			this.textEmployeeNum.Name = "textEmployeeNum";
 			this.textEmployeeNum.Size = new System.Drawing.Size(54, 20);
-			this.textEmployeeNum.TabIndex = 44;
+			this.textEmployeeNum.TabIndex = 0;
 			// 
 			// butDelete
 			// 
@@ -386,7 +386,7 @@ namespace OpenDental{
 			this.butDelete.Location = new System.Drawing.Point(28, 467);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(84, 24);
-			this.butDelete.TabIndex = 16;
+			this.butDelete.TabIndex = 13;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
@@ -401,7 +401,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(539, 467);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 8;
+			this.butOK.TabIndex = 11;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -416,7 +416,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(632, 467);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 9;
+			this.butCancel.TabIndex = 12;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
