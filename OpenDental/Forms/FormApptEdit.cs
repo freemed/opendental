@@ -2545,7 +2545,12 @@ namespace OpenDental{
 							row.Cells.Add(proc.ProcFee.ToString("F"));
 							break;
 						case "ADA Code":
-							row.Cells.Add(procCode.ProcCode);
+							if(procCode.ProcCode.Length>5 && procCode.ProcCode.StartsWith("D")) {
+								row.Cells.Add(procCode.ProcCode.Substring(0,5));//Remove suffix from all D codes.
+							}
+							else {
+								row.Cells.Add(procCode.ProcCode);
+							}
 							break;
 						case "User":
 							row.Cells.Add(usr!=null?usr.UserName:"");
