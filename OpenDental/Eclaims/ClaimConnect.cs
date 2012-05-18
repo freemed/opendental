@@ -257,10 +257,12 @@ namespace OpenDental.Eclaims
 				strResponse=response.content;
 			}
 			catch(SoapException ex) {
-				strResponse=ex.Message+"\r\n\r\n"+ex.Detail.InnerText+"\r\n\r\n"+"If this is a new customer, this error might also be due to an invalid Username or Password.  Servers may need a few hours before ready to accept new user information.";
+				strResponse="If this is a new customer, this error might be due to an invalid Username or Password.  Servers may need a few hours before ready to accept new user information.\r\n"
+					+"Error message received directly from Claim Connect:  "+ex.Message+"\r\n\r\n"+ex.Detail.InnerText;
 			}
 			//cleanup response.  Seems to start with \n and 4 spaces.  Ends with trailing \n.
-			strResponse=strResponse.Replace("\n","");
+			strResponse=strResponse.TrimStart('\n');
+			//strResponse.Replace("\n","");
 			strResponse=strResponse.TrimStart(' ');
 			//CodeBase.MsgBoxCopyPaste msgbox=new CodeBase.MsgBoxCopyPaste(response.content);
 			//msgbox.ShowDialog();
