@@ -1213,7 +1213,7 @@ namespace OpenDentBusiness{
 				+"WHERE schedule.EmployeeNum=employee.EmployeeNum "
 				+"AND SchedType=3 "//employee
 				+"AND SchedDate = "+POut.Date(dateStart)+" "
-				+"ORDER BY schedule.EmployeeNum,StartTime";
+				+"ORDER BY FName";
 			DataTable raw=dcon.GetTable(command);
 			DateTime startTime;
 			DateTime stopTime;
