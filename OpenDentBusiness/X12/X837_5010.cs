@@ -1449,8 +1449,8 @@ namespace OpenDentBusiness
 					#region Service DTP
 					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim for dental and inst. Emdeon dental complains if this date is specified when not needed.
 					if(claim.ClaimType!="PreAuth") {
-						//Always required for medical because there is no date of service at the claim level. Blue Cross Blue Shield of Puerto Rico (electid 973) always expects this field.
-						if(medType==EnumClaimMedType.Medical || proc.ProcDate!=claim.DateService || carrier.ElectID=="973") {
+						//Always required for medical because there is no date of service at the claim level. Required for institutional and dental when procedure date of service is different from the claim date of service. Always required for clearinghouse Inmediata.
+						if(medType==EnumClaimMedType.Medical || proc.ProcDate!=claim.DateService || IsInmediata(clearhouse)) {
 							sw.Write("DTP"+s
 								+"472"+s//DTP01 3/3 Date/Time Qualifier: 472=Service.
 								+"D8"+s//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
@@ -1664,6 +1664,10 @@ namespace OpenDentBusiness
 
 		private static bool IsEMS(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="EMS");
+		}
+
+		private static bool IsInmediata(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="660610220");
 		}
 
 		private static bool IsTesia(Clearinghouse clearinghouse) {
