@@ -4534,6 +4534,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\TxtMsg5.gif" />
+    <None Include="Resources\TxtMsg2.png" />
+    <None Include="Resources\TxtMsg1.png" />
+    <None Include="Resources\TxtMsg.png" />
+    <None Include="Resources\TxtMsg4.gif" />
+    <None Include="Resources\TxtMsg3.gif" />
+    <None Include="Resources\TxtMsg2.gif" />
+    <None Include="Resources\TxtMsg1.gif" />
     <None Include="Resources\UDS3b.gif" />
     <None Include="Resources\UDS3a.gif" />
     <None Include="Web References\MobileWeb\Mobile.disco" />

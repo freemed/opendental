@@ -110,6 +110,7 @@ namespace OpenDental{
 		private Label label9;
 		private UI.Button butColorClear;
 		private System.Windows.Forms.Button butColor;
+		private UI.Button butText;
 		private Label labelQuickAdd;
 
 		///<summary></summary>
@@ -221,6 +222,7 @@ namespace OpenDental{
 			this.butPin = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butText = new OpenDental.UI.Button();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1022,6 +1024,23 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butText
+			// 
+			this.butText.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butText.Autosize = true;
+			this.butText.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butText.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butText.CornerRadius = 4F;
+			this.butText.Image = global::OpenDental.Properties.Resources.Text;
+			this.butText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butText.Location = new System.Drawing.Point(880, 431);
+			this.butText.Name = "butText";
+			this.butText.Size = new System.Drawing.Size(92, 24);
+			this.butText.TabIndex = 143;
+			this.butText.Text = "Text";
+			this.butText.Click += new System.EventHandler(this.butText_Click);
+			// 
 			// FormApptEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -1036,6 +1055,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.labelApptNote);
+			this.Controls.Add(this.butText);
 			this.Controls.Add(this.butAddComm);
 			this.Controls.Add(this.butSlider);
 			this.Controls.Add(this.tbTime);
@@ -1297,6 +1317,18 @@ namespace OpenDental{
 				butComplete.Visible=false;
 				butPDF.Visible=false;
 			}
+			//Hide text message button sometimes
+			if(pat.WirelessPhone=="" || !Programs.IsEnabled(ProgramName.CallFire)) {
+				butText.Enabled=false;
+			}
+			else {//Pat has a wireless phone number and CallFire is enabled
+				if(pat.TxtMsgOk==YN.Unknown) {
+					butText.Enabled=!PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);//Not enabled since TxtMsgOk is ?? and "Treat ?? As No" is true.
+				}
+				else {
+					butText.Enabled=(pat.TxtMsgOk==YN.Yes);
+				}
+			}
 			FillProcedures();
 			SetProceduresForECW();
 			FillPatient();//Must be after FillProcedures(), so that the initial amount for the appointment can be calculated.
@@ -1448,21 +1480,6 @@ namespace OpenDental{
 			FillComm();
 		}
 
-		private void butAddComm_Click(object sender,EventArgs e) {
-			Commlog CommlogCur=new Commlog();
-			CommlogCur.PatNum=AptCur.PatNum;
-			CommlogCur.CommDateTime=DateTime.Now;
-			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
-			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI=new FormCommItem(CommlogCur);
-			FormCI.IsNew=true;
-			FormCI.ShowDialog();
-			DS.Tables.Remove("Comm");
-			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Comm"].Copy());
-				//AppointmentL.GetApptEditComm(AptCur.AptNum));
-			FillComm();
-		}
-
 		private void FillProcedures(){
 			gridProc.BeginUpdate();
 			gridProc.Columns.Clear();
@@ -1499,6 +1516,36 @@ namespace OpenDental{
 					gridProc.SetSelected(i,true);
 				}
 			}
+		}
+
+		private void butAddComm_Click(object sender,EventArgs e) {
+			Commlog CommlogCur=new Commlog();
+			CommlogCur.PatNum=AptCur.PatNum;
+			CommlogCur.CommDateTime=DateTime.Now;
+			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
+			CommlogCur.UserNum=Security.CurUser.UserNum;
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+			FormCI.IsNew=true;
+			FormCI.ShowDialog();
+			DS.Tables.Remove("Comm");
+			DS.Tables.Add(Appointments.GetApptEdit(AptCur.AptNum).Tables["Comm"].Copy());
+				//AppointmentL.GetApptEditComm(AptCur.AptNum));
+			FillComm();
+		}
+
+		private void butText_Click(object sender,EventArgs e) {
+			string message;
+			message=PrefC.GetString(PrefName.ConfirmTextMessage);
+			message=message.Replace("[NameF]",pat.GetNameFirst());
+			message=message.Replace("[NameFL]",pat.GetNameFL());
+			message=message.Replace("[date]",AptCur.AptDateTime.ToShortDateString());
+			message=message.Replace("[time]",AptCur.AptDateTime.ToShortTimeString());
+			FormTxtMsgEdit FormTME=new FormTxtMsgEdit();
+			FormTME.PatNum=pat.PatNum;
+			FormTME.WirelessPhone=pat.WirelessPhone;
+			FormTME.Message=message;
+			FormTME.TxtMsgOk=pat.TxtMsgOk;
+			FormTME.ShowDialog();
 		}
 
 		private void gridProc_CellClick(object sender,ODGridClickEventArgs e) {

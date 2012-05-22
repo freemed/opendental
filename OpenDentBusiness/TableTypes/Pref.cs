@@ -112,6 +112,10 @@ namespace OpenDentBusiness {
 		ConfirmPostcardMessage,
 		///<summary>FK to definition.DefNum.  Initially 0.</summary>
 		ConfirmStatusEmailed,
+		///<summary>FK to definition.DefNum.</summary>
+		ConfirmStatusTextMessaged,
+		///<summary>The message that goes out to patients when doing a batch confirmation.</summary>
+		ConfirmTextMessage,
 		CoPay_FeeSchedule_BlankLikeZero,
 		CorruptedDatabase,
 		CropDelta,

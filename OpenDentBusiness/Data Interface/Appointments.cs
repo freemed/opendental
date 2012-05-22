@@ -406,11 +406,12 @@ namespace OpenDentBusiness{
 			table.Columns.Add("PatNum");
 			table.Columns.Add("PreferConfirmMethod");
 			table.Columns.Add("ProcDescript");
+			table.Columns.Add("TxtMsgOk");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT patient.PatNum,"
 				+"patient.LName,"
 				+"patient.FName,patient.Preferred,patient.LName, "
-				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.HmPhone,"
+				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.HmPhone,patient.TxtMsgOk,"
 				+"patient.WkPhone,patient.WirelessPhone,ProcDescript,Confirmed,Note,"
 				+"patient.AddrNote,AptNum,patient.MedUrgNote,patient.PreferConfirmMethod,"
 				+"guar.Email guarEmail,patient.Email,patient.Premed "
@@ -463,6 +464,9 @@ namespace OpenDentBusiness{
 				if(contmeth==ContactMethod.WirelessPh) {
 					row["contactMethod"]=Lans.g("FormConfirmList","Cell:")+rawtable.Rows[i]["WirelessPhone"].ToString();
 				}
+				if(contmeth==ContactMethod.TextMessage) {
+					row["contactMethod"]=Lans.g("FormConfirmList","Text:")+rawtable.Rows[i]["WirelessPhone"].ToString();
+				}
 				if(contmeth==ContactMethod.Email) {
 					row["contactMethod"]=rawtable.Rows[i]["Email"].ToString();
 				}
@@ -503,6 +507,7 @@ namespace OpenDentBusiness{
 				row["PatNum"]=rawtable.Rows[i]["PatNum"].ToString();
 				row["PreferConfirmMethod"]=rawtable.Rows[i]["PreferConfirmMethod"].ToString();
 				row["ProcDescript"]=rawtable.Rows[i]["ProcDescript"].ToString();
+				row["TxtMsgOk"]=rawtable.Rows[i]["TxtMsgOk"].ToString();
 				rows.Add(row);
 			}
 			//Array.Sort(orderDate,RecallList);

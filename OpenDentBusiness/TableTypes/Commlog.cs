@@ -56,10 +56,8 @@ namespace OpenDentBusiness{
 		Phone,
 		///<summary>4</summary>
 		InPerson,
-		/////<summary>5</summary>
-		//AutoItem//these were all deleted in version 12.2.1
 		///<summary>5</summary>
-		TxtMsg
+		Text
 	}
 
 	///<summary>0=neither, 1=sent, 2=received.</summary>

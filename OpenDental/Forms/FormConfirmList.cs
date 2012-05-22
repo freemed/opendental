@@ -52,6 +52,7 @@ namespace OpenDental{
 		private ComboBox comboClinic;
 		private Label labelClinic;
 		private ComboBox comboShowRecall;
+		private UI.Button butText;
 		///<summary>Only used if PinClicked=true</summary>
 		public long AptSelected;
 
@@ -96,6 +97,7 @@ namespace OpenDental{
 			this.grid = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butEmail = new OpenDental.UI.Button();
+			this.butText = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.SuspendLayout();
@@ -241,7 +243,7 @@ namespace OpenDental{
 			this.butReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butReport.CornerRadius = 4F;
-			this.butReport.Location = new System.Drawing.Point(445, 659);
+			this.butReport.Location = new System.Drawing.Point(621, 659);
 			this.butReport.Name = "butReport";
 			this.butReport.Size = new System.Drawing.Size(87, 24);
 			this.butReport.TabIndex = 13;
@@ -329,7 +331,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(538, 659);
+			this.butPrint.Location = new System.Drawing.Point(714, 659);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(87, 24);
 			this.butPrint.TabIndex = 20;
@@ -346,18 +348,36 @@ namespace OpenDental{
 			this.butEmail.CornerRadius = 4F;
 			this.butEmail.Image = global::OpenDental.Properties.Resources.email1;
 			this.butEmail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butEmail.Location = new System.Drawing.Point(348, 659);
+			this.butEmail.Location = new System.Drawing.Point(237, 659);
 			this.butEmail.Name = "butEmail";
 			this.butEmail.Size = new System.Drawing.Size(91, 24);
 			this.butEmail.TabIndex = 61;
 			this.butEmail.Text = "E-Mail";
 			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
+			// butText
+			// 
+			this.butText.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butText.Autosize = false;
+			this.butText.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butText.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butText.CornerRadius = 4F;
+			this.butText.Image = global::OpenDental.Properties.Resources.Text;
+			this.butText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butText.Location = new System.Drawing.Point(333, 659);
+			this.butText.Name = "butText";
+			this.butText.Size = new System.Drawing.Size(79, 24);
+			this.butText.TabIndex = 61;
+			this.butText.Text = "Text";
+			this.butText.Click += new System.EventHandler(this.butText_Click);
+			// 
 			// FormConfirmList
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butClose;
 			this.ClientSize = new System.Drawing.Size(975, 688);
+			this.Controls.Add(this.butText);
 			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butPostcards);
@@ -407,6 +427,9 @@ namespace OpenDental{
 				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
+			}
+			if(!Programs.IsEnabled(ProgramName.CallFire)) {
+				butText.Enabled=false;
 			}
 			FillMain();
 		}
@@ -854,10 +877,13 @@ namespace OpenDental{
 					if(cmeth!=ContactMethod.Email) {
 						continue;
 					}
+					if(table.Rows[i]["confirmed"].ToString()==DefC.GetName(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ConfirmStatusEmailed))) {//Already confirmed by email
+						continue;
+					}
 					grid.SetSelected(i,true);
 				}
 				if(grid.SelectedIndices.Length==0) {
-					MsgBox.Show(this,"No patients of email type.");
+					MsgBox.Show(this,"All patients of email type have been sent confirmations.");
 					return;
 				}
 			}
@@ -908,6 +934,95 @@ namespace OpenDental{
 				message.SentOrReceived=CommSentOrReceived.Sent;
 				EmailMessages.Insert(message);
 				Appointments.SetConfirmed(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
+			}
+			FillMain();
+			Cursor=Cursors.Default;
+		}
+
+		private void butText_Click(object sender,EventArgs e) {
+			long patNum;
+			string wirelessPhone;
+			YN txtMsgOk;
+			if(grid.Rows.Count==0) {
+				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
+				return;
+			}
+			if(!Programs.IsEnabled(ProgramName.CallFire)) {
+				MsgBox.Show(this,"CallFire must be enabled to send text messages. Go to Setup | Program Links | CallFire, and enable CallFire.");
+				return;
+			}
+			if(PrefC.GetLong(PrefName.ConfirmStatusTextMessaged)==0) {
+				MsgBox.Show(this,"You need to set a status first for confirmation text messages in the Recall Setup window.");
+				return;
+			}
+			if(grid.SelectedIndices.Length==0) {//None selected. Select all of type text that are not yet confirmed by text message.
+				ContactMethod cmeth;
+				for(int i=0;i<table.Rows.Count;i++) {
+					cmeth=(ContactMethod)PIn.Int(table.Rows[i]["PreferConfirmMethod"].ToString());
+					if(cmeth!=ContactMethod.TextMessage) {
+						continue;
+					}
+					if(table.Rows[i]["confirmed"].ToString()==DefC.GetName(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ConfirmStatusTextMessaged))) {//Already confirmed by text
+						continue;
+					}
+					grid.SetSelected(i,true);
+				}
+				if(grid.SelectedIndices.Length==0) {
+					MsgBox.Show(this,"All patients of text message type have been sent confirmations.");
+					return;
+				}
+			}
+			//deselect the ones that do not have text messages specified or are not OK to send texts to or have already been texted
+			int skipped=0;
+			for(int i=grid.SelectedIndices.Length-1;i>=0;i--) {
+				wirelessPhone=table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString();
+				if(wirelessPhone.Length<5 || wirelessPhone.Substring(0,5)!="Text:") {//Check contact type
+					skipped++;
+					grid.SetSelected(grid.SelectedIndices[i],false);
+					continue;
+				}
+				if(wirelessPhone.Substring(5)=="") {//Check for wireless number
+					skipped++;
+					grid.SetSelected(grid.SelectedIndices[i],false);
+					continue;
+				}
+				txtMsgOk=(YN)PIn.Int(table.Rows[grid.SelectedIndices[i]]["TxtMsgOk"].ToString());
+				if(txtMsgOk==YN.Unknown	&& PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo)) {//Check if OK to text
+					skipped++;
+					grid.SetSelected(grid.SelectedIndices[i],false);
+					continue;
+				}
+				if(txtMsgOk==YN.No){//Check if OK to text
+					skipped++;
+					grid.SetSelected(grid.SelectedIndices[i],false);
+					continue;
+				}
+			}
+			if(grid.SelectedIndices.Length==0) {
+				MsgBox.Show(this,"None of the selected patients have wireless phone numbers and are OK to text.");
+				return;
+			}
+			if(skipped>0) {
+				MessageBox.Show(Lan.g(this,"Selected patients skipped: ")+skipped.ToString());
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Send text message to all of the selected patients?")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			FormTxtMsgEdit FormTME=new FormTxtMsgEdit();
+			string message="";
+			//Appointment apt;
+			for(int i=0;i<grid.SelectedIndices.Length;i++){
+				patNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
+				wirelessPhone=PIn.String(table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString()).Substring(5);
+				txtMsgOk=((YN)PIn.Int(table.Rows[grid.SelectedIndices[i]]["TxtMsgOk"].ToString()));
+				message=PrefC.GetString(PrefName.ConfirmTextMessage);
+				message=message.Replace("[NameF]",table.Rows[grid.SelectedIndices[i]]["nameF"].ToString());
+				message=message.Replace("[NameFL]",table.Rows[grid.SelectedIndices[i]]["nameFL"].ToString());
+				message=message.Replace("[date]",((DateTime)table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortDateString());
+				message=message.Replace("[time]",((DateTime)table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
+				FormTME.SendText(patNum,wirelessPhone,message,txtMsgOk);
+				Appointments.SetConfirmed(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusTextMessaged));
 			}
 			FillMain();
 			Cursor=Cursors.Default;

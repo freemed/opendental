@@ -63,6 +63,7 @@ namespace OpenDental{
 			this.textMessage.Multiline = true;
 			this.textMessage.Name = "textMessage";
 			this.textMessage.QuickPasteType = OpenDentBusiness.QuickPasteType.TxtMsg;
+			this.textMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textMessage.Size = new System.Drawing.Size(186, 83);
 			this.textMessage.TabIndex = 4;
 			// 
@@ -78,7 +79,7 @@ namespace OpenDental{
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
+			this.butOK.Text = "&Send";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel

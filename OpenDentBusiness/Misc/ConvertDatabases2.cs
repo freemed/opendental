@@ -9208,6 +9208,40 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ32(command);
 					}
 				}
+				//Text Message Confirmations--------------------------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ConfirmTextMessage','[NameF], we would like to confirm your dental appointment on [date] at [time].')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) "
+						+"VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ConfirmTextMessage','[NameF], we would like to confirm your dental appointment on [date] at [time].')";
+					Db.NonQ(command);
+				}
+				command="SELECT MAX(ItemOrder) FROM definition WHERE Category="+POut.Int((int)DefCat.ApptConfirmed);
+				int itemOrder=PIn.Int(Db.GetScalar(command))+1;//eg 7+1
+				long defNumTextMessaged;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO definition(Category,ItemOrder,ItemName,ItemValue) "
+						+"VALUES("+POut.Int((int)DefCat.ApptConfirmed)+","+POut.Int(itemOrder)+",'Texted','Texted')";
+					defNumTextMessaged=Db.NonQ(command,true);
+				}
+				else {//oracle
+					command="INSERT INTO definition(DefNum,Category,ItemOrder,ItemName,ItemValue) "
+						+"VALUES((SELECT MAX(PrefNum)+1 FROM preference),"+POut.Int((int)DefCat.ApptConfirmed)+","+POut.Int(itemOrder)+",'Texted','Texted')";
+					defNumTextMessaged=Db.NonQ(command,true);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ConfirmStatusTextMessaged','"+POut.Long(defNumTextMessaged)+"')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ConfirmStatusTextMessaged','"+POut.Long(defNumTextMessaged)+"')";
+					Db.NonQ(command);
+				}
+				//End Text Message Confirmations----------------------------------------------------------------------------------------------------------------------------------
+
+
 
 
 

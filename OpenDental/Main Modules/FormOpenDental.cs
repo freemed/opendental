@@ -1298,6 +1298,7 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(2, "email.gif");
 			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
 			this.imageListMain.Images.SetKeyName(4, "label.gif");
+			this.imageListMain.Images.SetKeyName(5, "Text.gif");
 			// 
 			// menuPatient
 			// 
@@ -2070,6 +2071,7 @@ namespace OpenDental{
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuEmail;
 				ToolBarMain.Buttons.Add(button);
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Text"),5,Lan.g(this,"Send Text Message"),"Text"));
 				button=new ODToolBarButton(Lan.g(this,"Letter"),-1,Lan.g(this,"Quick Letter"),"Letter");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuLetter;
@@ -2083,7 +2085,6 @@ namespace OpenDental{
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuLabel;
 				ToolBarMain.Buttons.Add(button);
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"TxtMsg"),-1,Lan.g(this,"Send Text Message"),"TxtMsg"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Popups"),-1,Lan.g(this,"Edit popups for this patient"),"Popups"));
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.AllModules);
@@ -2117,6 +2118,9 @@ namespace OpenDental{
 					case "Email":
 						OnEmail_Click();
 						break;
+					case "Text":
+						OnTxtMsg_Click();
+						break;
 					case "Letter":
 						OnLetter_Click();
 						break;
@@ -2131,9 +2135,6 @@ namespace OpenDental{
 						break;
 					case "Popups":
 						OnPopups_Click();
-						break;
-					case "TxtMsg":
-						OnTxtMsg_Click();
 						break;
 				}
 			}
@@ -2189,12 +2190,12 @@ namespace OpenDental{
 				if(!Programs.UsingEcwTight()) {//eCW tight only gets Patient Select and Popups toolbar buttons
 					ToolBarMain.Buttons["Email"].Enabled=false;
 					ToolBarMain.Buttons["EmailDropdown"].Enabled=false;
+					ToolBarMain.Buttons["Text"].Enabled=false;
 					ToolBarMain.Buttons["Commlog"].Enabled=false;
 					ToolBarMain.Buttons["Letter"].Enabled=false;
 					ToolBarMain.Buttons["Form"].Enabled=false;
 					ToolBarMain.Buttons["Tasklist"].Enabled=false;
 					ToolBarMain.Buttons["Label"].Enabled=false;
-					ToolBarMain.Buttons["TxtMsg"].Enabled=false;
 				}
 				ToolBarMain.Buttons["Popups"].Enabled=false;
 			}
@@ -2207,22 +2208,22 @@ namespace OpenDental{
 					else {
 						ToolBarMain.Buttons["Email"].Enabled=false;
 					}
+					if(pat.WirelessPhone=="" || !Programs.IsEnabled(ProgramName.CallFire)) {
+						ToolBarMain.Buttons["Text"].Enabled=false;
+					}
+					else {//Pat has a wireless phone number and CallFire is enabled
+						if(pat.TxtMsgOk==YN.Unknown) {
+							ToolBarMain.Buttons["Text"].Enabled=!PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);//Not enabled since TxtMsgOk is ?? and "Treat ?? As No" is true.
+						}
+						else {
+							ToolBarMain.Buttons["Text"].Enabled=(pat.TxtMsgOk==YN.Yes);
+						}
+					}
 					ToolBarMain.Buttons["EmailDropdown"].Enabled=true;
 					ToolBarMain.Buttons["Letter"].Enabled=true;
 					ToolBarMain.Buttons["Form"].Enabled=true;
 					ToolBarMain.Buttons["Tasklist"].Enabled=true;
 					ToolBarMain.Buttons["Label"].Enabled=true;
-					if(pat.WirelessPhone=="" || !Programs.IsEnabled(ProgramName.CallFire)) {
-						ToolBarMain.Buttons["TxtMsg"].Enabled=false;//Patient doesn't have a wireless # or CallFire is disabled
-					}
-					else {//Pat has a WirelessPhone
-						if(pat.TxtMsgOk==YN.Unknown) {
-							ToolBarMain.Buttons["TxtMsg"].Enabled=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
-						}
-						else {
-							ToolBarMain.Buttons["TxtMsg"].Enabled=(pat.TxtMsgOk==YN.Yes);
-						}
-					}
 				}
 				ToolBarMain.Buttons["Popups"].Enabled=true;
 			}
@@ -2605,7 +2606,10 @@ namespace OpenDental{
 
 		private void OnTxtMsg_Click() {
 			FormTxtMsgEdit FormTME=new FormTxtMsgEdit();
-			FormTME.PatCur=Patients.GetPat(CurPatNum);
+			Patient pat=Patients.GetPat(CurPatNum);
+			FormTME.PatNum=CurPatNum;
+			FormTME.WirelessPhone=pat.WirelessPhone;
+			FormTME.TxtMsgOk=pat.TxtMsgOk;
 			FormTME.ShowDialog();
 			if(FormTME.DialogResult==DialogResult.OK) {
 				RefreshCurrentModule();
