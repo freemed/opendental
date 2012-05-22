@@ -1386,19 +1386,59 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
 			}
+			if(DataConnection.DBtype==DatabaseType.Oracle) { //Does not apply to Oracle.
+				return "";
+			}
+			command="SELECT * FROM INFORMATION_SCHEMA.tables "
+				+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
+				+"AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
+			DataTable dtTableTypes=Db.GetTable(command);
+			int numInnodb=0;//Or possibly some other format.
+			int numMyisam=0;
+			for(int i=0;i<dtTableTypes.Rows.Count;i++) {
+				if(PIn.String(dtTableTypes.Rows[i]["Engine"].ToString()).ToUpper()=="MYISAM") {
+					numMyisam++;
+				}
+				else {
+					numInnodb++;
+				}
+			}
 			string log="";
 			if(isCheck) {
-				command="SELECT * FROM INFORMATION_SCHEMA.tables "
-					+"WHERE ENGINE NOT LIKE 'MyISAM'"
-					+"AND TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
-					+"AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
-				int numFound=Db.GetTable(command).Rows.Count;
-				if(numFound>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Number of tables not MyISAM (probably InnoDb): ")+numFound+"\r\n";
+				if(numInnodb>0 || verbose) {
+					if(numMyisam==0) {
+						log+=Lans.g("FormDatabaseMaintenance","All database tables are in InnoDb format. MyISAM tables are preferred. Total count: ")+numInnodb+"\r\n";
+					}
+					else {
+						log+=Lans.g("FormDatabaseMaintenance","Number of tables in InnoDb format which need to be fixed: ")+numInnodb+"\r\n";
+					}
 				}
 			}
 			else {//fix
-				//we will fix manually for now.
+				long numberFixed=0;
+				if(numInnodb>0 && numMyisam>0) {//Fix tables by converting them to MyISAM when there is a mixture of different table types.
+					for(int i=0;i<dtTableTypes.Rows.Count;i++) {
+						if(PIn.String(dtTableTypes.Rows[i]["Engine"].ToString()).ToUpper()=="MYISAM") {
+							continue;
+						}
+						string tableName=PIn.String(dtTableTypes.Rows[i]["TABLE_NAME"].ToString());
+						command="ALTER TABLE "+POut.String(tableName)+" ENGINE='MyISAM'";
+						Db.NonQ(command);
+						command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables "
+							+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
+							+"AND TABLE_NAME='"+POut.String(tableName)+"' "
+							+"AND ENGINE LIKE 'MyISAM'";
+						if(Db.GetCount(command)=="0") {
+							log+=Lans.g("FormDatabaseMaintenance","FAILED TO CONVERT TABLE TO MYISAM FORMAT: ")+tableName+"\r\n";
+						}
+						else {
+							numberFixed++;
+						}
+					}
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Number of tables changed to MyISAM format: ")+numberFixed+"\r\n";
+				}
 			}
 			return log;
 		}
