@@ -1519,7 +1519,7 @@ namespace OpenDentBusiness {
 					command="SELECT COUNT(*) FROM benefit WHERE PlanNum="+POut.Long(planNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM claim WHERE PlanNum="+POut.Long(planNum);
-					countUsed=PIn.Int(Db.GetCount(command));
+					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM claimproc WHERE PlanNum="+POut.Long(planNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
 					if(countUsed==0) {
