@@ -25,6 +25,8 @@ namespace OpenDental {
 		///<summary>This thread fills labelMsg</summary>
 		private Thread workerThread;
 		private List<Phone> phoneList;
+		///<summary>The number of tiles to show, must be an even integer.</summary>
+		private int TileCount=30;
 
 		public List<Phone> PhoneList {
 			set { 
@@ -50,11 +52,11 @@ namespace OpenDental {
 			PhoneTile tile;
 			int x=0;
 			int y=0;
-			for(int i=0;i<26;i++) {
+			for(int i=0;i<TileCount;i++) {
 				tile=new PhoneTile();
 				tile.Name="phoneTile"+(i+1).ToString();
 				tile.LayoutHorizontal=true;
-				tile.Location=new Point(tile.Width*x,26+(tile.Height*y));
+				tile.Location=new Point(tile.Width*x,TileCount+(tile.Height*y));
 				//((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
 				tile.GoToChanged += new System.EventHandler(this.phoneTile_GoToChanged);
 				tile.SelectedTileChanged += new System.EventHandler(this.phoneTile_SelectedTileChanged);
@@ -63,7 +65,7 @@ namespace OpenDental {
 				tile.MenuStatus=menuStatus;
 				this.Controls.Add(tile);
 				y++;
-				if(y==13){
+				if(y==TileCount/2){//Move over to the other column.
 					y=0;
 					x++;
 				}
@@ -86,7 +88,7 @@ namespace OpenDental {
 				return;
 			}
 			PhoneTile tile;
-			for(int i=0;i<26;i++) {
+			for(int i=0;i<TileCount;i++) {
 				//Application.DoEvents();
 				Control[] controlMatches=Controls.Find("phoneTile"+(i+1).ToString(),false);
 				if(controlMatches.Length==0) {//no match found for some reason.
