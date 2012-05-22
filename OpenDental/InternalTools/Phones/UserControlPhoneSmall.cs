@@ -57,7 +57,7 @@ namespace OpenDental {
 			if(phoneList==null){
 				return;
 			}
-			int rows=4;
+			int rows=5;
 			int columns=7;
 			float wh=21.4f;
 			float hTot=wh*rows;

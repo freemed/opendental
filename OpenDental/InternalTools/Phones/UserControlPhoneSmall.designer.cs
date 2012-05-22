@@ -196,7 +196,7 @@
 			// 
 			this.phoneTile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.phoneTile.LayoutHorizontal = false;
-			this.phoneTile.Location = new System.Drawing.Point(0, 89);
+			this.phoneTile.Location = new System.Drawing.Point(0, 113);
 			this.phoneTile.Name = "phoneTile";
 			this.phoneTile.PhoneCur = null;
 			this.phoneTile.Size = new System.Drawing.Size(150, 122);
@@ -209,7 +209,7 @@
 			this.Controls.Add(this.phoneTile);
 			this.DoubleBuffered = true;
 			this.Name = "UserControlPhoneSmall";
-			this.Size = new System.Drawing.Size(150, 215);
+			this.Size = new System.Drawing.Size(150, 239);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UserControlPhoneSmall_Paint);
 			this.menuStatus.ResumeLayout(false);
 			this.menuNumbers.ResumeLayout(false);
