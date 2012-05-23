@@ -481,6 +481,7 @@ namespace OpenDental{
 				IsQuickBooks=true;
 				//Only need to test if QB is installed when this is an old deposit that is attached to a transaction (non QB deposit).
 				if(Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null	&& !IsNew) {	
+					//There is no good way to know if this is an old deposit that has already been sent over to QB so always show.
 					butSendQB.Visible=true;
 					Cursor.Current=Cursors.WaitCursor;//Without QB open in background this could take 8-10 seconds.
 					if(QuickBooks.TestConnection(PrefC.GetString(PrefName.QuickBooksCompanyFile))!="Connection to QuickBooks was successful.") {
@@ -762,6 +763,7 @@ namespace OpenDental{
 					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,textMemo.Text,false)) 
 			{
 				MsgBox.Show(this,"Deposit was sent to QuickBooks.");
+				butSendQB.Enabled=false;//Don't let user send same deposit more than once.
 			}
 		}
 
