@@ -782,7 +782,7 @@ namespace OpenDental {
 		}
 
 		private void butDashboard_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
+			if(!Security.IsAuthorized(Permissions.ReportDashboard)) {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;

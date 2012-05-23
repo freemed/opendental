@@ -215,6 +215,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","User Query");
 				case Permissions.ReportProdInc:
 					return Lans.g("enumPermissions","Reports - Production and Income, Aging");
+				case Permissions.ReportDashboard:
+					return Lans.g("enumPermissions","Reports - Dashboard");
 			}
 			return "";//should never happen
 		}

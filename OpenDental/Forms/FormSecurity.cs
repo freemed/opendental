@@ -466,6 +466,8 @@ namespace OpenDental{
 				node2=SetNode(Permissions.UserQuery);
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.Reports);
+					node3=SetNode(Permissions.ReportDashboard);
+						node2.Nodes.Add(node3);
 					node3=SetNode(Permissions.ReportProdInc);
 						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);

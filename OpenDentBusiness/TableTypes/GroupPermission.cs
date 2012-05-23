@@ -144,7 +144,9 @@ namespace OpenDentBusiness{
 		///<summary>57</summary>
 		RefAttachDelete,
 		///<summary>58</summary>
-		CarrierCreate
+		CarrierCreate,
+		///<summary>59</summary>
+		ReportDashboard
 	}
 
 	

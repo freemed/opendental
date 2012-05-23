@@ -9240,8 +9240,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				//End Text Message Confirmations----------------------------------------------------------------------------------------------------------------------------------
-
-
+				//add ReportDashbaord permissions to all groups------------------------------------------------------
+				command="SELECT UserGroupNum FROM usergroup";
+				table=Db.GetTable(command);
+				//long groupNum;//Used above
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Long((int)Permissions.ReportDashboard)+")";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Long((int)Permissions.ReportDashboard)+")";
+						Db.NonQ(command);
+					}
+				}
 
 
 
