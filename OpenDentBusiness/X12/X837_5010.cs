@@ -1403,15 +1403,29 @@ namespace OpenDentBusiness
 								+isa16+Sout(proc.ClaimNote,80));//SV301-7 1/80 Description: Situational.
 						}
 						sw.Write(s//SV301-8 is not used.
-							+claimProcs[j].FeeBilled.ToString()+s);//SV302 1/18 Monetary Amount: Charge Amount.
+							+claimProcs[j].FeeBilled.ToString());//SV302 1/18 Monetary Amount: Charge Amount.
 						string placeService="";
 						if(proc.PlaceService!=claim.PlaceService) {
 							placeService=GetPlaceService(proc.PlaceService);
 						}
-						sw.Write(placeService+s//SV303 1/2 Facility Code Value: Location Code if different from claim.
-							+GetArea(proc,procCode)+s//SV304 Oral Cavity Designation: SV304-1 1/3 Oral Cavity Designation Code: Area. SV304-2 through SV304-5 are situational and we do not use.
-							+proc.Prosthesis+s//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
-							+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
+						string area=GetArea(proc,procCode);
+						if(placeService!="" || area!="" || proc.Prosthesis!="" || proc.UnitQty>1) {
+							sw.Write(s+placeService);//SV303 1/2 Facility Code Value: Location Code if different from claim.
+						}
+						if(area!="" || proc.Prosthesis!="" || proc.UnitQty>1) {
+							sw.Write(s+area);//SV304 Oral Cavity Designation: SV304-1 1/3 Oral Cavity Designation Code: Area. SV304-2 through SV304-5 are situational and we do not use.
+						}
+						if(proc.Prosthesis!="" || proc.UnitQty>1) {
+							sw.Write(s+proc.Prosthesis);//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
+						}
+						//if(IsPostNTrack(clearhouse)) { //The Post-N-Track clearinghouse does not want this value if it is less than 2.
+							if(proc.UnitQty>1) {
+								sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
+							}
+						//}
+						//else { //Every other clearinghouse always wants us to report the procedure count even if it is 1, although the guide says not to send this value if less than 2.
+						//	sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
+						//}
 						EndSegment(sw);//SV307 throug SV311 are either not used or are situational and we do not use.
 						//2400 TOO: Tooth Information. Number/Surface.
 						if(procCode.TreatArea==TreatmentArea.Tooth) {
@@ -1668,6 +1682,10 @@ namespace OpenDentBusiness
 
 		private static bool IsInmediata(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="660610220");
+		}
+
+		private static bool IsPostNTrack(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="PostnTrack");
 		}
 
 		private static bool IsTesia(Clearinghouse clearinghouse) {
