@@ -1943,9 +1943,9 @@ namespace OpenDental {
 			gridAcctPat.Rows.Clear();
 			ODGridRow row;
 			DataTable table=DataSetMain.Tables["patient"];
-			double bal=0;
+			decimal bal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
-				bal+=(double)table.Rows[i]["balanceDouble"];
+				bal+=(decimal)table.Rows[i]["balanceDouble"];
 				row = new ODGridRow();
 				row.Cells.Add(table.Rows[i]["name"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
@@ -2025,16 +2025,16 @@ namespace OpenDental {
 				text61_90.Text=FamCur.ListPats[0].Bal_61_90.ToString("F");
 				text31_60.Text=FamCur.ListPats[0].Bal_31_60.ToString("F");
 				text0_30.Text=FamCur.ListPats[0].Bal_0_30.ToString("F");
-				double total=FamCur.ListPats[0].BalTotal;
+				decimal total=(decimal)FamCur.ListPats[0].BalTotal;
 				labelTotalAmt.Text=total.ToString("F");
 				labelInsEstAmt.Text=FamCur.ListPats[0].InsEst.ToString("F");
-				labelBalanceAmt.Text = (total - FamCur.ListPats[0].InsEst).ToString("f");
+				labelBalanceAmt.Text = (total - (decimal)FamCur.ListPats[0].InsEst).ToString("F");
 				labelPatEstBalAmt.Text="";
 				DataTable tableMisc=DataSetMain.Tables["misc"];
 				if(!isSelectingFamily){
 					for(int i=0;i<tableMisc.Rows.Count;i++){
 						if(tableMisc.Rows[i]["descript"].ToString()=="patInsEst"){
-							double estBal=PatCur.EstBalance-PIn.Double(tableMisc.Rows[i]["value"].ToString());
+							decimal estBal=(decimal)PatCur.EstBalance-PIn.Decimal(tableMisc.Rows[i]["value"].ToString());
 							labelPatEstBalAmt.Text=estBal.ToString("F");
 						}
 					}

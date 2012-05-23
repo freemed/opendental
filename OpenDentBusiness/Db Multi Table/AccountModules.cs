@@ -14,9 +14,9 @@ namespace OpenDentBusiness {
 		private static Family fam;
 		private static Patient pat;
 		///<summary>Gets filled in GetPayPlansForStatement, then gets added to the misc table.</summary>
-		private static double payPlanDue;
+		private static decimal payPlanDue;
 		///<summary>Value will be set toward the bottom of GetAccount.  It will then go into the misc table.</summary>
-		private static double balanceForward;
+		private static decimal balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
 		public static DataSet GetAll(long patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled,bool showProcBreakdown,bool showNotes) {
@@ -90,19 +90,19 @@ namespace OpenDentBusiness {
 				+"FROM payplancharge WHERE PayPlanNum="+POut.Long(payPlanNum);
 			DataTable rawCharge=dcon.GetTable(command);
 			DateTime dateT;
-			double principal;
-			double interest;
-			double total;
+			decimal principal;
+			decimal interest;
+			decimal total;
 			for(int i=0;i<rawCharge.Rows.Count;i++){
-				interest=PIn.Double(rawCharge.Rows[i]["Interest"].ToString());
-				principal=PIn.Double(rawCharge.Rows[i]["Principal"].ToString());
+				interest=PIn.Decimal(rawCharge.Rows[i]["Interest"].ToString());
+				principal=PIn.Decimal(rawCharge.Rows[i]["Principal"].ToString());
 				total=principal+interest;
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
 				row["balanceDouble"]=0;//fill this later
 				row["chargesDouble"]=total;
-				row["charges"]=((double)row["chargesDouble"]).ToString("n");
+				row["charges"]=((decimal)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=Color.Black.ToArgb().ToString();
@@ -150,8 +150,8 @@ namespace OpenDentBusiness {
 			}*/
 			command+=") ORDER BY ProcDate";
 			DataTable rawPay=dcon.GetTable(command);
-			double payamt;
-			double amt;
+			decimal payamt;
+			decimal amt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -162,9 +162,9 @@ namespace OpenDentBusiness {
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
-				amt=PIn.Double(rawPay.Rows[i]["SplitAmt"].ToString());
+				amt=PIn.Decimal(rawPay.Rows[i]["SplitAmt"].ToString());
 				row["creditsDouble"]=amt;
-				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				row["credits"]=((decimal)row["creditsDouble"]).ToString("n");
 				dateT=PIn.DateT(rawPay.Rows[i]["ProcDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToShortDateString();
@@ -172,7 +172,7 @@ namespace OpenDentBusiness {
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}
-				payamt=PIn.Double(rawPay.Rows[i]["PayAmt"].ToString());
+				payamt=PIn.Decimal(rawPay.Rows[i]["PayAmt"].ToString());
 				row["description"]+=" "+payamt.ToString("c");
 				if(payamt!=amt){
 					row["description"]+=" "+Lans.g("ContrAccount","(split)");
@@ -204,10 +204,10 @@ namespace OpenDentBusiness {
 				num++;
 			}
 			//Compute balances-------------------------------------------------------------------------------------
-			double bal=0;
+			decimal bal=0;
 			for(int i=0;i<rows.Count;i++) {
-				bal+=(double)rows[i]["chargesDouble"];
-				bal-=(double)rows[i]["creditsDouble"];
+				bal+=(decimal)rows[i]["chargesDouble"];
+				bal-=(decimal)rows[i]["creditsDouble"];
 				rows[i]["balanceDouble"]=bal;
 				//if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
 				//	rows[i]["balance"]="";
@@ -415,15 +415,15 @@ namespace OpenDentBusiness {
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("AdjNum");
 			table.Columns.Add("balance");
-			table.Columns.Add("balanceDouble",typeof(double));
+			table.Columns.Add("balanceDouble",typeof(decimal));
 			table.Columns.Add("charges");
-			table.Columns.Add("chargesDouble",typeof(double));
+			table.Columns.Add("chargesDouble",typeof(decimal));
 			table.Columns.Add("ClaimNum");
 			table.Columns.Add("ClaimPaymentNum");//if this is set, also set ClaimNum
 			table.Columns.Add("clinic");
 			table.Columns.Add("colorText");
 			table.Columns.Add("credits");
-			table.Columns.Add("creditsDouble",typeof(double));
+			table.Columns.Add("creditsDouble",typeof(decimal));
 			table.Columns.Add("date");
 			table.Columns.Add("DateTime",typeof(DateTime));
 			table.Columns.Add("description");
@@ -465,8 +465,8 @@ namespace OpenDentBusiness {
 			//but we won't actually fill this table with rows until the very end.  It's more useful to use a List<> for now.
 			List<DataRow> rows=new List<DataRow>();
 			DateTime dateT;
-			double qty;
-			double amt;
+			decimal qty;
+			decimal amt;
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
 			command="SELECT ClaimNum,MAX(ClaimPaymentNum) ClaimPaymentNum,MAX(ClinicNum) ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,MAX(PatNum) PatNum,MAX(ProcDate) ProcDate,"//MAX functions added to preserve behavior in Oracle.
@@ -486,7 +486,7 @@ namespace OpenDentBusiness {
 				+"ORDER BY DateCP";
 			DataTable rawClaimPay=dcon.GetTable(command);
 			DateTime procdate;
-			double writeoff;
+			decimal writeoff;
 			for(int i=0;i<rawClaimPay.Rows.Count;i++){
 				row=table.NewRow();
 				row["AdjNum"]="0";
@@ -499,10 +499,10 @@ namespace OpenDentBusiness {
 				//this is because it will frequently not be attached to an actual claim payment.
 				row["clinic"]=Clinics.GetDesc(PIn.Long(rawClaimPay.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][7].ItemColor.ToArgb().ToString();
-				amt=PIn.Double(rawClaimPay.Rows[i]["InsPayAmt_"].ToString());
-				writeoff=PIn.Double(rawClaimPay.Rows[i]["WriteOff_"].ToString());
+				amt=PIn.Decimal(rawClaimPay.Rows[i]["InsPayAmt_"].ToString());
+				writeoff=PIn.Decimal(rawClaimPay.Rows[i]["WriteOff_"].ToString());
 				row["creditsDouble"]=amt+writeoff;
-				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				row["credits"]=((decimal)row["creditsDouble"]).ToString("n");
 				dateT=PIn.DateT(rawClaimPay.Rows[i]["DateCP"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -572,14 +572,14 @@ namespace OpenDentBusiness {
 			}
 			command+="ORDER BY procDate_";
 			DataTable rawProc=dcon.GetTable(command);
-			double insPayAmt;
-			double insPayEst;
-			double writeOff;
-			double writeOffCap;
-			double patPort;
-			double patPay;
+			decimal insPayAmt;
+			decimal insPayEst;
+			decimal writeOff;
+			decimal writeOffCap;
+			decimal patPort;
+			decimal patPay;
 			bool isNoBill;
-			double adjAmt;
+			decimal adjAmt;
 			string extraDetail;
 			List<DataRow> labRows=new List<DataRow>();//Canadian lab procs, which must be added in a loop at the very end.
 			for(int i=0;i<rawProc.Rows.Count;i++){
@@ -591,11 +591,11 @@ namespace OpenDentBusiness {
 				if(qty==0){
 					qty=1;
 				}
-				amt=PIn.Double(rawProc.Rows[i]["ProcFee"].ToString())*qty;
-				writeOffCap=PIn.Double(rawProc.Rows[i]["writeOffCap_"].ToString());
+				amt=PIn.Decimal(rawProc.Rows[i]["ProcFee"].ToString())*qty;
+				writeOffCap=PIn.Decimal(rawProc.Rows[i]["writeOffCap_"].ToString());
 				amt-=writeOffCap;
 				row["chargesDouble"]=amt;//*qty;
-				row["charges"]=((double)row["chargesDouble"]).ToString("n");
+				row["charges"]=((decimal)row["chargesDouble"]).ToString("n");
 				row["ClaimNum"]="0";
 				row["ClaimPaymentNum"]="0";
 				row["clinic"]=Clinics.GetDesc(PIn.Long(rawProc.Rows[i]["ClinicNum"].ToString()));
@@ -630,12 +630,12 @@ namespace OpenDentBusiness {
 				if(rawProc.Rows[i]["unsent_"].ToString()=="0" && !isNoBill){
 					row["description"]+=" "+Lans.g("ContrAccount","(unsent)");
 				}
-				insPayAmt=PIn.Double(rawProc.Rows[i]["insPayAmt_"].ToString());
-				insPayEst=PIn.Double(rawProc.Rows[i]["insPayEst_"].ToString());
-				writeOff=PIn.Double(rawProc.Rows[i]["writeOff_"].ToString());
+				insPayAmt=PIn.Decimal(rawProc.Rows[i]["insPayAmt_"].ToString());
+				insPayEst=PIn.Decimal(rawProc.Rows[i]["insPayEst_"].ToString());
+				writeOff=PIn.Decimal(rawProc.Rows[i]["writeOff_"].ToString());
 				patPort=amt-insPayAmt-insPayEst-writeOff;
-				patPay=PIn.Double(rawProc.Rows[i]["patPay_"].ToString());
-				adjAmt=PIn.Double(rawProc.Rows[i]["adj_"].ToString());
+				patPay=PIn.Decimal(rawProc.Rows[i]["patPay_"].ToString());
+				adjAmt=PIn.Decimal(rawProc.Rows[i]["adj_"].ToString());
 				extraDetail="";
 				if(patPay>0){
 					extraDetail+=Lans.g("AccountModule","Pat Paid: ")+patPay.ToString("c");
@@ -709,7 +709,7 @@ namespace OpenDentBusiness {
 				row["AdjNum"]=rawAdj.Rows[i]["AdjNum"].ToString();
 				row["balance"]="";//fill this later
 				row["balanceDouble"]=0;//fill this later
-				amt=PIn.Double(rawAdj.Rows[i]["AdjAmt"].ToString());
+				amt=PIn.Decimal(rawAdj.Rows[i]["AdjAmt"].ToString());
 				if(amt<0){
 					row["chargesDouble"]=0;
 					row["charges"]="";
@@ -767,7 +767,7 @@ namespace OpenDentBusiness {
 			}
 			command+=") GROUP BY DatePay,paysplit.PayPlanNum,paysplit.PayNum,paysplit.PatNum,paysplit.ClinicNum ORDER BY DatePay";//ProcDate ORDER BY ProcDate";
 			rawPay=dcon.GetTable(command);
-			double payamt;
+			decimal payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
 				//do not add rows that are attached to payment plans
 				if(rawPay.Rows[i]["PayPlanNum"].ToString()!="0"){
@@ -783,9 +783,9 @@ namespace OpenDentBusiness {
 				row["ClaimPaymentNum"]="0";
 				row["clinic"]=Clinics.GetDesc(PIn.Long(rawPay.Rows[i]["ClinicNum"].ToString()));
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][3].ItemColor.ToArgb().ToString();
-				amt=PIn.Double(rawPay.Rows[i]["splitAmt_"].ToString());
+				amt=PIn.Decimal(rawPay.Rows[i]["splitAmt_"].ToString());
 				row["creditsDouble"]=amt;
-				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				row["credits"]=((decimal)row["creditsDouble"]).ToString("n");
 				dateT=PIn.DateT(rawPay.Rows[i]["DatePay"].ToString());//was ProcDate in earlier versions
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -793,7 +793,7 @@ namespace OpenDentBusiness {
 				if(rawPay.Rows[i]["CheckNum"].ToString()!=""){
 					row["description"]+=" #"+rawPay.Rows[i]["CheckNum"].ToString();
 				}
-				payamt=PIn.Double(rawPay.Rows[i]["PayAmt"].ToString());
+				payamt=PIn.Decimal(rawPay.Rows[i]["PayAmt"].ToString());
 				row["description"]+=" "+payamt.ToString("c");
 				if(rawPay.Rows[i]["PatNum"].ToString() != rawPay.Rows[i]["patNumPayment_"].ToString()){
 					row["description"]+=" ("+Lans.g("ContrAccount","Paid by ")
@@ -866,11 +866,11 @@ namespace OpenDentBusiness {
 				+"ORDER BY DateService";
 			rawClaim=dcon.GetTable(command);
 			DateTime daterec;
-			double amtpaid;//can be different than amt if claims show UCR.
-			double procAmt;
-			double insest;
-			double deductible;
-			double patport;
+			decimal amtpaid;//can be different than amt if claims show UCR.
+			decimal procAmt;
+			decimal insest;
+			decimal deductible;
+			decimal patport;
 			string claimStatus;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
 				row=table.NewRow();
@@ -904,7 +904,7 @@ namespace OpenDentBusiness {
 				else if(rawClaim.Rows[i]["ClaimType"].ToString()=="Cap"){
 					row["description"]=Lans.g("ContrAccount","Cap")+" ";
 				}
-				amt=PIn.Double(rawClaim.Rows[i]["ClaimFee"].ToString());
+				amt=PIn.Decimal(rawClaim.Rows[i]["ClaimFee"].ToString());
 				row["description"]+=Lans.g("ContrAccount","Claim")+" "+amt.ToString("c")+" "
 					+rawClaim.Rows[i]["CarrierName"].ToString();
 				daterec=PIn.DateT(rawClaim.Rows[i]["DateReceived"].ToString());
@@ -931,11 +931,11 @@ namespace OpenDentBusiness {
 				else if(claimStatus=="S"){
 					row["description"]+="\r\n"+Lans.g("ContrAccount","Sent");
 				}
-				procAmt=PIn.Double(rawClaim.Rows[i]["procAmt_"].ToString());
-				insest=PIn.Double(rawClaim.Rows[i]["InsPayEst"].ToString());
-				amtpaid=PIn.Double(rawClaim.Rows[i]["InsPayAmt"].ToString());
-				writeoff=PIn.Double(rawClaim.Rows[i]["WriteOff"].ToString());
-				deductible=PIn.Double(rawClaim.Rows[i]["DedApplied"].ToString());
+				procAmt=PIn.Decimal(rawClaim.Rows[i]["procAmt_"].ToString());
+				insest=PIn.Decimal(rawClaim.Rows[i]["InsPayEst"].ToString());
+				amtpaid=PIn.Decimal(rawClaim.Rows[i]["InsPayAmt"].ToString());
+				writeoff=PIn.Decimal(rawClaim.Rows[i]["WriteOff"].ToString());
+				deductible=PIn.Decimal(rawClaim.Rows[i]["DedApplied"].ToString());
 				if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns) 
 					&& (claimStatus=="W" || claimStatus=="S")
 					&& rawClaim.Rows[i]["ClaimType"].ToString()!="Cap")
@@ -1106,9 +1106,9 @@ namespace OpenDentBusiness {
 				row["clinic"]="";
 				row["colorText"]=DefC.Long[(int)DefCat.AccountColors][6].ItemColor.ToArgb().ToString();
 				//amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
-				amt=PIn.Double(rawPayPlan.Rows[i]["CompletedAmt"].ToString());
+				amt=PIn.Decimal(rawPayPlan.Rows[i]["CompletedAmt"].ToString());
 				row["creditsDouble"]=amt;
-				row["credits"]=((double)row["creditsDouble"]).ToString("n");
+				row["credits"]=((decimal)row["creditsDouble"]).ToString("n");
 				dateT=PIn.DateT(rawPayPlan.Rows[i]["PayPlanDate"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -1184,12 +1184,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			//Compute balances-------------------------------------------------------------------------------------
-			double bal;
+			decimal bal;
 			if(rowsByPat==null){//just one table
 				bal=0;
 				for(int i=0;i<rows.Count;i++) {
-					bal+=(double)rows[i]["chargesDouble"];
-					bal-=(double)rows[i]["creditsDouble"];
+					bal+=(decimal)rows[i]["chargesDouble"];
+					bal-=(decimal)rows[i]["creditsDouble"];
 					rows[i]["balanceDouble"]=bal;
 					if(rows[i]["ClaimPaymentNum"].ToString()=="0" && rows[i]["ClaimNum"].ToString()!="0"){//claims
 						rows[i]["balance"]="";
@@ -1206,8 +1206,8 @@ namespace OpenDentBusiness {
 				for(int p=0;p<rowsByPat.Length;p++){
 					bal=0;
 					for(int i=0;i<rowsByPat[p].Rows.Count;i++) {
-						bal+=(double)rowsByPat[p].Rows[i]["chargesDouble"];
-						bal-=(double)rowsByPat[p].Rows[i]["creditsDouble"];
+						bal+=(decimal)rowsByPat[p].Rows[i]["chargesDouble"];
+						bal-=(decimal)rowsByPat[p].Rows[i]["creditsDouble"];
 						rowsByPat[p].Rows[i]["balanceDouble"]=bal;
 						if(rowsByPat[p].Rows[i]["ClaimPaymentNum"].ToString()=="0" 
 							&& rowsByPat[p].Rows[i]["ClaimNum"].ToString()!="0")//claims
@@ -1234,7 +1234,7 @@ namespace OpenDentBusiness {
 					else if(((DateTime)rows[i]["DateTime"])<fromDate){
 						if(!foundBalForward){
 							foundBalForward=true;
-							balanceForward=(double)rows[i]["balanceDouble"];
+							balanceForward=(decimal)rows[i]["balanceDouble"];
 						}
 						rows.RemoveAt(i);
 					}
@@ -1258,7 +1258,7 @@ namespace OpenDentBusiness {
 						else if(((DateTime)rowsByPat[p].Rows[i]["DateTime"])<fromDate){
 							if(!foundBalForward){
 								foundBalForward=true;
-								balanceForward=(double)rowsByPat[p].Rows[i]["balanceDouble"];
+								balanceForward=(decimal)rowsByPat[p].Rows[i]["balanceDouble"];
 							}
 							rowsByPat[p].Rows.RemoveAt(i);
 						}
@@ -1299,7 +1299,7 @@ namespace OpenDentBusiness {
 			//return table;
 		}
 
-		private static void SetBalForwardRow(DataRow row,double amt){
+		private static void SetBalForwardRow(DataRow row,decimal amt){
 			//No need to check RemotingRole; no call to db.
 			row["AdjNum"]="0";
 			row["balance"]=amt.ToString("n");
@@ -1348,15 +1348,15 @@ namespace OpenDentBusiness {
 			table.Columns.Add("totalCost");
 			List<DataRow> rows=new List<DataRow>();
 			DateTime dateT;
-			double paid;
-			double princ;
-			double princDue;
-			double interestDue;
-			double accumDue;
-			double princPaid;
-			double totCost;
-			double due;
-			double balance;
+			decimal paid;
+			decimal princ;
+			decimal princDue;
+			decimal interestDue;
+			decimal accumDue;
+			decimal princPaid;
+			decimal totCost;
+			decimal due;
+			decimal balance;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
 				//if the guarantor is not in this family, don't continue--------------------------------
 				if(fam.GetIndex(PIn.Long(rawPayPlan.Rows[i]["Guarantor"].ToString()))==-1) {
@@ -1366,18 +1366,18 @@ namespace OpenDentBusiness {
 				paid=0;
 				for(int p=0;p<rawPay.Rows.Count;p++){
 					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
-						paid+=PIn.Double(rawPay.Rows[p]["splitAmt_"].ToString());
+						paid+=PIn.Decimal(rawPay.Rows[p]["splitAmt_"].ToString());
 					}
 				}
-				princ=PIn.Double(rawPayPlan.Rows[i]["principal_"].ToString());
-				princDue=PIn.Double(rawPayPlan.Rows[i]["principalDue_"].ToString());
-				interestDue=PIn.Double(rawPayPlan.Rows[i]["interestDue_"].ToString());
+				princ=PIn.Decimal(rawPayPlan.Rows[i]["principal_"].ToString());
+				princDue=PIn.Decimal(rawPayPlan.Rows[i]["principalDue_"].ToString());
+				interestDue=PIn.Decimal(rawPayPlan.Rows[i]["interestDue_"].ToString());
 				accumDue=princDue+interestDue;
 				princPaid=paid-interestDue;
 				if(princPaid<0){
 					princPaid=0;
 				}
-				totCost=princ+PIn.Double(rawPayPlan.Rows[i]["interest_"].ToString());
+				totCost=princ+PIn.Decimal(rawPayPlan.Rows[i]["interest_"].ToString());
 				due=accumDue-paid;
 				balance=princ-princPaid;
 				//then fill the row----------------------------------------------------------------------
@@ -1417,16 +1417,16 @@ namespace OpenDentBusiness {
 			DataRow row;
 			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
 			List<DataRow> rows=new List<DataRow>();
-			double princ;
-			double bal;
+			decimal princ;
+			decimal bal;
 			DataTable rawAmort;
 			long payPlanNum;
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){//loop through the payment plans (usually zero or one)
-				princ=PIn.Double(rawPayPlan.Rows[i]["principal_"].ToString());
+				princ=PIn.Decimal(rawPayPlan.Rows[i]["principal_"].ToString());
 				bal=princ;
 				for(int p=0;p<rawPay.Rows.Count;p++){
 					if(rawPay.Rows[p]["PayPlanNum"].ToString()==rawPayPlan.Rows[i]["PayPlanNum"].ToString()){
-						bal-=PIn.Double(rawPay.Rows[p]["splitAmt_"].ToString());
+						bal-=PIn.Decimal(rawPay.Rows[p]["splitAmt_"].ToString());
 					}
 				}
 				//summary row----------------------------------------------------------------------
@@ -1480,7 +1480,7 @@ namespace OpenDentBusiness {
 				}
 				//grab the payPlanDue amount from the last row
 				if(rawAmort.Rows.Count>0) {
-					payPlanDue+=(double)rawAmort.Rows[rawAmort.Rows.Count-1]["balanceDouble"];
+					payPlanDue+=(decimal)rawAmort.Rows[rawAmort.Rows.Count-1]["balanceDouble"];
 				}
 				//remove old entries, going backwards
 				for(int d=rawAmort.Rows.Count-1;d>=0;d--){
@@ -1531,19 +1531,19 @@ namespace OpenDentBusiness {
 			DataTable table=new DataTable("patient");
 			DataRow row;
 			table.Columns.Add("balance");
-			table.Columns.Add("balanceDouble",typeof(double));
+			table.Columns.Add("balanceDouble",typeof(decimal));
 			table.Columns.Add("name");
 			table.Columns.Add("PatNum");
 			List<DataRow> rowspat=new List<DataRow>();
-			double bal;
-			double balfam=0;
+			decimal bal;
+			decimal balfam=0;
 			for(int p=0;p<fam.ListPats.Length;p++){
 				row=table.NewRow();
 				bal=0;
 				for(int i=0;i<rows.Count;i++) {
 					if(fam.ListPats[p].PatNum.ToString()==rows[i]["PatNum"].ToString()){
-						bal+=(double)rows[i]["chargesDouble"];
-						bal-=(double)rows[i]["creditsDouble"];
+						bal+=(decimal)rows[i]["chargesDouble"];
+						bal-=(decimal)rows[i]["creditsDouble"];
 					}
 				}
 				balfam+=bal;
@@ -1552,9 +1552,9 @@ namespace OpenDentBusiness {
 				row["name"]=fam.ListPats[p].GetNameLF();
 				row["PatNum"]=fam.ListPats[p].PatNum.ToString();
 				rowspat.Add(row);
-				if(bal!=fam.ListPats[p].EstBalance){
+				if((double)bal!=fam.ListPats[p].EstBalance){
 					Patient patnew=fam.ListPats[p].Copy();
-					patnew.EstBalance=bal;
+					patnew.EstBalance=(double)bal;
 					Patients.Update(patnew,fam.ListPats[p]);
 				}
 			}
@@ -1647,12 +1647,12 @@ namespace OpenDentBusiness {
 			//payPlanDue---------------------------
 			row=table.NewRow();
 			row["descript"]="payPlanDue";
-			row["value"]=POut.Double(payPlanDue);
+			row["value"]=POut.Double((double)payPlanDue);
 			rows.Add(row);
 			//balanceForward-----------------------
 			row=table.NewRow();
 			row["descript"]="balanceForward";
-			row["value"]=POut.Double(balanceForward);
+			row["value"]=POut.Double((double)balanceForward);
 			rows.Add(row);
 			//patInsEst----------------------------
 			command="SELECT SUM(inspayest+writeoff) FROM claimproc "
