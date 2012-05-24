@@ -361,8 +361,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.FeeDeleteDuplicates(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.InnoDbMyISAM(verbose,isCheck);
-			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanInvalidCarrier(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanNoClaimForm(verbose,isCheck);

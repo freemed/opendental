@@ -77,6 +77,38 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return false;
 			}
+			//If MyISAM and InnoDb mix, then try to fix
+			if(DataConnection.DBtype==DatabaseType.MySql){//not for Oracle
+				int numInnodb=DatabaseMaintenance.GetInnodbTableCount();//Or possibly some other format.
+				int numMyisam=DatabaseMaintenance.GetMyisamTableCount();
+				if(numInnodb>0 && numMyisam>0) {
+					MessageBox.Show(Lan.g(this,"A mixture of database tables in InnoDB and MyISAM format were found.  A database backup will now be made, and then the InnoDB tables will be converted to MyISAM format.  This issue is usually caused by an improperly configured MySQL install and can be corrected by modifying the my.ini (or my.cnf) file."));
+					try {
+						MiscData.MakeABackup();//Does not work for Oracle, due to some MySQL specific commands inside.
+					}
+					catch(Exception e) {
+						Cursor.Current=Cursors.Default;
+						if(e.Message!="") {
+							MessageBox.Show(e.Message);
+						}
+						MsgBox.Show(this,"Backup failed. Your database has not been altered.");
+						return false;
+					}
+					if(!DatabaseMaintenance.ConvertTablesToMyisam()) {
+						MessageBox.Show(Lan.g(this,"Failed to convert InnoDB tables to MyISAM format. Please contact support."));
+						return false;
+					}
+					MessageBox.Show(Lan.g(this,"All tables converted to MyISAM format successfully."));
+					numInnodb=0;
+				}
+				if(numInnodb==0 && numMyisam>0) {//if all tables are myisam
+					//but default storage engine is innodb, then kick them out.
+					if(DatabaseMaintenance.GetStorageEngineDefaultName().ToUpper()!="MYISAM") { //Probably InnoDB but could be another format.
+						MessageBox.Show(Lan.g(this,"The database tables are in MyISAM format, but the default database engine format is InnoDB. You must change the default storage engine within the my.ini (or my.cnf) file on the database server and restart MySQL in order to fix this problem. Exiting."));
+						return false;
+					}
+				}
+			}
 #if DEBUG
 			if(!silent && MessageBox.Show("You are in Debug mode.  Your database can now be converted"+"\r"
 				+"from version"+" "+FromVersion.ToString()+"\r"
@@ -118,7 +150,7 @@ namespace OpenDental{
 			}
 			try{
 #endif
-			if(FromVersion < new Version("7.5.17")) {
+			if(FromVersion < new Version("7.5.17")) {//Insurance Plan schema conversion
 				Cursor.Current=Cursors.Default;
 				YN InsPlanConverstion_7_5_17_AutoMergeYN=YN.Unknown;
 				if(FromVersion < new Version("7.5.1")) {
