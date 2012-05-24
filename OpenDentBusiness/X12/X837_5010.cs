@@ -1676,6 +1676,10 @@ namespace OpenDentBusiness
 			return (clearinghouse.ISA08=="0135WCH00");
 		}
 
+		private static bool IsEmdeonMedical(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="133052274");
+		}
+
 		private static bool IsEMS(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="EMS");
 		}
@@ -1696,6 +1700,10 @@ namespace OpenDentBusiness
 		private static void Write1000A_NM1(StreamWriter sw,Clearinghouse clearhouse) {
 			string name="OPEN DENTAL SOFTWARE";
 			string idCode="810624427";
+			if(IsEmdeonMedical(clearhouse)) {
+				name="Open Dental Software Inc.";
+				idCode="204944520";
+			}
 			if(clearhouse.SenderTIN!="") {
 				name=clearhouse.SenderName;
 				idCode=clearhouse.SenderTIN;
@@ -1717,6 +1725,10 @@ namespace OpenDentBusiness
 		private static void Write1000A_PER(StreamWriter sw,Clearinghouse clearhouse) {
 			string name="OPEN DENTAL SOFTWARE";
 			string phone="8776861248";
+			if(IsEmdeonMedical(clearhouse)) {
+				name="Open Dental Software Inc.";
+				phone="8662390469";
+			}
 			if(clearhouse.SenderTIN!="") {
 				name=clearhouse.SenderName;
 				phone=clearhouse.SenderTelephone;
