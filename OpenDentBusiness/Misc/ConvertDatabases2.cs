@@ -9243,7 +9243,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				//add ReportDashbaord permissions to all groups------------------------------------------------------
 				command="SELECT UserGroupNum FROM usergroup";
 				table=Db.GetTable(command);
-				//long groupNum;//Used above
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
