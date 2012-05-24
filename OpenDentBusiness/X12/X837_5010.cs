@@ -289,14 +289,14 @@ namespace OpenDentBusiness
 				}
 				if(medType==EnumClaimMedType.Dental) {
 					//2010AA REF: (dental) State License Number: Required by RECS and Emdeon clearinghouses. We do NOT validate that it's entered because sending it with non-persons causes problems.
-					if(IsEmdeonDental(clearhouse) || clearhouse.CommBridge==EclaimsCommBridge.RECS) {
-						if(billProv.StateLicense!="") {
-							sw.Write("REF"+s
-								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-								+Sout(billProv.StateLicense,50));//REF02 1/50 Reference Identification: 
-							EndSegment(sw);//REF03 and REF04 are not used.
-						}
+					//if(IsEmdeonDental(clearhouse) || clearhouse.CommBridge==EclaimsCommBridge.RECS) {
+					if(billProv.StateLicense!="") {
+						sw.Write("REF"+s
+							+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+							+Sout(billProv.StateLicense,50));//REF02 1/50 Reference Identification: 
+						EndSegment(sw);//REF03 and REF04 are not used.
 					}
+					//}
 					//2010AA REF G5 (dental) Site Identification Number: NOT IN X12 5010 STANDARD DOCUMENTATION. Only required by Emdeon.
 					if(IsEmdeonDental(clearhouse)) {
 						Write2010AASiteIDforEmdeon(sw,billProv,carrier.ElectID);
@@ -1626,11 +1626,13 @@ namespace OpenDentBusiness
 								+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
 								+X12Generator.GetTaxonomy(provTreat));//PRV03 1/50 Reference Identification: Taxonomy Code.
 							EndSegment(sw);//PRV04 through PRV06 not used.
-							//2420A REF: (dental) Rendering Provider Secondary Identification.
-							sw.Write("REF"+s
-								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-								+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification: 
-							EndSegment(sw);//REF03 1/80 Description: Not used. REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
+							//2420A REF: (dental) Rendering Provider Secondary Identification. Never required because we always send NPI (validated).
+							if(provTreat.StateLicense!="") {
+								sw.Write("REF"+s
+									+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
+									+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification: 
+								EndSegment(sw);//REF03 1/80 Description: Not used. REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
+							}
 						}
 						//2420B NM1: DD (dental) Assistant Surgeon Name. Situational. We do not support.
 						//2420B PRV: AS (dental) Assistant Surgeon Specialty Information. Situational. We do not support.
