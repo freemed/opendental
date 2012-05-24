@@ -110,7 +110,7 @@ namespace OpenDental {
 		private Label labelUnearnedAmt;
 		private Label labelUnearned;
 		private Label labelInsRem;
-		private double PPBalanceTotal;
+		private decimal PPBalanceTotal;
 
 		#region UserVariables
 		///<summary>This holds nearly all of the data needed for display.  It is retrieved in one call to the database.</summary>
@@ -2042,7 +2042,7 @@ namespace OpenDental {
 				labelUnearnedAmt.Text="";
 				for(int i=0;i<tableMisc.Rows.Count;i++){
 					if(tableMisc.Rows[i]["descript"].ToString()=="unearnedIncome") {
-						double unearned=PIn.Double(tableMisc.Rows[i]["value"].ToString());
+						decimal unearned=PIn.Decimal(tableMisc.Rows[i]["value"].ToString());
 						if(unearned!=0) {
 							labelUnearnedAmt.Text=unearned.ToString("F");
 						}
@@ -2191,7 +2191,7 @@ namespace OpenDental {
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
 			UI.ODGridCell cell;
-			double PPDueTotal=0;
+			decimal PPDueTotal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -2211,13 +2211,13 @@ namespace OpenDental {
 				row.Cells.Add(cell);
 				row.Cells.Add("");
 				gridPayPlan.Rows.Add(row);
-				PPBalanceTotal += (Convert.ToDouble((table.Rows[i]["balance"]).ToString()));
-				PPDueTotal += (Convert.ToDouble((table.Rows[i]["due"]).ToString()));
+				PPBalanceTotal += (Convert.ToDecimal((table.Rows[i]["balance"]).ToString()));
+				PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
 			}
 			gridPayPlan.EndUpdate();
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
 				panelTotalOwes.Top=1;
-				labelTotalPtOwes.Text=(PPBalanceTotal + FamCur.ListPats[0].BalTotal -FamCur.ListPats[0].InsEst).ToString("F");
+				labelTotalPtOwes.Text=(PPBalanceTotal + (decimal)FamCur.ListPats[0].BalTotal - (decimal)FamCur.ListPats[0].InsEst).ToString("F");
 			}
 		}
 
@@ -2719,7 +2719,7 @@ namespace OpenDental {
 					if(table.Rows[i]["ProcNum"].ToString()=="0"){
 						continue;//ignore non-procedures
 					}
-					if((double)table.Rows[i]["chargesDouble"]==0){
+					if((decimal)table.Rows[i]["chargesDouble"]==0){
 						continue;//ignore zero fee procedures, but user can explicitly select them
 					}
 					Procedure proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[i]["ProcNum"].ToString()));
