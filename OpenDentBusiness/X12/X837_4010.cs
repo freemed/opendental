@@ -294,9 +294,11 @@ namespace OpenDentBusiness
 						}
 						//2010AA REF: License #. Required by RECS clearinghouse,
 						//but everyone else should find it useful too.
-						seg++;
-						sw.WriteLine("REF*0B*"//REF01: 0B=state license #.
-							+Sout(billProv.StateLicense,30)+"~");
+						if(billProv.StateLicense!="") {
+							seg++;
+							sw.WriteLine("REF*0B*"//REF01: 0B=state license #.
+								+Sout(billProv.StateLicense,30)+"~");
+						}
 						//2010AA REF: Secondary ID number(s). Only required by some carriers.
 						seg+=WriteProv_REF(sw,billProv,claimItems[i].PayorId0);
 					}
