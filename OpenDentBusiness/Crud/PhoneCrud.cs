@@ -46,30 +46,31 @@ namespace OpenDentBusiness.Crud{
 			Phone phone;
 			for(int i=0;i<table.Rows.Count;i++) {
 				phone=new Phone();
-				phone.PhoneNum       = PIn.Long  (table.Rows[i]["PhoneNum"].ToString());
-				phone.Extension      = PIn.Int   (table.Rows[i]["Extension"].ToString());
-				phone.EmployeeName   = PIn.String(table.Rows[i]["EmployeeName"].ToString());
+				phone.PhoneNum         = PIn.Long  (table.Rows[i]["PhoneNum"].ToString());
+				phone.Extension        = PIn.Int   (table.Rows[i]["Extension"].ToString());
+				phone.EmployeeName     = PIn.String(table.Rows[i]["EmployeeName"].ToString());
 				string clockStatus=table.Rows[i]["ClockStatus"].ToString();
 				if(clockStatus==""){
-					phone.ClockStatus  =(ClockStatusEnum)0;
+					phone.ClockStatus    =(ClockStatusEnum)0;
 				}
 				else try{
-					phone.ClockStatus  =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatus);
+					phone.ClockStatus    =(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),clockStatus);
 				}
 				catch{
-					phone.ClockStatus  =(ClockStatusEnum)0;
+					phone.ClockStatus    =(ClockStatusEnum)0;
 				}
-				phone.Description    = PIn.String(table.Rows[i]["Description"].ToString());
-				phone.ColorBar       = Color.FromArgb(PIn.Int(table.Rows[i]["ColorBar"].ToString()));
-				phone.ColorText      = Color.FromArgb(PIn.Int(table.Rows[i]["ColorText"].ToString()));
-				phone.EmployeeNum    = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				phone.CustomerNumber = PIn.String(table.Rows[i]["CustomerNumber"].ToString());
-				phone.InOrOut        = PIn.String(table.Rows[i]["InOrOut"].ToString());
-				phone.PatNum         = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				phone.DateTimeStart  = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
-				phone.WebCamImage    = PIn.String(table.Rows[i]["WebCamImage"].ToString());
-				phone.ScreenshotPath = PIn.String(table.Rows[i]["ScreenshotPath"].ToString());
-				phone.ScreenshotImage= PIn.String(table.Rows[i]["ScreenshotImage"].ToString());
+				phone.Description      = PIn.String(table.Rows[i]["Description"].ToString());
+				phone.ColorBar         = Color.FromArgb(PIn.Int(table.Rows[i]["ColorBar"].ToString()));
+				phone.ColorText        = Color.FromArgb(PIn.Int(table.Rows[i]["ColorText"].ToString()));
+				phone.EmployeeNum      = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				phone.CustomerNumber   = PIn.String(table.Rows[i]["CustomerNumber"].ToString());
+				phone.InOrOut          = PIn.String(table.Rows[i]["InOrOut"].ToString());
+				phone.PatNum           = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				phone.DateTimeStart    = PIn.DateT (table.Rows[i]["DateTimeStart"].ToString());
+				phone.WebCamImage      = PIn.String(table.Rows[i]["WebCamImage"].ToString());
+				phone.ScreenshotPath   = PIn.String(table.Rows[i]["ScreenshotPath"].ToString());
+				phone.ScreenshotImage  = PIn.String(table.Rows[i]["ScreenshotImage"].ToString());
+				phone.CustomerNumberRaw= PIn.String(table.Rows[i]["CustomerNumberRaw"].ToString());
 				retVal.Add(phone);
 			}
 			return retVal;
@@ -110,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PhoneNum,";
 			}
-			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage,ScreenshotPath,ScreenshotImage) VALUES(";
+			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage,ScreenshotPath,ScreenshotImage,CustomerNumberRaw) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phone.PhoneNum)+",";
 			}
@@ -128,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (phone.DateTimeStart)+","
 				+"'"+POut.String(phone.WebCamImage)+"',"
 				+"'"+POut.String(phone.ScreenshotPath)+"',"
-				+"'"+POut.String(phone.ScreenshotImage)+"')";
+				+"'"+POut.String(phone.ScreenshotImage)+"',"
+				+"'"+POut.String(phone.CustomerNumberRaw)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -141,20 +143,21 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Phone in the database.</summary>
 		internal static void Update(Phone phone){
 			string command="UPDATE phone SET "
-				+"Extension      =  "+POut.Int   (phone.Extension)+", "
-				+"EmployeeName   = '"+POut.String(phone.EmployeeName)+"', "
-				+"ClockStatus    =  "+POut.String(phone.ClockStatus.ToString())+", "
-				+"Description    = '"+POut.String(phone.Description)+"', "
-				+"ColorBar       =  "+POut.Int   (phone.ColorBar.ToArgb())+", "
-				+"ColorText      =  "+POut.Int   (phone.ColorText.ToArgb())+", "
-				+"EmployeeNum    =  "+POut.Long  (phone.EmployeeNum)+", "
-				+"CustomerNumber = '"+POut.String(phone.CustomerNumber)+"', "
-				+"InOrOut        = '"+POut.String(phone.InOrOut)+"', "
-				+"PatNum         =  "+POut.Long  (phone.PatNum)+", "
-				+"DateTimeStart  =  "+POut.DateT (phone.DateTimeStart)+", "
-				+"WebCamImage    = '"+POut.String(phone.WebCamImage)+"', "
-				+"ScreenshotPath = '"+POut.String(phone.ScreenshotPath)+"', "
-				+"ScreenshotImage= '"+POut.String(phone.ScreenshotImage)+"' "
+				+"Extension        =  "+POut.Int   (phone.Extension)+", "
+				+"EmployeeName     = '"+POut.String(phone.EmployeeName)+"', "
+				+"ClockStatus      =  "+POut.String(phone.ClockStatus.ToString())+", "
+				+"Description      = '"+POut.String(phone.Description)+"', "
+				+"ColorBar         =  "+POut.Int   (phone.ColorBar.ToArgb())+", "
+				+"ColorText        =  "+POut.Int   (phone.ColorText.ToArgb())+", "
+				+"EmployeeNum      =  "+POut.Long  (phone.EmployeeNum)+", "
+				+"CustomerNumber   = '"+POut.String(phone.CustomerNumber)+"', "
+				+"InOrOut          = '"+POut.String(phone.InOrOut)+"', "
+				+"PatNum           =  "+POut.Long  (phone.PatNum)+", "
+				+"DateTimeStart    =  "+POut.DateT (phone.DateTimeStart)+", "
+				+"WebCamImage      = '"+POut.String(phone.WebCamImage)+"', "
+				+"ScreenshotPath   = '"+POut.String(phone.ScreenshotPath)+"', "
+				+"ScreenshotImage  = '"+POut.String(phone.ScreenshotImage)+"', "
+				+"CustomerNumberRaw= '"+POut.String(phone.CustomerNumberRaw)+"' "
 				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum);
 			Db.NonQ(command);
 		}
@@ -217,6 +220,10 @@ namespace OpenDentBusiness.Crud{
 			if(phone.ScreenshotImage != oldPhone.ScreenshotImage) {
 				if(command!=""){ command+=",";}
 				command+="ScreenshotImage = '"+POut.String(phone.ScreenshotImage)+"'";
+			}
+			if(phone.CustomerNumberRaw != oldPhone.CustomerNumberRaw) {
+				if(command!=""){ command+=",";}
+				command+="CustomerNumberRaw = '"+POut.String(phone.CustomerNumberRaw)+"'";
 			}
 			if(command==""){
 				return;

@@ -40,6 +40,8 @@ namespace OpenDentBusiness{
 		public string ScreenshotPath;
 		///<summary>The base64 thumbnail of the most recent screenshot.</summary>
 		public string ScreenshotImage;
+		///<summary>Always set to the phone number of the caller.</summary>
+		public string CustomerNumberRaw;
 
 		public Phone Copy() {
 			return (Phone)this.MemberwiseClone();

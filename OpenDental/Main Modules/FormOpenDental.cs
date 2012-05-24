@@ -3626,6 +3626,7 @@ namespace OpenDental{
 				task.ObjectType=TaskObjectType.Patient;
 				task.TaskListNum=1697;//Hardcoded for internal Triage task list.
 				task.UserNum=Security.CurUser.UserNum;
+				task.Descript=Phones.GetPhoneForExtension(Phones.GetPhoneList(),phoneSmall.Extension).CustomerNumberRaw+" ";//Prefill description with customers number.
 				FormTaskEdit FormTE=new FormTaskEdit(task,taskOld);
 				FormTE.IsNew=true;
 				FormTE.Show();
