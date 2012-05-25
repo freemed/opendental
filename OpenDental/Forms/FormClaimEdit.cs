@@ -4824,6 +4824,12 @@ namespace OpenDental{
 			FormCPB.IsNew=true;
 			FormCPB.ShowDialog();
 			if(FormCPB.DialogResult!=DialogResult.OK) {
+				//The user attached EOBs to the new claim payment and then clicked cancel. Then the user was asked if they wanted to delete the payment and they chose yes.
+				//Since we are deleting the claim payment we must remove the attached EOBs or else ClaimPayments.Delete() will throw an exception.
+				List<EobAttach> eobsAttached=EobAttaches.Refresh(claimPayment.ClaimPaymentNum);
+				for(int i=0;i<eobsAttached.Count;i++) {
+					EobAttaches.Delete(eobsAttached[i].EobAttachNum);
+				}
 				ClaimPayments.Delete(claimPayment);
 				return;
 			}
