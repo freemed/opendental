@@ -3184,16 +3184,25 @@ HAVING cnt>1";
 			return "";
 		}
 
-		///<summary>Gets the number of tables in InnoDB format (excluding the 'phone' table).</summary>
-		public static int GetInnodbTableCount() {
+		///<summary>Gets the names of tables in InnoDB format, comma delimited (excluding the 'phone' table).  Returns empty string if none.</summary>
+		public static string GetInnodbTableNames() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod());
+				return Meth.GetString(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables "
+			//Using COUNT(*) with INFORMATION_SCHEMA is buggy.  It can return "1" even if no results.
+			string command="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
 				+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
 				+"AND TABLE_NAME!='phone' "//this table is used internally at OD HQ, and is always innodb.
 				+"AND ENGINE NOT LIKE 'MyISAM'";
-			return PIn.Int(Db.GetCount(command));
+			DataTable table=Db.GetTable(command);
+			string tableNames="";
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(tableNames!="") {
+					tableNames+=",";
+				}
+				tableNames+=PIn.String(table.Rows[i][0].ToString());
+			}
+			return tableNames;
 		}
 
 		///<summary>Gets the number of tables in MyISAM format.</summary>
@@ -3201,10 +3210,10 @@ HAVING cnt>1";
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetInt(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables "
+			string command="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
 				+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
 				+"AND ENGINE LIKE 'MyISAM'";
-			return PIn.Int(Db.GetCount(command));
+			return Db.GetTable(command).Rows.Count;
 		}
 
 		///<summary>Returns true if the conversion was successfull or no conversion was necessary. The goal is to convert InnoDB tables (excluding the 'phone' table) to MyISAM format when there are a mixture of InnoDB and MyISAM tables but no conversion will be performed when all of the tables are already in the same format.</summary>
@@ -3215,14 +3224,14 @@ HAVING cnt>1";
 			if(DataConnection.DBtype==DatabaseType.Oracle) { //Does not apply to Oracle.
 				return true;
 			}
-			command="SELECT * FROM INFORMATION_SCHEMA.tables "
+			command="SELECT TABLE_NAME,ENGINE FROM INFORMATION_SCHEMA.tables "
 				+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
 				+"AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
 			DataTable dtTableTypes=Db.GetTable(command);
 			int numInnodb=0;//Or possibly some other format.
 			int numMyisam=0;
 			for(int i=0;i<dtTableTypes.Rows.Count;i++) {
-				if(PIn.String(dtTableTypes.Rows[i]["Engine"].ToString()).ToUpper()=="MYISAM") {
+				if(PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper()=="MYISAM") {
 					numMyisam++;
 				}
 				else {
@@ -3231,7 +3240,7 @@ HAVING cnt>1";
 			}
 			if(numInnodb>0 && numMyisam>0) {//Fix tables by converting them to MyISAM when there is a mixture of different table types.
 				for(int i=0;i<dtTableTypes.Rows.Count;i++) {
-					if(PIn.String(dtTableTypes.Rows[i]["Engine"].ToString()).ToUpper()=="MYISAM") {
+					if(PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper()=="MYISAM") {
 						continue;
 					}
 					string tableName=PIn.String(dtTableTypes.Rows[i]["TABLE_NAME"].ToString());
@@ -3242,13 +3251,13 @@ HAVING cnt>1";
 					catch {
 						return false;
 					}
-					command="SELECT COUNT(*) FROM INFORMATION_SCHEMA.tables "
-						+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
-						+"AND TABLE_NAME='"+POut.String(tableName)+"' "
-						+"AND ENGINE LIKE 'MyISAM'";
-					if(Db.GetCount(command)=="0") { //Check to make sure that the table format was successfully converted to MyISAM.
-						return false; //If not then indicate error.
-					}
+				}
+				command="SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
+					+"WHERE TABLE_SCHEMA='"+POut.String(DataConnection.GetDatabaseName())+"' "
+					+"AND TABLE_NAME!='phone' "
+					+"AND ENGINE NOT LIKE 'MyISAM'";
+				if(Db.GetTable(command).Rows.Count!=0) { //If any tables are still InnoDB.
+					return false;
 				}
 			}
 			return true;

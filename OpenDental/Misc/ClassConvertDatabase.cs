@@ -78,11 +78,11 @@ namespace OpenDental{
 				return false;
 			}
 			//If MyISAM and InnoDb mix, then try to fix
-			if(DataConnection.DBtype==DatabaseType.MySql){//not for Oracle
-				int numInnodb=DatabaseMaintenance.GetInnodbTableCount();//Or possibly some other format.
+			if(DataConnection.DBtype==DatabaseType.MySql) {//not for Oracle
+				string namesInnodb=DatabaseMaintenance.GetInnodbTableNames();//Or possibly some other format.
 				int numMyisam=DatabaseMaintenance.GetMyisamTableCount();
-				if(numInnodb>0 && numMyisam>0) {
-					MessageBox.Show(Lan.g(this,"A mixture of database tables in InnoDB and MyISAM format were found.  A database backup will now be made, and then the InnoDB tables will be converted to MyISAM format.  This issue is usually caused by an improperly configured MySQL install and can be corrected by modifying the my.ini (or my.cnf) file."));
+				if(namesInnodb!="" && numMyisam>0) {
+					MessageBox.Show(Lan.g(this,"A mixture of database tables in InnoDB and MyISAM format were found.  A database backup will now be made, and then the following InnoDB tables will be converted to MyISAM format: ")+namesInnodb);
 					try {
 						MiscData.MakeABackup();//Does not work for Oracle, due to some MySQL specific commands inside.
 					}
@@ -99,9 +99,9 @@ namespace OpenDental{
 						return false;
 					}
 					MessageBox.Show(Lan.g(this,"All tables converted to MyISAM format successfully."));
-					numInnodb=0;
+					namesInnodb="";
 				}
-				if(numInnodb==0 && numMyisam>0) {//if all tables are myisam
+				if(namesInnodb=="" && numMyisam>0) {//if all tables are myisam
 					//but default storage engine is innodb, then kick them out.
 					if(DatabaseMaintenance.GetStorageEngineDefaultName().ToUpper()!="MYISAM") { //Probably InnoDB but could be another format.
 						MessageBox.Show(Lan.g(this,"The database tables are in MyISAM format, but the default database engine format is InnoDB. You must change the default storage engine within the my.ini (or my.cnf) file on the database server and restart MySQL in order to fix this problem. Exiting."));
