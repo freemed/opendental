@@ -500,8 +500,9 @@ namespace OpenDentBusiness
 					+Sout(carrier.Zip.Replace("-",""),15));//N403 3/15 Postal Code:
 				EndSegment(sw);//N404 through N407 are either not used or are for addresses outside of the United States.
 				//2010BB REF 2U,EI,FY,NF (dental) Payer Secondary Identificaiton. Situational.
-				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Required when NM109 (NPI) of loop 2010AA is not used.
-				if(IsEmdeonDental(clearhouse) || billProv.NationalProvID.Length>1) {//Required by Emdeon and Denti-Cal.
+				//2010BB REF G2,LU Billing Provider Secondary Identification. Situational. Not required because we always send NPI.
+				if(!IsDentiCal(clearhouse)){//DentiCal complained that they don't usually want this (except for non-subparted NPIs, which we don't handle).  So far, nobody else has complained.
+					//Always required by Emdeon Dental.
 					WriteProv_REFG2orLU(sw,billProv,carrier.ElectID);
 				}
 				parentSubsc=HLcount;
@@ -1041,8 +1042,8 @@ namespace OpenDentBusiness
 						WriteNM1Provider("82",sw,provTreat);
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
 						WritePRV_PE(sw,provTreat);
-						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Max repeat of 4.
-						if(provTreat.NationalProvID.Length<2 || IsEmdeonDental(clearhouse)) {
+						//2310B REF: (dental) Rendering Provider Secondary Identification. Situational. Not required because we always send NPI. Max repeat of 4.
+						if(IsEmdeonDental(clearhouse)) { //Always required by Emdeon Dental.
 							//The state licence number can be anywhere between 4 and 14 characters depending on state, and most states have more than one state license format. 
 							//Therefore, we only validate that the state license is present or not.
 							if(provTreat.StateLicense!="") { 
