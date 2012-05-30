@@ -1410,6 +1410,9 @@ namespace OpenDentBusiness {
 				else {//same provider for every procedure
 					ProcList[i].ProvNum=apt.ProvNum;
 				}
+				if(procCode.ProvNumDefault!=0) {//Override provider for procedures with a default provider
+					ProcList[i].ProvNum=procCode.ProvNumDefault;
+				}
 				//if procedure was already complete, then don't add more notes.
 				if(oldProc.ProcStatus!=ProcStat.C) {
 					ProcList[i].Note+=ProcCodeNotes.GetNote(ProcList[i].ProvNum,ProcList[i].CodeNum);
