@@ -1218,7 +1218,11 @@ namespace OpenDentBusiness {
 					//Alter primary WO if needed.
 					if(priClaimProcIdx!=-1){
 						if(sumPay+claimProcs[priClaimProcIdx].WriteOffEst > proc.ProcFee){
-							claimProcs[priClaimProcIdx].WriteOffEst= proc.ProcFee-sumPay;
+							double writeOffEst=proc.ProcFee-sumPay;
+							if(writeOffEst<0) {
+								writeOffEst=0;
+							}
+							claimProcs[priClaimProcIdx].WriteOffEst=writeOffEst;
 							if(saveToDb){
 								ClaimProcs.Update(claimProcs[priClaimProcIdx]);
 							}

@@ -1653,10 +1653,12 @@ namespace OpenDental
 				ClaimProcCur.WriteOffEstOverride=PIn.Double(textWriteOffEstOverride.Text);
 			}
 			if(IsProc) {
+				//Get the histlist and looplist here so that write offs calculate correctly.
+				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,PlanList,proc.ProcDate,SubList);
+				LoopList=new List<ClaimProcHist>();
 				ClaimProcs.ComputeBaseEst(ClaimProcCur,proc.ProcFee,proc.ToothNum,proc.CodeNum,Plan,PatPlanNum,BenefitList,
 					HistList,LoopList,PatPlanList,PaidOtherInsTotal,PaidOtherInsBaseEst,PatCur.Age,WriteOffOtherIns);
 				//Paid other ins is not accurate
-
 			}
 			//else {
 			//	ClaimProcs.ComputeBaseEst(ClaimProcCur,0,"",0,Plan,PatPlanNum,BenefitList,HistList,LoopList);
