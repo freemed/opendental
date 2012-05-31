@@ -604,6 +604,7 @@ namespace OpenDental{
 			this.butRequirement.Size = new System.Drawing.Size(46, 20);
 			this.butRequirement.TabIndex = 163;
 			this.butRequirement.Text = "Req";
+			this.butRequirement.Click += new System.EventHandler(this.butRequirement_Click);
 			// 
 			// butInsPlan2
 			// 
@@ -617,6 +618,7 @@ namespace OpenDental{
 			this.butInsPlan2.Size = new System.Drawing.Size(18, 20);
 			this.butInsPlan2.TabIndex = 176;
 			this.butInsPlan2.Text = "...";
+			this.butInsPlan2.Click += new System.EventHandler(this.butInsPlan2_Click);
 			// 
 			// butInsPlan1
 			// 
@@ -630,6 +632,7 @@ namespace OpenDental{
 			this.butInsPlan1.Size = new System.Drawing.Size(18, 20);
 			this.butInsPlan1.TabIndex = 175;
 			this.butInsPlan1.Text = "...";
+			this.butInsPlan1.Click += new System.EventHandler(this.butInsPlan1_Click);
 			// 
 			// textInsPlan2
 			// 

@@ -693,7 +693,7 @@ namespace OpenDental{
 				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=TaskCur.Descript;
-			if(!IsPopup) {
+			if(!IsPopup) {//otherwise, TextUser is selected, and it cannot accept input.  This prevents a popup from accepting using input accidentally.
 				textDescript.Select();//Focus does not work for some reason.
 				textDescript.Select(TaskCur.Descript.Length,0);//Place the cursor at the end of the description box.
 			}
