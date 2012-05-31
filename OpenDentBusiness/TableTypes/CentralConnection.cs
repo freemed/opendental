@@ -23,11 +23,11 @@ namespace OpenDentBusiness{
 		public string OdUser;
 		///<summary>If connecting to the web service.  Symmetrically encrypted.</summary>
 		public string OdPassword;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Note;
-		///<summary></summary>
+		///<summary>0-based.</summary>
 		public int ItemOrder;
-		///<summary></summary>
+		///<summary>If set to true, the password hash is calculated differently.</summary>
 		public bool WebServiceIsEcw;
 
 		///<summary>Returns a copy.</summary>

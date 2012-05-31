@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		public bool IsTransitionOfCare;
 		///<summary>FK to procedurelog.ProcNum</summary>
 		public long ProcNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public DateTime DateProcComplete;
 
 		///<summary>Returns a copy of this RefAttach.</summary>

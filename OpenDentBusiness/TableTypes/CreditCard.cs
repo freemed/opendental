@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public long CreditCardNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Address;
 		///<summary>Postal code.</summary>
 		public string Zip;

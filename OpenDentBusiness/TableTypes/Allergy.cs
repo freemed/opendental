@@ -13,9 +13,9 @@ namespace OpenDentBusiness {
 		public long AllergyDefNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
-		///<summary></summary>
+		///<summary>Adverse reaction description.</summary>
 		public string Reaction;
-		///<summary></summary>
+		///<summary>True if still an active allergy.  False helps hide it from the list of active allergies.</summary>
 		public bool StatusIsActive;
 		///<summary>To be used for synch with web server for CertTimelyAccess.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]

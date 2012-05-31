@@ -16,15 +16,15 @@ namespace OpenDentBusiness{
 		public string Phone;
 		///<summary>Includes all punctuation.</summary>
 		public string Fax;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Address;
 		///<summary>Optional.</summary>
 		public string Address2;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string City;
 		///<summary>Two char, uppercase.</summary>
 		public string State;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string Zip;
 		///<summary>A freeform note for any info that is needed about the pharmacy, such as hours.</summary>
 		public string Note;

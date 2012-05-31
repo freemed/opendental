@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		public string LabResultName;
 		///<summary>String, example &lt;43. Must start with &lt; or &gt; followed by int.  Only used if FK LabResultID is used.</summary>
 		public string LabResultCompare;
-		///<summary></summary>
+		///<summary>.</summary>
 		public string ResourceUrl;
 		///<summary>FK to icd9.ICD9Num.</summary>
 		public long Icd9Num;

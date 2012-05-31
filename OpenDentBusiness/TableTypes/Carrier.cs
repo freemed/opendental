@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		public string CDAnetVersion;
 		///<summary>FK to canadiannetwork.CanadianNetworkNum.  Only used in Canada.  Right now, there is no UI to the canadiannetwork table in our db.</summary>
 		public long CanadianNetworkNum;
-		///<summary></summary>
+		///<summary>.</summary>
 		public bool IsHidden;
 		///<summary>1=No Encryption, 2=CDAnet standard #1, 3=CDAnet standard #2.  Field A10.</summary>
 		public byte CanadianEncryptionMethod;

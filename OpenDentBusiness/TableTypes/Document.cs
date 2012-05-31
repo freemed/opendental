@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 		public int DegreesRotated;
 		/// <summary>Incomplete.  An optional list of tooth numbers separated by commas.  The tooth numbers will be in American format and must be processed for display.  When displayed, dashes will be used for sequences of 3 or more tooth numbers.</summary>
 		public string ToothNumbers;
-		/// <summary></summary>
+		/// <summary>.</summary>
 		public string Note;
 		/// <summary>True if the signature is in Topaz format rather than OD format.</summary>
 		public bool SigIsTopaz;
