@@ -71,11 +71,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(Fee fee){
+			//No need to check RemotingRole; no call to db.
+			Delete(fee.FeeNum);
+		}
+
+		///<summary></summary>
+		public static void Delete(long feeNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),fee);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),feeNum);
 				return;
 			}
-			string command="DELETE FROM fee WHERE FeeNum="+fee.FeeNum;
+			string command="DELETE FROM fee WHERE FeeNum="+feeNum;
 			Db.NonQ(command);
 		}
 
@@ -270,20 +276,29 @@ namespace OpenDentBusiness{
 			if(!ProcedureCodes.IsValidCode(codeText)){
 				return;//skip for now. Possibly insert a code in a future version.
 			}
-			Fee fee=GetFee(ProcedureCodes.GetCodeNum(codeText),feeSchedNum);
-			if(fee!=null){
-				Delete(fee);
+			long feeNum=GetFeeNum(ProcedureCodes.GetCodeNum(codeText),feeSchedNum);
+			if(feeNum>0) {
+				Delete(feeNum);
 			}
 			if(amt==-1) {
 				//RefreshCache();
 				return;
 			}
-			fee=new Fee();
+			Fee fee=new Fee();
 			fee.Amount=amt;
 			fee.FeeSched=feeSchedNum;
 			fee.CodeNum=ProcedureCodes.GetCodeNum(codeText);
 			Insert(fee);
 			//RefreshCache();//moved this outside the loop
+		}
+
+		///<summary>Gets the FeeNum from the database, returns 0 if none found.</summary>
+		public static long GetFeeNum(long codeNum,long feeSchedNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),codeNum,feeSchedNum);
+			}
+			string command="SELECT FeeNum FROM fee WHERE CodeNum="+POut.Long(codeNum)+" AND FeeSched="+POut.Long(feeSchedNum);
+			return PIn.Long(Db.GetScalar(command));
 		}
 
 	}
