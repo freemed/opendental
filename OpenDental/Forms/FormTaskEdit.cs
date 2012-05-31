@@ -302,7 +302,7 @@ namespace OpenDental{
 			this.textUser.Name = "textUser";
 			this.textUser.ReadOnly = true;
 			this.textUser.Size = new System.Drawing.Size(134, 20);
-			this.textUser.TabIndex = 1;
+			this.textUser.TabIndex = 0;
 			// 
 			// label16
 			// 
@@ -555,7 +555,7 @@ namespace OpenDental{
 			this.textDescript.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
 			this.textDescript.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textDescript.Size = new System.Drawing.Size(683, 121);
-			this.textDescript.TabIndex = 0;
+			this.textDescript.TabIndex = 1;
 			this.textDescript.TextChanged += new System.EventHandler(this.textDescript_TextChanged);
 			// 
 			// butOK
@@ -693,7 +693,10 @@ namespace OpenDental{
 				textDateTimeFinished.Text=TaskCur.DateTimeFinished.ToString();
 			}
 			textDescript.Text=TaskCur.Descript;
-			textDescript.Select(TaskCur.Descript.Length,0);//Place the cursor at the end of the description box.
+			if(!IsPopup) {
+				textDescript.Select();//Focus does not work for some reason.
+				textDescript.Select(TaskCur.Descript.Length,0);//Place the cursor at the end of the description box.
+			}
 			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser) && TaskCur.TaskListNum !=0) {
 				long mailboxUserNum=TaskLists.GetMailboxUserNum(TaskCur.TaskListNum);
 				if(mailboxUserNum != 0 && mailboxUserNum != Security.CurUser.UserNum) {
