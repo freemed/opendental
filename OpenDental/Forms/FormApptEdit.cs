@@ -1779,6 +1779,7 @@ namespace OpenDental{
 			ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			ProcCur.RevCode=ProcedureCodes.GetProcCode(ProcCur.CodeNum).RevenueCodeDefault;
+			ProcCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
 			Procedures.Insert(ProcCur);
 			List<Benefit> benefitList=Benefits.Refresh(patPlanList,SubList);
 			Procedures.ComputeEstimates(ProcCur,pat.PatNum,new List<ClaimProc>(),true,PlanList,patPlanList,benefitList,pat.Age,SubList);
@@ -2126,6 +2127,7 @@ namespace OpenDental{
 					ProcCur.PlannedAptNum=AptCur.AptNum;
 				}
 				ProcCur.BaseUnits=ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+				ProcCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
 				Procedures.Insert(ProcCur);//recall synch not required
 				if(Programs.UsingOrion){//Orion requires a DPC for every procedure. Force proc edit window open.
 					FormProcEdit FormP=new FormProcEdit(ProcCur,pat.Copy(),fam);

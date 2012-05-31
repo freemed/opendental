@@ -489,6 +489,7 @@ namespace OpenDental{
 				ProcCur.ClinicNum=patCur.ClinicNum;
 				//nextaptnum
 				ProcCur.BaseUnits = ProcedureCodes.GetProcCode(ProcCur.CodeNum).BaseUnits;
+				ProcCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
 				Procedures.Insert(ProcCur);//no recall synch required
 				Procedures.ComputeEstimates(ProcCur,patCur.PatNum,new List<ClaimProc>(),false,planList,patPlanList,benefitList,patCur.Age,subList);
 				if(Programs.UsingOrion){

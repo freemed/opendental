@@ -106,6 +106,8 @@ namespace OpenDental{
 		private Label label16;
 		private CheckBox checkAppointmentTimeIsLocked;
 		private CheckBox checkTextMsgOkStatusTreatAsNo;
+		private TextBox textICD9DefaultForNewProcs;
+		private Label label17;
 		private bool IsLoading;
 
 		///<summary></summary>
@@ -203,11 +205,13 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays = new OpenDental.ValidNum();
 			this.tabTreatPlan = new System.Windows.Forms.TabPage();
 			this.tabChart = new System.Windows.Forms.TabPage();
+			this.textICD9DefaultForNewProcs = new System.Windows.Forms.TextBox();
 			this.checkMedicalFeeUsedForNewProcs = new System.Windows.Forms.CheckBox();
 			this.checkChartAddProcNoRefreshGrid = new System.Windows.Forms.CheckBox();
 			this.checkProcGroupNoteDoesAggregate = new System.Windows.Forms.CheckBox();
 			this.butAllergiesIndicateNone = new OpenDental.UI.Button();
 			this.textAllergiesIndicateNone = new System.Windows.Forms.TextBox();
+			this.label17 = new System.Windows.Forms.Label();
 			this.label14 = new System.Windows.Forms.Label();
 			this.butMedicationsIndicateNone = new OpenDental.UI.Button();
 			this.textMedicationsIndicateNone = new System.Windows.Forms.TextBox();
@@ -1075,11 +1079,13 @@ namespace OpenDental{
 			// tabChart
 			// 
 			this.tabChart.BackColor = System.Drawing.SystemColors.Window;
+			this.tabChart.Controls.Add(this.textICD9DefaultForNewProcs);
 			this.tabChart.Controls.Add(this.checkMedicalFeeUsedForNewProcs);
 			this.tabChart.Controls.Add(this.checkChartAddProcNoRefreshGrid);
 			this.tabChart.Controls.Add(this.checkProcGroupNoteDoesAggregate);
 			this.tabChart.Controls.Add(this.butAllergiesIndicateNone);
 			this.tabChart.Controls.Add(this.textAllergiesIndicateNone);
+			this.tabChart.Controls.Add(this.label17);
 			this.tabChart.Controls.Add(this.label14);
 			this.tabChart.Controls.Add(this.butMedicationsIndicateNone);
 			this.tabChart.Controls.Add(this.textMedicationsIndicateNone);
@@ -1098,6 +1104,13 @@ namespace OpenDental{
 			this.tabChart.Size = new System.Drawing.Size(466, 479);
 			this.tabChart.TabIndex = 4;
 			this.tabChart.Text = "Chart";
+			// 
+			// textICD9DefaultForNewProcs
+			// 
+			this.textICD9DefaultForNewProcs.Location = new System.Drawing.Point(358, 238);
+			this.textICD9DefaultForNewProcs.Name = "textICD9DefaultForNewProcs";
+			this.textICD9DefaultForNewProcs.Size = new System.Drawing.Size(83, 20);
+			this.textICD9DefaultForNewProcs.TabIndex = 209;
 			// 
 			// checkMedicalFeeUsedForNewProcs
 			// 
@@ -1156,6 +1169,16 @@ namespace OpenDental{
 			this.textAllergiesIndicateNone.ReadOnly = true;
 			this.textAllergiesIndicateNone.Size = new System.Drawing.Size(145, 20);
 			this.textAllergiesIndicateNone.TabIndex = 204;
+			// 
+			// label17
+			// 
+			this.label17.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label17.Location = new System.Drawing.Point(106, 241);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(246, 16);
+			this.label17.TabIndex = 203;
+			this.label17.Text = "Default ICD9 code for new procedures";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label14
 			// 
@@ -1451,6 +1474,7 @@ namespace OpenDental{
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
 			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
 			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+			textICD9DefaultForNewProcs.Text=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
 			//Image module-----------------------------------------------------------------------
 			checkImagesModuleTreeIsCollapsed.Checked=PrefC.GetBool(PrefName.ImagesModuleTreeIsCollapsed);
 			//Manage module
@@ -1611,6 +1635,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ChartAddProcNoRefreshGrid,checkChartAddProcNoRefreshGrid.Checked)
 				| Prefs.UpdateInt(PrefName.InsDefaultCobRule,comboCobRule.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,checkMedicalFeeUsedForNewProcs.Checked)
+				| Prefs.UpdateString(PrefName.ICD9DefaultForNewProcs,textICD9DefaultForNewProcs.Text)
 				| Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex)
 				| Prefs.UpdateBool(PrefName.TextMsgOkStatusTreatAsNo,checkTextMsgOkStatusTreatAsNo.Checked)
 				)

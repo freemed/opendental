@@ -4240,6 +4240,9 @@ namespace OpenDental{
 			ProcCur.DrugQty=PIn.Float(textDrugQty.Text);
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//Proc set complete.
 				ProcCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
+				if(ProcCur.DiagnosticCode=="") {
+					ProcCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+				}
 			}
 			ProcCur.DateTP=PIn.Date(this.textDateTP.Text);
 			ProcCur.ProcDate=PIn.Date(this.textDate.Text);

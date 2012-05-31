@@ -169,6 +169,8 @@ namespace OpenDentBusiness {
 		GenericEClaimsForm,
 		HL7FolderOut,
 		HL7FolderIn,
+		///<summary>procedurelog.DiagnosticCode will be set to this for new procedures and complete procedures if this field was blank when set complete.</summary>
+		ICD9DefaultForNewProcs,
 		ImagesModuleTreeIsCollapsed,
 		ImageStoreIsDatabase,
 		ImageWindowingMax,
