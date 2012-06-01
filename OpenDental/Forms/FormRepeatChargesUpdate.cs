@@ -125,7 +125,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			RepeatCharge[] chargeList=RepeatCharges.Refresh(0);
 			int countAdded=0;
-			DateTime possibleDate;
+			DateTime startDate;
 			Procedure proc;
 			for(int i=0;i<chargeList.Length;i++){
 				if(chargeList[i].DateStart>DateTime.Today){//not started yet
@@ -138,20 +138,31 @@ namespace OpenDental{
 				//}
 				//get a list dates of all completed procedures with this Code and patNum
 				ArrayList ALdates=RepeatCharges.GetDates(ProcedureCodes.GetCodeNum(chargeList[i].ProcCode),chargeList[i].PatNum);
-				possibleDate=chargeList[i].DateStart;
+				startDate=chargeList[i].DateStart;
+				//This is the repeating date using the old methodology.  It is necessary for checking if the repeating procedure was already added using the old methodology.
+				DateTime possibleDateOld=startDate;
+				//This is a more accurate repeating date which will allow procedures to be added on the 28th and later.
+				DateTime possibleDateNew=startDate;
+				int countMonths=0;
 				//start looping through possible dates, beginning with the start date of the repeating charge
-				while(possibleDate<=DateTime.Today){
-					if(possibleDate<DateTime.Today.AddMonths(-3)){
-						possibleDate=possibleDate.AddMonths(1);
+				while(possibleDateNew<=DateTime.Today){
+					if(possibleDateNew<DateTime.Today.AddMonths(-3)){
+						possibleDateOld=possibleDateOld.AddMonths(1);
+						countMonths++;
+						possibleDateNew=startDate.AddMonths(countMonths);
 						continue;//don't go back more than three months
 					}
 					//check to see if the possible date is present in the list
-					if(ALdates.Contains(possibleDate)){
-						possibleDate=possibleDate.AddMonths(1);
+					if(ALdates.Contains(possibleDateNew)
+						|| ALdates.Contains(possibleDateOld))
+					{
+						possibleDateOld=possibleDateOld.AddMonths(1);
+						countMonths++;
+						possibleDateNew=startDate.AddMonths(countMonths);
 						continue;
 					}
 					if(chargeList[i].DateStop.Year>1880//not blank
-						&& chargeList[i].DateStop < possibleDate)//but already ended
+						&& chargeList[i].DateStop < possibleDateNew)//but already ended
 					{
 						break;
 					}
@@ -160,8 +171,8 @@ namespace OpenDental{
 					proc.CodeNum=ProcedureCodes.GetCodeNum(chargeList[i].ProcCode);
 					proc.DateEntryC=DateTime.Today;
 					proc.PatNum=chargeList[i].PatNum;
-					proc.ProcDate=possibleDate;
-					proc.DateTP=possibleDate;
+					proc.ProcDate=possibleDateNew;
+					proc.DateTP=possibleDateNew;
 					proc.ProcFee=chargeList[i].ChargeAmt;
 					proc.ProcStatus=ProcStat.C;
 					proc.ProvNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
@@ -170,7 +181,9 @@ namespace OpenDental{
 					proc.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
 					Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
 					countAdded++;
-					possibleDate=possibleDate.AddMonths(1);
+					possibleDateOld=possibleDateOld.AddMonths(1);
+					countMonths++;
+					possibleDateNew=startDate.AddMonths(countMonths);
 				}
 			}
 			MessageBox.Show(countAdded.ToString()+" "+Lan.g(this,"procedures added."));
