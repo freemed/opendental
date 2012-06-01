@@ -2849,6 +2849,7 @@ namespace OpenDental{
 				ImageRenderingNow.Dispose();
 				ImageRenderingNow=null;
 			}
+			System.GC.Collect();
 		}
 
 		///<summary>Handles a change in selection of the xRay capture button.</summary>
