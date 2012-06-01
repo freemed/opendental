@@ -135,6 +135,7 @@ namespace OpenDentBusiness {
 				//list.Add(new DisplayField("Pri Prov",85,category));
 				//list.Add(new DisplayField("Birthdate",70,category));
 				//list.Add(new DisplayField("Site",90,category));
+				//list.Add(new DisplayField("Email",90,category));
 			}
 			else if(category==DisplayFieldCategory.PatientInformation){
 				list.Add(new DisplayField("Last",0,category));
@@ -326,6 +327,7 @@ namespace OpenDentBusiness {
 				list.Add(new DisplayField("Pri Prov",85,category));
 				list.Add(new DisplayField("Birthdate",70,category));
 				list.Add(new DisplayField("Site",90,category));
+				list.Add(new DisplayField("Email",90,category));
 			}
 			else if(category==DisplayFieldCategory.PatientInformation){
 				list.Add(new DisplayField("Last",0,category));

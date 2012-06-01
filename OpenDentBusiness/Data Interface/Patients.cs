@@ -209,7 +209,7 @@ namespace OpenDentBusiness{
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,
 			long billingtype,bool guarOnly,bool showArchived,long clinicNum,DateTime birthdate,
-			long siteNum,string subscriberId)
+			long siteNum,string subscriberId,string email)
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,lname,fname,phone,address,hideInactive,city,state,ssn,patnum,chartnumber,billingtype,guarOnly,showArchived,clinicNum,birthdate,siteNum,subscriberId);
@@ -245,7 +245,7 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv,SiteNum ";
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email ";
 			if(subscriberId!=""){
 				command+=",inssub.SubscriberId ";
 			}
@@ -316,7 +316,8 @@ namespace OpenDentBusiness{
 					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(ssn.Length>0?"AND SSN LIKE '"+POut.String(ssn)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//LIKE is case insensitive in mysql.
-					+(chartnumber.Length>0?"AND ChartNumber LIKE '"+POut.String(chartnumber)+"%' ":"");//LIKE is case insensitive in mysql.
+					+(chartnumber.Length>0?"AND ChartNumber LIKE '"+POut.String(chartnumber)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(email.Length>0?"AND Email LIKE '%"+POut.String(email)+"%' ":"");//LIKE is case insensitive in mysql.
 			}
 			else {//oracle
 				command+=
@@ -325,7 +326,8 @@ namespace OpenDentBusiness{
 					+(state.Length>0?"AND LOWER(State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
 					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//case matters in a like statement in oracle.
-					+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"");//case matters in a like statement in oracle.
+					+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"")//case matters in a like statement in oracle.
+					+(email.Length>0?"AND LOWER(Email) LIKE '%"+POut.String(email).ToLower()+"%' ":"");//LIKE is case insensitive in mysql.
 			}
 			if(birthdate.Year>1880 && birthdate.Year<2100){
 				command+="AND Birthdate ="+POut.Date(birthdate)+" ";
@@ -402,6 +404,7 @@ namespace OpenDentBusiness{
 				r["State"]=table.Rows[i]["State"].ToString();
 				r["PriProv"]=Providers.GetAbbr(PIn.Long(table.Rows[i]["PriProv"].ToString()));
 				r["site"]=Sites.GetDescription(PIn.Long(table.Rows[i]["SiteNum"].ToString()));
+				r["Email"]=table.Rows[i]["Email"].ToString();
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;

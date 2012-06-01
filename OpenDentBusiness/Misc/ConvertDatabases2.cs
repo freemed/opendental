@@ -9267,6 +9267,17 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ICD9DefaultForNewProcs','')";
 					Db.NonQ(command);
 				}
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE patient ADD INDEX (Email)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX patient_Email ON patient (Email)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
 
 
 
