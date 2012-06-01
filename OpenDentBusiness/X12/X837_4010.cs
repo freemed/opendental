@@ -200,11 +200,13 @@ namespace OpenDentBusiness
 					}
 					else {//dental
 						//2000A PRV: Provider Specialty Information (Optional Rendering prov for all claims in this HL)
-						//used instead of 2310B.
-						seg++;
-						sw.WriteLine("PRV*PT*"//PRV01: Provider Code. BI=Billing, PT=Pay-To
-							+"ZZ*"//PRV02: mutually defined taxonomy codes
-							+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
+						//Not used when the Billing or Pay-to Provider (we do not support pay-to provider for 4010s) is a group (not a person) and the individual Rendering Provider is in loop 2310B.
+						if(billProv.FName!="") { //We send the PRV segment when billing prov is a person. Loop 2310B is always used, so we do not need to check anything else.
+							seg++;
+							sw.WriteLine("PRV*PT*"//PRV01: Provider Code. BI=Billing, PT=Pay-To
+								+"ZZ*"//PRV02: mutually defined taxonomy codes
+								+X12Generator.GetTaxonomy(billProv)+"~");//PRV03: Provider taxonomy code
+						}
 					}
 					//2010AA NM1: Billing provider
 					seg++;
