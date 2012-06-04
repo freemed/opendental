@@ -86,15 +86,28 @@ namespace OpenDentBusiness{
 
 		///<summary>toothNum gets validated here.</summary>
 		public static bool IsMolar(string toothNum){
-			if(!IsValidDB(toothNum))
+			if(!IsValidDB(toothNum)) {
 				return false;
+			}
 			int intTooth=ToInt(toothNum);
-			if(intTooth>=1 && intTooth<=3)
+			if(IsPrimary(toothNum)) {
+			  if(intTooth<=5 || intTooth>=28) {//AB, ST
+			    return true;
+			  }
+			  if(intTooth>=12 && intTooth<=21) {//IJ, KL 
+			    return true;
+			  }
+			  return false;
+			}
+			if(intTooth>=1 && intTooth<=3) {
 				return true;
-			if(intTooth>=14 && intTooth<=19)
+			}
+			if(intTooth>=14 && intTooth<=19) {
 				return true;
-			if(intTooth>=30 && intTooth<=32)
+			}
+			if(intTooth>=30 && intTooth<=32) {
 				return true;
+			}
 			return false;
 		}
 
