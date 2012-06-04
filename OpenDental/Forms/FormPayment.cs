@@ -64,10 +64,11 @@ namespace OpenDental {
 		private ComboBox comboDepositAccount;
 		///<summary>Set this value to a PaySplitNum if you want one of the splits highlighted when opening this form.</summary>
 		public long InitialPaySplit;
-		///<summary></summary>
+		///<summary>A current list of splits showing on the left grid.</summary>
 		private List<PaySplit> SplitList;
-		private OpenDental.UI.ODGrid gridMain;
+		///<summary>The original splits that existed when this window was opened.  Empty for new payments.</summary>
 		private List<PaySplit> SplitListOld;
+		private OpenDental.UI.ODGrid gridMain;
 		private Panel panelXcharge;
 		private ContextMenu contextMenuXcharge;
 		private MenuItem menuXcharge;
@@ -94,6 +95,7 @@ namespace OpenDental {
 		private CheckBox checkRecurring;
 		private bool payConnectWarn;
 		private List<CreditCard> creditCards;
+		private CheckBox checkBalanceGroupByProv;
 		///<summary>The local override path or normal path for X-Charge.</summary>
 		private string xPath;
 
@@ -159,10 +161,14 @@ namespace OpenDental {
 			this.checkPayTypeNone = new System.Windows.Forms.CheckBox();
 			this.contextMenuPayConnect = new System.Windows.Forms.ContextMenu();
 			this.menuPayConnect = new System.Windows.Forms.MenuItem();
-			this.butPayConnect = new OpenDental.UI.Button();
-			this.butPay = new OpenDental.UI.Button();
+			this.comboCreditCards = new System.Windows.Forms.ComboBox();
+			this.labelCreditCards = new System.Windows.Forms.Label();
+			this.checkRecurring = new System.Windows.Forms.CheckBox();
+			this.checkBalanceGroupByProv = new System.Windows.Forms.CheckBox();
 			this.gridBal = new OpenDental.UI.ODGrid();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butPayConnect = new OpenDental.UI.Button();
+			this.butPay = new OpenDental.UI.Button();
 			this.textDateEntry = new OpenDental.ValidDate();
 			this.textNote = new OpenDental.ODtextBox();
 			this.textAmount = new OpenDental.ValidDouble();
@@ -171,9 +177,6 @@ namespace OpenDental {
 			this.butOK = new OpenDental.UI.Button();
 			this.butDeleteAll = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
-			this.comboCreditCards = new System.Windows.Forms.ComboBox();
-			this.labelCreditCards = new System.Windows.Forms.Label();
-			this.checkRecurring = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -466,6 +469,70 @@ namespace OpenDental {
 			this.menuPayConnect.Text = "Settings";
 			this.menuPayConnect.Click += new System.EventHandler(this.menuPayConnect_Click);
 			// 
+			// comboCreditCards
+			// 
+			this.comboCreditCards.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCreditCards.Location = new System.Drawing.Point(694, 65);
+			this.comboCreditCards.MaxDropDownItems = 30;
+			this.comboCreditCards.Name = "comboCreditCards";
+			this.comboCreditCards.Size = new System.Drawing.Size(198, 21);
+			this.comboCreditCards.TabIndex = 130;
+			// 
+			// labelCreditCards
+			// 
+			this.labelCreditCards.Location = new System.Drawing.Point(694, 45);
+			this.labelCreditCards.Name = "labelCreditCards";
+			this.labelCreditCards.Size = new System.Drawing.Size(198, 17);
+			this.labelCreditCards.TabIndex = 131;
+			this.labelCreditCards.Text = "Credit Card";
+			this.labelCreditCards.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// checkRecurring
+			// 
+			this.checkRecurring.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkRecurring.Location = new System.Drawing.Point(694, 97);
+			this.checkRecurring.Name = "checkRecurring";
+			this.checkRecurring.Size = new System.Drawing.Size(196, 18);
+			this.checkRecurring.TabIndex = 132;
+			this.checkRecurring.Text = "Apply to Recurring Charge";
+			// 
+			// checkBalanceGroupByProv
+			// 
+			this.checkBalanceGroupByProv.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBalanceGroupByProv.Location = new System.Drawing.Point(675, 208);
+			this.checkBalanceGroupByProv.Name = "checkBalanceGroupByProv";
+			this.checkBalanceGroupByProv.Size = new System.Drawing.Size(294, 20);
+			this.checkBalanceGroupByProv.TabIndex = 133;
+			this.checkBalanceGroupByProv.Text = "Group balances by provider instead of clinic, provider";
+			this.checkBalanceGroupByProv.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkBalanceGroupByProv.UseVisualStyleBackColor = true;
+			this.checkBalanceGroupByProv.CheckedChanged += new System.EventHandler(this.checkBalanceGroupByProv_CheckedChanged);
+			// 
+			// gridBal
+			// 
+			this.gridBal.HScrollVisible = false;
+			this.gridBal.Location = new System.Drawing.Point(588, 234);
+			this.gridBal.Name = "gridBal";
+			this.gridBal.ScrollValue = 0;
+			this.gridBal.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridBal.Size = new System.Drawing.Size(381, 198);
+			this.gridBal.TabIndex = 120;
+			this.gridBal.Title = "Family Balances";
+			this.gridBal.TranslationName = "TablePaymentBal";
+			this.gridBal.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBal_CellDoubleClick);
+			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(7, 234);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(575, 198);
+			this.gridMain.TabIndex = 116;
+			this.gridMain.Title = "Payment Splits (optional)";
+			this.gridMain.TranslationName = "TablePaySplits";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butPayConnect
 			// 
 			this.butPayConnect.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -496,31 +563,6 @@ namespace OpenDental {
 			this.butPay.TabIndex = 124;
 			this.butPay.Text = "Pay";
 			this.butPay.Click += new System.EventHandler(this.butPay_Click);
-			// 
-			// gridBal
-			// 
-			this.gridBal.HScrollVisible = false;
-			this.gridBal.Location = new System.Drawing.Point(588, 234);
-			this.gridBal.Name = "gridBal";
-			this.gridBal.ScrollValue = 0;
-			this.gridBal.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridBal.Size = new System.Drawing.Size(381, 198);
-			this.gridBal.TabIndex = 120;
-			this.gridBal.Title = "Family Balances";
-			this.gridBal.TranslationName = "TablePaymentBal";
-			this.gridBal.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBal_CellDoubleClick);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(7, 234);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(575, 198);
-			this.gridMain.TabIndex = 116;
-			this.gridMain.Title = "Payment Splits (optional)";
-			this.gridMain.TranslationName = "TablePaySplits";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// textDateEntry
 			// 
@@ -620,37 +662,11 @@ namespace OpenDental {
 			this.butAdd.Text = "&Add Split";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// comboCreditCards
-			// 
-			this.comboCreditCards.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCreditCards.Location = new System.Drawing.Point(694, 65);
-			this.comboCreditCards.MaxDropDownItems = 30;
-			this.comboCreditCards.Name = "comboCreditCards";
-			this.comboCreditCards.Size = new System.Drawing.Size(198, 21);
-			this.comboCreditCards.TabIndex = 130;
-			// 
-			// labelCreditCards
-			// 
-			this.labelCreditCards.Location = new System.Drawing.Point(694, 45);
-			this.labelCreditCards.Name = "labelCreditCards";
-			this.labelCreditCards.Size = new System.Drawing.Size(198, 17);
-			this.labelCreditCards.TabIndex = 131;
-			this.labelCreditCards.Text = "Credit Card";
-			this.labelCreditCards.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// checkRecurring
-			// 
-			this.checkRecurring.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkRecurring.Location = new System.Drawing.Point(694, 97);
-			this.checkRecurring.Name = "checkRecurring";
-			this.checkRecurring.Size = new System.Drawing.Size(196, 18);
-			this.checkRecurring.TabIndex = 132;
-			this.checkRecurring.Text = "Apply to Recurring Charge";
-			// 
 			// FormPayment
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(974, 562);
+			this.Controls.Add(this.checkBalanceGroupByProv);
 			this.Controls.Add(this.checkRecurring);
 			this.Controls.Add(this.labelCreditCards);
 			this.Controls.Add(this.comboCreditCards);
@@ -734,6 +750,7 @@ namespace OpenDental {
 			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
+				checkBalanceGroupByProv.Visible=false;
 			}
 			else {
 				comboClinic.Items.Clear();
@@ -752,7 +769,6 @@ namespace OpenDental {
 			}
 			comboCreditCards.Items.Add("New card");
 			comboCreditCards.SelectedIndex=0;
-			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum);
 			//this works even if patient not in family
 			textPaidBy.Text=FamCur.GetNameInFamFL(PaymentCur.PatNum);
 			textDateEntry.Text=PaymentCur.DateEntry.ToShortDateString();
@@ -947,6 +963,8 @@ namespace OpenDental {
 
 		///<summary></summary>
 		private void FillGridBal() {
+			//can't do this: SplitList=PaySplits.GetForPayment(PaymentCur.PayNum);//Count might be 0
+			//too slow: tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum,checkBalanceGroupByProv.Checked);
 			double famstart=0;
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				famstart+=PIn.Double(tableBalances.Rows[i]["StartBal"].ToString());
@@ -969,18 +987,25 @@ namespace OpenDental {
 				}
 			}
 			double amt;
-			for(int i=0;i<SplitList.Count;i++) {
-				for(int f=0;f<tableBalances.Rows.Count;f++) {
+			for(int i=0;i<SplitList.Count;i++) {//loop through each current paysplit that's showing
+				for(int f=0;f<tableBalances.Rows.Count;f++) {//loop through the balances on the right
 					if(tableBalances.Rows[f]["PatNum"].ToString()!=SplitList[i].PatNum.ToString()) {
 						continue;
 					}
 					if(tableBalances.Rows[f]["ProvNum"].ToString()!=SplitList[i].ProvNum.ToString()) {
 						continue;
 					}
-					if(tableBalances.Rows[f]["ClinicNum"].ToString()!=SplitList[i].ClinicNum.ToString()) {
-						continue;
+					if(checkBalanceGroupByProv.Checked) {
+						//more inclusive.  Multiple clinics from left will be included as long as the prov matches.
 					}
+					else{//box not checked, so filter by clinic
+						if(tableBalances.Rows[f]["ClinicNum"].ToString()!=SplitList[i].ClinicNum.ToString()) {
+							continue;
+						}
+					}
+					//sum up the amounts from the grid at the left which we want to apply to the grid on the right.
 					amt=PIn.Double(tableBalances.Rows[f]["EndBal"].ToString())-SplitList[i].SplitAmt;
+					//this is summing over multiple i and f loops.  NOT elegantly.
 					tableBalances.Rows[f]["EndBal"]=amt.ToString("N");
 				}
 			}
@@ -1014,7 +1039,12 @@ namespace OpenDental {
 			for(int i=0;i<tableBalances.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(Providers.GetAbbr(PIn.Long(tableBalances.Rows[i]["ProvNum"].ToString())));
-				row.Cells.Add(Clinics.GetDesc(PIn.Long(tableBalances.Rows[i]["ClinicNum"].ToString())));
+				if(checkBalanceGroupByProv.Checked) {
+					row.Cells.Add("");//show blank.  Value in datatable will be a random clinic.
+				}
+				else{
+					row.Cells.Add(Clinics.GetDesc(PIn.Long(tableBalances.Rows[i]["ClinicNum"].ToString())));
+				}
 				if(tableBalances.Rows[i]["Preferred"].ToString()=="") {
 					row.Cells.Add(tableBalances.Rows[i]["FName"].ToString());
 				}
@@ -1033,6 +1063,17 @@ namespace OpenDental {
 				gridBal.Rows.Add(row);
 			}
 			gridBal.EndUpdate();
+		}
+
+		private void checkBalanceGroupByProv_CheckedChanged(object sender,EventArgs e) {
+			if(checkBalanceGroupByProv.Checked) {
+				butPay.Enabled=false;
+			}
+			else {
+				butPay.Enabled=true;
+			}
+			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum,checkBalanceGroupByProv.Checked);
+			FillGridBal();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

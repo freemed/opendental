@@ -474,10 +474,14 @@ namespace OpenDentBusiness{
 			Lim.HasIns     = PIn.String(table.Rows[0][7].ToString());
 			Lim.SSN        = PIn.String(table.Rows[0][8].ToString());
 			return Lim;
+		}///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
+		public static DataTable GetPaymentStartingBalances(long guarNum,long excludePayNum) {
+			return GetPaymentStartingBalances(guarNum,excludePayNum,false);
+
 		}
 
-		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
-		public static DataTable GetPaymentStartingBalances(long guarNum,long excludePayNum) {
+		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits. groupByProv means group by provider only not provider/clinic.</summary>
+		public static DataTable GetPaymentStartingBalances(long guarNum,long excludePayNum,bool groupByProv) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),guarNum,excludePayNum);
 			}
@@ -560,12 +564,17 @@ namespace OpenDentBusiness{
 				AND patient.Guarantor=@GuarNum
 				GROUP BY patient.PatNum,ProvNum,ClinicNum;
 
-				SELECT tempfambal"+rndStr+@".PatNum,tempfambal"+rndStr+@".ProvNum,tempfambal"+rndStr+@".ClinicNum,SUM(AmtBal) StartBal
-					,SUM(AmtBal-tempfambal"+rndStr+@".InsEst) AfterIns,FName,Preferred,'0' EndBal
-					,CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END AS IsNotGuar
+				SELECT tempfambal"+rndStr+@".PatNum,tempfambal"+rndStr+@".ProvNum,
+					tempfambal"+rndStr+@".ClinicNum,tempfambal"+rndStr+@".ClinicNum,SUM(AmtBal) StartBal,
+					SUM(AmtBal-tempfambal"+rndStr+@".InsEst) AfterIns,FName,Preferred,'0' EndBal,
+					CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END AS IsNotGuar
 				FROM tempfambal"+rndStr+@",patient
 				WHERE tempfambal"+rndStr+@".PatNum=patient.PatNum
-				GROUP BY PatNum,ProvNum,ClinicNum,FName,Preferred
+				GROUP BY PatNum,ProvNum,";
+			if(!groupByProv){
+				command+=@"ClinicNum,";
+			}
+			command+=@"FName,Preferred
 				HAVING ((StartBal>0.005 OR StartBal<-0.005) OR (AfterIns>0.005 OR AfterIns<-0.005))
 				ORDER BY IsNotGuar,Birthdate,ProvNum,FName,Preferred;
 
