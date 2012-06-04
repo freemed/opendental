@@ -1871,7 +1871,7 @@ namespace OpenDental{
 			//if(clearhouse==null || clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect) {
 			//	butEligibility.Visible=false;
 			//}
-			FillFormWithPlanCur();
+			FillFormWithPlanCur(false);
 			FillBenefits();
 			DateTime dateLast270=Etranss.GetLastDate270(PlanCur.PlanNum);
 			if(dateLast270.Year<1880) {
@@ -1884,7 +1884,7 @@ namespace OpenDental{
 		}
 
 		///<summary>Uses PlanCur to fill out the information on the form.  Called once on startup and also if user picks a plan from template list.  This does not fill from SubCur, unlike FillPlanCurFromForm().</summary>
-		private void FillFormWithPlanCur() {
+		private void FillFormWithPlanCur(bool isPicked) {
 			Cursor=Cursors.WaitCursor;
 			textEmployer.Text=Employers.GetName(PlanCur.EmployerNum);
 			textGroupName.Text=PlanCur.GroupName;
@@ -1920,7 +1920,7 @@ namespace OpenDental{
 			checkCodeSubst.Checked=PlanCur.CodeSubstNone;
 			checkIsMedical.Checked=PlanCur.IsMedical;
 			checkClaimsUseUCR.Checked=PlanCur.ClaimsUseUCR;
-			if(IsNewPlan && PlanCur.PlanType=="" && PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims)) {
+			if(IsNewPlan && PlanCur.PlanType=="" && PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims) && !isPicked) {
 				checkClaimsUseUCR.Checked=true;
 			}
 			checkIsHidden.Checked=PlanCur.IsHidden;
@@ -2176,7 +2176,7 @@ namespace OpenDental{
 			else {//user selected an existing plan
 				PlanCur=FormIP.SelectedPlan;
 			}
-			FillFormWithPlanCur();
+			FillFormWithPlanCur(true);
 			//We need to pass patPlanNum in to RefreshForPlan to get patient level benefits:
 			long patPlanNum=0;
 			if(PatPlanCur!=null){
