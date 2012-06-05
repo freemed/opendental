@@ -9276,9 +9276,56 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						command=@"CREATE INDEX patient_Email ON patient (Email)";
 						Db.NonQ(command);
 					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE appointment ADD INDEX (AptStatus)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX appointment_AptStatus ON appointment (AptStatus)";
+						Db.NonQ(command);
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE commlog ADD INDEX (CommDateTime)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX commlog_CommDateTime ON commlog (CommDateTime)";
+						Db.NonQ(command);
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE commlog ADD INDEX (CommType)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX commlog_CommType ON commlog (CommType)";
+						Db.NonQ(command);
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE recall ADD INDEX (DatePrevious)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX recall_DatePrevious ON recall (DatePrevious)";
+						Db.NonQ(command);
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE recall ADD INDEX (IsDisabled)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX recall_IsDisabled ON recall (IsDisabled)";
+						Db.NonQ(command);
+					}
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE recall ADD INDEX (RecallTypeNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX recall_RecallTypeNum ON recall (RecallTypeNum)";
+						Db.NonQ(command);
+					}
 				}
 				catch(Exception ex) { }//ex is needed, or exception won't get caught.
-
 
 
 
