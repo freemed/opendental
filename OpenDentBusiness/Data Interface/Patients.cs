@@ -474,10 +474,11 @@ namespace OpenDentBusiness{
 			Lim.HasIns     = PIn.String(table.Rows[0][7].ToString());
 			Lim.SSN        = PIn.String(table.Rows[0][8].ToString());
 			return Lim;
-		}///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
+		}
+		
+		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits.</summary>
 		public static DataTable GetPaymentStartingBalances(long guarNum,long excludePayNum) {
 			return GetPaymentStartingBalances(guarNum,excludePayNum,false);
-
 		}
 
 		///<summary>Gets the patient and provider balances for all patients in the family.  Used from the payment window to help visualize and automate the family splits. groupByProv means group by provider only not provider/clinic.</summary>
