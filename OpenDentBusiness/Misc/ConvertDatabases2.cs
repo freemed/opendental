@@ -9326,7 +9326,36 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}
 				}
 				catch(Exception ex) { }//ex is needed, or exception won't get caught.
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS installmentplan";
+					Db.NonQ(command);
+					command=@"CREATE TABLE installmentplan (
+						InstallmentPlanNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						DateAgreement date NOT NULL DEFAULT '0001-01-01',
+						DateFirstPayment date NOT NULL DEFAULT '0001-01-01',
+						MonthlyPayment double NOT NULL,
+						APR float NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE installmentplan'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE installmentplan (
+						InstallmentPlanNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						DateAgreement date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						DateFirstPayment date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						MonthlyPayment number(38,8) NOT NULL,
+						APR number(38,8) NOT NULL,
+						CONSTRAINT installmentplan_InstallmentPla PRIMARY KEY (InstallmentPlanNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX installmentplan_PatNum ON installmentplan (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -9376,4 +9405,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-				
+		
