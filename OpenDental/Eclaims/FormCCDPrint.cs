@@ -1084,13 +1084,7 @@ namespace OpenDental.Eclaims {
 			x=doc.StartElement();
 			doc.DrawString(g,isFrench?"PARENTÉ AVEC PATIENT:":"RELATIONSHIP TO PATIENT:",x,0);
 			text="";
-			Relat relatPri;
-			if(claim==null){
-				relatPri=patPlanPri.Relationship;
-			}
-			else{
-				relatPri=patPlanPri.Relationship;
-			}
+			Relat relatPri=GetRelationshipToSubscriber();
 			switch(Canadian.GetRelationshipCode(relatPri)){//Field C03
 				case "1":
 					text=isFrench?"Soi-même":"Self";
@@ -2349,7 +2343,11 @@ namespace OpenDental.Eclaims {
 		}
 
 		private SizeF PrintPrimaryDependantNo(Graphics g,float X,float Y,string fieldText,string frenchFieldText){
-			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,patPlanPri.PatID,true,X,Y);
+			string patid="";
+			if(patPlanPri!=null) {
+				patid=patPlanPri.PatID;
+			}
+			return doc.DrawField(g,isFrench?frenchFieldText:fieldText,patid,true,X,Y);
 		}
 
 		private SizeF PrintSecondaryDependantNo(Graphics g,float X,float Y) {
@@ -2388,9 +2386,20 @@ namespace OpenDental.Eclaims {
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
+		///<summary>Pulls the relationship from the claim if not null. Otherwise pulls the claim from the primary patinet plan. If both are null, Self is returned.</summary>
+		private Relat GetRelationshipToSubscriber() {
+			if(claim!=null) {
+				return claim.PatRelat;
+			}
+			else if(patPlanPri!=null) {
+				return patPlanPri.Relationship;
+			}
+			return Relat.Self;
+		}
+
 		///<summary>Corresponds to field C03.</summary>
 		private SizeF PrintRelationshipToSubscriber(Graphics g,float X,float Y,bool useCaps) {
-			text=GetPatientRelationshipString(patPlanPri.Relationship);
+			text=GetPatientRelationshipString(GetRelationshipToSubscriber());
 			string engStr="RELATIONSHIP TO INSURED/MEMBER";
 			string frStr="PARENTÉ AVEC TITULAIRE";
 			string label=isFrench?frStr:engStr;
