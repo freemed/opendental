@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using OpenDentBusiness;
@@ -4061,6 +4062,15 @@ namespace OpenDental{
 			}
 			if(textDate.Text==""){
 				MessageBox.Show(Lan.g(this,"Please enter a date first."));
+				return false;
+			}
+			//There have been 2 or 3 cases where a customer entered a note with thousands of new lines and when OD tries to display such a note in the chart, a GDI exception occurs because the progress notes grid is very tall and takes up too much video memory. To help prevent this issue, we block the user from entering any note where there are 50 or more consecutive new lines anywhere in the note. Any number of new lines less than 50 are considered to be intentional.
+			StringBuilder tooManyNewLines=new StringBuilder();
+			for(int i=0;i<50;i++) {
+				tooManyNewLines.Append("\r\n");
+			}
+			if(textNotes.Text.Contains(tooManyNewLines.ToString())) {
+				MsgBox.Show(this,"The notes contain 50 or more consecutive blank lines. Probably unintentional and must be fixed.");
 				return false;
 			}
 			if(Programs.UsingOrion || PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
