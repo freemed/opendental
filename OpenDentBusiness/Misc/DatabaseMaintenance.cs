@@ -1160,6 +1160,12 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				//If estimate, set to default prov (doesn't affect finances)
+				command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0 AND Status="+POut.Int((int)ClaimProcStatus.Estimate);
+				int numberFixed=Db.NonQ32(command);
+				if(numberFixed>0 || verbose) {
+				  log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with missing provnums fixed: ")+numberFixed.ToString()+"\r\n";
+				}
 				//create a dummy provider (using helper function in Providers.cs)
 				//change provnum to the dummy prov (something like Providers.GetDummy())
 				//Provider dummy=new Provider();
@@ -1168,12 +1174,6 @@ namespace OpenDentBusiness {
 				//dummy.LName="Provider";
 				//Will get to this soon.
 				//01-17-2011 No fix yet. This has not caused issues except for notifying users.
-
-				//command="UPDATE claimproc SET ProvNum="+PrefC.GetString(PrefName.PracticeDefaultProv)+" WHERE ProvNum=0";
-				//int numberFixed=Db.NonQ32(command);
-				//if(numberFixed>0 || verbose) {
-				//  log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with missing provnums fixed: ")+numberFixed.ToString()+"\r\n";
-				//}
 			}
 			return log;
 		}
@@ -1443,10 +1443,21 @@ namespace OpenDentBusiness {
 			else {//fix
 				//One option will sometimes be to create a dummy plan to attach these things to, be we have not had to implement that yet.  
 				//We need databases with actual problems to test these fixes against.
-				//Not yet implemented: appointment.InsPlan1 and appointment.InsPlan2
+				//appointment.InsPlan1-----------------------------------------------------------------------------------------------
+				command="UPDATE appointment SET InsPlan1=0 WHERE InsPlan1 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan1)";
+				long numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan1 values fixed: ")+numFixed+"\r\n";
+				}
+				//appointment.InsPlan2-----------------------------------------------------------------------------------------------
+				command="UPDATE appointment SET InsPlan2=0 WHERE InsPlan2 != 0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=appointment.InsPlan2)";
+				numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Invalid appointment InsPlan2 values fixed: ")+numFixed+"\r\n";
+				}
 				//benefit.PlanNum----------------------------------------------------------------------------------------------------
 				command="DELETE FROM benefit WHERE PlanNum !=0 AND NOT EXISTS(SELECT * FROM insplan WHERE insplan.PlanNum=benefit.PlanNum)";
-				long numFixed=Db.NonQ(command);
+				numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Invalid benefit PlanNums fixed: ")+numFixed+"\r\n";
 				}
@@ -1586,7 +1597,7 @@ namespace OpenDentBusiness {
 			}
 			else {//fix
 				long numFixed=0;
-				//claim.PlanNum (1/3) Mismatch------------------------------------------------------------------------------------------------------
+				//claim.PlanNum (1/4) Mismatch------------------------------------------------------------------------------------------------------
 				command="UPDATE claim SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum) "
 					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
 				numFixed=Db.NonQ(command);
@@ -1594,7 +1605,7 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum/PlanNum fixed: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
-				//claim.PlanNum (2/3) PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
+				//claim.PlanNum (2/4) PlanNum zero, invalid InsSubNum--------------------------------------------------------------------------------
 				//Will leave orphaned claimprocs. No finanicals to check.
 				command="DELETE FROM claim WHERE PlanNum=0 AND ClaimStatus IN ('PreAuth','W','U') AND NOT EXISTS(SELECT * FROM inssub WHERE inssub.InsSubNum=claim.InsSubNum)";
 				numFixed=Db.NonQ(command);
@@ -1602,7 +1613,7 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Claims deleted with invalid InsSubNum and PlanNum=0: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
-				//claim.PlanNum (3/3) PlanNum invalid, and claim.InsSubNum invalid-------------------------------------------------------------------
+				//claim.PlanNum (3/4) PlanNum invalid, and claim.InsSubNum invalid-------------------------------------------------------------------
 				command="SELECT claim.PatNum,claim.PlanNum,claim.InsSubNum FROM claim "
 					+"WHERE PlanNum NOT IN (SELECT insplan.PlanNum FROM insplan) "
 					+"AND InsSubNum NOT IN (SELECT inssub.InsSubNum FROM inssub) ";
@@ -1637,6 +1648,25 @@ namespace OpenDentBusiness {
 				numFixed=table.Rows.Count;
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Claims with invalid PlanNums and invalid InsSubNums fixed: ")+numFixed.ToString()+"\r\n";
+				}
+				numFixed=0;
+				//claim.PlanNum (4/4) PlanNum valid, but claim.InsSubNum invalid-------------------------------------------------------------------
+				command="SELECT PatNum,PlanNum,InsSubNum FROM claim "
+					+"WHERE PlanNum IN (SELECT insplan.PlanNum FROM insplan) "
+					+"AND InsSubNum NOT IN (SELECT inssub.InsSubNum FROM inssub) GROUP BY InsSubNum";
+				table=Db.GetTable(command);
+				//Create a dummy inssub and link it to the valid plan.
+				for(int i=0;i<table.Rows.Count;i++) {
+					InsSub sub=new InsSub();
+					sub.InsSubNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+					sub.PlanNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
+					sub.Subscriber=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					sub.SubscriberID="unknown";
+					InsSubs.Insert(sub,true);
+				}
+				numFixed=table.Rows.Count;
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims with invalid InsSubNums and invalid PlanNums fixed: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
 				//claim.PlanNum2---------------------------------------------------------------------------------------------------
