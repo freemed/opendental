@@ -2883,6 +2883,9 @@ namespace OpenDental {
 					contOrigin.X+ContrApptSheet2.Location.X+panelSheet.Location.X+1,//the 1 is an unknown factor
 					contOrigin.Y+ContrApptSheet2.Location.Y+panelSheet.Location.Y+1);//ditto
 				TempApptSingle.Height=ResizingOrigH+e.Y-mouseOrigin.Y;
+				if(TempApptSingle.Height<4) {//unhandled exception if smaller.
+					TempApptSingle.Height=4;
+				}
 				TempApptSingle.CreateShadow();
 				TempApptSingle.Visible=true;
 				return;
