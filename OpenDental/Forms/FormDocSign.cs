@@ -376,6 +376,9 @@ namespace OpenDental{
 		}
 
 		private void FormDocSign_FormClosing(object sender,FormClosingEventArgs e) {
+			if(sigBoxTopaz.GetTabletState()==1) {//Accepting input.
+				sigBoxTopaz.SetTabletState(0);
+			}
 			sigBoxTopaz.Dispose();
 		}
 
