@@ -628,7 +628,7 @@ namespace OpenDental{
 					//fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.RemoveEmptyEntries);//Removing emtpy entries will misalign the columns
 					fieldArray=lines[i].Split(new string[1] { "\"" },StringSplitOptions.None);//half the 'fields' will be commas.
 					fields=new List<string>();
-					for(int f=0;f<fieldArray.Length;f++) {
+					for(int f=1;f<fieldArray.Length-1;f++) {//this loop skips the first and last elements because they are artifacts of the string splitting.
 						if(fieldArray[f]==",") {
 							continue;
 						}
