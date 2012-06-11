@@ -583,6 +583,7 @@ namespace OpenDental{
 		}
 
 		private void butSetScanner_Click(object sender,EventArgs e) {
+			xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			EZTwain.SelectImageSource(this.Handle);
 		}
 
