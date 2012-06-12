@@ -433,28 +433,29 @@ namespace OpenDentBusiness
 					+"MI"+s//NM108 1/2 Identification Code Qualifier: MI=Member Identification Number.
 					+Sout(sub.SubscriberID.Replace("-",""),80,2));//NM109 2/80 Identification Code: Situational. Required when NM102=1.
 				EndSegment(sw);//NM110 through NM112 are not used.
-				//At the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.
-				//This does not make the transaction non-compliant, and they find it useful.
-				if(subscriber.PatNum==patient.PatNum) {
-					//2010BA N3: (medical,institutional,dental) Subscriber Address. Situational. Required when the patient is the subscriber.
-					sw.Write("N3"+s+Sout(subscriber.Address,55));//N301 1/55 Address Information:
-					if(subscriber.Address2!="") {
-						sw.Write(s+Sout(subscriber.Address2,55));//N302 1/55 Address Information:
-					}
-					EndSegment(sw);
-					//2010BA N4: (medical,institutional,dental) Subscriber City, State, Zip Code. Situational. Required when the patient is the subscriber.
-					sw.Write("N4"+s
-						+Sout(subscriber.City,30)+s//N401 2/30 City Name:
-						+Sout(subscriber.State,2,2)+s//N402 2/2 State or Provice Code:
-						+Sout(subscriber.Zip.Replace("-",""),15));//N403 3/15 Postal Code:
-					EndSegment(sw);//N404 through N407 either not used or required for addresses outside of the United States.
-					//2010BA DMG: (medical,institutional,dental) Subscriber Demographic Information. Situational. Required when the patient is the subscriber.
-					sw.Write("DMG"+s
-						+"D8"+s//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
-						+subscriber.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The subscriber is the patient and the patient birtdate is validated, therefore the subscriber birthdate is validated.
-						+GetGender(subscriber.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
-					EndSegment(sw);
+				//In 4010s, at the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.  This did not make the transaction non-compliant, and they found it useful.
+				//In 5010s, Derek thinks someone told him to put the check back in.  Jordan wants to live dangerously and comment it out for now.
+				//If anyone ever wants us to exclude this data, we will document here who, and just exclude it for them.
+				//if(subscriber.PatNum==patient.PatNum) {
+				//2010BA N3: (medical,institutional,dental) Subscriber Address. Situational. Required when the patient is the subscriber.
+				sw.Write("N3"+s+Sout(subscriber.Address,55));//N301 1/55 Address Information:
+				if(subscriber.Address2!="") {
+					sw.Write(s+Sout(subscriber.Address2,55));//N302 1/55 Address Information:
 				}
+				EndSegment(sw);
+				//2010BA N4: (medical,institutional,dental) Subscriber City, State, Zip Code. Situational. Required when the patient is the subscriber.
+				sw.Write("N4"+s
+					+Sout(subscriber.City,30)+s//N401 2/30 City Name:
+					+Sout(subscriber.State,2,2)+s//N402 2/2 State or Provice Code:
+					+Sout(subscriber.Zip.Replace("-",""),15));//N403 3/15 Postal Code:
+				EndSegment(sw);//N404 through N407 either not used or required for addresses outside of the United States.
+				//2010BA DMG: (medical,institutional,dental) Subscriber Demographic Information. Situational. Required when the patient is the subscriber.
+				sw.Write("DMG"+s
+					+"D8"+s//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+					+subscriber.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The subscriber is the patient and the patient birtdate is validated, therefore the subscriber birthdate is validated.
+					+GetGender(subscriber.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
+				EndSegment(sw);
+				//}
 				//2010BA REF: SY (medical,institutional,dental) Secondary Secondary Identification: Situational. Required when an additional identification number to that provided in NM109 of this loop is necessary. We do not use this.
 				//2010BA REF: Y4 (medical,institutional,dental) Property and Casualty Claim Number: Required when the services included in this claim are to be considered as part of a property and casualty claim. We do not use this.
 				//2010BA PER: IC (medical) Property and Casualty Subscriber Contact information: Situational. We do not use this.
@@ -2284,11 +2285,10 @@ namespace OpenDentBusiness
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 			PatPlan patPlan=PatPlans.GetFromList(patPlans,claim.InsSubNum);//can be null
-			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-				if(patPlan!=null && patPlan.PatID!="") {
-					Comma(strb);
-					strb.Append("Create a new insurance plan instead of using the optional patient ID");
-				}
+			//if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//X12 is always United States
+			if(patPlan!=null && patPlan.PatID!="") {
+				Comma(strb);
+				strb.Append("Create a new insurance plan instead of using the optional patient ID");
 			}
 			if(IsDentiCal(clearhouse)) {
 				if(GetFilingCode(insPlan)!="MC") {
@@ -2341,11 +2341,10 @@ namespace OpenDentBusiness
 					strb.Append("Secondary Relationship");
 				}
 				PatPlan patPlan2=PatPlans.GetFromList(patPlans,claim.InsSubNum2);//can be null
-				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-					if(patPlan2!=null && patPlan2.PatID!="") {
-						Comma(strb);
-						strb.Append("Create a new insurance plan instead of using the optional patient ID for the other insurance plan");
-					}
+				//if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//X12 is always United States
+				if(patPlan2!=null && patPlan2.PatID!="") {
+					Comma(strb);
+					strb.Append("Create a new insurance plan instead of using the optional patient ID for the other insurance plan");
 				}
 			}
 			else { //other insurance not specified
