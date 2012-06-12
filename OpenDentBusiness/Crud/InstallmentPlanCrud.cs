@@ -52,6 +52,7 @@ namespace OpenDentBusiness.Crud{
 				installmentPlan.DateFirstPayment  = PIn.Date  (table.Rows[i]["DateFirstPayment"].ToString());
 				installmentPlan.MonthlyPayment    = PIn.Double(table.Rows[i]["MonthlyPayment"].ToString());
 				installmentPlan.APR               = PIn.Float (table.Rows[i]["APR"].ToString());
+				installmentPlan.Note              = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(installmentPlan);
 			}
 			return retVal;
@@ -92,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="InstallmentPlanNum,";
 			}
-			command+="PatNum,DateAgreement,DateFirstPayment,MonthlyPayment,APR) VALUES(";
+			command+="PatNum,DateAgreement,DateFirstPayment,MonthlyPayment,APR,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(installmentPlan.InstallmentPlanNum)+",";
 			}
@@ -101,7 +102,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (installmentPlan.DateAgreement)+","
 				+    POut.Date  (installmentPlan.DateFirstPayment)+","
 				+"'"+POut.Double(installmentPlan.MonthlyPayment)+"',"
-				+    POut.Float (installmentPlan.APR)+")";
+				+    POut.Float (installmentPlan.APR)+","
+				+"'"+POut.String(installmentPlan.Note)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -118,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateAgreement     =  "+POut.Date  (installmentPlan.DateAgreement)+", "
 				+"DateFirstPayment  =  "+POut.Date  (installmentPlan.DateFirstPayment)+", "
 				+"MonthlyPayment    = '"+POut.Double(installmentPlan.MonthlyPayment)+"', "
-				+"APR               =  "+POut.Float (installmentPlan.APR)+" "
+				+"APR               =  "+POut.Float (installmentPlan.APR)+", "
+				+"Note              = '"+POut.String(installmentPlan.Note)+"' "
 				+"WHERE InstallmentPlanNum = "+POut.Long(installmentPlan.InstallmentPlanNum);
 			Db.NonQ(command);
 		}
@@ -145,6 +148,10 @@ namespace OpenDentBusiness.Crud{
 			if(installmentPlan.APR != oldInstallmentPlan.APR) {
 				if(command!=""){ command+=",";}
 				command+="APR = "+POut.Float(installmentPlan.APR)+"";
+			}
+			if(installmentPlan.Note != oldInstallmentPlan.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(installmentPlan.Note)+"'";
 			}
 			if(command==""){
 				return;

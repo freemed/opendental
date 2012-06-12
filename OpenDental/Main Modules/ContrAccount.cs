@@ -1723,6 +1723,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Plan"),-1,"","PayPlan"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Installment Plan"),-1,"","InstallPlan"));
 			if(!PrefC.GetBool(PrefName.EasyHideRepeatCharges)) {
 				button=new ODToolBarButton(Lan.g(this,"Repeating Charge"),-1,"","RepeatCharge");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
@@ -1877,6 +1878,7 @@ namespace OpenDental {
 				ToolBarMain.Buttons["Adjustment"].Enabled=false;
 				ToolBarMain.Buttons["Insurance"].Enabled=false;
 				ToolBarMain.Buttons["PayPlan"].Enabled=false;
+				ToolBarMain.Buttons["InstallPlan"].Enabled=false;
 				ToolBarMain.Buttons["Statement"].Enabled=false;
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=false;
@@ -1891,6 +1893,7 @@ namespace OpenDental {
 				ToolBarMain.Buttons["Adjustment"].Enabled=true;
 				ToolBarMain.Buttons["Insurance"].Enabled=true;
 				ToolBarMain.Buttons["PayPlan"].Enabled=true;
+				ToolBarMain.Buttons["InstallPlan"].Enabled=true;
 				ToolBarMain.Buttons["Statement"].Enabled=true;
 				ToolBarMain.Invalidate();
 				textUrgFinNote.Enabled=true;
@@ -2152,6 +2155,7 @@ namespace OpenDental {
 				return;
 			}
 			DataTable table=DataSetMain.Tables["payplan"];
+			List<InstallmentPlan> ListInstallmentPlan=InstallmentPlans.Refresh(PatCur.PatNum);
 			if (table.Rows.Count == 0) {
 				gridPayPlan.Visible=false;
 				return;
@@ -2191,7 +2195,7 @@ namespace OpenDental {
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
 			UI.ODGridCell cell;
-			decimal PPDueTotal=0;
+			//decimal PPDueTotal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -2210,9 +2214,28 @@ namespace OpenDental {
 				}
 				row.Cells.Add(cell);
 				row.Cells.Add("");
+				row.Tag=table.Rows[i];
 				gridPayPlan.Rows.Add(row);
 				PPBalanceTotal += (Convert.ToDecimal((table.Rows[i]["balance"]).ToString()));
-				PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
+				//PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
+			}
+			for(int i=0;i<ListInstallmentPlan.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ListInstallmentPlan[i].DateAgreement.ToShortDateString());
+				row.Cells.Add("");//Guarantor
+				row.Cells.Add(PatCur.GetNameFirst());//Patient
+				row.Cells.Add("");//isIns
+				row.Cells.Add("");//principal
+				row.Cells.Add("");//totalCost
+				row.Cells.Add("");//paid
+				row.Cells.Add("");//princPaid
+				row.Cells.Add("");//balance
+				row.Cells.Add(ListInstallmentPlan[i].MonthlyPayment.ToString("F"));//due, Monthly Payment?
+				row.Cells.Add("");//??
+				row.Tag=ListInstallmentPlan[i];
+				gridPayPlan.Rows.Add(row);
+				//PPBalanceTotal //Used in hook only
+				//PPDueTotal
 			}
 			gridPayPlan.EndUpdate();
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
@@ -2601,16 +2624,25 @@ namespace OpenDental {
 		}
 
 		private void gridPayPlan_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			DataTable table=DataSetMain.Tables["payplan"];
-			PayPlan payplan=PayPlans.GetOne(PIn.Long(table.Rows[e.Row]["PayPlanNum"].ToString()));
-			FormPayPlan2=new FormPayPlan(PatCur,payplan);
-			FormPayPlan2.ShowDialog();
-			if(FormPayPlan2.GotoPatNum!=0){
-				ModuleSelected(FormPayPlan2.GotoPatNum,false);
-				return;
+			if(gridPayPlan.Rows[e.Row].Tag.GetType()==typeof(InstallmentPlan)) {
+				FormInstallmentPlanEdit FormIPE=new FormInstallmentPlanEdit();
+				FormIPE.InstallmentPlanCur=(InstallmentPlan)gridPayPlan.Rows[e.Row].Tag;
+				FormIPE.IsNew=false;
+				FormIPE.ShowDialog();
+				ModuleSelected(PatCur.PatNum);
 			}
-			bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
-			ModuleSelected(PatCur.PatNum,isSelectingFamily);
+			else {//Payment Plan
+				DataTable table=DataSetMain.Tables["payplan"];
+				PayPlan payplan=PayPlans.GetOne(PIn.Long(((DataRow)gridPayPlan.Rows[e.Row].Tag)["PayPlanNum"].ToString()));
+				FormPayPlan2=new FormPayPlan(PatCur,payplan);
+				FormPayPlan2.ShowDialog();
+				if(FormPayPlan2.GotoPatNum!=0) {
+					ModuleSelected(FormPayPlan2.GotoPatNum,false);
+					return;
+				}
+				bool isSelectingFamily=gridAcctPat.GetSelectedIndex()==this.DataSetMain.Tables["patient"].Rows.Count-1;
+				ModuleSelected(PatCur.PatNum,isSelectingFamily);
+			}
 		}
 
 		private void gridAcctPat_CellClick(object sender,ODGridClickEventArgs e) {
@@ -2645,6 +2677,9 @@ namespace OpenDental {
 						break;
 					case "PayPlan":
 						toolBarButPayPlan_Click();
+						break;
+					case "InstallPlan":
+						toolBarButInstallPlan_Click();
 						break;
 					case "RepeatCharge":
 						toolBarButRepeatCharge_Click();
@@ -3247,6 +3282,18 @@ namespace OpenDental {
 			else{
 				ModuleSelected(PatCur.PatNum);
 			}
+		}
+		
+		private void toolBarButInstallPlan_Click() {
+			InstallmentPlan InstallmentPlan=new InstallmentPlan();
+			InstallmentPlan.PatNum=PatCur.PatNum;
+			InstallmentPlan.DateAgreement=DateTime.Today;
+			InstallmentPlan.DateFirstPayment=DateTime.Today;
+			InstallmentPlans.Insert(InstallmentPlan);
+			FormInstallmentPlanEdit FormIPE=new FormInstallmentPlanEdit();
+			FormIPE.InstallmentPlanCur=InstallmentPlan;
+			FormIPE.IsNew=true;
+			FormIPE.ShowDialog();
 		}
 
 		private void toolBarButRepeatCharge_Click(){

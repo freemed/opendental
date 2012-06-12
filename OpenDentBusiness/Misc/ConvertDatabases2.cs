@@ -9336,6 +9336,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateFirstPayment date NOT NULL DEFAULT '0001-01-01',
 						MonthlyPayment double NOT NULL,
 						APR float NOT NULL,
+						Note varchar(255) NOT NULL,
 						INDEX(PatNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -9350,6 +9351,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateFirstPayment date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						MonthlyPayment number(38,8) NOT NULL,
 						APR number(38,8) NOT NULL,
+						Note varchar2(255) NOT NULL,
 						CONSTRAINT installmentplan_InstallmentPla PRIMARY KEY (InstallmentPlanNum)
 						)";
 					Db.NonQ(command);
@@ -9403,6 +9405,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 
-
-
-		

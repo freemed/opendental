@@ -358,6 +358,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormInstallmentPlanEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormInstallmentPlanEdit.designer.cs">
+      <DependentUpon>FormInstallmentPlanEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormTxtMsgEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2456,6 +2462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormInstallmentPlanEdit.resx">
+      <DependentUpon>FormInstallmentPlanEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTxtMsgEdit.resx">
       <DependentUpon>FormTxtMsgEdit.cs</DependentUpon>

@@ -19,6 +19,8 @@ namespace OpenDentBusiness{
 		public double MonthlyPayment;
 		///<summary>Annual Percentage Rate. e.g. 12.</summary>
 		public float APR;
+		///<summary>Note</summary>
+		public string Note;
 
 
 		///<summary>Returns a copy of this InstallmentPlan.</summary>
