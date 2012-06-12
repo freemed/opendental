@@ -2214,7 +2214,7 @@ namespace OpenDental {
 				}
 				row.Cells.Add(cell);
 				row.Cells.Add("");
-				row.Tag=table.Rows[i];
+				//row.Tag=table.Rows[i];
 				gridPayPlan.Rows.Add(row);
 				PPBalanceTotal += (Convert.ToDecimal((table.Rows[i]["balance"]).ToString()));
 				//PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
@@ -3285,15 +3285,16 @@ namespace OpenDental {
 		}
 		
 		private void toolBarButInstallPlan_Click() {
-			InstallmentPlan InstallmentPlan=new InstallmentPlan();
-			InstallmentPlan.PatNum=PatCur.PatNum;
-			InstallmentPlan.DateAgreement=DateTime.Today;
-			InstallmentPlan.DateFirstPayment=DateTime.Today;
-			InstallmentPlans.Insert(InstallmentPlan);
+			InstallmentPlan installPlan=new InstallmentPlan();
+			installPlan.PatNum=PatCur.PatNum;
+			installPlan.DateAgreement=DateTime.Today;
+			installPlan.DateFirstPayment=DateTime.Today;
+			//InstallmentPlans.Insert(installPlan);
 			FormInstallmentPlanEdit FormIPE=new FormInstallmentPlanEdit();
-			FormIPE.InstallmentPlanCur=InstallmentPlan;
+			FormIPE.InstallmentPlanCur=installPlan;
 			FormIPE.IsNew=true;
 			FormIPE.ShowDialog();
+			ModuleSelected(PatCur.PatNum);
 		}
 
 		private void toolBarButRepeatCharge_Click(){

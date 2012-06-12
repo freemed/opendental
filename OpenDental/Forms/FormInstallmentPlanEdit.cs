@@ -20,7 +20,7 @@ namespace OpenDental {
 		private void FormInstallmentPlanEdit_Load(object sender,EventArgs e) {
 			textDateAgreement.Text=InstallmentPlanCur.DateAgreement.ToShortDateString();
 			textDateFirstPay.Text=InstallmentPlanCur.DateFirstPayment.ToShortDateString();
-			textMonthlyPayment.Text=InstallmentPlanCur.MonthlyPayment.ToString();
+			textMonthlyPayment.Text=InstallmentPlanCur.MonthlyPayment.ToString("f");
 			textAPR.Text=InstallmentPlanCur.APR.ToString();
 			textNote.Text=InstallmentPlanCur.Note;
 		}
