@@ -51,7 +51,9 @@ namespace OpenDentBusiness {
 			if(patPlanNum!=0) {
 				command+=" OR PatPlanNum = "+POut.Long(patPlanNum);
 			}
-			return Crud.BenefitCrud.SelectMany(command);
+			List<Benefit> list=Crud.BenefitCrud.SelectMany(command);
+			list.Sort(SortBenefits);
+			return list;
 		}
 
 		/*
@@ -698,6 +700,14 @@ namespace OpenDentBusiness {
 						|| listShort[i].QuantityQualifier==BenefitQuantity.Years) 
 					{
 						continue;//exclude frequencies
+					}
+					//If it's an age based limitation, then make sure the patient age matches.
+					//If we have an age match, then we exit the method right here.
+					if(listShort[i].QuantityQualifier==BenefitQuantity.AgeLimit && listShort[i].Quantity > 0) {
+						if(patientAge > listShort[i].Quantity) {
+							note=Lans.g("Benefits","Age limitation:")+" "+listShort[i].Quantity.ToString();
+							return 0;//not covered if too old.
+						}
 					}
 					if(benInd != null && benInd.CovCatNum!=0) {//must compare
 						//only use the new one if the item order is larger
