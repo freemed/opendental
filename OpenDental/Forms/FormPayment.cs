@@ -769,6 +769,7 @@ namespace OpenDental {
 			}
 			comboCreditCards.Items.Add("New card");
 			comboCreditCards.SelectedIndex=0;
+			tableBalances=Patients.GetPaymentStartingBalances(PatCur.Guarantor,PaymentCur.PayNum);
 			//this works even if patient not in family
 			textPaidBy.Text=FamCur.GetNameInFamFL(PaymentCur.PatNum);
 			textDateEntry.Text=PaymentCur.DateEntry.ToShortDateString();
