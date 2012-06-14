@@ -6,9 +6,9 @@ using System.Text;
 namespace OpenDentBusiness
 {
 	///<summary>X12 835 Health Care Claim Payment/Advice. This transaction type is a response to an 837 claim submission. The 835 will always come after a 277 is received and a 277 will always come after a 999. Neither the 277 nor the 999 are required, so it is possible that an 835 will be received directly after the 837.</summary>
-	public class X2835:X12object{
+	public class X835:X12object{
 
-//    private List<X12Segment> segments;
+    private List<X12Segment> segments;
 //    ///<summary>NM1 of loop 2100A.</summary>
 //    private int segNumInfoSourceNM101;
 //    ///<summary>NM1 of loop 2100B.</summary>
@@ -20,18 +20,18 @@ namespace OpenDentBusiness
 //    ///<summary>TRN of loop 2200D.</summary>
 //    private List<int> segNumsClaimTrackingNumberTRN;
 
-//    public static bool Is277(X12object xobj) {
+    public static bool Is835(X12object xobj) {
 //      if(xobj.FunctGroups.Count!=1) {
 //        return false;
 //      }
 //      if(xobj.FunctGroups[0].Header.Get(1)=="HN") {
 //        return true;
 //      }
-//      return false;
-//    }
+      return false;
+    }
 
-//    public X277(string messageText):base(messageText) {
-//      segments=FunctGroups[0].Transactions[0].Segments;
+    public X835(string messageText):base(messageText) {
+      segments=FunctGroups[0].Transactions[0].Segments;
 //      segNumInfoSourceNM101=-1;
 //      segNumInfoReceiverNM101=-1;
 //      segNumsBillingProviderNM1=new List<int>();
@@ -85,7 +85,7 @@ namespace OpenDentBusiness
 //          }
 //        }
 //      }
-//    }
+    }
 
 //    ///<summary>NM101 of loop 2100A.</summary>
 //    public string GetInformationSourceType() {
@@ -256,7 +256,7 @@ namespace OpenDentBusiness
 //      return 0;
 //    }
 
-//    ///<summary>TRN02 in loop 2200D. Do this first to get a list of all claim tracking numbers that are contained within this 277.  Then, for each claim tracking number, we can later retrieve the AckCode for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
+//    ///<summary>TRN02 in loop 2200D. Do this first to get a list of all claim tracking numbers that are contained within this 835.  Then, for each claim tracking number, we can later retrieve the AckCode for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
 //    public List<string> GetClaimTrackingNumbers() {
 //      List<string> retVal=new List<string>();
 //      for(int i=0;i<segNumsClaimTrackingNumberTRN.Count;i++) {
@@ -364,176 +364,152 @@ namespace OpenDentBusiness
   }
 }
 
-////EXAMPLE 1 - From X12 Specification
-////ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
-////GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
-////ST*277*0001*005010X214~
-////BHT*0085*08*277X2140001*20060205*1635*TH~
-////HL*1**20*1~
-////NM1*AY*2*FIRST CLEARINGHOUSE*****46*CLHR00~
-////TRN*1*200102051635S00001ABCDEF~
-////DTP*050*D8*20060205~
-////DTP*009*D8*20060207~
-////HL*2*1*21*1~
-////NM1*41*2*BEST BILLING SERVICE*****46*S00001~
-////TRN*2*2002020542857~
-////STC*A0:16:PR*20060205*WQ*1000~
-////QTY*90*1~
-////QTY*AA*2~
-////AMT*YU*200~
-////AMT*YY*800~
-////HL*3*2*19*1~
-////NM1*85*2*SMITH CLINIC*****FI*123456789~
-////HL*4*3*PT~
-////NM1*QC*1*DOE*JOHN****MI*00ABCD1234~
-////TRN*2*4001/1339~
-////STC*A0:16:PR*20060205*WQ*200~
-////REF*1K*22029500123407X~
-////DTP*472*RD8*20060128-20060131~
-////HL*5*3*PT~
-////NM1*QC*1*DOE*JANE****MI*45613027602~
-////TRN*2*2890/4~
-////STC*A3:21:82*20060205*U*500~
-////DTP*472*D8*20060115~
-////SVC*HC:22305:22*350*****1~
-////STC*A3:122**U*******A3:153:82~
-////REF*FJ*11~
-////HL*6*3*PT~
-////NM1*QC*1*VEST*HELEN****MI*45602708901~
-////TRN*2*00000000000000000000~
-////STC*A3:401*20060205*U*300~
-////DTP*472*RD8*20060120-20060120~
-////SE*37*0001~
-////GE*1*17~
-////IEA*1*000000017~
+//Example 1 From 835 Specification:
+//ST*835*1234~
+//BPR*C*150000*C*ACH*CTX*01*999999992*DA*123456*1512345678*01*999988880*DA*98765*20020913~
+//TRN*1*12345*1512345678~
+//DTM*405*20020916~
+//N1*PR*INSURANCE COMPANY OF TIMBUCKTU~
+//N3*1 MAIN STREET~
+//N4*TIMBUCKTU*AK*89111~
+//REF*2U*999~
+//N1*PE*REGIONAL HOPE HOSPITAL*XX*6543210903~
+//LX*110212~
+//TS3*6543210903*11*20021231*1*211366.97****138018.4**73348.57~
+//TS2*2178.45*1919.71**56.82*197.69*4.23~
+//CLP*666123*1*211366.97*138018.4**MA*1999999444444*11*1~
+//CAS*CO*45*73348.57~
+//NM1*QC*1*JONES*SAM*O***HN*666666666A~
+//MIA*0***138018.4~
+//DTM*232*20020816~
+//DTM*233*20020824~
+//QTY*CA*8~
+//LX*130212~
+//TS3*6543210909*13*19961231*1*15000****11980.33**3019.67~
+//CLP*777777*1*150000*11980.33**MB*1999999444445*13*1~
+//CAS*CO*35*3019.67~
+//NM1*QC*1*BORDER*LIZ*E***HN*996669999B~
+//MOA***MA02~
+//DTM*232*20020512~
+//PLB*6543210903*20021231*CV:CP*-1.27~
+//SE*28*1234~
 
-////EXAMPLE 2 - From X12 Specification
-////ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
-////GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
-////ST*277*0002*005010X214~
-////BHT*0085*08*277X2140002*20060201*0405*TH~
-////HL*1**20*1~
-////NM1*AY*2*FIRST CLEARINGHOUSE*****46*CLHR00~
-////TRN*1*200201312005S00002XYZABC~
-////DTP*050*D8*20060131~
-////DTP*009*D8*20060201~
-////HL*2*1*21*0~
-////NM1*41*2*LAST BILLING SERVICE*****46*S00002~
-////TRN*2*20020131052389~
-////STC*A3:24:41**U~
-////QTY*AA*3~
-////AMT*YY*800~
-////SE*14*00002~
-////GE*1*17~
-////IEA*1*000000017~
+//Example 2 From 835 Specification:
+//ST*835*12233~
+//BPR*I*945*C*ACH*CCP*01*888999777*DA*24681012*1935665544*01*111333555*DA*144444*20020316~
+//TRN*1*71700666555*1935665544~
+//DTM*405*20020314~
+//N1*PR*RUSHMORE LIFE~
+//N3*10 SOUTH AVENUE~
+//N4*RAPID CITY*SD*55111~
+//N1*PE*ACME MEDICAL CENTER*XX*5544667733~
+//REF*TJ*777667755~
+//LX*1~
+//CLP*55545554444*1*800*450*300*12*94060555410000~
+//CAS*CO*A2*50~
+//NM1*QC*1*BUDD*WILLIAM****MI*33344555510~
+//SVC*HC:99211*800*500~
+//DTM*150*20020301~
+//DTM*151*20020304~
+//CAS*PR*1*300~
+//CLP*8765432112*1*1200*495*600*12*9407779923000~
+//CAS*CO*A2*55~
+//NM1*QC*1*SETTLE*SUSAN****MI*44455666610~
+//SVC*HC:93555*1200*550~
+//DTM*150*20020310~
+//DTM*151*20020312~
+//CAS*PR*1*600~
+//CAS*CO*45*50~
+//SE*25*112233~
 
-////EXAMPLE 3 - From X12 Specification
-////ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
-////GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
-////ST*277*0003*005010X214~
-////BHT*0085*08*277X2140003*20060221*1025*TH~
-////HL*1**20*1~
-////NM1*PR*2*YOUR INSURANCE COMPANY*****PI*YIC01~
-////TRN*1*0091182~
-////DTP*050*D8*20060220~
-////DTP*009*D8*20060221~
-////HL*2*1*21*1~
-////NM1*41*1*JONES*HARRY*B**MD*46*S00003~
-////TRN*2*2002022045678~
-////STC*A1:19:PR*20060221*WQ*365.5~
-////QTY*90*3~
-////QTY*AA*2~
-////AMT*YU*200.5~
-////AMT*YY*165~
-////HL*3*2*19*1~
-////NM1*85*1*JONES*HARRY*B**MD*FI*234567894~
-////HL*4*3*PT~
-////NM1*QC*1*PATIENT*FEMALE****MI*2222222222~
-////TRN*2*PATIENT22222~
-////STC*A2:20:PR*20060221*WQ*100~
-////REF*1K*220216359803X~
-////DTP*472*D8*20060214~
-////HL*5*3*PT~
-////NM1*QC*1*PATIENT*MALE****MI*3333333333~
-////TRN*2*PATIENT33333~
-////STC*A3:187:PR*20060221*U*65~
-////DTP*472*D8*20090221~
-////HL*6*3*PT~
-////NM1*QC*1*JONES*LARRY****MI*4444444444~
-////TRN*2*JONES44444~
-////STC*A3:21:77*20060221*U*100~
-////DTP*472*D8*20060211~
-////HL*7*3*PT~
-////NM1*QC*1*JOHNSON*MARY****MI*5555555555~
-////TRN*2*JONHSON55555~
-////STC*A2:20:PR*20060221*WQ*50.5~
-////REF*1K*220216359806X~
-////DTP*472*D8*20060210~
-////HL*8*3*PT~
-////NM1*QC*1*MILLS*HARRIETT****MI*6666666666~
-////TRN*2*MILLS66666~
-////STC*A2:20:PR*20060221*WQ*50~
-////REF*1K*220216359807X~
-////DTP*472*D8*20060205~
-////SE*46*0003~
-////GE*1*17~
-////IEA*1*000000017~
+//Example 3 From 835 Specification:
+//ST*835*0001~
+//BPR*I*1222*C*CHK************20050412~
+//TRN*1*0012524965*1559123456~
+//REF*EV*030240928~
+//DTM*405*20050412~
+//N1*PR*YOUR TAX DOLLARS AT WORK~
+//N3*481A00 DEER RUN ROAD~
+//N4*WEST PALM BCH*FL*11114~
+//N1*PE*ACME MEDICAL CENTER*FI*5999944521~
+//N3*PO BOX 863382~
+//N4*ORLANDO*FL*55115~
+//REF*PQ*10488~
+//LX*1~
+//CLP*L0004828311*2*10323.64*912**12*05090256390*11*1~
+//CAS*OA*23*9411.64~
+//NM1*QC*1*TOWNSEND*WILLIAM*P***MI*XXX123456789~
+//NM1*82*2*ACME MEDICAL CENTER*****BD*987~
+//DTM*232*20050303~
+//DTM*233*20050304~
+//AMT*AU*912~
+//LX*2~
+//CLP*0001000053*2*751.50*310*220*12*50630626430~
+//NM1*QC*1*BAKI*ANGI****MI*456789123~
+//NM1*82*2*SMITH JONES PA*****BS*34426~
+//DTM*232*20050106~
+//DTM*233*20050106~
+//SVC*HC>12345>26*166.5*30**1~
+//DTM*472*20050106~
+//CAS*OA*23*136.50~
+//REF*1B*43285~
+//AMT*AU*150~
+//SVC*HC>66543>26*585*280*220*1~
+//DTM*472*20050106~
+//CAS*PR*1*150**2*70~
+//CAS*CO*42*85~
+//REF*1B*43285~
+//AMT*AU*500~
+//SE*38*0001~
 
-////EXAMPLE 4 - From X12 Specification
-////ISA*00*          *00*          *ZZ*810624427      *ZZ*133052274      *060131*0756*^*00501*000000017*0*T*:~
-////GS*HN*810624427*133052274*20060131*0756*17*X*005010X214~
-////ST*277*0004*005010X214~
-////BHT*0085*08*277X2140004*20060321*1025*TH~
-////HL*1**20*1~
-////NM1*PR*2*OUR INSURANCE COMPANY*****PI*OIC02~
-////TRN*1*00911232~
-////DTP*050*D8*20060320~
-////DTP*009*D8*20060321~
-////HL*2*1*21*1~
-////NM1*41*1*KING*EWELL*B**MD*46*S00005~
-////TRN*2*200203207890~
-////STC*A1:19:PR*20060321*WQ*455~
-////QTY*90*3~
-////QTY*AA*5~
-////AMT*YU*155~
-////AMT*YY*300~
-////HL*3*2*19*1~
-////NM1*85*1*KING*EWELL*B**MD*XX*5365432101~
-////TRN*2*00098765432~
-////STC*A1:19:PR**WQ*305~
-////HL*4*3*PT~
-////NM1*QC*1*PATIENT*FEMALE****MI*2222222222~
-////TRN*2*PATIENT22222~
-////STC*A2:20:PR*20060321*WQ*55~
-////REF*1K*220216359803X~
-////DTP*472*D8*20060314~
-////HL*5*3*PT~
-////NM1*QC*1*PATIENT*MALE****MI*3333333333~
-////TRN*2*PATIENT33333~
-////STC*A3:187:PR*20060321*U*50~
-////HL*6*3*PT~
-////NM1*QC*1*JONES*MARY****MI*4444444444~
-////TRN*2*JONES44444~
-////STC*A3:116*20060321*U*100~
-////DTP*472*D8*20060311~
-////HL*7*3*PT~
-////NM1*QC*1*JOHNSON*JIMMY****MI*5555555555~
-////TRN*2*JOHNSON55555~
-////STC*A2:20:PR*20060321*WQ*50~
-////REF*1K*220216359806X~
-////DTP*472*D8*20060310~
-////HL*8*3*PT~
-////NM1*QC*1*MILLS*HALEY****MI*6666666666~
-////TRN*2*MILLS66666~
-////STC*A2:20:PR*20060321*WQ*50~
-////REF*1K*200216359807X~
-////DTP*472*D8*20060305~
-////HL*9*2*19*0~
-////NM1*85*1*REED*I*B**MD*FI*567012345~
-////TRN*2*00023456789~
-////STC*A3:24:85*20060321*U*150~
-////QTY*QC*3~
-////AMT*YY*150~
-////SE*53*0004~
-////GE*1*17~
-////IEA*1*000000017~
+//Example 4 From 835 Specification:
+//ST*835*0001~
+//BPR*I*187.50*C*CHK************20050412~
+//TRN*1*0012524879*1559123456~
+//REF*EV*030240928~
+//DTM*405*20050412~
+//N1*PR*YOUR TAX DOLLARS AT WORK~
+//N3*481A00 DEER RUN ROAD~
+//N4*WEST PALM BCH*FL*11114~
+//N1*PE*ACME MEDICAL CENTER*FI*599944521~
+//N3*PO BOX 863382~
+//N4*ORLANDO*FL*55115~
+//REF*PQ*10488~
+//LX*1~
+//CLP*0001000054*3*1766.5*187.50**12*50580155533~
+//NM1*QC*1*ISLAND*ELLIS*E****MI*789123456~
+//NM1*82*2*JONES JONES ASSOCIATES*****BS*AB34U~
+//DTM*232*20050120~
+//SVC*HC*24599*1766.5*187.50**1~
+//DTM*472*20050120~
+//CAS*OA*23*1579~
+//REF*1B*44280~
+//AMT*AU*1700~
+//SE*38*0001~
+
+//Example 5 From 835 Specification:
+//ST*835*0001~
+//BPR*I*34.00*C*CHK************20050318~
+//TRN*1*0063158ABC*1566339911~
+//REF*EV*030240928~
+//DTM*405*20050318~
+//N1*PR*YOUR TAX DOLLARS AT WORK~
+//N3*481A00 DEER RUN ROAD~
+//N4*WEST PALM BCH*FL*11114~
+//N1*PE*ATONEWITHHEALTH*FI*3UR334563~
+//N3*3501 JOHNSON STREET~
+//N4*SUNSHINE*FL*12345~
+//REF*PQ*11861~
+//LX*1~
+//CLP*0001000055*2*541*34**12*50650619501~
+//NM1*QC*1*BRUCK*RAYMOND*W***MI*987654321~
+//NM1*82*2*PROFESSIONAL TEST 1*****BS*34426~
+//DTM*232*20050202~
+//DTM*233*20050202~
+//SVC*HC>55669*541*34**1~
+//DTM*472*20050202~
+//CAS*OA*23*516~
+//CAS*OA*94*-9~
+//REF*1B*44280~
+//AMT*AU*550~
+//SE*38*0001~
