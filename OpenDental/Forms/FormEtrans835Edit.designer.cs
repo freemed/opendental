@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormEtrans277Edit {
+	partial class FormEtrans835Edit {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>

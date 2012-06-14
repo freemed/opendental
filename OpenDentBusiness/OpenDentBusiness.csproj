@@ -759,6 +759,7 @@
     <Compile Include="UI\ODGridRow.cs" />
     <Compile Include="UI\ODGridRowCollection.cs" />
     <Compile Include="WebServiceTests.cs" />
+    <Compile Include="X12\X835.cs" />
     <Compile Include="X12\X277.cs" />
     <Compile Include="X12\X999.cs" />
     <Compile Include="X12\X837_5010.cs" />
