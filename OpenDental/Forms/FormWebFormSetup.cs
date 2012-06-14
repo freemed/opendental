@@ -273,13 +273,38 @@ namespace OpenDental {
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			//Make sure each selected sheet contains FName, LName, and Birthdate.
+			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {//There will always only be one
+				bool hasFName=false;
+				bool hasLName=false;
+				bool hasBirthdate=false;
+				for(int j=0;j<FormS.SelectedSheetDefs[i].SheetFieldDefs.Count;j++) {
+					if(FormS.SelectedSheetDefs[i].SheetFieldDefs[j].FieldType!=SheetFieldType.InputField) {
+						continue;
+					}
+					if(FormS.SelectedSheetDefs[i].SheetFieldDefs[j].FieldName=="FName") {
+						hasFName=true;
+					}
+					else if(FormS.SelectedSheetDefs[i].SheetFieldDefs[j].FieldName=="LName") {
+						hasLName=true;
+					}
+					else if(FormS.SelectedSheetDefs[i].SheetFieldDefs[j].FieldName=="Birthdate") {
+						hasBirthdate=true;
+					}
+				}
+				if(!hasFName || !hasLName || !hasBirthdate) {
+					MessageBox.Show(Lan.g(this,"The sheet called ")+"\""+FormS.SelectedSheetDefs[i].Description+"\""
+			      +Lan.g(this," does not contain all three required fields: LName, FName, and Birthdate."));
+					return;
+				}
+			}
 			Cursor=Cursors.WaitCursor;
 			if(!TestWebServiceExists()) {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Either the web service is not available or the WebHostSynch URL is incorrect");
 				return;
 			}
-			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {
+			for(int i=0;i<FormS.SelectedSheetDefs.Count;i++) {//There will always only be one
 				LoadImagesToSheetDef(FormS.SelectedSheetDefs[i]);
 				wh.Timeout=300000; //for slow connections more timeout is provided. The  default is 100 seconds i.e 100000
 				wh.UpLoadSheetDef(RegistrationKey,FormS.SelectedSheetDefs[i]);
