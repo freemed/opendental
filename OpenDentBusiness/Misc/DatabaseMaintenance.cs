@@ -793,7 +793,7 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//because of the way this is grouped, it will just get one of many patients for each
-			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt
+			command=@"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt,claimproc.PatNum
 					FROM claimpayment,claimproc
 					WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum
 					GROUP BY claimproc.ClaimPaymentNum,CheckAmt
@@ -805,6 +805,19 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{
+				//Changing the claim payment sums automatically is dangerous so give the user enough information to investigate themselves.
+				if(table.Rows.Count>1) {
+					log=Lans.g("FormDatabaseMaintenance","The following claim payment sums are incorrect")+":\r\n";
+					for(int i=0;i<table.Rows.Count;i++) {
+						Patient pat=Patients.GetPat(PIn.Long(table.Rows[i]["PatNum"].ToString()));
+						command="SELECT CheckDate,CheckAmt FROM claimpayment WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
+						DataTable claimPayTable=Db.GetTable(command);
+						log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+":"+pat.GetNameFirstOrPrefL()
+							+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
+							+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+					}
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
+				}
 				/*
 				for(int i=0;i<table.Rows.Count;i++) {
 					command="UPDATE claimpayment SET CheckAmt='"+POut.Double(PIn.Double(table.Rows[i]["_sumpay"].ToString()))+"' "
@@ -866,7 +879,7 @@ namespace OpenDentBusiness {
 			}
 			else{
 				//Because it would change the sum on a deposit slip, can't easily delete these if attached to a deposit.
-				//Only delete claimpayments that are not attached to deposit slips.  Others, no action.
+				//Only delete claimpayments that are not attached to deposit slips.
 				//Above query might have more results than we can fix because of the deposit slips.
 				command="DELETE FROM claimpayment WHERE ClaimPaymentNum NOT IN ("
 					+"SELECT ClaimPaymentNum FROM claimproc) "
@@ -874,6 +887,28 @@ namespace OpenDentBusiness {
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","ClaimPayments with with no splits fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+				//There might be claimpayments still attached to deposits which we cannot automatically fix. Notify user to manually fix.
+				command="SELECT claimpayment.ClaimPaymentNum FROM claimpayment WHERE NOT EXISTS("
+						+"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(i==0) {
+						log+=Lans.g("FormDatabaseMaintenance","The following claim payments have no splits and are attached to deposits")+":\r\n";
+					}
+					command=@"SELECT deposit.DateDeposit,deposit.Amount,claimpayment.CarrierName,claimpayment.CheckDate,claimpayment.CheckAmt
+						FROM claimpayment,deposit
+						WHERE claimpayment.ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString()+@"
+						AND claimpayment.DepositNum=deposit.DepositNum";
+					DataTable temp=Db.GetTable(command);
+					log+="   DepositDate: "+PIn.Date(temp.Rows[0]["DateDeposit"].ToString()).ToShortDateString()
+						+" DepositAmt: "+PIn.Double(temp.Rows[0]["Amount"].ToString()).ToString("F")
+						+" Carrier: "+temp.Rows[0]["CarrierName"].ToString()
+						+" CheckDate: "+PIn.Date(temp.Rows[0]["CheckDate"].ToString()).ToShortDateString()
+						+" CheckAmt: "+PIn.Double(temp.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+				}
+				if(table.Rows.Count>0) {
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
 				}
 			}
 			return log;
@@ -1220,6 +1255,26 @@ namespace OpenDentBusiness {
 			}
 			else{
 				//Take no action.  Use descriptive explanation.
+				command=@"SELECT claim.PatNum,claim.DateService,claimproc.ProcDate,claimproc.CodeSent,claimproc.FeeBilled
+					FROM claimproc,claim
+					WHERE claimproc.ClaimNum=claim.ClaimNum
+					AND claim.ClaimStatus='R'
+					AND claimproc.Status=0";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					Patient pat=Patients.GetPat(PIn.Long(table.Rows[i]["PatNum"].ToString()));
+					if(i==0) {
+						log+=Lans.g("FormDatabaseMaintenance","The following ClaimProc statuses do not match the claim")+":\r\n";
+					}
+					log+="   Patient: #"+pat.PatNum.ToString()+":"+pat.GetNameFirstOrPrefL()
+						+" ClaimDate: "+PIn.Date(table.Rows[i]["DateService"].ToString()).ToShortDateString()
+						+" ProcDate: "+PIn.Date(table.Rows[i]["ProcDate"].ToString()).ToShortDateString()
+						+" Code: "+table.Rows[i]["CodeSent"].ToString()
+						+" FeeBilled: "+PIn.Double(table.Rows[i]["FeeBilled"].ToString()).ToString("F")+"\r\n";
+				}
+				if(table.Rows.Count>0) {
+					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
+				}
 			}
 			return log;
 		}
