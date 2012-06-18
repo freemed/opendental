@@ -4527,6 +4527,7 @@ namespace OpenDental{
 			ClaimProcCur.DateCP=DateTime.Today;
 			ClaimProcCur.ProcDate=ClaimCur.DateService;
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
+			ClaimProcCur.ClinicNum=ClaimCur.ClinicNum;
 			ClaimProcs.Insert(ClaimProcCur);
 			List<ClaimProcHist> loopList=null;
 			FormClaimProc FormCP=new FormClaimProc(ClaimProcCur,null,FamCur,PatCur,PlanList,null,ref loopList,PatPlanList,true,SubList);
