@@ -23,6 +23,16 @@ namespace OpenDental {
 			textMonthlyPayment.Text=InstallmentPlanCur.MonthlyPayment.ToString("f");
 			textAPR.Text=InstallmentPlanCur.APR.ToString();
 			textNote.Text=InstallmentPlanCur.Note;
+			if(IsNew) {
+				butDelete.Enabled=false;
+			}
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you would like to delete this installment plan?")) {
+				InstallmentPlans.Delete(InstallmentPlanCur.InstallmentPlanNum);
+				DialogResult=DialogResult.Cancel;
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

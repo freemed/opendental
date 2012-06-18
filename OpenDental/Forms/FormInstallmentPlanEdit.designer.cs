@@ -36,6 +36,7 @@ namespace OpenDental{
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -46,7 +47,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(398, 151);
+			this.butOK.Location = new System.Drawing.Point(370, 227);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 5;
@@ -61,7 +62,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(398, 192);
+			this.butCancel.Location = new System.Drawing.Point(370, 268);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 6;
@@ -158,10 +159,27 @@ namespace OpenDental{
 			this.label4.Text = "Note";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(35, 268);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75, 24);
+			this.butDelete.TabIndex = 5;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
 			// FormInstallmentPlanEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(498, 243);
+			this.ClientSize = new System.Drawing.Size(470, 319);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textMonthlyPayment);
@@ -173,6 +191,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textDateAgreement);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormInstallmentPlanEdit";
@@ -199,5 +218,6 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
+		private UI.Button butDelete;
 	}
 }

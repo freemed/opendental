@@ -1136,11 +1136,14 @@ namespace OpenDentBusiness {
 				row["tth"]="";
 				rows.Add(row);
 			}
+			//Installment plans----------------------------------------------------------------------------------
+			command="SELECT * FROM installmentplan WHERE PatNum = "+patNum;
+			DataTable rawInstall=Db.GetTable(command);
 			if(statementNum==0) {
-				GetPayPlans(rawPayPlan,rawPay);
+				GetPayPlans(rawPayPlan,rawPay,rawInstall);
 			}
 			else {
-				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient);
+				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient,rawInstall);
 			}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
@@ -1328,7 +1331,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case. </summary>
-		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay){
+		private static void GetPayPlans(DataTable rawPayPlan,DataTable rawPay,DataTable rawInstall){
 			//No need to check RemotingRole; no call to db.
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
@@ -1339,6 +1342,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("DateTime",typeof(DateTime));
 			table.Columns.Add("due");
 			table.Columns.Add("guarantor");
+			table.Columns.Add("InstallmentPlanNum");
 			table.Columns.Add("isIns");
 			table.Columns.Add("paid");
 			table.Columns.Add("patient");
@@ -1346,6 +1350,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("principal");
 			table.Columns.Add("princPaid");
 			table.Columns.Add("totalCost");
+			table.Columns.Add("type");//js I will review this after I get back
 			List<DataRow> rows=new List<DataRow>();
 			DateTime dateT;
 			decimal paid;
@@ -1389,6 +1394,7 @@ namespace OpenDentBusiness {
 				row["date"]=dateT.ToShortDateString();
 				row["due"]=due.ToString("n");
 				row["guarantor"]=fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["Guarantor"].ToString()));
+				row["InstallmentPlanNum"]="";
 				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
 					row["isIns"]="";
 				}
@@ -1403,6 +1409,26 @@ namespace OpenDentBusiness {
 				row["totalCost"]=totCost.ToString("n");
 				rows.Add(row);
 			}
+			//Installment plans-------------------------------------------------------------------------
+			for(int i=0;i<rawInstall.Rows.Count;i++){
+				row=table.NewRow();
+				row["accumDue"]="";
+				row["balance"]="";
+				dateT=PIn.DateT(rawInstall.Rows[i]["DateAgreement"].ToString());
+				row["DateTime"]=dateT;
+				row["date"]=dateT.ToShortDateString();
+				row["due"]=PIn.Decimal(rawInstall.Rows[i]["MonthlyPayment"].ToString()).ToString("f");
+				row["guarantor"]="";
+				row["InstallmentPlanNum"]=PIn.Long(rawInstall.Rows[i]["InstallmentPlanNum"].ToString());
+				row["isIns"]="";
+				row["paid"]="";
+				row["patient"]=fam.GetNameInFamLF(PIn.Long(rawInstall.Rows[i]["PatNum"].ToString()));
+				row["PayPlanNum"]="";
+				row["principal"]="";
+				row["princPaid"]="";
+				row["totalCost"]="";
+				rows.Add(row);
+			}
 			for(int i=0;i<rows.Count;i++) {
 				table.Rows.Add(rows[i]);
 			}
@@ -1410,7 +1436,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
-		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient){
+		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient,DataTable rawInstall){
 			//No need to check RemotingRole; no call to db.
 			//DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("payplan");
