@@ -191,6 +191,7 @@ namespace OpenDentBusiness
 				insPlan=InsPlans.GetPlan(claim.PlanNum,new List<InsPlan>());
 				sub=InsSubs.GetSub(claim.InsSubNum,null);
 				//insPlan could be null if db corruption. No error checking for that
+				otherPlan=null;//Must be reset each time through because if otherPlan!=null below then we assume the current claim has a secondary plan.
 				if(claim.PlanNum2>0) {
 					otherPlan=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 					otherSub=InsSubs.GetSub(claim.InsSubNum2,null);
