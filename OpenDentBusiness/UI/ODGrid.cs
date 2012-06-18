@@ -214,12 +214,29 @@ namespace OpenDental.UI {
 				if(!vScroll.Enabled) {
 					return;
 				}
-				if(value>vScroll.Maximum-vScroll.LargeChange)
-					vScroll.Value=vScroll.Maximum-vScroll.LargeChange;
-				else if(value<vScroll.Minimum)
+				int scrollValue=0;
+				if(value>vScroll.Maximum-vScroll.LargeChange){
+					scrollValue=vScroll.Maximum-vScroll.LargeChange;
+				}
+				else if(value<vScroll.Minimum) {
+					scrollValue=vScroll.Minimum;
+				}
+				else {
+					scrollValue=value;
+				}
+				try {
+					vScroll.Value=scrollValue;
+				}
+				catch(Exception e) {
+					MessageBox.Show("Error: Invalid Scroll Value. \r\n"
+						+"Scroll value from: "+vScroll.Value+"\r\n"
+						+"Scroll value to: "+scrollValue+"\r\n"
+						+"Min scroll value: "+vScroll.Minimum+"\r\n"
+						+"Max scroll value: "+vScroll.Maximum+"\r\n"
+						+"Large change value: "+vScroll.LargeChange+"\r\n\r\n"
+						+e.ToString());
 					vScroll.Value=vScroll.Minimum;
-				else
-					vScroll.Value=value;
+				}
 				if(editBox!=null) {
 					editBox.Dispose();
 				}
