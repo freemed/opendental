@@ -47,6 +47,10 @@ namespace OpenDental{
 				Camsight.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.CaptureLink.ToString()) {
+				CaptureLink.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.Cerec.ToString()) {
 				Cerec.SendData(prog,pat);
 				return;

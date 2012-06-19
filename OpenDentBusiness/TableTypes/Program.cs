@@ -37,6 +37,7 @@ namespace OpenDentBusiness{
 		BioPAK,
 		CallFire,
 		Camsight,
+		CaptureLink,
 		Cerec,
 		CliniView,
 		DBSWin,
