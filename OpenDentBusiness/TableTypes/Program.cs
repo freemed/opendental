@@ -40,6 +40,7 @@ namespace OpenDentBusiness{
 		CaptureLink,
 		Cerec,
 		CliniView,
+		ClioSoft,
 		DBSWin,
 		DentalEye,
 		DentForms,

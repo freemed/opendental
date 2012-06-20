@@ -59,6 +59,10 @@ namespace OpenDental{
 				Cliniview.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.ClioSoft.ToString()) {
+				ClioSoft.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.DBSWin.ToString()) {
 				DBSWin.SendData(prog,pat);
 				return;
