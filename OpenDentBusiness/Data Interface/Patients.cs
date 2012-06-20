@@ -315,7 +315,7 @@ namespace OpenDentBusiness{
 					+(city.Length>0?"AND City LIKE '"+POut.String(city)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(ssn.Length>0?"AND SSN LIKE '"+POut.String(ssn)+"%' ":"")//LIKE is case insensitive in mysql.
-					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//LIKE is case insensitive in mysql.
+					+(patnum.Length>0?"AND patient.PatNum LIKE '"+POut.String(patnum)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(chartnumber.Length>0?"AND ChartNumber LIKE '"+POut.String(chartnumber)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(email.Length>0?"AND Email LIKE '%"+POut.String(email)+"%' ":"");//LIKE is case insensitive in mysql.
 			}
@@ -325,7 +325,7 @@ namespace OpenDentBusiness{
 					+(city.Length>0?"AND LOWER(City) LIKE '"+POut.String(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(state.Length>0?"AND LOWER(State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(ssn.Length>0?"AND LOWER(SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
-					+(patnum.Length>0?"AND PatNum LIKE '"+POut.String(patnum)+"%' ":"")//case matters in a like statement in oracle.
+					+(patnum.Length>0?"AND patient.PatNum LIKE '"+POut.String(patnum)+"%' ":"")//case matters in a like statement in oracle.
 					+(chartnumber.Length>0?"AND LOWER(ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"")//case matters in a like statement in oracle.
 					+(email.Length>0?"AND LOWER(Email) LIKE '%"+POut.String(email).ToLower()+"%' ":"");//LIKE is case insensitive in mysql.
 			}
@@ -346,7 +346,7 @@ namespace OpenDentBusiness{
 			//	command+="AND PatStatus != "+POut.Int((int)PatientStatus.Prospective)+" ";
 			//}
 			if(guarOnly){
-				command+="AND PatNum = Guarantor ";
+				command+="AND patient.PatNum = Guarantor ";
 			}
 			if(clinicNum!=0){
 				command+="AND ClinicNum="+POut.Long(clinicNum)+" ";
