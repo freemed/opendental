@@ -361,7 +361,7 @@ namespace OpenDental {
 					split.DatePay=paymentCur.PayDate;
 					split.ProvNum=provider;
 					split.SplitAmt=paymentCur.PayAmt;
-					split.PayPlanNum=PIn.Long(table.Rows[i]["PayPlanNum"].ToString());
+					split.PayPlanNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PayPlanNum"].ToString());
 					PaySplits.Insert(split);
 					if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
 						Ledgers.ComputeAging(patCur.Guarantor,PrefC.GetDate(PrefName.DateLastAging),false);
