@@ -854,7 +854,10 @@ namespace OpenDental{
         SQLwhereComparison="WHERE ";
       }
       else{
-				if(SQLwhereRelation!="" && ListPrerequisites.Items.Count > 0) {
+				//HAVING statements will be in ListPrerequisites so that users can delete them if necessary.
+				//If a HAVING statement is the first in the list, it must be skipped so that there is no leading AND. 
+				//The AND for HAVING statements will be taken care of in CreateSQLgroup().
+				if(SQLwhereRelation!="" && ListPrerequisites.Items.Count > 0 && ListPrerequisites.Items[0].ToString().Substring(0, 1)!="*") {
 					SQLwhereComparison="AND ";
 				}
 				else {
@@ -864,7 +867,7 @@ namespace OpenDental{
 			
 			for(int i=0;i<ListPrerequisites.Items.Count;i++){
 				if(ListPrerequisites.Items[i].ToString().Substring(0,1)=="*"){
-	        
+					//Skip HAVING statements which will have a leading asterisk. They will be taken care of in CreateSQLgroup().
 				}
 				else{ 					
           if(count==0 && !IsWhereRelation){
@@ -1238,7 +1241,10 @@ namespace OpenDental{
  			else if(IsDate){
         if(DropListFilter.SelectedItem.ToString()=="First Visit Date"){
  					if(ListConditions.SelectedIndex==0){
-					  ListPrerequisites.Items.Add("*HAVING MIN(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'");   
+						//Add the HAVING statement to ListPrerequisites with a leading asterisk so that it shows up in the UI so that users can delete it.
+						//It is added with a leading asterisk so that it gets skipped in CreateSQLwhereComparison().
+					  ListPrerequisites.Items.Add("*HAVING MIN(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'");
+						//Set the class wide variable without the *HAVING portion. If ProcLogFirstDate has a value, it will be used in CreateSQLgroup().
             ProcLogFirstDate="MIN(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'";
 					}
 					else{
@@ -1251,6 +1257,7 @@ namespace OpenDental{
         }
         else if(DropListFilter.SelectedItem.ToString()=="Last Visit Date"){
           if(ListConditions.SelectedIndex==0){
+						//See comment above where ProcLogFirstDate is handled regarding the reasoning for leading the having statement with an asterisk.
 					  ListPrerequisites.Items.Add("*HAVING MAX(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'"); 
             ProcLogLastDate="MAX(procdate) LIKE '%"+POut.Date(DateTime.Parse(TextDate.Text),false)+"%'";
 					}
