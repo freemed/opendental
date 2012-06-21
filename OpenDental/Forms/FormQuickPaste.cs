@@ -385,6 +385,9 @@ namespace OpenDental{
 			else{
 				quickCat.ItemOrder=listCat.SelectedIndex;
 			}
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			QuickPasteCats.Insert(quickCat);
       FormQuickPasteCat FormQ=new FormQuickPasteCat(quickCat);
 			FormQ.ShowDialog();
@@ -406,7 +409,10 @@ namespace OpenDental{
 			FillNotes();
 		}
 
-		private void butDeleteCat_Click(object sender, System.EventArgs e) {
+		private void butDeleteCat_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listCat.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a category first."));
 				return;
@@ -430,7 +436,10 @@ namespace OpenDental{
 			localChanged=true;
 		}
 
-		private void butUpCat_Click(object sender, System.EventArgs e) {
+		private void butUpCat_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listCat.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a category first."));
 				return;
@@ -449,7 +458,10 @@ namespace OpenDental{
 			localChanged=true;
 		}
 
-		private void butDownCat_Click(object sender, System.EventArgs e) {
+		private void butDownCat_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listCat.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a category first."));
 				return;
@@ -472,7 +484,10 @@ namespace OpenDental{
 			FillNotes();
 		}
 
-		private void listCat_DoubleClick(object sender, System.EventArgs e) {
+		private void listCat_DoubleClick(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listCat.SelectedIndex==-1){
 				return;
 			}
@@ -487,7 +502,10 @@ namespace OpenDental{
 			localChanged=true;
 		}
 
-		private void butAddNote_Click(object sender, System.EventArgs e) {
+		private void butAddNote_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listCat.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a category first."));
 				return;
@@ -517,7 +535,10 @@ namespace OpenDental{
 			FillNotes();
 		}
 
-		private void butEditNote_Click(object sender, System.EventArgs e) {
+		private void butEditNote_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listNote.SelectedIndex==-1){
 				MessageBox.Show(Lan.g(this,"Please select a note first."));
 				return;
@@ -575,7 +596,7 @@ namespace OpenDental{
 			//do nothing
 		}
 
-		private void listNote_DoubleClick(object sender, System.EventArgs e) {
+		private void listNote_DoubleClick(object sender,System.EventArgs e) {
 			if(listNote.SelectedIndex==-1){
 				return;
 			}

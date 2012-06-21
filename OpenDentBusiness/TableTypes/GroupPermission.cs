@@ -146,7 +146,9 @@ namespace OpenDentBusiness{
 		///<summary>58</summary>
 		CarrierCreate,
 		///<summary>59</summary>
-		ReportDashboard
+		ReportDashboard,
+		///<summary>60</summary>
+		AutoNoteQuickNoteEdit
 	}
 
 	

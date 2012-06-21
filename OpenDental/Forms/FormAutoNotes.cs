@@ -128,9 +128,12 @@ namespace OpenDental{
 			}
 		}
 
-		private void listMain_DoubleClick(object sender, System.EventArgs e) {
+		private void listMain_DoubleClick(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			if(listMain.SelectedIndex==-1){
-				return;	
+				return;
 			}
 			FormAutoNoteEdit form=new FormAutoNoteEdit();
 			form.IsNew=false;
@@ -139,7 +142,10 @@ namespace OpenDental{
 			FillList();
 		}
 
-		private void butAdd_Click(object sender, System.EventArgs e) {			
+		private void butAdd_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			FormAutoNoteEdit FormA=new FormAutoNoteEdit();
 			FormA.IsNew=true;
 			FormA.AutoNoteCur=new AutoNote();

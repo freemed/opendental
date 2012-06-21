@@ -129,6 +129,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Appointment Move");
 				case Permissions.AppointmentsModule:
 					return Lans.g("enumPermissions","Appointments Module");
+				case Permissions.AutoNoteQuickNoteEdit:
+					return Lans.g("enumPermissions","Auto/Quick Note Edit");
 				case Permissions.EcwAppointmentRevise:
 					return Lans.g("enumPermissions","eCW Appointment Revise");
 				case Permissions.Backup:
