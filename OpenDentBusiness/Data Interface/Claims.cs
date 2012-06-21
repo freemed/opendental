@@ -128,6 +128,9 @@ namespace OpenDentBusiness{
 			command+=claimNums+")";
 			//List<ClaimProc> tempClaimProcs=ClaimProcCrud.SelectMany(command);
 			DataTable table=Db.GetTable(command);
+			if(table.Rows.Count==0) {
+				return new DataTable();//No procedures are attached to this claim somehow so no need to look for a related secondary claim.
+			}
 			command="SELECT claimproc.PatNum,claimproc.ProcDate"
 				+" FROM claimproc"
 				+" JOIN claim ON claimproc.ClaimNum=claim.ClaimNum"
