@@ -9029,6 +9029,35 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.2.17.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_2_28();
+		}
+
+		private static void To12_2_28() {
+			if(FromVersion<new Version("12.2.28.0")) {
+				string command="";
+				//Fix medical claim form 1500, P*Date fields printing issue. Fields were too narrow. The unique ID is OD9.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9' LIMIT 1";
+				}
+				else {//oracle doesn't have LIMIT
+					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9') WHERE RowNum<=1";
+				}
+				long claimFormNum=PIn.Long(Db.GetScalar(command));
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;
+					Db.NonQ(command);
+					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P_PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
+					Db.NonQ(command);
+				}
+				else {
+					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;
+					Db.NonQ(command);
+					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P_PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.2.28.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_3_0();
 		}
 
