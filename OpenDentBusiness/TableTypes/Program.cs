@@ -83,6 +83,7 @@ namespace OpenDentBusiness{
 		Trojan,
 		Trophy,
 		TrophyEnhanced,
+		Tscan,
 		UAppoint,
 		Vipersoft,
 		VixWin,

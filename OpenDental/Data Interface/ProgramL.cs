@@ -197,6 +197,10 @@ namespace OpenDental{
 				TrophyEnhanced.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.Tscan.ToString()) {
+				Tscan.SendData(prog,pat);
+				return;
+			}
 #if !DISABLE_WINDOWS_BRIDGES
 			else if(prog.ProgName==ProgramName.Vipersoft.ToString()) {
 				Vipersoft.SendData(prog,pat);
