@@ -16,7 +16,7 @@ namespace OpenDental {
 		public Sheet SheetCur;
 		public Document DocCur;
 		private List<SheetImportRow> Rows;
-		private Patient Pat;
+		private Patient PatCur;
 		private Family Fam;
 		///<summary>We must have a readily available bool, whether or not this checkbox field is present on the sheet.  It gets set at the very beginning, then gets changes based on user input on the sheet and in this window.</summary>
 		private bool AddressSameForFam;
@@ -34,6 +34,8 @@ namespace OpenDental {
 		private List<InsSub> SubList;
 		private InsSub Sub1;
 		private InsSub Sub2;
+		private Patient Subscriber1;
+		private Patient Subscriber2;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -42,7 +44,7 @@ namespace OpenDental {
 
 		private void FormSheetImport_Load(object sender,EventArgs e) {
 			if(SheetCur!=null) {
-				Pat=Patients.GetPat(SheetCur.PatNum);
+				PatCur=Patients.GetPat(SheetCur.PatNum);
 			}
 			else {
 				throw new NotImplementedException();//js this broke with the move to dot net 4.0.
@@ -113,21 +115,21 @@ namespace OpenDental {
 				acroApp=null;
 				*/
 			}
-			Fam=Patients.GetFamily(Pat.PatNum);
+			Fam=Patients.GetFamily(PatCur.PatNum);
 			AddressSameForFam=true;
 			for(int i=0;i<Fam.ListPats.Length;i++) {
-				if(Pat.HmPhone!=Fam.ListPats[i].HmPhone
-					|| Pat.Address!=Fam.ListPats[i].Address
-					|| Pat.Address2!=Fam.ListPats[i].Address2
-					|| Pat.City!=Fam.ListPats[i].City
-					|| Pat.State!=Fam.ListPats[i].State
-					|| Pat.Zip!=Fam.ListPats[i].Zip) 
+				if(PatCur.HmPhone!=Fam.ListPats[i].HmPhone
+					|| PatCur.Address!=Fam.ListPats[i].Address
+					|| PatCur.Address2!=Fam.ListPats[i].Address2
+					|| PatCur.City!=Fam.ListPats[i].City
+					|| PatCur.State!=Fam.ListPats[i].State
+					|| PatCur.Zip!=Fam.ListPats[i].Zip) 
 				{
 					AddressSameForFam=false;
 					break;
 				}
 			}
-			PatPlanList=PatPlans.Refresh(Pat.PatNum);
+			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			SubList=InsSubs.RefreshForFam(Fam);
 			PlanList=InsPlans.RefreshForSubList(SubList);
 			if(PatPlanList.Count==0) {
@@ -174,23 +176,23 @@ namespace OpenDental {
 				//LName---------------------------------------------
 				fieldVal=GetInputValue("LName");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("LName","",Pat.LName,Pat.LName,fieldVal,fieldVal,fieldVal,fieldVal,Pat.LName!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("LName","",PatCur.LName,PatCur.LName,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.LName!=fieldVal,false,typeof(string),false,false));
 				}
 				//FName---------------------------------------------
 				fieldVal=GetInputValue("FName");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("FName","",Pat.FName,Pat.FName,fieldVal,fieldVal,fieldVal,fieldVal,Pat.FName!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("FName","",PatCur.FName,PatCur.FName,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.FName!=fieldVal,false,typeof(string),false,false));
 				}
 				//MiddleI---------------------------------------------
 				fieldVal=GetInputValue("MiddleI");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("MiddleI","",Pat.MiddleI,Pat.MiddleI,fieldVal,fieldVal,fieldVal,fieldVal,Pat.MiddleI!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("MiddleI","",PatCur.MiddleI,PatCur.MiddleI,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.MiddleI!=fieldVal,false,typeof(string),false,false));
 				}
 				//Preferred---------------------------------------------
 				fieldVal=GetInputValue("Preferred");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Preferred","",Pat.Preferred,Pat.Preferred,fieldVal,fieldVal,fieldVal,fieldVal,
-						Pat.Preferred!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("Preferred","",PatCur.Preferred,PatCur.Preferred,fieldVal,fieldVal,fieldVal,fieldVal,
+						PatCur.Preferred!=fieldVal,false,typeof(string),false,false));
 				}
 				//Gender---------------------------------------------
 				fieldVal=GetRadioValue("Gender");
@@ -207,8 +209,8 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid gender."));
 						}
 					}
-					Rows.Add(CreateImportRow("Gender","",Lan.g("enumPatientGender",Pat.Gender.ToString()),Pat.Gender,
-						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientGender)newValObj!=Pat.Gender,false,typeof(PatientGender),false,false));
+					Rows.Add(CreateImportRow("Gender","",Lan.g("enumPatientGender",PatCur.Gender.ToString()),PatCur.Gender,
+						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientGender)newValObj!=PatCur.Gender,false,typeof(PatientGender),false,false));
 				}
 				//Position---------------------------------------------
 				fieldVal=GetRadioValue("Position");
@@ -225,8 +227,8 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid PatientPosition."));
 						}
 					}
-					Rows.Add(CreateImportRow("Position","",Lan.g("enumPatientPositionr",Pat.Position.ToString()),Pat.Position,
-						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientPosition)newValObj!=Pat.Position,false,typeof(PatientPosition),false,false));
+					Rows.Add(CreateImportRow("Position","",Lan.g("enumPatientPositionr",PatCur.Position.ToString()),PatCur.Position,
+						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientPosition)newValObj!=PatCur.Position,false,typeof(PatientPosition),false,false));
 				}
 				//Birthdate---------------------------------------------
 				fieldVal=GetInputValue("Birthdate");
@@ -234,33 +236,33 @@ namespace OpenDental {
 					string oldValDisplay="";
 					string newValDisplay="";
 					object newValObj=null;
-					if(Pat.Birthdate.Year>1880) {
-						oldValDisplay=Pat.Birthdate.ToShortDateString();
+					if(PatCur.Birthdate.Year>1880) {
+						oldValDisplay=PatCur.Birthdate.ToShortDateString();
 					}
 					newValObj=PIn.Date(fieldVal);
 					if(((DateTime)newValObj).Year>1880) {
 						newValDisplay=((DateTime)newValObj).ToShortDateString();
 					}
-					Rows.Add(CreateImportRow("Birthdate","",oldValDisplay,Pat.Birthdate,newValDisplay,newValObj,newValDisplay,newValObj,
+					Rows.Add(CreateImportRow("Birthdate","",oldValDisplay,PatCur.Birthdate,newValDisplay,newValObj,newValDisplay,newValObj,
 						oldValDisplay!=newValDisplay,false,typeof(DateTime),false,false));
 				}
 				//SSN---------------------------------------------
 				fieldVal=GetInputValue("SSN");
 				if(fieldVal!=null) {
 					string newValDisplay=fieldVal.Replace("-","");//quickly strip dashes
-					Rows.Add(CreateImportRow("SSN","",Pat.SSN,Pat.SSN,newValDisplay,newValDisplay,newValDisplay,newValDisplay,
-						Pat.SSN!=newValDisplay,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("SSN","",PatCur.SSN,PatCur.SSN,newValDisplay,newValDisplay,newValDisplay,newValDisplay,
+						PatCur.SSN!=newValDisplay,false,typeof(string),false,false));
 				}
 				//WkPhone---------------------------------------------
 				fieldVal=GetInputValue("WkPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("WkPhone","",Pat.WkPhone,Pat.WkPhone,fieldVal,fieldVal,fieldVal,fieldVal,Pat.WkPhone!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("WkPhone","",PatCur.WkPhone,PatCur.WkPhone,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.WkPhone!=fieldVal,false,typeof(string),false,false));
 				}
 				//WirelessPhone---------------------------------------------
 				fieldVal=GetInputValue("WirelessPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("WirelessPhone","",Pat.WirelessPhone,Pat.WirelessPhone,fieldVal,fieldVal,fieldVal,fieldVal,
-						Pat.WirelessPhone!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("WirelessPhone","",PatCur.WirelessPhone,PatCur.WirelessPhone,fieldVal,fieldVal,fieldVal,fieldVal,
+						PatCur.WirelessPhone!=fieldVal,false,typeof(string),false,false));
 				}
 				//wirelessCarrier---------------------------------------------
 				fieldVal=GetInputValue("wirelessCarrier");
@@ -270,12 +272,12 @@ namespace OpenDental {
 				//Email---------------------------------------------
 				fieldVal=GetInputValue("Email");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Email","",Pat.Email,Pat.Email,fieldVal,fieldVal,fieldVal,fieldVal,Pat.Email!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("Email","",PatCur.Email,PatCur.Email,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Email!=fieldVal,false,typeof(string),false,false));
 				}
 				//PreferContactMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferContactMethod");
 				if(fieldVal!=null) {
-					string oldValDisplay=Lan.g("enumContactMethod",Pat.PreferContactMethod.ToString());
+					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferContactMethod.ToString());
 					string newValDisplay="";
 					object newValObj=null;
 					if(fieldVal!="") {
@@ -288,13 +290,13 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferContactMethod","",oldValDisplay,Pat.PreferContactMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=Pat.PreferContactMethod,false,typeof(ContactMethod),false,false));
+					Rows.Add(CreateImportRow("PreferContactMethod","",oldValDisplay,PatCur.PreferContactMethod,newValDisplay,newValObj,newValDisplay,newValObj,
+						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferContactMethod,false,typeof(ContactMethod),false,false));
 				}
 				//PreferConfirmMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferConfirmMethod");
 				if(fieldVal!=null) {
-					string oldValDisplay=Lan.g("enumContactMethod",Pat.PreferConfirmMethod.ToString());
+					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferConfirmMethod.ToString());
 					string newValDisplay="";
 					object newValObj=null;
 					if(fieldVal!="") {
@@ -307,14 +309,14 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferConfirmMethod","",oldValDisplay,Pat.PreferConfirmMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=Pat.PreferConfirmMethod,false,typeof(ContactMethod),false,false));
+					Rows.Add(CreateImportRow("PreferConfirmMethod","",oldValDisplay,PatCur.PreferConfirmMethod,newValDisplay,newValObj,newValDisplay,newValObj,
+						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferConfirmMethod,false,typeof(ContactMethod),false,false));
 				}
 				//PreferRecallMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferRecallMethod");
 				if(fieldVal!=null) {
 					row=new SheetImportRow();
-					string oldValDisplay=Lan.g("enumContactMethod",Pat.PreferRecallMethod.ToString());
+					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferRecallMethod.ToString());
 					string newValDisplay="";
 					object newValObj=null;
 					if(fieldVal!="") {
@@ -327,15 +329,15 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferRecallMethod","",oldValDisplay,Pat.PreferRecallMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=Pat.PreferRecallMethod,false,typeof(ContactMethod),false,false));
+					Rows.Add(CreateImportRow("PreferRecallMethod","",oldValDisplay,PatCur.PreferRecallMethod,newValDisplay,newValObj,newValDisplay,newValObj,
+						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferRecallMethod,false,typeof(ContactMethod),false,false));
 				}
 				//referredFrom---------------------------------------------
 				fieldVal=GetInputValue("referredFrom");
 				if(fieldVal!=null) {
 					row=new SheetImportRow();
 					row.FieldName="referredFrom";
-					Referral refer=Referrals.GetReferralForPat(Pat.PatNum);
+					Referral refer=Referrals.GetReferralForPat(PatCur.PatNum);
 					if(refer==null) {//there was no existing referral
 						row.OldValDisplay="";
 						row.OldValObj=null;
@@ -408,32 +410,32 @@ namespace OpenDental {
 				//Address---------------------------------------------
 				fieldVal=GetInputValue("Address");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Address","",Pat.Address,Pat.Address,fieldVal,fieldVal,fieldVal,fieldVal,Pat.Address!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("Address","",PatCur.Address,PatCur.Address,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Address!=fieldVal,false,typeof(string),false,false));
 				}
 				//Address2---------------------------------------------
 				fieldVal=GetInputValue("Address2");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Address2","",Pat.Address2,Pat.Address2,fieldVal,fieldVal,fieldVal,fieldVal,Pat.Address2!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("Address2","",PatCur.Address2,PatCur.Address2,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Address2!=fieldVal,false,typeof(string),false,false));
 				}
 				//City---------------------------------------------
 				fieldVal=GetInputValue("City");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("City","",Pat.City,Pat.City,fieldVal,fieldVal,fieldVal,fieldVal,Pat.City!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("City","",PatCur.City,PatCur.City,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.City!=fieldVal,false,typeof(string),false,false));
 				}
 				//State---------------------------------------------
 				fieldVal=GetInputValue("State");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("State","",Pat.State,Pat.State,fieldVal,fieldVal,fieldVal,fieldVal,Pat.State!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("State","",PatCur.State,PatCur.State,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.State!=fieldVal,false,typeof(string),false,false));
 				}
 				//Zip---------------------------------------------
 				fieldVal=GetInputValue("Zip");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Zip","",Pat.Zip,Pat.Zip,fieldVal,fieldVal,fieldVal,fieldVal,Pat.Zip!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("Zip","",PatCur.Zip,PatCur.Zip,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Zip!=fieldVal,false,typeof(string),false,false));
 				}
 				//HmPhone---------------------------------------------
 				fieldVal=GetInputValue("HmPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("HmPhone","",Pat.HmPhone,Pat.HmPhone,fieldVal,fieldVal,fieldVal,fieldVal,Pat.HmPhone!=fieldVal,false,typeof(string),false,false));
+					Rows.Add(CreateImportRow("HmPhone","",PatCur.HmPhone,PatCur.HmPhone,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.HmPhone!=fieldVal,false,typeof(string),false,false));
 				}
 				#endregion address
 				//Separator-------------------------------------------
@@ -897,7 +899,7 @@ namespace OpenDental {
 				for(int i=0;i<allergyList.Count;i++) {
 					fieldVal="";
 					if(i<1) {
-						allergies=Allergies.GetAll(Pat.PatNum,true);
+						allergies=Allergies.GetAll(PatCur.PatNum,true);
 					}
 					row=new SheetImportRow();
 					row.FieldName=allergyList[i].FieldName.Remove(0,8);
@@ -976,7 +978,7 @@ namespace OpenDental {
 					#region existing medications
 					fieldVal="";
 					if(i<1) {
-						meds=Medications.GetMedicationsByPat(Pat.PatNum);
+						meds=Medications.GetMedicationsByPat(PatCur.PatNum);
 					}
 					row=new SheetImportRow();
 					row.FieldName=currentMedList[i].FieldValue;//Will be the name of the drug.
@@ -984,7 +986,7 @@ namespace OpenDental {
 					row.OldValObj=null;
 					for(int j=0;j<meds.Count;j++) {
 						if(Medications.GetDescription(meds[j].MedicationNum)==currentMedList[i].FieldValue) {
-							List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,Pat.PatNum);
+							List<MedicationPat> medList=MedicationPats.GetMedicationPatsByMedicationNum(meds[j].MedicationNum,PatCur.PatNum);
 							for(int k=0;k<medList.Count;k++) {
 								//Check if medication is active.
 								if(medList[k].DateStop.Year < 1880 || medList[k].DateStop > DateTime.Now) {
@@ -1055,7 +1057,7 @@ namespace OpenDental {
 				for(int i=0;i<problemList.Count;i++) {
 					fieldVal="";
 					if(i<1) {
-						diseases=Diseases.Refresh(Pat.PatNum,false);
+						diseases=Diseases.Refresh(PatCur.PatNum,false);
 					}
 					row=new SheetImportRow();
 					row.FieldName=problemList[i].FieldName.Remove(0,8);
@@ -1636,25 +1638,22 @@ namespace OpenDental {
 			#endregion
 			#region InsPlan
 			else if(Rows[e.Row].ObjType==typeof(InsPlan)) {
-				InsPlan plan;
 				bool isPrimary=true;
 				if(Rows[e.Row].FieldName.StartsWith("ins2")) {
 					isPrimary=false;
 				}
+				InsPlan plan=null;
 				PatPlan patPlan=isPrimary?PatPlan1:PatPlan2;
 				InsSub sub=isPrimary?Sub1:Sub2;
-				Patient subscriber=null;
-				if(sub!=null) {
-					subscriber=Patients.GetPat(sub.Subscriber);
-				}
-				//Subscriber------------------------------------------------------------------------------------------------
-				if(subscriber==null) {
+				Patient subscriber=isPrimary?Subscriber1:Subscriber2;
+				//Subscriber----------------------------------------------------------------------------------------------------
+				if(subscriber==null) {//Always make user choose the subscriber the first time around.
 					DialogResult result=MessageBox.Show(Lan.g(this,"Is this patient the subscriber?"),"",MessageBoxButtons.YesNoCancel);
 					if(result==DialogResult.Cancel) {
 						return;
 					}
 					if(result==DialogResult.Yes) {//current patient is subscriber
-						subscriber=Pat.Copy();
+						subscriber=PatCur.Copy();
 					}
 					else {//patient is not subscriber
 						//show list of patients in this family
@@ -1666,41 +1665,132 @@ namespace OpenDental {
 						subscriber=Patients.GetPat(FormS.SelectedPatNum);
 					}
 				}
-				if(Rows[e.Row].ImpValObj==null) {
-					plan=new InsPlan();
-					FormInsPlans formI=new FormInsPlans();
-					formI.IsSelectMode=true;
-					formI.ShowDialog();
-					if(formI.DialogResult!=DialogResult.OK) {
-						return;
-					}
-					plan=formI.SelectedPlan;
-				}
-				else {
-					plan=(InsPlan)Rows[e.Row].ImpValObj;
-				}
+				//Subscriber has been chosen. Now, pick a plan-------------------------------------------------------------------
+				bool isNewPlan=false;
 				bool isNewPatPlan=false;
-				if(patPlan==null) {
+				if(Rows[e.Row].ImpValObj==null) {//Make user select a plan the first time they double click on any ins row rather than trying to automate importing a plan.
+					List<InsSub> subList=InsSubs.GetListForSubscriber(subscriber.PatNum);
+					if(subList.Count==0) {
+						isNewPlan=true;
+					}
+					else {
+						FormInsSelectSubscr FormISS=new FormInsSelectSubscr(subscriber.PatNum);
+						FormISS.ShowDialog();
+						if(FormISS.DialogResult==DialogResult.Cancel) {
+							return;
+						}
+						if(FormISS.SelectedInsSubNum==0) {//'New' option selected.
+							isNewPlan=true;
+						}
+						else {
+							sub=InsSubs.GetSub(FormISS.SelectedInsSubNum,subList);
+							plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
+						}
+					}
+					//New plan was selected instead of an existing plan.  Create the plan--------------------------------------------
+					if(isNewPlan) {
+						plan=new InsPlan();
+						plan.EmployerNum=subscriber.EmployerNum;
+						plan.PlanType="";
+						InsPlans.Insert(plan);
+						sub=new InsSub();
+						sub.PlanNum=plan.PlanNum;
+						sub.Subscriber=subscriber.PatNum;
+						if(subscriber.MedicaidID=="") {
+							sub.SubscriberID=subscriber.SSN;
+						}
+						else {
+							sub.SubscriberID=subscriber.MedicaidID;
+						}
+						sub.ReleaseInfo=true;
+						sub.AssignBen=true;
+						InsSubs.Insert(sub);
+						Benefit ben;
+						for(int i=0;i<CovCatC.ListShort.Count;i++) {
+							if(CovCatC.ListShort[i].DefaultPercent==-1) {
+								continue;
+							}
+							ben=new Benefit();
+							ben.BenefitType=InsBenefitType.CoInsurance;
+							ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
+							ben.PlanNum=plan.PlanNum;
+							ben.Percent=CovCatC.ListShort[i].DefaultPercent;
+							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+							ben.CodeNum=0;
+							Benefits.Insert(ben);
+						}
+						//Zero deductible diagnostic
+						if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)!=null) {
+							ben=new Benefit();
+							ben.CodeNum=0;
+							ben.BenefitType=InsBenefitType.Deductible;
+							ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+							ben.PlanNum=plan.PlanNum;
+							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+							ben.MonetaryAmt=0;
+							ben.Percent=-1;
+							ben.CoverageLevel=BenefitCoverageLevel.Individual;
+							Benefits.Insert(ben);
+						}
+						//Zero deductible preventive
+						if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null) {
+							ben=new Benefit();
+							ben.CodeNum=0;
+							ben.BenefitType=InsBenefitType.Deductible;
+							ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+							ben.PlanNum=plan.PlanNum;
+							ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+							ben.MonetaryAmt=0;
+							ben.Percent=-1;
+							ben.CoverageLevel=BenefitCoverageLevel.Individual;
+							Benefits.Insert(ben);
+						}
+					}
+					//Then attach plan------------------------------------------------------------------------------------------------
 					patPlan=new PatPlan();
+					patPlan.Ordinal=(byte)(PatPlanList.Count+1);//so the ordinal of the first entry will be 1, NOT 0.
+					patPlan.PatNum=PatCur.PatNum;
+					patPlan.InsSubNum=sub.InsSubNum;
+					patPlan.Relationship=Relat.Self;
+					PatPlans.Insert(patPlan);
 					isNewPatPlan=true;
 				}
-				if(sub==null) {
-					sub=new InsSub();
+				else {//User is double clicking on a row for an insurance they have already chosen. Simply load up the plan so they can edit something.
+					isNewPlan=false;
+					isNewPatPlan=false;
+					plan=(InsPlan)Rows[e.Row].ImpValObj;
+					if(isPrimary) {
+						patPlan=PatPlan1;
+						sub=Sub1;
+					}
+					else {
+						patPlan=PatPlan2;
+						sub=Sub2;
+					}
 				}
-				sub.Subscriber=subscriber.PatNum;
-				FormInsPlan FormIP=new FormInsPlan(plan,patPlan,sub);
-				FormIP.IsNewPatPlan=isNewPatPlan;
-				FormIP.ShowDialog();
-				if(isPrimary) {
+				//Then, display insPlanEdit to user-------------------------------------------------------------------------------
+				FormInsPlan FormI=new FormInsPlan(plan,patPlan,sub);
+				FormI.IsNewPlan=isNewPlan;
+				FormI.IsNewPatPlan=isNewPatPlan;
+				FormI.ShowDialog();//this updates estimates also.
+				//if cancel, then patplan is deleted from within that dialog.
+				//if cancel, and planIsNew, then plan and benefits are also deleted.
+				if(FormI.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				if(isPrimary) {//Set the class wide variables so that the grid updates with the correct information.
 					Plan1=plan;
 					Sub1=sub;
 					PatPlan1=patPlan;
+					Subscriber1=subscriber;
 				}
 				else {
 					Plan2=plan;
 					Sub2=sub;
 					PatPlan2=patPlan;
+					Subscriber2=subscriber;
 				}
+				//Updates the grid with the selected plan and flags every row for DoImport.
 				UpdateInsuranceRows(e,isPrimary,false);
 			}
 			#endregion
@@ -1708,8 +1798,8 @@ namespace OpenDental {
 		}
 
 		///<summary>Updates all related insurance rows at once. Uses the class wide variables that should be set before calling this function (Plan,PatPlan,Sub).
-		///Set isImportCheck to true to only affect the DoImport status on every insurance row. It will not update insurance information.
-		///Every corresponding ins DoImport status will change to the status of the cell that was passed in.</summary>
+		///Set isImportCheck to true to only affect the DoImport status on every insurance row. It will not update insurance information that is displayed. 
+		///Every DoImport status will change to the status of the row that was clicked on.</summary>
 		private void UpdateInsuranceRows(ODGridClickEventArgs e,bool isPrimary,bool isImportCheck) {
 			bool doImport=!Rows[e.Row].DoImport;//Only used when isImportCheck is true.
 			string insStr="ins1";
@@ -1836,90 +1926,90 @@ namespace OpenDental {
 			}
 			#region Patient Form
 			if(SheetCur.SheetType==SheetTypeEnum.PatientForm) {
-				Patient patientOld=Pat.Copy();
+				Patient patientOld=PatCur.Copy();
 				for(int i=0;i<Rows.Count;i++) {
 					if(!Rows[i].DoImport) {
 						continue;
 					}
 					switch(Rows[i].FieldName) {
 						case "LName":
-							Pat.LName=Rows[i].ImpValDisplay;
+							PatCur.LName=Rows[i].ImpValDisplay;
 							break;
 						case "FName":
-							Pat.FName=Rows[i].ImpValDisplay;
+							PatCur.FName=Rows[i].ImpValDisplay;
 							break;
 						case "MiddleI":
-							Pat.MiddleI=Rows[i].ImpValDisplay;
+							PatCur.MiddleI=Rows[i].ImpValDisplay;
 							break;
 						case "Preferred":
-							Pat.Preferred=Rows[i].ImpValDisplay;
+							PatCur.Preferred=Rows[i].ImpValDisplay;
 							break;
 						case "Gender":
-							Pat.Gender=(PatientGender)Rows[i].ImpValObj;
+							PatCur.Gender=(PatientGender)Rows[i].ImpValObj;
 							break;
 						case "Position":
-							Pat.Position=(PatientPosition)Rows[i].ImpValObj;
+							PatCur.Position=(PatientPosition)Rows[i].ImpValObj;
 							break;
 						case "Birthdate":
-							Pat.Birthdate=(DateTime)Rows[i].ImpValObj;
+							PatCur.Birthdate=(DateTime)Rows[i].ImpValObj;
 							break;
 						case "SSN":
-							Pat.SSN=Rows[i].ImpValDisplay;
+							PatCur.SSN=Rows[i].ImpValDisplay;
 							break;
 						case "WkPhone":
-							Pat.WkPhone=Rows[i].ImpValDisplay;
+							PatCur.WkPhone=Rows[i].ImpValDisplay;
 							break;
 						case "WirelessPhone":
-							Pat.WirelessPhone=Rows[i].ImpValDisplay;
+							PatCur.WirelessPhone=Rows[i].ImpValDisplay;
 							break;
 						case "Email":
-							Pat.Email=Rows[i].ImpValDisplay;
+							PatCur.Email=Rows[i].ImpValDisplay;
 							break;
 						case "PreferContactMethod":
-							Pat.PreferContactMethod=(ContactMethod)Rows[i].ImpValObj;
+							PatCur.PreferContactMethod=(ContactMethod)Rows[i].ImpValObj;
 							break;
 						case "PreferConfirmMethod":
-							Pat.PreferConfirmMethod=(ContactMethod)Rows[i].ImpValObj;
+							PatCur.PreferConfirmMethod=(ContactMethod)Rows[i].ImpValObj;
 							break;
 						case "PreferRecallMethod":
-							Pat.PreferRecallMethod=(ContactMethod)Rows[i].ImpValObj;
+							PatCur.PreferRecallMethod=(ContactMethod)Rows[i].ImpValObj;
 							break;
 						case "referredFrom":
 							RefAttach ra=new RefAttach();
 							ra.IsFrom=true;
 							ra.ItemOrder=1;
-							ra.PatNum=Pat.PatNum;
+							ra.PatNum=PatCur.PatNum;
 							ra.RefDate=DateTime.Today;
 							ra.ReferralNum=((Referral)Rows[i].ImpValObj).ReferralNum;
 							RefAttaches.Insert(ra);//no security to block this action.
-							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,Pat.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
+							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
 							break;
 						//AddressSameForFam already set, but not really importable by itself
 						case "Address":
-							Pat.Address=Rows[i].ImpValDisplay;
+							PatCur.Address=Rows[i].ImpValDisplay;
 							break;
 						case "Address2":
-							Pat.Address2=Rows[i].ImpValDisplay;
+							PatCur.Address2=Rows[i].ImpValDisplay;
 							break;
 						case "City":
-							Pat.City=Rows[i].ImpValDisplay;
+							PatCur.City=Rows[i].ImpValDisplay;
 							break;
 						case "State":
-							Pat.State=Rows[i].ImpValDisplay;
+							PatCur.State=Rows[i].ImpValDisplay;
 							break;
 						case "Zip":
-							Pat.Zip=Rows[i].ImpValDisplay;
+							PatCur.Zip=Rows[i].ImpValDisplay;
 							break;
 						case "HmPhone":
-							Pat.HmPhone=Rows[i].ImpValDisplay;
+							PatCur.HmPhone=Rows[i].ImpValDisplay;
 							break;
 
 						//ins1 and ins2 do not get imported.
 					}
 				}
-				Patients.Update(Pat,patientOld);
+				Patients.Update(PatCur,patientOld);
 				if(AddressSameForFam) {
-					Patients.UpdateAddressForFam(Pat);
+					Patients.UpdateAddressForFam(PatCur);
 				}
 			}
 			#endregion
@@ -1967,7 +2057,7 @@ namespace OpenDental {
 							if(allergyList[j].Description==allergySheet.FieldName.Remove(0,8)) {
 								Allergy newAllergy=new Allergy();
 								newAllergy.AllergyDefNum=allergyList[j].AllergyDefNum;
-								newAllergy.PatNum=Pat.PatNum;
+								newAllergy.PatNum=PatCur.PatNum;
 								newAllergy.StatusIsActive=true;
 								Allergies.Insert(newAllergy);
 								break;
@@ -1981,7 +2071,7 @@ namespace OpenDental {
 					  if(Rows[i].OldValObj!=null) {
 					    //Set the stop date for the current medication(s).
 					    Medication oldMed=(Medication)Rows[i].OldValObj;
-					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,Pat.PatNum);
+					    List<MedicationPat> patMeds=MedicationPats.GetMedicationPatsByMedicationNum(oldMed.MedicationNum,PatCur.PatNum);
 					    for(int j=0;j<patMeds.Count;j++) {
 					      if(hasValue==YN.Yes) {
 					        //Check if med is currently inactive.
@@ -2006,7 +2096,7 @@ namespace OpenDental {
 					  for(int j=0;j<medList.Count;j++) {
 					    if(Medications.GetDescription(medList[j].MedicationNum)==medSheet.FieldValue) {
 					      MedicationPat medPat=new MedicationPat();
-					      medPat.PatNum=Pat.PatNum;
+					      medPat.PatNum=PatCur.PatNum;
 					      medPat.MedicationNum=medList[j].MedicationNum;
 					      MedicationPats.Insert(medPat);
 					      break;
@@ -2037,7 +2127,7 @@ namespace OpenDental {
 						for(int j=0;j<DiseaseDefs.List.Length;j++) {
 							if(DiseaseDefs.List[j].DiseaseName==diseaseSheet.FieldName.Remove(0,8)) {
 								Disease newDisease=new Disease();
-								newDisease.PatNum=Pat.PatNum;
+								newDisease.PatNum=PatCur.PatNum;
 								newDisease.DiseaseDefNum=DiseaseDefs.List[j].DiseaseDefNum;
 								newDisease.ProbStatus=ProblemStatus.Active;
 								Diseases.Insert(newDisease);
