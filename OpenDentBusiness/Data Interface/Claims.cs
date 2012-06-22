@@ -129,7 +129,7 @@ namespace OpenDentBusiness{
 			//List<ClaimProc> tempClaimProcs=ClaimProcCrud.SelectMany(command);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
-				return new DataTable();//No procedures are attached to this claim somehow so no need to look for a related secondary claim.
+				return new DataTable();//No procedures are attached to these claims.  This frequently happens in conversions.  No need to look for related secondary claims.
 			}
 			command="SELECT claimproc.PatNum,claimproc.ProcDate"
 				+" FROM claimproc"
