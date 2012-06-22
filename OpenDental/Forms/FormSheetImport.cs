@@ -34,7 +34,6 @@ namespace OpenDental {
 		private List<InsSub> SubList;
 		private InsSub Sub1;
 		private InsSub Sub2;
-		private Patient Subscriber;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -467,7 +466,7 @@ namespace OpenDental {
 					}
 					row.ImpValDisplay="[double click to pick]";
 					row.ImpValObj=null;
-					row.ObjType=typeof(Relat);
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
@@ -684,13 +683,14 @@ namespace OpenDental {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid Relationship."));
 						}
 					}
-					row.ImpValDisplay="";
+					row.ImpValDisplay="[double click to pick]";
 					row.ImpValObj=null;
-					row.ObjType=typeof(Relat);
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2Subscriber---------------------------------------------
@@ -709,13 +709,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj=row.NewValDisplay;
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2SubscriberID---------------------------------------------
@@ -734,13 +735,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2CarrierName---------------------------------------------
@@ -759,13 +761,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2CarrierPhone---------------------------------------------
@@ -784,13 +787,14 @@ namespace OpenDental {
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2EmployerName---------------------------------------------
@@ -808,13 +812,14 @@ namespace OpenDental {
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2GroupName---------------------------------------------
@@ -832,13 +837,14 @@ namespace OpenDental {
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2GroupNum---------------------------------------------
@@ -856,13 +862,14 @@ namespace OpenDental {
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
 					row.NewValObj="";
-					row.ImpValDisplay="";
-					row.ImpValObj="";
-					row.ObjType=typeof(string);
+					row.ImpValDisplay="[double click to pick]";
+					row.ImpValObj=null;
+					row.ObjType=typeof(InsPlan);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
 						row.IsFlagged=true;
 					}
+					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				#endregion ins2
@@ -1392,7 +1399,18 @@ namespace OpenDental {
 			if(!IsImportable(Rows[e.Row])) {
 				return;
 			}
-			Rows[e.Row].DoImport=!Rows[e.Row].DoImport;
+			//Must import all or none of the insurance rows.
+			if(Rows[e.Row].ObjType==typeof(InsPlan)) {
+				bool isPrimary=true;
+				if(Rows[e.Row].FieldName.StartsWith("ins2")) {
+					isPrimary=false;
+				}
+				//This will update every insurance row's Import status at once.
+				UpdateInsuranceRows(e,isPrimary,true);
+			}
+			else {//Not insurance row.
+				Rows[e.Row].DoImport=!Rows[e.Row].DoImport;
+			}
 			FillGrid();
 		}
 
@@ -1616,67 +1634,27 @@ namespace OpenDental {
 				}
 			}
 			#endregion
-			#region Carrier
-			//else if(rows[e.Row].ObjType==typeof(Carrier)) {
-			//  if(rows[e.Row].FieldName=="ins1CarrierPhone") {
-			//    MsgBox.Show(this,"Double click on the Carrier to set the phone.");
-			//    return;
-			//  }
-			//  FormCarriers formC=new FormCarriers();
-			//  formC.IsSelectMode=true;
-			//  formC.ShowDialog();
-			//  if(formC.DialogResult!=DialogResult.OK) {
-			//    return;
-			//  }
-			//  Carrier impCarrier=formC.SelectedCarrier;
-			//  rows[e.Row].ImpValDisplay=impCarrier.CarrierName;
-			//  rows[e.Row].ImpValObj=impCarrier;
-			//  rows[e.Row].DoImport=true;
-			//  rows[e.Row].IsFlaggedImp=false;
-			//  SheetImportRow carrierPhoneRow=GetImportRowByFieldName("ins1CarrierPhone");
-			//  if(carrierPhoneRow!=null) {//Now update the carrierPhone if one exists.
-			//    carrierPhoneRow.ImpValDisplay=impCarrier.Phone;
-			//    carrierPhoneRow.DoImport=true;
-			//  }
-			//}
-			#endregion
-			#region Employer
-			else if(Rows[e.Row].ObjType==typeof(Employer)) {
-				//FormEmployers formE=new FormEmployers();
-				//formE.IsSelectMode=true;
-				//formE.ShowDialog();
-				//if(formE.DialogResult!=DialogResult.OK) {
-				//  return;
-				//}
-				//Employer impEmployer=formE.SelectedEmployer;
-				//rows[e.Row].ImpValDisplay=impEmployer.EmpName;
-				//rows[e.Row].ImpValObj=impEmployer;
-				//rows[e.Row].DoImport=true;
-				//rows[e.Row].IsFlaggedImp=false;
-			}
-			#endregion
 			#region InsPlan
 			else if(Rows[e.Row].ObjType==typeof(InsPlan)) {
 				InsPlan plan;
-				string insStr="";
 				bool isPrimary=true;
-				if(Rows[e.Row].FieldName.StartsWith("ins1")) {
-					insStr="ins1";
-				}
-				else {
-					insStr="ins2";
+				if(Rows[e.Row].FieldName.StartsWith("ins2")) {
 					isPrimary=false;
 				}
 				PatPlan patPlan=isPrimary?PatPlan1:PatPlan2;
 				InsSub sub=isPrimary?Sub1:Sub2;
-				if(Subscriber==null) {
+				Patient subscriber=null;
+				if(sub!=null) {
+					subscriber=Patients.GetPat(sub.Subscriber);
+				}
+				//Subscriber------------------------------------------------------------------------------------------------
+				if(subscriber==null) {
 					DialogResult result=MessageBox.Show(Lan.g(this,"Is this patient the subscriber?"),"",MessageBoxButtons.YesNoCancel);
 					if(result==DialogResult.Cancel) {
 						return;
 					}
-					//Pick a subscriber------------------------------------------------------------------------------------------------
 					if(result==DialogResult.Yes) {//current patient is subscriber
-						Subscriber=Pat.Copy();
+						subscriber=Pat.Copy();
 					}
 					else {//patient is not subscriber
 						//show list of patients in this family
@@ -1685,12 +1663,11 @@ namespace OpenDental {
 						if(FormS.DialogResult==DialogResult.Cancel) {
 							return;
 						}
-						Subscriber=Patients.GetPat(FormS.SelectedPatNum);
+						subscriber=Patients.GetPat(FormS.SelectedPatNum);
 					}
 				}
 				if(Rows[e.Row].ImpValObj==null) {
 					plan=new InsPlan();
-					//Load up the insplan window what the patient filled in?
 					FormInsPlans formI=new FormInsPlans();
 					formI.IsSelectMode=true;
 					formI.ShowDialog();
@@ -1702,65 +1679,147 @@ namespace OpenDental {
 				else {
 					plan=(InsPlan)Rows[e.Row].ImpValObj;
 				}
+				bool isNewPatPlan=false;
 				if(patPlan==null) {
 					patPlan=new PatPlan();
+					isNewPatPlan=true;
 				}
 				if(sub==null) {
 					sub=new InsSub();
 				}
+				sub.Subscriber=subscriber.PatNum;
 				FormInsPlan FormIP=new FormInsPlan(plan,patPlan,sub);
-				//Load up every row related to the particular ins.
-				SheetImportRow subscriberRow=GetImportRowByFieldName(insStr+"Subscriber");
-				SheetImportRow subscriberIdRow=GetImportRowByFieldName(insStr+"SubscriberID");
-				SheetImportRow carrierNameRow=GetImportRowByFieldName(insStr+"CarrierName");
-				SheetImportRow carrierPhoneRow=GetImportRowByFieldName(insStr+"CarrierPhone");
-				SheetImportRow employerNameRow=GetImportRowByFieldName(insStr+"EmployerName");
-				SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
-				SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
-				Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
-				Employer employer=Employers.GetEmployer(plan.EmployerNum);
-				//PatPlanList=PatPlans.Refresh(Pat.PatNum);
-				//Set the values for the corresponding rows based on the selected plan.  
-				//The sheet could be missing one of these so we have to check for nulls.
-				if(subscriberRow!=null) {
-					subscriberRow.NewValDisplay=Subscriber.GetNameFirst();
-					subscriberRow.ImpValObj=plan;
-				}
-				if(subscriberIdRow!=null) {
-					//subscriberRow.ImpValDisplay=insSub.SubscriberID;
-					subscriberRow.ImpValObj=plan;
-				}
-				if(carrierNameRow!=null) {
-					subscriberRow.ImpValDisplay=carrier.CarrierName;
-					subscriberRow.ImpValObj=plan;
-				}
-				if(carrierPhoneRow!=null) {
-					subscriberRow.ImpValDisplay=carrier.Phone;
-					subscriberRow.ImpValObj=plan;
-				}
-				if(employerNameRow!=null) {
-					subscriberRow.ImpValDisplay=employer.EmpName;
-					subscriberRow.ImpValObj=plan;
-				}
-				if(groupNameRow!=null) {
-					subscriberRow.ImpValDisplay=plan.GroupName;
-					subscriberRow.ImpValObj=plan;
-				}
-				if(groupNumRow!=null) {
-					subscriberRow.ImpValDisplay=plan.GroupNum;
-					subscriberRow.ImpValObj=plan;
-				}
+				FormIP.IsNewPatPlan=isNewPatPlan;
+				FormIP.ShowDialog();
 				if(isPrimary) {
 					Plan1=plan;
+					Sub1=sub;
+					PatPlan1=patPlan;
 				}
 				else {
 					Plan2=plan;
+					Sub2=sub;
+					PatPlan2=patPlan;
 				}
-				Rows[e.Row].DoImport=true;
-				Rows[e.Row].IsFlaggedImp=false;
+				UpdateInsuranceRows(e,isPrimary,false);
 			}
 			#endregion
 			FillGrid();
+		}
+
+		///<summary>Updates all related insurance rows at once. Uses the class wide variables that should be set before calling this function (Plan,PatPlan,Sub).
+		///Set isImportCheck to true to only affect the DoImport status on every insurance row. It will not update insurance information.
+		///Every corresponding ins DoImport status will change to the status of the cell that was passed in.</summary>
+		private void UpdateInsuranceRows(ODGridClickEventArgs e,bool isPrimary,bool isImportCheck) {
+			bool doImport=!Rows[e.Row].DoImport;//Only used when isImportCheck is true.
+			string insStr="ins1";
+			if(!isPrimary) {
+				insStr="ins2";
+			}
+			InsPlan plan=isPrimary?Plan1:Plan2;
+			PatPlan patPlan=isPrimary?PatPlan1:PatPlan2;
+			InsSub sub=isPrimary?Sub1:Sub2;
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			Employer employer=Employers.GetEmployer(plan.EmployerNum);
+			//Load up every row related to the particular ins.
+			SheetImportRow relationRow=GetImportRowByFieldName(insStr+"Relat");
+			SheetImportRow subscriberRow=GetImportRowByFieldName(insStr+"Subscriber");
+			SheetImportRow subscriberIdRow=GetImportRowByFieldName(insStr+"SubscriberID");
+			SheetImportRow carrierNameRow=GetImportRowByFieldName(insStr+"CarrierName");
+			SheetImportRow carrierPhoneRow=GetImportRowByFieldName(insStr+"CarrierPhone");
+			SheetImportRow employerNameRow=GetImportRowByFieldName(insStr+"EmployerName");
+			SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
+			SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
+			//Set the values for the corresponding rows based on the selected plan.  
+			//The sheet could be missing one of these fields so we have to check for nulls.
+			if(relationRow!=null) {
+				if(isImportCheck) {
+					relationRow.DoImport=doImport;
+				}
+				else {
+					relationRow.ImpValDisplay=((Relat)patPlan.Relationship).ToString();
+					relationRow.ImpValObj=plan;
+					relationRow.DoImport=true;
+					relationRow.IsFlaggedImp=false;
+				}
+			}
+			if(subscriberRow!=null) {
+				if(isImportCheck) {
+					subscriberRow.DoImport=doImport;
+				}
+				else {
+					subscriberRow.ImpValDisplay=Patients.GetPat(sub.Subscriber).GetNameFirst();
+					subscriberRow.ImpValObj=plan;
+					subscriberRow.DoImport=true;
+					subscriberRow.IsFlaggedImp=false;
+				}
+			}
+			if(subscriberIdRow!=null) {
+				if(isImportCheck) {
+					subscriberIdRow.DoImport=doImport;
+				}
+				else {
+					subscriberIdRow.ImpValDisplay=sub.SubscriberID;
+					subscriberIdRow.ImpValObj=plan;
+					subscriberIdRow.DoImport=true;
+					subscriberIdRow.IsFlaggedImp=false;
+				}
+			}
+			if(carrierNameRow!=null) {
+				if(isImportCheck) {
+					carrierNameRow.DoImport=doImport;
+				}
+				else {
+					carrierNameRow.ImpValDisplay=carrier.CarrierName;
+					carrierNameRow.ImpValObj=plan;
+					carrierNameRow.DoImport=true;
+					carrierNameRow.IsFlaggedImp=false;
+				}
+			}
+			if(carrierPhoneRow!=null) {
+				if(isImportCheck) {
+					carrierPhoneRow.DoImport=doImport;
+				}
+				else {
+					carrierPhoneRow.ImpValDisplay=carrier.Phone;
+					carrierPhoneRow.ImpValObj=plan;
+					carrierPhoneRow.DoImport=true;
+					carrierPhoneRow.IsFlaggedImp=false;
+				}
+			}
+			if(employerNameRow!=null) {
+				if(isImportCheck) {
+					employerNameRow.DoImport=doImport;
+				}
+				else {
+					employerNameRow.ImpValDisplay=employer.EmpName;
+					employerNameRow.ImpValObj=plan;
+					employerNameRow.DoImport=true;
+					employerNameRow.IsFlaggedImp=false;
+				}
+			}
+			if(groupNameRow!=null) {
+				if(isImportCheck) {
+					groupNameRow.DoImport=doImport;
+				}
+				else {
+					groupNameRow.ImpValDisplay=plan.GroupName;
+					groupNameRow.ImpValObj=plan;
+					groupNameRow.DoImport=true;
+					groupNameRow.IsFlaggedImp=false;
+				}
+			}
+			if(groupNumRow!=null) {
+				if(isImportCheck) {
+					groupNumRow.DoImport=doImport;
+				}
+				else {
+					groupNumRow.ImpValDisplay=plan.GroupNum;
+					groupNumRow.ImpValObj=plan;
+					groupNumRow.DoImport=true;
+					groupNumRow.IsFlaggedImp=false;
+				}
+			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
