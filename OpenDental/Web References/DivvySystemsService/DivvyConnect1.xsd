@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/DivvyConnect.Services" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DivvyConnect.Services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://www.divvysystems.com/DivvyConnectAPI/DivvyConnect.Services.PostcardService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="ArrayOfPostcard">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Postcard" nillable="true" type="tns:Postcard" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPostcard" nillable="true" type="tns:ArrayOfPostcard" />
+  <xs:complexType name="Postcard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AppointmentDateTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DesignID" type="xs:int" />
+      <xs:element minOccurs="0" name="ExternalPostcardID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Recipient" nillable="true" type="tns:Recipient" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="Postcard" nillable="true" type="tns:Postcard" />
+  <xs:complexType name="Recipient">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExternalRecipientID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="State" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Zip" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="Recipient" nillable="true" type="tns:Recipient" />
+  <xs:complexType name="Practice">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Address2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="City" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Company" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExternalPracticeID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Fax" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Phone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="State" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="WebURL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Zip" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="Practice" nillable="true" type="tns:Practice" />
+  <xs:complexType name="PostcardReturnMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MessageCode" type="tns:MessageCode" />
+      <xs:element minOccurs="0" name="PostcardMessages" nillable="true" type="tns:ArrayOfSinglePostcardMessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PostcardReturnMessage" nillable="true" type="tns:PostcardReturnMessage" />
+  <xs:simpleType name="MessageCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CompletedSucessfully" />
+      <xs:enumeration value="CompletedWithErrors" />
+      <xs:enumeration value="Failure" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MessageCode" nillable="true" type="tns:MessageCode" />
+  <xs:complexType name="ArrayOfSinglePostcardMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SinglePostcardMessage" nillable="true" type="tns:SinglePostcardMessage" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSinglePostcardMessage" nillable="true" type="tns:ArrayOfSinglePostcardMessage" />
+  <xs:complexType name="SinglePostcardMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="postcardCode" type="tns:PostcardCode" />
+      <xs:element minOccurs="0" name="postcardRecord" nillable="true" type="tns:Postcard" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SinglePostcardMessage" nillable="true" type="tns:SinglePostcardMessage" />
+  <xs:simpleType name="PostcardCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Successful" />
+      <xs:enumeration value="CardNotLoaded" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PostcardCode" nillable="true" type="tns:PostcardCode" />
+</xs:schema>
