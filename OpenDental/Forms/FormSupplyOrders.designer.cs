@@ -26,7 +26,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butNewOrder = new OpenDental.UI.Button();
-			this.gridOrder = new OpenDental.UI.ODGrid();
+			this.gridOrders = new OpenDental.UI.ODGrid();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.gridOrderItem = new OpenDental.UI.ODGrid();
@@ -81,18 +81,18 @@ namespace OpenDental{
 			// 
 			// gridOrder
 			// 
-			this.gridOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.gridOrders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridOrder.HScrollVisible = false;
-			this.gridOrder.Location = new System.Drawing.Point(12, 37);
-			this.gridOrder.Name = "gridOrder";
-			this.gridOrder.ScrollValue = 0;
-			this.gridOrder.Size = new System.Drawing.Size(363, 184);
-			this.gridOrder.TabIndex = 15;
-			this.gridOrder.Title = "Order History";
-			this.gridOrder.TranslationName = null;
-			this.gridOrder.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellDoubleClick);
-			this.gridOrder.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellClick);
+			this.gridOrders.HScrollVisible = false;
+			this.gridOrders.Location = new System.Drawing.Point(12, 37);
+			this.gridOrders.Name = "gridOrder";
+			this.gridOrders.ScrollValue = 0;
+			this.gridOrders.Size = new System.Drawing.Size(363, 184);
+			this.gridOrders.TabIndex = 15;
+			this.gridOrders.Title = "Order History";
+			this.gridOrders.TranslationName = null;
+			this.gridOrders.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellDoubleClick);
+			this.gridOrders.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellClick);
 			// 
 			// comboSupplier
 			// 
@@ -167,7 +167,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butAddSupply);
 			this.Controls.Add(this.gridOrderItem);
 			this.Controls.Add(this.butNewOrder);
-			this.Controls.Add(this.gridOrder);
+			this.Controls.Add(this.gridOrders);
 			this.Controls.Add(this.comboSupplier);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butOK);
@@ -185,7 +185,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private UI.Button butNewOrder;
-		private UI.ODGrid gridOrder;
+		private UI.ODGrid gridOrders;
 		private System.Windows.Forms.ComboBox comboSupplier;
 		private System.Windows.Forms.Label label3;
 		private UI.ODGrid gridOrderItem;

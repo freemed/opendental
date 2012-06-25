@@ -17,7 +17,7 @@ namespace OpenDental {
 		public List<Supplier> ListSupplier;
 		///<Summary>Sets the supplier that will first show when opening this window.</Summary>
 		public long SupplierNum;
-		public bool IsSelectMode = false;
+		public bool IsSelectMode;
 		public Supply SelectedSupply;
 
 		public FormSupplies() {
