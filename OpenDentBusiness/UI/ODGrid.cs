@@ -227,7 +227,8 @@ namespace OpenDental.UI {
 				try {
 					vScroll.Value=scrollValue;
 				}
-				catch(Exception e) {
+				catch(Exception e) {//This should never ever happen.
+					//Showing a messagebox is NOT our normal way of handling errors on mouse events, but the user would get a popup for the unhandled exception, anyway.
 					MessageBox.Show("Error: Invalid Scroll Value. \r\n"
 						+"Scroll value from: "+vScroll.Value+"\r\n"
 						+"Scroll value to: "+scrollValue+"\r\n"

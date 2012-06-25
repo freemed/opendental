@@ -17,7 +17,9 @@ namespace OpenDental.Bridges{
 			
 		}
 
-		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
+		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.
+		///Arguments: tscan.exe [-fFirstname [-mMiddlename] -lLastname -iPatientid [-dBirthday] [-jBirthmonth] [-yBirthyear] [-gGender]]
+		///Example: tscan.exe -fBrent -lThompson -iBT1000 -d07 -j02 -y1962 -g2</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {

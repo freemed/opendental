@@ -233,6 +233,7 @@
     <Compile Include="Bridges\BioPAK.cs" />
     <Compile Include="Bridges\CaptureLink.cs" />
     <Compile Include="Bridges\ClioSoft.cs" />
+    <Compile Include="Bridges\AaTemplate.cs" />
     <Compile Include="Bridges\Tscan.cs" />
     <Compile Include="Bridges\POS_statements.cs" />
     <Compile Include="Bridges\RayMage.cs" />

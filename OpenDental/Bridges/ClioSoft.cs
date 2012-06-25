@@ -16,7 +16,11 @@ namespace OpenDental.Bridges{
 			
 		}
 
-		///<summary>Launches the program using a combination of command line characters and the patient.Cur data.</summary>
+		///<summary>Launches the program using a combination of command line characters and the patient.Cur data. 
+		///Arguments: ClioSoft.exe “-Id;FirstName;LastName;DateOfBirth;SocialSecurityNumber;”
+		///Only Id, FirstName and LastName are required.
+		///Example 1: ClioSoft.exe "-100;Jim;Jones;01/02/2000;123-456-789;"
+		///Example 2: ClioSoft.exe "-200;Jane;Smith;;;"</summary>
 		public static void SendData(Program ProgramCur, Patient pat){
 			string path=Programs.GetProgramPath(ProgramCur);
 			if(pat==null) {
