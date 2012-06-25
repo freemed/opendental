@@ -686,6 +686,16 @@ namespace OpenDental {
 			Close();
 		}
 
+		private void butSupplies_Click(object sender,EventArgs e) {
+			FormSupplies FormSup = new FormSupplies();
+			FormSup.ShowDialog();
+		}
+
+		private void butOrders_Click(object sender,EventArgs e) {
+			FormSupplyOrders FormSO = new FormSupplyOrders();
+			FormSO.ShowDialog();
+		}
+
 		
 
 		

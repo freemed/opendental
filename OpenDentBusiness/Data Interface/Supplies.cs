@@ -27,6 +27,15 @@ namespace OpenDentBusiness{
 			return Crud.SupplyCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all Supplies, ordered by category and itemOrder.</summary>
+		public static List<Supply> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Supply>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM supply";
+			return Crud.SupplyCrud.SelectMany(command);
+		}
+
 		///<Summary>Gets one supply from the database.  Used for display in SupplyOrderItemEdit window.</Summary>
 		public static Supply GetSupply(long supplyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

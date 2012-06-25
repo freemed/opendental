@@ -361,6 +361,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSupplyOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSupplyOrders.designer.cs">
+      <DependentUpon>FormSupplyOrders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEtrans835Edit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2471,6 +2477,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSupplyOrders.resx">
+      <DependentUpon>FormSupplyOrders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEtrans835Edit.resx">
       <DependentUpon>FormEtrans835Edit.cs</DependentUpon>

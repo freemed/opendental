@@ -20,6 +20,15 @@ namespace OpenDentBusiness{
 			return Crud.SupplyOrderCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all SupplyOrders, ordered by date.</summary>
+		public static List<SupplyOrder> GetAll() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<SupplyOrder>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM supplyorder ORDER BY DatePlaced DESC";
+			return Crud.SupplyOrderCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(SupplyOrder order) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
