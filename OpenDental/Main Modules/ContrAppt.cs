@@ -4258,7 +4258,7 @@ namespace OpenDental {
 					cardPrintFamily=false;
 					PrintApptCard();
 					break;
-				case 10:
+				case 10://RIGHT HERE DUMMY
 					cardPrintFamily=true;
 					PrintApptCard();
 					break;
@@ -5136,6 +5136,9 @@ namespace OpenDental {
 				for(int a=0;a<aptsOnePat.Length;a++) {
 					if(aptsOnePat[a].AptDateTime.Date<=DateTime.Today) {
 						continue;//ignore old appts
+					}
+					if(aptsOnePat[a].AptStatus!=ApptStatus.Scheduled && aptsOnePat[a].AptStatus!=ApptStatus.ASAP){
+						continue;
 					}
 					str+=name+": "+aptsOnePat[a].AptDateTime.ToShortDateString()+" "+aptsOnePat[a].AptDateTime.ToShortTimeString()+"\r\n";
 				}
