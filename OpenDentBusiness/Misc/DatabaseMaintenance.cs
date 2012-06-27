@@ -1929,6 +1929,10 @@ namespace OpenDentBusiness {
 			}
 			log+=Lans.g("FormDatabaseMaintenance","Patients with no Clinic assigned: ")+table.Rows.Count.ToString()+Lans.g("FormDatabaseMaintenance",", including: ");
 			for(int i=0;i<table.Rows.Count;i++){
+				//Start a new line and indent every three patients for printing purposes.
+				if(i%3==0) {
+					log+="\r\n   ";
+				}
 				log+=table.Rows[i]["PatNum"].ToString()+"-"
 					+table.Rows[i]["LName"].ToString()+", "
 					+table.Rows[i]["FName"].ToString()+"; ";
