@@ -499,7 +499,7 @@ namespace OpenDental{
 			double OverallBalance;
 			int rowsAffected = 0;
 			bool billingMatch;
-			for(int i = 0;i < AgingList.Length;i++) {
+			for(int i = 0;i < AgingList.Length;i++) {//loop through each guarantor that owes money.
 				OverallBalance = 0;//this WILL NOT be the same as the patient's total balance
 				if(radio30.Checked) {
 					OverallBalance = AgingList[i].Bal_31_60 + AgingList[i].Bal_61_90 + AgingList[i].BalOver90;
@@ -560,6 +560,10 @@ namespace OpenDental{
 		}
 
 		private void AddFinanceCharge(long PatNum,DateTime date,string APR,double OverallBalance,long PriProv) {
+			InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(PatNum);
+			if(installPlan!=null) {//Patient has an installment plan so use that APR instead.
+				APR=installPlan.APR.ToString();
+			}
 			Adjustment AdjustmentCur = new Adjustment();
 			AdjustmentCur.PatNum = PatNum;
 			//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled

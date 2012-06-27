@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace OpenDentBusiness{
 	
-	///<summary>Simpler than a payment plan.  Does not affect running account balances.  Allows override of finance charges.  Affects the "pay now" on statements.</summary>
+	///<summary>Simpler than a payment plan.  Does not affect running account balances.  Allows override of finance charges.  Affects the "pay now" on statements.  Only one installmentplan is allowed for a family, attached to guarantor only.  This is loosely enforced.</summary>
 	[Serializable]
 	public class InstallmentPlan:TableBase{
 		///<summary>Primary key.</summary>

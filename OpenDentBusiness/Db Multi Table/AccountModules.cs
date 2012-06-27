@@ -1137,7 +1137,10 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Installment plans----------------------------------------------------------------------------------
-			command="SELECT * FROM installmentplan WHERE PatNum = "+patNum;
+			command="SELECT * FROM installmentplan WHERE PatNum = "+patNum+" ";
+			for(int i=0;i<fam.ListPats.Length;i++){
+				command+="OR PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
+			}
 			DataTable rawInstall=Db.GetTable(command);
 			if(statementNum==0) {
 				GetPayPlans(rawPayPlan,rawPay,rawInstall);
@@ -1343,14 +1346,14 @@ namespace OpenDentBusiness {
 			table.Columns.Add("due");
 			table.Columns.Add("guarantor");
 			table.Columns.Add("InstallmentPlanNum");
-			table.Columns.Add("isIns");
 			table.Columns.Add("paid");
 			table.Columns.Add("patient");
+			table.Columns.Add("PatNum");
 			table.Columns.Add("PayPlanNum");
 			table.Columns.Add("principal");
 			table.Columns.Add("princPaid");
 			table.Columns.Add("totalCost");
-			table.Columns.Add("type");//js I will review this after I get back
+			table.Columns.Add("type");
 			List<DataRow> rows=new List<DataRow>();
 			DateTime dateT;
 			decimal paid;
@@ -1394,19 +1397,20 @@ namespace OpenDentBusiness {
 				row["date"]=dateT.ToShortDateString();
 				row["due"]=due.ToString("n");
 				row["guarantor"]=fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["Guarantor"].ToString()));
-				row["InstallmentPlanNum"]="";
-				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
-					row["isIns"]="";
-				}
-				else{
-					row["isIns"]="X";
-				}
+				row["InstallmentPlanNum"]="0";
 				row["paid"]=paid.ToString("n");
 				row["patient"]=fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
+				row["PatNum"]=rawPayPlan.Rows[i]["PatNum"].ToString();
 				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();
 				row["principal"]=princ.ToString("n");
 				row["princPaid"]=princPaid.ToString("n");
 				row["totalCost"]=totCost.ToString("n");
+				if(rawPayPlan.Rows[i]["PlanNum"].ToString()=="0"){
+					row["type"]="PP";
+				}
+				else{
+					row["type"]="Ins";
+				}
 				rows.Add(row);
 			}
 			//Installment plans-------------------------------------------------------------------------
@@ -1420,13 +1424,14 @@ namespace OpenDentBusiness {
 				row["due"]=PIn.Decimal(rawInstall.Rows[i]["MonthlyPayment"].ToString()).ToString("f");
 				row["guarantor"]="";
 				row["InstallmentPlanNum"]=PIn.Long(rawInstall.Rows[i]["InstallmentPlanNum"].ToString());
-				row["isIns"]="";
 				row["paid"]="";
 				row["patient"]=fam.GetNameInFamLF(PIn.Long(rawInstall.Rows[i]["PatNum"].ToString()));
-				row["PayPlanNum"]="";
+				row["PatNum"]=rawInstall.Rows[i]["PatNum"].ToString();
+				row["PayPlanNum"]="0";
 				row["principal"]="";
 				row["princPaid"]="";
 				row["totalCost"]="";
+				row["type"]="IP";
 				rows.Add(row);
 			}
 			for(int i=0;i<rows.Count;i++) {
@@ -1482,7 +1487,7 @@ namespace OpenDentBusiness {
 					continue;
 				}
 				row["description"]+="\r\nPatient: "+fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
-				//row["extraDetail"]="";
+				row["InstallmentPlanNum"]="0";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
@@ -1529,7 +1534,7 @@ namespace OpenDentBusiness {
 					row["DateTime"]=rawAmort.Rows[d]["DateTime"];
 					row["date"]=rawAmort.Rows[d]["date"];
 					row["description"]=rawAmort.Rows[d]["description"];
-					//row["extraDetail"]="";
+					row["InstallmentPlanNum"]="0";
 					row["patient"]=rawAmort.Rows[d]["patient"];
 					row["PatNum"]=rawAmort.Rows[d]["PatNum"];
 					row["PayNum"]=rawAmort.Rows[d]["PayNum"];

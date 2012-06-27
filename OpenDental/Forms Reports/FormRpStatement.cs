@@ -529,7 +529,19 @@ namespace OpenDental{
 						//payPlanDue;//PatGuar.PayPlanDue;
 					}
 				}
-				text=balTotal.ToString("F");
+				InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(PatGuar.PatNum);
+				if(installPlan!=null){
+					//show lesser of normal total balance or the monthly payment amount.
+					if(installPlan.MonthlyPayment < balTotal) {
+						text=installPlan.MonthlyPayment.ToString("F");
+					}
+					else {
+						text=balTotal.ToString("F");
+					}
+				}
+				else {//no installmentplan
+					text=balTotal.ToString("F");
+				}
 				cell=row.Cells[0];
 				par=cell.AddParagraph();
 				par.AddFormattedText(text,font);

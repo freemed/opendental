@@ -8,13 +8,13 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class InstallmentPlans{
 
-		///<summary></summary>
-		public static List<InstallmentPlan> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<InstallmentPlan>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM installmentplan WHERE PatNum = "+POut.Long(patNum);
-			return Crud.InstallmentPlanCrud.SelectMany(command);
+		///<summary>Gets the installment plan for this family.  If none, returns null.</summary>
+		public static InstallmentPlan GetOneForFam(long guarNum){
+		  if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+		    return Meth.GetObject<InstallmentPlan>(MethodBase.GetCurrentMethod(),guarNum);
+		  }
+		  string command="SELECT * FROM installmentplan WHERE PatNum = "+POut.Long(guarNum)+" LIMIT 1";
+		  return Crud.InstallmentPlanCrud.SelectOne(command);
 		}
 
 		///<summary>Gets one InstallmentPlan from the db.</summary>

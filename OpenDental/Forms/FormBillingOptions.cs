@@ -428,7 +428,8 @@ namespace OpenDental{
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(564, 16);
 			this.label4.TabIndex = 26;
-			this.label4.Text = "General Message (in addition to any dunning messages and appointment reminders)";
+			this.label4.Text = "General Message (in addition to any dunning messages and appointment reminders, [" +
+    "InstallmentPlanTerms] allowed)";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textNote
@@ -932,7 +933,18 @@ namespace OpenDental{
 				if(DefC.GetDef(DefCat.BillingTypes,agingList[i].BillingType).ItemValue=="E"){
 					stmt.Mode_=StatementMode.Email;
 				}
-				stmt.Note=textNote.Text;
+				InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(agingList[i].PatNum);
+				if(installPlan==null) {
+					stmt.Note=textNote.Text;
+				}
+				else {
+					stmt.Note=textNote.Text.Replace("[InstallmentPlanTerms]",
+						"Installment Plan\r\n"
+					+"Date First Payment: "+installPlan.DateFirstPayment.ToShortDateString()+"\r\n"
+					+"Monthly Payment: "+installPlan.MonthlyPayment.ToString("c")+"\r\n"
+					+"APR: "+(installPlan.APR/(float)100).ToString("P")+"\r\n"
+					+"Note: "+installPlan.Note);
+				}
 				stmt.NoteBold="";
 				//appointment reminders are not handled here since it would be too slow.
 				//set dunning messages here

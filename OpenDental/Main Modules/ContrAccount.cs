@@ -2175,7 +2175,7 @@ namespace OpenDental {
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentPlans","Patient"),100);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Ins"),30,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Type"),30,HorizontalAlignment.Center);
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentPlans","Principal"),70,HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
@@ -2189,7 +2189,7 @@ namespace OpenDental {
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentPlans","Due Now"),70,HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn("Type",70);
+			col=new ODGridColumn("",70);//filler
 			gridPayPlan.Columns.Add(col);
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
@@ -2198,22 +2198,29 @@ namespace OpenDental {
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
-				row.Cells.Add(table.Rows[i]["guarantor"].ToString());
+				if(table.Rows[i]["InstallmentPlanNum"].ToString()!="0" && table.Rows[i]["PatNum"].ToString()!=PatCur.Guarantor.ToString()) {//Installment plan and not on guar
+					cell=new ODGridCell(((string)"Invalid Guarantor"));
+					cell.Bold=YN.Yes;
+					cell.ColorText=Color.Red;
+				}
+				else {
+					cell=new ODGridCell(table.Rows[i]["guarantor"].ToString());
+				}
+				row.Cells.Add(cell);
 				row.Cells.Add(table.Rows[i]["patient"].ToString());
-				row.Cells.Add(table.Rows[i]["isIns"].ToString());
+				row.Cells.Add(table.Rows[i]["type"].ToString());
 				row.Cells.Add(table.Rows[i]["principal"].ToString());
 				row.Cells.Add(table.Rows[i]["totalCost"].ToString());
 				row.Cells.Add(table.Rows[i]["paid"].ToString());
 				row.Cells.Add(table.Rows[i]["princPaid"].ToString());
 				row.Cells.Add(table.Rows[i]["balance"].ToString());
 				cell=new ODGridCell(table.Rows[i]["due"].ToString());
-				if(table.Rows[i]["isIns"].ToString()==""){
+				if(table.Rows[i]["type"].ToString()!="Ins"){
 					cell.Bold=YN.Yes;
 					cell.ColorText=Color.Red;
 				}
 				row.Cells.Add(cell);
 				row.Cells.Add("");
-				//row.Tag=table.Rows[i]["type"].ToString();
 				gridPayPlan.Rows.Add(row);
 				PPBalanceTotal += (Convert.ToDecimal(PIn.Double(table.Rows[i]["balance"].ToString())));
 				//PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
@@ -2606,7 +2613,7 @@ namespace OpenDental {
 
 		private void gridPayPlan_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			DataTable table=DataSetMain.Tables["payplan"];
-			if (table.Rows[e.Row]["PayPlanNum"]!="") {//Not an Installment Plan
+			if(table.Rows[e.Row]["PayPlanNum"].ToString()!="0") {//Payment plan
 				PayPlan payplan=PayPlans.GetOne(PIn.Long(table.Rows[e.Row]["PayPlanNum"].ToString()));
 				FormPayPlan2=new FormPayPlan(PatCur,payplan);
 				FormPayPlan2.ShowDialog();
@@ -3266,8 +3273,12 @@ namespace OpenDental {
 		}
 		
 		private void toolBarButInstallPlan_Click() {
+			if(InstallmentPlans.GetOneForFam(PatCur.Guarantor)!=null) {
+				MsgBox.Show(this,"Family already has an installment plan.");
+				return;
+			}
 			InstallmentPlan installPlan=new InstallmentPlan();
-			installPlan.PatNum=PatCur.PatNum;
+			installPlan.PatNum=PatCur.Guarantor;
 			installPlan.DateAgreement=DateTime.Today;
 			installPlan.DateFirstPayment=DateTime.Today;
 			//InstallmentPlans.Insert(installPlan);

@@ -81,9 +81,11 @@ namespace OpenDental{
 			// 
 			this.label4.Location = new System.Drawing.Point(22, 55);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(575, 16);
+			this.label4.Size = new System.Drawing.Size(575, 32);
 			this.label4.TabIndex = 240;
-			this.label4.Text = "General Message (in addition to any dunning messages and appointment messages)";
+			this.label4.Text = "General Message (in addition to any dunning messages and appointment messages).\r\n" +
+    "You may use the variable [InstallmentPlanTerms] below to show the terms of the i" +
+    "nstallment plan.";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// label1
@@ -109,7 +111,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label3);
 			this.groupBox1.Controls.Add(this.textVendorId);
 			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Location = new System.Drawing.Point(12, 188);
+			this.groupBox1.Location = new System.Drawing.Point(12, 204);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(635, 132);
 			this.groupBox1.TabIndex = 247;
@@ -126,14 +128,14 @@ namespace OpenDental{
 			this.listElectBilling.Location = new System.Drawing.Point(12, 19);
 			this.listElectBilling.Name = "listElectBilling";
 			this.listElectBilling.Size = new System.Drawing.Size(120, 43);
-			this.listElectBilling.TabIndex = 255;
+			this.listElectBilling.TabIndex = 0;
 			// 
 			// textPassword
 			// 
 			this.textPassword.Location = new System.Drawing.Point(274, 104);
 			this.textPassword.Name = "textPassword";
 			this.textPassword.Size = new System.Drawing.Size(158, 20);
-			this.textPassword.TabIndex = 7;
+			this.textPassword.TabIndex = 5;
 			// 
 			// label6
 			// 
@@ -149,7 +151,7 @@ namespace OpenDental{
 			this.textUserName.Location = new System.Drawing.Point(274, 83);
 			this.textUserName.Name = "textUserName";
 			this.textUserName.Size = new System.Drawing.Size(158, 20);
-			this.textUserName.TabIndex = 6;
+			this.textUserName.TabIndex = 4;
 			// 
 			// label7
 			// 
@@ -214,7 +216,7 @@ namespace OpenDental{
 			this.textClientAcctNumber.Location = new System.Drawing.Point(274, 62);
 			this.textClientAcctNumber.Name = "textClientAcctNumber";
 			this.textClientAcctNumber.Size = new System.Drawing.Size(100, 20);
-			this.textClientAcctNumber.TabIndex = 5;
+			this.textClientAcctNumber.TabIndex = 3;
 			// 
 			// label5
 			// 
@@ -230,7 +232,7 @@ namespace OpenDental{
 			this.textVendorPMScode.Location = new System.Drawing.Point(274, 41);
 			this.textVendorPMScode.Name = "textVendorPMScode";
 			this.textVendorPMScode.Size = new System.Drawing.Size(100, 20);
-			this.textVendorPMScode.TabIndex = 4;
+			this.textVendorPMScode.TabIndex = 2;
 			// 
 			// label3
 			// 
@@ -246,7 +248,7 @@ namespace OpenDental{
 			this.textVendorId.Location = new System.Drawing.Point(274, 20);
 			this.textVendorId.Name = "textVendorId";
 			this.textVendorId.Size = new System.Drawing.Size(100, 20);
-			this.textVendorId.TabIndex = 3;
+			this.textVendorId.TabIndex = 1;
 			// 
 			// label2
 			// 
@@ -262,7 +264,7 @@ namespace OpenDental{
 			this.textBillingEmailSubject.Location = new System.Drawing.Point(12, 70);
 			this.textBillingEmailSubject.Name = "textBillingEmailSubject";
 			this.textBillingEmailSubject.Size = new System.Drawing.Size(616, 20);
-			this.textBillingEmailSubject.TabIndex = 1;
+			this.textBillingEmailSubject.TabIndex = 0;
 			// 
 			// label9
 			// 
@@ -277,7 +279,7 @@ namespace OpenDental{
 			// 
 			this.label8.Location = new System.Drawing.Point(11, 91);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(218, 16);
+			this.label8.Size = new System.Drawing.Size(87, 16);
 			this.label8.TabIndex = 240;
 			this.label8.Text = "Body";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -291,7 +293,7 @@ namespace OpenDental{
 			this.textBillingEmailBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
 			this.textBillingEmailBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBillingEmailBody.Size = new System.Drawing.Size(616, 102);
-			this.textBillingEmailBody.TabIndex = 2;
+			this.textBillingEmailBody.TabIndex = 1;
 			// 
 			// textDays
 			// 
@@ -305,7 +307,7 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(24, 74);
+			this.textNote.Location = new System.Drawing.Point(24, 90);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
@@ -350,9 +352,9 @@ namespace OpenDental{
 			this.groupBox3.Controls.Add(this.label9);
 			this.groupBox3.Controls.Add(this.textBillingEmailSubject);
 			this.groupBox3.Controls.Add(this.label10);
-			this.groupBox3.Location = new System.Drawing.Point(12, 338);
+			this.groupBox3.Location = new System.Drawing.Point(12, 354);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(635, 235);
+			this.groupBox3.Size = new System.Drawing.Size(635, 218);
 			this.groupBox3.TabIndex = 248;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Email Statements";
