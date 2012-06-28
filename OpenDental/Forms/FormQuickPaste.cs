@@ -378,15 +378,15 @@ namespace OpenDental{
 		}
 
 		private void butAddCat_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
+				return;
+			}
 			QuickPasteCat quickCat=new QuickPasteCat();
 			if(listCat.SelectedIndex==-1){
 				quickCat.ItemOrder=listCat.Items.Count;//one more than list will hold.
 			}
 			else{
 				quickCat.ItemOrder=listCat.SelectedIndex;
-			}
-			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
-				return;
 			}
 			QuickPasteCats.Insert(quickCat);
       FormQuickPasteCat FormQ=new FormQuickPasteCat(quickCat);

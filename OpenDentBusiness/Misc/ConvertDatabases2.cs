@@ -9044,15 +9044,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				long claimFormNum=PIn.Long(Db.GetScalar(command));
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;//How many?  Why not %?  Does it work with Oracle?
+					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P%Date' AND ClaimFormNum = "+claimFormNum;
 					Db.NonQ(command);
-					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P_PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
+					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P%PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
 					Db.NonQ(command);
 				}
 				else {
-					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;
+					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P%Date' AND ClaimFormNum = "+claimFormNum;
 					Db.NonQ(command);
-					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P_PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
+					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P%PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
 					Db.NonQ(command);
 				}
 				command="UPDATE preference SET ValueString = '12.2.28.0' WHERE PrefName = 'DataBaseVersion'";
