@@ -349,7 +349,17 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),userod);
 				return;
 			}
-			Validate(false,userod);
+			Validate(false,userod,false);
+			Crud.UserodCrud.Update(userod);
+		}
+
+		///<summary>Surround with try/catch because it can throw exceptions.  Only used from FormOpenDental.menuItemPassword_Click().  Same as Update(), only the Validate call skips checking duplicate names for hidden users.</summary>
+		public static void UpdatePassword(Userod userod){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),userod);
+				return;
+			}
+			Validate(false,userod,true);
 			Crud.UserodCrud.Update(userod);
 		}
 
@@ -359,14 +369,14 @@ namespace OpenDentBusiness {
 				userod.UserNum=Meth.GetLong(MethodBase.GetCurrentMethod(),userod);
 				return userod.UserNum;
 			}
-			Validate(true,userod);
+			Validate(true,userod,false);
 			return Crud.UserodCrud.Insert(userod);
 		}
 
 		///<summary>Surround with try/catch because it can throw exceptions.  We don't really need to make this public, but it's required in order to follow the RemotingRole pattern.</summary>
-		public static void Validate(bool isNew,Userod user){
+		public static void Validate(bool isNew,Userod user,bool excludeHiddenUsers){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),isNew,user);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),isNew,user,excludeHiddenUsers);
 				return;
 			}
 			//should add a check that employeenum and provnum are not both set.
@@ -379,8 +389,11 @@ namespace OpenDentBusiness {
 			else{
 				excludeUserNum=user.UserNum;//it's ok if the name matches the current username
 			}
-			if(!IsUserNameUnique(user.UserName,excludeUserNum)){
-				throw new Exception(Lans.g("Userods","UserName already in use."));
+			//It doesn't matter if the UserName is already in use if the user being updated is going to be hidden.  This check will block them from unhiding duplicate users.
+			if(!user.IsHidden) {//if the user is now not hidden
+				if(!IsUserNameUnique(user.UserName,excludeUserNum,excludeHiddenUsers)) {
+					throw new Exception(Lans.g("Userods","UserName already in use."));
+				}
 			}
 			//make sure that there would still be at least one user with security admin permissions
 			if(!isNew){
@@ -411,9 +424,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Supply 0 or -1 for the excludeUserNum to not exclude any.</summary>
-		public static bool IsUserNameUnique(string username,long excludeUserNum) {
+		public static bool IsUserNameUnique(string username,long excludeUserNum,bool excludeHiddenUsers) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),username,excludeUserNum);
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),username,excludeUserNum,excludeHiddenUsers);
 			}
 			if(username==""){
 				return false;
@@ -424,7 +437,10 @@ namespace OpenDentBusiness {
 				//Does not need to be tested under Oracle because eCW users do not use Oracle.
 			//}
 			command+="UserName='"+POut.String(username)+"' "
-				+"AND UserNum !="+POut.Long(excludeUserNum);
+				+"AND UserNum !="+POut.Long(excludeUserNum)+" ";
+			if(excludeHiddenUsers) {
+				command+="AND IsHidden=0";//not hidden
+			}
 			DataTable table=Db.GetTable(command);
 			if(table.Rows[0][0].ToString()=="0") {
 				return true;

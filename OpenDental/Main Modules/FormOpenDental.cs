@@ -3747,11 +3747,17 @@ namespace OpenDental{
 			if(FormU.DialogResult==DialogResult.Cancel) {
 				return;
 			}
+			try {
+				Userods.UpdatePassword(Security.CurUser);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			Security.CurUser.Password=FormU.hashedResult;
 			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
 				Security.CurUser.PasswordIsStrong=true;
 			}
-			Userods.Update(Security.CurUser);
 			DataValid.SetInvalid(InvalidType.Security);
 		}
 

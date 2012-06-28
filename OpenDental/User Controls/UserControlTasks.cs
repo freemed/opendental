@@ -740,7 +740,13 @@ namespace OpenDental {
 				PopupsAreBlocked=false;
 				Security.CurUser.DefaultHidePopups=false;
 			}
-			Userods.Update(Security.CurUser);
+			try {
+				Userods.Update(Security.CurUser);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			DataValid.SetInvalid(InvalidType.Security);
 		}
 

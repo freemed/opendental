@@ -601,13 +601,13 @@ namespace OpenDental{
 			if(fname.Length>0){
 				name+=fname.Substring(0,1);
 			}
-			if(Userods.IsUserNameUnique(name,0)){
+			if(Userods.IsUserNameUnique(name,0,false)){
 				return name;
 			}
 			int fnameI=1;
 			while(fnameI<fname.Length){
 				name+=fname.Substring(fnameI,1);
-				if(Userods.IsUserNameUnique(name,0)) {
+				if(Userods.IsUserNameUnique(name,0,false)) {
 					return name;
 				}
 				fnameI++;
@@ -616,7 +616,7 @@ namespace OpenDental{
 			do{
 				name+="x";
 			}
-			while(!Userods.IsUserNameUnique(name,0));
+			while(!Userods.IsUserNameUnique(name,0,false));
 			return name;
 		}
 
