@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("12.3.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("12.4.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -9058,11 +9058,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.2.28.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To12_3_0();
+			To12_3_1();
 		}
 
-		private static void To12_3_0() {
-			if(FromVersion<new Version("12.3.0.0")) {
+		private static void To12_3_1() {
+			if(FromVersion<new Version("12.3.1.0")) {
 				string command;
 				//Removing Appointment Complete-Time bar, Patient Note Text and Completed Pt. Note Text.
 				command="DELETE FROM definition WHERE Category=17 AND ItemName='Appointment Complete-Time bar'";//Cat 17=AppointmentColors
@@ -9506,17 +9506,27 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				    +"'Tscan')";
 					Db.NonQ(command);
 				}//end Tscan bridge
-
-
-
-
-
-
-				command="UPDATE preference SET ValueString = '12.3.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '12.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To12_3_X();
+			To12_4_0();
 		}
+
+		private static void To12_4_0() {
+			if(FromVersion<new Version("12.4.0.0")) {
+				string command;
+
+
+
+
+
+
+				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To12_5_0();
+		}
+
 
 
 
