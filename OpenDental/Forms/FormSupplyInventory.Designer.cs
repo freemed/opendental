@@ -28,30 +28,30 @@ namespace OpenDental {
 			this.menuItemCategories = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemEquipment = new System.Windows.Forms.ToolStripMenuItem();
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
+			this.butNewOrder = new OpenDental.UI.Button();
 			this.gridOrder = new OpenDental.UI.ODGrid();
+			this.butAddNeeded = new OpenDental.UI.Button();
 			this.gridNeeded = new OpenDental.UI.ODGrid();
 			this.comboSupplier = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.butPrint = new OpenDental.UI.Button();
 			this.tabControl = new System.Windows.Forms.TabControl();
 			this.tabSupplies = new System.Windows.Forms.TabPage();
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
-			this.textFind = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.gridSupplyMain = new OpenDental.UI.ODGrid();
-			this.tabOrderItems = new System.Windows.Forms.TabPage();
-			this.gridOrderItem = new OpenDental.UI.ODGrid();
-			this.label1 = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
-			this.butSupplies = new OpenDental.UI.Button();
-			this.butNewOrder = new OpenDental.UI.Button();
-			this.butAddNeeded = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.butAddToOrder = new OpenDental.UI.Button();
 			this.butNewSupply = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
+			this.textFind = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.gridSupplyMain = new OpenDental.UI.ODGrid();
+			this.tabOrderItems = new System.Windows.Forms.TabPage();
+			this.gridOrderItem = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
+			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.butSupplies = new OpenDental.UI.Button();
 			this.butOrders = new OpenDental.UI.Button();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -121,6 +121,22 @@ namespace OpenDental {
 			this.splitContainer.SplitterDistance = 212;
 			this.splitContainer.TabIndex = 11;
 			// 
+			// butNewOrder
+			// 
+			this.butNewOrder.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNewOrder.Autosize = true;
+			this.butNewOrder.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNewOrder.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNewOrder.CornerRadius = 4F;
+			this.butNewOrder.Image = global::OpenDental.Properties.Resources.Add;
+			this.butNewOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butNewOrder.Location = new System.Drawing.Point(3, 2);
+			this.butNewOrder.Name = "butNewOrder";
+			this.butNewOrder.Size = new System.Drawing.Size(95, 24);
+			this.butNewOrder.TabIndex = 12;
+			this.butNewOrder.Text = "New Order";
+			this.butNewOrder.Click += new System.EventHandler(this.butNewOrder_Click);
+			// 
 			// gridOrder
 			// 
 			this.gridOrder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -135,6 +151,22 @@ namespace OpenDental {
 			this.gridOrder.TranslationName = null;
 			this.gridOrder.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellDoubleClick);
 			this.gridOrder.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellClick);
+			// 
+			// butAddNeeded
+			// 
+			this.butAddNeeded.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddNeeded.Autosize = true;
+			this.butAddNeeded.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddNeeded.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddNeeded.CornerRadius = 4F;
+			this.butAddNeeded.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAddNeeded.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAddNeeded.Location = new System.Drawing.Point(381, 2);
+			this.butAddNeeded.Name = "butAddNeeded";
+			this.butAddNeeded.Size = new System.Drawing.Size(71, 24);
+			this.butAddNeeded.TabIndex = 5;
+			this.butAddNeeded.Text = "Add";
+			this.butAddNeeded.Click += new System.EventHandler(this.butAddNeeded_Click);
 			// 
 			// gridNeeded
 			// 
@@ -168,6 +200,23 @@ namespace OpenDental {
 			this.label3.TabIndex = 10;
 			this.label3.Text = "Supplier";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(311, 324);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(80, 26);
+			this.butPrint.TabIndex = 24;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// tabControl
 			// 
@@ -209,145 +258,6 @@ namespace OpenDental {
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.UseVisualStyleBackColor = true;
 			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
-			// 
-			// textFind
-			// 
-			this.textFind.Location = new System.Drawing.Point(385, 3);
-			this.textFind.Name = "textFind";
-			this.textFind.Size = new System.Drawing.Size(67, 20);
-			this.textFind.TabIndex = 22;
-			this.textFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFind_KeyDown);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(334, 3);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(50, 18);
-			this.label2.TabIndex = 21;
-			this.label2.Text = "Find";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// gridSupplyMain
-			// 
-			this.gridSupplyMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridSupplyMain.HScrollVisible = false;
-			this.gridSupplyMain.Location = new System.Drawing.Point(0, 25);
-			this.gridSupplyMain.Name = "gridSupplyMain";
-			this.gridSupplyMain.ScrollValue = 0;
-			this.gridSupplyMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridSupplyMain.Size = new System.Drawing.Size(750, 270);
-			this.gridSupplyMain.TabIndex = 11;
-			this.gridSupplyMain.Title = "Supplies";
-			this.gridSupplyMain.TranslationName = null;
-			this.gridSupplyMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSupplyMain_CellDoubleClick);
-			// 
-			// tabOrderItems
-			// 
-			this.tabOrderItems.BackColor = System.Drawing.SystemColors.Control;
-			this.tabOrderItems.Controls.Add(this.gridOrderItem);
-			this.tabOrderItems.Location = new System.Drawing.Point(4, 22);
-			this.tabOrderItems.Name = "tabOrderItems";
-			this.tabOrderItems.Padding = new System.Windows.Forms.Padding(3);
-			this.tabOrderItems.Size = new System.Drawing.Size(751, 295);
-			this.tabOrderItems.TabIndex = 0;
-			this.tabOrderItems.Text = "Supplies on one Order";
-			// 
-			// gridOrderItem
-			// 
-			this.gridOrderItem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridOrderItem.HScrollVisible = false;
-			this.gridOrderItem.Location = new System.Drawing.Point(0, 28);
-			this.gridOrderItem.Name = "gridOrderItem";
-			this.gridOrderItem.ScrollValue = 0;
-			this.gridOrderItem.Size = new System.Drawing.Size(628, 267);
-			this.gridOrderItem.TabIndex = 5;
-			this.gridOrderItem.Title = "Supplies on one Order";
-			this.gridOrderItem.TranslationName = null;
-			this.gridOrderItem.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrderItem_CellDoubleClick);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(482, 2);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(92, 18);
-			this.label1.TabIndex = 10;
-			this.label1.Text = "Supplier";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboBox1
-			// 
-			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Location = new System.Drawing.Point(576, 0);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(173, 21);
-			this.comboBox1.TabIndex = 8;
-			// 
-			// butSupplies
-			// 
-			this.butSupplies.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSupplies.Autosize = true;
-			this.butSupplies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSupplies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSupplies.CornerRadius = 4F;
-			this.butSupplies.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butSupplies.Location = new System.Drawing.Point(692, 0);
-			this.butSupplies.Name = "butSupplies";
-			this.butSupplies.Size = new System.Drawing.Size(71, 24);
-			this.butSupplies.TabIndex = 13;
-			this.butSupplies.Text = "Supplies";
-			this.butSupplies.Click += new System.EventHandler(this.butSupplies_Click);
-			// 
-			// butNewOrder
-			// 
-			this.butNewOrder.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butNewOrder.Autosize = true;
-			this.butNewOrder.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNewOrder.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNewOrder.CornerRadius = 4F;
-			this.butNewOrder.Image = global::OpenDental.Properties.Resources.Add;
-			this.butNewOrder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNewOrder.Location = new System.Drawing.Point(3, 2);
-			this.butNewOrder.Name = "butNewOrder";
-			this.butNewOrder.Size = new System.Drawing.Size(95, 24);
-			this.butNewOrder.TabIndex = 12;
-			this.butNewOrder.Text = "New Order";
-			this.butNewOrder.Click += new System.EventHandler(this.butNewOrder_Click);
-			// 
-			// butAddNeeded
-			// 
-			this.butAddNeeded.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddNeeded.Autosize = true;
-			this.butAddNeeded.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddNeeded.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddNeeded.CornerRadius = 4F;
-			this.butAddNeeded.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddNeeded.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddNeeded.Location = new System.Drawing.Point(381, 2);
-			this.butAddNeeded.Name = "butAddNeeded";
-			this.butAddNeeded.Size = new System.Drawing.Size(71, 24);
-			this.butAddNeeded.TabIndex = 5;
-			this.butAddNeeded.Text = "Add";
-			this.butAddNeeded.Click += new System.EventHandler(this.butAddNeeded_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(311, 324);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(80, 26);
-			this.butPrint.TabIndex = 24;
-			this.butPrint.Text = "Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// butAddToOrder
 			// 
@@ -423,6 +333,63 @@ namespace OpenDental {
 			this.butDown.TabIndex = 16;
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
+			// textFind
+			// 
+			this.textFind.Location = new System.Drawing.Point(385, 3);
+			this.textFind.Name = "textFind";
+			this.textFind.Size = new System.Drawing.Size(67, 20);
+			this.textFind.TabIndex = 22;
+			this.textFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textFind_KeyDown);
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(334, 3);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(50, 18);
+			this.label2.TabIndex = 21;
+			this.label2.Text = "Find";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// gridSupplyMain
+			// 
+			this.gridSupplyMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridSupplyMain.HScrollVisible = false;
+			this.gridSupplyMain.Location = new System.Drawing.Point(0, 25);
+			this.gridSupplyMain.Name = "gridSupplyMain";
+			this.gridSupplyMain.ScrollValue = 0;
+			this.gridSupplyMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSupplyMain.Size = new System.Drawing.Size(750, 270);
+			this.gridSupplyMain.TabIndex = 11;
+			this.gridSupplyMain.Title = "Supplies";
+			this.gridSupplyMain.TranslationName = null;
+			this.gridSupplyMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSupplyMain_CellDoubleClick);
+			// 
+			// tabOrderItems
+			// 
+			this.tabOrderItems.BackColor = System.Drawing.SystemColors.Control;
+			this.tabOrderItems.Controls.Add(this.gridOrderItem);
+			this.tabOrderItems.Location = new System.Drawing.Point(4, 22);
+			this.tabOrderItems.Name = "tabOrderItems";
+			this.tabOrderItems.Padding = new System.Windows.Forms.Padding(3);
+			this.tabOrderItems.Size = new System.Drawing.Size(751, 295);
+			this.tabOrderItems.TabIndex = 0;
+			this.tabOrderItems.Text = "Supplies on one Order";
+			// 
+			// gridOrderItem
+			// 
+			this.gridOrderItem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridOrderItem.HScrollVisible = false;
+			this.gridOrderItem.Location = new System.Drawing.Point(0, 28);
+			this.gridOrderItem.Name = "gridOrderItem";
+			this.gridOrderItem.ScrollValue = 0;
+			this.gridOrderItem.Size = new System.Drawing.Size(628, 267);
+			this.gridOrderItem.TabIndex = 5;
+			this.gridOrderItem.Title = "Supplies on one Order";
+			this.gridOrderItem.TranslationName = null;
+			this.gridOrderItem.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrderItem_CellDoubleClick);
+			// 
 			// butClose
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -438,6 +405,40 @@ namespace OpenDental {
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(482, 2);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(92, 18);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "Supplier";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox1
+			// 
+			this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox1.FormattingEnabled = true;
+			this.comboBox1.Location = new System.Drawing.Point(576, 0);
+			this.comboBox1.Name = "comboBox1";
+			this.comboBox1.Size = new System.Drawing.Size(173, 21);
+			this.comboBox1.TabIndex = 8;
+			// 
+			// butSupplies
+			// 
+			this.butSupplies.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butSupplies.Autosize = true;
+			this.butSupplies.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butSupplies.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSupplies.CornerRadius = 4F;
+			this.butSupplies.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butSupplies.Location = new System.Drawing.Point(692, 0);
+			this.butSupplies.Name = "butSupplies";
+			this.butSupplies.Size = new System.Drawing.Size(71, 24);
+			this.butSupplies.TabIndex = 13;
+			this.butSupplies.Text = "Supplies";
+			this.butSupplies.Visible = false;
+			this.butSupplies.Click += new System.EventHandler(this.butSupplies_Click);
+			// 
 			// butOrders
 			// 
 			this.butOrders.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -451,6 +452,7 @@ namespace OpenDental {
 			this.butOrders.Size = new System.Drawing.Size(71, 24);
 			this.butOrders.TabIndex = 14;
 			this.butOrders.Text = "Orders";
+			this.butOrders.Visible = false;
 			this.butOrders.Click += new System.EventHandler(this.butOrders_Click);
 			// 
 			// FormSupplyInventory

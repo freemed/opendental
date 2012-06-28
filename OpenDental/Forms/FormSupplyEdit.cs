@@ -77,7 +77,7 @@ namespace OpenDental {
 			Supp.LevelDesired=PIn.Float(textLevelDesired.Text);
 			Supp.Price=PIn.Double(textPrice.Text);
 			Supp.IsHidden=checkIsHidden.Checked;
-			if(Supp.IsHidden != isHiddenInitialVal) {
+			if(Supp.IsHidden!=isHiddenInitialVal) {
 				if(Supp.IsHidden) {
 					Supp.ItemOrder=0;
 				}

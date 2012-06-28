@@ -33,6 +33,9 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.checkSort = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// label3
@@ -56,9 +59,9 @@ namespace OpenDental{
 			// 
 			// checkShowHidden
 			// 
-			this.checkShowHidden.Location = new System.Drawing.Point(89, 19);
+			this.checkShowHidden.Location = new System.Drawing.Point(146, 19);
 			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(95, 18);
+			this.checkShowHidden.Size = new System.Drawing.Size(99, 18);
 			this.checkShowHidden.TabIndex = 12;
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.UseVisualStyleBackColor = true;
@@ -66,9 +69,9 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(247, 17);
+			this.label1.Location = new System.Drawing.Point(251, 17);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(53, 18);
+			this.label1.Size = new System.Drawing.Size(49, 18);
 			this.label1.TabIndex = 18;
 			this.label1.Text = "Find";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -159,10 +162,50 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.Location = new System.Drawing.Point(12, 13);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(24, 24);
+			this.butUp.TabIndex = 28;
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.Location = new System.Drawing.Point(42, 13);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(24, 24);
+			this.butDown.TabIndex = 29;
+			// 
+			// checkSort
+			// 
+			this.checkSort.Location = new System.Drawing.Point(87, 19);
+			this.checkSort.Name = "checkSort";
+			this.checkSort.Size = new System.Drawing.Size(53, 18);
+			this.checkSort.TabIndex = 30;
+			this.checkSort.Text = "Sort";
+			this.checkSort.UseVisualStyleBackColor = true;
+			this.checkSort.CheckedChanged += new System.EventHandler(this.checkSort_CheckedChanged);
+			// 
 			// FormSupplies
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(771, 588);
+			this.Controls.Add(this.checkSort);
+			this.Controls.Add(this.butUp);
+			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butPrint);
@@ -194,5 +237,8 @@ namespace OpenDental{
 		private UI.Button butPrint;
 		private UI.Button butOK;
 		private UI.Button butCancel;
+		private UI.Button butUp;
+		private UI.Button butDown;
+		private System.Windows.Forms.CheckBox checkSort;
 	}
 }
