@@ -9044,7 +9044,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				long claimFormNum=PIn.Long(Db.GetScalar(command));
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;
+					command="UPDATE claimformitem SET width = 80 WHERE FieldName LIKE 'P_Date' AND ClaimFormNum = "+claimFormNum;//How many?  Why not %?  Does it work with Oracle?
 					Db.NonQ(command);
 					command="UPDATE claimformitem SET XPos = 206 WHERE FieldName LIKE 'P_PlaceNumericCode' AND ClaimFormNum = "+claimFormNum;
 					Db.NonQ(command);
@@ -9506,6 +9506,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				    +"'Tscan')";
 					Db.NonQ(command);
 				}//end Tscan bridge
+
+
+
+
 
 
 				command="UPDATE preference SET ValueString = '12.3.0.0' WHERE PrefName = 'DataBaseVersion'";
