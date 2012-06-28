@@ -59,9 +59,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used to get a list of carriers to display in the FormCarriers window.</summary>
-		public static DataTable GetBigList(bool isCanadian,bool showHidden,string carrierName){
+		public static DataTable GetBigList(bool isCanadian,bool showHidden,string carrierName,string carrierPhone){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),isCanadian,showHidden,carrierName);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),isCanadian,showHidden,carrierName,carrierPhone);
 			}
 			DataTable tableRaw;
 			DataTable table;
@@ -75,7 +75,8 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
 				+"LEFT JOIN insplan ON insplan.CarrierNum=carrier.CarrierNum "
 				+"WHERE "
-				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
+				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' "
+				+"AND Phone LIKE '%"+POut.String(carrierPhone)+"%' ";
 			if(isCanadian){
 				command+="AND IsCDA=1 ";
 			}

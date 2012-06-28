@@ -25,10 +25,12 @@ namespace OpenDental{
 		private CheckBox checkCDAnet;
 		private bool changed;
 		private CheckBox checkShowHidden;
-		private TextBox textCarrier;
+		public TextBox textCarrier;
 		private Label label2;
 		private UI.Button butOK;//keeps track of whether an update is necessary.
 		private DataTable table;
+		public TextBox textPhone;
+		private Label labelPhone;
 		public Carrier SelectedCarrier;
 
 		///<summary></summary>
@@ -75,11 +77,13 @@ namespace OpenDental{
 			this.textCarrier = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
+			this.textPhone = new System.Windows.Forms.TextBox();
+			this.labelPhone = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -87,40 +91,40 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(830,435);
+			this.butAdd.Location = new System.Drawing.Point(830, 435);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(90,26);
+			this.butAdd.Size = new System.Drawing.Size(90, 26);
 			this.butAdd.TabIndex = 7;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butCombine
 			// 
-			this.butCombine.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCombine.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCombine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCombine.Autosize = true;
 			this.butCombine.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCombine.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCombine.CornerRadius = 4F;
-			this.butCombine.Location = new System.Drawing.Point(830,471);
+			this.butCombine.Location = new System.Drawing.Point(830, 471);
 			this.butCombine.Name = "butCombine";
-			this.butCombine.Size = new System.Drawing.Size(90,26);
+			this.butCombine.Size = new System.Drawing.Size(90, 26);
 			this.butCombine.TabIndex = 10;
 			this.butCombine.Text = "Co&mbine";
-			this.toolTip1.SetToolTip(this.butCombine,"Combines multiple Employers");
+			this.toolTip1.SetToolTip(this.butCombine, "Combines multiple Employers");
 			this.butCombine.Click += new System.EventHandler(this.butCombine_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(830,623);
+			this.butCancel.Location = new System.Drawing.Point(830, 623);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(90,26);
+			this.butCancel.Size = new System.Drawing.Size(90, 26);
 			this.butCancel.TabIndex = 12;
 			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -131,11 +135,11 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(11,29);
+			this.gridMain.Location = new System.Drawing.Point(11, 29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(796,620);
+			this.gridMain.Size = new System.Drawing.Size(796, 620);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Carriers";
 			this.gridMain.TranslationName = "TableCarriers";
@@ -144,9 +148,9 @@ namespace OpenDental{
 			// checkCDAnet
 			// 
 			this.checkCDAnet.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkCDAnet.Location = new System.Drawing.Point(428,6);
+			this.checkCDAnet.Location = new System.Drawing.Point(686, 6);
 			this.checkCDAnet.Name = "checkCDAnet";
-			this.checkCDAnet.Size = new System.Drawing.Size(96,17);
+			this.checkCDAnet.Size = new System.Drawing.Size(96, 17);
 			this.checkCDAnet.TabIndex = 99;
 			this.checkCDAnet.Text = "CDAnet Only";
 			this.checkCDAnet.Click += new System.EventHandler(this.checkCDAnet_Click);
@@ -154,50 +158,70 @@ namespace OpenDental{
 			// checkShowHidden
 			// 
 			this.checkShowHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowHidden.Location = new System.Drawing.Point(287,6);
+			this.checkShowHidden.Location = new System.Drawing.Point(545, 6);
 			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(96,17);
+			this.checkShowHidden.Size = new System.Drawing.Size(96, 17);
 			this.checkShowHidden.TabIndex = 100;
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
 			// 
 			// textCarrier
 			// 
-			this.textCarrier.Location = new System.Drawing.Point(118,4);
+			this.textCarrier.Location = new System.Drawing.Point(118, 4);
 			this.textCarrier.Name = "textCarrier";
-			this.textCarrier.Size = new System.Drawing.Size(140,20);
+			this.textCarrier.Size = new System.Drawing.Size(140, 20);
 			this.textCarrier.TabIndex = 101;
 			this.textCarrier.TextChanged += new System.EventHandler(this.textCarrier_TextChanged);
 			// 
 			// label2
 			// 
 			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(12,7);
+			this.label2.Location = new System.Drawing.Point(12, 7);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,17);
+			this.label2.Size = new System.Drawing.Size(100, 17);
 			this.label2.TabIndex = 102;
 			this.label2.Text = "Carrier";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(830,587);
+			this.butOK.Location = new System.Drawing.Point(830, 587);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(90,26);
+			this.butOK.Size = new System.Drawing.Size(90, 26);
 			this.butOK.TabIndex = 103;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// textPhone
+			// 
+			this.textPhone.Location = new System.Drawing.Point(342, 4);
+			this.textPhone.Name = "textPhone";
+			this.textPhone.Size = new System.Drawing.Size(140, 20);
+			this.textPhone.TabIndex = 104;
+			this.textPhone.TextChanged += new System.EventHandler(this.textPhone_TextChanged);
+			// 
+			// labelPhone
+			// 
+			this.labelPhone.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.labelPhone.Location = new System.Drawing.Point(264, 7);
+			this.labelPhone.Name = "labelPhone";
+			this.labelPhone.Size = new System.Drawing.Size(72, 17);
+			this.labelPhone.TabIndex = 105;
+			this.labelPhone.Text = "Phone";
+			this.labelPhone.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormCarriers
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(927,672);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(927, 672);
+			this.Controls.Add(this.textPhone);
+			this.Controls.Add(this.labelPhone);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.textCarrier);
 			this.Controls.Add(this.label2);
@@ -311,7 +335,7 @@ namespace OpenDental{
 			//}
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			table=Carriers.GetBigList(checkCDAnet.Checked,checkShowHidden.Checked,textCarrier.Text);
+			table=Carriers.GetBigList(checkCDAnet.Checked,checkShowHidden.Checked,textCarrier.Text,textPhone.Text);
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
 				/*if(checkCDAnet.Checked){
@@ -358,6 +382,10 @@ namespace OpenDental{
 		}
 
 		private void textCarrier_TextChanged(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void textPhone_TextChanged(object sender,EventArgs e) {
 			FillGrid();
 		}
 

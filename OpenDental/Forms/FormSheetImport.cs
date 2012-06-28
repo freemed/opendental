@@ -34,8 +34,6 @@ namespace OpenDental {
 		private List<InsSub> SubList;
 		private InsSub Sub1;
 		private InsSub Sub2;
-		private Patient Subscriber1;
-		private Patient Subscriber2;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -496,7 +494,7 @@ namespace OpenDental {
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
 					row.NewValObj=row.NewValDisplay;
 					row.ImpValDisplay="[double click to pick]";
-					row.ImpValObj=row.NewValObj;
+					row.ImpValObj=null;
 					row.ObjType=typeof(Patient);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
@@ -1639,52 +1637,72 @@ namespace OpenDental {
 			#endregion
 			#region Subscriber
 			else if(Rows[e.Row].ObjType==typeof(Patient)) {
-//TODO: finish subscriber section.
-				//Patient subscriber=new Patient();
-				////Subscriber----------------------------------------------------------------------------------------------------
-				//if(subscriber==null) {//Always make user choose the subscriber the first time around.
-				//  DialogResult result=MessageBox.Show(Lan.g(this,"Is this patient the subscriber?"),"",MessageBoxButtons.YesNoCancel);
-				//  if(result==DialogResult.Cancel) {
-				//    return;
-				//  }
-				//  if(result==DialogResult.Yes) {//current patient is subscriber
-				//    subscriber=PatCur.Copy();
-				//  }
-				//  else {//patient is not subscriber
-				//    //show list of patients in this family
-				//    FormSubscriberSelect FormS=new FormSubscriberSelect(Fam);
-				//    FormS.ShowDialog();
-				//    if(FormS.DialogResult==DialogResult.Cancel) {
-				//      return;
-				//    }
-				//    subscriber=Patients.GetPat(FormS.SelectedPatNum);
-				//  }
-				//}
+				Patient subscriber=new Patient();
+				FormSubscriberSelect FormSS=new FormSubscriberSelect(Fam);
+				FormSS.ShowDialog();
+				if(FormSS.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				subscriber=Patients.GetPat(FormSS.SelectedPatNum);
+				if(subscriber==null) {
+					return;//Should never happen but is a possibility.
+				}
+				//Use GetNameFirst() because this is how OldValDisplay is displayed.
+				string patName=Patients.GetNameFirst(subscriber.FName,subscriber.Preferred);
+				if(Rows[e.Row].OldValDisplay==patName) {
+					Rows[e.Row].DoImport=false;
+				}
+				else {
+					Rows[e.Row].DoImport=true;
+				}
+				Rows[e.Row].ImpValDisplay=patName;
+				Rows[e.Row].ImpValObj=subscriber;
 			}
 			#endregion
 			#region Carrier
 			else if(Rows[e.Row].ObjType==typeof(Carrier)) {
-//TODO: finish carrier section.
-				//if(Rows[e.Row].FieldName=="ins1CarrierPhone") {
-				//  MsgBox.Show(this,"Double click on the Carrier to set the phone.");
-				//  return;
-				//}
-				//FormCarriers formC=new FormCarriers();
-				//formC.IsSelectMode=true;
-				//formC.ShowDialog();
-				//if(formC.DialogResult!=DialogResult.OK) {
-				//  return;
-				//}
-				//Carrier impCarrier=formC.SelectedCarrier;
-				//Rows[e.Row].ImpValDisplay=impCarrier.CarrierName;
-				//Rows[e.Row].ImpValObj=impCarrier;
-				//Rows[e.Row].DoImport=true;
-				//Rows[e.Row].IsFlaggedImp=false;
-				//SheetImportRow carrierPhoneRow=GetImportRowByFieldName("ins1CarrierPhone");
-				//if(carrierPhoneRow!=null) {//Now update the carrierPhone if one exists.
-				//  carrierPhoneRow.ImpValDisplay=impCarrier.Phone;
-				//  carrierPhoneRow.DoImport=true;
-				//}
+				//Change both carrier rows at the same time.
+				string insStr="ins1";
+				if(Rows[e.Row].FieldName.StartsWith("ins2")) {
+					insStr="ins2";
+				}
+				SheetImportRow carrierNameRow=GetImportRowByFieldName(insStr+"CarrierName");
+				SheetImportRow carrierPhoneRow=GetImportRowByFieldName(insStr+"CarrierPhone");
+				Carrier carrier=new Carrier();
+				FormCarriers FormC=new FormCarriers();
+				FormC.IsSelectMode=true;
+				if(carrierNameRow!=null) {
+					FormC.textCarrier.Text=carrierNameRow.NewValDisplay;
+				}
+				if(carrierPhoneRow!=null) {
+					FormC.textPhone.Text=carrierPhoneRow.NewValDisplay;
+				}
+				FormC.ShowDialog();
+				if(FormC.DialogResult!=DialogResult.OK) {
+					return;
+				}
+				carrier=FormC.SelectedCarrier;
+				//Check for nulls because the name AND phone rows might not both be on the sheet.
+				if(carrierNameRow!=null) {
+					if(carrierNameRow.OldValDisplay==carrier.CarrierName) {
+						carrierNameRow.DoImport=false;
+					}
+					else {
+						carrierNameRow.DoImport=true;
+					}
+					carrierNameRow.ImpValDisplay=carrier.CarrierName;
+					carrierNameRow.ImpValObj=carrier;
+				}
+				if(carrierPhoneRow!=null) {
+					if(carrierPhoneRow.OldValDisplay==carrier.Phone) {
+						carrierPhoneRow.DoImport=false;
+					}
+					else {
+						carrierPhoneRow.DoImport=true;
+					}
+					carrierPhoneRow.ImpValDisplay=carrier.Phone;
+					carrierPhoneRow.ImpValObj=carrier;
+				}
 			}
 			#endregion
 			FillGrid();
@@ -1821,19 +1839,33 @@ namespace OpenDental {
 					}
 				}
 				#region Insurance importing
+				/* Commenting this out for the release of v12.3.
 				//Insurance importing happens first in case more information is required, there is a possibility of returning.
+				string insStr;
 				if(importPriIns) {
-					if(!IsVaildInsurance("ins1")) {
-						MsgBox.Show(this,"");
-						return;
+					insStr="ins1";
+					if(IsVaildInsurance(insStr)) {
+						//check if they have pri ins already
+						//remove it
+						//create new ins from the entered values
+					}
+					else {
+						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  The insurance cannot be imported.\r\nContinue anyway?")) {
+							return;
+						}
 					}
 				}
 				if(importSecIns) {
-					if(!IsVaildInsurance("ins2")) {
-						MsgBox.Show(this,"");
-						return;
+					insStr="ins2";
+					if(IsVaildInsurance(insStr)) {
+					}
+					else {
+						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  The insurance cannot be imported.\r\nContinue anyway?")) {
+							return;
+						}
 					}
 				}
+				*/
 				#endregion
 				Patients.Update(PatCur,patientOld);
 				if(AddressSameForFam) {
