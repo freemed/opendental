@@ -76,6 +76,11 @@ namespace OpenDentBusiness.HL7 {
 				}
 			}
 			//AIL,AIP seem to be optional, and I'm going to ignore them for now.
+			if(pat.FName=="" || pat.LName=="") {
+				EventLog.WriteEntry("OpenDentHL7","Appointment not processed due to missing patient first or last name. PatNum:"+pat.PatNum.ToString()
+					,EventLogEntryType.Information);
+				return;//this will also skip the appt insert.
+			}
 			if(isNewPat) {
 				if(isVerboseLogging) {
 					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName+", PatNum:"+pat.PatNum.ToString()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
@@ -44,6 +45,13 @@ namespace OpenDentBusiness.HL7 {
 				return;
 			}
 			if(seg.GetFieldFullText(11)=="1") {//if relationship is self (according to some of their documentation)
+				return;
+			}
+			if(seg.GetFieldComponent(3,0)==""//lname
+				|| seg.GetFieldComponent(3,1)=="")//fname
+			{
+				EventLog.WriteEntry("OpenDentHL7","Guarantor not processed due to missing first or last name. PatNum of patient:"+pat.PatNum.ToString()
+					,EventLogEntryType.Information);
 				return;
 			}
 			Patient guar=null;

@@ -89,6 +89,11 @@ namespace OpenDentBusiness.HL7 {
 			//for(int i=0;i<segments.Count;i++) {
 			//	ProcessIN1(pat,seg);
 			//}
+			if(pat.FName=="" || pat.LName=="") {
+				EventLog.WriteEntry("OpenDentHL7","Patient demographics not processed due to missing first or last name. PatNum:"+pat.PatNum.ToString()
+					,EventLogEntryType.Information);
+				return;
+			}
 			if(isNewPat) {
 				if(isVerboseLogging) {
 					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
