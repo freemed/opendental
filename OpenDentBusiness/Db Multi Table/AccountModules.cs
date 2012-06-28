@@ -1137,16 +1137,19 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Installment plans----------------------------------------------------------------------------------
-			command="SELECT * FROM installmentplan WHERE PatNum = "+patNum+" ";
+			command="SELECT * FROM installmentplan WHERE ";
 			for(int i=0;i<fam.ListPats.Length;i++){
-				command+="OR PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
+				if(i!=0){
+					command+="OR ";
+				}
+				command+="PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
 			DataTable rawInstall=Db.GetTable(command);
 			if(statementNum==0) {
 				GetPayPlans(rawPayPlan,rawPay,rawInstall);
 			}
 			else {
-				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient,rawInstall);
+				GetPayPlansForStatement(rawPayPlan,rawPay,fromDate,toDate,singlePatient);
 			}
 			//Sorting-----------------------------------------------------------------------------------------
 			rows.Sort(new AccountLineComparer());
@@ -1441,9 +1444,9 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Gets payment plans for the family.  RawPay will include any paysplits for anyone in the family, so it's guaranteed to include all paysplits for a given payplan since payplans only show in the guarantor's family.  Database maint tool enforces paysplit.patnum=payplan.guarantor just in case.  fromDate and toDate are only used if isForStatement.  From date lets us restrict how many amortization items to show.  toDate is typically 10 days in the future.</summary>
-		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient,DataTable rawInstall){
+		private static void GetPayPlansForStatement(DataTable rawPayPlan,DataTable rawPay,DateTime fromDate,DateTime toDate,bool singlePatient){
 			//No need to check RemotingRole; no call to db.
-			//DataConnection dcon=new DataConnection();
+			//We may need to add installment plans to this grid some day.  No time right now.
 			DataTable table=new DataTable("payplan");
 			DataRow row;
 			SetTableColumns(table);//this will allow it to later be fully integrated into a single grid.
@@ -1487,7 +1490,6 @@ namespace OpenDentBusiness {
 					continue;
 				}
 				row["description"]+="\r\nPatient: "+fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
-				row["InstallmentPlanNum"]="0";
 				row["patient"]="";
 				row["PatNum"]="0";
 				row["PayNum"]="0";
@@ -1534,7 +1536,6 @@ namespace OpenDentBusiness {
 					row["DateTime"]=rawAmort.Rows[d]["DateTime"];
 					row["date"]=rawAmort.Rows[d]["date"];
 					row["description"]=rawAmort.Rows[d]["description"];
-					row["InstallmentPlanNum"]="0";
 					row["patient"]=rawAmort.Rows[d]["patient"];
 					row["PatNum"]=rawAmort.Rows[d]["PatNum"];
 					row["PayNum"]=rawAmort.Rows[d]["PayNum"];

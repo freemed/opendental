@@ -2194,7 +2194,6 @@ namespace OpenDental {
 			gridPayPlan.Rows.Clear();
 			UI.ODGridRow row;
 			UI.ODGridCell cell;
-			//decimal PPDueTotal=0;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(table.Rows[i]["date"].ToString());
@@ -2223,7 +2222,6 @@ namespace OpenDental {
 				row.Cells.Add("");
 				gridPayPlan.Rows.Add(row);
 				PPBalanceTotal += (Convert.ToDecimal(PIn.Double(table.Rows[i]["balance"].ToString())));
-				//PPDueTotal += (Convert.ToDecimal((table.Rows[i]["due"]).ToString()));
 			}
 			gridPayPlan.EndUpdate();
 			if(PrefC.GetBool(PrefName.FuchsOptionsOn)) {
