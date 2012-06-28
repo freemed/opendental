@@ -391,6 +391,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanDeleteWithInvalidPatNum(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalDuplicates(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalZeroToOne(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PatPlanOrdinalTwoToOne(verbose,isCheck);

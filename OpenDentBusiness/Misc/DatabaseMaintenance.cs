@@ -2074,6 +2074,32 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PatPlanOrdinalDuplicates(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT patient.PatNum,patient.LName,patient.FName,COUNT(*) "
+				+"FROM patplan "
+				+"INNER JOIN patient ON patient.PatNum=patplan.PatNum "
+				+"GROUP BY patplan.PatNum,patplan.Ordinal "
+				+"HAVING COUNT(*)>1";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan duplicate ordinals: ")+table.Rows.Count+"\r\n";
+				}
+				for(int i=0;i<table.Rows.Count;i++) {
+					log+=Lans.g("FormDatabaseMaintenance","PatPlan duplicate ordinals for patient must be manually fixed: ")
+						+PIn.String(table.Rows[i]["FName"].ToString())+" "+PIn.String(table.Rows[i]["LName"].ToString())+"\r\n";
+				}
+			}
+			else {
+				//No fix. User needs to fix manually.
+			}
+			return log;
+		}
+
 		public static string PatPlanOrdinalZeroToOne(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
