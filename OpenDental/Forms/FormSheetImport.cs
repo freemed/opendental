@@ -1708,8 +1708,18 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		///<summary>Returns true if all insurance fields exist ?and have valid values?.  Set insStr to "ins1" or "ins2".</summary>
-		private bool IsVaildInsurance(string insStr) {
+		///<summary>Returns true if all required insurance fields exist, import fields have valid values, and the insurance plan has been imported successfully.  The user will be asked to pick an ins plan.  If any fields on the selected plan do not exactly match the imported fields, they will be prompted to choose between the selected plan's values or to create a new ins plan with the import values.  After validating, the actual import of the new ins plan takes place.  That might consist of dropping the current plan and replacing it or simply inserting the new plan.</summary>
+		private bool ValidateAndImportInsurance(bool isPrimary) {
+			string insStr="";
+			byte ordinal;
+			if(isPrimary) {
+				insStr="ins1";
+				ordinal=1;
+			}
+			else {
+				insStr="ins2";
+				ordinal=2;
+			}
 			//Load up every insurance row related to the particular ins.
 			SheetImportRow relationRow=GetImportRowByFieldName(insStr+"Relat");
 			SheetImportRow subscriberRow=GetImportRowByFieldName(insStr+"Subscriber");
@@ -1720,18 +1730,167 @@ namespace OpenDental {
 			SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
 			SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
 			//Check if the required insurance fields exist on this sheet.
+			//NOTE: Group name and num are optional! Not required on the sheet.
 			if(relationRow==null 
 				|| subscriberRow==null
 				|| subscriberIdRow==null
 				|| carrierNameRow==null
 				|| carrierPhoneRow==null
-				|| employerNameRow==null
-				|| groupNameRow==null
-				|| groupNumRow==null) 
+				|| employerNameRow==null) 
 			{
+				//if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  Secondary insurance cannot be imported.  Continue anyway?")) {
+				//  return;
+				//}
 				return false;
 			}
 			//Validate the values here?
+			if(relationRow.ImpValObj==null 
+				|| subscriberRow.ImpValObj==null
+				|| subscriberIdRow.ImpValObj==""
+				|| carrierNameRow.ImpValObj==null
+				|| carrierPhoneRow.ImpValObj==null
+				|| employerNameRow.ImpValObj=="") 
+			{
+				return false;
+			}
+			InsPlan plan=null;
+			InsSub sub=null;
+			//Get the employer from the db or a new one will be created.
+			long employerNum=Employers.GetEmployerNum(employerNameRow.ImpValDisplay);
+			Patient subscriber=(Patient)subscriberRow.ImpValObj;
+			//Have user pick a plan------------------------------------------------------------------------------------------------------------
+			bool planIsNew=false;
+			List<InsSub> subList=InsSubs.GetListForSubscriber(subscriber.PatNum);
+			if(subList.Count==0) {
+				planIsNew=true;
+			}
+			else {
+				FormInsSelectSubscr FormISS=new FormInsSelectSubscr(subscriber.PatNum);
+				FormISS.ShowDialog();
+				if(FormISS.DialogResult==DialogResult.Cancel) {
+					return false;
+				}
+				if(FormISS.SelectedInsSubNum==0) {//'New' option selected.
+					planIsNew=true;
+				}
+				else {
+					sub=InsSubs.GetSub(FormISS.SelectedInsSubNum,subList);
+					plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
+				}
+			}
+			//User picked a plan but the carrier for that plan is different then the carrier chosen for the import then we need to make a new plan.
+			if(!planIsNew && plan.CarrierNum!=((Carrier)carrierNameRow.ImpValObj).CarrierNum) {
+				//Ask the user here if they want to change carriers or make a new plan?
+				//The old patplan has already been deleted so they need to pick one or the other at this point.
+				planIsNew=true;
+			}
+			//Do the same check for the employer?
+			if(!planIsNew && plan.EmployerNum!=employerNum) {
+				//Ask the user here if they want to use the employer on the selected plan or make a new plan?
+				planIsNew=true;
+			}
+			//Do the same check for the subscriber id?
+			if(!planIsNew && sub.SubscriberID!=subscriberIdRow.ImpValDisplay) {
+				//Ask the user here if they want to use the subscriber's ID or make a new plan?
+				planIsNew=true;
+			}
+			//Do the same check for the employer name?
+			if(!planIsNew && sub.SubscriberID!=subscriberIdRow.ImpValDisplay) {
+				//Ask the user here if they want to use the subscriber's ID or make a new plan?
+				planIsNew=true;
+			}
+			//Do the same for Group Name?
+			if(groupNameRow!=null && !planIsNew && plan.GroupName!=groupNameRow.ImpValDisplay) {
+				planIsNew=true;
+			}
+			//Do the same for Group Num?
+			if(groupNumRow!=null && !planIsNew && plan.GroupNum!=groupNumRow.ImpValDisplay) {
+				planIsNew=true;
+			}
+			//Create a new plan------------------------------------------------------------------------------------------------------------------
+			if(planIsNew) {
+				plan=new InsPlan();
+				plan.EmployerNum=subscriber.EmployerNum;
+				plan.PlanType="";
+				plan.CarrierNum=((Carrier)carrierNameRow.ImpValObj).CarrierNum;
+				if(groupNameRow!=null) {
+					plan.GroupName=groupNameRow.ImpValDisplay;
+				}
+				if(groupNumRow!=null) {
+					plan.GroupNum=groupNumRow.ImpValDisplay;
+				}
+				InsPlans.Insert(plan);
+				sub=new InsSub();
+				sub.PlanNum=plan.PlanNum;
+				sub.Subscriber=subscriber.PatNum;
+				sub.SubscriberID=subscriberIdRow.ImpValDisplay;
+				sub.ReleaseInfo=true;
+				sub.AssignBen=true;
+				InsSubs.Insert(sub);
+				Benefit ben;
+				for(int i=0;i<CovCatC.ListShort.Count;i++) {
+					if(CovCatC.ListShort[i].DefaultPercent==-1) {
+						continue;
+					}
+					ben=new Benefit();
+					ben.BenefitType=InsBenefitType.CoInsurance;
+					ben.CovCatNum=CovCatC.ListShort[i].CovCatNum;
+					ben.PlanNum=plan.PlanNum;
+					ben.Percent=CovCatC.ListShort[i].DefaultPercent;
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+					ben.CodeNum=0;
+					Benefits.Insert(ben);
+				}
+				//Zero deductible diagnostic
+				if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)!=null) {
+					ben=new Benefit();
+					ben.CodeNum=0;
+					ben.BenefitType=InsBenefitType.Deductible;
+					ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+					ben.PlanNum=plan.PlanNum;
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+					ben.MonetaryAmt=0;
+					ben.Percent=-1;
+					ben.CoverageLevel=BenefitCoverageLevel.Individual;
+					Benefits.Insert(ben);
+				}
+				//Zero deductible preventive
+				if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null) {
+					ben=new Benefit();
+					ben.CodeNum=0;
+					ben.BenefitType=InsBenefitType.Deductible;
+					ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+					ben.PlanNum=plan.PlanNum;
+					ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+					ben.MonetaryAmt=0;
+					ben.Percent=-1;
+					ben.CoverageLevel=BenefitCoverageLevel.Individual;
+					Benefits.Insert(ben);
+				}
+			}
+			//Delete the old patplan-------------------------------------------------------------------------------------------------------------
+			if(isPrimary && PatPlan1!=null) {//Patient has pri ins.
+				PatPlans.DeleteNonContiguous(PatPlan1.PatPlanNum);
+			}
+			if(!isPrimary && PatPlan2!=null) {
+				PatPlans.DeleteNonContiguous(PatPlan2.PatPlanNum);
+			}
+			//Then attach new patplan to the plan------------------------------------------------------------------------------------------------
+			PatPlan patplan=new PatPlan();
+			patplan.Ordinal=ordinal;//Not allowed to be 0.
+			patplan.PatNum=PatCur.PatNum;
+			patplan.InsSubNum=sub.InsSubNum;
+			patplan.Relationship=((Relat)relationRow.ImpValObj);
+			PatPlans.Insert(patplan);
+			//After new plan has been entered, recompute all estimates for this patient because their coverage is now different.  Also set patient.HasIns to the correct value.
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(PatCur.PatNum);
+			List<Procedure> procs=Procedures.Refresh(PatCur.PatNum);
+			List<PatPlan> patPlans=PatPlans.Refresh(PatCur.PatNum);
+			subList=InsSubs.RefreshForFam(Fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<Benefit> benList=Benefits.Refresh(patPlans,subList);
+			Procedures.ComputeEstimatesForAll(PatCur.PatNum,claimProcs,procs,planList,patPlans,benList,PatCur.Age,subList);
+			Patients.SetHasIns(PatCur.PatNum);
 			return true;
 		}
 
@@ -1838,35 +1997,31 @@ namespace OpenDental {
 							break;
 					}
 				}
+				//Insurance importing happens before updating the patient information because there is a possibility of returning for more information.
 				#region Insurance importing
-				/* Commenting this out for the release of v12.3.
-				//Insurance importing happens first in case more information is required, there is a possibility of returning.
-				string insStr;
+				bool primaryImported=false;
 				if(importPriIns) {
-					insStr="ins1";
-					if(IsVaildInsurance(insStr)) {
-						//check if they have pri ins already
-						//remove it
-						//create new ins from the entered values
+					if(!ValidateAndImportInsurance(true)) {
+						//Field missing or user chose to back out to correct information.
+						return;//Nothing has been updated so no harm in returning.
 					}
-					else {
-						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  The insurance cannot be imported.\r\nContinue anyway?")) {
-							return;
-						}
-					}
+					primaryImported=true;//Primary insurance was imported successfully.
 				}
 				if(importSecIns) {
-					insStr="ins2";
-					if(IsVaildInsurance(insStr)) {
-					}
-					else {
-						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  The insurance cannot be imported.\r\nContinue anyway?")) {
+					if(!ValidateAndImportInsurance(false)) {
+						//Field missing or user chose to back out to correct information.
+						if(primaryImported) {
+							//Primary has been imported, we cannot return at this point.  Simply notify the user that secondary could not be imported correctly.
+							MsgBox.Show(this,"Primary insurance was imported but secondary was unable to import.");
+						}
+						else {
+							//Secondary insurance was the only one set to import and nothing has been updated so no harm in returning.
 							return;
 						}
 					}
 				}
-				*/
 				#endregion
+				//Patient information updating---------------------------------------------------------------------------------------------------------
 				Patients.Update(PatCur,patientOld);
 				if(AddressSameForFam) {
 					Patients.UpdateAddressForFam(PatCur);

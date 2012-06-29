@@ -274,6 +274,18 @@ namespace OpenDentBusiness{
 			Procedures.ComputeEstimatesForAll(patNum,claimProcs,procs,planList,patPlans,benList,pat.Age,subList);
 			Patients.SetHasIns(patNum);
 		}
+
+		///<summary>Deletes the patplan and benefits with the specified patPlanNum.  Does not rearrange the other patplans for the patient.  A patplan must be inserted after this function is called to take the place of the patplan being deleted.</summary>
+		public static void DeleteNonContiguous(long patPlanNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
+				return;
+			}
+			string command="DELETE FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
+			Db.NonQ(command);
+			command="DELETE FROM benefit WHERE PatPlanNum=" +POut.Long(patPlanNum);
+			Db.NonQ(command);
+		}
 		
 	}
 
