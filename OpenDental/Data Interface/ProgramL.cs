@@ -235,6 +235,7 @@ namespace OpenDental{
 					cmdline=cmdline.Replace("[WirelessPhone]",pat.WirelessPhone);
 					cmdline=cmdline.Replace("[HmPhone]",pat.HmPhone);
 					cmdline=cmdline.Replace("[WkPhone]",pat.WkPhone);
+					cmdline=cmdline.Replace("[LNameLetter]",pat.LName.Substring(0,1).ToUpper());
 					path=path.Replace("[LName]",pat.LName);
 					path=path.Replace("[FName]",pat.FName);
 					path=path.Replace("[PatNum]",pat.PatNum.ToString());
@@ -242,6 +243,7 @@ namespace OpenDental{
 					path=path.Replace("[WirelessPhone]",pat.WirelessPhone);
 					path=path.Replace("[HmPhone]",pat.HmPhone);
 					path=path.Replace("[WkPhone]",pat.WkPhone);
+					path=path.Replace("[LNameLetter]",pat.LName.Substring(0,1).ToUpper());
 				}
 				Process.Start(path,cmdline);
 			}
