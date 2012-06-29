@@ -67,7 +67,7 @@ namespace OpenDental {
 			}
 			FormSupplies FormSup = new FormSupplies();
 			FormSup.IsSelectMode = true;
-			FormSup.SupplierNum = ListOrders[gridOrders.GetSelectedIndex()].SupplierNum;
+			FormSup.SelectedSupplierNum = ListOrders[gridOrders.GetSelectedIndex()].SupplierNum;
 			FormSup.ShowDialog();
 			if(FormSup.DialogResult!=DialogResult.OK) {
 				return;

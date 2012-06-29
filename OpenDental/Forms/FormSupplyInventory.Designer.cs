@@ -436,7 +436,6 @@ namespace OpenDental {
 			this.butSupplies.Size = new System.Drawing.Size(71, 24);
 			this.butSupplies.TabIndex = 13;
 			this.butSupplies.Text = "Supplies";
-			this.butSupplies.Visible = false;
 			this.butSupplies.Click += new System.EventHandler(this.butSupplies_Click);
 			// 
 			// butOrders
@@ -452,7 +451,6 @@ namespace OpenDental {
 			this.butOrders.Size = new System.Drawing.Size(71, 24);
 			this.butOrders.TabIndex = 14;
 			this.butOrders.Text = "Orders";
-			this.butOrders.Visible = false;
 			this.butOrders.Click += new System.EventHandler(this.butOrders_Click);
 			// 
 			// FormSupplyInventory

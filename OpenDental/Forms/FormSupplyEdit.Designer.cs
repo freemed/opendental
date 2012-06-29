@@ -44,68 +44,68 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(31,9);
+			this.label1.Location = new System.Drawing.Point(31, 9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(132,18);
+			this.label1.Size = new System.Drawing.Size(132, 18);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Supplier";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textSupplier
 			// 
-			this.textSupplier.Location = new System.Drawing.Point(166,8);
+			this.textSupplier.Location = new System.Drawing.Point(166, 8);
 			this.textSupplier.Name = "textSupplier";
 			this.textSupplier.ReadOnly = true;
-			this.textSupplier.Size = new System.Drawing.Size(295,20);
+			this.textSupplier.Size = new System.Drawing.Size(295, 20);
 			this.textSupplier.TabIndex = 10;
 			// 
 			// textCatalogNumber
 			// 
-			this.textCatalogNumber.Location = new System.Drawing.Point(166,61);
+			this.textCatalogNumber.Location = new System.Drawing.Point(166, 61);
 			this.textCatalogNumber.Name = "textCatalogNumber";
-			this.textCatalogNumber.Size = new System.Drawing.Size(144,20);
+			this.textCatalogNumber.Size = new System.Drawing.Size(144, 20);
 			this.textCatalogNumber.TabIndex = 0;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(7,62);
+			this.label2.Location = new System.Drawing.Point(7, 62);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(156,18);
+			this.label2.Size = new System.Drawing.Size(156, 18);
 			this.label2.TabIndex = 8;
 			this.label2.Text = "Catalog Item Number";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDescript
 			// 
-			this.textDescript.Location = new System.Drawing.Point(166,87);
+			this.textDescript.Location = new System.Drawing.Point(166, 87);
 			this.textDescript.MaxLength = 255;
 			this.textDescript.Name = "textDescript";
-			this.textDescript.Size = new System.Drawing.Size(401,20);
+			this.textDescript.Size = new System.Drawing.Size(401, 20);
 			this.textDescript.TabIndex = 1;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(6,88);
+			this.label3.Location = new System.Drawing.Point(6, 88);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(157,18);
+			this.label3.Size = new System.Drawing.Size(157, 18);
 			this.label3.TabIndex = 10;
 			this.label3.Text = "Description";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(31,35);
+			this.label5.Location = new System.Drawing.Point(31, 35);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(132,18);
+			this.label5.Size = new System.Drawing.Size(132, 18);
 			this.label5.TabIndex = 14;
 			this.label5.Text = "Category";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(32,113);
+			this.label6.Location = new System.Drawing.Point(32, 113);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(132,18);
+			this.label6.Size = new System.Drawing.Size(132, 18);
 			this.label6.TabIndex = 16;
 			this.label6.Text = "Level Desired";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -113,9 +113,9 @@ namespace OpenDental{
 			// checkIsHidden
 			// 
 			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.Location = new System.Drawing.Point(76,164);
+			this.checkIsHidden.Location = new System.Drawing.Point(76, 164);
 			this.checkIsHidden.Name = "checkIsHidden";
-			this.checkIsHidden.Size = new System.Drawing.Size(104,18);
+			this.checkIsHidden.Size = new System.Drawing.Size(104, 18);
 			this.checkIsHidden.TabIndex = 7;
 			this.checkIsHidden.Text = "Hidden";
 			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -123,18 +123,18 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(32,139);
+			this.label8.Location = new System.Drawing.Point(32, 139);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(132,18);
+			this.label8.Size = new System.Drawing.Size(132, 18);
 			this.label8.TabIndex = 20;
 			this.label8.Text = "Price";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(228,116);
+			this.label12.Location = new System.Drawing.Point(228, 116);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(173,19);
+			this.label12.Size = new System.Drawing.Size(173, 19);
 			this.label12.TabIndex = 24;
 			this.label12.Text = "Decimals allowed.";
 			// 
@@ -142,32 +142,32 @@ namespace OpenDental{
 			// 
 			this.comboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboCategory.FormattingEnabled = true;
-			this.comboCategory.Location = new System.Drawing.Point(166,34);
+			this.comboCategory.Location = new System.Drawing.Point(166, 34);
 			this.comboCategory.Name = "comboCategory";
-			this.comboCategory.Size = new System.Drawing.Size(228,21);
+			this.comboCategory.Size = new System.Drawing.Size(228, 21);
 			this.comboCategory.TabIndex = 11;
 			// 
 			// textLevelDesired
 			// 
 			this.textLevelDesired.BackColor = System.Drawing.SystemColors.Window;
 			this.textLevelDesired.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textLevelDesired.Location = new System.Drawing.Point(166,113);
+			this.textLevelDesired.Location = new System.Drawing.Point(166, 113);
 			this.textLevelDesired.Name = "textLevelDesired";
-			this.textLevelDesired.Size = new System.Drawing.Size(62,20);
+			this.textLevelDesired.Size = new System.Drawing.Size(62, 20);
 			this.textLevelDesired.TabIndex = 4;
 			// 
 			// textPrice
 			// 
 			this.textPrice.BackColor = System.Drawing.SystemColors.Window;
 			this.textPrice.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textPrice.Location = new System.Drawing.Point(166,139);
+			this.textPrice.Location = new System.Drawing.Point(166, 139);
 			this.textPrice.Name = "textPrice";
-			this.textPrice.Size = new System.Drawing.Size(80,20);
+			this.textPrice.Size = new System.Drawing.Size(80, 20);
 			this.textPrice.TabIndex = 5;
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -175,39 +175,39 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,220);
+			this.butDelete.Location = new System.Drawing.Point(27, 214);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81,26);
+			this.butDelete.Size = new System.Drawing.Size(81, 26);
 			this.butDelete.TabIndex = 6;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(582,179);
+			this.butOK.Location = new System.Drawing.Point(499, 173);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 8;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(582,220);
+			this.butCancel.Location = new System.Drawing.Point(499, 214);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 9;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -215,7 +215,7 @@ namespace OpenDental{
 			// FormSupplyEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(682,271);
+			this.ClientSize = new System.Drawing.Size(599, 265);
 			this.Controls.Add(this.textLevelDesired);
 			this.Controls.Add(this.comboCategory);
 			this.Controls.Add(this.textPrice);

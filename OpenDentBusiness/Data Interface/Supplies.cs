@@ -32,7 +32,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Supply>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM supply";
+			string command="SELECT supply.* FROM supply, definition "
+				+"WHERE definition.DefNum=supply.Category "
+				+"ORDER BY definition.ItemOrder,supply.ItemOrder";
 			return Crud.SupplyCrud.SelectMany(command);
 		}
 
@@ -104,7 +106,7 @@ namespace OpenDentBusiness{
 				return Meth.GetInt(MethodBase.GetCurrentMethod(),supplierNum,catNum);
 			}
 			string command="SELECT MAX(ItemOrder) FROM supply WHERE SupplierNum="+POut.Long(supplierNum)
-				+" AND Category="+POut.Long(catNum)+" AND IsHidden=0";
+				+" AND Category="+POut.Long(catNum);// +" AND IsHidden=0";
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
 				return -1;
