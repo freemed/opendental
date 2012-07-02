@@ -330,7 +330,7 @@ namespace OpenDentBusiness{
 				+"AND Address = '"    +POut.String(carrier.Address)+"' "
 				+"AND Address2 = '"   +POut.String(carrier.Address2)+"' "
 				+"AND City = '"       +POut.String(carrier.City)+"' "
-				+"AND State = '"      +POut.String(carrier.State)+"' "
+				+"AND State LIKE '"   +POut.String(carrier.State)+"' "//This allows user to remove trailing spaces from the FormInsPlan interface.
 				+"AND Zip = '"        +POut.String(carrier.Zip)+"' "
 				+"AND Phone = '"      +POut.String(carrier.Phone)+"' "
 				+"AND ElectID = '"    +POut.String(carrier.ElectID)+"' "
