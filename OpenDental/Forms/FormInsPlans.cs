@@ -50,6 +50,10 @@ namespace OpenDental{
 		private CheckBox checkShowHidden;
 		private OpenDental.UI.Button butHide;
 		private bool trojan;
+		///<summary>Supply a string here to start off the search with filtered group names.</summary>
+		public string groupNameText;
+		///<summary>Supply a string here to start off the search with filtered group nums.</summary>
+		public string groupNumText;
 
 		///<summary></summary>
 		public FormInsPlans(){
@@ -376,6 +380,8 @@ namespace OpenDental{
 			}
 			textEmployer.Text=empText;
 			textCarrier.Text=carrierText;
+			textGroupName.Text=groupNameText;
+			textGroupNum.Text=groupNumText;
 			FillGrid();
 		}
 

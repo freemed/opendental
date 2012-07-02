@@ -470,11 +470,9 @@ namespace OpenDental {
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(Relat);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
+					if(row.NewValObj!=null && row.OldValDisplay!=row.NewValDisplay) {
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins1Subscriber---------------------------------------------
@@ -497,9 +495,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Patient);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -518,16 +513,14 @@ namespace OpenDental {
 						row.OldValObj="";
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins1CarrierName---------------------------------------------
@@ -550,9 +543,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Carrier);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -576,9 +566,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Carrier);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -597,16 +584,14 @@ namespace OpenDental {
 						row.OldValObj=Employers.GetEmployer(Plan1.EmployerNum);
 					}
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins1GroupName---------------------------------------------
@@ -623,16 +608,14 @@ namespace OpenDental {
 					}
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins1GroupNum---------------------------------------------
@@ -649,16 +632,14 @@ namespace OpenDental {
 					}
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				#endregion ins1
@@ -694,11 +675,9 @@ namespace OpenDental {
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(Relat);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
+					if(row.NewValObj!=null && row.OldValDisplay!=row.NewValDisplay) {
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2Subscriber---------------------------------------------
@@ -721,9 +700,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Patient);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -742,16 +718,14 @@ namespace OpenDental {
 						row.OldValObj="";
 					}
 					row.NewValDisplay=fieldVal;//whether it's empty or has a value					
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2CarrierName---------------------------------------------
@@ -774,9 +748,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Carrier);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -800,9 +771,6 @@ namespace OpenDental {
 					row.ImpValObj=null;
 					row.ObjType=typeof(Carrier);
 					row.DoImport=false;
-					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
-					}
 					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
@@ -820,16 +788,14 @@ namespace OpenDental {
 					}
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2GroupName---------------------------------------------
@@ -846,16 +812,14 @@ namespace OpenDental {
 					}
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				//ins2GroupNum---------------------------------------------
@@ -872,16 +836,14 @@ namespace OpenDental {
 					}
 					row.OldValObj="";
 					row.NewValDisplay=fieldVal;
-					row.NewValObj="";
+					row.NewValObj=fieldVal;
 					row.ImpValDisplay=row.NewValDisplay;
 					row.ImpValObj=row.NewValObj;
 					row.ObjType=typeof(string);
 					row.DoImport=false;
 					if(row.OldValDisplay!=row.NewValDisplay) {
-						row.IsFlagged=true;
 						row.DoImport=true;
 					}
-					row.IsFlaggedImp=true;
 					Rows.Add(row);
 				}
 				#endregion ins2
@@ -1526,7 +1488,7 @@ namespace OpenDental {
 					if(selectedI==-1) {
 						Rows[e.Row].DoImport=false;//impossible to import a null
 					}
-					else if((int)Rows[e.Row].ImpValObj==(int)Rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
+					else if(Rows[e.Row].OldValObj!=null && (int)Rows[e.Row].ImpValObj==(int)Rows[e.Row].OldValObj) {//it's the old setting for the patient, whether or not they actually changed it.
 						Rows[e.Row].DoImport=false;//so no need to import
 					}
 					else {
@@ -1708,16 +1670,19 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		///<summary>Returns true if all required insurance fields exist, import fields have valid values, and the insurance plan has been imported successfully.  The user will be asked to pick an ins plan.  If any fields on the selected plan do not exactly match the imported fields, they will be prompted to choose between the selected plan's values or to create a new ins plan with the import values.  After validating, the actual import of the new ins plan takes place.  That might consist of dropping the current plan and replacing it or simply inserting the new plan.</summary>
+		///<summary>Returns false if validation fails.  Returns true if all required insurance fields exist, import fields have valid values, and the insurance plan has been imported successfully.  The user will have the option to pick an existing ins plan.  If any fields on the selected plan do not exactly match the imported fields, they will be prompted to choose between the selected plan's values or to create a new ins plan with the import values.  After validating, the actual import of the new ins plan takes place.  That might consist of dropping the current plan and replacing it or simply inserting the new plan.</summary>
 		private bool ValidateAndImportInsurance(bool isPrimary) {
 			string insStr="";
+			string insWarnStr="";
 			byte ordinal;
 			if(isPrimary) {
 				insStr="ins1";
+				insWarnStr="primary insurance";
 				ordinal=1;
 			}
 			else {
 				insStr="ins2";
+				insWarnStr="secondary insurance";
 				ordinal=2;
 			}
 			//Load up every insurance row related to the particular ins.
@@ -1730,87 +1695,142 @@ namespace OpenDental {
 			SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
 			SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
 			//Check if the required insurance fields exist on this sheet.
-			//NOTE: Group name and num are optional! Not required on the sheet.
+			//NOTE: Employer, group name and group num are optional fields.
 			if(relationRow==null 
 				|| subscriberRow==null
 				|| subscriberIdRow==null
 				|| carrierNameRow==null
-				|| carrierPhoneRow==null
-				|| employerNameRow==null) 
-			{
-				//if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Required insurance fields are missing on this sheet.  Secondary insurance cannot be imported.  Continue anyway?")) {
-				//  return;
-				//}
+				|| carrierPhoneRow==null) {
+				MessageBox.Show(Lan.g(this,"Required ")+insWarnStr+Lan.g(this," fields are missing on this sheet.  You cannot import ")+insWarnStr
+					+Lan.g(this," with this sheet until it contains all of required fields.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName/CarrierPhone."));
 				return false;
 			}
-			//Validate the values here?
 			if(relationRow.ImpValObj==null 
 				|| subscriberRow.ImpValObj==null
-				|| subscriberIdRow.ImpValObj==""
+				|| (string)subscriberIdRow.ImpValObj==""
 				|| carrierNameRow.ImpValObj==null
-				|| carrierPhoneRow.ImpValObj==null
-				|| employerNameRow.ImpValObj=="") 
-			{
+				|| carrierPhoneRow.ImpValObj==null) {
+				MessageBox.Show(Lan.g(this,"Cannot import ")+insWarnStr+Lan.g(this," until all required fields have been set.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName/CarrierPhone."));
 				return false;
 			}
 			InsPlan plan=null;
 			InsSub sub=null;
-			//Get the employer from the db or a new one will be created.
-			long employerNum=Employers.GetEmployerNum(employerNameRow.ImpValDisplay);
+			long insSubNum=0;
+			long employerNum=0;
+			//Get the employer from the db.  If no matching employer found, a new one will automatically get created.
+			if(employerNameRow!=null && employerNameRow.ImpValDisplay.Trim()!="") {
+				employerNum=Employers.GetEmployerNum(employerNameRow.ImpValDisplay);
+			}
 			Patient subscriber=(Patient)subscriberRow.ImpValObj;
 			//Have user pick a plan------------------------------------------------------------------------------------------------------------
 			bool planIsNew=false;
 			List<InsSub> subList=InsSubs.GetListForSubscriber(subscriber.PatNum);
-			if(subList.Count==0) {
+			FormInsPlans FormIP=new FormInsPlans();
+			FormIP.carrierText=carrierNameRow.ImpValDisplay;
+			if(employerNameRow!=null) {
+				FormIP.empText=employerNameRow.ImpValDisplay;
+			}
+			if(groupNameRow!=null) {
+				FormIP.groupNameText=groupNameRow.ImpValDisplay;
+			}
+			if(groupNumRow!=null) {
+				FormIP.groupNumText=groupNumRow.ImpValDisplay;
+			}
+			FormIP.IsSelectMode=true;
+			FormIP.ShowDialog();
+			if(FormIP.DialogResult!=DialogResult.OK) {
+				return false;
+			}
+			plan=FormIP.SelectedPlan;
+			if(plan.PlanNum==0) {
+				//User clicked blank plan, so a new plan will be created using the import values.
 				planIsNew=true;
 			}
-			else {
-				FormInsSelectSubscr FormISS=new FormInsSelectSubscr(subscriber.PatNum);
-				FormISS.ShowDialog();
-				if(FormISS.DialogResult==DialogResult.Cancel) {
-					return false;
+			else {//An existing plan was selected so see if the plan is already subscribed to by the subscriber or create a new inssub.  Patplan will be taken care of later.
+				for(int i=0;i<subList.Count;i++) {
+					if(subList[i].PlanNum==plan.PlanNum) {
+						sub=subList[i];
+					}
 				}
-				if(FormISS.SelectedInsSubNum==0) {//'New' option selected.
+				if(sub==null) {//Create a new inssub if subscriber is not subscribed to this plan yet.
+					sub=new InsSub();
+					sub.PlanNum=plan.PlanNum;
+					sub.Subscriber=subscriber.PatNum;
+					sub.SubscriberID=subscriberIdRow.ImpValDisplay;
+					sub.ReleaseInfo=true;
+					sub.AssignBen=true;
+					insSubNum=InsSubs.Insert(sub);
+				}
+			}
+			//User picked a plan but the information they want to import might be different than the chosen plan.  Give them options to use current values or created a new plan.
+			//It's still okay to let the user return at this point in order to change importing information.
+			DialogResult result;
+			//Carrier check-----------------------------------------------------------------------------------------
+			if(!planIsNew && plan.CarrierNum!=((Carrier)carrierNameRow.ImpValObj).CarrierNum) {
+				result=InsuranceImportQuestion("carrier",isPrimary);
+				//Yes means the user wants to keep the information on the plan they picked, nothing to do.
+				if(result==DialogResult.No) {
 					planIsNew=true;
 				}
-				else {
-					sub=InsSubs.GetSub(FormISS.SelectedInsSubNum,subList);
-					plan=InsPlans.GetPlan(sub.PlanNum,new List<InsPlan>());
+				if(result==DialogResult.Cancel) {
+					return false;
 				}
 			}
-			//User picked a plan but the carrier for that plan is different then the carrier chosen for the import then we need to make a new plan.
-			if(!planIsNew && plan.CarrierNum!=((Carrier)carrierNameRow.ImpValObj).CarrierNum) {
-				//Ask the user here if they want to change carriers or make a new plan?
-				//The old patplan has already been deleted so they need to pick one or the other at this point.
-				planIsNew=true;
+			//Employer check----------------------------------------------------------------------------------------
+			if(!planIsNew && employerNum>0 && plan.EmployerNum!=employerNum) {
+				result=InsuranceImportQuestion("employer",isPrimary);
+				if(result==DialogResult.No) {
+					planIsNew=true;
+				}
+				if(result==DialogResult.Cancel) {
+					return false;
+				}
 			}
-			//Do the same check for the employer?
-			if(!planIsNew && plan.EmployerNum!=employerNum) {
-				//Ask the user here if they want to use the employer on the selected plan or make a new plan?
-				planIsNew=true;
+			//Subscriber check--------------------------------------------------------------------------------------
+			if(!planIsNew && sub.Subscriber!=((Patient)subscriberRow.ImpValObj).PatNum) {
+				result=InsuranceImportQuestion("subscriber",isPrimary);
+				if(result==DialogResult.No) {
+					planIsNew=true;
+				}
+				if(result==DialogResult.Cancel) {
+					return false;
+				}
 			}
-			//Do the same check for the subscriber id?
 			if(!planIsNew && sub.SubscriberID!=subscriberIdRow.ImpValDisplay) {
-				//Ask the user here if they want to use the subscriber's ID or make a new plan?
-				planIsNew=true;
+				result=InsuranceImportQuestion("subscriber id",isPrimary);
+				if(result==DialogResult.No) {
+					planIsNew=true;
+				}
+				if(result==DialogResult.Cancel) {
+					return false;
+				}
 			}
-			//Do the same check for the employer name?
-			if(!planIsNew && sub.SubscriberID!=subscriberIdRow.ImpValDisplay) {
-				//Ask the user here if they want to use the subscriber's ID or make a new plan?
-				planIsNew=true;
-			}
-			//Do the same for Group Name?
+			//Group name check--------------------------------------------------------------------------------------
 			if(groupNameRow!=null && !planIsNew && plan.GroupName!=groupNameRow.ImpValDisplay) {
-				planIsNew=true;
+				result=InsuranceImportQuestion("group name",isPrimary);
+				if(result==DialogResult.No) {
+					planIsNew=true;
+				}
+				if(result==DialogResult.Cancel) {
+					return false;
+				}
 			}
-			//Do the same for Group Num?
+			//Group num check---------------------------------------------------------------------------------------
 			if(groupNumRow!=null && !planIsNew && plan.GroupNum!=groupNumRow.ImpValDisplay) {
-				planIsNew=true;
+				result=InsuranceImportQuestion("group num",isPrimary);
+				if(result==DialogResult.No) {
+					planIsNew=true;
+				}
+				if(result==DialogResult.Cancel) {
+					return false;
+				}
 			}
-			//Create a new plan------------------------------------------------------------------------------------------------------------------
+			//Create a new plan-------------------------------------------------------------------------------------
 			if(planIsNew) {
 				plan=new InsPlan();
-				plan.EmployerNum=subscriber.EmployerNum;
+				if(employerNum>0) {
+					plan.EmployerNum=employerNum;
+				}
 				plan.PlanType="";
 				plan.CarrierNum=((Carrier)carrierNameRow.ImpValObj).CarrierNum;
 				if(groupNameRow!=null) {
@@ -1826,7 +1846,7 @@ namespace OpenDental {
 				sub.SubscriberID=subscriberIdRow.ImpValDisplay;
 				sub.ReleaseInfo=true;
 				sub.AssignBen=true;
-				InsSubs.Insert(sub);
+				insSubNum=InsSubs.Insert(sub);
 				Benefit ben;
 				for(int i=0;i<CovCatC.ListShort.Count;i++) {
 					if(CovCatC.ListShort[i].DefaultPercent==-1) {
@@ -1869,20 +1889,20 @@ namespace OpenDental {
 				}
 			}
 			//Delete the old patplan-------------------------------------------------------------------------------------------------------------
-			if(isPrimary && PatPlan1!=null) {//Patient has pri ins.
+			if(isPrimary && PatPlan1!=null) {//Importing primary and currently has primary ins.
 				PatPlans.DeleteNonContiguous(PatPlan1.PatPlanNum);
 			}
-			if(!isPrimary && PatPlan2!=null) {
+			if(!isPrimary && PatPlan2!=null) {//Importing secondary and currently has secondary ins.
 				PatPlans.DeleteNonContiguous(PatPlan2.PatPlanNum);
 			}
 			//Then attach new patplan to the plan------------------------------------------------------------------------------------------------
 			PatPlan patplan=new PatPlan();
 			patplan.Ordinal=ordinal;//Not allowed to be 0.
 			patplan.PatNum=PatCur.PatNum;
-			patplan.InsSubNum=sub.InsSubNum;
+			patplan.InsSubNum=insSubNum;
 			patplan.Relationship=((Relat)relationRow.ImpValObj);
 			PatPlans.Insert(patplan);
-			//After new plan has been entered, recompute all estimates for this patient because their coverage is now different.  Also set patient.HasIns to the correct value.
+			//After new plan has been imported, recompute all estimates for this patient because their coverage is now different.  Also set patient.HasIns to the correct value.
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(PatCur.PatNum);
 			List<Procedure> procs=Procedures.Refresh(PatCur.PatNum);
 			List<PatPlan> patPlans=PatPlans.Refresh(PatCur.PatNum);
@@ -1892,6 +1912,17 @@ namespace OpenDental {
 			Procedures.ComputeEstimatesForAll(PatCur.PatNum,claimProcs,procs,planList,patPlans,benList,PatCur.Age,subList);
 			Patients.SetHasIns(PatCur.PatNum);
 			return true;
+		}
+
+		///<summary>Displays a yes no cancel message to the user indicating that the import value does not match the selected plan.  They will choose to use the current plan's value or create a new plan.   Only called from ValidateAndImportInsurance.</summary>
+		private DialogResult InsuranceImportQuestion(string importValue,bool isPrimary) {
+			string insStr="primary ";
+			if(!isPrimary) {
+				insStr="secondary ";
+			}
+			return MessageBox.Show(Lan.g(this,"The ")+insStr+importValue+Lan.g(this," does not match the selected plan's ")+importValue+".\r\n"
+				+Lan.g(this,"Use the selected plan's ")+importValue+"?\r\n\r\n"
+				+Lan.g(this,"No will create a new plan using all of the import values."),Lan.g(this,"Import ")+insStr+importValue,MessageBoxButtons.YesNoCancel);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -1915,6 +1946,7 @@ namespace OpenDental {
 					if(!Rows[i].DoImport) {
 						continue;
 					}
+					//Importing insurance happens later.
 					if(Rows[i].FieldName.StartsWith("ins1")) {
 						importPriIns=true;
 						continue;
@@ -2012,7 +2044,7 @@ namespace OpenDental {
 						//Field missing or user chose to back out to correct information.
 						if(primaryImported) {
 							//Primary has been imported, we cannot return at this point.  Simply notify the user that secondary could not be imported correctly.
-							MsgBox.Show(this,"Primary insurance was imported but secondary was unable to import.");
+							MsgBox.Show(this,"Primary insurance was imported successfully but secondary was unable to import.");
 						}
 						else {
 							//Secondary insurance was the only one set to import and nothing has been updated so no harm in returning.
