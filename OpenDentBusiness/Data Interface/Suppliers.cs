@@ -18,6 +18,14 @@ namespace OpenDentBusiness{
 			return Crud.SupplierCrud.SelectMany(command);
 		}
 
+		///<summary>Gets one Supplier by num.</summary>
+		public static Supplier GetOne(long supplierNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Supplier>(MethodBase.GetCurrentMethod());
+			}
+			return Crud.SupplierCrud.SelectOne(supplierNum);
+		}
+
 		///<summary></summary>
 		public static long Insert(Supplier supp) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

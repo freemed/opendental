@@ -81,13 +81,11 @@ namespace OpenDental{
 			// 
 			// gridOrders
 			// 
-			this.gridOrders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridOrders.HScrollVisible = false;
 			this.gridOrders.Location = new System.Drawing.Point(12, 37);
 			this.gridOrders.Name = "gridOrders";
 			this.gridOrders.ScrollValue = 0;
-			this.gridOrders.Size = new System.Drawing.Size(363, 184);
+			this.gridOrders.Size = new System.Drawing.Size(341, 184);
 			this.gridOrders.TabIndex = 15;
 			this.gridOrders.Title = "Order History";
 			this.gridOrders.TranslationName = null;
@@ -98,7 +96,7 @@ namespace OpenDental{
 			// 
 			this.comboSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboSupplier.FormattingEnabled = true;
-			this.comboSupplier.Location = new System.Drawing.Point(231, 10);
+			this.comboSupplier.Location = new System.Drawing.Point(209, 10);
 			this.comboSupplier.Name = "comboSupplier";
 			this.comboSupplier.Size = new System.Drawing.Size(144, 21);
 			this.comboSupplier.TabIndex = 13;
@@ -106,7 +104,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(154, 10);
+			this.label3.Location = new System.Drawing.Point(132, 10);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(75, 18);
 			this.label3.TabIndex = 14;
@@ -115,8 +113,9 @@ namespace OpenDental{
 			// 
 			// gridItems
 			// 
-			this.gridItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridItems.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridItems.HScrollVisible = false;
 			this.gridItems.Location = new System.Drawing.Point(12, 227);
 			this.gridItems.Name = "gridItems";
@@ -130,6 +129,7 @@ namespace OpenDental{
 			// butAddSupply
 			// 
 			this.butAddSupply.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddSupply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddSupply.Autosize = true;
 			this.butAddSupply.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddSupply.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;

@@ -245,60 +245,49 @@ namespace OpenDental {
 		}
 
 		private void pd2_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			//Rectangle bounds=e.MarginBounds;
-			//Graphics g=e.Graphics;
-			//string text;
-			//Font headingFont=new Font("Arial",13,FontStyle.Bold);
-			//Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
-			//Font mainFont=new Font("Arial",9);
-			//int yPos=bounds.Top;
-			//#region printHeading
-			////TODO: Decide what information goes in the heading.
-			//if(!headingPrinted) {
-			//  text=Lan.g(this,"Supply List");
-			//  g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
-			//  yPos+=(int)g.MeasureString(text,headingFont).Height;
-			//  text=Lan.g(this,"Order Number")+": "+ListOrders[gridOrders.SelectedIndices[0]].SupplyOrderNum;
-			//  g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//  yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-
-			//  text=Lan.g(this,"Supplier")+": "+ListOrders[gridOrders.SelectedIndices[0]].SupplierNum;
-			//  g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//  yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			//  if(comboSupplier.SelectedIndex<1) {
-			//    text=Lan.g(this,"All Suppliers");
-			//    g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//    yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			//  }
-			//  else {
-			//    text=Lan.g(this,"Supplier")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Name;
-			//    g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//    yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			//    if(ListSupplier[comboSupplier.SelectedIndex-1].Phone!="") {
-			//      text=Lan.g(this,"Phone")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Phone;
-			//      g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//      yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			//    }
-			//    if(ListSupplier[comboSupplier.SelectedIndex-1].Name!="") {
-			//      text=Lan.g(this,"Note")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Name;
-			//      g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-			//      yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			//    }
-			//  }
-			//  yPos+=15;
-			//  headingPrinted=true;
-			//  headingPrintH=yPos;
-			//}
-			//#endregion
-			//yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
-			//pagesPrinted++;
-			//if(yPos==-1) {
-			//  e.HasMorePages=true;
-			//}
-			//else {
-			//  e.HasMorePages=false;
-			//}
-			//g.Dispose();
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			Font mainFont=new Font("Arial",9);
+			int yPos=bounds.Top;
+			#region printHeading
+			//TODO: Decide what information goes in the heading.
+			if(!headingPrinted) {
+				text=Lan.g(this,"Supply List");
+				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				text=Lan.g(this,"Order Number")+": "+ListOrders[gridOrders.SelectedIndices[0]].SupplyOrderNum;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=Lan.g(this,"Date")+": "+ListOrders[gridOrders.SelectedIndices[0]].DatePlaced.ToShortDateString();
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				Supplier supCur=Suppliers.GetOne(ListOrders[gridOrders.SelectedIndices[0]].SupplierNum);
+				text=supCur.Name;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=supCur.Phone;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				text=supCur.Note;
+				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				yPos+=15;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			yPos=gridItems.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
