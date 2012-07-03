@@ -6,10 +6,10 @@ namespace OpenDentBusiness.HL7 {
 	public class MessageHL7 {
 		public List<SegmentHL7> Segments;
 		private string originalMsgText;//We'll store this for now, but I don't think we'll use it.
-		public MessageType MsgType;
+		public MessageTypeHL7 MsgType;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
-		internal MessageHL7(MessageType msgType) {
+		internal MessageHL7(MessageTypeHL7 msgType) {
 			Segments=new List<SegmentHL7>();
 		}
 
@@ -25,13 +25,13 @@ namespace OpenDentBusiness.HL7 {
 //js 7/3/12 Make this more intelligent because we also now need the suffix
 					string msgtype=segment.GetFieldComponent(8,0);
 					if(msgtype=="ADT") {
-						MsgType=MessageType.ADT;
+						MsgType=MessageTypeHL7.ADT;
 					}
 					else if(msgtype=="SIU") {
-						MsgType=MessageType.SIU;
+						MsgType=MessageTypeHL7.SIU;
 					}
 					else if(msgtype=="DFT") {
-						MsgType=MessageType.DFT;
+						MsgType=MessageTypeHL7.DFT;
 					}
 				}
 			}
@@ -42,7 +42,7 @@ namespace OpenDentBusiness.HL7 {
 			string retVal="";
 			for(int i=0;i<Segments.Count;i++) {
 				if(i>0) {
-					retVal+="\r\n";
+					retVal+="\r\n";//in our generic HL7 interface, we should change this to just an \r aka 0D aka \u000d
 				}
 				retVal+=Segments[i].FullText;
 			}
@@ -80,8 +80,8 @@ namespace OpenDentBusiness.HL7 {
 
 	}
 
-	///<summary>js 7/3/12  Expand this to include the suffix.  Like this: ADT_A01.  This enum will then be moved over to a TableType class so we know that it's being used in the db an shouldn't be reordered.</summary>
-	public enum MessageType {
+	///<summary>js 7/3/12  This enum will soon be moved over to a TableType class (and different namespace in the process)</summary>
+	public enum MessageTypeHL7 {
 		///<summary>This should never happen.</summary>
 		Unknown,
 		///<summary>Demographics - A01,A04,A08,A28,A31</summary>

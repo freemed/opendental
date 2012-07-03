@@ -26,7 +26,7 @@ namespace OpenDentBusiness.HL7 {
 			//}
 			//LabResult labresult=labresultList[0];
 			Patient pat=Patients.GetPat(panels[0].PatNum);
-			msg=new MessageHL7(MessageType.ORU);
+			msg=new MessageHL7(MessageTypeHL7.ORU);
 			MSH();
 			PID(pat);
 			for(int p=0;p<panels.Count;p++) {

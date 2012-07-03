@@ -16,7 +16,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Creates the Message object and fills it with data.</summary>
 		public void InitializeEcw(long aptNum,long provNum,Patient pat,string pdfDataAsBase64,string pdfDescription,bool justPDF){
-			msg=new MessageHL7(MessageType.DFT);
+			msg=new MessageHL7(MessageTypeHL7.DFT);
 			MSH();
 			EVN();
 			PID(pat);

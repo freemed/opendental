@@ -19,7 +19,7 @@ namespace OpenDentBusiness.HL7 {
 			if(vaccines.Count==0) {
 				throw new ApplicationException("Must be at least one vaccine.");
 			}
-			msg=new MessageHL7(MessageType.VXU);
+			msg=new MessageHL7(MessageTypeHL7.VXU);
 			MSH();
 			PID(pat);
 			for(int i=0;i<vaccines.Count;i++) {
