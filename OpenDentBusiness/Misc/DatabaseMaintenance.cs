@@ -1826,7 +1826,8 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			string log="";
-			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";//This code is only needed for older db's. New DB's created after 12.2.30 and 12.3.2 shouldn't need this.
+			//This code is only needed for older db's. New DB's created after 12.2.30 and 12.3.2 shouldn't need this.
+			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
 			Db.NonQ(command);
 			string tableName="tempduplicatepatfields"+MiscUtils.CreateRandomAlphaNumericString(8);//max size for a table name in oracle is 30 chars.
 			//This query run very fast on a db with no corruption.
@@ -1861,10 +1862,10 @@ namespace OpenDentBusiness {
 					command="INSERT INTO patfield SELECT * FROM "+tableName+";";
 					Db.NonQ(command);
 					log+=Lans.g("FormDatabaseMaintenance","Patients with duplicate field entries removed: ")+table.Rows.Count+".\r\n";
-					command=@"DROP TABLE IF EXISTS "+tableName;
-					Db.NonQ(command);
 				}
 			}
+			command=@"DROP TABLE IF EXISTS "+tableName;
+			Db.NonQ(command);
 			return log;
 		}
 
