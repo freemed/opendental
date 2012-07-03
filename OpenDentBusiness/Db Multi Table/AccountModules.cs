@@ -315,8 +315,11 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//emailmessage---------------------------------------------------------------------------------------
-			command="SELECT MsgDateTime,SentOrReceived,Subject,EmailMessageNum "
-				+"FROM emailmessage WHERE PatNum ='"+POut.Long(patNum)+"' ORDER BY MsgDateTime";
+			command="SELECT p1.FName,MsgDateTime,SentOrReceived,Subject,EmailMessageNum "
+				+"FROM emailmessage,patient p1,patient p2 "
+				+"WHERE emailmessage.PatNum=p1.PatNum "
+				+"AND p1.Guarantor=p2.Guarantor "
+				+"AND p2.PatNum="+POut.Long(patNum)+" ORDER BY MsgDateTime";
 			DataTable rawEmail=dcon.GetTable(command);
 			string txt;
 			for(int i=0;i<rawEmail.Rows.Count;i++) {
@@ -337,7 +340,7 @@ namespace OpenDentBusiness {
 					txt="("+Lans.g("AccountModule","Unsent")+") ";
 				}
 				row["Note"]=txt+rawEmail.Rows[i]["Subject"].ToString();
-				row["patName"]="";
+				row["patName"]=rawEmail.Rows[i]["FName"].ToString();
 				row["SheetNum"]="0";
 				//if(rawEmail.Rows[i]["SentOrReceived"].ToString()=="0") {
 				//	row["sentOrReceived"]=Lans.g("AccountModule","Unsent");
@@ -372,8 +375,11 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//sheet---------------------------------------------------------------------------------------
-			command="SELECT DateTimeSheet,SheetNum,SheetType,Description "
-				+"FROM sheet WHERE PatNum ="+POut.Long(patNum)
+			command="SELECT p1.FName,DateTimeSheet,SheetNum,SheetType,Description "
+				+"FROM sheet,patient p1,patient p2 "
+				+"WHERE sheet.PatNum =p1.PatNum "
+				+"AND p1.Guarantor=p2.Guarantor "
+				+"AND p2.PatNum="+POut.Long(patNum)
 				+" AND SheetType!="+POut.Long((int)SheetTypeEnum.Rx)//rx are only accesssible from within Rx edit window.
 				+" ORDER BY DateTimeSheet";
 			DataTable rawSheet=dcon.GetTable(command);
@@ -393,7 +399,7 @@ namespace OpenDentBusiness {
 				row["mode"]="";
 				//sheetType=(SheetTypeEnum)PIn.Long(rawSheet.Rows[i]["SheetType"].ToString());
 				row["Note"]=rawSheet.Rows[i]["Description"].ToString();
-				row["patName"]="";
+				row["patName"]=rawSheet.Rows[i]["FName"].ToString();
 				row["SheetNum"]=rawSheet.Rows[i]["SheetNum"].ToString();
 				//row["sentOrReceived"]="";
 				rows.Add(row);

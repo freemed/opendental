@@ -2267,7 +2267,7 @@ namespace OpenDental {
 				if(!this.checkShowFamilyComm.Checked										//show family not checked
 					&& !isSelectingFamily																	//family not selected
 					&& table.Rows[i]["patName"].ToString()!=PatCur.FName	//not this patient
-					&& table.Rows[i]["patName"].ToString()!=""						//No name; table only returns patient specific materials. i.e. Sheets
+					&& table.Rows[i]["patName"].ToString()!=""						//No name; For example, formpat
 					) {
 					continue;
 				}
