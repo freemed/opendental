@@ -384,6 +384,8 @@ namespace OpenDentBusiness{
 			//don't forget to refresh procedurecodes.
 		}
 
+
+		/* js These are not currently in use.  This probably needs to be consolidated with code from other places.  ProcsColored and InsSpans comes to mind.
 		///<summary>Returns true if any of the codes in the list fall within the code range.</summary>
 		public static bool IsCodeInRange(List<string> myCodes,string range) {
 			for(int i=0;i<myCodes.Count;i++) {
@@ -411,7 +413,7 @@ namespace OpenDentBusiness{
 				return false;
 			}
 			return true;
-		}
+		}*/
 
 
 

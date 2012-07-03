@@ -151,15 +151,17 @@ namespace OpenDentBusiness {
 				throw new Exception("Unrecognized date format string.");
 			}
 			//MySQL-----------------------------------------------------------------------------
-			if(!System.Globalization.CultureInfo.CurrentCulture.Name.EndsWith("US")) {//foreign
-				if(format=="%c/%d/%Y") {
-					return "DATE_FORMAT("+colName+",'%d/%c/%Y')";
-				}
-				else if(format=="%m/%d/%Y") {
-					return "DATE_FORMAT("+colName+",'%d/%m/%Y')";
-				}
+			if(System.Globalization.CultureInfo.CurrentCulture.Name.EndsWith("US")) {
+				return "DATE_FORMAT("+colName+",'"+format+"')";
 			}
-			return "DATE_FORMAT("+colName+",'"+format+"')";
+			//foreign, assume d/m/y
+			if(format=="%c/%d/%Y") {
+				return "DATE_FORMAT("+colName+",'%d/%c/%Y')";
+			}
+			else if(format=="%m/%d/%Y") {
+				return "DATE_FORMAT("+colName+",'%d/%m/%Y')";
+			}
+			throw new Exception("Unrecognized date format string.");
 		}
 
 		/* Not used
