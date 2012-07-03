@@ -79,13 +79,13 @@ namespace OpenDental{
 			this.butNewOrder.TabIndex = 16;
 			this.butNewOrder.Text = "New Order";
 			// 
-			// gridOrder
+			// gridOrders
 			// 
 			this.gridOrders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridOrders.HScrollVisible = false;
 			this.gridOrders.Location = new System.Drawing.Point(12, 37);
-			this.gridOrders.Name = "gridOrder";
+			this.gridOrders.Name = "gridOrders";
 			this.gridOrders.ScrollValue = 0;
 			this.gridOrders.Size = new System.Drawing.Size(363, 184);
 			this.gridOrders.TabIndex = 15;
@@ -113,13 +113,13 @@ namespace OpenDental{
 			this.label3.Text = "Supplier";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// gridOrderItem
+			// gridItems
 			// 
 			this.gridItems.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridItems.HScrollVisible = false;
 			this.gridItems.Location = new System.Drawing.Point(12, 227);
-			this.gridItems.Name = "gridOrderItem";
+			this.gridItems.Name = "gridItems";
 			this.gridItems.ScrollValue = 0;
 			this.gridItems.Size = new System.Drawing.Size(705, 270);
 			this.gridItems.TabIndex = 17;
@@ -158,6 +158,7 @@ namespace OpenDental{
 			this.butPrint.Size = new System.Drawing.Size(80, 26);
 			this.butPrint.TabIndex = 26;
 			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// FormSupplyOrders
 			// 

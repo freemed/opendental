@@ -29,7 +29,7 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textFind = new System.Windows.Forms.TextBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.checkSort = new System.Windows.Forms.CheckBox();
+			this.checkReorderMode = new System.Windows.Forms.CheckBox();
 			this.butUp = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -59,7 +59,7 @@ namespace OpenDental{
 			// 
 			// checkShowHidden
 			// 
-			this.checkShowHidden.Location = new System.Drawing.Point(224, 13);
+			this.checkShowHidden.Location = new System.Drawing.Point(209, 13);
 			this.checkShowHidden.Name = "checkShowHidden";
 			this.checkShowHidden.Size = new System.Drawing.Size(99, 18);
 			this.checkShowHidden.TabIndex = 12;
@@ -73,7 +73,7 @@ namespace OpenDental{
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(49, 18);
 			this.label1.TabIndex = 18;
-			this.label1.Text = "Find";
+			this.label1.Text = "Search";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textFind
@@ -99,16 +99,16 @@ namespace OpenDental{
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// checkSort
+			// checkReorderMode
 			// 
-			this.checkSort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkSort.Location = new System.Drawing.Point(79, 556);
-			this.checkSort.Name = "checkSort";
-			this.checkSort.Size = new System.Drawing.Size(311, 21);
-			this.checkSort.TabIndex = 30;
-			this.checkSort.Text = "Check this box to begin moving items up and down";
-			this.checkSort.UseVisualStyleBackColor = true;
-			this.checkSort.CheckedChanged += new System.EventHandler(this.checkSort_CheckedChanged);
+			this.checkReorderMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkReorderMode.Location = new System.Drawing.Point(79, 556);
+			this.checkReorderMode.Name = "checkReorderMode";
+			this.checkReorderMode.Size = new System.Drawing.Size(311, 21);
+			this.checkReorderMode.TabIndex = 30;
+			this.checkReorderMode.Text = "Check this box to begin moving items up and down";
+			this.checkReorderMode.UseVisualStyleBackColor = true;
+			this.checkReorderMode.CheckedChanged += new System.EventHandler(this.checkReorderMode_CheckedChanged);
 			// 
 			// butUp
 			// 
@@ -210,7 +210,7 @@ namespace OpenDental{
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(771, 588);
 			this.Controls.Add(this.textFind);
-			this.Controls.Add(this.checkSort);
+			this.Controls.Add(this.checkReorderMode);
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butOK);
@@ -245,6 +245,6 @@ namespace OpenDental{
 		private UI.Button butCancel;
 		private UI.Button butUp;
 		private UI.Button butDown;
-		private System.Windows.Forms.CheckBox checkSort;
+		private System.Windows.Forms.CheckBox checkReorderMode;
 	}
 }

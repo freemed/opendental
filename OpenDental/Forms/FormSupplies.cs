@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System.Drawing.Printing;
 
 namespace OpenDental {
 	public partial class FormSupplies:Form {
@@ -24,7 +25,12 @@ namespace OpenDental {
 		///<summary>Selected supply item. Intended to be used to add to an order.</summary>
 		public Supply SelectedSupply;
 		///<summary>Used to cache the selected SupplyNums of the items in the main grid, to reselect them after a refresh.</summary>
-		private List<long> SelectedGridItems = new List<long>();
+		private List<long> SelectedGridItems=new List<long>();
+		//Variables used for printing are copied and pasted here
+		PrintDocument pd2;
+		private int pagesPrinted;
+		private bool headingPrinted;
+		private int headingPrintH;
 
 		public FormSupplies() {
 			InitializeComponent();
@@ -38,8 +44,8 @@ namespace OpenDental {
 			FillGrid();
 			if(IsSelectMode) {
 				comboSupplier.Enabled=false;
-				checkSort.Enabled=false;
-				checkSort.Visible=false;
+				checkReorderMode.Enabled=false;
+				checkReorderMode.Visible=false;
 				gridMain.SelectionMode=GridSelectionMode.One;
 			}
 		}
@@ -332,7 +338,7 @@ namespace OpenDental {
 				supplier=ListSupplier[comboSupplier.SelectedIndex-1].SupplierNum;//SelectedIndex-1 because All is added before all the other items in the list.
 			}
 			foreach(Supply supply in ListSupplyAll) {
-				if(checkSort.Checked) {//all items are added in sort mode
+				if(checkReorderMode.Checked) {//all items are added in sort mode
 					ListSupply.Add(supply);
 					continue;
 				}
@@ -383,12 +389,12 @@ namespace OpenDental {
 			return;
 		}
 
-		private void checkSort_CheckedChanged(object sender,EventArgs e) {
+		private void checkReorderMode_CheckedChanged(object sender,EventArgs e) {
 			SelectedGridItems.Clear();
 			foreach(int index in gridMain.SelectedIndices) {
 				SelectedGridItems.Add(ListSupply[index].SupplyNum);
 			}
-			if(checkSort.Checked) {//Sort Mode
+			if(checkReorderMode.Checked) {//Sort Mode
 				butAdd.Enabled=false;
 				butAdd.Visible=false;
 				butUp.Enabled=true;
@@ -441,6 +447,102 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
+			if(ListSupply.Count<1) {
+				MsgBox.Show(this,"Supply list is Empty.");
+				return;
+			}
+			pagesPrinted=0;
+			headingPrinted=false;
+			pd2=new PrintDocument();
+			pd2.DefaultPageSettings.Margins=new Margins(50,50,40,30);
+			pd2.PrintPage+=new PrintPageEventHandler(pd2_PrintPage);
+			if(pd2.DefaultPageSettings.PrintableArea.Height==0) {
+				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+#if DEBUG
+			FormRpPrintPreview pView=new FormRpPrintPreview();
+			pView.printPreviewControl2.Document=pd2;
+			pView.ShowDialog();
+#else
+				if(PrinterL.SetPrinter(pd2,PrintSituation.Default)) {
+					try{
+						pd2.Print();
+					}
+					catch{
+						MsgBox.Show(this,"Printer not available");
+					}
+				}
+#endif
+		}
+
+		private void pd2_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			Font mainFont=new Font("Arial",9);
+			int yPos=bounds.Top;
+			#region printHeading
+			//TODO: Decide what information goes in the heading.
+			if(!headingPrinted) {
+				text=Lan.g(this,"Supply List");
+				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,headingFont).Height;
+				if(checkShowHidden.Checked) {
+					text=Lan.g(this,"Showing Hidden Items");
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				}
+				else{
+					text=Lan.g(this,"Not Showing Hidden Items");
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				}
+				if(textFind.Text!="") {
+					text=Lan.g(this,"Search Filter")+": "+textFind.Text;
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				}
+				else {
+					text=Lan.g(this,"No Search Filter");
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				}
+				if(comboSupplier.SelectedIndex<1) {
+					text=Lan.g(this,"All Suppliers");
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				}
+				else {
+					text=Lan.g(this,"Supplier")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Name;
+					g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+					yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+					if(ListSupplier[comboSupplier.SelectedIndex-1].Phone!="") {
+						text=Lan.g(this,"Phone")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Phone;
+						g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+						yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+					}
+					if(ListSupplier[comboSupplier.SelectedIndex-1].Name!="") {
+						text=Lan.g(this,"Note")+": "+ListSupplier[comboSupplier.SelectedIndex-1].Name;
+						g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+						yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+					}
+				}
+				yPos+=15;
+				headingPrinted=true;
+				headingPrintH=yPos;
+			}
+			#endregion
+			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
+			pagesPrinted++;
+			if(yPos==-1) {
+				e.HasMorePages=true;
+			}
+			else {
+				e.HasMorePages=false;
+			}
+			g.Dispose();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
