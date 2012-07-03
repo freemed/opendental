@@ -4,6 +4,7 @@ using System.Data;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using CodeBase;
 
 namespace OpenDentBusiness {
 	public class DatabaseMaintenance {
@@ -1825,10 +1826,11 @@ namespace OpenDentBusiness {
 				return "";
 			}
 			string log="";
-			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
+			string command=@"DROP TABLE IF EXISTS tempduplicatepatfields";//This code is only needed for older db's. New DB's created after 12.2.30 and 12.3.2 shouldn't need this.
 			Db.NonQ(command);
+			string tableName="tempduplicatepatfields"+MiscUtils.CreateRandomAlphaNumericString(8);//max size for a table name in oracle is 30 chars.
 			//This query run very fast on a db with no corruption.
-			command=@"CREATE TABLE tempduplicatepatfields
+			command=@"CREATE TABLE "+tableName+@"
 								SELECT *
 								FROM patfield
 								GROUP BY PatNum,FieldName
@@ -1836,7 +1838,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 			command=@"SELECT PatNum, LName, FName
 								FROM patient 
-								WHERE (PatNum IN (SELECT DISTINCT PatNum FROM tempduplicatepatfields))";
+								WHERE (PatNum IN (SELECT DISTINCT PatNum FROM "+tableName+"))";
 			table=Db.GetTable(command);
 			if(isCheck) {
 				if(table.Rows.Count>0 || verbose) {
@@ -1850,16 +1852,16 @@ namespace OpenDentBusiness {
 						log+="#"+table.Rows[i]["PatNum"].ToString()+" "+table.Rows[i]["LName"]+", "+table.Rows[i]["FName"]+".\r\n";
 					}
 					//Without this index the delete process takes too long.
-					command="ALTER TABLE tempduplicatepatfields ADD INDEX(PatNum)";
+					command="ALTER TABLE "+tableName+" ADD INDEX(PatNum)";
 					Db.NonQ(command);
-					command="ALTER TABLE tempduplicatepatfields ADD INDEX(FieldName)";
+					command="ALTER TABLE "+tableName+" ADD INDEX(FieldName)";
 					Db.NonQ(command);
-					command="DELETE FROM patfield WHERE ((PatNum, FieldName) IN (SELECT PatNum, FieldName FROM tempduplicatepatfields));";
+					command="DELETE FROM patfield WHERE ((PatNum, FieldName) IN (SELECT PatNum, FieldName FROM "+tableName+"));";
 					Db.NonQ(command);
-					command="INSERT INTO patfield SELECT * FROM tempduplicatepatfields;";
+					command="INSERT INTO patfield SELECT * FROM "+tableName+";";
 					Db.NonQ(command);
 					log+=Lans.g("FormDatabaseMaintenance","Patients with duplicate field entries removed: ")+table.Rows.Count+".\r\n";
-					command=@"DROP TABLE IF EXISTS tempduplicatepatfields";
+					command=@"DROP TABLE IF EXISTS "+tableName;
 					Db.NonQ(command);
 				}
 			}
