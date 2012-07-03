@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 
 namespace OpenDentBusiness.HL7 {
-	public class SIU {
+	public class EcwSIU {
 		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
 			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
@@ -21,7 +21,7 @@ namespace OpenDentBusiness.HL7 {
 			else {
 				patOld=pat.Copy();
 			}
-			SegmentPID.ProcessPID(pat,seg,isStandalone);
+			EcwSegmentPID.ProcessPID(pat,seg,isStandalone);
 			//PV1-patient visit---------------------------
 			//seg=message.GetSegment(SegmentName.PV1,false);
 			//if(seg!=null) {
@@ -62,14 +62,14 @@ namespace OpenDentBusiness.HL7 {
 			SegmentHL7 segAIG=message.GetSegment(SegmentName.AIG,false);
 			SegmentHL7 segPV=message.GetSegment(SegmentName.PV1,false);
 			if(segAIG!=null) {
-				long provNum=SegmentPID.ProvProcess(segAIG.GetField(3));
+				long provNum=EcwSegmentPID.ProvProcess(segAIG.GetField(3));
 				if(provNum!=0) {
 					apt.ProvNum=provNum;
 					pat.PriProv=provNum;
 				}
 			}
 			else if(segPV!=null) {
-				long provNum=SegmentPID.ProvProcess(segPV.GetField(7));
+				long provNum=EcwSegmentPID.ProvProcess(segPV.GetField(7));
 				if(provNum!=0) {
 					apt.ProvNum=provNum;
 					pat.PriProv=provNum;

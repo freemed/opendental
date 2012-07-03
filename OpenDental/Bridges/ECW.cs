@@ -25,7 +25,7 @@ namespace OpenDental.Bridges {
 		//}
 
 		public static void SendHL7(long aptNum,long provNum,Patient pat,string pdfDataBase64,string pdfDescription,bool justPDF) {
-			OpenDentBusiness.HL7.DFT dft=new OpenDentBusiness.HL7.DFT();
+			OpenDentBusiness.HL7.EcwDFT dft=new OpenDentBusiness.HL7.EcwDFT();
 			dft.InitializeEcw(aptNum,provNum,pat,pdfDataBase64,pdfDescription,justPDF);
 			HL7Msg msg=new HL7Msg();
 			if(justPDF){

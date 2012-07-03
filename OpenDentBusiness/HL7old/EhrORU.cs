@@ -5,12 +5,12 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary>An ORU message is an Unsolicited Observation Message.  It is a message sent out from Open Dental containing immunization status in order to satisfy ehr public health requirements.</summary>
-	public class ORU {
+	public class EhrORU {
 		private MessageHL7 msg;
 		private SegmentHL7 seg;
 
 		///<summary></summary>
-		public ORU() {
+		public EhrORU() {
 			
 		}
 		

@@ -140,13 +140,13 @@ namespace OpenDentHL7 {
 					if(IsVerboseLogging) {
 						EventLog.WriteEntry("OpenDentHL7","Processed ADT message",EventLogEntryType.Information);
 					}
-					ADT.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
+					EcwADT.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
 				}
 				else if(msg.MsgType==MessageType.SIU && !IsStandalone) {//appointments don't get imported if standalone mode.
 					if(IsVerboseLogging) {
 						EventLog.WriteEntry("OpenDentHL7","Processed SUI message",EventLogEntryType.Information);
 					}
-					SIU.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
+					EcwSIU.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
 				}
 			}
 			catch(Exception ex) {

@@ -5,12 +5,12 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary>A VXU message is an Unsolicited Vaccination Record Update.  It is a message sent out from Open Dental detailing vaccinations that were given.</summary>
-	public class VXU {
+	public class EhrVXU {
 		private MessageHL7 msg;
 		private SegmentHL7 seg;
 
 		///<summary></summary>
-		public VXU() {
+		public EhrVXU() {
 			
 		}
 		

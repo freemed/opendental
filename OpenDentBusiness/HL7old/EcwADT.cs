@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary>ADT messages are known as Patient Administration messages.  There are around 60 different kinds of ADT messages.  ADT messages are the most common message type, and I always think of them as "demographics" messages.  Not sure what ADT stands for; probably "admit/discharge/transfer" since many of the kinds of ADTs have to do with handling incoming and outgoing patients.</summary>
-	public class ADT {
+	public class EcwADT {
 		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
 			/*string triggerevent=message.Segments[0].GetFieldComponent(8,1);
 			switch(triggerevent) {
@@ -37,7 +37,7 @@ namespace OpenDentBusiness.HL7 {
 					//try to find the patient in question by using name and birthdate
 					string lName=seg.GetFieldComponent(5,0);
 					string fName=seg.GetFieldComponent(5,1);
-					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(7));
+					DateTime birthdate=EcwSegmentPID.DateParse(seg.GetFieldFullText(7));
 					long patNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
 					if(patNumByName==0) {//patient does not exist in OD
 						//so pat will still be null, triggering creation of new patient further down.
@@ -70,7 +70,7 @@ namespace OpenDentBusiness.HL7 {
 			else{
 				patOld=pat.Copy();
 			}
-			SegmentPID.ProcessPID(pat,seg,isStandalone);
+			EcwSegmentPID.ProcessPID(pat,seg,isStandalone);
 			//PV1-patient visit---------------------------
 			//seg=message.GetSegment(SegmentName.PV1,false);
 			//if(seg!=null) {//this seg is optional
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.HL7 {
 			//}
 			//GT1-Guarantor-------------------------------------
 			seg=message.GetSegment(SegmentName.GT1,true);
-			SegmentPID.ProcessGT1(pat,seg,isStandalone);
+			EcwSegmentPID.ProcessGT1(pat,seg,isStandalone);
 			//IN1-Insurance-------------------------------------
 			//List<SegmentHL7> segments=message.GetSegments(SegmentName.IN1);
 			//for(int i=0;i<segments.Count;i++) {
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		public static void ProcessPD1(Patient pat,SegmentHL7 seg) {
-			long provNum=SegmentPID.ProvProcess(seg.GetField(4));//don't know why both
+			long provNum=EcwSegmentPID.ProvProcess(seg.GetField(4));//don't know why both
 			if(provNum!=0) {
 				pat.PriProv=provNum;
 			}

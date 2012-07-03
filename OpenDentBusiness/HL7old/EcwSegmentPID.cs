@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	/// <summary>(and GT1 and PV1)</summary>
-	public class SegmentPID {
+	public class EcwSegmentPID {
 		///<summary>PatNum will not be altered here.  The pat passed in must either have PatNum=0, or must have a PatNum matching the segment.  The reason that isStandalone is passed in is because if using tight integration mode (isStandalone=false), then we need to store the "alternate patient id" aka Account No. that comes in on PID.4 in the ChartNumber field so we can pass it back in PID.2 of the DFT charge message.  However, if not using tight integration (isStandalone=true), the ChartNumber field is already occupied by the eCW patient ID, and we do not want to overwrite it.</summary>
 		public static void ProcessPID(Patient pat,SegmentHL7 seg,bool isStandalone) {
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.HL7 {
 					//try to find the guarantor by using name and birthdate
 					string lName=seg.GetFieldComponent(3,0);
 					string fName=seg.GetFieldComponent(3,1);
-					DateTime birthdate=SegmentPID.DateParse(seg.GetFieldFullText(8));
+					DateTime birthdate=EcwSegmentPID.DateParse(seg.GetFieldFullText(8));
 					long guarNumByName=Patients.GetPatNumByNameAndBirthday(lName,fName,birthdate);
 					if(guarNumByName==0) {//guarantor does not exist in OD
 						//so guar will still be null, triggering creation of new guarantor further down.

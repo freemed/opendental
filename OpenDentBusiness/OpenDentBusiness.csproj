@@ -428,8 +428,8 @@
     <Compile Include="Db\PoIn.cs" />
     <Compile Include="Db\SchemaCrudProposedTest.cs" />
     <Compile Include="Db\SchemaCrudTest.cs" />
-    <Compile Include="HL7\ORU.cs" />
-    <Compile Include="HL7\VXU.cs" />
+    <Compile Include="HL7old\EhrORU.cs" />
+    <Compile Include="HL7old\EhrVXU.cs" />
     <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
     <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />
@@ -651,14 +651,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Remoting\DtoObject.cs" />
-    <Compile Include="HL7\ADT.cs" />
+    <Compile Include="HL7old\EcwADT.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
-    <Compile Include="HL7\DFT.cs" />
+    <Compile Include="HL7old\EcwDFT.cs" />
     <Compile Include="HL7\FieldHL7.cs" />
     <Compile Include="HL7\MessageHL7.cs" />
     <Compile Include="HL7\SegmentHL7.cs" />
-    <Compile Include="HL7\SegmentPID.cs" />
-    <Compile Include="HL7\SIU.cs" />
+    <Compile Include="HL7old\EcwSegmentPID.cs" />
+    <Compile Include="HL7old\EcwSIU.cs" />
     <Compile Include="Imaging\ImageHelper.cs" />
     <Compile Include="Imaging\ImageStore.cs" />
     <Compile Include="Db Multi Table\MiscData.cs" />

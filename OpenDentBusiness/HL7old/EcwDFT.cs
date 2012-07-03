@@ -5,12 +5,12 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary>A DFT message is a Charge Specification.  There are different kinds.  The kind we have implemented passes information about completed procedures and their charges to external programs for billing purposes.</summary>
-	public class DFT {
+	public class EcwDFT {
 		private MessageHL7 msg;
 		private SegmentHL7 seg;
 
 		///<summary></summary>
-		public DFT() {
+		public EcwDFT() {
 			
 		}
 
