@@ -22,6 +22,7 @@ namespace OpenDentBusiness.HL7 {
 				segment=new SegmentHL7(rows[i]);//this creates the field objects.
 				Segments.Add(segment);
 				if(i==0 && segment.Name==SegmentName.MSH) {
+//js 7/3/12 Make this more intelligent because we also now need the suffix
 					string msgtype=segment.GetFieldComponent(8,0);
 					if(msgtype=="ADT") {
 						MsgType=MessageType.ADT;
@@ -61,6 +62,7 @@ namespace OpenDentBusiness.HL7 {
 			return null;
 		}
 
+		/*
 		///<summary>The list will be ordered by sequence number.</summary>
 		public List<SegmentHL7> GetSegments(SegmentName segmentName) {
 			List<SegmentHL7> retVal=new List<SegmentHL7>();
@@ -74,10 +76,11 @@ namespace OpenDentBusiness.HL7 {
 				retVal.Add(Segments[i]);
 			}
 			return retVal;
-		}
+		}*/
 
 	}
 
+	///<summary>js 7/3/12  Expand this to include the suffix.  Like this: ADT_A01.  This enum will then be moved over to a TableType class so we know that it's being used in the db an shouldn't be reordered.</summary>
 	public enum MessageType {
 		///<summary>This should never happen.</summary>
 		Unknown,

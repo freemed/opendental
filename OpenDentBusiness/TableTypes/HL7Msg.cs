@@ -23,6 +23,17 @@ namespace OpenDentBusiness{
 			return (HL7Msg)this.MemberwiseClone();
 		}	
 	}
+
+	public enum HL7MessageStatus {
+		///<summary>0</summary>
+		OutPending,
+		///<summary>1</summary>
+		OutSent,
+		///<summary>2</summary>
+		InReceived,
+		///<summary>3</summary>
+		InProcessed
+	}
 }
 
 

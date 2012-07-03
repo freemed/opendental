@@ -1241,17 +1241,6 @@ namespace OpenDentBusiness{
 		Recall
 	}
 
-	public enum HL7MessageStatus {
-		///<summary>0</summary>
-		OutPending,
-		///<summary>1</summary>
-		OutSent,
-		///<summary>2</summary>
-		InReceived,
-		///<summary>3</summary>
-		InProcessed
-	}
-
 	///<summary>0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
 	public enum SmokingStatus {
 		///<summary>0</summary>
