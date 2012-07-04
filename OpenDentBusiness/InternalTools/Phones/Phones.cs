@@ -65,10 +65,20 @@ namespace OpenDentBusiness {
 				+"WHERE phone.Extension="+POut.Long(extens);
 			DataTable tablePhone=Db.GetTable(command);
 			if(tablePhone.Rows.Count==0) {
+				//It would be nice if we could create a phone row for this extension.
 				return;
 			}
 			long empNum=PIn.Long(tablePhone.Rows[0]["EmployeeNum"].ToString());
 			string empName=PIn.String(tablePhone.Rows[0]["EmpName"].ToString());
+			Employee emp=Employees.GetEmp(employeeNum);
+			if(emp!=null) {//A new employee is going to take over this extension.
+				empName=emp.FName;
+				empNum=emp.EmployeeNum;
+			}
+			else if(employeeNum==0) {//Clear the employee from that row.
+				empName="";
+				empNum=0;
+			}
 			//if these values are null because of missing phoneempdefault row, they will default to false
 			//PhoneEmpStatusOverride statusOverride=(PhoneEmpStatusOverride)PIn.Int(tablePhone.Rows[0]["StatusOverride"].ToString());
 			bool isDefaultNoColor=PIn.Bool(tablePhone.Rows[0]["NoColor"].ToString());

@@ -59,20 +59,27 @@ namespace OpenDental {
 		}
 
 		public static void Available(PhoneTile tile) {
+			int extension=tile.PhoneCur.Extension;
+			long employeeNum=Security.CurUser.EmployeeNum;
+			//The user is already clocked in.  They might be changing their status back to Available.  We only want to stop users from clocking into extensions if another employee is already using the current extension.  This will stop users from clocking into multiple extensions at one time and force them to be physically present at the computer.
+			if(ClockEvents.IsClockedIn(employeeNum) && tile.PhoneCur.EmployeeNum!=employeeNum) {
+				MsgBox.Show(langThis,"You are already clocked in.  You must clock out of the current extension you are logged into before moving to another extension.");
+				return;
+			}
+			//We want to be able to log into any computer without switching any big phone settings.  If someone is clocked into this computer/extension, either on this instance of OD or one running in the background, we want to have a warning message notify the user that someone is already clocked into this computer.  Due to this fact, we will no longer be able to clock other people in from different locations using the big phones.
+			if(employeeNum!=tile.PhoneCur.EmployeeNum							//If the employee logged in OD is not the employee last to use this extension
+				&& tile.PhoneCur.ClockStatus!=ClockStatusEnum.None	//and that person is still actively using this extension, show a warning.
+				&& tile.PhoneCur.ClockStatus!=ClockStatusEnum.Home)				
+			{
+				MsgBox.Show(langThis,"Someone else is currently using this extension.  They might still be clocked into another instance of OD on this computer.");
+				return;
+			}
+			//This is the user that is currently using this extension or this is a new user wanting to start use of this extension.
 			if(!ClockIn(tile)) {
 				return;
 			}
-			int extension=tile.PhoneCur.Extension;
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
-				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
-					if(!CheckSelectedUserPassword(employeeNum)) {
-						return;
-					}
-				}
-			}
 			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
-			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension);//green
+			Phones.SetPhoneStatus(ClockStatusEnum.Available,extension,employeeNum);//green
 		}
 
 		public static void Training(PhoneTile tile) {
@@ -308,21 +315,22 @@ namespace OpenDental {
 
 		///<summary>If already clocked in, this does nothing.  Returns false if not able to clock in due to security, or true if successful.</summary>
 		private static bool ClockIn(PhoneTile tile) {
-			long employeeNum=tile.PhoneCur.EmployeeNum;
-			if(employeeNum==0) {
-				MsgBox.Show(langThis,"No employee at that extension.");
+			long employeeNum=Security.CurUser.EmployeeNum;//tile.PhoneCur.EmployeeNum;
+			if(employeeNum==0) {//Should never happen, this means the employee trying to clock doesn't exist in the employee table.
+				//MsgBox.Show(langThis,"No employee at that extension.");
 				return false;
 			}
 			if(ClockEvents.IsClockedIn(employeeNum)) {
-				return true;
+			  return true;
 			}
-			if(Security.CurUser.EmployeeNum!=employeeNum) {
+			//We no longer need to check passwords here because the user HAS to be logged in and physically sitting at the computer.
+			/*if(Security.CurUser.EmployeeNum!=employeeNum) {
 				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
 					if(!CheckSelectedUserPassword(employeeNum)) {
 						return false;
 					}
 				}
-			}
+			}*/
 			try {
 				ClockEvents.ClockIn(employeeNum);
 			}

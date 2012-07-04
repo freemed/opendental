@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		public AsteriskRingGroups RingGroups;
 		///<summary>Just makes management easier.  Not used by the program.</summary>
 		public string EmpName;
-		///<summary>The phone extension for the employee.  e.g. 101,102,etc.  Used to be in the employee table.  This can be changed daily by staff who float from workstation to workstation.</summary>
+		///<summary>The phone extension for the employee.  e.g. 101,102,etc.  Used to be in the employee table.  This can be changed daily by staff who float from workstation to workstation.  Can be 0 in order to keep two rows from sharing the same extension.</summary>
 		public int PhoneExt;
 		///<summary>Enum:PhoneEmpStatusOverride </summary>
 		public PhoneEmpStatusOverride StatusOverride;

@@ -68,9 +68,6 @@ namespace OpenDental {
 						try{
 							g.FillRectangle(SystemBrushes.Control,0,0,bmp.Width,bmp.Height);
 							string strStat=phoneCur.ClockStatus.ToString();
-							if(phoneCur.ClockStatus==ClockStatusEnum.None){
-								strStat="";
-							}
 							SizeF sizef=g.MeasureString(strStat,labelStatusAndNote.Font);
 							g.DrawString(strStat,labelStatusAndNote.Font,SystemBrushes.GrayText,(bmp.Width-sizef.Width)/2,(bmp.Height-sizef.Height)/2);
 							pictureWebCam.Image=(Image)bmp.Clone();
@@ -101,10 +98,19 @@ namespace OpenDental {
 					else {
 						pictureInUse.Visible=true;
 					}
-					labelExtensionName.Text=phoneCur.Extension.ToString()+" - "+phoneCur.EmployeeName;
-					string str="";
-					if(phoneCur.ClockStatus!=ClockStatusEnum.None) {
-						str+=phoneCur.ClockStatus.ToString();
+					labelExtensionName.Text="";
+					string str=phoneCur.ClockStatus.ToString();
+					//Check if the user is logged in.
+					if(phoneCur.ClockStatus==ClockStatusEnum.None
+						|| phoneCur.ClockStatus==ClockStatusEnum.Home) 
+					{
+						if(layoutHorizontal) {//Big phones looks odd without the extensions.
+							labelExtensionName.Text=phoneCur.Extension.ToString();
+						}
+						str="Clock In";
+					}
+					else {//User is clocked in so show their ext and name.
+						labelExtensionName.Text=phoneCur.Extension.ToString()+" - "+phoneCur.EmployeeName;
 					}
 					labelStatusAndNote.Text=str;
 					DateTime dateTimeStart=phoneCur.DateTimeStart;

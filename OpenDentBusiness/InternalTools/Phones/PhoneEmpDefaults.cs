@@ -81,16 +81,28 @@ namespace OpenDentBusiness{
 			return AsteriskRingGroups.All;
 		}
 
-		///<summary>Was in phoneoverrides.</summary>
+		///<summary>Was in phoneoverrides.  Sets the user's ext, name and status override.</summary>
 		public static void SetAvailable(int extension,long empNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,empNum);
 				return;
 			}
+			Employee emp=Employees.GetEmp(empNum);
+			if(emp==null) {//Should never happen. This means the employee that's changing their status doesn't exist in the employee table.
+				return;
+			}
 			string command="UPDATE phoneempdefault "
-				+"SET StatusOverride = "+POut.Int((int)PhoneEmpStatusOverride.None)+" "
-				+"WHERE PhoneExt="+POut.Int(extension)+" "
-				+"AND EmployeeNum="+POut.Long(empNum);
+				+"SET StatusOverride="+POut.Int((int)PhoneEmpStatusOverride.None)
+				+",PhoneExt="+POut.Int(extension)
+				+",EmpName='"+POut.String(emp.FName)+"' "
+				//No longer require users to manually type in extensions.  This could be the first time a user is going to use this extension so we cannot filter by it.  
+				//+"WHERE PhoneExt="+POut.Int(extension)+" "
+				+"WHERE EmployeeNum="+POut.Long(empNum);
+			Db.NonQ(command);
+			//Set the extension to 0 for any other employee that is using this extension to prevent duplicate rows using the same extentions. This would cause confusion for the ring groups.  This is possible if a user logged off and another employee logs into their computer.
+			command="UPDATE phoneempdefault SET PhoneExt=0"
+				+" WHERE PhoneExt="+POut.Int(extension)
+				+" AND EmployeeNum!="+POut.Long(empNum);
 			Db.NonQ(command);
 		}
 	
