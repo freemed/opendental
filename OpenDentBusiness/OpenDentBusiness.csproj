@@ -213,6 +213,10 @@
     <Compile Include="Crud\FormularyMedCrud.cs" />
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
+    <Compile Include="Crud\HL7DefCrud.cs" />
+    <Compile Include="Crud\HL7DefFieldCrud.cs" />
+    <Compile Include="Crud\HL7DefMessageCrud.cs" />
+    <Compile Include="Crud\HL7DefSegmentCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
     <Compile Include="Crud\ICD9Crud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />

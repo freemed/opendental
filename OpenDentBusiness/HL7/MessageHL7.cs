@@ -80,19 +80,5 @@ namespace OpenDentBusiness.HL7 {
 
 	}
 
-	///<summary>js 7/3/12  This enum will soon be moved over to a TableType class (and different namespace in the process)</summary>
-	public enum MessageTypeHL7 {
-		///<summary>This should never happen.</summary>
-		Unknown,
-		///<summary>Demographics - A01,A04,A08,A28,A31</summary>
-		ADT,
-		///<summary>Scheduling - S12,S13,S14,S15,S22</summary>
-		SIU,
-		///<summary>Detailed Financial Transaction - P03</summary>
-		DFT,
-		///<summary>Unsolicited Vaccination Record Update - V04</summary>
-		VXU,
-		///<summary>Unsolicited Observation Message - R01</summary>
-		ORU
-	}
+	
 }

@@ -9515,6 +9515,150 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To12_4_0() {
 			if(FromVersion<new Version("12.4.0.0")) {
 				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS hl7def";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7def (
+						HL7DefNum bigint NOT NULL auto_increment PRIMARY KEY,
+						Description varchar(255) NOT NULL,
+						ModeTx tinyint NOT NULL,
+						IncomingFolder varchar(255) NOT NULL,
+						OutgoingFolder varchar(255) NOT NULL,
+						IncomingPort varchar(255) NOT NULL,
+						OutgoingIpPort varchar(255) NOT NULL,
+						FieldSeparator varchar(1) NOT NULL,
+						ComponentSeparator varchar(1) NOT NULL,
+						SubcomponentSeparator varchar(1) NOT NULL,
+						RepetitionSeparator varchar(1) NOT NULL,
+						EscapeCharacter varchar(1) NOT NULL,
+						IsInternal tinyint NOT NULL,
+						InternalType varchar(255) NOT NULL,
+						InternalTypeVersion varchar(50) NOT NULL,
+						IsEnabled tinyint NOT NULL,
+						Note text NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE hl7def'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7def (
+						HL7DefNum number(20) NOT NULL,
+						Description varchar2(255),
+						ModeTx number(3),
+						IncomingFolder varchar2(255),
+						OutgoingFolder varchar2(255),
+						IncomingPort varchar2(255),
+						OutgoingIpPort varchar2(255),
+						FieldSeparator varchar2(1),
+						ComponentSeparator varchar2(1),
+						SubcomponentSeparator varchar2(1),
+						RepetitionSeparator varchar2(1),
+						EscapeCharacter varchar2(1),
+						IsInternal number(3) NOT NULL,
+						InternalType varchar2(255),
+						InternalTypeVersion varchar2(50),
+						IsEnabled number(3) NOT NULL,
+						Note clob,
+						CONSTRAINT hl7def_HL7DefNum PRIMARY KEY (HL7DefNum)
+						)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS hl7deffield";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7deffield (
+						HL7DefFieldNum bigint NOT NULL auto_increment PRIMARY KEY,
+						HL7DefSegmentNum bigint NOT NULL,
+						OrdinalPos int NOT NULL,
+						TableId varchar(255) NOT NULL,
+						DataType varchar(255) NOT NULL,
+						FieldName varchar(255) NOT NULL,
+						INDEX(HL7DefSegmentNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE hl7deffield'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7deffield (
+						HL7DefFieldNum number(20) NOT NULL,
+						HL7DefSegmentNum number(20) NOT NULL,
+						OrdinalPos number(11) NOT NULL,
+						TableId varchar2(255),
+						DataType varchar2(255),
+						FieldName varchar2(255),
+						CONSTRAINT hl7deffield_HL7DefFieldNum PRIMARY KEY (HL7DefFieldNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX hl7deffield_HL7DefSegmentNum ON hl7deffield (HL7DefSegmentNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS hl7defmessage";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7defmessage (
+						HL7DefMessageNum bigint NOT NULL auto_increment PRIMARY KEY,
+						HL7DefNum bigint NOT NULL,
+						MessageType varchar(255) NOT NULL,
+						EventType varchar(255) NOT NULL,
+						InOrOut tinyint NOT NULL,
+						ItemOrder int NOT NULL,
+						Note text NOT NULL,
+						INDEX(HL7DefNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE hl7defmessage'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7defmessage (
+						HL7DefMessageNum number(20) NOT NULL,
+						HL7DefNum number(20) NOT NULL,
+						MessageType varchar2(255) NOT NULL,
+						EventType varchar2(255) NOT NULL,
+						InOut number(3) NOT NULL,
+						ItemOrder number(11) NOT NULL,
+						Note clob,
+						CONSTRAINT hl7defmessage_HL7DefMessageNum PRIMARY KEY (HL7DefMessageNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX hl7defmessage_HL7DefNum ON hl7defmessage (HL7DefNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS hl7defsegment";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7defsegment (
+						HL7DefSegmentNum bigint NOT NULL auto_increment PRIMARY KEY,
+						HL7DefMessageNum bigint NOT NULL,
+						ItemOrder int NOT NULL,
+						CanRepeat tinyint NOT NULL,
+						IsOptional tinyint NOT NULL,
+						Note text NOT NULL,
+						INDEX(HL7DefMessageNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE hl7defsegment'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE hl7defsegment (
+						HL7DefSegmentNum number(20) NOT NULL,
+						HL7DefMessageNum number(20) NOT NULL,
+						ItemOrder number(11) NOT NULL,
+						CanRepeat number(3) NOT NULL,
+						IsOptional number(3) NOT NULL,
+						Note clob,
+						CONSTRAINT hl7defsegment_HL7DefSegmentNum PRIMARY KEY (HL7DefSegmentNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX hl7defsegment_HL7DefMessageNum ON hl7defsegment (HL7DefMessageNum)";
+					Db.NonQ(command);
+				}
+				
+
+
 
 
 
@@ -9563,5 +9707,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+
 
 

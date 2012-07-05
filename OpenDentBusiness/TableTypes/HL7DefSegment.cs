@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace OpenDentBusiness.TableTypes {
+namespace OpenDentBusiness {
 	///<summary>multiple segments per message</summary>
 	[Serializable]
 	public class HL7DefSegment:TableBase {
@@ -19,6 +19,7 @@ namespace OpenDentBusiness.TableTypes {
 		///<summary>An incoming message may or may not contain this segment. Not used for outgoing.</summary>
 		public bool IsOptional;
 		///<summary>.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 
 		///<summary></summary>
