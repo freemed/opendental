@@ -724,6 +724,8 @@
     <Compile Include="TableTypes\EhrMeasureEvent.cs" />
     <Compile Include="TableTypes\Formulary.cs" />
     <Compile Include="TableTypes\FormularyMed.cs" />
+    <Compile Include="TableTypes\HL7DefMessage.cs" />
+    <Compile Include="TableTypes\HL7DefSegment.cs" />
     <Compile Include="TableTypes\HL7Def.cs" />
     <Compile Include="TableTypes\HL7DefField.cs" />
     <Compile Include="TableTypes\InstallmentPlan.cs" />
