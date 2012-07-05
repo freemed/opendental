@@ -137,8 +137,9 @@ namespace OpenDentBusiness{
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				datesql="(SELECT CURRENT_DATE FROM dual)";
 			}
-			command=
-				@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
+			command=@"SELECT A.* FROM
+				(
+				SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email ""_guarEmail"",patguar.FName ""_guarFName"",
 				patguar.LName ""_guarLName"",patient.FName,
@@ -146,14 +147,13 @@ namespace OpenDentBusiness{
 				COUNT(commlog.CommlogNum) ""_numberOfReminders"",
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
 				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
-				recalltype.Description ""_recalltype"",patient.WirelessPhone,patient.WkPhone
+				recalltype.Description ""_recalltype"",patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
 				LEFT JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum
 				LEFT JOIN commlog ON commlog.PatNum=recall.PatNum
 				AND CommType="+POut.Long(Commlogs.GetTypeAuto(CommItemTypeAuto.RECALL))+" "
-				//+"AND SentOrReceived = "+POut.PInt((int)CommSentOrReceived.Sent)+" "
 				+"AND CommDateTime > recall.DatePrevious "
 				//We need to make commlog more restrictive for situations where a manually added recall has no date previous,
 				+"WHERE patient.patstatus=0 ";
@@ -167,47 +167,35 @@ namespace OpenDentBusiness{
 			if(siteNum>0) {
 				command+="AND patient.SiteNum="+POut.Long(siteNum)+" ";
 			}
-			command+=
-				"AND NOT EXISTS("//test for scheduled appt.
-				+"SELECT * FROM appointment,procedurelog,recalltrigger "
-				+"WHERE appointment.AptNum=procedurelog.AptNum "
-				+"AND appointment.PatNum=recall.PatNum "
-				+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
-				+"AND recall.PatNum=procedurelog.PatNum "
-				+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
-				+"AND (appointment.AptStatus=1 "//Scheduled
-				+"OR appointment.AptStatus=4) "//ASAP
-				+"AND appointment.AptDateTime > "+datesql+" "//early this morning
-				+") "//end of NOT EXISTS
-				+"AND recall.DateDue >= "+POut.Date(fromDate)+" "
+			command+="AND recall.DateDue >= "+POut.Date(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.Date(toDate)+" "
-				+"AND recall.IsDisabled = 0 ";
-			List<long> recalltypes=new List<long>();
-			string[] typearray=PrefC.GetString(PrefName.RecallTypesShowingInList).Split(',');
-			if(typearray.Length>0){
-				for(int i=0;i<typearray.Length;i++){
-					recalltypes.Add(PIn.Long(typearray[i]));
-				}
+				+"AND recall.IsDisabled = 0 "
+				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") ";
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
 			}
-			if(recalltypes.Count>0){
-				command+="AND (";
-				for(int i=0;i<recalltypes.Count;i++){
-					if(i>0){
-						command+=" OR ";
-					}
-					command+="recall.RecallTypeNum="+POut.Long(recalltypes[i]);
-				}
-				command+=") ";
+			else {
+				command+=@"GROUP BY  patguar.BalTotal,patient.BillingType,
+					patient.Birthdate,recall.DateDue,
+					DisableUntilBalance,DisableUntilDate,
+					patient.Email,patguar.Email,patguar.FName,
+					patguar.LName,patient.FName,
+					patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
+					recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
+					recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
+					recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";
 			}
-			command+=@"GROUP BY  patguar.BalTotal,patient.BillingType,
-				patient.Birthdate,recall.DateDue,
-				DisableUntilBalance,DisableUntilDate,
-				patient.Email,patguar.Email,patguar.FName,
-				patguar.LName,patient.FName,
-				patient.Guarantor,patient.HmPhone,patguar.InsEst,patient.LName,recall.Note,
-				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
-				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
-				recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
+			command+=@") A
+				LEFT JOIN
+				(
+				SELECT appointment.PatNum,recalltrigger.RecallTypeNum 
+				FROM procedurelog
+				INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > "+datesql//early this morning
+				+@" AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
+				INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
+				) B ON A.PatNum=B.PatNum AND A.RecallTypeNum=B.RecallTypeNum
+				WHERE ISNULL(B.PatNum) ";//only show rows where no future recall appointment
+			
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
