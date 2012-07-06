@@ -369,6 +369,10 @@
     <Compile Include="Data Interface\FormularyMeds.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
+    <Compile Include="Data Interface\HL7DefFields.cs" />
+    <Compile Include="Data Interface\HL7DefMessages.cs" />
+    <Compile Include="Data Interface\HL7Defs.cs" />
+    <Compile Include="Data Interface\HL7DefSegments.cs" />
     <Compile Include="Data Interface\ICD9s.cs" />
     <Compile Include="Data Interface\InsSubs.cs" />
     <Compile Include="Data Interface\InstallmentPlans.cs" />
