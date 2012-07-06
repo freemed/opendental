@@ -16,7 +16,8 @@ namespace OpenDentBusiness{
 		///<summary>HL7 table Id, if applicable. Example: 0234. Example: 1234/2345</summary>
 		public string TableId;
 		///<summary>The DataTypeHL7 enum will be unlinked from the db by storing as string in db. As it's loaded into OD, it will become an enum.</summary>
-		public string DataType;
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public DataTypeHL7 DataType;
 		///<summary>User will get to pick from a list of fields that we will maintain. For example, guarantor.LName, provider.Abbr, or patient.addressFull</summary>
 		public string FieldName;
 
@@ -25,6 +26,10 @@ namespace OpenDentBusiness{
 			return (HL7DefField)this.MemberwiseClone();
 		}
 
+	}
+
+	public enum DataTypeHL7 {
+		None
 	}
 
 	

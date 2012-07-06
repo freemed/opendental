@@ -11,8 +11,9 @@ namespace OpenDentBusiness{
 		public long HL7DefNum;
 		///<summary></summary>
 		public string Description;
-		///<summary>Enum:ModeTxHL7 File, TcpIp</summary>
-		public string ModeTx;
+		///<summary>Stored in db as string, but used in OD as enum ModeTxHL7. Examples: File, TcpIp</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public ModeTxHL7 ModeTx;
 		///<summary>Only used for File mode</summary>
 		public string IncomingFolder;
 		///<summary>Only used for File mode</summary>
@@ -48,6 +49,13 @@ namespace OpenDentBusiness{
 			return (HL7Def)this.MemberwiseClone();
 		}
 
+	}
+
+	public enum ModeTxHL7 {
+		///<summary>0</summary>
+		File,
+		///<summary>1</summary>
+		TcpIp
 	}
 
 	

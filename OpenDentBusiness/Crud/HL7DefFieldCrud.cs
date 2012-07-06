@@ -50,7 +50,16 @@ namespace OpenDentBusiness.Crud{
 				hL7DefField.HL7DefSegmentNum= PIn.Long  (table.Rows[i]["HL7DefSegmentNum"].ToString());
 				hL7DefField.OrdinalPos      = PIn.Int   (table.Rows[i]["OrdinalPos"].ToString());
 				hL7DefField.TableId         = PIn.String(table.Rows[i]["TableId"].ToString());
-				hL7DefField.DataType        = PIn.String(table.Rows[i]["DataType"].ToString());
+				string dataType=table.Rows[i]["DataType"].ToString();
+				if(dataType==""){
+					hL7DefField.DataType      =(DataTypeHL7)0;
+				}
+				else try{
+					hL7DefField.DataType      =(DataTypeHL7)Enum.Parse(typeof(DataTypeHL7),dataType);
+				}
+				catch{
+					hL7DefField.DataType      =(DataTypeHL7)0;
+				}
 				hL7DefField.FieldName       = PIn.String(table.Rows[i]["FieldName"].ToString());
 				retVal.Add(hL7DefField);
 			}
@@ -100,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (hL7DefField.HL7DefSegmentNum)+","
 				+    POut.Int   (hL7DefField.OrdinalPos)+","
 				+"'"+POut.String(hL7DefField.TableId)+"',"
-				+"'"+POut.String(hL7DefField.DataType)+"',"
+				+    POut.String(hL7DefField.DataType.ToString())+","
 				+"'"+POut.String(hL7DefField.FieldName)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -117,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 				+"HL7DefSegmentNum=  "+POut.Long  (hL7DefField.HL7DefSegmentNum)+", "
 				+"OrdinalPos      =  "+POut.Int   (hL7DefField.OrdinalPos)+", "
 				+"TableId         = '"+POut.String(hL7DefField.TableId)+"', "
-				+"DataType        = '"+POut.String(hL7DefField.DataType)+"', "
+				+"DataType        =  "+POut.String(hL7DefField.DataType.ToString())+", "
 				+"FieldName       = '"+POut.String(hL7DefField.FieldName)+"' "
 				+"WHERE HL7DefFieldNum = "+POut.Long(hL7DefField.HL7DefFieldNum);
 			Db.NonQ(command);
@@ -140,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7DefField.DataType != oldHL7DefField.DataType) {
 				if(command!=""){ command+=",";}
-				command+="DataType = '"+POut.String(hL7DefField.DataType)+"'";
+				command+="DataType = "+POut.String(hL7DefField.DataType.ToString())+"";
 			}
 			if(hL7DefField.FieldName != oldHL7DefField.FieldName) {
 				if(command!=""){ command+=",";}

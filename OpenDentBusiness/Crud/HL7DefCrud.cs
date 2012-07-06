@@ -48,7 +48,16 @@ namespace OpenDentBusiness.Crud{
 				hL7Def=new HL7Def();
 				hL7Def.HL7DefNum            = PIn.Long  (table.Rows[i]["HL7DefNum"].ToString());
 				hL7Def.Description          = PIn.String(table.Rows[i]["Description"].ToString());
-				hL7Def.ModeTx               = PIn.String(table.Rows[i]["ModeTx"].ToString());
+				string modeTx=table.Rows[i]["ModeTx"].ToString();
+				if(modeTx==""){
+					hL7Def.ModeTx             =(ModeTxHL7)0;
+				}
+				else try{
+					hL7Def.ModeTx             =(ModeTxHL7)Enum.Parse(typeof(ModeTxHL7),modeTx);
+				}
+				catch{
+					hL7Def.ModeTx             =(ModeTxHL7)0;
+				}
 				hL7Def.IncomingFolder       = PIn.String(table.Rows[i]["IncomingFolder"].ToString());
 				hL7Def.OutgoingFolder       = PIn.String(table.Rows[i]["OutgoingFolder"].ToString());
 				hL7Def.IncomingPort         = PIn.String(table.Rows[i]["IncomingPort"].ToString());
@@ -109,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				 "'"+POut.String(hL7Def.Description)+"',"
-				+"'"+POut.String(hL7Def.ModeTx)+"',"
+				+    POut.String(hL7Def.ModeTx.ToString())+","
 				+"'"+POut.String(hL7Def.IncomingFolder)+"',"
 				+"'"+POut.String(hL7Def.OutgoingFolder)+"',"
 				+"'"+POut.String(hL7Def.IncomingPort)+"',"
@@ -141,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(HL7Def hL7Def){
 			string command="UPDATE hl7def SET "
 				+"Description          = '"+POut.String(hL7Def.Description)+"', "
-				+"ModeTx               = '"+POut.String(hL7Def.ModeTx)+"', "
+				+"ModeTx               =  "+POut.String(hL7Def.ModeTx.ToString())+", "
 				+"IncomingFolder       = '"+POut.String(hL7Def.IncomingFolder)+"', "
 				+"OutgoingFolder       = '"+POut.String(hL7Def.OutgoingFolder)+"', "
 				+"IncomingPort         = '"+POut.String(hL7Def.IncomingPort)+"', "
@@ -173,7 +182,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7Def.ModeTx != oldHL7Def.ModeTx) {
 				if(command!=""){ command+=",";}
-				command+="ModeTx = '"+POut.String(hL7Def.ModeTx)+"'";
+				command+="ModeTx = "+POut.String(hL7Def.ModeTx.ToString())+"";
 			}
 			if(hL7Def.IncomingFolder != oldHL7Def.IncomingFolder) {
 				if(command!=""){ command+=",";}

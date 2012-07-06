@@ -10,7 +10,7 @@ namespace OpenDentBusiness.HL7 {
 		public static HL7Def GetHL7Def() {
 			HL7Def def=new HL7Def();
 			def.Description="eClinicalWorks";
-			def.ModeTx="File";//TODO: Convert to enum.
+			def.ModeTx=ModeTxHL7.File;
 			def.IncomingFolder=@"C:\HL7\In";
 			def.OutgoingFolder=@"C:\HL7\Out";
 			def.IncomingPort="";

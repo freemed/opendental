@@ -13,8 +13,10 @@ namespace OpenDentBusiness {
 		///<summary>FK to HL7Def.HL7DefNum</summary>
 		public long HL7DefNum;
 		///<summary>Stored in db as string, but used in OD as enum MessageTypeHL7. Example: ADT</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public MessageTypeHL7 MessageType;
-		///<summary>used in OD as enum EventTypeHL7.  Example: A04, which is only used iwth ADT/ACK.</summary>
+		///<summary>Stored in db as string, but used in OD as enum EventTypeHL7. Example: A04, which is only used iwth ADT/ACK.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public EventTypeHL7 EventType;
 		///<summary>Enum:InOutHL7 Incoming, Outgoing</summary>
 		public InOutHL7 InOrOut;

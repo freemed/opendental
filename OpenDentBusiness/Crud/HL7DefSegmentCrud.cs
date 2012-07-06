@@ -101,12 +101,16 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (hL7DefSegment.ItemOrder)+","
 				+    POut.Bool  (hL7DefSegment.CanRepeat)+","
 				+    POut.Bool  (hL7DefSegment.IsOptional)+","
-				+"'"+POut.String(hL7DefSegment.Note)+"')";
+				+DbHelper.ParamChar+"paramNote)";
+			if(hL7DefSegment.Note==null) {
+				hL7DefSegment.Note="";
+			}
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,hL7DefSegment.Note);
 			if(useExistingPK || PrefC.RandomKeys) {
-				Db.NonQ(command);
+				Db.NonQ(command,paramNote);
 			}
 			else {
-				hL7DefSegment.HL7DefSegmentNum=Db.NonQ(command,true);
+				hL7DefSegment.HL7DefSegmentNum=Db.NonQ(command,true,paramNote);
 			}
 			return hL7DefSegment.HL7DefSegmentNum;
 		}
@@ -118,9 +122,13 @@ namespace OpenDentBusiness.Crud{
 				+"ItemOrder       =  "+POut.Int   (hL7DefSegment.ItemOrder)+", "
 				+"CanRepeat       =  "+POut.Bool  (hL7DefSegment.CanRepeat)+", "
 				+"IsOptional      =  "+POut.Bool  (hL7DefSegment.IsOptional)+", "
-				+"Note            = '"+POut.String(hL7DefSegment.Note)+"' "
+				+"Note            =  "+DbHelper.ParamChar+"paramNote "
 				+"WHERE HL7DefSegmentNum = "+POut.Long(hL7DefSegment.HL7DefSegmentNum);
-			Db.NonQ(command);
+			if(hL7DefSegment.Note==null) {
+				hL7DefSegment.Note="";
+			}
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,hL7DefSegment.Note);
+			Db.NonQ(command,paramNote);
 		}
 
 		///<summary>Updates one HL7DefSegment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
@@ -144,14 +152,18 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7DefSegment.Note != oldHL7DefSegment.Note) {
 				if(command!=""){ command+=",";}
-				command+="Note = '"+POut.String(hL7DefSegment.Note)+"'";
+				command+="Note = "+DbHelper.ParamChar+"paramNote";
 			}
 			if(command==""){
 				return;
 			}
+			if(hL7DefSegment.Note==null) {
+				hL7DefSegment.Note="";
+			}
+			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,hL7DefSegment.Note);
 			command="UPDATE hl7defsegment SET "+command
 				+" WHERE HL7DefSegmentNum = "+POut.Long(hL7DefSegment.HL7DefSegmentNum);
-			Db.NonQ(command);
+			Db.NonQ(command,paramNote);
 		}
 
 		///<summary>Deletes one HL7DefSegment from the database.</summary>

@@ -9521,7 +9521,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE hl7def (
 						HL7DefNum bigint NOT NULL auto_increment PRIMARY KEY,
 						Description varchar(255) NOT NULL,
-						ModeTx tinyint NOT NULL,
+						ModeTx varchar(255) NOT NULL,
 						IncomingFolder varchar(255) NOT NULL,
 						OutgoingFolder varchar(255) NOT NULL,
 						IncomingPort varchar(255) NOT NULL,
@@ -9545,16 +9545,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE hl7def (
 						HL7DefNum number(20) NOT NULL,
 						Description varchar2(255),
-						ModeTx number(3),
+						ModeTx varchar2(255),
 						IncomingFolder varchar2(255),
 						OutgoingFolder varchar2(255),
 						IncomingPort varchar2(255),
 						OutgoingIpPort varchar2(255),
-						FieldSeparator varchar2(1),
-						ComponentSeparator varchar2(1),
-						SubcomponentSeparator varchar2(1),
-						RepetitionSeparator varchar2(1),
-						EscapeCharacter varchar2(1),
+						FieldSeparator varchar2(5),
+						ComponentSeparator varchar2(5),
+						SubcomponentSeparator varchar2(5),
+						RepetitionSeparator varchar2(5),
+						EscapeCharacter varchar2(5),
 						IsInternal number(3) NOT NULL,
 						InternalType varchar2(255),
 						InternalTypeVersion varchar2(50),
@@ -9615,9 +9615,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE hl7defmessage (
 						HL7DefMessageNum number(20) NOT NULL,
 						HL7DefNum number(20) NOT NULL,
-						MessageType varchar2(255) NOT NULL,
-						EventType varchar2(255) NOT NULL,
-						InOut number(3) NOT NULL,
+						MessageType varchar2(255),
+						EventType varchar2(255),
+						InOrOut number(3) NOT NULL,
 						ItemOrder number(11) NOT NULL,
 						Note clob,
 						CONSTRAINT hl7defmessage_HL7DefMessageNum PRIMARY KEY (HL7DefMessageNum)
@@ -9693,20 +9693,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 				
-
-			
-				
-
-				
-
-				
-
-				
-
-
-
-
-				
-
-
 
