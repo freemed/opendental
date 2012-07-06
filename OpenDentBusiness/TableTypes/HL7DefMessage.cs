@@ -12,11 +12,11 @@ namespace OpenDentBusiness {
 		public long HL7DefMessageNum;
 		///<summary>FK to HL7Def.HL7DefNum</summary>
 		public long HL7DefNum;
-		///<summary>Example: ADT</summary>
+		///<summary>Stored in db as string, but used in OD as enum MessageTypeHL7. Example: ADT</summary>
 		public MessageTypeHL7 MessageType;
-		///<summary>Example: A04, which is only used with ADT/ACK.</summary>
+		///<summary>used in OD as enum EventTypeHL7.  Example: A04, which is only used iwth ADT/ACK.</summary>
 		public EventTypeHL7 EventType;
-		///<summary></summary>
+		///<summary>Enum:InOutHL7 Incoming, Outgoing</summary>
 		public InOutHL7 InOrOut;
 		///<summary>This is mostly for outgoing, since incoming can have extra unexpected segments and since we don't usually care about order of incoming.</summary>
 		public int ItemOrder;
