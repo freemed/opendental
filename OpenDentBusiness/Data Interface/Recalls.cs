@@ -795,7 +795,7 @@ namespace OpenDentBusiness{
 			rawRows.Sort(comparer);
 			DataTable table=new DataTable();
 			table.Columns.Add("address");//includes address2. Can be guar.
-			table.Columns.Add("cityStZip");//Can be guar.
+			table.Columns.Add("City");//Can be guar.
 			table.Columns.Add("clinicNum");//will be the guar clinicNum if grouped.
 			table.Columns.Add("dateDue");
 			table.Columns.Add("email");//Will be guar if grouped by family
@@ -806,7 +806,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("patientNameF");//Only used when single email
 			table.Columns.Add("patientNameFL");
 			table.Columns.Add("patNums");//Comma delimited.  Used in email.
-			table.Columns.Add("recallNums");//Comma delimited.  Used during e-mail
+			table.Columns.Add("recallNums");//Comma delimited.  Used during e-mail and eCards
+			table.Columns.Add("State");//Can be guar.
+			table.Columns.Add("Zip");//Can be guar.
 			string familyAptList="";
 			string recallNumStr="";
 			string patNumStr="";
@@ -822,9 +824,7 @@ namespace OpenDentBusiness{
 					if(rawRows[i]["Address2"].ToString()!="") {
 						row["address"]+="\r\n"+rawRows[i]["Address2"].ToString();
 					}
-					row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
-						+rawRows[i]["State"].ToString()+"  "
-						+rawRows[i]["Zip"].ToString();
+					row["City"]=rawRows[i]["City"].ToString();
 					row["clinicNum"]=rawRows[i]["ClinicNum"].ToString();
 					row["dateDue"]=PIn.Date(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 					//since not grouping by family, this is always just the patient email
@@ -841,6 +841,8 @@ namespace OpenDentBusiness{
 					row["patientNameFL"]=pat.GetNameFLnoPref();// GetNameFirstOrPrefL();
 					row["patNums"]=rawRows[i]["PatNum"].ToString();
 					row["recallNums"]=rawRows[i]["RecallNum"].ToString();
+					row["State"]=rawRows[i]["State"].ToString();
+					row["Zip"]=rawRows[i]["Zip"].ToString();
 					rows.Add(row);
 					continue;
 				}
@@ -869,9 +871,9 @@ namespace OpenDentBusiness{
 						if(rawRows[i]["Address2"].ToString()!="") {
 							row["address"]+="\r\n"+rawRows[i]["Address2"].ToString();
 						}
-						row["cityStZip"]=rawRows[i]["City"].ToString()+",  "
-							+rawRows[i]["State"].ToString()+"  "
-							+rawRows[i]["Zip"].ToString();
+						row["City"]=rawRows[i]["City"].ToString();
+						row["State"]=rawRows[i]["State"].ToString();
+						row["Zip"]=rawRows[i]["Zip"].ToString();
 						row["clinicNum"]=rawRows[i]["ClinicNum"].ToString();
 						row["dateDue"]=PIn.Date(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 						//this will always be the guarantor email
@@ -917,9 +919,9 @@ namespace OpenDentBusiness{
 					if(rawRows[i]["guarAddress2"].ToString()!="") {
 						row["address"]+="\r\n"+rawRows[i]["guarAddress2"].ToString();
 					}
-					row["cityStZip"]=rawRows[i]["guarCity"].ToString()+",  "
-						+rawRows[i]["guarState"].ToString()+"  "
-						+rawRows[i]["guarZip"].ToString();
+					row["City"]=rawRows[i]["City"].ToString();
+					row["State"]=rawRows[i]["State"].ToString();
+					row["Zip"]=rawRows[i]["Zip"].ToString();
 					row["clinicNum"]=rawRows[i]["guarClinicNum"].ToString();
 					row["dateDue"]=PIn.Date(rawRows[i]["DateDue"].ToString()).ToShortDateString();
 					row["email"]=rawRows[i]["guarEmail"].ToString();

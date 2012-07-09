@@ -619,7 +619,6 @@ namespace OpenDental{
 			this.butECards.Size = new System.Drawing.Size(91, 24);
 			this.butECards.TabIndex = 60;
 			this.butECards.Text = "eCards";
-			this.butECards.Visible = false;
 			this.butECards.Click += new System.EventHandler(this.butECards_Click);
 			// 
 			// FormRecallList
@@ -1046,7 +1045,7 @@ namespace OpenDental{
         }
       }
       FormRpRecall FormRPR=new FormRpRecall(recallNums);
-      FormRPR.ShowDialog();      
+      FormRPR.ShowDialog();
 		}
 
 		private void butLabels_Click(object sender, System.EventArgs e) {
@@ -1133,7 +1132,9 @@ namespace OpenDental{
 					text=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
 				}
 				text+=AddrTable.Rows[patientsPrinted]["address"].ToString()+"\r\n";
-				text+=AddrTable.Rows[patientsPrinted]["cityStZip"].ToString()+"\r\n";
+				text+=AddrTable.Rows[patientsPrinted]["City"].ToString()+", "
+					+AddrTable.Rows[patientsPrinted]["State"].ToString()+" "
+					+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				LabelSingle.PrintText(0,text);
 				patientsPrinted++;
 			}
@@ -1246,9 +1247,6 @@ namespace OpenDental{
 			if(gridMain.SelectedIndices.Length==0) {
 				ContactMethod cmeth;
 				for(int i=0;i<table.Rows.Count;i++) {
-					//if(table.Rows[i]["status"].ToString()!=""){//we only want rows without a status
-					//	continue;
-					//}
 					cmeth=(ContactMethod)PIn.Long(table.Rows[i]["PreferRecallMethod"].ToString());
 					if(cmeth!=ContactMethod.Mail && cmeth!=ContactMethod.None) {
 						continue;
@@ -1259,28 +1257,106 @@ namespace OpenDental{
 					MsgBox.Show(this,"No patients of mail type.");
 					return;
 				}
-				//if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Preview postcards for all of the selected patients?")) {//No preview for eCards.
-				//  return;
-				//}
 			}
 			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
 			List<long> recallNums=new List<long>();
-			DivvySystemsService.Postcard postcard;
-			DivvySystemsService.Recipient recipient;
-			List<DivvySystemsService.Postcard> listPostcards=new List<DivvySystemsService.Postcard>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
 			}
 			AddrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+			DivvySystemsService.Postcard postcard;
+			DivvySystemsService.Recipient recipient;
+			DivvySystemsService.Postcard[] listPostcards=new DivvySystemsService.Postcard[gridMain.SelectedIndices.Length];
+			string message;
+			long clinicNum;
+			Clinic clinic;
+			string phone;
+			for(int i=0;i<AddrTable.Rows.Count;i++) {
 				postcard=new DivvySystemsService.Postcard();
 				recipient=new DivvySystemsService.Recipient();
-				recipient.Address1=AddrTable.Rows[i]["Address"].ToString();
-				recipient.Address2=AddrTable.Rows[i]["Address2"].ToString();
+				recipient.Name=AddrTable.Rows[i]["patientNameFL"].ToString();
+				recipient.Id=AddrTable.Rows[i]["patNums"].ToString();
+				recipient.Address1=AddrTable.Rows[i]["Address"].ToString();//Includes Address2
 				recipient.City=AddrTable.Rows[i]["City"].ToString();
-				recipient.Id=AddrTable.Rows[i]["PatNum"].ToString();
-				recipient.Name=AddrTable.Rows[i]["FName"].ToString()+" "+AddrTable.Rows[i]["LName"].ToString();
+				recipient.State=AddrTable.Rows[i]["State"].ToString();
+				recipient.Zip=AddrTable.Rows[i]["Zip"].ToString();
+				postcard.AppointmentDateTime=PIn.Date(AddrTable.Rows[i]["dateDue"].ToString());
+				postcard.AppointmentDateTimeSpecified=true;
+				//Body text, family card ------------------------------------------------------------------
+				if(checkGroupFamilies.Checked	&& AddrTable.Rows[i]["famList"].ToString()!=""){
+					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+						message=PrefC.GetString(PrefName.RecallPostcardFamMsg);
+					}
+					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+						message=PrefC.GetString(PrefName.RecallPostcardFamMsg2);
+					}
+					else {
+						message=PrefC.GetString(PrefName.RecallPostcardFamMsg3);
+					}
+					message=message.Replace("[FamilyList]",AddrTable.Rows[i]["famList"].ToString());
+				}
+				//Body text, single card-------------------------------------------------------------------
+				else{
+					if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
+						message=PrefC.GetString(PrefName.RecallPostcardMessage);
+					}
+					else if(AddrTable.Rows[i]["numberOfReminders"].ToString()=="1") {
+						message=PrefC.GetString(PrefName.RecallPostcardMessage2);
+					}
+					else {
+						message=PrefC.GetString(PrefName.RecallPostcardMessage3);
+					}
+					message=message.Replace("[DueDate]",AddrTable.Rows[i]["dateDue"].ToString());
+					message=message.Replace("[NameF]","");//Name is included
+				}
+				postcard.Message=message;
+				postcard.Recipient=recipient;
+				listPostcards[i]=postcard;
 			}
+			DivvySystemsService.Practice practice=new DivvySystemsService.Practice();
+			clinicNum=PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString());
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0 //if using clinics
+				&& Clinics.GetClinic(clinicNum)!=null)//and this patient assigned to a clinic
+			{
+				clinic=Clinics.GetClinic(clinicNum);
+				practice.Company=clinic.Description;
+				practice.Address1=clinic.Address;
+				practice.Address2=clinic.Address2;
+				practice.City=clinic.City;
+				practice.State=clinic.State;
+				practice.Zip=clinic.Zip;
+				phone=clinic.Phone;
+			}
+			else {
+				practice.Company=PrefC.GetString(PrefName.PracticeTitle);
+				practice.Address1=PrefC.GetString(PrefName.PracticeAddress);
+				practice.Address2=PrefC.GetString(PrefName.PracticeAddress2);
+				practice.City=PrefC.GetString(PrefName.PracticeCity);
+				practice.State=PrefC.GetString(PrefName.PracticeST);
+				practice.Zip=PrefC.GetString(PrefName.PracticeZip);
+				phone=PrefC.GetString(PrefName.PracticePhone);
+			}
+			if(phone.Length==10 
+				&& (CultureInfo.CurrentCulture.Name=="en-US" || 
+				CultureInfo.CurrentCulture.Name.EndsWith("CA"))) //Canadian. en-CA or fr-CA
+			{
+				practice.Phone="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
+			}
+			else {
+				practice.Phone=phone;
+			}
+			DivvySystemsService.PostcardService service=new DivvySystemsService.PostcardService();
+			DivvySystemsService.PostcardReturnMessage returnMessage=new DivvySystemsService.PostcardReturnMessage();
+			string messages="";
+			Cursor=Cursors.WaitCursor;
+			try {
+				returnMessage=service.SendPostcards("key","username","password",listPostcards,practice);
+			}
+			catch (Exception ex) {
+				messages+="Exception: "+ex.Message+"\r\nData: "+ex.Data+"\r\n";
+			}
+			messages+="MessageCode: "+returnMessage.MessageCode.ToString();//MessageCode enum. 0=CompletedSuccessfully, 1=CompletedWithErrors, 2=Failure
+			MsgBox.Show(this,"Return Messages: "+returnMessage.Message+"\r\n"+messages);
 			FillMain(null);
 			Cursor=Cursors.Default;
 		}
@@ -1428,7 +1504,9 @@ namespace OpenDental{
 					text=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
 				}
 				text+=AddrTable.Rows[patientsPrinted]["address"].ToString()+"\r\n";
-				text+=AddrTable.Rows[patientsPrinted]["cityStZip"].ToString()+"\r\n";
+				text+=AddrTable.Rows[patientsPrinted]["City"].ToString()+", "
+					+AddrTable.Rows[patientsPrinted]["State"].ToString()+" "
+					+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos,yPos);
 				//reposition for next label
 				xPos+=275;
@@ -1526,6 +1604,8 @@ namespace OpenDental{
 						str=PrefC.GetString(PrefName.RecallPostcardMessage3);
 					}
 					str=str.Replace("[DueDate]",AddrTable.Rows[patientsPrinted]["dateDue"].ToString());
+					str=str.Replace("[NameF]",AddrTable.Rows[patientsPrinted]["patientNameF"].ToString());
+					str=str.Replace("[NameFL]",AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString());
 				}
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,10),Brushes.Black,new RectangleF(xPos+45,yPos+180,250,190));
 				//Patient's Address-----------------------------------------------------------------------
@@ -1538,7 +1618,9 @@ namespace OpenDental{
 					str=AddrTable.Rows[patientsPrinted]["patientNameFL"].ToString()+"\r\n";
 				}
 				str+=AddrTable.Rows[patientsPrinted]["address"].ToString()+"\r\n";
-				str+=AddrTable.Rows[patientsPrinted]["cityStZip"].ToString()+"\r\n";
+				str+=AddrTable.Rows[patientsPrinted]["City"].ToString()+", "
+					+AddrTable.Rows[patientsPrinted]["State"].ToString()+" "
+					+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
 				if(PrefC.GetLong(PrefName.RecallPostcardsPerSheet)==1){
 					yPos+=400;

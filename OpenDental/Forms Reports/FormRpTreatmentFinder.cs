@@ -714,7 +714,9 @@ namespace OpenDental{
 		    text=table.Rows[gridMain.SelectedIndices[i]]["FName"].ToString()+" "
 					+table.Rows[gridMain.SelectedIndices[i]]["LName"].ToString()+"\r\n";
 		    text+=table.Rows[gridMain.SelectedIndices[i]]["address"].ToString()+"\r\n";
-		    text+=table.Rows[gridMain.SelectedIndices[i]]["cityStZip"].ToString()+"\r\n";
+		    text+=table.Rows[gridMain.SelectedIndices[i]]["City"].ToString()+", "
+					+table.Rows[gridMain.SelectedIndices[i]]["State"].ToString()+" "
+					+table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString()+"\r\n";
 		    LabelSingle.PrintText(0,text);
 		    patientsPrinted++;
 			}
@@ -747,7 +749,9 @@ namespace OpenDental{
 				text=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["FName"].ToString()+" "
 					+table.Rows[gridMain.SelectedIndices[patientsPrinted]]["LName"].ToString()+"\r\n";
 				text+=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["address"].ToString()+"\r\n";
-				text+=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["cityStZip"].ToString()+"\r\n";
+				text+=table.Rows[gridMain.SelectedIndices[patientsPrinted]]["City"].ToString()+", "
+					+table.Rows[gridMain.SelectedIndices[patientsPrinted]]["State"].ToString()+" "
+					+table.Rows[gridMain.SelectedIndices[patientsPrinted]]["Zip"].ToString()+"\r\n";
 				g.DrawString(text,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos,yPos);
 				//reposition for next label
 				xPos+=275;

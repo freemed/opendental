@@ -1388,7 +1388,9 @@ namespace OpenDentBusiness{
 			table.Columns.Add("FName");
 			table.Columns.Add("contactMethod");
 			table.Columns.Add("address");
-			table.Columns.Add("cityStZip");
+			table.Columns.Add("City");
+			table.Columns.Add("State");
+			table.Columns.Add("Zip");
 			table.Columns.Add("annualMax");
 			table.Columns.Add("amountUsed");
 			table.Columns.Add("amountPending");
@@ -1582,9 +1584,9 @@ FROM insplan";
 					if(rawtable.Rows[i]["Address2"].ToString()!="") {
 						row["address"]+="\r\n"+rawtable.Rows[i]["Address2"].ToString();
 					}
-					row["cityStZip"]=rawtable.Rows[i]["City"].ToString()+",  "
-						+rawtable.Rows[i]["State"].ToString()+"  "
-						+rawtable.Rows[i]["Zip"].ToString();
+					row["City"]=rawtable.Rows[i]["City"].ToString();
+					row["State"]=rawtable.Rows[i]["State"].ToString();
+					row["Zip"]=rawtable.Rows[i]["Zip"].ToString();
 				row["annualMax"]=(PIn.Double(rawtable.Rows[i]["$AnnualMax"].ToString())).ToString("N");
 				row["amountUsed"]=(PIn.Double(rawtable.Rows[i]["$AmountUsed"].ToString())).ToString("N");
 				row["amountPending"]=(PIn.Double(rawtable.Rows[i]["$AmountPending"].ToString())).ToString("N");
