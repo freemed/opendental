@@ -250,6 +250,7 @@ namespace OpenDental{
 		private Thread ThreadVM;
 		///<summary>Holds the time for the oldest triage task.</summary>
 		private DateTime triageTime;
+		private MenuItem menuItemHL7;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -381,6 +382,7 @@ namespace OpenDental{
 			this.menuItemDisplayFields = new System.Windows.Forms.MenuItem();
 			this.menuItemEmail = new System.Windows.Forms.MenuItem();
 			this.menuItemEHR = new System.Windows.Forms.MenuItem();
+			this.menuItemHL7 = new System.Windows.Forms.MenuItem();
 			this.menuItemFeeScheds = new System.Windows.Forms.MenuItem();
 			this.menuItemImaging = new System.Windows.Forms.MenuItem();
 			this.menuItemInsCats = new System.Windows.Forms.MenuItem();
@@ -592,6 +594,7 @@ namespace OpenDental{
             this.menuItemEmail,
             this.menuItemEHR,
             this.menuItemFeeScheds,
+						this.menuItemHL7,
             this.menuItemImaging,
             this.menuItemInsCats,
             this.menuItemInsFilingCodes,
@@ -711,159 +714,165 @@ namespace OpenDental{
 			this.menuItemFeeScheds.Text = "Fee Schedules";
 			this.menuItemFeeScheds.Click += new System.EventHandler(this.menuItemFeeScheds_Click);
 			// 
+			// menuItemHL7
+			// 
+			this.menuItemHL7.Index = 15;
+			this.menuItemHL7.Text = "HL7";
+			this.menuItemHL7.Click += new System.EventHandler(this.menuItemHL7_Click);
+			// 
 			// menuItemImaging
 			// 
-			this.menuItemImaging.Index = 15;
+			this.menuItemImaging.Index = 16;
 			this.menuItemImaging.Text = "Imaging";
 			this.menuItemImaging.Click += new System.EventHandler(this.menuItemImaging_Click);
 			// 
 			// menuItemInsCats
 			// 
-			this.menuItemInsCats.Index = 16;
+			this.menuItemInsCats.Index = 17;
 			this.menuItemInsCats.Text = "Insurance Categories";
 			this.menuItemInsCats.Click += new System.EventHandler(this.menuItemInsCats_Click);
 			// 
 			// menuItemInsFilingCodes
 			// 
-			this.menuItemInsFilingCodes.Index = 17;
+			this.menuItemInsFilingCodes.Index = 18;
 			this.menuItemInsFilingCodes.Text = "Insurance Filing Codes";
 			this.menuItemInsFilingCodes.Click += new System.EventHandler(this.menuItemInsFilingCodes_Click);
 			// 
 			// menuItemLaboratories
 			// 
-			this.menuItemLaboratories.Index = 18;
+			this.menuItemLaboratories.Index = 19;
 			this.menuItemLaboratories.Text = "Laboratories";
 			this.menuItemLaboratories.Click += new System.EventHandler(this.menuItemLaboratories_Click);
 			// 
 			// menuItemLetters
 			// 
-			this.menuItemLetters.Index = 19;
+			this.menuItemLetters.Index = 20;
 			this.menuItemLetters.Text = "Letters";
 			this.menuItemLetters.Click += new System.EventHandler(this.menuItemLetters_Click);
 			// 
 			// menuItemMessaging
 			// 
-			this.menuItemMessaging.Index = 20;
+			this.menuItemMessaging.Index = 21;
 			this.menuItemMessaging.Text = "Messaging";
 			this.menuItemMessaging.Click += new System.EventHandler(this.menuItemMessaging_Click);
 			// 
 			// menuItemMessagingButs
 			// 
-			this.menuItemMessagingButs.Index = 21;
+			this.menuItemMessagingButs.Index = 22;
 			this.menuItemMessagingButs.Text = "Messaging Buttons";
 			this.menuItemMessagingButs.Click += new System.EventHandler(this.menuItemMessagingButs_Click);
 			// 
 			// menuItemMisc
 			// 
-			this.menuItemMisc.Index = 22;
+			this.menuItemMisc.Index = 23;
 			this.menuItemMisc.Text = "Miscellaneous";
 			this.menuItemMisc.Click += new System.EventHandler(this.menuItemMisc_Click);
 			// 
 			// menuItemModules
 			// 
-			this.menuItemModules.Index = 23;
+			this.menuItemModules.Index = 24;
 			this.menuItemModules.Text = "Modules";
 			this.menuItemModules.Click += new System.EventHandler(this.menuItemModules_Click);
 			// 
 			// menuItemOperatories
 			// 
-			this.menuItemOperatories.Index = 24;
+			this.menuItemOperatories.Index = 25;
 			this.menuItemOperatories.Text = "Operatories";
 			this.menuItemOperatories.Click += new System.EventHandler(this.menuItemOperatories_Click);
 			// 
 			// menuItemPatFieldDefs
 			// 
-			this.menuItemPatFieldDefs.Index = 25;
+			this.menuItemPatFieldDefs.Index = 26;
 			this.menuItemPatFieldDefs.Text = "Patient Field Defs";
 			this.menuItemPatFieldDefs.Click += new System.EventHandler(this.menuItemPatFieldDefs_Click);
 			// 
 			// menuItemPayerIDs
 			// 
-			this.menuItemPayerIDs.Index = 26;
+			this.menuItemPayerIDs.Index = 27;
 			this.menuItemPayerIDs.Text = "Payer IDs";
 			this.menuItemPayerIDs.Click += new System.EventHandler(this.menuItemPayerIDs_Click);
 			// 
 			// menuItemPractice
 			// 
-			this.menuItemPractice.Index = 27;
+			this.menuItemPractice.Index = 28;
 			this.menuItemPractice.Text = "Practice";
 			this.menuItemPractice.Click += new System.EventHandler(this.menuItemPractice_Click);
 			// 
 			// menuItemProblems
 			// 
-			this.menuItemProblems.Index = 28;
+			this.menuItemProblems.Index = 29;
 			this.menuItemProblems.Text = "Problems";
 			this.menuItemProblems.Click += new System.EventHandler(this.menuItemProblems_Click);
 			// 
 			// menuItemProcedureButtons
 			// 
-			this.menuItemProcedureButtons.Index = 29;
+			this.menuItemProcedureButtons.Index = 30;
 			this.menuItemProcedureButtons.Text = "Procedure Buttons";
 			this.menuItemProcedureButtons.Click += new System.EventHandler(this.menuItemProcedureButtons_Click);
 			// 
 			// menuItemLinks
 			// 
-			this.menuItemLinks.Index = 30;
+			this.menuItemLinks.Index = 31;
 			this.menuItemLinks.Text = "Program Links";
 			this.menuItemLinks.Click += new System.EventHandler(this.menuItemLinks_Click);
 			// 
 			// menuItemQuestions
 			// 
-			this.menuItemQuestions.Index = 31;
+			this.menuItemQuestions.Index = 32;
 			this.menuItemQuestions.Text = "Questionnaire";
 			this.menuItemQuestions.Click += new System.EventHandler(this.menuItemQuestions_Click);
 			// 
 			// menuItemRecall
 			// 
-			this.menuItemRecall.Index = 32;
+			this.menuItemRecall.Index = 33;
 			this.menuItemRecall.Text = "Recall";
 			this.menuItemRecall.Click += new System.EventHandler(this.menuItemRecall_Click);
 			// 
 			// menuItemRecallTypes
 			// 
-			this.menuItemRecallTypes.Index = 33;
+			this.menuItemRecallTypes.Index = 34;
 			this.menuItemRecallTypes.Text = "RecallTypes";
 			this.menuItemRecallTypes.Click += new System.EventHandler(this.menuItemRecallTypes_Click);
 			// 
 			// menuItemReplication
 			// 
-			this.menuItemReplication.Index = 34;
+			this.menuItemReplication.Index = 35;
 			this.menuItemReplication.Text = "Replication";
 			this.menuItemReplication.Click += new System.EventHandler(this.menuItemReplication_Click);
 			// 
 			// menuItemRequirementsNeeded
 			// 
-			this.menuItemRequirementsNeeded.Index = 35;
+			this.menuItemRequirementsNeeded.Index = 36;
 			this.menuItemRequirementsNeeded.Text = "Requirements Needed";
 			this.menuItemRequirementsNeeded.Click += new System.EventHandler(this.menuItemRequirementsNeeded_Click);
 			// 
 			// menuItemSched
 			// 
-			this.menuItemSched.Index = 36;
+			this.menuItemSched.Index = 37;
 			this.menuItemSched.Text = "Schedules";
 			this.menuItemSched.Click += new System.EventHandler(this.menuItemSched_Click);
 			// 
 			// menuItemSecurity
 			// 
-			this.menuItemSecurity.Index = 37;
+			this.menuItemSecurity.Index = 38;
 			this.menuItemSecurity.Text = "Security";
 			this.menuItemSecurity.Click += new System.EventHandler(this.menuItemSecurity_Click);
 			// 
 			// menuItemSheets
 			// 
-			this.menuItemSheets.Index = 38;
+			this.menuItemSheets.Index = 39;
 			this.menuItemSheets.Text = "Sheets";
 			this.menuItemSheets.Click += new System.EventHandler(this.menuItemSheets_Click);
 			// 
 			// menuItemEasy
 			// 
-			this.menuItemEasy.Index = 39;
+			this.menuItemEasy.Index = 40;
 			this.menuItemEasy.Text = "Show Features";
 			this.menuItemEasy.Click += new System.EventHandler(this.menuItemEasy_Click);
 			// 
 			// menuItemTimeCards
 			// 
-			this.menuItemTimeCards.Index = 40;
+			this.menuItemTimeCards.Index = 41;
 			this.menuItemTimeCards.Text = "Time Cards";
 			this.menuItemTimeCards.Click += new System.EventHandler(this.menuItemTimeCards_Click);
 			// 
@@ -3956,6 +3965,15 @@ namespace OpenDental{
 			FormFeeScheds FormF=new FormFeeScheds();
 			FormF.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Fee Schedules");
+		}
+
+		private void menuItemHL7_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
+			FormHL7Defs FormH=new FormHL7Defs();
+			FormH.ShowDialog();
+			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"HL7");
 		}
 
 		private void menuItemImaging_Click(object sender,System.EventArgs e) {

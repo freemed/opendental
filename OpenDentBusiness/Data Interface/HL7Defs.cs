@@ -45,6 +45,11 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		/////<summary></summary>
+		//public static HL7Def GetInternalDef(string hl7InternalType) {
+
+		//}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
