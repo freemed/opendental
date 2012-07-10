@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	///<summary>multiple segments per message</summary>
@@ -21,6 +22,11 @@ namespace OpenDentBusiness {
 		///<summary>.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
+
+		///<Summary>List of segments associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		[XmlIgnore]
+		public List<HL7DefField> hl7DefFields;
 
 		///<summary></summary>
 		public HL7DefSegment Clone() {

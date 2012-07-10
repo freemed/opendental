@@ -25,6 +25,25 @@ namespace OpenDentBusiness.HL7 {
 			def.InternalTypeVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
 			def.IsEnabled=false;
 			def.Note="";
+			def.hl7DefMessages=new List<HL7DefMessage> ();
+			//-----------------------------------------------------------------------
+			//eCW incoming patient information (ADT).
+			HL7DefMessage adt=new HL7DefMessage();
+			adt.HL7DefNum=def.HL7DefNum;
+			adt.MessageType=MessageTypeHL7.ADT;
+			adt.EventType=EventTypeHL7.A04;
+			adt.InOrOut=InOutHL7.Incoming;
+			adt.ItemOrder=1;
+			adt.Note="";
+			def.hl7DefMessages.Add(adt);
+
+
+
+
+
+
+
+
 			return def;
 		}
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	///<summary>There is no field for MessageStructureHL7 (ADT_A01), because that will be inferred. Defined in HL7 specs, section 2.16.3.</summary>
@@ -25,6 +26,11 @@ namespace OpenDentBusiness {
 		///<summary>text</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
+
+		///<Summary>List of segments associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		[XmlIgnore]
+		public List<HL7DefSegment> hl7DefSegments;
 
 		///<summary></summary>
 		public HL7DefMessage Clone() {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 	///<summary>.</summary>
@@ -43,6 +45,11 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
+
+		///<Summary>List of messages associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		[XmlIgnore]
+		public List<HL7DefMessage> hl7DefMessages;
 
 		///<summary></summary>
 		public HL7Def Clone() {
