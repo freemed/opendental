@@ -57,7 +57,9 @@ namespace OpenDentBusiness {
 
 	public enum EventTypeHL7 {
 		///<summary>0 - Only used with ADT/ACK.</summary>
-		A04
+		A04,
+		///<summary>1 - Only used with SUI/ACK.</summary>
+		S12
 	}
 
 	public enum InOutHL7 {

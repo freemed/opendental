@@ -29,7 +29,13 @@ namespace OpenDentBusiness{
 	}
 
 	public enum DataTypeHL7 {
-		None
+		None,
+		///<summary>Strings</summary>
+		STR,
+		///<summary>DateTime</summary>
+		DT,
+		///<summary>Integer</summary>
+		INT,
 	}
 
 	
