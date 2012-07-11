@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM hl7def ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM hl7def ORDER BY Description";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="HL7Def";
 			FillCache(table);
@@ -45,10 +45,15 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		/////<summary></summary>
-		//public static HL7Def GetInternalDef(string hl7InternalType) {
-
-		//}
+		///<summary></summary>
+		public static HL7Def GetInternalDef(string Hl7InternalType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod(),Hl7InternalType);
+			}
+			string command="SELECT * FROM hl7def WHERE IsInternal=1 "
+				+"AND InternalType='"+POut.String(Hl7InternalType)+"'";
+			return Crud.HL7DefCrud.SelectOne(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

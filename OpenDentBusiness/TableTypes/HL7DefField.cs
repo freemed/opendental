@@ -28,14 +28,15 @@ namespace OpenDentBusiness{
 
 	}
 
+	/// <summary>Data types are listed in HL7 docs section 2.15.</summary>
 	public enum DataTypeHL7 {
 		None,
-		///<summary>Strings</summary>
-		STR,
-		///<summary>DateTime</summary>
+		///<summary>Extended composite ID with check digit.</summary>
+		CX,
+		///<summary>Date</summary>
 		DT,
-		///<summary>Integer</summary>
-		INT,
+		///<summary>String, alphanumeric</summary>
+		ST	
 	}
 
 	

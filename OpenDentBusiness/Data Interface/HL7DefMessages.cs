@@ -45,6 +45,14 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		public static List<HL7DefMessage> GetForDef(long hl7DefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7DefMessage>>(MethodBase.GetCurrentMethod(),hl7DefNum);
+			}
+			string command="SELECT * FROM hl7defmessage WHERE HL7DefNum='"+POut.Long(hl7DefNum)+"'";
+			return Crud.HL7DefMessageCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

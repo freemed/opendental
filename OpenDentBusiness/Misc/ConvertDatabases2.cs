@@ -9521,7 +9521,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE hl7def (
 						HL7DefNum bigint NOT NULL auto_increment PRIMARY KEY,
 						Description varchar(255) NOT NULL,
-						ModeTx varchar(255) NOT NULL,
+						ModeTx tinyint NOT NULL,
 						IncomingFolder varchar(255) NOT NULL,
 						OutgoingFolder varchar(255) NOT NULL,
 						IncomingPort varchar(255) NOT NULL,
@@ -9545,7 +9545,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE hl7def (
 						HL7DefNum number(20) NOT NULL,
 						Description varchar2(255),
-						ModeTx varchar2(255),
+						ModeTx number(3) NOT NULL,
 						IncomingFolder varchar2(255),
 						OutgoingFolder varchar2(255),
 						IncomingPort varchar2(255),
@@ -9693,4 +9693,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			
 
 				
+
+
+
+
 

@@ -15,7 +15,6 @@ namespace OpenDental {
 	public partial class FormHL7DefEdit:System.Windows.Forms.Form {
 		private FolderBrowserDialog fb;
 		public HL7Def HL7DefCur;
-		public bool IsInternal;
 
 		///<summary></summary>
 		public FormHL7DefEdit() {
@@ -31,49 +30,49 @@ namespace OpenDental {
 				grid1.Enabled=false;
 			}
 			FillGrid1();
-			this.comboModeTx.Items.Add(Lan.g(this,"File"));
-			this.comboModeTx.Items.Add(Lan.g(this,"TcpIp"));
-			this.textDescription.Text = HL7DefCur.Description;
-			this.checkBoxIsInternal.Checked = HL7DefCur.IsInternal;
-			this.checkEnabled.Checked = HL7DefCur.IsEnabled;
-			this.textInternalType.Text = HL7DefCur.InternalType;
-			this.textInternalTypeVersion.Text = HL7DefCur.InternalTypeVersion;
-			this.textInPort.Text = HL7DefCur.IncomingPort;
-			this.textInPath.Text = HL7DefCur.IncomingFolder;
-			this.textOutPort.Text = HL7DefCur.OutgoingIpPort;
-			this.textOutPath.Text = HL7DefCur.OutgoingFolder;
-			this.textFieldSep.Text = HL7DefCur.FieldSeparator;
-			this.textRepSep.Text = HL7DefCur.RepetitionSeparator;
-			this.textCompSep.Text = HL7DefCur.ComponentSeparator;
-			this.textSubcompSep.Text = HL7DefCur.SubcomponentSeparator;
-			this.textEscChar.Text = HL7DefCur.EscapeCharacter;
-			this.textNote.Text = HL7DefCur.Note;
-			if(HL7DefCur.ModeTx.ToString().CompareTo("File")==0) {
-				this.comboModeTx.SelectedIndex=0;
-				this.textInPort.ReadOnly = true;
-				this.textInPath.ReadOnly = false;
-				this.textOutPort.ReadOnly = true;
-				this.textOutPath.ReadOnly = false;
-				this.butBrowseIn.Enabled = true;
-				this.butBrowseOut.Enabled = true;
+			comboModeTx.Items.Add(Lan.g(this,"File"));
+			comboModeTx.Items.Add(Lan.g(this,"TcpIp"));
+			textDescription.Text=HL7DefCur.Description;
+			checkBoxIsInternal.Checked=HL7DefCur.IsInternal;
+			checkEnabled.Checked=HL7DefCur.IsEnabled;
+			textInternalType.Text=HL7DefCur.InternalType;
+			textInternalTypeVersion.Text=HL7DefCur.InternalTypeVersion;
+			textInPort.Text=HL7DefCur.IncomingPort;
+			textInPath.Text=HL7DefCur.IncomingFolder;
+			textOutPort.Text=HL7DefCur.OutgoingIpPort;
+			textOutPath.Text=HL7DefCur.OutgoingFolder;
+			textFieldSep.Text=HL7DefCur.FieldSeparator;
+			textRepSep.Text=HL7DefCur.RepetitionSeparator;
+			textCompSep.Text=HL7DefCur.ComponentSeparator;
+			textSubcompSep.Text=HL7DefCur.SubcomponentSeparator;
+			textEscChar.Text=HL7DefCur.EscapeCharacter;
+			textNote.Text=HL7DefCur.Note;
+			if(HL7DefCur.ModeTx==ModeTxHL7.File) {
+				comboModeTx.SelectedIndex=0;
+				textInPort.ReadOnly=true;
+				textInPath.ReadOnly=false;
+				textOutPort.ReadOnly=true;
+				textOutPath.ReadOnly=false;
+				butBrowseIn.Enabled=true;
+				butBrowseOut.Enabled=true;
 			}
-			else {
-				this.comboModeTx.SelectedIndex=1;
-				this.textInPort.ReadOnly = false;
-				this.textInPath.ReadOnly = true;
-				this.textOutPort.ReadOnly = false;
-				this.textOutPath.ReadOnly = true;
-				this.butBrowseIn.Enabled = false;
-				this.butBrowseOut.Enabled = false;
+			else { //ModeTxHL7.TcpIp
+				comboModeTx.SelectedIndex=1;
+				textInPort.ReadOnly=false;
+				textInPath.ReadOnly=true;
+				textOutPort.ReadOnly=false;
+				textOutPath.ReadOnly=true;
+				butBrowseIn.Enabled=false;
+				butBrowseOut.Enabled=false;
 			}
-			if(this.IsInternal) {
-				this.textDescription.ReadOnly = true;
-				this.textFieldSep.ReadOnly = true;
-				this.textFieldSep.ReadOnly = true;
-				this.textRepSep.ReadOnly = true;
-				this.textCompSep.ReadOnly = true;
-				this.textSubcompSep.ReadOnly = true;
-				this.textEscChar.ReadOnly = true;
+			if(HL7DefCur.IsInternal) {
+				textDescription.ReadOnly=true;
+				textFieldSep.ReadOnly=true;
+				textFieldSep.ReadOnly=true;
+				textRepSep.ReadOnly=true;
+				textCompSep.ReadOnly=true;
+				textSubcompSep.ReadOnly=true;
+				textEscChar.ReadOnly=true;
 			}
 		}
 
@@ -89,12 +88,14 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Note"),100);
 			grid1.Columns.Add(col);
 			grid1.Rows.Clear();
-			ODGridRow row=new ODGridRow();
-			row.Cells.Add("ADT");
-			row.Cells.Add("A04");
-			row.Cells.Add("In");
-			row.Cells.Add("Blah");
-			grid1.Rows.Add(row);
+			for(int i=0;i<HL7DefCur.hl7DefMessages.Count;i++) {
+				ODGridRow row=new ODGridRow();
+				row.Cells.Add(HL7DefCur.hl7DefMessages[i].MessageType.ToString());
+				row.Cells.Add(HL7DefCur.hl7DefMessages[i].EventType.ToString());
+				row.Cells.Add(HL7DefCur.hl7DefMessages[i].InOrOut.ToString());
+				row.Cells.Add(HL7DefCur.hl7DefMessages[i].Note);
+				grid1.Rows.Add(row);
+			}
 			grid1.EndUpdate();
 		}
 
@@ -127,28 +128,28 @@ namespace OpenDental {
 		}
 
 		private void comboModeTx_SelectedIndexChanged(object sender,System.EventArgs e) {
-			if(this.comboModeTx.SelectedIndex==0) {
-				this.textInPort.ReadOnly = true;
-				this.textInPath.ReadOnly = false;
-				this.textOutPort.ReadOnly = true;
-				this.textOutPath.ReadOnly = false;
-				this.butBrowseIn.Enabled = true;
-				this.butBrowseOut.Enabled = true;
+			if(comboModeTx.SelectedIndex==0) {
+				textInPort.ReadOnly=true;
+				textInPath.ReadOnly=false;
+				textOutPort.ReadOnly=true;
+				textOutPath.ReadOnly=false;
+				butBrowseIn.Enabled=true;
+				butBrowseOut.Enabled=true;
 			}
-			else if(this.comboModeTx.SelectedIndex==1) {
-				this.textInPort.ReadOnly = false;
-				this.textInPath.ReadOnly = true;
-				this.textOutPort.ReadOnly = false;
-				this.textOutPath.ReadOnly = true;
-				this.butBrowseIn.Enabled = false;
-				this.butBrowseOut.Enabled = false;
+			else if(comboModeTx.SelectedIndex==1) {
+				textInPort.ReadOnly=false;
+				textInPath.ReadOnly=true;
+				textOutPort.ReadOnly=false;
+				textOutPath.ReadOnly=true;
+				butBrowseIn.Enabled=false;
+				butBrowseOut.Enabled=false;
 			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(this.comboModeTx.SelectedIndex==0) {//File mode
-				if(this.textInPath.Text!="") {
-					if(!Directory.Exists(this.textInPath.Text)) {
+			if(comboModeTx.SelectedIndex==0) {//File mode
+				if(textInPath.Text!="") {
+					if(!Directory.Exists(textInPath.Text)) {
 						MsgBox.Show(this,"The path for Incoming Folder is invalid.");
 						return;
 					}
@@ -157,8 +158,8 @@ namespace OpenDental {
 					MsgBox.Show(this,"The path for Incoming Folder is empty.");
 					return;
 				}
-				if(this.textOutPath.Text!="") {
-					if(!Directory.Exists(this.textOutPath.Text)) {
+				if(textOutPath.Text!="") {
+					if(!Directory.Exists(textOutPath.Text)) {
 						MsgBox.Show(this,"The path for Outgoing Folder is invalid.");
 						return;
 					}
@@ -169,32 +170,39 @@ namespace OpenDental {
 				}
 			}
 			else {//TcpIp mode
-				if(this.textInPort.Text=="") {
+				if(textInPort.Text=="") {
 					MsgBox.Show(this,"The Incoming Port is empty.");
 					return;
 				}
-				if(this.textOutPort.Text=="") {
+				if(textOutPort.Text=="") {
 					MsgBox.Show(this,"The Outgoing Port is empty.");
 					return;
 				}
 			}
-			HL7DefCur.Description = this.textDescription.Text;
-			HL7DefCur.IsEnabled = this.checkEnabled.Checked;
-			HL7DefCur.FieldSeparator = this.textFieldSep.Text;
-			HL7DefCur.RepetitionSeparator = this.textRepSep.Text;
-			HL7DefCur.ComponentSeparator = this.textCompSep.Text;
-			HL7DefCur.SubcomponentSeparator = this.textSubcompSep.Text;
-			HL7DefCur.EscapeCharacter = this.textEscChar.Text;
-			HL7DefCur.Note = this.textNote.Text;
-			if(this.comboModeTx.SelectedIndex==0) {//File mode
-				HL7DefCur.IncomingFolder = this.textInPath.Text;
-				HL7DefCur.OutgoingFolder = this.textOutPath.Text;
-				HL7DefCur.ModeTx = ModeTxHL7.File;
+			HL7DefCur.Description=textDescription.Text;
+			HL7DefCur.IsEnabled=checkEnabled.Checked;
+			HL7DefCur.FieldSeparator=textFieldSep.Text;
+			HL7DefCur.RepetitionSeparator=textRepSep.Text;
+			HL7DefCur.ComponentSeparator=textCompSep.Text;
+			HL7DefCur.SubcomponentSeparator=textSubcompSep.Text;
+			HL7DefCur.EscapeCharacter=textEscChar.Text;
+			HL7DefCur.Note=textNote.Text;
+			if(comboModeTx.SelectedIndex==0) {//File mode
+				HL7DefCur.IncomingFolder=textInPath.Text;
+				HL7DefCur.OutgoingFolder=textOutPath.Text;
+				HL7DefCur.ModeTx=ModeTxHL7.File;
 			}
 			else {//TcpIp mode
-				HL7DefCur.IncomingPort = this.textInPort.Text;
-				HL7DefCur.OutgoingIpPort = this.textOutPort.Text;
-				HL7DefCur.ModeTx = ModeTxHL7.TcpIp;
+				HL7DefCur.IncomingPort=textInPort.Text;
+				HL7DefCur.OutgoingIpPort=textOutPort.Text;
+				HL7DefCur.ModeTx=ModeTxHL7.TcpIp;
+			}
+			if(HL7DefCur.IsNew) {
+				//TODO: Insert def and all sub-objects where IsNew.
+				HL7DefCur.IsNew=false;
+			}
+			else {
+				//TODO: Update def and all sub-objects.
 			}
 			DialogResult=DialogResult.OK;
 		}
@@ -202,6 +210,5 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
 	}
 }
