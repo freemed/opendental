@@ -3664,10 +3664,11 @@ namespace OpenDental{
 				}
 				butSend.Enabled=(ClaimCur.CanadaTransRefNum==null || ClaimCur.CanadaTransRefNum=="");
 				if(ClaimCur.ClaimType=="PreAuth") {
-					InsSub insSubClaim=InsSubs.GetOne(ClaimCur.InsSubNum);
-					PatPlan patPlan1=PatPlans.GetPatPlan(insSubClaim.Subscriber,1);
-					if(ClaimCur.InsSubNum!=patPlan1.InsSubNum) {
-						butSend.Enabled=false;//Do not allow the user to send secondary predeterminations because there is no format that supports such a transaction in ITRANS.
+					List <PatPlan> patPlansForPat=PatPlans.Refresh(ClaimCur.PatNum);
+					for(int i=0;i<patPlansForPat.Count;i++) {
+						if(patPlansForPat[i].InsSubNum==ClaimCur.InsSubNum && patPlansForPat[i].Ordinal!=1) {
+							butSend.Enabled=false;//Do not allow the user to send secondary predeterminations because there is no format that supports such a transaction in ITRANS.
+						}
 					}
 				}
 			}
