@@ -28,6 +28,12 @@ namespace OpenDental {
 				listAlignment.Items.Add(Enum.GetNames(typeof(ApptViewAlignment))[i]);
 			}
 			listAlignment.SelectedIndex=(int)ApptVItem.ElementAlignment;
+			if(textDesc.Text=="ProcsColored") {
+				//This is the one field where setting the color would be meaningless.
+				labelBeforeTime.Visible=false;
+				panelColor.Visible=false;
+				butColor.Visible=false;
+			}
 		}
 
 		private void butColor_Click(object sender,EventArgs e) {
