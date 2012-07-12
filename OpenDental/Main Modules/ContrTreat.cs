@@ -865,8 +865,10 @@ namespace OpenDental{
 				//panelSide.Enabled=true;
 				ToolBarMain.Buttons["PreAuth"].Enabled=true;
 				ToolBarMain.Buttons["Update"].Enabled=true;
+				ToolBarMain.Buttons["Create"].Enabled=true;
 				ToolBarMain.Buttons["Print"].Enabled=true;
 				ToolBarMain.Buttons["Email"].Enabled=true;
+				ToolBarMain.Buttons["Sign"].Enabled=true;
 				ToolBarMain.Invalidate();
 				if(PatPlanList.Count==0){//patient doesn't have insurance
 					checkShowIns.Checked=false;
@@ -899,8 +901,10 @@ namespace OpenDental{
 				//panelSide.Enabled=false;
 				ToolBarMain.Buttons["PreAuth"].Enabled=false;
 				ToolBarMain.Buttons["Update"].Enabled=false;
+				ToolBarMain.Buttons["Create"].Enabled=false;
 				ToolBarMain.Buttons["Print"].Enabled=false;
 				ToolBarMain.Buttons["Email"].Enabled=false;
+				ToolBarMain.Buttons["Sign"].Enabled=false;
 				ToolBarMain.Invalidate();
         //listPreAuth.Enabled=false;
 			}
