@@ -341,6 +341,9 @@ namespace OpenDental{
 				comboClinic.SelectedIndex=0;
 				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
+					if(Clinics.List[i].ClinicNum==ClaimPaymentCur.ClinicNum) {
+						comboClinic.SelectedIndex=i+1;
+					}
 				}
 			}
 			if(ClaimPaymentCur.CheckDate.Year>1880) {
