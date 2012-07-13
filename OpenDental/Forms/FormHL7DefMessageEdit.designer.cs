@@ -27,18 +27,18 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.radioButtonOut = new System.Windows.Forms.RadioButton();
+			this.radioButtonIn = new System.Windows.Forms.RadioButton();
+			this.labelItemOrderDesc = new System.Windows.Forms.Label();
 			this.comboEventType = new System.Windows.Forms.ComboBox();
 			this.comboMsgType = new System.Windows.Forms.ComboBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.label1 = new System.Windows.Forms.Label();
+			this.textItemOrder = new System.Windows.Forms.TextBox();
+			this.labelItemOrder = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.radioButtonIn = new System.Windows.Forms.RadioButton();
-			this.radioButtonOut = new System.Windows.Forms.RadioButton();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -76,11 +76,11 @@ namespace OpenDental{
 			// 
 			this.groupBox1.Controls.Add(this.radioButtonOut);
 			this.groupBox1.Controls.Add(this.radioButtonIn);
-			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Controls.Add(this.labelItemOrderDesc);
 			this.groupBox1.Controls.Add(this.comboEventType);
 			this.groupBox1.Controls.Add(this.comboMsgType);
-			this.groupBox1.Controls.Add(this.textBox1);
-			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.textItemOrder);
+			this.groupBox1.Controls.Add(this.labelItemOrder);
 			this.groupBox1.Controls.Add(this.textNote);
 			this.groupBox1.Controls.Add(this.label12);
 			this.groupBox1.Controls.Add(this.label10);
@@ -92,14 +92,38 @@ namespace OpenDental{
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "HL7 Message Settings";
 			// 
-			// label2
+			// radioButtonOut
 			// 
-			this.label2.Location = new System.Drawing.Point(179,105);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(125,18);
-			this.label2.TabIndex = 0;
-			this.label2.Text = "(for outgoing)";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.radioButtonOut.Location = new System.Drawing.Point(50,85);
+			this.radioButtonOut.Name = "radioButtonOut";
+			this.radioButtonOut.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioButtonOut.Size = new System.Drawing.Size(100,18);
+			this.radioButtonOut.TabIndex = 4;
+			this.radioButtonOut.TabStop = true;
+			this.radioButtonOut.Text = "Outgoing";
+			this.radioButtonOut.UseVisualStyleBackColor = true;
+			this.radioButtonOut.Click += new System.EventHandler(this.radioButtonOut_Selected);
+			// 
+			// radioButtonIn
+			// 
+			this.radioButtonIn.Location = new System.Drawing.Point(50,65);
+			this.radioButtonIn.Name = "radioButtonIn";
+			this.radioButtonIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioButtonIn.Size = new System.Drawing.Size(100,18);
+			this.radioButtonIn.TabIndex = 3;
+			this.radioButtonIn.TabStop = true;
+			this.radioButtonIn.Text = "Incoming";
+			this.radioButtonIn.UseVisualStyleBackColor = true;
+			this.radioButtonIn.Click += new System.EventHandler(this.radioButtonIn_Selected);
+			// 
+			// labelItemOrderDesc
+			// 
+			this.labelItemOrderDesc.Location = new System.Drawing.Point(179,105);
+			this.labelItemOrderDesc.Name = "labelItemOrderDesc";
+			this.labelItemOrderDesc.Size = new System.Drawing.Size(125,18);
+			this.labelItemOrderDesc.TabIndex = 0;
+			this.labelItemOrderDesc.Text = "(for outgoing)";
+			this.labelItemOrderDesc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// comboEventType
 			// 
@@ -119,21 +143,21 @@ namespace OpenDental{
 			this.comboMsgType.Size = new System.Drawing.Size(138,21);
 			this.comboMsgType.TabIndex = 1;
 			// 
-			// textBox1
+			// textItemOrder
 			// 
-			this.textBox1.Location = new System.Drawing.Point(136,105);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(40,20);
-			this.textBox1.TabIndex = 5;
+			this.textItemOrder.Location = new System.Drawing.Point(136,105);
+			this.textItemOrder.Name = "textItemOrder";
+			this.textItemOrder.Size = new System.Drawing.Size(40,20);
+			this.textItemOrder.TabIndex = 5;
 			// 
-			// label1
+			// labelItemOrder
 			// 
-			this.label1.Location = new System.Drawing.Point(10,105);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(125,18);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "Item Order";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.labelItemOrder.Location = new System.Drawing.Point(10,105);
+			this.labelItemOrder.Name = "labelItemOrder";
+			this.labelItemOrder.Size = new System.Drawing.Size(125,18);
+			this.labelItemOrder.TabIndex = 0;
+			this.labelItemOrder.Text = "Item Order";
+			this.labelItemOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textNote
 			// 
@@ -181,28 +205,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 7;
 			this.gridMain.Title = "Segments";
 			this.gridMain.TranslationName = null;
-			// 
-			// radioButtonIn
-			// 
-			this.radioButtonIn.Location = new System.Drawing.Point(50,65);
-			this.radioButtonIn.Name = "radioButtonIn";
-			this.radioButtonIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.radioButtonIn.Size = new System.Drawing.Size(100,18);
-			this.radioButtonIn.TabIndex = 3;
-			this.radioButtonIn.TabStop = true;
-			this.radioButtonIn.Text = "Incoming";
-			this.radioButtonIn.UseVisualStyleBackColor = true;
-			// 
-			// radioButtonOut
-			// 
-			this.radioButtonOut.Location = new System.Drawing.Point(50,85);
-			this.radioButtonOut.Name = "radioButtonOut";
-			this.radioButtonOut.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.radioButtonOut.Size = new System.Drawing.Size(100,18);
-			this.radioButtonOut.TabIndex = 4;
-			this.radioButtonOut.TabStop = true;
-			this.radioButtonOut.Text = "Outgoing";
-			this.radioButtonOut.UseVisualStyleBackColor = true;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// FormHL7DefMessageEdit
 			// 
@@ -235,11 +238,11 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox textNote;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox textItemOrder;
+		private System.Windows.Forms.Label labelItemOrder;
 		private System.Windows.Forms.ComboBox comboMsgType;
 		private System.Windows.Forms.ComboBox comboEventType;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label labelItemOrderDesc;
 		private System.Windows.Forms.RadioButton radioButtonOut;
 		private System.Windows.Forms.RadioButton radioButtonIn;
 	}

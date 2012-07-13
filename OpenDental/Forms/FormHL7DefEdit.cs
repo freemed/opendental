@@ -30,8 +30,9 @@ namespace OpenDental {
 				groupBox1.Enabled=false;
 			}
 			FillGridMain();
-			comboModeTx.Items.Add(Lan.g(this,"File"));
-			comboModeTx.Items.Add(Lan.g(this,"TcpIp"));
+			for(int i=0;i<Enum.GetNames(typeof(ModeTxHL7)).Length;i++) {
+				comboModeTx.Items.Add(Lan.g("enumModeTxHL7",Enum.GetName(typeof(ModeTxHL7),i).ToString()));
+			}
 			textDescription.Text=HL7DefCur.Description;
 			checkInternal.Checked=HL7DefCur.IsInternal;
 			checkEnabled.Checked=HL7DefCur.IsEnabled;
