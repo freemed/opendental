@@ -2749,8 +2749,8 @@ namespace OpenDental{
 				if (!MsgBox.Show(this, true, "Delete Patient Note?")) {
 					return;
 				}
-				if (textNote.Text != "") {
-					if (MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? " + "\r\n" + "\r\n" + textNote.Text), "Question...",
+				if(textNote.Text != "") {
+					if(MessageBox.Show(Lan.g(this, "Save a copy of this note in CommLog? " + "\r\n" + "\r\n" + textNote.Text), "Question...",
 							MessageBoxButtons.YesNo) == DialogResult.Yes) {
 						Commlog CommlogCur = new Commlog();
 						CommlogCur.PatNum = AptCur.PatNum;
@@ -2758,6 +2758,7 @@ namespace OpenDental{
 						CommlogCur.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Pt NOTE from schedule, saved copy: ";
 						CommlogCur.Note += textNote.Text;
+						CommlogCur.UserNum=Security.CurUser.UserNum;
 						//there is no dialog here because it is just a simple entry
 						Commlogs.Insert(CommlogCur);
 					}
@@ -2779,6 +2780,7 @@ namespace OpenDental{
 							CommlogCur.Note += AptCur.ProcDescript + ": ";
 						}
 						CommlogCur.Note += textNote.Text;
+						CommlogCur.UserNum=Security.CurUser.UserNum;
 						//there is no dialog here because it is just a simple entry
 						Commlogs.Insert(CommlogCur);
 					}

@@ -4582,6 +4582,7 @@ namespace OpenDental {
 						CommlogCur.CommType =Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 						CommlogCur.Note = "Deleted Patient NOTE from schedule, saved copy: ";
 						CommlogCur.Note += apt.Note;
+						CommlogCur.UserNum=Security.CurUser.UserNum;
 						//there is no dialog here because it is just a simple entry
 						Commlogs.Insert(CommlogCur);
 					}
@@ -4606,6 +4607,7 @@ namespace OpenDental {
 							CommlogCur.Note += apt.ProcDescript + ": ";
 						}
 						CommlogCur.Note += apt.Note;
+						CommlogCur.UserNum=Security.CurUser.UserNum;
 						//there is no dialog here because it is just a simple entry
 						Commlogs.Insert(CommlogCur);
 					}
@@ -5165,6 +5167,7 @@ namespace OpenDental {
 			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
 			CommlogCur.Note="Appointment card sent";
 			CommlogCur.PatNum=pat.PatNum;
+			CommlogCur.UserNum=Security.CurUser.UserNum;
 			//there is no dialog here because it is just a simple entry
 			Commlogs.Insert(CommlogCur);
 			ev.HasMorePages = false;
