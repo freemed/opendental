@@ -44,7 +44,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.ItemOrder=1;
 			seg.CanRepeat=false;
 			seg.IsOptional=false;
-			seg.Note="PID";
+			seg.SegmentName=SegmentNameHL7.PID;
+			seg.Note="";
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//PID.2
@@ -77,7 +78,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.ItemOrder=4;
 			seg.CanRepeat=false;
 			seg.IsOptional=false;
-			seg.Note="GT1";
+			seg.SegmentName=SegmentNameHL7.GT1;
+			seg.Note="";
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//GT1.2
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.ItemOrder=1;
 			seg.CanRepeat=false;
 			seg.IsOptional=false;
-			seg.Note="PID";
+			seg.SegmentName=SegmentNameHL7.PID;
+			seg.Note="";
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//PID.2
@@ -148,7 +151,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.ItemOrder=3;
 			seg.CanRepeat=false;
 			seg.IsOptional=false;
-			seg.Note="SCH";
+			seg.SegmentName=SegmentNameHL7.SCH;
+			seg.Note="";
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//SCH.2
@@ -182,7 +186,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.ItemOrder=4;
 			seg.CanRepeat=false;
 			seg.IsOptional=true;
-			seg.Note="AIG";
+			seg.SegmentName=SegmentNameHL7.AIG;
+			seg.Note="";
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//AIG 3.1. TODO
