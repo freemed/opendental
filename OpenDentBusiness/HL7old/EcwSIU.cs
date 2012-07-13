@@ -6,7 +6,7 @@ using System.Text;
 namespace OpenDentBusiness.HL7 {
 	public class EcwSIU {
 		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
-			SegmentHL7 seg=message.GetSegment(SegmentName.PID,true);
+			SegmentHL7 seg=message.GetSegment(SegmentNameHL7.PID,true);
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
 			Patient patOld=null;
@@ -28,7 +28,7 @@ namespace OpenDentBusiness.HL7 {
 			//	SegmentPID.ProcessPV1(pat,seg);
 			//}
 			//SCH- Schedule Activity Information
-			seg=message.GetSegment(SegmentName.SCH,true);
+			seg=message.GetSegment(SegmentNameHL7.SCH,true);
 			//The documentation is wrong.  SCH.01 is not the appointment ID, but is instead a sequence# (always 1)
 			long aptNum=PIn.Long(seg.GetFieldFullText(2));
 			Appointment apt=Appointments.GetOneApt(aptNum);
@@ -59,8 +59,8 @@ namespace OpenDentBusiness.HL7 {
 			apt.ProvNum=pat.PriProv;//just in case there's not AIG segment.
 			//AIG is optional, but looks like the only way to get provider for the appt-----------
 			//PV1 seems to frequently be sent instead of AIG.
-			SegmentHL7 segAIG=message.GetSegment(SegmentName.AIG,false);
-			SegmentHL7 segPV=message.GetSegment(SegmentName.PV1,false);
+			SegmentHL7 segAIG=message.GetSegment(SegmentNameHL7.AIG,false);
+			SegmentHL7 segPV=message.GetSegment(SegmentNameHL7.PV1,false);
 			if(segAIG!=null) {
 				long provNum=EcwSegmentPID.ProvProcess(segAIG.GetField(3));
 				if(provNum!=0) {

@@ -8,37 +8,37 @@ namespace OpenDentBusiness.HL7 {
 	public class SegmentHL7 {
 		public List<FieldHL7> Fields;
 		///<summary>The name</summary>
-		public SegmentName Name;
+		public SegmentNameHL7 Name;
 		///<summary>The original full text of the segment.</summary>
 		private string fullText;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
-		internal SegmentHL7(SegmentName name) {
+		internal SegmentHL7(SegmentNameHL7 name) {
 			fullText="";
 			Name=name;
 			Fields=new List<FieldHL7>();
 			//remember that the "field quantity" is one more than the last index, because 0-based.
 			//All fields are initially added with just one component
 			//This can all probably be removed now since we add fields dynamically as needed:
-			if(name==SegmentName.MSH) {
+			if(name==SegmentNameHL7.MSH) {
 				AddFields(12);
 			}
-			if(name==SegmentName.EVN) {
+			if(name==SegmentNameHL7.EVN) {
 				AddFields(4);
 			}
-			if(name==SegmentName.PID) {
+			if(name==SegmentNameHL7.PID) {
 				AddFields(23);
 			}
-			if(name==SegmentName.PV1) {
+			if(name==SegmentNameHL7.PV1) {
 				AddFields(51);
 			}
-			if(name==SegmentName.FT1) {
+			if(name==SegmentNameHL7.FT1) {
 				AddFields(27);
 			}
-			if(name==SegmentName.DG1) {
+			if(name==SegmentNameHL7.DG1) {
 				AddFields(5);
 			}
-			if(name==SegmentName.ZX1) {
+			if(name==SegmentNameHL7.ZX1) {
 				AddFields(6);
 			}
 			
@@ -76,10 +76,10 @@ namespace OpenDentBusiness.HL7 {
 					Fields.Add(field);
 				}
 				try {
-					Name=(SegmentName)Enum.Parse(typeof(SegmentName),Fields[0].FullText);
+					Name=(SegmentNameHL7)Enum.Parse(typeof(SegmentNameHL7),Fields[0].FullText);
 				}
 				catch {
-					Name=SegmentName.Unknown;
+					Name=SegmentNameHL7.Unknown;
 				}
 			}
 		}
@@ -153,45 +153,5 @@ namespace OpenDentBusiness.HL7 {
 
 	}
 
-	public enum SegmentName {
-		///<summary>This can happen for unsupported segments.</summary>
-		Unknown,
-		///<summary>Message Header</summary>
-		MSH,
-		///<summary>Event Type</summary>
-		EVN,
-		///<summary>Patient Identification</summary>
-		PID,
-		///<summary>Patient Visit</summary>
-		PV1,
-		///<summary>Patient additional demographics</summary>
-		PD1,
-		///<summary>Guarantor Information</summary>
-		GT1,
-		///<summary>Insurance Information</summary>
-		IN1,
-		///<summary>Scheduling Activity Information</summary>
-		SCH,
-		///<summary>Db Resource Appointment Information</summary>
-		AIG,
-		///<summary>Location Resource Appointment Information</summary>
-		AIL,
-		///<summary>Personnel Resource Appointment Information</summary>
-		AIP,
-		///<summary>Financial Transaction Information</summary>
-		FT1,
-		///<summary>Diagnosis Information</summary>
-		DG1,
-		///<summary>We use for PDF Data</summary>
-		ZX1,
-		///<summary>Common Order.  Used in outgoing vaccinations VXUs as well as incoming lab result ORUs.</summary>
-		ORC,
-		///<summary>Pharmacy Administration Segment</summary>
-		RXA,
-		///<summary>Observations Request</summary>
-		OBR,
-		///<summary>Observation Related to OBR</summary>
-		OBX,
-		
-	}
+	
 }

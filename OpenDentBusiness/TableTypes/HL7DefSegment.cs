@@ -19,6 +19,9 @@ namespace OpenDentBusiness {
 		public bool CanRepeat;
 		///<summary>An incoming message may or may not contain this segment. Not used for outgoing.</summary>
 		public bool IsOptional;
+		///<summary>Stored in db as string, but used in OD as enum SegmentNameHL7. Example: PID.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		public SegmentNameHL7 SegmentName;
 		///<summary>.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
@@ -33,5 +36,47 @@ namespace OpenDentBusiness {
 			return (HL7DefSegment)this.MemberwiseClone();
 		}
 
+	}
+
+	/// <summary>Keep this list alphabetized.  Reordering will not mess up the database.</summary>
+	public enum SegmentNameHL7 {
+		///<summary>Db Resource Appointment Information</summary>
+		AIG,
+		///<summary>Location Resource Appointment Information</summary>
+		AIL,
+		///<summary>Personnel Resource Appointment Information</summary>
+		AIP,
+		///<summary>Diagnosis Information</summary>
+		DG1,
+		///<summary>Event Type</summary>
+		EVN,
+		///<summary>Financial Transaction Information</summary>
+		FT1,
+		///<summary>Guarantor Information</summary>
+		GT1,
+		///<summary>Insurance Information</summary>
+		IN1,
+		///<summary>Message Header</summary>
+		MSH,
+		///<summary>Observations Request</summary>
+		OBR,
+		///<summary>Observation Related to OBR</summary>
+		OBX,
+		///<summary>Common Order.  Used in outgoing vaccinations VXUs as well as incoming lab result ORUs.</summary>
+		ORC,
+		///<summary>Patient Identification</summary>
+		PID,
+		///<summary>Patient additional demographics</summary>
+		PD1,
+		///<summary>Patient Visit</summary>
+		PV1,
+		///<summary>Pharmacy Administration Segment</summary>
+		RXA,
+		///<summary>Scheduling Activity Information</summary>
+		SCH,
+		///<summary>This can happen for unsupported segments.</summary>
+		Unknown,
+		///<summary>We use for PDF Data</summary>
+		ZX1,
 	}
 }

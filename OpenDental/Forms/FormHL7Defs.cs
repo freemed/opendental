@@ -66,22 +66,22 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// grid1
+			// grid2
 			// 
 			this.grid2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grid2.HScrollVisible = false;
-			this.grid2.Location = new System.Drawing.Point(445,12);
+			this.grid2.Location = new System.Drawing.Point(465,12);
 			this.grid2.Name = "grid2";
 			this.grid2.ScrollValue = 0;
-			this.grid2.Size = new System.Drawing.Size(424,613);
+			this.grid2.Size = new System.Drawing.Size(445,585);
 			this.grid2.TabIndex = 12;
 			this.grid2.Title = "Custom";
 			this.grid2.TranslationName = null;
 			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
 			// 
-			// grid2
+			// grid1
 			// 
 			this.grid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.grid1.Location = new System.Drawing.Point(12,12);
 			this.grid1.Name = "grid1";
 			this.grid1.ScrollValue = 0;
-			this.grid1.Size = new System.Drawing.Size(424,613);
+			this.grid1.Size = new System.Drawing.Size(445,585);
 			this.grid1.TabIndex = 14;
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
@@ -105,7 +105,7 @@ namespace OpenDental{
 			this.butCopy.CornerRadius = 4F;
 			this.butCopy.Image = global::OpenDental.Properties.Resources.Right;
 			this.butCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCopy.Location = new System.Drawing.Point(333,635);
+			this.butCopy.Location = new System.Drawing.Point(333,607);
 			this.butCopy.Name = "butCopy";
 			this.butCopy.Size = new System.Drawing.Size(75,24);
 			this.butCopy.TabIndex = 15;
@@ -122,7 +122,7 @@ namespace OpenDental{
 			this.butNew.CornerRadius = 4F;
 			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(615,635);
+			this.butNew.Location = new System.Drawing.Point(657,607);
 			this.butNew.Name = "butNew";
 			this.butNew.Size = new System.Drawing.Size(80,24);
 			this.butNew.TabIndex = 10;
@@ -137,7 +137,7 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(794,635);
+			this.butClose.Location = new System.Drawing.Point(836,607);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
@@ -147,7 +147,7 @@ namespace OpenDental{
 			// FormHL7Defs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(881,669);
+			this.ClientSize = new System.Drawing.Size(923,641);
 			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.grid1);
 			this.Controls.Add(this.grid2);
@@ -172,6 +172,7 @@ namespace OpenDental{
 				butNew.Enabled=false;
 				butCopy.Enabled=false;
 				grid2.Enabled=false;
+				grid1.Enabled=false;
 			}
 			FillGrid1();
 			FillGrid2();			
@@ -183,27 +184,23 @@ namespace OpenDental{
 			if(def==null) {
 				def=InternalEcw.GetHL7Def();//Gets all related data.
 			}
-			//js no, this would be for the grid on the right:
-			//else { //Since the def is in the database, we need to get other related data from the database.
-			//	def.hl7DefMessages=HL7DefMessages.GetForDef(def.HL7DefNum);
-			//	for(int i=0;i<def.hl7DefMessages.Count;i++) {
-			//		
-			//	}
-			//}
+			else { //There should never be an InternalDef in the database. Would have to be saved as Custom first.
+				throw new Exception(Lan.g(this,"The internal HL7Def selected is stored in the database and should not be."));//Just in case
+			}
 			listInternal.Add(def);
 			//Add defs for other companies like Centricity here later.
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),170);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),90);
 			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Mode Tx"),100);
+			col=new ODGridColumn(Lan.g(this,"Mode Tx"),55);
 			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Incoming Folder/Port"),150);
-			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Outgoing Folder/Port"),150);
-			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Enabled"),20);
-			grid2.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),115);
+			grid1.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),115);
+			grid1.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
+			grid1.Columns.Add(col);
 			grid1.Rows.Clear();
 			for(int i=0;i<listInternal.Count;i++) {
 				ODGridRow row=new ODGridRow();
@@ -228,15 +225,15 @@ namespace OpenDental{
 		private void FillGrid2(){
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),90);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Mode Tx"),100);
+			col=new ODGridColumn(Lan.g(this,"Mode Tx"),55);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Incoming Folder/Port"),150);
+			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),115);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Outgoing Folder/Port"),150);
+			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),115);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Enabled"),20);
+			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
 			grid2.Columns.Add(col);
 			grid2.Rows.Clear();
 			grid2.EndUpdate();

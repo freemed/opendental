@@ -9635,6 +9635,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						ItemOrder int NOT NULL,
 						CanRepeat tinyint NOT NULL,
 						IsOptional tinyint NOT NULL,
+						SegmentName varchar(255) NOT NULL,
 						Note text NOT NULL,
 						INDEX(HL7DefMessageNum)
 						) DEFAULT CHARSET=utf8";
@@ -9649,6 +9650,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						ItemOrder number(11) NOT NULL,
 						CanRepeat number(3) NOT NULL,
 						IsOptional number(3) NOT NULL,
+						SegmentName varchar2(255),
 						Note clob,
 						CONSTRAINT hl7defsegment_HL7DefSegmentNum PRIMARY KEY (HL7DefSegmentNum)
 						)";
@@ -9656,13 +9658,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX hl7defsegment_HL7DefMessageNum ON hl7defsegment (HL7DefMessageNum)";
 					Db.NonQ(command);
 				}
-				
-
-
-
-
-
-
 
 
 				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -9698,3 +9693,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
+
+
+				

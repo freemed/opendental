@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
-using OpenDentBusiness.HL7;
 using OpenDental.UI;
 
 namespace OpenDental {
@@ -27,13 +26,14 @@ namespace OpenDental {
 
 		private void FormHL7DefEdit_Load(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup,true)) {
-				grid1.Enabled=false;
+				gridMain.Enabled=false;
+				groupBox1.Enabled=false;
 			}
-			FillGrid1();
+			FillGridMain();
 			comboModeTx.Items.Add(Lan.g(this,"File"));
 			comboModeTx.Items.Add(Lan.g(this,"TcpIp"));
 			textDescription.Text=HL7DefCur.Description;
-			checkBoxIsInternal.Checked=HL7DefCur.IsInternal;
+			checkInternal.Checked=HL7DefCur.IsInternal;
 			checkEnabled.Checked=HL7DefCur.IsEnabled;
 			textInternalType.Text=HL7DefCur.InternalType;
 			textInternalTypeVersion.Text=HL7DefCur.InternalTypeVersion;
@@ -49,25 +49,44 @@ namespace OpenDental {
 			textNote.Text=HL7DefCur.Note;
 			if(HL7DefCur.ModeTx==ModeTxHL7.File) {
 				comboModeTx.SelectedIndex=0;
-				textInPort.ReadOnly=true;
-				textInPath.ReadOnly=false;
-				textOutPort.ReadOnly=true;
-				textOutPath.ReadOnly=false;
-				butBrowseIn.Enabled=true;
-				butBrowseOut.Enabled=true;
+				textInPort.Visible=false;
+				textOutPort.Visible=false;
+				labelInPort.Visible=false;
+				labelInPortEx.Visible=false;
+				labelOutPort.Visible=false;
+				labelOutPortEx.Visible=false;
+				textInPath.Visible=true;
+				textOutPath.Visible=true;
+				labelInPath.Visible=true;
+				butBrowseIn.Visible=true;
+				labelOutPath.Visible=true;
+				butBrowseOut.Visible=true;
+				textInPort.TabStop=false;
+				textOutPort.TabStop=false;
+				butBrowseIn.TabStop=true;
+				butBrowseOut.TabStop=true;
 			}
 			else { //ModeTxHL7.TcpIp
 				comboModeTx.SelectedIndex=1;
-				textInPort.ReadOnly=false;
-				textInPath.ReadOnly=true;
-				textOutPort.ReadOnly=false;
-				textOutPath.ReadOnly=true;
-				butBrowseIn.Enabled=false;
-				butBrowseOut.Enabled=false;
+				textInPort.Visible=true;
+				textOutPort.Visible=true;
+				labelInPort.Visible=true;
+				labelInPortEx.Visible=true;
+				labelOutPort.Visible=true;
+				labelOutPortEx.Visible=true;
+				textInPath.Visible=false;
+				textOutPath.Visible=false;
+				labelInPath.Visible=false;
+				butBrowseIn.Visible=false;
+				labelOutPath.Visible=false;
+				butBrowseOut.Visible=false;
+				textInPort.TabStop=true;
+				textOutPort.TabStop=true;
+				butBrowseIn.TabStop=false;
+				butBrowseOut.TabStop=false;
 			}
 			if(HL7DefCur.IsInternal) {
 				textDescription.ReadOnly=true;
-				textFieldSep.ReadOnly=true;
 				textFieldSep.ReadOnly=true;
 				textRepSep.ReadOnly=true;
 				textCompSep.ReadOnly=true;
@@ -76,27 +95,33 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillGrid1() {
-			grid1.BeginUpdate();
-			grid1.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"MessageType"),100);
-			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"EventType"),100);
-			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"InOrOut"),70);
-			grid1.Columns.Add(col);
+		private void FillGridMain() {
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Message"),120);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Segment Name"),100);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Note"),100);
-			grid1.Columns.Add(col);
-			grid1.Rows.Clear();
+			gridMain.Columns.Add(col);
+			gridMain.Rows.Clear();
 			for(int i=0;i<HL7DefCur.hl7DefMessages.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(HL7DefCur.hl7DefMessages[i].MessageType.ToString());
-				row.Cells.Add(HL7DefCur.hl7DefMessages[i].EventType.ToString());
-				row.Cells.Add(HL7DefCur.hl7DefMessages[i].InOrOut.ToString());
+				row.Cells.Add(HL7DefCur.hl7DefMessages[i].MessageType.ToString()+"-"+HL7DefCur.hl7DefMessages[i].EventType.ToString()+", "+HL7DefCur.hl7DefMessages[i].InOrOut.ToString());
+				row.Cells.Add("");
 				row.Cells.Add(HL7DefCur.hl7DefMessages[i].Note);
-				grid1.Rows.Add(row);
+				row.Tag=HL7DefCur.hl7DefMessages[i];
+				gridMain.Rows.Add(row);
+				for(int j=0;j<HL7DefCur.hl7DefMessages[i].hl7DefSegments.Count;j++) {
+					row=new ODGridRow();
+					row.Cells.Add("");
+					row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].SegmentName.ToString());
+					row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].Note);
+					row.Tag=HL7DefCur.hl7DefMessages[i];
+					gridMain.Rows.Add(row);
+				}
 			}
-			grid1.EndUpdate();
+			gridMain.EndUpdate();
 		}
 
 		///<summary>Returns the given path with the local OS path separators as necessary.</summary>
@@ -122,27 +147,50 @@ namespace OpenDental {
 			}
 		}
 
-		private void grid1_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormHL7DefMessageEdit FormS=new FormHL7DefMessageEdit();
+			FormS.HL7DefMes=(HL7DefMessage)gridMain.Rows[e.Row].Tag;
 			FormS.ShowDialog();
+			FillGridMain();
 		}
 
 		private void comboModeTx_SelectedIndexChanged(object sender,System.EventArgs e) {
 			if(comboModeTx.SelectedIndex==0) {
-				textInPort.ReadOnly=true;
-				textInPath.ReadOnly=false;
-				textOutPort.ReadOnly=true;
-				textOutPath.ReadOnly=false;
-				butBrowseIn.Enabled=true;
-				butBrowseOut.Enabled=true;
+				textInPort.Visible=false;
+				textOutPort.Visible=false;
+				labelInPort.Visible=false;
+				labelInPortEx.Visible=false;
+				labelOutPort.Visible=false;
+				labelOutPortEx.Visible=false;
+				textInPath.Visible=true;
+				textOutPath.Visible=true;
+				labelInPath.Visible=true;
+				butBrowseIn.Visible=true;
+				labelOutPath.Visible=true;
+				butBrowseOut.Visible=true;
+				textInPort.TabStop=false;
+				textOutPort.TabStop=false;
+				butBrowseIn.TabStop=true;
+				butBrowseOut.TabStop=true;
 			}
 			else if(comboModeTx.SelectedIndex==1) {
-				textInPort.ReadOnly=false;
-				textInPath.ReadOnly=true;
-				textOutPort.ReadOnly=false;
-				textOutPath.ReadOnly=true;
-				butBrowseIn.Enabled=false;
-				butBrowseOut.Enabled=false;
+				comboModeTx.SelectedIndex=1;
+				textInPort.Visible=true;
+				textOutPort.Visible=true;
+				labelInPort.Visible=true;
+				labelInPortEx.Visible=true;
+				labelOutPort.Visible=true;
+				labelOutPortEx.Visible=true;
+				textInPath.Visible=false;
+				textOutPath.Visible=false;
+				labelInPath.Visible=false;
+				butBrowseIn.Visible=false;
+				labelOutPath.Visible=false;
+				butBrowseOut.Visible=false;
+				textInPort.TabStop=true;
+				textOutPort.TabStop=true;
+				butBrowseIn.TabStop=false;
+				butBrowseOut.TabStop=false;
 			}
 		}
 

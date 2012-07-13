@@ -61,7 +61,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 
 		///<summary>Patient identification.</summary>
 		private void PID(Patient pat){
-			seg=new SegmentHL7(SegmentName.PID);
+			seg=new SegmentHL7(SegmentNameHL7.PID);
 			seg.SetField(0,"PID");
 			seg.SetField(3,pat.PatNum.ToString(),"","","","MR");//component 5 is "identifier type code".  See table 0203. MR=medical record number
 			seg.SetField(5,pat.LName,pat.FName);
@@ -77,7 +77,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 		}
 
 		private void ORC() {
-			seg=new SegmentHL7(SegmentName.ORC);
+			seg=new SegmentHL7(SegmentNameHL7.ORC);
 			seg.SetField(0,"ORC");
 			seg.SetField(1,"RE");//fixed
 			msg.Segments.Add(seg);
@@ -85,7 +85,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 
 		private void RXA(VaccinePat vaccine) {
 			VaccineDef vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
-			seg=new SegmentHL7(SegmentName.RXA);
+			seg=new SegmentHL7(SegmentNameHL7.RXA);
 			seg.SetField(0,"RXA");
 			seg.SetField(1,"0");//fixed
 			seg.SetField(2,"1");//fixed

@@ -54,7 +54,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Patient identification.</summary>
 		private void PID(Patient pat){
-			seg=new SegmentHL7(SegmentName.PID);
+			seg=new SegmentHL7(SegmentNameHL7.PID);
 			seg.SetField(0,"PID");
 			seg.SetField(2,pat.PatNum.ToString());
 			seg.SetField(3,pat.PatNum.ToString());
@@ -124,7 +124,7 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 		
 
 		private void OBR(LabPanel panel, DateTime datetime) {
-			seg=new SegmentHL7(SegmentName.OBR);
+			seg=new SegmentHL7(SegmentNameHL7.OBR);
 			seg.SetField(0,"OBR");
 			seg.SetField(1,"1");
 			seg.SetField(2,"OrderNum-1001");
@@ -146,7 +146,7 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000*
 
 		/// <summary>idx passed in will be zero-based. Will be converted to 1-based.</summary>
 		private void OBX(LabResult labresult,int idx) {
-			seg=new SegmentHL7(SegmentName.OBX);
+			seg=new SegmentHL7(SegmentNameHL7.OBX);
 			seg.SetField(0,"OBX");
 			seg.SetField(1,(idx+1).ToString());
 			seg.SetField(2,"NM");//ValueType. NM=numeric, referring to the value that will follow in OBX-5

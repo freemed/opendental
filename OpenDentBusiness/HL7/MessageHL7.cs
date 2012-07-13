@@ -21,7 +21,7 @@ namespace OpenDentBusiness.HL7 {
 			for(int i=0;i<rows.Length;i++) {
 				segment=new SegmentHL7(rows[i]);//this creates the field objects.
 				Segments.Add(segment);
-				if(i==0 && segment.Name==SegmentName.MSH) {
+				if(i==0 && segment.Name==SegmentNameHL7.MSH) {
 //js 7/3/12 Make this more intelligent because we also now need the suffix
 					string msgtype=segment.GetFieldComponent(8,0);
 					if(msgtype=="ADT") {
@@ -50,7 +50,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		///<summary>If an optional segment is not present, it will return null.</summary>
-		public SegmentHL7 GetSegment(SegmentName segmentName,bool isRequired) {
+		public SegmentHL7 GetSegment(SegmentNameHL7 segmentName,bool isRequired) {
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].Name==segmentName) {
 					return Segments[i];

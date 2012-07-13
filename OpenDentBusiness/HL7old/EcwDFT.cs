@@ -40,7 +40,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Patient identification.</summary>
 		private void PID(Patient pat){
-			seg=new SegmentHL7(SegmentName.PID);
+			seg=new SegmentHL7(SegmentNameHL7.PID);
 			seg.SetField(0,"PID");
 			seg.SetField(1,"1");
 			seg.SetField(2,pat.ChartNumber);//Account number.  eCW requires this to be the same # as came in on PID.4.
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>Patient visit.</summary>
 		private void PV1(long aptNum,long provNum){
-			seg=new SegmentHL7(SegmentName.PV1);
+			seg=new SegmentHL7(SegmentNameHL7.PV1);
 			seg.SetField(0,"PV1");
 			Provider prov=Providers.GetProv(provNum);
 			seg.SetField(7,prov.EcwID,prov.LName,prov.FName,prov.MI);
@@ -76,7 +76,7 @@ namespace OpenDentBusiness.HL7 {
 			List<Procedure> procs=Procedures.GetProcsForSingle(aptNum,false);
 			ProcedureCode procCode;
 			for(int i=0;i<procs.Count;i++) {
-				seg=new SegmentHL7(SegmentName.FT1);
+				seg=new SegmentHL7(SegmentNameHL7.FT1);
 				seg.SetField(0,"FT1");
 				seg.SetField(1,(i+1).ToString());
 				seg.SetField(4,procs[i].ProcDate.ToString("yyyyMMddHHmmss"));
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.HL7 {
 
 		///<summary>PDF data segment.</summary>
 		private void ZX1(string pdfDataAsBase64,string pdfDescription){
-			seg=new SegmentHL7(SegmentName.ZX1);
+			seg=new SegmentHL7(SegmentNameHL7.ZX1);
 			seg.SetField(0,"ZX1");
 			seg.SetField(1,"6");
 			seg.SetField(2,"PDF");

@@ -51,6 +51,16 @@ namespace OpenDentBusiness.Crud{
 				hL7DefSegment.ItemOrder       = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
 				hL7DefSegment.CanRepeat       = PIn.Bool  (table.Rows[i]["CanRepeat"].ToString());
 				hL7DefSegment.IsOptional      = PIn.Bool  (table.Rows[i]["IsOptional"].ToString());
+				string segmentName=table.Rows[i]["SegmentName"].ToString();
+				if(segmentName==""){
+					hL7DefSegment.SegmentName   =(SegmentNameHL7)0;
+				}
+				else try{
+					hL7DefSegment.SegmentName   =(SegmentNameHL7)Enum.Parse(typeof(SegmentNameHL7),segmentName);
+				}
+				catch{
+					hL7DefSegment.SegmentName   =(SegmentNameHL7)0;
+				}
 				hL7DefSegment.Note            = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(hL7DefSegment);
 			}
@@ -92,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="HL7DefSegmentNum,";
 			}
-			command+="HL7DefMessageNum,ItemOrder,CanRepeat,IsOptional,Note) VALUES(";
+			command+="HL7DefMessageNum,ItemOrder,CanRepeat,IsOptional,SegmentName,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(hL7DefSegment.HL7DefSegmentNum)+",";
 			}
@@ -101,6 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (hL7DefSegment.ItemOrder)+","
 				+    POut.Bool  (hL7DefSegment.CanRepeat)+","
 				+    POut.Bool  (hL7DefSegment.IsOptional)+","
+				+    POut.String(hL7DefSegment.SegmentName.ToString())+","
 				+DbHelper.ParamChar+"paramNote)";
 			if(hL7DefSegment.Note==null) {
 				hL7DefSegment.Note="";
@@ -122,6 +133,7 @@ namespace OpenDentBusiness.Crud{
 				+"ItemOrder       =  "+POut.Int   (hL7DefSegment.ItemOrder)+", "
 				+"CanRepeat       =  "+POut.Bool  (hL7DefSegment.CanRepeat)+", "
 				+"IsOptional      =  "+POut.Bool  (hL7DefSegment.IsOptional)+", "
+				+"SegmentName     =  "+POut.String(hL7DefSegment.SegmentName.ToString())+", "
 				+"Note            =  "+DbHelper.ParamChar+"paramNote "
 				+"WHERE HL7DefSegmentNum = "+POut.Long(hL7DefSegment.HL7DefSegmentNum);
 			if(hL7DefSegment.Note==null) {
@@ -149,6 +161,10 @@ namespace OpenDentBusiness.Crud{
 			if(hL7DefSegment.IsOptional != oldHL7DefSegment.IsOptional) {
 				if(command!=""){ command+=",";}
 				command+="IsOptional = "+POut.Bool(hL7DefSegment.IsOptional)+"";
+			}
+			if(hL7DefSegment.SegmentName != oldHL7DefSegment.SegmentName) {
+				if(command!=""){ command+=",";}
+				command+="SegmentName = "+POut.String(hL7DefSegment.SegmentName.ToString())+"";
 			}
 			if(hL7DefSegment.Note != oldHL7DefSegment.Note) {
 				if(command!=""){ command+=",";}
