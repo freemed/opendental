@@ -523,11 +523,20 @@ namespace OpenDental{
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
 				if(Accounts.DepositsLinked()) {
-					DepositAccounts=Accounts.GetDepositAccounts();
-					for(int i=0;i<DepositAccounts.Length;i++) {
-						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {//Quickbooks
+						DepositAccountsQB=Accounts.GetDepositAccountsQB();
+						for(int i=0;i<DepositAccountsQB.Count;i++) {
+							comboDepositAccount.Items.Add(DepositAccountsQB[i]);
+						}
+						comboDepositAccount.SelectedIndex=0;
 					}
-					comboDepositAccount.SelectedIndex=0;
+					else {//Other Accounting Software (Open Dental)
+						DepositAccounts=Accounts.GetDepositAccounts();
+						for(int i=0;i<DepositAccounts.Length;i++) {
+							comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+						}
+						comboDepositAccount.SelectedIndex=0;
+					}
 				}
 				else {
 					labelDepositAccount.Visible=false;
