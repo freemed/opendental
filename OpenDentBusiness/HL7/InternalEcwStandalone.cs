@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary></summary>
-	public class InternalEcw {
+	public class InternalEcwStandalone {
 
 		public static HL7Def GetHL7Def() {
 			HL7Def def=new HL7Def();

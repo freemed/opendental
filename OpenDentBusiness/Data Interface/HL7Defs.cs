@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 		#endregion
 
 		///<summary></summary>
-		public static HL7Def GetInternalDef(string Hl7InternalType) {
+		public static HL7Def GetInternalFromDb(string Hl7InternalType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod(),Hl7InternalType);
 			}
