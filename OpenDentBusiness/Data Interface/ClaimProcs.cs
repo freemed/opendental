@@ -641,6 +641,8 @@ namespace OpenDentBusiness{
 			if(loopList!=null && histList!=null) {
 				cp.DedEst=Benefits.GetDeductibleByCode(benList,plan.PlanNum,patPlanNum,procDate,ProcedureCodes.GetStringProcCode(codeNum),histList,loopList,plan,cp.PatNum);
 			}
+			//if this proc has a percent override
+
 			if(cp.DedEst > cp.InsEstTotal){//if the deductible is more than the fee
 				cp.DedEst=cp.InsEstTotal;//reduce the deductible
 			}

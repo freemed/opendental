@@ -421,6 +421,9 @@ namespace OpenDentBusiness {
 			if(benInd==null || benInd.MonetaryAmt==-1 || benInd.MonetaryAmt==0) {
 				return 0;
 			}
+			if(GetPercent(procCode,plan.PlanType,planNum,patPlanNum,benList)==0) {//Procedure is not covered. Do not apply deductible.
+				return 0;
+			}
 			double retVal=benInd.MonetaryAmt;
 			//reduce by amount individual already paid this year--------------------------------------------------------------------
 			//establish date range for procedures to consider

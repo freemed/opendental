@@ -1335,7 +1335,7 @@ namespace UnitTests {
 			if(claimProc1.DedEst!=0){
 				throw new Exception("Estimated deduction should be 0, is " + claimProc1.DedEst + ".\r\n");
 			}
-			retVal+="21: Passed.\r\n";
+			retVal+="21: Passed. Deductibles are not applied to procedures that are not covered.\r\n";
 			return retVal;
 		}
 
