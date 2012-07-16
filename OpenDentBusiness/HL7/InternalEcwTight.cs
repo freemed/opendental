@@ -8,24 +8,28 @@ namespace OpenDentBusiness.HL7 {
 	public class InternalEcwTight {
 
 		public static HL7Def GetHL7Def() {
-			HL7Def def=new HL7Def();
-			def.IsNew=true;
-			def.Description="eClinicalWorks";
-			def.ModeTx=ModeTxHL7.File;
-			def.IncomingFolder=@"C:\HL7\In";
-			def.OutgoingFolder=@"C:\HL7\Out";
-			def.IncomingPort="";
-			def.OutgoingIpPort="";
-			def.FieldSeparator="|";
-			def.ComponentSeparator="^";
-			def.SubcomponentSeparator="&";
-			def.RepetitionSeparator="~";
-			def.EscapeCharacter=@"\";
-			def.IsInternal=true;
-			def.InternalType="eCW";
-			def.InternalTypeVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
-			def.IsEnabled=false;
-			def.Note="";
+			HL7Def def=HL7Defs.GetInternalFromDb("eCWtight");
+			if(def==null) {//wasn't in the database
+				def=new HL7Def();
+				def.IsNew=true;
+				def.Description="eClinicalWorks";
+				def.ModeTx=ModeTxHL7.File;
+				def.IncomingFolder=@"C:\HL7\In";
+				def.OutgoingFolder=@"C:\HL7\Out";
+				def.IncomingPort="";
+				def.OutgoingIpPort="";
+				def.FieldSeparator="|";
+				def.ComponentSeparator="^";
+				def.SubcomponentSeparator="&";
+				def.RepetitionSeparator="~";
+				def.EscapeCharacter=@"\";
+				def.IsInternal=true;
+				def.InternalType="eCWtight";
+				def.InternalTypeVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
+				def.IsEnabled=false;
+				def.Note="";
+			}
+			//in either case, now get all child objects, which can't be in the database.
 			def.hl7DefMessages=new List<HL7DefMessage> ();
 			//-----------------------------------------------------------------------
 			//eCW incoming patient information (ADT).
@@ -49,13 +53,7 @@ namespace OpenDentBusiness.HL7 {
 			msg.hl7DefSegments.Add(seg);
 			seg.hl7DefFields=new List<HL7DefField>();
 			//PID.2
-			HL7DefField field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=2;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="patient.PatNum";//TODO: PatNum in tight integration, ChartNum in stand alone mode.
-			seg.hl7DefFields.Add(field);
+			seg.hl7DefFields.Add(new HL7DefField(2,DataTypeHL7.ST,"patient.PatNum"));//TODO: PatNum in tight integration, ChartNum in stand alone mode.
 			//PID.4
 			field=new HL7DefField();
 			field.IsNew=true;

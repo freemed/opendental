@@ -180,14 +180,9 @@ namespace OpenDental{
 
 		private void FillGrid1(){
 			listInternal=new List<HL7Def>();
-			HL7Def def=HL7Defs.GetInternalFromDb("eCW");//if there is one in the database.  There will be no children.
-			if(def==null) {
-				def=InternalEcwTight.GetHL7Def();//Gets all related data.
-			}
-			else { //There should never be an InternalDef in the database. Would have to be saved as Custom first.
-				throw new Exception(Lan.g(this,"The internal HL7Def selected is stored in the database and should not be."));//Just in case
-			}
-			listInternal.Add(def);
+			listInternal.Add(InternalEcwTight.GetHL7Def());
+			listInternal.Add(InternalEcwFull.GetHL7Def());
+			listInternal.Add(InternalEcwStandalone.GetHL7Def());
 			//Add defs for other companies like Centricity here later.
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
