@@ -87,6 +87,9 @@ namespace OpenDentBusiness{
 				}
 			}
 			command+=" ORDER BY PayDate";
+			object[] parameters={command,payTypes};
+			Plugins.HookAddCode(null, "Payments.GetForDeposit_beforequeryrun", parameters);
+			command=(string)parameters[0];
 			return Crud.PaymentCrud.SelectMany(command);
 		}
 
