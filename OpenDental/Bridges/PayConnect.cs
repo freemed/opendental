@@ -57,11 +57,11 @@ namespace OpenDental.Bridges {
 				PayConnectService.transResponse response=ms.processCreditCard(cred,request);
 				ms.Dispose();
 				if(response.Status.code!=0){//Error
-					MessageBox.Show(Lan.g("PayConnect","Payment failed")+". "+response.Status.description);
+					MessageBox.Show(Lan.g("PayConnect","Payment failed")+". \r\n"+Lan.g("PayConnect","Error message from")+" Pay Connect: \""+response.Status.description+"\"");
 				}
 				return response;
 			}catch(Exception ex){
-				MessageBox.Show(Lan.g("PayConnect","Payment failed")+". "+ex.Message);
+				MessageBox.Show(Lan.g("PayConnect","Payment failed")+". \r\n"+Lan.g("PayConnect","Error message from")+" Open Dental: \""+ex.Message+"\"");
 			}
 			return null;
 		}
