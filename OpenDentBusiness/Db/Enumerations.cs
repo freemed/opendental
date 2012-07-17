@@ -280,7 +280,9 @@ namespace OpenDentBusiness{
 		///<summary>51</summary>
 		TimeCardRules,
 		///<summary>52. Includes DrugManufacturers and DrugUnits.</summary>
-		Vaccines
+		Vaccines,
+		///<summary>53. Includes all 4 HL7Def tables.</summary>
+		HL7Defs,
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

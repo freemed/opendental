@@ -24,12 +24,9 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7DefMessageEdit));
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.radioButtonOut = new System.Windows.Forms.RadioButton();
 			this.radioButtonIn = new System.Windows.Forms.RadioButton();
-			this.labelItemOrderDesc = new System.Windows.Forms.Label();
 			this.comboEventType = new System.Windows.Forms.ComboBox();
 			this.comboMsgType = new System.Windows.Forms.ComboBox();
 			this.textItemOrder = new System.Windows.Forms.TextBox();
@@ -39,44 +36,15 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(548,494);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(634,494);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.radioButtonOut);
 			this.groupBox1.Controls.Add(this.radioButtonIn);
-			this.groupBox1.Controls.Add(this.labelItemOrderDesc);
 			this.groupBox1.Controls.Add(this.comboEventType);
 			this.groupBox1.Controls.Add(this.comboMsgType);
 			this.groupBox1.Controls.Add(this.textItemOrder);
@@ -116,15 +84,6 @@ namespace OpenDental{
 			this.radioButtonIn.UseVisualStyleBackColor = true;
 			this.radioButtonIn.Click += new System.EventHandler(this.radioButtonIn_Selected);
 			// 
-			// labelItemOrderDesc
-			// 
-			this.labelItemOrderDesc.Location = new System.Drawing.Point(179,105);
-			this.labelItemOrderDesc.Name = "labelItemOrderDesc";
-			this.labelItemOrderDesc.Size = new System.Drawing.Size(125,18);
-			this.labelItemOrderDesc.TabIndex = 0;
-			this.labelItemOrderDesc.Text = "(for outgoing)";
-			this.labelItemOrderDesc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
 			// comboEventType
 			// 
 			this.comboEventType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -147,7 +106,7 @@ namespace OpenDental{
 			// 
 			this.textItemOrder.Location = new System.Drawing.Point(136,105);
 			this.textItemOrder.Name = "textItemOrder";
-			this.textItemOrder.Size = new System.Drawing.Size(40,20);
+			this.textItemOrder.Size = new System.Drawing.Size(26,20);
 			this.textItemOrder.TabIndex = 5;
 			// 
 			// labelItemOrder
@@ -207,6 +166,36 @@ namespace OpenDental{
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(548,494);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 3;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(634,494);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
 			// FormHL7DefMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -242,7 +231,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelItemOrder;
 		private System.Windows.Forms.ComboBox comboMsgType;
 		private System.Windows.Forms.ComboBox comboEventType;
-		private System.Windows.Forms.Label labelItemOrderDesc;
 		private System.Windows.Forms.RadioButton radioButtonOut;
 		private System.Windows.Forms.RadioButton radioButtonIn;
 	}

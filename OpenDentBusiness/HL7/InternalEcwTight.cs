@@ -30,175 +30,70 @@ namespace OpenDentBusiness.HL7 {
 				def.Note="";
 			}
 			//in either case, now get all child objects, which can't be in the database.
-			def.hl7DefMessages=new List<HL7DefMessage> ();
 			//-----------------------------------------------------------------------
 			//eCW incoming patient information (ADT).
 			HL7DefMessage msg=new HL7DefMessage();
-			msg.IsNew=true;
-			msg.MessageType=MessageTypeHL7.ADT;
-			msg.EventType=EventTypeHL7.A04;
-			msg.InOrOut=InOutHL7.Incoming;
-			msg.ItemOrder=1;
-			msg.Note="ADT";
-			def.hl7DefMessages.Add(msg);
-			msg.hl7DefSegments=new List<HL7DefSegment>();
+			def.AddMessage(msg,MessageTypeHL7.ADT,EventTypeHL7.A04,InOutHL7.Incoming,1,"");
 			//PID segment
 			HL7DefSegment seg=new HL7DefSegment();
-			seg.IsNew=true;
-			seg.ItemOrder=1;
-			seg.CanRepeat=false;
-			seg.IsOptional=false;
-			seg.SegmentName=SegmentNameHL7.PID;
-			seg.Note="";
-			msg.hl7DefSegments.Add(seg);
-			seg.hl7DefFields=new List<HL7DefField>();
+			msg.AddSegment(seg,1,false,false,SegmentNameHL7.PID,"");
 			//PID.2
-			seg.hl7DefFields.Add(new HL7DefField(2,DataTypeHL7.ST,"patient.PatNum"));//TODO: PatNum in tight integration, ChartNum in stand alone mode.
+			HL7DefField field=new HL7DefField();
+			seg.AddField(field,2,"",DataTypeHL7.ST,"patient.PatNum");//TODO: PatNum in tight integration, ChartNum in stand alone mode.
 			//PID.4
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=4;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="patient.ChartNum";//TODO: ChartNum in tight integration, not saved in stand alone.
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,4,"",DataTypeHL7.ST,"patient.ChartNum");
 			//PID.22
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=22;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.None;//TODO
-			field.FieldName="";//TODO:
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,22,"",DataTypeHL7.None,"");
 			//GT1 segment
 			seg=new HL7DefSegment();
-			seg.IsNew=true;
-			seg.ItemOrder=4;
-			seg.CanRepeat=false;
-			seg.IsOptional=false;
-			seg.SegmentName=SegmentNameHL7.GT1;
-			seg.Note="";
-			msg.hl7DefSegments.Add(seg);
-			seg.hl7DefFields=new List<HL7DefField>();
+			msg.AddSegment(seg,4,false,false,SegmentNameHL7.GT1,"");
 			//GT1.2
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=2;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="patient.PatNum";//TODO: PatNum in tight integration, ChartNum in stand alone mode.
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,2,"",DataTypeHL7.ST,"patient.PatNum");
 			//GT1.4
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=4;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="patient.ChartNum";//TODO: ChartNum in tight integration, not saved in stand alone.
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,4,"",DataTypeHL7.ST,"patient.ChartNum");
 			//GT1.22
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=22;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.None;//TODO
-			field.FieldName="";//TODO:
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,22,"",DataTypeHL7.None,"");
 			//-----------------------------------------------------------------------
 			//eCW incoming appointment information (SIU).
 			msg=new HL7DefMessage();
-			msg.IsNew=true;
-			msg.MessageType=MessageTypeHL7.SIU;
-			msg.EventType=EventTypeHL7.S12;
-			msg.InOrOut=InOutHL7.Incoming;
-			msg.ItemOrder=2;
-			msg.Note="SIU";
-			def.hl7DefMessages.Add(msg);
-			msg.hl7DefSegments=new List<HL7DefSegment>();
+			def.AddMessage(msg,MessageTypeHL7.SIU,EventTypeHL7.S12,InOutHL7.Incoming,2,"");
 			//PID segment
 			seg=new HL7DefSegment();
-			seg.IsNew=true;
-			seg.ItemOrder=1;
-			seg.CanRepeat=false;
-			seg.IsOptional=false;
-			seg.SegmentName=SegmentNameHL7.PID;
-			seg.Note="";
-			msg.hl7DefSegments.Add(seg);
-			seg.hl7DefFields=new List<HL7DefField>();
+			msg.AddSegment(seg,1,false,false,SegmentNameHL7.PID,"");
 			//PID.2
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=2;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.CX;//TODO
-			field.FieldName="patient.PatNum";
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,2,"",DataTypeHL7.CX,"patient.PatNum");
 			//PID.4
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=4;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="patient.ChartNum";//TODO: saved to chart number when in tight integration, but what about stand alone?
-			seg.hl7DefFields.Add(field);
-			//TODO: other PID fields.
+			seg.AddField(field,4,"",DataTypeHL7.ST,"patient.ChartNum");
+//TODO: other PID fields.
 			//PV1 segment. TODO: Use when AIG segment is not present.
 			//SCH segment
 			seg=new HL7DefSegment();
-			seg.IsNew=true;
-			seg.ItemOrder=3;
-			seg.CanRepeat=false;
-			seg.IsOptional=false;
-			seg.SegmentName=SegmentNameHL7.SCH;
-			seg.Note="";
-			msg.hl7DefSegments.Add(seg);
-			seg.hl7DefFields=new List<HL7DefField>();
+			msg.AddSegment(seg,3,false,false,SegmentNameHL7.SCH,"");
 			//SCH.2
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=2;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.CX;
-			field.FieldName="appointment.AptNum";
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,2,"",DataTypeHL7.CX,"appointment.AptNum");
 			//SCH.7
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=7;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.ST;
-			field.FieldName="appointment.Note";
-			seg.hl7DefFields.Add(field);
+			seg.AddField(field,7,"",DataTypeHL7.ST,"appointment.Note");
 			//SCH.11
 			field=new HL7DefField();
-			field.IsNew=true;
-			field.OrdinalPos=11;
-			field.TableId="";//TODO
-			field.DataType=DataTypeHL7.None;
-			field.FieldName="appointment.AptDateTime";
-			seg.hl7DefFields.Add(field);
-			//TODO: components for 11.3 (appointment.AptDateTime) and 11.4 (appointment stop time)
+			seg.AddField(field,11,"",DataTypeHL7.None,"appointment.AptDateTime");
+//TODO: components for 11.3 (appointment.AptDateTime) and 11.4 (appointment stop time)
 			//AIG segment
 			seg=new HL7DefSegment();
-			seg.IsNew=true;
-			seg.ItemOrder=4;
-			seg.CanRepeat=false;
-			seg.IsOptional=true;
-			seg.SegmentName=SegmentNameHL7.AIG;
-			seg.Note="";
-			msg.hl7DefSegments.Add(seg);
+			msg.AddSegment(seg,4,false,true,SegmentNameHL7.AIG,"");
 			seg.hl7DefFields=new List<HL7DefField>();
 			//AIG 3.1. TODO
 			//AIG 3.2. TODO
 			//AIG 3.3. TODO
 			//AIG 3.4. TODO
-
-
-
-
-
-
-
 
 			return def;
 		}

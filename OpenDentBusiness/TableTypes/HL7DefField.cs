@@ -26,14 +26,6 @@ namespace OpenDentBusiness{
 			return (HL7DefField)this.MemberwiseClone();
 		}
 
-		public HL7DefField(int ordinalPos,DataTypeHL7 dataType,string fieldName) {
-			HL7DefField field=new HL7DefField();
-			field.OrdinalPos=ordinalPos;
-			field.DataType=dataType;
-			field.FieldName=fieldName;
-			return field;
-		}
-
 	}
 
 	/// <summary>Data types are listed in HL7 docs section 2.15.</summary>

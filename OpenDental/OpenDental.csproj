@@ -362,6 +362,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormHL7DefFieldEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormHL7DefFieldEdit.designer.cs">
+      <DependentUpon>FormHL7DefFieldEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormHL7DefSegmentEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2504,6 +2510,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormHL7DefFieldEdit.resx">
+      <DependentUpon>FormHL7DefFieldEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7DefSegmentEdit.resx">
       <DependentUpon>FormHL7DefSegmentEdit.cs</DependentUpon>

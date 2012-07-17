@@ -37,6 +37,18 @@ namespace OpenDentBusiness {
 			return (HL7DefMessage)this.MemberwiseClone();
 		}
 
+		public void AddSegment(HL7DefSegment seg,int itemOrder,bool canRepeat,bool isOptional,SegmentNameHL7 segmentName,string note) {
+			if(hl7DefSegments==null) {
+				hl7DefSegments=new List<HL7DefSegment>();
+			}
+			seg.ItemOrder=itemOrder;
+			seg.CanRepeat=canRepeat;
+			seg.IsOptional=isOptional;
+			seg.SegmentName=segmentName;
+			seg.Note=note;
+			this.hl7DefSegments.Add(seg);
+		}
+
 	}
 
 	///<summary></summary>

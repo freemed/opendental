@@ -36,6 +36,17 @@ namespace OpenDentBusiness {
 			return (HL7DefSegment)this.MemberwiseClone();
 		}
 
+		public void AddField(HL7DefField field,int ordinalPos,string tableId,DataTypeHL7 dataType,string fieldName) {
+			if(hl7DefFields==null){
+				hl7DefFields=new List<HL7DefField>();
+			}
+			field.OrdinalPos=ordinalPos;
+			field.DataType=dataType;
+			field.TableId=tableId;
+			field.FieldName=fieldName;
+			this.hl7DefFields.Add(field);
+		}
+
 	}
 
 	/// <summary>Keep this list alphabetized.  Reordering will not mess up the database.</summary>

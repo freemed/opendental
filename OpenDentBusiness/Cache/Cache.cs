@@ -128,6 +128,12 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll){
 				ds.Tables.Add(FeeScheds.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.HL7Defs) || isAll) {
+				ds.Tables.Add(HL7Defs.RefreshCache());
+				ds.Tables.Add(HL7DefMessages.RefreshCache());
+				ds.Tables.Add(HL7DefSegments.RefreshCache());
+				ds.Tables.Add(HL7DefFields.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll){
 				ds.Tables.Add(CovCats.RefreshCache());
 				ds.Tables.Add(CovSpans.RefreshCache());
@@ -301,6 +307,12 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.FeeScheds) || isAll) {
 				FeeScheds.FillCache(ds.Tables["FeeSched"]);
+			}
+			if(itypes.Contains((int)InvalidType.HL7Defs) || isAll) {
+				HL7Defs.FillCache(ds.Tables["HL7Def"]);
+				HL7DefMessages.FillCache(ds.Tables["HL7DefMessage"]);
+				HL7DefSegments.FillCache(ds.Tables["HL7DefSegment"]);
+				HL7DefFields.FillCache(ds.Tables["HL7DefField"]);
 			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll) {
 				FeeScheds.FillCache(ds.Tables["CovCat"]);

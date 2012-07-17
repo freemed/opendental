@@ -160,7 +160,7 @@ namespace OpenDental{
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HL7 Defs";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSheetDefs_FormClosing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormHL7Defs_FormClosing);
 			this.Load += new System.EventHandler(this.FormHL7Defs_Load);
 			this.ResumeLayout(false);
 
@@ -181,8 +181,8 @@ namespace OpenDental{
 		private void FillGrid1(){
 			listInternal=new List<HL7Def>();
 			listInternal.Add(InternalEcwTight.GetHL7Def());
-			listInternal.Add(InternalEcwFull.GetHL7Def());
-			listInternal.Add(InternalEcwStandalone.GetHL7Def());
+			//listInternal.Add(InternalEcwFull.GetHL7Def());
+			//listInternal.Add(InternalEcwStandalone.GetHL7Def());
 			//Add defs for other companies like Centricity here later.
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
@@ -200,8 +200,8 @@ namespace OpenDental{
 			for(int i=0;i<listInternal.Count;i++) {
 				ODGridRow row=new ODGridRow();
 				row.Cells.Add(listInternal[i].Description);
-				row.Cells.Add(listInternal[i].ModeTx.ToString());
-				if(listInternal[i].ModeTx==0){//File mode
+				row.Cells.Add(Lan.g("enumModeTxHL7",listInternal[i].ModeTx.ToString()));
+				if(listInternal[i].ModeTx==ModeTxHL7.File){
 					row.Cells.Add(listInternal[i].IncomingFolder);
 					row.Cells.Add(listInternal[i].OutgoingFolder);
 				}
@@ -209,9 +209,7 @@ namespace OpenDental{
 					row.Cells.Add(listInternal[i].IncomingPort);
 					row.Cells.Add(listInternal[i].OutgoingIpPort);
 				}
-				if(listInternal[i].IsEnabled){
-					row.Cells.Add("X");
-				}
+				row.Cells.Add(listInternal[i].IsEnabled?"X":"");
 				grid1.Rows.Add(row);
 			}
 			grid1.EndUpdate();
@@ -266,7 +264,7 @@ namespace OpenDental{
 
 		private void butCopy_Click(object sender,EventArgs e) {
 			if(grid1.GetSelectedIndex()==-1){
-				MsgBox.Show(this,"Please select an internal setup from the list above first.");
+				MsgBox.Show(this,"Please select an internal HL7Def from the list on the left first.");
 				return;
 			}
 			//SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
@@ -312,9 +310,9 @@ namespace OpenDental{
 			Close();
 		}
 
-		private void FormSheetDefs_FormClosing(object sender,FormClosingEventArgs e) {
+		private void FormHL7Defs_FormClosing(object sender,FormClosingEventArgs e) {
 			if(changed){
-				//DataValid.SetInvalid(InvalidType.Sheets);//Add HL7 as a cache type
+				DataValid.SetInvalid(InvalidType.HL7Defs);
 			}
 		}
 

@@ -64,7 +64,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
-			this.fb = new System.Windows.Forms.FolderBrowserDialog();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -478,6 +477,7 @@ namespace OpenDental{
 			this.gridMain.Title = "Messages / Segments";
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// butOK
 			// 
