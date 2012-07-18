@@ -8,10 +8,6 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class HL7DefFields{
 		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
 		///<summary>A list of all HL7DefFields.</summary>
 		private static List<HL7DefField> listt;
 
@@ -31,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM hl7deffield ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM hl7deffield ORDER BY OrdinalPos";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="HL7DefField";
 			FillCache(table);
@@ -44,6 +40,42 @@ namespace OpenDentBusiness{
 			listt=Crud.HL7DefFieldCrud.TableToList(table);
 		}
 		#endregion
+
+		public static List<HL7DefField> GetForDefSegment(long hl7DefSegmentNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7DefField>>(MethodBase.GetCurrentMethod(),hl7DefSegmentNum);
+			}
+			string command="SELECT * FROM hl7deffield WHERE HL7DefSegmentNum='"+POut.Long(hl7DefSegmentNum)+"'";
+			return Crud.HL7DefFieldCrud.SelectMany(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(HL7DefField hL7DefField) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				hL7DefField.HL7DefFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7DefField);
+				return hL7DefField.HL7DefFieldNum;
+			}
+			return Crud.HL7DefFieldCrud.Insert(hL7DefField);
+		}
+
+		///<summary></summary>
+		public static void Update(HL7DefField hL7DefField) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefField);
+				return;
+			}
+			Crud.HL7DefFieldCrud.Update(hL7DefField);
+		}
+
+		///<summary></summary>
+		public static void Delete(long hL7DefFieldNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefFieldNum);
+				return;
+			}
+			string command= "DELETE FROM hl7deffield WHERE HL7DefFieldNum = "+POut.Long(hL7DefFieldNum);
+			Db.NonQ(command);
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -65,33 +97,6 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefFieldCrud.SelectOne(hL7DefFieldNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(HL7DefField hL7DefField){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				hL7DefField.HL7DefFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7DefField);
-				return hL7DefField.HL7DefFieldNum;
-			}
-			return Crud.HL7DefFieldCrud.Insert(hL7DefField);
-		}
-
-		///<summary></summary>
-		public static void Update(HL7DefField hL7DefField){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefField);
-				return;
-			}
-			Crud.HL7DefFieldCrud.Update(hL7DefField);
-		}
-
-		///<summary></summary>
-		public static void Delete(long hL7DefFieldNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefFieldNum);
-				return;
-			}
-			string command= "DELETE FROM hl7deffield WHERE HL7DefFieldNum = "+POut.Long(hL7DefFieldNum);
-			Db.NonQ(command);
-		}
 		*/
 
 
