@@ -60,7 +60,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormHL7DefFieldEdit FormS=new FormHL7DefFieldEdit();
-			FormS.HL7DefField=(HL7DefField)gridMain.Rows[e.Row].Tag;
+			FormS.HL7DefFieldCur=(HL7DefField)gridMain.Rows[e.Row].Tag;
 			FormS.ShowDialog();
 			FillGridMain();
 		}
