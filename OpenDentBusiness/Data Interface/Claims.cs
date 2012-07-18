@@ -345,7 +345,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.ClaimNum,carrier.NoSendElect"
 				+",CONCAT(CONCAT(CONCAT(concat(patient.LName,', '),patient.FName),' '),patient.MiddleI)"
-				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,MedType,claim.DateService "
+				+",claim.ClaimStatus,carrier.CarrierName,patient.PatNum,carrier.ElectID,MedType,claim.DateService,claim.ClinicNum "
 				+"FROM claim "
 				+"Left join insplan on claim.PlanNum = insplan.PlanNum "
 				+"Left join carrier on insplan.CarrierNum = carrier.CarrierNum "
@@ -378,6 +378,7 @@ namespace OpenDentBusiness{
 				listQueue[i].ClearinghouseNum=Clearinghouses.AutomateClearinghouseSelection(payorID,medType);
 				listQueue[i].MedType=medType;
 				listQueue[i].DateService     = PIn.Date  (table.Rows[i]["DateService"].ToString());
+				listQueue[i].ClinicNum		 = PIn.Long	 (table.Rows[i]["ClinicNum"].ToString());
 			}
 			return listQueue;
 		}
