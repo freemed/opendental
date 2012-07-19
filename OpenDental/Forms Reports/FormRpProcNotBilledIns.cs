@@ -137,7 +137,7 @@ namespace OpenDental{
 			else {
 				report.Query+=DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI");
 			}
-			report.Query+=",procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
+			report.Query+=" AS 'PatientName',procedurelog.ProcDate,procedurecode.Descript,procedurelog.ProcFee "
 				+"FROM patient,procedurecode,procedurelog,claimproc,insplan "
 				+"WHERE claimproc.procnum=procedurelog.procnum "
 				+"AND patient.PatNum=procedurelog.PatNum "
