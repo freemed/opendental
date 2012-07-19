@@ -3229,7 +3229,11 @@ namespace OpenDental {
 			else{
 				apt.ClinicNum=curOp.ClinicNum;
 			}
-			apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;//Causes the confirmation status to be reset.
+			if(apt.AptDateTime!=aptOld.AptDateTime) {
+				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Reset Confirmation Status?")) {
+					apt.Confirmed=DefC.Short[(int)DefCat.ApptConfirmed][0].DefNum;//Causes the confirmation status to be reset.
+				}
+			}
 			try {
 				Appointments.Update(apt,aptOld);
 			}
