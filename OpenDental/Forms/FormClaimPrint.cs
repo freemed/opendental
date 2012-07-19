@@ -1474,61 +1474,61 @@ namespace OpenDental{
 						Provider P=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)];
 						displayStrings[i]=P.FName+" "+P.MI+" "+P.LName+" "+P.Suffix;
 						break;
-					case "BillingDentistAddress":
-						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
-						}
-						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
-						}
-						else {
-							displayStrings[i]=clinic.Address;
-						}
-						break;
-					case "BillingDentistAddress2":
-						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
-						}
-						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
-						}
-						else {
-							displayStrings[i]=clinic.Address2;
-						}
-						break;
-					case "BillingDentistCity":
-						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
-						}
-						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
-						}
-						else {
-							displayStrings[i]=clinic.City;
-						}
-						break;
-					case "BillingDentistST":
-						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
-						}
-						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
-						}
-						else {
-							displayStrings[i]=clinic.State;
-						}
-						break;
-					case "BillingDentistZip":
-						if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
-						}
-						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
-						}
-						else {
-							displayStrings[i]=clinic.Zip;
-						}
-						break;
+					//case "BillingDentistAddress":
+					//  if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
+					//  }
+					//  else if(clinic==null) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
+					//  }
+					//  else {
+					//    displayStrings[i]=clinic.Address;
+					//  }
+					//  break;
+					//case "BillingDentistAddress2":
+					//  if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
+					//  }
+					//  else if(clinic==null) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
+					//  }
+					//  else {
+					//    displayStrings[i]=clinic.Address2;
+					//  }
+					//  break;
+					//case "BillingDentistCity":
+					//  if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
+					//  }
+					//  else if(clinic==null) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
+					//  }
+					//  else {
+					//    displayStrings[i]=clinic.City;
+					//  }
+					//  break;
+					//case "BillingDentistST":
+					//  if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
+					//  }
+					//  else if(clinic==null) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
+					//  }
+					//  else {
+					//    displayStrings[i]=clinic.State;
+					//  }
+					//  break;
+					//case "BillingDentistZip":
+					//  if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
+					//  }
+					//  else if(clinic==null) {
+					//    displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
+					//  }
+					//  else {
+					//    displayStrings[i]=clinic.Zip;
+					//  }
+					//  break;
 					case "BillingDentistMedicaidID":
 						displayStrings[i]=ProviderC.ListLong[Providers.GetIndexLong(ClaimCur.ProvBill)].MedicaidID;
 						break;
@@ -1621,6 +1621,76 @@ namespace OpenDental{
 						}
 						else {
 							displayStrings[i]=clinic.Phone;
+						}
+						break;
+					case "PayToDentistAddress": //Behaves just like the old BillingDentistAddress field, but is overridden by the Pay-To address if the Pay-To address has been specified.
+						if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticePayToAddress);
+						}
+						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
+						}
+						else if(clinic==null) {
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
+						}
+						else {
+						  displayStrings[i]=clinic.Address;
+						}
+						break;
+					case "PayToDentistAddress2": //Behaves just like the old BillingDentistAddress2 field, but is overridden by the Pay-To address if the Pay-To address has been specified.
+						if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticePayToAddress2);
+						}
+						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
+						}
+						else if(clinic==null) {
+						  displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
+						}
+						else {
+						  displayStrings[i]=clinic.Address2;
+						}
+						break;
+					case "PayToDentistCity": //Behaves just like the old BillingDentistCity field, but is overridden by the Pay-To address if the Pay-To address has been specified.
+						if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToCity);
+						}
+						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
+						}
+						else if(clinic==null) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
+						}
+						else {
+							displayStrings[i]=clinic.City;
+						}
+						break;
+					case "PayToDentistST": //Behaves just like the old BillingDentistST field, but is overridden by the Pay-To address if the Pay-To address has been specified.
+						if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToST);
+						}
+						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
+						}
+						else if(clinic==null) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
+						}
+						else {
+							displayStrings[i]=clinic.State;
+						}
+						break;
+					case "PayToDentistZip": //Behaves just like the old BillingDentistZip field, but is overridden by the Pay-To address if the Pay-To address has been specified.
+						if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToZip);
+						}
+						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
+						}
+						else if(clinic==null) {
+							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
+						}
+						else {
+							displayStrings[i]=clinic.Zip;
 						}
 						break;
 					case "TreatingDentistFName":

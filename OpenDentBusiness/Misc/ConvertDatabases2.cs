@@ -9509,6 +9509,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.3.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_3_3();
+		}
+
+		private static void To12_3_3() {
+			if(FromVersion<new Version("12.3.3.0")) {
+				string command="";
+				command="UPDATE claimformitem SET FieldName='PayToDentistAddress' WHERE FieldName='BillingDentistAddress'";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='PayToDentistAddress2' WHERE FieldName='BillingDentistAddress2'";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='PayToDentistCity' WHERE FieldName='BillingDentistCity'";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='PayToDentistST' WHERE FieldName='BillingDentistST'";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='PayToDentistZip' WHERE FieldName='BillingDentistZip'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '12.3.3.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_4_0();
 		}
 
