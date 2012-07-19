@@ -138,8 +138,7 @@ namespace OpenDental{
 				+"AND n1.Note LIKE '%\"\"%' "//looks for ""
 				+@"AND n1.EntryDateTime=(SELECT MAX(n2.EntryDateTime)
 				FROM procnote n2
-				WHERE n1.ProcNum = n2.ProcNum)
-				ORDER BY procedurelog.ProcDate)
+				WHERE n1.ProcNum = n2.ProcNum))
 				UNION ALL
 				(SELECT procedurelog.ProcDate,
 				CONCAT(CONCAT(patient.LName,', '),patient.FName),
@@ -154,8 +153,8 @@ namespace OpenDental{
 				+@"AND n1.EntryDateTime=(SELECT MAX(n2.EntryDateTime)
 				FROM procnote n2
 				WHERE n1.ProcNum = n2.ProcNum)
-				AND procedurecode.ProcCode='~GRP~'
-				ORDER BY procedurelog.ProcDate)";
+				AND procedurecode.ProcCode='~GRP~')
+				ORDER BY ProcDate";
 			report.AddColumn("Date",80,FieldValueType.Date);
 			report.AddColumn("Patient",120,FieldValueType.String);
 			report.AddColumn("Code",50,FieldValueType.String);
