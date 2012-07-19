@@ -109,15 +109,14 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SELECT procedurelog.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+@" patname,
 procedurelog.ProcDate,
-SUM(procedurelog.ProcFee) ""$sumfee"",
+procedurelog.ProcFee ""$sumfee"",
 SUM((SELECT SUM(claimproc.InsPayAmt + claimproc.Writeoff) FROM claimproc WHERE claimproc.ProcNum=procedurelog.ProcNum)) AS
 ""$PaidAndWriteoff""
 FROM procedurelog
 LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum
 LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
 WHERE procedurelog.ProcStatus=2/*complete*/
-AND procedurelog.ProcFee > 0 
-GROUP BY procedurelog.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+@",procedurelog.ProcDate
+GROUP BY procedurelog.ProcNum
 HAVING ROUND($sumfee,3) < ROUND($PaidAndWriteoff,3)
 ORDER BY patname,ProcDate";
 			FormQuery FormQuery2=new FormQuery(report);
