@@ -20,6 +20,8 @@ namespace OpenDental {
 		private static int statementLimitPerPatient=5;
 		///<summary>This variable prevents the synching methods from being called when a previous synch is in progress.</summary>
 		private static bool IsSynching;
+		///<summary>This variable prevents multiple error message boxes from popping up if mobile synch server is not available.</summary>
+		private static bool IsServerAvail=true;
 		///<summary>True if a pref was saved and the other workstations need to have their cache refreshed when this form closes.</summary>
 		private bool changed;
 		///<summary>If this variable is true then records are uploaded one at a time so that an error in uploading can be traced down to a single record</summary>
@@ -547,11 +549,18 @@ namespace OpenDental {
 			}
 			if(!TestWebServiceExists()) {
 				if(!doForce) {//if being used from FormOpenDental as part of timer
-					if(MessageBox.Show("Mobile synch server not available.  Synch failed.  Turn off synch?","",MessageBoxButtons.YesNo)==DialogResult.Yes) {
-						Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,0);
+					if(IsServerAvail) {//this will only happen the first time to prevent multiple windows.
+						IsServerAvail=false;
+						DialogResult res=MessageBox.Show("Mobile synch server not available.  Synch failed.  Turn off synch?","",MessageBoxButtons.YesNo);
+						if(res==DialogResult.Yes) {
+							Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,0);
+						}
 					}
 				}
 				return;
+			}
+			else {
+				IsServerAvail=true;
 			}
 			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
 			//FormProgress FormP=new FormProgress();//but we won't display it.
