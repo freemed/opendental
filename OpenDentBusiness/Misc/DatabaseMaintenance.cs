@@ -364,6 +364,52 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string AppointmentSpecialCharactersInNotes(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT * FROM appointment WHERE (procdescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+				List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
+				List<char> specialCharsFound=new List<char>();
+				int specialCharCount=0;
+				//string safeString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890-=~!@#$%^&*()_+,./;'[]\\<>?:\"{}|";
+				if(apts.Count!=0||verbose) {
+					foreach(Appointment apt in apts) {
+						foreach(char c in apt.Note) {
+							if((int)c<255) {//search every character in Note skip basic latin characters and some control characters
+								continue;
+							}
+							specialCharCount++;
+							if(specialCharsFound.Contains(c)) {
+								continue;
+							}
+							specialCharsFound.Add(c);
+						}
+						foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
+							if((int)c<255) {
+								continue;
+							}
+							specialCharCount++;
+							if(specialCharsFound.Contains(c)) {
+								continue;
+							}
+							specialCharsFound.Add(c);
+						}
+					}
+					//foreach(char c in specialCharsFound) {
+					//  log+=Lans.g("FormDatabaseMaintenance","Special character found in appointment (char/hex): ")+c+" / "+(int)c+"\r\n";
+					//}
+					log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","Total special characters found.  These will cause mobile synch to fail.  If your mobile synch is failing, use the Spec Char button below to fix.")+"\r\n";
+				}
+			}
+			else {
+				//Fix code is in a dedicated button "Spec Char"
+			}
+			return log;
+		}
+
 		public static string AutoCodesDeleteWithNoItems(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -3283,6 +3329,43 @@ HAVING cnt>1";
 			//log+="Missing claimprocs added back: "+numberFixed.ToString()+".\r\n";
 			//log+="Missing claimpayments added back: "+numberFixed2.ToString()+".\r\n";
 			return log;
+		}
+
+		public static void FixSpecialCharacters() {
+			string command="SELECT * FROM appointment WHERE (procdescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+			List<Appointment> apts=OpenDentBusiness.Crud.AppointmentCrud.SelectMany(command);
+			List<char> specialCharsFound=new List<char>();
+			int specialCharCount=0;
+			//string safeString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890-=~!@#$%^&*()_+,./;'[]\\<>?:\"{}|";
+			if(apts.Count!=0) {
+				foreach(Appointment apt in apts) {
+					foreach(char c in apt.Note) {
+						if((int)c<255) {//search every character in Note skip basic latin characters and some control characters
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
+						if((int)c<255) {
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+				}
+				foreach(char c in specialCharsFound) {
+					command="UPDATE appointment SET Note = REPLACE(Note,'"+c+"',''), procdescript = REPLACE(procdescript,'"+c+"','')";
+					Db.NonQ(command);
+				}
+			}
+			return;
 		}
 
 		///<summary>Return values look like 'MyISAM' or 'InnoDB'. Will return empty string on error.</summary>
