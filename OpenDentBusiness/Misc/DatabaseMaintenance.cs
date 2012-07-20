@@ -1812,7 +1812,7 @@ namespace OpenDentBusiness {
 				  +"WHERE medication.MedicationNum=medicationpat.MedicationNum)";
 				int numberFixed=Db.NonQ32(command);
 				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","Medications deleted because no defition exists for them: ")+numberFixed.ToString()+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Medications deleted because no definition exists for them: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
