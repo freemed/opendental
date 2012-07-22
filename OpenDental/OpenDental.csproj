@@ -362,12 +362,6 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormDatabaseMaintenanceSpecChar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormDatabaseMaintenanceSpecChar.designer.cs">
-      <DependentUpon>FormDatabaseMaintenanceSpecChar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormHL7DefFieldEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2516,9 +2510,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormDatabaseMaintenanceSpecChar.resx">
-      <DependentUpon>FormDatabaseMaintenanceSpecChar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7DefFieldEdit.resx">
       <DependentUpon>FormHL7DefFieldEdit.cs</DependentUpon>
