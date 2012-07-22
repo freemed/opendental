@@ -16,6 +16,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml;
 using OpenDental.UI;
 using Tao.Platform.Windows;
 using SparksToothChart;
@@ -3652,9 +3653,13 @@ namespace OpenDental{
 							labelECWerror.Visible=true;
 						}
 						else {
-							//ecwEx.InitClass oExInit=new ecwEx.InitClass();
-							strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
-							//oExInit.getAppServer();
+							//strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
+							XmlTextReader reader=new XmlTextReader(Bridges.ECW.EcwConfigPath);
+							while(reader.Read()){
+								if(reader.Name.ToString()=="server") {
+									strAppServer=reader.ReadString().Trim();
+								}
+							}
 							string path="http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
 								+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
 								+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString();
