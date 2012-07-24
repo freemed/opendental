@@ -418,6 +418,15 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,true,"Change the fee schedule for all selected plans to the new fee schedule?")){
 				return;
 			}
+			InputBox passBox=new InputBox("To prevent accidental changes, please enter password.  It can be found in our manual.");
+			passBox.Show();
+			if(passBox.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(passBox.textResult.Text!="fee") {
+				MsgBox.Show(this,"Incorrect password.");
+				return;
+			}
 			Cursor=Cursors.WaitCursor;
 			long employerNum;
 			string carrierName;
