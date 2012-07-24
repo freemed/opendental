@@ -2956,6 +2956,28 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string RefAttachDeleteWithInvalidReferral(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM refattach WHERE ReferralNum NOT IN (SELECT ReferralNum FROM referral)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Ref attachments found with invalid referrals: ")+numFound+"\r\n";
+				}
+			}
+			else {//fix
+				command="DELETE FROM refattach WHERE ReferralNum NOT IN (SELECT ReferralNum FROM referral)";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Ref attachments with invalid referrals deleted: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string SchedulesDeleteShort(bool verbose,bool isCheck) {
 			//No need to check RemotingRole; no call to db.
 			string log="";
