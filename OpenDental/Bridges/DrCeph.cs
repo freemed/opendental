@@ -25,10 +25,11 @@ namespace OpenDental.Bridges{
 				MessageBox.Show("Please select a patient first.");
 				return;
 			}
-			if(pat.Race==PatientRace.Unknown) {
-				MessageBox.Show("Race must be entered first.");
-				return;
-			}
+			//js This was originally added on 9/2/09, probably due to race affecting ceph proportions.  But since we can't find any documentation, and since a customer is complaining, we are removing it for now.  If we add it back, we will document exactly why.
+			//if(pat.Race==PatientRace.Unknown) {
+			//  MessageBox.Show("Race must be entered first.");
+			//  return;
+			//}
 			//Make sure the program is running
 			if(Process.GetProcessesByName("DrCeph").Length==0) {
 				try{
