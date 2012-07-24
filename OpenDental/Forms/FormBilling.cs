@@ -775,6 +775,7 @@ namespace OpenDental{
 			Patient pat;
 			string patFolder;
 			int skipped=0;
+			int skippedElect=0;
 			int emailed=0;
 			int printed=0;
 			int sentelect=0;
@@ -899,6 +900,11 @@ namespace OpenDental{
 					Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
 				}
 				if(stmt.Mode_==StatementMode.Electronic) {
+					Patient guar=fam.ListPats[0];
+					if(guar.Address.Trim()=="" || guar.City.Trim()=="" || guar.State.Trim()=="" || guar.Zip.Trim()=="") {
+						skippedElect++;
+						continue;
+					}
 					stateNumsElect.Add(stmt.StatementNum);
 					if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
 						OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
@@ -969,6 +975,9 @@ namespace OpenDental{
 			string msg="";
 			if(skipped>0){
 				msg+=Lan.g(this,"Skipped due to missing or bad email address: ")+skipped.ToString()+"\r\n";
+			}
+			if(skippedElect>0) {
+				msg+=Lan.g(this,"Skipped due to missing or mailing address: ")+skippedElect.ToString()+"\r\n";
 			}
 			msg+=Lan.g(this,"Printed: ")+printed.ToString()+"\r\n"
 				+Lan.g(this,"E-mailed: ")+emailed.ToString()+"\r\n"
