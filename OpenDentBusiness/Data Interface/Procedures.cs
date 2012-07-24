@@ -830,7 +830,7 @@ namespace OpenDentBusiness {
 			return ConvertProcToString(proc.CodeNum,proc.Surf,proc.ToothNum,false);
 		}
 
-		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.  Also sets procDate for TP procs.</Summary>
+		///<Summary>Supply the list of procedures attached to the appointment.  It will loop through each and assign the correct provider.  Also sets clinic.  Also sets procDate for TP procs.  js 7/24/12 This is not supposed to be called if the appointment is complete.</Summary>
 		public static void SetProvidersInAppointment(Appointment apt,List<Procedure> procList) {
 			//No need to check RemotingRole; no call to db.
 			ProcedureCode procCode;
