@@ -818,6 +818,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
+			if(textDaysFirstReminder.Text=="") {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Initial Reminder box should not be blank, or the recall list will be blank.")) {
+					return;
+				}
+			}
 			if(textPostcardsPerSheet.Text!="1"
 				&& textPostcardsPerSheet.Text!="3"
 				&& textPostcardsPerSheet.Text!="4")
@@ -829,6 +834,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Both status options at the bottom must be set.");
 				return; 
 			}
+			//End of Validation
 			if(Prefs.UpdateString(PrefName.RecallPostcardsPerSheet,textPostcardsPerSheet.Text)) {
 				if(textPostcardsPerSheet.Text=="1"){
 					MsgBox.Show(this,"If using 1 postcard per sheet, you must adjust the position, and also the preview will not work");
