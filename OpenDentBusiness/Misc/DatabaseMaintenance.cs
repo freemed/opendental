@@ -370,37 +370,45 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck) {
-				command="SELECT * FROM appointment WHERE (procdescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+				command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
 				List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
 				List<char> specialCharsFound=new List<char>();
 				int specialCharCount=0;
-				//string safeString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890-=~!@#$%^&*()_+,./;'[]\\<>?:\"{}|";
-				if(apts.Count!=0||verbose) {
-					foreach(Appointment apt in apts) {
-						foreach(char c in apt.Note) {
-							if((int)c<255) {//search every character in Note skip basic latin characters and some control characters
-								continue;
-							}
-							specialCharCount++;
-							if(specialCharsFound.Contains(c)) {
-								continue;
-							}
-							specialCharsFound.Add(c);
+				int intC=0;
+				foreach(Appointment apt in apts) {
+					foreach(char c in apt.Note) {
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
+							continue;
 						}
-						foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
-							if((int)c<255) {
-								continue;
-							}
-							specialCharCount++;
-							if(specialCharsFound.Contains(c)) {
-								continue;
-							}
-							specialCharsFound.Add(c);
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
 						}
+						specialCharsFound.Add(c);
 					}
-					//foreach(char c in specialCharsFound) {
-					//  log+=Lans.g("FormDatabaseMaintenance","Special character found in appointment (char/hex): ")+c+" / "+(int)c+"\r\n";
-					//}
+					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+				}
+				foreach(char c in specialCharsFound) {
+					log+=c.ToString()+" doesn't work.\r\n";
+				}
+				if(specialCharCount!=0||verbose) {
 					log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","Total special characters found.  These will cause mobile synch to fail.  If your mobile synch is failing, use the Spec Char button below to fix.")+"\r\n";
 				}
 			}
@@ -3331,16 +3339,21 @@ HAVING cnt>1";
 			return log;
 		}
 
+		///<summary>Removes unsupported unicode characters from appointment.procdescript</summary>
 		public static void FixSpecialCharacters() {
-			string command="SELECT * FROM appointment WHERE (procdescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+			string command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
 			List<Appointment> apts=OpenDentBusiness.Crud.AppointmentCrud.SelectMany(command);
 			List<char> specialCharsFound=new List<char>();
 			int specialCharCount=0;
-			//string safeString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`1234567890-=~!@#$%^&*()_+,./;'[]\\<>?:\"{}|";
+			int intC=0;
 			if(apts.Count!=0) {
 				foreach(Appointment apt in apts) {
 					foreach(char c in apt.Note) {
-						if((int)c<255) {//search every character in Note skip basic latin characters and some control characters
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
 							continue;
 						}
 						specialCharCount++;
@@ -3350,7 +3363,11 @@ HAVING cnt>1";
 						specialCharsFound.Add(c);
 					}
 					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
-						if((int)c<255) {
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
 							continue;
 						}
 						specialCharCount++;
@@ -3361,7 +3378,7 @@ HAVING cnt>1";
 					}
 				}
 				foreach(char c in specialCharsFound) {
-					command="UPDATE appointment SET Note = REPLACE(Note,'"+c+"',''), procdescript = REPLACE(procdescript,'"+c+"','')";
+					command="UPDATE appointment SET Note = REPLACE(Note,'"+POut.String(c.ToString())+"',''), ProcDescript = REPLACE(ProcDescript,'"+POut.String(c.ToString())+"','')";
 					Db.NonQ(command);
 				}
 			}

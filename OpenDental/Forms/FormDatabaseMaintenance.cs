@@ -588,8 +588,19 @@ namespace OpenDental {
 		}
 
 		private void butSpecChar_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This is only used if your mobile synch is failing.  This cannot be undone.  Do you wish to continue?")) {
+				return;
+			}
+			InputBox box=new InputBox("In our online manual, on the database maintenance page, look for the password and enter it below.");
+			if(box.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			if(box.textResult.Text!="fix") {
+				MessageBox.Show("Wrong password.");
+				return;
+			}
 			DatabaseMaintenance.FixSpecialCharacters();
-			MsgBox.Show(this,"Special Characters have been removed. Mobile synch should now function properly.");
+			MsgBox.Show(this,"Special Characters have been removed from Appointment Notes and Appointment Procedure Descriptions.  Mobile synch should now function properly.");
 		}
 
 
