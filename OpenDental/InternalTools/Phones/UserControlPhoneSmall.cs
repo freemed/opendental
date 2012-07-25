@@ -130,6 +130,11 @@ namespace OpenDental {
 			FillTile();
 		}
 
+		private void menuItemNeedsHelp_Click(object sender,EventArgs e) {
+			PhoneUI.NeedsHelp(phoneTile);
+			FillTile();
+		}
+
 		private void menuItemWrapUp_Click(object sender,EventArgs e) {
 			PhoneUI.WrapUp(phoneTile);
 			FillTile();

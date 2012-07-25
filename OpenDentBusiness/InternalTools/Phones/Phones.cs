@@ -15,6 +15,7 @@ namespace OpenDentBusiness {
 		public static Color ColorGreen=Color.FromArgb(153,220,153);
 		public static Color ColorYellow=Color.FromArgb(255,255,145);
 		public static Color ColorPaleGreen=Color.FromArgb(217,255,217);
+		public static Color ColorPink=Color.HotPink;
 
 		public static List<Phone> GetPhoneList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -111,6 +112,9 @@ namespace OpenDentBusiness {
 			}
 			else if(isInUse) {
 				colorBar=ColorRed;
+				if(clockStatus==ClockStatusEnum.NeedsHelp) {
+					colorBar=ColorPink;//Show NeedsHelp even when on a call.
+				}
 			}
 			//the rest are for idle:
 			else if(clockStatus==ClockStatusEnum.Available) {
@@ -134,6 +138,9 @@ namespace OpenDentBusiness {
 			}
 			else if(clockStatus==ClockStatusEnum.Backup) {
 				colorBar=ColorPaleGreen;
+			}
+			else if(clockStatus==ClockStatusEnum.NeedsHelp) {
+				colorBar=ColorPink;
 			}
 			return colorBar;
 		}
@@ -263,11 +270,13 @@ namespace OpenDentBusiness {
 				try {
 					ClockStatusEnum status=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),PIn.String(Db.GetScalar(command)));
 					if(status==ClockStatusEnum.Available
-					|| status==ClockStatusEnum.Backup
-					|| status==ClockStatusEnum.OfflineAssist
-					|| status==ClockStatusEnum.TeamAssist
-					|| status==ClockStatusEnum.Training
-					|| status==ClockStatusEnum.WrapUp) {
+						|| status==ClockStatusEnum.Backup
+						|| status==ClockStatusEnum.OfflineAssist
+						|| status==ClockStatusEnum.TeamAssist
+						|| status==ClockStatusEnum.Training
+						|| status==ClockStatusEnum.WrapUp
+						|| status==ClockStatusEnum.NeedsHelp) 
+					{
 						return ped.PhoneExt;
 					}
 				}
@@ -310,7 +319,9 @@ namespace OpenDentBusiness {
 					|| status2==ClockStatusEnum.OfflineAssist
 					|| status2==ClockStatusEnum.TeamAssist
 					|| status2==ClockStatusEnum.Training
-					|| status2==ClockStatusEnum.WrapUp) {
+					|| status2==ClockStatusEnum.WrapUp
+					|| status2==ClockStatusEnum.NeedsHelp) 
+				{
 					return extension;
 				}
 			}

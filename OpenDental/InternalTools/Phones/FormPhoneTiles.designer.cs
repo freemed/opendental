@@ -46,6 +46,7 @@
 			this.menuItemBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkBoxAll = new System.Windows.Forms.CheckBox();
 			this.butOverride = new OpenDental.UI.Button();
+			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuNumbers.SuspendLayout();
 			this.menuStatus.SuspendLayout();
 			this.SuspendLayout();
@@ -89,6 +90,7 @@
             this.menuItemAvailable,
             this.menuItemTraining,
             this.menuItemTeamAssist,
+            this.menuItemNeedsHelp,
             this.menuItemWrapUp,
             this.menuItemOfflineAssist,
             this.menuItemUnavailable,
@@ -102,7 +104,7 @@
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(179, 302);
+			this.menuStatus.Size = new System.Drawing.Size(179, 346);
 			// 
 			// menuItemAvailable
 			// 
@@ -230,6 +232,13 @@
 			this.butOverride.Text = "Settings";
 			this.butOverride.Click += new System.EventHandler(this.butOverride_Click);
 			// 
+			// menuItemNeedsHelp
+			// 
+			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
+			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
+			this.menuItemNeedsHelp.Text = "NeedsHelp";
+			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
+			// 
 			// FormPhoneTiles
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,5 +283,6 @@
 		private System.Windows.Forms.ToolStripMenuItem menuItemHome;
 		private System.Windows.Forms.ToolStripMenuItem menuItemBreak;
 		private System.Windows.Forms.CheckBox checkBoxAll;
+		private System.Windows.Forms.ToolStripMenuItem menuItemNeedsHelp;
 	}
 }

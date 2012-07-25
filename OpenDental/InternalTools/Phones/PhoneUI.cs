@@ -116,6 +116,23 @@ namespace OpenDental {
 			Phones.SetPhoneStatus(ClockStatusEnum.TeamAssist,extension);
 		}
 
+		public static void NeedsHelp(PhoneTile tile) {
+			if(!ClockIn(tile)) {
+				return;
+			}
+			int extension=tile.PhoneCur.Extension;
+			long employeeNum=tile.PhoneCur.EmployeeNum;
+			if(Security.CurUser.EmployeeNum!=employeeNum) {
+				if(!Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
+					if(!CheckSelectedUserPassword(employeeNum)) {
+						return;
+					}
+				}
+			}
+			PhoneEmpDefaults.SetAvailable(extension,employeeNum);
+			Phones.SetPhoneStatus(ClockStatusEnum.NeedsHelp,extension);
+		}
+
 		public static void WrapUp(PhoneTile tile) {
 			if(!ClockIn(tile)) {
 				return;

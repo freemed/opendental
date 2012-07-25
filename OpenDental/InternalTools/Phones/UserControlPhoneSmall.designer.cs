@@ -44,6 +44,7 @@
 			this.menuItemManage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.phoneTile = new OpenDental.PhoneTile();
+			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStatus.SuspendLayout();
 			this.menuNumbers.SuspendLayout();
 			this.SuspendLayout();
@@ -54,6 +55,7 @@
             this.menuItemAvailable,
             this.menuItemTraining,
             this.menuItemTeamAssist,
+            this.menuItemNeedsHelp,
             this.menuItemWrapUp,
             this.menuItemOfflineAssist,
             this.menuItemUnavailable,
@@ -67,7 +69,7 @@
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(179, 302);
+			this.menuStatus.Size = new System.Drawing.Size(179, 346);
 			// 
 			// menuItemAvailable
 			// 
@@ -202,6 +204,13 @@
 			this.phoneTile.Size = new System.Drawing.Size(150, 122);
 			this.phoneTile.TabIndex = 0;
 			// 
+			// menuItemNeedsHelp
+			// 
+			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
+			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
+			this.menuItemNeedsHelp.Text = "NeedsHelp";
+			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
+			// 
 			// UserControlPhoneSmall
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,5 +248,6 @@
 		private System.Windows.Forms.ContextMenuStrip menuNumbers;
 		private System.Windows.Forms.ToolStripMenuItem menuItemManage;
 		private System.Windows.Forms.ToolStripMenuItem menuItemAdd;
+		private System.Windows.Forms.ToolStripMenuItem menuItemNeedsHelp;
 	}
 }

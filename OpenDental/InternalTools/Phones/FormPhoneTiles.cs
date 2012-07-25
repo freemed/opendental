@@ -249,6 +249,11 @@ namespace OpenDental {
 			FillTiles(true);
 		}
 
+		private void menuItemNeedsHelp_Click(object sender,EventArgs e) {
+			PhoneUI.NeedsHelp(selectedTile);
+			FillTiles(true);
+		}
+
 		private void menuItemWrapUp_Click(object sender,EventArgs e) {
 			PhoneUI.WrapUp(selectedTile);
 			FillTiles(true);

@@ -63,7 +63,8 @@ namespace OpenDentBusiness{
 		TeamAssist,
 		OfflineAssist,
 		Backup,
-		Unavailable
+		Unavailable,
+		NeedsHelp
 	}
 
 	
