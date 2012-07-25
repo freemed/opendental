@@ -663,7 +663,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add("1");
 			row.Cells.Add(Lan.g(this,"Postcard"));
-			row.Cells.Add(Lan.g(this,"Use [DueDate] wherever you want the due date to be inserted."));
+			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
 			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage));//old
 			row.Tag="RecallPostcardMessage";
 			gridMain.Rows.Add(row);
@@ -704,7 +704,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add("2");
 			row.Cells.Add(Lan.g(this,"Postcard"));
-			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
+			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
 			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage2));
 			row.Tag="RecallPostcardMessage2";
 			gridMain.Rows.Add(row);
@@ -745,7 +745,7 @@ namespace OpenDental{
 			row=new ODGridRow();
 			row.Cells.Add("3");
 			row.Cells.Add(Lan.g(this,"Postcard"));
-			row.Cells.Add(Lan.g(this,"Use [DueDate]."));
+			row.Cells.Add(Lan.g(this,"Available variables: [DueDate], [NameFL], [NameF]."));
 			row.Cells.Add(PrefC.GetString(PrefName.RecallPostcardMessage3));
 			row.Tag="RecallPostcardMessage3";
 			gridMain.Rows.Add(row);
