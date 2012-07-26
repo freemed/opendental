@@ -112,6 +112,8 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butColor;
 		private UI.Button butText;
 		private Label labelQuickAdd;
+		///<summary>True if appt was double clicked on from the chart module gridProg.  Currently only used to trigger an appointment overlap check.</summary>
+		public bool IsInChartModule;
 
 		///<summary></summary>
 		public FormApptEdit(long aptNum)
@@ -2339,6 +2341,20 @@ namespace OpenDental{
 				MsgBox.Show(this,"Not allowed to set complete future appointments.");
 				return false;
 			}
+			string aptPattern=Appointments.ConvertPatternTo5(strBTime.ToString());
+			//Only run appt overlap check if editing an appt from the chart module and not eCW.
+			if(IsInChartModule && !Programs.UsingEcwTightOrFull()) {
+				List<Appointment> apptList=Appointments.GetForPeriodList(AptCur.AptDateTime,AptCur.AptDateTime);
+				if(DoesOverlap(aptPattern,apptList)) {
+					MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
+					do {
+						aptPattern=aptPattern.Substring(0,aptPattern.Length-1);
+						if(aptPattern.Length==1) {
+							break;
+						}
+					} while(DoesOverlap(aptPattern,apptList));
+				}
+			}
 			if(AptCur.AptStatus == ApptStatus.Planned) {
 				;
 			}
@@ -2354,7 +2370,7 @@ namespace OpenDental{
 			//set procs complete was moved further down
 			//convert from current increment into 5 minute increment
 			//MessageBox.Show(strBTime.ToString());
-			AptCur.Pattern=Appointments.ConvertPatternTo5(strBTime.ToString());
+			AptCur.Pattern=aptPattern;
 			if(comboUnschedStatus.SelectedIndex==0){//none
 				AptCur.UnschedStatus=0;
 			}
@@ -2483,6 +2499,42 @@ namespace OpenDental{
 				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
 			return true;
+		}
+
+		///<summary>Tests all appts for the day, even not visible, to make sure AptCur doesn't overlap others. Pass in the pattern for the appt being edited and the list of appts to test against.</summary>
+		private bool DoesOverlap(string pattern,List<Appointment> apptList) {
+			DateTime aptDateTime;
+			for(int i=0;i<apptList.Count;i++) {
+				if(apptList[i].AptNum==AptCur.AptNum) {
+					continue;
+				}
+				if(apptList[i].Op!=AptCur.Op) {
+					continue;
+				}
+				aptDateTime=apptList[i].AptDateTime;
+				if(aptDateTime.Date!=AptCur.AptDateTime.Date) {
+					continue;
+				}
+				//tests start time
+				if(AptCur.AptDateTime.TimeOfDay >= aptDateTime.TimeOfDay
+					&& AptCur.AptDateTime.TimeOfDay < aptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(
+					apptList[i].Pattern.Length*5))) {
+					return true;
+				}
+				//tests stop time
+				if(AptCur.AptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(pattern.Length*5)) > aptDateTime.TimeOfDay
+					&& AptCur.AptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(pattern.Length*5))
+					<= aptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(apptList[i].Pattern.Length*5))) {
+					return true;
+				}
+				//tests engulf
+				if(AptCur.AptDateTime.TimeOfDay <= aptDateTime.TimeOfDay
+					&& AptCur.AptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(pattern.Length*5))
+					>= aptDateTime.TimeOfDay.Add(TimeSpan.FromMinutes(apptList[i].Pattern.Length*5))) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {

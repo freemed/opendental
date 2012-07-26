@@ -5968,6 +5968,7 @@ namespace OpenDental{
 				//Appointment apt=Appointments.GetOneApt(
 				FormApptEdit FormA=new FormApptEdit(PIn.Long(row["AptNum"].ToString()));
 				//PinIsVisible=false
+				FormA.IsInChartModule=true;
 				FormA.ShowDialog();
 				if(FormA.CloseOD) {
 					((Form)this.Parent).Close();
