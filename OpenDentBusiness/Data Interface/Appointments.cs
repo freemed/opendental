@@ -735,8 +735,8 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN insplan plan2 ON InsPlan2=plan2.PlanNum "
 				+"LEFT JOIN carrier carrier1 ON plan1.CarrierNum=carrier1.CarrierNum "
 				+"LEFT JOIN carrier carrier2 ON plan2.CarrierNum=carrier2.CarrierNum "
-				+"LEFT JOIN disease ON patient.PatNum=disease.PatNum "
-				+"LEFT JOIN allergy ON patient.PatNum=allergy.PatNum ";
+				+"LEFT JOIN disease ON patient.PatNum=disease.PatNum AND disease.DiseaseDefNum <> "+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
+				+"LEFT JOIN allergy ON patient.PatNum=allergy.PatNum AND allergy.AllergyDefNum <> "+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+" ";
 			if(aptNum==0){
 				command+="WHERE AptDateTime >= "+POut.Date(dateStart)+" "
 					+"AND AptDateTime < "+POut.Date(dateEnd.AddDays(1))+" "
