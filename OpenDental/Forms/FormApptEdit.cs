@@ -1352,6 +1352,7 @@ namespace OpenDental{
 			if(!Programs.UsingEcwTightOrFull()) {
 			  return;
 			}
+			List<long> procNums=new List<long>();
 			//this is a method that attaches very specific kinds of procedures to appt
 			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++) {//loop through procs
 				if(DS.Tables["Procedure"].Rows[i]["ProcStatus"].ToString()!=((int)ProcStat.C).ToString()){//must be complete proc
@@ -1361,7 +1362,11 @@ namespace OpenDental{
 					continue;
 				}
 				gridProc.SetSelected(i,true);//harmless if already selected.
+				procNums.Add(PIn.Long(DS.Tables["Procedure"].Rows[i]["ProcNum"].ToString()));
 			}
+			//Now attach the procedure to the appt in the database.
+			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
+			Procedures.AttachToApt(procNums,AptCur.AptNum,isPlanned);
 		}
 
 		private void butPickDentist_Click(object sender,EventArgs e) {
