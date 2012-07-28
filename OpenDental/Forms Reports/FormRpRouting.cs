@@ -312,6 +312,10 @@ namespace OpenDental
 				sheetDef=SheetDefs.GetSheetDef(sheetDefNum);//includes fields and parameters
 			}
 			List<Sheet> sheetBatch=SheetUtil.CreateBatch(sheetDef,aptNums);
+			if(sheetBatch.Count==0) {
+				MsgBox.Show(this,"There are no routing slips to print.");
+				return;
+			}
 			try {
 				SheetPrinting.PrintBatch(sheetBatch);
 			}
