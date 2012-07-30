@@ -208,9 +208,10 @@ namespace OpenDental {
 			if(phoneCur==null) {
 				return;
 			}
-			if(phoneCur.EmployeeNum==0) {
-				return;
-			}
+			//Jason - Allowed to be 0 here.  The Security.UserCur.EmpNum will be used when they go to clock in and that is where the 0 check needs to be.
+			//if(phoneCur.EmployeeNum==0) {
+			//  return;
+			//}
 			OnSelectedTileChanged();
 			MenuStatus.Show(labelStatusAndNote,e.Location);		
 		}
