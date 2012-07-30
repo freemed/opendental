@@ -1364,7 +1364,7 @@ namespace OpenDental{
 				gridProc.SetSelected(i,true);//harmless if already selected.
 				procNums.Add(PIn.Long(DS.Tables["Procedure"].Rows[i]["ProcNum"].ToString()));
 			}
-			//Now attach the procedure to the appt in the database.
+			//Now attach the procedures to the appt in the database.
 			bool isPlanned=AptCur.AptStatus==ApptStatus.Planned;
 			Procedures.AttachToApt(procNums,AptCur.AptNum,isPlanned);
 		}
