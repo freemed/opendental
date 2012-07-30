@@ -424,6 +424,7 @@ namespace OpenDental{
 			}
 			FillFamily();
 			FillGrid();
+			gridMain.ScrollToEnd();
 			CheckStatus();
 		}
 
