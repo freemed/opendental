@@ -9677,7 +9677,19 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX hl7defsegment_HL7DefMessageNum ON hl7defsegment (HL7DefMessageNum)";
 					Db.NonQ(command);
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE recall ADD DateScheduled date NOT NULL DEFAULT '0001-01-01'";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE recall ADD DateScheduled date";
+					Db.NonQ(command);
+					command="UPDATE recall SET DateScheduled = TO_DATE('0001-01-01','YYYY-MM-DD') WHERE DateScheduled IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE recall MODIFY DateScheduled NOT NULL";
+					Db.NonQ(command);
+				}
+				
 
 				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -9718,3 +9730,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
+

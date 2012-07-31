@@ -137,9 +137,7 @@ namespace OpenDentBusiness{
 			if(DataConnection.DBtype==DatabaseType.Oracle){
 				datesql="(SELECT CURRENT_DATE FROM dual)";
 			}
-			command=@"SELECT A.* FROM
-				(
-				SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
+			command=@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email ""_guarEmail"",patguar.FName ""_guarFName"",
 				patguar.LName ""_guarLName"",patient.FName,
@@ -147,7 +145,7 @@ namespace OpenDentBusiness{
 				COUNT(commlog.CommlogNum) ""_numberOfReminders"",
 				recall.PatNum,patient.PreferRecallMethod,patient.Preferred,
 				recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
-				recalltype.Description ""_recalltype"",patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum
+				recalltype.Description ""_recalltype"",patient.WirelessPhone,patient.WkPhone
 				FROM recall
 				LEFT JOIN patient ON recall.PatNum=patient.PatNum
 				LEFT JOIN patient patguar ON patient.Guarantor=patguar.PatNum
@@ -170,7 +168,8 @@ namespace OpenDentBusiness{
 			command+="AND recall.DateDue >= "+POut.Date(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.Date(toDate)+" "
 				+"AND recall.IsDisabled = 0 "
-				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") ";
+				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") "
+				+"AND recall.DateScheduled='0001-01-01' "; //Only show rows where no future recall appointment so DateScheduled is default date.
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
 			}
@@ -185,17 +184,16 @@ namespace OpenDentBusiness{
 					recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
 					recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";
 			}
-			command+=@") A
-				LEFT JOIN
-				(
-				SELECT appointment.PatNum,recalltrigger.RecallTypeNum 
-				FROM procedurelog
-				INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > "+datesql//early this morning
-				+@" AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
-				INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
-				) B ON A.PatNum=B.PatNum AND A.RecallTypeNum=B.RecallTypeNum
-				WHERE ISNULL(B.PatNum) ";//only show rows where no future recall appointment
-			
+//      command+=@") A
+//				LEFT JOIN
+//				(
+//				SELECT appointment.PatNum,recalltrigger.RecallTypeNum 
+//				FROM procedurelog
+//				INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > "+datesql//early this morning
+//        +@" AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
+//				INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
+//				) B ON A.PatNum=B.PatNum AND A.RecallTypeNum=B.RecallTypeNum
+//				WHERE ISNULL(B.PatNum) ";//only show rows where no future recall appointment
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;

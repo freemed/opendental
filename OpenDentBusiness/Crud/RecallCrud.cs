@@ -59,6 +59,7 @@ namespace OpenDentBusiness.Crud{
 				recall.RecallTypeNum      = PIn.Long  (table.Rows[i]["RecallTypeNum"].ToString());
 				recall.DisableUntilBalance= PIn.Double(table.Rows[i]["DisableUntilBalance"].ToString());
 				recall.DisableUntilDate   = PIn.Date  (table.Rows[i]["DisableUntilDate"].ToString());
+				recall.DateScheduled      = PIn.Date  (table.Rows[i]["DateScheduled"].ToString());
 				retVal.Add(recall);
 			}
 			return retVal;
@@ -99,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RecallNum,";
 			}
-			command+="PatNum,DateDueCalc,DateDue,DatePrevious,RecallInterval,RecallStatus,Note,IsDisabled,RecallTypeNum,DisableUntilBalance,DisableUntilDate) VALUES(";
+			command+="PatNum,DateDueCalc,DateDue,DatePrevious,RecallInterval,RecallStatus,Note,IsDisabled,RecallTypeNum,DisableUntilBalance,DisableUntilDate,DateScheduled) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(recall.RecallNum)+",";
 			}
@@ -115,7 +116,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Long  (recall.RecallTypeNum)+","
 				+"'"+POut.Double(recall.DisableUntilBalance)+"',"
-				+    POut.Date  (recall.DisableUntilDate)+")";
+				+    POut.Date  (recall.DisableUntilDate)+","
+				+    POut.Date  (recall.DateScheduled)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -139,7 +141,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"RecallTypeNum      =  "+POut.Long  (recall.RecallTypeNum)+", "
 				+"DisableUntilBalance= '"+POut.Double(recall.DisableUntilBalance)+"', "
-				+"DisableUntilDate   =  "+POut.Date  (recall.DisableUntilDate)+" "
+				+"DisableUntilDate   =  "+POut.Date  (recall.DisableUntilDate)+", "
+				+"DateScheduled      =  "+POut.Date  (recall.DateScheduled)+" "
 				+"WHERE RecallNum = "+POut.Long(recall.RecallNum);
 			Db.NonQ(command);
 		}
@@ -191,6 +194,10 @@ namespace OpenDentBusiness.Crud{
 			if(recall.DisableUntilDate != oldRecall.DisableUntilDate) {
 				if(command!=""){ command+=",";}
 				command+="DisableUntilDate = "+POut.Date(recall.DisableUntilDate)+"";
+			}
+			if(recall.DateScheduled != oldRecall.DateScheduled) {
+				if(command!=""){ command+=",";}
+				command+="DateScheduled = "+POut.Date(recall.DateScheduled)+"";
 			}
 			if(command==""){
 				return;
