@@ -2515,6 +2515,10 @@ namespace OpenDentBusiness
 						Comma(strb);
 						strb.Append(procCode.AbbrDesc+" mod4");
 					}
+					if(Regex.IsMatch(procCode.MedicalCode,"^[0-9]{3}99$") && proc.ClaimNote.Trim()=="") { //CPT codes ending in 99.
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" proc e-claim note missing");
+					}
 				}
 				else if(claim.MedType==EnumClaimMedType.Institutional) {
 					if(proc.RevCode==""){
