@@ -14,8 +14,8 @@ namespace OpenDentBusiness.HL7 {
 				def.IsNew=true;
 				def.Description="eClinicalWorks";
 				def.ModeTx=ModeTxHL7.File;
-				def.IncomingFolder=@"C:\HL7\In";
-				def.OutgoingFolder=@"C:\HL7\Out";
+				def.IncomingFolder="";
+				def.OutgoingFolder="";
 				def.IncomingPort="";
 				def.OutgoingIpPort="";
 				def.FieldSeparator="|";

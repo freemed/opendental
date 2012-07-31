@@ -24,138 +24,138 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7DefMessageEdit));
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.radioButtonOut = new System.Windows.Forms.RadioButton();
-			this.radioButtonIn = new System.Windows.Forms.RadioButton();
+			this.radioOut = new System.Windows.Forms.RadioButton();
+			this.radioIn = new System.Windows.Forms.RadioButton();
 			this.comboEventType = new System.Windows.Forms.ComboBox();
 			this.comboMsgType = new System.Windows.Forms.ComboBox();
-			this.textItemOrder = new System.Windows.Forms.TextBox();
 			this.labelItemOrder = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label8 = new System.Windows.Forms.Label();
+			this.labelDelete = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1.SuspendLayout();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
+			this.textItemOrder = new OpenDental.ValidNum();
 			this.SuspendLayout();
 			// 
-			// groupBox1
+			// radioOut
 			// 
-			this.groupBox1.Controls.Add(this.radioButtonOut);
-			this.groupBox1.Controls.Add(this.radioButtonIn);
-			this.groupBox1.Controls.Add(this.comboEventType);
-			this.groupBox1.Controls.Add(this.comboMsgType);
-			this.groupBox1.Controls.Add(this.textItemOrder);
-			this.groupBox1.Controls.Add(this.labelItemOrder);
-			this.groupBox1.Controls.Add(this.textNote);
-			this.groupBox1.Controls.Add(this.label12);
-			this.groupBox1.Controls.Add(this.label10);
-			this.groupBox1.Controls.Add(this.label8);
-			this.groupBox1.Location = new System.Drawing.Point(17,2);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(692,132);
-			this.groupBox1.TabIndex = 4;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "HL7 Message Settings";
+			this.radioOut.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.radioOut.Location = new System.Drawing.Point(78,85);
+			this.radioOut.Name = "radioOut";
+			this.radioOut.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioOut.Size = new System.Drawing.Size(100,18);
+			this.radioOut.TabIndex = 15;
+			this.radioOut.TabStop = true;
+			this.radioOut.Text = "Outgoing";
+			this.radioOut.UseVisualStyleBackColor = true;
+			this.radioOut.Click += new System.EventHandler(this.radioOut_Click);
 			// 
-			// radioButtonOut
+			// radioIn
 			// 
-			this.radioButtonOut.Location = new System.Drawing.Point(50,85);
-			this.radioButtonOut.Name = "radioButtonOut";
-			this.radioButtonOut.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.radioButtonOut.Size = new System.Drawing.Size(100,18);
-			this.radioButtonOut.TabIndex = 4;
-			this.radioButtonOut.TabStop = true;
-			this.radioButtonOut.Text = "Outgoing";
-			this.radioButtonOut.UseVisualStyleBackColor = true;
-			this.radioButtonOut.Click += new System.EventHandler(this.radioButtonOut_Selected);
-			// 
-			// radioButtonIn
-			// 
-			this.radioButtonIn.Location = new System.Drawing.Point(50,65);
-			this.radioButtonIn.Name = "radioButtonIn";
-			this.radioButtonIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.radioButtonIn.Size = new System.Drawing.Size(100,18);
-			this.radioButtonIn.TabIndex = 3;
-			this.radioButtonIn.TabStop = true;
-			this.radioButtonIn.Text = "Incoming";
-			this.radioButtonIn.UseVisualStyleBackColor = true;
-			this.radioButtonIn.Click += new System.EventHandler(this.radioButtonIn_Selected);
+			this.radioIn.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.radioIn.Location = new System.Drawing.Point(78,65);
+			this.radioIn.Name = "radioIn";
+			this.radioIn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+			this.radioIn.Size = new System.Drawing.Size(100,18);
+			this.radioIn.TabIndex = 14;
+			this.radioIn.TabStop = true;
+			this.radioIn.Text = "Incoming";
+			this.radioIn.UseVisualStyleBackColor = true;
+			this.radioIn.Click += new System.EventHandler(this.radioIn_Click);
 			// 
 			// comboEventType
 			// 
+			this.comboEventType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.comboEventType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboEventType.Location = new System.Drawing.Point(136,42);
+			this.comboEventType.Location = new System.Drawing.Point(164,42);
 			this.comboEventType.MaxDropDownItems = 100;
 			this.comboEventType.Name = "comboEventType";
 			this.comboEventType.Size = new System.Drawing.Size(138,21);
-			this.comboEventType.TabIndex = 2;
+			this.comboEventType.TabIndex = 13;
 			// 
 			// comboMsgType
 			// 
+			this.comboMsgType.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.comboMsgType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboMsgType.Location = new System.Drawing.Point(136,21);
+			this.comboMsgType.Location = new System.Drawing.Point(164,21);
 			this.comboMsgType.MaxDropDownItems = 100;
 			this.comboMsgType.Name = "comboMsgType";
 			this.comboMsgType.Size = new System.Drawing.Size(138,21);
-			this.comboMsgType.TabIndex = 1;
-			// 
-			// textItemOrder
-			// 
-			this.textItemOrder.Location = new System.Drawing.Point(136,105);
-			this.textItemOrder.Name = "textItemOrder";
-			this.textItemOrder.Size = new System.Drawing.Size(26,20);
-			this.textItemOrder.TabIndex = 5;
+			this.comboMsgType.TabIndex = 12;
 			// 
 			// labelItemOrder
 			// 
-			this.labelItemOrder.Location = new System.Drawing.Point(10,105);
+			this.labelItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.labelItemOrder.Location = new System.Drawing.Point(38,105);
 			this.labelItemOrder.Name = "labelItemOrder";
 			this.labelItemOrder.Size = new System.Drawing.Size(125,18);
-			this.labelItemOrder.TabIndex = 0;
+			this.labelItemOrder.TabIndex = 10;
 			this.labelItemOrder.Text = "Item Order";
 			this.labelItemOrder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(396,16);
+			this.textNote.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.textNote.Location = new System.Drawing.Point(424,16);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(285,109);
-			this.textNote.TabIndex = 6;
+			this.textNote.TabIndex = 17;
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(285,16);
+			this.label12.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.label12.Location = new System.Drawing.Point(313,16);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(110,18);
-			this.label12.TabIndex = 0;
+			this.label12.TabIndex = 8;
 			this.label12.Text = "Note";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(10,20);
+			this.label10.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.label10.Location = new System.Drawing.Point(38,20);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(125,18);
-			this.label10.TabIndex = 0;
+			this.label10.TabIndex = 9;
 			this.label10.Text = "Message Type";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(10,42);
+			this.label8.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.label8.Location = new System.Drawing.Point(38,42);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(125,18);
-			this.label8.TabIndex = 0;
+			this.label8.TabIndex = 11;
 			this.label8.Text = "Event Type";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// labelDelete
+			// 
+			this.labelDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelDelete.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelDelete.Location = new System.Drawing.Point(108,492);
+			this.labelDelete.Name = "labelDelete";
+			this.labelDelete.Size = new System.Drawing.Size(266,28);
+			this.labelDelete.TabIndex = 66;
+			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom" +
+    " list.";
+			this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelDelete.Visible = false;
+			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(17,140);
 			this.gridMain.Name = "gridMain";
@@ -196,14 +196,69 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(17,494);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(85,24);
+			this.butDelete.TabIndex = 18;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(409,494);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(80,24);
+			this.butAdd.TabIndex = 0;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
+			// textItemOrder
+			// 
+			this.textItemOrder.Location = new System.Drawing.Point(164,103);
+			this.textItemOrder.MaxVal = 255;
+			this.textItemOrder.MinVal = 0;
+			this.textItemOrder.Name = "textItemOrder";
+			this.textItemOrder.Size = new System.Drawing.Size(34,20);
+			this.textItemOrder.TabIndex = 67;
+			// 
 			// FormHL7DefMessageEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.ClientSize = new System.Drawing.Size(725,534);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.textItemOrder);
+			this.Controls.Add(this.butAdd);
+			this.Controls.Add(this.labelDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butDelete);
+			this.Controls.Add(this.radioOut);
+			this.Controls.Add(this.radioIn);
+			this.Controls.Add(this.comboEventType);
+			this.Controls.Add(this.comboMsgType);
+			this.Controls.Add(this.labelItemOrder);
+			this.Controls.Add(this.textNote);
+			this.Controls.Add(this.label12);
+			this.Controls.Add(this.label10);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.gridMain);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -212,26 +267,27 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HL7 Def Message Edit";
 			this.Load += new System.EventHandler(this.FormHL7DefMessageEdit_Load);
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.GroupBox groupBox1;
 		private UI.ODGrid gridMain;
+		private System.Windows.Forms.RadioButton radioOut;
+		private System.Windows.Forms.RadioButton radioIn;
+		private System.Windows.Forms.ComboBox comboEventType;
+		private System.Windows.Forms.ComboBox comboMsgType;
+		private System.Windows.Forms.Label labelItemOrder;
+		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox textNote;
-		private System.Windows.Forms.TextBox textItemOrder;
-		private System.Windows.Forms.Label labelItemOrder;
-		private System.Windows.Forms.ComboBox comboMsgType;
-		private System.Windows.Forms.ComboBox comboEventType;
-		private System.Windows.Forms.RadioButton radioButtonOut;
-		private System.Windows.Forms.RadioButton radioButtonIn;
+		private UI.Button butDelete;
+		private System.Windows.Forms.Label labelDelete;
+		private UI.Button butAdd;
+		private ValidNum textItemOrder;
 	}
 }

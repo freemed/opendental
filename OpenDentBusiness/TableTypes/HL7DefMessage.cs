@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		public EventTypeHL7 EventType;
 		///<summary>Enum:InOutHL7 Incoming, Outgoing</summary>
 		public InOutHL7 InOrOut;
-		///<summary>This is mostly for outgoing, since incoming can have extra unexpected segments and since we don't usually care about order of incoming.</summary>
+		///<summary>Zero for incoming, since they can have extra unexpected segments and since we don't usually care about order of incoming.  For outgoing, this should 1-based, but we don't enforce or automate.  For example, all messages could be 1.</summary>
 		public int ItemOrder;
 		///<summary>text</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
@@ -51,26 +51,25 @@ namespace OpenDentBusiness {
 
 	}
 
-	///<summary></summary>
+	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum MessageTypeHL7 {
-		///<summary>This should never happen.</summary>
-		Unknown,
 		///<summary>Demographics - A01,A04,A08,A28,A31</summary>
 		ADT,
-		///<summary>Scheduling - S12,S13,S14,S15,S22</summary>
-		SIU,
 		///<summary>Detailed Financial Transaction - P03</summary>
 		DFT,
-		///<summary>Unsolicited Vaccination Record Update - V04</summary>
-		VXU,
 		///<summary>Unsolicited Observation Message - R01</summary>
-		ORU
+		ORU,
+		///<summary>Scheduling - S12,S13,S14,S15,S22</summary>
+		SIU,
+		///<summary>Unsolicited Vaccination Record Update - V04</summary>
+		VXU
 	}
 
+	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum EventTypeHL7 {
-		///<summary>0 - Only used with ADT/ACK.</summary>
+		///<summary>Only used with ADT/ACK.</summary>
 		A04,
-		///<summary>1 - Only used with SUI/ACK.</summary>
+		///<summary>Only used with SUI/ACK.</summary>
 		S12
 	}
 

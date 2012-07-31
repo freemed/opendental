@@ -7,6 +7,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Reflection;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
 using OpenDental.UI;
@@ -20,11 +21,12 @@ namespace OpenDental{
 		private System.ComponentModel.Container components=null;
 		private bool changed;
 		private UI.Button butClose;
-		private UI.Button butNew;
 		private UI.Button butCopy;
 		private ODGrid grid2;
 		private ODGrid grid1;
-		List<HL7Def> listInternal;
+		List<HL7Def> ListInternal;
+		private UI.Button butDuplicate;
+		List<HL7Def> ListCustom;
 
 		///<summary></summary>
 		public FormHL7Defs()
@@ -59,12 +61,26 @@ namespace OpenDental{
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7Defs));
-			this.grid2 = new OpenDental.UI.ODGrid();
 			this.grid1 = new OpenDental.UI.ODGrid();
+			this.grid2 = new OpenDental.UI.ODGrid();
+			this.butDuplicate = new OpenDental.UI.Button();
 			this.butCopy = new OpenDental.UI.Button();
-			this.butNew = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
+			// 
+			// grid1
+			// 
+			this.grid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.grid1.HScrollVisible = false;
+			this.grid1.Location = new System.Drawing.Point(12,12);
+			this.grid1.Name = "grid1";
+			this.grid1.ScrollValue = 0;
+			this.grid1.Size = new System.Drawing.Size(445,585);
+			this.grid1.TabIndex = 14;
+			this.grid1.Title = "Internal";
+			this.grid1.TranslationName = null;
+			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
 			// 
 			// grid2
 			// 
@@ -81,19 +97,22 @@ namespace OpenDental{
 			this.grid2.TranslationName = null;
 			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
 			// 
-			// grid1
+			// butDuplicate
 			// 
-			this.grid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.grid1.HScrollVisible = false;
-			this.grid1.Location = new System.Drawing.Point(12,12);
-			this.grid1.Name = "grid1";
-			this.grid1.ScrollValue = 0;
-			this.grid1.Size = new System.Drawing.Size(445,585);
-			this.grid1.TabIndex = 14;
-			this.grid1.Title = "Internal";
-			this.grid1.TranslationName = null;
-			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
+			this.butDuplicate.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDuplicate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDuplicate.Autosize = true;
+			this.butDuplicate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDuplicate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDuplicate.CornerRadius = 4F;
+			this.butDuplicate.Image = global::OpenDental.Properties.Resources.Add;
+			this.butDuplicate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDuplicate.Location = new System.Drawing.Point(737,607);
+			this.butDuplicate.Name = "butDuplicate";
+			this.butDuplicate.Size = new System.Drawing.Size(89,24);
+			this.butDuplicate.TabIndex = 20;
+			this.butDuplicate.Text = "Duplicate";
+			this.butDuplicate.Click += new System.EventHandler(this.butDuplicate_Click);
 			// 
 			// butCopy
 			// 
@@ -111,23 +130,6 @@ namespace OpenDental{
 			this.butCopy.TabIndex = 15;
 			this.butCopy.Text = "Copy";
 			this.butCopy.Click += new System.EventHandler(this.butCopy_Click);
-			// 
-			// butNew
-			// 
-			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butNew.Autosize = true;
-			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNew.CornerRadius = 4F;
-			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
-			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(657,607);
-			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(80,24);
-			this.butNew.TabIndex = 10;
-			this.butNew.Text = "New";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click);
 			// 
 			// butClose
 			// 
@@ -148,10 +150,10 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(923,641);
+			this.Controls.Add(this.butDuplicate);
 			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.grid1);
 			this.Controls.Add(this.grid2);
-			this.Controls.Add(this.butNew);
 			this.Controls.Add(this.butClose);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
@@ -169,7 +171,6 @@ namespace OpenDental{
 
 		private void FormHL7Defs_Load(object sender, System.EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup,true)){
-				butNew.Enabled=false;
 				butCopy.Enabled=false;
 				grid2.Enabled=false;
 				grid1.Enabled=false;
@@ -178,9 +179,9 @@ namespace OpenDental{
 			FillGrid2();			
 		}
 
-		private void FillGrid1(){
-			listInternal=new List<HL7Def>();
-			listInternal.Add(InternalEcwTight.GetHL7Def());
+		private void FillGrid1() {
+			ListInternal=new List<HL7Def>();
+			ListInternal.Add(InternalEcwTight.GetHL7Def());
 			//listInternal.Add(InternalEcwFull.GetHL7Def());
 			//listInternal.Add(InternalEcwStandalone.GetHL7Def());
 			//Add defs for other companies like Centricity here later.
@@ -197,25 +198,26 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
 			grid1.Columns.Add(col);
 			grid1.Rows.Clear();
-			for(int i=0;i<listInternal.Count;i++) {
+			for(int i=0;i<ListInternal.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(listInternal[i].Description);
-				row.Cells.Add(Lan.g("enumModeTxHL7",listInternal[i].ModeTx.ToString()));
-				if(listInternal[i].ModeTx==ModeTxHL7.File){
-					row.Cells.Add(listInternal[i].IncomingFolder);
-					row.Cells.Add(listInternal[i].OutgoingFolder);
+				row.Cells.Add(ListInternal[i].Description);
+				row.Cells.Add(Lan.g("enumModeTxHL7",ListInternal[i].ModeTx.ToString()));
+				if(ListInternal[i].ModeTx==ModeTxHL7.File) {
+					row.Cells.Add(ListInternal[i].IncomingFolder);
+					row.Cells.Add(ListInternal[i].OutgoingFolder);
 				}
 				else {//TcpIp mode
-					row.Cells.Add(listInternal[i].IncomingPort);
-					row.Cells.Add(listInternal[i].OutgoingIpPort);
+					row.Cells.Add(ListInternal[i].IncomingPort);
+					row.Cells.Add(ListInternal[i].OutgoingIpPort);
 				}
-				row.Cells.Add(listInternal[i].IsEnabled?"X":"");
+				row.Cells.Add(ListInternal[i].IsEnabled?"X":"");
 				grid1.Rows.Add(row);
 			}
 			grid1.EndUpdate();
 		}
 
-		private void FillGrid2(){
+		private void FillGrid2() {
+			ListCustom=HL7Defs.GetCustomList();
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),90);
@@ -229,37 +231,47 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
 			grid2.Columns.Add(col);
 			grid2.Rows.Clear();
+			for(int i=0;i<ListCustom.Count;i++) {
+				ODGridRow row=new ODGridRow();
+				row.Cells.Add(ListCustom[i].Description);
+				row.Cells.Add(Lan.g("enumModeTxHL7",ListCustom[i].ModeTx.ToString()));
+				if(ListCustom[i].ModeTx==ModeTxHL7.File) {
+					row.Cells.Add(ListCustom[i].IncomingFolder);
+					row.Cells.Add(ListCustom[i].OutgoingFolder);
+				}
+				else {//TcpIp mode
+					row.Cells.Add(ListCustom[i].IncomingPort);
+					row.Cells.Add(ListCustom[i].OutgoingIpPort);
+				}
+				row.Cells.Add(ListCustom[i].IsEnabled?"X":"");
+				grid2.Rows.Add(row);
+			}
 			grid2.EndUpdate();
 		}
 
-		private void butNew_Click(object sender, System.EventArgs e) {
-			////This button is not enabled unless user has appropriate permission for setup.
-			////Not allowed to change sheettype once a sheet is created, so we need to let user pick.
-			//FormSheetDef FormS=new FormSheetDef();
-			//FormS.IsInitial=true;
-			//FormS.IsReadOnly=false;
-			//SheetDef sheetdef=new SheetDef();
-			//sheetdef.FontName="Microsoft Sans Serif";
-			//sheetdef.FontSize=9;
-			//sheetdef.Height=1100;
-			//sheetdef.Width=850;
-			//FormS.SheetDefCur=sheetdef;
-			//FormS.ShowDialog();
-			//if(FormS.DialogResult!=DialogResult.OK){
-			//  return;
-			//}
-			////what about parameters?
-			//sheetdef.SheetFieldDefs=new List<SheetFieldDef>();
-			//sheetdef.IsNew=true;
-			//FormSheetDefEdit FormSD=new FormSheetDefEdit(sheetdef);
-			//FormSD.ShowDialog();//It will be saved to db inside this form.
-			//FillGrid2();
-			//for(int i=0;i<SheetDefC.Listt.Count;i++){
-			//  if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
-			//    grid2.SetSelected(i,true);
-			//  }
-			//}
-			//changed=true;
+		private void butDuplicate_Click(object sender,System.EventArgs e) {
+			if(grid2.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select a Custom HL7Def from the list on the right first.");
+				return;
+			}
+			HL7Def hl7def=ListCustom[grid2.GetSelectedIndex()].Clone();
+			hl7def.hl7DefMessages=HL7DefMessages.GetDeepForDef(hl7def.HL7DefNum);
+			long hl7DefNum=HL7Defs.Insert(hl7def);
+			for(int m=0;m<hl7def.hl7DefMessages.Count;m++) {
+				hl7def.hl7DefMessages[m].HL7DefNum=hl7DefNum;
+				long hl7DefMessageNum=HL7DefMessages.Insert(hl7def.hl7DefMessages[m]);
+				for(int s=0;s<hl7def.hl7DefMessages[m].hl7DefSegments.Count;s++) {
+					hl7def.hl7DefMessages[m].hl7DefSegments[s].HL7DefMessageNum=hl7DefMessageNum;
+					long hl7DefSegmentNum=HL7DefSegments.Insert(hl7def.hl7DefMessages[m].hl7DefSegments[s]);
+					for(int f=0;f<hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields.Count;f++) {
+						hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields[f].HL7DefSegmentNum=hl7DefSegmentNum;
+						HL7DefFields.Insert(hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields[f]);
+					}
+				}
+			}
+			DataValid.SetInvalid(InvalidType.HL7Defs);
+			FillGrid2();
+			grid2.SetSelected(false);
 		}
 
 		private void butCopy_Click(object sender,EventArgs e) {
@@ -267,43 +279,40 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select an internal HL7Def from the list on the left first.");
 				return;
 			}
-			//SheetDef sheetdef=internalList[grid1.GetSelectedIndex()].Copy();
-			//sheetdef.IsNew=true;
-			//SheetDefs.InsertOrUpdate(sheetdef);
-			//if(sheetdef.SheetType==SheetTypeEnum.MedicalHistory
-			//  && (sheetdef.Description=="Medical History New Patient" || sheetdef.Description=="Medical History Update")) 
-			//{
-			//  MsgBox.Show(this,"This is just a template, it may contain allergies and problems that do not exist in your setup.");
-			//}
-			//grid1.SetSelected(false);
-			//FillGrid2();
-			//for(int i=0;i<SheetDefC.Listt.Count;i++){
-			//  if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
-			//    grid2.SetSelected(i,true);
-			//  }
-			//}
+			HL7Def hl7def=ListInternal[grid1.GetSelectedIndex()].Clone();
+			hl7def.IsInternal=false;
+			long hl7DefNum=HL7Defs.Insert(hl7def);
+			for(int m=0;m<hl7def.hl7DefMessages.Count;m++) {
+				hl7def.hl7DefMessages[m].HL7DefNum=hl7DefNum;
+				long hl7DefMessageNum=HL7DefMessages.Insert(hl7def.hl7DefMessages[m]);
+				for(int s=0;s<hl7def.hl7DefMessages[m].hl7DefSegments.Count;s++) {
+					hl7def.hl7DefMessages[m].hl7DefSegments[s].HL7DefMessageNum=hl7DefMessageNum;
+					long hl7DefSegmentNum=HL7DefSegments.Insert(hl7def.hl7DefMessages[m].hl7DefSegments[s]);
+					for(int f=0;f<hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields.Count;f++) {
+						hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields[f].HL7DefSegmentNum=hl7DefSegmentNum;
+						HL7DefFields.Insert(hl7def.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields[f]);
+					}
+				}
+			}
+			DataValid.SetInvalid(InvalidType.HL7Defs);
+			FillGrid2();
+			grid1.SetSelected(false);
 		}
 
 		private void grid1_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormHL7DefEdit FormS=new FormHL7DefEdit();
-			FormS.HL7DefCur=listInternal[e.Row];
+			FormS.HL7DefCur=ListInternal[e.Row];
 			FormS.ShowDialog();
 			FillGrid1();
 			FillGrid2();	
 		}
 
 		private void grid2_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//SheetDef sheetdef=SheetDefC.Listt[e.Row];
-			//SheetDefs.GetFieldsAndParameters(sheetdef);
-			//FormSheetDefEdit FormS=new FormSheetDefEdit(sheetdef);
-			//FormS.ShowDialog();
-			//FillGrid2();
-			//for(int i=0;i<SheetDefC.Listt.Count;i++){
-			//  if(SheetDefC.Listt[i].SheetDefNum==sheetdef.SheetDefNum){
-			//    grid2.SetSelected(i,true);
-			//  }
-			//}
-			//changed=true;
+			FormHL7DefEdit FormS=new FormHL7DefEdit();
+			FormS.HL7DefCur=ListCustom[e.Row];
+			FormS.ShowDialog();
+			FillGrid1();
+			FillGrid2();
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
@@ -318,24 +327,6 @@ namespace OpenDental{
 
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

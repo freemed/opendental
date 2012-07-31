@@ -24,7 +24,7 @@ namespace OpenDental {
 		}
 
 		private void FormHL7DefEdit_Load(object sender,EventArgs e) {
-			FillGridMain();
+			FillGrid();
 			for(int i=0;i<Enum.GetNames(typeof(ModeTxHL7)).Length;i++) {
 				comboModeTx.Items.Add(Lan.g("enumModeTxHL7",Enum.GetName(typeof(ModeTxHL7),i).ToString()));
 				if((int)HL7DefCur.ModeTx==i){
@@ -47,16 +47,30 @@ namespace OpenDental {
 			textEscChar.Text=HL7DefCur.EscapeCharacter;
 			textNote.Text=HL7DefCur.Note;
 			if(HL7DefCur.IsInternal) {
-				textDescription.ReadOnly=true;
-				textFieldSep.ReadOnly=true;
-				textRepSep.ReadOnly=true;
-				textCompSep.ReadOnly=true;
-				textSubcompSep.ReadOnly=true;
-				textEscChar.ReadOnly=true;
+				if(!HL7DefCur.IsEnabled) {
+					textDescription.ReadOnly=true;
+					textInPath.ReadOnly=true;
+					textOutPath.ReadOnly=true;
+					textInPort.ReadOnly=true;
+					textOutPort.ReadOnly=true;
+					butBrowseIn.Enabled=false;
+					butBrowseOut.Enabled=false;
+					textFieldSep.ReadOnly=true;
+					textRepSep.ReadOnly=true;
+					textCompSep.ReadOnly=true;
+					textSubcompSep.ReadOnly=true;
+					textEscChar.ReadOnly=true;
+				}
+				butAdd.Enabled=false;
+				butDelete.Enabled=false;
+				labelDelete.Visible=true;
 			}
 		}
 
-		private void FillGridMain() {
+		private void FillGrid() {
+			if(!HL7DefCur.IsInternal && !HL7DefCur.IsNew) {
+				HL7DefCur.hl7DefMessages=HL7DefMessages.GetDeepForDef(HL7DefCur.HL7DefNum);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Message"),110);
@@ -66,20 +80,24 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Note"),100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			for(int i=0;i<HL7DefCur.hl7DefMessages.Count;i++) {
-				ODGridRow row=new ODGridRow();
-				row.Cells.Add(HL7DefCur.hl7DefMessages[i].MessageType.ToString()+"-"+HL7DefCur.hl7DefMessages[i].EventType.ToString()+", "+HL7DefCur.hl7DefMessages[i].InOrOut.ToString());
-				row.Cells.Add("");
-				row.Cells.Add(HL7DefCur.hl7DefMessages[i].Note);
-				row.Tag=HL7DefCur.hl7DefMessages[i];
-				gridMain.Rows.Add(row);
-				for(int j=0;j<HL7DefCur.hl7DefMessages[i].hl7DefSegments.Count;j++) {
-					row=new ODGridRow();
+			if(HL7DefCur!=null && HL7DefCur.hl7DefMessages!=null) {
+				for(int i=0;i<HL7DefCur.hl7DefMessages.Count;i++) {
+					ODGridRow row=new ODGridRow();
+					row.Cells.Add(HL7DefCur.hl7DefMessages[i].MessageType.ToString()+"-"+HL7DefCur.hl7DefMessages[i].EventType.ToString()+", "+HL7DefCur.hl7DefMessages[i].InOrOut.ToString());
 					row.Cells.Add("");
-					row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].SegmentName.ToString());
-					row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].Note);
+					row.Cells.Add(HL7DefCur.hl7DefMessages[i].Note);
 					row.Tag=HL7DefCur.hl7DefMessages[i];
 					gridMain.Rows.Add(row);
+					if(HL7DefCur.hl7DefMessages[i].hl7DefSegments!=null) {
+						for(int j=0;j<HL7DefCur.hl7DefMessages[i].hl7DefSegments.Count;j++) {
+							row=new ODGridRow();
+							row.Cells.Add("");
+							row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].SegmentName.ToString());
+							row.Cells.Add(HL7DefCur.hl7DefMessages[i].hl7DefSegments[j].Note);
+							row.Tag=HL7DefCur.hl7DefMessages[i];
+							gridMain.Rows.Add(row);
+						}
+					}
 				}
 			}
 			gridMain.EndUpdate();
@@ -103,9 +121,10 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormHL7DefMessageEdit FormS=new FormHL7DefMessageEdit();
-			FormS.HL7DefMes=(HL7DefMessage)gridMain.Rows[e.Row].Tag;
+			FormS.HL7DefMesCur=(HL7DefMessage)gridMain.Rows[e.Row].Tag;
+			FormS.IsHL7DefInternal=HL7DefCur.IsInternal;
 			FormS.ShowDialog();
-			FillGridMain();
+			FillGrid();
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
@@ -118,6 +137,39 @@ namespace OpenDental {
 				}
 			}
 			gridMain.Invalidate();
+		}
+
+		private void checkEnabled_CheckedChanged(object sender,EventArgs e) {
+			if(checkEnabled.Checked) {
+				butBrowseIn.Enabled=true;
+				butBrowseOut.Enabled=true;
+				textInPath.ReadOnly=false;
+				textInPort.ReadOnly=false;
+				textOutPath.ReadOnly=false;
+				textOutPort.ReadOnly=false;
+				textDescription.ReadOnly=false;
+				textFieldSep.ReadOnly=false;
+				textRepSep.ReadOnly=false;
+				textCompSep.ReadOnly=false;
+				textSubcompSep.ReadOnly=false;
+				textEscChar.ReadOnly=false;
+				//textNote.ReadOnly=false;
+			}
+			else {
+				butBrowseIn.Enabled=false;
+				butBrowseOut.Enabled=false;
+				textInPath.ReadOnly=true;
+				textInPort.ReadOnly=true;
+				textOutPath.ReadOnly=true;
+				textOutPort.ReadOnly=true;
+				textDescription.ReadOnly=true;
+				textFieldSep.ReadOnly=true;
+				textRepSep.ReadOnly=true;
+				textCompSep.ReadOnly=true;
+				textSubcompSep.ReadOnly=true;
+				textEscChar.ReadOnly=true;
+				//textNote.ReadOnly=true;
+			}
 		}
 
 		private void comboModeTx_SelectedIndexChanged(object sender,System.EventArgs e) {
@@ -160,58 +212,127 @@ namespace OpenDental {
 			}
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			//This button is only enabled if this is a custom def.
+			if(MessageBox.Show(Lan.g(this,"Delete entire HL7Def?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				return;
+			}
+			for(int m=0;m<HL7DefCur.hl7DefMessages.Count;m++) {
+				for(int s=0;s<HL7DefCur.hl7DefMessages[m].hl7DefSegments.Count;s++) {
+					for(int f=0;f<HL7DefCur.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields.Count;f++) {
+						HL7DefFields.Delete(HL7DefCur.hl7DefMessages[m].hl7DefSegments[s].hl7DefFields[f].HL7DefFieldNum);
+					}
+					HL7DefSegments.Delete(HL7DefCur.hl7DefMessages[m].hl7DefSegments[s].HL7DefSegmentNum);
+				}
+				HL7DefMessages.Delete(HL7DefCur.hl7DefMessages[m].HL7DefMessageNum);
+			}
+			HL7Defs.Delete(HL7DefCur.HL7DefNum);
+			DataValid.SetInvalid(InvalidType.HL7Defs);
+			DialogResult=DialogResult.OK;			
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			//This button is only enabled if this is a custom def.
+			//if(HL7DefCur.IsNew) {//never happens
+			//	HL7Defs.Insert(HL7DefCur);
+			//	HL7DefCur.IsNew=false;
+			//}
+			FormHL7DefMessageEdit FormS=new FormHL7DefMessageEdit();
+			FormS.HL7DefMesCur=new HL7DefMessage();
+			FormS.HL7DefMesCur.HL7DefNum=HL7DefCur.HL7DefNum;
+			FormS.HL7DefMesCur.IsNew=true;
+			FormS.IsHL7DefInternal=false;
+			FormS.ShowDialog();
+			FillGrid();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
-			if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
-				if(textInPath.Text=="") {
-					MsgBox.Show(this,"The path for Incoming Folder is empty.");
-					return;
+			//validation
+			if(checkEnabled.Checked) {
+				if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
+					if(textInPath.Text=="") {
+						MessageBox.Show(Lan.g(this,"The path for Incoming Folder is empty."),"",MessageBoxButtons.OK);
+						return;
+					}
+					if(!Directory.Exists(textInPath.Text)) {
+						MessageBox.Show(Lan.g(this,"The path for Incoming Folder is invalid."),"",MessageBoxButtons.OK);
+						return;
+					}
+					if(textOutPath.Text=="") {
+						MessageBox.Show(Lan.g(this,"The path for Outgoing Folder is empty."),"",MessageBoxButtons.OK);
+						return;
+					}
+					if(!Directory.Exists(textOutPath.Text)) {
+						MessageBox.Show(Lan.g(this,"The path for Outgoing Folder is invalid."),"",MessageBoxButtons.OK);
+						return;
+					}
 				}
-				if(!Directory.Exists(textInPath.Text)) {
-					MsgBox.Show(this,"The path for Incoming Folder is invalid.");
-					return;
-				}
-				if(textOutPath.Text=="") {
-					MsgBox.Show(this,"The path for Outgoing Folder is empty.");
-					return;
-				}
-				if(!Directory.Exists(textOutPath.Text)) {
-					MsgBox.Show(this,"The path for Outgoing Folder is invalid.");
-					return;
+				else {//TcpIp mode
+					if(textInPort.Text=="") {
+						MessageBox.Show(Lan.g(this,"The Incoming Port is empty."),"",MessageBoxButtons.OK);
+						return;
+					}
+					if(textOutPort.Text=="") {
+						MessageBox.Show(Lan.g(this,"The Outgoing Port is empty."),"",MessageBoxButtons.OK);
+						return;
+					}
 				}
 			}
-			else {//TcpIp mode
-				if(textInPort.Text=="") {
-					MsgBox.Show(this,"The Incoming Port is empty.");
-					return;
+
+			//save
+			if(checkEnabled.Checked) {
+				HL7DefCur.IsEnabled=true;
+				HL7DefCur.IsInternal=checkInternal.Checked;
+				HL7DefCur.InternalType=textInternalType.Text;
+				HL7DefCur.InternalTypeVersion=textInternalTypeVersion.Text;
+				HL7DefCur.Description=textDescription.Text;
+				HL7DefCur.FieldSeparator=textFieldSep.Text;
+				HL7DefCur.RepetitionSeparator=textRepSep.Text;
+				HL7DefCur.ComponentSeparator=textCompSep.Text;
+				HL7DefCur.SubcomponentSeparator=textSubcompSep.Text;
+				HL7DefCur.EscapeCharacter=textEscChar.Text;
+				HL7DefCur.Note=textNote.Text;
+				HL7DefCur.ModeTx=(ModeTxHL7)comboModeTx.SelectedIndex;
+				if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
+					HL7DefCur.IncomingFolder=textInPath.Text;
+					HL7DefCur.OutgoingFolder=textOutPath.Text;
+					HL7DefCur.IncomingPort="";
+					HL7DefCur.OutgoingIpPort="";
 				}
-				if(textOutPort.Text=="") {
-					MsgBox.Show(this,"The Outgoing Port is empty.");
-					return;
+				else {//TcpIp mode
+					HL7DefCur.IncomingPort=textInPort.Text;
+					HL7DefCur.OutgoingIpPort=textOutPort.Text;
+					HL7DefCur.IncomingFolder="";
+					HL7DefCur.OutgoingFolder="";
+				}
+				if(checkInternal.Checked){
+					if(HL7Defs.GetInternalFromDb(HL7DefCur.InternalType)==null){ //it's not in the database.
+						HL7Defs.Insert(HL7DefCur);//The user wants to enable this, so we will need to save this def to the db.
+					}
+					else {
+						HL7Defs.Update(HL7DefCur);
+					}
+				}
+				else {//all custom defs are already in the db.
+					HL7Defs.Update(HL7DefCur);
 				}
 			}
-			HL7DefCur.Description=textDescription.Text;
-			HL7DefCur.IsEnabled=checkEnabled.Checked;
-			HL7DefCur.FieldSeparator=textFieldSep.Text;
-			HL7DefCur.RepetitionSeparator=textRepSep.Text;
-			HL7DefCur.ComponentSeparator=textCompSep.Text;
-			HL7DefCur.SubcomponentSeparator=textSubcompSep.Text;
-			HL7DefCur.EscapeCharacter=textEscChar.Text;
-			HL7DefCur.Note=textNote.Text;
-			HL7DefCur.ModeTx=(ModeTxHL7)comboModeTx.SelectedIndex;
-			if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
-				HL7DefCur.IncomingFolder=textInPath.Text;
-				HL7DefCur.OutgoingFolder=textOutPath.Text;
-			}
-			else {//TcpIp mode
-				HL7DefCur.IncomingPort=textInPort.Text;
-				HL7DefCur.OutgoingIpPort=textOutPort.Text;
-			}
-			if(HL7DefCur.IsNew) {
-				//TODO: Insert def and all sub-objects where IsNew.
-				HL7DefCur.IsNew=false;
-			}
-			else {
-				//TODO: Update def and all sub-objects.
+			else {//IsEnabled check box is not checked
+				if(HL7DefCur.IsEnabled) {//If def was enabled but user wants to disable
+					if(HL7DefCur.IsInternal) {
+						if(MessageBox.Show(Lan.g(this,"Disable HL7Def? Changes made will be lost."),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+							HL7Defs.Delete(HL7DefCur.HL7DefNum);
+						}
+						else {//user selected No
+							return;
+						}
+					}
+					else {//custom
+						//Disable the custom def
+						HL7DefCur.IsEnabled=false;
+						HL7Defs.Update(HL7DefCur);
+					}
+				}
 			}
 			DialogResult=DialogResult.OK;
 		}

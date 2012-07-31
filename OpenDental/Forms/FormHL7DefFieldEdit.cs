@@ -13,6 +13,7 @@ namespace OpenDental {
 	public partial class FormHL7DefFieldEdit:Form {
 		public HL7DefField HL7DefFieldCur;
 		public List<string> FieldNameList;
+		public bool IsHL7DefInternal;
 
 		///<summary></summary>
 		public FormHL7DefFieldEdit() {
@@ -25,16 +26,23 @@ namespace OpenDental {
 			FillFieldNameList();
 			for(int i=0;i<FieldNameList.Count;i++) {
 				listFieldNames.Items.Add(FieldNameList[i]);
-				if(HL7DefFieldCur.FieldName==FieldNameList[i]) {
+				if(HL7DefFieldCur!=null && HL7DefFieldCur.FieldName==FieldNameList[i]) {
 					listFieldNames.SelectedIndex=i;
 				}
 			}
 			for(int i=0;i<Enum.GetNames(typeof(DataTypeHL7)).Length;i++) {
 				comboDataType.Items.Add(Lan.g("enumDataTypeHL7",Enum.GetName(typeof(DataTypeHL7),i).ToString()));
 			}
-			comboDataType.SelectedIndex=(int)HL7DefFieldCur.DataType;
-			textItemOrder.Text=HL7DefFieldCur.OrdinalPos.ToString();
-			textTableId.Text=HL7DefFieldCur.TableId;
+			if(HL7DefFieldCur!=null) {
+				comboDataType.SelectedIndex=(int)HL7DefFieldCur.DataType;
+				textItemOrder.Text=HL7DefFieldCur.OrdinalPos.ToString();
+				textTableId.Text=HL7DefFieldCur.TableId;
+			}
+			if(IsHL7DefInternal) {
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+				labelDelete.Visible=true;
+			}
 		}
 
 		private void FillFieldNameList() {
@@ -46,16 +54,39 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete HL7DefField?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(MessageBox.Show(Lan.g(this,"Delete Field?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
 				return;
 			}
 			HL7DefFields.Delete(HL7DefFieldCur.HL7DefFieldNum);
-			HL7DefFieldCur=null;
 			DataValid.SetInvalid(InvalidType.HL7Defs);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!IsHL7DefInternal) {
+				HL7DefFieldCur.DataType=(DataTypeHL7)comboDataType.SelectedIndex;
+				HL7DefFieldCur.TableId=textTableId.Text;
+				int order;
+				try{
+					order=int.Parse(textItemOrder.Text);
+					if(order<1){
+						MsgBox.Show(this,"Item Order is invalid.");
+						return;
+					}
+				}
+				catch{
+					MsgBox.Show(this,"Item Order is invalid.");
+					return;
+				}
+				HL7DefFieldCur.OrdinalPos=order;
+				HL7DefFieldCur.FieldName=listFieldNames.SelectedItem.ToString();
+				if(HL7DefFieldCur.IsNew) {
+					HL7DefFields.Insert(HL7DefFieldCur);
+				}
+				else {
+					HL7DefFields.Update(HL7DefFieldCur);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 

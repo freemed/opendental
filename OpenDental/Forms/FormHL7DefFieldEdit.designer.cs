@@ -35,6 +35,7 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
+			this.labelDelete = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -160,10 +161,23 @@ namespace OpenDental{
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// labelDelete
+			// 
+			this.labelDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelDelete.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelDelete.Location = new System.Drawing.Point(11,361);
+			this.labelDelete.Name = "labelDelete";
+			this.labelDelete.Size = new System.Drawing.Size(125,69);
+			this.labelDelete.TabIndex = 66;
+			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom list.";
+			this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelDelete.Visible = false;
+			// 
 			// FormHL7DefFieldEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(405,473);
+			this.Controls.Add(this.labelDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butDelete);
@@ -198,5 +212,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label10;
 		private UI.Button butDelete;
+		private System.Windows.Forms.Label labelDelete;
 	}
 }

@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 
 	}
 
-	/// <summary>Data types are listed in HL7 docs section 2.15.</summary>
+	///<summary>Data types are listed in HL7 docs section 2.15.  The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum DataTypeHL7 {
 		None,
 		///<summary>Extended composite ID with check digit.</summary>

@@ -117,8 +117,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+=
 				     POut.Long  (hL7DefMessage.HL7DefNum)+","
-				+    POut.String(hL7DefMessage.MessageType.ToString())+","
-				+    POut.String(hL7DefMessage.EventType.ToString())+","
+				+    "'"+POut.String(hL7DefMessage.MessageType.ToString())+"',"
+				+    "'"+POut.String(hL7DefMessage.EventType.ToString())+"',"
 				+    POut.Int   ((int)hL7DefMessage.InOrOut)+","
 				+    POut.Int   (hL7DefMessage.ItemOrder)+","
 				+DbHelper.ParamChar+"paramNote)";
@@ -139,8 +139,8 @@ namespace OpenDentBusiness.Crud{
 		internal static void Update(HL7DefMessage hL7DefMessage){
 			string command="UPDATE hl7defmessage SET "
 				+"HL7DefNum       =  "+POut.Long  (hL7DefMessage.HL7DefNum)+", "
-				+"MessageType     =  "+POut.String(hL7DefMessage.MessageType.ToString())+", "
-				+"EventType       =  "+POut.String(hL7DefMessage.EventType.ToString())+", "
+				+"MessageType     =  '"+POut.String(hL7DefMessage.MessageType.ToString())+"', "
+				+"EventType       =  '"+POut.String(hL7DefMessage.EventType.ToString())+"', "
 				+"InOrOut         =  "+POut.Int   ((int)hL7DefMessage.InOrOut)+", "
 				+"ItemOrder       =  "+POut.Int   (hL7DefMessage.ItemOrder)+", "
 				+"Note            =  "+DbHelper.ParamChar+"paramNote "
@@ -161,11 +161,11 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7DefMessage.MessageType != oldHL7DefMessage.MessageType) {
 				if(command!=""){ command+=",";}
-				command+="MessageType = "+POut.String(hL7DefMessage.MessageType.ToString())+"";
+				command+="MessageType = '"+POut.String(hL7DefMessage.MessageType.ToString())+"'";
 			}
 			if(hL7DefMessage.EventType != oldHL7DefMessage.EventType) {
 				if(command!=""){ command+=",";}
-				command+="EventType = "+POut.String(hL7DefMessage.EventType.ToString())+"";
+				command+="EventType = '"+POut.String(hL7DefMessage.EventType.ToString())+"'";
 			}
 			if(hL7DefMessage.InOrOut != oldHL7DefMessage.InOrOut) {
 				if(command!=""){ command+=",";}

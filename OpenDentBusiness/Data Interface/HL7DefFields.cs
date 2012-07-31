@@ -41,6 +41,7 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+		/// <summary>Gets it straight from the database instead of from cache.</summary>
 		public static List<HL7DefField> GetForDefSegment(long hl7DefSegmentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7DefField>>(MethodBase.GetCurrentMethod(),hl7DefSegmentNum);

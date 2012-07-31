@@ -12,29 +12,39 @@ using OpenDental.UI;
 namespace OpenDental {
 	/// <summary></summary>
 	public partial class FormHL7DefSegmentEdit:System.Windows.Forms.Form {
-		public HL7DefSegment HL7DefSeg;
+		public HL7DefSegment HL7DefSegCur;
+		public bool IsHL7DefInternal;
+
 		///<summary></summary>
 		public FormHL7DefSegmentEdit() {
-			//
-			// Required for Windows Form Designer support
-			//
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormHL7DefSegmentEdit_Load(object sender,EventArgs e) {
-			FillGridMain();
+			FillGrid();
 			for(int i=0;i<Enum.GetNames(typeof(SegmentNameHL7)).Length;i++) {
-				comboSegName.Items.Add(Lan.g("enumSegmentNameHL7",Enum.GetName(typeof(SegmentNameHL7),i).ToString()));
+				comboSegmentName.Items.Add(Lan.g("enumSegmentNameHL7",Enum.GetName(typeof(SegmentNameHL7),i).ToString()));
 			}
-			comboSegName.SelectedIndex=(int)HL7DefSeg.SegmentName;
-			textItemOrder.Text=HL7DefSeg.ItemOrder.ToString();
-			checkRepeat.Checked=HL7DefSeg.CanRepeat;
-			checkOptional.Checked=HL7DefSeg.IsOptional;
-			textNote.Text=HL7DefSeg.Note;
+			if(HL7DefSegCur!=null) {
+				comboSegmentName.SelectedIndex=(int)HL7DefSegCur.SegmentName;
+				textItemOrder.Text=HL7DefSegCur.ItemOrder.ToString();
+				checkCanRepeat.Checked=HL7DefSegCur.CanRepeat;
+				checkIsOptional.Checked=HL7DefSegCur.IsOptional;
+				textNote.Text=HL7DefSegCur.Note;
+			}
+			if(IsHL7DefInternal) {
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+				labelDelete.Visible=true;
+				butAdd.Enabled=false;
+			}
 		}
 
-		private void FillGridMain() {
+		private void FillGrid() {
+			if(!IsHL7DefInternal && !HL7DefSegCur.IsNew) {
+				HL7DefSegCur.hl7DefFields=HL7DefFields.GetForDefSegment(HL7DefSegCur.HL7DefSegmentNum);
+			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Field"),140);
@@ -46,26 +56,80 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Table ID"),75);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			for(int i=0;i<HL7DefSeg.hl7DefFields.Count;i++) {
-				ODGridRow row=new ODGridRow();
-				row.Cells.Add(Lan.g(this,HL7DefSeg.hl7DefFields[i].FieldName));
-				row.Cells.Add(Lan.g("enumDataTypeHL7",HL7DefSeg.hl7DefFields[i].DataType.ToString()));
-				row.Cells.Add(HL7DefSeg.hl7DefFields[i].OrdinalPos.ToString());
-				row.Cells.Add(Lan.g(this,HL7DefSeg.hl7DefFields[i].TableId));
-				row.Tag=HL7DefSeg.hl7DefFields[i];
-				gridMain.Rows.Add(row);
+			if(HL7DefSegCur!=null && HL7DefSegCur.hl7DefFields!=null) {
+				for(int i=0;i<HL7DefSegCur.hl7DefFields.Count;i++) {
+					ODGridRow row=new ODGridRow();
+					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].FieldName);
+					row.Cells.Add(Lan.g("enumDataTypeHL7",HL7DefSegCur.hl7DefFields[i].DataType.ToString()));
+					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].OrdinalPos.ToString());
+					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].TableId);
+					gridMain.Rows.Add(row);
+				}
 			}
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormHL7DefFieldEdit FormS=new FormHL7DefFieldEdit();
-			FormS.HL7DefFieldCur=(HL7DefField)gridMain.Rows[e.Row].Tag;
+			FormS.HL7DefFieldCur=HL7DefSegCur.hl7DefFields[e.Row];
+			FormS.IsHL7DefInternal=IsHL7DefInternal;
 			FormS.ShowDialog();
-			FillGridMain();
+			FillGrid();
+		}
+
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(MessageBox.Show(Lan.g(this,"Delete Segment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				return;
+			}
+			for(int f=0;f<HL7DefSegCur.hl7DefFields.Count;f++) {
+				HL7DefFields.Delete(HL7DefSegCur.hl7DefFields[f].HL7DefFieldNum);
+			}
+			HL7DefSegments.Delete(HL7DefSegCur.HL7DefSegmentNum);
+			DataValid.SetInvalid(InvalidType.HL7Defs);
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			if(HL7DefSegCur.IsNew) {
+				HL7DefSegments.Insert(HL7DefSegCur);
+				HL7DefSegCur.IsNew=false;
+			}
+			FormHL7DefFieldEdit FormS=new FormHL7DefFieldEdit();
+			FormS.HL7DefFieldCur=new HL7DefField();
+			FormS.HL7DefFieldCur.HL7DefSegmentNum=HL7DefSegCur.HL7DefSegmentNum;
+			FormS.HL7DefFieldCur.IsNew=true;
+			FormS.IsHL7DefInternal=false;
+			FormS.ShowDialog();
+			FillGrid();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!IsHL7DefInternal) {
+				HL7DefSegCur.SegmentName=(SegmentNameHL7)comboSegmentName.SelectedIndex;
+				int order;
+				try {
+					order=int.Parse(textItemOrder.Text);
+					if(order<1) {
+						MsgBox.Show(this,"Item Order is invalid.");
+						return;
+					}
+				}
+				catch {
+					MsgBox.Show(this,"Item Order is invalid.");
+					return;
+				}
+				HL7DefSegCur.ItemOrder=order;
+				HL7DefSegCur.CanRepeat=checkCanRepeat.Checked;
+				HL7DefSegCur.IsOptional=checkIsOptional.Checked;
+				HL7DefSegCur.Note=textNote.Text;
+				if(HL7DefSegCur.IsNew) {
+					HL7DefSegments.Insert(HL7DefSegCur);
+					HL7DefSegCur.IsNew=false;
+				}
+				else {
+					HL7DefSegments.Update(HL7DefSegCur);
+				}
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -49,7 +49,7 @@ namespace OpenDentBusiness {
 
 	}
 
-	/// <summary>Keep this list alphabetized.  Reordering will not mess up the database.</summary>
+	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum SegmentNameHL7 {
 		///<summary>Db Resource Appointment Information</summary>
 		AIG,

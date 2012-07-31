@@ -8,10 +8,6 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class HL7Defs{
 		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
 		///<summary>A list of all HL7Defs.</summary>
 		private static List<HL7Def> listt;
 
@@ -45,7 +41,7 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		///<summary></summary>
+		///<summary>Gets an internal HL7Def from the database of the specified type.</summary>
 		public static HL7Def GetInternalFromDb(string Hl7InternalType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod(),Hl7InternalType);
@@ -53,6 +49,53 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM hl7def WHERE IsInternal=1 "
 				+"AND InternalType='"+POut.String(Hl7InternalType)+"'";
 			return Crud.HL7DefCrud.SelectOne(command);
+		}
+
+		///<summary>Gets list of all defs that are not internal from the database.</summary>
+		public static List<HL7Def> GetCustomList() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7Def>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM hl7def WHERE IsInternal=0";
+			return Crud.HL7DefCrud.SelectMany(command);
+		}
+
+		///<summary>Gets a full deep list of all defs that are not internal from the database.</summary>
+		public static List<HL7Def> GetDeepCustomList(){
+			List<HL7Def> hl7defs=new List<HL7Def>();
+			hl7defs=GetCustomList();
+			foreach(HL7Def d in hl7defs) {
+				d.hl7DefMessages=HL7DefMessages.GetDeepForDef(d.HL7DefNum);
+			}
+			return hl7defs;
+		}
+
+		///<summary></summary>
+		public static long Insert(HL7Def hL7Def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				hL7Def.HL7DefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7Def);
+				return hL7Def.HL7DefNum;
+			}
+			return Crud.HL7DefCrud.Insert(hL7Def);
+		}
+
+		///<summary></summary>
+		public static void Update(HL7Def hL7Def) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7Def);
+				return;
+			}
+			Crud.HL7DefCrud.Update(hL7Def);
+		}
+
+		///<summary></summary>
+		public static void Delete(long hL7DefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefNum);
+				return;
+			}
+			string command= "DELETE FROM hl7def WHERE HL7DefNum = "+POut.Long(hL7DefNum);
+			Db.NonQ(command);
 		}
 
 		/*
@@ -75,33 +118,9 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefCrud.SelectOne(hL7DefNum);
 		}
 
-		///<summary></summary>
-		public static long Insert(HL7Def hL7Def){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				hL7Def.HL7DefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),hL7Def);
-				return hL7Def.HL7DefNum;
-			}
-			return Crud.HL7DefCrud.Insert(hL7Def);
-		}
+		
 
-		///<summary></summary>
-		public static void Update(HL7Def hL7Def){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7Def);
-				return;
-			}
-			Crud.HL7DefCrud.Update(hL7Def);
-		}
-
-		///<summary></summary>
-		public static void Delete(long hL7DefNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),hL7DefNum);
-				return;
-			}
-			string command= "DELETE FROM hl7def WHERE HL7DefNum = "+POut.Long(hL7DefNum);
-			Db.NonQ(command);
-		}
+		
 		*/
 
 
