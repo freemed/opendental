@@ -58,7 +58,7 @@ namespace OpenDental{
 		private Label labelMemo;
 		///<summary>Only used if linking to QB account.</summary>
 		private List<string> IncomeAccountsQB;
-		///<summary>Checks if QB prefs are set and if a connection can successfully be made.</summary>
+		///<summary>True if the accounting software pref is set to QuickBooks.</summary>
 		private bool IsQuickBooks;
 
 		///<summary></summary>
@@ -473,26 +473,11 @@ namespace OpenDental{
 		}
 		#endregion
 
-		private void FormDepositEdit_Load(object sender, System.EventArgs e) {
+		private void FormDepositEdit_Load(object sender,System.EventArgs e) {
 			butSendQB.Visible=false;
-			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks	//QuickBooks is in use when the accounting software pref is set
-				&& Accounts.DepositsLinked())																										//and the QB account prefs are not blank.
-			{
-				IsQuickBooks=true;
-				//Only need to test if QB is installed when this is an old deposit that is attached to a transaction (non QB deposit).
-				if(Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null	&& !IsNew) {	
-					//There is no good way to know if this is an old deposit that has already been sent over to QB so always show.
-					butSendQB.Visible=true;
-					Cursor.Current=Cursors.WaitCursor;//Without QB open in background this could take 8-10 seconds.
-					if(QuickBooks.TestConnection(PrefC.GetString(PrefName.QuickBooksCompanyFile))!="Connection to QuickBooks was successful.") {
-						IsQuickBooks=false;//QB is not installed on this computer so have the normal deposit window show.
-						butSendQB.Visible=false;
-					}
-					Cursor.Current=Cursors.Default;
-				}
-			}
+			IsQuickBooks=PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks;
 			if(IsNew) {
-				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)){
+				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)) {
 					//we will check the date again when saving
 					DialogResult=DialogResult.Cancel;
 					return;
@@ -500,50 +485,41 @@ namespace OpenDental{
 			}
 			else {
 				//We enforce security here based on date displayed, not date entered
-				if(!Security.IsAuthorized(Permissions.DepositSlips,DepositCur.DateDeposit)){
+				if(!Security.IsAuthorized(Permissions.DepositSlips,DepositCur.DateDeposit)) {
 					butOK.Enabled=false;
 					butDelete.Enabled=false;
 				}
 			}
-			if(IsNew){
+			if(IsNew) {
 				textDateStart.Text=PIn.Date(PrefC.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
-				if(PrefC.GetBool(PrefName.EasyNoClinics)){
+				if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
 				}
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(Lan.g(this,"all"));
 				comboClinic.SelectedIndex=0;
-				for(int i=0;i<Clinics.List.Length;i++){
+				for(int i=0;i<Clinics.List.Length;i++) {
 					comboClinic.Items.Add(Clinics.List[i].Description);
 				}
-				for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++){
+				for(int i=0;i<DefC.Short[(int)DefCat.PaymentTypes].Length;i++) {
 					listPayType.Items.Add(DefC.Short[(int)DefCat.PaymentTypes][i].ItemName);
 					listPayType.SetSelected(i,true);
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
-				if(Accounts.DepositsLinked()) {
-					if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {//Quickbooks
-						DepositAccountsQB=Accounts.GetDepositAccountsQB();
-						for(int i=0;i<DepositAccountsQB.Count;i++) {
-							comboDepositAccount.Items.Add(DepositAccountsQB[i]);
-						}
-						comboDepositAccount.SelectedIndex=0;
+				if(Accounts.DepositsLinked() && !IsQuickBooks) {
+					DepositAccounts=Accounts.GetDepositAccounts();
+					for(int i=0;i<DepositAccounts.Length;i++) {
+						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
 					}
-					else {//Other Accounting Software (Open Dental)
-						DepositAccounts=Accounts.GetDepositAccounts();
-						for(int i=0;i<DepositAccounts.Length;i++) {
-							comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
-						}
-						comboDepositAccount.SelectedIndex=0;
-					}
+					comboDepositAccount.SelectedIndex=0;
 				}
 				else {
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 				}
 			}
-			else{
+			else {//Not new.
 				groupSelect.Visible=false;
 				gridIns.SelectionMode=GridSelectionMode.None;
 				gridPat.SelectionMode=GridSelectionMode.None;
@@ -551,17 +527,17 @@ namespace OpenDental{
 				//They need to detach it from within the transaction
 				//Might be enhanced later to allow, but that's very complex.
 				Transaction trans=Transactions.GetAttachedToDeposit(DepositCur.DepositNum);
-				if(trans==null){
+				if(trans==null) {
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 					textDepositAccount.Visible=false;
 				}
-				else{
+				else {
 					comboDepositAccount.Enabled=false;
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
-					for(int i=0;i<jeL.Count;i++){
-						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset){
+					for(int i=0;i<jeL.Count;i++) {
+						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
 							comboDepositAccount.Items.Add(Accounts.GetDescript(jeL[i].AccountNum));
 							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString()
@@ -572,15 +548,21 @@ namespace OpenDental{
 				}
 			}
 			if(IsQuickBooks) {//If in QuickBooks mode, always show deposit and income accounts so that users can send old deposits into QB.
-				if(IsNew || Transactions.GetAttachedToDeposit(DepositCur.DepositNum)!=null) {//Show QB items if new or this is an an old OD deposit.
-					labelIncomeAccountQB.Visible=true;
-					comboIncomeAccountQB.Visible=true;
-					labelMemo.Visible=true;
-					textMemo.Visible=true;
-					textDepositAccount.Visible=false;
-					labelDepositAccount.Text=Lan.g(this,"Deposit into Account");
-					comboDepositAccount.Enabled=true;
-					comboDepositAccount.Items.Clear();
+				labelIncomeAccountQB.Visible=true;
+				comboIncomeAccountQB.Visible=true;
+				comboIncomeAccountQB.Items.Clear();
+				labelMemo.Visible=true;
+				textMemo.Visible=true;
+				textDepositAccount.Visible=false;
+				labelDepositAccount.Visible=true;
+				labelDepositAccount.Text=Lan.g(this,"Deposit into Account");
+				comboDepositAccount.Visible=true;
+				comboDepositAccount.Enabled=true;
+				comboDepositAccount.Items.Clear();
+				if(Accounts.DepositsLinked()) {
+					if(!IsNew) {
+						butSendQB.Visible=true;
+					}
 					DepositAccountsQB=Accounts.GetDepositAccountsQB();
 					for(int i=0;i<DepositAccountsQB.Count;i++) {
 						comboDepositAccount.Items.Add(DepositAccountsQB[i]);
@@ -597,7 +579,7 @@ namespace OpenDental{
 			textAmount.Text=DepositCur.Amount.ToString("F");
 			textBankAccountInfo.Text=DepositCur.BankAccountInfo;
 			FillGrids();
-			if(IsNew){
+			if(IsNew) {
 				gridPat.SetSelected(true);
 				gridIns.SetSelected(true);
 			}
@@ -768,12 +750,7 @@ namespace OpenDental{
 		}
 
 		private void butSendQB_Click(object sender,EventArgs e) {
-			if(CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex]
-					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,textMemo.Text,false)) 
-			{
-				MsgBox.Show(this,"Deposit was sent to QuickBooks.");
-				butSendQB.Enabled=false;//Don't let user send same deposit more than once.
-			}
+			CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex],IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,textMemo.Text,false);
 		}
 
 		///<summary>Returns true if a deposit was created OR if the user clicked continue anyway on pop up.</summary>
@@ -783,6 +760,8 @@ namespace OpenDental{
 				QuickBooks.CreateDeposit(DepositAccountsQB[comboDepositAccount.SelectedIndex]
 					,IncomeAccountsQB[comboIncomeAccountQB.SelectedIndex],DepositCur.Amount,memo);
 				Cursor.Current=Cursors.Default;
+				MsgBox.Show(this,"Deposit successfully sent to QuickBooks.");
+				butSendQB.Enabled=false;//Don't let user send same deposit more than once.  
 			}
 			catch(Exception ex) {
 				Cursor.Current=Cursors.Default;
@@ -867,7 +846,7 @@ namespace OpenDental{
 						return false;
 					}
 				}
-				Deposits.Insert(DepositCur);
+				//Deposits.Insert(DepositCur);
 				if(Accounts.DepositsLinked() && DepositCur.Amount>0) {
 					if(IsQuickBooks) {//Create a deposit in QuickBooks.						
 						if(!CreateDepositQB(DepositAccountsQB[comboDepositAccount.SelectedIndex]
@@ -876,8 +855,10 @@ namespace OpenDental{
 						{
 							return false;
 						}
+						Deposits.Insert(DepositCur);
 					}
 					else {
+						Deposits.Insert(DepositCur);
 						//create a transaction here
 						Transaction trans=new Transaction();
 						trans.DepositNum=DepositCur.DepositNum;
@@ -904,6 +885,9 @@ namespace OpenDental{
 						je.TransactionNum=trans.TransactionNum;
 						JournalEntries.Insert(je);
 					}
+				}
+				else {//Deposits are not linked or deposit amount is not greater than 0.
+					Deposits.Insert(DepositCur);
 				}
 			}
 			else{

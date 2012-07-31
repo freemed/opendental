@@ -201,8 +201,7 @@ namespace OpenDentBusiness{
 		public static bool DepositsLinked(){
 			//No need to check RemotingRole; no call to db.
 			if(PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks) {
-				string depAccounts=PrefC.GetString(PrefName.QuickBooksDepositAccounts);
-				if(depAccounts=="") {
+				if(PrefC.GetString(PrefName.QuickBooksDepositAccounts)=="") {
 					return false;
 				}
 				if(PrefC.GetString(PrefName.QuickBooksIncomeAccount)=="") {
@@ -210,8 +209,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			else {
-				string depAccounts=PrefC.GetString(PrefName.AccountingDepositAccounts);
-				if(depAccounts=="") {
+				if(PrefC.GetString(PrefName.AccountingDepositAccounts)=="") {
 					return false;
 				}
 				if(PrefC.GetLong(PrefName.AccountingIncomeAccount)==0) {
