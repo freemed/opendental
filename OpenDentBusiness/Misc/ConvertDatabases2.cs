@@ -9689,6 +9689,45 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE recall MODIFY DateScheduled NOT NULL";
 					Db.NonQ(command);
 				}
+				try{
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE recall ADD INDEX (DateScheduled)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command="CREATE INDEX recall_DateScheduled ON recall (DateScheduled)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"UPDATE recall
+						INNER JOIN (
+						SELECT recall.PatNum, recall.RecallTypeNum, 
+						(SELECT DATE(MIN(appointment.AptDateTime)) 
+							FROM procedurelog
+							INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > CURDATE() AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
+							INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
+							WHERE recall.PatNum=procedurelog.PatNum AND recalltrigger.RecallTypeNum=recall.RecallTypeNum
+						)	AS DateScheduled
+						FROM recall) A ON recall.PatNum=A.PatNum AND recall.RecallTypeNum=A.RecallTypeNum AND A.DateScheduled IS NOT NULL
+						SET recall.DateScheduled=A.DateScheduled";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"UPDATE recall
+						INNER JOIN (
+						SELECT recall.PatNum, recall.RecallTypeNum, 
+						(SELECT TO_DATE(MIN(appointment.AptDateTime)) 
+							FROM procedurelog
+							INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > SYSDATE AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
+							INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
+							WHERE recall.PatNum=procedurelog.PatNum AND recalltrigger.RecallTypeNum=recall.RecallTypeNum
+						)	AS DateScheduled
+						FROM recall) A ON recall.PatNum=A.PatNum AND recall.RecallTypeNum=A.RecallTypeNum AND A.DateScheduled IS NOT NULL
+						SET recall.DateScheduled=A.DateScheduled";
+					Db.NonQ(command);
+				}
 				
 
 				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";

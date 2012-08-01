@@ -21,21 +21,8 @@ namespace OpenDentBusiness{
 				}
 				wherePats+="PatNum="+patNums[i].ToString();
 			}
-			string command=
-				"SELECT recall.*, "
-				//MIN prevents multiple rows from being returned in the subquery.
-				+DbHelper.DateColumn("(SELECT MIN(appointment.AptDateTime) FROM appointment,procedurelog,recalltrigger "
-					+"WHERE appointment.AptNum=procedurelog.AptNum "
-					+"AND appointment.AptDateTime > "+DbHelper.Now()+" "
-					+"AND procedurelog.CodeNum=recalltrigger.CodeNum "
-					+"AND recall.PatNum=procedurelog.PatNum "
-					+"AND recalltrigger.RecallTypeNum=recall.RecallTypeNum "
-					+"AND (appointment.AptStatus=1 "//Scheduled
-					+"OR appointment.AptStatus=4))")//ASAP
-				+"FROM recall "
-				+"WHERE "+wherePats;
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table);
+			string command="SELECT * FROM recall WHERE "+wherePats;
+			return Crud.RecallCrud.SelectMany(command);
 		}
 
 		public static List<Recall> GetList(long patNum) {
@@ -58,10 +45,8 @@ namespace OpenDentBusiness{
 		public static Recall GetRecall(long recallNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Recall>(MethodBase.GetCurrentMethod(),recallNum);
-			} 
-			string command="SELECT * FROM recall WHERE RecallNum="+POut.Long(recallNum);
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table)[0];
+			}
+			return Crud.RecallCrud.SelectOne(recallNum);
 		}
 
 		///<summary>Will return a recall or null.</summary>
@@ -71,15 +56,10 @@ namespace OpenDentBusiness{
 			} 
 			string command="SELECT * FROM recall WHERE PatNum="+POut.Long(patNum)
 				+" AND (RecallTypeNum="+RecallTypes.ProphyType+" OR RecallTypeNum="+RecallTypes.PerioType+")";
-			DataTable table=Db.GetTable(command);
-			List<Recall> recallList=RefreshAndFill(table);
-			if(recallList.Count==0){
-				return null;
-			}
-			return recallList[0];
+			return Crud.RecallCrud.SelectOne(command);
 		}
 
-		private static List<Recall> RefreshAndFill(DataTable table){
+		/*private static List<Recall> RefreshAndFill(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			List<Recall> list=Crud.RecallCrud.TableToList(table);
 			if(table.Columns.Count>13) {
@@ -88,15 +68,14 @@ namespace OpenDentBusiness{
 				}
 			}
 			return list;
-		}
+		}*/
 
 		public static List<Recall> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),changedSince);
 			} 
 			string command="SELECT * FROM recall WHERE DateTStamp > "+POut.DateT(changedSince);
-			DataTable table=Db.GetTable(command);
-			return RefreshAndFill(table);
+			return Crud.RecallCrud.SelectMany(command);
 		}
 
 		///<summary>Only used in FormRecallList to get a list of patients with recall.  Supply a date range, using min and max values if user left blank.  If provNum=0, then it will get all provnums.  It looks for both provider match in either PriProv or SecProv.</summary>
@@ -133,10 +112,6 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command;
-			string datesql="CURDATE()";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				datesql="(SELECT CURRENT_DATE FROM dual)";
-			}
 			command=@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email ""_guarEmail"",patguar.FName ""_guarFName"",
@@ -492,8 +467,7 @@ namespace OpenDentBusiness{
 			List<RecallType> typeListActive=RecallTypes.GetActive();
 			List<RecallType> typeList=new List<RecallType>(typeListActive);
 			string command="SELECT * FROM recall WHERE PatNum="+POut.Long(patNum);
-			DataTable table=Db.GetTable(command);
-			List<Recall> recallList=RefreshAndFill(table);
+			List<Recall> recallList=Crud.RecallCrud.SelectMany(command);
 			//determine if this patient is a perio patient.
 			bool isPerio=false;
 			for(int i=0;i<recallList.Count;i++){
@@ -675,6 +649,44 @@ namespace OpenDentBusiness{
 				//Recalls.Update(matchingRecall);
 			}*/
 		}
+
+		/// <summary>Synchronizes DateScheduled column in recall table for one patient.</summary>
+		public static void SynchScheduledAppt(long patNum) {
+			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+			//  Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+			//  return;
+			//}
+			//List<RecallType> typeListActive=RecallTypes.GetActive();
+			//List<RecallType> typeList=new List<RecallType>(typeListActive);
+			//string command="SELECT * FROM recall WHERE PatNum="+POut.Long(patNum);
+			//DataTable table=Db.GetTable(command);
+			////determine if this patient is a perio patient.
+			//bool isPerio=false;
+			//for(int i=0;i<recallList.Count;i++) {
+			//  if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==recallList[i].RecallTypeNum) {
+			//    isPerio=true;
+			//    break;
+			//  }
+			//}
+			////remove types from the list which do not apply to this patient.
+			//for(int i=0;i<typeList.Count;i++) {//it's ok to not go backwards because we immediately break.
+			//  if(isPerio) {
+			//    if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum) {
+			//      typeList.RemoveAt(i);
+			//      break;
+			//    }
+			//  }
+			//  else {
+			//    if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum) {
+			//      typeList.RemoveAt(i);
+			//      break;
+			//    }
+			//  }
+			//}
+
+
+		}
+
 
 		///<summary>Updates RecallInterval and DueDate for all patients that have the recallTypeNum and defaultIntervalOld to use the defaultIntervalNew.</summary>
 		public static void UpdateDefaultIntervalForPatients(long recallTypeNum,Interval defaultIntervalOld,Interval defaultIntervalNew) {

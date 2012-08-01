@@ -2317,7 +2317,9 @@
       <DependentUpon>FormScreenshotBrowse.cs</DependentUpon>
     </Compile>
     <Compile Include="InternalTools\Phones\VideoCapture.cs" />
-    <Compile Include="InternalTools\Phones\FormPhoneTiles.cs" />
+    <Compile Include="InternalTools\Phones\FormPhoneTiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="InternalTools\Phones\FormPhoneTiles.designer.cs">
       <DependentUpon>FormPhoneTiles.cs</DependentUpon>
     </Compile>

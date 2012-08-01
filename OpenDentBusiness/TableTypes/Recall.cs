@@ -36,7 +36,6 @@ namespace OpenDentBusiness{
 		public double DisableUntilBalance;
 		///<summary>If a date is entered, then this recall will be disabled until that date.</summary>
 		public DateTime DisableUntilDate;
-
 		/// <summary>This will only have a value if a recall is scheduled.</summary>
 		public DateTime DateScheduled;
 
