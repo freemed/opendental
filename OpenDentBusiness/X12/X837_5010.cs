@@ -1859,6 +1859,8 @@ namespace OpenDentBusiness
 			return "";
 		}
 
+
+		///<summary>01 Spouse, 18 Self, 19 Child, 20 Employee, 21 Unknown, 39 Organ Donor, 40 Cadaver Donor, 53 Life Partner, G8 Other Relationship.</summary>
 		private static string GetRelat(Relat relat) {
 			switch(relat) {
 				case (Relat.Self):
@@ -1866,17 +1868,17 @@ namespace OpenDentBusiness
 				case (Relat.Child):
 					return "19";
 				case (Relat.Dependent):
-					return "76";
+					return "G8";//Other relationship
 				case (Relat.Employee):
 					return "20";
 				case (Relat.HandicapDep):
-					return "22";
+					return "G8";//Other relationship
 				case (Relat.InjuredPlaintiff):
-					return "41";
+					return "G8";//Other relationship
 				case (Relat.LifePartner):
 					return "53";
 				case (Relat.SignifOther):
-					return "29";
+					return "G8";//Other relationship
 				case (Relat.Spouse):
 					return "01";
 			}
