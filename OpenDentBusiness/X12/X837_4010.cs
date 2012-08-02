@@ -1694,7 +1694,10 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Practice Title");
 			}
-			if(clinic==null) {
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				X12Validate.BillingAddress(strb);
+			}
+			else if(clinic==null) {
 				X12Validate.PracticeAddress(strb);
 			}
 			else {

@@ -117,6 +117,30 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		public static void BillingAddress(StringBuilder strb) {
+			if(PrefC.GetString(PrefName.PracticePhone).Length!=10) { //There is no billing phone, so the practice phone is sent electronically.
+				//10 digit phone is required by WebMD and is universally assumed 
+				Comma(strb);
+				strb.Append("Practice Phone");
+			}
+			if(PrefC.GetString(PrefName.PracticeBillingAddress)=="") {
+				Comma(strb);
+				strb.Append("Billing Address");
+			}
+			if(PrefC.GetString(PrefName.PracticeBillingCity).Length<2) {
+				Comma(strb);
+				strb.Append("Billing City");
+			}
+			if(PrefC.GetString(PrefName.PracticeBillingST).Length!=2) {
+				Comma(strb);
+				strb.Append("Billing State(2 char)");
+			}
+			if(PrefC.GetString(PrefName.PracticeBillingZip).Length<3) {
+				Comma(strb);
+				strb.Append("Billing Zip");
+			}
+		}
+
 		///<summary>Clinic passed in must not be null.</summary>
 		public static void Clinic(Clinic clinic,StringBuilder strb) {
 			if(clinic.Phone.Length!=10) {//1000A PER04 min length=1.

@@ -2277,12 +2277,15 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Practice Title");
 			}
-			if(clinic==null) {
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				X12Validate.BillingAddress(strb);
+			}
+			else if(clinic==null) {
 				X12Validate.PracticeAddress(strb);
 			}
 			else {
 				X12Validate.Clinic(clinic,strb);
-			}      
+			}
 			if(!sub.ReleaseInfo) {
 				Comma(strb);
 				strb.Append("InsPlan Release of Info");
