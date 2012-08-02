@@ -451,9 +451,10 @@ namespace OpenDentBusiness
 					+Sout(subscriber.Zip.Replace("-",""),15));//N403 3/15 Postal Code:
 				EndSegment(sw);//N404 through N407 either not used or required for addresses outside of the United States.
 				//2010BA DMG: (medical,institutional,dental) Subscriber Demographic Information. Situational. Required when the patient is the subscriber.
+				//Carriers tend to complain if the BD is missing for the subscriber even though it's not strictly required.  So we will require it from users.
 				sw.Write("DMG"+s
 					+"D8"+s//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
-					+subscriber.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The subscriber is the patient and the patient birtdate is validated, therefore the subscriber birthdate is validated.
+					+subscriber.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The subscriber birtdate is validated.
 					+GetGender(subscriber.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
 				EndSegment(sw);
 				//}
@@ -2370,6 +2371,10 @@ namespace OpenDentBusiness
 			}
 			Patient patient=Patients.GetPat(claim.PatNum);
 			Patient subscriber=Patients.GetPat(sub.Subscriber);
+			if(subscriber.Birthdate.Year<1880) {
+				Comma(strb);
+				strb.Append("Subscriber Birthdate");
+			}
 			if(claim.PatNum != sub.Subscriber//if patient is not subscriber
 				&& claim.PatRelat==Relat.Self) {//and relat is self
 				Comma(strb);

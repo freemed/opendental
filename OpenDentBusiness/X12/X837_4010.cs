@@ -1718,6 +1718,13 @@ namespace OpenDentBusiness
 			if(claim.PlanNum2>0) {
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
+				Patient subscriber2=Patients.GetPat(sub2.Subscriber); //Always exists because validated in UI.
+				if(subscriber2.Birthdate.Year<1880) {
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary Subscriber Birthdate");
+				}
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				if(carrier2.Address=="") {
 					if(strb.Length!=0) {
