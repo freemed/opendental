@@ -9061,6 +9061,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_3_1();
 		}
 
+		//In version 12.2.34, there is an eCW section here.
+
 		private static void To12_3_1() {
 			if(FromVersion<new Version("12.3.1.0")) {
 				string command;
@@ -9528,6 +9530,41 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.3.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_3_6();
+		}
+
+		/// <summary>Also in 12.2.34</summary>
+		private static void To12_3_6() {
+			if(FromVersion<new Version("12.3.6.0")) {
+				string command="";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
+					int programNum=PIn.Int(Db.GetScalar(command));
+					command="SELECT COUNT(*) FROM programproperty WHERE ProgramNum="+programNum+" AND PropertyDesc='eCWServer'";
+					if(Db.GetCount(command)=="0") {//Also added in 12.2 so we need to check to see if it exists
+						command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+							+") VALUES("
+							+"'"+POut.Long(programNum)+"', "
+							+"'eCWServer', "
+							+"'')";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM programproperty WHERE ProgramNum="+programNum+" AND PropertyDesc='eCWPort'";
+					if(Db.GetCount(command)=="0") {//Also added in 12.2 so we need to check to see if it exists
+						command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+							+") VALUES("
+							+"'"+POut.Long(programNum)+"', "
+							+"'eCWPort', "
+							+"'4928')";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					//eCW will never use Oracle.
+				}
+				command="UPDATE preference SET ValueString = '12.3.6.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_4_0();
 		}
 
@@ -9730,6 +9767,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				
 
+
 				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
@@ -9769,4 +9807,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 				
-
