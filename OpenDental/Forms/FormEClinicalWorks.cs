@@ -42,6 +42,11 @@ namespace OpenDental{
 		private localhost.Service1 service11;
 		private Label labelHL7Warning;
 		private RadioButton radioModeFull;
+		private UI.Button butDiagnostic;
+		private TextBox textECWServer;
+		private Label label3;
+		private TextBox textODServer;
+		private Label label6;
 		private Label labelHL7FolderIn;
 
 		///<summary></summary>
@@ -99,6 +104,11 @@ namespace OpenDental{
 			this.service11 = new OpenDental.localhost.Service1();
 			this.labelHL7Warning = new System.Windows.Forms.Label();
 			this.radioModeFull = new System.Windows.Forms.RadioButton();
+			this.butDiagnostic = new OpenDental.UI.Button();
+			this.textECWServer = new System.Windows.Forms.TextBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.textODServer = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -111,7 +121,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(524, 362);
+			this.butCancel.Location = new System.Drawing.Point(524, 397);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 0;
@@ -126,7 +136,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443, 362);
+			this.butOK.Location = new System.Drawing.Point(443, 397);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 1;
@@ -217,7 +227,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textHL7FolderIn);
 			this.groupBox1.Controls.Add(this.labelHL7FolderOut);
 			this.groupBox1.Controls.Add(this.labelHL7FolderIn);
-			this.groupBox1.Location = new System.Drawing.Point(12, 149);
+			this.groupBox1.Location = new System.Drawing.Point(12, 201);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(538, 101);
 			this.groupBox1.TabIndex = 52;
@@ -234,7 +244,7 @@ namespace OpenDental{
 			// 
 			// labelDefaultUserGroup
 			// 
-			this.labelDefaultUserGroup.Location = new System.Drawing.Point(12, 265);
+			this.labelDefaultUserGroup.Location = new System.Drawing.Point(12, 317);
 			this.labelDefaultUserGroup.Name = "labelDefaultUserGroup";
 			this.labelDefaultUserGroup.Size = new System.Drawing.Size(232, 18);
 			this.labelDefaultUserGroup.TabIndex = 53;
@@ -245,7 +255,7 @@ namespace OpenDental{
 			// 
 			this.comboDefaultUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDefaultUserGroup.FormattingEnabled = true;
-			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246, 265);
+			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246, 317);
 			this.comboDefaultUserGroup.Name = "comboDefaultUserGroup";
 			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215, 21);
 			this.comboDefaultUserGroup.TabIndex = 54;
@@ -254,7 +264,7 @@ namespace OpenDental{
 			// 
 			this.checkShowImages.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowImages.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowImages.Location = new System.Drawing.Point(60, 292);
+			this.checkShowImages.Location = new System.Drawing.Point(60, 344);
 			this.checkShowImages.Name = "checkShowImages";
 			this.checkShowImages.Size = new System.Drawing.Size(199, 18);
 			this.checkShowImages.TabIndex = 55;
@@ -292,7 +302,7 @@ namespace OpenDental{
 			// 
 			this.checkFeeSchedules.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkFeeSchedules.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkFeeSchedules.Location = new System.Drawing.Point(12, 314);
+			this.checkFeeSchedules.Location = new System.Drawing.Point(12, 366);
 			this.checkFeeSchedules.Name = "checkFeeSchedules";
 			this.checkFeeSchedules.Size = new System.Drawing.Size(247, 18);
 			this.checkFeeSchedules.TabIndex = 58;
@@ -306,7 +316,7 @@ namespace OpenDental{
 			// 
 			// labelHL7Warning
 			// 
-			this.labelHL7Warning.Location = new System.Drawing.Point(264, 312);
+			this.labelHL7Warning.Location = new System.Drawing.Point(264, 364);
 			this.labelHL7Warning.Name = "labelHL7Warning";
 			this.labelHL7Warning.Size = new System.Drawing.Size(170, 18);
 			this.labelHL7Warning.TabIndex = 59;
@@ -326,11 +336,65 @@ namespace OpenDental{
 			this.radioModeFull.UseVisualStyleBackColor = true;
 			this.radioModeFull.Click += new System.EventHandler(this.radioModeFull_Click);
 			// 
+			// butDiagnostic
+			// 
+			this.butDiagnostic.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDiagnostic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDiagnostic.Autosize = true;
+			this.butDiagnostic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDiagnostic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDiagnostic.CornerRadius = 4F;
+			this.butDiagnostic.Location = new System.Drawing.Point(260, 397);
+			this.butDiagnostic.Name = "butDiagnostic";
+			this.butDiagnostic.Size = new System.Drawing.Size(90, 24);
+			this.butDiagnostic.TabIndex = 61;
+			this.butDiagnostic.Text = "Diagnostic Tool";
+			this.butDiagnostic.Click += new System.EventHandler(this.butDiagnostic_Click);
+			// 
+			// textECWServer
+			// 
+			this.textECWServer.Location = new System.Drawing.Point(246, 148);
+			this.textECWServer.Name = "textECWServer";
+			this.textECWServer.Size = new System.Drawing.Size(215, 20);
+			this.textECWServer.TabIndex = 53;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(15, 149);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(229, 18);
+			this.label3.TabIndex = 52;
+			this.label3.Text = "eCW Server";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textODServer
+			// 
+			this.textODServer.BackColor = System.Drawing.SystemColors.Window;
+			this.textODServer.Location = new System.Drawing.Point(246, 174);
+			this.textODServer.Name = "textODServer";
+			this.textODServer.ReadOnly = true;
+			this.textODServer.Size = new System.Drawing.Size(215, 20);
+			this.textODServer.TabIndex = 65;
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(15, 175);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(229, 18);
+			this.label6.TabIndex = 64;
+			this.label6.Text = "OpenDental Server";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(611, 398);
+			this.ClientSize = new System.Drawing.Size(611, 433);
+			this.Controls.Add(this.textODServer);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.textECWServer);
+			this.Controls.Add(this.label3);
+			this.Controls.Add(this.butDiagnostic);
 			this.Controls.Add(this.radioModeFull);
 			this.Controls.Add(this.labelHL7Warning);
 			this.Controls.Add(this.checkFeeSchedules);
@@ -376,6 +440,8 @@ namespace OpenDental{
 			checkEnabled.Checked=ProgramCur.Enabled;
 			SetModeRadioButtons(GetProp("eClinicalWorksMode"));
 			SetModeVisibilities();
+			textECWServer.Text=GetProp("eCWServer");
+			textODServer.Text=DataCore.GetTable("SHOW VARIABLES LIKE 'hostname';").Rows[0]["Value"].ToString();//MySQL Only which is okay since eCW won't use Oracle
 			textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
 			textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
 			comboDefaultUserGroup.Items.Clear();
@@ -513,6 +579,7 @@ namespace OpenDental{
 				else {
 					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eClinicalWorksMode","2");//Full
 				}
+				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eCWServer",textECWServer.Text);
 				Prefs.UpdateString(PrefName.HL7FolderIn,textHL7FolderIn.Text);
 				ProgramProperties.SetProperty(ProgramCur.ProgramNum,"DefaultUserGroup",
 					UserGroups.List[comboDefaultUserGroup.SelectedIndex].UserGroupNum.ToString());
@@ -538,6 +605,12 @@ namespace OpenDental{
 			}
 			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			return true;
+		}
+
+		private void butDiagnostic_Click(object sender,EventArgs e) {
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eCWServer",textECWServer.Text);
+			FormEcwDiag FormECWD=new FormEcwDiag();
+			FormECWD.ShowDialog();
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

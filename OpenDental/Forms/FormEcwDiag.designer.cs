@@ -23,24 +23,48 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
+			this.textLog = new System.Windows.Forms.TextBox();
+			this.checkShow = new System.Windows.Forms.CheckBox();
+			this.butRunCheck = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
-			// butOK
+			// textLog
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(638, 468);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.textLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textLog.Location = new System.Drawing.Point(12, 12);
+			this.textLog.Multiline = true;
+			this.textLog.Name = "textLog";
+			this.textLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textLog.Size = new System.Drawing.Size(620, 510);
+			this.textLog.TabIndex = 4;
+			// 
+			// checkShow
+			// 
+			this.checkShow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.checkShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShow.Location = new System.Drawing.Point(638, 43);
+			this.checkShow.Name = "checkShow";
+			this.checkShow.Size = new System.Drawing.Size(75, 20);
+			this.checkShow.TabIndex = 17;
+			this.checkShow.Text = "Verbose";
+			// 
+			// butRunCheck
+			// 
+			this.butRunCheck.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRunCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRunCheck.Autosize = true;
+			this.butRunCheck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRunCheck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRunCheck.CornerRadius = 4F;
+			this.butRunCheck.Location = new System.Drawing.Point(638, 12);
+			this.butRunCheck.Name = "butRunCheck";
+			this.butRunCheck.Size = new System.Drawing.Size(75, 25);
+			this.butRunCheck.TabIndex = 5;
+			this.butRunCheck.Text = "Run Check";
+			this.butRunCheck.Click += new System.EventHandler(this.butRunCheck_Click);
 			// 
 			// butCancel
 			// 
@@ -54,24 +78,31 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormEcwDiag
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725, 534);
-			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.checkShow);
+			this.Controls.Add(this.butRunCheck);
+			this.Controls.Add(this.textLog);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormEcwDiag";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "eClinical Works Diagnostic";
+			this.Load += new System.EventHandler(this.FormEcwDiag_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
+		private System.Windows.Forms.TextBox textLog;
+		private UI.Button butRunCheck;
+		private System.Windows.Forms.CheckBox checkShow;
 	}
 }
