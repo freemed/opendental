@@ -768,7 +768,7 @@ namespace OpenDental{
 			if(radioWriteoffPay.Checked){
 				report.Query+="SELECT claimproc.DateCP,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
-					+"procedurecode.Descript,"//might be null, which is ok.  Was: carrier.CarrierName
+					+"CONCAT(CONCAT(procedurecode.AbbrDesc,' '),carrier.CarrierName),"//AbbrDesc might be null, which is ok.
 					+"provider.Abbr,"
 					+"claimproc.ClinicNum,"
 					+"0,"
@@ -780,6 +780,8 @@ namespace OpenDental{
 					+"FROM claimproc "
 					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "
 					+"LEFT JOIN provider ON provider.ProvNum = claimproc.ProvNum "
+					+"LEFT JOIN insplan ON insplan.PlanNum = claimproc.PlanNum "
+					+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
 					+"LEFT JOIN procedurelog ON procedurelog.ProcNum=claimproc.ProcNum "
 					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"WHERE (claimproc.Status=1 OR claimproc.Status=4) "//received or supplemental
@@ -792,7 +794,7 @@ namespace OpenDental{
 			else{
 				report.Query+="SELECT claimproc.ProcDate,"
 					+"CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName),' '),patient.MiddleI),"
-					+"procedurecode.Descript,"
+					+"CONCAT(CONCAT(procedurecode.AbbrDesc,' '),carrier.CarrierName),"
 					+"provider.Abbr,"
 					+"claimproc.ClinicNum,"
 					+"0,"
@@ -804,6 +806,8 @@ namespace OpenDental{
 					+"FROM claimproc "
 					+"LEFT JOIN patient ON claimproc.PatNum = patient.PatNum "
 					+"LEFT JOIN provider ON provider.ProvNum = claimproc.ProvNum "
+					+"LEFT JOIN insplan ON insplan.PlanNum = claimproc.PlanNum "
+					+"LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
 					+"LEFT JOIN procedurelog ON procedurelog.ProcNum=claimproc.ProcNum "
 					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"WHERE (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) "//received or supplemental or notreceived
