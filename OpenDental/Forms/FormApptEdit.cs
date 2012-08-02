@@ -1575,6 +1575,11 @@ namespace OpenDental{
 			else{
 				//gridProc.SetSelected(e.Row,true);
 				Procedures.AttachToApt(procNums,AptCur.AptNum,isPlanned);
+				if(!isPlanned) {
+					List<string> procCodes=new List<string>();
+					procCodes.Add(DS.Tables["Procedure"].Rows[e.Row]["ProcCode"].ToString());
+					Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
+				}
 			}
 			Recalls.Synch(AptCur.PatNum);//Maybe we should move this to the closing event?
 			//manually change existing table instead of refreshing from db?
@@ -2844,6 +2849,7 @@ namespace OpenDental{
 				}
 			}
 			Appointments.Delete(AptCur.AptNum);
+			Recalls.SynchScheduledApptFull(AptCur.PatNum);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
 				"Delete for date/time: "+AptCur.AptDateTime.ToString(),
 				AptCur.AptNum);
@@ -2874,6 +2880,14 @@ namespace OpenDental{
 					AptCur.AptDateTime.ToShortDateString()+", "+AptCur.ProcDescript,
 					AptCur.AptNum);
 			}
+			List<string> procCodes=new List<string>();
+			for(int i=0;i<DS.Tables["Procedure"].Rows.Count;i++) {
+				if(DS.Tables["Procedure"].Rows[i]["attached"].ToString()=="0") {//not attached
+					continue;
+				}
+				procCodes.Add(DS.Tables["Procedure"].Rows[i]["ProcCode"].ToString());
+			}
+			Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -2887,6 +2901,7 @@ namespace OpenDental{
 			}
 			if(IsNew) {
 				Appointments.Delete(AptCur.AptNum);
+				Recalls.SynchScheduledApptFull(AptCur.PatNum);
 			}
 		}
 		

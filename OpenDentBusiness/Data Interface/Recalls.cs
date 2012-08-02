@@ -59,17 +59,6 @@ namespace OpenDentBusiness{
 			return Crud.RecallCrud.SelectOne(command);
 		}
 
-		/*private static List<Recall> RefreshAndFill(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			List<Recall> list=Crud.RecallCrud.TableToList(table);
-			if(table.Columns.Count>13) {
-				for(int i=0;i<list.Count;i++) {
-					list[i].DateScheduled=PIn.Date(table.Rows[i][13].ToString());
-				}
-			}
-			return list;
-		}*/
-
 		public static List<Recall> GetChangedSince(DateTime changedSince) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Recall>>(MethodBase.GetCurrentMethod(),changedSince);
@@ -144,7 +133,7 @@ namespace OpenDentBusiness{
 				+"AND recall.DateDue <= "+POut.Date(toDate)+" "
 				+"AND recall.IsDisabled = 0 "
 				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") "
-				+"AND recall.DateScheduled='0001-01-01' "; //Only show rows where no future recall appointment so DateScheduled is default date.
+				+"AND recall.DateScheduled='0001-01-01' "; //Only show rows where no future recall appointment.
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
 			}
@@ -159,16 +148,6 @@ namespace OpenDentBusiness{
 					recall.RecallInterval,recall.RecallNum,recall.RecallStatus,
 					recalltype.Description,patient.WirelessPhone,patient.WkPhone,recall.RecallTypeNum ";
 			}
-//      command+=@") A
-//				LEFT JOIN
-//				(
-//				SELECT appointment.PatNum,recalltrigger.RecallTypeNum 
-//				FROM procedurelog
-//				INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > "+datesql//early this morning
-//        +@" AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
-//				INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
-//				) B ON A.PatNum=B.PatNum AND A.RecallTypeNum=B.RecallTypeNum
-//				WHERE ISNULL(B.PatNum) ";//only show rows where no future recall appointment
  			DataTable rawtable=Db.GetTable(command);
 			DateTime dateDue;
 			DateTime dateRemind;
@@ -650,41 +629,71 @@ namespace OpenDentBusiness{
 			}*/
 		}
 
-		/// <summary>Synchronizes DateScheduled column in recall table for one patient.</summary>
-		public static void SynchScheduledAppt(long patNum) {
-			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-			//  Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
-			//  return;
-			//}
-			//List<RecallType> typeListActive=RecallTypes.GetActive();
-			//List<RecallType> typeList=new List<RecallType>(typeListActive);
-			//string command="SELECT * FROM recall WHERE PatNum="+POut.Long(patNum);
-			//DataTable table=Db.GetTable(command);
-			////determine if this patient is a perio patient.
-			//bool isPerio=false;
-			//for(int i=0;i<recallList.Count;i++) {
-			//  if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==recallList[i].RecallTypeNum) {
-			//    isPerio=true;
-			//    break;
-			//  }
-			//}
-			////remove types from the list which do not apply to this patient.
-			//for(int i=0;i<typeList.Count;i++) {//it's ok to not go backwards because we immediately break.
-			//  if(isPerio) {
-			//    if(PrefC.GetLong(PrefName.RecallTypeSpecialProphy)==typeList[i].RecallTypeNum) {
-			//      typeList.RemoveAt(i);
-			//      break;
-			//    }
-			//  }
-			//  else {
-			//    if(PrefC.GetLong(PrefName.RecallTypeSpecialPerio)==typeList[i].RecallTypeNum) {
-			//      typeList.RemoveAt(i);
-			//      break;
-			//    }
-			//  }
-			//}
+		/// <summary>Synchronizes DateScheduled column in recall table for one patient.  This must be used instead of lazy synch in RecallsForPatient, when deleting an appointment, when sending to unscheduled list, etc.  This is fast, but it would be inefficient to call it too much.</summary>
+		public static void SynchScheduledApptFull(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
+				return;
+			}
+			//Clear out DateScheduled column for this pat before changing
+			string command="UPDATE recall "
+				+"SET recall.DateScheduled="+POut.Date(DateTime.MinValue)+" "
+				+"WHERE recall.PatNum="+POut.Long(patNum);
+			Db.NonQ(command);
+			//Get table of future appointments dates with recall type for this patient, where a procedure is attached that is a recall trigger procedure
+			command=@"SELECT recalltrigger.RecallTypeNum,MIN("+DbHelper.DateColumn("appointment.AptDateTime")+@") AS AptDateTime
+				FROM appointment,procedurelog,recalltrigger,recall
+				WHERE appointment.AptNum=procedurelog.AptNum 
+				AND appointment.PatNum="+POut.Long(patNum)+@" 
+				AND procedurelog.CodeNum=recalltrigger.CodeNum 
+				AND recall.PatNum=appointment.PatNum 
+				AND recalltrigger.RecallTypeNum=recall.RecallTypeNum 
+				AND (appointment.AptStatus=1 "//Scheduled
+				+"OR appointment.AptStatus=4) "//ASAP
+				+"AND appointment.AptDateTime > "+DbHelper.Curdate()+" ";//early this morning
+			DataTable table=Db.GetTable(command);
+			//Update the recalls for this patient with DATE(AptDateTime) where there is a future appointment with recall proc on it
+			for(int i=0;i<table.Rows.Count;i++) {
+				if(table.Rows[i]["RecallTypeNum"].ToString()=="") {
+					continue;
+				}
+				command=@"UPDATE recall	SET recall.DateScheduled="+POut.Date(PIn.Date(table.Rows[i]["AptDateTime"].ToString()))+" " 
+					+"WHERE recall.RecallTypeNum="+POut.Long(PIn.Long(table.Rows[i]["RecallTypeNum"].ToString()))+" "
+					+"AND recall.PatNum="+POut.Long(patNum)+" ";
+				Db.NonQ(command);
+			}
+		}
 
-
+		/// <summary>Whenever an appointment is scheduled or moved, or whenever procs are added to an appt.  Uses the final apt date and all the procs on the appt.  Pass in procs in the D#### format.</summary>
+		public static void SynchScheduledApptLazy(long patNum,DateTime date,List<string> procCodes) {
+			//compare procCodes to triggers so that you know which types of recalls to update.
+			List<long> recalltypes=new List<long>();//List of recall types that have procs that match one of the procCodes sent in
+			for(int i=0;i<procCodes.Count;i++){
+				long codeNum=ProcedureCodes.GetCodeNum(procCodes[i]);
+				for(int j=0;j<RecallTriggerC.Listt.Count;j++) {
+					if(codeNum==RecallTriggerC.Listt[j].CodeNum) {
+						recalltypes.Add(RecallTriggerC.Listt[j].RecallTypeNum);
+						break;
+					}
+				}
+			}
+			if(recalltypes.Count>0) {
+				//for each type that needs to be updated:
+					//blind updates to the db to set the date based on trigger procs.
+				//Update date of all recalls of types that need updating based on procCodes sent in
+				string command=@"UPDATE recall
+					SET recall.DateScheduled="+POut.Date(date)+" "
+					+"WHERE recall.PatNum="+POut.Long(patNum)+" "
+					+"AND (";
+				for(int i=0;i<recalltypes.Count;i++) {
+					if(i>0) {
+						command+=" OR ";
+					}
+					command+="recall.RecallTypeNum="+recalltypes[i].ToString();
+				}
+				command+=") ";
+				Db.NonQ(command);
+			}
 		}
 
 
@@ -731,6 +740,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			for(int i=0;i<table.Rows.Count;i++){
 				Synch(PIn.Long(table.Rows[i][0].ToString()));
+				SynchScheduledApptFull(PIn.Long(table.Rows[i][0].ToString()));
 			}
 		}
 

@@ -9738,32 +9738,48 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				catch(Exception ex) { }//ex is needed, or exception won't get caught.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command=@"UPDATE recall
-						INNER JOIN (
-						SELECT recall.PatNum, recall.RecallTypeNum, 
-						(SELECT DATE(MIN(appointment.AptDateTime)) 
-							FROM procedurelog
-							INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > CURDATE() AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
-							INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
-							WHERE recall.PatNum=procedurelog.PatNum AND recalltrigger.RecallTypeNum=recall.RecallTypeNum
-						)	AS DateScheduled
-						FROM recall) A ON recall.PatNum=A.PatNum AND recall.RecallTypeNum=A.RecallTypeNum AND A.DateScheduled IS NOT NULL
-						SET recall.DateScheduled=A.DateScheduled";
-					Db.NonQ(command);
+					command=@"SELECT recalltrigger.RecallTypeNum,MIN(DATE(appointment.AptDateTime)) AS AptDateTime,recall.PatNum
+						FROM appointment,procedurelog,recalltrigger,recall
+						WHERE appointment.AptNum=procedurelog.AptNum  
+						AND procedurelog.CodeNum=recalltrigger.CodeNum 
+						AND recall.PatNum=procedurelog.PatNum 
+						AND recalltrigger.RecallTypeNum=recall.RecallTypeNum 
+						AND (appointment.AptStatus=1 "//Scheduled
+						+"OR appointment.AptStatus=4) "//ASAP
+						+"AND appointment.AptDateTime > CURDATE() " //early this morning
+						+"GROUP BY recalltrigger.RecallTypeNum,recall.PatNum ";
+						DataTable table=Db.GetTable(command);
+						for(int i=0;i<table.Rows.Count;i++) {
+							if(table.Rows[i]["RecallTypeNum"].ToString()=="") {
+								continue;//this might happen if there are zero results, but the MIN in the query causes one result row with NULLs.
+							}
+							command=@"UPDATE recall	SET recall.DateScheduled="+POut.Date(PIn.Date(table.Rows[i]["AptDateTime"].ToString()))+" " 
+								+"WHERE recall.RecallTypeNum="+POut.Long(PIn.Long(table.Rows[i]["RecallTypeNum"].ToString()))+" "
+								+"AND recall.PatNum="+POut.Long(PIn.Long(table.Rows[i]["PatNum"].ToString()));
+							Db.NonQ(command);
+						}
 				}
 				else {//oracle
-					command=@"UPDATE recall
-						INNER JOIN (
-						SELECT recall.PatNum, recall.RecallTypeNum, 
-						(SELECT TO_DATE(MIN(appointment.AptDateTime)) 
-							FROM procedurelog
-							INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum AND appointment.AptDateTime > SYSDATE AND appointment.AptStatus IN(1,4)/*scheduled,ASAP*/
-							INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum
-							WHERE recall.PatNum=procedurelog.PatNum AND recalltrigger.RecallTypeNum=recall.RecallTypeNum
-						)	AS DateScheduled
-						FROM recall) A ON recall.PatNum=A.PatNum AND recall.RecallTypeNum=A.RecallTypeNum AND A.DateScheduled IS NOT NULL
-						SET recall.DateScheduled=A.DateScheduled";
-					Db.NonQ(command);
+					command=@"SELECT recalltrigger.RecallTypeNum,MIN(TO_DATE(appointment.AptDateTime)) AS AptDateTime,recall.PatNum
+						FROM appointment,procedurelog,recalltrigger,recall
+						WHERE appointment.AptNum=procedurelog.AptNum  
+						AND procedurelog.CodeNum=recalltrigger.CodeNum 
+						AND recall.PatNum=procedurelog.PatNum 
+						AND recalltrigger.RecallTypeNum=recall.RecallTypeNum 
+						AND (appointment.AptStatus=1 "//Scheduled
+						+"OR appointment.AptStatus=4) "//ASAP
+						+"AND appointment.AptDateTime > SYSDATE " //early this morning
+						+"GROUP BY recalltrigger.RecallTypeNum,recall.PatNum ";
+					DataTable table=Db.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++) {
+						if(table.Rows[i]["RecallTypeNum"].ToString()=="") {
+							continue;
+						}
+						command=@"UPDATE recall	SET recall.DateScheduled="+POut.Date(PIn.Date(table.Rows[i]["AptDateTime"].ToString()))+" " 
+							+"WHERE recall.RecallTypeNum="+POut.Long(PIn.Long(table.Rows[i]["RecallTypeNum"].ToString()))+" "
+							+"AND recall.PatNum="+POut.Long(PIn.Long(table.Rows[i]["PatNum"].ToString()));
+						Db.NonQ(command);
+					}
 				}
 				
 

@@ -2623,6 +2623,11 @@ namespace OpenDental {
 			AppointmentL.DateSelected=aptCur.AptDateTime;
 			mouseIsDown = false;
 			boolAptMoved=false;
+			List<string> procCodes=new List<string>();
+			for(int i=0;i<procsForSingleApt.Count;i++) {
+				procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
+			}
+			Recalls.SynchScheduledApptLazy(aptCur.PatNum, aptCur.AptDateTime, procCodes);
 		}
 
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
@@ -3260,6 +3265,11 @@ namespace OpenDental {
 			mouseIsDown = false;
 			boolAptMoved=false;
 			TempApptSingle.Dispose();
+			List<string> procCodes=new List<string>();
+			for(int i=0;i<procsForSingleApt.Count;i++) {
+				procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
+			}
+			Recalls.SynchScheduledApptLazy(apt.PatNum,apt.AptDateTime,procCodes);
 		}
 
 		private void ContrApptSheet2_MouseLeave(object sender,EventArgs e) {
@@ -4456,6 +4466,7 @@ namespace OpenDental {
 				PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
+			Recalls.SynchScheduledApptFull(apt.PatNum);
 		}
 
 		private void OnBreak_Click() {
@@ -4644,6 +4655,7 @@ namespace OpenDental {
 				ModuleSelected(PatCur.PatNum);
 			}
 			SetInvalid();
+			Recalls.SynchScheduledApptFull(apt.PatNum);
 		}
 
 		private void PrintApptLabel() {

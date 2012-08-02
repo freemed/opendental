@@ -37,6 +37,7 @@ namespace OpenDental {
 
 		private void FillGrid(){
 			Recalls.Synch(PatNum);
+			Recalls.SynchScheduledApptFull(PatNum);
 			RecallList=Recalls.GetList(PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -48,8 +49,8 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallsPat","Due Date"),80);
 			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g("TableRecallsPat","Sched Date"),80);
-			//gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g("TableRecallsPat","Sched Date"),80);
+			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallsPat","Interval"),70);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRecallsPat","Status"),80);
@@ -92,7 +93,12 @@ namespace OpenDental {
 					}
 					row.Cells.Add(cell);
 				}
-				//row.Cells.Add("");//sched
+				if(RecallList[i].DateScheduled.Year<1880) {
+					row.Cells.Add("");
+				}
+				else {
+					row.Cells.Add(RecallList[i].DateScheduled.ToShortDateString());
+				}
 				row.Cells.Add(RecallList[i].RecallInterval.ToString());
 				row.Cells.Add(DefC.GetValue(DefCat.RecallUnschedStatus,RecallList[i].RecallStatus));
 				cellStr="";

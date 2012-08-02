@@ -48,6 +48,8 @@ namespace OpenDental{
 		private ValidDate textDisableDate;
 		private Label label12;
 		private ValidDouble textBalance;
+		private TextBox textScheduledDate;
+		private Label label13;
 		private Label label10;
 		//private Patient PatCur;
 
@@ -103,16 +105,18 @@ namespace OpenDental{
 			this.label9 = new System.Windows.Forms.Label();
 			this.comboType = new System.Windows.Forms.ComboBox();
 			this.label10 = new System.Windows.Forms.Label();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.textBalance = new OpenDental.ValidDouble();
+			this.textDisableDate = new OpenDental.ValidDate();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.textScheduledDate = new System.Windows.Forms.TextBox();
+			this.label13 = new System.Windows.Forms.Label();
 			this.textNote = new OpenDental.ODtextBox();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.textDateDue = new OpenDental.ValidDate();
 			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.textDisableDate = new OpenDental.ValidDate();
-			this.label12 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.textBalance = new OpenDental.ValidDouble();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -252,7 +256,7 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(12,249);
+			this.label8.Location = new System.Drawing.Point(12,275);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(170,19);
 			this.label8.TabIndex = 8;
@@ -262,7 +266,7 @@ namespace OpenDental{
 			// comboStatus
 			// 
 			this.comboStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboStatus.Location = new System.Drawing.Point(184,249);
+			this.comboStatus.Location = new System.Drawing.Point(184,275);
 			this.comboStatus.MaxDropDownItems = 50;
 			this.comboStatus.Name = "comboStatus";
 			this.comboStatus.Size = new System.Drawing.Size(188,21);
@@ -282,7 +286,7 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(65,275);
+			this.label9.Location = new System.Drawing.Point(65,301);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(117,92);
 			this.label9.TabIndex = 11;
@@ -308,71 +312,6 @@ namespace OpenDental{
 			this.label10.Text = "Type";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textNote
-			// 
-			this.textNote.AcceptsReturn = true;
-			this.textNote.Location = new System.Drawing.Point(184,277);
-			this.textNote.Multiline = true;
-			this.textNote.Name = "textNote";
-			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Recall;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(350,112);
-			this.textNote.TabIndex = 15;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(26,424);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(83,24);
-			this.butDelete.TabIndex = 14;
-			this.butDelete.Text = "&Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(640,382);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 13;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// textDateDue
-			// 
-			this.textDateDue.Location = new System.Drawing.Point(184,223);
-			this.textDateDue.Name = "textDateDue";
-			this.textDateDue.Size = new System.Drawing.Size(86,20);
-			this.textDateDue.TabIndex = 6;
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(640,424);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.textBalance);
@@ -386,6 +325,15 @@ namespace OpenDental{
 			this.groupBox2.TabIndex = 18;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Disable Recall";
+			// 
+			// textBalance
+			// 
+			this.textBalance.BackColor = System.Drawing.SystemColors.Window;
+			this.textBalance.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textBalance.Location = new System.Drawing.Point(141,48);
+			this.textBalance.Name = "textBalance";
+			this.textBalance.Size = new System.Drawing.Size(86,20);
+			this.textBalance.TabIndex = 19;
 			// 
 			// textDisableDate
 			// 
@@ -412,19 +360,94 @@ namespace OpenDental{
 			this.label11.Text = "Until family Account balance is below";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBalance
+			// textScheduledDate
 			// 
-			this.textBalance.BackColor = System.Drawing.SystemColors.Window;
-			this.textBalance.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textBalance.Location = new System.Drawing.Point(141,48);
-			this.textBalance.Name = "textBalance";
-			this.textBalance.Size = new System.Drawing.Size(86,20);
-			this.textBalance.TabIndex = 19;
+			this.textScheduledDate.Location = new System.Drawing.Point(184,249);
+			this.textScheduledDate.Name = "textScheduledDate";
+			this.textScheduledDate.ReadOnly = true;
+			this.textScheduledDate.Size = new System.Drawing.Size(85,20);
+			this.textScheduledDate.TabIndex = 19;
+			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(11,248);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(170,19);
+			this.label13.TabIndex = 20;
+			this.label13.Text = "Scheduled Date";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textNote
+			// 
+			this.textNote.AcceptsReturn = true;
+			this.textNote.Location = new System.Drawing.Point(184,303);
+			this.textNote.Multiline = true;
+			this.textNote.Name = "textNote";
+			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Recall;
+			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.Size = new System.Drawing.Size(350,112);
+			this.textNote.TabIndex = 15;
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(26,442);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(83,24);
+			this.butDelete.TabIndex = 14;
+			this.butDelete.Text = "&Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(640,400);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.TabIndex = 13;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// textDateDue
+			// 
+			this.textDateDue.Location = new System.Drawing.Point(184,223);
+			this.textDateDue.Name = "textDateDue";
+			this.textDateDue.Size = new System.Drawing.Size(85,20);
+			this.textDateDue.TabIndex = 6;
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(640,442);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormRecallEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(736,473);
+			this.ClientSize = new System.Drawing.Size(736,491);
+			this.Controls.Add(this.textScheduledDate);
+			this.Controls.Add(this.label13);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.comboType);
 			this.Controls.Add(this.label10);
@@ -494,6 +517,9 @@ namespace OpenDental{
 			}
 			if(RecallCur.DateDue.Year>1880){
 				textDateDue.Text=RecallCur.DateDue.ToShortDateString();
+			}
+			if(RecallCur.DateScheduled.Year>1880) {
+				textScheduledDate.Text=RecallCur.DateScheduled.ToShortDateString();
 			}
 			textYears.Text=RecallCur.RecallInterval.Years.ToString();
 			textMonths.Text=RecallCur.RecallInterval.Months.ToString();
