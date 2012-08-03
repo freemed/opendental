@@ -186,5 +186,14 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>Gets every credit card in the db with a token.</summary>
+		public static List<CreditCard> GetCreditCardsWithTokens() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM creditcard WHERE XChargeToken!=\"\"";
+			return Crud.CreditCardCrud.SelectMany(command);
+		}
+
 	}
 }

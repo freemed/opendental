@@ -362,6 +362,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormXchargeTokenTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormXchargeTokenTool.designer.cs">
+      <DependentUpon>FormXchargeTokenTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEcwDiag.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2516,6 +2522,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormXchargeTokenTool.resx">
+      <DependentUpon>FormXchargeTokenTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEcwDiag.resx">
       <DependentUpon>FormEcwDiag.cs</DependentUpon>
