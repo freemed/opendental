@@ -21,6 +21,10 @@ namespace OpenDental {
 		}
 
 		private void FormXchargeTokenTool_Load(object sender,EventArgs e) {
+			CardList=CreditCards.GetCreditCardsWithTokens();
+			textTotal.Text=CardList.Count.ToString();
+			textVerified.Text="0";
+			textInvalid.Text="0";
 			Program prog=Programs.GetCur(ProgramName.Xcharge);
 			string path=Programs.GetProgramPath(prog);
 			if(prog==null || !prog.Enabled) {
@@ -37,7 +41,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			Cursor=Cursors.WaitCursor;
-			CardList=FillCardList();
+			CardList=FilterCardList();
 			Cursor=Cursors.Default;
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -72,10 +76,12 @@ namespace OpenDental {
 			}
 		}
 
-		private List<CreditCard> FillCardList(){
-			CardList=CreditCards.GetCreditCardsWithTokens();
+		private List<CreditCard> FilterCardList() {
+			int verified=0;
+			int invalid=0;
+			textVerified.Text=verified.ToString();
+			textInvalid.Text=invalid.ToString();
 			for(int i=CardList.Count-1;i>=0;i--) {
-				//Query XCharge
 				Program prog=Programs.GetCur(ProgramName.Xcharge);
 				string path=Programs.GetProgramPath(prog);
 				ProgramProperty prop=(ProgramProperty)ProgramProperties.GetForProgram(prog.ProgramNum)[0];
@@ -119,12 +125,18 @@ namespace OpenDental {
 					}
 					if(CardList[i].CCNumberMasked.Length>4 && account.Length>4
 						&& CardList[i].CCNumberMasked.Substring(CardList[i].CCNumberMasked.Length-4)==account.Substring(account.Length-4)
-						&& CardList[i].CCExpiration.ToString("MMyy")==exp)
+						&& CardList[i].CCExpiration.ToString("MMyy")==exp) 
 					{
 						//The credit card on file matches the one in X-Charge, so remove from the list.
 						CardList.Remove(CardList[i]);
+						verified++;
+					}
+					else {
+						invalid++;
 					}
 				}
+				textVerified.Text=verified.ToString();
+				textInvalid.Text=invalid.ToString();
 			}
 			return CardList;
 		}

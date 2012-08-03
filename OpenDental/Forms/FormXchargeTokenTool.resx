@@ -119,7 +119,7 @@
   </resheader>
   <data name="labelWarning.Text" xml:space="preserve">
     <value>This tool will check the database for any tokens that are attached to the wrong credit card number.
-Click check to start validating all cards on file with X-Charge.  This might take a long time.
+Click check to start validating all cards on file with X-Charge.  This might take a long time depending on the total cards.
 Double click on any row to open the credit card manage window. There you should delete the card. 
 After the card is deleted, manually add the card back which will give it a new and valid token.
 </value>
