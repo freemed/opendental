@@ -26,24 +26,24 @@ namespace OpenDentBusiness{
 		//MS_Sql
 	}
 
-	///<summary></summary>
+	///<summary>In the case of MySQL, we will use connection pooling, so this isn't really a connection, but just a remembered connection string.</summary>
 	public class DataConnection{//
 		///<summary>The value here is now reliable for public use.  FormChooseDatabase.DBtype, which used to be used for the client is now gone.</summary>
 		public static DatabaseType DBtype;
-		///<summary>This data adapter is used for all queries to the database.</summary>
-		private MySqlDataAdapter da;
+		//<summary>This data adapter is used for all queries to the database.</summary>
+		//private MySqlDataAdapter da;
 		///<summary>Data adapter when 'isOracle' is set to true.</summary>
 		private OracleDataAdapter daOr;
-		///<summary>This is the connection that is used by the data adapter for all queries.  8/30/2010 js Changed this to be not static so that we can use it with multiple threads.  Has potential to cause bugs.</summary>
-		private MySqlConnection con;
+		//<summary>This is the connection that is used by the data adapter for all queries.  8/30/2010 js Changed this to be not static so that we can use it with multiple threads.  Has potential to cause bugs.  8/2/2012 js Changed this to use MySQLHelper as recommended by MySQL.</summary>
+		//private MySqlConnection con;
 		///<summary>Connection that is being used when 'isOracle' is set to true.</summary>
 		private OracleConnection conOr;
-		///<summary>Used to get very small bits of data from the db when the data adapter would be overkill.  For instance retrieving the response after a command is sent.</summary>
-		private MySqlDataReader dr;
+		//<summary>Used to get very small bits of data from the db when the data adapter would be overkill.  For instance retrieving the response after a command is sent.</summary>
+		//private MySqlDataReader dr;
 		///<summary>The data reader being used when 'isOracle' is set to true.</summary>
 		private OracleDataReader drOr;
-		///<summary>Stores the string of the command that will be sent to the database.</summary>
-		private MySqlCommand cmd;
+		//<summary>Stores the string of the command that will be sent to the database.</summary>
+		//private MySqlCommand cmd;
 		///<summary>The command to set when 'isOracle' is set to true?</summary>
 		public OracleCommand cmdOr;
 		///<summary>After inserting a row, this variable will contain the primary key for the newly inserted row.  This can frequently save an additional query to the database.</summary>
@@ -55,8 +55,10 @@ namespace OpenDentBusiness{
 		//User with lower privileges:
 		private static string MysqlUserLow;
 		private static string MysqlPassLow;
-		///<summary>If this is used, then none of the fields above will be set.</summary>
-		private static string ConnectionString="";
+		///<summary>If this is used, then none of the fields above will be set.  This string is remembered for new "DataConnection" objects.</summary>
+		private static string ConnectionStringGlobal="";
+		///<summary>This is only used by a single "DataConnection" and will not affect the ConnectionStringGlobal.</summary>
+		private string ConnectionStringPrivate="";
 #if DEBUG
 		///<summary>milliseconds.</summary>
 		private static int delayForTesting=0;
@@ -91,43 +93,40 @@ namespace OpenDentBusiness{
 
 		#region Constructors
 		public DataConnection(bool isLow) {
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1 && ServerName!=null) {
-				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
+			ConnectionStringPrivate=ConnectionStringGlobal;
+			if(ConnectionStringPrivate.Length==0 && ServerName!=null) {
+				ConnectionStringPrivate=BuildSimpleConnectionString(ServerName,Database,MysqlUserLow,MysqlPassLow);
 			}
 			if(DBtype==DatabaseType.Oracle) {
-				conOr=new OracleConnection(connectStr);
+				conOr=new OracleConnection(ConnectionStringPrivate);
 				//drOr = null;
 				cmdOr=new OracleCommand();
 				cmdOr.Connection=conOr;
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
+				//con=new MySqlConnection(ConnectionStringPrivate);
+				//cmd = new MySqlCommand();
+				//cmd.Connection=con;
 			}
 		}
 
 		///<summary></summary>
 		public DataConnection() {
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1 && ServerName!=null) {
-				connectStr=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
+			ConnectionStringPrivate=ConnectionStringGlobal;
+			if(ConnectionStringPrivate.Length==0 && ServerName!=null) {
+				ConnectionStringPrivate=BuildSimpleConnectionString(ServerName,Database,MysqlUser,MysqlPass);
 			}
 			if(DBtype==DatabaseType.Oracle) {
-				conOr=new OracleConnection(connectStr);
+				conOr=new OracleConnection(ConnectionStringPrivate);
 				//drOr = null;
 				cmdOr=new OracleCommand();
 				cmdOr.Connection=conOr;
 				//table=new DataTable();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-				//table=new DataTable();
+				//con=new MySqlConnection(ConnectionStringPrivate);
+				//cmd = new MySqlCommand();
+				//cmd.Connection=con;
 			}
 		}
 
@@ -138,51 +137,49 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public DataConnection(string database) {
-			string connectStr=ConnectionString;//this doesn't really set it to the new db as intended. Deal with later.
-			if(connectStr.Length<1) {
-				connectStr=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
+			ConnectionStringPrivate=ConnectionStringGlobal;//this doesn't really set it to the new db as intended. Deal with later.
+			if(ConnectionStringPrivate.Length<1) {
+				ConnectionStringPrivate=BuildSimpleConnectionString(ServerName,database,MysqlUser,MysqlPass);
 			}
 			if(DBtype==DatabaseType.Oracle) {
-				conOr=new OracleConnection(connectStr);
+				conOr=new OracleConnection(ConnectionStringPrivate);
 				//drOr=null;
 				cmdOr=new OracleCommand();
 				cmdOr.Connection=conOr;
 				//table=new DataTable();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
-				//table=new DataTable();
+				//con=new MySqlConnection(ConnectionStringPrivate);
+				//cmd = new MySqlCommand();
+				//cmd.Connection=con;
 			}
 		}
 
 		///<summary>Only used to fill the list of databases in the ChooseDatabase window and from Employees.GetAsteriskMissedCalls.</summary>
 		public DataConnection(string serverName,string database,string mysqlUser,string mysqlPass,DatabaseType dtype) {
-			string connectStr=ConnectionString;
-			if(connectStr.Length<1) {
-				connectStr=BuildSimpleConnectionString(dtype,serverName,database,mysqlUser,mysqlPass);
+			ConnectionStringPrivate=ConnectionStringGlobal;
+			if(ConnectionStringPrivate.Length<1) {
+				ConnectionStringPrivate=BuildSimpleConnectionString(dtype,serverName,database,mysqlUser,mysqlPass);
 			}
 			if(dtype==DatabaseType.Oracle) {
-				conOr=new OracleConnection(connectStr);
+				conOr=new OracleConnection(ConnectionStringPrivate);
 				//drOr=null;
 				cmdOr=new OracleCommand();
 				cmdOr.Connection=conOr;
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				con=new MySqlConnection(connectStr);
-				//dr = null;
-				cmd = new MySqlCommand();
-				cmd.Connection=con;
+				//con=new MySqlConnection(ConnectionStringPrivate);
+				//cmd = new MySqlCommand();
+				//cmd.Connection=con;
 			}
 		}
 
 		///<summary>Used by the mobile server because it does not need to worry about 3-tier scenarios.  Only supports MySQL.</summary>
 		public DataConnection(string connectStr,bool isMobile) {//isMobile is ignored.  Just needed to make it different than the other constructor.
-			con=new MySqlConnection(connectStr);
-			cmd = new MySqlCommand();
-			cmd.Connection=con;
+			ConnectionStringPrivate=connectStr;
+			//con=new MySqlConnection(connectStr);
+			//cmd = new MySqlCommand();
+			//cmd.Connection=con;
 		}
 		#endregion Constructors
 
@@ -273,7 +270,7 @@ namespace OpenDentBusiness{
 		public void SetDb(string connectStr,string connectStrLow,DatabaseType dbtype,bool skipValidation){
 			TestConnection(connectStr,connectStrLow,dbtype,skipValidation);
 			//connection string must be valid, so OK to set permanently
-			ConnectionString=connectStr;
+			ConnectionStringGlobal=connectStr;
 		}
 
 		///<summary></summary>
@@ -281,6 +278,7 @@ namespace OpenDentBusiness{
 			SetDb(connectStr,connectStrLow,dbtype,false);
 		}
 
+		/// <summary>Skip validation might be used if this is not a standard OD database.</summary>
 		private void TestConnection(string connectStr,string connectStrLow,DatabaseType dbtype,bool skipValidation) {
 			DBtype=dbtype;
 			if(DBtype==DatabaseType.Oracle) {
@@ -305,26 +303,33 @@ namespace OpenDentBusiness{
 				}
 			}
 			else {
-				con=new MySqlConnection(connectStr);
-				cmd = new MySqlCommand();
+				//con=new MySqlConnection(connectStr);
+				//cmd = new MySqlCommand();
 				//cmd.CommandTimeout=30;
-				cmd.Connection=con;
-				con.Open();
-				if(!skipValidation) {
-					cmd.CommandText="UPDATE preference SET ValueString = '0' WHERE ValueString = '0'";
-					cmd.ExecuteNonQuery();
+				//cmd.Connection=con;
+				//con.Open();
+				if(skipValidation) {
+					MySqlHelper.ExecuteNonQuery(connectStr,"SELECT 1");
+					//cmd.CommandText="SELECT 1";
+					//cmd.ExecuteNonQuery();
 				}
-				con.Close();
+				else {
+					MySqlHelper.ExecuteNonQuery(connectStr,"UPDATE preference SET ValueString = '0' WHERE ValueString = '0'");
+					//cmd.CommandText="UPDATE preference SET ValueString = '0' WHERE ValueString = '0'";
+					//cmd.ExecuteNonQuery();
+				}
+				//con.Close();
 				if(connectStrLow!="") {
-					con=new MySqlConnection(connectStrLow);
-					cmd = new MySqlCommand();
-					cmd.Connection=con;
-					con.Open();
-					cmd.CommandText="SELECT * FROM preference WHERE ValueString = 'DataBaseVersion'";
-					DataTable table=new DataTable();
-					da=new MySqlDataAdapter(cmd);
-					da.Fill(table);
-					con.Close();
+					//con=new MySqlConnection(connectStrLow);
+					//cmd = new MySqlCommand();
+					//cmd.Connection=con;
+					//con.Open();
+					MySqlHelper.ExecuteDataset(connectStrLow,"SELECT * FROM preference WHERE ValueString = 'DataBaseVersion'");
+					//cmd.CommandText="SELECT * FROM preference WHERE ValueString = 'DataBaseVersion'";
+					//DataTable table=new DataTable();
+					//da=new MySqlDataAdapter(cmd);
+					//da.Fill(table);
+					//con.Close();
 				}
 			}
 		}
@@ -353,10 +358,11 @@ namespace OpenDentBusiness{
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				cmd.CommandText=command;
-				da=new MySqlDataAdapter(cmd);
+				//cmd.CommandText=command;
+				//da=new MySqlDataAdapter(cmd);
+				MySqlDataAdapter da=new MySqlDataAdapter(command,ConnectionStringPrivate);
 				da.Fill(table);
-				con.Close();
+				//con.Close();
 			}
 			return table;
 		}
@@ -462,13 +468,19 @@ namespace OpenDentBusiness{
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				cmd.CommandText=commands;
+				//cmd.CommandText=commands;
+				MySqlParameter[] mySqlParameterArray=new MySqlParameter[parameters.Length];
+				MySqlParameter mySqlParameter;
 				for(int p=0;p<parameters.Length;p++) {
-					cmd.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetMySqlDbType()).Value=parameters[p].Value;
+					mySqlParameter=new MySqlParameter(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetMySqlDbType());
+					mySqlParameter.Value=parameters[p].Value;
+					mySqlParameterArray[p]=mySqlParameter;
+					//cmd.Parameters.Add(DbHelper.ParamChar+parameters[p].ParameterName,parameters[p].GetMySqlDbType()).Value=parameters[p].Value;
 				}
-				con.Open();
+				//con.Open();
 				try {
-					rowsChanged=cmd.ExecuteNonQuery();
+					rowsChanged=MySqlHelper.ExecuteNonQuery(ConnectionStringPrivate,commands,mySqlParameterArray);
+					//rowsChanged=cmd.ExecuteNonQuery();
 				}
 				catch(MySqlException ex){
 					if(ex.Number==1153) {
@@ -477,13 +489,14 @@ namespace OpenDentBusiness{
 					throw ex;
 				}
 				if(getInsertID) {
-					cmd.CommandText="SELECT LAST_INSERT_ID()";
-					dr=(MySqlDataReader)cmd.ExecuteReader();
-					if(dr.Read()) {
-						InsertID=Convert.ToInt64(dr[0].ToString());
-					}
+					InsertID=Convert.ToInt64(MySqlHelper.ExecuteScalar(ConnectionStringPrivate,"SELECT LAST_INSERT_ID()").ToString());
+					//cmd.CommandText="SELECT LAST_INSERT_ID()";
+					//dr=(MySqlDataReader)cmd.ExecuteReader();
+					//if(dr.Read()) {
+					//	InsertID=Convert.ToInt64(dr[0].ToString());
+					//}
 				}
-				con.Close();
+				//con.Close();
 			}
 			return rowsChanged;
 		}
@@ -518,12 +531,13 @@ namespace OpenDentBusiness{
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				cmd.CommandText=command;
-				con.Open();
-				dr=(MySqlDataReader)cmd.ExecuteReader();
-				dr.Read();
-				retVal=dr[0].ToString();
-				con.Close();
+				//cmd.CommandText=command;
+				//con.Open();
+				//dr=(MySqlDataReader)cmd.ExecuteReader();
+				//dr.Read();
+				//retVal=dr[0].ToString();
+				//con.Close();
+				retVal=MySqlHelper.ExecuteScalar(ConnectionStringPrivate,command).ToString();
 			}
 			return retVal;
 		}
@@ -558,16 +572,17 @@ namespace OpenDentBusiness{
 				conOr.Close();
 			}
 			else if(DBtype==DatabaseType.MySql) {
-				cmd.CommandText=command;
-				con.Open();
-				scalar=cmd.ExecuteScalar();
+				//cmd.CommandText=command;
+				//con.Open();
+				//scalar=cmd.ExecuteScalar();
+				scalar=MySqlHelper.ExecuteScalar(ConnectionStringPrivate,command);
 				if(scalar==null) {
 					retVal="";
 				}
 				else {
 					retVal=scalar.ToString();
 				}
-				con.Close();
+				//con.Close();
 			}
 			return retVal;
 		}
