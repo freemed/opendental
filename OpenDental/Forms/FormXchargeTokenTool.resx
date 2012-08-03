@@ -117,10 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="textWarning.Text" xml:space="preserve">
-    <value>This tool will check the X-Charge database for any tokens that are attached to the wrong credit card number.
-Click check to fill the grid with cards that have invalid tokens.  This might take a long time.
-Double click on any row to go to open the credit card manage window. There you can delete the card. 
-After the card is deleted you can add the card back which will give it a valid token.</value>
+  <data name="labelWarning.Text" xml:space="preserve">
+    <value>This tool will check the database for any tokens that are attached to the wrong credit card number.
+Click check to start validating all cards on file with X-Charge.  This might take a long time.
+Double click on any row to open the credit card manage window. There you should delete the card. 
+After the card is deleted, manually add the card back which will give it a new and valid token.
+</value>
   </data>
 </root>

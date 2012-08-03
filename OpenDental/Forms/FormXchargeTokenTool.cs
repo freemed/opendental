@@ -39,21 +39,17 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			CardList=FillCardList();
 			Cursor=Cursors.Default;
-			if(CardList.Count==0) {
-				MsgBox.Show(this,"There are no invalid tokens in the database.");
-				return;
-			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormXChargeTest","PatNum"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormXChargeTest","First"),150);
+			col=new ODGridColumn(Lan.g("FormXChargeTest","First"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormXChargeTest","Last"),150);
+			col=new ODGridColumn(Lan.g("FormXChargeTest","Last"),120);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormXChargeTest","CCNumberMasked"),150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormXChargeTest","Exp"),80);
+			col=new ODGridColumn(Lan.g("FormXChargeTest","Exp"),50);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormXChargeTest","Token"),100);
 			gridMain.Columns.Add(col);
@@ -71,6 +67,9 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			if(CardList.Count==0) {
+				MsgBox.Show(this,"There are no invalid tokens in the database.");
+			}
 		}
 
 		private List<CreditCard> FillCardList(){
@@ -90,6 +89,7 @@ namespace OpenDental {
 				info.Arguments+="/PASSWORD:"+ProgramProperties.GetPropVal(prog.ProgramNum,"Password")+" ";
 				info.Arguments+="/AUTOPROCESS ";
 				info.Arguments+="/AUTOCLOSE ";
+				info.Arguments+="/NORESULTDIALOG ";
 				Process process=new Process();
 				process.StartInfo=info;
 				process.EnableRaisingEvents=true;
@@ -100,6 +100,8 @@ namespace OpenDental {
 				Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
 				string resulttext="";
 				string line="";
+				string account="";
+				string exp="";
 				using(TextReader reader=new StreamReader(resultfile)) {
 					line=reader.ReadLine();
 					while(line!=null) {
@@ -108,14 +110,19 @@ namespace OpenDental {
 						}
 						resulttext+=line;
 						if(line.StartsWith("ACCOUNT=")) {
-							if(CardList[i].CCNumberMasked.Length>4 
-								&& CardList[i].CCNumberMasked.Substring(CardList[i].CCNumberMasked.Length-4)==line.Substring(line.Length-4)) 
-							{
-								//The credit card on file matches the one in X-Charge, so remove from the list.
-								CardList.Remove(CardList[i]);
-							}
+							account=line.Substring(8);
+						}
+						else if(line.StartsWith("EXPIRATION=")) {
+							exp=line.Substring(11);
 						}
 						line=reader.ReadLine();
+					}
+					if(CardList[i].CCNumberMasked.Length>4 && account.Length>4
+						&& CardList[i].CCNumberMasked.Substring(CardList[i].CCNumberMasked.Length-4)==account.Substring(account.Length-4)
+						&& CardList[i].CCExpiration.ToString("MMyy")==exp)
+					{
+						//The credit card on file matches the one in X-Charge, so remove from the list.
+						CardList.Remove(CardList[i]);
 					}
 				}
 			}
@@ -123,7 +130,8 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-
+			FormCreditCardManage FormCCM=new FormCreditCardManage(Patients.GetPat(CardList[gridMain.GetSelectedIndex()].PatNum));
+			FormCCM.ShowDialog();
 		}
 
 		private void butCheck_Click(object sender,EventArgs e) {

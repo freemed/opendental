@@ -24,11 +24,34 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormXchargeTokenTool));
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.labelWarning = new System.Windows.Forms.Label();
 			this.butCheck = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.textWarning = new System.Windows.Forms.TextBox();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.SuspendLayout();
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(12, 83);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(701, 379);
+			this.gridMain.TabIndex = 68;
+			this.gridMain.Title = "Invalid X-Charge Tokens";
+			this.gridMain.TranslationName = "FormDisplayFields";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// labelWarning
+			// 
+			this.labelWarning.Location = new System.Drawing.Point(9, 17);
+			this.labelWarning.Name = "labelWarning";
+			this.labelWarning.Size = new System.Drawing.Size(704, 63);
+			this.labelWarning.TabIndex = 69;
+			this.labelWarning.Text = resources.GetString("labelWarning.Text");
 			// 
 			// butCheck
 			// 
@@ -60,38 +83,12 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// textWarning
-			// 
-			this.textWarning.BackColor = System.Drawing.SystemColors.Control;
-			this.textWarning.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.textWarning.Location = new System.Drawing.Point(12, 17);
-			this.textWarning.Multiline = true;
-			this.textWarning.Name = "textWarning";
-			this.textWarning.Size = new System.Drawing.Size(701, 51);
-			this.textWarning.TabIndex = 4;
-			this.textWarning.Text = resources.GetString("textWarning.Text");
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 74);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(701, 388);
-			this.gridMain.TabIndex = 68;
-			this.gridMain.Title = "Invalid X-Charge Tokens";
-			this.gridMain.TranslationName = "FormDisplayFields";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
 			// FormXchargeTokenTool
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725, 534);
+			this.Controls.Add(this.labelWarning);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.textWarning);
 			this.Controls.Add(this.butCheck);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormXchargeTokenTool";
@@ -99,7 +96,6 @@ namespace OpenDental{
 			this.Text = "X-Charge Token Tool";
 			this.Load += new System.EventHandler(this.FormXchargeTokenTool_Load);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -107,7 +103,7 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butCheck;
 		private OpenDental.UI.Button butClose;
-		private System.Windows.Forms.TextBox textWarning;
 		private UI.ODGrid gridMain;
+		private System.Windows.Forms.Label labelWarning;
 	}
 }
