@@ -1674,6 +1674,12 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov NPI");
 			}
+			if(treatProv.TaxonomyCodeOverride.Length>0 && treatProv.TaxonomyCodeOverride.Length!=10) {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("Treating Prov Taxonomy Code must be 10 characters");
+			}
 			if(treatProv.StateLicense=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
@@ -1943,6 +1949,12 @@ namespace OpenDentBusiness
 							strb.Append(",");
 						}
 						strb.Append("Treating Prov NPI");
+					}
+					if(treatProv.TaxonomyCodeOverride.Length>0 && treatProv.TaxonomyCodeOverride.Length!=10) {
+						if(strb.Length!=0) {
+							strb.Append(",");
+						}
+						strb.Append("Treating Prov Taxonomy Code for proc "+procCode.ProcCode+" must be 10 characters");
 					}
 					if(treatProv.StateLicense=="") {
 						if(strb.Length!=0) {

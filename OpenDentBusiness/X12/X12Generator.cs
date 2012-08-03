@@ -25,28 +25,27 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Returns the Provider Taxonomy code for the given specialty.</summary>
+		///<summary>Returns the Provider Taxonomy code for the given specialty. Always 10 characters, validated.</summary>
 		public static string GetTaxonomy(Provider provider){
-			//must return a string with length of at least one char.
 			if(provider.TaxonomyCodeOverride!=""){
 				return provider.TaxonomyCodeOverride;
 			}
-			string spec=" ";
+			string spec="1223G0001X";//general
 			switch(provider.Specialty) {
 				case DentalSpecialty.General: spec="1223G0001X"; break;
-				case DentalSpecialty.Hygienist: spec="124Q00000X"; break;//?
+				case DentalSpecialty.Hygienist: spec="124Q00000X"; break;
 				case DentalSpecialty.PublicHealth: spec="1223D0001X"; break;
 				case DentalSpecialty.Endodontics: spec="1223E0200X"; break;
 				case DentalSpecialty.Pathology: spec="1223P0106X"; break;
-				case DentalSpecialty.Radiology: spec="1223D0008X"; break;
+				case DentalSpecialty.Radiology: spec="1223X0008X"; break;
 				case DentalSpecialty.Surgery: spec="1223S0112X"; break;
 				case DentalSpecialty.Ortho: spec="1223X0400X"; break;
 				case DentalSpecialty.Pediatric: spec="1223P0221X"; break;
 				case DentalSpecialty.Perio: spec="1223P0300X"; break;
 				case DentalSpecialty.Prosth: spec="1223P0700X"; break;
-				case DentalSpecialty.Denturist: spec=" "; break;
-				case DentalSpecialty.Assistant: spec=" "; break;
-				case DentalSpecialty.LabTech: spec=" "; break;
+				case DentalSpecialty.Denturist: spec="122400000X"; break;
+				case DentalSpecialty.Assistant: spec="126800000X"; break;
+				case DentalSpecialty.LabTech: spec="126900000X"; break;
 			}
 			return spec;
 		}

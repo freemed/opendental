@@ -1015,6 +1015,11 @@ namespace OpenDentBusiness
 					//2310A NM1: 71 (institutional) Attending Provider Name. Situational. Always a person according to the specification (cannot be non-person).
 					WriteNM1Provider("71",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
 					//2310A PRV: AT (institutional) Attending Provider Specialty Information. Situational.
+					sw.Write("PRV"+s
+						+"AT"+s//PRV01 1/3 Provider Code: AT=Attending.
+						+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
+						+X12Generator.GetTaxonomy(provTreat));//PRV03 1/50 Reference Identification: Provider Taxonomy Code.
+					EndSegment(sw);//PRV04 through PRV06 are not used.
 					//2310A REF: (institutional) Attending Provider Secondary Identification. Situational.
 					//2310B NM1: 72 (institutional) Operating Physician Name. Situational. For surgical procedure codes.
 					//2310C REF: ZZ (institutional) Secondary Physician Secondary Identification. Situational.
@@ -2203,6 +2208,10 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Billing Prov NPI");
 			}
+			if(billProv.TaxonomyCodeOverride.Length>0 && billProv.TaxonomyCodeOverride.Length!=10) {
+				Comma(strb);
+				strb.Append("Billing Prov Taxonomy Code must be 10 characters");
+			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 				if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {
 					Comma(strb);
@@ -2262,6 +2271,10 @@ namespace OpenDentBusiness
 			if(treatProv.NationalProvID.Length<2) {
 				Comma(strb);
 				strb.Append("Treating Prov NPI");
+			}
+			if(treatProv.TaxonomyCodeOverride.Length>0 && treatProv.TaxonomyCodeOverride.Length!=10) {
+				Comma(strb);
+				strb.Append("Treating Prov Taxonomy Code must be 10 characters");
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 				if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
@@ -2608,6 +2621,12 @@ namespace OpenDentBusiness
 					if(treatProv.NationalProvID.Length<2) {
 						Comma(strb);
 						strb.Append("Treat Prov NPI for proc "+procCode.ProcCode);
+					}
+					if(claim.MedType!=EnumClaimMedType.Institutional) { //Medical and Dental only. No where to send taxonomy code for instituational procedures.
+						if(treatProv.TaxonomyCodeOverride.Length>0 && treatProv.TaxonomyCodeOverride.Length!=10) {
+							Comma(strb);
+							strb.Append("Treating Prov Taxonomy Code for proc "+procCode.ProcCode+" must be 10 characters");
+						}
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 						if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {

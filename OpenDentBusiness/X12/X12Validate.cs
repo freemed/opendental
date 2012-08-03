@@ -83,6 +83,10 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Billing Prov NPI");
 			}
+			if(billProv.TaxonomyCodeOverride.Length>0 && billProv.TaxonomyCodeOverride.Length!=10) {
+				Comma(strb);
+				strb.Append("Billing Prov Taxonomy Code must be 10 characters");
+			}
 			/* This was causing problems when dummy providers were used for office and no license number was applicable.
 			 * Delta carriers key off this number and start assigning to wrong provider. Customer: ATD.
 			if(billProv.StateLicense=="") {
