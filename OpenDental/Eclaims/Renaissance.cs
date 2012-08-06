@@ -268,10 +268,10 @@ namespace OpenDental.Eclaims{
 			Fill(214,"");
 			Fill(215,"");
 			Fill(216,"OtherInsCarrierName");//COB insurance company name
-			Fill(217,"OtherInsAddress");
-			Fill(218,"");//COB ins City
-			Fill(219,"");//COB ins State
-			Fill(220,"");
+			Fill(217,"OtherInsAddress");//COB address
+			Fill(218,"OtherInsCity");//COB ins City
+			Fill(219,"OtherInsST");//COB ins State
+			Fill(220,"OtherInsZip");//COB Zip
 			Fill(221,"");
 			Fill(222,"");
 			Fill(223,"");
