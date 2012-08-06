@@ -92,14 +92,20 @@ namespace OpenDental.Bridges {
 				}
 			}
 			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
-				writer.WriteElementString("EstInsPayments","");
-				writer.WriteElementString("AmountDue",amountDue.ToString("F2"));
+				writer.WriteElementString("EstInsPayments","");//optional.
 			}
-			else{//this is typical
-				writer.WriteElementString("EstInsPayments",guar.InsEst.ToString("F2"));
+			else {//this is typical
+				writer.WriteElementString("EstInsPayments",guar.InsEst.ToString("F2"));//optional.
 				amountDue-=guar.InsEst;
-				writer.WriteElementString("AmountDue",amountDue.ToString("F2"));
 			}
+			InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(guar.PatNum);
+			if(installPlan!=null){
+				//show lesser of normal total balance or the monthly payment amount.
+				if(installPlan.MonthlyPayment < amountDue) {
+					amountDue=installPlan.MonthlyPayment;
+				}
+			}
+			writer.WriteElementString("AmountDue",amountDue.ToString("F2"));
 			writer.WriteElementString("Bal_0_30",guar.Bal_0_30.ToString("F2"));
 			writer.WriteElementString("Bal_31_60",guar.Bal_31_60.ToString("F2"));
 			writer.WriteElementString("Bal_61_90",guar.Bal_61_90.ToString("F2"));

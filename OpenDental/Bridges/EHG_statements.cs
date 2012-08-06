@@ -146,16 +146,20 @@ namespace OpenDental.Bridges {
 			}
 			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");//optional.
-				writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
-				//this is ambiguous.  It seems to be AmountDue, but it could possibly be 0-30 days aging
-				writer.WriteElementString("CurrentBalance",amountDue.ToString("F2"));
 			}
 			else {//this is typical
 				writer.WriteElementString("EstInsPayments",guar.InsEst.ToString("F2"));//optional.
 				amountDue-=guar.InsEst;
-				writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
-				writer.WriteElementString("CurrentBalance",amountDue.ToString("F2"));
 			}
+			InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(guar.PatNum);
+			if(installPlan!=null){
+				//show lesser of normal total balance or the monthly payment amount.
+				if(installPlan.MonthlyPayment < amountDue) {
+					amountDue=installPlan.MonthlyPayment;
+				}
+			}
+			writer.WriteElementString("PatientShare",amountDue.ToString("F2"));
+			writer.WriteElementString("CurrentBalance",amountDue.ToString("F2"));//this is ambiguous.  It seems to be AmountDue, but it could possibly be 0-30 days aging
 			writer.WriteElementString("PastDue30",guar.Bal_31_60.ToString("F2"));//optional
 			writer.WriteElementString("PastDue60",guar.Bal_61_90.ToString("F2"));//optional
 			writer.WriteElementString("PastDue90",guar.BalOver90.ToString("F2"));//optional
