@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using CodeBase;
 using OpenDentBusiness;
 
 namespace OpenDental {
@@ -33,13 +34,17 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
+		/// <summary>Will only convert to MyISAM if default storage engine set to MyISAM.</summary>
 		private void butToMyIsam_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will convert all tables in the database to the MyISAM storage engine.  This may take several minutes.\r\nContinue?")) {
 				return;
 			}
 			if(InnoDb.GetDefaultEngine()=="InnoDB") {
-				MsgBox.Show("FormInnoDB","You will need to change your default storage engine to MyISAM.  Replace the line in your my.ini file that says "+
-					"\"default-storage-engine=InnoDB\" with \"default-storage-engine=MyISAM\".  Then restart the MySQL service within the service manager.");
+				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(
+					Lan.g("FormInnoDB","You will first need to change your default storage engine to MyISAM.  Make sure that the following line is in your my.ini file: \r\n"
+					+"default-storage-engine=MyISAM.\r\n"
+					+"Then, restart the MySQL service and return here."));
+				msgbox.ShowDialog();
 				return;
 			}
 			try {
@@ -63,18 +68,27 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 		}
 
+		/// <summary>Will only convert to InnoDB if default storage engine set to InnoDB and skip-innodb is not in my.ini file, which disables InnoDB engine.</summary>
 		private void butToInnoDb_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will convert all tables in the database to the InnoDB storage engine.  This may take several minutes.\r\nContinue?")) {
 				return;
 			}
 			if(!InnoDb.IsInnodbAvail()) {
-				MsgBox.Show("FormInnoDb","InnoDB storage engine is disabled.  In order for InnoDB tables to work you must remove the line in your my.ini file that says \"skip-innodb\""+
-				" and remove the line \"default-storage-engine=MyISAM\" if present.  Then restart the MySQL service within the service manager.");
+				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(
+					Lan.g("FormInnoDb","InnoDB storage engine is disabled.  In order for InnoDB tables to work you must comment out the skip-innodb line in your my.ini file, like this:\r\n"
+					+"#skip-innodb\r\n"
+					+"and, if present, comment out the default-storage-engine line like this: \r\n"
+					+"#default-storage-engine=MyISAM.\r\n"
+					+"Then, restart the MySQL service and return here."));
+				msgbox.ShowDialog();
 				return;
 			}
 			if(InnoDb.GetDefaultEngine()=="MyISAM") {
-				MsgBox.Show("FormInnoDb","You will need to change your default storage engine to InnoDB.  Remove the line in your my.ini file that says "+
-					"\"default-storage-engine=MyISAM\".  Then restart the MySQL service within the service manager.");
+				MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(
+					Lan.g("FormInnoDB","You will first need to change your default storage engine to InnoDB.  In your my.ini file, comment out the default-storage-engine line like this: \r\n"
+					+"#default-storage-engine=MyISAM.\r\n"
+					+"Then, restart the MySQL service and return here."));
+				msgbox.ShowDialog();
 				return;
 			}
 			try {

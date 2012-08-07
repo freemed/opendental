@@ -8,6 +8,7 @@ using System.Windows.Forms;
 namespace OpenDentBusiness {
 	public class InnoDb {
 
+		/// <summary>Returns the default storage engine.</summary>
 		public static string GetDefaultEngine() {
 			string command="SELECT @@default_storage_engine";
 			string defaultengine=Db.GetScalar(command).ToString();
@@ -20,6 +21,7 @@ namespace OpenDentBusiness {
 			return innoDbOn=="YES";
 		}
 
+		/// <summary>Returns the number of MyISAM tables and the number of InnoDB tables in the current database.</summary>
 		public static string GetEngineCount() {
 			string command=@"SELECT SUM(CASE WHEN information_schema.tables.engine='MyISAM' THEN 1 ELSE 0 END) AS 'myisam',
 				SUM(CASE WHEN information_schema.tables.engine='InnoDB' THEN 1 ELSE 0 END) AS 'innodb'
@@ -33,7 +35,7 @@ namespace OpenDentBusiness {
 			return retval;
 		}
 
-		///<summary>The only allowed parameters are "InnoDB" or "MyISAM".</summary>
+		///<summary>The only allowed parameters are "InnoDB" or "MyISAM".  Converts tables to toEngine type and returns the number of tables converted.</summary>
 		public static int ConvertTables(string fromEngine,string toEngine) {
 			int numtables=0;
 			string command="SELECT DATABASE()";
