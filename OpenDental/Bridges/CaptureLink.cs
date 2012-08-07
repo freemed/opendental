@@ -23,15 +23,27 @@ namespace OpenDental.Bridges{
 				MessageBox.Show("No patient selected.");
 				return;
 			}
+			string path=Programs.GetProgramPath(ProgramCur);
 			string info=Tidy(pat.LName)+" ";
 			info+=Tidy(pat.FName)+" ";
 			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
 				info+=pat.PatNum.ToString();
 			}
 			else{
+				if(pat.ChartNumber==null || pat.ChartNumber=="") {
+					MsgBox.Show("CaptureLink","This patient does not have a chart number.");
+					return;
+				}
 				info+=Tidy(pat.ChartNumber);
 			}
+			Clipboard.Clear();
 			Clipboard.SetText(info,TextDataFormat.Text);
+			try {
+				Process.Start(path);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+			}
 		}
 
 		///<summary>Removes double-quotes and spaces.</summary>
@@ -43,54 +55,3 @@ namespace OpenDental.Bridges{
 	}
 }
 
-//WE NEED TO ADD THE FOLLOWING CODE TO ConvertDatabases2.cs WHEN WE CAN VERIFY THE FUNCTIONALITY OF THIS BRIDGE WITH SPECIFICATIONS (WHICH WE DO NOT HAVE YET).
-////Insert CaptureLink Bridge
-//if(DataConnection.DBtype==DatabaseType.MySql) {
-//  command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
-//    +") VALUES("
-//    +"'CaptureLink', "
-//    +"'CaptureLink from www.henryschein.ca', "
-//    +"'0', "
-//    +"'"+POut.String(@"CaptureLink.exe")+"',"
-//    +"'', "
-//    +"'')";
-//  long programNum=Db.NonQ(command,true);
-//  command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
-//    +") VALUES("
-//    +"'"+POut.Long(programNum)+"', "
-//    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
-//    +"'0')";
-//  Db.NonQ(command);
-//  command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
-//    +"VALUES ("
-//    +"'"+POut.Long(programNum)+"', "
-//    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
-//    +"'CaptureLink')";
-//  Db.NonQ(command);
-//}
-//else {//oracle
-//  command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
-//    +") VALUES("
-//    +"(SELECT MAX(ProgramNum)+1 FROM program),"
-//    +"'CaptureLink', "
-//    +"'CaptureLink from www.henryschein.ca', "
-//    +"'0', "
-//    +"'"+POut.String(@"CaptureLink.exe")+"',"
-//    +"'', "
-//    +"'')";
-//  long programNum=Db.NonQ(command,true);
-//  command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
-//    +") VALUES("
-//    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
-//    +"'"+POut.Long(programNum)+"', "
-//    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
-//    +"'0')";
-//  Db.NonQ(command);
-//  command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
-//    +"VALUES ("
-//    +"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
-//    +"'"+POut.Long(programNum)+"', "
-//    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
-//    +"'CaptureLink')";
-//  Db.NonQ(command);
-//}//end CaptureLink bridge
