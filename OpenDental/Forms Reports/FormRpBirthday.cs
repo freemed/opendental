@@ -398,6 +398,10 @@ namespace OpenDental
 				return;
 			}
 			BirthdayTable=Patients.GetBirthdayList(dateFrom,dateTo);
+			if(BirthdayTable.Rows.Count==0) {
+				MsgBox.Show(this,"No postcards to preview.");
+				return;
+			}
 			pagesPrinted=0;
 			patientsPrinted=0;
 			pd=new PrintDocument();
