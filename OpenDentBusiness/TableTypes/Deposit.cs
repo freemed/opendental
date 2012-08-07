@@ -15,6 +15,8 @@ namespace OpenDentBusiness{
 		public string BankAccountInfo;
 		///<summary>Total amount of the deposit. User not allowed to directly edit.</summary>
 		public double Amount;
+		///<summary>Short description to help identify the deposit.</summary>
+		public string Memo;
 		
 		///<summary></summary>
 		public Deposit Copy(){

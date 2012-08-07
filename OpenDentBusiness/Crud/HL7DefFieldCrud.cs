@@ -109,7 +109,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (hL7DefField.HL7DefSegmentNum)+","
 				+    POut.Int   (hL7DefField.OrdinalPos)+","
 				+"'"+POut.String(hL7DefField.TableId)+"',"
-				+"'"+POut.String(hL7DefField.DataType.ToString())+"',"
+				+    POut.String(hL7DefField.DataType.ToString())+","
 				+"'"+POut.String(hL7DefField.FieldName)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -149,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(hL7DefField.DataType != oldHL7DefField.DataType) {
 				if(command!=""){ command+=",";}
-				command+="DataType = '"+POut.String(hL7DefField.DataType.ToString())+"'";
+				command+="DataType = "+POut.String(hL7DefField.DataType.ToString())+"";
 			}
 			if(hL7DefField.FieldName != oldHL7DefField.FieldName) {
 				if(command!=""){ command+=",";}

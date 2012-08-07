@@ -9831,6 +9831,16 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				    +"'CaptureLink')";
 				  Db.NonQ(command);
 				}//end CaptureLink bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE deposit ADD Memo varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE deposit ADD Memo varchar2(255)";
+					Db.NonQ(command);
+				}
+
+
 
 
 				command="UPDATE preference SET ValueString = '12.4.0.0' WHERE PrefName = 'DataBaseVersion'";

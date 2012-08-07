@@ -111,14 +111,14 @@ namespace OpenDental{
 			this.textDepositAccount = new System.Windows.Forms.TextBox();
 			this.labelIncomeAccountQB = new System.Windows.Forms.Label();
 			this.comboIncomeAccountQB = new System.Windows.Forms.ComboBox();
-			this.gridIns = new OpenDental.UI.ODGrid();
-			this.gridPat = new OpenDental.UI.ODGrid();
 			this.textMemo = new System.Windows.Forms.TextBox();
 			this.labelMemo = new System.Windows.Forms.Label();
 			this.butSendQB = new OpenDental.UI.Button();
+			this.gridIns = new OpenDental.UI.ODGrid();
 			this.butPrint = new OpenDental.UI.Button();
 			this.textDate = new OpenDental.ValidDate();
 			this.butDelete = new OpenDental.UI.Button();
+			this.gridPat = new OpenDental.UI.ODGrid();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.butOK = new OpenDental.UI.Button();
@@ -198,16 +198,16 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(602, 87);
+			this.label3.Location = new System.Drawing.Point(602, 83);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(127, 18);
+			this.label3.Size = new System.Drawing.Size(127, 15);
 			this.label3.TabIndex = 104;
 			this.label3.Text = "Bank Account Info";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textBankAccountInfo
 			// 
-			this.textBankAccountInfo.Location = new System.Drawing.Point(602, 108);
+			this.textBankAccountInfo.Location = new System.Drawing.Point(602, 100);
 			this.textBankAccountInfo.Multiline = true;
 			this.textBankAccountInfo.Name = "textBankAccountInfo";
 			this.textBankAccountInfo.Size = new System.Drawing.Size(289, 59);
@@ -217,14 +217,14 @@ namespace OpenDental{
 			// 
 			this.label4.Location = new System.Drawing.Point(602, 46);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(127, 18);
+			this.label4.Size = new System.Drawing.Size(127, 15);
 			this.label4.TabIndex = 106;
 			this.label4.Text = "Amount";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// textAmount
 			// 
-			this.textAmount.Location = new System.Drawing.Point(602, 67);
+			this.textAmount.Location = new System.Drawing.Point(602, 63);
 			this.textAmount.Name = "textAmount";
 			this.textAmount.ReadOnly = true;
 			this.textAmount.Size = new System.Drawing.Size(94, 20);
@@ -276,52 +276,22 @@ namespace OpenDental{
 			this.comboIncomeAccountQB.TabIndex = 113;
 			this.comboIncomeAccountQB.Visible = false;
 			// 
-			// gridIns
-			// 
-			this.gridIns.HScrollVisible = false;
-			this.gridIns.Location = new System.Drawing.Point(8, 319);
-			this.gridIns.Name = "gridIns";
-			this.gridIns.ScrollValue = 0;
-			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridIns.Size = new System.Drawing.Size(584, 301);
-			this.gridIns.TabIndex = 109;
-			this.gridIns.Title = "Insurance Payments";
-			this.gridIns.TranslationName = "TableDepositSlipIns";
-			this.gridIns.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellClick);
-			this.gridIns.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridIns_MouseUp);
-			// 
-			// gridPat
-			// 
-			this.gridPat.HScrollVisible = false;
-			this.gridPat.Location = new System.Drawing.Point(8, 12);
-			this.gridPat.Name = "gridPat";
-			this.gridPat.ScrollValue = 0;
-			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridPat.Size = new System.Drawing.Size(584, 299);
-			this.gridPat.TabIndex = 100;
-			this.gridPat.Title = "Patient Payments";
-			this.gridPat.TranslationName = "TableDepositSlipPat";
-			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
-			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
-			// 
 			// textMemo
 			// 
-			this.textMemo.Location = new System.Drawing.Point(602, 187);
+			this.textMemo.Location = new System.Drawing.Point(602, 177);
 			this.textMemo.Multiline = true;
 			this.textMemo.Name = "textMemo";
-			this.textMemo.Size = new System.Drawing.Size(289, 23);
+			this.textMemo.Size = new System.Drawing.Size(289, 35);
 			this.textMemo.TabIndex = 117;
-			this.textMemo.Visible = false;
 			// 
 			// labelMemo
 			// 
-			this.labelMemo.Location = new System.Drawing.Point(602, 169);
+			this.labelMemo.Location = new System.Drawing.Point(602, 160);
 			this.labelMemo.Name = "labelMemo";
-			this.labelMemo.Size = new System.Drawing.Size(127, 16);
+			this.labelMemo.Size = new System.Drawing.Size(127, 15);
 			this.labelMemo.TabIndex = 116;
 			this.labelMemo.Text = "Memo";
 			this.labelMemo.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			this.labelMemo.Visible = false;
 			// 
 			// butSendQB
 			// 
@@ -337,6 +307,20 @@ namespace OpenDental{
 			this.butSendQB.TabIndex = 115;
 			this.butSendQB.Text = "&Send QB";
 			this.butSendQB.Click += new System.EventHandler(this.butSendQB_Click);
+			// 
+			// gridIns
+			// 
+			this.gridIns.HScrollVisible = false;
+			this.gridIns.Location = new System.Drawing.Point(8, 319);
+			this.gridIns.Name = "gridIns";
+			this.gridIns.ScrollValue = 0;
+			this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridIns.Size = new System.Drawing.Size(584, 301);
+			this.gridIns.TabIndex = 109;
+			this.gridIns.Title = "Insurance Payments";
+			this.gridIns.TranslationName = "TableDepositSlipIns";
+			this.gridIns.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellClick);
+			this.gridIns.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridIns_MouseUp);
 			// 
 			// butPrint
 			// 
@@ -378,6 +362,20 @@ namespace OpenDental{
 			this.butDelete.TabIndex = 101;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
+			// 
+			// gridPat
+			// 
+			this.gridPat.HScrollVisible = false;
+			this.gridPat.Location = new System.Drawing.Point(8, 12);
+			this.gridPat.Name = "gridPat";
+			this.gridPat.ScrollValue = 0;
+			this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPat.Size = new System.Drawing.Size(584, 299);
+			this.gridPat.TabIndex = 100;
+			this.gridPat.Title = "Patient Payments";
+			this.gridPat.TranslationName = "TableDepositSlipPat";
+			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
+			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
 			// 
 			// butRefresh
 			// 
@@ -551,8 +549,6 @@ namespace OpenDental{
 				labelIncomeAccountQB.Visible=true;
 				comboIncomeAccountQB.Visible=true;
 				comboIncomeAccountQB.Items.Clear();
-				labelMemo.Visible=true;
-				textMemo.Visible=true;
 				textDepositAccount.Visible=false;
 				labelDepositAccount.Visible=true;
 				labelDepositAccount.Text=Lan.g(this,"Deposit into Account");
@@ -578,6 +574,7 @@ namespace OpenDental{
 			textDate.Text=DepositCur.DateDeposit.ToShortDateString();
 			textAmount.Text=DepositCur.Amount.ToString("F");
 			textBankAccountInfo.Text=DepositCur.BankAccountInfo;
+			textMemo.Text=DepositCur.Memo;
 			FillGrids();
 			if(IsNew) {
 				gridPat.SetSelected(true);
@@ -840,6 +837,7 @@ namespace OpenDental{
 			DepositCur.DateDeposit=PIn.Date(textDate.Text);
 			//amount already handled.
 			DepositCur.BankAccountInfo=PIn.String(textBankAccountInfo.Text);
+			DepositCur.Memo=PIn.String(textMemo.Text);
 			if(IsNew){
 				if(gridPat.SelectedIndices.Length+gridIns.SelectedIndices.Length>18){
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"No more than 18 items will fit on a QuickBooks deposit slip. Continue anyway?")) {
