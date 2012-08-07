@@ -20,6 +20,51 @@ namespace OpenDental {
 			AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,apt.PatNum);
 		}
 
+		///<summary>Returns empty string if no duplicates, otherwise returns duplicate procedure information.</summary>
+		public static string ProcsContainDuplicates(List<Procedure> procs) {
+			string info="";
+			List<Procedure> procsChecked=new List<Procedure>();
+			for(int i=0;i<procs.Count;i++) {
+				Procedure proc=procs[i];
+				ProcedureCode procCode=ProcedureCodes.GetProcCode(procs[i].CodeNum);
+				string procCodeStr=procCode.ProcCode;
+				if(procCodeStr.Length>5 && procCodeStr.StartsWith("D")) {
+					procCodeStr=procCodeStr.Substring(0,5);
+				}
+				for(int j=0;j<procsChecked.Count;j++) {
+					Procedure procDup=procsChecked[j];
+					ProcedureCode procCodeDup=ProcedureCodes.GetProcCode(procsChecked[j].CodeNum);
+					string procCodeDupStr=procCodeDup.ProcCode;
+					if(procCodeDupStr.Length>5 && procCodeDupStr.StartsWith("D")) {
+						procCodeDupStr=procCodeDupStr.Substring(0,5);
+					}
+					if(procCodeDupStr!=procCodeStr) {
+						continue;
+					}
+					if(procDup.ToothNum!=proc.ToothNum) {
+						continue;
+					}
+					if(procDup.ToothRange!=proc.ToothRange) {
+						continue;
+					}
+					if(procDup.ProcFee!=proc.ProcFee) {
+						continue;
+					}
+					if(procDup.Surf!=proc.Surf) {
+						continue;
+					}
+					if(info!="") {
+						info+=", ";
+					}
+					info+=procCodeDupStr;
+				}
+				procsChecked.Add(proc);
+			}
+			if(info!="") {
+				info=Lan.g("ProcedureL","Duplicate procedures")+": "+info;
+			}
+			return info;
+		}
 
 	}
 }

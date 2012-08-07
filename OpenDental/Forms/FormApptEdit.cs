@@ -2548,6 +2548,12 @@ namespace OpenDental{
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {
+			List<Procedure> procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
+			string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
+			if(duplicateProcs!="") {
+				MessageBox.Show(duplicateProcs);
+				return;
+			}
 			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.	
 			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
@@ -2722,6 +2728,12 @@ namespace OpenDental{
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW.
 			if(butComplete.Text=="Complete") {
+				List<Procedure> procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
+				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
+				if(duplicateProcs!="") {
+					MessageBox.Show(duplicateProcs);
+					return;
+				}
 				////check to make sure that the appointment and all attached procedures are marked complete as required.
 				//bool procsAreComplete=true;
 				//for(int i=0;i<gridProc.SelectedIndices.Length;i++) {

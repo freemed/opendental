@@ -2555,6 +2555,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"The default TP must be selected before saving a TP.  You can highlight some procedures in the default TP to save a TP with only those procedures in it.");
 				return;
 			}
+			//Check for duplicate procedures on the appointment before sending the DFT to eCW.
+			if(Programs.UsingEcwTightOrFull() && Bridges.ECW.AptNum!=0) {
+				List<Procedure> procs=Procedures.GetProcsForSingle(Bridges.ECW.AptNum,false);
+				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
+				if(duplicateProcs!="") {
+					MessageBox.Show(duplicateProcs);
+					return;
+				}
+			}
 			if(gridMain.SelectedIndices.Length==0){
 				gridMain.SetSelected(true);
 			}
