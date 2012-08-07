@@ -1661,6 +1661,41 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string InsSubInvalidSubscriber(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT Subscriber FROM inssub WHERE Subscriber NOT IN (SELECT PatNum FROM patient) AND Subscriber != 0 GROUP BY Subscriber";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				int numFound=table.Rows.Count;
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","InsSub subscribers missing: ")+numFound+"\r\n";
+				}
+			}
+			else {//Fix
+				//Create dummy patients using the FKs that the Subscriber column is expecting.
+				long priProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
+				long billType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+				for(int i=0;i<table.Rows.Count;i++) {
+					Patient pat=new Patient();
+					pat.PatNum=PIn.Long(table.Rows[i]["Subscriber"].ToString());
+					pat.LName="UNKNOWN";
+					pat.FName="Unknown";
+					pat.Guarantor=pat.PatNum;
+					pat.PriProv=priProv;
+					pat.BillingType=billType;
+					Patients.Insert(pat,true);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","InsSub subscribers fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string InsSubNumMismatchPlanNum(bool verbose,bool isCheck) {
 			//Checks for situations where there are valid InsSubNums, but mismatched PlanNums. 
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

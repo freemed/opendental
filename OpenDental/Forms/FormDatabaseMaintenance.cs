@@ -511,6 +511,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsPlanInvalidNum(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.InsSubInvalidSubscriber(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.InsSubNumMismatchPlanNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.LaboratoryWithInvalidSlip(verbose,isCheck);
