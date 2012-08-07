@@ -50,6 +50,7 @@ namespace OpenDental{
 			this.checkShow.Size = new System.Drawing.Size(75, 20);
 			this.checkShow.TabIndex = 17;
 			this.checkShow.Text = "Verbose";
+			this.checkShow.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.checkShow_KeyPress);
 			// 
 			// butRunCheck
 			// 

@@ -609,6 +609,7 @@ namespace OpenDental{
 
 		private void butDiagnostic_Click(object sender,EventArgs e) {
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eCWServer",textECWServer.Text);
+			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
 			FormEcwDiag FormECWD=new FormEcwDiag();
 			FormECWD.ShowDialog();
 		}

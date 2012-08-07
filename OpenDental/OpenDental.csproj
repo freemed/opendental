@@ -380,6 +380,12 @@
     <Compile Include="Forms\FormEcwDiag.designer.cs">
       <DependentUpon>FormEcwDiag.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormEcwDiagAdv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormEcwDiagAdv.designer.cs">
+      <DependentUpon>FormEcwDiagAdv.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormHL7DefFieldEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2537,6 +2543,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEcwDiag.resx">
       <DependentUpon>FormEcwDiag.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEcwDiagAdv.resx">
+      <DependentUpon>FormEcwDiagAdv.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7DefFieldEdit.resx">
       <DependentUpon>FormHL7DefFieldEdit.cs</DependentUpon>

@@ -18,6 +18,7 @@ namespace OpenDental {
 		private string password="l69Rr4Rmj4CjiCTLxrIblg==";//encrypted
 		private string server;
 		private string port;
+		private StringBuilder arbitraryStringName=new StringBuilder();
 
 		public FormEcwDiag() {
 			InitializeComponent();
@@ -25,6 +26,10 @@ namespace OpenDental {
 			port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");
 			buildConnectionString();
 			Lan.F(this);
+		}
+
+		private void FormEcwDiag_Load(object sender,EventArgs e) {
+			VerifyECW();
 		}
 
 		///<summary>Used to construct a default construction string.</summary>
@@ -73,8 +78,8 @@ namespace OpenDental {
 			}
 		}
 
-		private void FormEcwDiag_Load(object sender,EventArgs e) {
-			VerifyECW();
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 		private void butRunCheck_Click(object sender,EventArgs e) {
@@ -95,6 +100,7 @@ namespace OpenDental {
 			}
 			catch(Exception ex) {
 				textLog.Text+="Cannot detect eCW server named \""+server+"\".\r\n";
+				Cursor=Cursors.Default;
 				return;
 			}
 			HL7Verification(verbose);//composite check
@@ -331,6 +337,24 @@ namespace OpenDental {
 			return retVal.ToString();
 		}
 
+		private void checkShow_KeyPress(object sender,KeyPressEventArgs e) {
+			KeysConverter kc=new KeysConverter();
+			try {
+				arbitraryStringName.Append(e.KeyChar);
+			}
+			catch(Exception ex) {
+				//fail VERY silently. Mwa Ha Ha.
+			}
+			if(arbitraryStringName[arbitraryStringName.Length-1]=='X') {//Clear string if 'X' is pressed.
+				arbitraryStringName.Clear();
+			}
+			if(arbitraryStringName.ToString()=="open" || arbitraryStringName.ToString()=="There is no cow level") {
+				FormEcwDiagAdv FormECWA=new FormEcwDiagAdv();
+				FormECWA.ShowDialog();
+			}
+
+		}
+
 		//private string Test1(bool verbose) {
 		//  StringBuilder retVal=new StringBuilder();
 		//  bool failed=true;
@@ -416,11 +440,7 @@ namespace OpenDental {
 		//  }
 		//  return retVal.ToString()+" LIMIT 100;";
 		//}
-		
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
 
 	}
 }

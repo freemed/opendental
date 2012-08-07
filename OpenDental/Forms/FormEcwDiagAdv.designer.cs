@@ -1,0 +1,150 @@
+namespace OpenDental{
+	partial class FormEcwDiagAdv {
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
+
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing) {
+			if(disposing && (components != null)) {
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
+
+		#region Windows Form Designer generated code
+
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent() {
+			this.butCancel = new OpenDental.UI.Button();
+			this.textQuery = new System.Windows.Forms.TextBox();
+			this.textConnString = new System.Windows.Forms.TextBox();
+			this.butRunQ = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.gridTables = new OpenDental.UI.ODGrid();
+			this.SuspendLayout();
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(986, 644);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "Close";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			// 
+			// textQuery
+			// 
+			this.textQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textQuery.Location = new System.Drawing.Point(12, 58);
+			this.textQuery.Multiline = true;
+			this.textQuery.Name = "textQuery";
+			this.textQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textQuery.Size = new System.Drawing.Size(962, 99);
+			this.textQuery.TabIndex = 3;
+			this.textQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textQuery_KeyDown);
+			// 
+			// textConnString
+			// 
+			this.textConnString.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textConnString.Location = new System.Drawing.Point(12, 12);
+			this.textConnString.Multiline = true;
+			this.textConnString.Name = "textConnString";
+			this.textConnString.Size = new System.Drawing.Size(962, 40);
+			this.textConnString.TabIndex = 4;
+			// 
+			// butRunQ
+			// 
+			this.butRunQ.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRunQ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRunQ.Autosize = true;
+			this.butRunQ.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRunQ.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRunQ.CornerRadius = 4F;
+			this.butRunQ.Image = global::OpenDental.Properties.Resources.butGoto;
+			this.butRunQ.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRunQ.Location = new System.Drawing.Point(986, 58);
+			this.butRunQ.Name = "butRunQ";
+			this.butRunQ.Size = new System.Drawing.Size(75, 24);
+			this.butRunQ.TabIndex = 6;
+			this.butRunQ.Text = "Run";
+			this.butRunQ.Click += new System.EventHandler(this.butRunQ_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.AllowSelection = false;
+			this.gridMain.AllowSortingByColumn = true;
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = true;
+			this.gridMain.Location = new System.Drawing.Point(246, 163);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(728, 505);
+			this.gridMain.TabIndex = 7;
+			this.gridMain.Title = "Query Results";
+			this.gridMain.TranslationName = null;
+			// 
+			// gridTables
+			// 
+			this.gridTables.AllowSelection = false;
+			this.gridTables.AllowSortingByColumn = true;
+			this.gridTables.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gridTables.AutoScroll = true;
+			this.gridTables.HScrollVisible = true;
+			this.gridTables.Location = new System.Drawing.Point(12, 163);
+			this.gridTables.Name = "gridTables";
+			this.gridTables.ScrollValue = 0;
+			this.gridTables.Size = new System.Drawing.Size(228, 505);
+			this.gridTables.TabIndex = 8;
+			this.gridTables.Title = "Tables Available";
+			this.gridTables.TranslationName = null;
+			this.gridTables.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTables_CellDoubleClick);
+			this.gridTables.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.gridTables_KeyPress);
+			// 
+			// FormEcwDiagAdv
+			// 
+			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+			this.ClientSize = new System.Drawing.Size(1073, 680);
+			this.Controls.Add(this.gridTables);
+			this.Controls.Add(this.gridMain);
+			this.Controls.Add(this.butRunQ);
+			this.Controls.Add(this.textConnString);
+			this.Controls.Add(this.textQuery);
+			this.Controls.Add(this.butCancel);
+			this.Name = "FormEcwDiagAdv";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "eClinical Works Diagnostic";
+			this.Load += new System.EventHandler(this.FormEcwDiagAdv_Load);
+			this.ResumeLayout(false);
+			this.PerformLayout();
+
+		}
+
+		#endregion
+
+		private OpenDental.UI.Button butCancel;
+		private System.Windows.Forms.TextBox textQuery;
+		private System.Windows.Forms.TextBox textConnString;
+		private UI.Button butRunQ;
+		private UI.ODGrid gridMain;
+		private UI.ODGrid gridTables;
+	}
+}
