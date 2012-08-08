@@ -26,7 +26,6 @@ namespace OpenDental{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7DefFieldEdit));
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textItemOrder = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.listFieldNames = new System.Windows.Forms.ListBox();
 			this.comboDataType = new System.Windows.Forms.ComboBox();
@@ -36,6 +35,7 @@ namespace OpenDental{
 			this.label10 = new System.Windows.Forms.Label();
 			this.butDelete = new OpenDental.UI.Button();
 			this.labelDelete = new System.Windows.Forms.Label();
+			this.textItemOrder = new OpenDental.ValidNum();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -67,14 +67,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// textItemOrder
-			// 
-			this.textItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.textItemOrder.Location = new System.Drawing.Point(136,57);
-			this.textItemOrder.Name = "textItemOrder";
-			this.textItemOrder.Size = new System.Drawing.Size(26,20);
-			this.textItemOrder.TabIndex = 15;
 			// 
 			// label1
 			// 
@@ -169,19 +161,30 @@ namespace OpenDental{
 			this.labelDelete.Name = "labelDelete";
 			this.labelDelete.Size = new System.Drawing.Size(125,69);
 			this.labelDelete.TabIndex = 66;
-			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom list.";
+			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom" +
+    " list.";
 			this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelDelete.Visible = false;
+			// 
+			// textItemOrder
+			// 
+			this.textItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.textItemOrder.Location = new System.Drawing.Point(136,57);
+			this.textItemOrder.MaxVal = 255;
+			this.textItemOrder.MinVal = 0;
+			this.textItemOrder.Name = "textItemOrder";
+			this.textItemOrder.Size = new System.Drawing.Size(34,20);
+			this.textItemOrder.TabIndex = 15;
 			// 
 			// FormHL7DefFieldEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(405,473);
+			this.Controls.Add(this.textItemOrder);
 			this.Controls.Add(this.labelDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textItemOrder);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listFieldNames);
 			this.Controls.Add(this.comboDataType);
@@ -203,7 +206,6 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.TextBox textItemOrder;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listFieldNames;
 		private System.Windows.Forms.ComboBox comboDataType;
@@ -213,5 +215,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label10;
 		private UI.Button butDelete;
 		private System.Windows.Forms.Label labelDelete;
+		private ValidNum textItemOrder;
 	}
 }

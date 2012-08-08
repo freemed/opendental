@@ -78,14 +78,13 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete Segment?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete Segment?")) {
 				return;
 			}
 			for(int f=0;f<HL7DefSegCur.hl7DefFields.Count;f++) {
 				HL7DefFields.Delete(HL7DefSegCur.hl7DefFields[f].HL7DefFieldNum);
 			}
 			HL7DefSegments.Delete(HL7DefSegCur.HL7DefSegmentNum);
-			DataValid.SetInvalid(InvalidType.HL7Defs);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -104,31 +103,21 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(!IsHL7DefInternal) {
-				HL7DefSegCur.SegmentName=(SegmentNameHL7)comboSegmentName.SelectedIndex;
-				int order;
-				try {
-					order=int.Parse(textItemOrder.Text);
-					if(order<1) {
-						MsgBox.Show(this,"Item Order is invalid.");
-						return;
-					}
-				}
-				catch {
-					MsgBox.Show(this,"Item Order is invalid.");
-					return;
-				}
-				HL7DefSegCur.ItemOrder=order;
-				HL7DefSegCur.CanRepeat=checkCanRepeat.Checked;
-				HL7DefSegCur.IsOptional=checkIsOptional.Checked;
-				HL7DefSegCur.Note=textNote.Text;
-				if(HL7DefSegCur.IsNew) {
-					HL7DefSegments.Insert(HL7DefSegCur);
-					HL7DefSegCur.IsNew=false;
-				}
-				else {
-					HL7DefSegments.Update(HL7DefSegCur);
-				}
+			//not enabled if internal
+			if(textItemOrder.errorProvider1.GetError(textItemOrder)!="") {
+				MsgBox.Show(this,"Please fix data entry error first.");
+				return;
+			}
+			HL7DefSegCur.SegmentName=(SegmentNameHL7)comboSegmentName.SelectedIndex;
+			HL7DefSegCur.ItemOrder=PIn.Int(textItemOrder.Text);
+			HL7DefSegCur.CanRepeat=checkCanRepeat.Checked;
+			HL7DefSegCur.IsOptional=checkIsOptional.Checked;
+			HL7DefSegCur.Note=textNote.Text;
+			if(HL7DefSegCur.IsNew) {
+				HL7DefSegments.Insert(HL7DefSegCur);
+			}
+			else {
+				HL7DefSegments.Update(HL7DefSegCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

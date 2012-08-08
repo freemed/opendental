@@ -101,7 +101,7 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(MessageBox.Show(Lan.g(this,"Delete Message?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete Message?")) {
 				return;
 			}
 			for(int s=0;s<HL7DefMesCur.hl7DefSegments.Count;s++) {
@@ -111,7 +111,6 @@ namespace OpenDental {
 				HL7DefSegments.Delete(HL7DefMesCur.hl7DefSegments[s].HL7DefSegmentNum);
 			}
 			HL7DefMessages.Delete(HL7DefMesCur.HL7DefMessageNum);
-			DataValid.SetInvalid(InvalidType.HL7Defs);
 			DialogResult=DialogResult.OK;
 		}
 

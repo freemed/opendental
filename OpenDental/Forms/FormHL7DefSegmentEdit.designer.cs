@@ -30,7 +30,6 @@ namespace OpenDental{
 			this.checkCanRepeat = new System.Windows.Forms.CheckBox();
 			this.checkIsOptional = new System.Windows.Forms.CheckBox();
 			this.comboSegmentName = new System.Windows.Forms.ComboBox();
-			this.textItemOrder = new System.Windows.Forms.TextBox();
 			this.labelItemOrder = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.label12 = new System.Windows.Forms.Label();
@@ -38,6 +37,7 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.labelDelete = new System.Windows.Forms.Label();
 			this.butAdd = new OpenDental.UI.Button();
+			this.textItemOrder = new OpenDental.ValidNum();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -119,14 +119,6 @@ namespace OpenDental{
 			this.comboSegmentName.Size = new System.Drawing.Size(138,21);
 			this.comboSegmentName.TabIndex = 11;
 			// 
-			// textItemOrder
-			// 
-			this.textItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.textItemOrder.Location = new System.Drawing.Point(148,47);
-			this.textItemOrder.Name = "textItemOrder";
-			this.textItemOrder.Size = new System.Drawing.Size(26,20);
-			this.textItemOrder.TabIndex = 12;
-			// 
 			// labelItemOrder
 			// 
 			this.labelItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -192,7 +184,8 @@ namespace OpenDental{
 			this.labelDelete.Name = "labelDelete";
 			this.labelDelete.Size = new System.Drawing.Size(266,28);
 			this.labelDelete.TabIndex = 66;
-			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom list.";
+			this.labelDelete.Text = "This HL7Def is internal. To edit this HL7Def you must first copy it to the Custom" +
+    " list.";
 			this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelDelete.Visible = false;
 			// 
@@ -213,10 +206,21 @@ namespace OpenDental{
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
+			// textItemOrder
+			// 
+			this.textItemOrder.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.textItemOrder.Location = new System.Drawing.Point(148,47);
+			this.textItemOrder.MaxVal = 255;
+			this.textItemOrder.MinVal = 0;
+			this.textItemOrder.Name = "textItemOrder";
+			this.textItemOrder.Size = new System.Drawing.Size(34,20);
+			this.textItemOrder.TabIndex = 12;
+			// 
 			// FormHL7DefSegmentEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.ClientSize = new System.Drawing.Size(654,441);
+			this.Controls.Add(this.textItemOrder);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.labelDelete);
 			this.Controls.Add(this.butOK);
@@ -225,7 +229,6 @@ namespace OpenDental{
 			this.Controls.Add(this.checkCanRepeat);
 			this.Controls.Add(this.checkIsOptional);
 			this.Controls.Add(this.comboSegmentName);
-			this.Controls.Add(this.textItemOrder);
 			this.Controls.Add(this.labelItemOrder);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.label12);
@@ -251,7 +254,6 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkCanRepeat;
 		private System.Windows.Forms.CheckBox checkIsOptional;
 		private System.Windows.Forms.ComboBox comboSegmentName;
-		private System.Windows.Forms.TextBox textItemOrder;
 		private System.Windows.Forms.Label labelItemOrder;
 		private System.Windows.Forms.TextBox textNote;
 		private System.Windows.Forms.Label label12;
@@ -259,5 +261,6 @@ namespace OpenDental{
 		private UI.Button butDelete;
 		private System.Windows.Forms.Label labelDelete;
 		private UI.Button butAdd;
+		private ValidNum textItemOrder;
 	}
 }

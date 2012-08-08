@@ -68,6 +68,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
+			//Our strategy in this window and all sub windows is to get all data directly from the database.
 			if(!HL7DefCur.IsInternal && !HL7DefCur.IsNew) {
 				HL7DefCur.hl7DefMessages=HL7DefMessages.GetDeepForDef(HL7DefCur.HL7DefNum);
 			}
@@ -214,7 +215,7 @@ namespace OpenDental {
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			//This button is only enabled if this is a custom def.
-			if(MessageBox.Show(Lan.g(this,"Delete entire HL7Def?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete entire HL7Def?")) {
 				return;
 			}
 			for(int m=0;m<HL7DefCur.hl7DefMessages.Count;m++) {
@@ -233,10 +234,6 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			//This button is only enabled if this is a custom def.
-			//if(HL7DefCur.IsNew) {//never happens
-			//	HL7Defs.Insert(HL7DefCur);
-			//	HL7DefCur.IsNew=false;
-			//}
 			FormHL7DefMessageEdit FormS=new FormHL7DefMessageEdit();
 			FormS.HL7DefMesCur=new HL7DefMessage();
 			FormS.HL7DefMesCur.HL7DefNum=HL7DefCur.HL7DefNum;
@@ -251,60 +248,59 @@ namespace OpenDental {
 			if(checkEnabled.Checked) {
 				if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
 					if(textInPath.Text=="") {
-						MessageBox.Show(Lan.g(this,"The path for Incoming Folder is empty."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The path for Incoming Folder is empty.");
 						return;
 					}
 					if(!Directory.Exists(textInPath.Text)) {
-						MessageBox.Show(Lan.g(this,"The path for Incoming Folder is invalid."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The path for Incoming Folder is invalid.");
 						return;
 					}
 					if(textOutPath.Text=="") {
-						MessageBox.Show(Lan.g(this,"The path for Outgoing Folder is empty."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The path for Outgoing Folder is empty.");
 						return;
 					}
 					if(!Directory.Exists(textOutPath.Text)) {
-						MessageBox.Show(Lan.g(this,"The path for Outgoing Folder is invalid."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The path for Outgoing Folder is invalid.");
 						return;
 					}
 				}
 				else {//TcpIp mode
 					if(textInPort.Text=="") {
-						MessageBox.Show(Lan.g(this,"The Incoming Port is empty."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The Incoming Port is empty.");
 						return;
 					}
 					if(textOutPort.Text=="") {
-						MessageBox.Show(Lan.g(this,"The Outgoing Port is empty."),"",MessageBoxButtons.OK);
+						MsgBox.Show(this,"The Outgoing Port is empty.");
 						return;
 					}
 				}
 			}
-
+			HL7DefCur.IsEnabled=true;
+			HL7DefCur.IsInternal=checkInternal.Checked;
+			HL7DefCur.InternalType=textInternalType.Text;
+			HL7DefCur.InternalTypeVersion=textInternalTypeVersion.Text;
+			HL7DefCur.Description=textDescription.Text;
+			HL7DefCur.FieldSeparator=textFieldSep.Text;
+			HL7DefCur.RepetitionSeparator=textRepSep.Text;
+			HL7DefCur.ComponentSeparator=textCompSep.Text;
+			HL7DefCur.SubcomponentSeparator=textSubcompSep.Text;
+			HL7DefCur.EscapeCharacter=textEscChar.Text;
+			HL7DefCur.Note=textNote.Text;
+			HL7DefCur.ModeTx=(ModeTxHL7)comboModeTx.SelectedIndex;
+			if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
+				HL7DefCur.IncomingFolder=textInPath.Text;
+				HL7DefCur.OutgoingFolder=textOutPath.Text;
+				HL7DefCur.IncomingPort="";
+				HL7DefCur.OutgoingIpPort="";
+			}
+			else {//TcpIp mode
+				HL7DefCur.IncomingPort=textInPort.Text;
+				HL7DefCur.OutgoingIpPort=textOutPort.Text;
+				HL7DefCur.IncomingFolder="";
+				HL7DefCur.OutgoingFolder="";
+			}
 			//save
 			if(checkEnabled.Checked) {
-				HL7DefCur.IsEnabled=true;
-				HL7DefCur.IsInternal=checkInternal.Checked;
-				HL7DefCur.InternalType=textInternalType.Text;
-				HL7DefCur.InternalTypeVersion=textInternalTypeVersion.Text;
-				HL7DefCur.Description=textDescription.Text;
-				HL7DefCur.FieldSeparator=textFieldSep.Text;
-				HL7DefCur.RepetitionSeparator=textRepSep.Text;
-				HL7DefCur.ComponentSeparator=textCompSep.Text;
-				HL7DefCur.SubcomponentSeparator=textSubcompSep.Text;
-				HL7DefCur.EscapeCharacter=textEscChar.Text;
-				HL7DefCur.Note=textNote.Text;
-				HL7DefCur.ModeTx=(ModeTxHL7)comboModeTx.SelectedIndex;
-				if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
-					HL7DefCur.IncomingFolder=textInPath.Text;
-					HL7DefCur.OutgoingFolder=textOutPath.Text;
-					HL7DefCur.IncomingPort="";
-					HL7DefCur.OutgoingIpPort="";
-				}
-				else {//TcpIp mode
-					HL7DefCur.IncomingPort=textInPort.Text;
-					HL7DefCur.OutgoingIpPort=textOutPort.Text;
-					HL7DefCur.IncomingFolder="";
-					HL7DefCur.OutgoingFolder="";
-				}
 				if(checkInternal.Checked){
 					if(HL7Defs.GetInternalFromDb(HL7DefCur.InternalType)==null){ //it's not in the database.
 						HL7Defs.Insert(HL7DefCur);//The user wants to enable this, so we will need to save this def to the db.
@@ -317,21 +313,27 @@ namespace OpenDental {
 					HL7Defs.Update(HL7DefCur);
 				}
 			}
-			else {//IsEnabled check box is not checked
-				if(HL7DefCur.IsEnabled) {//If def was enabled but user wants to disable
-					if(HL7DefCur.IsInternal) {
-						if(MessageBox.Show(Lan.g(this,"Disable HL7Def? Changes made will be lost."),"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
+			else {//not enabled
+				if(HL7DefCur.IsInternal) {
+					if(HL7DefCur.IsEnabled) {//If def was enabled but user wants to disable
+						if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Disable HL7Def?  Changes made will be lost.  Continue?")) {
 							HL7Defs.Delete(HL7DefCur.HL7DefNum);
 						}
-						else {//user selected No
+						else {//user selected Cancel
 							return;
 						}
 					}
-					else {//custom
-						//Disable the custom def
-						HL7DefCur.IsEnabled=false;
-						HL7Defs.Update(HL7DefCur);
+					else {//was disabled and is still disabled
+						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Changes made will be lost.  Continue?")) {
+							return;
+						}
+						//do nothing.  Changes will be lost.
 					}
+				}
+				else {//custom
+					//Disable the custom def
+					HL7DefCur.IsEnabled=false;
+					HL7Defs.Update(HL7DefCur);
 				}
 			}
 			DialogResult=DialogResult.OK;
