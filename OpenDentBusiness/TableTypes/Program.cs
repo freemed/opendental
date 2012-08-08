@@ -47,6 +47,7 @@ namespace OpenDentBusiness{
 		DentX,
 		Dexis,
 		Digora,
+		Divvy,
 		Dolphin,
 		DrCeph,
 		Dxis,

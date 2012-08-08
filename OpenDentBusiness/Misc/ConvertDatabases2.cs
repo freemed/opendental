@@ -9839,6 +9839,83 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE deposit ADD Memo varchar2(255)";
 					Db.NonQ(command);
 				}
+				//Insert Divvy Systems/eCards bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"'Divvy', "
+				    +"'Divvy from www.divvysystems.com', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'Username', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'Password', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'API Key', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'DesignID for Recall Cards', "
+					  +"'')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramNum)+1 FROM program),"
+				    +"'Divvy', "
+				    +"'Divvy from www.divvysystems.com', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					  +") VALUES("
+					  +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'Username', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					  +") VALUES("
+					  +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'Password', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					  +") VALUES("
+					  +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'API Key', "
+					  +"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+					  +") VALUES("
+					  +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+					  +"'"+POut.Long(programNum)+"', "
+					  +"'DesignID for Recall Cards', "
+					  +"'')";
+					Db.NonQ(command);
+				}//end Divvy Systems/eCards bridge
+				
 
 
 
