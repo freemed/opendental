@@ -563,6 +563,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcButtonItemsDeleteWithInvalidAutoCode(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ProcedurecodeCategoryNotSet(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToApptWithProcStatusDeleted(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogAttachedToWrongAppts(verbose,isCheck);
