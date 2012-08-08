@@ -422,7 +422,7 @@ using System.Drawing;"+rn);
 					strb.Append("    POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else if(specialType==CrudSpecialColType.EnumAsString) {
-					strb.Append("    POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+					strb.Append("\"'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"'");
 				}
 				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 					strb.Append("\"'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
@@ -553,7 +553,7 @@ using System.Drawing;"+rn);
 					strb.Append(" \"+POut.DateT ("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 				}
 				else if(specialType==CrudSpecialColType.EnumAsString) {
-					strb.Append(" \"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+					strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"'");
 				}
 				else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 					strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");
@@ -672,7 +672,7 @@ using System.Drawing;"+rn);
 						strb.Append("\"+POut.DateT("+obj+"."+fieldsExceptPri[f].Name+")+\"");
 					}
 					else if(specialType==CrudSpecialColType.EnumAsString) {
-						strb.Append("\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"");
+						strb.Append("'\"+POut.String("+obj+"."+fieldsExceptPri[f].Name+".ToString())+\"'");
 					}
 					else if(specialType==CrudSpecialColType.TimeSpanNeg) {
 						strb.Append("'\"+POut.TSpan ("+obj+"."+fieldsExceptPri[f].Name+")+\"'");

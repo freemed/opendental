@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 			command+=
 				     POut.Int   (phone.Extension)+","
 				+"'"+POut.String(phone.EmployeeName)+"',"
-				+    POut.String(phone.ClockStatus.ToString())+","
+				+"'"+POut.String(phone.ClockStatus.ToString())+"',"
 				+"'"+POut.String(phone.Description)+"',"
 				+    POut.Int   (phone.ColorBar.ToArgb())+","
 				+    POut.Int   (phone.ColorText.ToArgb())+","
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE phone SET "
 				+"Extension        =  "+POut.Int   (phone.Extension)+", "
 				+"EmployeeName     = '"+POut.String(phone.EmployeeName)+"', "
-				+"ClockStatus      =  "+POut.String(phone.ClockStatus.ToString())+", "
+				+"ClockStatus      = '"+POut.String(phone.ClockStatus.ToString())+"', "
 				+"Description      = '"+POut.String(phone.Description)+"', "
 				+"ColorBar         =  "+POut.Int   (phone.ColorBar.ToArgb())+", "
 				+"ColorText        =  "+POut.Int   (phone.ColorText.ToArgb())+", "
@@ -175,7 +175,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(phone.ClockStatus != oldPhone.ClockStatus) {
 				if(command!=""){ command+=",";}
-				command+="ClockStatus = "+POut.String(phone.ClockStatus.ToString())+"";
+				command+="ClockStatus = '"+POut.String(phone.ClockStatus.ToString())+"'";
 			}
 			if(phone.Description != oldPhone.Description) {
 				if(command!=""){ command+=",";}
