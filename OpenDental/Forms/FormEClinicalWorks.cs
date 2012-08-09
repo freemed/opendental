@@ -608,8 +608,9 @@ namespace OpenDental{
 		}
 
 		private void butDiagnostic_Click(object sender,EventArgs e) {
+			//no need to validate all the other fields on the page.
 			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eCWServer",textECWServer.Text);
-			DataValid.SetInvalid(InvalidType.Programs,InvalidType.Prefs);
+			DataValid.SetInvalid(InvalidType.Programs);
 			FormEcwDiag FormECWD=new FormEcwDiag();
 			FormECWD.ShowDialog();
 		}

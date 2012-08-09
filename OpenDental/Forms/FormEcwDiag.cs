@@ -29,7 +29,11 @@ namespace OpenDental {
 		}
 
 		private void FormEcwDiag_Load(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			Application.DoEvents();
 			VerifyECW();
+			Cursor=Cursors.Default;
+			Application.DoEvents();
 		}
 
 		///<summary>Used to construct a default construction string.</summary>
@@ -83,12 +87,16 @@ namespace OpenDental {
 		}
 
 		private void butRunCheck_Click(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;
+			Application.DoEvents();
 			VerifyECW();
+			Cursor=Cursors.Default;
+			Application.DoEvents();
 		}
 
+		///<summary>Surround with wait cursor.</summary>
 		private void VerifyECW() {
 			//buildConnectionString();
-			Cursor=Cursors.WaitCursor;
 			bool verbose=checkShow.Checked;
 			StringBuilder strB=new StringBuilder();
 			strB.Append('-',90);
@@ -105,10 +113,41 @@ namespace OpenDental {
 			}
 			HL7Verification(verbose);//composite check
 			Application.DoEvents();
+			//textLog.Text+=appointmentTriggersForHl7(verbose);
+			//Application.DoEvents();
 			//textLog.Text+=Test1(verbose);
 			//Application.DoEvents();
 			textLog.Text+="Done.";
-			Cursor=Cursors.Default;
+		}
+
+		private string appointmentTriggersForHl7(bool verbose) {
+			string retVal="";
+			DataTable appTriggers = new DataTable();
+			try {
+				appTriggers=MySqlHelper.ExecuteDataset(connString,"SELECT * FROM pmitemkeys WHERE name LIKE '%Filter_for_%';").Tables[0];
+			}
+			catch(Exception ex) {
+				return ex.Message+"\r\n";
+			}
+			foreach(DataRow trigger in appTriggers.Rows) {
+				if(trigger["value"].ToString()!="no") {
+					if(verbose) {
+						retVal+=trigger["name"].ToString().Split('_')[3]+" messages are configured to be sent based on "+trigger["name"].ToString().Split('_')[0]+" filter.\r\n";
+					}
+					continue;
+				}
+				if(trigger["value"].ToString()=="no"&&verbose) {
+					retVal+=trigger["name"].ToString().Split('_')[3]+" messages are sent for any "+trigger["name"].ToString().Split('_')[0]+".\r\n";
+					continue;
+				}
+			}
+			if(retVal!="") {
+				string header="\r\n";
+				header+="   HL7 Message Triggers\r\n";
+				header+="".PadRight(90,'*')+"\r\n";
+				retVal=header+retVal;
+			}
+			return retVal;
 		}
 
 		private void HL7Verification(bool verbose) {
@@ -140,6 +179,11 @@ namespace OpenDental {
 				if(interfaceErrorCount[i]<interfaceErrorCount[leastErrorIndex]) {
 					leastErrorIndex=i;
 				}
+			}
+			if(interfaceErrorLogs[leastErrorIndex]!="" || verbose) {
+				textLog.Text+="\r\n";
+				textLog.Text+="   HL7 Messages\r\n";
+				textLog.Text+="".PadRight(90,'*')+"\r\n";
 			}
 			if(verbose) {
 				textLog.Text+="HL7 Interface "+hl7InterfaceIDs[leastErrorIndex]+" had "+interfaceErrorCount[leastErrorIndex]+" errors.\r\n";
@@ -249,8 +293,8 @@ namespace OpenDental {
 				errors+=5;//no segment plus the 4 sub errors.
 				validMessage=false;
 			}
-			if(!segmentsContained.Contains("AIG") && !segmentsContained.Contains("PV1")) {
-				retVal+="No AIG or PV1 segment found in SIU HL7 message. Provider information will not be sent from eCW.\r\n";
+			if(!segmentsContained.Contains("AIG") && !segmentsContained.Contains("PV1") && verbose) {
+				retVal+="No AIG or PV1 segment found in SIU HL7 message. Appointments will use patient's default primary provider.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
 				validMessage=false;
 			}
 			//If everything above checks out return a success message

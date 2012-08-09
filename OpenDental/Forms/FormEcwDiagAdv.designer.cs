@@ -23,28 +23,13 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butCancel = new OpenDental.UI.Button();
 			this.textQuery = new System.Windows.Forms.TextBox();
 			this.textConnString = new System.Windows.Forms.TextBox();
-			this.butRunQ = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.gridTables = new OpenDental.UI.ODGrid();
+			this.butRunQ = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(986, 644);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "Close";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// textQuery
 			// 
@@ -67,23 +52,6 @@ namespace OpenDental{
 			this.textConnString.Name = "textConnString";
 			this.textConnString.Size = new System.Drawing.Size(962, 40);
 			this.textConnString.TabIndex = 4;
-			// 
-			// butRunQ
-			// 
-			this.butRunQ.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRunQ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRunQ.Autosize = true;
-			this.butRunQ.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRunQ.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRunQ.CornerRadius = 4F;
-			this.butRunQ.Image = global::OpenDental.Properties.Resources.butGoto;
-			this.butRunQ.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butRunQ.Location = new System.Drawing.Point(986, 58);
-			this.butRunQ.Name = "butRunQ";
-			this.butRunQ.Size = new System.Drawing.Size(75, 24);
-			this.butRunQ.TabIndex = 6;
-			this.butRunQ.Text = "Run";
-			this.butRunQ.Click += new System.EventHandler(this.butRunQ_Click);
 			// 
 			// gridMain
 			// 
@@ -118,6 +86,38 @@ namespace OpenDental{
 			this.gridTables.TranslationName = null;
 			this.gridTables.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTables_CellDoubleClick);
 			this.gridTables.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.gridTables_KeyPress);
+			// 
+			// butRunQ
+			// 
+			this.butRunQ.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRunQ.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRunQ.Autosize = true;
+			this.butRunQ.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRunQ.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRunQ.CornerRadius = 4F;
+			this.butRunQ.Image = global::OpenDental.Properties.Resources.butGoto;
+			this.butRunQ.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butRunQ.Location = new System.Drawing.Point(986, 58);
+			this.butRunQ.Name = "butRunQ";
+			this.butRunQ.Size = new System.Drawing.Size(75, 24);
+			this.butRunQ.TabIndex = 6;
+			this.butRunQ.Text = "Run";
+			this.butRunQ.Click += new System.EventHandler(this.butRunQ_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(986, 644);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "Close";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormEcwDiagAdv
 			// 
