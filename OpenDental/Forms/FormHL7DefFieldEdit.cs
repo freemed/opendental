@@ -46,11 +46,34 @@ namespace OpenDental {
 		}
 
 		private void FillFieldNameList() {
-			FieldNameList.Add("patient.PatNum");
-			FieldNameList.Add("patient.ChartNum");
-			FieldNameList.Add("appointment.AptNum");
-			FieldNameList.Add("appointment.AptDateTime");
-			FieldNameList.Add("appointment.Note");
+			FieldNameList.Add("apt.AptDateTime");
+			FieldNameList.Add("apt.AptNum");
+			FieldNameList.Add("apt.lengthStartEnd");
+			FieldNameList.Add("apt.Note");
+			FieldNameList.Add("guar.addressCityStateZip");
+			FieldNameList.Add("guar.birthdateTime");
+			FieldNameList.Add("guar.Gender");
+			FieldNameList.Add("guar.HmPhone");
+			FieldNameList.Add("guar.nameLFM");
+			FieldNameList.Add("guar.PatNum");
+			FieldNameList.Add("guar.SSN");
+			FieldNameList.Add("guar.WkPhone");
+			FieldNameList.Add("pat.addressCityStateZip");
+			FieldNameList.Add("pat.birthdateTime");
+			FieldNameList.Add("pat.ChartNumber");
+			FieldNameList.Add("pat.FeeSched");
+			FieldNameList.Add("pat.Gender");
+			FieldNameList.Add("pat.HmPhone");
+			FieldNameList.Add("pat.nameLFM");
+			FieldNameList.Add("pat.PatNum");
+			FieldNameList.Add("pat.Position");
+			FieldNameList.Add("pat.Race");
+			FieldNameList.Add("pat.SSN");
+			FieldNameList.Add("pat.WkPhone");
+			FieldNameList.Add("prov.ProvNum");
+			FieldNameList.Add("prov.provNumNameLFM");
+			
+
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

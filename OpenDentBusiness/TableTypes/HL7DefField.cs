@@ -30,12 +30,32 @@ namespace OpenDentBusiness{
 
 	///<summary>Data types are listed in HL7 docs section 2.15.  The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum DataTypeHL7 {
+		///<summary>Coded with exceptions.  Example: Race: American Indian or Alaska Native,Asian,Black or African American,Native Hawaiian or Other Pacific,White, Hispanic,Other Race.</summary>
+		CWE,
 		///<summary>Extended composite ID with check digit.</summary>
 		CX,
-		///<summary>Date</summary>
+		///<summary>Date.</summary>
 		DT,
-		///<summary>String, alphanumeric</summary>
-		ST	
+		///<summary>Date/Time.</summary>
+		DTM,
+		///<summary>Entity identifier.</summary>
+		EI,
+		///<summary>Coded value for user-defined tables.  Example: Administrative Sex, F=Female, M=Male,U=Unknown.</summary>
+		IS,
+		///<summary>Sequence ID</summary>
+		SI,
+		///<summary>String, alphanumeric.</summary>
+		ST,
+		///<summary>Timing quantity.</summary>
+		TQ,
+		///<summary>Extended address.</summary>
+		XAD,
+		///<summary>Extended composite ID number and name for person.</summary>
+		XCN,
+		///<summary>Extended person name.  Composite data type.  Example: component 0 is LName, 1 is FName, 2 is second and further given names or initials (MiddleI).</summary>
+		XPN,
+		///<summary>Extended telecommunication number.</summary>
+		XTN
 	}
 
 	
