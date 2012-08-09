@@ -1923,6 +1923,9 @@ namespace OpenDental{
 			if(IsNewPlan && PlanCur.PlanType=="" && PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims) && !isPicked) {
 				checkClaimsUseUCR.Checked=true;
 			}
+			if(IsNewPlan && !PrefC.GetBool(PrefName.InsDefaultAssignBen) && !isPicked) {
+				checkAssign.Checked=false;
+			}
 			checkIsHidden.Checked=PlanCur.IsHidden;
 			checkShowBaseUnits.Checked=PlanCur.ShowBaseUnits;
 			comboFeeSched.Items.Clear();

@@ -209,6 +209,14 @@ namespace OpenDentBusiness{
 			return PIn.String(table.Rows[0][0].ToString());
 		}
 
+		///<summary>Returns the number of subs affected.</summary>
+		public static long SetAllSubsAssignBen() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod());
+			}
+			string command="UPDATE inssub SET AssignBen=0 WHERE AssignBen<>0";
+			return Db.NonQ(command);
+		}
 
 
 

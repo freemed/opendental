@@ -9917,7 +9917,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					  +"'')";
 					Db.NonQ(command);
 				}//end Divvy Systems/eCards bridge
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('InsDefaultAssignBen','1')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'InsDefaultAssignBen','1')";
+					Db.NonQ(command);
+				}
 
 
 
