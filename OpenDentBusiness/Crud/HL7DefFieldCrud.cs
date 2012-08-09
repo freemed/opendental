@@ -61,6 +61,7 @@ namespace OpenDentBusiness.Crud{
 					hL7DefField.DataType      =(DataTypeHL7)0;
 				}
 				hL7DefField.FieldName       = PIn.String(table.Rows[i]["FieldName"].ToString());
+				hL7DefField.FixedText       = PIn.String(table.Rows[i]["FixedText"].ToString());
 				retVal.Add(hL7DefField);
 			}
 			return retVal;
@@ -101,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="HL7DefFieldNum,";
 			}
-			command+="HL7DefSegmentNum,OrdinalPos,TableId,DataType,FieldName) VALUES(";
+			command+="HL7DefSegmentNum,OrdinalPos,TableId,DataType,FieldName,FixedText) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(hL7DefField.HL7DefFieldNum)+",";
 			}
@@ -110,7 +111,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (hL7DefField.OrdinalPos)+","
 				+"'"+POut.String(hL7DefField.TableId)+"',"
 				+"'"+POut.String(hL7DefField.DataType.ToString())+"',"
-				+"'"+POut.String(hL7DefField.FieldName)+"')";
+				+"'"+POut.String(hL7DefField.FieldName)+"',"
+				+"'"+POut.String(hL7DefField.FixedText)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -127,7 +129,8 @@ namespace OpenDentBusiness.Crud{
 				+"OrdinalPos      =  "+POut.Int   (hL7DefField.OrdinalPos)+", "
 				+"TableId         = '"+POut.String(hL7DefField.TableId)+"', "
 				+"DataType        = '"+POut.String(hL7DefField.DataType.ToString())+"', "
-				+"FieldName       = '"+POut.String(hL7DefField.FieldName)+"' "
+				+"FieldName       = '"+POut.String(hL7DefField.FieldName)+"', "
+				+"FixedText       = '"+POut.String(hL7DefField.FixedText)+"' "
 				+"WHERE HL7DefFieldNum = "+POut.Long(hL7DefField.HL7DefFieldNum);
 			Db.NonQ(command);
 		}
@@ -154,6 +157,10 @@ namespace OpenDentBusiness.Crud{
 			if(hL7DefField.FieldName != oldHL7DefField.FieldName) {
 				if(command!=""){ command+=",";}
 				command+="FieldName = '"+POut.String(hL7DefField.FieldName)+"'";
+			}
+			if(hL7DefField.FixedText != oldHL7DefField.FixedText) {
+				if(command!=""){ command+=",";}
+				command+="FixedText = '"+POut.String(hL7DefField.FixedText)+"'";
 			}
 			if(command==""){
 				return;

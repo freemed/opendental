@@ -9630,6 +9630,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						TableId varchar(255) NOT NULL,
 						DataType varchar(255) NOT NULL,
 						FieldName varchar(255) NOT NULL,
+						FixedText text NOT NULL,
 						INDEX(HL7DefSegmentNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -9644,6 +9645,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						TableId varchar2(255),
 						DataType varchar2(255),
 						FieldName varchar2(255),
+						FixedText varchar2(2000),
 						CONSTRAINT hl7deffield_HL7DefFieldNum PRIMARY KEY (HL7DefFieldNum)
 						)";
 					Db.NonQ(command);
@@ -9943,19 +9945,3 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-			
-
-			
-
-				
-
-
-
-
-
-
-
-				
-
-
-				
