@@ -965,6 +965,9 @@ namespace OpenDental{
 					if(table.Rows[i]["confirmed"].ToString()==DefC.GetName(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ConfirmStatusTextMessaged))) {//Already confirmed by text
 						continue;
 					}
+					if(table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString().StartsWith("Text:")) {//Check contact method
+						continue;
+					}
 					grid.SetSelected(i,true);
 				}
 				if(grid.SelectedIndices.Length==0) {
@@ -975,13 +978,8 @@ namespace OpenDental{
 			//deselect the ones that do not have text messages specified or are not OK to send texts to or have already been texted
 			int skipped=0;
 			for(int i=grid.SelectedIndices.Length-1;i>=0;i--) {
-				wirelessPhone=table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString();
-				if(wirelessPhone.Length<5 || wirelessPhone.Substring(0,5)!="Text:") {//Check contact type
-					skipped++;
-					grid.SetSelected(grid.SelectedIndices[i],false);
-					continue;
-				}
-				if(wirelessPhone.Substring(5)=="") {//Check for wireless number
+				wirelessPhone=table.Rows[grid.SelectedIndices[i]]["WirelessPhone"].ToString();
+				if(wirelessPhone=="") {//Check for wireless number
 					skipped++;
 					grid.SetSelected(grid.SelectedIndices[i],false);
 					continue;
@@ -1014,7 +1012,7 @@ namespace OpenDental{
 			//Appointment apt;
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				patNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
-				wirelessPhone=PIn.String(table.Rows[grid.SelectedIndices[i]]["contactMethod"].ToString()).Substring(5);
+				wirelessPhone=PIn.String(table.Rows[grid.SelectedIndices[i]]["WirelessPhone"].ToString());
 				txtMsgOk=((YN)PIn.Int(table.Rows[grid.SelectedIndices[i]]["TxtMsgOk"].ToString()));
 				message=PrefC.GetString(PrefName.ConfirmTextMessage);
 				message=message.Replace("[NameF]",table.Rows[grid.SelectedIndices[i]]["nameF"].ToString());

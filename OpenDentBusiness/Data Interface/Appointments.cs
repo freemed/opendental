@@ -407,6 +407,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("PreferConfirmMethod");
 			table.Columns.Add("ProcDescript");
 			table.Columns.Add("TxtMsgOk");
+			table.Columns.Add("WirelessPhone");
 			List<DataRow> rows=new List<DataRow>();
 			string command="SELECT patient.PatNum,"
 				+"patient.LName,"
@@ -508,6 +509,7 @@ namespace OpenDentBusiness{
 				row["PreferConfirmMethod"]=rawtable.Rows[i]["PreferConfirmMethod"].ToString();
 				row["ProcDescript"]=rawtable.Rows[i]["ProcDescript"].ToString();
 				row["TxtMsgOk"]=rawtable.Rows[i]["TxtMsgOk"].ToString();
+				row["WirelessPhone"]=rawtable.Rows[i]["WirelessPhone"].ToString();
 				rows.Add(row);
 			}
 			//Array.Sort(orderDate,RecallList);
