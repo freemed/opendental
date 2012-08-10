@@ -36,8 +36,6 @@ namespace OpenDental {
 				textNote.Text=HL7DefMesCur.Note;
 				if(HL7DefMesCur.InOrOut==InOutHL7.Incoming) {
 					radioIn.Checked=true;
-					textItemOrder.Visible=false;
-					labelItemOrder.Visible=false;
 				}
 				else {//outgoing
 					radioOut.Checked=true;
@@ -80,16 +78,6 @@ namespace OpenDental {
 				}
 			}
 			gridMain.EndUpdate();
-		}
-
-		private void radioIn_Click(object sender,System.EventArgs e) {
-			textItemOrder.Visible=false;
-			labelItemOrder.Visible=false;
-		}
-
-		private void radioOut_Click(object sender,System.EventArgs e) {
-			textItemOrder.Visible=true;
-			labelItemOrder.Visible=true;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {

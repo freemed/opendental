@@ -471,6 +471,12 @@ namespace OpenDental{
 				checkEnabled.Checked=!checkEnabled.Checked;
 				return;
 			}
+			bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled(-1);
+			if(isHL7Enabled) {
+				checkEnabled.Checked=false;
+				MsgBox.Show(this,"Only one HL7 process can be enabled at a time and an HL7 definition is already enabled.  To enable this program link you must first disable the HL7 definition under Setup|HL7.");
+				return;
+			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before turning this bridge on or off.  Make sure you understand the difference between the bridging modes and how it will affect patient accounts.  Continue anyway?")) {
 				checkEnabled.Checked=!checkEnabled.Checked;
 				return;

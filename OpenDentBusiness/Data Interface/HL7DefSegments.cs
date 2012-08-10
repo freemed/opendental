@@ -46,7 +46,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7DefSegment>>(MethodBase.GetCurrentMethod(),hl7DefMessageNum);
 			}
-			string command="SELECT * FROM hl7defsegment WHERE HL7DefMessageNum='"+POut.Long(hl7DefMessageNum)+"'";
+			string command="SELECT * FROM hl7defsegment WHERE HL7DefMessageNum='"+POut.Long(hl7DefMessageNum)+"' ORDER BY ItemOrder";
 			return Crud.HL7DefSegmentCrud.SelectMany(command);
 		}
 

@@ -13,7 +13,7 @@ namespace OpenDentBusiness{
 		public long HL7DefSegmentNum;
 		///<summary>Position within the segment.</summary>
 		public int OrdinalPos;
-		///<summary>HL7 table Id, if applicable. Example: 0234. Example: 1234/2345</summary>
+		///<summary>HL7 table Id, if applicable. Example: 0234. Example: 1234/2345.  DataType will be ID.</summary>
 		public string TableId;
 		///<summary>The DataTypeHL7 enum will be unlinked from the db by storing as string in db. As it's loaded into OD, it will become an enum.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 		EI,
 		/// <summary>Hierarchic designator.  Application identifier.</summary>
 		HD,
-		/// <summary>Coded value for HL7 defined tables.</summary>
+		/// <summary>Coded value for HL7 defined tables.  Must include TableId.</summary>
 		ID,
 		///<summary>Coded value for user-defined tables.  Example: Administrative Sex, F=Female, M=Male,U=Unknown.</summary>
 		IS,

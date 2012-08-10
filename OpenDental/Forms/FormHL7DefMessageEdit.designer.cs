@@ -53,7 +53,6 @@ namespace OpenDental{
 			this.radioOut.TabStop = true;
 			this.radioOut.Text = "Outgoing";
 			this.radioOut.UseVisualStyleBackColor = true;
-			this.radioOut.Click += new System.EventHandler(this.radioOut_Click);
 			// 
 			// radioIn
 			// 
@@ -66,7 +65,6 @@ namespace OpenDental{
 			this.radioIn.TabStop = true;
 			this.radioIn.Text = "Incoming";
 			this.radioIn.UseVisualStyleBackColor = true;
-			this.radioIn.Click += new System.EventHandler(this.radioIn_Click);
 			// 
 			// comboEventType
 			// 

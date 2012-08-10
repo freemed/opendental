@@ -142,6 +142,12 @@ namespace OpenDental {
 
 		private void checkEnabled_CheckedChanged(object sender,EventArgs e) {
 			if(checkEnabled.Checked) {
+				bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled(HL7DefCur.HL7DefNum);
+				if(Programs.IsEnabled(ProgramName.eClinicalWorks) || isHL7Enabled) {
+					checkEnabled.Checked=false;
+					MsgBox.Show(this,"Only one HL7 process can be enabled.  The eClinicalWorks program link is enabled or another HL7 definition is enabled.");
+					return;
+				}
 				butBrowseIn.Enabled=true;
 				butBrowseOut.Enabled=true;
 				textInPath.ReadOnly=false;
@@ -154,7 +160,6 @@ namespace OpenDental {
 				textCompSep.ReadOnly=false;
 				textSubcompSep.ReadOnly=false;
 				textEscChar.ReadOnly=false;
-				//textNote.ReadOnly=false;
 			}
 			else {
 				butBrowseIn.Enabled=false;
@@ -169,7 +174,6 @@ namespace OpenDental {
 				textCompSep.ReadOnly=true;
 				textSubcompSep.ReadOnly=true;
 				textEscChar.ReadOnly=true;
-				//textNote.ReadOnly=true;
 			}
 		}
 
@@ -275,7 +279,6 @@ namespace OpenDental {
 					}
 				}
 			}
-			HL7DefCur.IsEnabled=true;
 			HL7DefCur.IsInternal=checkInternal.Checked;
 			HL7DefCur.InternalType=textInternalType.Text;
 			HL7DefCur.InternalTypeVersion=textInternalTypeVersion.Text;
@@ -301,8 +304,10 @@ namespace OpenDental {
 			}
 			//save
 			if(checkEnabled.Checked) {
+				HL7DefCur.IsEnabled=true;
 				if(checkInternal.Checked){
 					if(HL7Defs.GetInternalFromDb(HL7DefCur.InternalType)==null){ //it's not in the database.
+
 						HL7Defs.Insert(HL7DefCur);//The user wants to enable this, so we will need to save this def to the db.
 					}
 					else {

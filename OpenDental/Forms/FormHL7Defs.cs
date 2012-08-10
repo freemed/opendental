@@ -188,13 +188,13 @@ namespace OpenDental{
 			//Add defs for other companies like Centricity here later.
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),100);
 			grid1.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Mode Tx"),55);
 			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),115);
+			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),110);
 			grid1.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),115);
+			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),110);
 			grid1.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
 			grid1.Columns.Add(col);
@@ -226,13 +226,13 @@ namespace OpenDental{
 			}
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),90);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),100);
 			grid2.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Mode Tx"),55);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),115);
+			col=new ODGridColumn(Lan.g(this,"In Folder / Port"),110);
 			grid2.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),115);
+			col=new ODGridColumn(Lan.g(this,"Out Folder / Port"),110);
 			grid2.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Enabled"),10);
 			grid2.Columns.Add(col);
@@ -261,6 +261,7 @@ namespace OpenDental{
 				return;
 			}
 			HL7Def hl7def=ListCustom[grid2.GetSelectedIndex()].Clone();
+			hl7def.IsEnabled=false;
 			long hl7DefNum=HL7Defs.Insert(hl7def);
 			for(int m=0;m<hl7def.hl7DefMessages.Count;m++) {
 				hl7def.hl7DefMessages[m].HL7DefNum=hl7DefNum;
@@ -286,6 +287,7 @@ namespace OpenDental{
 			}
 			HL7Def hl7def=ListInternal[grid1.GetSelectedIndex()].Clone();
 			hl7def.IsInternal=false;
+			hl7def.IsEnabled=false;
 			long hl7DefNum=HL7Defs.Insert(hl7def);
 			for(int m=0;m<hl7def.hl7DefMessages.Count;m++) {
 				hl7def.hl7DefMessages[m].HL7DefNum=hl7DefNum;

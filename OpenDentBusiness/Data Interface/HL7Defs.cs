@@ -60,6 +60,18 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefCrud.SelectMany(command);
 		}
 
+		///<summary>Gets list of enabled defnums from the database.</summary>
+		public static bool IsExistingHL7Enabled(long excludeHL7DefNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),excludeHL7DefNum);
+			}
+			string command="SELECT COUNT(*) FROM hl7def WHERE IsEnabled=1 AND HL7DefNum != "+POut.Long(excludeHL7DefNum);
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 		///<summary>Gets a full deep list of all defs that are not internal from the database.</summary>
 		public static List<HL7Def> GetDeepCustomList(){
 			List<HL7Def> hl7defs=new List<HL7Def>();
