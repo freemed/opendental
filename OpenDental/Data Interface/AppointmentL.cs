@@ -414,11 +414,28 @@ namespace OpenDental{
 				}
 			}
 			AptCur.ProcDescript="";
+			AptCur.ProcsColored="";
 			for(int i=0;i<procs.Count;i++) {
+				string procDescOne="";
 				if(i>0){
 					AptCur.ProcDescript+=", ";
 				}
-				AptCur.ProcDescript+=ProcedureCodes.GetProcCode(procs[i]).AbbrDesc;
+				procDescOne+=ProcedureCodes.GetProcCode(procs[i]).AbbrDesc;
+				AptCur.ProcDescript+=procDescOne;
+				//Color and previous date are determined by ProcApptColor object
+				ProcApptColor pac=ProcApptColors.GetMatch(procs[i]);
+				System.Drawing.Color pColor=System.Drawing.Color.Black;
+				string prevDateString="";
+				if(pac!=null){
+					pColor=pac.ColorText;
+					if(pac.ShowPreviousDate) {
+						prevDateString=Procedures.GetRecentProcDateString(AptCur.PatNum,AptCur.AptDateTime,pac.CodeRange);
+						if(prevDateString!="") {
+							prevDateString=" ("+prevDateString+")";
+						}
+					}
+				}
+				AptCur.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
 			}
 			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			Appointments.Insert(AptCur);

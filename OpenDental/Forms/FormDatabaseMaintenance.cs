@@ -659,7 +659,7 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			//The ApptProcDescript region is also in FormProcEdit.SaveAndClose() and FormDatabaseMaintenance.butApptProcs_Click()  Make any changes there as well.
+			//The ApptProcDescript region is also in FormProcEdit.SaveAndClose() and FormApptEdit.UpdateToDB()  Make any changes there as well.
 			#region ApptProcDescript
 			List<long> aptNums=new List<long>();
 			Appointment[] aptList=Appointments.GetForPeriod(DateTime.Now.Date.AddMonths(-6),DateTime.MaxValue.AddDays(-10));
