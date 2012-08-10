@@ -989,13 +989,15 @@ namespace OpenDentBusiness
 					//2310A NM1: DN/P3 (medical) Referring Provider Name. Situational.
 					WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
-					if(claim.ProvTreat!=claim.ProvBill) {
-						//2310B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider. Person only, non-person not allowed.
-						WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
-						//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
-						WritePRV_PE(sw,provTreat);
-						//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
-					}
+					//Always included for Emdeon Medical, because Emdeon Medical will automatically remove this segment if the payer does not want it
+					//Some payers reject if not specified, even when the claim.ProvTreat=claim.ProvBill. For example, Texas Medicaid.
+					//if(claim.ProvTreat!=claim.ProvBill || IsEmdeonMedical(clearhouse)) {
+					//2310B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider. Person only, non-person not allowed.
+					WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
+					//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
+					WritePRV_PE(sw,provTreat);
+					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
+					//}
 					//2310C NM1: (medical) Service Facility Location Name. Situational. We do not use.
 					//2310C N3: (medical) Service Facility Location Address. We do not use.
 					//2310C N4: (medical) Service Facility Location City, State, Zip Code. We do not use.
