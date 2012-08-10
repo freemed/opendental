@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 		public long HL7DefSegmentNum;
 		///<summary>FK to HL7DefMessage.HL7DefMessageNum</summary>
 		public long HL7DefMessageNum;
-		///<summary>.</summary>
+		///<summary>Since we don't enforce or automate, it can be 1-based or 0-based.  For outgoing, this affects the message structure.  For incoming, this is just for convenience and organization in the HL7 Def windows.</summary>
 		public int ItemOrder;
 		///<summary>For example, a DFT can have multiple FT1 segments.</summary>
 		public bool CanRepeat;
@@ -36,15 +36,26 @@ namespace OpenDentBusiness {
 			return (HL7DefSegment)this.MemberwiseClone();
 		}
 
-		public void AddField(HL7DefField field,int ordinalPos,string tableId,DataTypeHL7 dataType,string fieldName) {
+		public void AddField(int ordinalPos,string tableId,DataTypeHL7 dataType,string fieldName,string fixedText) {
 			if(hl7DefFields==null){
 				hl7DefFields=new List<HL7DefField>();
 			}
+			HL7DefField field=new HL7DefField();
 			field.OrdinalPos=ordinalPos;
 			field.DataType=dataType;
 			field.TableId=tableId;
 			field.FieldName=fieldName;
+			field.FixedText=fixedText;
 			this.hl7DefFields.Add(field);
+		}
+
+		public void AddField(int ordinalPos,DataTypeHL7 dataType,string fieldName) {
+			AddField(ordinalPos,"",dataType,fieldName,"");
+		}
+
+		/// <summary></summary>
+		public void AddFieldFixed(int ordinalPos,DataTypeHL7 dataType,string fixedText) {
+			AddField(ordinalPos,"",dataType,"",fixedText);
 		}
 
 	}

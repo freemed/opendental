@@ -21,7 +21,7 @@ namespace OpenDentBusiness {
 		public EventTypeHL7 EventType;
 		///<summary>Enum:InOutHL7 Incoming, Outgoing</summary>
 		public InOutHL7 InOrOut;
-		///<summary>Zero for incoming, since they can have extra unexpected segments and since we don't usually care about order of incoming.  For outgoing, this should 1-based, but we don't enforce or automate.  For example, all messages could be 1.</summary>
+		///<summary>The only purpose of this column is to let you change the order in the HL7 Def windows.  It's just for convenience.</summary>
 		public int ItemOrder;
 		///<summary>text</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
@@ -47,6 +47,14 @@ namespace OpenDentBusiness {
 			seg.SegmentName=segmentName;
 			seg.Note=note;
 			this.hl7DefSegments.Add(seg);
+		}
+
+		public void AddSegment(HL7DefSegment seg,int itemOrder,bool canRepeat,bool isOptional,SegmentNameHL7 segmentName) {
+			AddSegment(seg,itemOrder,canRepeat,isOptional,segmentName,"");
+		}
+
+		public void AddSegment(HL7DefSegment seg,int itemOrder,SegmentNameHL7 segmentName) {
+			AddSegment(seg,itemOrder,false,false,segmentName,"");
 		}
 
 	}

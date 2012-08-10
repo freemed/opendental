@@ -184,7 +184,7 @@ namespace OpenDental{
 			ListInternal=new List<HL7Def>();
 			ListInternal.Add(InternalEcwTight.GetHL7Def());
 			//listInternal.Add(InternalEcwFull.GetHL7Def());
-			//listInternal.Add(InternalEcwStandalone.GetHL7Def());
+			ListInternal.Add(InternalEcwStandalone.GetHL7Def());
 			//Add defs for other companies like Centricity here later.
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();

@@ -67,6 +67,10 @@ namespace OpenDentBusiness{
 			this.hl7DefMessages.Add(msg);
 		}
 
+		public void AddMessage(HL7DefMessage msg,MessageTypeHL7 messageType,EventTypeHL7 eventType,InOutHL7 inOrOut,int itemOrder) {
+			AddMessage(msg,messageType,eventType,inOrOut,itemOrder,"");
+		}
+
 	}
 
 	public enum ModeTxHL7 {

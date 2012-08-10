@@ -48,14 +48,24 @@ namespace OpenDentBusiness{
 		EI,
 		/// <summary>Hierarchic designator.  Application identifier.</summary>
 		HD,
+		/// <summary>Coded value for HL7 defined tables.</summary>
+		ID,
 		///<summary>Coded value for user-defined tables.  Example: Administrative Sex, F=Female, M=Male,U=Unknown.</summary>
 		IS,
-		///<summary>Sequence ID</summary>
+		/// <summary>Message type.</summary>
+		MSG,
+		/// <summary>Numeric.</summary>
+		NM,
+		/// <summary>Processing type.  Examples: P-Production, T-Test.</summary>
+		PT,
+		///<summary>Sequence ID.</summary>
 		SI,
 		///<summary>String, alphanumeric.</summary>
 		ST,
 		///<summary>Timing quantity.</summary>
 		TQ,
+		/// <summary>Version identifier.</summary>
+		VID,
 		///<summary>Extended address.</summary>
 		XAD,
 		///<summary>Extended composite ID number and name for person.</summary>

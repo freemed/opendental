@@ -47,7 +47,9 @@ namespace OpenDental {
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Field"),140);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Field Name"),140);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Fixed Text"),240);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Type"),40);
 			gridMain.Columns.Add(col);
@@ -60,6 +62,7 @@ namespace OpenDental {
 				for(int i=0;i<HL7DefSegCur.hl7DefFields.Count;i++) {
 					ODGridRow row=new ODGridRow();
 					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].FieldName);
+					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].FixedText);
 					row.Cells.Add(Lan.g("enumDataTypeHL7",HL7DefSegCur.hl7DefFields[i].DataType.ToString()));
 					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].OrdinalPos.ToString());
 					row.Cells.Add(HL7DefSegCur.hl7DefFields[i].TableId);
