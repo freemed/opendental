@@ -76,32 +76,35 @@ namespace OpenDentHL7 {
 				EventLog.WriteEntry("OpenDentHL7","Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString(),EventLogEntryType.Error);
 				throw new ApplicationException("Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString());
 			}
-			//inform od via signal that this service is running
-			IsStandalone=true;//and for Mountainside
-			//if(Programs.UsingEcwTight()){
-			if(Programs.UsingEcwTightOrFull()){
-				IsStandalone=false;
+			//Later: inform od via signal that this service is running
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+				IsStandalone=true;//and for Mountainside
+				//if(Programs.UsingEcwTight()){
+				if(Programs.UsingEcwTightOrFull()) {
+					IsStandalone=false;
+				}
+				//#if DEBUG//just so I don't forget to remove it later.
+				//IsStandalone=false;
+				//#endif
+				hl7FolderOut=PrefC.GetString(PrefName.HL7FolderOut);
+				if(!Directory.Exists(hl7FolderOut)) {
+					throw new ApplicationException(hl7FolderOut+" does not exist.");
+				}
+				//start polling the folder for waiting messages to import.  Every 5 seconds.
+				TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFunction);
+				timerReceive=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
+				if(IsStandalone) {
+					return;//do not continue with the HL7 sending code below
+				}
+				//start polling the db for new HL7 messages to send. Every 1.8 seconds.
+				hl7FolderIn=PrefC.GetString(PrefName.HL7FolderIn);
+				if(!Directory.Exists(hl7FolderIn)) {
+					throw new ApplicationException(hl7FolderIn+" does not exist.");
+				}
+				TimerCallback timercallbackSend=new TimerCallback(TimerCallbackSendFunction);
+				timerSend=new System.Threading.Timer(timercallbackSend,null,1800,1800);
 			}
-			//#if DEBUG//just so I don't forget to remove it later.
-			//IsStandalone=false;
-			//#endif
-			hl7FolderOut=PrefC.GetString(PrefName.HL7FolderOut);
-			if(!Directory.Exists(hl7FolderOut)) {
-				throw new ApplicationException(hl7FolderOut+" does not exist.");
-			}
-			//start polling the folder for waiting messages to import.  Every 5 seconds.
-			TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFunction);
-			timerReceive=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
-			if(IsStandalone) {
-				return;//do not continue with the HL7 sending code below
-			}
-			//start polling the db for new HL7 messages to send. Every 1.8 seconds.
-			hl7FolderIn=PrefC.GetString(PrefName.HL7FolderIn);
-			if(!Directory.Exists(hl7FolderIn)) {
-				throw new ApplicationException(hl7FolderIn+" does not exist.");
-			}
-			TimerCallback timercallbackSend=new TimerCallback(TimerCallbackSendFunction);
-			timerSend=new System.Threading.Timer(timercallbackSend,null,1800,1800);
+			//HL7Defs.GetOneDeepEnabled
 		}
 
 		private void TimerCallbackReceiveFunction(Object stateInfo) {

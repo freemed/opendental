@@ -7,8 +7,9 @@ namespace OpenDentBusiness.HL7 {
 	///<summary></summary>
 	public class InternalEcwStandalone {
 
-		public static HL7Def GetHL7Def() {
-			HL7Def def=HL7Defs.GetInternalFromDb("eCWStandalone");
+		public static void GetDeepInternal(HL7Def def) {
+			//ok to pass in null
+			//HL7Def def=HL7Defs.GetInternalFromDb("eCWStandalone");
 			if(def==null) {//wasn't in the database
 				def=new HL7Def();
 				def.IsNew=true;
@@ -79,7 +80,7 @@ namespace OpenDentBusiness.HL7 {
 			seg.AddField(9,DataTypeHL7.IS,"guar.Gender");
 			//GT1.12, Guarantor SSN
 			seg.AddField(12,DataTypeHL7.ST,"guar.SSN");
-			return def;
+			//return def;
 		}
 
 	}

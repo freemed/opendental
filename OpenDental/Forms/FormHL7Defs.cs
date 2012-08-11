@@ -181,11 +181,7 @@ namespace OpenDental{
 
 		private void FillGrid1() {
 			//Our strategy in this window and all sub windows is to get all data directly from the database (or internal).
-			ListInternal=new List<HL7Def>();
-			ListInternal.Add(InternalEcwTight.GetHL7Def());
-			//listInternal.Add(InternalEcwFull.GetHL7Def());
-			ListInternal.Add(InternalEcwStandalone.GetHL7Def());
-			//Add defs for other companies like Centricity here later.
+			ListInternal=HL7Defs.GetDeepInternalList();
 			grid1.BeginUpdate();
 			grid1.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),100);
@@ -220,10 +216,7 @@ namespace OpenDental{
 		private void FillGrid2() {
 			//Our strategy in this window and all sub windows is to get all data directly from the database.
 			//If it's too slow in this window due to the 20-30 database calls per row in grid2, then we might later optimize to pull from the cache.
-			ListCustom=HL7Defs.GetCustomList();
-			for(int i=0;i<ListCustom.Count;i++) {
-				ListCustom[i].hl7DefMessages=HL7DefMessages.GetDeepForDef(ListCustom[i].HL7DefNum);
-			}
+			ListCustom=HL7Defs.GetDeepCustomList();
 			grid2.BeginUpdate();
 			grid2.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),100);

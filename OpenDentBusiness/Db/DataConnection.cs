@@ -212,7 +212,7 @@ namespace OpenDentBusiness{
 				"Server="+serverName
 				+";Port="+port//although this does seem to cause a bug in Mono.  We will revisit this bug if needed to exclude the port option only for Mono.
 				+";Database="+pDatabase
-				//+";Connect Timeout=20"
+				//+";Connect Timeout=5"
 				+";User ID="+pUserID
 				+";Password="+pPassword
 				+";CharSet=utf8"

@@ -7,8 +7,9 @@ namespace OpenDentBusiness.HL7 {
 	///<summary></summary>
 	public class InternalEcwTight {
 
-		public static HL7Def GetHL7Def() {
-			HL7Def def=HL7Defs.GetInternalFromDb("eCWTight");
+		public static void GetDeepInternal(HL7Def def) {
+			//ok to pass in null
+			//HL7Def def=HL7Defs.GetInternalFromDb("eCWTight");
 			if(def==null) {//wasn't in the database
 				def=new HL7Def();
 				def.IsNew=true;
@@ -232,7 +233,7 @@ namespace OpenDentBusiness.HL7 {
 			seg.AddField(4,DataTypeHL7.ST,"pdfDescription");
 			//ZX1.5
 			seg.AddField(5,DataTypeHL7.ST,"pdfDataAsBase64");
-			return def;
+			//return def;
 		}
 
 	}

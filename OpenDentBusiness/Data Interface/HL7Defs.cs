@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using OpenDentBusiness.HL7;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -51,16 +52,44 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefCrud.SelectOne(command);
 		}
 
-		///<summary>Gets list of all defs that are not internal from the database.</summary>
-		public static List<HL7Def> GetCustomList() {
+		/// <summary>This will return null if no HL7defs are enabled.  Since only one can be enabled, this will return only the enabled one.</summary>
+		public static HL7Def GetOneDeepEnabled() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM hl7def WHERE IsEnabled=1";
+			HL7Def retval=Crud.HL7DefCrud.SelectOne(command);
+			if(retval==null) {
+				return null;
+			}
+			retval.hl7DefMessages=HL7DefMessages.GetDeepForDef(retval.HL7DefNum);
+			return retval;
+		}
+
+		///<summary>Gets a full deep list of all internal defs.  If one is enabled, then it might be in database.</summary>
+		public static List<HL7Def> GetDeepInternalList(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7Def>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM hl7def WHERE IsInternal=0";
-			return Crud.HL7DefCrud.SelectMany(command);
+			List<HL7Def> listInternal=new List<HL7Def>();
+			HL7Def def=GetInternalFromDb("eCWTight");//might be null
+			InternalEcwTight.GetDeepInternal(def);
+			listInternal.Add(def);
+			def=GetInternalFromDb("eCWStandalone");
+			InternalEcwStandalone.GetDeepInternal(def);
+			listInternal.Add(def);
+			//InternalEcwFull
+			//Add defs for other companies like Centricity here later.
+			return listInternal;
 		}
 
-		///<summary>Gets list of enabled defnums from the database.</summary>
+		///<summary>Gets from C# internal code rather than db</summary>
+		private static void GetDeepForInternal(HL7Def def) {
+			//No need to check RemotingRole; no call to db.
+
+		}
+
+		///<summary>Tells us whether there is an existing enable HL7Def.</summary>
 		public static bool IsExistingHL7Enabled(long excludeHL7DefNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod(),excludeHL7DefNum);
@@ -74,12 +103,15 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a full deep list of all defs that are not internal from the database.</summary>
 		public static List<HL7Def> GetDeepCustomList(){
-			List<HL7Def> hl7defs=new List<HL7Def>();
-			hl7defs=GetCustomList();
-			foreach(HL7Def d in hl7defs) {
-				d.hl7DefMessages=HL7DefMessages.GetDeepForDef(d.HL7DefNum);
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7Def>>(MethodBase.GetCurrentMethod());
 			}
-			return hl7defs;
+			string command="SELECT * FROM hl7def WHERE IsInternal=0";
+			List<HL7Def> customList=Crud.HL7DefCrud.SelectMany(command);
+			for(int i=0;i<customList.Count;i++) {
+				customList[i].hl7DefMessages=HL7DefMessages.GetDeepForDef(customList[i].HL7DefNum);
+			}
+			return customList;
 		}
 
 		///<summary></summary>
