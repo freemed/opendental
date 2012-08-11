@@ -7,7 +7,7 @@ namespace OpenDentBusiness.HL7 {
 	///<summary></summary>
 	public class InternalEcwTight {
 
-		public static void GetDeepInternal(HL7Def def) {
+		public static HL7Def GetDeepInternal(HL7Def def) {
 			//ok to pass in null
 			//HL7Def def=HL7Defs.GetInternalFromDb("eCWTight");
 			if(def==null) {//wasn't in the database
@@ -210,9 +210,9 @@ namespace OpenDentBusiness.HL7 {
 			//FT1.19, Diagnosis Code
 			seg.AddField(19,DataTypeHL7.CWE,"proc.DiagnosticCode");
 			//FT1.20, Performed by Code (provider)
-			seg.AddField(20,DataTypeHL7.XCN,"prov.provNumNameLFM");
+			seg.AddField(20,DataTypeHL7.XCN,"prov.provIdNameLFM");
 			//FT1.21, Ordering Provider
-			seg.AddField(21,DataTypeHL7.XCN,"prov.provNumNameLFM");
+			seg.AddField(21,DataTypeHL7.XCN,"prov.provIdNameLFM");
 			//FT1.22, Unit Cost (procedure fee)
 			seg.AddField(22,DataTypeHL7.CP,"proc.ProcFee");
 			//FT1.25, Procedure Code
@@ -233,7 +233,7 @@ namespace OpenDentBusiness.HL7 {
 			seg.AddField(4,DataTypeHL7.ST,"pdfDescription");
 			//ZX1.5
 			seg.AddField(5,DataTypeHL7.ST,"pdfDataAsBase64");
-			//return def;
+			return def;
 		}
 
 	}

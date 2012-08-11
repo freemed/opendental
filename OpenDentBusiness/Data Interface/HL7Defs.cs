@@ -73,10 +73,10 @@ namespace OpenDentBusiness{
 			}
 			List<HL7Def> listInternal=new List<HL7Def>();
 			HL7Def def=GetInternalFromDb("eCWTight");//might be null
-			InternalEcwTight.GetDeepInternal(def);
+			def=InternalEcwTight.GetDeepInternal(def);
 			listInternal.Add(def);
 			def=GetInternalFromDb("eCWStandalone");
-			InternalEcwStandalone.GetDeepInternal(def);
+			def=InternalEcwStandalone.GetDeepInternal(def);
 			listInternal.Add(def);
 			//InternalEcwFull
 			//Add defs for other companies like Centricity here later.

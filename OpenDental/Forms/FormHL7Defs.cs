@@ -323,6 +323,7 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.HL7Defs);
 			}
+			DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
 	}

@@ -3462,6 +3462,9 @@ namespace OpenDental{
 					if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 						ToolBarMain.Buttons["EHR"].Enabled=false;
 					}
+					if(HL7Defs.IsExistingHL7Enabled(-1)) {
+						ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=false;
+					}
 				}
 			}
 		}
@@ -3511,6 +3514,9 @@ namespace OpenDental{
 			}
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR",-1,"","EHR"));
+			}
+			if(HL7Defs.IsExistingHL7Enabled(-1)) {
+				ToolBarMain.Buttons.Add(new ODToolBarButton(HL7Defs.GetOneDeepEnabled().Description,-1,"",HL7Defs.GetOneDeepEnabled().Description));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -3613,6 +3619,9 @@ namespace OpenDental{
 				if(ToolBarMain.Buttons["EHR"]!=null){
 					ToolBarMain.Buttons["EHR"].Enabled=false;
 				}
+				if(ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description]!=null) {
+					ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=false;
+				}
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
 				butForeignKey.Enabled=false;
@@ -3684,6 +3693,9 @@ namespace OpenDental{
 				if(PrefC.GetBool(PrefName.ShowFeatureEhr)) { //didn't work either
 				//if(ToolBarMain.Buttons["EHR"]!=null) {
 					ToolBarMain.Buttons["EHR"].Enabled=true;
+				}
+				if(HL7Defs.IsExistingHL7Enabled(-1) && ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description]!=null) {
+					ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=true;
 				}
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
