@@ -78,6 +78,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EcwOld.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormDebug.cs">
       <SubType>Form</SubType>
     </Compile>

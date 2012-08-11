@@ -16,14 +16,12 @@ using OpenDentBusiness.HL7;
 
 namespace OpenDentHL7 {
 	public partial class ServiceHL7:ServiceBase {
-		private System.Threading.Timer timerSend;
-		private System.Threading.Timer timerReceive;
-		private static string hl7FolderIn;
-		private static string hl7FolderOut;
-		///<summary>Indicates the standalone mode for eCW, or the use of Mountainside.  In both cases, chartNumber will be used instead of PatNum.</summary>
-		private static bool IsStandalone;
 		private bool IsVerboseLogging;
-		private static bool isReceiving;
+		private System.Threading.Timer timerSendFiles;
+		private System.Threading.Timer timerReceiveFiles;
+		private string hl7FolderIn;
+		private string hl7FolderOut;
+		private static bool isReceivingFiles;
 
 		public ServiceHL7() {
 			InitializeComponent();
@@ -78,49 +76,42 @@ namespace OpenDentHL7 {
 			}
 			//Later: inform od via signal that this service is running
 			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
-				IsStandalone=true;//and for Mountainside
-				//if(Programs.UsingEcwTight()){
-				if(Programs.UsingEcwTightOrFull()) {
-					IsStandalone=false;
-				}
-				//#if DEBUG//just so I don't forget to remove it later.
-				//IsStandalone=false;
-				//#endif
-				hl7FolderOut=PrefC.GetString(PrefName.HL7FolderOut);
-				if(!Directory.Exists(hl7FolderOut)) {
-					throw new ApplicationException(hl7FolderOut+" does not exist.");
-				}
-				//start polling the folder for waiting messages to import.  Every 5 seconds.
-				TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFunction);
-				timerReceive=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
-				if(IsStandalone) {
-					return;//do not continue with the HL7 sending code below
-				}
-				//start polling the db for new HL7 messages to send. Every 1.8 seconds.
-				hl7FolderIn=PrefC.GetString(PrefName.HL7FolderIn);
-				if(!Directory.Exists(hl7FolderIn)) {
-					throw new ApplicationException(hl7FolderIn+" does not exist.");
-				}
-				TimerCallback timercallbackSend=new TimerCallback(TimerCallbackSendFunction);
-				timerSend=new System.Threading.Timer(timercallbackSend,null,1800,1800);
+				EcwOldSendAndReceive();
 			}
-			//HL7Defs.GetOneDeepEnabled
+			HL7Def hL7Def=HL7Defs.GetOneDeepEnabled();
+			if(hL7Def==null) {
+				return;
+			}
+			if(hL7Def.ModeTx==ModeTxHL7.File) {
+				hl7FolderOut=hL7Def.OutgoingFolder;
+				hl7FolderIn=hL7Def.IncomingFolder;
+//todo: check to make sure both folders exist.  Errors if not.
+				//start polling the folder for waiting messages to import.  Every 5 seconds.
+				TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFiles);
+				timerReceiveFiles=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
+				//start polling the db for new HL7 messages to send. Every 1.8 seconds.
+				TimerCallback timercallbackSend=new TimerCallback(TimerCallbackSendFiles);
+				timerSendFiles=new System.Threading.Timer(timercallbackSend,null,1800,1800);
+			}
+			else {
+				//tcp/ip later.  Use MLLP protocol.
+			}
 		}
 
-		private void TimerCallbackReceiveFunction(Object stateInfo) {
+		private void TimerCallbackReceiveFiles(Object stateInfo) {
 			//process all waiting messages
-			if(isReceiving) {
+			if(isReceivingFiles) {
 				return;//already in the middle of processing files
 			}
-			isReceiving=true;
-			string[] existingFiles=Directory.GetFiles(hl7FolderOut);
+			isReceivingFiles=true;
+			string[] existingFiles=Directory.GetFiles(hl7FolderIn);
 			for(int i=0;i<existingFiles.Length;i++) {
-				ProcessMessage(existingFiles[i]);
+				ProcessMessageFile(existingFiles[i]);
 			}
-			isReceiving=false;
+			isReceivingFiles=false;
 		}
-		
-		private void ProcessMessage(string fullPath) {
+
+		private void ProcessMessageFile(string fullPath) {
 			string msgtext="";
 			int i=0;
 			while(i<5) {
@@ -139,27 +130,15 @@ namespace OpenDentHL7 {
 			}
 			try {
 				MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
-				if(msg.MsgType==MessageTypeHL7.ADT) {
-					if(IsVerboseLogging) {
-						EventLog.WriteEntry("OpenDentHL7","Processed ADT message",EventLogEntryType.Information);
-					}
-					EcwADT.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
-				}
-				else if(msg.MsgType==MessageTypeHL7.SIU && !IsStandalone) {//appointments don't get imported if standalone mode.
-					if(IsVerboseLogging) {
-						EventLog.WriteEntry("OpenDentHL7","Processed SUI message",EventLogEntryType.Information);
-					}
-					EcwSIU.ProcessMessage(msg,IsStandalone,IsVerboseLogging);
+				MessageParser.Process(msg);
+				if(IsVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Processed message "+msg.MsgType.ToString(),EventLogEntryType.Information);
 				}
 			}
 			catch(Exception ex) {
 				EventLog.WriteEntry(ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
 				return;
 			}
-			//we won't be processing DFT messages.
-			//else if(msg.MsgType==MessageType.DFT) {
-				//ADT.ProcessMessage(msg);
-			//}
 			try {
 				File.Delete(fullPath);
 			}
@@ -167,31 +146,26 @@ namespace OpenDentHL7 {
 				EventLog.WriteEntry("Delete failed for "+fullPath+"\r\n"+ex.Message,EventLogEntryType.Error);
 			}
 		}
-
+		
 		protected override void OnStop() {
-			//inform od via signal that this service has shut down
-			if(timerSend!=null) {
-				timerSend.Dispose();
+			//later: inform od via signal that this service has shut down
+			EcwOldStop();
+			if(timerSendFiles!=null) {
+				timerSendFiles.Dispose();
 			}
 		}
 
-		private void TimerCallbackSendFunction(Object stateInfo) {
-			//does not happen for standalone
+		private void TimerCallbackSendFiles(Object stateInfo) {
 			List<HL7Msg> list=HL7Msgs.GetOnePending();
 			string filename;
 			for(int i=0;i<list.Count;i++) {//Right now, there will only be 0 or 1 item in the list.
-				if(list[i].AptNum==0){
-					filename=ODFileUtils.CreateRandomFile(hl7FolderIn,".txt");
-				}
-				else{
-					filename=Path.Combine(hl7FolderIn,list[i].AptNum.ToString()+".txt");
-				}
-				//EventLog.WriteEntry("Attempting to create file: "+filename);
+				filename=ODFileUtils.CreateRandomFile(hl7FolderOut,".txt");
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.Update(list[i]);//set the status to sent.
 				HL7Msgs.DeleteOldMessages();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
 			}
 		}
+		
 	}
 }

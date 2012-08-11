@@ -47,7 +47,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		///<summary>Deletes all hl7 messages set to status OutSent or InProcessed that are at least two weeks old.</summary>
+		///<summary>Deletes all hl7 messages set to status OutSent or InProcessed that are at least two months old.</summary>
 		public static void DeleteOldMessages() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
@@ -55,7 +55,7 @@ namespace OpenDentBusiness{
 			}
 			string command="DELETE FROM hl7msg "
 				+"WHERE HL7Status IN ("+POut.Long((int)HL7MessageStatus.OutSent)+","+POut.Long((int)HL7MessageStatus.InProcessed)+") "
-				+"AND DateTStamp < ADDDATE(CURDATE(),INTERVAL -2 WEEK)";
+				+"AND DateTStamp < ADDDATE(CURDATE(),INTERVAL -2 MONTH)";
 			Db.NonQ(command);
 		}
 

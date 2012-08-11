@@ -10,7 +10,10 @@ namespace OpenDentBusiness.HL7 {
 		//At the top of page 32, there are rules for the recipient.
 		//Basically, they state that parsing should not fail just because there are extra unexpected items.
 		//And parsing should also not fail if expected items are missing.
- 		
+
+		public static void Process(MessageHL7 msg) {
+
+		}
 
 	}
 }

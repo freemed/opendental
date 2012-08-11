@@ -71,7 +71,8 @@ namespace CodeBase {
 					fs=File.Create(filePath);
 					fs.Dispose();
 					fileCreated=true;
-				}catch{
+				}
+				catch{
 				}
 			}while(!fileCreated);
 			return filePath;
