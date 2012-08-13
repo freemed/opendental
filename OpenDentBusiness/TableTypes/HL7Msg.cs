@@ -29,10 +29,12 @@ namespace OpenDentBusiness{
 		OutPending,
 		///<summary>1</summary>
 		OutSent,
-		///<summary>2</summary>
-		InReceived,
+		///<summary>2-Tried to send, but there was a problem.  Will keep trying.</summary>
+		OutFailed,
 		///<summary>3</summary>
-		InProcessed
+		InProcessed,
+		///<summary>4</summary>
+		InFailed
 	}
 
 
