@@ -582,9 +582,10 @@ namespace OpenDental{
 				return;
 			}
 			string[] lines=File.ReadAllLines(Dlg.FileName);
-			if(lines.Length==0 || lines[0]!="Code,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode") {
+			if(lines.Length==0 || (lines[0]!="Code,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode" && 
+					lines[0]!="\"Code\",\"Description\",\"UnitFee\",\"AllowedFee\",\"POS\",\"TOS\",\"Modifier\",\"RequiresCliaID\",\"GlobalBillingDays\",\"ChargeCode\"")) {
 				Cursor=Cursors.Default;
-				MessageBox.Show("Unexpected file format. First line in file should be:\r\nCode,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode");
+				MessageBox.Show("Unexpected file format. First line in file should be:\r\nCode,Description,Unit Fee,Allowed Fee,POS,TOS,Modifier,RequiresCliaID,GlobalBillingDays,ChargeCode\r\nor\r\n\"Code\",\"Description\",\"UnitFee\",\"AllowedFee\",\"POS\",\"TOS\",\"Modifier\",\"RequiresCliaID\",\"GlobalBillingDays\",\"ChargeCode\"");
 				return;
 			}
 			string feeSchedName=Path.GetFileNameWithoutExtension(Dlg.FileName);
