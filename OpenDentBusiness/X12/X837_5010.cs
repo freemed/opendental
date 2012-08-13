@@ -1344,7 +1344,7 @@ namespace OpenDentBusiness
 						}
 						sw.Write(s//SV101-8 is not used.
 							+claimProcs[j].FeeBilled.ToString()+s//SV102 1/18 Monetary Amount: Charge Amt.
-							+"MJ"+s//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes.
+							+"UN"+s//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes, UN=Unit.
 							+proc.UnitQty+s);//SV104 1/15 Quantity: Service Unit Count or Anesthesia Minutes.
 						if(proc.PlaceService!=claim.PlaceService) {
 							sw.Write(GetPlaceService(proc.PlaceService));
