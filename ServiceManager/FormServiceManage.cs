@@ -2,58 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.ServiceProcess;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
 namespace ServiceManager {
-	public partial class FormMain:Form {
-		//ServiceController service=null;
-
-		public FormMain() {
+	public partial class FormServiceManage:Form {
+		public FormServiceManage() {
 			InitializeComponent();
-		}
-
-		private void FormMain_Load(object sender,EventArgs e) {
-			SetStatus();
-		}
-
-		private void SetStatus() {
-			List<ServiceController> serviceControllerList=new List<ServiceController>();
-			ServiceController[] serviceControllersAll=ServiceController.GetServices();
-			for(int i=0;i<serviceControllersAll.Length;i++) {
-				if(serviceControllersAll[i].ServiceName.StartsWith("OpenDent")) {
-					serviceControllerList.Add(serviceControllersAll[i]);
-					break;
-				}
-			}
-
-			/*
-			if(service != null) {//installed) {
-				textStatus.Text="Installed";
-				butInstall.Enabled=false;
-				butUninstall.Enabled=true;
-				if(service.Status==ServiceControllerStatus.Running) {
-					textStatus.Text+=", Running";
-					butStart.Enabled=false;
-					butStop.Enabled=true;
-				}
-				else {
-					textStatus.Text+=", Stopped";
-					butStart.Enabled=true;
-					butStop.Enabled=false;
-				}
-			}
-			else {
-				textStatus.Text="Not installed";
-				butInstall.Enabled=true;
-				butUninstall.Enabled=false;
-				butStart.Enabled=false;
-				butStop.Enabled=false;
-			}
-			butRefresh.Select();*/
 		}
 
 		private void butInstall_Click(object sender,EventArgs e) {
@@ -130,5 +87,8 @@ namespace ServiceManager {
 		private void butRefresh_Click(object sender,EventArgs e) {
 			//SetStatus();
 		}
+
+
+
 	}
 }
