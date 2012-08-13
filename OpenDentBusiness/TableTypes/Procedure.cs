@@ -105,6 +105,8 @@ namespace OpenDentBusiness {
 		public EnumProcDrugUnit DrugUnit;
 		///<summary>Includes fractions. For 837I</summary>
 		public float DrugQty;
+		///<summary>Enum:ProcUnitQtyType For dental, the type is always sent electronically as MultiProcs. For institutional SV204, Days will be sent electronically if chosen, otherwise ServiceUnits will be sent. For medical SV103, MinutesAnesth will be sent electronically if chosen, otherwise ServiceUnits will be sent.</summary>
+		public ProcUnitQtyType UnitQtyType;
 
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
@@ -168,5 +170,15 @@ namespace OpenDentBusiness {
 	}
 	
 
+	public enum ProcUnitQtyType {
+		///<summary>0-Only allowed on dental, and only option allowed on dental.  This is also the default for all procs in our UI.  For example, 4 PAs all on one line on the e-claim.</summary>
+		MultProcs,
+		///<summary>1-Only allowed on medical SV103.</summary>
+		MinutesAnesth,
+		///<summary>2-Allowed on medical SV103 and institutional SV204.  This is the default for both medical and inst when creating X12 claims, regardless of what is set on the proc.</summary>
+		ServiceUnits,
+		///<summary>3-Only allowed on institutional SV204.</summary>
+		Days
+	}
 
 }

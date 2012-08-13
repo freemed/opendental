@@ -1343,9 +1343,14 @@ namespace OpenDentBusiness
 							sw.Write(isa16+Sout(proc.ClaimNote,80));//SV101-7 1/80 Description: Situational.
 						}
 						sw.Write(s//SV101-8 is not used.
-							+claimProcs[j].FeeBilled.ToString()+s//SV102 1/18 Monetary Amount: Charge Amt.
-							+"UN"+s//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes, UN=Unit.
-							+proc.UnitQty+s);//SV104 1/15 Quantity: Service Unit Count or Anesthesia Minutes.
+							+claimProcs[j].FeeBilled.ToString()+s);//SV102 1/18 Monetary Amount: Charge Amt.
+						if(proc.UnitQtyType==ProcUnitQtyType.MinutesAnesth) {
+							sw.Write("MJ"+s);//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes, UN=Unit.
+						}
+						else {
+							sw.Write("UN"+s);//SV103 2/2 Unit or Basis for Measurement Code: MJ=minutes, UN=Unit.
+						}
+						sw.Write(proc.UnitQty+s);//SV104 1/15 Quantity: Service Unit Count or Anesthesia Minutes.
 						if(proc.PlaceService!=claim.PlaceService) {
 							sw.Write(GetPlaceService(proc.PlaceService));
 						}
@@ -1397,9 +1402,14 @@ namespace OpenDentBusiness
 							sw.Write(isa16+Sout(proc.ClaimNote,80));//SV202-7 1/80 Description: Situational.
 						}
 						sw.Write(s//SV202-8 is not used.
-							+claimProcs[j].FeeBilled.ToString()+s//SV203 1/18 Monetary Amount: Charge Amt.
-							+"UN"+s//SV204 2/2 Unit or Basis for Measurement Code: UN=Unit. We don't support Days yet.
-							+proc.UnitQty.ToString());//SV205 1/15 Quantity:
+							+claimProcs[j].FeeBilled.ToString()+s);//SV203 1/18 Monetary Amount: Charge Amt.
+						if(proc.UnitQtyType==ProcUnitQtyType.Days) {
+							sw.Write("DA"+s);//SV204 2/2 Unit or Basis for Measurement Code: DA=Days, UN=Unit.
+						}
+						else {
+							sw.Write("UN"+s);//SV204 2/2 Unit or Basis for Measurement Code: DA=Days, UN=Unit.
+						}
+						sw.Write(proc.UnitQty.ToString());//SV205 1/15 Quantity:
 						EndSegment(sw);//SV206,208,209 and 210 are not used, SV207 is situational but we do not use.
 					}
 					else if(medType==EnumClaimMedType.Dental) {

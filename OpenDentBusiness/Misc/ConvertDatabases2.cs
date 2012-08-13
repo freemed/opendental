@@ -9925,6 +9925,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'InsDefaultAssignBen','1')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD UnitQtyType tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD UnitQtyType number(3)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET UnitQtyType = 0 WHERE UnitQtyType IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY UnitQtyType NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
