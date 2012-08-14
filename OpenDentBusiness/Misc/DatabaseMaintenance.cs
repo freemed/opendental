@@ -1910,6 +1910,41 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string MessageButtonDuplicateButtonIndex(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			string queryStr="SELECT COUNT(*) NumFound,SigButDefNum,ButtonIndex,ComputerName FROM sigbutdef GROUP BY ComputerName,ButtonIndex HAVING COUNT(*) > 1";
+			table=Db.GetTable(queryStr);
+			int numFound=0;
+			for(int i=0;i<table.Rows.Count;i++) {
+				numFound+=PIn.Int(table.Rows[i]["NumFound"].ToString())-1;//Gets the actual number of rows that will be altered.
+			}
+			if(isCheck) {
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Messaging buttons found with invalid button orders: ")+numFound+"\r\n";
+				}
+			}
+			else {//fix
+				do {
+					//Loop through the messaging buttons and increment the duplicate button index by the max plus one.
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="SELECT MAX(ButtonIndex) FROM sigbutdef WHERE ComputerName='"+table.Rows[i]["ComputerName"].ToString()+"'";
+						int newIndex=PIn.Int(Db.GetScalar(command))+1;
+						command="UPDATE sigbutdef SET ButtonIndex="+newIndex.ToString()+" WHERE SigButDefNum="+table.Rows[i]["SigButDefNum"].ToString();
+						Db.NonQ(command);
+					}
+					//It's possible we need to loop through several more times depending on how many items shared the same button index. 
+					table=Db.GetTable(queryStr);
+				} while(table.Rows.Count > 0);
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Messaging buttons with invalid button orders fixed: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PatFieldsDeleteDuplicates(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
