@@ -9937,6 +9937,27 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE procedurelog MODIFY UnitQtyType NOT NULL";
 					Db.NonQ(command);
 				}
+				//Fix medical claim form 1500, unit quantity fields.  The unique ID is OD9.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9' LIMIT 1";
+				}
+				else {//oracle doesn't have LIMIT
+					command="SELECT * FROM (SELECT ClaimFormNum FROM claimform WHERE UniqueID='OD9') WHERE RowNum<=1";
+				}
+				long claimFormNum=PIn.Long(Db.GetScalar(command));
+				command="UPDATE claimformitem SET FieldName='P1UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=763";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='P2UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=796";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='P3UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=828";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='P4UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=862";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='P5UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=895";
+				Db.NonQ(command);
+				command="UPDATE claimformitem SET FieldName='P6UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=929";
+				Db.NonQ(command);
+				
 
 
 
