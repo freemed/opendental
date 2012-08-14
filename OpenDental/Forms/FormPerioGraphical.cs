@@ -71,61 +71,99 @@ namespace OpenDental {
 				}
 				//mb
 				calMB=-1;
-				gm=measureGM.MBvalue;
+				gm=measureGM.MBvalue;//MBvalue must stay over 100 for hyperplasia, because that's how we're storing it in ToothChartData.ListPerioMeasure.
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3
+				}
 				pd=measureProbe.MBvalue;
-				if(gm!=-1&&pd!=-1) {
+				if(measureGM.MBvalue!=-1 && pd!=-1) {
 					calMB=gm+pd;
+					if(calMB<0) {
+						calMB=0;//CALs can't be negative
+					}
 				}
 				//B
 				calB=-1;
 				gm=measureGM.Bvalue;
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3 
+				}
 				pd=measureProbe.Bvalue;
-				if(gm!=-1&&pd!=-1) {
+				if(measureGM.Bvalue!=-1&&pd!=-1) {
 					calB=gm+pd;
+					if(calB<0) {
+						calB=0;
+					}
 				}
 				//DB
 				calDB=-1;
 				gm=measureGM.DBvalue;
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3 
+				}
 				pd=measureProbe.DBvalue;
-				if(gm!=-1&&pd!=-1) {
+				if(measureGM.DBvalue!=-1&&pd!=-1) {
 					calDB=gm+pd;
+					if(calDB<0) {
+						calDB=0;
+					}
 				}
 				//ML
 				calML=-1;
 				gm=measureGM.MLvalue;
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3 
+				}
 				pd=measureProbe.MLvalue;
-				if(gm!=-1&&pd!=-1) {
+				if(measureGM.MLvalue!=-1&&pd!=-1) {
 					calML=gm+pd;
+					if(calML<0) {
+						calML=0;
+					}
 				}
 				//L
 				calL=-1;
 				gm=measureGM.Lvalue;
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3 
+				}
 				pd=measureProbe.Lvalue;
-				if(gm!=-1&&pd!=-1) {
+				if(measureGM.Lvalue!=-1&&pd!=-1) {
 					calL=gm+pd;
+					if(calL<0) {
+						calL=0;
+					}
 				}
 				//DL
 				calDL=-1;
 				gm=measureGM.DLvalue;
-				pd=measureProbe.DLvalue;
-				if(gm!=-1&&pd!=-1) {
-					calDL=gm+pd;
+				if(gm>100) {//hyperplasia
+					gm=100-gm;//e.g. 100-103=-3 
 				}
-				if(calMB!=-1||calB!=-1||calDB!=-1||calML!=-1||calL!=-1||calDL!=-1) {
+				pd=measureProbe.DLvalue;
+				if(measureGM.DLvalue!=-1&&pd!=-1) {
+					calDL=gm+pd;
+					if(calDL<0) {
+						calDL=0;
+					}
+				}
+				if(calMB!=-1||calB!=-1||calDB!=-1||calML!=-1||calL!=-1||calDL!=-1){
 					toothChart.AddPerioMeasure(t,PerioSequenceType.CAL,calMB,calB,calDB,calML,calL,calDL);
 				}
 			}
 			for(int i=0;i<listMeas.Count;i++) {
 				if(listMeas[i].SequenceType==PerioSequenceType.SkipTooth) {
 					toothChart.SetMissing(listMeas[i].IntTooth.ToString());
-				} else if(listMeas[i].SequenceType==PerioSequenceType.Mobility) {
+				} 
+				else if(listMeas[i].SequenceType==PerioSequenceType.Mobility) {
 					int mob=listMeas[i].ToothValue;
 					Color color=Color.Black;
 					if(mob>=PrefC.GetInt(PrefName.PerioRedMob)) {
 						color=Color.Red;
 					}
 					toothChart.SetMobility(listMeas[i].IntTooth.ToString(),mob.ToString(),color);
-				} else {
+				} 
+				else {
 					toothChart.AddPerioMeasure(listMeas[i]);
 				}
 			}

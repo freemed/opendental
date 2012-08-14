@@ -690,28 +690,26 @@ namespace SparksToothChart {
 				if(ListPerioMeasure[i].SequenceType==PerioSequenceType.GingMargin) {
 					switch(surf) {
 						case PerioSurf.MB:
-							gm=ListPerioMeasure[i].MBvalue;
+							//Examples: 0, -1(null), 5, or 105(hyperplasia).  But the null is not even being considered.  So adjusting 100+ vals to -x would work.
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].MBvalue);//Converts the above examples to 0, 0, 5, and -5.
 							break;
 						case PerioSurf.B:
-							gm=ListPerioMeasure[i].Bvalue;
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].Bvalue);
 							break;
 						case PerioSurf.DB:
-							gm=ListPerioMeasure[i].DBvalue;
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].DBvalue);
 							break;
 						case PerioSurf.ML:
-							gm=ListPerioMeasure[i].MLvalue;
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].MLvalue);
 							break;
 						case PerioSurf.L:
-							gm=ListPerioMeasure[i].Lvalue;
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].Lvalue);
 							break;
 						case PerioSurf.DL:
-							gm=ListPerioMeasure[i].DLvalue;
+							gm=PerioMeasures.AdjustGMVal(ListPerioMeasure[i].DLvalue);
 							break;
 					}
 				}
-			}
-			if(gm==-1) {
-				gm=0;
 			}
 			if(pd==0 || pd==-1) {
 				return null;
@@ -719,6 +717,7 @@ namespace SparksToothChart {
 			if(pd >= RedLimitProbing) {
 				color=ColorProbingRed;
 			}
+			//CAL shouldn't be less than 0, so we need to draw probing lines down to zero if CAL is negative for some reason. (Or maybe we just let this happen so that dentists know something is wrong.
 			if(Tooth.IsMaxillary(intTooth)) {
 				return new LineSimple(xshift,gm,0,xshift,gm+pd,0);
 			}
@@ -848,14 +847,15 @@ namespace SparksToothChart {
 					if(ListPerioMeasure[i].SequenceType!=sequenceType) {
 						continue;
 					}
+					//so we are now on the specific PerioMeasure for this sequence and tooth.  It contains 6 values, and we will use 3.
 					PerioMeasure pmGM=null;
 					//We need to draw MGJ as dist from GM, not CEJ
-					if(sequenceType==PerioSequenceType.MGJ) {
+					if(sequenceType==PerioSequenceType.MGJ) {//we only care about this if we are trying to calculate MGJ
 						for(int m=0;m<ListPerioMeasure.Count;m++) {
 							if(ListPerioMeasure[m].IntTooth==t
 								&& ListPerioMeasure[m].SequenceType==PerioSequenceType.GingMargin) 
 							{
-								pmGM=ListPerioMeasure[m];
+								pmGM=ListPerioMeasure[m];//get the GM for this same tooth.
 								break;
 							}
 						}
@@ -867,13 +867,13 @@ namespace SparksToothChart {
 							val3=ListPerioMeasure[i].MBvalue;
 							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
 								if(pmGM.DBvalue!=-1) {
-									val1+=pmGM.DBvalue;
+									val1+=PerioMeasures.AdjustGMVal(pmGM.DBvalue);
 								}
 								if(pmGM.Bvalue!=-1) {
-									val2+=pmGM.Bvalue;
+									val2+=PerioMeasures.AdjustGMVal(pmGM.Bvalue);
 								}
 								if(pmGM.MBvalue!=-1) {
-									val3+=pmGM.MBvalue;
+									val3+=PerioMeasures.AdjustGMVal(pmGM.MBvalue);
 								}
 							}
 							surf1=PerioSurf.DB;
@@ -886,13 +886,13 @@ namespace SparksToothChart {
 							val3=ListPerioMeasure[i].DBvalue;
 							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
 								if(pmGM.MBvalue!=-1) {
-									val1+=pmGM.MBvalue;
+									val1+=PerioMeasures.AdjustGMVal(pmGM.MBvalue);
 								}
 								if(pmGM.Bvalue!=-1) {
-									val2+=pmGM.Bvalue;
+									val2+=PerioMeasures.AdjustGMVal(pmGM.Bvalue);
 								}
 								if(pmGM.DBvalue!=-1) {
-									val3+=pmGM.DBvalue;
+									val3+=PerioMeasures.AdjustGMVal(pmGM.DBvalue);
 								}
 							}
 							surf1=PerioSurf.MB;
@@ -907,13 +907,13 @@ namespace SparksToothChart {
 							val3=ListPerioMeasure[i].MLvalue;
 							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
 								if(pmGM.DLvalue!=-1) {
-									val1+=pmGM.DLvalue;
+									val1+=PerioMeasures.AdjustGMVal(pmGM.DLvalue);
 								}
 								if(pmGM.Lvalue!=-1) {
-									val2+=pmGM.Lvalue;
+									val2+=PerioMeasures.AdjustGMVal(pmGM.Lvalue);
 								}
 								if(pmGM.MLvalue!=-1) {
-									val3+=pmGM.MLvalue;
+									val3+=PerioMeasures.AdjustGMVal(pmGM.MLvalue);
 								}
 							}
 							surf1=PerioSurf.DL;
@@ -926,13 +926,13 @@ namespace SparksToothChart {
 							val3=ListPerioMeasure[i].DLvalue;
 							if(sequenceType==PerioSequenceType.MGJ && pmGM!=null) {
 								if(pmGM.MLvalue!=-1) {
-									val1+=pmGM.MLvalue;
+									val1+=PerioMeasures.AdjustGMVal(pmGM.MLvalue);
 								}
 								if(pmGM.Lvalue!=-1) {
-									val2+=pmGM.Lvalue;
+									val2+=PerioMeasures.AdjustGMVal(pmGM.Lvalue);
 								}
 								if(pmGM.DLvalue!=-1) {
-									val3+=pmGM.DLvalue;
+									val3+=PerioMeasures.AdjustGMVal(pmGM.DLvalue);
 								}
 							}
 							surf1=PerioSurf.ML;
@@ -957,10 +957,13 @@ namespace SparksToothChart {
 					vertex=new Vertex3f();
 					vertex.Z=0;//we don't use z
 					if(isMaxillary) {
-						vertex.Y=val1;
+						//this is safe to run on all sequence types because -1 has already been handled and because other types wouldn't have values > 100.
+						//Also safe to process on the vals that are MGJ, calculated above, because if they are ever negative, 
+						//it would be an obvious entry error, and the MGJ line would just harmlessly disappear for -1 vals.
+						vertex.Y=PerioMeasures.AdjustGMVal(val1);
 					}
 					else {
-						vertex.Y=-val1;
+						vertex.Y=-PerioMeasures.AdjustGMVal(val1);
 					}
 					vertex.X=GetXShiftPerioSite(t,surf1)+ToothGraphic.GetDefaultOrthoXpos(t);
 					line.Vertices.Add(vertex);
@@ -979,10 +982,10 @@ namespace SparksToothChart {
 					vertex=new Vertex3f();
 					vertex.Z=0;
 					if(isMaxillary) {
-						vertex.Y=val2;
+						vertex.Y=PerioMeasures.AdjustGMVal(val2);
 					}
 					else {
-						vertex.Y=-val2;
+						vertex.Y=-PerioMeasures.AdjustGMVal(val2);
 					}
 					vertex.X=GetXShiftPerioSite(t,surf2)+ToothGraphic.GetDefaultOrthoXpos(t);
 					line.Vertices.Add(vertex);
@@ -1001,10 +1004,10 @@ namespace SparksToothChart {
 					vertex=new Vertex3f();
 					vertex.Z=0;
 					if(isMaxillary) {
-						vertex.Y=val3;
+						vertex.Y=PerioMeasures.AdjustGMVal(val3);
 					}
 					else {
-						vertex.Y=-val3;
+						vertex.Y=-PerioMeasures.AdjustGMVal(val3);
 					}
 					vertex.X=GetXShiftPerioSite(t,surf3)+ToothGraphic.GetDefaultOrthoXpos(t);
 					line.Vertices.Add(vertex);

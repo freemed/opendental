@@ -33,11 +33,11 @@ namespace OpenDentBusiness{
 			return (PerioMeasure)this.MemberwiseClone();
 		}
 
-		public PerioMeasure AdjustGMVals() {
-			PerioMeasure pm=this.Copy();
-			PerioMeasures.AdjustGMVals(pm);
-			return pm;
-		}
+		//public PerioMeasure AdjustGMVals() {
+		//  PerioMeasure pm=this.Copy();
+		//  PerioMeasures.AdjustGMVals(pm);
+		//  return pm;
+		//}
 
 
 
