@@ -274,7 +274,33 @@ namespace OpenDental {
 						return;
 					}
 					if(textOutPort.Text=="") {
-						MsgBox.Show(this,"The Outgoing Port is empty.");
+						MsgBox.Show(this,"The Outgoing IP:Port is empty.");
+						return;
+					}
+					string[] strIpPort=textOutPort.Text.Split(':');
+					if(strIpPort.Length!=2) {//there isn't a ':' in the IpPort field
+						MsgBox.Show(this,"The Outgoing IP:Port field requires an IP address, followed by a colon, followed by a port number.");
+						return;
+					}
+					try {
+						System.Net.IPAddress.Parse(strIpPort[0]);
+					}
+					catch {
+						MsgBox.Show(this,"The Outgoing IP address is invalid.");
+						return;
+					}
+					try {
+						int.Parse(strIpPort[1]);
+					}
+					catch {
+						MsgBox.Show(this,"The Outgoing port must be a valid integer.");
+						return;
+					}
+					try {
+						int.Parse(textInPort.Text.ToString());
+					}
+					catch {
+						MsgBox.Show(this,"The Incoming port must be a valid integer.");
 						return;
 					}
 				}
