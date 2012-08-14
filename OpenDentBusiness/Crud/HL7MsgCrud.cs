@@ -51,6 +51,8 @@ namespace OpenDentBusiness.Crud{
 				hL7Msg.MsgText   = PIn.String(table.Rows[i]["MsgText"].ToString());
 				hL7Msg.AptNum    = PIn.Long  (table.Rows[i]["AptNum"].ToString());
 				hL7Msg.DateTStamp= PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				hL7Msg.PatNum    = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				hL7Msg.Note      = PIn.String(table.Rows[i]["Note"].ToString());
 				retVal.Add(hL7Msg);
 			}
 			return retVal;
@@ -91,15 +93,17 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="HL7MsgNum,";
 			}
-			command+="HL7Status,MsgText,AptNum) VALUES(";
+			command+="HL7Status,MsgText,AptNum,PatNum,Note) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(hL7Msg.HL7MsgNum)+",";
 			}
 			command+=
 				     POut.Int   ((int)hL7Msg.HL7Status)+","
 				+DbHelper.ParamChar+"paramMsgText,"
-				+    POut.Long  (hL7Msg.AptNum)+")";
+				+    POut.Long  (hL7Msg.AptNum)+","
 				//DateTStamp can only be set by MySQL
+				+    POut.Long  (hL7Msg.PatNum)+","
+				+"'"+POut.String(hL7Msg.Note)+"')";
 			if(hL7Msg.MsgText==null) {
 				hL7Msg.MsgText="";
 			}
@@ -118,8 +122,10 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE hl7msg SET "
 				+"HL7Status =  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
 				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText, "
-				+"AptNum    =  "+POut.Long  (hL7Msg.AptNum)+" "
+				+"AptNum    =  "+POut.Long  (hL7Msg.AptNum)+", "
 				//DateTStamp can only be set by MySQL
+				+"PatNum    =  "+POut.Long  (hL7Msg.PatNum)+", "
+				+"Note      = '"+POut.String(hL7Msg.Note)+"' "
 				+"WHERE HL7MsgNum = "+POut.Long(hL7Msg.HL7MsgNum);
 			if(hL7Msg.MsgText==null) {
 				hL7Msg.MsgText="";
@@ -144,6 +150,14 @@ namespace OpenDentBusiness.Crud{
 				command+="AptNum = "+POut.Long(hL7Msg.AptNum)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(hL7Msg.PatNum != oldHL7Msg.PatNum) {
+				if(command!=""){ command+=",";}
+				command+="PatNum = "+POut.Long(hL7Msg.PatNum)+"";
+			}
+			if(hL7Msg.Note != oldHL7Msg.Note) {
+				if(command!=""){ command+=",";}
+				command+="Note = '"+POut.String(hL7Msg.Note)+"'";
+			}
 			if(command==""){
 				return;
 			}

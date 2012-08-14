@@ -18,6 +18,10 @@ namespace OpenDentBusiness{
 		///<summary>Used to determine which messages are old so that they can be cleaned up.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		/// <summary></summary>
+		public long PatNum;
+		/// <summary></summary>
+		public string Note;
 		
 		public HL7Msg Copy(){
 			return (HL7Msg)this.MemberwiseClone();

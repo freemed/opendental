@@ -9957,7 +9957,32 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="UPDATE claimformitem SET FieldName='P6UnitQty',FormatString='' WHERE ClaimFormNum="+POut.Long(claimFormNum)+" AND FormatString='1' AND Xpos=615 AND YPos=929";
 				Db.NonQ(command);
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7msg ADD PatNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE hl7msg ADD INDEX (PatNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7msg ADD PatNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE hl7msg SET PatNum = 0 WHERE PatNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE hl7msg MODIFY PatNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX hl7msg_PatNum ON hl7msg (PatNum)";
+					Db.NonQ(command);
+				} if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7msg ADD Note varchar(2000) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7msg ADD Note varchar2(2000)";
+					Db.NonQ(command);
+				}
+
+
+
 
 
 
@@ -9976,12 +10001,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-
-
-
-				
-
-			
 
 
 
