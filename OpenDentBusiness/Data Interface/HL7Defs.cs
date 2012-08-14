@@ -62,7 +62,12 @@ namespace OpenDentBusiness{
 			if(retval==null) {
 				return null;
 			}
-			retval.hl7DefMessages=HL7DefMessages.GetDeepForDef(retval.HL7DefNum);
+			if(retval.IsInternal) {//if internal, messages, segments, and fields will not be in the database
+				GetDeepForInternal(retval);
+			}
+			else {
+				retval.hl7DefMessages=HL7DefMessages.GetDeepForDef(retval.HL7DefNum);
+			}
 			return retval;
 		}
 
@@ -86,7 +91,12 @@ namespace OpenDentBusiness{
 		///<summary>Gets from C# internal code rather than db</summary>
 		private static void GetDeepForInternal(HL7Def def) {
 			//No need to check RemotingRole; no call to db.
-
+			if(def.InternalType.ToString()=="eCWTight") {
+				def=InternalEcwTight.GetDeepInternal(def);
+			}
+			else if(def.InternalType.ToString()=="eCWStandalone") {
+				def=InternalEcwStandalone.GetDeepInternal(def);
+			}
 		}
 
 		///<summary>Tells us whether there is an existing enable HL7Def.</summary>
