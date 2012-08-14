@@ -3462,8 +3462,8 @@ namespace OpenDental{
 					if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 						ToolBarMain.Buttons["EHR"].Enabled=false;
 					}
-					if(HL7Defs.IsExistingHL7Enabled(-1)) {
-						ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=false;
+					if(ToolBarMain.Buttons["HL7"]!=null) {
+						ToolBarMain.Buttons["HL7"].Enabled=false;
 					}
 				}
 			}
@@ -3516,7 +3516,7 @@ namespace OpenDental{
 				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR",-1,"","EHR"));
 			}
 			if(HL7Defs.IsExistingHL7Enabled(-1)) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(HL7Defs.GetOneDeepEnabled().Description,-1,"",HL7Defs.GetOneDeepEnabled().Description));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(HL7Defs.GetOneDeepEnabled().Description,-1,"","HL7"));
 			}
 			ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ChartModule);
 			for(int i=0;i<toolButItems.Count;i++){
@@ -3619,8 +3619,8 @@ namespace OpenDental{
 				if(ToolBarMain.Buttons["EHR"]!=null){
 					ToolBarMain.Buttons["EHR"].Enabled=false;
 				}
-				if(ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description]!=null) {
-					ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=false;
+				if(ToolBarMain.Buttons["HL7"]!=null) {
+					ToolBarMain.Buttons["HL7"].Enabled=false;
 				}
 				tabProc.Enabled = false;
 				butAddKey.Enabled=false;
@@ -3694,8 +3694,8 @@ namespace OpenDental{
 				//if(ToolBarMain.Buttons["EHR"]!=null) {
 					ToolBarMain.Buttons["EHR"].Enabled=true;
 				}
-				if(HL7Defs.IsExistingHL7Enabled(-1) && ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description]!=null) {
-					ToolBarMain.Buttons[HL7Defs.GetOneDeepEnabled().Description].Enabled=true;
+				if(ToolBarMain.Buttons["HL7"]!=null) {
+					ToolBarMain.Buttons["HL7"].Enabled=true;
 				}
 				tabProc.Enabled=true;
 				butAddKey.Enabled=true;
@@ -3801,6 +3801,9 @@ namespace OpenDental{
 						break;
 					case "EHR":
 						Tool_EHR_Click(false);
+						break;
+					case "HL7":
+						Tool_HL7_Click();
 						break;
 				}
 			}
@@ -4139,6 +4142,40 @@ namespace OpenDental{
 					Tool_EHR_Click(true);
 				}
 			#endif
+		}
+
+		private void Tool_HL7_Click() {
+			DataTable progNotes=DataSetMain.Tables["ProgNotes"];
+			if(gridProg.SelectedIndices.Length==0) {
+				//autoselect procedures
+				for(int i=0;i<progNotes.Rows.Count;i++) {//loop through every line showing in progress notes
+					if(progNotes.Rows[i]["ProcNum"].ToString()=="0") {
+						continue;//ignore non-procedures
+					}
+					//May want to ignore procs with zero fee?
+					//if((decimal)progNotes.Rows[i]["chargesDouble"]==0) {
+					//  continue;//ignore zero fee procedures, but user can explicitly select them
+					//}
+					if(PIn.Date(progNotes.Rows[i]["ProcDate"].ToString())==DateTime.Today && PIn.Int(progNotes.Rows[i]["ProcStatus"].ToString())==2) {
+						gridProg.SetSelected(i,true);
+					}
+				}
+				if(gridProg.SelectedIndices.Length==0) {//if still none selected
+					MessageBox.Show(Lan.g(this,"Please select procedures first."));
+					return;
+				}
+			}
+			bool allAreProcedures=true;
+			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
+				if(progNotes.Rows[gridProg.SelectedIndices[i]]["ProcNum"].ToString()=="0") {
+					allAreProcedures=false;
+				}
+			}
+			if(!allAreProcedures) {
+				MsgBox.Show(this,"You can only select procedures.");
+				return;
+			}
+
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {
