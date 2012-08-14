@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 		public int IntTooth;
 		///<summary>This is used when the measurement does not apply to a surface(mobility and skiptooth).  Valid values for all surfaces are 0 through 19, or -1 to represent no measurement taken.</summary>
 		public int ToothValue;
-		///<summary>.</summary>
+		///<summary>-1 represents no measurement. Values of 100+ represent negative values (only used for Gingival Margins). e.g. To use a value of 105, subtract it from 100. (100 - 105 = -5)</summary>
 		public int MBvalue;
 		///<summary>.</summary>
 		public int Bvalue;
@@ -31,6 +31,12 @@ namespace OpenDentBusiness{
 
 		public PerioMeasure Copy(){
 			return (PerioMeasure)this.MemberwiseClone();
+		}
+
+		public PerioMeasure AdjustGMVals() {
+			PerioMeasure pm=this.Copy();
+			PerioMeasures.AdjustGMVals(pm);
+			return pm;
 		}
 
 

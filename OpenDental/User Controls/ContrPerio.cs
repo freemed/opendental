@@ -622,6 +622,9 @@ namespace OpenDental
 				else{
 					drawOld=false;
 					cellValue=PIn.Int(DataArray[i,row].Text);
+					if(cellValue>100) {//used for negative numbers
+						cellValue=100-cellValue;//i.e. 100-103 = -3
+					}
 					textColor=Color.Black;
 					if(!perioEdit) {
 						textColor=Color.Gray;
@@ -664,14 +667,18 @@ namespace OpenDental
 					}
 					font=new Font(Font,FontStyle.Bold);
 				}
-				//if number is two digits:
-				if(cellValue>9){
+				//if number is three digits or negative and 2 digits:(Should never happen, but just in case.)
+				if(cellValue>9 || cellValue<0){//two characters
 					font=new Font("SmallFont",7);
 					rect=new RectangleF(rect.X-2,rect.Y+1,rect.Width+5,rect.Height);
 				}
 				//e.Graphics.DrawString(cellValue.ToString(),Font,Brushes.Black,rect);
-				e.Graphics.DrawString(cellValue.ToString(),font,
-					new SolidBrush(textColor),rect,format);
+				if((RowTypes[GetSection(row)][GetSectionRow(row)]==PerioSequenceType.GingMargin)) {
+					e.Graphics.DrawString(cellValue.ToString().Replace('-','+'),font,new SolidBrush(textColor),rect,format);//replace '-' with '+' for Gingival Margin Hyperplasia
+				}
+				else {
+				e.Graphics.DrawString(cellValue.ToString(),font,new SolidBrush(textColor),rect,format);
+				}
 			}//i col
 		}
 
@@ -820,8 +827,9 @@ namespace OpenDental
 								curCell=GetCell(examI,PerioMeasures.List[examI,seqI,toothI].SequenceType
 									,toothI,PerioSurf.B);
 								cellText=PerioMeasures.List[examI,seqI,toothI].ToothValue.ToString();
-								if(cellText=="-1")
+								if(cellText=="-1"){
 									cellText="";
+								}
 								if(examI==selectedExam)
 									DataArray[curCell.X,curCell.Y].Text=cellText;
 								else
@@ -887,8 +895,9 @@ namespace OpenDental
 									cellText=PerioMeasures.List[examI,seqI,toothI].MLvalue.ToString();
 									break;
 							}//switch surfI
-							if(cellText=="-1")
+							if(cellText=="-1") {//seqI==2 means it is gingival margin.
 								cellText="";
+							}
 							if(examI==selectedExam)
 								DataArray[curCell.X,curCell.Y].Text=cellText;
 							else
@@ -1326,15 +1335,27 @@ namespace OpenDental
 			//base.OnKeyDown (e);
 			if(e.KeyValue>=96 && e.KeyValue<=105){//keypad 0 through 9
 				if(e.Control){
-					ButtonPressed(e.KeyValue-96+10);
+					if(RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]==PerioSequenceType.GingMargin) {
+						int val=(e.KeyValue-96);
+						ButtonPressed((val==0?0:val+100));//0 if val==0, val+100 if val != 0
+					}
+					else { //general case
+						ButtonPressed(e.KeyValue-96+10);
+					}
 				}
 				else{
 					ButtonPressed(e.KeyValue-96);
 				}
 			}
 			else if(e.KeyValue>=48 && e.KeyValue<=57){//0 through 9
-				if(e.Control){
-					ButtonPressed(e.KeyValue-48+10);
+				if(e.Control) {
+					if(RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]==PerioSequenceType.GingMargin) {//gm
+						int val=(e.KeyValue-48);
+						ButtonPressed((val==0?0:val+100));//0 if val==0, val+100 if val != 0
+					}
+					else { //general case
+						ButtonPressed(e.KeyValue-48+10);
+					}
 				}
 				else{
 					ButtonPressed(e.KeyValue-48);
@@ -1498,7 +1519,8 @@ namespace OpenDental
 
 		///<summary>Only valid values are numbers 0 through 19. Validation should be done before sending here.</summary>
 		private void EnterValue(int keyValue){
-			if(keyValue < 0 || keyValue > 19){
+			if((keyValue < 0 || keyValue > 19) 
+				&& RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]!=PerioSequenceType.GingMargin){//large values are allowed for GingMargin to represent hyperplasia (e.g. 101 to 109 represent -1 to -9)
 				MessageBox.Show("Only values 0 through 19 allowed");//just for debugging
 				return;
 			}
@@ -1537,6 +1559,9 @@ namespace OpenDental
 			}
 			int probValue=PIn.Int(DataArray[probingCell.X,probingCell.Y].Text);
 			int gingValue=PIn.Int(DataArray[gingLoc.X,gingLoc.Y].Text);
+			if(gingValue>100) {
+				gingValue=100-gingValue;
+			}
 			DataArray[calLoc.X,calLoc.Y].Text=(gingValue+probValue).ToString();
 			if(alsoInvalidate){
 				Invalidate(Rectangle.Ceiling(GetBounds(calLoc.X,calLoc.Y)));
@@ -1890,12 +1915,6 @@ namespace OpenDental
 			DrawGridlines(e);
 			DrawText(e);
 		}
-
-		
-
-
-		
-
 
 
 

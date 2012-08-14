@@ -138,7 +138,52 @@ namespace OpenDentBusiness{
 				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			return Crud.PerioMeasureCrud.SelectMany(command);
 		}
-			
+
+		///<summary>Only affects GM measures.  We will revisit this.  Nulls?  A -1 will be changed to a 0. Measures over 100 are changed to 100-measure. i.e. 100-104=-4 for hyperplasiac GM.</summary>
+		public static void AdjustGMVals(PerioMeasure perioMeasure) {
+			//No need to check RemotingRole; no call to db.
+			//PerioMeasure retVal= (PerioMeasure)this.MemberwiseClone();
+			if(perioMeasure.SequenceType!=PerioSequenceType.GingMargin) {//no need to actually adjust any values.
+				return;
+			}
+			if(perioMeasure.Bvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.Bvalue=0;
+			}
+			else if(perioMeasure.Bvalue>100) {
+				perioMeasure.Bvalue=100-perioMeasure.Bvalue;
+			}
+			if(perioMeasure.DBvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.DBvalue=0;
+			}
+			else if(perioMeasure.DBvalue>100) {
+				perioMeasure.DBvalue=100-perioMeasure.DBvalue;
+			}
+			if(perioMeasure.DLvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.DLvalue=0;
+			}
+			else if(perioMeasure.DLvalue>100) {
+				perioMeasure.DLvalue=100-perioMeasure.DLvalue;
+			}
+			if(perioMeasure.Lvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.Lvalue=0;
+			}
+			else if(perioMeasure.Lvalue>100) {
+				perioMeasure.Lvalue=100-perioMeasure.Lvalue;
+			}
+			if(perioMeasure.MBvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.MBvalue=0;
+			}
+			else if(perioMeasure.MBvalue>100) {
+				perioMeasure.MBvalue=100-perioMeasure.MBvalue;
+			}
+			if(perioMeasure.MLvalue==-1) {//-1 means no measurement, and is effectively equivalent to 0
+				perioMeasure.MLvalue=0;
+			}
+			else if(perioMeasure.MLvalue>100) {
+				perioMeasure.MLvalue=100-perioMeasure.MLvalue;
+			}
+			//return perioMeasure;
+		}
 		
 
 	
