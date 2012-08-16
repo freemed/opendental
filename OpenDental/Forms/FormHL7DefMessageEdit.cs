@@ -51,7 +51,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			if(!IsHL7DefInternal && !HL7DefMesCur.IsNew) {
-				HL7DefMesCur.hl7DefSegments=HL7DefSegments.GetDeepForDefMessage(HL7DefMesCur.HL7DefMessageNum);
+				HL7DefMesCur.hl7DefSegments=HL7DefSegments.GetDeepFromDb(HL7DefMesCur.HL7DefMessageNum);
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();

@@ -70,7 +70,7 @@ namespace OpenDental {
 		private void FillGrid() {
 			//Our strategy in this window and all sub windows is to get all data directly from the database.
 			if(!HL7DefCur.IsInternal && !HL7DefCur.IsNew) {
-				HL7DefCur.hl7DefMessages=HL7DefMessages.GetDeepForDef(HL7DefCur.HL7DefNum);
+				HL7DefCur.hl7DefMessages=HL7DefMessages.GetDeepFromDb(HL7DefCur.HL7DefNum);
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();

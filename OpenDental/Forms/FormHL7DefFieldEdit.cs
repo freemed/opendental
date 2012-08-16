@@ -93,7 +93,6 @@ namespace OpenDental {
 			FieldNameList.Add(new FieldNameAndType("proc.procDateTime",DataTypeHL7.DTM));
 			FieldNameList.Add(new FieldNameAndType("proc.ProcFee",DataTypeHL7.CP));
 			FieldNameList.Add(new FieldNameAndType("proc.toothSurfRange",DataTypeHL7.CNE));
-			FieldNameList.Add(new FieldNameAndType("proc.toothSurfRange",DataTypeHL7.CNE));
 			FieldNameList.Add(new FieldNameAndType("proccode.ProcCode",DataTypeHL7.CNE));
 			FieldNameList.Add(new FieldNameAndType("prov.provIdNameLFM",DataTypeHL7.XCN));
 			FieldNameList.Add(new FieldNameAndType("prov.provIdName",DataTypeHL7.XCN));

@@ -43,7 +43,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			if(!IsHL7DefInternal && !HL7DefSegCur.IsNew) {
-				HL7DefSegCur.hl7DefFields=HL7DefFields.GetForDefSegment(HL7DefSegCur.HL7DefSegmentNum);
+				HL7DefSegCur.hl7DefFields=HL7DefFields.GetFromDb(HL7DefSegCur.HL7DefSegmentNum);
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
