@@ -18,9 +18,9 @@ namespace OpenDentBusiness{
 		///<summary>Used to determine which messages are old so that they can be cleaned up.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		/// <summary></summary>
+		/// <summary>Patient number.</summary>
 		public long PatNum;
-		/// <summary></summary>
+		/// <summary>Maximum size 2000 characters.</summary>
 		public string Note;
 		
 		public HL7Msg Copy(){

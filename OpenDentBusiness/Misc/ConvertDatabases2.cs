@@ -9972,8 +9972,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command=@"CREATE INDEX hl7msg_PatNum ON hl7msg (PatNum)";
 					Db.NonQ(command);
-				} if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE hl7msg ADD Note varchar(2000) NOT NULL";
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7msg ADD Note text NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
