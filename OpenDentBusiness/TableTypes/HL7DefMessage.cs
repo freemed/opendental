@@ -26,6 +26,7 @@ namespace OpenDentBusiness {
 		///<summary>text</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
+//VendorCustomized, an enumeration.  Example: PDF TPs.
 
 		///<Summary>List of segments associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
 		[CrudColumn(IsNotDbColumn=true)]

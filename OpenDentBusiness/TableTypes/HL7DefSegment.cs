@@ -15,7 +15,7 @@ namespace OpenDentBusiness {
 		public long HL7DefMessageNum;
 		///<summary>Since we don't enforce or automate, it can be 1-based or 0-based.  For outgoing, this affects the message structure.  For incoming, this is just for convenience and organization in the HL7 Def windows.</summary>
 		public int ItemOrder;
-		///<summary>For example, a DFT can have multiple FT1 segments.</summary>
+		///<summary>For example, a DFT can have multiple FT1 segments.  This turns out to be a completely useless field, since we already know which ones can repeat.</summary>
 		public bool CanRepeat;
 		///<summary>An incoming message may or may not contain this segment. Not used for outgoing.</summary>
 		public bool IsOptional;

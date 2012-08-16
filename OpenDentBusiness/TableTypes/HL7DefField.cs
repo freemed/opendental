@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		///<summary>The DataTypeHL7 enum will be unlinked from the db by storing as string in db. As it's loaded into OD, it will become an enum.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public DataTypeHL7 DataType;
-		///<summary>User will get to pick from a list of fields that we will maintain. Example: guarantor.LName, provider.Abbr, or patient.addressFull.</summary>
+		///<summary>User will get to pick from a list of fields that we will maintain. Example: guarantor.LName, provider.Abbr, or patient.addressFull.  This will be blank if this is a fixed text field.</summary>
 		public string FieldName;
 		///<summary>User will need to insert fixed text for some fields.  Either FixedText or FieldName will have a value, not both.</summary>
 		public string FixedText;
