@@ -42,7 +42,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(561, 503);
+			this.butOK.Location = new System.Drawing.Point(561, 665);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -57,7 +57,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(642, 503);
+			this.butCancel.Location = new System.Drawing.Point(642, 665);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.gridItems.Location = new System.Drawing.Point(12, 227);
 			this.gridItems.Name = "gridItems";
 			this.gridItems.ScrollValue = 0;
-			this.gridItems.Size = new System.Drawing.Size(705, 270);
+			this.gridItems.Size = new System.Drawing.Size(705, 432);
 			this.gridItems.TabIndex = 17;
 			this.gridItems.Title = "Supplies on one Order";
 			this.gridItems.TranslationName = null;
@@ -153,7 +153,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(322, 502);
+			this.butPrint.Location = new System.Drawing.Point(322, 664);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(80, 26);
 			this.butPrint.TabIndex = 26;
@@ -163,7 +163,7 @@ namespace OpenDental{
 			// FormSupplyOrders
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725, 534);
+			this.ClientSize = new System.Drawing.Size(725, 696);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butAddSupply);
 			this.Controls.Add(this.gridItems);

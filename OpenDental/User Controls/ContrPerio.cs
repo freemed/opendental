@@ -667,8 +667,13 @@ namespace OpenDental
 					}
 					font=new Font(Font,FontStyle.Bold);
 				}
-				//if number is three digits or negative and 2 digits:(Should never happen, but just in case.)
-				if(cellValue>9 || cellValue<0){//two characters
+				//if number is negative "+" symbol is wider than "-" symbol so hand it seperately here.
+				if(cellValue<0) {//two characters
+					font=new Font("SmallFont",7);
+					//shift text left, 1 more pixel than usual.
+					rect=new RectangleF(rect.X-3,rect.Y+1,rect.Width+5,rect.Height);
+				}
+				if(cellValue>9){//two characters
 					font=new Font("SmallFont",7);
 					rect=new RectangleF(rect.X-2,rect.Y+1,rect.Width+5,rect.Height);
 				}

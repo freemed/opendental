@@ -88,7 +88,7 @@ namespace OpenDental{
 			// checkReorderMode
 			// 
 			this.checkReorderMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkReorderMode.Location = new System.Drawing.Point(79, 556);
+			this.checkReorderMode.Location = new System.Drawing.Point(79, 664);
 			this.checkReorderMode.Name = "checkReorderMode";
 			this.checkReorderMode.Size = new System.Drawing.Size(311, 21);
 			this.checkReorderMode.TabIndex = 30;
@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(747, 506);
+			this.gridMain.Size = new System.Drawing.Size(747, 614);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Supplies";
 			this.gridMain.TranslationName = null;
@@ -121,7 +121,7 @@ namespace OpenDental{
 			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.Location = new System.Drawing.Point(12, 553);
+			this.butUp.Location = new System.Drawing.Point(12, 661);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(24, 24);
 			this.butUp.TabIndex = 28;
@@ -137,7 +137,7 @@ namespace OpenDental{
 			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.Location = new System.Drawing.Point(42, 553);
+			this.butDown.Location = new System.Drawing.Point(42, 661);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(24, 24);
 			this.butDown.TabIndex = 29;
@@ -152,7 +152,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(603, 553);
+			this.butOK.Location = new System.Drawing.Point(603, 661);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 27;
@@ -167,7 +167,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(684, 553);
+			this.butCancel.Location = new System.Drawing.Point(684, 661);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 26;
@@ -184,7 +184,7 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(452, 553);
+			this.butPrint.Location = new System.Drawing.Point(452, 661);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(80, 26);
 			this.butPrint.TabIndex = 25;
@@ -210,7 +210,7 @@ namespace OpenDental{
 			// FormSupplies
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(771, 588);
+			this.ClientSize = new System.Drawing.Size(771, 696);
 			this.Controls.Add(this.textFind);
 			this.Controls.Add(this.checkReorderMode);
 			this.Controls.Add(this.butUp);
