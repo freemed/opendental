@@ -1872,6 +1872,12 @@ namespace OpenDentBusiness
 			//List<Procedure> procList=Procedures.Refresh(claim.PatNum);
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
+			if(claimProcs.Count==0) {
+				if(strb.Length!=0) {
+					strb.Append(",");
+				}
+				strb.Append("No procedures attached please recreate claim");
+			}
 			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);
 			Procedure proc;
 			ProcedureCode procCode;

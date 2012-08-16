@@ -992,8 +992,8 @@ namespace OpenDentBusiness
 					//Always included for Emdeon Medical, because Emdeon Medical will automatically remove this segment if the payer does not want it
 					//Some payers reject if not specified, even when the claim.ProvTreat=claim.ProvBill. For example, Texas Medicaid.
 					//if(claim.ProvTreat!=claim.ProvBill || IsEmdeonMedical(clearhouse)) {
-					//2310B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider. Person only, non-person not allowed.
-					WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
+					//2310B NM1: 82 (medical) Rendering Provider Name. Required when treating provider is different from billing provider.
+					WriteNM1Provider("82",sw,provTreat);
 					//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
 					WritePRV_PE(sw,provTreat);
 					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
@@ -2181,10 +2181,6 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Referring Prov must be a person.");
 				}
-				if(treatProv.IsNotPerson && claim.ProvTreat!=claim.ProvBill) {
-					Comma(strb);
-					strb.Append("Treat Prov must be a person.");
-				}
 			}
 			else if(claim.MedType==EnumClaimMedType.Institutional) {
 				if(referral!=null && referral.IsDoctor && referral.NotPerson && claim.ReferringProv!=claim.ProvTreat) {
@@ -2521,6 +2517,10 @@ namespace OpenDentBusiness
 			}
 			List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(claim.ClaimNum);
 			List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,claim.ClaimNum);
+			if(claimProcs.Count==0) {
+				Comma(strb);
+				strb.Append("No procedures attached please recreate claim");
+			}
 			List<Procedure> procList=Procedures.GetProcsFromClaimProcs(claimProcs);
 			Procedure proc;
 			ProcedureCode procCode;
