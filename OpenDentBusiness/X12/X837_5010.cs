@@ -1326,7 +1326,7 @@ namespace OpenDentBusiness
 						sw.Write("SV1"+s
 							//SV101 Composite Medical Procedure Identifier
 							+"HC"+isa16//SV101-1 2/2 Product/Service ID Qualifier: HC=Health Care.
-							+Sout(proc.MedicalCode));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported
+							+Sout(proc.MedicalCode));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported //TODO: Shouldn't we be using claimProcs[j].CodeSent? Accounts for medical codes and alternate codes.
 						if(proc.CodeMod1!="" || proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
 							sw.Write(isa16+Sout(proc.CodeMod1));//SV101-3 2/2 Procedure Modifier: Situational.
 						}
