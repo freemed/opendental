@@ -2688,6 +2688,9 @@ namespace OpenDental{
 
 		///<summary>Handles a change in selection of the xRay capture button.</summary>
 		private void ToolBarCapture_Click() {
+			if(treeDocuments.SelectedNode==null) {
+				return;
+			}
 			if(ToolBarMain.Buttons["Capture"].Pushed) {
 				ImageNodeId nodeId=(ImageNodeId)treeDocuments.SelectedNode.Tag;
 				//ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
