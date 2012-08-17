@@ -113,6 +113,9 @@ namespace OpenDental {
 			}
 			HL7Verification(verbose);//composite check
 			Application.DoEvents();
+			textLog.Text+=checkDentalVisitTypes(verbose);
+			Application.DoEvents();
+
 			//textLog.Text+=appointmentTriggersForHl7(verbose);
 			//Application.DoEvents();
 			//textLog.Text+=Test1(verbose);
@@ -357,6 +360,21 @@ namespace OpenDental {
 			}
 			return retVal;
 		}*/
+
+		private string checkDentalVisitTypes(bool verbose) {
+			string retval = ""; 
+			DataTable queryResult = new DataTable();
+			try {
+				queryResult=MySqlHelper.ExecuteDataset(connString,"SELECT * FROM pmcodes WHERE (ecwcode LIKE '%dental%' OR externalCode LIKE '%dental%') AND pmid=1 AND flag='VS';").Tables[0];
+			}
+			catch(Exception ex) {
+				return ex.Message+"\r\n";
+			}
+			if(queryResult.Rows.Count==0 || verbose) {
+				retval+="Number of dental visit codes found : "+queryResult.Rows.Count+".\r\n";
+			}
+			return retval;
+		}
 
 		private List<int> ColumnToListHelper(DataTable dataTable,string colName) {
 			List<int> retVal = new List<int>();
