@@ -42,12 +42,23 @@ namespace OpenDentBusiness{
 		#endregion
 
 		/// <summary>Gets it straight from the database instead of from cache.</summary>
-		public static List<HL7DefField> GetForDefSegment(long hl7DefSegmentNum) {
+		public static List<HL7DefField> GetFromDb(long hl7DefSegmentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7DefField>>(MethodBase.GetCurrentMethod(),hl7DefSegmentNum);
 			}
 			string command="SELECT * FROM hl7deffield WHERE HL7DefSegmentNum='"+POut.Long(hl7DefSegmentNum)+"' ORDER BY OrdinalPos";
 			return Crud.HL7DefFieldCrud.SelectMany(command);
+		}
+
+		/// <summary>Gets the field list from the cache.</summary>
+		public static List<HL7DefField> GetFromCache(long hl7DefSegmentNum) {
+			List<HL7DefField> list=new List<HL7DefField>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].HL7DefSegmentNum==hl7DefSegmentNum) {
+					list.Add(Listt[i]);
+				}
+			}
+			return list;
 		}
 
 		///<summary></summary>

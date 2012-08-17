@@ -52,13 +52,17 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefCrud.SelectOne(command);
 		}
 
-		/// <summary>This will return null if no HL7defs are enabled.  Since only one can be enabled, this will return only the enabled one.</summary>
+		/// <summary>Gets from cache.  This will return null if no HL7defs are enabled.  Since only one can be enabled, this will return only the enabled one.</summary>
 		public static HL7Def GetOneDeepEnabled() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM hl7def WHERE IsEnabled=1";
-			HL7Def retval=Crud.HL7DefCrud.SelectOne(command);
+			HL7Def retval=null;
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].IsEnabled) {
+					retval=Listt[i];
+				}
+			}
 			if(retval==null) {
 				return null;
 			}
@@ -66,7 +70,7 @@ namespace OpenDentBusiness{
 				GetDeepForInternal(retval);
 			}
 			else {
-				retval.hl7DefMessages=HL7DefMessages.GetDeepForDef(retval.HL7DefNum);
+				retval.hl7DefMessages=HL7DefMessages.GetDeepFromCache(retval.HL7DefNum);
 			}
 			return retval;
 		}
@@ -92,11 +96,12 @@ namespace OpenDentBusiness{
 		private static void GetDeepForInternal(HL7Def def) {
 			//No need to check RemotingRole; no call to db.
 			if(def.InternalType.ToString()=="eCWTight") {
-				def=InternalEcwTight.GetDeepInternal(def);
+				def=InternalEcwTight.GetDeepInternal(def);//def that we're passing in is guaranteed to not be null
 			}
 			else if(def.InternalType.ToString()=="eCWStandalone") {
 				def=InternalEcwStandalone.GetDeepInternal(def);
 			}
+			//no need to return a def because the original reference won't have been lost.
 		}
 
 		///<summary>Tells us whether there is an existing enable HL7Def.</summary>
@@ -119,7 +124,7 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM hl7def WHERE IsInternal=0";
 			List<HL7Def> customList=Crud.HL7DefCrud.SelectMany(command);
 			for(int i=0;i<customList.Count;i++) {
-				customList[i].hl7DefMessages=HL7DefMessages.GetDeepForDef(customList[i].HL7DefNum);
+				customList[i].hl7DefMessages=HL7DefMessages.GetDeepFromDb(customList[i].HL7DefNum);
 			}
 			return customList;
 		}

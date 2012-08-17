@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 		#endregion
 
 		/// <summary>Gets it straight from the database instead of from cache. No child objects included.</summary>
-		public static List<HL7DefSegment> GetForDefMessage(long hl7DefMessageNum) {
+		public static List<HL7DefSegment> GetShallowFromDb(long hl7DefMessageNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<HL7DefSegment>>(MethodBase.GetCurrentMethod(),hl7DefMessageNum);
 			}
@@ -50,12 +50,24 @@ namespace OpenDentBusiness{
 			return Crud.HL7DefSegmentCrud.SelectMany(command);
 		}
 
+		///<summary>Gets deep list from cache.</summary>
+		public static List<HL7DefSegment> GetDeepFromCache(long hl7DefMessageNum) {
+			List<HL7DefSegment> list=new List<HL7DefSegment>();
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].HL7DefMessageNum==hl7DefMessageNum) {
+					list.Add(Listt[i]);
+					list[list.Count-1].hl7DefFields=HL7DefFields.GetFromCache(Listt[i].HL7DefSegmentNum);
+				}
+			}
+			return list;
+		}
+
 		///<summary>Gets a full deep list of all Segments for this message from the database.</summary>
-		public static List<HL7DefSegment> GetDeepForDefMessage(long hl7DefMessageNum) {
+		public static List<HL7DefSegment> GetDeepFromDb(long hl7DefMessageNum) {
 			List<HL7DefSegment> hl7defsegs=new List<HL7DefSegment>();
-			hl7defsegs=GetForDefMessage(hl7DefMessageNum);
+			hl7defsegs=GetShallowFromDb(hl7DefMessageNum);
 			foreach(HL7DefSegment s in hl7defsegs) {
-				s.hl7DefFields=HL7DefFields.GetForDefSegment(s.HL7DefSegmentNum);
+				s.hl7DefFields=HL7DefFields.GetFromDb(s.HL7DefSegmentNum);
 			}
 			return hl7defsegs;
 		}
