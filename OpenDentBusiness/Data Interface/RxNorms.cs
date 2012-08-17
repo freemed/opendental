@@ -99,7 +99,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Never returns multums, only used for displaying after a search.</summary>
-		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc,bool isExact) {
+		public static List<RxNorm> GetListByCodeOrDesc(string codeOrDesc,bool isExact,bool ignoreNumbers) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<List<RxNorm>>(MethodBase.GetCurrentMethod(),codeOrDesc);
 			}
@@ -112,6 +112,10 @@ namespace OpenDentBusiness{
 				command="SELECT * FROM rxnorm WHERE (RxCui LIKE '%"+POut.String(codeOrDesc)+"%' OR Description LIKE '%"+POut.String(codeOrDesc)+"%') "
 					+"AND MmslCode=''";
 			}
+			if(ignoreNumbers) {
+				command+=" AND Description NOT REGEXP '.*[0-9]+.*'";
+			}
+			command+=" ORDER BY Description";
 			return Crud.RxNormCrud.SelectMany(command);
 		}
 

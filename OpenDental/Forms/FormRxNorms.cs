@@ -21,7 +21,7 @@ namespace OpenDental {
 		}
 
 		private void FormRxNorms_Load(object sender,EventArgs e) {
-		
+			checkIgnore.Checked=true;
 		}
 
 		private void FormRxNorms_Shown(object sender,EventArgs e) {
@@ -40,7 +40,7 @@ namespace OpenDental {
 
 		private void FillGrid(bool isExact) {
 			Cursor=Cursors.WaitCursor;
-			rxList=RxNorms.GetListByCodeOrDesc(textCode.Text,isExact);
+			rxList=RxNorms.GetListByCodeOrDesc(textCode.Text,isExact,checkIgnore.Checked);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormRxNorms","Code"),80);
@@ -81,6 +81,10 @@ namespace OpenDental {
 			MsgBox.Show(this,RxNorms.GetMmslCodeByRxCui("1000002")+" <-- should be blank");*/
 		}
 
+		private void butNone_Click(object sender,EventArgs e) {
+			gridMain.SetSelected(false);
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()<0) {
 				MsgBox.Show(this,"Please select an item first.");
@@ -94,7 +98,7 @@ namespace OpenDental {
 			DialogResult=DialogResult.Cancel;
 		}
 
-		
+	
 
 	
 		
