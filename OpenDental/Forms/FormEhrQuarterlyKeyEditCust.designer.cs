@@ -42,86 +42,85 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(42,93);
+			this.label2.Location = new System.Drawing.Point(42, 93);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,18);
+			this.label2.Size = new System.Drawing.Size(100, 18);
 			this.label2.TabIndex = 13;
 			this.label2.Text = "Quarter, ex: 2";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(42,67);
+			this.label1.Location = new System.Drawing.Point(42, 67);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,18);
+			this.label1.Size = new System.Drawing.Size(100, 18);
 			this.label1.TabIndex = 12;
 			this.label1.Text = "Year, ex: 12";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textNotes
 			// 
-			this.textNotes.Location = new System.Drawing.Point(147,170);
-			this.textNotes.MaxLength = 15;
+			this.textNotes.Location = new System.Drawing.Point(147, 170);
 			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
-			this.textNotes.Size = new System.Drawing.Size(319,92);
+			this.textNotes.Size = new System.Drawing.Size(319, 92);
 			this.textNotes.TabIndex = 126;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(59,174);
+			this.label4.Location = new System.Drawing.Point(59, 174);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(88,14);
+			this.label4.Size = new System.Drawing.Size(88, 14);
 			this.label4.TabIndex = 127;
 			this.label4.Text = "Notes";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textPracticeTitle
 			// 
-			this.textPracticeTitle.Location = new System.Drawing.Point(147,117);
+			this.textPracticeTitle.Location = new System.Drawing.Point(147, 117);
 			this.textPracticeTitle.MaxLength = 100;
 			this.textPracticeTitle.Name = "textPracticeTitle";
-			this.textPracticeTitle.Size = new System.Drawing.Size(319,20);
+			this.textPracticeTitle.Size = new System.Drawing.Size(319, 20);
 			this.textPracticeTitle.TabIndex = 130;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(19,121);
+			this.label8.Location = new System.Drawing.Point(19, 121);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(127,14);
+			this.label8.Size = new System.Drawing.Size(127, 14);
 			this.label8.TabIndex = 131;
 			this.label8.Text = "Practice Title";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textEhrKey
 			// 
-			this.textEhrKey.Location = new System.Drawing.Point(147,143);
+			this.textEhrKey.Location = new System.Drawing.Point(147, 143);
 			this.textEhrKey.MaxLength = 15;
 			this.textEhrKey.Name = "textEhrKey";
-			this.textEhrKey.Size = new System.Drawing.Size(161,20);
+			this.textEhrKey.Size = new System.Drawing.Size(161, 20);
 			this.textEhrKey.TabIndex = 128;
 			// 
 			// labelEhrKey
 			// 
-			this.labelEhrKey.Location = new System.Drawing.Point(22,147);
+			this.labelEhrKey.Location = new System.Drawing.Point(22, 147);
 			this.labelEhrKey.Name = "labelEhrKey";
-			this.labelEhrKey.Size = new System.Drawing.Size(125,14);
+			this.labelEhrKey.Size = new System.Drawing.Size(125, 14);
 			this.labelEhrKey.TabIndex = 129;
 			this.labelEhrKey.Text = "Quarterly EHR Key";
 			this.labelEhrKey.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(146,25);
+			this.label3.Location = new System.Drawing.Point(146, 25);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(422,38);
+			this.label3.Size = new System.Drawing.Size(422, 38);
 			this.label3.TabIndex = 133;
 			this.label3.Text = "The quarterly key is tied to the practice title as entered in THEIR system.  It\'s" +
     " best to copy/paste from their practice setup window.";
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -129,71 +128,71 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(25,292);
+			this.butDelete.Location = new System.Drawing.Point(25, 292);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 134;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butGenerate
 			// 
-			this.butGenerate.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGenerate.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butGenerate.Autosize = true;
 			this.butGenerate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGenerate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGenerate.CornerRadius = 4F;
-			this.butGenerate.Location = new System.Drawing.Point(311,141);
+			this.butGenerate.Location = new System.Drawing.Point(311, 141);
 			this.butGenerate.Name = "butGenerate";
-			this.butGenerate.Size = new System.Drawing.Size(75,24);
+			this.butGenerate.Size = new System.Drawing.Size(75, 24);
 			this.butGenerate.TabIndex = 132;
 			this.butGenerate.Text = "Generate";
 			this.butGenerate.Click += new System.EventHandler(this.butGenerate_Click);
 			// 
 			// textQuarter
 			// 
-			this.textQuarter.Location = new System.Drawing.Point(147,91);
+			this.textQuarter.Location = new System.Drawing.Point(147, 91);
 			this.textQuarter.MaxVal = 4;
 			this.textQuarter.MinVal = 1;
 			this.textQuarter.Name = "textQuarter";
-			this.textQuarter.Size = new System.Drawing.Size(58,20);
+			this.textQuarter.Size = new System.Drawing.Size(58, 20);
 			this.textQuarter.TabIndex = 17;
 			// 
 			// textYear
 			// 
-			this.textYear.Location = new System.Drawing.Point(147,66);
+			this.textYear.Location = new System.Drawing.Point(147, 66);
 			this.textYear.MaxVal = 20;
 			this.textYear.MinVal = 11;
 			this.textYear.Name = "textYear";
-			this.textYear.Size = new System.Drawing.Size(58,20);
+			this.textYear.Size = new System.Drawing.Size(58, 20);
 			this.textYear.TabIndex = 16;
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(430,292);
+			this.butOK.Location = new System.Drawing.Point(430, 292);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(523,292);
+			this.butCancel.Location = new System.Drawing.Point(523, 292);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -201,7 +200,7 @@ namespace OpenDental{
 			// FormEhrQuarterlyKeyEditCust
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(610,328);
+			this.ClientSize = new System.Drawing.Size(610, 328);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.butGenerate);
