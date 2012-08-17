@@ -315,15 +315,14 @@ namespace OpenDental {
 				//PreferRecallMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferRecallMethod");
 				if(fieldVal!=null) {
-					row=new SheetImportRow();
 					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferRecallMethod.ToString());
 					string newValDisplay="";
 					object newValObj=null;
 					if(fieldVal!="") {
 						try {
 							ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
-							row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-							row.NewValObj=cmeth;
+							newValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+							newValObj=cmeth;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
