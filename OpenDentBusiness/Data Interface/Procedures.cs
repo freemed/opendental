@@ -5,6 +5,7 @@ using System.Data;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
+using OpenDentBusiness.Crud;
 
 namespace OpenDentBusiness {
 	public class Procedures {
@@ -915,6 +916,15 @@ namespace OpenDentBusiness {
 				}
 			}
 			return retVal;
+		}
+
+		///<summary>Pulls the lab fees for the given procnum directly from the database.</summary>
+		public static List<Procedure> GetCanadianLabFees(long procNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),procNum);
+			}
+			string command="SELECT * FROM procedurelog WHERE ProcStatus<>6 AND ProcNumLab="+POut.Long(procNum);
+			return ProcedureCrud.SelectMany(command);
 		}
 
 		/*
