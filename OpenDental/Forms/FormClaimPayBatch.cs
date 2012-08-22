@@ -701,9 +701,11 @@ namespace OpenDental{
 			gridAttached.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Service Date"),80);
 			gridAttached.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Carrier"),220);
+			col=new ODGridColumn(Lan.g(this,"Clinic"),70);
+			gridAttached.Columns.Add(col); 
+			col=new ODGridColumn(Lan.g(this,"Carrier"),186);
 			gridAttached.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient"),160);
+			col=new ODGridColumn(Lan.g(this,"Patient"),130);
 			gridAttached.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Fee"),70,HorizontalAlignment.Right);
 			gridAttached.Columns.Add(col);
@@ -715,6 +717,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(ClaimsAttached[i].PaymentRow.ToString());
 				row.Cells.Add(ClaimsAttached[i].DateClaim.ToShortDateString());
+				row.Cells.Add(ClaimsAttached[i].ClinicDesc);
 				row.Cells.Add(ClaimsAttached[i].Carrier);
 				row.Cells.Add(ClaimsAttached[i].PatName);
 				row.Cells.Add(ClaimsAttached[i].FeeBilled.ToString("F"));
@@ -737,9 +740,11 @@ namespace OpenDental{
 			gridOut.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Service Date"),80);
 			gridOut.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Carrier"),220);
+			col=new ODGridColumn(Lan.g(this,"Clinic"),70);
+			gridOut.Columns.Add(col); 
+			col=new ODGridColumn(Lan.g(this,"Carrier"),186);
 			gridOut.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Patient"),160);
+			col=new ODGridColumn(Lan.g(this,"Patient"),130);
 			gridOut.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Fee"),70,HorizontalAlignment.Right);
 			gridOut.Columns.Add(col);
@@ -750,6 +755,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add("");
 				row.Cells.Add(ClaimsOutstanding[i].DateClaim.ToShortDateString());
+				row.Cells.Add(ClaimsOutstanding[i].ClinicDesc);
 				row.Cells.Add(ClaimsOutstanding[i].Carrier);
 				row.Cells.Add(ClaimsOutstanding[i].PatName);
 				row.Cells.Add(ClaimsOutstanding[i].FeeBilled.ToString("F"));

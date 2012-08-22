@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"//Changed from \"_patName\" to patName_ for MySQL 5.5. Also added checks for #<table> and $<table>
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
+				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -61,7 +61,7 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
 				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"//SUM(claimproc.FeeBilled) feeBilled_ was low if inspay 0 on proc
-				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow  "
+				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow  "
 				+"FROM claim,patient,insplan,carrier,claimproc "
 				+"WHERE claimproc.ClaimNum = claim.ClaimNum "
 				+"AND patient.PatNum = claim.PatNum "
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
 				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
-				+"claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
+				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,claim.PatNum,PaymentRow "
+				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -195,6 +195,7 @@ namespace OpenDentBusiness{
 				split.ClaimNum       =PIn.Long  (table.Rows[i]["ClaimNum"].ToString());
 				split.ClaimPaymentNum=PIn.Long  (table.Rows[i]["ClaimPaymentNum"].ToString());
 				split.PaymentRow     =PIn.Int   (table.Rows[i]["PaymentRow"].ToString());
+				split.ClinicDesc		 =PIn.String(table.Rows[i]["Description"].ToString());
 				splits.Add(split);
 			}
 			return splits;
@@ -535,6 +536,8 @@ namespace OpenDentBusiness{
 		public long ClaimPaymentNum;
 		///<summary>1-based</summary>
 		public int PaymentRow;
+		///<summary></summary>
+		public string ClinicDesc;
 	}
 	
 }
