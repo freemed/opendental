@@ -418,7 +418,7 @@ namespace OpenDentBusiness
 					+s//SBR06 1/1 Coordination of Benefits Code: Not used.
 					+s//SBR07 1/1 Yes/No Condition or Respose Code: Not used.
 					+s//SBR08 2/2 Employment Status Code: Not used.
-					+GetFilingCode(insPlan));//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO
+					+GetFilingCode(insPlan));//SBR09: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. Will no longer be required when HIPPA National Plan ID is mandated.
 				EndSegment(sw);
 				if(medType==EnumClaimMedType.Medical) {
 					//2000B PAT: (medical) Patient Information. Situational. Required when the patient is the subscriber or considered to be the subscriber and at least one of the element requirements are met. Element requirements include: when the patient is deceased and the date of death is available; or when the claim involves Medicare Durable Medical Equipment Regional Carriers Certificate of Medical Necessity (DMERC CMN) 02.03, 10.02, or DMA MAC 10.03; or when law requires to know if the patient is pregnant or not. We do not use, because we do not track death date, durable medical equipment information, nor do we know weather or not the patient is pregnant. Some of these fields may be necessary in the future, but not likely since our medical claims are usually pretty simple.
@@ -1120,7 +1120,7 @@ namespace OpenDentBusiness
 						+s//SBR06 1/1 Coordination of Benefits Code: Not used.
 						+s//SBR07 1/1 Yes/No Condition or Response Code: Not Used.
 						+s//SBR08 2/2 Employment Status Code: Not Used.
-						+"CI");//SBR09 1/2 Claim Filing Indicator Code: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. There are too many. I'm just going to use CI for everyone. I don't think anyone will care.
+						+GetFilingCode(otherPlan));//SBR09 1/2 Claim Filing Indicator Code: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. Will no longer be required when HIPPA National Plan ID is mandated.
 					EndSegment(sw);
 					if(claim.ClaimType!="P") {
 						double claimWriteoff=0;
