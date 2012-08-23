@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"//Changed from \"_patName\" to patName_ for MySQL 5.5. Also added checks for #<table> and $<table>
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
+				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -93,7 +93,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_,"
 				+"carrier.CarrierName,ClaimFee feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum,"
-				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
+				+"claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 			string command=
 				"SELECT claim.DateService,claim.ProvTreat,CONCAT(CONCAT(patient.LName,', '),patient.FName) patName_"
 				+",carrier.CarrierName,SUM(claimproc.FeeBilled) feeBilled_,SUM(claimproc.InsPayAmt) insPayAmt_,claim.ClaimNum"
-				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum),claim.PatNum,PaymentRow "
+				+",claimproc.ClaimPaymentNum,(SELECT clinic.Description FROM clinic WHERE claimproc.ClinicNum = clinic.ClinicNum) Description,claim.PatNum,PaymentRow "
 				+" FROM claim,patient,insplan,carrier,claimproc"
 				+" WHERE claimproc.ClaimNum = claim.ClaimNum"
 				+" AND patient.PatNum = claim.PatNum"
