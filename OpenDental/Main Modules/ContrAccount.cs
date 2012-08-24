@@ -3047,6 +3047,11 @@ namespace OpenDental {
 					if(claimProcs[i].CodeSent.Length>5 && claimProcs[i].CodeSent.Substring(0,1)=="D"){
 						claimProcs[i].CodeSent=claimProcs[i].CodeSent.Substring(0,5);
 					}
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						if(claimProcs[i].CodeSent.Length>5) { //In Canadian electronic claims, codes can contain letters or numbers and cannot be longer than 5 characters.
+							claimProcs[i].CodeSent=claimProcs[i].CodeSent.Substring(0,5);
+						}
+					}
 				}
 				claimProcs[i].LineNumber=(byte)(i+1);
 				ClaimProcs.Update(claimProcs[i]);
