@@ -8,7 +8,7 @@ namespace OpenDentBusiness.HL7 {
 	public class InternalEcwFull {
 
 		public static HL7Def GetHL7Def() {
-			HL7Def def=HL7Defs.GetInternalFromDb("eCWfull");
+			HL7Def def=HL7Defs.GetInternalFromDb("eCWFull");
 
 			return def;
 		}

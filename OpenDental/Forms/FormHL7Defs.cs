@@ -19,7 +19,6 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components=null;
-		private bool changed;
 		private UI.Button butClose;
 		private UI.Button butCopy;
 		private ODGrid grid2;
@@ -320,12 +319,9 @@ namespace OpenDental{
 		}
 
 		private void FormHL7Defs_FormClosing(object sender,FormClosingEventArgs e) {
-			if(changed){
-				DataValid.SetInvalid(InvalidType.HL7Defs);
-			}
+			DataValid.SetInvalid(InvalidType.HL7Defs);
 			DataValid.SetInvalid(InvalidType.Prefs);
 		}
-
 	}
 }
 

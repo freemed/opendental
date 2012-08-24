@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 		public int ItemOrder;
 		///<summary>For example, a DFT can have multiple FT1 segments.  This turns out to be a completely useless field, since we already know which ones can repeat.</summary>
 		public bool CanRepeat;
-		///<summary>An incoming message may or may not contain this segment. Not used for outgoing.</summary>
+		///<summary>If this is false, and an incoming message is missing this segment, then it gets logged as an error/failure.  If this is true, then it will gracefully skip a missing incoming segment.  Not used for outgoing.</summary>
 		public bool IsOptional;
 		///<summary>Stored in db as string, but used in OD as enum SegmentNameHL7. Example: PID.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]

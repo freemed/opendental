@@ -127,7 +127,6 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private static string gPDF(Appointment apt,string pdfDescription) {
-			string result;
 			if(pdfDescription=="treatment") {
 				return "";
 			}

@@ -68,6 +68,7 @@ namespace OpenDental {
 			FieldNameList.Add(new FieldNameAndType("eventType",DataTypeHL7.ID));
 			FieldNameList.Add(new FieldNameAndType("guar.addressCityStateZip",DataTypeHL7.XAD));
 			FieldNameList.Add(new FieldNameAndType("guar.birthdateTime",DataTypeHL7.DTM));
+			FieldNameList.Add(new FieldNameAndType("guar.ChartNumber",DataTypeHL7.CX));
 			FieldNameList.Add(new FieldNameAndType("guar.Gender",DataTypeHL7.IS));
 			FieldNameList.Add(new FieldNameAndType("guar.HmPhone",DataTypeHL7.XTN));
 			FieldNameList.Add(new FieldNameAndType("guar.nameLFM",DataTypeHL7.XPN));

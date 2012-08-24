@@ -115,8 +115,8 @@ namespace OpenDentBusiness.HL7 {
 			//SCH segment------------------------------------------------------------------
 			seg=new HL7DefSegment();
 			msg.AddSegment(seg,1,SegmentNameHL7.SCH);
-			//SCH.2, Filler Appointment ID
-			seg.AddField(2,DataTypeHL7.EI,"apt.AptNum");
+			//SCH.1, Placer Appointment ID.  In the old eCW interface, we were pulling from SCH.2, which was always the same as SCH.1.
+			seg.AddField(1,DataTypeHL7.EI,"apt.AptNum");
 			//SCH.7, Appointment Reason
 			seg.AddField(7,DataTypeHL7.CWE,"apt.Note");
 			//SCH.11, Appointment Timing Quantity
@@ -203,7 +203,6 @@ namespace OpenDentBusiness.HL7 {
 			//FT1.5, Transaction Posting Date (YYYYMMDDHHMMSS)
 			seg.AddField(5,DataTypeHL7.DTM,"proc.procDateTime");
 			//FT1.6, Transaction Type
-//todo: needs table # ?
 			seg.AddFieldFixed(6,DataTypeHL7.IS,"CG");
 			//FT1.10, Transaction Quantity
 			seg.AddFieldFixed(10,DataTypeHL7.NM,"1.0");

@@ -32,47 +32,47 @@ namespace OpenDentBusiness{
 
 	///<summary>Data types are listed in HL7 docs section 2.15.  The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum DataTypeHL7 {
-		///<summary>Coded with no exceptions.</summary>
+		///<summary>Coded with no exceptions.  Examples: ProcCode (Dxxxx) or TreatmentArea like tooth^surface</summary>
 		CNE,
-		///<summary>Composite price.</summary>
+		///<summary>Composite price.  Example: 125.00</summary>
 		CP,
 		///<summary>Coded with exceptions.  Example: Race: American Indian or Alaska Native,Asian,Black or African American,Native Hawaiian or Other Pacific,White, Hispanic,Other Race.</summary>
 		CWE,
-		///<summary>Extended composite ID with check digit.</summary>
+		///<summary>Extended composite ID with check digit.  Example: patient.PatNum or patient.ChartNumber or appointment.AptNum.</summary>
 		CX,
-		///<summary>Date.</summary>
+		///<summary>Date.  8 digit yyyyMMdd</summary>
 		DT,
-		///<summary>Date/Time.</summary>
+		///<summary>Date/Time.  8 or 14 digit yyyyMMdd or yyyyMMddHHmmss</summary>
 		DTM,
-		///<summary>Entity identifier.</summary>
+		///<summary>Entity identifier.  Example: appointment.AptNum</summary>
 		EI,
-		/// <summary>Hierarchic designator.  Application identifier.</summary>
+		/// <summary>Hierarchic designator.  Application identifier.  Example: "OD" for OpenDental.</summary>
 		HD,
-		/// <summary>Coded value for HL7 defined tables.  Must include TableId.</summary>
+		/// <summary>Coded value for HL7 defined tables.  Must include TableId.  Example: 0003 is eCW's event type table id.</summary>
 		ID,
 		///<summary>Coded value for user-defined tables.  Example: Administrative Sex, F=Female, M=Male,U=Unknown.</summary>
 		IS,
-		/// <summary>Message type.</summary>
+		/// <summary>Message type.  Example: composed of messageType^eventType like DFT^P03</summary>
 		MSG,
-		/// <summary>Numeric.</summary>
+		/// <summary>Numeric.  Example: transaction quantity of 1.0</summary>
 		NM,
 		/// <summary>Processing type.  Examples: P-Production, T-Test.</summary>
 		PT,
-		///<summary>Sequence ID.</summary>
+		///<summary>Sequence ID.  Example: for repeating segments number that begins with 1.</summary>
 		SI,
-		///<summary>String, alphanumeric.</summary>
+		///<summary>String, alphanumeric.  Example: SSN or patient.FeeSchedule</summary>
 		ST,
-		///<summary>Timing quantity.</summary>
+		///<summary>Timing quantity.  Example: for eCW appointment ^^duration^startTime^endTime like ^^1200^20120101112000^20120101114000 for 20 minute (1200 second) appointment starting at 11:20 on 01/01/2012</summary>
 		TQ,
-		/// <summary>Version identifier.</summary>
+		/// <summary>Version identifier.  Example: 2.3</summary>
 		VID,
-		///<summary>Extended address.</summary>
+		///<summary>Extended address.  Example: Addr1^Addr2^City^State^Zip like 120 Main St.^Suite 3^Salem^OR^97302</summary>
 		XAD,
-		///<summary>Extended composite ID number and name for person.</summary>
+		///<summary>Extended composite ID number and name for person.  Example: provider.EcwID^provider.LName^provider.FName^provider.MI</summary>
 		XCN,
-		///<summary>Extended person name.  Composite data type.  Example: component 0 is LName, 1 is FName, 2 is second and further given names or initials (MiddleI).</summary>
+		///<summary>Extended person name.  Composite data type.  Example: LName^FName^MI).</summary>
 		XPN,
-		///<summary>Extended telecommunication number.</summary>
+		///<summary>Extended telecommunication number.  Example: 5033635432</summary>
 		XTN
 	}
 
