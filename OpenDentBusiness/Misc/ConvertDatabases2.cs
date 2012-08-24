@@ -10004,8 +10004,25 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ(command);
 					}
 				}
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
+					int programNum=PIn.Int(Db.GetScalar(command));
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'HL7Server', "
+						+"'')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+						+") VALUES("
+						+"'"+POut.Long(programNum)+"', "
+						+"'HL7ServiceName', "
+						+"'OpenDentalHL7')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//eCW will never use Oracle.
+				}
 
 
 

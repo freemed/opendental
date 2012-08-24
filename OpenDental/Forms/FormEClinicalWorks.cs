@@ -47,6 +47,12 @@ namespace OpenDental{
 		private Label label3;
 		private TextBox textODServer;
 		private Label label6;
+		private TextBox textHL7ServiceName;
+		private Label label4;
+		private TextBox textHL7Server;
+		private Label label7;
+		private Label label8;
+		private Label label9;
 		private Label labelHL7FolderIn;
 
 		///<summary></summary>
@@ -101,7 +107,6 @@ namespace OpenDental{
 			this.radioModeTight = new System.Windows.Forms.RadioButton();
 			this.radioModeStandalone = new System.Windows.Forms.RadioButton();
 			this.checkFeeSchedules = new System.Windows.Forms.CheckBox();
-			this.service11 = new OpenDental.localhost.Service1();
 			this.labelHL7Warning = new System.Windows.Forms.Label();
 			this.radioModeFull = new System.Windows.Forms.RadioButton();
 			this.butDiagnostic = new OpenDental.UI.Button();
@@ -109,36 +114,43 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textODServer = new System.Windows.Forms.TextBox();
 			this.label6 = new System.Windows.Forms.Label();
+			this.textHL7ServiceName = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.textHL7Server = new System.Windows.Forms.TextBox();
+			this.label7 = new System.Windows.Forms.Label();
+			this.service11 = new OpenDental.localhost.Service1();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(524, 397);
+			this.butCancel.Location = new System.Drawing.Point(552,447);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(443, 397);
+			this.butOK.Location = new System.Drawing.Point(471,447);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
@@ -147,9 +159,9 @@ namespace OpenDental{
 			// 
 			this.checkEnabled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkEnabled.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEnabled.Location = new System.Drawing.Point(161, 60);
+			this.checkEnabled.Location = new System.Drawing.Point(124,60);
 			this.checkEnabled.Name = "checkEnabled";
-			this.checkEnabled.Size = new System.Drawing.Size(98, 18);
+			this.checkEnabled.Size = new System.Drawing.Size(98,18);
 			this.checkEnabled.TabIndex = 41;
 			this.checkEnabled.Text = "Enabled";
 			this.checkEnabled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -157,65 +169,65 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(58, 10);
+			this.label1.Location = new System.Drawing.Point(21,10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(187, 18);
+			this.label1.Size = new System.Drawing.Size(187,18);
 			this.label1.TabIndex = 44;
 			this.label1.Text = "Internal Name";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textProgName
 			// 
-			this.textProgName.Location = new System.Drawing.Point(246, 9);
+			this.textProgName.Location = new System.Drawing.Point(209,9);
 			this.textProgName.Name = "textProgName";
 			this.textProgName.ReadOnly = true;
-			this.textProgName.Size = new System.Drawing.Size(275, 20);
+			this.textProgName.Size = new System.Drawing.Size(275,20);
 			this.textProgName.TabIndex = 45;
 			// 
 			// textProgDesc
 			// 
-			this.textProgDesc.Location = new System.Drawing.Point(246, 34);
+			this.textProgDesc.Location = new System.Drawing.Point(209,34);
 			this.textProgDesc.Name = "textProgDesc";
-			this.textProgDesc.Size = new System.Drawing.Size(275, 20);
+			this.textProgDesc.Size = new System.Drawing.Size(275,20);
 			this.textProgDesc.TabIndex = 47;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(57, 35);
+			this.label2.Location = new System.Drawing.Point(20,35);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(187, 18);
+			this.label2.Size = new System.Drawing.Size(187,18);
 			this.label2.TabIndex = 46;
 			this.label2.Text = "Description";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textHL7FolderIn
 			// 
-			this.textHL7FolderIn.Location = new System.Drawing.Point(234, 43);
+			this.textHL7FolderIn.Location = new System.Drawing.Point(197,43);
 			this.textHL7FolderIn.Name = "textHL7FolderIn";
-			this.textHL7FolderIn.Size = new System.Drawing.Size(275, 20);
+			this.textHL7FolderIn.Size = new System.Drawing.Size(275,20);
 			this.textHL7FolderIn.TabIndex = 49;
 			// 
 			// labelHL7FolderIn
 			// 
-			this.labelHL7FolderIn.Location = new System.Drawing.Point(3, 44);
+			this.labelHL7FolderIn.Location = new System.Drawing.Point(9,44);
 			this.labelHL7FolderIn.Name = "labelHL7FolderIn";
-			this.labelHL7FolderIn.Size = new System.Drawing.Size(229, 18);
+			this.labelHL7FolderIn.Size = new System.Drawing.Size(186,18);
 			this.labelHL7FolderIn.TabIndex = 48;
 			this.labelHL7FolderIn.Text = "In to eClinicalWorks";
 			this.labelHL7FolderIn.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textHL7FolderOut
 			// 
-			this.textHL7FolderOut.Location = new System.Drawing.Point(234, 69);
+			this.textHL7FolderOut.Location = new System.Drawing.Point(197,69);
 			this.textHL7FolderOut.Name = "textHL7FolderOut";
-			this.textHL7FolderOut.Size = new System.Drawing.Size(275, 20);
+			this.textHL7FolderOut.Size = new System.Drawing.Size(275,20);
 			this.textHL7FolderOut.TabIndex = 51;
 			// 
 			// labelHL7FolderOut
 			// 
-			this.labelHL7FolderOut.Location = new System.Drawing.Point(6, 70);
+			this.labelHL7FolderOut.Location = new System.Drawing.Point(9,70);
 			this.labelHL7FolderOut.Name = "labelHL7FolderOut";
-			this.labelHL7FolderOut.Size = new System.Drawing.Size(226, 18);
+			this.labelHL7FolderOut.Size = new System.Drawing.Size(186,18);
 			this.labelHL7FolderOut.TabIndex = 50;
 			this.labelHL7FolderOut.Text = "Out from eClinicalWorks";
 			this.labelHL7FolderOut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -227,26 +239,26 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textHL7FolderIn);
 			this.groupBox1.Controls.Add(this.labelHL7FolderOut);
 			this.groupBox1.Controls.Add(this.labelHL7FolderIn);
-			this.groupBox1.Location = new System.Drawing.Point(12, 201);
+			this.groupBox1.Location = new System.Drawing.Point(12,252);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(538, 101);
+			this.groupBox1.Size = new System.Drawing.Size(538,101);
 			this.groupBox1.TabIndex = 52;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "HL7 Synch Folders";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(6, 19);
+			this.label5.Location = new System.Drawing.Point(6,19);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(478, 18);
+			this.label5.Size = new System.Drawing.Size(478,18);
 			this.label5.TabIndex = 45;
 			this.label5.Text = "Folder locations must be valid on the computer where the HL7 process is running";
 			// 
 			// labelDefaultUserGroup
 			// 
-			this.labelDefaultUserGroup.Location = new System.Drawing.Point(12, 317);
+			this.labelDefaultUserGroup.Location = new System.Drawing.Point(21,368);
 			this.labelDefaultUserGroup.Name = "labelDefaultUserGroup";
-			this.labelDefaultUserGroup.Size = new System.Drawing.Size(232, 18);
+			this.labelDefaultUserGroup.Size = new System.Drawing.Size(186,18);
 			this.labelDefaultUserGroup.TabIndex = 53;
 			this.labelDefaultUserGroup.Text = "Default User Group for new users";
 			this.labelDefaultUserGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -255,18 +267,18 @@ namespace OpenDental{
 			// 
 			this.comboDefaultUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDefaultUserGroup.FormattingEnabled = true;
-			this.comboDefaultUserGroup.Location = new System.Drawing.Point(246, 317);
+			this.comboDefaultUserGroup.Location = new System.Drawing.Point(209,368);
 			this.comboDefaultUserGroup.Name = "comboDefaultUserGroup";
-			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215, 21);
+			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215,21);
 			this.comboDefaultUserGroup.TabIndex = 54;
 			// 
 			// checkShowImages
 			// 
 			this.checkShowImages.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowImages.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowImages.Location = new System.Drawing.Point(60, 344);
+			this.checkShowImages.Location = new System.Drawing.Point(23,395);
 			this.checkShowImages.Name = "checkShowImages";
-			this.checkShowImages.Size = new System.Drawing.Size(199, 18);
+			this.checkShowImages.Size = new System.Drawing.Size(199,18);
 			this.checkShowImages.TabIndex = 55;
 			this.checkShowImages.Text = "Show Images Module";
 			this.checkShowImages.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -275,9 +287,9 @@ namespace OpenDental{
 			// radioModeTight
 			// 
 			this.radioModeTight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioModeTight.Location = new System.Drawing.Point(77, 84);
+			this.radioModeTight.Location = new System.Drawing.Point(40,84);
 			this.radioModeTight.Name = "radioModeTight";
-			this.radioModeTight.Size = new System.Drawing.Size(182, 18);
+			this.radioModeTight.Size = new System.Drawing.Size(182,18);
 			this.radioModeTight.TabIndex = 56;
 			this.radioModeTight.TabStop = true;
 			this.radioModeTight.Text = "Tight Integration";
@@ -288,9 +300,9 @@ namespace OpenDental{
 			// radioModeStandalone
 			// 
 			this.radioModeStandalone.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioModeStandalone.Location = new System.Drawing.Point(77, 104);
+			this.radioModeStandalone.Location = new System.Drawing.Point(40,104);
 			this.radioModeStandalone.Name = "radioModeStandalone";
-			this.radioModeStandalone.Size = new System.Drawing.Size(182, 18);
+			this.radioModeStandalone.Size = new System.Drawing.Size(182,18);
 			this.radioModeStandalone.TabIndex = 57;
 			this.radioModeStandalone.TabStop = true;
 			this.radioModeStandalone.Text = "Standalone";
@@ -302,23 +314,18 @@ namespace OpenDental{
 			// 
 			this.checkFeeSchedules.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkFeeSchedules.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkFeeSchedules.Location = new System.Drawing.Point(12, 366);
+			this.checkFeeSchedules.Location = new System.Drawing.Point(23,416);
 			this.checkFeeSchedules.Name = "checkFeeSchedules";
-			this.checkFeeSchedules.Size = new System.Drawing.Size(247, 18);
+			this.checkFeeSchedules.Size = new System.Drawing.Size(199,18);
 			this.checkFeeSchedules.TabIndex = 58;
 			this.checkFeeSchedules.Text = "Patient Fee Schedules Set Manually";
 			this.checkFeeSchedules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// service11
-			// 
-			this.service11.Url = "http://localhost:3824/Service1.asmx";
-			this.service11.UseDefaultCredentials = true;
-			// 
 			// labelHL7Warning
 			// 
-			this.labelHL7Warning.Location = new System.Drawing.Point(264, 364);
+			this.labelHL7Warning.Location = new System.Drawing.Point(227,415);
 			this.labelHL7Warning.Name = "labelHL7Warning";
-			this.labelHL7Warning.Size = new System.Drawing.Size(170, 18);
+			this.labelHL7Warning.Size = new System.Drawing.Size(170,18);
 			this.labelHL7Warning.TabIndex = 59;
 			this.labelHL7Warning.Text = "(instead of importing from HL7)";
 			this.labelHL7Warning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -326,9 +333,9 @@ namespace OpenDental{
 			// radioModeFull
 			// 
 			this.radioModeFull.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioModeFull.Location = new System.Drawing.Point(77, 124);
+			this.radioModeFull.Location = new System.Drawing.Point(40,124);
 			this.radioModeFull.Name = "radioModeFull";
-			this.radioModeFull.Size = new System.Drawing.Size(182, 18);
+			this.radioModeFull.Size = new System.Drawing.Size(182,18);
 			this.radioModeFull.TabIndex = 60;
 			this.radioModeFull.TabStop = true;
 			this.radioModeFull.Text = "Full";
@@ -338,31 +345,31 @@ namespace OpenDental{
 			// 
 			// butDiagnostic
 			// 
-			this.butDiagnostic.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDiagnostic.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butDiagnostic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butDiagnostic.Autosize = true;
 			this.butDiagnostic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDiagnostic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDiagnostic.CornerRadius = 4F;
-			this.butDiagnostic.Location = new System.Drawing.Point(260, 397);
+			this.butDiagnostic.Location = new System.Drawing.Point(288,447);
 			this.butDiagnostic.Name = "butDiagnostic";
-			this.butDiagnostic.Size = new System.Drawing.Size(90, 24);
+			this.butDiagnostic.Size = new System.Drawing.Size(90,24);
 			this.butDiagnostic.TabIndex = 61;
 			this.butDiagnostic.Text = "Diagnostic Tool";
 			this.butDiagnostic.Click += new System.EventHandler(this.butDiagnostic_Click);
 			// 
 			// textECWServer
 			// 
-			this.textECWServer.Location = new System.Drawing.Point(246, 148);
+			this.textECWServer.Location = new System.Drawing.Point(209,148);
 			this.textECWServer.Name = "textECWServer";
-			this.textECWServer.Size = new System.Drawing.Size(215, 20);
+			this.textECWServer.Size = new System.Drawing.Size(181,20);
 			this.textECWServer.TabIndex = 53;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(15, 149);
+			this.label3.Location = new System.Drawing.Point(24,148);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(229, 18);
+			this.label3.Size = new System.Drawing.Size(179,18);
 			this.label3.TabIndex = 52;
 			this.label3.Text = "eCW Server";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -370,26 +377,88 @@ namespace OpenDental{
 			// textODServer
 			// 
 			this.textODServer.BackColor = System.Drawing.SystemColors.Window;
-			this.textODServer.Location = new System.Drawing.Point(246, 174);
+			this.textODServer.Location = new System.Drawing.Point(209,174);
 			this.textODServer.Name = "textODServer";
 			this.textODServer.ReadOnly = true;
-			this.textODServer.Size = new System.Drawing.Size(215, 20);
+			this.textODServer.Size = new System.Drawing.Size(181,20);
 			this.textODServer.TabIndex = 65;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(15, 175);
+			this.label6.Location = new System.Drawing.Point(24,174);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(229, 18);
+			this.label6.Size = new System.Drawing.Size(179,18);
 			this.label6.TabIndex = 64;
 			this.label6.Text = "OpenDental Server";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// textHL7ServiceName
+			// 
+			this.textHL7ServiceName.BackColor = System.Drawing.SystemColors.Window;
+			this.textHL7ServiceName.Location = new System.Drawing.Point(209,226);
+			this.textHL7ServiceName.Name = "textHL7ServiceName";
+			this.textHL7ServiceName.Size = new System.Drawing.Size(181,20);
+			this.textHL7ServiceName.TabIndex = 69;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(24,226);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(179,18);
+			this.label4.TabIndex = 68;
+			this.label4.Text = "HL7 Service Name";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textHL7Server
+			// 
+			this.textHL7Server.Location = new System.Drawing.Point(209,200);
+			this.textHL7Server.Name = "textHL7Server";
+			this.textHL7Server.Size = new System.Drawing.Size(181,20);
+			this.textHL7Server.TabIndex = 67;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(24,200);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(179,18);
+			this.label7.TabIndex = 66;
+			this.label7.Text = "HL7 Server";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// service11
+			// 
+			this.service11.Url = "http://localhost:3824/Service1.asmx";
+			this.service11.UseDefaultCredentials = true;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(396,200);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(237,18);
+			this.label8.TabIndex = 70;
+			this.label8.Text = "The computer where the HL7 Service is running.";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(396,226);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(237,18);
+			this.label9.TabIndex = 71;
+			this.label9.Text = "Typically OpenDentalHL7.";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormEClinicalWorks
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(611, 433);
+			this.ClientSize = new System.Drawing.Size(639,483);
+			this.Controls.Add(this.label9);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.textHL7ServiceName);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.textHL7Server);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textODServer);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textECWServer);
@@ -441,6 +510,8 @@ namespace OpenDental{
 			SetModeRadioButtons(GetProp("eClinicalWorksMode"));
 			SetModeVisibilities();
 			textECWServer.Text=GetProp("eCWServer");
+			textHL7Server.Text=GetProp("HL7Server");
+			textHL7ServiceName.Text=GetProp("HL7ServiceName");
 			textODServer.Text=DataCore.GetTable("SHOW VARIABLES LIKE 'hostname';").Rows[0]["Value"].ToString();//MySQL Only which is okay since eCW won't use Oracle
 			textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
 			textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
@@ -574,10 +645,20 @@ namespace OpenDental{
 				MsgBox.Show(this,"HL7 out folder may not be blank.");
 				return false;
 			}
+			if(textHL7Server.Text=="") {
+				MsgBox.Show(this,"HL7 Server may not be blank.");
+				return false;
+			}
+			if(textHL7ServiceName.Text=="") {
+				MsgBox.Show(this,"HL7 Service Name may not be blank.");
+				return false;
+			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;
 			Programs.Update(ProgramCur);
 			Prefs.UpdateString(PrefName.HL7FolderOut,textHL7FolderOut.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7Server",textHL7Server.Text);
+			ProgramProperties.SetProperty(ProgramCur.ProgramNum,"HL7ServiceName",textHL7ServiceName.Text);
 			if(radioModeTight.Checked || radioModeFull.Checked) {
 				if(radioModeTight.Checked) {
 					ProgramProperties.SetProperty(ProgramCur.ProgramNum,"eClinicalWorksMode","0");//Tight

@@ -39,7 +39,6 @@ namespace OpenDentHL7 {
 		public ServiceHL7() {
 			InitializeComponent();
 			CanStop = true;
-			//ServiceName = "OpenDentHL7";//moved over to main().
 			EventLog.WriteEntry("OpenDentHL7",DateTime.Now.ToLongTimeString()+" - Initialized.");
 		}
 
@@ -87,9 +86,25 @@ namespace OpenDentHL7 {
 				EventLog.WriteEntry("OpenDentHL7","Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString(),EventLogEntryType.Error);
 				throw new ApplicationException("Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString());
 			}
-			//Later: inform od via signal that this service is running
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+				long progNum=Programs.GetProgramNum(ProgramName.eClinicalWorks);
+				string hl7Server=ProgramProperties.GetPropVal(progNum,"HL7Server");
+				string hl7ServiceName=ProgramProperties.GetPropVal(progNum,"HL7ServiceName");
+				if(hl7ServiceName!=this.ServiceName) {
+					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName,
+						EventLogEntryType.Error);
+					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName);
+				}
+				if(hl7Server!=System.Environment.MachineName) {
+					EventLog.WriteEntry("OpenDentHL7","The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
+						+", Server name in Program Links: "+hl7Server,EventLogEntryType.Error);
+					throw new ApplicationException("The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
+						+", Server name in Program Links: "+hl7Server);
+				}
+			}
 			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
 				EcwOldSendAndReceive();
+				return;
 			}
 			HL7Def hL7Def=HL7Defs.GetOneDeepEnabled();
 			if(hL7Def==null) {
@@ -99,7 +114,14 @@ namespace OpenDentHL7 {
 			if(HL7DefEnabled.ModeTx==ModeTxHL7.File) {
 				hl7FolderOut=HL7DefEnabled.OutgoingFolder;
 				hl7FolderIn=HL7DefEnabled.IncomingFolder;
-//todo: check to make sure both folders exist.  Errors if not.
+				if(!Directory.Exists(hl7FolderOut)) {
+					EventLog.WriteEntry("OpenDentHL7","The outgoing HL7 folder does not exist.  Path is set to: "+hl7FolderOut,EventLogEntryType.Error);
+					throw new ApplicationException("The outgoing HL7 folder does not exist.  Path is set to: "+hl7FolderOut);
+				}
+				if(!Directory.Exists(hl7FolderIn)) {
+					EventLog.WriteEntry("OpenDentHL7","The incoming HL7 folder does not exist.  Path is set to: "+hl7FolderIn,EventLogEntryType.Error);
+					throw new ApplicationException("The incoming HL7 folder does not exist.  Path is set to: "+hl7FolderIn);
+				}
 				//start polling the folder for waiting messages to import.  Every 5 seconds.
 				TimerCallback timercallbackReceive=new TimerCallback(TimerCallbackReceiveFiles);
 				timerReceiveFiles=new System.Threading.Timer(timercallbackReceive,null,5000,5000);
@@ -147,7 +169,7 @@ namespace OpenDentHL7 {
 			}
 			try {
 				MessageHL7 msg=new MessageHL7(msgtext);//this creates an entire heirarchy of objects.
-				MessageParser.Process(msg);
+				MessageParser.Process(msg,IsVerboseLogging);
 				if(IsVerboseLogging) {
 					EventLog.WriteEntry("OpenDentHL7","Processed message "+msg.MsgType.ToString(),EventLogEntryType.Information);
 				}
@@ -282,17 +304,16 @@ namespace OpenDentHL7 {
 			hl7Msg.MsgText=strbFullMsg.ToString();		
 			strbFullMsg.Clear();//ready for the next message
 			if(isMalformed){
-//todo: make a comment the hl7Msg.Note field.
+				hl7Msg.Note="This message is malformed so it was not processed.";
 			}
 			else{
 				try {
 					MessageHL7 messageHl7Object=new MessageHL7(strbFullMsg.ToString());//this creates an entire heirarchy of objects.
-					MessageParser.Process(messageHl7Object);
+					MessageParser.Process(messageHl7Object,IsVerboseLogging);
 					hl7Msg.HL7Status=HL7MessageStatus.InProcessed;
 				}
 				catch(Exception ex) {
-//todo: put the error into the hl7Msg.Note field.
-					//EventLog.WriteEntry(ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
+					hl7Msg.Note=ex.Message+"\r\n"+ex.StackTrace;
 					hl7Msg.HL7Status=HL7MessageStatus.InFailed;
 				}
 			}
