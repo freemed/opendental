@@ -120,7 +120,7 @@ namespace OpenDental {
 			//Application.DoEvents();
 			//textLog.Text+=Test1(verbose);
 			//Application.DoEvents();
-			textLog.Text+="Done.";
+			textLog.Text+="\r\nDone.";
 		}
 
 		private string appointmentTriggersForHl7(bool verbose) {
@@ -189,7 +189,7 @@ namespace OpenDental {
 				textLog.Text+="".PadRight(90,'*')+"\r\n";
 			}
 			if(verbose) {
-				textLog.Text+="HL7 Interface "+hl7InterfaceIDs[leastErrorIndex]+" had "+interfaceErrorCount[leastErrorIndex]+" errors.\r\n";
+				textLog.Text+="HL7 Interface "+hl7InterfaceIDs[leastErrorIndex]+" had "+(interfaceErrorCount[leastErrorIndex]==0?"no":"the following")+" issues.\r\n";
 			}
 			textLog.Text+=interfaceErrorLogs[leastErrorIndex];
 			Application.DoEvents();
@@ -362,16 +362,30 @@ namespace OpenDental {
 		}*/
 
 		private string checkDentalVisitTypes(bool verbose) {
-			string retval = ""; 
-			DataTable queryResult = new DataTable();
+			string retval = "";
+			DataTable tableVisitCodesJOINpmCodes = new DataTable();
 			try {
-				queryResult=MySqlHelper.ExecuteDataset(connString,"SELECT * FROM pmcodes WHERE (ecwcode LIKE '%dental%' OR externalCode LIKE '%dental%') AND pmid=1 AND flag='VS';").Tables[0];
+				tableVisitCodesJOINpmCodes=MySqlHelper.ExecuteDataset(connString,"SELECT * FROM visitcodes LEFT OUTER JOIN pmcodes ON visitcodes.Name=pmcodes.ecwcode WHERE dentalvisit=1;").Tables[0];
 			}
 			catch(Exception ex) {
 				return ex.Message+"\r\n";
 			}
-			if(queryResult.Rows.Count==0 || verbose) {
-				retval+="Number of dental visit codes found : "+queryResult.Rows.Count+".\r\n";
+			//left outer join should show null in ecwcode if there is no corresponding pmcode for the visitcode.
+			if(verbose || tableVisitCodesJOINpmCodes.Select("ecwcode is null").Length>0 || tableVisitCodesJOINpmCodes.Rows.Count==0) {
+				retval+="\r\n";
+				retval+="   Dental Visit Codes\r\n";
+				retval+="".PadRight(90,'*')+"\r\n";
+				foreach(DataRow dRow in tableVisitCodesJOINpmCodes.Rows) {
+					if(dRow["ecwcode"].ToString()=="") {
+						retval+="Dental visit code named \""+dRow["Description"].ToString()+"\" found but not set up.\r\n";
+					}
+					else if(verbose) {
+						retval+="Dental visit code named \""+dRow["Description"].ToString()+"\" found.\r\n";
+					}
+				}
+				if(tableVisitCodesJOINpmCodes.Rows.Count==0) {
+					retval+="No dental visit codes found or set up.\r\n";
+				}
 			}
 			return retval;
 		}
@@ -389,7 +403,10 @@ namespace OpenDental {
 			bool failed=true;
 			string command="SHOW TABLES;";
 			DataTable qResult=MySql.Data.MySqlClient.MySqlHelper.ExecuteDataset(connString,command).Tables[0];
+			//or
 			MySql.Data.MySqlClient.MySqlDataReader mtDataReader;
+
+
 			//Place check code here. Also, use a reader, table or both as shown above.
 
 			if(verbose||failed) {
@@ -407,7 +424,7 @@ namespace OpenDental {
 			catch(Exception ex) {
 				//fail VERY silently. Mwa Ha Ha.
 			}
-			if(arbitraryStringName[arbitraryStringName.Length-1]=='X') {//Clear string if 'X' is pressed.
+			if(arbitraryStringName.ToString().EndsWith("X")) {//Clear string if (upper case) 'X' is pressed.
 				arbitraryStringName.Clear();
 			}
 			if(arbitraryStringName.ToString()=="open" || arbitraryStringName.ToString()=="There is no cow level") {

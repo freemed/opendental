@@ -29,17 +29,18 @@ namespace OpenDental{
 			this.gridTables = new OpenDental.UI.ODGrid();
 			this.butRunQ = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.listQuery = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
 			// 
 			// textQuery
 			// 
 			this.textQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textQuery.Location = new System.Drawing.Point(12, 58);
+			this.textQuery.Location = new System.Drawing.Point(246, 58);
 			this.textQuery.Multiline = true;
 			this.textQuery.Name = "textQuery";
 			this.textQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textQuery.Size = new System.Drawing.Size(962, 99);
+			this.textQuery.Size = new System.Drawing.Size(728, 99);
 			this.textQuery.TabIndex = 3;
 			this.textQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textQuery_KeyDown);
 			// 
@@ -119,10 +120,20 @@ namespace OpenDental{
 			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// listQuery
+			// 
+			this.listQuery.FormattingEnabled = true;
+			this.listQuery.Location = new System.Drawing.Point(12, 58);
+			this.listQuery.Name = "listQuery";
+			this.listQuery.Size = new System.Drawing.Size(228, 95);
+			this.listQuery.TabIndex = 9;
+			this.listQuery.SelectedIndexChanged += new System.EventHandler(this.listQuery_SelectedIndexChanged);
+			// 
 			// FormEcwDiagAdv
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1073, 680);
+			this.Controls.Add(this.listQuery);
 			this.Controls.Add(this.gridTables);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butRunQ);
@@ -146,5 +157,6 @@ namespace OpenDental{
 		private UI.Button butRunQ;
 		private UI.ODGrid gridMain;
 		private UI.ODGrid gridTables;
+		private System.Windows.Forms.ListBox listQuery;
 	}
 }

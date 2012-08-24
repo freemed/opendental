@@ -35,6 +35,7 @@ namespace OpenDental {
 		}
 
 		private void FormEcwDiagAdv_Load(object sender,EventArgs e) {
+			fillQueryList();
 			server=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWServer");
 			port=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"eCWPort");
 			buildConnectionString();
@@ -86,6 +87,18 @@ namespace OpenDental {
 										+");";
 			RunQuery();
 			FillTables();
+		}
+
+		private void fillQueryList() {
+			listQuery.Items.Add("SELECT * FROM itemkeys WHERE NAME IN ('pwd', 'user', 'FtpPath', 'Administrator', 'ClientVersion', 'upgrade_sqlver', 'ReconcilePatientFlag', 'ReconciliationPath', 'InterfaceID', 'GenericResultsPath', 'IsSIUOutboundConfigured', 'IsSIUOutboundVirtualTelConfigured', 'IsADTOutboundConfigured', 'IsADTWithOutHL7Interface', 'DentalEMRAppPath', 'EnableDentalEMR', 'isSaasPractice');");
+			listQuery.Items.Add("SELECT * FROM mobiledoc.pmitemkeys WHERE name LIKE '%_Filter_for_%';/*look at 'value' column. Look for values other than 'no'*/");
+			listQuery.Items.Add("SELECT * FROM mobiledoc.hl7segment_details;/*Look for AIG or PV1 segment in the SIU messages.*/");
+			listQuery.Items.Add("SELECT * FROM mobiledoc.hl7segment_groups;/*Look at group definitions.*/");
+			listQuery.Items.Add("SELECT * FROM mobiledoc.itemkeys WHERE NAME IN ('pwd', 'user', 'FtpPath', 'Administrator', 'ClientVersion', 'upgrade_sqlver', 'ReconcilePatientFlag', 'ReconciliationPath', 'InterfaceID', 'GenericResultsPath', 'IsSIUOutboundConfigured', 'IsSIUOutboundVirtualTelConfigured', 'IsADTOutboundConfigured', 'IsADTWithOutHL7Interface', 'DentalEMRAppPath', 'EnableDentalEMR', 'isSaasPractice');/*General settings that might be useful.*/");
+			listQuery.Items.Add("SELECT * FROM pmcodes;");
+			listQuery.Items.Add("SELECT * FROM visitcodes ORDER by dentalvisit DESC;");
+			listQuery.Items.Add("SELECT * FROM visitcodes LEFT OUTER JOIN pmcodes ON visitcodes.Name=pmcodes.ecwcode WHERE dentalvisit=1;");
+			//listQuery.Items.Add("");
 		}
 
 		private void FillTables() {
@@ -235,10 +248,6 @@ namespace OpenDental {
 
 		}
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
 		private void butRunQ_Click(object sender,EventArgs e) {
 			RunQuery();
 		}
@@ -263,6 +272,15 @@ namespace OpenDental {
 			if(e.KeyCode==Keys.F9) {
 				RunQuery();
 			}
+		}
+
+		private void listQuery_SelectedIndexChanged(object sender,EventArgs e) {
+			textQuery.Text=listQuery.Items[listQuery.SelectedIndex].ToString();
+			RunQuery();
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
+			DialogResult=DialogResult.Cancel;
 		}
 
 	}
