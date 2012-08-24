@@ -12,10 +12,16 @@ namespace OpenDentHL7 {
 		/// </summary>
 		static void Main(string[] args) {
 #if DEBUG
+			string serviceName="OpenDentHL7";
+			for(int i=0;i<args.Length;i++) {
+				if(args[i].StartsWith("ServiceName=") && args[i].Length>12) {
+					serviceName=args[i].Substring(11).Trim('"');
+				}
+			}
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FormDebug());
-//#else
+			Application.Run(new FormDebug(serviceName));
+#else
 			//ServiceBase[] ServicesToRun;
 			//ServiceHL7 serviceHL7=new ServiceHL7();
 			//serviceHL7.ServiceName="serviceHL7";
@@ -26,13 +32,11 @@ namespace OpenDentHL7 {
 			//ServiceBase.Run(ServicesToRun);
 			EventLog.WriteEntry("OpenDentHL7.Main", DateTime.Now.ToLongTimeString() +" - Service main method starting...");
 			ServiceHL7 serviceHL7=new ServiceHL7();
+			serviceHL7.ServiceName="OpenDentHL7";
 			for(int i=0;i<args.Length;i++) {
 				if(args[i].StartsWith("ServiceName=") && args[i].Length>12) {
 					serviceHL7.ServiceName=args[i].Substring(11).Trim('"');
 				}
-			}
-			if(serviceHL7.ServiceName=="") {
-				serviceHL7.ServiceName="OpenDentHL7";
 			}
 			ServiceBase.Run(new ServiceHL7());
 			EventLog.WriteEntry("OpenDentHL7.Main",DateTime.Now.ToLongTimeString() +" - Service main method exiting...");

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Configuration.Install;
 using System.ServiceProcess;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace OpenDentServer {
 	[RunInstallerAttribute(true)]
@@ -15,13 +16,20 @@ namespace OpenDentServer {
 			serviceInstaller1 = new ServiceInstaller();
 			processInstaller.Account = ServiceAccount.LocalSystem;
 			serviceInstaller1.StartType = ServiceStartMode.Automatic;
-      //new strategy for setting the service name:
-			if(Context.Parameters.ContainsKey("ServiceName")) {//if InstallUtil.exe was used with /ServiceName=xyz parameter 
-				serviceInstaller1.ServiceName=Context.Parameters["ServiceName"];
+			serviceInstaller1.ServiceName="OpenDentHL7";
+			string[] args=Environment.GetCommandLineArgs();
+			for(int i=0;i<args.Length;i++) {
+				if(args[i].StartsWith("/ServiceName")) {
+					serviceInstaller1.ServiceName=args[i].Substring(13);
+				}
 			}
-			else {
-				serviceInstaller1.ServiceName="OpenDentHL7";
-			}
+			////new strategy for setting the service name:
+			//if(Context.Parameters.ContainsKey("ServiceName")) {//if InstallUtil.exe was used with /ServiceName=xyz parameter 
+			//  serviceInstaller1.ServiceName=Context.Parameters["ServiceName"];
+			//}
+			//else {
+			//	serviceInstaller1.ServiceName="OpenDentHL7";
+			//}
 			Installers.Add(serviceInstaller1);
 			Installers.Add(processInstaller);
 		}

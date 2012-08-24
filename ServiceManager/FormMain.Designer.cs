@@ -38,6 +38,7 @@
 			this.listMain.Name = "listMain";
 			this.listMain.Size = new System.Drawing.Size(174,303);
 			this.listMain.TabIndex = 1;
+			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// label1
 			// 
@@ -55,6 +56,7 @@
 			this.butAdd.TabIndex = 3;
 			this.butAdd.Text = "Add";
 			this.butAdd.UseVisualStyleBackColor = true;
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormMain
 			// 

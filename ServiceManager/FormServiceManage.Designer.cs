@@ -33,7 +33,8 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.textName = new System.Windows.Forms.TextBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.textPathToExe = new System.Windows.Forms.TextBox();
+			this.butBrowse = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// butRefresh
@@ -44,6 +45,7 @@
 			this.butRefresh.TabIndex = 4;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.UseVisualStyleBackColor = true;
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// butStop
 			// 
@@ -53,6 +55,7 @@
 			this.butStop.TabIndex = 3;
 			this.butStop.Text = "Stop";
 			this.butStop.UseVisualStyleBackColor = true;
+			this.butStop.Click += new System.EventHandler(this.butStop_Click);
 			// 
 			// butStart
 			// 
@@ -62,6 +65,7 @@
 			this.butStart.TabIndex = 2;
 			this.butStart.Text = "Start";
 			this.butStart.UseVisualStyleBackColor = true;
+			this.butStart.Click += new System.EventHandler(this.butStart_Click);
 			// 
 			// butUninstall
 			// 
@@ -71,6 +75,7 @@
 			this.butUninstall.TabIndex = 1;
 			this.butUninstall.Text = "Uninstall";
 			this.butUninstall.UseVisualStyleBackColor = true;
+			this.butUninstall.Click += new System.EventHandler(this.butUninstall_Click);
 			// 
 			// butInstall
 			// 
@@ -80,6 +85,7 @@
 			this.butInstall.TabIndex = 0;
 			this.butInstall.Text = "Install";
 			this.butInstall.UseVisualStyleBackColor = true;
+			this.butInstall.Click += new System.EventHandler(this.butInstall_Click);
 			// 
 			// textStatus
 			// 
@@ -123,20 +129,31 @@
 			this.label3.Text = "Path to OpenDentHL7.exe";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textBox1
+			// textPathToExe
 			// 
-			this.textBox1.Location = new System.Drawing.Point(156,56);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(521,20);
-			this.textBox1.TabIndex = 8;
+			this.textPathToExe.Location = new System.Drawing.Point(156,56);
+			this.textPathToExe.Name = "textPathToExe";
+			this.textPathToExe.Size = new System.Drawing.Size(448,20);
+			this.textPathToExe.TabIndex = 8;
+			// 
+			// butBrowse
+			// 
+			this.butBrowse.Location = new System.Drawing.Point(608,55);
+			this.butBrowse.Name = "butBrowse";
+			this.butBrowse.Size = new System.Drawing.Size(75,23);
+			this.butBrowse.TabIndex = 9;
+			this.butBrowse.Text = "Browse";
+			this.butBrowse.UseVisualStyleBackColor = true;
+			this.butBrowse.Click += new System.EventHandler(this.butBrowse_Click);
 			// 
 			// FormServiceManage
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(697,166);
+			this.Controls.Add(this.butBrowse);
 			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textBox1);
+			this.Controls.Add(this.textPathToExe);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textName);
 			this.Controls.Add(this.butRefresh);
@@ -147,7 +164,9 @@
 			this.Controls.Add(this.textStatus);
 			this.Controls.Add(this.butInstall);
 			this.Name = "FormServiceManage";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Manage Service";
+			this.Load += new System.EventHandler(this.FormServiceManager_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -165,6 +184,7 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TextBox textName;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox textPathToExe;
+		private System.Windows.Forms.Button butBrowse;
 	}
 }

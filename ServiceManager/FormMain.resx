@@ -126,7 +126,7 @@ Most HL7 users will only add one service to this list.
 But if multiple customer databases are hosted on one server,
 then each database must have its own uniquely named service,
 and each such service will typically point to a different exe
-it it's own separate folder.
+in it's own separate folder.
 (double click to manage)</value>
   </data>
   <metadata name="backgroundWorker2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
