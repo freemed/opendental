@@ -151,6 +151,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Deposit Slips");
 				case Permissions.EquipmentDelete:
 					return Lans.g("enumPermissions","Equipment Delete");
+				case Permissions.EquipmentSetup:
+					return Lans.g("enumPermissions","Equipment Setup");
 				case Permissions.EhrEmergencyAccess:
 					return Lans.g("enumPermissions","EHR Emergency Access");
 				case Permissions.FamilyModule:

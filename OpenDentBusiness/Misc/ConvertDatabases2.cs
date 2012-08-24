@@ -9739,6 +9739,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					}
 				}
 				catch(Exception ex) { }//ex is needed, or exception won't get caught.
+				DataTable table;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command=@"SELECT recalltrigger.RecallTypeNum,MIN(DATE(appointment.AptDateTime)) AS AptDateTime,recall.PatNum
 						FROM appointment,procedurelog,recalltrigger,recall
@@ -9750,7 +9751,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"OR appointment.AptStatus=4) "//ASAP
 						+"AND appointment.AptDateTime > CURDATE() " //early this morning
 						+"GROUP BY recalltrigger.RecallTypeNum,recall.PatNum ";
-						DataTable table=Db.GetTable(command);
+						table=Db.GetTable(command);
 						for(int i=0;i<table.Rows.Count;i++) {
 							if(table.Rows[i]["RecallTypeNum"].ToString()=="") {
 								continue;//this might happen if there are zero results, but the MIN in the query causes one result row with NULLs.
@@ -9772,7 +9773,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+"OR appointment.AptStatus=4) "//ASAP
 						+"AND appointment.AptDateTime > SYSDATE " //early this morning
 						+"GROUP BY recalltrigger.RecallTypeNum,recall.PatNum ";
-					DataTable table=Db.GetTable(command);
+					table=Db.GetTable(command);
 					for(int i=0;i<table.Rows.Count;i++) {
 						if(table.Rows[i]["RecallTypeNum"].ToString()=="") {
 							continue;
@@ -9980,6 +9981,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					command="ALTER TABLE hl7msg ADD Note varchar2(2000)";
 					Db.NonQ(command);
+				}
+				//Add EquipmentSetup permission to all groups that had Setup permission---------------------------------------------
+				long groupNum;
+				command="SELECT DISTINCT UserGroupNum "
+					+"FROM grouppermission "
+					+"WHERE PermType="+POut.Int((int)Permissions.Setup);
+				table=Db.GetTable(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.EquipmentSetup)+")";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.EquipmentSetup)+")";
+						Db.NonQ(command);
+					}
 				}
 
 

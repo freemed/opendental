@@ -577,7 +577,11 @@ namespace OpenDental{
 					node3=SetNode(Permissions.TimecardDeleteEntry);
 						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
-				node2=SetNode(Permissions.EquipmentDelete);
+				node2=SetNode("Equipment");
+					node3=SetNode(Permissions.EquipmentSetup);
+						node2.Nodes.Add(node3);
+					node3=SetNode(Permissions.EquipmentDelete);
+						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			treePermissions.ExpandAll();

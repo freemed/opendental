@@ -148,7 +148,9 @@ namespace OpenDentBusiness{
 		///<summary>59</summary>
 		ReportDashboard,
 		///<summary>60</summary>
-		AutoNoteQuickNoteEdit
+		AutoNoteQuickNoteEdit,
+		///<summary>61</summary>
+		EquipmentSetup
 	}
 
 	

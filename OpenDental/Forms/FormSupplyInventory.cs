@@ -81,7 +81,7 @@ namespace OpenDental {
 		}
 
 		private void butEquipment_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {
+			if(!Security.IsAuthorized(Permissions.EquipmentSetup)) {
 				return;
 			}
 			FormEquipment form=new FormEquipment();
