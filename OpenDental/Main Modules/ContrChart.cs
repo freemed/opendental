@@ -21,6 +21,7 @@ using OpenDental.UI;
 using Tao.Platform.Windows;
 using SparksToothChart;
 using OpenDentBusiness;
+using OpenDentBusiness.HL7;
 using CodeBase;
 #if EHRTEST
 using EHR;
@@ -4145,37 +4146,64 @@ namespace OpenDental{
 		}
 
 		private void Tool_HL7_Click() {
-			DataTable progNotes=DataSetMain.Tables["ProgNotes"];
+			DataRow row;
 			if(gridProg.SelectedIndices.Length==0) {
 				//autoselect procedures
-				for(int i=0;i<progNotes.Rows.Count;i++) {//loop through every line showing in progress notes
-					if(progNotes.Rows[i]["ProcNum"].ToString()=="0") {
+				for(int i=0;i<gridProg.Rows.Count;i++) {//loop through every line showing in progress notes
+					row=(DataRow)gridProg.Rows[i].Tag;
+					if(row["ProcNum"].ToString()=="0") {
 						continue;//ignore non-procedures
 					}
 					//May want to ignore procs with zero fee?
-					//if((decimal)progNotes.Rows[i]["chargesDouble"]==0) {
+					//if((decimal)row["chargesDouble"]==0) {
 					//  continue;//ignore zero fee procedures, but user can explicitly select them
 					//}
-					if(PIn.Date(progNotes.Rows[i]["ProcDate"].ToString())==DateTime.Today && PIn.Int(progNotes.Rows[i]["ProcStatus"].ToString())==2) {
+					if(PIn.Date(row["ProcDate"].ToString())==DateTime.Today && PIn.Int(row["ProcStatus"].ToString())==(int)ProcStat.C) {
 						gridProg.SetSelected(i,true);
 					}
 				}
 				if(gridProg.SelectedIndices.Length==0) {//if still none selected
-					MessageBox.Show(Lan.g(this,"Please select procedures first."));
+					MsgBox.Show(this,"Please select procedures first.");
 					return;
 				}
 			}
+			List<Procedure> procs=new List<Procedure>();
 			bool allAreProcedures=true;
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++) {
-				if(progNotes.Rows[gridProg.SelectedIndices[i]]["ProcNum"].ToString()=="0") {
+				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
+				if(row["ProcNum"].ToString()=="0") {
 					allAreProcedures=false;
+				}
+				else {
+					procs.Add(Procedures.GetOneProc(PIn.Long(row["ProcNum"].ToString()),false));
 				}
 			}
 			if(!allAreProcedures) {
 				MsgBox.Show(this,"You can only select procedures.");
 				return;
 			}
-
+			long aptNum=0;
+			for(int i=0;i<procs.Count;i++) {
+				if(procs[i].AptNum==0) {
+					continue;
+				}
+				aptNum=procs[i].AptNum;
+				break;
+			}
+			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,"P03","treatment",PatCur,FamCur.ListPats[0],aptNum);
+			if(messageHL7==null) {
+				MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
+				return;
+			}
+			HL7Msg hl7Msg=new HL7Msg();
+			hl7Msg.AptNum=aptNum;
+			hl7Msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+			hl7Msg.MsgText=messageHL7.ToString();
+			hl7Msg.PatNum=PatCur.PatNum;
+			HL7Msgs.Insert(hl7Msg);
+#if DEBUG
+			MsgBox.Show(this,messageHL7.ToString());
+#endif
 		}
 
 		private void menuConsent_Popup(object sender,EventArgs e) {
