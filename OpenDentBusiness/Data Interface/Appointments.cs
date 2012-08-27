@@ -777,9 +777,14 @@ namespace OpenDentBusiness{
 			}
 			else{
 				command="SELECT AptNum,PlannedAptNum,"//AbbrDesc,procedurecode.CodeNum
-					+"ProcFee, "
-					+"SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO,"
-					+"procedurelog.ProcNum "
+					+"ProcFee,";
+				if(dateStart.Date<DateTime.Now.Date) {//Use the actual writeoff if looking at a date in the past, otherwise writeoff estimates will be used.
+					command+="SUM(WriteOff) writeoffPPO,";
+				}
+				else {
+					command+="SUM(CASE WHEN WriteOffEstOverride!=-1 THEN WriteOffEstOverride ELSE WriteOffEst END) writeoffPPO,";
+				}
+				command+="procedurelog.ProcNum "
 					//+"Surf,ToothNum,TreatArea  "
 					+"FROM procedurelog "
 					//+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
