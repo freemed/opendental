@@ -9565,6 +9565,21 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.3.6.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_3_12();
+		}
+
+		private static void To12_3_12() {
+			if(FromVersion<new Version("12.3.12.0")) {
+				string command="";
+				//Sheets created in 12.3 with misc check boxes would have a trailing semicolon.  So we will remove the colon for the sheet field def.
+				command="UPDATE sheetfielddef set FieldName='misc' WHERE FieldType=8 AND FieldName='misc:'";//FieldType 8 = CheckBox.
+				Db.NonQ(command);
+				//And remove the colon from all patient forms.
+				command="UPDATE sheetfield SET FieldName='misc' WHERE FieldType=8 AND FieldName='misc:'";//FieldType 8 = CheckBox.
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '12.3.12.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_4_0();
 		}
 

@@ -225,17 +225,17 @@ namespace OpenDental {
 			string radioButtonValue="";
 			#region Medical History Sheet
 			if(isMedHistSheet) {
-				if(listMedical.Visible && listMedical.SelectedIndex==-1) {
-					switch(fieldName) {
-						case "allergy":
-							MsgBox.Show(this,"Please select an allergy first.");
-							return;
-						case "problem":
-							MsgBox.Show(this,"Please select a problem first.");
-							return;
+				if(listMedical.Visible) {
+					if(listMedical.SelectedIndex==-1) {
+						switch(fieldName) {
+							case "allergy":
+								MsgBox.Show(this,"Please select an allergy first.");
+								return;
+							case "problem":
+								MsgBox.Show(this,"Please select a problem first.");
+								return;
+						}
 					}
-				}
-				if(!fieldName.StartsWith("checkMed")) {
 					fieldName+=":"+listMedical.SelectedItem;
 				}
 				if(radioNo.Checked) {
