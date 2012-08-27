@@ -613,12 +613,14 @@ namespace OpenDental{
 			this.butECards.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butECards.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butECards.CornerRadius = 4F;
+			this.butECards.Enabled = false;
 			this.butECards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butECards.Location = new System.Drawing.Point(256, 637);
 			this.butECards.Name = "butECards";
 			this.butECards.Size = new System.Drawing.Size(91, 24);
 			this.butECards.TabIndex = 60;
 			this.butECards.Text = "eCards";
+			this.butECards.Visible = false;
 			this.butECards.Click += new System.EventHandler(this.butECards_Click);
 			// 
 			// FormRecallList
@@ -1389,7 +1391,9 @@ namespace OpenDental{
 				}
 			}
 			else if(returnMessage.MessageCode==DivvySystemsService.MessageCode.CompletedWithErrors) {
-				//Todo: Find out what happens when we get this message? If some postcards were sent, make commlog entry and update recall statuses.
+				for(int i=0;i<returnMessage.PostcardMessages.Length;i++) {
+					//todo: process return messages. Update commlog and change recall statuses for postcards that were sent.
+				}
 			}
 			FillMain(null);
 			Cursor=Cursors.Default;
