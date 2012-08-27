@@ -923,7 +923,7 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),procNum);
 			}
-			string command="SELECT * FROM procedurelog WHERE ProcStatus<>6 AND ProcNumLab="+POut.Long(procNum);
+			string command="SELECT * FROM procedurelog WHERE ProcStatus<>"+POut.Int((int)ProcStat.D)+" AND ProcNumLab="+POut.Long(procNum);
 			return ProcedureCrud.SelectMany(command);
 		}
 

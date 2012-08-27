@@ -2458,9 +2458,15 @@ namespace OpenDental{
 					canadaLabFees=Procedures.GetCanadianLabFees(ProcCur.ProcNum);
 					if(canadaLabFees.Count>0) {
 						textCanadaLabFee1.Text=canadaLabFees[0].ProcFee.ToString("n");
+						if(canadaLabFees[0].ProcStatus==ProcStat.C) {
+							textCanadaLabFee1.Enabled=false;
+						}
 					}
 					if(canadaLabFees.Count>1) {
 						textCanadaLabFee2.Text=canadaLabFees[1].ProcFee.ToString("n");
+						if(canadaLabFees[1].ProcStatus==ProcStat.C) {
+							textCanadaLabFee2.Enabled=false;
+						}
 					}
 				}
 			}
@@ -4284,7 +4290,7 @@ namespace OpenDental{
 					}
 				}
 				if(textCanadaLabFee1.errorProvider1.GetError(textCanadaLabFee1)!="" || textCanadaLabFee2.errorProvider1.GetError(textCanadaLabFee2)!="") {
-					MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+					MessageBox.Show(Lan.g(this,"Please fix lab fees."));
 					return false;
 				}
 			}
