@@ -92,7 +92,7 @@ namespace OpenDental{
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(125, 16);
 			this.label11.TabIndex = 131;
-			this.label11.Text = "Customer";
+			this.label11.Text = "New Customer";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// textDateEntry
@@ -131,11 +131,11 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(5, 56);
+			this.label2.Location = new System.Drawing.Point(5, 58);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(131, 16);
 			this.label2.TabIndex = 136;
-			this.label2.Text = "Referenced To";
+			this.label2.Text = "Used as a Reference";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butDeleteAll

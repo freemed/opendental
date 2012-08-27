@@ -49,7 +49,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<List<CustRefEntry>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM custrefentry WHERE PatNumCust="+POut.Long(patNum);
+			string command="SELECT * FROM custrefentry WHERE PatNumCust="+POut.Long(patNum)+" OR PatNumRef="+POut.Long(patNum);
 			return Crud.CustRefEntryCrud.SelectMany(command);
 		}
 

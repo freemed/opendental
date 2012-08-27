@@ -20,6 +20,12 @@ namespace OpenDental {
 		}
 
 		private void FormReference_Load(object sender,EventArgs e) {
+			for(int i=0;i<DefC.Short[(int)DefCat.BillingTypes].Length;i++){
+				listBillingType.Items.Add(DefC.Short[(int)DefCat.BillingTypes][i].ItemName);
+				listBillingType.SetSelected(i,true);
+			}
+			listBillingType.TopIndex=0;
+			listBillingType.SelectedIndexChanged+=new EventHandler(listBillingType_SelectedIndexChanged);
 			FillMain(true);
 		}
 
@@ -34,7 +40,13 @@ namespace OpenDental {
 				superFam=PIn.Int(textSuperFamily.Text);
 			}
 			catch { }
-			RefTable=CustReferences.GetReferenceTable(limit,checkBadRefs.Checked,checkUsedRefs.Checked,textCity.Text,textState.Text,
+			long[] billingTypes=new long[listBillingType.SelectedIndices.Count];
+			if(listBillingType.SelectedIndices.Count!=0){
+				for(int i=0;i<listBillingType.SelectedIndices.Count;i++) {
+					billingTypes[i]=DefC.Short[(int)DefCat.BillingTypes][listBillingType.SelectedIndices[i]].DefNum;
+				}
+			}
+			RefTable=CustReferences.GetReferenceTable(limit,billingTypes,checkBadRefs.Checked,checkUsedRefs.Checked,checkGuarOnly.Checked,textCity.Text,textState.Text,
 				textZip.Text,textAreaCode.Text,textSpecialty.Text,superFam,textLName.Text,textFName.Text,textPatNum.Text,age);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -105,6 +117,7 @@ namespace OpenDental {
 			CustReference refCur=CustReferences.GetOne(PIn.Long(RefTable.Rows[e.Row]["CustReferenceNum"].ToString()));
 			FormReferenceEdit FormRE=new FormReferenceEdit(refCur);
 			FormRE.ShowDialog();
+			FillMain(true);
 		}
 
 		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
@@ -122,6 +135,10 @@ namespace OpenDental {
 			Close();
 		}
 
+		private void listBillingType_SelectedIndexChanged(object sender,EventArgs e) {
+			OnDataEntered();
+		}
+
 		private void checkUsedRefs_Click(object sender,EventArgs e) {
 			OnDataEntered();
 		}
@@ -135,7 +152,9 @@ namespace OpenDental {
 		}
 
 		private void butGetAll_Click(object sender,EventArgs e) {
+			Cursor.Current=Cursors.WaitCursor;
 			FillMain(false);
+			Cursor.Current=Cursors.Default;
 		}
 
 		#region TextChanged

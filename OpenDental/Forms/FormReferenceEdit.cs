@@ -62,8 +62,15 @@ namespace OpenDental {
 			FillMain();
 		}
 
+		private void butToday_Click(object sender,EventArgs e) {
+			textRecentDate.Text=DateTime.Now.ToShortDateString();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
-			//No need to validate anything.
+			if(textRecentDate.errorProvider1.GetError(textRecentDate)!="") {
+				MsgBox.Show(this,"Please enter a valid date.");
+			}
+			RefCur.DateMostRecent=PIn.Date(textRecentDate.Text);
 			RefCur.IsBadRef=checkBadRef.Checked;
 			RefCur.Note=textNote.Text;
 			CustReferences.Update(RefCur);

@@ -46,11 +46,26 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Used only from FormReferenceSelect to get the list of references.</summary>
-		public static DataTable GetReferenceTable(bool limit,bool showBadRefs,bool showUsed,string city,string state,string zip,
+		public static DataTable GetReferenceTable(bool limit,long[] billingTypes,bool showBadRefs,bool showUsed,bool showGuarOnly,string city,string state,string zip,
 			string areaCode,string specialty,int superFam,string lname,string fname,string patnum,int age) 
 		{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,showBadRefs,showUsed,city,state,zip,areaCode,specialty,superFam,lname,fname,patnum,age);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),limit,billingTypes,showBadRefs,showUsed,showGuarOnly,city,state,zip,areaCode,specialty,superFam,lname,fname,patnum,age);
+			}
+			string billingSnippet="";
+			if(billingTypes.Length!=0){
+				for(int i=0;i<billingTypes.Length;i++) {
+					if(i==0) {
+						billingSnippet+="AND (";
+					}
+					else {
+						billingSnippet+="OR ";
+					}
+					billingSnippet+="BillingType="+POut.Long(billingTypes[i])+" ";
+					if(i==billingTypes.Length-1) {
+						billingSnippet+=") ";
+					}
+				}
 			}
 			string phonedigits="";
 			for(int i=0;i<areaCode.Length;i++) {
@@ -90,6 +105,8 @@ namespace OpenDentBusiness{
 				INNER JOIN patient p ON cr.PatNum=p.PatNum
 				LEFT JOIN patfield pf ON cr.PatNum=pf.PatNum AND pf.FieldName='Specialty' 
 				WHERE cr.CustReferenceNum<>0 ";//This just makes the following AND statements brainless.
+				command+="AND (p.PatStatus="+POut.Int((int)PatientStatus.Patient)+" OR p.PatStatus="+POut.Int((int)PatientStatus.NonPatient)+") "//excludes deleted, etc.
+					+billingSnippet;
 			if(age > 0) {
 				command+="AND p.Birthdate <"+POut.Date(DateTime.Now.AddYears(-age))+" ";
 			}
@@ -103,7 +120,8 @@ namespace OpenDentBusiness{
 					+(zip.Length>0?"AND p.Zip LIKE '"+POut.String(zip)+"%' ":"")
 					+(patnum.Length>0?"AND p.PatNum LIKE '"+POut.String(patnum)+"%' ":"")
 					+(specialty.Length>0?"AND pf.FieldValue LIKE '"+POut.String(specialty)+"%' ":"")
-					+(showBadRefs?"":"AND cr.IsBadRef=0 ");
+					+(showBadRefs?"":"AND cr.IsBadRef=0 ")
+					+(showGuarOnly?"AND p.Guarantor=p.PatNum":"");
 			if(limit) {
 				command=DbHelper.LimitOrderBy(command,40);
 			}

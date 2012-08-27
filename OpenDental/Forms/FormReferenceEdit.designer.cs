@@ -33,6 +33,7 @@ namespace OpenDental{
 			this.label12 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butToday = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -109,7 +110,6 @@ namespace OpenDental{
 			// 
 			this.textRecentDate.Location = new System.Drawing.Point(127, 50);
 			this.textRecentDate.Name = "textRecentDate";
-			this.textRecentDate.ReadOnly = true;
 			this.textRecentDate.Size = new System.Drawing.Size(100, 20);
 			this.textRecentDate.TabIndex = 132;
 			// 
@@ -142,10 +142,25 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(403, 241);
 			this.gridMain.TabIndex = 135;
-			this.gridMain.Title = "Referenced To";
+			this.gridMain.Title = "Used as a Reference for These New Customers";
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butToday
+			// 
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butToday.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butToday.Autosize = true;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.Location = new System.Drawing.Point(233, 50);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(48, 20);
+			this.butToday.TabIndex = 2;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
 			// 
 			// FormReferenceEdit
 			// 
@@ -160,6 +175,7 @@ namespace OpenDental{
 			this.Controls.Add(this.checkBadRef);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.butOK);
+			this.Controls.Add(this.butToday);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormReferenceEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -182,5 +198,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label1;
 		private UI.ODGrid gridMain;
+		private UI.Button butToday;
 	}
 }

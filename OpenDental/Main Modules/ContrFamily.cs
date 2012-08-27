@@ -907,8 +907,14 @@ namespace OpenDental{
 						}
 						for(int i=0;i<custREList.Count;i++) {
 							row=new ODGridRow();
-							row.Cells.Add(custREList[i].DateEntry.ToShortDateString());
-							row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
+							if(custREList[i].PatNumRef==PatCur.PatNum) {
+								row.Cells.Add(custREList[i].DateEntry.ToShortDateString());
+								row.Cells.Add("For: "+CustReferences.GetCustNameFL(custREList[i].PatNumCust));
+							}
+							else {
+								row.Cells.Add("");
+								row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
+							}
 							row.Tag=custREList[i];
 							row.ColorBackG=DefC.Short[(int)DefCat.MiscColors][8].ItemColor;
 							if(i<custREList.Count-1) {
