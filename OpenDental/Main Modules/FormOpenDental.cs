@@ -3684,7 +3684,6 @@ namespace OpenDental{
 						isBold=false;
 						color=Color.Black;
 						this.Invoke(new DelegateSetString(SetString),new Object[] { msg,isBold,color });
-						return;
 					}
 					msgCount=Directory.GetFiles(PhoneUI.PathPhoneMsg,"*.txt").Length;
 					if(msgCount==0) {

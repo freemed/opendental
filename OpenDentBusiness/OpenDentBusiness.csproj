@@ -260,6 +260,7 @@
     <Compile Include="Crud\PharmacyCrud.cs" />
     <Compile Include="Crud\PhoneCrud.cs" />
     <Compile Include="Crud\PhoneEmpDefaultCrud.cs" />
+    <Compile Include="Crud\PhoneMetricCrud.cs" />
     <Compile Include="Crud\PhoneNumberCrud.cs" />
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />
@@ -447,11 +448,13 @@
     <Compile Include="HL7\MessageConstructor.cs" />
     <Compile Include="InternalTools\Phones\PhoneAsterisks.cs" />
     <Compile Include="InternalTools\Phones\PhoneEmpDefaults.cs" />
+    <Compile Include="InternalTools\Phones\PhoneMetrics.cs" />
     <Compile Include="InternalTools\Phones\PhoneNumbers.cs" />
     <Compile Include="InternalTools\Phones\PhoneOverrides.cs" />
     <Compile Include="InternalTools\Phones\Phones.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\Phone.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneEmpDefault.cs" />
+    <Compile Include="InternalTools\Phones\TableTypes\PhoneMetric.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
     <Compile Include="Misc\InnoDb.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
