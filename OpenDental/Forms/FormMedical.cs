@@ -42,6 +42,7 @@ namespace OpenDental{
 		private PrintDocument pd;
 		private bool headingPrinted;
 		private UI.Button butPrintMedical;
+		private Label label1;
 		private int headingPrintH;
 
 
@@ -96,6 +97,7 @@ namespace OpenDental{
 			this.checkShowInactiveAllergies = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
 			this.butPrintMedical = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -379,12 +381,22 @@ namespace OpenDental{
 			this.butPrintMedical.CornerRadius = 4F;
 			this.butPrintMedical.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrintMedical.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrintMedical.Location = new System.Drawing.Point(9, 647);
+			this.butPrintMedical.Location = new System.Drawing.Point(9, 651);
 			this.butPrintMedical.Name = "butPrintMedical";
 			this.butPrintMedical.Size = new System.Drawing.Size(112, 24);
 			this.butPrintMedical.TabIndex = 67;
 			this.butPrintMedical.Text = "Print Medical";
 			this.butPrintMedical.Click += new System.EventHandler(this.butPrintMedical_Click);
+			// 
+			// label1
+			// 
+			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.label1.Location = new System.Drawing.Point(126, 655);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(241, 16);
+			this.label1.TabIndex = 68;
+			this.label1.Text = "To print medications, use button at UR";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormMedical
 			// 
@@ -392,6 +404,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(964, 683);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butPrintMedical);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShowInactiveAllergies);
@@ -603,10 +616,10 @@ namespace OpenDental{
 			text=Lan.g(this,"Medical History For ")+PatCur.FName+" "+PatCur.LName;
 			g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
 			yPos+=(int)g.MeasureString(text,headingFont).Height;
-			text=Lan.g(this,"Created ")+DateTime.Now.ToString();
+			text=Lan.g(this,"Birthdate: ")+PatCur.Birthdate.ToShortDateString();
 			g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-			text=Lan.g(this,"Born ")+PatCur.Birthdate.ToShortDateString();
+			text=Lan.g(this,"Created ")+DateTime.Now.ToString();
 			g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 			yPos+=25;
@@ -615,16 +628,16 @@ namespace OpenDental{
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 				yPos+=2;
-				yPos+=gridDiseases.PrintPage(g,0,bounds,yPos);
-				yPos-=125;
+				yPos=gridDiseases.PrintPage(g,0,bounds,yPos);
+				yPos+=25;
 			}
 			if(gridAllergies.Rows.Count>0) {
 				text=Lan.g(this,"Allergies");
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 				yPos+=2;
-				yPos+=gridAllergies.PrintPage(g,0,bounds,yPos);
-				yPos-=250;
+				yPos=gridAllergies.PrintPage(g,0,bounds,yPos);
+				yPos+=25;
 			}
 			text=Lan.g(this,"Premedicate (PAC or other): ")+(checkPremed.Checked?"Y":"N");
 			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
@@ -632,13 +645,13 @@ namespace OpenDental{
 			g.DrawString(text,subHeadingFont,Brushes.Black,textRect);
 			yPos+=textHeight;
 			yPos+=10;
-			text=Lan.g(this,"Medical Urgent");
+			text=Lan.g(this,"Medical Urgent Note");
 			g.DrawString(text,subHeadingFont,Brushes.Black,bounds.Left,yPos);
 			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 			text=textMedUrgNote.Text;
 			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
 			textRect=new Rectangle(bounds.Left,yPos,bounds.Width,textHeight);
-			g.DrawString(text,subHeadingFont,Brushes.Red,textRect);
+			g.DrawString(text,bodyFont,Brushes.Black,textRect);//maybe red?
 			yPos+=textHeight;
 			yPos+=10;
 			text=Lan.g(this,"Medical Summary");
