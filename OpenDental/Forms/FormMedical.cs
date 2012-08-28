@@ -41,6 +41,7 @@ namespace OpenDental{
 		private int pagesPrinted;
 		private PrintDocument pd;
 		private bool headingPrinted;
+		private UI.Button butPrintMedical;
 		private int headingPrintH;
 
 
@@ -94,35 +95,36 @@ namespace OpenDental{
 			this.butAddAllergy = new OpenDental.UI.Button();
 			this.checkShowInactiveAllergies = new System.Windows.Forms.CheckBox();
 			this.butPrint = new OpenDental.UI.Button();
+			this.butPrintMedical = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(786,650);
+			this.butOK.Location = new System.Drawing.Point(786, 650);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,25);
+			this.butOK.Size = new System.Drawing.Size(75, 25);
 			this.butOK.TabIndex = 0;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(879,650);
+			this.butCancel.Location = new System.Drawing.Point(879, 650);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,25);
+			this.butCancel.Size = new System.Drawing.Size(75, 25);
 			this.butCancel.TabIndex = 4;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -130,14 +132,14 @@ namespace OpenDental{
 			// textMedUrgNote
 			// 
 			this.textMedUrgNote.AcceptsReturn = true;
-			this.textMedUrgNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textMedUrgNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textMedUrgNote.ForeColor = System.Drawing.Color.Red;
-			this.textMedUrgNote.Location = new System.Drawing.Point(115,447);
+			this.textMedUrgNote.Location = new System.Drawing.Point(115, 447);
 			this.textMedUrgNote.Multiline = true;
 			this.textMedUrgNote.Name = "textMedUrgNote";
 			this.textMedUrgNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalUrgent;
 			this.textMedUrgNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMedUrgNote.Size = new System.Drawing.Size(252,33);
+			this.textMedUrgNote.Size = new System.Drawing.Size(252, 33);
 			this.textMedUrgNote.TabIndex = 53;
 			// 
 			// textService
@@ -145,73 +147,73 @@ namespace OpenDental{
 			this.textService.AcceptsReturn = true;
 			this.textService.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.textService.Location = new System.Drawing.Point(115,558);
+			this.textService.Location = new System.Drawing.Point(115, 558);
 			this.textService.Multiline = true;
 			this.textService.Name = "textService";
 			this.textService.QuickPasteType = OpenDentBusiness.QuickPasteType.ServiceNotes;
 			this.textService.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textService.Size = new System.Drawing.Size(252,83);
+			this.textService.Size = new System.Drawing.Size(252, 83);
 			this.textService.TabIndex = 52;
 			// 
 			// textMedical
 			// 
 			this.textMedical.AcceptsReturn = true;
-			this.textMedical.Location = new System.Drawing.Point(115,482);
+			this.textMedical.Location = new System.Drawing.Point(115, 482);
 			this.textMedical.Multiline = true;
 			this.textMedical.Name = "textMedical";
 			this.textMedical.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalSummary;
 			this.textMedical.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMedical.Size = new System.Drawing.Size(252,74);
+			this.textMedical.Size = new System.Drawing.Size(252, 74);
 			this.textMedical.TabIndex = 51;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(6,559);
+			this.label3.Location = new System.Drawing.Point(6, 559);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(106,16);
+			this.label3.Size = new System.Drawing.Size(106, 16);
 			this.label3.TabIndex = 50;
 			this.label3.Text = "Service Notes";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(6,445);
+			this.label2.Location = new System.Drawing.Point(6, 445);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(106,21);
+			this.label2.Size = new System.Drawing.Size(106, 21);
 			this.label2.TabIndex = 49;
 			this.label2.Text = "Med Urgent";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(6,483);
+			this.label4.Location = new System.Drawing.Point(6, 483);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(106,17);
+			this.label4.Size = new System.Drawing.Size(106, 17);
 			this.label4.TabIndex = 47;
 			this.label4.Text = "Medical Summary";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(371,242);
+			this.label6.Location = new System.Drawing.Point(371, 242);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(421,18);
+			this.label6.Size = new System.Drawing.Size(421, 18);
 			this.label6.TabIndex = 6;
 			this.label6.Text = "Medical History - Complete and Detailed (does not show in chart)";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(374,1);
+			this.butAdd.Location = new System.Drawing.Point(374, 1);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(123,23);
+			this.butAdd.Size = new System.Drawing.Size(123, 23);
 			this.butAdd.TabIndex = 51;
 			this.butAdd.Text = "&Add Medication";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -222,26 +224,26 @@ namespace OpenDental{
 			this.textMedicalComp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textMedicalComp.Location = new System.Drawing.Point(374,262);
+			this.textMedicalComp.Location = new System.Drawing.Point(374, 262);
 			this.textMedicalComp.Multiline = true;
 			this.textMedicalComp.Name = "textMedicalComp";
 			this.textMedicalComp.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalHistory;
 			this.textMedicalComp.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textMedicalComp.Size = new System.Drawing.Size(585,379);
+			this.textMedicalComp.Size = new System.Drawing.Size(585, 379);
 			this.textMedicalComp.TabIndex = 54;
 			// 
 			// butAddDisease
 			// 
-			this.butAddDisease.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butAddDisease.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddDisease.Autosize = true;
 			this.butAddDisease.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddDisease.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddDisease.CornerRadius = 4F;
 			this.butAddDisease.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddDisease.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddDisease.Location = new System.Drawing.Point(5,1);
+			this.butAddDisease.Location = new System.Drawing.Point(5, 1);
 			this.butAddDisease.Name = "butAddDisease";
-			this.butAddDisease.Size = new System.Drawing.Size(98,23);
+			this.butAddDisease.Size = new System.Drawing.Size(98, 23);
 			this.butAddDisease.TabIndex = 58;
 			this.butAddDisease.Text = "Add Problem";
 			this.butAddDisease.Click += new System.EventHandler(this.butAddProblem_Click);
@@ -251,10 +253,10 @@ namespace OpenDental{
 			this.gridMeds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMeds.HScrollVisible = false;
-			this.gridMeds.Location = new System.Drawing.Point(374,26);
+			this.gridMeds.Location = new System.Drawing.Point(374, 26);
 			this.gridMeds.Name = "gridMeds";
 			this.gridMeds.ScrollValue = 0;
-			this.gridMeds.Size = new System.Drawing.Size(585,216);
+			this.gridMeds.Size = new System.Drawing.Size(585, 216);
 			this.gridMeds.TabIndex = 59;
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
@@ -263,10 +265,10 @@ namespace OpenDental{
 			// gridDiseases
 			// 
 			this.gridDiseases.HScrollVisible = false;
-			this.gridDiseases.Location = new System.Drawing.Point(4,26);
+			this.gridDiseases.Location = new System.Drawing.Point(4, 26);
 			this.gridDiseases.Name = "gridDiseases";
 			this.gridDiseases.ScrollValue = 0;
-			this.gridDiseases.Size = new System.Drawing.Size(363,216);
+			this.gridDiseases.Size = new System.Drawing.Size(363, 216);
 			this.gridDiseases.TabIndex = 60;
 			this.gridDiseases.Title = "Problems";
 			this.gridDiseases.TranslationName = "TableDiseases";
@@ -275,9 +277,9 @@ namespace OpenDental{
 			// checkPremed
 			// 
 			this.checkPremed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkPremed.Location = new System.Drawing.Point(6,407);
+			this.checkPremed.Location = new System.Drawing.Point(6, 407);
 			this.checkPremed.Name = "checkPremed";
-			this.checkPremed.Size = new System.Drawing.Size(123,35);
+			this.checkPremed.Size = new System.Drawing.Size(123, 35);
 			this.checkPremed.TabIndex = 61;
 			this.checkPremed.Text = "Premedicate (PAC or other)";
 			this.checkPremed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -285,25 +287,25 @@ namespace OpenDental{
 			// 
 			// butIcd9
 			// 
-			this.butIcd9.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butIcd9.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butIcd9.Autosize = true;
 			this.butIcd9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butIcd9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butIcd9.CornerRadius = 4F;
 			this.butIcd9.Image = global::OpenDental.Properties.Resources.Add;
 			this.butIcd9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butIcd9.Location = new System.Drawing.Point(129,1);
+			this.butIcd9.Location = new System.Drawing.Point(129, 1);
 			this.butIcd9.Name = "butIcd9";
-			this.butIcd9.Size = new System.Drawing.Size(98,23);
+			this.butIcd9.Size = new System.Drawing.Size(98, 23);
 			this.butIcd9.TabIndex = 62;
 			this.butIcd9.Text = "Add ICD9";
 			this.butIcd9.Click += new System.EventHandler(this.butIcd9_Click);
 			// 
 			// checkDiscontinued
 			// 
-			this.checkDiscontinued.Location = new System.Drawing.Point(514,2);
+			this.checkDiscontinued.Location = new System.Drawing.Point(514, 2);
 			this.checkDiscontinued.Name = "checkDiscontinued";
-			this.checkDiscontinued.Size = new System.Drawing.Size(201,23);
+			this.checkDiscontinued.Size = new System.Drawing.Size(201, 23);
 			this.checkDiscontinued.TabIndex = 61;
 			this.checkDiscontinued.Tag = "";
 			this.checkDiscontinued.Text = "Show Discontinued Medications";
@@ -314,10 +316,10 @@ namespace OpenDental{
 			// gridAllergies
 			// 
 			this.gridAllergies.HScrollVisible = false;
-			this.gridAllergies.Location = new System.Drawing.Point(4,278);
+			this.gridAllergies.Location = new System.Drawing.Point(4, 278);
 			this.gridAllergies.Name = "gridAllergies";
 			this.gridAllergies.ScrollValue = 0;
-			this.gridAllergies.Size = new System.Drawing.Size(363,123);
+			this.gridAllergies.Size = new System.Drawing.Size(363, 123);
 			this.gridAllergies.TabIndex = 63;
 			this.gridAllergies.Title = "Allergies";
 			this.gridAllergies.TranslationName = "TableDiseases";
@@ -325,25 +327,25 @@ namespace OpenDental{
 			// 
 			// butAddAllergy
 			// 
-			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddAllergy.Autosize = true;
 			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAddAllergy.CornerRadius = 4F;
 			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddAllergy.Location = new System.Drawing.Point(5,249);
+			this.butAddAllergy.Location = new System.Drawing.Point(5, 249);
 			this.butAddAllergy.Name = "butAddAllergy";
-			this.butAddAllergy.Size = new System.Drawing.Size(98,23);
+			this.butAddAllergy.Size = new System.Drawing.Size(98, 23);
 			this.butAddAllergy.TabIndex = 64;
 			this.butAddAllergy.Text = "Add Allergy";
 			this.butAddAllergy.Click += new System.EventHandler(this.butAddAllergy_Click);
 			// 
 			// checkShowInactiveAllergies
 			// 
-			this.checkShowInactiveAllergies.Location = new System.Drawing.Point(129,250);
+			this.checkShowInactiveAllergies.Location = new System.Drawing.Point(129, 250);
 			this.checkShowInactiveAllergies.Name = "checkShowInactiveAllergies";
-			this.checkShowInactiveAllergies.Size = new System.Drawing.Size(201,23);
+			this.checkShowInactiveAllergies.Size = new System.Drawing.Size(201, 23);
 			this.checkShowInactiveAllergies.TabIndex = 65;
 			this.checkShowInactiveAllergies.Tag = "";
 			this.checkShowInactiveAllergies.Text = "Show Inactive Allergies";
@@ -352,7 +354,7 @@ namespace OpenDental{
 			// 
 			// butPrint
 			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPrint.Autosize = true;
 			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -360,19 +362,37 @@ namespace OpenDental{
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(843,1);
+			this.butPrint.Location = new System.Drawing.Point(843, 1);
 			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(116,24);
+			this.butPrint.Size = new System.Drawing.Size(116, 24);
 			this.butPrint.TabIndex = 66;
 			this.butPrint.Text = "Print Medications";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// butPrintMedical
+			// 
+			this.butPrintMedical.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrintMedical.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrintMedical.Autosize = true;
+			this.butPrintMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintMedical.CornerRadius = 4F;
+			this.butPrintMedical.Image = global::OpenDental.Properties.Resources.butPrintSmall;
+			this.butPrintMedical.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintMedical.Location = new System.Drawing.Point(9, 647);
+			this.butPrintMedical.Name = "butPrintMedical";
+			this.butPrintMedical.Size = new System.Drawing.Size(112, 24);
+			this.butPrintMedical.TabIndex = 67;
+			this.butPrintMedical.Text = "Print Medical";
+			this.butPrintMedical.Click += new System.EventHandler(this.butPrintMedical_Click);
+			// 
 			// FormMedical
 			// 
 			this.AcceptButton = this.butOK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(964,683);
+			this.ClientSize = new System.Drawing.Size(964, 683);
+			this.Controls.Add(this.butPrintMedical);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.checkShowInactiveAllergies);
 			this.Controls.Add(this.butAddAllergy);
@@ -540,6 +560,104 @@ namespace OpenDental{
 			else {
 				e.HasMorePages=false;
 			}
+			g.Dispose();
+		}
+
+		/// <summary>This report is a brute force, one page medical history report. It is not designed to handle more than one page. It does not print service notes or medications.</summary>
+		private void butPrintMedical_Click(object sender,EventArgs e) {
+			pd=new PrintDocument();
+			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPageMedical);
+			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
+			pd.OriginAtMargins=true;
+			if(pd.DefaultPageSettings.PrintableArea.Height==0) {
+				pd.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
+			}
+			try {
+#if DEBUG
+        FormRpPrintPreview pView = new FormRpPrintPreview();
+        pView.printPreviewControl2.Document=pd;
+        pView.ShowDialog();
+#else
+					if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
+						pd.Print();
+					}
+#endif
+			}
+			catch {
+				MessageBox.Show(Lan.g(this,"Printer not available"));
+			}
+		}
+
+		private void pd_PrintPageMedical(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
+			Rectangle bounds=e.MarginBounds;
+			Graphics g=e.Graphics;
+			string text;
+			Font headingFont=new Font("Arial",13,FontStyle.Bold);
+			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
+			Font bodyFont=new Font(FontFamily.GenericSansSerif,10);
+			StringFormat format=new StringFormat();
+			int yPos=bounds.Top;
+			int center=bounds.X+bounds.Width/2;
+			int textHeight;
+			RectangleF textRect;
+			text=Lan.g(this,"Medical History For ")+PatCur.FName+" "+PatCur.LName;
+			g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
+			yPos+=(int)g.MeasureString(text,headingFont).Height;
+			text=Lan.g(this,"Created ")+DateTime.Now.ToString();
+			g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+			text=Lan.g(this,"Born ")+PatCur.Birthdate.ToShortDateString();
+			g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+			yPos+=25;
+			if(gridDiseases.Rows.Count>0) {
+				text=Lan.g(this,"Problems");
+				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				yPos+=2;
+				yPos+=gridDiseases.PrintPage(g,0,bounds,yPos);
+				yPos-=125;
+			}
+			if(gridAllergies.Rows.Count>0) {
+				text=Lan.g(this,"Allergies");
+				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
+				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+				yPos+=2;
+				yPos+=gridAllergies.PrintPage(g,0,bounds,yPos);
+				yPos-=250;
+			}
+			text=Lan.g(this,"Premedicate (PAC or other): ")+(checkPremed.Checked?"Y":"N");
+			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
+			textRect=new Rectangle(bounds.Left,yPos,bounds.Width,textHeight);
+			g.DrawString(text,subHeadingFont,Brushes.Black,textRect);
+			yPos+=textHeight;
+			yPos+=10;
+			text=Lan.g(this,"Medical Urgent");
+			g.DrawString(text,subHeadingFont,Brushes.Black,bounds.Left,yPos);
+			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+			text=textMedUrgNote.Text;
+			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
+			textRect=new Rectangle(bounds.Left,yPos,bounds.Width,textHeight);
+			g.DrawString(text,subHeadingFont,Brushes.Red,textRect);
+			yPos+=textHeight;
+			yPos+=10;
+			text=Lan.g(this,"Medical Summary");
+			g.DrawString(text,subHeadingFont,Brushes.Black,bounds.Left,yPos);
+			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+			text=textMedical.Text;
+			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
+			textRect=new Rectangle(bounds.Left,yPos,bounds.Width,textHeight);
+			g.DrawString(text,bodyFont,Brushes.Black,textRect);
+			yPos+=textHeight;
+			yPos+=10;
+			text=Lan.g(this,"Medical History - Complete and Detailed");
+			g.DrawString(text,subHeadingFont,Brushes.Black,bounds.Left,yPos);
+			yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
+			text=textMedicalComp.Text;
+			textHeight=(int)g.MeasureString(text,bodyFont,bounds.Width).Height;
+			textRect=new Rectangle(bounds.Left,yPos,bounds.Width,textHeight);
+			g.DrawString(text,bodyFont,Brushes.Black,textRect);
+			yPos+=textHeight;
 			g.Dispose();
 		}
 
