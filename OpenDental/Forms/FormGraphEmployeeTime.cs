@@ -15,7 +15,7 @@ namespace OpenDental {
 		private float[] buckets;//a bucket can hold partial people.
 		private bool[] usedLunch;
 		private DateTime dateShowing;
-		private int[] missedCalls;
+		private int[] minutesBehind;
 		///<summary>Retrieved once when opening the form, then reused.</summary>
 		private List<PhoneEmpDefault> ListPED;
 
@@ -124,17 +124,19 @@ namespace OpenDental {
 				//break;//just show one sched for debugging.
 			}
 			//missed calls
-			missedCalls=new int[28];
-			List<DateTime> callTimes=PhoneAsterisks.GetMissedCalls(dateShowing);
-			for(int i=0;i<callTimes.Count;i++) {
-				for(int b=0;b<missedCalls.Length;b++) {
-					time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
-					time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
-					if(callTimes[i].TimeOfDay >= time1 && callTimes[i].TimeOfDay < time2) {
-						missedCalls[b]++;
-					}
-				}
-			}
+			//missedCalls=new int[28];
+			//List<DateTime> callTimes=PhoneAsterisks.GetMissedCalls(dateShowing);
+			//for(int i=0;i<callTimes.Count;i++) {
+			//  for(int b=0;b<missedCalls.Length;b++) {
+			//    time1=new TimeSpan(5,0,0) + new TimeSpan(0,b*30,0);
+			//    time2=new TimeSpan(5,30,0) + new TimeSpan(0,b*30,0);
+			//    if(callTimes[i].TimeOfDay >= time1 && callTimes[i].TimeOfDay < time2) {
+			//      missedCalls[b]++;
+			//    }
+			//  }
+			//}
+			//Minutes Behind
+			minutesBehind=PhoneMetrics.AverageMinutesBehind();
 			this.Invalidate();
 		}
 
@@ -228,11 +230,11 @@ namespace OpenDental {
 				e.Graphics.DrawLine(redPen,x1,y1,x2,y2);
 			}
 			//Missed call numbers
-			for(int i=0;i<missedCalls.Length;i++) {
-				if(missedCalls[i]==0) {
+			for(int i=0;i<minutesBehind.Length;i++) {
+				if(minutesBehind[i]==0) {
 					continue;
 				}
-				str=missedCalls[i].ToString();
+				str=minutesBehind[i].ToString();
 				strW=e.Graphics.MeasureString(str,Font).Width;
 				x1=rec.X + barW + ((float)i * rec.Width / totalhrs / 2) - strW / 2f;
 				y1=rec.Y+rec.Height-17;

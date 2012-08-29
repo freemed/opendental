@@ -16,6 +16,42 @@ namespace OpenDentBusiness{
 			}
 			return Crud.PhoneMetricCrud.Insert(phoneMetric);
 		}
+		
+		///<summary>Returns the average number of minutes behind rounded down for each half hour from 5:00 AM - 7:00 PM.</summary>
+		public static int[] AverageMinutesBehind(){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<int[]>(MethodBase.GetCurrentMethod());
+			}
+			DateTime startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
+			DateTime endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,19,0,0);
+			string command="SELECT * FROM phonemetric WHERE DateTimeEntry BETWEEN "+POut.DateT(startTime)+" AND "+POut.DateT(endTime);
+			List<PhoneMetric> listPhoneMetrics=Crud.PhoneMetricCrud.SelectMany(command);
+			int[] avgMinBehind=new int[28];//Used in FormGraphEmployeeTime. One "bucket" every half hour.
+			int numerator;
+			int denominator;
+			for(int i=0;i<28;i++) {
+				numerator=0;
+				denominator=0;
+				//reuse startTime and endTime for 30 minute intervals
+				startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
+				endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,30,0);
+				for(int j=0;j<listPhoneMetrics.Count;j++) {
+					if(startTime<listPhoneMetrics[j].DateTimeEntry && listPhoneMetrics[j].DateTimeEntry < endTime) { //startTime < time < endTime
+						numerator+=listPhoneMetrics[j].MinutesBehind;
+						denominator++;
+					}
+				}
+				if(denominator>0) {
+					avgMinBehind[i]=numerator/denominator;//denominator should usually be 30. Result will be rounded down due to integer math.
+				}
+				else {
+					avgMinBehind[i]=0;
+				}
+				startTime=startTime.AddMinutes(30);
+				endTime=endTime.AddMinutes(30);
+			}
+			return avgMinBehind;
+		}
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
