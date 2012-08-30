@@ -9606,7 +9606,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						InternalType varchar(255) NOT NULL,
 						InternalTypeVersion varchar(50) NOT NULL,
 						IsEnabled tinyint NOT NULL,
-						Note text NOT NULL
+						Note text NOT NULL,
+						HL7Server varchar(255) NOT NULL,
+						HL7ServiceName varchar(255) NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}
@@ -9631,6 +9633,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						InternalTypeVersion varchar2(50),
 						IsEnabled number(3) NOT NULL,
 						Note clob,
+						HL7Server varchar2(255),
+						HL7ServiceName varchar2(255),
 						CONSTRAINT hl7def_HL7DefNum PRIMARY KEY (HL7DefNum)
 						)";
 					Db.NonQ(command);
@@ -10032,7 +10036,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						+") VALUES("
 						+"'"+POut.Long(programNum)+"', "
 						+"'HL7ServiceName', "
-						+"'OpenDentalHL7')";
+						+"'')";
 					Db.NonQ(command);
 				}
 				else {//oracle
@@ -10089,7 +10093,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
 
 
 

@@ -44,6 +44,10 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
+		///<summary>The machine name of the computer where the OpenDentHL7 service for this def is running.</summary>
+		public string HL7Server;
+		///<summary>The name of the HL7 service for this def.  Must begin with OpenDent...</summary>
+		public string HL7ServiceName;
 
 		///<Summary>List of messages associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
 		[CrudColumn(IsNotDbColumn=true)]
