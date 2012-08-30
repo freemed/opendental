@@ -69,6 +69,10 @@ namespace ServiceManager {
 		}
 
 		private void butInstall_Click(object sender,EventArgs e) {
+			if(textName.Text.Length<8 || textName.Text.Substring(0,8)!="OpenDent") {
+				MessageBox.Show("Error.  Service name must begin with \"OpenDent\".");
+				return;
+			}
 			for(int i=0;i<allOpenDentServices.Count;i++) {//create list of all OpenDent service install paths to ensure only one service can be installed from each directory
 				if(textName.Text==allOpenDentServices[i].ServiceName) {
 					MessageBox.Show("Error.  An OpenDentHL7 service with this name is already installed.  Names must be unique.");

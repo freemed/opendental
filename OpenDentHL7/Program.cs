@@ -38,7 +38,7 @@ namespace OpenDentHL7 {
 					serviceHL7.ServiceName=args[i].Substring(11).Trim('"');
 				}
 			}
-			ServiceBase.Run(new ServiceHL7());
+			ServiceBase.Run(serviceHL7);
 			EventLog.WriteEntry("OpenDentHL7.Main",DateTime.Now.ToLongTimeString() +" - Service main method exiting...");
 #endif
 		}

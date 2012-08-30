@@ -90,16 +90,24 @@ namespace OpenDentHL7 {
 				long progNum=Programs.GetProgramNum(ProgramName.eClinicalWorks);
 				string hl7Server=ProgramProperties.GetPropVal(progNum,"HL7Server");
 				string hl7ServiceName=ProgramProperties.GetPropVal(progNum,"HL7ServiceName");
-				if(hl7ServiceName!=this.ServiceName) {
-					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName,
-						EventLogEntryType.Error);
-					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName);
+				if(hl7Server=="") {
+					ProgramProperties.SetProperty(progNum,"HL7Server",System.Environment.MachineName);
+					hl7Server=System.Environment.MachineName;
+				}
+				if(hl7ServiceName=="") {
+					ProgramProperties.SetProperty(progNum,"HL7ServiceName",this.ServiceName);
+					hl7ServiceName=this.ServiceName;
 				}
 				if(hl7Server!=System.Environment.MachineName) {
 					EventLog.WriteEntry("OpenDentHL7","The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
 						+", Server name in Program Links: "+hl7Server,EventLogEntryType.Error);
 					throw new ApplicationException("The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
 						+", Server name in Program Links: "+hl7Server);
+				}
+				if(hl7ServiceName!=this.ServiceName) {
+					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName,
+						EventLogEntryType.Error);
+					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName);
 				}
 			}
 			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
