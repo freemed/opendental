@@ -13,6 +13,7 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormRxNorms:Form {
 		private List<RxNorm> rxList;
+		///<summary>When this window is used for selecting an RxNorm (medication.RxCui or rxpat.RxCui), then use must click OK, None, or double click in grid.  In those cases, this field will have a value.  If None was clicked, it will be a new RxNorm with an RxCui of zero.</summary>
 		public RxNorm SelectedRxNorm;
 
 		public FormRxNorms() {
@@ -82,7 +83,8 @@ namespace OpenDental {
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {
-			gridMain.SetSelected(false);
+			SelectedRxNorm=new RxNorm();//Seems to work correctly but might cause problems. 8/24/2012 v12.4
+			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
