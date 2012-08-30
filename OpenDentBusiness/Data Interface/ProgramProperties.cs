@@ -56,13 +56,13 @@ namespace OpenDentBusiness {
 		///<summary>Returns a List of programproperties attached to the specified programNum.  Does not include path overrides.</summary>
 		public static List<ProgramProperty> GetListForProgram(long programNum) {
 			//No need to check RemotingRole; no call to db.
-			List<ProgramProperty> ForProgram=new List<ProgramProperty>();
+			List<ProgramProperty> listProgProp=new List<ProgramProperty>();
 			for(int i=0;i<ProgramPropertyC.Listt.Count;i++) {
 				if(ProgramPropertyC.Listt[i].ProgramNum==programNum && ProgramPropertyC.Listt[i].PropertyDesc!="") {
-					ForProgram.Add(ProgramPropertyC.Listt[i]);
+					listProgProp.Add(ProgramPropertyC.Listt[i]);
 				}
 			}
-			return ForProgram;
+			return listProgProp;
 		}
 
 		///<summary>Returns an ArrayList of programproperties attached to the specified programNum.  Does not include path overrides.</summary>

@@ -24,7 +24,6 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7DefEdit));
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label6 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -63,29 +62,20 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.labelDelete = new System.Windows.Forms.Label();
+			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butBrowseOut = new OpenDental.UI.Button();
 			this.butBrowseIn = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.label16 = new System.Windows.Forms.Label();
+			this.label17 = new System.Windows.Forms.Label();
+			this.textHL7ServiceName = new System.Windows.Forms.TextBox();
+			this.label18 = new System.Windows.Forms.Label();
+			this.textHL7Server = new System.Windows.Forms.TextBox();
+			this.label19 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(17,288);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(898,318);
-			this.gridMain.TabIndex = 18;
-			this.gridMain.Title = "Messages / Segments";
-			this.gridMain.TranslationName = null;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
 			// 
 			// label15
 			// 
@@ -141,11 +131,11 @@ namespace OpenDental{
 			// textNote
 			// 
 			this.textNote.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.textNote.Location = new System.Drawing.Point(473,77);
+			this.textNote.Location = new System.Drawing.Point(473,112);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNote.Size = new System.Drawing.Size(356,196);
+			this.textNote.Size = new System.Drawing.Size(356,159);
 			this.textNote.TabIndex = 56;
 			// 
 			// labelOutPortEx
@@ -163,7 +153,7 @@ namespace OpenDental{
 			this.labelInPortEx.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.labelInPortEx.Location = new System.Drawing.Point(332,134);
 			this.labelInPortEx.Name = "labelInPortEx";
-			this.labelInPortEx.Size = new System.Drawing.Size(145,18);
+			this.labelInPortEx.Size = new System.Drawing.Size(82,18);
 			this.labelInPortEx.TabIndex = 57;
 			this.labelInPortEx.Text = "Ex: 5845";
 			this.labelInPortEx.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -254,7 +244,7 @@ namespace OpenDental{
 			// label11
 			// 
 			this.label11.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.label11.Location = new System.Drawing.Point(345,77);
+			this.label11.Location = new System.Drawing.Point(345,112);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(127,18);
 			this.label11.TabIndex = 32;
@@ -383,7 +373,7 @@ namespace OpenDental{
 			// textOutPath
 			// 
 			this.textOutPath.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.textOutPath.Location = new System.Drawing.Point(473,51);
+			this.textOutPath.Location = new System.Drawing.Point(473,47);
 			this.textOutPath.Name = "textOutPath";
 			this.textOutPath.Size = new System.Drawing.Size(356,20);
 			this.textOutPath.TabIndex = 49;
@@ -391,7 +381,7 @@ namespace OpenDental{
 			// labelOutPath
 			// 
 			this.labelOutPath.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.labelOutPath.Location = new System.Drawing.Point(345,51);
+			this.labelOutPath.Location = new System.Drawing.Point(345,47);
 			this.labelOutPath.Name = "labelOutPath";
 			this.labelOutPath.Size = new System.Drawing.Size(127,18);
 			this.labelOutPath.TabIndex = 38;
@@ -457,6 +447,23 @@ namespace OpenDental{
 			this.labelDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelDelete.Visible = false;
 			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(615,612);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(80,24);
+			this.butAdd.TabIndex = 0;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
 			// butOK
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -512,7 +519,7 @@ namespace OpenDental{
 			this.butBrowseOut.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBrowseOut.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBrowseOut.CornerRadius = 4F;
-			this.butBrowseOut.Location = new System.Drawing.Point(835,48);
+			this.butBrowseOut.Location = new System.Drawing.Point(835,44);
 			this.butBrowseOut.Name = "butBrowseOut";
 			this.butBrowseOut.Size = new System.Drawing.Size(76,25);
 			this.butBrowseOut.TabIndex = 50;
@@ -534,27 +541,83 @@ namespace OpenDental{
 			this.butBrowseIn.Text = "&Browse";
 			this.butBrowseIn.Click += new System.EventHandler(this.butBrowseIn_Click);
 			// 
-			// butAdd
+			// gridMain
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(615,612);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(80,24);
-			this.butAdd.TabIndex = 0;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(17,288);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(898,318);
+			this.gridMain.TabIndex = 18;
+			this.gridMain.Title = "Messages / Segments";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(674,92);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(237,18);
+			this.label16.TabIndex = 77;
+			this.label16.Text = "Typically OpenDentalHL7.";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(674,72);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(237,18);
+			this.label17.TabIndex = 76;
+			this.label17.Text = "The computer where the HL7 Service is running.";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// textHL7ServiceName
+			// 
+			this.textHL7ServiceName.BackColor = System.Drawing.SystemColors.Window;
+			this.textHL7ServiceName.Location = new System.Drawing.Point(473,92);
+			this.textHL7ServiceName.Name = "textHL7ServiceName";
+			this.textHL7ServiceName.Size = new System.Drawing.Size(195,20);
+			this.textHL7ServiceName.TabIndex = 75;
+			// 
+			// label18
+			// 
+			this.label18.Location = new System.Drawing.Point(345,92);
+			this.label18.Name = "label18";
+			this.label18.Size = new System.Drawing.Size(127,18);
+			this.label18.TabIndex = 74;
+			this.label18.Text = "HL7 Service Name";
+			this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textHL7Server
+			// 
+			this.textHL7Server.Location = new System.Drawing.Point(473,72);
+			this.textHL7Server.Name = "textHL7Server";
+			this.textHL7Server.Size = new System.Drawing.Size(195,20);
+			this.textHL7Server.TabIndex = 73;
+			// 
+			// label19
+			// 
+			this.label19.Location = new System.Drawing.Point(345,72);
+			this.label19.Name = "label19";
+			this.label19.Size = new System.Drawing.Size(127,18);
+			this.label19.TabIndex = 72;
+			this.label19.Text = "HL7 Server";
+			this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormHL7DefEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.ClientSize = new System.Drawing.Size(931,652);
+			this.Controls.Add(this.label16);
+			this.Controls.Add(this.label17);
+			this.Controls.Add(this.textHL7ServiceName);
+			this.Controls.Add(this.label18);
+			this.Controls.Add(this.textHL7Server);
+			this.Controls.Add(this.label19);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.labelDelete);
 			this.Controls.Add(this.butOK);
@@ -567,7 +630,6 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.textNote);
 			this.Controls.Add(this.labelOutPortEx);
-			this.Controls.Add(this.labelInPortEx);
 			this.Controls.Add(this.textInternalTypeVersion);
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.textInternalType);
@@ -600,6 +662,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textDescription);
 			this.Controls.Add(this.gridMain);
+			this.Controls.Add(this.labelInPortEx);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -659,5 +722,11 @@ namespace OpenDental{
 		private UI.Button butDelete;
 		private System.Windows.Forms.Label labelDelete;
 		private UI.Button butAdd;
+		private System.Windows.Forms.Label label16;
+		private System.Windows.Forms.Label label17;
+		private System.Windows.Forms.TextBox textHL7ServiceName;
+		private System.Windows.Forms.Label label18;
+		private System.Windows.Forms.TextBox textHL7Server;
+		private System.Windows.Forms.Label label19;
 	}
 }

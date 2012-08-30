@@ -50,55 +50,8 @@ namespace OpenDental {
 			}
 		}
 
-		private class FieldNameAndType {
-			public string Name;
-			public DataTypeHL7 DataType;
-
-			public FieldNameAndType(string name,DataTypeHL7 datatype) {
-				Name=name;
-				DataType=datatype;
-			}
-		}
-
 		private void FillFieldNameList() {
-			FieldNameList.Add(new FieldNameAndType("apt.AptNum",DataTypeHL7.CX));
-			FieldNameList.Add(new FieldNameAndType("apt.lengthStartEnd",DataTypeHL7.TQ));
-			FieldNameList.Add(new FieldNameAndType("apt.Note",DataTypeHL7.CWE));
-			FieldNameList.Add(new FieldNameAndType("dateTime.Now",DataTypeHL7.DTM));
-			FieldNameList.Add(new FieldNameAndType("eventType",DataTypeHL7.ID));
-			FieldNameList.Add(new FieldNameAndType("guar.addressCityStateZip",DataTypeHL7.XAD));
-			FieldNameList.Add(new FieldNameAndType("guar.birthdateTime",DataTypeHL7.DTM));
-			FieldNameList.Add(new FieldNameAndType("guar.ChartNumber",DataTypeHL7.CX));
-			FieldNameList.Add(new FieldNameAndType("guar.Gender",DataTypeHL7.IS));
-			FieldNameList.Add(new FieldNameAndType("guar.HmPhone",DataTypeHL7.XTN));
-			FieldNameList.Add(new FieldNameAndType("guar.nameLFM",DataTypeHL7.XPN));
-			FieldNameList.Add(new FieldNameAndType("guar.PatNum",DataTypeHL7.CX));
-			FieldNameList.Add(new FieldNameAndType("guar.SSN",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("guar.WkPhone",DataTypeHL7.XTN));
-			FieldNameList.Add(new FieldNameAndType("messageType",DataTypeHL7.MSG));
-			FieldNameList.Add(new FieldNameAndType("pat.addressCityStateZip",DataTypeHL7.XAD));
-			FieldNameList.Add(new FieldNameAndType("pat.birthdateTime",DataTypeHL7.DTM));
-			FieldNameList.Add(new FieldNameAndType("pat.ChartNumber",DataTypeHL7.CX));
-			FieldNameList.Add(new FieldNameAndType("pat.FeeSched",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("pat.Gender",DataTypeHL7.IS));
-			FieldNameList.Add(new FieldNameAndType("pat.HmPhone",DataTypeHL7.XTN));
-			FieldNameList.Add(new FieldNameAndType("pat.nameLFM",DataTypeHL7.XPN));
-			FieldNameList.Add(new FieldNameAndType("pat.PatNum",DataTypeHL7.CX));
-			FieldNameList.Add(new FieldNameAndType("pat.Position",DataTypeHL7.CWE));
-			FieldNameList.Add(new FieldNameAndType("pat.Race",DataTypeHL7.CWE));
-			FieldNameList.Add(new FieldNameAndType("pat.SSN",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("pat.WkPhone",DataTypeHL7.XTN));
-			FieldNameList.Add(new FieldNameAndType("pdfDescription",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("pdfDataAsBase64",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("proc.DiagnosticCode",DataTypeHL7.CWE));
-			FieldNameList.Add(new FieldNameAndType("proc.procDateTime",DataTypeHL7.DTM));
-			FieldNameList.Add(new FieldNameAndType("proc.ProcFee",DataTypeHL7.CP));
-			FieldNameList.Add(new FieldNameAndType("proc.toothSurfRange",DataTypeHL7.CNE));
-			FieldNameList.Add(new FieldNameAndType("proccode.ProcCode",DataTypeHL7.CNE));
-			FieldNameList.Add(new FieldNameAndType("prov.provIdNameLFM",DataTypeHL7.XCN));
-			FieldNameList.Add(new FieldNameAndType("prov.provIdName",DataTypeHL7.XCN));
-			FieldNameList.Add(new FieldNameAndType("separators^~\\&",DataTypeHL7.ST));
-			FieldNameList.Add(new FieldNameAndType("sequenceNum",DataTypeHL7.SI));
+			FieldNameList=FieldNameAndType.GetFullList();
 		}
 
 		private void textFixedText_KeyUp(object sender,EventArgs e) {
