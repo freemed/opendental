@@ -63,6 +63,8 @@ namespace OpenDentBusiness.Crud{
 				hL7Def.InternalTypeVersion  = PIn.String(table.Rows[i]["InternalTypeVersion"].ToString());
 				hL7Def.IsEnabled            = PIn.Bool  (table.Rows[i]["IsEnabled"].ToString());
 				hL7Def.Note                 = PIn.String(table.Rows[i]["Note"].ToString());
+				hL7Def.HL7Server            = PIn.String(table.Rows[i]["HL7Server"].ToString());
+				hL7Def.HL7ServiceName       = PIn.String(table.Rows[i]["HL7ServiceName"].ToString());
 				retVal.Add(hL7Def);
 			}
 			return retVal;
@@ -103,7 +105,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="HL7DefNum,";
 			}
-			command+="Description,ModeTx,IncomingFolder,OutgoingFolder,IncomingPort,OutgoingIpPort,FieldSeparator,ComponentSeparator,SubcomponentSeparator,RepetitionSeparator,EscapeCharacter,IsInternal,InternalType,InternalTypeVersion,IsEnabled,Note) VALUES(";
+			command+="Description,ModeTx,IncomingFolder,OutgoingFolder,IncomingPort,OutgoingIpPort,FieldSeparator,ComponentSeparator,SubcomponentSeparator,RepetitionSeparator,EscapeCharacter,IsInternal,InternalType,InternalTypeVersion,IsEnabled,Note,HL7Server,HL7ServiceName) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(hL7Def.HL7DefNum)+",";
 			}
@@ -123,7 +125,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(hL7Def.InternalType)+"',"
 				+"'"+POut.String(hL7Def.InternalTypeVersion)+"',"
 				+    POut.Bool  (hL7Def.IsEnabled)+","
-				+DbHelper.ParamChar+"paramNote)";
+				+DbHelper.ParamChar+"paramNote,"
+				+"'"+POut.String(hL7Def.HL7Server)+"',"
+				+"'"+POut.String(hL7Def.HL7ServiceName)+"')";
 			if(hL7Def.Note==null) {
 				hL7Def.Note="";
 			}
@@ -155,7 +159,9 @@ namespace OpenDentBusiness.Crud{
 				+"InternalType         = '"+POut.String(hL7Def.InternalType)+"', "
 				+"InternalTypeVersion  = '"+POut.String(hL7Def.InternalTypeVersion)+"', "
 				+"IsEnabled            =  "+POut.Bool  (hL7Def.IsEnabled)+", "
-				+"Note                 =  "+DbHelper.ParamChar+"paramNote "
+				+"Note                 =  "+DbHelper.ParamChar+"paramNote, "
+				+"HL7Server            = '"+POut.String(hL7Def.HL7Server)+"', "
+				+"HL7ServiceName       = '"+POut.String(hL7Def.HL7ServiceName)+"' "
 				+"WHERE HL7DefNum = "+POut.Long(hL7Def.HL7DefNum);
 			if(hL7Def.Note==null) {
 				hL7Def.Note="";
@@ -230,6 +236,14 @@ namespace OpenDentBusiness.Crud{
 			if(hL7Def.Note != oldHL7Def.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = "+DbHelper.ParamChar+"paramNote";
+			}
+			if(hL7Def.HL7Server != oldHL7Def.HL7Server) {
+				if(command!=""){ command+=",";}
+				command+="HL7Server = '"+POut.String(hL7Def.HL7Server)+"'";
+			}
+			if(hL7Def.HL7ServiceName != oldHL7Def.HL7ServiceName) {
+				if(command!=""){ command+=",";}
+				command+="HL7ServiceName = '"+POut.String(hL7Def.HL7ServiceName)+"'";
 			}
 			if(command==""){
 				return;
