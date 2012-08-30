@@ -45,9 +45,9 @@ namespace OpenDentBusiness{
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
-		///<summary></summary>
+		///<summary>Override for AmountBonusAuto. -1 indicates no override.</summary>
 		public double AmountBonus;
-		///<summary></summary>
+		///<summary>Automatically created bonus (due to differential and OT hours worked). -1 will indicate no bonus calculated.</summary>
 		public double AmountBonusAuto;
 
 		///<summary>Used only for serialization purposes</summary>
