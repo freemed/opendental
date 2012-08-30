@@ -83,7 +83,7 @@ namespace OpenDental {
 		}
 
 		private void butNone_Click(object sender,EventArgs e) {
-			SelectedRxNorm=new RxNorm();//Seems to work correctly but might cause problems. 8/24/2012 v12.4
+			SelectedRxNorm=new RxNorm();
 			DialogResult=DialogResult.OK;
 		}
 
