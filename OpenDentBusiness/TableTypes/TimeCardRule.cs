@@ -22,6 +22,9 @@ namespace OpenDentBusiness{
 		///<summary>Typical example is 6:00 to indicate that all time worked before 6am for specific employees is overtime.</summary>
 		[XmlIgnore]
 		public TimeSpan BeforeTimeOfDay;
+		///<summary>Differential paid to employees working before or after the specified times.</summary>
+		public double AmtDiff;
+
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OverHoursPerDay",typeof(long))]

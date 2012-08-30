@@ -31,6 +31,9 @@ namespace OpenDental{
 			this.textAfterTimeOfDay = new System.Windows.Forms.TextBox();
 			this.listEmployees = new System.Windows.Forms.ListBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.textDifferential = new OpenDental.ValidDouble();
+			this.radioDifferential = new System.Windows.Forms.RadioButton();
+			this.radioOvertime = new System.Windows.Forms.RadioButton();
 			this.but6am = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.textBeforeTimeOfDay = new System.Windows.Forms.TextBox();
@@ -44,7 +47,7 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Location = new System.Drawing.Point(14, 127);
+			this.label1.Location = new System.Drawing.Point(14, 163);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(97, 18);
 			this.label1.TabIndex = 4;
@@ -53,7 +56,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(23, 19);
+			this.label2.Location = new System.Drawing.Point(23, 69);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(112, 18);
 			this.label2.TabIndex = 6;
@@ -62,7 +65,7 @@ namespace OpenDental{
 			// 
 			// textOverHoursPerDay
 			// 
-			this.textOverHoursPerDay.Location = new System.Drawing.Point(138, 19);
+			this.textOverHoursPerDay.Location = new System.Drawing.Point(138, 69);
 			this.textOverHoursPerDay.Name = "textOverHoursPerDay";
 			this.textOverHoursPerDay.Size = new System.Drawing.Size(62, 20);
 			this.textOverHoursPerDay.TabIndex = 7;
@@ -70,7 +73,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(24, 77);
+			this.label3.Location = new System.Drawing.Point(24, 123);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(111, 18);
 			this.label3.TabIndex = 8;
@@ -79,7 +82,7 @@ namespace OpenDental{
 			// 
 			// textAfterTimeOfDay
 			// 
-			this.textAfterTimeOfDay.Location = new System.Drawing.Point(138, 77);
+			this.textAfterTimeOfDay.Location = new System.Drawing.Point(138, 123);
 			this.textAfterTimeOfDay.Name = "textAfterTimeOfDay";
 			this.textAfterTimeOfDay.Size = new System.Drawing.Size(62, 20);
 			this.textAfterTimeOfDay.TabIndex = 9;
@@ -89,13 +92,16 @@ namespace OpenDental{
 			// 
 			this.listEmployees.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.listEmployees.FormattingEnabled = true;
-			this.listEmployees.Location = new System.Drawing.Point(15, 149);
+			this.listEmployees.Location = new System.Drawing.Point(15, 185);
 			this.listEmployees.Name = "listEmployees";
 			this.listEmployees.Size = new System.Drawing.Size(200, 277);
 			this.listEmployees.TabIndex = 156;
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.textDifferential);
+			this.groupBox1.Controls.Add(this.radioDifferential);
+			this.groupBox1.Controls.Add(this.radioOvertime);
 			this.groupBox1.Controls.Add(this.but6am);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.textBeforeTimeOfDay);
@@ -106,10 +112,42 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textAfterTimeOfDay);
 			this.groupBox1.Location = new System.Drawing.Point(15, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(252, 112);
+			this.groupBox1.Size = new System.Drawing.Size(252, 151);
 			this.groupBox1.TabIndex = 157;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Overtime if";
+			// 
+			// textDifferential
+			// 
+			this.textDifferential.BackColor = System.Drawing.SystemColors.Window;
+			this.textDifferential.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textDifferential.Location = new System.Drawing.Point(138, 42);
+			this.textDifferential.Name = "textDifferential";
+			this.textDifferential.Size = new System.Drawing.Size(62, 20);
+			this.textDifferential.TabIndex = 163;
+			// 
+			// radioDifferential
+			// 
+			this.radioDifferential.AutoSize = true;
+			this.radioDifferential.Location = new System.Drawing.Point(62, 42);
+			this.radioDifferential.Name = "radioDifferential";
+			this.radioDifferential.Size = new System.Drawing.Size(75, 17);
+			this.radioDifferential.TabIndex = 162;
+			this.radioDifferential.TabStop = true;
+			this.radioDifferential.Text = "Differential";
+			this.radioDifferential.UseVisualStyleBackColor = true;
+			// 
+			// radioOvertime
+			// 
+			this.radioOvertime.AutoSize = true;
+			this.radioOvertime.Location = new System.Drawing.Point(62, 20);
+			this.radioOvertime.Name = "radioOvertime";
+			this.radioOvertime.Size = new System.Drawing.Size(67, 17);
+			this.radioOvertime.TabIndex = 162;
+			this.radioOvertime.TabStop = true;
+			this.radioOvertime.Text = "Overtime";
+			this.radioOvertime.UseVisualStyleBackColor = true;
+			this.radioOvertime.CheckedChanged += new System.EventHandler(this.radioOvertime_CheckedChanged);
 			// 
 			// but6am
 			// 
@@ -119,7 +157,7 @@ namespace OpenDental{
 			this.but6am.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but6am.CornerRadius = 4F;
 			this.but6am.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.but6am.Location = new System.Drawing.Point(206, 48);
+			this.but6am.Location = new System.Drawing.Point(206, 94);
 			this.but6am.Name = "but6am";
 			this.but6am.Size = new System.Drawing.Size(35, 22);
 			this.but6am.TabIndex = 161;
@@ -128,7 +166,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(24, 49);
+			this.label4.Location = new System.Drawing.Point(24, 96);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(111, 18);
 			this.label4.TabIndex = 159;
@@ -137,7 +175,7 @@ namespace OpenDental{
 			// 
 			// textBeforeTimeOfDay
 			// 
-			this.textBeforeTimeOfDay.Location = new System.Drawing.Point(138, 49);
+			this.textBeforeTimeOfDay.Location = new System.Drawing.Point(138, 96);
 			this.textBeforeTimeOfDay.Name = "textBeforeTimeOfDay";
 			this.textBeforeTimeOfDay.Size = new System.Drawing.Size(62, 20);
 			this.textBeforeTimeOfDay.TabIndex = 160;
@@ -151,7 +189,7 @@ namespace OpenDental{
 			this.but5pm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.but5pm.CornerRadius = 4F;
 			this.but5pm.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.but5pm.Location = new System.Drawing.Point(206, 76);
+			this.but5pm.Location = new System.Drawing.Point(206, 122);
 			this.but5pm.Name = "but5pm";
 			this.but5pm.Size = new System.Drawing.Size(35, 22);
 			this.but5pm.TabIndex = 158;
@@ -168,7 +206,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(273, 279);
+			this.butDelete.Location = new System.Drawing.Point(273, 315);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(75, 24);
 			this.butDelete.TabIndex = 155;
@@ -183,7 +221,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(273, 370);
+			this.butOK.Location = new System.Drawing.Point(273, 406);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -198,7 +236,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(273, 402);
+			this.butCancel.Location = new System.Drawing.Point(273, 438);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -208,7 +246,7 @@ namespace OpenDental{
 			// FormTimeCardRuleEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(373, 438);
+			this.ClientSize = new System.Drawing.Size(373, 474);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.listEmployees);
 			this.Controls.Add(this.butDelete);
@@ -242,5 +280,8 @@ namespace OpenDental{
 		private UI.Button but6am;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox textBeforeTimeOfDay;
+		private System.Windows.Forms.RadioButton radioDifferential;
+		private System.Windows.Forms.RadioButton radioOvertime;
+		private ValidDouble textDifferential;
 	}
 }

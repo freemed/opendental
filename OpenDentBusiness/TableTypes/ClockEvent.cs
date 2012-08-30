@@ -45,6 +45,10 @@ namespace OpenDentBusiness{
 		public TimeSpan AdjustAuto;
 		///<summary>True if AdjustAuto is overridden by Adjust.</summary>
 		public bool AdjustIsOverridden;
+		///<summary></summary>
+		public double AmountBonus;
+		///<summary></summary>
+		public double AmountBonusAuto;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("OTimeHours",typeof(long))]

@@ -10038,7 +10038,41 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					//eCW will never use Oracle.
 				}
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD AmountBonus double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD AmountBonus number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE clockevent SET AmountBonus = 0 WHERE AmountBonus IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE clockevent MODIFY AmountBonus NOT NULL";
+					Db.NonQ(command);
+				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clockevent ADD AmountBonusAuto double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clockevent ADD AmountBonusAuto number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE clockevent SET AmountBonusAuto = 0 WHERE AmountBonusAuto IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE clockevent MODIFY AmountBonusAuto NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE timecardrule ADD AmtDiff double NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE timecardrule ADD AmtDiff number(38,8)";
+					Db.NonQ(command);
+					command="UPDATE timecardrule SET AmtDiff = 0 WHERE AmtDiff IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE timecardrule MODIFY AmtDiff NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -10054,6 +10088,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
+
 
 
 

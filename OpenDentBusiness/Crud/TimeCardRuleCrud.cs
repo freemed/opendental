@@ -51,6 +51,7 @@ namespace OpenDentBusiness.Crud{
 				timeCardRule.OverHoursPerDay= PIn.Time(table.Rows[i]["OverHoursPerDay"].ToString());
 				timeCardRule.AfterTimeOfDay = PIn.Time(table.Rows[i]["AfterTimeOfDay"].ToString());
 				timeCardRule.BeforeTimeOfDay= PIn.Time(table.Rows[i]["BeforeTimeOfDay"].ToString());
+				timeCardRule.AmtDiff        = PIn.Double(table.Rows[i]["AmtDiff"].ToString());
 				retVal.Add(timeCardRule);
 			}
 			return retVal;
@@ -91,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="TimeCardRuleNum,";
 			}
-			command+="EmployeeNum,OverHoursPerDay,AfterTimeOfDay,BeforeTimeOfDay) VALUES(";
+			command+="EmployeeNum,OverHoursPerDay,AfterTimeOfDay,BeforeTimeOfDay,AmtDiff) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(timeCardRule.TimeCardRuleNum)+",";
 			}
@@ -99,7 +100,8 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (timeCardRule.EmployeeNum)+","
 				+    POut.Time  (timeCardRule.OverHoursPerDay)+","
 				+    POut.Time  (timeCardRule.AfterTimeOfDay)+","
-				+    POut.Time  (timeCardRule.BeforeTimeOfDay)+")";
+				+    POut.Time  (timeCardRule.BeforeTimeOfDay)+","
+				+"'"+POut.Double(timeCardRule.AmtDiff)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +117,8 @@ namespace OpenDentBusiness.Crud{
 				+"EmployeeNum    =  "+POut.Long  (timeCardRule.EmployeeNum)+", "
 				+"OverHoursPerDay=  "+POut.Time  (timeCardRule.OverHoursPerDay)+", "
 				+"AfterTimeOfDay =  "+POut.Time  (timeCardRule.AfterTimeOfDay)+", "
-				+"BeforeTimeOfDay=  "+POut.Time  (timeCardRule.BeforeTimeOfDay)+" "
+				+"BeforeTimeOfDay=  "+POut.Time  (timeCardRule.BeforeTimeOfDay)+", "
+				+"AmtDiff        = '"+POut.Double(timeCardRule.AmtDiff)+"' "
 				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRule.TimeCardRuleNum);
 			Db.NonQ(command);
 		}
@@ -138,6 +141,10 @@ namespace OpenDentBusiness.Crud{
 			if(timeCardRule.BeforeTimeOfDay != oldTimeCardRule.BeforeTimeOfDay) {
 				if(command!=""){ command+=",";}
 				command+="BeforeTimeOfDay = "+POut.Time  (timeCardRule.BeforeTimeOfDay)+"";
+			}
+			if(timeCardRule.AmtDiff != oldTimeCardRule.AmtDiff) {
+				if(command!=""){ command+=",";}
+				command+="AmtDiff = '"+POut.Double(timeCardRule.AmtDiff)+"'";
 			}
 			if(command==""){
 				return;

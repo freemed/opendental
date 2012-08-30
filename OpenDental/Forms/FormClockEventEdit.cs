@@ -47,6 +47,9 @@ namespace OpenDental{
 		private Label label11;
 		private Label label10;
 		private TextBox textAdjustAuto;
+		private ValidDouble textAmountBonusAuto;
+		private TextBox textAmountBonus;
+		private Label label13;
 		private ClockEvent ClockEventCur;
 
 		///<summary></summary>
@@ -92,13 +95,10 @@ namespace OpenDental{
 			this.label4 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butNow1 = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.textTimeEntered2 = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.butClear = new OpenDental.UI.Button();
 			this.label6 = new System.Windows.Forms.Label();
-			this.butNow2 = new OpenDental.UI.Button();
 			this.textTimeDisplayed2 = new System.Windows.Forms.TextBox();
 			this.textOTimeHours = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -113,9 +113,15 @@ namespace OpenDental{
 			this.label11 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
 			this.textAdjustAuto = new System.Windows.Forms.TextBox();
+			this.butClear = new OpenDental.UI.Button();
+			this.butNow2 = new OpenDental.UI.Button();
+			this.butNow1 = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.label13 = new System.Windows.Forms.Label();
+			this.textAmountBonus = new System.Windows.Forms.TextBox();
+			this.textAmountBonusAuto = new OpenDental.ValidDouble();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupTimeSpans.SuspendLayout();
@@ -123,69 +129,69 @@ namespace OpenDental{
 			// 
 			// textTimeEntered1
 			// 
-			this.textTimeEntered1.Location = new System.Drawing.Point(101,19);
+			this.textTimeEntered1.Location = new System.Drawing.Point(101, 19);
 			this.textTimeEntered1.Name = "textTimeEntered1";
 			this.textTimeEntered1.ReadOnly = true;
-			this.textTimeEntered1.Size = new System.Drawing.Size(156,20);
+			this.textTimeEntered1.Size = new System.Drawing.Size(156, 20);
 			this.textTimeEntered1.TabIndex = 2;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(6,21);
+			this.label1.Location = new System.Drawing.Point(6, 21);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(94,16);
+			this.label1.Size = new System.Drawing.Size(94, 16);
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Entered";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(6,45);
+			this.label2.Location = new System.Drawing.Point(6, 45);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(93,16);
+			this.label2.Size = new System.Drawing.Size(93, 16);
 			this.label2.TabIndex = 5;
 			this.label2.Text = "Displayed";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textTimeDisplayed1
 			// 
-			this.textTimeDisplayed1.Location = new System.Drawing.Point(101,43);
+			this.textTimeDisplayed1.Location = new System.Drawing.Point(101, 43);
 			this.textTimeDisplayed1.Name = "textTimeDisplayed1";
-			this.textTimeDisplayed1.Size = new System.Drawing.Size(156,20);
+			this.textTimeDisplayed1.Size = new System.Drawing.Size(156, 20);
 			this.textTimeDisplayed1.TabIndex = 4;
 			this.textTimeDisplayed1.TextChanged += new System.EventHandler(this.textTimeDisplayed1_TextChanged);
 			// 
 			// listStatus
 			// 
-			this.listStatus.Location = new System.Drawing.Point(179,118);
+			this.listStatus.Location = new System.Drawing.Point(179, 118);
 			this.listStatus.Name = "listStatus";
-			this.listStatus.Size = new System.Drawing.Size(120,43);
+			this.listStatus.Size = new System.Drawing.Size(120, 43);
 			this.listStatus.TabIndex = 8;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(72,118);
+			this.label3.Location = new System.Drawing.Point(72, 118);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(105,16);
+			this.label3.Size = new System.Drawing.Size(105, 16);
 			this.label3.TabIndex = 9;
 			this.label3.Text = "Out Status";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(72,298);
+			this.label4.Location = new System.Drawing.Point(72, 348);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(105,16);
+			this.label4.Size = new System.Drawing.Size(105, 16);
 			this.label4.TabIndex = 10;
 			this.label4.Text = "Note";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textNote
 			// 
-			this.textNote.Location = new System.Drawing.Point(179,297);
+			this.textNote.Location = new System.Drawing.Point(179, 347);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
-			this.textNote.Size = new System.Drawing.Size(317,110);
+			this.textNote.Size = new System.Drawing.Size(317, 110);
 			this.textNote.TabIndex = 11;
 			// 
 			// groupBox1
@@ -195,26 +201,12 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butNow1);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.textTimeDisplayed1);
-			this.groupBox1.Location = new System.Drawing.Point(79,12);
+			this.groupBox1.Location = new System.Drawing.Point(79, 12);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(267,100);
+			this.groupBox1.Size = new System.Drawing.Size(267, 100);
 			this.groupBox1.TabIndex = 13;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Clock In Date and Time";
-			// 
-			// butNow1
-			// 
-			this.butNow1.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNow1.Autosize = true;
-			this.butNow1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNow1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNow1.CornerRadius = 4F;
-			this.butNow1.Location = new System.Drawing.Point(101,69);
-			this.butNow1.Name = "butNow1";
-			this.butNow1.Size = new System.Drawing.Size(70,24);
-			this.butNow1.TabIndex = 17;
-			this.butNow1.Text = "Now";
-			this.butNow1.Click += new System.EventHandler(this.butNow1_Click);
 			// 
 			// groupBox2
 			// 
@@ -224,134 +216,106 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.label6);
 			this.groupBox2.Controls.Add(this.butNow2);
 			this.groupBox2.Controls.Add(this.textTimeDisplayed2);
-			this.groupBox2.Location = new System.Drawing.Point(363,12);
+			this.groupBox2.Location = new System.Drawing.Point(363, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(267,100);
+			this.groupBox2.Size = new System.Drawing.Size(267, 100);
 			this.groupBox2.TabIndex = 14;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Clock Out Date and Time";
 			// 
 			// textTimeEntered2
 			// 
-			this.textTimeEntered2.Location = new System.Drawing.Point(101,19);
+			this.textTimeEntered2.Location = new System.Drawing.Point(101, 19);
 			this.textTimeEntered2.Name = "textTimeEntered2";
 			this.textTimeEntered2.ReadOnly = true;
-			this.textTimeEntered2.Size = new System.Drawing.Size(156,20);
+			this.textTimeEntered2.Size = new System.Drawing.Size(156, 20);
 			this.textTimeEntered2.TabIndex = 2;
 			this.textTimeEntered2.TextChanged += new System.EventHandler(this.textTimeEntered2_TextChanged);
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(6,21);
+			this.label5.Location = new System.Drawing.Point(6, 21);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(94,16);
+			this.label5.Size = new System.Drawing.Size(94, 16);
 			this.label5.TabIndex = 3;
 			this.label5.Text = "Entered";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butClear
-			// 
-			this.butClear.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClear.Autosize = true;
-			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClear.CornerRadius = 4F;
-			this.butClear.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClear.Location = new System.Drawing.Point(177,69);
-			this.butClear.Name = "butClear";
-			this.butClear.Size = new System.Drawing.Size(80,24);
-			this.butClear.TabIndex = 16;
-			this.butClear.Text = "Clear";
-			this.butClear.Click += new System.EventHandler(this.butClear_Click);
-			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(6,45);
+			this.label6.Location = new System.Drawing.Point(6, 45);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(93,16);
+			this.label6.Size = new System.Drawing.Size(93, 16);
 			this.label6.TabIndex = 5;
 			this.label6.Text = "Displayed";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// butNow2
-			// 
-			this.butNow2.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNow2.Autosize = true;
-			this.butNow2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNow2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNow2.CornerRadius = 4F;
-			this.butNow2.Location = new System.Drawing.Point(101,69);
-			this.butNow2.Name = "butNow2";
-			this.butNow2.Size = new System.Drawing.Size(70,24);
-			this.butNow2.TabIndex = 15;
-			this.butNow2.Text = "Now";
-			this.butNow2.Click += new System.EventHandler(this.butNow2_Click);
-			// 
 			// textTimeDisplayed2
 			// 
-			this.textTimeDisplayed2.Location = new System.Drawing.Point(101,43);
+			this.textTimeDisplayed2.Location = new System.Drawing.Point(101, 43);
 			this.textTimeDisplayed2.Name = "textTimeDisplayed2";
-			this.textTimeDisplayed2.Size = new System.Drawing.Size(156,20);
+			this.textTimeDisplayed2.Size = new System.Drawing.Size(156, 20);
 			this.textTimeDisplayed2.TabIndex = 4;
 			this.textTimeDisplayed2.TextChanged += new System.EventHandler(this.textTimeDisplayed2_TextChanged);
 			// 
 			// textOTimeHours
 			// 
-			this.textOTimeHours.Location = new System.Drawing.Point(176,78);
+			this.textOTimeHours.Location = new System.Drawing.Point(176, 78);
 			this.textOTimeHours.Name = "textOTimeHours";
-			this.textOTimeHours.Size = new System.Drawing.Size(68,20);
+			this.textOTimeHours.Size = new System.Drawing.Size(68, 20);
 			this.textOTimeHours.TabIndex = 7;
 			this.textOTimeHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textOTimeHours.TextChanged += new System.EventHandler(this.textOvertime_TextChanged);
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(8,78);
+			this.label7.Location = new System.Drawing.Point(8, 78);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(92,18);
+			this.label7.Size = new System.Drawing.Size(92, 18);
 			this.label7.TabIndex = 10;
 			this.label7.Text = "- Overtime";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textTotalTime
 			// 
-			this.textTotalTime.Location = new System.Drawing.Point(100,34);
+			this.textTotalTime.Location = new System.Drawing.Point(100, 34);
 			this.textTotalTime.Name = "textTotalTime";
 			this.textTotalTime.ReadOnly = true;
-			this.textTotalTime.Size = new System.Drawing.Size(68,20);
+			this.textTotalTime.Size = new System.Drawing.Size(68, 20);
 			this.textTotalTime.TabIndex = 1;
 			this.textTotalTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(8,34);
+			this.label8.Location = new System.Drawing.Point(8, 34);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(92,18);
+			this.label8.Size = new System.Drawing.Size(92, 18);
 			this.label8.TabIndex = 8;
 			this.label8.Text = "Total Time";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textRegTime
 			// 
-			this.textRegTime.Location = new System.Drawing.Point(100,100);
+			this.textRegTime.Location = new System.Drawing.Point(100, 100);
 			this.textRegTime.Name = "textRegTime";
 			this.textRegTime.ReadOnly = true;
-			this.textRegTime.Size = new System.Drawing.Size(68,20);
+			this.textRegTime.Size = new System.Drawing.Size(68, 20);
 			this.textRegTime.TabIndex = 4;
 			this.textRegTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(8,100);
+			this.label9.Location = new System.Drawing.Point(8, 100);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(92,18);
+			this.label9.Size = new System.Drawing.Size(92, 18);
 			this.label9.TabIndex = 11;
 			this.label9.Text = "Regular Time";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupTimeSpans
 			// 
+			this.groupTimeSpans.Controls.Add(this.textAmountBonusAuto);
+			this.groupTimeSpans.Controls.Add(this.textAmountBonus);
 			this.groupTimeSpans.Controls.Add(this.textOTimeAuto);
 			this.groupTimeSpans.Controls.Add(this.textAdjust);
 			this.groupTimeSpans.Controls.Add(this.label12);
@@ -360,74 +324,119 @@ namespace OpenDental{
 			this.groupTimeSpans.Controls.Add(this.textAdjustAuto);
 			this.groupTimeSpans.Controls.Add(this.label8);
 			this.groupTimeSpans.Controls.Add(this.textRegTime);
+			this.groupTimeSpans.Controls.Add(this.label13);
 			this.groupTimeSpans.Controls.Add(this.label7);
 			this.groupTimeSpans.Controls.Add(this.label9);
 			this.groupTimeSpans.Controls.Add(this.textOTimeHours);
 			this.groupTimeSpans.Controls.Add(this.textTotalTime);
-			this.groupTimeSpans.Location = new System.Drawing.Point(79,164);
+			this.groupTimeSpans.Location = new System.Drawing.Point(79, 164);
 			this.groupTimeSpans.Name = "groupTimeSpans";
-			this.groupTimeSpans.Size = new System.Drawing.Size(267,127);
+			this.groupTimeSpans.Size = new System.Drawing.Size(267, 158);
 			this.groupTimeSpans.TabIndex = 30;
 			this.groupTimeSpans.TabStop = false;
 			this.groupTimeSpans.Text = "Time Spans";
 			// 
 			// textOTimeAuto
 			// 
-			this.textOTimeAuto.Location = new System.Drawing.Point(100,78);
+			this.textOTimeAuto.Location = new System.Drawing.Point(100, 78);
 			this.textOTimeAuto.Name = "textOTimeAuto";
 			this.textOTimeAuto.ReadOnly = true;
-			this.textOTimeAuto.Size = new System.Drawing.Size(68,20);
+			this.textOTimeAuto.Size = new System.Drawing.Size(68, 20);
 			this.textOTimeAuto.TabIndex = 3;
 			this.textOTimeAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textAdjust
 			// 
-			this.textAdjust.Location = new System.Drawing.Point(176,56);
+			this.textAdjust.Location = new System.Drawing.Point(176, 56);
 			this.textAdjust.Name = "textAdjust";
-			this.textAdjust.Size = new System.Drawing.Size(68,20);
+			this.textAdjust.Size = new System.Drawing.Size(68, 20);
 			this.textAdjust.TabIndex = 6;
 			this.textAdjust.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.textAdjust.TextChanged += new System.EventHandler(this.textAdjust_TextChanged);
 			// 
 			// label12
 			// 
-			this.label12.Location = new System.Drawing.Point(176,13);
+			this.label12.Location = new System.Drawing.Point(176, 13);
 			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(68,18);
+			this.label12.Size = new System.Drawing.Size(68, 18);
 			this.label12.TabIndex = 5;
 			this.label12.Text = "Override";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(100,13);
+			this.label11.Location = new System.Drawing.Point(100, 13);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(68,18);
+			this.label11.Size = new System.Drawing.Size(68, 18);
 			this.label11.TabIndex = 0;
 			this.label11.Text = "Calculated";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			// 
 			// label10
 			// 
-			this.label10.Location = new System.Drawing.Point(8,56);
+			this.label10.Location = new System.Drawing.Point(8, 56);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(92,18);
+			this.label10.Size = new System.Drawing.Size(92, 18);
 			this.label10.TabIndex = 9;
 			this.label10.Text = "+ Adj";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textAdjustAuto
 			// 
-			this.textAdjustAuto.Location = new System.Drawing.Point(100,56);
+			this.textAdjustAuto.Location = new System.Drawing.Point(100, 56);
 			this.textAdjustAuto.Name = "textAdjustAuto";
 			this.textAdjustAuto.ReadOnly = true;
-			this.textAdjustAuto.Size = new System.Drawing.Size(68,20);
+			this.textAdjustAuto.Size = new System.Drawing.Size(68, 20);
 			this.textAdjustAuto.TabIndex = 2;
 			this.textAdjustAuto.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// butClear
+			// 
+			this.butClear.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClear.Autosize = true;
+			this.butClear.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClear.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClear.CornerRadius = 4F;
+			this.butClear.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butClear.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butClear.Location = new System.Drawing.Point(177, 69);
+			this.butClear.Name = "butClear";
+			this.butClear.Size = new System.Drawing.Size(80, 24);
+			this.butClear.TabIndex = 16;
+			this.butClear.Text = "Clear";
+			this.butClear.Click += new System.EventHandler(this.butClear_Click);
+			// 
+			// butNow2
+			// 
+			this.butNow2.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNow2.Autosize = true;
+			this.butNow2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNow2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNow2.CornerRadius = 4F;
+			this.butNow2.Location = new System.Drawing.Point(101, 69);
+			this.butNow2.Name = "butNow2";
+			this.butNow2.Size = new System.Drawing.Size(70, 24);
+			this.butNow2.TabIndex = 15;
+			this.butNow2.Text = "Now";
+			this.butNow2.Click += new System.EventHandler(this.butNow2_Click);
+			// 
+			// butNow1
+			// 
+			this.butNow1.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butNow1.Autosize = true;
+			this.butNow1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNow1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNow1.CornerRadius = 4F;
+			this.butNow1.Location = new System.Drawing.Point(101, 69);
+			this.butNow1.Name = "butNow1";
+			this.butNow1.Size = new System.Drawing.Size(70, 24);
+			this.butNow1.TabIndex = 17;
+			this.butNow1.Text = "Now";
+			this.butNow1.Click += new System.EventHandler(this.butNow1_Click);
+			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -435,48 +444,75 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(31,435);
+			this.butDelete.Location = new System.Drawing.Point(31, 472);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(84,24);
+			this.butDelete.Size = new System.Drawing.Size(84, 24);
 			this.butDelete.TabIndex = 12;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(464,434);
+			this.butOK.Location = new System.Drawing.Point(464, 471);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,24);
+			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 1;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(555,434);
+			this.butCancel.Location = new System.Drawing.Point(555, 471);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,24);
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// label13
+			// 
+			this.label13.Location = new System.Drawing.Point(8, 123);
+			this.label13.Name = "label13";
+			this.label13.Size = new System.Drawing.Size(92, 18);
+			this.label13.TabIndex = 10;
+			this.label13.Text = "Bonus";
+			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textAmountBonus
+			// 
+			this.textAmountBonus.Location = new System.Drawing.Point(100, 123);
+			this.textAmountBonus.Name = "textAmountBonus";
+			this.textAmountBonus.ReadOnly = true;
+			this.textAmountBonus.Size = new System.Drawing.Size(68, 20);
+			this.textAmountBonus.TabIndex = 3;
+			this.textAmountBonus.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// textAmountBonusAuto
+			// 
+			this.textAmountBonusAuto.BackColor = System.Drawing.SystemColors.Window;
+			this.textAmountBonusAuto.ForeColor = System.Drawing.SystemColors.WindowText;
+			this.textAmountBonusAuto.Location = new System.Drawing.Point(174, 123);
+			this.textAmountBonusAuto.Name = "textAmountBonusAuto";
+			this.textAmountBonusAuto.Size = new System.Drawing.Size(70, 20);
+			this.textAmountBonusAuto.TabIndex = 31;
+			// 
 			// FormClockEventEdit
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(669,477);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(669, 514);
 			this.Controls.Add(this.groupTimeSpans);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
@@ -614,6 +650,8 @@ namespace OpenDental{
 				return;
 			}
 			textRegTime.Text=ClockEvents.Format(regTime);
+			textAmountBonus.Text=ClockEventCur.AmountBonus.ToString("f");
+			textAmountBonusAuto.Text=ClockEventCur.AmountBonusAuto.ToString("f");
 		}
 
 		private void textTimeDisplayed2_TextChanged(object sender,EventArgs e) {
