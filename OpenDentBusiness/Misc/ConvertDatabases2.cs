@@ -10049,7 +10049,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command="ALTER TABLE clockevent MODIFY AmountBonus NOT NULL";
 					Db.NonQ(command);
-				}				if(DataConnection.DBtype==DatabaseType.MySql) {
+				}				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clockevent ADD AmountBonusAuto double NOT NULL";
 					Db.NonQ(command);
 				}
