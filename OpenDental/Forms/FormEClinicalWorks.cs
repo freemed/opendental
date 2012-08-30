@@ -629,29 +629,31 @@ namespace OpenDental{
 		}
 
 		private bool SaveToDb() {
-			if(textProgDesc.Text=="") {
-				MsgBox.Show(this,"Description may not be blank.");
-				return false;
-			}
-			if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select a default user group first.");
-				return false;
-			}
-			if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
-				MsgBox.Show(this,"HL7 in folder may not be blank.");
-				return false;
-			}
-			if(textHL7FolderOut.Text=="") {
-				MsgBox.Show(this,"HL7 out folder may not be blank.");
-				return false;
-			}
-			if(textHL7Server.Text=="") {
-				MsgBox.Show(this,"HL7 Server may not be blank.");
-				return false;
-			}
-			if(textHL7ServiceName.Text=="") {
-				MsgBox.Show(this,"HL7 Service Name may not be blank.");
-				return false;
+			if(checkEnabled.Checked) {
+				if(textProgDesc.Text=="") {
+					MsgBox.Show(this,"Description may not be blank.");
+					return false;
+				}
+				if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
+					MsgBox.Show(this,"Please select a default user group first.");
+					return false;
+				}
+				if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
+					MsgBox.Show(this,"HL7 in folder may not be blank.");
+					return false;
+				}
+				if(textHL7FolderOut.Text=="") {
+					MsgBox.Show(this,"HL7 out folder may not be blank.");
+					return false;
+				}
+				if(textHL7Server.Text=="") {
+					MsgBox.Show(this,"HL7 Server may not be blank.");
+					return false;
+				}
+				if(textHL7ServiceName.Text=="") {
+					MsgBox.Show(this,"HL7 Service Name may not be blank.");
+					return false;
+				}
 			}
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;

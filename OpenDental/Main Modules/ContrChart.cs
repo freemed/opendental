@@ -4190,6 +4190,7 @@ namespace OpenDental{
 				aptNum=procs[i].AptNum;
 				break;
 			}
+//todo: compare with: Bridges.ECW.AptNum
 			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,"P03","treatment",PatCur,FamCur.ListPats[0],aptNum);
 			if(messageHL7==null) {
 				MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
