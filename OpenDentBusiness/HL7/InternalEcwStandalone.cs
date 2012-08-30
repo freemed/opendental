@@ -39,47 +39,47 @@ namespace OpenDentBusiness.HL7 {
 			HL7DefSegment seg=new HL7DefSegment();
 			msg.AddSegment(seg,2,SegmentNameHL7.PID);
 			//PID.2, Patient ID
-			seg.AddField(2,DataTypeHL7.CX,"pat.ChartNumber");
+			seg.AddField(2,"pat.ChartNumber");
 			//PID.4, Alternate Patient ID, PID.4 is not saved with using standalone integration
 			//PID.5, Patient Name
-			seg.AddField(5,DataTypeHL7.XPN,"pat.nameLFM");
+			seg.AddField(5,"pat.nameLFM");
 			//PID.7, Date/Time of Birth
-			seg.AddField(7,DataTypeHL7.DTM,"pat.birthdateTime");
+			seg.AddField(7,"pat.birthdateTime");
 			//PID.8, Administrative Sex
-			seg.AddField(8,DataTypeHL7.IS,"pat.Gender");
+			seg.AddField(8,"pat.Gender");
 			//PID.10, Race
-			seg.AddField(10,DataTypeHL7.CWE,"pat.Race");
+			seg.AddField(10,"pat.Race");
 			//PID.11, Patient Address
-			seg.AddField(11,DataTypeHL7.XAD,"pat.addressCityStateZip");
+			seg.AddField(11,"pat.addressCityStateZip");
 			//PID.13, Phone Number - Home
-			seg.AddField(13,DataTypeHL7.XTN,"pat.HmPhone");
+			seg.AddField(13,"pat.HmPhone");
 			//PID.14, Phone Number - Business
-			seg.AddField(14,DataTypeHL7.XTN,"pat.WkPhone");
+			seg.AddField(14,"pat.WkPhone");
 			//PID.16, Marital Status
-			seg.AddField(16,DataTypeHL7.CWE,"pat.Position");
+			seg.AddField(16,"pat.Position");
 			//PID.19, SSN - Patient
-			seg.AddField(19,DataTypeHL7.ST,"pat.SSN");
+			seg.AddField(19,"pat.SSN");
 			//PID.22, Fee Schedule
-			seg.AddField(22,DataTypeHL7.ST,"pat.FeeSched");
+			seg.AddField(22,"pat.FeeSched");
 			//GT1 segment------------------------------------------------------------------
 			seg=new HL7DefSegment();
 			msg.AddSegment(seg,5,SegmentNameHL7.GT1);
 			//GT1.2, Guarantor Number
-			seg.AddField(2,DataTypeHL7.CX,"guar.PatNum");
+			seg.AddField(2,"guar.PatNum");
 			//GT1.3, Guarantor Name
-			seg.AddField(3,DataTypeHL7.XPN,"guar.nameLFM");
+			seg.AddField(3,"guar.nameLFM");
 			//GT1.5, Guarantor Address
-			seg.AddField(5,DataTypeHL7.XAD,"guar.addressCityStateZip");
+			seg.AddField(5,"guar.addressCityStateZip");
 			//GT1.6, Guarantor Phone Number - Home
-			seg.AddField(6,DataTypeHL7.XTN,"guar.HmPhone");
+			seg.AddField(6,"guar.HmPhone");
 			//GT1.7, Guarantor Phone Number - Business
-			seg.AddField(7,DataTypeHL7.XTN,"guar.WkPhone");
+			seg.AddField(7,"guar.WkPhone");
 			//GT1.8, Guarantor Date/Time of Birth
-			seg.AddField(8,DataTypeHL7.DTM,"guar.birthdateTime");
+			seg.AddField(8,"guar.birthdateTime");
 			//GT1.9, Guarantor Administrative Sex
-			seg.AddField(9,DataTypeHL7.IS,"guar.Gender");
+			seg.AddField(9,"guar.Gender");
 			//GT1.12, Guarantor SSN
-			seg.AddField(12,DataTypeHL7.ST,"guar.SSN");
+			seg.AddField(12,"guar.SSN");
 			return def;
 		}
 

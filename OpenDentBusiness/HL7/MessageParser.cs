@@ -59,7 +59,7 @@ namespace OpenDentBusiness.HL7 {
 					}
 					else if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="pat.birthdateTime") {
 						int patBdayOrdinal=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
-						birthdate=FieldParser.DateParse(msg.Segments[pidOrder].Fields[patBdayOrdinal].ToString().Substring(0,8));
+						birthdate=FieldParser.DateTimeParse(msg.Segments[pidOrder].Fields[patBdayOrdinal].ToString().Substring(0,8));
 					}
 					else if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="pat.nameLFM") {
 						int patNameOrdinal=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
@@ -173,10 +173,10 @@ namespace OpenDentBusiness.HL7 {
 					ProcessGT1(pat,segDef,seg);
 					return;
 				case SegmentNameHL7.IN1:
-					ProcessIN1();
+					//ProcessIN1();
 					return;
 				case SegmentNameHL7.PD1:
-					ProcessPD1();
+					//ProcessPD1();
 					return;
 				case SegmentNameHL7.PID:
 					ProcessPID(pat,segDef,seg);
@@ -299,7 +299,7 @@ namespace OpenDentBusiness.HL7 {
 					//try to find the guarantor by using name and birthdate
 					string guarLName=seg.GetFieldComponent(guarNameOrdinal,0);
 					string guarFName=seg.GetFieldComponent(guarNameOrdinal,1);
-					DateTime guarBirthdate=FieldParser.DateParse(seg.GetFieldFullText(guarBirthdateOrdinal));
+					DateTime guarBirthdate=FieldParser.DateTimeParse(seg.GetFieldFullText(guarBirthdateOrdinal));
 					long guarNumByName=Patients.GetPatNumByNameAndBirthday(guarLName,guarFName,guarBirthdate);
 					if(guarNumByName==0) {//guarantor does not exist in OD
 						//so guar will still be null, triggering creation of new guarantor further down.
@@ -338,7 +338,7 @@ namespace OpenDentBusiness.HL7 {
 						guar.Zip=seg.GetFieldComponent(itemOrder,4);
 						continue;
 					case "guar.birthdateTime":
-						guar.Birthdate=FieldParser.DateParse(seg.GetFieldComponent(itemOrder));
+						guar.Birthdate=FieldParser.DateTimeParse(seg.GetFieldComponent(itemOrder));
 						continue;
 					case "guar.ChartNumber":
 						guar.ChartNumber=seg.GetFieldComponent(itemOrder);
@@ -378,13 +378,13 @@ namespace OpenDentBusiness.HL7 {
 			return;
 		}
 
-		public static void ProcessIN1() {
-			return;
-		}
+		//public static void ProcessIN1() {
+		//	return;
+		//}
 
-		public static void ProcessPD1() {
-			return;
-		}
+		//public static void ProcessPD1() {
+		//	return;
+		//}
 
 		public static void ProcessPID(Patient pat,HL7DefSegment segDef,SegmentHL7 seg) {
 			for(int i=0;i<segDef.hl7DefFields.Count;i++) {
@@ -398,7 +398,7 @@ namespace OpenDentBusiness.HL7 {
 						pat.Zip=seg.GetFieldComponent(itemOrder,4);
 						continue;
 					case "pat.birthdateTime":
-						pat.Birthdate=FieldParser.DateParse(seg.GetFieldComponent(itemOrder));
+						pat.Birthdate=FieldParser.DateTimeParse(seg.GetFieldComponent(itemOrder));
 						continue;
 					case "pat.ChartNumber":
 						pat.ChartNumber=seg.GetFieldComponent(itemOrder);

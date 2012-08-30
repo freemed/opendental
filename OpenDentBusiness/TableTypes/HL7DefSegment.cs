@@ -49,8 +49,10 @@ namespace OpenDentBusiness {
 			this.hl7DefFields.Add(field);
 		}
 
-		public void AddField(int ordinalPos,DataTypeHL7 dataType,string fieldName) {
-			AddField(ordinalPos,"",dataType,fieldName,"");
+		public void AddField(int ordinalPos,string fieldName) {
+			DataTypeHL7 dataType=FieldNameAndType.GetTypeFromName(fieldName);
+			string tableNum=FieldNameAndType.GetTableNumFromName(fieldName);
+			AddField(ordinalPos,tableNum,dataType,fieldName,"");
 		}
 
 		/// <summary></summary>

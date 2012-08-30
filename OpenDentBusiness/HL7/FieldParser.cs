@@ -9,29 +9,32 @@ namespace OpenDentBusiness.HL7 {
 		//HL7 has very specific data types.  Each data type that we use will have a corresponding parser method here.
 		//Data types are listed in 2.15.
 
-		///<summary>yyyyMMdd.  If not in that format, it returns minVal.</summary>
-		public static DateTime DateParse(string str) {
-			if(str.Length != 8) {
-				return DateTime.MinValue;
-			}
-			int year=PIn.Int(str.Substring(0,4));
-			int month=PIn.Int(str.Substring(4,2));
-			int day=PIn.Int(str.Substring(6));
-			DateTime retVal=new DateTime(year,month,day);
-			return retVal;
-		}
-
-		///<summary>yyyyMMddHHmmss.  If not in that format, it returns minVal.</summary>
+		///<summary>yyyyMMddHHmmss.  Can have more precision than seconds and won't break.  If less than 4 digits, returns MinVal.</summary>
 		public static DateTime DateTimeParse(string str) {
-			if(str.Length != 14) {
+			int year=0;
+			int month=0;
+			int day=0;
+			int hour=0;
+			int minute=0;
+			if(str.Length>=4) {
+				year=PIn.Int(str.Substring(0,4));
+			}
+			else {
 				return DateTime.MinValue;
 			}
-			int year=PIn.Int(str.Substring(0,4));
-			int month=PIn.Int(str.Substring(4,2));
-			int day=PIn.Int(str.Substring(6,2));
-			int hour=PIn.Int(str.Substring(8,2));
-			int minute=PIn.Int(str.Substring(10,2));
-			//skip seconds
+			if(str.Length>=6) {
+				month=PIn.Int(str.Substring(4,2));
+			}
+			if(str.Length>=8) {
+				day=PIn.Int(str.Substring(6,2));
+			}
+			if(str.Length>=10) {
+				hour=PIn.Int(str.Substring(8,2));
+			}
+			if(str.Length>=12) {
+				minute=PIn.Int(str.Substring(10,2));
+			}
+			//skip seconds and any trailing numbers
 			DateTime retVal=new DateTime(year,month,day,hour,minute,0);
 			return retVal;
 		}
