@@ -307,7 +307,7 @@ namespace OpenDental{
 			textToothNumbers.Text=Tooth.FormatRangeForDisplay(DocCur.ToothNumbers);
 			textDate.Text=DocCur.DateCreated.ToString("d");
 			textDescript.Text=DocCur.Description;
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
 				if(File.Exists(textFileName.Text)) {

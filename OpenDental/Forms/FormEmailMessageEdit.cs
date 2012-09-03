@@ -560,7 +560,7 @@ namespace OpenDental{
 		///<summary>This is a stupid place for this, but keeping it around because it's used from many places.</summary>
 		public static string GetAttachPath(){
 			string attachPath;
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
 				if(!Directory.Exists(attachPath)) {
 					Directory.CreateDirectory(attachPath);
@@ -580,7 +580,7 @@ namespace OpenDental{
 			dlg.Multiselect=true;
 			Patient PatCur=Patients.GetPat(MessageCur.PatNum);
 			if(PatCur.ImageFolder!=""){
-				if(PrefC.UsingAtoZfolder){
+				if(PrefC.AtoZfolderUsed){
 					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
 																																				PatCur.ImageFolder.Substring(0,1).ToUpper(),
 																																				PatCur.ImageFolder);

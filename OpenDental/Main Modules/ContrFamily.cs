@@ -324,7 +324,7 @@ namespace OpenDental{
 			picturePat.Image=null;
 			picturePat.TextNullImage=Lan.g(this,"Patient Picture Unavailable");
 			if(PatCur==null || 
-				!PrefC.UsingAtoZfolder){//Do not use patient image when A to Z folders are disabled.
+				!PrefC.AtoZfolderUsed){//Do not use patient image when A to Z folders are disabled.
 				return;
 			}
 			try{

@@ -53,7 +53,8 @@ namespace OpenDentBusiness {
 		ApptPrintFontSize,
 		ApptPrintTimeStart,
 		ApptPrintTimeStop,
-		AtoZfolderNotRequired,
+		///<summary>Normally 1.  If this is set to 0, then that means images are being stored in the database.  This used to be called AtoZfolderNotRequired, but that name was confusing.</summary>
+		AtoZfolderUsed,
 		AutoResetTPEntryStatus,
 		BackupExcludeImageFolder,
 		BackupFromPath,
@@ -129,6 +130,7 @@ namespace OpenDentBusiness {
 		///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.  Used by OD HQ.</summary>
 		DistributorKey,
 		DockPhonePanelShow,
+		///<summary>The AtoZ folder path.</summary>
 		DocPath,
 		EasyBasicModules,
 		EasyHideAdvancedIns,
@@ -368,6 +370,7 @@ namespace OpenDentBusiness {
 		TrojanExpressCollectPreviousFileNumber,
 		UpdateCode,
 		UpdateInProgressOnComputerName,
+		///<summary>Described in the Update Setup window and in the manual.  Can contain multiple db names separated by commas.  Should not include current db name.</summary>
 		UpdateMultipleDatabases,
 		UpdateServerAddress,
 		UpdateShowMsiButtons,

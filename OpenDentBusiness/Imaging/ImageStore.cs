@@ -12,14 +12,14 @@ using System.Security.Cryptography;
 using System.Diagnostics;
 
 namespace OpenDentBusiness {
-	/// <summary>Provide a standard base class for image (and file) stores.</summary>
+	/// <summary></summary>
 	public class ImageStore  {
 		///<summary>Remembers the computerpref.AtoZpath.  Set to empty string on startup.  If set to something else, this path will override all other paths.</summary>
 		public static string LocalAtoZpath=null;
 
 		///<summary>Only makes a call to the database on startup.  After that, just uses cached data.  Does not validate that the path exists except if the main one is used.  ONLY used from Client layer; no S classes.</summary>
 		public static string GetPreferredAtoZpath() {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				return null;
 			}
 			if(LocalAtoZpath==null) {//on startup
@@ -157,7 +157,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static Bitmap OpenImage(Document doc,string patFolder) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				if(HasImageExtension(srcFileName)) {
 					//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
@@ -185,7 +185,7 @@ namespace OpenDentBusiness {
 
 		public static Bitmap[] OpenImagesEob(EobAttach eob) {
 			Bitmap[] values = new Bitmap[1];
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string eobFolder=GetEobFolder();
 				string srcFileName = ODFileUtils.CombinePaths(eobFolder,eob.FileName);
 				if(HasImageExtension(srcFileName)) {
@@ -212,7 +212,7 @@ namespace OpenDentBusiness {
 			return values;
 		}
 
-		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. For use in other modules.</summary>
+		///<summary>Takes in a mount object and finds all the images pertaining to the mount, then combines them together into one large, unscaled image and returns that image. For use in other modules.</summary>
 		public static Bitmap GetMountImage(Mount mount,string patFolder) {
 			//string patFolder=GetPatientFolder(pat);
 			List <MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
@@ -256,7 +256,7 @@ namespace OpenDentBusiness {
 		/// <summary></summary>
 		public static Document Import(string pathImportFrom,long docCategory,Patient pat) {
 			string patFolder="";
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
@@ -280,7 +280,7 @@ namespace OpenDentBusiness {
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
 				SaveDocument(doc,pathImportFrom,patFolder);
-				if(PrefC.UsingAtoZfolder) {
+				if(PrefC.AtoZfolderUsed) {
 					Documents.Update(doc);
 				}
 			}
@@ -291,39 +291,10 @@ namespace OpenDentBusiness {
 			return doc;
 		}
 
-		/*
-		public static Document Import(Bitmap image,long docCategory,Patient pat) {
-			string patFolder="";
-			if(PrefC.UsingAtoZfolder) {
-				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
-			}
-			Document doc=new Document();
-			doc.FileName=".jpg";
-			doc.DateCreated=DateTime.Today;
-			doc.DocCategory=docCategory;
-			doc.PatNum=pat.PatNum;
-			doc.ImgType=ImageType.Photo;
-			//doc.RawBase64 handled further down.
-			//doc.Thumbnail="";//no thumbnail yet
-			Documents.Insert(doc,pat);//this assigns a filename and saves to db
-			doc=Documents.GetByNum(doc.DocNum);
-			try {
-				SaveDocument(doc,image,ImageFormat.Jpeg,patFolder);
-				if(PrefC.UsingAtoZfolder) {
-					Documents.Update(doc);
-				}
-			}
-			catch {
-				Documents.Delete(doc);
-				throw;
-			}
-			return doc;
-		}*/
-
 		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat) {
 			string patFolder="";
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
@@ -360,7 +331,7 @@ namespace OpenDentBusiness {
 			//AutoCrop()?
 			try {
 				SaveDocument(doc,image,myImageCodecInfo,myEncoderParameters,patFolder);
-				if(!PrefC.UsingAtoZfolder) {
+				if(!PrefC.AtoZfolderUsed) {
 					Documents.Update(doc);//because SaveDocument stuck the image in doc.RawBase64.
 					//no thumbnail yet
 				}
@@ -426,7 +397,7 @@ namespace OpenDentBusiness {
 		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will be according to user setting.</summary>
 		public static EobAttach ImportEobAttach(Bitmap image,long claimPaymentNum) {
 			string eobFolder="";
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				eobFolder=GetEobFolder();
 			}
 			EobAttach eob=new EobAttach();
@@ -450,7 +421,7 @@ namespace OpenDentBusiness {
 			myEncoderParameters.Param[0] = myEncoderParameter;
 			try {
 				SaveEobAttach(eob,image,myImageCodecInfo,myEncoderParameters,eobFolder);
-				if(!PrefC.UsingAtoZfolder) {
+				if(!PrefC.AtoZfolderUsed) {
 					EobAttaches.Update(eob);//because SaveEobAttach stuck the image in eob.RawBase64.
 					//no thumbnail
 				}
@@ -465,7 +436,7 @@ namespace OpenDentBusiness {
 		/// <summary></summary>
 		public static EobAttach ImportEobAttach(string pathImportFrom,long claimPaymentNum) {
 			string eobFolder="";
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				eobFolder=GetEobFolder();
 			}
 			EobAttach eob=new EobAttach();
@@ -481,7 +452,7 @@ namespace OpenDentBusiness {
 			eob=EobAttaches.GetOne(eob.EobAttachNum);
 			try {
 				SaveEobAttach(eob,pathImportFrom,eobFolder);
-				if(PrefC.UsingAtoZfolder) {
+				if(PrefC.AtoZfolderUsed) {
 					EobAttaches.Update(eob);
 				}
 			}
@@ -494,7 +465,7 @@ namespace OpenDentBusiness {
 
 		///<summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
 		public static void Export(string saveToPath,Document doc,Patient pat) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 				File.Copy(ODFileUtils.CombinePaths(patFolder,doc.FileName),saveToPath);
 			}
@@ -511,7 +482,7 @@ namespace OpenDentBusiness {
 
 		///<summary> Save an Eob to another location on the disk (outside of Open Dental). </summary>
 		public static void ExportEobAttach(string saveToPath,EobAttach eob) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string eobFolder=GetEobFolder();
 				File.Copy(ODFileUtils.CombinePaths(eobFolder,eob.FileName),saveToPath);
 			}
@@ -528,7 +499,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZ folder, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.  The image format can be bmp, jpg, etc, but this overload does not allow specifying jpg compression quality.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageFormat format,string patFolder) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string pathFileOut = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				image.Save(pathFileOut);
 			}
@@ -543,7 +514,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the doc.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string patFolder) {
-			if(!PrefC.UsingAtoZfolder) {//if saving to db
+			if(!PrefC.AtoZfolderUsed) {//if saving to db
 				using(MemoryStream stream=new MemoryStream()) {
 					image.Save(stream,codec,encoderParameters);
 					byte[] rawData=stream.ToArray();
@@ -557,7 +528,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,string pathSourceFile,string patFolder) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(patFolder,doc.FileName));
 			}
 			else {//saving to db
@@ -568,7 +539,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveEobAttach(EobAttach eob,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string eobFolder) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				image.Save(ODFileUtils.CombinePaths(eobFolder,eob.FileName),codec,encoderParameters);
 			}
 			else {//saving to db
@@ -582,7 +553,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then eobFolder must be fully qualified and valid.  If not usingAtoZ folder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string eobFolder) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(eobFolder,eob.FileName));
 			}
 			else {//saving to db
@@ -597,7 +568,7 @@ namespace OpenDentBusiness {
 				if(documents[i]==null){
 					continue;
 				}
-				if(PrefC.UsingAtoZfolder) {
+				if(PrefC.AtoZfolderUsed) {
 					try{
 						string filePath = ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
 						if(File.Exists(filePath)) {
@@ -617,7 +588,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Also handles deletion of db object.</summary>
 		public static void DeleteEobAttach(EobAttach eob) {
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string eobFolder=GetEobFolder();
 				string filePath=ODFileUtils.CombinePaths(eobFolder,eob.FileName);
 				if(File.Exists(filePath)) {

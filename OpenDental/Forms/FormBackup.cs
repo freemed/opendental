@@ -422,7 +422,7 @@ namespace OpenDental{
 		}
 
 		private bool ShouldUseAtoZFolder(){
-			return (PrefC.UsingAtoZfolder //&& !usesInternalImages 
+			return (PrefC.AtoZfolderUsed //&& !usesInternalImages 
 				&& !checkExcludeImages.Checked);
 		}
 

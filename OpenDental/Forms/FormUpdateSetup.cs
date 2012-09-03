@@ -435,7 +435,7 @@ namespace OpenDental{
 		}
 
 		private void butValidate_Click(object sender,EventArgs e) {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Not using AtoZ folders, so UpdateFiles folder does not exist.");
 				return;
 			}

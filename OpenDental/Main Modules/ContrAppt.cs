@@ -3341,7 +3341,7 @@ namespace OpenDental {
 				PicturePat.Image=null;
 				if(//PatCur==null ||
 					row["ImageFolder"].ToString()!=""
-					&& PrefC.UsingAtoZfolder)//Do not use patient image when A to Z folders are disabled.
+					&& PrefC.AtoZfolderUsed)//Do not use patient image when A to Z folders are disabled.
 				//return;
 				{
 					try {

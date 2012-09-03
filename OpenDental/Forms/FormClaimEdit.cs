@@ -4918,7 +4918,7 @@ namespace OpenDental{
 
 		private void butAttachPerio_Click(object sender,EventArgs e) {
 			//Patient PatCur=Patients.GetPat(PatNum);
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}

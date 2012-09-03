@@ -896,7 +896,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			if(!PrefC.UsingAtoZfolder){
+			if(!PrefC.AtoZfolderUsed){
 				MsgBox.Show(this,"Could not create email because no AtoZ folder.");
 				return false;
 			}

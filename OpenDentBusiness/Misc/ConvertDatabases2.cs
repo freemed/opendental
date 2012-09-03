@@ -10078,6 +10078,20 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE timecardrule MODIFY AmtDiff NOT NULL";
 					Db.NonQ(command);
 				}
+				//Negatives should not be part of prefs.  Too confusing.
+				command="SELECT ValueString FROM preference WHERE PrefName='AtoZfolderNotRequired'";
+				string atozFolderNotRequired=Db.GetScalar(command);
+				command="UPDATE preference SET PrefName='AtoZfolderUsed' WHERE PrefName='AtoZfolderNotRequired'";
+				Db.NonQ(command);
+				if(atozFolderNotRequired=="1") {
+					command="UPDATE preference SET ValueString='0' WHERE PrefName='AtoZfolderUsed'";
+					Db.NonQ(command);
+				}
+				else {//blank or 0
+					command="UPDATE preference SET ValueString='1' WHERE PrefName='AtoZfolderUsed'";
+					Db.NonQ(command);
+				}
+				
 
 
 

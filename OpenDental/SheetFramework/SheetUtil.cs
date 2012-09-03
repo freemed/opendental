@@ -176,7 +176,7 @@ namespace OpenDental{
 		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
 		public static string GetImagePath(){
 			string imagePath;
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				throw new ApplicationException("Must be using AtoZ folders.");
 			}
 			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetImages");

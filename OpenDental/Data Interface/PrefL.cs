@@ -34,7 +34,7 @@ namespace OpenDental {
 		}
 
 		public static bool CopyFromHereToUpdateFiles(Version currentVersion) {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				return true;//not using AtoZ, so no place to stash the files.
 			}
 			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
@@ -119,7 +119,7 @@ namespace OpenDental {
 			}
 			if(storedVersion>currentVersion) {
 				//This is the update sequence for both a direct workstation, and for a ClientWeb workstation.
-				if(!PrefC.UsingAtoZfolder){//Not using image path.
+				if(!PrefC.AtoZfolderUsed){//Not using image path.
 					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
 					//perform program update automatically.
 					DownloadAndRunSetup(storedVersion,currentVersion);
@@ -291,7 +291,7 @@ namespace OpenDental {
 				Cache.Refresh(InvalidType.Prefs);
 			}
 			if(storedVersion>currentVersion) {
-				if(PrefC.UsingAtoZfolder) {
+				if(PrefC.AtoZfolderUsed) {
 					string setupBinPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Setup.exe");
 					if(File.Exists(setupBinPath)) {
 						if(MessageBox.Show("You are attempting to run version "+currentVersion.ToString(3)+",\r\n"

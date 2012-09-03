@@ -38,7 +38,7 @@ namespace OpenDental {
 		}
 
 		private void FillCombo(){
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				comboFieldName.Items.Clear();
 				string[] files=Directory.GetFiles(SheetUtil.GetImagePath());
 				for(int i=0;i<files.Length;i++) {

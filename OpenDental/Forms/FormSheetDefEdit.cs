@@ -460,7 +460,7 @@ namespace OpenDental {
 		}
 
 		private void butAddImage_Click(object sender,EventArgs e) {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
 				return;
 			}
@@ -551,7 +551,7 @@ namespace OpenDental {
 		}
 
 		private void butAddPatImage_Click(object sender,EventArgs e) {
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
 				return;
 			}

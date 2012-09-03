@@ -383,7 +383,7 @@ namespace OpenDental{
 			textLocalPath.Text=ImageStore.LocalAtoZpath;//This was set on startup.  //compPref.AtoZpath;
 			textExportPath.Text=PrefC.GetString(PrefName.ExportPath);
 			textLetterMergePath.Text=PrefC.GetString(PrefName.LetterMergePath);
-			if(PrefC.GetBool(PrefName.AtoZfolderNotRequired)) {
+			if(PrefC.GetBool(PrefName.AtoZfolderUsed)) {
 				radioAtoZfolderNotRequired.Checked = true;
 			}  
 			else {
@@ -527,7 +527,7 @@ namespace OpenDental{
 					}
 				}				
     	}
-			if(	Prefs.UpdateBool(PrefName.AtoZfolderNotRequired,radioAtoZfolderNotRequired.Checked)
+			if(	Prefs.UpdateBool(PrefName.AtoZfolderUsed,radioAtoZfolderNotRequired.Checked)
 				| Prefs.UpdateString(PrefName.DocPath,textDocPath.Text)
 				| Prefs.UpdateString(PrefName.ExportPath,textExportPath.Text)
 				| Prefs.UpdateString(PrefName.LetterMergePath,textLetterMergePath.Text))

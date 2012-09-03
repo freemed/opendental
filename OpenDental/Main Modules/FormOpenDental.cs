@@ -1816,7 +1816,7 @@ namespace OpenDental{
 				return false;
 			}
 			PrefL.MySqlVersion55Remind();
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string prefImagePath=ImageStore.GetPreferredAtoZpath();
 				if(prefImagePath==null || !Directory.Exists(prefImagePath)) {//AtoZ folder not found
 					Cache.Refresh(InvalidType.Security);
@@ -1937,7 +1937,7 @@ namespace OpenDental{
 				else {
 					menuItemCustomerManage.Visible=true;
 				}
-				ContrImages2.Enabled=PrefC.UsingAtoZfolder;
+				ContrImages2.Enabled=PrefC.AtoZfolderUsed;
 				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
@@ -2044,7 +2044,7 @@ namespace OpenDental{
 		private void CheckCustomReports(){
 			menuItemCustomReports.MenuItems.Clear();
 			//Try to load custom reports, but only if using the A to Z folders.
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				string imagePath=ImageStore.GetPreferredAtoZpath();
 				string reportFolderName=PrefC.GetString(PrefName.ReportFolderName);
 				string reportDir=ODFileUtils.CombinePaths(imagePath,reportFolderName);
@@ -3881,7 +3881,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemClaimForms_Click(object sender, System.EventArgs e) {
-			if(!PrefC.UsingAtoZfolder){
+			if(!PrefC.AtoZfolderUsed){
 				MsgBox.Show(this,"Claim Forms feature is unavailable when data path A to Z folder is disabled.");
 				return;
 			}
@@ -3915,7 +3915,7 @@ namespace OpenDental{
 			//security is handled from within the form.
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			ContrImages2.Enabled=PrefC.UsingAtoZfolder;
+			ContrImages2.Enabled=PrefC.AtoZfolderUsed;
 			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			CheckCustomReports();
 			this.RefreshCurrentModule();

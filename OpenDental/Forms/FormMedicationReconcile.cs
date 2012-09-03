@@ -128,7 +128,7 @@ namespace OpenDental {
 		}
 
 		private void butPickRxListImage_Click(object sender,EventArgs e) {	
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"This option is not supported with images stored in the database.");
 				return;
 			}

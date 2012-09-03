@@ -3577,7 +3577,7 @@ namespace OpenDental{
 			BenefitList=Benefits.Refresh(PatPlanList,SubList);
 //todo: track down where this is altered.  Optimize for eCW:
 			PatientNoteCur=PatientNotes.Refresh(patNum,PatCur.Guarantor);
-			if(PrefC.UsingAtoZfolder) {
+			if(PrefC.AtoZfolderUsed) {
 				patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//GetImageFolder();
 			}
 			DocumentList=Documents.GetAllWithPat(patNum);
@@ -5799,7 +5799,7 @@ namespace OpenDental{
 			visImages=new ArrayList();
 			listViewImages.Items.Clear();
 			imageListThumbnails.Images.Clear();
-			if(!PrefC.UsingAtoZfolder) {
+			if(!PrefC.AtoZfolderUsed) {
 				//Don't show any images if there is no document path.
 				return;
 			}
@@ -8791,7 +8791,7 @@ namespace OpenDental{
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=20;
 				//Patient images are not shown when the A to Z folders are disabled.
-				if(PrefC.UsingAtoZfolder){
+				if(PrefC.AtoZfolderUsed){
 					Bitmap picturePat;
 					bool patientPictExists=Documents.GetPatPict(PatCur.PatNum,ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath()),out picturePat);
 					if(picturePat!=null){//Successfully loaded a patient picture?

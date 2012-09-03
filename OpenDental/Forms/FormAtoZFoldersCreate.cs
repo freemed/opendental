@@ -214,7 +214,7 @@ namespace OpenDental{
 				//Save new image path into the DocPath and 
 				//set "use A to Z folders" check-box to checked.
 				Prefs.UpdateString(PrefName.DocPath,rootDir);
-				Prefs.UpdateString(PrefName.AtoZfolderNotRequired,"0");
+				Prefs.UpdateString(PrefName.AtoZfolderUsed,"0");
 				Cache.Refresh(InvalidType.Prefs);
 				//Prefs_client.RefreshClient();
 			}
