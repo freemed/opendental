@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		///<summary>This property is just a shortcut to this pref to make typing faster.  This pref is used a lot.</summary>
 		public static bool AtoZfolderUsed {
 			get {
-				return !GetBool(PrefName.AtoZfolderUsed);
+				return GetBool(PrefName.AtoZfolderUsed);
 			}
 		}
 

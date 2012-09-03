@@ -384,10 +384,10 @@ namespace OpenDental{
 			textExportPath.Text=PrefC.GetString(PrefName.ExportPath);
 			textLetterMergePath.Text=PrefC.GetString(PrefName.LetterMergePath);
 			if(PrefC.GetBool(PrefName.AtoZfolderUsed)) {
-				radioAtoZfolderNotRequired.Checked = true;
+				radioUseFolder.Checked = true;
 			}  
 			else {
-				radioUseFolder.Checked = true;
+				radioAtoZfolderNotRequired.Checked = true;
 			}
 			// The opt***_checked event will enable/disable the appropriate UI elements.
 			checkMultiplePaths.Checked=(textDocPath.Text.LastIndexOf(';')!=-1);	
@@ -527,7 +527,7 @@ namespace OpenDental{
 					}
 				}				
     	}
-			if(	Prefs.UpdateBool(PrefName.AtoZfolderUsed,radioAtoZfolderNotRequired.Checked)
+			if(	Prefs.UpdateBool(PrefName.AtoZfolderUsed,radioUseFolder.Checked)
 				| Prefs.UpdateString(PrefName.DocPath,textDocPath.Text)
 				| Prefs.UpdateString(PrefName.ExportPath,textExportPath.Text)
 				| Prefs.UpdateString(PrefName.LetterMergePath,textLetterMergePath.Text))
