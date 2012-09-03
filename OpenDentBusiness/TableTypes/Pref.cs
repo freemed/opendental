@@ -172,7 +172,6 @@ namespace OpenDentBusiness {
 		///<summary>procedurelog.DiagnosticCode will be set to this for new procedures and complete procedures if this field was blank when set complete.</summary>
 		ICD9DefaultForNewProcs,
 		ImagesModuleTreeIsCollapsed,
-		ImageStoreIsDatabase,
 		ImageWindowingMax,
 		ImageWindowingMin,
 		///<summary>0=Default practice provider, -1=Treating Provider. Otherwise, FK to provider.ProvNum.</summary>
