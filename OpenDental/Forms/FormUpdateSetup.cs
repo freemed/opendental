@@ -34,7 +34,7 @@ namespace OpenDental{
 		private CheckBox checkShowMsi;
 		private Label label10;
 		private Label label11;
-		private OpenDental.UI.Button butValidate;
+		private OpenDental.UI.Button butRecopy;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -93,7 +93,7 @@ namespace OpenDental{
 			this.checkShowMsi = new System.Windows.Forms.CheckBox();
 			this.label10 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
-			this.butValidate = new OpenDental.UI.Button();
+			this.butRecopy = new OpenDental.UI.Button();
 			this.butChange = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -283,19 +283,19 @@ namespace OpenDental{
     "f all the files from C:\\Program Files\\Open Dental\\\r\n";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// butValidate
+			// butRecopy
 			// 
-			this.butValidate.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butValidate.Autosize = true;
-			this.butValidate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butValidate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butValidate.CornerRadius = 4F;
-			this.butValidate.Location = new System.Drawing.Point(249,355);
-			this.butValidate.Name = "butValidate";
-			this.butValidate.Size = new System.Drawing.Size(67,23);
-			this.butValidate.TabIndex = 54;
-			this.butValidate.Text = "Recopy";
-			this.butValidate.Click += new System.EventHandler(this.butValidate_Click);
+			this.butRecopy.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRecopy.Autosize = true;
+			this.butRecopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRecopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRecopy.CornerRadius = 4F;
+			this.butRecopy.Location = new System.Drawing.Point(249,355);
+			this.butRecopy.Name = "butRecopy";
+			this.butRecopy.Size = new System.Drawing.Size(67,23);
+			this.butRecopy.TabIndex = 54;
+			this.butRecopy.Text = "Recopy";
+			this.butRecopy.Click += new System.EventHandler(this.butRecopy_Click);
 			// 
 			// butChange
 			// 
@@ -345,7 +345,7 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(734,433);
-			this.Controls.Add(this.butValidate);
+			this.Controls.Add(this.butRecopy);
 			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkShowMsi);
@@ -434,7 +434,7 @@ namespace OpenDental{
 			}
 		}
 
-		private void butValidate_Click(object sender,EventArgs e) {
+		private void butRecopy_Click(object sender,EventArgs e) {
 			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Not using AtoZ folders, so UpdateFiles folder does not exist.");
 				return;

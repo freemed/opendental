@@ -565,11 +565,11 @@ namespace OpenDental{
 				if(!Directory.Exists(attachPath)) {
 					Directory.CreateDirectory(attachPath);
 				}
-			}else{
-				//For users which have the A to Z folders disabled, there is no defined image path, so we
-				//have to use another path. Since we have chosen the temporary directory, this means that
-				//email attachements for a particular email may or may not be viewable later (i.e. in case
-				//someone cleaned out their temporary files to conserve disk space).
+			}
+			else{
+				//For users who have the A to Z folders disabled, there is no defined image path, so we
+				//have to use a temp path.  This means that the attachments might be available immediately afterward,
+				//but probably not later.
 				attachPath=Path.GetTempPath();
 			}
 			return attachPath;
