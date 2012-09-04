@@ -422,7 +422,7 @@ namespace OpenDentBusiness {
 			try {
 				SaveEobAttach(eob,image,myImageCodecInfo,myEncoderParameters,eobFolder);
 				if(!PrefC.AtoZfolderUsed) {
-					EobAttaches.Update(eob);//because SaveEobAttach stuck the image in eob.RawBase64.
+					EobAttaches.Update(eob);//because SaveEobAttach stuck the image in EobAttach.RawBase64.
 					//no thumbnail
 				}
 			}
