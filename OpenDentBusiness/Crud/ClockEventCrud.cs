@@ -46,21 +46,21 @@ namespace OpenDentBusiness.Crud{
 			ClockEvent clockEvent;
 			for(int i=0;i<table.Rows.Count;i++) {
 				clockEvent=new ClockEvent();
-				clockEvent.ClockEventNum      = PIn.Long  (table.Rows[i]["ClockEventNum"].ToString());
-				clockEvent.EmployeeNum        = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
-				clockEvent.TimeEntered1       = PIn.DateT (table.Rows[i]["TimeEntered1"].ToString());
-				clockEvent.TimeDisplayed1     = PIn.DateT (table.Rows[i]["TimeDisplayed1"].ToString());
-				clockEvent.ClockStatus        = (TimeClockStatus)PIn.Int(table.Rows[i]["ClockStatus"].ToString());
-				clockEvent.Note               = PIn.String(table.Rows[i]["Note"].ToString());
-				clockEvent.TimeEntered2       = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
-				clockEvent.TimeDisplayed2     = PIn.DateT (table.Rows[i]["TimeDisplayed2"].ToString());
-				clockEvent.OTimeHours         = PIn.TSpan (table.Rows[i]["OTimeHours"].ToString());
-				clockEvent.OTimeAuto          = PIn.TSpan (table.Rows[i]["OTimeAuto"].ToString());
-				clockEvent.Adjust             = PIn.TSpan (table.Rows[i]["Adjust"].ToString());
-				clockEvent.AdjustAuto         = PIn.TSpan (table.Rows[i]["AdjustAuto"].ToString());
-				clockEvent.AdjustIsOverridden = PIn.Bool  (table.Rows[i]["AdjustIsOverridden"].ToString());
-				clockEvent.AmountBonus        = PIn.Double(table.Rows[i]["AmountBonus"].ToString());
-				clockEvent.AmountBonusAuto    = PIn.Double(table.Rows[i]["AmountBonusAuto"].ToString());
+				clockEvent.ClockEventNum     = PIn.Long  (table.Rows[i]["ClockEventNum"].ToString());
+				clockEvent.EmployeeNum       = PIn.Long  (table.Rows[i]["EmployeeNum"].ToString());
+				clockEvent.TimeEntered1      = PIn.DateT (table.Rows[i]["TimeEntered1"].ToString());
+				clockEvent.TimeDisplayed1    = PIn.DateT (table.Rows[i]["TimeDisplayed1"].ToString());
+				clockEvent.ClockStatus       = (TimeClockStatus)PIn.Int(table.Rows[i]["ClockStatus"].ToString());
+				clockEvent.Note              = PIn.String(table.Rows[i]["Note"].ToString());
+				clockEvent.TimeEntered2      = PIn.DateT (table.Rows[i]["TimeEntered2"].ToString());
+				clockEvent.TimeDisplayed2    = PIn.DateT (table.Rows[i]["TimeDisplayed2"].ToString());
+				clockEvent.OTimeHours        = PIn.TSpan (table.Rows[i]["OTimeHours"].ToString());
+				clockEvent.OTimeAuto         = PIn.TSpan (table.Rows[i]["OTimeAuto"].ToString());
+				clockEvent.Adjust            = PIn.TSpan (table.Rows[i]["Adjust"].ToString());
+				clockEvent.AdjustAuto        = PIn.TSpan (table.Rows[i]["AdjustAuto"].ToString());
+				clockEvent.AdjustIsOverridden= PIn.Bool  (table.Rows[i]["AdjustIsOverridden"].ToString());
+				clockEvent.AmountBonus       = PIn.Double(table.Rows[i]["AmountBonus"].ToString());
+				clockEvent.AmountBonusAuto   = PIn.Double(table.Rows[i]["AmountBonusAuto"].ToString());
 				retVal.Add(clockEvent);
 			}
 			return retVal;
@@ -132,20 +132,20 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ClockEvent in the database.</summary>
 		internal static void Update(ClockEvent clockEvent){
 			string command="UPDATE clockevent SET "
-				+"EmployeeNum        =  "+POut.Long  (clockEvent.EmployeeNum)+", "
+				+"EmployeeNum       =  "+POut.Long  (clockEvent.EmployeeNum)+", "
 				//TimeEntered1 not allowed to change
-				+"TimeDisplayed1     =  "+POut.DateT (clockEvent.TimeDisplayed1)+", "
-				+"ClockStatus        =  "+POut.Int   ((int)clockEvent.ClockStatus)+", "
-				+"Note               = '"+POut.String(clockEvent.Note)+"', "
-				+"TimeEntered2       =  "+POut.DateT (clockEvent.TimeEntered2)+", "
-				+"TimeDisplayed2     =  "+POut.DateT (clockEvent.TimeDisplayed2)+", "
-				+"OTimeHours         = '"+POut.TSpan (clockEvent.OTimeHours)+"', "
-				+"OTimeAuto          = '"+POut.TSpan (clockEvent.OTimeAuto)+"', "
-				+"Adjust             = '"+POut.TSpan (clockEvent.Adjust)+"', "
-				+"AdjustAuto         = '"+POut.TSpan (clockEvent.AdjustAuto)+"', "
-				+"AdjustIsOverridden =  "+POut.Bool  (clockEvent.AdjustIsOverridden)+", "
-				+"AmountBonus        = '"+POut.Double(clockEvent.AmountBonus)+"', "
-				+"AmountBonusAuto    = '"+POut.Double(clockEvent.AmountBonusAuto)+"' "
+				+"TimeDisplayed1    =  "+POut.DateT (clockEvent.TimeDisplayed1)+", "
+				+"ClockStatus       =  "+POut.Int   ((int)clockEvent.ClockStatus)+", "
+				+"Note              = '"+POut.String(clockEvent.Note)+"', "
+				+"TimeEntered2      =  "+POut.DateT (clockEvent.TimeEntered2)+", "
+				+"TimeDisplayed2    =  "+POut.DateT (clockEvent.TimeDisplayed2)+", "
+				+"OTimeHours        = '"+POut.TSpan (clockEvent.OTimeHours)+"', "
+				+"OTimeAuto         = '"+POut.TSpan (clockEvent.OTimeAuto)+"', "
+				+"Adjust            = '"+POut.TSpan (clockEvent.Adjust)+"', "
+				+"AdjustAuto        = '"+POut.TSpan (clockEvent.AdjustAuto)+"', "
+				+"AdjustIsOverridden=  "+POut.Bool  (clockEvent.AdjustIsOverridden)+", "
+				+"AmountBonus       = '"+POut.Double(clockEvent.AmountBonus)+"', "
+				+"AmountBonusAuto   = '"+POut.Double(clockEvent.AmountBonusAuto)+"' "
 				+"WHERE ClockEventNum = "+POut.Long(clockEvent.ClockEventNum);
 			Db.NonQ(command);
 		}
