@@ -4519,6 +4519,15 @@ namespace OpenDental{
 						labFee1.ClinicNum=ProcCur.ClinicNum;
 						labFee1.ProcNumLab=ProcCur.ProcNum;
 						labFee1.CodeNum=ProcedureCodes.GetCodeNum("99111");
+						if(labFee1.CodeNum==0) { //Code does not exist.
+							ProcedureCode code99111=new ProcedureCode();
+							code99111.ProcCode="99111";
+							code99111.Descript="+L Commercial Laboratory Procedures";
+							code99111.AbbrDesc="Lab Fee";
+							code99111.ProcCat=DefC.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Adjunctive General Services");
+							ProcedureCodes.Insert(code99111);
+							labFee1.CodeNum=code99111.CodeNum;
+						}
 						Procedures.Insert(labFee1);
 					}
 				}
@@ -4548,6 +4557,15 @@ namespace OpenDental{
 						labFee2.ClinicNum=ProcCur.ClinicNum;
 						labFee2.ProcNumLab=ProcCur.ProcNum;
 						labFee2.CodeNum=ProcedureCodes.GetCodeNum("99111");
+						if(labFee2.CodeNum==0) { //Code does not exist.
+							ProcedureCode code99111=new ProcedureCode();
+							code99111.ProcCode="99111";
+							code99111.Descript="+L Commercial Laboratory Procedures";
+							code99111.AbbrDesc="Lab Fee";
+							code99111.ProcCat=DefC.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Adjunctive General Services");
+							ProcedureCodes.Insert(code99111);
+							labFee2.CodeNum=code99111.CodeNum;
+						}
 						Procedures.Insert(labFee2);
 					}
 				}
