@@ -10091,6 +10091,31 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="UPDATE preference SET ValueString='1' WHERE PrefName='AtoZfolderUsed'";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS documentmisc";
+					Db.NonQ(command);
+					command=@"CREATE TABLE documentmisc (
+						DocMiscNum bigint NOT NULL auto_increment PRIMARY KEY,
+						DateCreated date NOT NULL DEFAULT '0001-01-01',
+						FileName varchar(255) NOT NULL,
+						DocMiscType tinyint NOT NULL,
+						RawBase64 text NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE documentmisc'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE documentmisc (
+						DocMiscNum number(20) NOT NULL,
+						DateCreated date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						FileName varchar2(255),
+						DocMiscType number(3) NOT NULL,
+						RawBase64 clob,
+						CONSTRAINT documentmisc_DocMiscNum PRIMARY KEY (DocMiscNum)
+						)";
+					Db.NonQ(command);
+				}
 				
 
 
@@ -10114,3 +10139,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+			
