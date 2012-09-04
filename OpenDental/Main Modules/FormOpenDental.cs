@@ -1828,11 +1828,6 @@ namespace OpenDental{
 						Application.Exit();
 						return false;
 					}
-					//bool usingAtoZ=FormPath.UsingImagePath();
-					//ContrImages2.Enabled=usingAtoZ;
-					//menuItemClaimForms.Visible=usingAtoZ;
-					//CheckCustomReports();
-					//this.RefreshCurrentModule();
 					Cache.Refresh(InvalidType.Prefs);//because listening thread not started yet.
 				}
 			}
@@ -1937,8 +1932,6 @@ namespace OpenDental{
 				else {
 					menuItemCustomerManage.Visible=true;
 				}
-				ContrImages2.Enabled=PrefC.AtoZfolderUsed;
-				//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
 				if(PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom)) {
@@ -3915,8 +3908,6 @@ namespace OpenDental{
 			//security is handled from within the form.
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			ContrImages2.Enabled=PrefC.AtoZfolderUsed;
-			//menuItemClaimForms.Visible=PrefC.UsingAtoZfolder;
 			CheckCustomReports();
 			this.RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Data Path");	

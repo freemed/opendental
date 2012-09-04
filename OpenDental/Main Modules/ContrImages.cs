@@ -652,12 +652,6 @@ namespace OpenDental{
 
 		///<summary>This overload is needed when jumping to a specific image from FormPatientForms.</summary>
 		public void ModuleSelected(long patNum,long docNum) {
-			//if(!PrefC.UsingAtoZfolder) {
-			//	MsgBox.Show(this,"Not currently using documents. Turn on the A to Z folders option by going to Setup | Data Paths to enable imaging.");
-			//	this.Enabled=false;
-			//	return;
-			//}
-			this.Enabled=true;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
 			if(docNum!=0){
@@ -666,9 +660,8 @@ namespace OpenDental{
 			Plugins.HookAddCode(this,"ContrImages.ModuleSelected_end",patNum,docNum);
 		}
 
-		///<summary>This overload is needed when jumping to a specific image from FormPatientForms.</summary>
+		///<summary>This overload is for batch claim payment (EOB) images.</summary>
 		public void ModuleSelectedClaimPayment(long claimPaymentNum) {
-			this.Enabled=true;
 			ClaimPaymentNum=claimPaymentNum;
 			LayoutToolBar();//again
 			sliderBrightnessContrast.Visible=false;
