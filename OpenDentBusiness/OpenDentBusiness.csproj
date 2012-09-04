@@ -187,6 +187,7 @@
     <Compile Include="Crud\DiseaseDefCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
+    <Compile Include="Crud\DocumentMiscCrud.cs" />
     <Compile Include="Crud\DrugManufacturerCrud.cs" />
     <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data Interface\DocumentMiscs.cs" />
     <Compile Include="Data Interface\DrugManufacturers.cs" />
     <Compile Include="Data Interface\DrugUnits.cs" />
     <Compile Include="Data Interface\EduResources.cs" />
@@ -725,6 +727,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\DocumentMisc.cs" />
     <Compile Include="TableTypes\CustReference.cs" />
     <Compile Include="TableTypes\CustRefEntry.cs" />
     <Compile Include="TableTypes\EobAttach.cs" />
