@@ -29,6 +29,7 @@ namespace OpenDental{
 			this.buttonRight = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// panel1
@@ -112,10 +113,20 @@ namespace OpenDental{
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
+			// label1
+			// 
+			this.label1.ForeColor = System.Drawing.Color.Red;
+			this.label1.Location = new System.Drawing.Point(157,626);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100,23);
+			this.label1.TabIndex = 10;
+			this.label1.Text = "Minutes Behind";
+			// 
 			// FormGraphEmployeeTime
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(725,665);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.buttonLeft);
 			this.Controls.Add(this.buttonRight);
@@ -139,5 +150,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonRight;
 		private OpenDental.UI.Button buttonLeft;
 		private OpenDental.UI.Button butPrint;
+		private System.Windows.Forms.Label label1;
 	}
 }
