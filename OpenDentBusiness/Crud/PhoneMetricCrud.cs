@@ -47,7 +47,7 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				phoneMetric=new PhoneMetric();
 				phoneMetric.PhoneMetricNum= PIn.Long  (table.Rows[i]["PhoneMetricNum"].ToString());
-				phoneMetric.DateTimeEntry = PIn.Date  (table.Rows[i]["DateTimeEntry"].ToString());
+				phoneMetric.DateTimeEntry = PIn.DateT (table.Rows[i]["DateTimeEntry"].ToString());
 				phoneMetric.VoiceMails    = PIn.Int   (table.Rows[i]["VoiceMails"].ToString());
 				phoneMetric.Triages       = PIn.Int   (table.Rows[i]["Triages"].ToString());
 				phoneMetric.MinutesBehind = PIn.Int   (table.Rows[i]["MinutesBehind"].ToString());
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 				command+=POut.Long(phoneMetric.PhoneMetricNum)+",";
 			}
 			command+=
-				     POut.Date  (phoneMetric.DateTimeEntry)+","
+				     POut.DateT (phoneMetric.DateTimeEntry)+","
 				+    POut.Int   (phoneMetric.VoiceMails)+","
 				+    POut.Int   (phoneMetric.Triages)+","
 				+    POut.Int   (phoneMetric.MinutesBehind)+")";
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one PhoneMetric in the database.</summary>
 		internal static void Update(PhoneMetric phoneMetric){
 			string command="UPDATE phonemetric SET "
-				+"DateTimeEntry =  "+POut.Date  (phoneMetric.DateTimeEntry)+", "
+				+"DateTimeEntry =  "+POut.DateT (phoneMetric.DateTimeEntry)+", "
 				+"VoiceMails    =  "+POut.Int   (phoneMetric.VoiceMails)+", "
 				+"Triages       =  "+POut.Int   (phoneMetric.Triages)+", "
 				+"MinutesBehind =  "+POut.Int   (phoneMetric.MinutesBehind)+" "
@@ -125,7 +125,7 @@ namespace OpenDentBusiness.Crud{
 			string command="";
 			if(phoneMetric.DateTimeEntry != oldPhoneMetric.DateTimeEntry) {
 				if(command!=""){ command+=",";}
-				command+="DateTimeEntry = "+POut.Date(phoneMetric.DateTimeEntry)+"";
+				command+="DateTimeEntry = "+POut.DateT(phoneMetric.DateTimeEntry)+"";
 			}
 			if(phoneMetric.VoiceMails != oldPhoneMetric.VoiceMails) {
 				if(command!=""){ command+=",";}

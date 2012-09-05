@@ -11,6 +11,7 @@ namespace OpenDentBusiness{
 		[CrudColumn(IsPriKey=true)]
 		public long PhoneMetricNum;
 		///<summary></summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEntry;
 		///<summary>Smallint -32768 to 32767. -1 means was unable to reach the server.</summary>
 		public int VoiceMails;
