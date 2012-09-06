@@ -157,7 +157,7 @@ namespace OpenDental {
 			List<int> hl7InterfaceIDs=ColumnToListHelper(MySqlHelper.ExecuteDataset(connString,"SELECT DISTINCT InterfaceId FROM hl7segment_details;").Tables[0],"InterfaceId");
 			List<int> interfaceErrorCount=new List<int>(hl7InterfaceIDs.Count);
 			List<string> interfaceErrorLogs=new List<string>(hl7InterfaceIDs.Count);//Cache error logs for each interface until we determine which interface to report on.
-			for(int ifaceIndex=0;ifaceIndex<hl7InterfaceIDs.Count;ifaceIndex++){//validate one interface at a time.
+			for(int ifaceIndex=0;ifaceIndex<hl7InterfaceIDs.Count;ifaceIndex++) {//validate one interface at a time.
 				int interfaceID=hl7InterfaceIDs[ifaceIndex];
 				interfaceErrorLogs.Add("");//start each interface with a blank error log
 				interfaceErrorCount.Add(0);//start each interface with 0 error count
@@ -168,10 +168,10 @@ namespace OpenDental {
 					string messageType=MySqlHelper.ExecuteDataRow(connString,"SELECT DISTINCT MessageType FROM hl7message_types WHERE MessageTypeId="+messageID)["MessageType"].ToString();
 					//Validate each message individually if needed.
 					errorsFromCurMessage=0;
-					if(messageType.Contains("ADT")){
+					if(messageType.Contains("ADT")) {
 						interfaceErrorLogs[ifaceIndex]+=verifyAsADTMessage(interfaceID,messageID,out errorsFromCurMessage,verbose);
 					}
-					else if(messageType.Contains("SIU")){
+					else if(messageType.Contains("SIU")) {
 						interfaceErrorLogs[ifaceIndex]+=verifyAsSIUMessage(interfaceID,messageID,out errorsFromCurMessage,verbose);
 					}
 				}
@@ -294,18 +294,18 @@ namespace OpenDental {
 							errors++;
 							validMessage=false;
 						}
-						if(false){//segmentFields[9]!="{???}") { //Don't know what this should look like when properly configured. TODO
+						if(false) {//segmentFields[9]!="{???}") { //Don't know what this should look like when properly configured. TODO
 							retVal+="SIU HL7 message is not sending appointment duration in minutes in field SCH.09\r\n";
 							errors++;
 							validMessage=false;
 						}
-						if(false){//segmentFields[10]!="{???}") { //Don't know what this should look like when properly configured. TODO
+						if(false) {//segmentFields[10]!="{???}") { //Don't know what this should look like when properly configured. TODO
 							retVal+="SIU HL7 message is not sending appointment duration units in field SCH.10\r\n";
 							errors++;
 							validMessage=false;
 						}
 						string[] SCH11=segmentFields[11].Split('^');
-						if(false){//SCH11[2]!="{???}") { //Don't 
+						if(false) {//SCH11[2]!="{???}") { //Don't 
 							retVal+="SIU HL7 message is not sending appointment duration in field SCH.11.02\r\n";
 							errors++;
 							validMessage=false;
@@ -363,7 +363,7 @@ namespace OpenDental {
 						continue;
 					case "AIG":
 						if(segmentFields[3]!="{RSDRID}^{RSLN}^{RSFN}") {
-							retVal+="(Optional) SIU HL7 message is not sending provider/resource id in field AIG.03\r\n";
+							retVal+="SIU HL7 message is not sending provider/resource id in field AIG.03\r\n";
 							errors++;
 							validMessage=false;
 						}
@@ -386,17 +386,8 @@ namespace OpenDental {
 				errors+=5;//no segment plus 4 sub errors.
 				validMessage=false;
 			}
-			if(!segmentsContained.Contains("PV1")) {
-				retVal+="No PV1 segment found in SIU HL7 message.\r\n";
-				errors+=5;//no segment plus 4 sub errors.
-				validMessage=false;
-			}
-			if(!segmentsContained.Contains("AIG") && !segmentsContained.Contains("PV1") && verbose) {
-				retVal+="No AIG (optional) or PV1 segments found in SIU HL7 message. Appointments will use patient's default primary provider.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
-				validMessage=false;
-			}
-			else if(!segmentsContained.Contains("AIG") && verbose) {
-				retVal+="No AIG (optional) segment found in SIU HL7 message. Appointments will use provider information from PV1 segment.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
+			if(!segmentsContained.Contains("AIG") && !segmentsContained.Contains("PV1")) {
+				retVal+="No AIG or PV1 segments found in SIU HL7 message. Appointments will use patient's default primary provider.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
 				validMessage=false;
 			}
 			//If everything above checks out return a success message
