@@ -813,6 +813,9 @@ namespace OpenDental{
 		}
 
 		private void butBilling_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Billing)) {
+				return;
+			}
 			bool unsentStatementsExist=Statements.UnsentStatementsExist();
 			if(unsentStatementsExist) {
 				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Using clinics.
@@ -835,7 +838,7 @@ namespace OpenDental{
 			else {//No unsent statements exist.  Have user create a billing list.
 				ShowBillingOptions(0);
 			}
-			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Billing");
+			SecurityLogs.MakeLogEntry(Permissions.Billing,0,"");
 		}
 
 		///<summary>Shows FormBilling and displays warning message if needed.  Pass 0 to show all clinics.</summary>

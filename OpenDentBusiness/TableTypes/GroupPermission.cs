@@ -150,7 +150,9 @@ namespace OpenDentBusiness{
 		///<summary>60</summary>
 		AutoNoteQuickNoteEdit,
 		///<summary>61</summary>
-		EquipmentSetup
+		EquipmentSetup,
+		///<summary>62</summary>
+		Billing
 	}
 
 	

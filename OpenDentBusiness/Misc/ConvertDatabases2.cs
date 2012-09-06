@@ -10000,9 +10000,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					command="ALTER TABLE hl7msg ADD Note varchar2(2000)";
 					Db.NonQ(command);
+				} 
+				//Permission for billing
+				command="SELECT UserGroupNum FROM usergroup";
+				table=Db.GetTable(command);
+				long groupNum;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
+							+"VALUES("+POut.Long(groupNum)+","+POut.Long((int)Permissions.Billing)+")";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Long((int)Permissions.Billing)+")";
+						Db.NonQ(command);
+					}
 				}
 				//Add EquipmentSetup permission to all groups that had Setup permission---------------------------------------------
-				long groupNum;
 				command="SELECT DISTINCT UserGroupNum "
 					+"FROM grouppermission "
 					+"WHERE PermType="+POut.Int((int)Permissions.Setup);
