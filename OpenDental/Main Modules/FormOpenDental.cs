@@ -4598,7 +4598,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemScreening_Click(object sender,System.EventArgs e) {
-			FormScreenings FormS=new FormScreenings();
+			FormScreenGroups FormS=new FormScreenGroups();
 			FormS.ShowDialog();
 		}
 

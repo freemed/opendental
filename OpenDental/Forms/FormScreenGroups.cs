@@ -10,7 +10,7 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormScreenings : System.Windows.Forms.Form{
+	public class FormScreenGroups:System.Windows.Forms.Form {
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 		private System.Windows.Forms.ListView listMain;
 		private System.Windows.Forms.ColumnHeader columnHeader4;
@@ -27,7 +27,7 @@ namespace OpenDental{
 		private List<ScreenGroup> ScreenGroupList;
 
 		///<summary></summary>
-		public FormScreenings()
+		public FormScreenGroups()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -58,10 +58,10 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("00/00/0000");
+			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("00/00/0000");
 			this.listMain = new System.Windows.Forms.ListView();
-			this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-			this.columnHeader4 = new System.Windows.Forms.ColumnHeader();
+			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.textDateFrom = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.textDateTo = new System.Windows.Forms.TextBox();
@@ -79,10 +79,10 @@ namespace OpenDental{
 			this.listMain.GridLines = true;
 			this.listMain.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.listMain.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
-			this.listMain.Location = new System.Drawing.Point(-1,7);
+            listViewItem1});
+			this.listMain.Location = new System.Drawing.Point(-1, 7);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(231,237);
+			this.listMain.Size = new System.Drawing.Size(231, 237);
 			this.listMain.TabIndex = 73;
 			this.listMain.UseCompatibleStateImageBehavior = false;
 			this.listMain.View = System.Windows.Forms.View.Details;
@@ -100,72 +100,75 @@ namespace OpenDental{
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(0,251);
+			this.textDateFrom.Location = new System.Drawing.Point(0, 251);
 			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(69,20);
+			this.textDateFrom.Size = new System.Drawing.Size(69, 20);
 			this.textDateFrom.TabIndex = 74;
 			this.textDateFrom.Validating += new System.ComponentModel.CancelEventHandler(this.textDateFrom_Validating);
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(63,255);
+			this.label2.Location = new System.Drawing.Point(63, 255);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(25,13);
+			this.label2.Size = new System.Drawing.Size(25, 13);
 			this.label2.TabIndex = 77;
 			this.label2.Text = "To";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(90,251);
+			this.textDateTo.Location = new System.Drawing.Point(90, 251);
 			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(75,20);
+			this.textDateTo.Size = new System.Drawing.Size(75, 20);
 			this.textDateTo.TabIndex = 76;
 			this.textDateTo.Validating += new System.ComponentModel.CancelEventHandler(this.textDateTo_Validating);
 			// 
 			// butRefresh
 			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Autosize = true;
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.Location = new System.Drawing.Point(175,252);
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(175, 252);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(55,21);
+			this.butRefresh.Size = new System.Drawing.Size(55, 21);
 			this.butRefresh.TabIndex = 78;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.Location = new System.Drawing.Point(5,274);
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Location = new System.Drawing.Point(5, 274);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(55,21);
+			this.butAdd.Size = new System.Drawing.Size(55, 21);
 			this.butAdd.TabIndex = 79;
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.Location = new System.Drawing.Point(87,275);
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Location = new System.Drawing.Point(87, 275);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(55,21);
+			this.butDelete.Size = new System.Drawing.Size(55, 21);
 			this.butDelete.TabIndex = 80;
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
-			// FormScreenings
+			// FormScreenGroups
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(234,296);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(234, 296);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textDateFrom);
@@ -176,7 +179,7 @@ namespace OpenDental{
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "FormScreenings";
+			this.Name = "FormScreenGroups";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Screening Groups";
@@ -207,7 +210,7 @@ namespace OpenDental{
 		}
 
 		private void listMain_DoubleClick(object sender, System.EventArgs e) {
-			FormScreenGroup FormSG=new FormScreenGroup();
+			FormScreenGroupEdit FormSG=new FormScreenGroupEdit();
 			FormSG.ScreenGroupCur=ScreenGroupList[listMain.SelectedIndices[0]];
 			FormSG.ShowDialog();
 			//if(FormSG.DialogResult!=DialogResult.OK){
@@ -245,7 +248,7 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			FormScreenGroup FormSG=new FormScreenGroup();
+			FormScreenGroupEdit FormSG=new FormScreenGroupEdit();
 			FormSG.IsNew=true;
 			//ScreenGroups.Cur=new ScreenGroup();
 			if(ScreenGroupList.Count==0){
