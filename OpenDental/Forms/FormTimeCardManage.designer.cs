@@ -27,14 +27,16 @@ namespace OpenDental{
 			this.textDatePaycheck = new System.Windows.Forms.TextBox();
 			this.textDateStop = new System.Windows.Forms.TextBox();
 			this.textDateStart = new System.Windows.Forms.TextBox();
+			this.butRight = new OpenDental.UI.Button();
+			this.butLeft = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butDaily = new OpenDental.UI.Button();
+			this.butCompute = new OpenDental.UI.Button();
 			this.butReport = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.butRight = new OpenDental.UI.Button();
-			this.butLeft = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
@@ -80,6 +82,34 @@ namespace OpenDental{
 			this.textDateStart.Size = new System.Drawing.Size(100, 20);
 			this.textDateStart.TabIndex = 12;
 			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(63, 18);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(39, 24);
+			this.butRight.TabIndex = 11;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(13, 18);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(39, 24);
+			this.butLeft.TabIndex = 10;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
+			// 
 			// label4
 			// 
 			this.label4.Location = new System.Drawing.Point(354, 19);
@@ -116,11 +146,44 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 66);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
 			this.gridMain.Size = new System.Drawing.Size(931, 580);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Employee Time Cards";
 			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butDaily
+			// 
+			this.butDaily.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDaily.Autosize = true;
+			this.butDaily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDaily.CornerRadius = 4F;
+			this.butDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDaily.Location = new System.Drawing.Point(12, 652);
+			this.butDaily.Name = "butDaily";
+			this.butDaily.Size = new System.Drawing.Size(78, 24);
+			this.butDaily.TabIndex = 119;
+			this.butDaily.Text = "Calc Daily";
+			this.butDaily.Click += new System.EventHandler(this.butDaily_Click);
+			// 
+			// butCompute
+			// 
+			this.butCompute.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCompute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCompute.Autosize = true;
+			this.butCompute.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCompute.CornerRadius = 4F;
+			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCompute.Location = new System.Drawing.Point(96, 652);
+			this.butCompute.Name = "butCompute";
+			this.butCompute.Size = new System.Drawing.Size(90, 24);
+			this.butCompute.TabIndex = 118;
+			this.butCompute.Text = "Calc Week OT";
+			this.butCompute.Click += new System.EventHandler(this.butWeekly_Click);
 			// 
 			// butReport
 			// 
@@ -155,34 +218,6 @@ namespace OpenDental{
 			this.butPrint.Text = "&Print All";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// butRight
-			// 
-			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRight.Autosize = true;
-			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRight.CornerRadius = 4F;
-			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(63, 18);
-			this.butRight.Name = "butRight";
-			this.butRight.Size = new System.Drawing.Size(39, 24);
-			this.butRight.TabIndex = 11;
-			this.butRight.Click += new System.EventHandler(this.butRight_Click);
-			// 
-			// butLeft
-			// 
-			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLeft.Autosize = true;
-			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLeft.CornerRadius = 4F;
-			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(13, 18);
-			this.butLeft.Name = "butLeft";
-			this.butLeft.Size = new System.Drawing.Size(39, 24);
-			this.butLeft.TabIndex = 10;
-			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -202,6 +237,8 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(955, 686);
+			this.Controls.Add(this.butDaily);
+			this.Controls.Add(this.butCompute);
 			this.Controls.Add(this.butReport);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.gridMain);
@@ -232,5 +269,7 @@ namespace OpenDental{
 		private UI.ODGrid gridMain;
 		private UI.Button butPrint;
 		private UI.Button butReport;
+		private UI.Button butDaily;
+		private UI.Button butCompute;
 	}
 }

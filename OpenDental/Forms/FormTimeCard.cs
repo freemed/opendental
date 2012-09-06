@@ -100,22 +100,22 @@ namespace OpenDental{
 			this.textDatePaycheck = new System.Windows.Forms.TextBox();
 			this.textDateStop = new System.Windows.Forms.TextBox();
 			this.textDateStart = new System.Windows.Forms.TextBox();
-			this.butRight = new OpenDental.UI.Button();
-			this.butLeft = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelOvertime = new System.Windows.Forms.Label();
 			this.textOvertime = new System.Windows.Forms.TextBox();
-			this.butCompute = new OpenDental.UI.Button();
-			this.butAdj = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butClose = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioBreaks = new System.Windows.Forms.RadioButton();
 			this.radioTimeCard = new System.Windows.Forms.RadioButton();
 			this.textOvertime2 = new System.Windows.Forms.TextBox();
 			this.textTotal2 = new System.Windows.Forms.TextBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butDaily = new OpenDental.UI.Button();
+			this.butPrint = new OpenDental.UI.Button();
+			this.butCompute = new OpenDental.UI.Button();
+			this.butAdj = new OpenDental.UI.Button();
+			this.butRight = new OpenDental.UI.Button();
+			this.butLeft = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
@@ -123,37 +123,37 @@ namespace OpenDental{
 			// textTotal
 			// 
 			this.textTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textTotal.Location = new System.Drawing.Point(491,642);
+			this.textTotal.Location = new System.Drawing.Point(491, 642);
 			this.textTotal.Name = "textTotal";
-			this.textTotal.Size = new System.Drawing.Size(66,20);
+			this.textTotal.Size = new System.Drawing.Size(66, 20);
 			this.textTotal.TabIndex = 3;
 			this.textTotal.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label1
 			// 
 			this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(385,643);
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Location = new System.Drawing.Point(385, 643);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,17);
+			this.label1.Size = new System.Drawing.Size(100, 17);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "Regular Time";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(146,8);
+			this.label2.Location = new System.Drawing.Point(146, 8);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(96,18);
+			this.label2.Size = new System.Drawing.Size(96, 18);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "Start Date";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(143,28);
+			this.label3.Location = new System.Drawing.Point(143, 28);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(99,18);
+			this.label3.Size = new System.Drawing.Size(99, 18);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "End Date";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -174,70 +174,42 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(18,3);
+			this.groupBox1.Location = new System.Drawing.Point(18, 3);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(659,51);
+			this.groupBox1.Size = new System.Drawing.Size(659, 51);
 			this.groupBox1.TabIndex = 14;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Pay Period";
 			// 
 			// textDatePaycheck
 			// 
-			this.textDatePaycheck.Location = new System.Drawing.Point(473,19);
+			this.textDatePaycheck.Location = new System.Drawing.Point(473, 19);
 			this.textDatePaycheck.Name = "textDatePaycheck";
 			this.textDatePaycheck.ReadOnly = true;
-			this.textDatePaycheck.Size = new System.Drawing.Size(100,20);
+			this.textDatePaycheck.Size = new System.Drawing.Size(100, 20);
 			this.textDatePaycheck.TabIndex = 14;
 			// 
 			// textDateStop
 			// 
-			this.textDateStop.Location = new System.Drawing.Point(244,28);
+			this.textDateStop.Location = new System.Drawing.Point(244, 28);
 			this.textDateStop.Name = "textDateStop";
 			this.textDateStop.ReadOnly = true;
-			this.textDateStop.Size = new System.Drawing.Size(100,20);
+			this.textDateStop.Size = new System.Drawing.Size(100, 20);
 			this.textDateStop.TabIndex = 13;
 			// 
 			// textDateStart
 			// 
-			this.textDateStart.Location = new System.Drawing.Point(244,8);
+			this.textDateStart.Location = new System.Drawing.Point(244, 8);
 			this.textDateStart.Name = "textDateStart";
 			this.textDateStart.ReadOnly = true;
-			this.textDateStart.Size = new System.Drawing.Size(100,20);
+			this.textDateStart.Size = new System.Drawing.Size(100, 20);
 			this.textDateStart.TabIndex = 12;
-			// 
-			// butRight
-			// 
-			this.butRight.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRight.Autosize = true;
-			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRight.CornerRadius = 4F;
-			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(63,18);
-			this.butRight.Name = "butRight";
-			this.butRight.Size = new System.Drawing.Size(39,24);
-			this.butRight.TabIndex = 11;
-			this.butRight.Click += new System.EventHandler(this.butRight_Click);
-			// 
-			// butLeft
-			// 
-			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butLeft.Autosize = true;
-			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLeft.CornerRadius = 4F;
-			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(13,18);
-			this.butLeft.Name = "butLeft";
-			this.butLeft.Size = new System.Drawing.Size(39,24);
-			this.butLeft.TabIndex = 10;
-			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(354,19);
+			this.label4.Location = new System.Drawing.Point(354, 19);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(117,18);
+			this.label4.Size = new System.Drawing.Size(117, 18);
 			this.label4.TabIndex = 9;
 			this.label4.Text = "Paycheck Date";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -245,10 +217,10 @@ namespace OpenDental{
 			// labelOvertime
 			// 
 			this.labelOvertime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelOvertime.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
-			this.labelOvertime.Location = new System.Drawing.Point(385,663);
+			this.labelOvertime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOvertime.Location = new System.Drawing.Point(385, 663);
 			this.labelOvertime.Name = "labelOvertime";
-			this.labelOvertime.Size = new System.Drawing.Size(100,17);
+			this.labelOvertime.Size = new System.Drawing.Size(100, 17);
 			this.labelOvertime.TabIndex = 17;
 			this.labelOvertime.Text = "Overtime";
 			this.labelOvertime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -256,104 +228,27 @@ namespace OpenDental{
 			// textOvertime
 			// 
 			this.textOvertime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textOvertime.Location = new System.Drawing.Point(491,662);
+			this.textOvertime.Location = new System.Drawing.Point(491, 662);
 			this.textOvertime.Name = "textOvertime";
-			this.textOvertime.Size = new System.Drawing.Size(66,20);
+			this.textOvertime.Size = new System.Drawing.Size(66, 20);
 			this.textOvertime.TabIndex = 16;
 			this.textOvertime.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// butCompute
-			// 
-			this.butCompute.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCompute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butCompute.Autosize = true;
-			this.butCompute.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCompute.CornerRadius = 4F;
-			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCompute.Location = new System.Drawing.Point(139,650);
-			this.butCompute.Name = "butCompute";
-			this.butCompute.Size = new System.Drawing.Size(90,24);
-			this.butCompute.TabIndex = 18;
-			this.butCompute.Text = "Calc Week OT";
-			this.butCompute.Click += new System.EventHandler(this.butCompute_Click);
-			// 
-			// butAdj
-			// 
-			this.butAdj.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdj.Autosize = true;
-			this.butAdj.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdj.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdj.CornerRadius = 4F;
-			this.butAdj.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdj.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdj.Location = new System.Drawing.Point(18,650);
-			this.butAdj.Name = "butAdj";
-			this.butAdj.Size = new System.Drawing.Size(115,24);
-			this.butAdj.TabIndex = 15;
-			this.butAdj.Text = "Add Adjustment";
-			this.butAdj.Click += new System.EventHandler(this.butAdj_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(18,60);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(851,580);
-			this.gridMain.TabIndex = 13;
-			this.gridMain.Title = "Time Card";
-			this.gridMain.TranslationName = "TableTimeCard";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(794,650);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75,24);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(691,650);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(86,24);
-			this.butPrint.TabIndex = 19;
-			this.butPrint.Text = "Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.radioBreaks);
 			this.groupBox2.Controls.Add(this.radioTimeCard);
-			this.groupBox2.Location = new System.Drawing.Point(747,3);
+			this.groupBox2.Location = new System.Drawing.Point(747, 3);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(122,51);
+			this.groupBox2.Size = new System.Drawing.Size(122, 51);
 			this.groupBox2.TabIndex = 20;
 			this.groupBox2.TabStop = false;
 			// 
 			// radioBreaks
 			// 
-			this.radioBreaks.Location = new System.Drawing.Point(14,27);
+			this.radioBreaks.Location = new System.Drawing.Point(14, 27);
 			this.radioBreaks.Name = "radioBreaks";
-			this.radioBreaks.Size = new System.Drawing.Size(97,19);
+			this.radioBreaks.Size = new System.Drawing.Size(97, 19);
 			this.radioBreaks.TabIndex = 1;
 			this.radioBreaks.Text = "Breaks";
 			this.radioBreaks.UseVisualStyleBackColor = true;
@@ -362,9 +257,9 @@ namespace OpenDental{
 			// radioTimeCard
 			// 
 			this.radioTimeCard.Checked = true;
-			this.radioTimeCard.Location = new System.Drawing.Point(14,10);
+			this.radioTimeCard.Location = new System.Drawing.Point(14, 10);
 			this.radioTimeCard.Name = "radioTimeCard";
-			this.radioTimeCard.Size = new System.Drawing.Size(97,19);
+			this.radioTimeCard.Size = new System.Drawing.Size(97, 19);
 			this.radioTimeCard.TabIndex = 0;
 			this.radioTimeCard.TabStop = true;
 			this.radioTimeCard.Text = "Time Card";
@@ -374,41 +269,146 @@ namespace OpenDental{
 			// textOvertime2
 			// 
 			this.textOvertime2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textOvertime2.Location = new System.Drawing.Point(563,662);
+			this.textOvertime2.Location = new System.Drawing.Point(563, 662);
 			this.textOvertime2.Name = "textOvertime2";
-			this.textOvertime2.Size = new System.Drawing.Size(66,20);
+			this.textOvertime2.Size = new System.Drawing.Size(66, 20);
 			this.textOvertime2.TabIndex = 22;
 			this.textOvertime2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// textTotal2
 			// 
 			this.textTotal2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textTotal2.Location = new System.Drawing.Point(563,642);
+			this.textTotal2.Location = new System.Drawing.Point(563, 642);
 			this.textTotal2.Name = "textTotal2";
-			this.textTotal2.Size = new System.Drawing.Size(66,20);
+			this.textTotal2.Size = new System.Drawing.Size(66, 20);
 			this.textTotal2.TabIndex = 21;
 			this.textTotal2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// gridMain
+			// 
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(18, 60);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(851, 580);
+			this.gridMain.TabIndex = 13;
+			this.gridMain.Title = "Time Card";
+			this.gridMain.TranslationName = "TableTimeCard";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
 			// butDaily
 			// 
-			this.butDaily.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDaily.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDaily.Autosize = true;
 			this.butDaily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDaily.CornerRadius = 4F;
 			this.butDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDaily.Location = new System.Drawing.Point(235,650);
+			this.butDaily.Location = new System.Drawing.Point(139, 650);
 			this.butDaily.Name = "butDaily";
-			this.butDaily.Size = new System.Drawing.Size(78,24);
+			this.butDaily.Size = new System.Drawing.Size(78, 24);
 			this.butDaily.TabIndex = 23;
 			this.butDaily.Text = "Calc Daily";
 			this.butDaily.Click += new System.EventHandler(this.butDaily_Click);
 			// 
+			// butPrint
+			// 
+			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrint.Autosize = true;
+			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.CornerRadius = 4F;
+			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrint.Location = new System.Drawing.Point(691, 650);
+			this.butPrint.Name = "butPrint";
+			this.butPrint.Size = new System.Drawing.Size(86, 24);
+			this.butPrint.TabIndex = 19;
+			this.butPrint.Text = "Print";
+			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			// 
+			// butCompute
+			// 
+			this.butCompute.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCompute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCompute.Autosize = true;
+			this.butCompute.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCompute.CornerRadius = 4F;
+			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCompute.Location = new System.Drawing.Point(223, 650);
+			this.butCompute.Name = "butCompute";
+			this.butCompute.Size = new System.Drawing.Size(90, 24);
+			this.butCompute.TabIndex = 18;
+			this.butCompute.Text = "Calc Week OT";
+			this.butCompute.Click += new System.EventHandler(this.butCompute_Click);
+			// 
+			// butAdj
+			// 
+			this.butAdj.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butAdj.Autosize = true;
+			this.butAdj.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdj.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdj.CornerRadius = 4F;
+			this.butAdj.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdj.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdj.Location = new System.Drawing.Point(18, 650);
+			this.butAdj.Name = "butAdj";
+			this.butAdj.Size = new System.Drawing.Size(115, 24);
+			this.butAdj.TabIndex = 15;
+			this.butAdj.Text = "Add Adjustment";
+			this.butAdj.Click += new System.EventHandler(this.butAdj_Click);
+			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(63, 18);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(39, 24);
+			this.butRight.TabIndex = 11;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(13, 18);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(39, 24);
+			this.butLeft.TabIndex = 10;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(794, 650);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 0;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormTimeCard
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(891,686);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(891, 686);
 			this.Controls.Add(this.butDaily);
 			this.Controls.Add(this.textOvertime2);
 			this.Controls.Add(this.textTotal2);
@@ -502,6 +502,7 @@ namespace OpenDental{
 			IsBreaks=false;
 			textOvertime.Visible=true;
 			labelOvertime.Visible=true;
+			butDaily.Visible=true;
 			butCompute.Visible=true;
 			butAdj.Visible=true;
 			butDaily.Visible=true;
@@ -512,6 +513,7 @@ namespace OpenDental{
 			IsBreaks=true;
 			textOvertime.Visible=false;
 			labelOvertime.Visible=false;
+			butDaily.Visible=false;
 			butCompute.Visible=false;
 			butAdj.Visible=false;
 			//butDaily.Visible=false;
@@ -869,6 +871,22 @@ namespace OpenDental{
 			FillMain(true);
 		}
 
+		//private void butCompute_Click(object sender,EventArgs e) {
+		//  if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+		//    return;
+		//  }
+		//  TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+		//  FillMain(true);
+		//}
+
+		//private void butDaily_Click(object sender,EventArgs e) {
+		//  if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+		//    return;
+		//  }
+		//  TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+		//  FillMain(true);
+		//}
+
 		private void butCompute_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
@@ -888,16 +906,15 @@ namespace OpenDental{
 			Calendar cal=CultureInfo.CurrentCulture.Calendar;
 			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			//loop through all rows
-			for(int i=0;i<mergedAL.Count;i++){
+			for(int i=0;i<mergedAL.Count;i++) {
 				//ignore rows that aren't weekly totals
 				if(i<mergedAL.Count-1//if not the last row
-					//if the next row has the same week as this row
-					&& cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
-					== cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
-				{
+		      //if the next row has the same week as this row
+		      && cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
+		      == cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))) {
 					continue;
 				}
-				if(WeeklyTotals[i]<=TimeSpan.FromHours(40)){
+				if(WeeklyTotals[i]<=TimeSpan.FromHours(40)) {
 					continue;
 				}
 				//found a weekly total over 40 hours
@@ -920,9 +937,9 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			DateTime previousDate;
 			//Over breaks-------------------------------------------------------------------------------------------------
-			if(PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks)){
+			if(PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks)) {
 				//set adj auto to zero for all.
-				for(int i=0;i<ClockEventList.Count;i++){
+				for(int i=0;i<ClockEventList.Count;i++) {
 					ClockEventList[i].AdjustAuto=TimeSpan.Zero;
 					ClockEvents.Update(ClockEventList[i]);
 				}
@@ -930,14 +947,14 @@ namespace OpenDental{
 				TimeSpan totalToday=TimeSpan.Zero;
 				TimeSpan totalOne=TimeSpan.Zero;
 				previousDate=DateTime.MinValue;
-				for(int b=0;b<breakList.Count;b++){
-					if(breakList[b].TimeDisplayed2.Year<1880){
+				for(int b=0;b<breakList.Count;b++) {
+					if(breakList[b].TimeDisplayed2.Year<1880) {
 						Cursor=Cursors.Default;
 						MsgBox.Show(this,"Error. Employee break malformed.");
 						FillMain(true);//in case some changes already made.
 						return;
 					}
-					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date){
+					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
 						Cursor=Cursors.Default;
 						MsgBox.Show(this,"Error. One break spans multiple dates.");
 						FillMain(true);//in case some changes already made.
@@ -952,20 +969,20 @@ namespace OpenDental{
 					}
 					totalToday+=totalOne;
 					//decide if breaks for the day went over 30 min.
-					if(totalToday > TimeSpan.FromMinutes(31)){//31 to prevent silly fractions less than 1.
+					if(totalToday > TimeSpan.FromMinutes(31)) {//31 to prevent silly fractions less than 1.
 						//loop through all ClockEvents in this grid to find one to adjust.
 						//Go backwards to find the last entry for a given date.
-						for(int c=ClockEventList.Count-1;c>=0;c--){
-							if(ClockEventList[c].TimeDisplayed1.Date==breakList[b].TimeDisplayed1.Date){
+						for(int c=ClockEventList.Count-1;c>=0;c--) {
+							if(ClockEventList[c].TimeDisplayed1.Date==breakList[b].TimeDisplayed1.Date) {
 								ClockEventList[c].AdjustAuto-=(totalToday-TimeSpan.FromMinutes(30));
 								ClockEvents.Update(ClockEventList[c]);
 								totalToday=TimeSpan.FromMinutes(30);//reset to 30.  Therefore, any additional breaks will be wholly adjustments.
 								break;
 							}
-							if(c==0){//we never found a match
+							if(c==0) {//we never found a match
 								Cursor=Cursors.Default;
 								MessageBox.Show("Error. Over breaks, but could not adjust because not regular time entered for date:"
-									+breakList[b].TimeDisplayed1.Date.ToShortDateString());
+		              +breakList[b].TimeDisplayed1.Date.ToShortDateString());
 								FillMain(true);//in case some changes already made.
 								return;
 							}
@@ -979,12 +996,12 @@ namespace OpenDental{
 			TimeSpan beforeTime=TimeSpan.Zero;
 			TimeSpan overHours=TimeSpan.Zero;
 			//loop through timecardrules to find one rule of each kind.
-			for(int i=0;i<TimeCardRules.Listt.Count;i++){
-				if(TimeCardRules.Listt[i].EmployeeNum!=0 && TimeCardRules.Listt[i].EmployeeNum!=EmployeeCur.EmployeeNum){
+			for(int i=0;i<TimeCardRules.Listt.Count;i++) {
+				if(TimeCardRules.Listt[i].EmployeeNum!=0 && TimeCardRules.Listt[i].EmployeeNum!=EmployeeCur.EmployeeNum) {
 					continue;
 				}
-				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero){
-					if(afterTime > TimeSpan.Zero){//already found a match, and this is a second match
+				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero) {
+					if(afterTime > TimeSpan.Zero) {//already found a match, and this is a second match
 						Cursor=Cursors.Default;
 						MsgBox.Show(this,"Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
 						return;
@@ -999,7 +1016,7 @@ namespace OpenDental{
 					}
 					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
 				}
-				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero){
+				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
 					return;
@@ -1010,11 +1027,11 @@ namespace OpenDental{
 					return;
 				}
 				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
-				  if(beforeTime>TimeSpan.Zero) {
-				    Cursor=Cursors.Default;
-				    MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
-				    return;
-				  }
+					if(beforeTime>TimeSpan.Zero) {//already found a match, and this is a second match
+						Cursor=Cursors.Default;
+						MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
+						return;
+					}
 					beforeTime=TimeCardRules.Listt[i].BeforeTimeOfDay;
 				}
 			}
@@ -1022,14 +1039,14 @@ namespace OpenDental{
 			TimeSpan dailyTotal=TimeSpan.Zero;
 			TimeSpan pairTotal=TimeSpan.Zero;
 			previousDate=DateTime.MinValue;
-			for(int i=0;i<ClockEventList.Count;i++){
-				if(ClockEventList[i].TimeDisplayed2.Year<1880){
+			for(int i=0;i<ClockEventList.Count;i++) {
+				if(ClockEventList[i].TimeDisplayed2.Year<1880) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Error. Employee not clocked out.");
 					FillMain(true);//in case some changes already made.
 					return;
 				}
-				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date){
+				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date) {
 					Cursor=Cursors.Default;
 					MsgBox.Show(this,"Error. One clock pair spans multiple dates.");
 					FillMain(true);//in case some changes already made.
@@ -1037,48 +1054,48 @@ namespace OpenDental{
 				}
 				pairTotal=ClockEventList[i].TimeDisplayed2-ClockEventList[i].TimeDisplayed1;
 				//add any adjustments, manual or overrides.
-				if(ClockEventList[i].AdjustIsOverridden){
+				if(ClockEventList[i].AdjustIsOverridden) {
 					pairTotal+=ClockEventList[i].Adjust;
 				}
-				else{
+				else {
 					pairTotal+=ClockEventList[i].AdjustAuto;
 				}
 				//calc daily total
-				if(previousDate.Date != ClockEventList[i].TimeDisplayed1.Date){ //if date changed
+				if(previousDate.Date != ClockEventList[i].TimeDisplayed1.Date) { //if date changed
 					dailyTotal=TimeSpan.Zero;//new day
 					previousDate=ClockEventList[i].TimeDisplayed1.Date;//for the next loop
 				}
 				dailyTotal+=pairTotal;
 				//handle OT
 				ClockEventList[i].OTimeAuto=TimeSpan.Zero;//set auto OT to zero.
-				if(ClockEventList[i].OTimeHours != TimeSpan.FromHours(-1)){//if OT is overridden
+				if(ClockEventList[i].OTimeHours != TimeSpan.FromHours(-1)) {//if OT is overridden
 					//don't try to calc a time.
 					ClockEvents.Update(ClockEventList[i]);//just to possibly clear autoOT, even though it doesn't count.
 					//but still need to subtract OT from dailyTotal
 					dailyTotal-=ClockEventList[i].OTimeHours;
 					continue;
 				}
-				if(afterTime != TimeSpan.Zero){
+				if(afterTime != TimeSpan.Zero) {
 					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTime){//the start time is after time, so the whole pairTotal is OT
+					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTime) {//the start time is after time, so the whole pairTotal is OT
 						ClockEventList[i].OTimeAuto=pairTotal;
 					}
-					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTime){//only the second time is after time
+					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTime) {//only the second time is after time
 						ClockEventList[i].OTimeAuto=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTime;//only a portion of the pairTotal is OT
 					}
 				}
 				if(beforeTime!=TimeSpan.Zero) {
 					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime){//the end time is before time, so the whole pairTotal is OT
+					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime) {//the end time is before time, so the whole pairTotal is OT
 						ClockEventList[i].OTimeAuto+=pairTotal;
 					}
-					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime){//only the first time is before time
+					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime) {//only the first time is before time
 						ClockEventList[i].OTimeAuto+=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
 					}
 				}
-				if(overHours != TimeSpan.Zero){
+				if(overHours != TimeSpan.Zero) {
 					//test dailyTotal
-					if(dailyTotal > overHours){
+					if(dailyTotal > overHours) {
 						ClockEventList[i].OTimeAuto=dailyTotal-overHours;
 						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
 					}

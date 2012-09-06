@@ -118,14 +118,16 @@ namespace OpenDentBusiness{
 					if(breakList[b].TimeDisplayed2.Year<1880) {
 						//Cursor=Cursors.Default;
 						//MsgBox.Show(this,"Error. Employee break malformed.");
+						throw new Exception("Error. Employee break malformed.");
 						//FillMain(true);//in case some changes already made.
-						return;
+						//return;
 					}
 					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
 						//Cursor=Cursors.Default;
 						//MsgBox.Show(this,"Error. One break spans multiple dates.");
+						throw new Exception("Error. One break spans multiple dates.");
 						//FillMain(true);//in case some changes already made.
-						return;
+						//return;
 					}
 					//calc time for the one break
 					totalOne=breakList[b].TimeDisplayed2-breakList[b].TimeDisplayed1;
@@ -150,8 +152,10 @@ namespace OpenDentBusiness{
 								//Cursor=Cursors.Default;
 								//MessageBox.Show("Error. Over breaks, but could not adjust because not regular time entered for date:"
 								//  +breakList[b].TimeDisplayed1.Date.ToShortDateString());
+								throw new Exception("Error. Over breaks, but could not adjust because not regular time entered for date:"
+								  +breakList[b].TimeDisplayed1.Date.ToShortDateString());
 								//FillMain(true);//in case some changes already made.
-								return;
+								//return;
 							}
 						}
 					}
@@ -171,7 +175,8 @@ namespace OpenDentBusiness{
 					if(afterTime > TimeSpan.Zero) {//already found a match, and this is a second match
 						//Cursor=Cursors.Default;
 						//MsgBox.Show(this,"Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
-						return;
+						throw new Exception("Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
+						//return;
 					}
 					afterTime=TimeCardRules.Listt[i].AfterTimeOfDay;
 				}
@@ -179,25 +184,29 @@ namespace OpenDentBusiness{
 					if(overHours > TimeSpan.Zero) {//already found a match, and this is a second match
 						//Cursor=Cursors.Default;
 						//MsgBox.Show(this,"Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
-						return;
+						throw new Exception("Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
+						//return;
 					}
 					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
 				}
 				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
 					//Cursor=Cursors.Default;
 					//MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
-					return;
+					throw new Exception("Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
+					//return;
 				}
 				if(beforeTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
 					//Cursor=Cursors.Default;
 					//MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
-					return;
+					throw new Exception("Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
+					//return;
 				}
 				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
 					if(beforeTime>TimeSpan.Zero) {//already found a match, and this is a second match
 						//Cursor=Cursors.Default;
 						//MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
-						return;
+						throw new Exception("Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
+						//return;
 					}
 					beforeTime=TimeCardRules.Listt[i].BeforeTimeOfDay;
 				}
@@ -211,13 +220,15 @@ namespace OpenDentBusiness{
 					//Cursor=Cursors.Default;
 					//MsgBox.Show(this,"Error. Employee not clocked out.");
 					//FillMain(true);//in case some changes already made.
-					return;
+					throw new Exception("Error. Employee not clocked out.");
+					//return;
 				}
 				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date) {
 					//Cursor=Cursors.Default;
 					//MsgBox.Show(this,"Error. One clock pair spans multiple dates.");
 					//FillMain(true);//in case some changes already made.
-					return;
+					throw new Exception("Error. One clock pair spans multiple dates.");
+					//return;
 				}
 				pairTotal=ClockEventList[i].TimeDisplayed2-ClockEventList[i].TimeDisplayed1;
 				//add any adjustments, manual or overrides.
@@ -267,11 +278,54 @@ namespace OpenDentBusiness{
 						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
 					}
 				}
+				//TODO: fix negative OT bug. If you work from 9-5 but take a 2 hour lunch, clock out for home. Clock back in 
+				//also, there is an issue with putting adjustments on the last time entry of the day if the adjustments are greater than the length of work for the day.
 				ClockEvents.Update(ClockEventList[i]);
 			}
+			AdjustBreaksHelper(EmployeeCur,StartDate,StopDate);
 			//FillMain(true);
 			//Cursor=Cursors.Default;
 		}
+
+		///<summary>This function is aesthetic and has no bearing on actual OT calculations. It adds adjustments to breaks so that when viewing them you can see if they went over 30 minutes.</summary>
+		private static void AdjustBreaksHelper(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
+			if(!PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks)){
+				//Only adjust breaks if preference is set.
+				return;
+			}
+			List<ClockEvent> breakList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,true);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),true);
+			TimeSpan totalToday=TimeSpan.Zero;
+			TimeSpan totalOne=TimeSpan.Zero;
+			DateTime previousDate=DateTime.MinValue;
+			for(int b=0;b<breakList.Count;b++) {
+				if(breakList[b].TimeDisplayed2.Year<1880) {
+					//Cursor=Cursors.Default;
+					//MsgBox.Show(this,"Error. Employee break malformed.");
+					//FillMain(true);//in case some changes already made.
+					return;
+				}
+				if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
+					//Cursor=Cursors.Default;
+					//MsgBox.Show(this,"Error. One break spans multiple dates.");
+					//FillMain(true);//in case some changes already made.
+					return;
+				}
+				//calc time for the one break
+				totalOne=breakList[b].TimeDisplayed2-breakList[b].TimeDisplayed1;
+				//calc daily total
+				if(previousDate.Date != breakList[b].TimeDisplayed1.Date) {//if date changed, this is the first pair of the day
+					totalToday=TimeSpan.Zero;//new day
+					previousDate=breakList[b].TimeDisplayed1.Date;//for the next loop
+				}
+				totalToday+=totalOne;
+				//decide if breaks for the day went over 30 min.
+				if(totalToday > TimeSpan.FromMinutes(31)) {//31 to prevent silly fractions less than 1.
+					breakList[b].AdjustAuto=-(totalToday-TimeSpan.FromMinutes(30));
+					ClockEvents.Update(breakList[b]);
+					totalToday=TimeSpan.FromMinutes(30);//reset to 30.  Therefore, any additional breaks will be wholly adjustments.
+				}
+			}//end breaklist
+			}
 
 		///<summary>Calculates weekly overtime and inserts TimeAdjustments accordingly.</summary>
 		public static void CalculateWeeklyOvertime(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
@@ -330,7 +384,7 @@ namespace OpenDentBusiness{
 
 		private static List<TimeSpan> FillWeeklyTotalsHelper(bool fromDB,Employee EmployeeCur,ArrayList mergedAL) {//,DateTime StartTime,DateTime StopTime) {
 			List<TimeSpan> retVal = new List<TimeSpan>();
-			//TODO: fill that list!
+			//This used to be fillGrid()
 			//if(fromDB) {
 			//List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartTime,StopTime,false);//PIn.Date(textDateStart.Text),	PIn.Date(textDateStop.Text),IsBreaks);
 			//if(IsBreaks) {

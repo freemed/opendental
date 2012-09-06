@@ -32,6 +32,8 @@ namespace OpenDental {
 			SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
 			FillPayPeriod();
 			FillMain();
+			butCompute.Visible=false;			//only until unit tests are complete.
+			butDaily.Visible=false;			//only until unit tests are complete.
 		}
 
 		private void FillMain() {
@@ -488,8 +490,108 @@ namespace OpenDental {
 			FormQ.ShowDialog();
 		}
 
+		private void butDaily_Click(object sender,EventArgs e) {
+			//not even visible if viewing breaks.
+			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			List<Employee> employeesList = new List<Employee>();
+			foreach(int index in gridMain.SelectedIndices) {
+				foreach(Employee emp in Employees.ListLong) {
+					if(emp.EmployeeNum.ToString()==MainTable.Rows[index]["EmployeeNum"].ToString()) {
+						employeesList.Add(emp);
+						break;//no need to check other employees, handle next selected index.
+					}
+				}
+			}
+			if(employeesList.Count==0) {//nothing in grid was selected so populate list with all non hidden employees.
+				foreach(Employee emp in Employees.ListShort){
+					employeesList.Add(emp);
+				}
+			}
+			foreach(Employee EmployeeCur in employeesList) {
+				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			}
+			Cursor=Cursors.Default;
+			//Cach selected indicies, fill grid, reselect indicies.
+			List<int> listSelectedIndexCach=new List<int>();
+			foreach(int ind in gridMain.SelectedIndices) {
+				listSelectedIndexCach.Add(ind);
+			}
+			FillMain();
+			foreach(int ind in listSelectedIndexCach) {
+				gridMain.SetSelected(ind,true);
+			}
+		}
+
+		private void butWeekly_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			List<Employee> employeesList = new List<Employee>();
+			foreach(int selectedIndex in gridMain.SelectedIndices) {
+				foreach(Employee emp in Employees.ListLong){
+					if(emp.EmployeeNum.ToString()==MainTable.Rows[selectedIndex]["EmployeeNum"].ToString()) {
+						employeesList.Add(emp);
+						break;//no need to check other employees, handle next selected index.
+					}
+				}
+			}
+			if(employeesList.Count==0) {//nothing in grid was selected so populate list with all non hidden employees.
+				foreach(Employee emp in Employees.ListShort) {
+					employeesList.Add(emp);
+				}
+			}
+			if(gridMain.SelectedIndices.Length==0) {//Nothing selected, run on all employees.
+				//MsgBox? for a warning?
+				foreach(Employee emp in Employees.ListLong) {
+					employeesList.Add(emp);
+				}
+			}
+			foreach(Employee EmployeeCur in employeesList) {
+				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			}
+			Cursor=Cursors.Default;
+			//Cach selected indicies, fill grid, reselect indicies.
+			List<int> listSelectedIndexCach=new List<int>();
+			foreach(int ind in gridMain.SelectedIndices) {
+				listSelectedIndexCach.Add(ind);
+			}
+			FillMain();
+			foreach(int ind in listSelectedIndexCach) {
+				gridMain.SetSelected(ind,true);
+			}
+		}
+
+		private void butDayAndWeek_Click(object sender,EventArgs e) {
+			//not even visible if viewing breaks.
+			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			List<Employee> employeesList = new List<Employee>();
+			foreach(int index in gridMain.SelectedIndices) {
+				foreach(Employee emp in Employees.ListLong) {
+					if(emp.EmployeeNum.ToString()==MainTable.Rows[index]["EmployeeNum"].ToString()) {
+						employeesList.Add(emp);
+						break;//no need to check other employees, handle next selected index.
+					}
+				}
+			}
+			foreach(Employee EmployeeCur in employeesList) {
+				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			}
+			Cursor=Cursors.Default;
+			FillMain();
+		}
+
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+
 	}
 }
