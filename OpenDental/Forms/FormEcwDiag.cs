@@ -206,14 +206,34 @@ namespace OpenDental {
 				string[] segmentValues=segment["SegmentData"].ToString().Split('|');
 				segmentsContained.Add(segmentValues[0]);//used later to validate existance of segments.
 				switch(segmentValues[0]) {
+					case "EVN":
+						//We ignore this field
+						continue;
 					case "PID":
 						if(segmentValues[2]!="{PID}") {
-							retVal+="ADT HL7 message is not sending eCW's internal patient number in field PID.2\r\n";
+							retVal+="ADT HL7 message is not sending eCW's internal patient number in field PID.02\r\n";
 							errors++;
 							validMessage=false;
 						}
 						if(segmentValues[4]!="{CONTNO}") {
-							retVal+="ADT HL7 message is not sending eCW's account number in field PID.4\r\n";
+							retVal+="ADT HL7 message is not sending eCW's account number in field PID.04\r\n";
+							errors++;
+							validMessage=false;
+						}
+						continue;
+					case "GT1":
+						if(segmentValues[2]!="{GRID}") {
+							retVal+="ADT HL7 message is not sending guarantor's id number in field GT1.02\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentValues[3]!="{GRLN}^{GRFN}^{GRMN}") {
+							retVal+="ADT HL7 message is not sending eCW's guarantor's name in field GT1.03\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentValues[11]!="{GRREL}") {
+							retVal+="ADT HL7 message is not sending guarantor's relationship to patient in field GT1.11\r\n";
 							errors++;
 							validMessage=false;
 						}
@@ -223,9 +243,18 @@ namespace OpenDental {
 				}
 			}
 			//Validate existance of segments
+			//if(!segmentsContained.Contains("EVN")) { //We ignore this segment
+			//  retVal+="No EVN segment found in ADT HL7 message.\r\n";
+			//  errors+=3;//No segment +2 sub errors
+			//  validMessage=false;
+			//}
 			if(!segmentsContained.Contains("PID")) {
 				retVal+="No PID segment found in ADT HL7 message.\r\n";
 				errors+=3;//No segment +2 sub errors
+				validMessage=false;
+			}
+			if(!segmentsContained.Contains("GT1") && verbose) {
+				retVal+="No GT1 segment found in ADT HL7 message. Guarantors for new patients will always be set to self.\r\n";
 				validMessage=false;
 			}
 			//If everything above checks out return a success message
@@ -243,40 +272,98 @@ namespace OpenDental {
 			DataTable hl7Segments=MySqlHelper.ExecuteDataset(connString,"SELECT SegmentData FROM hl7segment_details WHERE InterfaceID="+interfaceID+" AND Messageid="+messageID+";").Tables[0];
 			//validate segments based on content
 			foreach(DataRow segment in hl7Segments.Rows) {
-				string[] segmentValues=segment["SegmentData"].ToString().Split('|');
-				segmentsContained.Add(segmentValues[0]);//used later to validate existance of segments.
-				switch(segmentValues[0]) {
-					case "PID":
-						if(segmentValues[2]!="{PID}") {
-							retVal+="SIU HL7 message is not sending eCW's internal patient number in field PID.2\r\n";
-							errors++;
-							validMessage=false;
-						}
-						if(segmentValues[4]!="{CONTNO}") {
-							retVal+="SIU HL7 message is not sending eCW's account number in field PID.4\r\n";
-							errors++;
-							validMessage=false;
-						}
+				string[] segmentFields=segment["SegmentData"].ToString().Split('|');
+				segmentsContained.Add(segmentFields[0]);//used later to validate existance of segments.
+				switch(segmentFields[0]) {
+					case "MSH":
+						//validation?
 						continue;
 					case "SCH":
-						if(segmentValues[2]!="{ENCID}") {
-							retVal+="SIU HL7 message is not sending appointment number in field SCH.2\r\n";
+						if(segmentFields[2]!="{ENCID}") {//eCW's documentation is wrong. SCH.01 is not used as appointment num, instead SCH.02 is used for appointment num.
+							retVal+="SIU HL7 message is not sending visit number in field SCH.01\r\n";
 							errors++;
 							validMessage=false;
 						}
-						if(segmentValues[7]!="{ENCREASON}") {
-							retVal+="SIU HL7 message is not sending appointment notes in field SCH.7\r\n";
+						if(segmentFields[7]!="{ENCREASON}") {
+							retVal+="SIU HL7 message is not sending visit reason in field SCH.07\r\n";
 							errors++;
 							validMessage=false;
 						}
-						string[] SCH11=segmentValues[11].Split('^');
+						if(segmentFields[8]!="{VISITTYPE}") {
+							retVal+="SIU HL7 message is not sending visit type in field SCH.08\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(false){//segmentFields[9]!="{ENCID}") { //Don't know what this should look like when properly configured. TODO
+							retVal+="SIU HL7 message is not sending appointment duration in minutes in field SCH.09\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(false){//segmentFields[10]!="{ENCID}") { //Don't know what this should look like when properly configured. TODO
+							retVal+="SIU HL7 message is not sending appointment duration units in field SCH.10\r\n";
+							errors++;
+							validMessage=false;
+						}
+						string[] SCH11=segmentFields[11].Split('^');
+						if(false){//SCH11[2]!="{ENCSDATETIME}") { //Don't 
+							retVal+="SIU HL7 message is not sending appointment duration in field SCH.11.02\r\n";
+							errors++;
+							validMessage=false;
+						}
 						if(SCH11[3]!="{ENCSDATETIME}") {
-							retVal+="SIU HL7 message is not sending appointment start time in field SCH.11.3\r\n";
+							retVal+="SIU HL7 message is not sending appointment start time in field SCH.11.03\r\n";
 							errors++;
 							validMessage=false;
 						}
 						if(SCH11[4]!="{ENCEDATETIME}") {
-							retVal+="SIU HL7 message is not sending appointment end time in field SCH.11.4\r\n";
+							retVal+="SIU HL7 message is not sending appointment end time in field SCH.11.04\r\n";
+							errors++;
+							validMessage=false;
+						}
+						//if(segmentFields[25]!="{STATUS}") {//according to documentation, we need this, but actually we never try to reference it.
+						//  retVal+="SIU HL7 message is not sending visit status in field SCH.25\r\n";
+						//  errors++;
+						//  validMessage=false;
+						//}
+						continue;
+					case "PID":
+						if(segmentFields[2]!="{PID}") {
+							retVal+="SIU HL7 message is not sending eCW's internal patient number in field PID.02\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentFields[4]!="{CONTNO}" && !Programs.UsingEcwTightOrFull()) {
+							retVal+="SIU HL7 message is not sending eCW's account number in field PID.04\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentFields[5]!="{PLN}^{PFN}^{PMN}") {
+							retVal+="SIU HL7 message is not sending patient's name correctly in field PID.05\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentFields[7]!="{PDOB}") {
+							retVal+="SIU HL7 message is not sending patient's date of birth in field PID.07\r\n";
+							errors++;
+							validMessage=false;
+						}
+						if(segmentFields[8]!="{PSEX}") {
+							retVal+="SIU HL7 message is not sending patient's gender in field PID.08\r\n";
+							errors++;
+							validMessage=false;
+						}
+						//No checking of optional fields.
+						continue;
+					case "PV1":
+						if(false) {//segmentFields[7]!="{PID}") { //Don't know what this should look like when properly configured. TODO
+							retVal+="SIU HL7 message is not sending provider id in field PV1.07\r\n";
+							errors++;
+							validMessage=false;
+						}
+						continue;
+					case "AIG":
+						if(false) {//segmentFields[3]!="{PID}") { //Don't know what this should look like when properly configured. TODO
+							retVal+="SIU HL7 message is not sending provider/resource id in field AIG.03\r\n";
 							errors++;
 							validMessage=false;
 						}
@@ -286,18 +373,30 @@ namespace OpenDental {
 				}
 			}
 			//Validate existance of segments
-			if(!segmentsContained.Contains("PID")) {
-				retVal+="No PID segment found in SIU HL7 message.\r\n";
-				errors+=3;//no segment plus 2 sub errors.
-				validMessage=false;
-			}
 			if(!segmentsContained.Contains("SCH")) {
 				retVal+="No SCH segment found in SIU HL7 message.\r\n";
-				errors+=5;//no segment plus the 4 sub errors.
+				errors+=7;//no segment plus 6 sub errors.
+				validMessage=false;
+			}
+			if(!segmentsContained.Contains("PID")) {
+				retVal+="No PID segment found in SIU HL7 message.\r\n";
+				if(!Programs.UsingEcwTightOrFull()) {
+					errors++;//to account for not sending eCW's account number
+				}
+				errors+=5;//no segment plus 4 sub errors.
+				validMessage=false;
+			}
+			if(!segmentsContained.Contains("PV1")) {
+				retVal+="No PV1 segment found in SIU HL7 message.\r\n";
+				errors+=5;//no segment plus 4 sub errors.
 				validMessage=false;
 			}
 			if(!segmentsContained.Contains("AIG") && !segmentsContained.Contains("PV1") && verbose) {
-				retVal+="No AIG or PV1 segment found in SIU HL7 message. Appointments will use patient's default primary provider.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
+				retVal+="No AIG (optional) or PV1 segments found in SIU HL7 message. Appointments will use patient's default primary provider.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
+				validMessage=false;
+			}
+			else if(!segmentsContained.Contains("AIG") && verbose) {
+				retVal+="No AIG (optional) segment found in SIU HL7 message. Appointments will use provider information from PV1 segment.\r\n";//ecwSIU.cs sets this when in-processing SIU message.
 				validMessage=false;
 			}
 			//If everything above checks out return a success message
