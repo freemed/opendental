@@ -6674,6 +6674,18 @@ namespace OpenDental{
 			}
 			List<string> procCodes=new List<string>();
 			Procedure ProcCur=null;
+			//"Bug fix" for Dr. Lazar-------------
+			bool isPeriapicalSix=false;
+			if(codeList.Length==6) {//quick check before checking all codes. So that the program isn't slowed down too much.
+				string tempVal="";
+				foreach(long code in codeList) {
+					tempVal+=ProcedureCodes.GetProcCode(code).AbbrDesc;
+				}
+				if(tempVal=="PAPA+PA+PA+PA+PA+") {
+					isPeriapicalSix = true;
+					toothChart.SelectedTeeth.Clear();//set tooth numbers later
+				}
+			}
 			for(int i=0;i<codeList.Length;i++){
 				//needs to loop at least once, regardless of whether any teeth are selected.	
 				for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
@@ -6681,6 +6693,12 @@ namespace OpenDental{
 					ProcCur=new Procedure();//insert, so no need to set CurOld
 					ProcCur.CodeNum=ProcedureCodes.GetProcCode(codeList[i]).CodeNum;
 					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
+					//"Bug fix" for Dr. Lazar-------------
+					if(isPeriapicalSix && n!=0) {
+						//PA code is already set to treatment area tooth by default.
+						tArea=TreatmentArea.Tooth;
+						ProcCur.ToothNum="8,14,19,24,30".Split(',')[n-1];
+					}
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth
 						|| tArea==TreatmentArea.Quad
