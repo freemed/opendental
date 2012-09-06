@@ -388,7 +388,7 @@ namespace OpenDentBusiness{
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewInput("toothNum",sheet.FontSize,sheet.FontName,false,x+120,y,100,rowH));
 			y+=rowH;
 			y+=20;
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"Extraction(s) are to be peformed on the tooth/teeth listed above.  While we expect no complications, there are some risks involved with this procedure.  The more common complications are:
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(@"Extraction(s) are to be performed on the tooth/teeth listed above.  While we expect no complications, there are some risks involved with this procedure.  The more common complications are:
 
 Pain, infection, swelling, bruising, and discoloration.  Adjacent teeth may be chipped or damaged during the extraction.
 
