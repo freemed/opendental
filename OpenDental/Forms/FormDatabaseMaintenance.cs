@@ -10,6 +10,7 @@ using System.Security;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using OpenDental.UI;
 
 namespace OpenDental {
 	/// <summary>
@@ -42,6 +43,8 @@ namespace OpenDental {
 		private Label label7;
 		private UI.Button butTokens;
 		private OpenDental.UI.Button butPrint;
+		///<summary>Holds any text from the log that still needs to be printed when the log spans multiple pages.</summary>
+		private string LogTextPrint;
 
 		///<summary></summary>
 		public FormDatabaseMaintenance() {
@@ -421,7 +424,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			bool verbose=checkShow.Checked;
 			StringBuilder strB=new StringBuilder();
-			strB.Append('-',90);
+			strB.Append('-',65);
 			textLog.Text=DateTime.Now.ToString()+strB.ToString()+"\r\n";
 			Application.DoEvents();
 //#if DEBUG
@@ -627,11 +630,17 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
+			LogTextPrint=textLog.Text;
 			pd2 = new PrintDocument();
 			pd2.PrintPage += new PrintPageEventHandler(this.pd2_PrintPage);
 			pd2.DefaultPageSettings.Margins=new Margins(40,50,50,60);
 			try {
+				#if DEBUG
+				FormPrintPreview printPreview=new FormPrintPreview(PrintSituation.Default,pd2,0);
+				printPreview.ShowDialog();
+				#else
 				pd2.Print();
+				#endif
 			}
 			catch {
 				MessageBox.Show("Printer not available");
@@ -639,10 +648,13 @@ namespace OpenDental {
 		}
 
 		private void pd2_PrintPage(object sender,PrintPageEventArgs ev) {//raised for each page to be printed.
-			int yPos = ev.MarginBounds.Top;
-			int xPos=ev.MarginBounds.Left;
-			ev.Graphics.DrawString(textLog.Text,new Font("Courier New",10),Brushes.Black,xPos,yPos);
-			ev.HasMorePages = false;
+			int charsOnPage=0;
+			int linesPerPage=0;
+			Font font=new Font("Courier New",10);
+			ev.Graphics.MeasureString(LogTextPrint,font,ev.MarginBounds.Size,StringFormat.GenericTypographic,out charsOnPage,out linesPerPage);
+			ev.Graphics.DrawString(LogTextPrint,font,Brushes.Black,ev.MarginBounds,StringFormat.GenericTypographic);
+			LogTextPrint=LogTextPrint.Substring(charsOnPage);
+			ev.HasMorePages=(LogTextPrint.Length > 0);
 		}
 
 		private void butTemp_Click(object sender,EventArgs e) {
