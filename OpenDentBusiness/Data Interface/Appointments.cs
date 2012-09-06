@@ -1217,10 +1217,11 @@ namespace OpenDentBusiness{
 			//columns that start with lowercase are altered for display rather than being raw data.
 			table.Columns.Add("empName");
 			table.Columns.Add("schedule");
+			table.Columns.Add("Note");
 			if(dateStart!=dateEnd) {
 				return table;
 			}
-			string command="SELECT StartTime,StopTime,FName,employee.EmployeeNum "
+			string command="SELECT StartTime,StopTime,FName,employee.EmployeeNum,Note "
 				+"FROM employee,schedule "
 				+"WHERE schedule.EmployeeNum=employee.EmployeeNum "
 				+"AND SchedType=3 "//employee
@@ -1243,6 +1244,7 @@ namespace OpenDentBusiness{
 				startTime=PIn.DateT(raw.Rows[i]["StartTime"].ToString());
 				stopTime=PIn.DateT(raw.Rows[i]["StopTime"].ToString());
 				row["schedule"]+=startTime.ToString("h:mm")+"-"+stopTime.ToString("h:mm");
+				row["Note"]=raw.Rows[i]["Note"].ToString();
 				table.Rows.Add(row);
 			}
 			return table;

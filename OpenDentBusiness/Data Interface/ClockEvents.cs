@@ -216,7 +216,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Returns clockevent information for all employees.  Used only in the time card manage window.</summary>
+		///<summary>Returns clockevent information for all non-hidden employees.  Used only in the time card manage window.</summary>
 		public static DataTable GetTimeCardManage(DateTime startDate,DateTime stopDate) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),startDate,stopDate);
