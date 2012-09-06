@@ -136,7 +136,7 @@ namespace OpenDental {
 			//  }
 			//}
 			//Minutes Behind
-			minutesBehind=PhoneMetrics.AverageMinutesBehind();
+			minutesBehind=PhoneMetrics.AverageMinutesBehind(dateShowing);
 			this.Invalidate();
 		}
 

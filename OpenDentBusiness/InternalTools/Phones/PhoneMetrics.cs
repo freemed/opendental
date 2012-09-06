@@ -18,19 +18,19 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary>Returns the average number of minutes behind rounded down for each half hour from 5:00 AM - 7:00 PM.</summary>
-		public static int[] AverageMinutesBehind(){
+		public static int[] AverageMinutesBehind(DateTime date){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<int[]>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<int[]>(MethodBase.GetCurrentMethod(),date);
 			}
-			DateTime startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
-			DateTime endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,19,0,0);
+			DateTime startTime=new DateTime(date.Year,date.Month,date.Day,5,0,0);
+			DateTime endTime=new DateTime(date.Year,date.Month,date.Day,19,0,0);
 			string command="SELECT * FROM phonemetric WHERE DateTimeEntry BETWEEN "+POut.DateT(startTime)+" AND "+POut.DateT(endTime);
 			List<PhoneMetric> listPhoneMetrics=Crud.PhoneMetricCrud.SelectMany(command);
 			int[] avgMinBehind=new int[28];//Used in FormGraphEmployeeTime. One "bucket" every half hour.
 			int numerator;
 			int denominator;
-			startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
-			endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,30,0);
+			startTime=new DateTime(date.Year,date.Month,date.Day,5,0,0);
+			endTime=new DateTime(date.Year,date.Month,date.Day,5,30,0);
 			for(int i=0;i<28;i++) {
 				numerator=0;
 				denominator=0;
