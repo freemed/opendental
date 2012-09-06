@@ -90,6 +90,8 @@ namespace OpenDental
 		//public PerioExam PerioExamCur;
 		///<summary>Perio security:  False will only allow user to see information but not edit.</summary>
 		public bool perioEdit;
+		///<summary>True if all gingival margin values entered should be positive. (Stored in DB as negative.)</summary>
+		public bool GingMargPlus;
 
 		///<summary>The index in PerioExams.List of the currently selected exam.</summary>
 		public int SelectedExam{
@@ -667,15 +669,15 @@ namespace OpenDental
 					}
 					font=new Font(Font,FontStyle.Bold);
 				}
-				//if number is negative "+" symbol is wider than "-" symbol so hand it seperately here.
-				if(cellValue<0) {//two characters
-					font=new Font("SmallFont",7);
-					//shift text left, 1 more pixel than usual.
-					rect=new RectangleF(rect.X-3,rect.Y+1,rect.Width+5,rect.Height);
-				}
-				if(cellValue>9){//two characters
+				//if number is two digits:
+				if(cellValue>9){
 					font=new Font("SmallFont",7);
 					rect=new RectangleF(rect.X-2,rect.Y+1,rect.Width+5,rect.Height);
+				}
+				//if number is negative. "+" symbol is wider than "1" symbol so hand it seperately here.
+				if(cellValue<0) {
+					font=new Font("SmallFont",7);
+					rect=new RectangleF(rect.X-3,rect.Y+1,rect.Width+5,rect.Height);//shift text left, 1 more pixel than usual.
 				}
 				//e.Graphics.DrawString(cellValue.ToString(),Font,Brushes.Black,rect);
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]==PerioSequenceType.GingMargin)) {
@@ -1446,17 +1448,29 @@ namespace OpenDental
 				EnterValue(keyValue);
 		}
 
-		///<summary>Accepts button clicks from window rather than the usual keyboard entry.  All validation MUST be done before the value is sent here.  Only valid values are numbers 0 through 19.</summary>
+		///<summary>Accepts button clicks from window rather than the usual keyboard entry.  All validation MUST be done before the value is sent here.  Only valid values are numbers 0 through 19, and 101 to 109.</summary>
 		public void ButtonPressed(int keyValue){
 			if(!perioEdit) {
 				return;
 			}
-			if(ThreeAtATime){
-				for(int i=0;i<3;i++)
-					EnterValue(keyValue);
+			if(GingMargPlus && RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]==PerioSequenceType.GingMargin) {
+				//Possible values for keyValue are 0-19,101-109
+				if(keyValue<100) {
+					keyValue=keyValue%10;//in case the +10 was down when the number was pressed on the onscreen keypad.
+					if(keyValue!=0) {//add 100 to represent negative values unless they pressed 0
+						keyValue+=100;
+					}
+				}
+				//Possible values for keyValue at this point are 0, 101-109.
 			}
-			else
+			if(ThreeAtATime) {
+				for(int i=0;i<3;i++) {
+					EnterValue(keyValue);
+				}
+			}
+			else {
 				EnterValue(keyValue);
+			}
 		}
 
 		///<summary>Only valid values are b,s,p, and c.</summary>
@@ -1522,7 +1536,7 @@ namespace OpenDental
 
 		
 
-		///<summary>Only valid values are numbers 0 through 19. Validation should be done before sending here.</summary>
+		///<summary>Only valid values are numbers 0-19, and 101-109. Validation should be done before sending here.</summary>
 		private void EnterValue(int keyValue){
 			if((keyValue < 0 || keyValue > 19) 
 				&& RowTypes[GetSection(CurCell.Y)][GetSectionRow(CurCell.Y)]!=PerioSequenceType.GingMargin){//large values are allowed for GingMargin to represent hyperplasia (e.g. 101 to 109 represent -1 to -9)
