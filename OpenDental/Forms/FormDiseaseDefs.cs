@@ -218,6 +218,9 @@ namespace OpenDental{
 		}
 
 		private void listMain_DoubleClick(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.ProblemAdd) && !IsSelectionMode) {
+				return;
+			}
 			if(listMain.SelectedIndex==-1){
 				return;
 			}
@@ -234,7 +237,10 @@ namespace OpenDental{
 			FillGrid();
 		}
 
-		private void butAdd_Click(object sender, System.EventArgs e) {
+		private void butAdd_Click(object sender,System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.ProblemAdd)) {
+				return;
+			}
 			DiseaseDef def=new DiseaseDef();
 			def.ItemOrder=DiseaseDefs.ListLong.Length;
 			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(def);
