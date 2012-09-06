@@ -29,12 +29,12 @@ namespace OpenDentBusiness{
 			int[] avgMinBehind=new int[28];//Used in FormGraphEmployeeTime. One "bucket" every half hour.
 			int numerator;
 			int denominator;
+			startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
+			endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,30,0);
 			for(int i=0;i<28;i++) {
 				numerator=0;
 				denominator=0;
 				//reuse startTime and endTime for 30 minute intervals
-				startTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,0,0);
-				endTime=new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,5,30,0);
 				for(int j=0;j<listPhoneMetrics.Count;j++) {
 					if(startTime<listPhoneMetrics[j].DateTimeEntry && listPhoneMetrics[j].DateTimeEntry < endTime) { //startTime < time < endTime
 						numerator+=listPhoneMetrics[j].MinutesBehind;
