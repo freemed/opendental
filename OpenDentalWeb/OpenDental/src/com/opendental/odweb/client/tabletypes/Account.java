@@ -61,6 +61,7 @@ public class Account {
 			}
 		}
 		
+		/** Used in accounting for chart of accounts. */
 		public enum AccountType	{
 			/** 0- Asset */
 			Asset,
