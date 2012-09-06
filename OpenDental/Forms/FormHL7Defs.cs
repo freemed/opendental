@@ -25,6 +25,7 @@ namespace OpenDental{
 		private ODGrid grid1;
 		List<HL7Def> ListInternal;
 		private UI.Button butDuplicate;
+		private UI.Button butHistory;
 		List<HL7Def> ListCustom;
 
 		///<summary></summary>
@@ -65,6 +66,7 @@ namespace OpenDental{
 			this.butDuplicate = new OpenDental.UI.Button();
 			this.butCopy = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
+			this.butHistory = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// grid1
@@ -72,10 +74,10 @@ namespace OpenDental{
 			this.grid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.grid1.HScrollVisible = false;
-			this.grid1.Location = new System.Drawing.Point(12,12);
+			this.grid1.Location = new System.Drawing.Point(12,38);
 			this.grid1.Name = "grid1";
 			this.grid1.ScrollValue = 0;
-			this.grid1.Size = new System.Drawing.Size(445,585);
+			this.grid1.Size = new System.Drawing.Size(445,559);
 			this.grid1.TabIndex = 14;
 			this.grid1.Title = "Internal";
 			this.grid1.TranslationName = null;
@@ -87,10 +89,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grid2.HScrollVisible = false;
-			this.grid2.Location = new System.Drawing.Point(465,12);
+			this.grid2.Location = new System.Drawing.Point(465,38);
 			this.grid2.Name = "grid2";
 			this.grid2.ScrollValue = 0;
-			this.grid2.Size = new System.Drawing.Size(445,585);
+			this.grid2.Size = new System.Drawing.Size(445,559);
 			this.grid2.TabIndex = 12;
 			this.grid2.Title = "Custom";
 			this.grid2.TranslationName = null;
@@ -145,10 +147,26 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// butHistory
+			// 
+			this.butHistory.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHistory.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.butHistory.Autosize = true;
+			this.butHistory.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butHistory.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHistory.CornerRadius = 4F;
+			this.butHistory.Location = new System.Drawing.Point(12,8);
+			this.butHistory.Name = "butHistory";
+			this.butHistory.Size = new System.Drawing.Size(75,24);
+			this.butHistory.TabIndex = 21;
+			this.butHistory.Text = "History";
+			this.butHistory.Click += new System.EventHandler(this.butHistory_Click);
+			// 
 			// FormHL7Defs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(923,641);
+			this.Controls.Add(this.butHistory);
 			this.Controls.Add(this.butDuplicate);
 			this.Controls.Add(this.butCopy);
 			this.Controls.Add(this.grid1);
@@ -321,6 +339,13 @@ namespace OpenDental{
 		private void FormHL7Defs_FormClosing(object sender,FormClosingEventArgs e) {
 			DataValid.SetInvalid(InvalidType.HL7Defs);
 			DataValid.SetInvalid(InvalidType.Prefs);
+		}
+
+		private void butHistory_Click(object sender,EventArgs e) {
+			FormHL7Msgs FormS=new FormHL7Msgs();
+			FormS.ShowDialog();
+			FillGrid1();
+			FillGrid2();
 		}
 	}
 }

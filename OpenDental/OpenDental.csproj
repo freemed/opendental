@@ -362,6 +362,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormHL7Msgs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormHL7Msgs.designer.cs">
+      <DependentUpon>FormHL7Msgs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormInnoDb.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2534,6 +2540,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormHL7Msgs.resx">
+      <DependentUpon>FormHL7Msgs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormInnoDb.resx">
       <DependentUpon>FormInnoDb.cs</DependentUpon>
