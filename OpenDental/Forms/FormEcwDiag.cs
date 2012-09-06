@@ -294,18 +294,18 @@ namespace OpenDental {
 							errors++;
 							validMessage=false;
 						}
-						if(false){//segmentFields[9]!="{ENCID}") { //Don't know what this should look like when properly configured. TODO
+						if(false){//segmentFields[9]!="{???}") { //Don't know what this should look like when properly configured. TODO
 							retVal+="SIU HL7 message is not sending appointment duration in minutes in field SCH.09\r\n";
 							errors++;
 							validMessage=false;
 						}
-						if(false){//segmentFields[10]!="{ENCID}") { //Don't know what this should look like when properly configured. TODO
+						if(false){//segmentFields[10]!="{???}") { //Don't know what this should look like when properly configured. TODO
 							retVal+="SIU HL7 message is not sending appointment duration units in field SCH.10\r\n";
 							errors++;
 							validMessage=false;
 						}
 						string[] SCH11=segmentFields[11].Split('^');
-						if(false){//SCH11[2]!="{ENCSDATETIME}") { //Don't 
+						if(false){//SCH11[2]!="{???}") { //Don't 
 							retVal+="SIU HL7 message is not sending appointment duration in field SCH.11.02\r\n";
 							errors++;
 							validMessage=false;
@@ -355,15 +355,15 @@ namespace OpenDental {
 						//No checking of optional fields.
 						continue;
 					case "PV1":
-						if(false) {//segmentFields[7]!="{PID}") { //Don't know what this should look like when properly configured. TODO
+						if(segmentFields[7]!="{ODDRID}^{ODLN}^{ODFN}") {
 							retVal+="SIU HL7 message is not sending provider id in field PV1.07\r\n";
 							errors++;
 							validMessage=false;
 						}
 						continue;
 					case "AIG":
-						if(false) {//segmentFields[3]!="{PID}") { //Don't know what this should look like when properly configured. TODO
-							retVal+="SIU HL7 message is not sending provider/resource id in field AIG.03\r\n";
+						if(segmentFields[3]!="{RSDRID}^{RSLN}^{RSFN}") {
+							retVal+="(Optional) SIU HL7 message is not sending provider/resource id in field AIG.03\r\n";
 							errors++;
 							validMessage=false;
 						}
