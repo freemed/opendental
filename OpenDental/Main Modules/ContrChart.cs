@@ -6694,10 +6694,15 @@ namespace OpenDental{
 					ProcCur.CodeNum=ProcedureCodes.GetProcCode(codeList[i]).CodeNum;
 					tArea=ProcedureCodes.GetProcCode(ProcCur.CodeNum).TreatArea;
 					//"Bug fix" for Dr. Lazar-------------
-					if(isPeriapicalSix && n!=0) {
-						//PA code is already set to treatment area tooth by default.
-						tArea=TreatmentArea.Tooth;
-						ProcCur.ToothNum="8,14,19,24,30".Split(',')[n-1];
+					if(isPeriapicalSix) {
+						//PA code is already set to treatment area mouth by default.
+						ProcCur.ToothNum=",8,14,19,24,30".Split(',')[i];//first code has tooth num "";
+						if(i==0) {
+							tArea=TreatmentArea.Mouth;
+						}
+						else {
+							tArea=TreatmentArea.Tooth;
+						}
 					}
 					if((tArea==TreatmentArea.Arch
 						|| tArea==TreatmentArea.Mouth
@@ -6739,7 +6744,10 @@ namespace OpenDental{
 						}
 					}
 					else if(tArea==TreatmentArea.Tooth){
-						if(toothChart.SelectedTeeth.Count==0) {
+						if(isPeriapicalSix) {
+							AddQuick(ProcCur);
+						}
+						else if(toothChart.SelectedTeeth.Count==0) {
 							AddProcedure(ProcCur);
 						}
 						else{
