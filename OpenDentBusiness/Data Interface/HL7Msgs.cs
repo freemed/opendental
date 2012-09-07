@@ -17,6 +17,23 @@ namespace OpenDentBusiness{
 			return Crud.HL7MsgCrud.SelectMany(command);//Just 0 or 1 item in list for now.
 		}
 
+		///<summary>When called we will make sure to send a startDate and endDate.  Status parameter 0:All, 1:OutPending, 2:OutSent, 3:OutFailed, 4:InProcessed, 5:InFailed</summary>
+		public static List<HL7Msg> GetHL7Msgs(DateTime startDate,DateTime endDate,long patNum,int status) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7Msg>>(MethodBase.GetCurrentMethod(),startDate,endDate,patNum,status);
+			}
+			//join with the patient table so we can display patient name instead of PatNum
+			string command=@"SELECT *	FROM hl7msg	WHERE DATE(hl7msg.DateTStamp) BETWEEN "+POut.Date(startDate)+" AND "+POut.Date(endDate)+" ";
+			if(patNum>0) {
+				command+="AND hl7msg.PatNum="+POut.Long(patNum)+" ";
+			}
+			if(status>0) {
+				command+="AND hl7msg.HL7Status="+POut.Long(status-1)+" ";//minus 1 because 0=All but our enum starts at 0
+			}
+			command+="ORDER BY hl7msg.DateTStamp";
+			return Crud.HL7MsgCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(HL7Msg hL7Msg) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -58,6 +75,21 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		public static List<HL7Msg> GetOneExisting(HL7Msg hl7Msg) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<HL7Msg>>(MethodBase.GetCurrentMethod(),hl7Msg);
+			}
+			string command="SELECT * FROM hl7msg WHERE MsgText='"+POut.String(hl7Msg.MsgText)+"' "+DbHelper.LimitAnd(1);
+			return Crud.HL7MsgCrud.SelectMany(command);//Just 0 or 1 item in list for now.
+		}
 
+		public static void UpdateDateTStamp(HL7Msg hl7Msg) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),hl7Msg);
+				return;
+			}
+			string command="UPDATE hl7msg SET DateTStamp=CURRENT_TIMESTAMP WHERE MsgText='"+POut.String(hl7Msg.MsgText)+"' ";
+			Db.NonQ(command);
+		}
 	}
 }

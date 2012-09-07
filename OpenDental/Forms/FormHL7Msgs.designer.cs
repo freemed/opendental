@@ -24,25 +24,152 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHL7Msgs));
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.comboSort = new System.Windows.Forms.ComboBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.labelAptNum = new System.Windows.Forms.Label();
-			this.labelPatNum = new System.Windows.Forms.Label();
-			this.comboHL7Status = new System.Windows.Forms.ComboBox();
-			this.labelHL7Status = new System.Windows.Forms.Label();
+			this.butFind = new OpenDental.UI.Button();
 			this.textDateEnd = new OpenDental.ValidDate();
 			this.textDateStart = new OpenDental.ValidDate();
+			this.labelHL7Status = new System.Windows.Forms.Label();
 			this.labelEndDate = new System.Windows.Forms.Label();
+			this.textPatient = new System.Windows.Forms.TextBox();
+			this.labelPatient = new System.Windows.Forms.Label();
+			this.comboHL7Status = new System.Windows.Forms.ComboBox();
 			this.labelStartDate = new System.Windows.Forms.Label();
 			this.butRefresh = new OpenDental.UI.Button();
-			this.textPatNum = new System.Windows.Forms.TextBox();
-			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.butFind);
+			this.groupBox1.Controls.Add(this.textDateEnd);
+			this.groupBox1.Controls.Add(this.textDateStart);
+			this.groupBox1.Controls.Add(this.labelHL7Status);
+			this.groupBox1.Controls.Add(this.labelEndDate);
+			this.groupBox1.Controls.Add(this.textPatient);
+			this.groupBox1.Controls.Add(this.labelPatient);
+			this.groupBox1.Controls.Add(this.comboHL7Status);
+			this.groupBox1.Controls.Add(this.labelStartDate);
+			this.groupBox1.Controls.Add(this.butRefresh);
+			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.groupBox1.Location = new System.Drawing.Point(17,2);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(618,62);
+			this.groupBox1.TabIndex = 20;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "View";
+			// 
+			// butFind
+			// 
+			this.butFind.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butFind.Autosize = true;
+			this.butFind.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butFind.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFind.CornerRadius = 4F;
+			this.butFind.Location = new System.Drawing.Point(453,10);
+			this.butFind.Name = "butFind";
+			this.butFind.Size = new System.Drawing.Size(56,24);
+			this.butFind.TabIndex = 40;
+			this.butFind.Text = "Find";
+			this.butFind.Click += new System.EventHandler(this.butFind_Click);
+			// 
+			// textDateEnd
+			// 
+			this.textDateEnd.Location = new System.Drawing.Point(112,35);
+			this.textDateEnd.Name = "textDateEnd";
+			this.textDateEnd.Size = new System.Drawing.Size(77,20);
+			this.textDateEnd.TabIndex = 18;
+			// 
+			// textDateStart
+			// 
+			this.textDateStart.Location = new System.Drawing.Point(112,12);
+			this.textDateStart.Name = "textDateStart";
+			this.textDateStart.Size = new System.Drawing.Size(77,20);
+			this.textDateStart.TabIndex = 17;
+			// 
+			// labelHL7Status
+			// 
+			this.labelHL7Status.Location = new System.Drawing.Point(210,35);
+			this.labelHL7Status.Name = "labelHL7Status";
+			this.labelHL7Status.Size = new System.Drawing.Size(80,18);
+			this.labelHL7Status.TabIndex = 20;
+			this.labelHL7Status.Text = "HL7Status";
+			this.labelHL7Status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// labelEndDate
+			// 
+			this.labelEndDate.Location = new System.Drawing.Point(29,35);
+			this.labelEndDate.Name = "labelEndDate";
+			this.labelEndDate.Size = new System.Drawing.Size(80,18);
+			this.labelEndDate.TabIndex = 12;
+			this.labelEndDate.Text = "End Date";
+			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textPatient
+			// 
+			this.textPatient.Location = new System.Drawing.Point(292,12);
+			this.textPatient.Name = "textPatient";
+			this.textPatient.Size = new System.Drawing.Size(155,20);
+			this.textPatient.TabIndex = 38;
+			// 
+			// labelPatient
+			// 
+			this.labelPatient.Location = new System.Drawing.Point(210,12);
+			this.labelPatient.Name = "labelPatient";
+			this.labelPatient.Size = new System.Drawing.Size(80,18);
+			this.labelPatient.TabIndex = 22;
+			this.labelPatient.Text = "Patient";
+			this.labelPatient.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboHL7Status
+			// 
+			this.comboHL7Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboHL7Status.Location = new System.Drawing.Point(292,35);
+			this.comboHL7Status.MaxDropDownItems = 40;
+			this.comboHL7Status.Name = "comboHL7Status";
+			this.comboHL7Status.Size = new System.Drawing.Size(155,21);
+			this.comboHL7Status.TabIndex = 21;
+			this.comboHL7Status.SelectedIndexChanged += new System.EventHandler(this.comboHL7Status_SelectedIndexChanged);
+			// 
+			// labelStartDate
+			// 
+			this.labelStartDate.Location = new System.Drawing.Point(29,12);
+			this.labelStartDate.Name = "labelStartDate";
+			this.labelStartDate.Size = new System.Drawing.Size(80,18);
+			this.labelStartDate.TabIndex = 11;
+			this.labelStartDate.Text = "Start Date";
+			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// butRefresh
+			// 
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(539,10);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(75,24);
+			this.butRefresh.TabIndex = 2;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(17,70);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(898,536);
+			this.gridMain.TabIndex = 19;
+			this.gridMain.Title = "HL7 Message Log";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 
@@ -74,157 +201,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(17,70);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(898,536);
-			this.gridMain.TabIndex = 19;
-			this.gridMain.Title = "HL7 Message Log";
-			this.gridMain.TranslationName = null;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.textBox1);
-			this.groupBox1.Controls.Add(this.textPatNum);
-			this.groupBox1.Controls.Add(this.comboSort);
-			this.groupBox1.Controls.Add(this.label5);
-			this.groupBox1.Controls.Add(this.labelAptNum);
-			this.groupBox1.Controls.Add(this.labelPatNum);
-			this.groupBox1.Controls.Add(this.comboHL7Status);
-			this.groupBox1.Controls.Add(this.labelHL7Status);
-			this.groupBox1.Controls.Add(this.textDateEnd);
-			this.groupBox1.Controls.Add(this.textDateStart);
-			this.groupBox1.Controls.Add(this.labelEndDate);
-			this.groupBox1.Controls.Add(this.labelStartDate);
-			this.groupBox1.Controls.Add(this.butRefresh);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(17,2);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(755,62);
-			this.groupBox1.TabIndex = 20;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "View";
-			// 
-			// comboSort
-			// 
-			this.comboSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSort.Location = new System.Drawing.Point(292,35);
-			this.comboSort.MaxDropDownItems = 40;
-			this.comboSort.Name = "comboSort";
-			this.comboSort.Size = new System.Drawing.Size(118,21);
-			this.comboSort.TabIndex = 37;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(210,36);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(80,18);
-			this.label5.TabIndex = 36;
-			this.label5.Text = "Sort";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelAptNum
-			// 
-			this.labelAptNum.Location = new System.Drawing.Point(425,36);
-			this.labelAptNum.Name = "labelAptNum";
-			this.labelAptNum.Size = new System.Drawing.Size(80,18);
-			this.labelAptNum.TabIndex = 24;
-			this.labelAptNum.Text = "AptNum";
-			this.labelAptNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// labelPatNum
-			// 
-			this.labelPatNum.Location = new System.Drawing.Point(425,13);
-			this.labelPatNum.Name = "labelPatNum";
-			this.labelPatNum.Size = new System.Drawing.Size(80,18);
-			this.labelPatNum.TabIndex = 22;
-			this.labelPatNum.Text = "PatNum";
-			this.labelPatNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboHL7Status
-			// 
-			this.comboHL7Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboHL7Status.Location = new System.Drawing.Point(292,12);
-			this.comboHL7Status.MaxDropDownItems = 40;
-			this.comboHL7Status.Name = "comboHL7Status";
-			this.comboHL7Status.Size = new System.Drawing.Size(118,21);
-			this.comboHL7Status.TabIndex = 21;
-			// 
-			// labelHL7Status
-			// 
-			this.labelHL7Status.Location = new System.Drawing.Point(210,13);
-			this.labelHL7Status.Name = "labelHL7Status";
-			this.labelHL7Status.Size = new System.Drawing.Size(80,18);
-			this.labelHL7Status.TabIndex = 20;
-			this.labelHL7Status.Text = "HL7Status";
-			this.labelHL7Status.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDateEnd
-			// 
-			this.textDateEnd.Location = new System.Drawing.Point(112,35);
-			this.textDateEnd.Name = "textDateEnd";
-			this.textDateEnd.Size = new System.Drawing.Size(77,20);
-			this.textDateEnd.TabIndex = 18;
-			// 
-			// textDateStart
-			// 
-			this.textDateStart.Location = new System.Drawing.Point(112,12);
-			this.textDateStart.Name = "textDateStart";
-			this.textDateStart.Size = new System.Drawing.Size(77,20);
-			this.textDateStart.TabIndex = 17;
-			// 
-			// labelEndDate
-			// 
-			this.labelEndDate.Location = new System.Drawing.Point(29,36);
-			this.labelEndDate.Name = "labelEndDate";
-			this.labelEndDate.Size = new System.Drawing.Size(80,18);
-			this.labelEndDate.TabIndex = 12;
-			this.labelEndDate.Text = "End Date";
-			this.labelEndDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// labelStartDate
-			// 
-			this.labelStartDate.Location = new System.Drawing.Point(29,13);
-			this.labelStartDate.Name = "labelStartDate";
-			this.labelStartDate.Size = new System.Drawing.Size(80,18);
-			this.labelStartDate.TabIndex = 11;
-			this.labelStartDate.Text = "Start Date";
-			this.labelStartDate.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(650,12);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(98,24);
-			this.butRefresh.TabIndex = 2;
-			this.butRefresh.Text = "&Refresh List";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// textPatNum
-			// 
-			this.textPatNum.Location = new System.Drawing.Point(507,12);
-			this.textPatNum.Name = "textPatNum";
-			this.textPatNum.Size = new System.Drawing.Size(118,20);
-			this.textPatNum.TabIndex = 38;
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(507,35);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(118,20);
-			this.textBox1.TabIndex = 39;
-			// 
 			// FormHL7Msgs
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -237,6 +213,7 @@ namespace OpenDental{
 			this.Name = "FormHL7Msgs";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "HL7 Messages";
+			this.Load += new System.EventHandler(this.FormHL7Msgs_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
@@ -249,10 +226,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.ComboBox comboSort;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label labelAptNum;
-		private System.Windows.Forms.Label labelPatNum;
+		private System.Windows.Forms.Label labelPatient;
 		private System.Windows.Forms.ComboBox comboHL7Status;
 		private System.Windows.Forms.Label labelHL7Status;
 		private ValidDate textDateEnd;
@@ -260,7 +234,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label labelEndDate;
 		private System.Windows.Forms.Label labelStartDate;
 		private UI.Button butRefresh;
-		private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.TextBox textPatNum;
+		private System.Windows.Forms.TextBox textPatient;
+		private UI.Button butFind;
 	}
 }

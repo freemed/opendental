@@ -362,6 +362,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormHL7MsgEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormHL7MsgEdit.designer.cs">
+      <DependentUpon>FormHL7MsgEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormHL7Msgs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2540,6 +2546,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormHL7MsgEdit.resx">
+      <DependentUpon>FormHL7MsgEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7Msgs.resx">
       <DependentUpon>FormHL7Msgs.cs</DependentUpon>

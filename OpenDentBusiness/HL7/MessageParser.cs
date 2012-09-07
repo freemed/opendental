@@ -21,8 +21,15 @@ namespace OpenDentBusiness.HL7 {
 			HL7MsgCur.MsgText=msg.ToString();
 			HL7MsgCur.PatNum=0;
 			HL7MsgCur.AptNum=0;
-			//Insert as InFailed until processing is complete.  Update once complete, PatNum will have correct value, AptNum will have correct value if SIU message or 0 if ADT, and status changed to InProcessed
-			HL7Msgs.Insert(HL7MsgCur);
+			List<HL7Msg> hl7Existing=HL7Msgs.GetOneExisting(HL7MsgCur);
+			if(hl7Existing.Count>0) {//This message is already in the db
+				HL7MsgCur.HL7MsgNum=hl7Existing[0].HL7MsgNum;
+				HL7Msgs.UpdateDateTStamp(HL7MsgCur);
+			}
+			else {
+				//Insert as InFailed until processing is complete.  Update once complete, PatNum will have correct value, AptNum will have correct value if SIU message or 0 if ADT, and status changed to InProcessed
+				HL7Msgs.Insert(HL7MsgCur);
+			}
 			IsVerboseLogging=isVerboseLogging;
 			IsNewPat=false;
 			HL7Def def=HL7Defs.GetOneDeepEnabled();
