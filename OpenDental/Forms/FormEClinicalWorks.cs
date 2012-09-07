@@ -53,6 +53,7 @@ namespace OpenDental{
 		private Label label7;
 		private Label label8;
 		private Label label9;
+		private Label labelDefEnabledWarning;
 		private Label labelHL7FolderIn;
 
 		///<summary></summary>
@@ -121,6 +122,7 @@ namespace OpenDental{
 			this.service11 = new OpenDental.localhost.Service1();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.labelDefEnabledWarning = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -133,7 +135,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(552,447);
+			this.butCancel.Location = new System.Drawing.Point(563,480);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 0;
@@ -148,7 +150,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(471,447);
+			this.butOK.Location = new System.Drawing.Point(482,480);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 1;
@@ -239,7 +241,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.textHL7FolderIn);
 			this.groupBox1.Controls.Add(this.labelHL7FolderOut);
 			this.groupBox1.Controls.Add(this.labelHL7FolderIn);
-			this.groupBox1.Location = new System.Drawing.Point(12,252);
+			this.groupBox1.Location = new System.Drawing.Point(12,286);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(538,101);
 			this.groupBox1.TabIndex = 52;
@@ -256,7 +258,7 @@ namespace OpenDental{
 			// 
 			// labelDefaultUserGroup
 			// 
-			this.labelDefaultUserGroup.Location = new System.Drawing.Point(21,368);
+			this.labelDefaultUserGroup.Location = new System.Drawing.Point(21,402);
 			this.labelDefaultUserGroup.Name = "labelDefaultUserGroup";
 			this.labelDefaultUserGroup.Size = new System.Drawing.Size(186,18);
 			this.labelDefaultUserGroup.TabIndex = 53;
@@ -267,7 +269,7 @@ namespace OpenDental{
 			// 
 			this.comboDefaultUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboDefaultUserGroup.FormattingEnabled = true;
-			this.comboDefaultUserGroup.Location = new System.Drawing.Point(209,368);
+			this.comboDefaultUserGroup.Location = new System.Drawing.Point(209,402);
 			this.comboDefaultUserGroup.Name = "comboDefaultUserGroup";
 			this.comboDefaultUserGroup.Size = new System.Drawing.Size(215,21);
 			this.comboDefaultUserGroup.TabIndex = 54;
@@ -276,7 +278,7 @@ namespace OpenDental{
 			// 
 			this.checkShowImages.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkShowImages.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowImages.Location = new System.Drawing.Point(23,395);
+			this.checkShowImages.Location = new System.Drawing.Point(23,429);
 			this.checkShowImages.Name = "checkShowImages";
 			this.checkShowImages.Size = new System.Drawing.Size(199,18);
 			this.checkShowImages.TabIndex = 55;
@@ -314,7 +316,7 @@ namespace OpenDental{
 			// 
 			this.checkFeeSchedules.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkFeeSchedules.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkFeeSchedules.Location = new System.Drawing.Point(23,416);
+			this.checkFeeSchedules.Location = new System.Drawing.Point(23,450);
 			this.checkFeeSchedules.Name = "checkFeeSchedules";
 			this.checkFeeSchedules.Size = new System.Drawing.Size(199,18);
 			this.checkFeeSchedules.TabIndex = 58;
@@ -323,7 +325,7 @@ namespace OpenDental{
 			// 
 			// labelHL7Warning
 			// 
-			this.labelHL7Warning.Location = new System.Drawing.Point(227,415);
+			this.labelHL7Warning.Location = new System.Drawing.Point(227,449);
 			this.labelHL7Warning.Name = "labelHL7Warning";
 			this.labelHL7Warning.Size = new System.Drawing.Size(170,18);
 			this.labelHL7Warning.TabIndex = 59;
@@ -351,7 +353,7 @@ namespace OpenDental{
 			this.butDiagnostic.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDiagnostic.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDiagnostic.CornerRadius = 4F;
-			this.butDiagnostic.Location = new System.Drawing.Point(288,447);
+			this.butDiagnostic.Location = new System.Drawing.Point(299,480);
 			this.butDiagnostic.Name = "butDiagnostic";
 			this.butDiagnostic.Size = new System.Drawing.Size(90,24);
 			this.butDiagnostic.TabIndex = 61;
@@ -433,7 +435,7 @@ namespace OpenDental{
 			// 
 			this.label8.Location = new System.Drawing.Point(396,200);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(237,18);
+			this.label8.Size = new System.Drawing.Size(242,18);
 			this.label8.TabIndex = 70;
 			this.label8.Text = "The computer where the HL7 Service is running.";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -447,11 +449,25 @@ namespace OpenDental{
 			this.label9.Text = "Typically OpenDentalHL7.";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// labelDefEnabledWarning
+			// 
+			this.labelDefEnabledWarning.ForeColor = System.Drawing.Color.Red;
+			this.labelDefEnabledWarning.Location = new System.Drawing.Point(40,251);
+			this.labelDefEnabledWarning.Name = "labelDefEnabledWarning";
+			this.labelDefEnabledWarning.Size = new System.Drawing.Size(569,32);
+			this.labelDefEnabledWarning.TabIndex = 72;
+			this.labelDefEnabledWarning.Text = "An HL7Def is enabled.  The HL7 Server, HL7 Service Name, and HL7 Synch Folders ar" +
+    "e set in that definition.  Message processing is also handled using the specific" +
+    "ations in that definition.";
+			this.labelDefEnabledWarning.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelDefEnabledWarning.Visible = false;
+			// 
 			// FormEClinicalWorks
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(639,483);
+			this.ClientSize = new System.Drawing.Size(650,516);
+			this.Controls.Add(this.labelDefEnabledWarning);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textHL7ServiceName);
@@ -505,6 +521,7 @@ namespace OpenDental{
 				textHL7ServiceName.ReadOnly=true;
 				textHL7FolderIn.ReadOnly=true;
 				textHL7FolderOut.ReadOnly=true;
+				labelDefEnabledWarning.Visible=true;
 			}
 		}
 
@@ -565,6 +582,7 @@ namespace OpenDental{
 				textHL7ServiceName.ReadOnly=true;
 				textHL7FolderIn.ReadOnly=true;
 				textHL7FolderOut.ReadOnly=true;
+				labelDefEnabledWarning.Visible=true;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before turning this bridge on or off.  Make sure you understand the difference between the bridging modes and how it will affect patient accounts.  Continue anyway?")) {
 				checkEnabled.Checked=!checkEnabled.Checked;
