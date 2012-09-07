@@ -10137,14 +10137,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				//Add ProblemAdd permission to all groups that had Setup permission---------------------------------------------
 				command="SELECT DISTINCT UserGroupNum "
-					+"FROM grouppermission "
-					+"WHERE PermType="+POut.Int((int)Permissions.Setup);
+				  +"FROM grouppermission "
+				  +"WHERE PermType="+POut.Int((int)Permissions.Setup);
 				table=Db.GetTable(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
+				      +"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
 						Db.NonQ(command);
 					}
 				}
@@ -10152,9 +10152,111 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
+				      +"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
 						Db.NonQ(command);
 					}
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS toothgridcell";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgridcell (
+						ToothGridCellNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SheetFieldNum bigint NOT NULL,
+						ToothGridColNum bigint NOT NULL,
+						ValueEntered varchar(255) NOT NULL,
+						ToothNum varchar(10) NOT NULL,
+						INDEX(SheetFieldNum),
+						INDEX(ToothGridColNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE toothgridcell'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgridcell (
+						ToothGridCellNum number(20) NOT NULL,
+						SheetFieldNum number(20) NOT NULL,
+						ToothGridColNum number(20) NOT NULL,
+						ValueEntered varchar2(255),
+						ToothNum varchar2(10),
+						CONSTRAINT toothgridcell_ToothGridCellNum PRIMARY KEY (ToothGridCellNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgridcell_SheetFieldNum ON toothgridcell (SheetFieldNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgridcell_ToothGridColNum ON toothgridcell (ToothGridColNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS toothgridcol";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgridcol (
+						ToothGridColNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SheetFieldNum bigint NOT NULL,
+						NameItem varchar(255) NOT NULL,
+						CellType tinyint NOT NULL,
+						ItemOrder smallint NOT NULL,
+						ColumnWidth smallint NOT NULL,
+						CodeNum bigint NOT NULL,
+						ProcStatus tinyint NOT NULL,
+						INDEX(SheetFieldNum),
+						INDEX(CodeNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE toothgridcol'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgridcol (
+						ToothGridColNum number(20) NOT NULL,
+						SheetFieldNum number(20) NOT NULL,
+						NameItem varchar2(255),
+						CellType number(3) NOT NULL,
+						ItemOrder number(11) NOT NULL,
+						ColumnWidth number(11) NOT NULL,
+						CodeNum number(20) NOT NULL,
+						ProcStatus number(3) NOT NULL,
+						CONSTRAINT toothgridcol_ToothGridColNum PRIMARY KEY (ToothGridColNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgridcol_SheetFieldNum ON toothgridcol (SheetFieldNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgridcol_CodeNum ON toothgridcol (CodeNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS toothgriddef";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgriddef (
+						ToothGridDefNum bigint NOT NULL auto_increment PRIMARY KEY,
+						NameInternal varchar(255),
+						NameShowing varchar(255),
+						CellType tinyint NOT NULL,
+						ItemOrder smallint NOT NULL,
+						ColumnWidth smallint NOT NULL,
+						CodeNum bigint NOT NULL,
+						ProcStatus tinyint NOT NULL,
+						INDEX(CodeNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE toothgriddef'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE toothgriddef (
+						ToothGridDefNum number(20) NOT NULL,
+						NameInternal varchar2(255),
+						NameShowing varchar2(255),
+						CellType number(3) NOT NULL,
+						ItemOrder number(11) NOT NULL,
+						ColumnWidth number(11) NOT NULL,
+						CodeNum number(20) NOT NULL,
+						ProcStatus number(3) NOT NULL,
+						CONSTRAINT toothgriddef_ToothGridDefNum PRIMARY KEY (ToothGridDefNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgriddef_CodeNum ON toothgriddef (CodeNum)";
+					Db.NonQ(command);
 				}
 				
 
@@ -10181,4 +10283,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
-			
+
