@@ -333,6 +333,9 @@
     <Compile Include="Crud\TimeAdjustCrud.cs" />
     <Compile Include="Crud\TimeCardRuleCrud.cs" />
     <Compile Include="Crud\ToolButItemCrud.cs" />
+    <Compile Include="Crud\ToothGridCellCrud.cs" />
+    <Compile Include="Crud\ToothGridColCrud.cs" />
+    <Compile Include="Crud\ToothGridDefCrud.cs" />
     <Compile Include="Crud\ToothInitialCrud.cs" />
     <Compile Include="Crud\TransactionCrud.cs" />
     <Compile Include="Crud\TreatPlanCrud.cs" />
@@ -426,6 +429,9 @@
     <Compile Include="Cache\MountDefC.cs" />
     <Compile Include="Cache\PrefC.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
+    <Compile Include="Data Interface\ToothGridCells.cs" />
+    <Compile Include="Data Interface\ToothGridCols.cs" />
+    <Compile Include="Data Interface\ToothGridDefs.cs" />
     <Compile Include="Data Interface\VaccineDefs.cs" />
     <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
