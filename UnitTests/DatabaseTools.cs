@@ -113,9 +113,12 @@ namespace UnitTests {
 				DELETE FROM patient;
 				DELETE FROM patplan;
 				DELETE FROM procedurelog;
+				DELETE FROM appointment;
 				";
 			DataCore.NonQ(command);
 			return "Database cleared of old data.\r\n";
 		}
+
+		
 	}
 }

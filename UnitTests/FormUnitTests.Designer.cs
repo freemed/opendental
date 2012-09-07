@@ -42,6 +42,8 @@ namespace UnitTests {
 			this.radioSchema2 = new System.Windows.Forms.RadioButton();
 			this.label6 = new System.Windows.Forms.Label();
 			this.butTopaz = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.butHL7 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// textResults
@@ -49,10 +51,10 @@ namespace UnitTests {
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,183);
+			this.textResults.Location = new System.Drawing.Point(12,208);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
-			this.textResults.Size = new System.Drawing.Size(733,612);
+			this.textResults.Size = new System.Drawing.Size(733,587);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
@@ -66,7 +68,7 @@ namespace UnitTests {
 			// 
 			// butNewDb
 			// 
-			this.butNewDb.Location = new System.Drawing.Point(12,129);
+			this.butNewDb.Location = new System.Drawing.Point(12,154);
 			this.butNewDb.Name = "butNewDb";
 			this.butNewDb.Size = new System.Drawing.Size(75,23);
 			this.butNewDb.TabIndex = 0;
@@ -76,7 +78,7 @@ namespace UnitTests {
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(92,131);
+			this.label2.Location = new System.Drawing.Point(92,156);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(505,18);
 			this.label2.TabIndex = 6;
@@ -86,7 +88,7 @@ namespace UnitTests {
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(12,154);
+			this.butRun.Location = new System.Drawing.Point(12,179);
 			this.butRun.Name = "butRun";
 			this.butRun.Size = new System.Drawing.Size(75,23);
 			this.butRun.TabIndex = 7;
@@ -96,7 +98,7 @@ namespace UnitTests {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(92,156);
+			this.label3.Location = new System.Drawing.Point(92,181);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(90,18);
 			this.label3.TabIndex = 8;
@@ -105,7 +107,7 @@ namespace UnitTests {
 			// 
 			// textSpecificTest
 			// 
-			this.textSpecificTest.Location = new System.Drawing.Point(177,156);
+			this.textSpecificTest.Location = new System.Drawing.Point(177,181);
 			this.textSpecificTest.Name = "textSpecificTest";
 			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
 			this.textSpecificTest.TabIndex = 9;
@@ -217,11 +219,32 @@ namespace UnitTests {
 			this.butTopaz.UseVisualStyleBackColor = true;
 			this.butTopaz.Click += new System.EventHandler(this.butTopaz_Click);
 			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(92,131);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(445,18);
+			this.label8.TabIndex = 29;
+			this.label8.Text = "This will test the old eCW HL7 message processing as well as the new HL7Defs.";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butHL7
+			// 
+			this.butHL7.Location = new System.Drawing.Point(12,129);
+			this.butHL7.Name = "butHL7";
+			this.butHL7.Size = new System.Drawing.Size(75,23);
+			this.butHL7.TabIndex = 28;
+			this.butHL7.Text = "HL7";
+			this.butHL7.UseVisualStyleBackColor = true;
+			this.butHL7.Click += new System.EventHandler(this.butHL7_Click);
+			// 
 			// FormUnitTests
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(757,807);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.butHL7);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.butTopaz);
 			this.Controls.Add(this.radioSchema2);
@@ -270,6 +293,8 @@ namespace UnitTests {
 		private System.Windows.Forms.RadioButton radioSchema2;
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.Button butTopaz;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Button butHL7;
 	}
 }
 

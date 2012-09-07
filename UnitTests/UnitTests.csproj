@@ -99,6 +99,7 @@
     <Compile Include="BenefitT.cs" />
     <Compile Include="CarrierT.cs" />
     <Compile Include="ClaimT.cs" />
+    <Compile Include="HL7Tests.cs" />
     <Compile Include="TopazT.cs" />
     <Compile Include="InsSubT.cs" />
     <Compile Include="CoreTypesT.cs" />
