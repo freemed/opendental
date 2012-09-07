@@ -7,6 +7,7 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class ToothGridDefs{
+		/*
 		#region CachePattern
 		//This region can be eliminated if this is not a table type with cached data.
 		//If leaving this region in place, be sure to add RefreshCache and FillCache 
@@ -43,7 +44,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.ToothGridDefCrud.TableToList(table);
 		}
-		#endregion
+		#endregion*/
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

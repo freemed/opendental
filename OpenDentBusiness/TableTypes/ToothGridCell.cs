@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public long ToothGridColNum;
 		///<summary>Cannot be empty.  For a tooth-level cell, the only allowed value is X.  If the cell is unchecked, then it won't even have a row in this table.  For a surface level column, only valid surfaces can be entered:MOIDBFLV  Enforced.  FreeText columns can have any text up to 255 char.</summary>
 		public string ValueEntered;
-		///<summary>Validated db-formated toothnums in USA format.  Get internationalized as being displayed.</summary>
+		///<summary>Corresponds exactly to procedurelog.ToothNum.  May be blank, otherwise 1-32, 51-82, A-T, or AS-TS, 1 or 2 char.  Gets internationalized as being displayed.</summary>
 		public string ToothNum;
 
 		public ToothGridCell Copy() {
