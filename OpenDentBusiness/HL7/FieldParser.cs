@@ -9,25 +9,19 @@ namespace OpenDentBusiness.HL7 {
 		//HL7 has very specific data types.  Each data type that we use will have a corresponding parser method here.
 		//Data types are listed in 2.15.
 
-		///<summary>yyyyMMddHHmmss.  Can have more precision than seconds and won't break.  If less than 4 digits, returns MinVal.</summary>
+		///<summary>yyyyMMddHHmmss.  Can have more precision than seconds and won't break.  If less than 8 digits, returns MinVal.</summary>
 		public static DateTime DateTimeParse(string str) {
 			int year=0;
 			int month=0;
 			int day=0;
 			int hour=0;
 			int minute=0;
-			if(str.Length>=4) {
-				year=PIn.Int(str.Substring(0,4));
-			}
-			else {
+			if(str.Length<8) {
 				return DateTime.MinValue;
 			}
-			if(str.Length>=6) {
-				month=PIn.Int(str.Substring(4,2));
-			}
-			if(str.Length>=8) {
-				day=PIn.Int(str.Substring(6,2));
-			}
+			year=PIn.Int(str.Substring(0,4));
+			month=PIn.Int(str.Substring(4,2));
+			day=PIn.Int(str.Substring(6,2));
 			if(str.Length>=10) {
 				hour=PIn.Int(str.Substring(8,2));
 			}
@@ -94,8 +88,7 @@ namespace OpenDentBusiness.HL7 {
 			return pattern.ToString();
 		}
 
-		///<summary>Supply in format UPIN^LastName^FirstName^MI (AIG) or UPIN^LastName, FirstName MI (PV1).  If UPIN(abbr) does not exist, provider gets created.  If name has changed, provider gets updated.
-		///ProvNum is returned.  If blank, then returns 0.  If field is NULL, returns 0. For PV1, the provider.LName field will hold "LastName, FirstName MI". They can manually change later.</summary>
+		///<summary>Supply in format UPIN^LastName^FirstName^MI (AIG) or UPIN^LastName, FirstName MI (PV1).  If UPIN(abbr) does not exist, provider gets created.  If name has changed, provider gets updated.  ProvNum is returned.  If blank, then returns 0.  If field is NULL, returns 0. For PV1, the provider.LName field will hold "LastName, FirstName MI". They can manually change later.</summary>
 		public static long ProvProcess(FieldHL7 field) {
 			if(field==null) {
 				return 0;
@@ -167,6 +160,18 @@ namespace OpenDentBusiness.HL7 {
 				return 0;
 			}
 			return retVal/60;
+		}
+
+		/// <summary>Will return 0 if string cannot be parsed to a number.  Will return 0 if the fee schedule passed in does not exactly match the description of a regular fee schedule.</summary>
+		public static long FeeScheduleParse(string str) {
+			if(str=="") {
+				return 0;
+			}
+			FeeSched feeSched=FeeScheds.GetByExactName(str,FeeScheduleType.Normal);
+			if(feeSched==null) {
+				return 0;
+			}
+			return feeSched.FeeSchedNum;
 		}
 	}
 }

@@ -65,7 +65,7 @@ namespace OpenDentBusiness.HL7 {
 			seg=new HL7DefSegment();
 			msg.AddSegment(seg,5,SegmentNameHL7.GT1);
 			//GT1.2, Guarantor Number
-			seg.AddField(2,"guar.PatNum");
+			seg.AddField(2,"guar.ChartNumber");
 			//GT1.3, Guarantor Name
 			seg.AddField(3,"guar.nameLFM");
 			//GT1.5, Guarantor Address

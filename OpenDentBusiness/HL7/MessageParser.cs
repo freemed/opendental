@@ -24,6 +24,7 @@ namespace OpenDentBusiness.HL7 {
 			//Insert as InFailed until processing is complete.  Update once complete, PatNum will have correct value, AptNum will have correct value if SIU message or 0 if ADT, and status changed to InProcessed
 			HL7Msgs.Insert(HL7MsgCur);
 			IsVerboseLogging=isVerboseLogging;
+			IsNewPat=false;
 			HL7Def def=HL7Defs.GetOneDeepEnabled();
 			HL7DefMessage hl7defmsg=null;
 			for(int i=0;i<def.hl7DefMessages.Count;i++) {
@@ -59,7 +60,7 @@ namespace OpenDentBusiness.HL7 {
 					}
 					else if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="pat.birthdateTime") {
 						int patBdayOrdinal=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
-						birthdate=FieldParser.DateTimeParse(msg.Segments[pidOrder].Fields[patBdayOrdinal].ToString().Substring(0,8));
+						birthdate=FieldParser.DateTimeParse(msg.Segments[pidOrder].Fields[patBdayOrdinal].ToString());
 					}
 					else if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="pat.nameLFM") {
 						int patNameOrdinal=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
@@ -70,15 +71,19 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//We now have patnum, chartnum, patname, and/or birthdate so locate pat
 			Patient pat=null;
+			Patient patOld=null;
 			if(patNum!=0) {
 				pat=Patients.GetPat(patNum);
 			}
-			//If we couldn't locate patient by patNum or patNum was 0 then pat will still be null so try to locate by chartNum if chartNum is not null
-			if(pat==null && chartNum!=null) {
+			if(def.InternalType!="eCWStandalone" && pat==null) {
+				IsNewPat=true;
+			}
+			//In eCWstandalone integration, if we couldn't locate patient by patNum or patNum was 0 then pat will still be null so try to locate by chartNum if chartNum is not null
+			if(def.InternalType=="eCWStandalone" && chartNum!=null) {
 				pat=Patients.GetPatByChartNumber(chartNum);
 			}
-			//If pat is still null we need to try to locate patient by name and birthdate
-			if(pat==null) {
+			//In eCWstandalone integration, if pat is still null we need to try to locate patient by name and birthdate
+			if(def.InternalType=="eCWStandalone" && pat==null) {
 				long patNumByName=Patients.GetPatNumByNameAndBirthday(patLName,patFName,birthdate);
 				//If patNumByName is 0 we couldn't locate by patNum, chartNum or name and birthdate so this message must be for a new patient
 				if(patNumByName==0) {
@@ -86,10 +91,11 @@ namespace OpenDentBusiness.HL7 {
 				}
 				else {
 					pat=Patients.GetPat(patNumByName);
+					patOld=pat.Copy();
 					pat.ChartNumber=chartNum;//from now on, we will be able to find pat by chartNumber
+					Patients.Update(pat,patOld);
 				}
 			}
-			Patient patOld=null;
 			if(IsNewPat) {
 				pat=new Patient();
 				if(chartNum!=null) {
@@ -124,6 +130,19 @@ namespace OpenDentBusiness.HL7 {
 				}
 			}
 			//We now have a patient object , either loaded from the db or new, and aptNum so process this message for this patient
+			//We need to insert the pat to get a patnum so we can compare to guar patnum to see if relationship to guar is self
+			if(IsNewPat) {
+				if(isVerboseLogging) {
+					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
+				}
+				if(pat.PatNum==0) {
+					pat.PatNum=Patients.Insert(pat,false);
+				}
+				else {
+					pat.PatNum=Patients.Insert(pat,true);
+				}
+				patOld=pat.Copy();
+			}
 			for(int i=0;i<hl7defmsg.hl7DefSegments.Count;i++) {
 				try {
 					SegmentHL7 seg=msg.GetSegment(hl7defmsg.hl7DefSegments[i].SegmentName,!hl7defmsg.hl7DefSegments[i].IsOptional);
@@ -144,13 +163,11 @@ namespace OpenDentBusiness.HL7 {
 				return;
 			}
 			if(IsNewPat) {
-				if(isVerboseLogging) {
-					EventLog.WriteEntry("OpenDentHL7","Inserted patient: "+pat.FName+" "+pat.LName,EventLogEntryType.Information);
-				}
-				Patients.Insert(pat,true);
 				if(pat.Guarantor==0) {
-					patOld=pat.Copy();
 					pat.Guarantor=pat.PatNum;
+					Patients.Update(pat,patOld);
+				}
+				else {
 					Patients.Update(pat,patOld);
 				}
 			}
@@ -306,7 +323,9 @@ namespace OpenDentBusiness.HL7 {
 					}
 					else {
 						guar=Patients.GetPat(guarNumByName);
+						guarOld=guar.Copy();
 						guar.ChartNumber=guarChartNum.ToString();//from now on, we will be able to find guar by chartNumber
+						Patients.Update(guar,guarOld);
 					}
 				}
 			}
@@ -366,8 +385,13 @@ namespace OpenDentBusiness.HL7 {
 				}
 			}
 			if(isNewGuar) {
-				Patients.Insert(guar,true);
 				guarOld=guar.Copy();
+				if(guar.PatNum==0) {
+					guar.PatNum=Patients.Insert(guar,false);
+				}
+				else {
+					guar.PatNum=Patients.Insert(guar,true);
+				}
 				guar.Guarantor=guar.PatNum;
 				Patients.Update(guar,guarOld);
 			}
@@ -430,6 +454,9 @@ namespace OpenDentBusiness.HL7 {
 						continue;
 					case "pat.WkPhone":
 						pat.WkPhone=FieldParser.PhoneParse(seg.GetFieldComponent(itemOrder));
+						continue;
+					case "pat.FeeSched":
+						pat.FeeSched=FieldParser.FeeScheduleParse(seg.GetFieldComponent(itemOrder));
 						continue;
 					default:
 						continue;
