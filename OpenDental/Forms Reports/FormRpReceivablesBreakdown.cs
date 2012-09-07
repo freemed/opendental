@@ -375,7 +375,7 @@ namespace OpenDental {
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "DateCP >= '" + bDate + "' "
                     + "AND DateCP < '" + eDate + "' "
-                    + "AND (Status = '1' OR Status = 4) "//Recieved or supplemental. Otherwise, it's only an estimate.
+                    + "AND Status IN (1,4,5) "//Recieved, supplemental, capclaim. Otherwise, it's only an estimate. 7-CapCompl handled above.
                     + whereProv
                     + " GROUP BY DateCP "
                     + "ORDER BY DateCP";
@@ -385,7 +385,7 @@ namespace OpenDental {
                     + "SUM(WriteOff) FROM claimproc WHERE "
                     + "ProcDate >= '" + bDate + "' "
                     + "AND ProcDate < '" + eDate + "' "
-                    + "AND (claimproc.Status=1 OR claimproc.Status=4 OR claimproc.Status=0) " //received or supplemental or notreceived
+                    + "AND Status IN (0,1,4,5) " //Notreceived, received, supplemental, capclaim. 7-CapCompl handled above.
                     + whereProv
                     + " GROUP BY ProcDate "
                     + "ORDER BY ProcDate";
@@ -406,8 +406,8 @@ namespace OpenDental {
 					whereProv += ") ";
 				}
 				report.Query = "SELECT paysplit.DatePay,SUM(paysplit.splitamt) FROM paysplit "
-                + "WHERE paysplit.IsDiscount = '0' "
-                + "AND paysplit.DatePay >= '" + bDate + "' "
+                + "WHERE paysplit.PayPlanNum=0 "
+				+ "AND paysplit.DatePay >= '" + bDate + "' "
                 + "AND paysplit.DatePay < '" + eDate + "' "
                 + whereProv
                 + " GROUP BY paysplit.DatePay ORDER BY DatePay";
@@ -428,7 +428,7 @@ namespace OpenDental {
 				}
 				report.Query = "SELECT DateCP,SUM(InsPayamt) "
                 + "FROM claimproc WHERE "
-                + "Status IN (1,4) "//received or supplemental
+                + "Status IN (1,4,5,7) "//Received, supplemental, capclaim, capcomplete.
                 + "AND DateCP >= '" + bDate + "' "
                 + "AND DateCP < '" + eDate + "' "
                 + whereProv
