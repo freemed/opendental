@@ -209,6 +209,7 @@ namespace OpenDental{
 			this.checkEnabled.TabIndex = 40;
 			this.checkEnabled.Text = "Enabled";
 			this.checkEnabled.CheckedChanged += new System.EventHandler(this.checkEnabled_CheckedChanged);
+			this.checkEnabled.Click += new System.EventHandler(this.checkEnabled_Click);
 			// 
 			// textEscChar
 			// 
@@ -577,7 +578,6 @@ namespace OpenDental{
 			// 
 			// textHL7ServiceName
 			// 
-			this.textHL7ServiceName.BackColor = System.Drawing.SystemColors.Window;
 			this.textHL7ServiceName.Location = new System.Drawing.Point(473,92);
 			this.textHL7ServiceName.Name = "textHL7ServiceName";
 			this.textHL7ServiceName.Size = new System.Drawing.Size(195,20);

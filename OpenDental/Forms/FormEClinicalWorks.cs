@@ -394,7 +394,6 @@ namespace OpenDental{
 			// 
 			// textHL7ServiceName
 			// 
-			this.textHL7ServiceName.BackColor = System.Drawing.SystemColors.Window;
 			this.textHL7ServiceName.Location = new System.Drawing.Point(209,226);
 			this.textHL7ServiceName.Name = "textHL7ServiceName";
 			this.textHL7ServiceName.Size = new System.Drawing.Size(181,20);
@@ -499,6 +498,14 @@ namespace OpenDental{
 
 		private void FormEClinicalWorks_Load(object sender, System.EventArgs e) {
 			FillForm();
+			if(HL7Defs.IsExistingHL7Enabled()) {
+				//Instead of using these, we will use the ones that are part of the HL7Def
+				//These will be filled with those values.
+				textHL7Server.ReadOnly=true;
+				textHL7ServiceName.ReadOnly=true;
+				textHL7FolderIn.ReadOnly=true;
+				textHL7FolderOut.ReadOnly=true;
+			}
 		}
 
 		private void FillForm(){
@@ -510,11 +517,20 @@ namespace OpenDental{
 			SetModeRadioButtons(GetProp("eClinicalWorksMode"));
 			SetModeVisibilities();
 			textECWServer.Text=GetProp("eCWServer");
-			textHL7Server.Text=GetProp("HL7Server");
-			textHL7ServiceName.Text=GetProp("HL7ServiceName");
+			if(HL7Defs.IsExistingHL7Enabled()) {
+				HL7Def def=HL7Defs.GetOneDeepEnabled();
+				textHL7Server.Text=def.HL7Server;
+				textHL7ServiceName.Text=def.HL7ServiceName;
+				textHL7FolderIn.Text=def.OutgoingFolder;//because these are the opposite of the way they are in the HL7Def
+				textHL7FolderOut.Text=def.IncomingFolder;
+			}
+			else {
+				textHL7Server.Text=GetProp("HL7Server");
+				textHL7ServiceName.Text=GetProp("HL7ServiceName");
+				textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
+				textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
+			}
 			textODServer.Text=DataCore.GetTable("SHOW VARIABLES LIKE 'hostname';").Rows[0]["Value"].ToString();//MySQL Only which is okay since eCW won't use Oracle
-			textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
-			textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
 			comboDefaultUserGroup.Items.Clear();
 			for(int i=0;i<UserGroups.List.Length;i++) {
 				comboDefaultUserGroup.Items.Add(UserGroups.List[i].Description);
@@ -542,11 +558,13 @@ namespace OpenDental{
 				checkEnabled.Checked=!checkEnabled.Checked;
 				return;
 			}
-			bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled(-1);
-			if(isHL7Enabled) {
-				checkEnabled.Checked=false;
-				MsgBox.Show(this,"Only one HL7 process can be enabled at a time and an HL7 definition is already enabled.  To enable this program link you must first disable the HL7 definition under Setup|HL7.");
-				return;
+			bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled();
+			if(isHL7Enabled && checkEnabled.Checked) {
+				MsgBox.Show(this,"An HL7Def is enabled.  The enabled HL7 definition will control the HL7 messages not this program link.");
+				textHL7Server.ReadOnly=true;
+				textHL7ServiceName.ReadOnly=true;
+				textHL7FolderIn.ReadOnly=true;
+				textHL7FolderOut.ReadOnly=true;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning!  Read the manual carefully before turning this bridge on or off.  Make sure you understand the difference between the bridging modes and how it will affect patient accounts.  Continue anyway?")) {
 				checkEnabled.Checked=!checkEnabled.Checked;
@@ -638,21 +656,23 @@ namespace OpenDental{
 					MsgBox.Show(this,"Please select a default user group first.");
 					return false;
 				}
-				if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
-					MsgBox.Show(this,"HL7 in folder may not be blank.");
-					return false;
-				}
-				if(textHL7FolderOut.Text=="") {
-					MsgBox.Show(this,"HL7 out folder may not be blank.");
-					return false;
-				}
-				if(textHL7Server.Text=="") {
-					MsgBox.Show(this,"HL7 Server may not be blank.");
-					return false;
-				}
-				if(textHL7ServiceName.Text=="") {
-					MsgBox.Show(this,"HL7 Service Name may not be blank.");
-					return false;
+				if(!HL7Defs.IsExistingHL7Enabled()) {
+					if((radioModeTight.Checked || radioModeFull.Checked) && textHL7FolderIn.Text=="") {
+						MsgBox.Show(this,"HL7 in folder may not be blank.");
+						return false;
+					}
+					if(textHL7FolderOut.Text=="") {
+						MsgBox.Show(this,"HL7 out folder may not be blank.");
+						return false;
+					}
+					if(textHL7Server.Text=="") {
+						MsgBox.Show(this,"HL7 Server may not be blank.");
+						return false;
+					}
+					if(textHL7ServiceName.Text=="") {
+						MsgBox.Show(this,"HL7 Service Name may not be blank.");
+						return false;
+					}
 				}
 			}
 			ProgramCur.ProgDesc=textProgDesc.Text;

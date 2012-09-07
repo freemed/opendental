@@ -86,7 +86,8 @@ namespace OpenDentHL7 {
 				EventLog.WriteEntry("OpenDentHL7","Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString(),EventLogEntryType.Error);
 				throw new ApplicationException("Versions do not match.  Db version:"+dbVersion+".  Application version:"+Application.ProductVersion.ToString());
 			}
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks) && !HL7Defs.IsExistingHL7Enabled()) {//eCW enabled, and no HL7def enabled.
+				//prevent startup:
 				long progNum=Programs.GetProgramNum(ProgramName.eClinicalWorks);
 				string hl7Server=ProgramProperties.GetPropVal(progNum,"HL7Server");
 				string hl7ServiceName=ProgramProperties.GetPropVal(progNum,"HL7ServiceName");
@@ -105,18 +106,35 @@ namespace OpenDentHL7 {
 						+", Server name in Program Links: "+hl7Server);
 				}
 				if(hl7ServiceName!=this.ServiceName) {
-					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName,
-						EventLogEntryType.Error);
-					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", name in Program Links: "+hl7ServiceName);
+					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", Service name in Program Links: "
+						+hl7ServiceName,EventLogEntryType.Error);
+					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", Service name in Program Links: "
+						+hl7ServiceName);
 				}
-			}
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
 				EcwOldSendAndReceive();
 				return;
 			}
 			HL7Def hL7Def=HL7Defs.GetOneDeepEnabled();
 			if(hL7Def==null) {
 				return;
+			}
+			if(hL7Def.HL7Server=="") {
+				hL7Def.HL7Server=System.Environment.MachineName;
+				HL7Defs.Update(hL7Def);
+			}
+			if(hL7Def.HL7ServiceName=="") {
+				hL7Def.HL7ServiceName=this.ServiceName;
+				HL7Defs.Update(hL7Def);
+			}
+			if(hL7Def.HL7Server!=System.Environment.MachineName) {
+				EventLog.WriteEntry("OpenDentHL7","The HL7 Server name does not match the name in the enabled HL7Def Setup.  Server name: "+System.Environment.MachineName+", Server name in HL7Def: "+hL7Def.HL7Server,
+					EventLogEntryType.Error);
+				throw new ApplicationException("The HL7 Server name does not match the name in the enabled HL7Def Setup.  Server name: "+System.Environment.MachineName+", Server name in HL7Def: "+hL7Def.HL7Server);
+			}
+			if(hL7Def.HL7ServiceName!=this.ServiceName) {
+				EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name in the enabled HL7Def Setup.  Service name: "+this.ServiceName+", Service name in HL7Def: "+hL7Def.HL7ServiceName,
+					EventLogEntryType.Error);
+				throw new ApplicationException("The HL7 Service Name does not match the name in the enabled HL7Def Setup.  Service name: "+this.ServiceName+", Service name in HL7Def: "+hL7Def.HL7ServiceName);
 			}
 			HL7DefEnabled=hL7Def;//so we can access it later from other methods
 			if(HL7DefEnabled.ModeTx==ModeTxHL7.File) {

@@ -116,6 +116,18 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
+		///<summary>Tells us whether there is an existing enable HL7Def.</summary>
+		public static bool IsExistingHL7Enabled() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT COUNT(*) FROM hl7def WHERE IsEnabled=1";
+			if(Db.GetCount(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 		///<summary>Gets a full deep list of all defs that are not internal from the database.</summary>
 		public static List<HL7Def> GetDeepCustomList(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

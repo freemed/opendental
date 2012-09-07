@@ -46,6 +46,8 @@ namespace OpenDental {
 			textSubcompSep.Text=HL7DefCur.SubcomponentSeparator;
 			textEscChar.Text=HL7DefCur.EscapeCharacter;
 			textNote.Text=HL7DefCur.Note;
+			textHL7Server.Text=HL7DefCur.HL7Server;
+			textHL7ServiceName.Text=HL7DefCur.HL7ServiceName;
 			if(HL7DefCur.IsInternal) {
 				if(!HL7DefCur.IsEnabled) {
 					textDescription.ReadOnly=true;
@@ -60,6 +62,8 @@ namespace OpenDental {
 					textCompSep.ReadOnly=true;
 					textSubcompSep.ReadOnly=true;
 					textEscChar.ReadOnly=true;
+					textHL7Server.ReadOnly=true;
+					textHL7ServiceName.ReadOnly=true;
 				}
 				butAdd.Enabled=false;
 				butDelete.Enabled=false;
@@ -142,12 +146,6 @@ namespace OpenDental {
 
 		private void checkEnabled_CheckedChanged(object sender,EventArgs e) {
 			if(checkEnabled.Checked) {
-				bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled(HL7DefCur.HL7DefNum);
-				if(Programs.IsEnabled(ProgramName.eClinicalWorks) || isHL7Enabled) {
-					checkEnabled.Checked=false;
-					MsgBox.Show(this,"Only one HL7 process can be enabled.  The eClinicalWorks program link is enabled or another HL7 definition is enabled.");
-					return;
-				}
 				butBrowseIn.Enabled=true;
 				butBrowseOut.Enabled=true;
 				textInPath.ReadOnly=false;
@@ -160,6 +158,8 @@ namespace OpenDental {
 				textCompSep.ReadOnly=false;
 				textSubcompSep.ReadOnly=false;
 				textEscChar.ReadOnly=false;
+				textHL7Server.ReadOnly=false;
+				textHL7ServiceName.ReadOnly=false;
 			}
 			else {
 				butBrowseIn.Enabled=false;
@@ -174,6 +174,25 @@ namespace OpenDental {
 				textCompSep.ReadOnly=true;
 				textSubcompSep.ReadOnly=true;
 				textEscChar.ReadOnly=true;
+				textHL7Server.ReadOnly=true;
+				textHL7ServiceName.ReadOnly=true;
+			}
+		}
+
+		private void checkEnabled_Click(object sender,EventArgs e) {
+			if(checkEnabled.Checked) {
+				bool isHL7Enabled=HL7Defs.IsExistingHL7Enabled(HL7DefCur.HL7DefNum);
+				if(isHL7Enabled) {
+					checkEnabled.Checked=false;
+					MsgBox.Show(this,"Only one HL7 process can be enabled.  Another HL7 definition is enabled.");
+					return;
+				}
+				if(Programs.IsEnabled(ProgramName.eClinicalWorks)) {
+					MsgBox.Show(this,"The eClinicalWorks program link is enabled.  This definition will now control the HL7 messages.");
+				}
+			}
+			else {
+				//
 			}
 		}
 
@@ -250,6 +269,14 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			//validation
 			if(checkEnabled.Checked) {
+				if(textHL7Server.Text=="") {
+					MsgBox.Show(this,"HL7 Server may not be blank.");
+					return;
+				}
+				if(textHL7ServiceName.Text=="") {
+					MsgBox.Show(this,"HL7 Service Name may not be blank.");
+					return;
+				}
 				if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
 					if(textInPath.Text=="") {
 						MsgBox.Show(this,"The path for Incoming Folder is empty.");
@@ -305,6 +332,8 @@ namespace OpenDental {
 					}
 				}
 			}
+			HL7DefCur.HL7Server=textHL7Server.Text;
+			HL7DefCur.HL7ServiceName=textHL7ServiceName.Text;
 			HL7DefCur.IsInternal=checkInternal.Checked;
 			HL7DefCur.InternalType=textInternalType.Text;
 			HL7DefCur.InternalTypeVersion=textInternalTypeVersion.Text;
@@ -333,7 +362,6 @@ namespace OpenDental {
 				HL7DefCur.IsEnabled=true;
 				if(checkInternal.Checked){
 					if(HL7Defs.GetInternalFromDb(HL7DefCur.InternalType)==null){ //it's not in the database.
-
 						HL7Defs.Insert(HL7DefCur);//The user wants to enable this, so we will need to save this def to the db.
 					}
 					else {
@@ -373,5 +401,7 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 	}
 }
