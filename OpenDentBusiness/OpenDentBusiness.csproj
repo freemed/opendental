@@ -727,6 +727,9 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\ToothGridCell.cs" />
+    <Compile Include="TableTypes\ToothGridCol.cs" />
+    <Compile Include="TableTypes\ToothGridDef.cs" />
     <Compile Include="TableTypes\DocumentMisc.cs" />
     <Compile Include="TableTypes\CustReference.cs" />
     <Compile Include="TableTypes\CustRefEntry.cs" />
