@@ -43,12 +43,12 @@ namespace OpenDentBusiness{
 		#endregion
 
 		///<summary>Gets an internal HL7Def from the database of the specified type.</summary>
-		public static HL7Def GetInternalFromDb(string Hl7InternalType) {
+		public static HL7Def GetInternalFromDb(string internalType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod(),Hl7InternalType);
+				return Meth.GetObject<HL7Def>(MethodBase.GetCurrentMethod(),internalType);
 			}
 			string command="SELECT * FROM hl7def WHERE IsInternal=1 "
-				+"AND InternalType='"+POut.String(Hl7InternalType)+"'";
+				+"AND InternalType='"+POut.String(internalType)+"'";
 			return Crud.HL7DefCrud.SelectOne(command);
 		}
 
@@ -87,7 +87,7 @@ namespace OpenDentBusiness{
 			def=GetInternalFromDb("eCWStandalone");
 			def=InternalEcwStandalone.GetDeepInternal(def);
 			listInternal.Add(def);
-			//InternalEcwFull
+			//eCWFull
 			//Add defs for other companies like Centricity here later.
 			return listInternal;
 		}
@@ -139,6 +139,24 @@ namespace OpenDentBusiness{
 				customList[i].hl7DefMessages=HL7DefMessages.GetDeepFromDb(customList[i].HL7DefNum);
 			}
 			return customList;
+		}
+
+		///<summary>Only used from Unit Tests.</summary>
+		public static void EnableInternalForTests(string internalType) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),internalType);
+				return;
+			}
+			HL7Def hl7Def=null;
+			List<HL7Def> defList=GetDeepInternalList();
+			for(int i=0;i<defList.Count;i++){
+				if(defList[i].InternalType==internalType){
+					hl7Def=defList[i];
+					break;
+				}
+			}
+			hl7Def.IsEnabled=true;
+			Update(hl7Def);
 		}
 
 		///<summary></summary>

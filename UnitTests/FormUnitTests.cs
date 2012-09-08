@@ -12,14 +12,6 @@ using OpenDental;
 using OpenDental.UI;
 
 namespace UnitTests {
-		public enum HL7TestInterface {
-			EcwOldTight,
-			EcwOldFull,
-			EcwOldStandalone,
-			HL7DefTight,
-			HL7DefFull,
-			HL7DefStandalone
-		};
 	public partial class FormUnitTests:Form {
 		private bool isOracle;
 		public FormUnitTests() {
@@ -308,10 +300,10 @@ namespace UnitTests {
 				DatabaseTools.SetDbConnection("",false);
 				textResults.Text+=DatabaseTools.FreshFromDump(false);//this also sets database to be unittest.
 			}
-			foreach(HL7TestInterface hl7TestInterface in Enum.GetValues(typeof(HL7TestInterface))) {
+			foreach(HL7TestInterfaceEnum hl7TestInterfaceEnum in Enum.GetValues(typeof(HL7TestInterfaceEnum))) {
 				textResults.Text+=DatabaseTools.ClearDb();
-				textResults.Text+="Testing "+Enum.GetName(typeof(HL7TestInterface),hl7TestInterface)+" interface.\r\n";
-				textResults.Text+=HL7Tests.HL7TestAll(hl7TestInterface);
+				textResults.Text+="Testing "+hl7TestInterfaceEnum.ToString()+" interface.\r\n";
+				textResults.Text+=HL7Tests.HL7TestAll(hl7TestInterfaceEnum);
 			}
 			textResults.Text+="Done\r\n";
 			Cursor=Cursors.Default;

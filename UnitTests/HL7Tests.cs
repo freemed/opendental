@@ -7,79 +7,65 @@ using OpenDentBusiness;
 using OpenDental;
 
 namespace UnitTests {
+	public enum HL7TestInterfaceEnum {
+		EcwOldTight,
+		EcwOldFull,
+		EcwOldStandalone,
+		HL7DefEcwTight,
+		HL7DefEcwFull,
+		HL7DefEcwStandalone
+	};
+
 	public class HL7Tests {
 
-		public static string HL7TestAll(HL7TestInterface hl7TestInterface) {
+		///<summary>Runs all the tests for a single interface.  Database gets wiped between each interface test.</summary>
+		public static string HL7TestAll(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
 			string retval="";
-			//Switch statement to enable the correct HL7Def
-			switch(hl7TestInterface) {
-				case HL7TestInterface.EcwOldFull:
+			//Enable the correct eCW program link or HL7Def
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldTight:
+					return retval+="No tests yet for EcwOldTight.\r\n";
+				case HL7TestInterfaceEnum.EcwOldFull:
 					return retval+="No tests yet for EcwOldFull.\r\n";
-				case HL7TestInterface.HL7DefFull:
+				case HL7TestInterfaceEnum.EcwOldStandalone:
+					return retval+="No tests yet for EcwOldStandalone.\r\n";
+				case HL7TestInterfaceEnum.HL7DefEcwFull:
+					//HL7Defs.EnableInternalForTests("eCWFull");
+					//HL7Defs.RefreshCache();
+					//break;
 					return retval+="No tests yet for HL7DefFull.\r\n";
-				case HL7TestInterface.HL7DefTight:
-					//Make sure the correct HL7Def is enabled for message processing
-					List<HL7Def> defList=HL7Defs.GetDeepInternalList();
-					foreach(HL7Def hl7Def in defList) {
-						if(hl7Def.InternalType!="eCWTight" && HL7Defs.GetInternalFromDb(hl7Def.InternalType)!=null) {//If the def is in the db and not tight so disable it
-							hl7Def.IsEnabled=false;
-							HL7Defs.Update(hl7Def);
-						}
-						if(hl7Def.InternalType=="eCWTight") {//enable the def and insert or update in database
-							hl7Def.IsEnabled=true;
-							if(HL7Defs.GetInternalFromDb(hl7Def.InternalType)==null) {//eCWTight is not in the db so insert it
-								HL7Defs.Insert(hl7Def);
-							}
-							else {//eCWTight is in the db so just make sure it is enabled
-								HL7Defs.Update(hl7Def);
-							}
-						}
-					}
+				case HL7TestInterfaceEnum.HL7DefEcwTight:
+					HL7Defs.EnableInternalForTests("eCWTight");
 					HL7Defs.RefreshCache();
 					break;
-				case HL7TestInterface.HL7DefStandalone:
-					//Make sure the correct HL7Def is enabled for message processing
-					defList=HL7Defs.GetDeepInternalList();
-					foreach(HL7Def hl7Def in defList) {
-						if(hl7Def.InternalType!="eCWStandalone" && HL7Defs.GetInternalFromDb(hl7Def.InternalType)!=null) {//If the def is in the db and not standalone so disable it
-							hl7Def.IsEnabled=false;
-							HL7Defs.Update(hl7Def);
-						}
-						if(hl7Def.InternalType=="eCWStandalone") {//enable the def and insert or update in database
-							hl7Def.IsEnabled=true;
-							if(HL7Defs.GetInternalFromDb(hl7Def.InternalType)==null) {//eCWStandalone is not in the db so insert it
-								HL7Defs.Insert(hl7Def);
-							}
-							else {//eCWStandalone is in the db so just make sure it is enabled
-								HL7Defs.Update(hl7Def);
-							}
-						}
-					}
+				case HL7TestInterfaceEnum.HL7DefEcwStandalone:
+					HL7Defs.EnableInternalForTests("eCWStandalone");
 					HL7Defs.RefreshCache();
-					break;
-				default:
 					break;
 			}
-			retval+=Test1(hl7TestInterface);
+			retval+=Test1(hl7TestInterfaceEnum);
 			return retval;
 		}
 
 		///<summary>Test 1: Pat in PID segment and guar in GT1 segment are new pats since db cleared so insert new patients into db.  Set pat.guar=guar.PatNum and guar.guar=guar.PatNum.  Set pat.PriProv and guar.PriProv=PracticeDefaultProvider and pat.BillingType and guar.BillingType to PracticeDefaultBillType.  pat.ChartNumber=A10,pat.PatNum=10,guar.PatNum=11.</summary>
-		public static string Test1(HL7TestInterface hl7TestInterface) {
+		public static string Test1(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
 			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
 				EVN|A04|20120901100000||
 				PID|1|10||A10|Testt^Pat^F||19760210|F||Hispanic|420 Test Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||534997812|||Standard
 				GT1|1|11|Testt^Guar^F||420 Test Ave^Apt 7^Salem^MA^97330|5305554743|5303635432|19770730|M|||544071829";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
-				if(hl7TestInterface==HL7TestInterface.EcwOldTight || hl7TestInterface==HL7TestInterface.EcwOldFull) {
-					EcwADT.ProcessMessage(msg,false,false);
-				}
-				else if(hl7TestInterface==HL7TestInterface.EcwOldStandalone) {
-					EcwADT.ProcessMessage(msg,true,false);
-				}
-				else {
-					MessageParser.Process(msg,false);
+				switch(hl7TestInterfaceEnum) {
+					case HL7TestInterfaceEnum.EcwOldTight:
+ 					case HL7TestInterfaceEnum.EcwOldFull:
+						EcwADT.ProcessMessage(msg,false,false);
+						break;
+					case HL7TestInterfaceEnum.EcwOldStandalone:
+						EcwADT.ProcessMessage(msg,true,false);
+						break;
+					default:
+						MessageParser.Process(msg,false);
+						break;
 				}
 			}
 			catch(Exception ex) {
@@ -87,12 +73,9 @@ namespace UnitTests {
 			}
 			Patient correctPat=new Patient();
 			Patient correctGuar=new Patient();
-			switch(hl7TestInterface) {
-				case HL7TestInterface.EcwOldStandalone:
-					correctPat.ChartNumber="10";
-					correctGuar.ChartNumber="11";
-					break;
-				case HL7TestInterface.HL7DefStandalone:
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldStandalone:
+				case HL7TestInterfaceEnum.HL7DefEcwStandalone:
 					correctPat.ChartNumber="10";
 					correctGuar.ChartNumber="11";
 					break;
@@ -146,7 +129,7 @@ namespace UnitTests {
 			if(guar==null) {
 				return "Test 1: Couldn't locate guarantor.\r\n";
 			}
-			string retval=CompareGuarAndPat(pat,correctPat,guar,correctGuar,hl7TestInterface);
+			string retval=CompareGuarAndPat(pat,correctPat,guar,correctGuar,hl7TestInterfaceEnum);
 			if(retval.Length>0) {
 				return retval;
 			}
@@ -154,7 +137,7 @@ namespace UnitTests {
 		}
 
 		///<summary>Locate existing patient with patient.PatNum and update demographic information.  patient.ChartNumber should be changed from A10 to A11.  All pat fields should be updated from test 1.</summary>
-		public static string Test2(HL7TestInterface hl7TestInterface) {
+		public static string Test2(HL7TestInterfaceEnum hl7TestInterface) {
 			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
 				EVN|A04|20120901100000||
 				PID|1|10||A11|Test^Patient^N||19760205|Male||White|420 Test St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||Standard
@@ -221,7 +204,7 @@ namespace UnitTests {
 		}
 
 		///<summary>If first or last name is blank, don't update any information.  Message would update birthdate of patient and guarantor if processed, but patient.FName is blank and guarantor.LName is blank so should not change anything</summary>
-		public static string Test3(HL7TestInterface hl7TestInterface) {
+		public static string Test3(HL7TestInterfaceEnum hl7TestInterface) {
 			Patient correctPat=Patients.GetPat(10);
 			Patient correctGuar=Patients.GetPat(11);
 			if(correctPat==null) {
@@ -257,7 +240,7 @@ namespace UnitTests {
 		}
 
 		/// <summary>Insert two new patients, patient from PID and guarantor from GT1.  If date is less than 8 digits, set to MinValue of 0001-01-01.  Otherwise set to the correct precision with yyyyMMddHHmmss format and HHmmss all optional.  patient.Birthdate=0001-01-01; guarantor.Birthdate=1977-07-03 7:11 AM but inserted as date 1977-07-03.</summary>
-		public static string Test4(HL7TestInterface hl7TestInterface) {
+		public static string Test4(HL7TestInterfaceEnum hl7TestInterface) {
 			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
 				EVN|A04|20120901100000||
 				PID|1|20||A100|Test^Patient^N||197602|Male||White|420 Test St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||Standard
@@ -287,7 +270,7 @@ namespace UnitTests {
 		}
 
 		/// <summary>Fail to locate patient so insert new patient.  No PV1 or AIG segment.  New appointment so insert appointment into database.</summary>
-		public static string Test5(HL7TestInterface hl7TestInterface) {
+		public static string Test5(HL7TestInterfaceEnum hl7TestInterface) {
 			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
 				EVN|S12|20120901100000||
 				SCH|100|100|||||Checkup||||^^1200^20120901100000^20120901102000||||||||||||||
@@ -323,7 +306,7 @@ namespace UnitTests {
 		}
 
 		///<summary>Compares the pat and guar to correctPat and correctGuar to make sure every field matches.</summary>
-		public static string CompareGuarAndPat(Patient pat,Patient correctPat,Patient guar,Patient correctGuar,HL7TestInterface hl7TestInterface) {
+		public static string CompareGuarAndPat(Patient pat,Patient correctPat,Patient guar,Patient correctGuar,HL7TestInterfaceEnum hl7TestInterface) {
 			string retval="";
 			if(pat.Guarantor!=guar.PatNum) {
 				retval+="Patient inserted isn't assigned to the guarantor specified in the GT1 segment.\r\n";
@@ -343,8 +326,8 @@ namespace UnitTests {
 				retval+="Patient ChartNumber should be "+correctPat.ChartNumber+" and is "+pat.ChartNumber+".\r\n";
 				retval+="Guarantor ChartNumber should be "+correctGuar.ChartNumber+" and is "+guar.ChartNumber+".\r\n";
 			}
-			if(hl7TestInterface!=HL7TestInterface.EcwOldStandalone
-				&& hl7TestInterface!=HL7TestInterface.HL7DefStandalone
+			if(hl7TestInterface!=HL7TestInterfaceEnum.EcwOldStandalone
+				&& hl7TestInterface!=HL7TestInterfaceEnum.HL7DefEcwStandalone
 				&& (pat.PatNum!=correctPat.PatNum || guar.PatNum!=correctGuar.PatNum))
 			{
 				retval+="Patient PatNum should be "+correctPat.PatNum.ToString()+" and is "+pat.PatNum.ToString()+".\r\n";

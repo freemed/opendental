@@ -109,6 +109,7 @@ namespace UnitTests {
 				DELETE FROM claimproc;
 				DELETE FROM fee;
 				DELETE FROM feesched WHERE FeeSchedNum !=53; /*because this is the default fee schedule for providers*/
+				DELETE FROM hl7def;
 				DELETE FROM insplan;
 				DELETE FROM patient;
 				DELETE FROM patplan;
