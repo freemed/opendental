@@ -12,6 +12,14 @@ using OpenDental;
 using OpenDental.UI;
 
 namespace UnitTests {
+		public enum HL7TestInterface {
+			EcwOldTight,
+			EcwOldFull,
+			EcwOldStandalone,
+			HL7DefTight,
+			HL7DefFull,
+			HL7DefStandalone
+		};
 	public partial class FormUnitTests:Form {
 		private bool isOracle;
 		public FormUnitTests() {
@@ -300,56 +308,12 @@ namespace UnitTests {
 				DatabaseTools.SetDbConnection("",false);
 				textResults.Text+=DatabaseTools.FreshFromDump(false);//this also sets database to be unittest.
 			}
-			textResults.Text+=DatabaseTools.ClearDb();
-			textResults.Text+=HL7Tests.EcwTightOld1();
-			textResults.Text+=HL7Tests.EcwTightOld2();
-			textResults.Text+=HL7Tests.EcwTightOld3();
-			textResults.Text+=HL7Tests.EcwTightOld4();
-			textResults.Text+=HL7Tests.EcwTightOld5();
-			/*
-			bool isEcwOld=false;
-			bool isStandalone=false;
-			string hl7Tested="";
-			for(int i=0;i<6;i++) {
-				if(i==0) {//test ecwOld tight integration
-					hl7Tested="EcwOld Tight";
-					isEcwOld=true;
-					isStandalone=false;
-				}
-				else if(i==1) {//test ecwOld standalone integration
-					hl7Tested="EcwOld Standalone";
-					isEcwOld=true;
-					isStandalone=true;
-				}
-				else if(i==2) {
-					//No test yet for ecwOld full integration, just continue
-					continue;
-				}
-				else if(i==3) {//test new HL7Def tight integration
-					hl7Tested="New HL7Def Tight";
-					isEcwOld=false;
-					isStandalone=false;
-				}
-				else if(i==4) {//test new HL7Def standalone integration
-					hl7Tested="New HL7Def Standalone";
-					isEcwOld=false;
-					isStandalone=true;
-				}
-				else if(i==5) {
-					//No test yet for new HL7Def full integration, continue
-					continue;
-				}
+			foreach(HL7TestInterface hl7TestInterface in Enum.GetValues(typeof(HL7TestInterface))) {
 				textResults.Text+=DatabaseTools.ClearDb();
-				try {
-					textResults.Text+="Testing "+hl7Tested+".\r\n";
-					Application.DoEvents();
-					textResults.Text+=HL7Tests_old.TestADT(isEcwOld,isStandalone);
-				}
-				catch(Exception ex) {
-					textResults.Text+="ADT Failed for "+hl7Tested+".\r\n"+ex.Message;
-				}
-			}*/
-			textResults.Text+="Done";
+				textResults.Text+="Testing "+Enum.GetName(typeof(HL7TestInterface),hl7TestInterface)+" interface.\r\n";
+				textResults.Text+=HL7Tests.HL7TestAll(hl7TestInterface);
+			}
+			textResults.Text+="Done\r\n";
 			Cursor=Cursors.Default;
 		}
 
