@@ -100,6 +100,9 @@
     <Compile Include="CarrierT.cs" />
     <Compile Include="ClaimT.cs" />
     <Compile Include="HL7Tests.cs" />
+    <Compile Include="HL7Tests_old.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="TopazT.cs" />
     <Compile Include="InsSubT.cs" />
     <Compile Include="CoreTypesT.cs" />
