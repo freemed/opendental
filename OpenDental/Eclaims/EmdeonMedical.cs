@@ -32,7 +32,7 @@ namespace OpenDental.Eclaims
 				//for sure that we need to reverse the batch. This will also help us avoid any exterraneous/old batch files in the
 				//same directory which might be left if there is a permission issue when trying to delete the batch files after processing.
 				batchFile=Path.Combine(clearhouse.ExportPath,"claims"+batchNum+".txt");
-				byte[] fileBytes=File.ReadAllBytes(batchFile);
+				//byte[] fileBytes=File.ReadAllBytes(batchFile);//unused
 				MemoryStream zipMemoryStream=new MemoryStream();
 				ZipFile tempZip=new ZipFile();
 				tempZip.AddFile(batchFile,"");

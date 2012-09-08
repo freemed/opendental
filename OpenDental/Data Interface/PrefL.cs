@@ -8,6 +8,7 @@ using System.Threading;
 using OpenDentBusiness;
 using System.Windows.Forms;
 using CodeBase;
+using Ionic.Zip;
 
 namespace OpenDental {
 	public class PrefL{
@@ -33,11 +34,14 @@ namespace OpenDental {
 			return ConvertDB(false,Application.ProductVersion);
 		}
 
-		public static bool CopyFromHereToUpdateFiles(Version currentVersion) {
-			if(!PrefC.AtoZfolderUsed) {
-				return true;//not using AtoZ, so no place to stash the files.
+		public static bool CopyFromHereToUpdateFiles(Version versionCurrent) {
+			string folderUpdate="";
+			if(PrefC.AtoZfolderUsed) {
+				folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 			}
-			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
+			else {
+				folderUpdate=ODFileUtils.CombinePaths(Path.GetTempPath(),"UpdateFiles");
+			}
 			if(Directory.Exists(folderUpdate)) {
 				try {
 					Directory.Delete(folderUpdate,true);
@@ -76,7 +80,24 @@ namespace OpenDental {
 				File.Copy(appfiles[i].FullName,ODFileUtils.CombinePaths(folderUpdate,appfiles[i].Name));
 			}
 			//Create a simple manifest file so that we know what version the files are for.
-			File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),currentVersion.ToString(3));
+			File.WriteAllText(ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt"),versionCurrent.ToString(3));
+			if(PrefC.AtoZfolderUsed) {
+				//nothing more to do
+			}
+			else {
+				//zip and save to db
+				ZipFile zipFile=new ZipFile();
+				zipFile.AddDirectory(folderUpdate);
+				MemoryStream memStream=new MemoryStream();
+				zipFile.Save(memStream);
+				zipFile.Dispose();
+				memStream.Position=0;
+				byte[] zipFileBytes=memStream.GetBuffer();
+				string zipFileBytesBase64=Convert.ToBase64String(zipFileBytes);
+				memStream.Dispose();
+				int length=zipFileBytesBase64.Length;
+				DocumentMiscs.SetUpdateFilesZip(zipFileBytesBase64);
+			}
 			return true;
 		}
 

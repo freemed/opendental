@@ -7,43 +7,31 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class DocumentMiscs{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary>A list of all DocumentMiscs.</summary>
-		private static List<DocumentMisc> listt;
-
-		///<summary>A list of all DocumentMiscs.</summary>
-		public static List<DocumentMisc> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
+		///<summary>Can return null</summary>
+		public static DocumentMisc GetUpdateFilesZip() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DocumentMisc>(MethodBase.GetCurrentMethod());
 			}
-			set {
-				listt=value;
-			}
+			//There will be either one or zero
+			string command="SELECT * FROM documentmisc WHERE DocMiscType="+POut.Long((int)DocumentMiscType.UpdateFiles);
+			return Crud.DocumentMiscCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM documentmisc ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="DocumentMisc";
-			FillCache(table);
-			return table;
+		public static void SetUpdateFilesZip(string rawBase64zipped) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),rawBase64zipped);
+				return;
+			}
+			string command="DELETE FROM documentmisc WHERE DocMiscType="+POut.Long((int)DocumentMiscType.UpdateFiles);
+			Db.NonQ(command);
+			DocumentMisc doc=new DocumentMisc();
+			doc.DateCreated=DateTime.Today;
+			doc.DocMiscType=DocumentMiscType.UpdateFiles;
+			doc.FileName="UpdateFiles.zip";
+			doc.RawBase64=rawBase64zipped;
+			Crud.DocumentMiscCrud.Insert(doc);
 		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.DocumentMiscCrud.TableToList(table);
-		}
-		#endregion
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
@@ -55,14 +43,6 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM documentmisc WHERE PatNum = "+POut.Long(patNum);
 			return Crud.DocumentMiscCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one DocumentMisc from the db.</summary>
-		public static DocumentMisc GetOne(long docMiscNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DocumentMisc>(MethodBase.GetCurrentMethod(),docMiscNum);
-			}
-			return Crud.DocumentMiscCrud.SelectOne(docMiscNum);
 		}
 
 		///<summary></summary>

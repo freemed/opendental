@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using Ionic.Zip;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -33,7 +34,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butChange;
 		private CheckBox checkShowMsi;
 		private Label label10;
-		private Label label11;
+		private Label labelRecopy;
 		private OpenDental.UI.Button butRecopy;
 		/// <summary>
 		/// Required designer variable.
@@ -92,7 +93,7 @@ namespace OpenDental{
 			this.label7 = new System.Windows.Forms.Label();
 			this.checkShowMsi = new System.Windows.Forms.CheckBox();
 			this.label10 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
+			this.labelRecopy = new System.Windows.Forms.Label();
 			this.butRecopy = new OpenDental.UI.Button();
 			this.butChange = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
@@ -273,15 +274,15 @@ namespace OpenDental{
 			this.label10.Text = "(most users will not check this option)";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// label11
+			// labelRecopy
 			// 
-			this.label11.Location = new System.Drawing.Point(11,348);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(237,47);
-			this.label11.TabIndex = 53;
-			this.label11.Text = "The AtoZ folder contains an UpdateFiles folder which should have current copies o" +
+			this.labelRecopy.Location = new System.Drawing.Point(11,348);
+			this.labelRecopy.Name = "labelRecopy";
+			this.labelRecopy.Size = new System.Drawing.Size(237,47);
+			this.labelRecopy.TabIndex = 53;
+			this.labelRecopy.Text = "The AtoZ folder contains an UpdateFiles folder which should have current copies o" +
     "f all the files from C:\\Program Files\\Open Dental\\\r\n";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.labelRecopy.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// butRecopy
 			// 
@@ -346,7 +347,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(734,433);
 			this.Controls.Add(this.butRecopy);
-			this.Controls.Add(this.label11);
+			this.Controls.Add(this.labelRecopy);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkShowMsi);
 			this.Controls.Add(this.butChange);
@@ -394,6 +395,9 @@ namespace OpenDental{
 			}
 			textMultiple.Text=PrefC.GetString(PrefName.UpdateMultipleDatabases);
 			checkShowMsi.Checked=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
+			if(!PrefC.AtoZfolderUsed) {
+				labelRecopy.Text=@"Recopy all of the files from C:\Program Files\Open Dental\ into a special place in the database for future use in updating other computers.";
+			}
 		}
 
 		private void textRegKey_KeyUp(object sender,KeyEventArgs e) {
@@ -435,18 +439,30 @@ namespace OpenDental{
 		}
 
 		private void butRecopy_Click(object sender,EventArgs e) {
-			if(!PrefC.AtoZfolderUsed) {
-				MsgBox.Show(this,"Not using AtoZ folders, so UpdateFiles folder does not exist.");
-				return;
+			Version versionCurrent=new Version(Application.ProductVersion);
+			string folderUpdate="";
+			if(PrefC.AtoZfolderUsed) {
+				folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 			}
-			string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
-			Version currentVersion=new Version(Application.ProductVersion);
+			else{
+				folderUpdate=ODFileUtils.CombinePaths(Path.GetTempPath(),"UpdateFiles");
+				if(Directory.Exists(folderUpdate)) {
+					Directory.Delete(folderUpdate,true);
+				}
+				DocumentMisc docmisc=DocumentMiscs.GetUpdateFilesZip();
+				if(docmisc!=null){
+					byte[] rawBytes=Convert.FromBase64String(docmisc.RawBase64);
+					using(ZipFile unzipped=ZipFile.Read(rawBytes)) {
+						unzipped.ExtractAll(Path.GetTempPath());//I think this will create UpdateFiles folder at the right level
+					}
+				}
+			}
 			//identify the ideal situation where everything is already in place and no copy is needed.
 			if(Directory.Exists(folderUpdate)) {
 				string filePath=ODFileUtils.CombinePaths(folderUpdate,"Manifest.txt");
 				if(File.Exists(filePath)) {
 					string fileText=File.ReadAllText(filePath);
-					if(fileText==currentVersion.ToString(3)) {
+					if(fileText==versionCurrent.ToString(3)) {
 						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"According to the information in UpdateFiles\\Manifest.txt, the UpdateFiles folder is current.  Recopy anyway?")) {
 							return;
 						}
@@ -454,7 +470,7 @@ namespace OpenDental{
 				}
 			}
 			Cursor=Cursors.WaitCursor;
-			if(!PrefL.CopyFromHereToUpdateFiles(currentVersion)) {
+			if(!PrefL.CopyFromHereToUpdateFiles(versionCurrent)) {
 				Cursor=Cursors.Default;
 				return;
 			}
