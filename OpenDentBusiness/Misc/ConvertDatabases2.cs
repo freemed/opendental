@@ -10118,7 +10118,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						DateCreated date NOT NULL DEFAULT '0001-01-01',
 						FileName varchar(255) NOT NULL,
 						DocMiscType tinyint NOT NULL,
-						RawBase64 mediumtext NOT NULL
+						RawBase64 longtext NOT NULL
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
 				}

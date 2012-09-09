@@ -30,7 +30,7 @@ namespace UpdateFileCopier {
 		private void FormMain_Shown(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			//kill all processes named OpenDental.
-			//If the software has been rebranded, this won't do anything, but the original exe will still be correctly closed.
+			//If the software has been rebranded, the original exe will NOT be correctly closed.
 			Process[] processes=Process.GetProcessesByName("OpenDental");
 			for(int i=0;i<processes.Length;i++) {
 				try {
@@ -56,17 +56,11 @@ namespace UpdateFileCopier {
 				catch { }//sometimes, it happens so fast that it would fail to get the processById.
 			}*/
 			//wait for a moment to make sure they have really exited.
-			DateTime now=DateTime.Now;
-			while(DateTime.Now < now.AddSeconds(.3)) {
-				Application.DoEvents();
-			}
+			Thread.Sleep(300);
 			DirectoryInfo dirInfoSource=new DirectoryInfo(SourceDirectory);
 			//DirectoryInfo dirInfoDest=new DirectoryInfo(DestDirectory);
 			FileInfo[] appfiles=dirInfoSource.GetFiles();
 			for(int i=0;i<appfiles.Length;i++) {
-				//if(appfiles[i].Name=="UpdateFileCopier.exe") {
-				//	continue;//skip this one.
-				//}
 				//Any file exclusions will have happened when originally copying files into the AtoZ folder.
 				//And that happens in OpenDental.PrefL.CheckProgramVersion().
 				try{
@@ -80,12 +74,8 @@ namespace UpdateFileCopier {
 			//MessageBox.Show(dirInfoDest.GetFiles().Length.ToString());
 			//The above test shows that by the time it gets to this point,
 			//the files have already been copied over, so short wait.
-			now=DateTime.Now;
-			while(DateTime.Now < now.AddSeconds(.3)) {
-				Application.DoEvents();
-			}
-			//Not sure what to do about this line in rebranding situations:
-			//I guess it will have to be hard coded.
+			Thread.Sleep(300);
+			//If Open Dental has been rebranded, then change this value:
 			Process.Start(Path.Combine(DestDirectory,"OpenDental.exe"));
 			Cursor=Cursors.Default;
 			Application.Exit();

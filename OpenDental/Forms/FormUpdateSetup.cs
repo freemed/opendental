@@ -278,7 +278,7 @@ namespace OpenDental{
 			// 
 			this.labelRecopy.Location = new System.Drawing.Point(11,348);
 			this.labelRecopy.Name = "labelRecopy";
-			this.labelRecopy.Size = new System.Drawing.Size(237,47);
+			this.labelRecopy.Size = new System.Drawing.Size(237,60);
 			this.labelRecopy.TabIndex = 53;
 			this.labelRecopy.Text = "The AtoZ folder contains an UpdateFiles folder which should have current copies o" +
     "f all the files from C:\\Program Files\\Open Dental\\\r\n";
@@ -444,7 +444,7 @@ namespace OpenDental{
 			if(PrefC.AtoZfolderUsed) {
 				folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 			}
-			else{
+			else{//db
 				folderUpdate=ODFileUtils.CombinePaths(Path.GetTempPath(),"UpdateFiles");
 				if(Directory.Exists(folderUpdate)) {
 					Directory.Delete(folderUpdate,true);
@@ -453,7 +453,7 @@ namespace OpenDental{
 				if(docmisc!=null){
 					byte[] rawBytes=Convert.FromBase64String(docmisc.RawBase64);
 					using(ZipFile unzipped=ZipFile.Read(rawBytes)) {
-						unzipped.ExtractAll(Path.GetTempPath());//I think this will create UpdateFiles folder at the right level
+						unzipped.ExtractAll(folderUpdate);
 					}
 				}
 			}

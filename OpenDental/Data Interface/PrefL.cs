@@ -140,14 +140,23 @@ namespace OpenDental {
 			}
 			if(storedVersion>currentVersion) {
 				//This is the update sequence for both a direct workstation, and for a ClientWeb workstation.
-				if(!PrefC.AtoZfolderUsed){//Not using image path.
-					//this does not bypass checking the RegistrationKey because that's the only way to get the UpdateCode.
-					//perform program update automatically.
-					DownloadAndRunSetup(storedVersion,currentVersion);
-					Application.Exit();
-					return false;
+				string folderUpdate="";
+				if(PrefC.AtoZfolderUsed) {
+					folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
 				}
-				string folderUpdate=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"UpdateFiles");
+				else {//images in db
+					folderUpdate=ODFileUtils.CombinePaths(Path.GetTempPath(),"UpdateFiles");
+					if(Directory.Exists(folderUpdate)) {
+						Directory.Delete(folderUpdate,true);
+					}
+					DocumentMisc docmisc=DocumentMiscs.GetUpdateFilesZip();
+					if(docmisc!=null) {
+						byte[] rawBytes=Convert.FromBase64String(docmisc.RawBase64);
+						using(ZipFile unzipped=ZipFile.Read(rawBytes)) {
+							unzipped.ExtractAll(folderUpdate);
+						}
+					}
+				}
 				//look at the manifest to see if it's the version we need
 				string manifestVersion="";
 				try {
@@ -193,10 +202,11 @@ namespace OpenDental {
 				//launch UpdateFileCopier to copy all files to here.
 				int processId=Process.GetCurrentProcess().Id;
 				string appDir=Application.StartupPath;
-				Process.Start(ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe"),
-					"\""+folderUpdate+"\""//pass the source directory to the file copier.
+				string startFileName=ODFileUtils.CombinePaths(tempDir,"UpdateFileCopier.exe");
+				string arguments="\""+folderUpdate+"\""//pass the source directory to the file copier.
 					+" "+processId.ToString()//and the processId of Open Dental.
-					+" \""+appDir+"\"");//and the directory where OD is running
+					+" \""+appDir+"\"";//and the directory where OD is running
+				Process.Start(startFileName,arguments);					
 				Application.Exit();//always exits, whether launch of setup worked or not
 				return false;
 			}

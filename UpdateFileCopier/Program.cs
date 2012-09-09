@@ -5,9 +5,7 @@ using System.Windows.Forms;
 
 namespace UpdateFileCopier {
 	static class Program {
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
+		/// <summary>The main entry point for the application.  Takes the following arguments: sourcedir processid destdir</summary>
 		[STAThread]
 		static void Main(string[] arguments) {
 			Application.EnableVisualStyles();
