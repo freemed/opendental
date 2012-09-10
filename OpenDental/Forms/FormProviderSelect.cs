@@ -464,15 +464,13 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormProvEdit FormP=new FormProvEdit();
 			FormP.ProvCur=new Provider();
-			//FormP.ProvCur.ItemOrder=Providers.GetNextItemOrder();//this is clumsy and needs rewrite.
-			//if(gridMain.SelectedIndices.Length==1) {//place new provider before selected index if there is only one index selected.
-			if(gridMain.SelectedIndices.Length>0){//place new provider before first selected index. No changes are made to DB until provider is actually inserted.
-				FormP.ProvCur.ItemOrder=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString())).ItemOrder;
+			if(gridMain.SelectedIndices.Length>0){//place new provider after the first selected index. No changes are made to DB until after provider is actually inserted.
+				FormP.ProvCur.ItemOrder=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString())).ItemOrder;//now two with this itemorder
 			}
 			else {
-				FormP.ProvCur.ItemOrder=Providers.GetNextItemOrder();
+				FormP.ProvCur.ItemOrder=Providers.GetNextItemOrder();//this is clumsy and needs rewrite.
 			}
-			if(groupDentalSchools.Visible && comboClass.SelectedIndex>0) {
+			if(groupDentalSchools.Visible && comboClass.SelectedIndex>0){
 				FormP.ProvCur.SchoolClassNum=SchoolClasses.List[comboClass.SelectedIndex-1].SchoolClassNum;
 			}
 			FormP.IsNew=true;
@@ -481,7 +479,7 @@ namespace OpenDental{
 				return;
 			}
 			//new provider has already been inserted into DB from FormP.
-			Providers.MoveDownBelow(FormP.ProvCur);
+			Providers.MoveDownBelow(FormP.ProvCur);//safe to run even if none selected.
 			changed=true;
 			FillGrid();
 			gridMain.ScrollToEnd();

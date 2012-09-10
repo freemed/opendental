@@ -58,21 +58,10 @@ namespace OpenDentBusiness{
 				provider.ProvNum=Meth.GetLong(MethodBase.GetCurrentMethod(),provider);
 			}
 			//Add 1 to all item orders equal to or greater than new provider's item order
-			Db.NonQ("UPDATE provider SET ItemOrder=ItemOrder+1 WHERE ProvNum!="+provider.ProvNum+" AND ItemOrder>="+provider.ItemOrder);
+			Db.NonQ("UPDATE provider SET ItemOrder=ItemOrder+1"
+				+" WHERE ProvNum!="+provider.ProvNum
+				+" AND ItemOrder>="+provider.ItemOrder);
 		}
-
-		/*
-		///<summary></summary>
-		public static long InsertAtItemOrderIndex(Provider provider) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				provider.ProvNum=Meth.GetLong(MethodBase.GetCurrentMethod(),provider);
-				return provider.ProvNum;
-			}
-			//Add 1 to all item orders equal to or greater than new provider's item order
-			Db.NonQ("UPDATE provider SET ItemOrder=ItemOrder+1 WHERE ItemOrder>="+provider.ItemOrder);
-			//Insert new provider normally
-			return Crud.ProviderCrud.Insert(provider);
-		}*/
 
 		///<summary>Only used from FormProvEdit if user clicks cancel before finishing entering a new provider.</summary>
 		public static void Delete(Provider prov){
