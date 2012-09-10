@@ -29,6 +29,13 @@ namespace OpenDental {
 		}
 
 		private void FormSheetFieldCheckBox_Load(object sender,EventArgs e) {
+			labelReportableName.Visible=false;
+			textReportableName.Visible=false;
+			if(SheetFieldDefCur.FieldName.StartsWith("misc")) {
+				labelReportableName.Visible=true;
+				textReportableName.Visible=true;
+				textReportableName.Text=SheetFieldDefCur.ReportableName;
+			}
 			if(IsReadOnly){
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
@@ -146,8 +153,14 @@ namespace OpenDental {
 				groupRadioMisc.Visible=true;
 				labelRequired.Visible=true;
 				checkRequired.Visible=true;
+				labelReportableName.Visible=true;
+				textReportableName.Visible=true;
+				textReportableName.Text=SheetFieldDefCur.ReportableName;//will either be "" or saved ReportableName.
 			}
 			else {
+				labelReportableName.Visible=false;
+				textReportableName.Visible=false;
+				textReportableName.Text="";
 				radioButtonValues=SheetFieldsAvailable.GetRadio(AvailFields[listFields.SelectedIndex].FieldName);
 				if(radioButtonValues.Count==0) {
 					return;
@@ -247,6 +260,7 @@ namespace OpenDental {
 			}
 			#endregion
 			SheetFieldDefCur.FieldName=fieldName;
+			SheetFieldDefCur.ReportableName=textReportableName.Text;//always safe even if not a misc field or if textReportableName is blank.
 			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);

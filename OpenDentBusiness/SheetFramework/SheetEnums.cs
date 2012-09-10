@@ -72,7 +72,9 @@ namespace OpenDentBusiness {
 		///<summary>9-A signature box, either Topaz pad or directly on the screen with stylus/mouse.  The signature is encrypted based an a hash of all other field values in the entire sheet, excluding other SigBoxes.  The order is critical.</summary>
 		SigBox,
 		///<Summary>10-An image specific to one patient.</Summary>
-		PatImage
+		PatImage,
+		///<Summary>11-Special: Currently only used for Toothgrid</Summary>
+		Special
 		//<summary></summary>
 		//RadioButton
 		

@@ -47,6 +47,8 @@ namespace OpenDental{
 			this.textXPos = new OpenDental.ValidNum();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textReportableName = new System.Windows.Forms.TextBox();
+			this.labelReportableName = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -66,6 +68,7 @@ namespace OpenDental{
 			this.listFields.Name = "listFields";
 			this.listFields.Size = new System.Drawing.Size(142, 277);
 			this.listFields.TabIndex = 85;
+			this.listFields.SelectedIndexChanged += new System.EventHandler(this.listFields_SelectedIndexChanged);
 			this.listFields.DoubleClick += new System.EventHandler(this.listFields_DoubleClick);
 			// 
 			// groupBox1
@@ -76,7 +79,7 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.comboFontName);
 			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Location = new System.Drawing.Point(188, 31);
+			this.groupBox1.Location = new System.Drawing.Point(182, 42);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(283, 95);
 			this.groupBox1.TabIndex = 88;
@@ -86,7 +89,7 @@ namespace OpenDental{
 			// checkFontIsBold
 			// 
 			this.checkFontIsBold.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkFontIsBold.Location = new System.Drawing.Point(10, 66);
+			this.checkFontIsBold.Location = new System.Drawing.Point(16, 66);
 			this.checkFontIsBold.Name = "checkFontIsBold";
 			this.checkFontIsBold.Size = new System.Drawing.Size(85, 20);
 			this.checkFontIsBold.TabIndex = 90;
@@ -96,14 +99,14 @@ namespace OpenDental{
 			// 
 			// textFontSize
 			// 
-			this.textFontSize.Location = new System.Drawing.Point(80, 41);
+			this.textFontSize.Location = new System.Drawing.Point(86, 40);
 			this.textFontSize.Name = "textFontSize";
 			this.textFontSize.Size = new System.Drawing.Size(44, 20);
 			this.textFontSize.TabIndex = 89;
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(7, 42);
+			this.label4.Location = new System.Drawing.Point(13, 41);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(71, 16);
 			this.label4.TabIndex = 89;
@@ -113,14 +116,14 @@ namespace OpenDental{
 			// comboFontName
 			// 
 			this.comboFontName.FormattingEnabled = true;
-			this.comboFontName.Location = new System.Drawing.Point(80, 14);
+			this.comboFontName.Location = new System.Drawing.Point(86, 14);
 			this.comboFontName.Name = "comboFontName";
-			this.comboFontName.Size = new System.Drawing.Size(197, 21);
+			this.comboFontName.Size = new System.Drawing.Size(191, 21);
 			this.comboFontName.TabIndex = 88;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(7, 16);
+			this.label3.Location = new System.Drawing.Point(13, 15);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(71, 16);
 			this.label3.TabIndex = 87;
@@ -306,10 +309,28 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textReportableName
+			// 
+			this.textReportableName.Location = new System.Drawing.Point(268, 17);
+			this.textReportableName.Name = "textReportableName";
+			this.textReportableName.Size = new System.Drawing.Size(197, 20);
+			this.textReportableName.TabIndex = 104;
+			// 
+			// labelReportableName
+			// 
+			this.labelReportableName.Location = new System.Drawing.Point(127, 18);
+			this.labelReportableName.Name = "labelReportableName";
+			this.labelReportableName.Size = new System.Drawing.Size(141, 16);
+			this.labelReportableName.TabIndex = 105;
+			this.labelReportableName.Text = "Reportable Name";
+			this.labelReportableName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSheetFieldInput
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(494, 367);
+			this.Controls.Add(this.textReportableName);
+			this.Controls.Add(this.labelReportableName);
 			this.Controls.Add(this.textTabOrder);
 			this.Controls.Add(this.labelTabOrder);
 			this.Controls.Add(this.checkRequired);
@@ -366,5 +387,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkRequired;
 		private System.Windows.Forms.Label labelTabOrder;
 		private ValidNum textTabOrder;
+		private System.Windows.Forms.TextBox textReportableName;
+		private System.Windows.Forms.Label labelReportableName;
 	}
 }

@@ -103,6 +103,10 @@ namespace OpenDentBusiness{
 			return new SheetFieldDef(SheetFieldType.CheckBox,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,radioButtonValue);
 		}
 
+		private static SheetFieldDef NewSpecial(string fieldName) {
+			return new SheetFieldDef(SheetFieldType.Special,fieldName,"",0,"",false,0,0,0,0,GrowthBehaviorEnum.None,"");
+		}
+
 		private static List<SheetFieldDef> GetLabelPatient(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out){
@@ -194,7 +198,7 @@ namespace OpenDentBusiness{
 				list.Add(NewOutput("Drug"));
 				list.Add(NewOutput("Disp"));
 				list.Add(NewOutput("Sig"));
-				list.Add(NewOutput("Refills"));			
+				list.Add(NewOutput("Refills"));
 				list.Add(NewOutput("prov.stateRxID"));
 			}
 			else if(outInCheck==OutInCheck.In){
@@ -265,7 +269,7 @@ namespace OpenDentBusiness{
 
 		private static List<SheetFieldDef> GetPatientForm(OutInCheck outInCheck) {
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
-			if(outInCheck==OutInCheck.Out){
+			if(outInCheck==OutInCheck.Out) {
 				//I can't really think of any for this kind				
 			}
 			else if(outInCheck==OutInCheck.In){

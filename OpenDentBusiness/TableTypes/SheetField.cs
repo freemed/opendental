@@ -42,6 +42,8 @@ namespace OpenDentBusiness{
 		public bool IsRequired;
 		///<summary>Tab stop order for all fields. Only checkboxes and input fields can have values other than 0.</summary>
 		public int TabOrder;
+		///<summary>Allows reporting on misc fields.</summary>
+		public string ReportableName;
 				
 		public SheetField Copy(){
 			return (SheetField)this.MemberwiseClone();

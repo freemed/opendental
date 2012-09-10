@@ -23,6 +23,13 @@ namespace OpenDental {
 		}
 
 		private void FormSheetFieldInput_Load(object sender,EventArgs e) {
+			labelReportableName.Visible=false;
+			textReportableName.Visible=false;
+			if(SheetFieldDefCur.FieldName.StartsWith("misc")) {
+				labelReportableName.Visible=true;
+				textReportableName.Visible=true;
+				textReportableName.Text=SheetFieldDefCur.ReportableName;
+			}
 			if(IsReadOnly){
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
@@ -60,6 +67,25 @@ namespace OpenDental {
 
 		private void listFields_DoubleClick(object sender,EventArgs e) {
 			SaveAndClose();
+		}
+
+		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
+			if(listFields.SelectedIndex==-1) {
+				labelReportableName.Visible=false;
+				textReportableName.Visible=false;
+				textReportableName.Text="";
+				return;
+			}
+			if(AvailFields[listFields.SelectedIndex].FieldName=="misc") {
+				labelReportableName.Visible=true;
+				textReportableName.Visible=true;
+				textReportableName.Text=SheetFieldDefCur.ReportableName;//will either be "" or saved ReportableName.
+			}
+			else {
+				labelReportableName.Visible=false;
+				textReportableName.Visible=false;
+				textReportableName.Text="";
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -103,6 +129,7 @@ namespace OpenDental {
 				return;
 			}
 			SheetFieldDefCur.FieldName=AvailFields[listFields.SelectedIndex].FieldName;
+			SheetFieldDefCur.ReportableName=textReportableName.Text;//always safe even if not a misc field or if textReportableName is blank.
 			SheetFieldDefCur.FontName=comboFontName.Text;
 			SheetFieldDefCur.FontSize=fontSize;
 			SheetFieldDefCur.FontIsBold=checkFontIsBold.Checked;

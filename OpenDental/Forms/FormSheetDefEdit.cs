@@ -172,6 +172,9 @@ namespace OpenDental {
 			else if(def1.FieldType==SheetFieldType.OutputText) {//Move Output text to the top of the list under images.
 				return -1;
 			}
+			else if(def1.FieldType==SheetFieldType.Special) {//Move Special to the top of the list under special.
+				return -1;
+			}
 			if(def1.TabOrder-def2.TabOrder==0) {
 				int comp=(def1.FieldName+def1.RadioButtonValue).CompareTo(def2.FieldName+def2.RadioButtonValue);//RadioButtionValuecan be filled or ""
 				if(comp!=0) {
@@ -220,7 +223,7 @@ namespace OpenDental {
 			SolidBrush brushRed=new SolidBrush(Color.Red);
 			Font font;
 			FontStyle fontstyle;
-			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++){
+			for(int i=0;i<SheetDefCur.SheetFieldDefs.Count;i++) {
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Parameter){
 					continue;
 				}
@@ -318,6 +321,10 @@ namespace OpenDental {
 					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
 						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
 					g.DrawString("(signature box)",Font,brush,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos);
+					continue;
+				}
+				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Special) {
+					//TODO:
 					continue;
 				}
 				fontstyle=FontStyle.Regular;
@@ -550,6 +557,22 @@ namespace OpenDental {
 			panelMain.Refresh();
 		}
 
+		private void butAddSpecial_Click(object sender,EventArgs e) {
+			FormSheetFieldSpecial FormSFS=new FormSheetFieldSpecial();
+			FormSFS.SheetDefCur=SheetDefCur;
+			FormSFS.SheetFieldDefCur=SheetFieldDef.NewSpecial(0,0,500,300);
+			if(this.IsInternal) {
+				FormSFS.IsReadOnly=true;
+			}
+			FormSFS.ShowDialog();
+			if(FormSFS.DialogResult!=DialogResult.OK){
+				return;
+			}
+			SheetDefCur.SheetFieldDefs.Add(FormSFS.SheetFieldDefCur);
+			FillFieldList();
+			panelMain.Refresh();
+		}
+
 		private void butAddPatImage_Click(object sender,EventArgs e) {
 			if(!PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
@@ -718,6 +741,21 @@ namespace OpenDental {
 						return;
 					}
 					if(FormSBx.SheetFieldDefCur==null){
+						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
+					}
+					break;
+				case SheetFieldType.Special:
+					FormSheetFieldSpecial FormSFS=new FormSheetFieldSpecial();
+					FormSFS.SheetDefCur=SheetDefCur;
+					FormSFS.SheetFieldDefCur=field;
+					if(this.IsInternal) {
+						FormSFS.IsReadOnly=true;
+					}
+					FormSFS.ShowDialog();
+					if(FormSFS.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					if(FormSFS.SheetFieldDefCur==null) {
 						SheetDefCur.SheetFieldDefs.RemoveAt(idx);
 					}
 					break;

@@ -368,6 +368,12 @@
     <Compile Include="Forms\FormHL7MsgEdit.designer.cs">
       <DependentUpon>FormHL7MsgEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSheetFieldSpecial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSheetFieldSpecial.designer.cs">
+      <DependentUpon>FormSheetFieldSpecial.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormHL7Msgs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2549,6 +2555,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7MsgEdit.resx">
       <DependentUpon>FormHL7MsgEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSheetFieldSpecial.resx">
+      <DependentUpon>FormSheetFieldSpecial.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormHL7Msgs.resx">
       <DependentUpon>FormHL7Msgs.cs</DependentUpon>

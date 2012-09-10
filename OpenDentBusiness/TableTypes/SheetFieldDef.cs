@@ -46,6 +46,8 @@ namespace OpenDentBusiness{
 		public string ImageData;
 		///<summary>Tab stop order for all fields. One-based.  Only checkboxes and input fields can have values other than 0.</summary>
 		public int TabOrder;
+		///<summary>Allows reporting on misc fields.</summary>
+		public string ReportableName;
 
 		public SheetFieldDef(){//required for use as a generic.
 			RadioButtonGroup="";
@@ -150,6 +152,11 @@ namespace OpenDentBusiness{
 
 		public static SheetFieldDef NewSigBox(int xPos,int yPos,int width,int height) {
 			return new SheetFieldDef(SheetFieldType.SigBox,"","",0,"",false,
+				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
+		}
+
+		public static SheetFieldDef NewSpecial(int xPos,int yPos,int width,int height) {
+			return new SheetFieldDef(SheetFieldType.Special,"","",0,"",false,
 				xPos,yPos,width,height,GrowthBehaviorEnum.None,"");
 		}
 

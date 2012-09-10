@@ -51,6 +51,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.labelRequired = new System.Windows.Forms.Label();
+			this.textReportableName = new System.Windows.Forms.TextBox();
+			this.labelReportableName = new System.Windows.Forms.Label();
 			this.groupRadioMisc.SuspendLayout();
 			this.groupRadio.SuspendLayout();
 			this.SuspendLayout();
@@ -77,7 +79,7 @@ namespace OpenDental{
 			// label5
 			// 
 			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label5.Location = new System.Drawing.Point(385, 39);
+			this.label5.Location = new System.Drawing.Point(385, 43);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(71, 16);
 			this.label5.TabIndex = 90;
@@ -87,7 +89,7 @@ namespace OpenDental{
 			// label6
 			// 
 			this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label6.Location = new System.Drawing.Point(385, 62);
+			this.label6.Location = new System.Drawing.Point(385, 66);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(71, 16);
 			this.label6.TabIndex = 92;
@@ -97,7 +99,7 @@ namespace OpenDental{
 			// label7
 			// 
 			this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label7.Location = new System.Drawing.Point(385, 85);
+			this.label7.Location = new System.Drawing.Point(385, 89);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(71, 16);
 			this.label7.TabIndex = 94;
@@ -107,7 +109,7 @@ namespace OpenDental{
 			// label8
 			// 
 			this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label8.Location = new System.Drawing.Point(385, 108);
+			this.label8.Location = new System.Drawing.Point(385, 112);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(71, 16);
 			this.label8.TabIndex = 96;
@@ -286,7 +288,7 @@ namespace OpenDental{
 			// textHeight
 			// 
 			this.textHeight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textHeight.Location = new System.Drawing.Point(456, 107);
+			this.textHeight.Location = new System.Drawing.Point(456, 111);
 			this.textHeight.MaxVal = 2000;
 			this.textHeight.MinVal = 1;
 			this.textHeight.Name = "textHeight";
@@ -296,7 +298,7 @@ namespace OpenDental{
 			// textWidth
 			// 
 			this.textWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textWidth.Location = new System.Drawing.Point(456, 84);
+			this.textWidth.Location = new System.Drawing.Point(456, 88);
 			this.textWidth.MaxVal = 2000;
 			this.textWidth.MinVal = 1;
 			this.textWidth.Name = "textWidth";
@@ -306,7 +308,7 @@ namespace OpenDental{
 			// textYPos
 			// 
 			this.textYPos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textYPos.Location = new System.Drawing.Point(456, 61);
+			this.textYPos.Location = new System.Drawing.Point(456, 65);
 			this.textYPos.MaxVal = 2000;
 			this.textYPos.MinVal = -100;
 			this.textYPos.Name = "textYPos";
@@ -316,7 +318,7 @@ namespace OpenDental{
 			// textXPos
 			// 
 			this.textXPos.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.textXPos.Location = new System.Drawing.Point(456, 38);
+			this.textXPos.Location = new System.Drawing.Point(456, 42);
 			this.textXPos.MaxVal = 2000;
 			this.textXPos.MinVal = -100;
 			this.textXPos.Name = "textXPos";
@@ -362,10 +364,28 @@ namespace OpenDental{
 			this.labelRequired.Text = "Radio buttons in a radio button group must all be marked required or all be marke" +
     "d not required.";
 			// 
+			// textReportableName
+			// 
+			this.textReportableName.Location = new System.Drawing.Point(456, 17);
+			this.textReportableName.Name = "textReportableName";
+			this.textReportableName.Size = new System.Drawing.Size(197, 20);
+			this.textReportableName.TabIndex = 107;
+			// 
+			// labelReportableName
+			// 
+			this.labelReportableName.Location = new System.Drawing.Point(315, 18);
+			this.labelReportableName.Name = "labelReportableName";
+			this.labelReportableName.Size = new System.Drawing.Size(141, 16);
+			this.labelReportableName.TabIndex = 108;
+			this.labelReportableName.Text = "Reportable Name";
+			this.labelReportableName.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormSheetFieldCheckBox
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(675, 542);
+			this.Controls.Add(this.textReportableName);
+			this.Controls.Add(this.labelReportableName);
 			this.Controls.Add(this.labelRequired);
 			this.Controls.Add(this.radioNo);
 			this.Controls.Add(this.radioYes);
@@ -431,5 +451,7 @@ namespace OpenDental{
 		private System.Windows.Forms.RadioButton radioYes;
 		private System.Windows.Forms.RadioButton radioNo;
 		private System.Windows.Forms.Label labelRequired;
+		private System.Windows.Forms.TextBox textReportableName;
+		private System.Windows.Forms.Label labelReportableName;
 	}
 }
