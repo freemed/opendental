@@ -203,7 +203,7 @@ namespace Crud {
 			return strb.ToString();
 		}
 
-		/// <summary>For example, might return "bigint NOT NULL".</summary>
+		/// <summary>For example, might return "bigint".</summary>
 		private static string GetMySqlType(DbSchemaCol col) {
 			switch(col.DataType) {
 				case OdDbType.Bool:
