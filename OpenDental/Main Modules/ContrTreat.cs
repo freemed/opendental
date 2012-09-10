@@ -2696,7 +2696,23 @@ namespace OpenDental{
 			FillMain();
 		}
 
+		///<summary>Similar method in Account</summary>
+		private bool CheckClearinghouseDefaults() {
+			if(PrefC.GetInt(PrefName.ClearinghouseDefaultDent)==0) {
+				MsgBox.Show(this,"No default dental clearinghouse defined.");
+				return false;
+			}
+			if(PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance) && PrefC.GetInt(PrefName.ClearinghouseDefaultMed)==0) {
+				MsgBox.Show(this,"No default medical clearinghouse defined.");
+				return false;
+			}
+			return true;
+		}
+
 		private void ToolBarMainPreAuth_Click() {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"You can only send a preauth from the current TP, not a saved TP.");
 				return;

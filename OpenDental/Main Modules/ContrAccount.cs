@@ -2719,7 +2719,22 @@ namespace OpenDental {
 			ModuleSelected(PatCur.PatNum);
 		}
 
+		private bool CheckClearinghouseDefaults() {
+			if(PrefC.GetInt(PrefName.ClearinghouseDefaultDent)==0) {
+				MsgBox.Show(this,"No default dental clearinghouse defined.");
+				return false;
+			}
+			if(PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance) && PrefC.GetInt(PrefName.ClearinghouseDefaultMed)==0) {
+				MsgBox.Show(this,"No default medical clearinghouse defined.");
+				return false;
+			}
+			return true;
+		}
+
 		private void toolBarButIns_Click() {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
@@ -3061,6 +3076,9 @@ namespace OpenDental {
 		}
 
 		private void menuInsPri_Click(object sender, System.EventArgs e) {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
@@ -3108,6 +3126,9 @@ namespace OpenDental {
 		}
 
 		private void menuInsSec_Click(object sender, System.EventArgs e) {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
@@ -3154,6 +3175,9 @@ namespace OpenDental {
 		}
 
 		private void menuInsMedical_Click(object sender, System.EventArgs e) {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
@@ -3222,6 +3246,9 @@ namespace OpenDental {
 		}
 
 		private void menuInsOther_Click(object sender, System.EventArgs e) {
+			if(!CheckClearinghouseDefaults()) {
+				return;
+			}
 			List <PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<InsSub> SubList=InsSubs.RefreshForFam(FamCur);
 			List<InsPlan> InsPlanList=InsPlans.RefreshForSubList(SubList);
