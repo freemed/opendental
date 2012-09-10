@@ -176,9 +176,6 @@ namespace OpenDental{
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.listMain);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "FormScreenGroups";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
