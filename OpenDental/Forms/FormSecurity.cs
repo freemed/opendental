@@ -452,7 +452,7 @@ namespace OpenDental{
 			TreeNode node3;
 			node=SetNode("Main Menu");
 				node2=SetNode(Permissions.Setup);
-					node3=SetNode(Permissions.ProblemAdd);
+					node3=SetNode(Permissions.ProblemEdit);
 						node2.Nodes.Add(node3);
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.ChooseDatabase);

@@ -154,7 +154,7 @@ namespace OpenDentBusiness{
 		///<summary>62</summary>
 		Billing,
 		///<summary>63</summary>
-		ProblemAdd
+		ProblemEdit
 	}
 
 	

@@ -10135,7 +10135,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
-				//Add ProblemAdd permission to all groups that had Setup permission---------------------------------------------
+				//Add ProblemEdit permission to all groups that had Setup permission---------------------------------------------
 				command="SELECT DISTINCT UserGroupNum "
 				  +"FROM grouppermission "
 				  +"WHERE PermType="+POut.Int((int)Permissions.Setup);
@@ -10144,7 +10144,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-				      +"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
+				      +"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemEdit)+")";
 						Db.NonQ(command);
 					}
 				}
@@ -10152,7 +10152,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-				      +"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemAdd)+")";
+				      +"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.ProblemEdit)+")";
 						Db.NonQ(command);
 					}
 				}
@@ -10256,6 +10256,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX toothgriddef_CodeNum ON toothgriddef (CodeNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE sheetfield ADD ReportableName varchar(255)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE sheetfield ADD ReportableName varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE sheetfielddef ADD ReportableName varchar(255)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE sheetfielddef ADD ReportableName varchar2(255)";
 					Db.NonQ(command);
 				}
 				

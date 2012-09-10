@@ -218,7 +218,7 @@ namespace OpenDental{
 		}
 
 		private void listMain_DoubleClick(object sender, System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ProblemAdd) && !IsSelectionMode) {
+			if(!IsSelectionMode && !Security.IsAuthorized(Permissions.ProblemEdit)) {//trying to double click to edit, but no permission.
 				return;
 			}
 			if(listMain.SelectedIndex==-1){
@@ -229,8 +229,10 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
+			//everything below this point is _not_ selection mode.  User guaranteed to have permission for ProblemEdit.
 			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(DiseaseDefs.ListLong[listMain.SelectedIndex]);
 			FormD.ShowDialog();
+			//Security log entry made inside that form.
 			if(FormD.DialogResult!=DialogResult.OK) {
 				return;
 			}
@@ -238,7 +240,7 @@ namespace OpenDental{
 		}
 
 		private void butAdd_Click(object sender,System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.ProblemAdd)) {
+			if(!Security.IsAuthorized(Permissions.ProblemEdit)) {
 				return;
 			}
 			DiseaseDef def=new DiseaseDef();
@@ -246,6 +248,10 @@ namespace OpenDental{
 			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(def);
 			FormD.IsNew=true;
 			FormD.ShowDialog();
+			//Security log entry made inside that form.
+			if(FormD.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			FillGrid();
 		}
 

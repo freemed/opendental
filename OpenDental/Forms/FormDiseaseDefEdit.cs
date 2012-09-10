@@ -18,7 +18,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonDelete;
 		private CheckBox checkIsHidden;
 		private Label label1;
-		private DiseaseDef DiseaseDefCur;
+		public DiseaseDef DiseaseDefCur;
 
 		///<summary></summary>
 		public FormDiseaseDefEdit(DiseaseDef diseaseDefCur)
@@ -175,6 +175,7 @@ namespace OpenDental{
 			}
 			try{
 				DiseaseDefs.Delete(DiseaseDefCur);
+				SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,DiseaseDefCur.DiseaseName+" deleted.");
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex){
@@ -187,9 +188,11 @@ namespace OpenDental{
 			DiseaseDefCur.IsHidden=checkIsHidden.Checked;
 			if(IsNew){
 				DiseaseDefs.Insert(DiseaseDefCur);
+				SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,DiseaseDefCur.DiseaseName+" added.");
 			}
 			else{
 				DiseaseDefs.Update(DiseaseDefCur);
+				SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,DiseaseDefCur.DiseaseName);
 			}
 			DialogResult=DialogResult.OK;
 		}
