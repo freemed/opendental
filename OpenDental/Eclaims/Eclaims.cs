@@ -149,6 +149,12 @@ namespace OpenDental.Eclaims
 			Clearinghouse clearhouse=ClearinghouseL.GetClearinghouse(queueItem.ClearinghouseNum,true);//Suppress error message in case no default medical clearinghouse set.
 			//this is usually just the default clearinghouse or the clearinghouse for the PayorID.
 			if(clearhouse==null){
+				if(queueItem.MedType==EnumClaimMedType.Dental) {
+					queueItem.MissingData+="No default dental clearinghouse set.";
+				}
+				else {
+					queueItem.MissingData+="No default medical/institutional clearinghouse set.";
+				}				
 				return;
 			}
 			if(clearhouse.Eformat==ElectronicClaimFormat.x837D_4010){
