@@ -90,7 +90,8 @@ namespace OpenDental {
 				//butPaste.Visible=true;
 			}
 			if(SheetDefCur.SheetType==SheetTypeEnum.DepositSlip
-				|| SheetDefCur.SheetType==SheetTypeEnum.LabelCarrier) {
+				|| SheetDefCur.SheetType==SheetTypeEnum.LabelCarrier) 
+			{
 					butAddSpecial.Enabled=false;//grey out button
 			}
 			textDescription.Text=SheetDefCur.Description;
