@@ -2268,6 +2268,10 @@ namespace OpenDental{
 		}
 
 		private void gridFields_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			if(ApptFieldDefs.HasDuplicateFieldNames()) {//Check for duplicate field names.
+				MsgBox.Show(this,"There are duplicate appointment field defs, go rename or delete the duplicates.");
+				return;
+			}
 			ApptField field=ApptFields.GetOne(PIn.Long(DS.Tables["ApptFields"].Rows[e.Row]["ApptFieldNum"].ToString()));
 			if(field==null) {
 				field=new ApptField();

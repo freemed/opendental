@@ -142,6 +142,15 @@ namespace OpenDentBusiness{
 			return "";
 		}
 
+		///<summary>Returns true if there are any duplicate field names in the entire apptfielddef table.</summary>
+		public static bool HasDuplicateFieldNames() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT COUNT(*) FROM apptfielddef GROUP BY FieldName HAVING COUNT(FieldName) > 1";
+			return (Db.GetScalar(command)!="");
+		}
+
 
 	}
 }
