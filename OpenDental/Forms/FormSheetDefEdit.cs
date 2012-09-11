@@ -89,6 +89,10 @@ namespace OpenDental {
 				//butCopy.Visible=true;
 				//butPaste.Visible=true;
 			}
+			if(SheetDefCur.SheetType==SheetTypeEnum.DepositSlip
+				|| SheetDefCur.SheetType==SheetTypeEnum.LabelCarrier) {
+					butAddSpecial.Enabled=false;//grey out button
+			}
 			textDescription.Text=SheetDefCur.Description;
 			if(SheetDefCur.IsLandscape){
 				panelMain.Width=SheetDefCur.Height;
@@ -169,10 +173,10 @@ namespace OpenDental {
 			else if(def1.FieldType==SheetFieldType.Image) {//Always move images to the top of the list. This is because of the way the sheet is drawn.
 				return -1;
 			}
-			else if(def1.FieldType==SheetFieldType.OutputText) {//Move Output text to the top of the list under images.
+			else if(def1.FieldType==SheetFieldType.Special) {//Move Special to the top of the list under special.
 				return -1;
 			}
-			else if(def1.FieldType==SheetFieldType.Special) {//Move Special to the top of the list under special.
+			else if(def1.FieldType==SheetFieldType.OutputText) {//Move Output text to the top of the list under images.
 				return -1;
 			}
 			if(def1.TabOrder-def2.TabOrder==0) {

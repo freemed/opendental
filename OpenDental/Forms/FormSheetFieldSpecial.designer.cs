@@ -210,7 +210,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormSheetFieldSpecial";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit OutputText Field";
+			this.Text = "Edit Special Field";
 			this.Load += new System.EventHandler(this.FormSheetFieldDefEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

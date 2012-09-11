@@ -14,7 +14,7 @@ namespace OpenDental {
 		public SheetFieldDef SheetFieldDefCur;
 		///<summary>We need access to a few other fields of the sheetDef.</summary>
 		public SheetDef SheetDefCur;
-		private List<SheetFieldDef> AvailFields;
+		//private List<SheetFieldDef> AvailFields;
 		public bool IsReadOnly;
 
 		public FormSheetFieldSpecial() {
@@ -59,6 +59,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
+			SheetFieldDefCur.FieldName="Tooth Chart";
 			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);
