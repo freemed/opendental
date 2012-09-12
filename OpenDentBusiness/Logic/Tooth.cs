@@ -443,7 +443,7 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		///<summary>Returns 1-32, or -1.  The toothNum should be validated before coming here, but it won't crash if invalid.  Primary or perm are ok.  Empty and null are also ok.</summary>
+		///<summary>Returns 1-32, or -1.  The toothNum should be validated before coming here, but it won't crash if invalid.  Primary or perm are ok.  Empty and null are also ok.  Supernumerary are also ok.</summary>
 		public static int ToInt(string tooth_id){
 			if(tooth_id==null || tooth_id=="")
 				return -1;
@@ -451,7 +451,10 @@ namespace OpenDentBusiness{
 				if(IsPrimary(tooth_id)) {
 					return Convert.ToInt32(PriToPerm(tooth_id));
 				}
-				else{
+				else if(IsSuperNum(tooth_id)) {
+					return Convert.ToInt32(SupToPerm(tooth_id));
+				}
+				else {
 					return Convert.ToInt32(tooth_id);
 				}
 			}
@@ -503,6 +506,26 @@ namespace OpenDentBusiness{
 				case "27": return "R";
 				case "28": return "S";
 				case "29": return "T";
+				case "54": return "AS";
+				case "55": return "BS";
+				case "56": return "CS";
+				case "57": return "DS";
+				case "58": return "ES";
+				case "59": return "FS";
+				case "60": return "GS";
+				case "61": return "HS";
+				case "62": return "IS";
+				case "63": return "JS";
+				case "70": return "KS";
+				case "71": return "LS";
+				case "72": return "MS";
+				case "73": return "NS";
+				case "74": return "OS";
+				case "75": return "PS";
+				case "76": return "QS";
+				case "77": return "RS";
+				case "78": return "SS";
+				case "79": return "TS";
 			}
 		}
 
@@ -536,6 +559,85 @@ namespace OpenDentBusiness{
 				case "R": return "27";
 				case "S": return "28";
 				case "T": return "29";
+				case "AS": return "4";
+				case "BS": return "5";
+				case "CS": return "6";
+				case "DS": return "7";
+				case "ES": return "8";
+				case "FS": return "9";
+				case "GS": return "10";
+				case "HS": return "11";
+				case "IS": return "12";
+				case "JS": return "13";
+				case "KS": return "20";
+				case "LS": return "21";
+				case "MS": return "22";
+				case "NS": return "23";
+				case "OS": return "24";
+				case "PS": return "25";
+				case "QS": return "26";
+				case "RS": return "27";
+				case "SS": return "28";
+				case "TS": return "29";
+			}
+		}
+
+		///<summary>Converts supernumerary teeth to permanent.</summary>
+		public static string SupToPerm(string tooth_id) {
+			switch(tooth_id) {
+				default: return "";
+				case "51": return "1";
+				case "52": return "2";
+				case "53": return "3";
+				case "54": return "4";
+				case "55": return "5";
+				case "56": return "6";
+				case "57": return "7";
+				case "58": return "8";
+				case "59": return "9";
+				case "60": return "10";
+				case "61": return "11";
+				case "62": return "12";
+				case "63": return "13";
+				case "64": return "14";
+				case "65": return "15";
+				case "66": return "16";
+				case "67": return "17";
+				case "68": return "18";
+				case "69": return "19";
+				case "70": return "20";
+				case "71": return "21";
+				case "72": return "22";
+				case "73": return "23";
+				case "74": return "24";
+				case "75": return "25";
+				case "76": return "26";
+				case "77": return "27";
+				case "78": return "28";
+				case "79": return "29";
+				case "80": return "30";
+				case "81": return "31";
+				case "82": return "32";
+				case "AS": return "4";
+				case "BS": return "5";
+				case "CS": return "6";
+				case "DS": return "7";
+				case "ES": return "8";
+				case "FS": return "9";
+				case "GS": return "10";
+				case "HS": return "11";
+				case "IS": return "12";
+				case "JS": return "13";
+				case "KS": return "20";
+				case "LS": return "21";
+				case "MS": return "22";
+				case "NS": return "23";
+				case "OS": return "24";
+				case "PS": return "25";
+				case "QS": return "26";
+				case "RS": return "27";
+				case "SS": return "28";
+				case "TS": return "29";
 			}
 		}
 		

@@ -3983,7 +3983,8 @@ namespace OpenDental{
 				textSurfaces.AppendText("M");
 			}
 			if(butOI.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
+				//if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
+				if(Tooth.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
 					textSurfaces.AppendText("I");
 				}
 				else {
@@ -4002,7 +4003,8 @@ namespace OpenDental{
 				}
 			}
 			if(butBF.BackColor==Color.White) {
-				if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
+				//if(ToothGraphic.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
+				if(Tooth.IsAnterior(Tooth.FromInternat(textTooth.Text))) {
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 						textSurfaces.AppendText("V");//vestibular
 					}
