@@ -1510,11 +1510,9 @@ namespace OpenDentBusiness {
 			}
 			else {
 				if(table.Rows.Count>0) {
-					Carrier carrier=new Carrier();
-					carrier.CarrierName="unknown";
-					Carriers.Insert(carrier);
-					command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)
-				    +" WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
+					Carrier carrier=Carriers.GetByNameAndPhone("UNKNOWN CARRIER","");
+					command="UPDATE insplan SET CarrierNum="+POut.Long(carrier.CarrierNum)//set this new carrier for all insplans
+						+" WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";//which have invalid carriernums
 					Db.NonQ(command);
 				}
 				int numberFixed=table.Rows.Count;
@@ -1625,8 +1623,18 @@ namespace OpenDentBusiness {
 					countUsed+=PIn.Int(Db.GetCount(command));
 					command="SELECT COUNT(*) FROM claimproc WHERE PlanNum="+POut.Long(planNum);
 					countUsed+=PIn.Int(Db.GetCount(command));
-					if(countUsed==0) {
+					if(countUsed==0) {//There are no other pointers to this invalid plannum or this inssub, delete this inssub
 						command="DELETE FROM inssub WHERE InsSubNum="+POut.Long(insSubNum);
+						Db.NonQ(command);
+						numFixed++;
+						continue;
+					}
+					else {//There are objects referencing this inssub or this insplan.  Insert a dummy plan linked to a dummy carrier with CarrierName=Unknown
+						InsPlan insplan=new InsPlan();
+						insplan.IsHidden=true;
+						insplan.CarrierNum=Carriers.GetByNameAndPhone("UNKNOWN CARRIER","").CarrierNum;
+						long insPlanNum=InsPlans.Insert(insplan);
+						command="UPDATE inssub SET PlanNum="+POut.Long(insPlanNum)+" WHERE InsSubNum="+POut.Long(insSubNum);
 						Db.NonQ(command);
 						numFixed++;
 						continue;
