@@ -13,19 +13,24 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		private static Hashtable HList;
 
-		///<summary></summary>
+		///<summary>This must refresh Listt on client, not on server.</summary>
 		public static void Refresh() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
-			string command ="SELECT * FROM medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
-			List<Medication> list=Crud.MedicationCrud.SelectMany(command);
+			//No need to check RemotingRole; no call to db.
+			List<Medication> list=GetListFromDb();
 			HList=new Hashtable();
 			for(int i=0;i<list.Count;i++) {
 				HList.Add(list[i].MedicationNum,list[i]);
 			}
 			Listt=list.ToArray();
+		}
+
+		///<summary>Only public so that the remoting works.  Do not call this from anywhere except in this class.</summary>
+		public static List<Medication> GetListFromDb() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<Medication>>(MethodBase.GetCurrentMethod());
+			}
+			string command ="SELECT * FROM medication ORDER BY MedName";// WHERE MedName LIKE '%"+POut.String(str)+"%' ORDER BY MedName";
+			return Crud.MedicationCrud.SelectMany(command);
 		}
 
 		public static List<Medication> TableToList(DataTable table) {
