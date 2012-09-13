@@ -112,5 +112,11 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void butAll_Click(object sender,EventArgs e) {
+			SelectedPatNum=0;
+			textPatient.Text="";
+			FillGrid();
+		}
+
 	}
 }
