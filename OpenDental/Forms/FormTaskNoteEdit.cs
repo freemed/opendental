@@ -24,11 +24,11 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(TaskNoteCur.IsNew) {
-				DialogResult=DialogResult.Cancel;
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
+			if(TaskNoteCur.IsNew) {
+				DialogResult=DialogResult.Cancel;
 				return;
 			}
 			TaskNotes.Delete(TaskNoteCur.TaskNoteNum);
