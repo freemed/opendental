@@ -5137,15 +5137,8 @@ namespace OpenDental{
 				userControlTasks1.ClearLogOff();
 			}
 			Userod oldUser=Security.CurUser;
-			if(CurPatNum==0) {
-				Security.CurUser=null;
-				Text=PatientL.GetMainTitle(null);
-			}
-			else {
-				Patient pat=Patients.GetPat(CurPatNum);
-				Security.CurUser=null;
-				Text=PatientL.GetMainTitle(pat);
-			}
+			Security.CurUser=null;
+			Text=PatientL.GetMainTitle(null);
 			////Iterating through OpenForms with foreach did not work, probably because we were altering the collection when closing forms.
 			////So we make a copy of the collection before iterating through to close each form.
 			//List<Form> listForms=new List<Form>();
