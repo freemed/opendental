@@ -15,6 +15,12 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
+		public bool IsClaimReplacement {
+			get{ 
+				return radioClaimReplacement.Checked; 
+			}
+		}
+
 		private void radioClaimOriginal_Click(object sender,EventArgs e) {
 			radioClaimOriginal.Checked=true;
 			radioClaimReplacement.Checked=false;
@@ -23,10 +29,6 @@ namespace OpenDental {
 		private void radioClaimReplacement_Click(object sender,EventArgs e) {
 			radioClaimOriginal.Checked=false;
 			radioClaimReplacement.Checked=true;
-		}
-
-		public bool IsClaimReplacement {
-			get { return radioClaimReplacement.Checked; }
 		}
 
 		private void butSend_Click(object sender,EventArgs e) {

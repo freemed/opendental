@@ -5178,6 +5178,7 @@ namespace OpenDental{
 				}
 				else {
 					comboCorrectionType.SelectedIndex=0;//original
+					textDateResent.Text=DateTime.Now.ToShortDateString();
 				}
 				SendClaim();
 			}
