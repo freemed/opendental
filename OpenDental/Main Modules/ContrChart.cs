@@ -3493,6 +3493,7 @@ namespace OpenDental{
 			else {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 			}
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"eRx"),1,"","eRx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ortho Chart"),-1,"","Ortho"));
@@ -3776,6 +3777,9 @@ namespace OpenDental{
 					case "Rx":
 						Tool_Rx_Click();
 						break;
+					case "eRx":
+						Tool_eRx_Click();
+						break;
 					case "LabCase":
 						Tool_LabCase_Click();
 						break;
@@ -3849,6 +3853,14 @@ namespace OpenDental{
 				ModuleSelected(PatCur.PatNum);
 				SecurityLogs.MakeLogEntry(Permissions.RxCreate,PatCur.PatNum,"Created prescription.");
 			}
+		}
+
+		private void Tool_eRx_Click() {
+			if(!Security.IsAuthorized(Permissions.RxCreate)) {
+				return;
+			}
+			FormErx formErx=new FormErx();
+			formErx.ShowDialog();
 		}
 
 		private void Tool_LabCase_Click() {

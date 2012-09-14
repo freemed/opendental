@@ -445,6 +445,8 @@
     <Compile Include="Db\PoIn.cs" />
     <Compile Include="Db\SchemaCrudProposedTest.cs" />
     <Compile Include="Db\SchemaCrudTest.cs" />
+    <Compile Include="Erx\ErxXml.cs" />
+    <Compile Include="Erx\NCScript.cs" />
     <Compile Include="HL7old\EhrORU.cs" />
     <Compile Include="HL7old\EhrVXU.cs" />
     <Compile Include="HL7\FieldConstructor.cs" />
