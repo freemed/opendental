@@ -1084,6 +1084,9 @@ namespace OpenDental{
 						case "Email":
 							row.Cells.Add(PtDataTable.Rows[i]["Email"].ToString());
 							break;
+						case "OtherPhone":
+							row.Cells.Add(PtDataTable.Rows[i]["OtherPhone"].ToString());
+							break;
 					}
 				}
 				gridMain.Rows.Add(row);

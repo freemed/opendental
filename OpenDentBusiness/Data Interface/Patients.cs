@@ -245,11 +245,12 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email ";
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email,GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone ";
 			if(subscriberId!=""){
 				command+=",inssub.SubscriberId ";
 			}
-			command+="FROM patient ";
+			command+="FROM patient "
+				+"LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
 					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
@@ -301,7 +302,8 @@ namespace OpenDentBusiness{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
-						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"') ";
+						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"' "
+						+"OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"') ";
 				} 
 				else {//oracle
 					command+="AND ((SELECT REGEXP_INSTR(p.HmPhone,'"+POut.String(regexp)+"') FROM dual)<>0"
@@ -357,7 +359,8 @@ namespace OpenDentBusiness{
 			if(subscriberId!=""){
 				command+="AND inssub.SubscriberId LIKE '%"+POut.String(subscriberId)+"%' ";
 			}
-			command+="ORDER BY LName,FName ";
+			command+="GROUP BY patient.PatNum "
+				+"ORDER BY LName,FName ";
 			if(limit){
 				command=DbHelper.LimitOrderBy(command,40);
 			}
@@ -405,6 +408,7 @@ namespace OpenDentBusiness{
 				r["PriProv"]=Providers.GetAbbr(PIn.Long(table.Rows[i]["PriProv"].ToString()));
 				r["site"]=Sites.GetDescription(PIn.Long(table.Rows[i]["SiteNum"].ToString()));
 				r["Email"]=table.Rows[i]["Email"].ToString();
+				r["OtherPhone"]=table.Rows[i]["OtherPhone"].ToString();
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;
