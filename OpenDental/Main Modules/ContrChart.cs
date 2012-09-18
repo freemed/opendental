@@ -3864,6 +3864,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Practice phone must be 10 digits.");
 				return;
 			}
+			string practiceFax=Regex.Replace(PrefC.GetString(PrefName.PracticeFax),"[^0-9]*","");//Removes all non-digit characters.
+			if(practiceFax.Length!=10) {
+				MsgBox.Show(this,"Practice fax must be 10 digits.");
+				return;
+			}
 			string practiceZip=PrefC.GetString(PrefName.PracticeZip);
 			practiceZip=Regex.Replace(practiceZip,"[^0-9]*","");//Zip with all non-numeric characters removed.
 			if(practiceZip.Length!=9) {
@@ -3879,6 +3884,10 @@ namespace OpenDental{
 			}
 			if(prov.NationalProvID=="") {
 				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"NPI missing")+".");
+				return;
+			}
+			if(prov.StateLicensed.Length!=2) {
+				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"state licensed must be a 2 character state abbreviation")+".");
 				return;
 			}
 			Employee emp=null;

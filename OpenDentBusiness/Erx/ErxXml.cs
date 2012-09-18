@@ -34,7 +34,7 @@ namespace OpenDentBusiness {
 
 			string practiceTitle=PrefC.GetString(PrefName.PracticeTitle);
 			string practicePhone=PrefC.GetString(PrefName.PracticePhone);//Verified to be 10 digits within the chart.
-			string practiceFax="";//todo: Required. make a new field for this?
+			string practiceFax=PrefC.GetString(PrefName.PracticeFax);//Verified to be 10 digits within the chart.
 			string practiceAddress=PrefC.GetString(PrefName.PracticeAddress);
 			string practiceAddress2=PrefC.GetString(PrefName.PracticeAddress2);
 			string practiceCity=PrefC.GetString(PrefName.PracticeCity);
@@ -47,7 +47,7 @@ namespace OpenDentBusiness {
 				country=CultureInfo.CurrentCulture.Name.Substring(CultureInfo.CurrentCulture.Name.Length-2);
 			}
 			ncScript.Account=new AccountTypeRx();
-			ncScript.Account.ID="PRIMARY";
+			ncScript.Account.ID="1";
 			ncScript.Account.accountName=practiceTitle;
 			ncScript.Account.siteID="1";
 			ncScript.Account.AccountAddress=new AddressType();
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 			ncScript.Account.accountPrimaryFaxNumber=practiceFax;
 
 			ncScript.Location=new LocationType();
-			ncScript.Location.ID="PRIMARY";
+			ncScript.Location.ID="1";
 			ncScript.Location.locationName=practiceTitle;
 			ncScript.Location.LocationAddress=new AddressType();
 			ncScript.Location.LocationAddress.address1=practiceAddress;
@@ -78,13 +78,13 @@ namespace OpenDentBusiness {
 
 			ncScript.LicensedPrescriber=new LicensedPrescriberType();
 			ncScript.LicensedPrescriber.ID=prov.ProvNum.ToString();
+			//UPIN is obsolete
 			ncScript.LicensedPrescriber.LicensedPrescriberName=new PersonNameType();
 			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName;
 			ncScript.LicensedPrescriber.LicensedPrescriberName.first=prov.FName;
 			ncScript.LicensedPrescriber.LicensedPrescriberName.middle=prov.MI;
 			ncScript.LicensedPrescriber.dea=prov.DEANum;
-			ncScript.LicensedPrescriber.upin="";//todo.  Ask someone what this is.
-			ncScript.LicensedPrescriber.licenseState=practiceState;//todo.  Add to provider table.
+			ncScript.LicensedPrescriber.licenseState=prov.StateLicensed;
 			ncScript.LicensedPrescriber.licenseNumber=prov.StateLicense;
 
 			ncScript.Patient=new PatientType();

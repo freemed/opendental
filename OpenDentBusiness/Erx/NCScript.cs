@@ -3352,7 +3352,8 @@ namespace OpenDentBusiness {
             }
         }
         
-        /// <remarks/>
+        ///No used and not required, because NPIs replaced UPINs and we require NPI before allowing a prescription to be sent. <remarks/>
+				[System.Xml.Serialization.XmlIgnoreAttribute()]
         public string upin {
             get {
                 return this.upinField;

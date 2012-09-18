@@ -588,6 +588,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogTpAttachedToClaim(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ProcedurelogTpAttachedToCompleteLabFeesCanada(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProcedurelogUnitQtyZero(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProviderHiddenWithClaimPayments(verbose,isCheck);

@@ -241,6 +241,7 @@ namespace OpenDentBusiness {
 		PracticeCity,
 		PracticeDefaultBillType,
 		PracticeDefaultProv,
+		PracticeFax,
 		PracticePayToAddress,
 		PracticePayToAddress2,
 		PracticePayToCity,

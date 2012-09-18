@@ -76,6 +76,8 @@ namespace OpenDentBusiness{
 		public bool EhrHasReportAccess;
 		///<summary>Default is false because most providers are persons.  But some dummy providers used for practices or billing entities are not persons.  This is needed on 837s.</summary>
 		public bool IsNotPerson;
+		///<summary>The state abbreviation where the state license number in the StateLicense field is legally registered.</summary>
+		public string StateLicensed;
 
 		///<summary>Used only for serialization purposes</summary>
 		[XmlElement("ProvColor",typeof(int))]

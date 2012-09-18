@@ -10274,8 +10274,22 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE sheetfielddef ADD ReportableName varchar2(255)";
 					Db.NonQ(command);
 				}
-				
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE provider ADD StateWhereLicensed varchar(50) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE provider ADD StateWhereLicensed varchar2(50)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PracticeFax','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PracticeFax','')";
+					Db.NonQ(command);
+				}
 
 
 
@@ -10290,6 +10304,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
 
 
 

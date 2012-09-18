@@ -12,9 +12,7 @@ for more details, available at http://www.opensource.org/licenses/gpl-license.ph
 Any changes to this program must follow the guidelines of the GPL license if a modified version is to be
 redistributed.
 ===============================================================================================================*/
-//For now, all screens are assumed to have available 990x734.  That would be a screen resolution of 1024x768 with a single width taskbar docked to any one of the four sides of the screen.  Screens can be optimized to the larger 1280x1024 (1246x990 to allow for docked taskbar) as long as scrollbars appear when user is at 1024x768.  This can be visualized for design purposes by placing hash lines radiating from 982,700.
 
-//The 7 main controls are slightly smaller due to menu bar on left of 51 and the toolbars on the top of 29. Max size 939x679, or the larger 1195x935 as long as it still functions acceptably at 939x679.
 
 //#define ORA_DB
 using System;

@@ -2935,6 +2935,38 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ProcedurelogTpAttachedToCompleteLabFeesCanada(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				return "";
+			}
+			string log="";
+			command="SELECT pc.ProcCode ProcCode,pclab.ProcCode ProcCodeLab,proc.PatNum,proc.ProcDate "
+				+"FROM procedurelog proc "
+				+"INNER JOIN procedurecode pc ON pc.CodeNum=proc.CodeNum "
+				+"INNER JOIN procedurelog lab ON proc.ProcNum=lab.ProcNumLab AND lab.ProcStatus="+POut.Long((int)ProcStat.C)+" "
+				+"INNER JOIN procedurecode pclab ON pclab.CodeNum=lab.CodeNum "
+				+"WHERE proc.ProcStatus="+POut.Long((int)ProcStat.TP);
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						log+=Lans.g("FormDatabaseMaintenance","Completed lab fee")+" "+table.Rows[i]["ProcCodeLab"].ToString()+" "
+							+Lans.g("FormDatabaseMaintenance","is attached to TP procedure")+" "+table.Rows[i]["ProcCode"].ToString()+" "
+							+Lans.g("FormDatabaseMaintenance","on date")+" "+PIn.Date(table.Rows[i]["ProcDate"].ToString()).ToShortDateString()+". "
+							+Lans.g("FormDatabaseMaintenance","PatNum: ")+table.Rows[i]["PatNum"].ToString()+" "
+							+Lans.g("FormDatabaseMaintenance","Fix manually from within the Chart module.")+"\r\n";
+					}
+				}
+			}
+			else {
+				//User must fix manually.
+			}
+			return log;
+		}
+
 		public static string ProcedurelogUnitQtyZero(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
