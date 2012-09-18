@@ -3886,8 +3886,8 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"NPI missing")+".");
 				return;
 			}
-			if(prov.StateLicensed.Length!=2) {
-				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"state licensed must be a 2 character state abbreviation")+".");
+			if(prov.StateWhereLicensed.Length!=2) {
+				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"state where licensed must be a 2 character state abbreviation")+".");
 				return;
 			}
 			Employee emp=null;

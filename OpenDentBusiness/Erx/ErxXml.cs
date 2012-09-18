@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 			ncScript.LicensedPrescriber.LicensedPrescriberName.first=prov.FName;
 			ncScript.LicensedPrescriber.LicensedPrescriberName.middle=prov.MI;
 			ncScript.LicensedPrescriber.dea=prov.DEANum;
-			ncScript.LicensedPrescriber.licenseState=prov.StateLicensed;
+			ncScript.LicensedPrescriber.licenseState=prov.StateWhereLicensed;
 			ncScript.LicensedPrescriber.licenseNumber=prov.StateLicense;
 
 			ncScript.Patient=new PatientType();

@@ -78,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 				provider.StateRxID           = PIn.String(table.Rows[i]["StateRxID"].ToString());
 				provider.EhrHasReportAccess  = PIn.Bool  (table.Rows[i]["EhrHasReportAccess"].ToString());
 				provider.IsNotPerson         = PIn.Bool  (table.Rows[i]["IsNotPerson"].ToString());
-				provider.StateLicensed       = PIn.String(table.Rows[i]["StateLicensed"].ToString());
+				provider.StateWhereLicensed       = PIn.String(table.Rows[i]["StateWhereLicensed"].ToString());
 				retVal.Add(provider);
 			}
 			return retVal;
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProvNum,";
 			}
-			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet,EcwID,EhrKey,StateRxID,EhrHasReportAccess,IsNotPerson,StateLicensed) VALUES(";
+			command+="Abbr,ItemOrder,LName,FName,MI,Suffix,FeeSched,Specialty,SSN,StateLicense,DEANum,IsSecondary,ProvColor,IsHidden,UsingTIN,BlueCrossID,SigOnFile,MedicaidID,OutlineColor,SchoolClassNum,NationalProvID,CanadianOfficeNum,AnesthProvType,TaxonomyCodeOverride,IsCDAnet,EcwID,EhrKey,StateRxID,EhrHasReportAccess,IsNotPerson,StateWhereLicensed) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(provider.ProvNum)+",";
 			}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(provider.StateRxID)+"',"
 				+    POut.Bool  (provider.EhrHasReportAccess)+","
 				+    POut.Bool  (provider.IsNotPerson)+","
-				+"'"+POut.String(provider.StateLicensed)+"')";
+				+"'"+POut.String(provider.StateWhereLicensed)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -199,7 +199,7 @@ namespace OpenDentBusiness.Crud{
 				+"StateRxID           = '"+POut.String(provider.StateRxID)+"', "
 				+"EhrHasReportAccess  =  "+POut.Bool  (provider.EhrHasReportAccess)+", "
 				+"IsNotPerson         =  "+POut.Bool  (provider.IsNotPerson)+", "
-				+"StateLicensed       = '"+POut.String(provider.StateLicensed)+"' "
+				+"StateWhereLicensed       = '"+POut.String(provider.StateWhereLicensed)+"' "
 				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}
@@ -328,9 +328,9 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="IsNotPerson = "+POut.Bool(provider.IsNotPerson)+"";
 			}
-			if(provider.StateLicensed != oldProvider.StateLicensed) {
+			if(provider.StateWhereLicensed != oldProvider.StateWhereLicensed) {
 				if(command!=""){ command+=",";}
-				command+="StateLicensed = '"+POut.String(provider.StateLicensed)+"'";
+				command+="StateWhereLicensed = '"+POut.String(provider.StateWhereLicensed)+"'";
 			}
 			if(command==""){
 				return;

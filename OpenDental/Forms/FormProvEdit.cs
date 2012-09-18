@@ -77,7 +77,7 @@ namespace OpenDental{
 		private CheckBox checkEhrHasReportAccess;
 		private CheckBox checkIsNotPerson;
 		private Label label15;
-		private TextBox textStateLicensed;
+		private TextBox textStateWhereLicensed;
 		public Provider ProvCur;
 
 		///<summary></summary>
@@ -171,7 +171,7 @@ namespace OpenDental{
 			this.checkEhrHasReportAccess = new System.Windows.Forms.CheckBox();
 			this.checkIsNotPerson = new System.Windows.Forms.CheckBox();
 			this.label15 = new System.Windows.Forms.Label();
-			this.textStateLicensed = new System.Windows.Forms.TextBox();
+			this.textStateWhereLicensed = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupAnesthProvType.SuspendLayout();
@@ -798,13 +798,13 @@ namespace OpenDental{
 			this.label15.Text = "State Where Licensed";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// textStateLicensed
+			// textStateWhereLicensed
 			// 
-			this.textStateLicensed.Location = new System.Drawing.Point(136,233);
-			this.textStateLicensed.MaxLength = 15;
-			this.textStateLicensed.Name = "textStateLicensed";
-			this.textStateLicensed.Size = new System.Drawing.Size(34,20);
-			this.textStateLicensed.TabIndex = 110;
+			this.textStateWhereLicensed.Location = new System.Drawing.Point(136,233);
+			this.textStateWhereLicensed.MaxLength = 15;
+			this.textStateWhereLicensed.Name = "textStateWhereLicensed";
+			this.textStateWhereLicensed.Size = new System.Drawing.Size(34,20);
+			this.textStateWhereLicensed.TabIndex = 110;
 			// 
 			// FormProvEdit
 			// 
@@ -812,7 +812,7 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(811,641);
-			this.Controls.Add(this.textStateLicensed);
+			this.Controls.Add(this.textStateWhereLicensed);
 			this.Controls.Add(this.label15);
 			this.Controls.Add(this.checkIsNotPerson);
 			this.Controls.Add(this.checkEhrHasReportAccess);
@@ -930,7 +930,7 @@ namespace OpenDental{
 				radioSSN.Checked=true;
 			}
 			textStateLicense.Text=ProvCur.StateLicense;
-			textStateLicensed.Text=ProvCur.StateLicensed;
+			textStateWhereLicensed.Text=ProvCur.StateWhereLicensed;
 			textDEANum.Text=ProvCur.DEANum;
 			textStateRxID.Text=ProvCur.StateRxID;
 			//textBlueCrossID.Text=ProvCur.BlueCrossID;
@@ -1115,7 +1115,7 @@ namespace OpenDental{
 			ProvCur.Suffix=textSuffix.Text;
 			ProvCur.SSN=textSSN.Text;
 			ProvCur.StateLicense=textStateLicense.Text;
-			ProvCur.StateLicensed=textStateLicensed.Text;
+			ProvCur.StateWhereLicensed=textStateWhereLicensed.Text;
 			ProvCur.DEANum=textDEANum.Text;
 			ProvCur.StateRxID=textStateRxID.Text;
 			//ProvCur.BlueCrossID=textBlueCrossID.Text;
