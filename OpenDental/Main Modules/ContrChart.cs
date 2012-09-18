@@ -3859,7 +3859,45 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
+			string practicePhone=Regex.Replace(PrefC.GetString(PrefName.PracticePhone),"[^0-9]*","");//Removes all non-digit characters.
+			if(practicePhone.Length!=10) {
+				MsgBox.Show(this,"Practice phone must be 10 digits.");
+				return;
+			}
+			string practiceZip=PrefC.GetString(PrefName.PracticeZip);
+			practiceZip=Regex.Replace(practiceZip,"[^0-9]*","");//Zip with all non-numeric characters removed.
+			if(practiceZip.Length!=9) {
+				MsgBox.Show(this,"Practice zip must be 9 digits.");
+				return;
+			}
+			Provider prov=null;
+			if(Security.CurUser.ProvNum!=0) {
+				prov=Providers.GetProv(Security.CurUser.ProvNum);
+			}
+			else {
+				prov=Providers.GetProv(PatCur.PriProv);
+			}
+			if(prov.NationalProvID=="") {
+				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"NPI missing")+".");
+				return;
+			}
+			Employee emp=null;
+			if(Security.CurUser.EmployeeNum!=0) {
+				emp=Employees.GetEmp(Security.CurUser.EmployeeNum);
+			}
+			if(PatCur.Birthdate.Year<1880) {
+				MsgBox.Show(this,"Patient birthdate missing.");
+				return;
+			}
+			string ssn=Regex.Replace(PatCur.SSN,"[^0-9]*","");//Removes all non-numerical characters.
+			if(ssn.Length!=9) {
+				MsgBox.Show(this,"Patient SSN must be 9 digits.");
+				return;
+			}
 			FormErx formErx=new FormErx();
+			formErx.prov=prov;
+			formErx.emp=emp;
+			formErx.pat=PatCur;
 			formErx.ShowDialog();
 		}
 

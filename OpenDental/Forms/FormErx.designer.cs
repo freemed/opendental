@@ -33,10 +33,10 @@ namespace OpenDental{
 			this.browser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.browser.Location = new System.Drawing.Point(33,12);
+			this.browser.Location = new System.Drawing.Point(0,0);
 			this.browser.MinimumSize = new System.Drawing.Size(20,20);
 			this.browser.Name = "browser";
-			this.browser.Size = new System.Drawing.Size(916,627);
+			this.browser.Size = new System.Drawing.Size(973,658);
 			this.browser.TabIndex = 4;
 			this.browser.Url = new System.Uri("",System.UriKind.Relative);
 			// 
@@ -48,7 +48,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(874,645);
+			this.butCancel.Location = new System.Drawing.Point(891,666);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -61,7 +61,7 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(974,696);
 			this.Controls.Add(this.browser);
 			this.Controls.Add(this.butCancel);
-			this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+			this.Cursor = System.Windows.Forms.Cursors.Default;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "FormErx";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
