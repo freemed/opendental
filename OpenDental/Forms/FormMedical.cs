@@ -737,14 +737,17 @@ namespace OpenDental{
 		private void butAddProblem_Click(object sender,EventArgs e) {
 			FormDiseaseDefs formDD=new FormDiseaseDefs();
 			formDD.IsSelectionMode=true;
+			formDD.IsMultiSelect=true;
 			formDD.ShowDialog();
 			if(formDD.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Disease disease=new Disease();
-			disease.PatNum=PatCur.PatNum;
-			disease.DiseaseDefNum=formDD.SelectedDiseaseDefNum;
-			Diseases.Insert(disease);
+			for(int i=0;i<formDD.SelectedDiseaseDefNums.Count;i++) {
+				Disease disease=new Disease();
+				disease.PatNum=PatCur.PatNum;
+				disease.DiseaseDefNum=formDD.SelectedDiseaseDefNums[i];
+				Diseases.Insert(disease);
+			}
 			FillProblems();
 		}
 

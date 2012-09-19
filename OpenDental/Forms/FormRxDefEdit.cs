@@ -428,14 +428,17 @@ namespace OpenDental{
 		private void butAddProblem_Click(object sender,EventArgs e) {
 			FormDiseaseDefs FormD=new FormDiseaseDefs();
 			FormD.IsSelectionMode=true;
+			FormD.IsMultiSelect=true;
 			FormD.ShowDialog();
 			if(FormD.DialogResult!=DialogResult.OK){
 				return;
 			}
-			RxAlert alert=new RxAlert();
-			alert.DiseaseDefNum=FormD.SelectedDiseaseDefNum;
-			alert.RxDefNum=RxDefCur.RxDefNum;
-			RxAlerts.Insert(alert);
+			for(int i=0;i<FormD.SelectedDiseaseDefNums.Count;i++) {
+				RxAlert alert=new RxAlert();
+				alert.DiseaseDefNum=FormD.SelectedDiseaseDefNums[i];
+				alert.RxDefNum=RxDefCur.RxDefNum;
+				RxAlerts.Insert(alert);
+			}
 			FillAlerts();
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -20,8 +21,13 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		///<summary>Set to true when user is using this to select a disease def. Currently used when adding Alerts to Rx.</summary>
 		public bool IsSelectionMode;
+		///<summary>Set to true when user is using FormMedical to allow multiple problems to be selected at once.</summary>
+		public bool IsMultiSelect;
 		///<summary>If IsSelectionMode, then after closing with OK, this will contain number.</summary>
 		public long SelectedDiseaseDefNum;
+		///<summary>If IsMultiSelect, then this will contain a list of numbers when closing with OK.</summary>
+		public List<long> SelectedDiseaseDefNums;
+		private bool IsChanged;
 
 		///<summary></summary>
 		public FormDiseaseDefs()
@@ -69,39 +75,39 @@ namespace OpenDental{
 			// 
 			// listMain
 			// 
-			this.listMain.Location = new System.Drawing.Point(18,34);
+			this.listMain.Location = new System.Drawing.Point(18, 34);
 			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(265,628);
+			this.listMain.Size = new System.Drawing.Size(265, 628);
 			this.listMain.TabIndex = 2;
 			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(15,11);
+			this.label1.Location = new System.Drawing.Point(15, 11);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(335,20);
+			this.label1.Size = new System.Drawing.Size(335, 20);
 			this.label1.TabIndex = 8;
 			this.label1.Text = "This is a list of medical problems that patients might have. ";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(349,637);
+			this.butClose.Location = new System.Drawing.Point(349, 637);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(79,26);
+			this.butClose.Size = new System.Drawing.Size(79, 26);
 			this.butClose.TabIndex = 1;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -109,16 +115,16 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(349,394);
+			this.butAdd.Location = new System.Drawing.Point(349, 394);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79,26);
+			this.butAdd.Size = new System.Drawing.Size(79, 26);
 			this.butAdd.TabIndex = 7;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butDown
 			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDown.Autosize = true;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -126,16 +132,16 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(349,501);
+			this.butDown.Location = new System.Drawing.Point(349, 501);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79,26);
+			this.butDown.Size = new System.Drawing.Size(79, 26);
 			this.butDown.TabIndex = 14;
 			this.butDown.Text = "&Down";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
 			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butUp.Autosize = true;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -143,32 +149,32 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(349,469);
+			this.butUp.Location = new System.Drawing.Point(349, 469);
 			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(79,26);
+			this.butUp.Size = new System.Drawing.Size(79, 26);
 			this.butUp.TabIndex = 13;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(349,605);
+			this.butOK.Location = new System.Drawing.Point(349, 605);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(79,26);
+			this.butOK.Size = new System.Drawing.Size(79, 26);
 			this.butOK.TabIndex = 15;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// FormDiseaseDefs
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(447,675);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(447, 675);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
@@ -196,6 +202,9 @@ namespace OpenDental{
 			}
 			else{
 				butOK.Visible=false;
+			}
+			if(IsMultiSelect) { 
+				listMain.SelectionMode=SelectionMode.MultiExtended;
 			}
 			FillGrid();
 		}
@@ -225,7 +234,13 @@ namespace OpenDental{
 				return;
 			}
 			if(IsSelectionMode){
-				SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+				if(IsMultiSelect) {
+					SelectedDiseaseDefNums=new List<long>();
+					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum);
+				}
+				else {
+					SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+				}
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -236,6 +251,7 @@ namespace OpenDental{
 			if(FormD.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			IsChanged=true;
 			FillGrid();
 		}
 
@@ -252,10 +268,12 @@ namespace OpenDental{
 			if(FormD.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			IsChanged=true;
 			FillGrid();
 		}
 
 		private void butUp_Click(object sender,EventArgs e) {
+			//These aren't yet optimized for multiselection.
 			int selected=listMain.SelectedIndex;
 			try{
 				DiseaseDefs.MoveUp(listMain.SelectedIndex);
@@ -271,9 +289,11 @@ namespace OpenDental{
 			else{
 				listMain.SelectedIndex=selected-1;
 			}
+			IsChanged=true;
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
+			//These aren't yet optimized for multiselection.
 			int selected=listMain.SelectedIndex;
 			try {
 				DiseaseDefs.MoveDown(listMain.SelectedIndex);
@@ -289,15 +309,24 @@ namespace OpenDental{
 			else{
 				listMain.SelectedIndex=selected+1;
 			}
+			IsChanged=true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless IsSelectionMode
-			if(listMain.SelectedIndex==-1){
+			if(listMain.SelectedIndices.Count==0){
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+			if(IsMultiSelect) {
+				SelectedDiseaseDefNums=new List<long>();
+				for(int i=0;i<listMain.SelectedIndices.Count;i++) {
+					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[listMain.SelectedIndices[i]].DiseaseDefNum);
+				}
+			}
+			else {
+				SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -306,7 +335,9 @@ namespace OpenDental{
 		}
 
 		private void FormDiseaseDefs_FormClosing(object sender,FormClosingEventArgs e) {
-			DataValid.SetInvalid(InvalidType.Email);
+			if(IsChanged) {
+				DataValid.SetInvalid(InvalidType.Diseases);
+			}
 		}
 
 		
