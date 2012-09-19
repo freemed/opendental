@@ -288,6 +288,8 @@ namespace OpenDental{
 			// 
 			// gridMain
 			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(2, 162);
 			this.gridMain.Name = "gridMain";
@@ -323,7 +325,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label3);
 			this.Name = "FormScreenGroupEdit";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Edit Screening Group";
 			this.Load += new System.EventHandler(this.FormScreenGroup_Load);
 			this.ResumeLayout(false);
@@ -333,7 +335,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormScreenGroup_Load(object sender, System.EventArgs e) {
-			Location=new Point(200,200);
 			if(IsNew){
 				ScreenGroups.Insert(ScreenGroupCur);
 			}

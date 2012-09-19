@@ -163,7 +163,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label2);
 			this.Name = "FormScreenGroups";
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Screening Groups";
 			this.Load += new System.EventHandler(this.FormScreenings_Load);
 			this.ResumeLayout(false);
@@ -173,7 +173,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormScreenings_Load(object sender, System.EventArgs e) {
-			Location=new Point(200,200);
 			textDateFrom.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
