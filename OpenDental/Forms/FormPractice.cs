@@ -852,6 +852,17 @@ namespace OpenDental{
 				MsgBox.Show(this,"You must select a provider.");
 				return;
 			}
+			if(listProvider.SelectedIndex==-1//practice really needs a default prov
+				&& ProviderC.ListShort.Count > 0)
+			{
+				listProvider.SelectedIndex=0;
+			}
+			if(ProviderC.ListShort.Count > 0
+			  && ProviderC.ListShort[listProvider.SelectedIndex].FeeSched==0)//Default provider must have a fee schedule set.
+			{
+				MsgBox.Show(this,"The selected provider must have a fee schedule set before they can be the default provider.");
+				return;
+			}
 			bool changed=false;
 			if( Prefs.UpdateString(PrefName.PracticeTitle,textPracticeTitle.Text)
 				| Prefs.UpdateString(PrefName.PracticeAddress,textAddress.Text)
@@ -882,11 +893,6 @@ namespace OpenDental{
 				{
 					changed=true;
 				}
-			}
-			if(listProvider.SelectedIndex==-1//practice really needs a default prov
-				&& ProviderC.ListShort.Count > 0)
-			{
-				listProvider.SelectedIndex=0;
 			}
 			if(listProvider.SelectedIndex!=-1){
 				if(Prefs.UpdateLong(PrefName.PracticeDefaultProv,ProviderC.ListShort[listProvider.SelectedIndex].ProvNum)){
