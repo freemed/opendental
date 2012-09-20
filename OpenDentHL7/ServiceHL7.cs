@@ -334,7 +334,7 @@ namespace OpenDentHL7 {
 			}
 			else{
 				try {
-					MessageHL7 messageHl7Object=new MessageHL7(strbFullMsg.ToString());//this creates an entire heirarchy of objects.
+					MessageHL7 messageHl7Object=new MessageHL7(hl7Msg.MsgText);//this creates an entire heirarchy of objects.
 					MessageParser.Process(messageHl7Object,IsVerboseLogging);
 					hl7Msg.HL7Status=HL7MessageStatus.InProcessed;
 				}

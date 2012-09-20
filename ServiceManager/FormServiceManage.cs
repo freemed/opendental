@@ -138,6 +138,7 @@ namespace ServiceManager {
 			Cursor=Cursors.WaitCursor;
 			try {
 				ServiceController service=new ServiceController(textName.Text);
+				service.MachineName=Environment.MachineName;
 				service.Start();
 				service.WaitForStatus(ServiceControllerStatus.Running,new TimeSpan(0,0,7));
 				ServControllerCur=service;

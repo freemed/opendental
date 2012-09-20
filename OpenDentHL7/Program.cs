@@ -14,8 +14,8 @@ namespace OpenDentHL7 {
 #if DEBUG
 			string serviceName="OpenDentHL7";
 			for(int i=0;i<args.Length;i++) {
-				if(args[i].StartsWith("ServiceName=") && args[i].Length>12) {
-					serviceName=args[i].Substring(11).Trim('"');
+				if(args[i].StartsWith("/ServiceName") && args[i].Length>13) {
+					serviceName=args[i].Substring(13);
 				}
 			}
 			Application.EnableVisualStyles();
@@ -34,8 +34,8 @@ namespace OpenDentHL7 {
 			ServiceHL7 serviceHL7=new ServiceHL7();
 			serviceHL7.ServiceName="OpenDentHL7";
 			for(int i=0;i<args.Length;i++) {
-				if(args[i].StartsWith("ServiceName=") && args[i].Length>12) {
-					serviceHL7.ServiceName=args[i].Substring(11).Trim('"');
+				if(args[i].StartsWith("/ServiceName") && args[i].Length>13) {
+					serviceHL7.ServiceName=args[i].Substring(13).Trim('"');
 				}
 			}
 			ServiceBase.Run(serviceHL7);

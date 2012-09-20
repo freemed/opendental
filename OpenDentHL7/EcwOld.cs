@@ -95,7 +95,7 @@ namespace OpenDentHL7 {
 					if(IsVerboseLogging) {
 						EventLog.WriteEntry("OpenDentHL7","Processed SUI message",EventLogEntryType.Information);
 					}
-					EcwSIU.ProcessMessage(msg,ecwOldIsStandalone,IsVerboseLogging);
+					EcwSIU.ProcessMessage(msg,IsVerboseLogging);
 				}
 			}
 			catch(Exception ex) {
