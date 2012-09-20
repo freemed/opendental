@@ -304,6 +304,7 @@ namespace UnitTests {
 				textResults.Text+=DatabaseTools.ClearDb();
 				textResults.Text+="Testing "+hl7TestInterfaceEnum.ToString()+" interface.\r\n";
 				textResults.Text+=HL7Tests.HL7TestAll(hl7TestInterfaceEnum);
+				textResults.Text+="\r\n\r\n";
 			}
 			textResults.Text+="Done\r\n";
 			Cursor=Cursors.Default;

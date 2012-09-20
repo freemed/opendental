@@ -54,6 +54,7 @@ namespace UnitTests {
 			this.textResults.Location = new System.Drawing.Point(12,208);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
+			this.textResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textResults.Size = new System.Drawing.Size(733,587);
 			this.textResults.TabIndex = 1;
 			// 

@@ -7,7 +7,7 @@ using OpenDentBusiness;
 
 namespace UnitTests {
 	public class HL7Tests_old {
-		///<summary></summary>
+//    ///<summary></summary>
 //    public static string HL7TestAll(HL7TestInterface hl7TestInterface) {
 //      string retval="";
 //      if(!isEcwOld) {//Make sure the correct HL7Def is enabled for message processing
