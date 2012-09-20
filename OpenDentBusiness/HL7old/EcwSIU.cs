@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenDentBusiness.HL7 {
 	public class EcwSIU {
-		public static void ProcessMessage(MessageHL7 message,bool isStandalone,bool isVerboseLogging) {
+		public static void ProcessMessage(MessageHL7 message,bool isVerboseLogging) {
 			SegmentHL7 seg=message.GetSegment(SegmentNameHL7.PID,true);
 			long patNum=PIn.Long(seg.GetFieldFullText(2));
 			Patient pat=Patients.GetPat(patNum);
@@ -21,7 +21,7 @@ namespace OpenDentBusiness.HL7 {
 			else {
 				patOld=pat.Copy();
 			}
-			EcwSegmentPID.ProcessPID(pat,seg,isStandalone);
+			EcwSegmentPID.ProcessPID(pat,seg,false);//IsStandalone=false because should never make it this far.
 			//PV1-patient visit---------------------------
 			//seg=message.GetSegment(SegmentName.PV1,false);
 			//if(seg!=null) {
