@@ -93,6 +93,8 @@ namespace OpenDental.UI {
 		///<summary>If we are part way through drawing a note when we reach the end of a page, this will contain the remainder of the note still to be printed.  If it is empty string, then we are not in the middle of a note.</summary>
 		private string NoteRemaining;
 		private Point oldSelectedCell;
+		///<summary>Holds the amount of the grid that is hidden due to the user making the window too small.  We need to keep track of this so that when they resize the window the scroll bar will become visible again.</summary>
+		private int widthHidden;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -398,11 +400,14 @@ namespace OpenDental.UI {
 						minGridW+=columns[i].ColWidth;
 					}
 				}
-				if(Width<minGridW+2+vScroll.Width+5) {//trying to make it too narrow
-					this.Width=minGridW
-					+2//outline
-					+vScroll.Width
-					+5;
+				if(widthHidden>0) {
+					this.Width-=widthHidden;//just for a few lines
+					widthHidden=0;
+				}
+				int minimumWidth=minGridW+2+vScroll.Width+5;
+				if(this.Width<minimumWidth) {//Trying to make it too narrow.
+					widthHidden=minimumWidth-Width;//Keep track of how much of the grid is being hidden.
+					this.Width=minimumWidth;//make it get stuck at the last column.  User doesn't notice the part that's sticking over to the right.
 				}
 				else if(columns.Count>0) {//resize the last column automatically
 					columns[columns.Count-1].ColWidth=Width-2-vScroll.Width-minGridW;
