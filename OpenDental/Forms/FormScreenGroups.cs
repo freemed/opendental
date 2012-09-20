@@ -24,6 +24,9 @@ namespace OpenDental{
 		private UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private List<ScreenGroup> ScreenGroupList;
+		private MenuStrip menuStrip1;
+		private ToolStripMenuItem setupToolStripMenuItem;
+		private MenuItem menuItemSetup;
 
 		///<summary></summary>
 		public FormScreenGroups()
@@ -64,11 +67,14 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.setupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(12, 12);
+			this.textDateFrom.Location = new System.Drawing.Point(12, 27);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(69, 20);
 			this.textDateFrom.TabIndex = 74;
@@ -76,7 +82,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(75, 16);
+			this.label2.Location = new System.Drawing.Point(75, 31);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(25, 13);
 			this.label2.TabIndex = 77;
@@ -85,7 +91,7 @@ namespace OpenDental{
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(102, 12);
+			this.textDateTo.Location = new System.Drawing.Point(102, 27);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(75, 20);
 			this.textDateTo.TabIndex = 76;
@@ -98,7 +104,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(187, 13);
+			this.butRefresh.Location = new System.Drawing.Point(187, 28);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(55, 21);
 			this.butRefresh.TabIndex = 78;
@@ -115,7 +121,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(18, 313);
+			this.butAdd.Location = new System.Drawing.Point(13, 336);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(70, 24);
 			this.butAdd.TabIndex = 79;
@@ -131,7 +137,7 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(172, 313);
+			this.butClose.Location = new System.Drawing.Point(172, 336);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(70, 24);
 			this.butClose.TabIndex = 79;
@@ -141,7 +147,7 @@ namespace OpenDental{
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(13, 40);
+			this.gridMain.Location = new System.Drawing.Point(13, 55);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(229, 267);
@@ -150,10 +156,27 @@ namespace OpenDental{
 			this.gridMain.TranslationName = null;
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
+			// menuStrip1
+			// 
+			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setupToolStripMenuItem});
+			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+			this.menuStrip1.Name = "menuStrip1";
+			this.menuStrip1.Size = new System.Drawing.Size(255, 24);
+			this.menuStrip1.TabIndex = 81;
+			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// setupToolStripMenuItem
+			// 
+			this.setupToolStripMenuItem.Name = "setupToolStripMenuItem";
+			this.setupToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+			this.setupToolStripMenuItem.Text = "Setup";
+			this.setupToolStripMenuItem.Click += new System.EventHandler(this.setupToolStripMenuItem_Click);
+			// 
 			// FormScreenGroups
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(255, 352);
+			this.ClientSize = new System.Drawing.Size(255, 375);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAdd);
@@ -161,11 +184,14 @@ namespace OpenDental{
 			this.Controls.Add(this.textDateTo);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.label2);
+			this.Controls.Add(this.menuStrip1);
 			this.Name = "FormScreenGroups";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Screening Groups";
 			this.Load += new System.EventHandler(this.FormScreenings_Load);
+			this.menuStrip1.ResumeLayout(false);
+			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -173,6 +199,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormScreenings_Load(object sender, System.EventArgs e) {
+			menuItemSetup=new MenuItem("Setup");
+			Menu=menuItemSetup.GetMainMenu();
 			textDateFrom.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
@@ -269,6 +297,10 @@ namespace OpenDental{
 
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		private void setupToolStripMenuItem_Click(object sender,EventArgs e) {
+			MsgBox.Show(this,"Test");
 		}
 
 		

@@ -10290,6 +10290,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PracticeFax','')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PublicHealthScreeningUsePat','0')";
+					Db.NonQ(command);
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PublicHealthScreeningSheet','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PublicHealthScreeningUsePat','0')";
+					Db.NonQ(command);
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PublicHealthScreeningSheet','0')";
+					Db.NonQ(command);
+				}
 
 
 

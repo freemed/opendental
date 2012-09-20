@@ -259,6 +259,10 @@ namespace OpenDentBusiness {
 		ProcGroupNoteDoesAggregate,
 		ProgramVersion,
 		ProviderIncomeTransferShows,
+		///<summary>FK to sheet.SheetNum. Must be an exam sheet. Only makes sense if PublicHealthScreeningUsePat is true.</summary>
+		PublicHealthScreeningSheet,
+		///<summary>Boolean. Initially set to 0.</summary>
+		PublicHealthScreeningUsePat,
 		QuickBooksCompanyFile,
 		QuickBooksDepositAccounts,
 		QuickBooksIncomeAccount,
