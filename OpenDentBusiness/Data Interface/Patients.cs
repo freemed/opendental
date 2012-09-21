@@ -245,12 +245,17 @@ namespace OpenDentBusiness{
 			}
 			string command= 
 				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email,GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone ";
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email,"
+//todo: if for HQ, Oracle
+				+"GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone ";//this customer might have multiple extra phone numbers that match the param.
 			if(subscriberId!=""){
 				command+=",inssub.SubscriberId ";
 			}
 			command+="FROM patient "
 				+"LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
+			if(regexp!="" && DataConnection.DBtype==DatabaseType.MySql){
+				command+="AND phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
+			}
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
 					+"LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
