@@ -4634,6 +4634,7 @@ namespace OpenDental{
 					}
 				}//End of "is not new."
 			}
+			//The actual update----------------------------------------------------------------------------------------------------------------------------------
 			Procedures.Update(ProcCur,ProcOld);
 			if(ProcCur.AptNum>0 || ProcCur.PlannedAptNum>0) {
 				//Update the ProcDescript on the appointment if procedure is attached to one.
@@ -4709,7 +4710,9 @@ namespace OpenDental{
 			for(int i=0;i<ClaimProcsForProc.Count;i++) {
 				ClaimProcsForProc[i].ClinicNum=ProcCur.ClinicNum;
 			}
+			//Recall synch--------------------------------------------------------------------------------------------------------------------------------------
 			Recalls.Synch(ProcCur.PatNum);
+			//Security logs------------------------------------------------------------------------------------------------------------------------------------
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){
 				//if status was changed to complete
 				SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,PatCur.PatNum,
@@ -4738,6 +4741,11 @@ namespace OpenDental{
 				//Procedures.SetHideGraphical(ProcCur);//might not matter anymore
 				ToothInitials.SetValue(ProcCur.PatNum,ProcCur.ToothNum,ToothInitialType.Missing);
 			}
+			//Canadian lab fees complete-----------------------------------------------------------------------------------------------------------------------
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && ProcCur.ProcStatus==ProcStat.C) {//Canada
+				Procedures.SetCanadianLabFeesCompleteForProc(ProcCur);
+			}
+			//Autocodes----------------------------------------------------------------------------------------------------------------------------------------
 			ProcOld=ProcCur.Copy();//in case we now make more changes.
 			//these areas have no autocodes
 			if(ProcedureCode2.TreatArea==TreatmentArea.Mouth
@@ -4822,9 +4830,6 @@ namespace OpenDental{
 						PatCur.GetNameLF()+", "+ProcedureCode2.ProcCode+", "
 						+ProcCur.ProcFee.ToString("c"));
 				}
-			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")){//Canada
-				Procedures.SetCanadianLabFeesCompleteForProc(ProcCur);
 			}
       DialogResult=DialogResult.OK;
 			//it is assumed that we will do an immediate refresh after closing this window.
