@@ -3859,6 +3859,10 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
+			if(PatCur==null) {
+				MsgBox.Show(this,"No patient selected.");
+				return;
+			}
 			string practicePhone=Regex.Replace(PrefC.GetString(PrefName.PracticePhone),"[^0-9]*","");//Removes all non-digit characters.
 			if(practicePhone.Length!=10) {
 				MsgBox.Show(this,"Practice phone must be 10 digits.");
@@ -3869,11 +3873,58 @@ namespace OpenDental{
 				MsgBox.Show(this,"Practice fax must be 10 digits.");
 				return;
 			}
-			string practiceZip=PrefC.GetString(PrefName.PracticeZip);
-			practiceZip=Regex.Replace(practiceZip,"[^0-9]*","");//Zip with all non-numeric characters removed.
+			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
+				MsgBox.Show(this,"Practice address blank.");
+				return;
+			}
+			if(PrefC.GetString(PrefName.PracticeCity)=="") {
+				MsgBox.Show(this,"Practice city blank.");
+				return;
+			}
+			List <string> stateCodes=new List <string> (new string[] {
+				"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",
+				"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
+				"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
+				"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
+				"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY" });
+			if(stateCodes.IndexOf(PrefC.GetString(PrefName.PracticeST))<0) {
+				MsgBox.Show(this,"Practice state abbreviation invalid.");
+				return;
+			}
+			string practiceZip=Regex.Replace(PrefC.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed.
 			if(practiceZip.Length!=9) {
 				MsgBox.Show(this,"Practice zip must be 9 digits.");
 				return;
+			}
+			if(!PrefC.GetBool(PrefName.EasyNoClinics) && PatCur.ClinicNum!=0) { //Using clinics and the patient is assigned to a clinic.
+				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
+				string clinicPhone=Regex.Replace(clinic.Phone,"[^0-9]*","");//Removes all non-digit characters.
+				if(clinicPhone.Length!=10) {
+					MessageBox.Show(Lan.g(this,"Clinic phone must be 10 digits")+": "+clinic.Description);
+					return;
+				}
+				string clinicFax=Regex.Replace(clinic.Fax,"[^0-9]*","");//Removes all non-digit characters.
+				if(clinicFax.Length!=10) {
+					MessageBox.Show(Lan.g(this,"Clinic fax must be 10 digits")+": "+clinic.Description);
+					return;
+				}
+				if(clinic.Address=="") {
+					MessageBox.Show(Lan.g(this,"Clinic address blank")+": "+clinic.Description);
+					return;
+				}
+				if(clinic.City=="") {
+					MessageBox.Show(Lan.g(this,"Clinic city blank")+": "+clinic.Description);
+					return;
+				}
+				if(stateCodes.IndexOf(clinic.State)<0) {
+					MessageBox.Show(Lan.g(this,"Clinic state abbreviation invalid")+": "+clinic.Description);
+					return;
+				}
+				string clinicZip=Regex.Replace(clinic.Zip,"[^0-9]*","");//Zip with all non-numeric characters removed.;
+				if(clinicZip.Length!=9) {
+					MessageBox.Show(Lan.g(this,"Clinic zip must be 9 digits")+": "+clinic.Description);
+					return;
+				}
 			}
 			Provider prov=null;
 			if(Security.CurUser.ProvNum!=0) {
@@ -3883,11 +3934,11 @@ namespace OpenDental{
 				prov=Providers.GetProv(PatCur.PriProv);
 			}
 			if(prov.NationalProvID=="") {
-				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"NPI missing")+".");
+				MessageBox.Show(Lan.g(this,"Provider NPI missing")+": "+prov.Abbr);
 				return;
 			}
 			if(prov.StateWhereLicensed.Length!=2) {
-				MessageBox.Show(Lan.g(this,"Provider")+" "+prov.Abbr+" "+Lan.g(this,"state where licensed must be a 2 character state abbreviation")+".");
+				MessageBox.Show(Lan.g(this,"Provider state where licensed must be a 2 character state abbreviation")+": "+prov.Abbr);
 				return;
 			}
 			Employee emp=null;

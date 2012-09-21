@@ -29,6 +29,8 @@ namespace OpenDentBusiness{
 		public PlaceOfService DefaultPlaceService;
 		///<summary>FK to provider.ProvNum.  0=Default practice provider, -1=Treating provider.</summary>
 		public long InsBillingProv;
+		///<summary>Does not include any punctuation.  Should be exactly 10 digits or empty in USA.</summary>
+		public string Fax;
 
 		///<summary>Returns a copy of this Clinic.</summary>
 		public Clinic Copy(){

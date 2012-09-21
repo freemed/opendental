@@ -44,42 +44,13 @@ namespace OpenDental {
 				+"Database=mobiledoc;"//ecwMaster;"
 				//+"Connect Timeout=20;"
 				+"User ID="+username+";"
-				+"Password="+Decrypt(password)+";"
+				+"Password="+CodeBase.MiscUtils.Decrypt(password)+";"
 				+"CharSet=utf8;"
 				+"Treat Tiny As Boolean=false;"
 				+"Allow User Variables=true;"
 				+"Default Command Timeout=300;"//default is 30seconds
 				+"Pooling=false"
 				;
-		}
-
-		private string Decrypt(string encString) {
-			try {
-				byte[] encrypted=Convert.FromBase64String(encString);
-				MemoryStream ms=null;
-				CryptoStream cs=null;
-				StreamReader sr=null;
-				Aes aes=new AesManaged();
-				UTF8Encoding enc=new UTF8Encoding();
-				aes.Key=enc.GetBytes("AKQjlLUjlcABVbqp");//Random string will be key
-				aes.IV=new byte[16];
-				ICryptoTransform decryptor=aes.CreateDecryptor(aes.Key,aes.IV);
-				ms=new MemoryStream(encrypted);
-				cs=new CryptoStream(ms,decryptor,CryptoStreamMode.Read);
-				sr=new StreamReader(cs);
-				string decrypted=sr.ReadToEnd();
-				ms.Dispose();
-				cs.Dispose();
-				sr.Dispose();
-				if(aes!=null) {
-					aes.Clear();
-				}
-				return decrypted;
-			}
-			catch {
-				MessageBox.Show("Text entered was not valid encrypted text.");
-				return "";
-			}
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

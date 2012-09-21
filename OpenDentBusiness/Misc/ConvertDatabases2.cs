@@ -10302,6 +10302,14 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PublicHealthScreeningSheet','0')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clinic ADD Fax varchar(50) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clinic ADD Fax varchar2(50)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -10316,6 +10324,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
 
 
 

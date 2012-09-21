@@ -41,6 +41,9 @@ namespace OpenDental{
 		private RadioButton radioInsBillingProvSpecific;
 		private RadioButton radioInsBillingProvTreat;
 		private RadioButton radioInsBillingProvDefault;
+		private TextBox textFax;
+		private Label label8;
+		private Label label9;
 		private Clinic ClinicCur;
 
 		///<summary></summary>
@@ -102,6 +105,9 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.textFax = new System.Windows.Forms.TextBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
 			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -123,7 +129,7 @@ namespace OpenDental{
 			// 
 			// textCity
 			// 
-			this.textCity.Location = new System.Drawing.Point(169,101);
+			this.textCity.Location = new System.Drawing.Point(169,121);
 			this.textCity.MaxLength = 255;
 			this.textCity.Name = "textCity";
 			this.textCity.Size = new System.Drawing.Size(155,20);
@@ -131,7 +137,7 @@ namespace OpenDental{
 			// 
 			// textState
 			// 
-			this.textState.Location = new System.Drawing.Point(324,101);
+			this.textState.Location = new System.Drawing.Point(324,121);
 			this.textState.MaxLength = 255;
 			this.textState.Name = "textState";
 			this.textState.Size = new System.Drawing.Size(65,20);
@@ -139,7 +145,7 @@ namespace OpenDental{
 			// 
 			// textZip
 			// 
-			this.textZip.Location = new System.Drawing.Point(389,101);
+			this.textZip.Location = new System.Drawing.Point(389,121);
 			this.textZip.MaxLength = 255;
 			this.textZip.Name = "textZip";
 			this.textZip.Size = new System.Drawing.Size(71,20);
@@ -147,7 +153,7 @@ namespace OpenDental{
 			// 
 			// textAddress2
 			// 
-			this.textAddress2.Location = new System.Drawing.Point(169,80);
+			this.textAddress2.Location = new System.Drawing.Point(169,100);
 			this.textAddress2.MaxLength = 255;
 			this.textAddress2.Name = "textAddress2";
 			this.textAddress2.Size = new System.Drawing.Size(291,20);
@@ -155,7 +161,7 @@ namespace OpenDental{
 			// 
 			// textAddress
 			// 
-			this.textAddress.Location = new System.Drawing.Point(169,60);
+			this.textAddress.Location = new System.Drawing.Point(169,80);
 			this.textAddress.MaxLength = 255;
 			this.textAddress.Name = "textAddress";
 			this.textAddress.Size = new System.Drawing.Size(291,20);
@@ -172,7 +178,7 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(4,105);
+			this.label11.Location = new System.Drawing.Point(4,125);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(163,15);
 			this.label11.TabIndex = 105;
@@ -181,7 +187,7 @@ namespace OpenDental{
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(16,84);
+			this.label4.Location = new System.Drawing.Point(16,104);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(151,17);
 			this.label4.TabIndex = 103;
@@ -190,7 +196,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(16,62);
+			this.label3.Location = new System.Drawing.Point(16,82);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(151,17);
 			this.label3.TabIndex = 101;
@@ -208,7 +214,7 @@ namespace OpenDental{
 			// 
 			// textBankNumber
 			// 
-			this.textBankNumber.Location = new System.Drawing.Point(169,147);
+			this.textBankNumber.Location = new System.Drawing.Point(169,167);
 			this.textBankNumber.MaxLength = 255;
 			this.textBankNumber.Name = "textBankNumber";
 			this.textBankNumber.Size = new System.Drawing.Size(291,20);
@@ -216,7 +222,7 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(16,151);
+			this.label5.Location = new System.Drawing.Point(16,171);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(151,17);
 			this.label5.TabIndex = 109;
@@ -234,7 +240,7 @@ namespace OpenDental{
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(-2,194);
+			this.label7.Location = new System.Drawing.Point(-2,214);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(168,17);
 			this.label7.TabIndex = 111;
@@ -244,7 +250,7 @@ namespace OpenDental{
 			// comboPlaceService
 			// 
 			this.comboPlaceService.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboPlaceService.Location = new System.Drawing.Point(169,191);
+			this.comboPlaceService.Location = new System.Drawing.Point(169,211);
 			this.comboPlaceService.MaxDropDownItems = 30;
 			this.comboPlaceService.Name = "comboPlaceService";
 			this.comboPlaceService.Size = new System.Drawing.Size(177,21);
@@ -257,7 +263,7 @@ namespace OpenDental{
 			this.groupBox4.Controls.Add(this.radioInsBillingProvTreat);
 			this.groupBox4.Controls.Add(this.radioInsBillingProvDefault);
 			this.groupBox4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox4.Location = new System.Drawing.Point(168,230);
+			this.groupBox4.Location = new System.Drawing.Point(168,250);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(235,104);
 			this.groupBox4.TabIndex = 9;
@@ -348,10 +354,40 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// textFax
+			// 
+			this.textFax.Location = new System.Drawing.Point(169,60);
+			this.textFax.MaxLength = 255;
+			this.textFax.Name = "textFax";
+			this.textFax.Size = new System.Drawing.Size(157,20);
+			this.textFax.TabIndex = 112;
+			this.textFax.TextChanged += new System.EventHandler(this.textFax_TextChanged);
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(17,63);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(151,17);
+			this.label8.TabIndex = 113;
+			this.label8.Text = "Fax";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(329,62);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(144,18);
+			this.label9.TabIndex = 114;
+			this.label9.Text = "(###)###-####";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormClinicEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(650,430);
+			this.Controls.Add(this.textFax);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.label9);
 			this.Controls.Add(this.groupBox4);
 			this.Controls.Add(this.comboPlaceService);
 			this.Controls.Add(this.label7);
@@ -397,6 +433,13 @@ namespace OpenDental{
 			else{
 				textPhone.Text=phone;
 			}
+			string fax=ClinicCur.Fax;
+			if(fax!=null && fax.Length==10 && Application.CurrentCulture.Name=="en-US") {
+				textFax.Text="("+fax.Substring(0,3)+")"+fax.Substring(3,3)+"-"+fax.Substring(6);
+			}
+			else {
+				textFax.Text=fax;
+			}
 			textAddress.Text=ClinicCur.Address;
 			textAddress2.Text=ClinicCur.Address2;
 			textCity.Text=ClinicCur.City;
@@ -428,6 +471,15 @@ namespace OpenDental{
 			if(textPhone.Text.Length>length)
 				cursor++;
 			textPhone.SelectionStart=cursor;		
+		}
+
+		private void textFax_TextChanged(object sender,EventArgs e) {
+			int cursor=textFax.SelectionStart;
+			int length=textFax.Text.Length;
+			textFax.Text=TelephoneNumbers.AutoFormat(textFax.Text);
+			if(textFax.Text.Length>length)
+				cursor++;
+			textFax.SelectionStart=cursor;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -467,8 +519,20 @@ namespace OpenDental{
 					return;
 				}
 			}
+			string fax=textFax.Text;
+			if(Application.CurrentCulture.Name=="en-US") {
+				fax=fax.Replace("(","");
+				fax=fax.Replace(")","");
+				fax=fax.Replace(" ","");
+				fax=fax.Replace("-","");
+				if(fax.Length!=0 && fax.Length!=10) {
+					MessageBox.Show("Invalid fax");
+					return;
+				}
+			}
 			ClinicCur.Description=textDescription.Text;
 			ClinicCur.Phone=phone;
+			ClinicCur.Fax=fax;
 			ClinicCur.Address=textAddress.Text;
 			ClinicCur.Address2=textAddress2.Text;
 			ClinicCur.City=textCity.Text;

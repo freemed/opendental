@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	public class ErxXml {
 
 		public static string BuildClickThroughXml(Provider prov,Employee emp,Patient pat) {
 			NCScript ncScript=new NCScript();
-
 			ncScript.Credentials=new CredentialsType();
-			ncScript.Credentials.partnerName="OpenDental";
-			ncScript.Credentials.name="demo";
-			ncScript.Credentials.password="demo";
+			ncScript.Credentials.partnerName="OpenDental";//Assigned by NewCrop. Used globally for all customers.
+			ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+			ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
 			ncScript.Credentials.productName="OpenDental";
 			ncScript.Credentials.productVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
-
 			ncScript.UserRole=new UserRoleType();
 			if(emp==null) {
 				ncScript.UserRole.user=UserType.LicensedPrescriber;
@@ -28,28 +28,27 @@ namespace OpenDentBusiness {
 				ncScript.UserRole.user=UserType.Staff;
 				ncScript.UserRole.role=RoleType.nurse;
 			}
-
 			ncScript.Destination=new DestinationType();
 			ncScript.Destination.requestedPage=RequestedPageType.compose;
-
 			string practiceTitle=PrefC.GetString(PrefName.PracticeTitle);
-			string practicePhone=PrefC.GetString(PrefName.PracticePhone);//Verified to be 10 digits within the chart.
-			string practiceFax=PrefC.GetString(PrefName.PracticeFax);//Verified to be 10 digits within the chart.
+			string practicePhone=PrefC.GetString(PrefName.PracticePhone);//Validated to be 10 digits within the chart.
+			string practiceFax=PrefC.GetString(PrefName.PracticeFax);//Validated to be 10 digits within the chart.
 			string practiceAddress=PrefC.GetString(PrefName.PracticeAddress);
 			string practiceAddress2=PrefC.GetString(PrefName.PracticeAddress2);
 			string practiceCity=PrefC.GetString(PrefName.PracticeCity);
 			string practiceState=PrefC.GetString(PrefName.PracticeST);
-			string practiceZip=Regex.Replace(PrefC.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed.
-			string practiceZip4=practiceZip4=practiceZip.Substring(5);
+			string practiceZip=Regex.Replace(PrefC.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
+			string practiceZip4=practiceZip.Substring(5);
 			practiceZip=practiceZip.Substring(0,5);
 			string country="US";
-			if(CultureInfo.CurrentCulture.Name.Length>=2) {
-				country=CultureInfo.CurrentCulture.Name.Substring(CultureInfo.CurrentCulture.Name.Length-2);
-			}
+			//if(CultureInfo.CurrentCulture.Name.Length>=2) {
+			//  country=CultureInfo.CurrentCulture.Name.Substring(CultureInfo.CurrentCulture.Name.Length-2);
+			//}
 			ncScript.Account=new AccountTypeRx();
-			ncScript.Account.ID="1";
+			//Each LicensedPrescriberID must be unique within an account. Since we send ProvNum for LicensedPrescriberID, each OD database must have a unique AccountID.
+			ncScript.Account.ID="1";//todo.  This should be a long and complex alphanumeric so that we can prevent duplicates and also run checksums.
 			ncScript.Account.accountName=practiceTitle;
-			ncScript.Account.siteID="1";
+			ncScript.Account.siteID="1";//Always send 1.  For each AccountID/SiteID pair, a separate database will be created in NewCrop.
 			ncScript.Account.AccountAddress=new AddressType();
 			ncScript.Account.AccountAddress.address1=practiceAddress;
 			ncScript.Account.AccountAddress.address2=practiceAddress2;
@@ -60,22 +59,47 @@ namespace OpenDentBusiness {
 			ncScript.Account.AccountAddress.country=country;
 			ncScript.Account.accountPrimaryPhoneNumber=practicePhone;
 			ncScript.Account.accountPrimaryFaxNumber=practiceFax;
-
 			ncScript.Location=new LocationType();
-			ncScript.Location.ID="1";
-			ncScript.Location.locationName=practiceTitle;
-			ncScript.Location.LocationAddress=new AddressType();
-			ncScript.Location.LocationAddress.address1=practiceAddress;
-			ncScript.Location.LocationAddress.address2=practiceAddress2;
-			ncScript.Location.LocationAddress.city=practiceCity;
-			ncScript.Location.LocationAddress.state=practiceState;
-			ncScript.Location.LocationAddress.zip=practiceZip;
-			ncScript.Location.LocationAddress.zip4=practiceZip4;
-			ncScript.Location.LocationAddress.country=country;
-			ncScript.Location.primaryPhoneNumber=practicePhone;
-			ncScript.Location.primaryFaxNumber=practiceFax;
-			ncScript.Location.pharmacyContactNumber=practicePhone;
-
+			if(PrefC.GetBool(PrefName.EasyNoClinics) || pat.ClinicNum==0) { //No clinics.
+				ncScript.Location.ID="0";
+				ncScript.Location.locationName=practiceTitle;
+				ncScript.Location.LocationAddress=new AddressType();
+				ncScript.Location.LocationAddress.address1=practiceAddress;
+				ncScript.Location.LocationAddress.address2=practiceAddress2;
+				ncScript.Location.LocationAddress.city=practiceCity;
+				ncScript.Location.LocationAddress.state=practiceState;
+				ncScript.Location.LocationAddress.zip=practiceZip;
+				ncScript.Location.LocationAddress.zip4=practiceZip4;
+				ncScript.Location.LocationAddress.country=country;
+				ncScript.Location.primaryPhoneNumber=practicePhone;
+				ncScript.Location.primaryFaxNumber=practiceFax;
+				ncScript.Location.pharmacyContactNumber=practicePhone;
+			}
+			else { //Using clinics.
+				Clinic clinic=null;
+				//if(pat.ClinicNum==0) {
+				//	clinic=Clinics.List[0];//Use the default clinic. There must be at least one, validated in chart before this point.
+				//}
+				//else {
+				clinic=Clinics.GetClinic(pat.ClinicNum);
+				//}
+				ncScript.Location.ID=clinic.ClinicNum.ToString();
+				ncScript.Location.locationName=clinic.Description;
+				ncScript.Location.LocationAddress=new AddressType();
+				ncScript.Location.LocationAddress.address1=clinic.Address;
+				ncScript.Location.LocationAddress.address2=clinic.Address2;
+				ncScript.Location.LocationAddress.city=clinic.City;
+				ncScript.Location.LocationAddress.state=clinic.State;
+				string clinicZip=Regex.Replace(clinic.Zip,"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
+				string clinicZip4=clinicZip.Substring(5);
+				clinicZip=clinicZip.Substring(0,5);
+				ncScript.Location.LocationAddress.zip=clinicZip;
+				ncScript.Location.LocationAddress.zip4=clinicZip4;
+				ncScript.Location.LocationAddress.country=country;
+				ncScript.Location.primaryPhoneNumber=clinic.Phone;
+				ncScript.Location.primaryFaxNumber=clinic.Fax;
+				ncScript.Location.pharmacyContactNumber=clinic.Phone;
+			}
 			ncScript.LicensedPrescriber=new LicensedPrescriberType();
 			ncScript.LicensedPrescriber.ID=prov.ProvNum.ToString();
 			//UPIN is obsolete
@@ -86,7 +110,6 @@ namespace OpenDentBusiness {
 			ncScript.LicensedPrescriber.dea=prov.DEANum;
 			ncScript.LicensedPrescriber.licenseState=prov.StateWhereLicensed;
 			ncScript.LicensedPrescriber.licenseNumber=prov.StateLicense;
-
 			ncScript.Patient=new PatientType();
 			ncScript.Patient.ID=pat.PatNum.ToString();
 			ncScript.Patient.PatientName=new PersonNameType();
@@ -117,11 +140,11 @@ namespace OpenDentBusiness {
 			}
 			ncScript.Patient.PatientCharacteristics.genderSpecified=true;
 			//Serialize
-			System.IO.MemoryStream memoryStream=new System.IO.MemoryStream();
-			System.Xml.Serialization.XmlSerializer xmlSerializer=new System.Xml.Serialization.XmlSerializer(typeof(NCScript));
+			MemoryStream memoryStream=new MemoryStream();
+			XmlSerializer xmlSerializer=new XmlSerializer(typeof(NCScript));
 			xmlSerializer.Serialize(memoryStream,ncScript);
 			byte[] memoryStreamInBytes=memoryStream.ToArray();
-			return System.Text.Encoding.UTF8.GetString(memoryStreamInBytes,0,memoryStreamInBytes.Length);
+			return Encoding.UTF8.GetString(memoryStreamInBytes,0,memoryStreamInBytes.Length);
 		}
 
 	}
