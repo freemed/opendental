@@ -38,10 +38,6 @@ namespace OpenDental{
 		private CheckBox checkTitleBarShowSite;
 		private TextBox textWebServiceServerName;
 		private Label label2;
-		private CheckBox checkReportsProcDate;
-		private CheckBox checkReportsShowPatNum;
-		private CheckBox checkReportProdWO;
-		private GroupBox groupBox1;
 		private CheckBox checkTasksNewTrackedByUser;
 		private CheckBox checkShowOpenTickets;
 		private Label label1;
@@ -82,7 +78,10 @@ namespace OpenDental{
 			this.labelY = new System.Windows.Forms.Label();
 			this.comboShowID = new System.Windows.Forms.ComboBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkShowOpenTickets = new System.Windows.Forms.CheckBox();
 			this.groupBoxTaskDefaults = new System.Windows.Forms.GroupBox();
+			this.validNumY = new OpenDental.ValidNumber();
+			this.validNumX = new OpenDental.ValidNumber();
 			this.label15 = new System.Windows.Forms.Label();
 			this.label17 = new System.Windows.Forms.Label();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -90,13 +89,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.textWebServiceServerName = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
-			this.checkReportsProcDate = new System.Windows.Forms.CheckBox();
-			this.checkReportsShowPatNum = new System.Windows.Forms.CheckBox();
-			this.checkReportProdWO = new System.Windows.Forms.CheckBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkShowOpenTickets = new System.Windows.Forms.CheckBox();
-			this.validNumY = new OpenDental.ValidNumber();
-			this.validNumX = new OpenDental.ValidNumber();
 			this.butLanguages = new OpenDental.UI.Button();
 			this.textSigInterval = new OpenDental.ValidNumber();
 			this.butCancel = new OpenDental.UI.Button();
@@ -104,7 +96,6 @@ namespace OpenDental{
 			this.groupBox2.SuspendLayout();
 			this.groupBoxTaskDefaults.SuspendLayout();
 			this.groupBox6.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// textMainWindowTitle
@@ -252,12 +243,23 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.checkTaskListAlwaysShow);
 			this.groupBox2.Controls.Add(this.checkTasksCheckOnStartup);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(101,308);
+			this.groupBox2.Location = new System.Drawing.Point(101,240);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(386,182);
+			this.groupBox2.Size = new System.Drawing.Size(364,184);
 			this.groupBox2.TabIndex = 188;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Task List";
+			// 
+			// checkShowOpenTickets
+			// 
+			this.checkShowOpenTickets.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkShowOpenTickets.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowOpenTickets.Location = new System.Drawing.Point(6,72);
+			this.checkShowOpenTickets.Name = "checkShowOpenTickets";
+			this.checkShowOpenTickets.Size = new System.Drawing.Size(342,14);
+			this.checkShowOpenTickets.TabIndex = 78;
+			this.checkShowOpenTickets.Text = "Show open tickets for user";
+			this.checkShowOpenTickets.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBoxTaskDefaults
 			// 
@@ -272,10 +274,34 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBoxTaskDefaults.Location = new System.Drawing.Point(67,94);
 			this.groupBoxTaskDefaults.Name = "groupBoxTaskDefaults";
-			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(297,83);
+			this.groupBoxTaskDefaults.Size = new System.Drawing.Size(290,83);
 			this.groupBoxTaskDefaults.TabIndex = 76;
 			this.groupBoxTaskDefaults.TabStop = false;
 			this.groupBoxTaskDefaults.Text = "Local Computer Default Settings";
+			// 
+			// validNumY
+			// 
+			this.validNumY.Location = new System.Drawing.Point(235,59);
+			this.validNumY.MaxLength = 4;
+			this.validNumY.MaxVal = 1200;
+			this.validNumY.MinVal = 300;
+			this.validNumY.Name = "validNumY";
+			this.validNumY.Size = new System.Drawing.Size(47,20);
+			this.validNumY.TabIndex = 188;
+			this.validNumY.Text = "542";
+			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// validNumX
+			// 
+			this.validNumX.Location = new System.Drawing.Point(115,59);
+			this.validNumX.MaxLength = 4;
+			this.validNumX.MaxVal = 2000;
+			this.validNumX.MinVal = 300;
+			this.validNumX.Name = "validNumX";
+			this.validNumX.Size = new System.Drawing.Size(47,20);
+			this.validNumX.TabIndex = 186;
+			this.validNumX.Text = "542";
+			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// label15
 			// 
@@ -349,87 +375,6 @@ namespace OpenDental{
 			this.label2.Text = "Web Service: Server Name";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// checkReportsProcDate
-			// 
-			this.checkReportsProcDate.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkReportsProcDate.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsProcDate.Location = new System.Drawing.Point(75,13);
-			this.checkReportsProcDate.Name = "checkReportsProcDate";
-			this.checkReportsProcDate.Size = new System.Drawing.Size(362,17);
-			this.checkReportsProcDate.TabIndex = 199;
-			this.checkReportsProcDate.Text = "Default to using Proc Date for PPO writeoffs";
-			this.checkReportsProcDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkReportsShowPatNum
-			// 
-			this.checkReportsShowPatNum.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkReportsShowPatNum.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportsShowPatNum.Location = new System.Drawing.Point(23,32);
-			this.checkReportsShowPatNum.Name = "checkReportsShowPatNum";
-			this.checkReportsShowPatNum.Size = new System.Drawing.Size(414,17);
-			this.checkReportsShowPatNum.TabIndex = 200;
-			this.checkReportsShowPatNum.Text = "Show PatNum: Aging, OutstandingIns, ProcsNotBilled";
-			this.checkReportsShowPatNum.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkReportProdWO
-			// 
-			this.checkReportProdWO.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkReportProdWO.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkReportProdWO.Location = new System.Drawing.Point(23,51);
-			this.checkReportProdWO.Name = "checkReportProdWO";
-			this.checkReportProdWO.Size = new System.Drawing.Size(414,17);
-			this.checkReportProdWO.TabIndex = 201;
-			this.checkReportProdWO.Text = "Monthly P&&I scheduled production subtracts PPO writeoffs";
-			this.checkReportProdWO.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.checkReportsShowPatNum);
-			this.groupBox1.Controls.Add(this.checkReportProdWO);
-			this.groupBox1.Controls.Add(this.checkReportsProcDate);
-			this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox1.Location = new System.Drawing.Point(12,229);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(453,73);
-			this.groupBox1.TabIndex = 202;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Reports";
-			// 
-			// checkShowOpenTickets
-			// 
-			this.checkShowOpenTickets.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowOpenTickets.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkShowOpenTickets.Location = new System.Drawing.Point(6,72);
-			this.checkShowOpenTickets.Name = "checkShowOpenTickets";
-			this.checkShowOpenTickets.Size = new System.Drawing.Size(342,14);
-			this.checkShowOpenTickets.TabIndex = 78;
-			this.checkShowOpenTickets.Text = "Show open tickets for user";
-			this.checkShowOpenTickets.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// validNumY
-			// 
-			this.validNumY.Location = new System.Drawing.Point(235,59);
-			this.validNumY.MaxLength = 4;
-			this.validNumY.MaxVal = 1200;
-			this.validNumY.MinVal = 300;
-			this.validNumY.Name = "validNumY";
-			this.validNumY.Size = new System.Drawing.Size(47,20);
-			this.validNumY.TabIndex = 188;
-			this.validNumY.Text = "542";
-			this.validNumY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// validNumX
-			// 
-			this.validNumX.Location = new System.Drawing.Point(115,59);
-			this.validNumX.MaxLength = 4;
-			this.validNumX.MaxVal = 2000;
-			this.validNumX.MinVal = 300;
-			this.validNumX.Name = "validNumX";
-			this.validNumX.Size = new System.Drawing.Size(47,20);
-			this.validNumX.TabIndex = 186;
-			this.validNumX.Text = "542";
-			this.validNumX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
 			// butLanguages
 			// 
 			this.butLanguages.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -463,7 +408,7 @@ namespace OpenDental{
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(548,452);
+			this.butCancel.Location = new System.Drawing.Point(487,400);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 8;
@@ -478,7 +423,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(548,414);
+			this.butOK.Location = new System.Drawing.Point(487,362);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 7;
@@ -488,8 +433,7 @@ namespace OpenDental{
 			// FormMisc
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(670,502);
-			this.Controls.Add(this.groupBox1);
+			this.ClientSize = new System.Drawing.Size(579,437);
 			this.Controls.Add(this.textWebServiceServerName);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
@@ -514,7 +458,6 @@ namespace OpenDental{
 			this.groupBoxTaskDefaults.PerformLayout();
 			this.groupBox6.ResumeLayout(false);
 			this.groupBox6.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -556,9 +499,6 @@ namespace OpenDental{
 			validNumY.Text=ComputerPrefs.LocalComputer.TaskY.ToString();
 			checkTitleBarShowSite.Checked=PrefC.GetBool(PrefName.TitleBarShowSite);
 			textWebServiceServerName.Text=PrefC.GetString(PrefName.WebServiceServerName);
-			checkReportsProcDate.Checked=PrefC.GetBool(PrefName.ReportsPPOwriteoffDefaultToProcDate);
-			checkReportsShowPatNum.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
-			checkReportProdWO.Checked=PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO);
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {
@@ -613,9 +553,6 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.TasksShowOpenTickets,checkShowOpenTickets.Checked)
 				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
 				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
-				| Prefs.UpdateBool(PrefName.ReportsPPOwriteoffDefaultToProcDate,checkReportsProcDate.Checked)
-				| Prefs.UpdateBool(PrefName.ReportsShowPatNum,checkReportsShowPatNum.Checked)
-				| Prefs.UpdateBool(PrefName.ReportPandIschedProdSubtractsWO,checkReportProdWO.Checked)
 				)
 			{
 				changed=true;
