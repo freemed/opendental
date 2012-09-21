@@ -4232,7 +4232,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			FormEasy FormE=new FormEasy();
+			FormShowFeatures FormE=new FormShowFeatures();
 			FormE.ShowDialog();
 			ContrAccount2.LayoutToolBar();//for repeating charges
 			RefreshCurrentModule();
