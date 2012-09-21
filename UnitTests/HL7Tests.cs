@@ -23,12 +23,6 @@ namespace UnitTests {
 		///<summary>Runs all the tests for a single interface.  Database gets wiped between each interface test.</summary>
 		public static string HL7TestAll(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
 			string retval="";
-			switch(hl7TestInterfaceEnum) {
-				case HL7TestInterfaceEnum.EcwOldFull:
-					return retval+="No tests yet for EcwOldFull.\r\n";
-				case HL7TestInterfaceEnum.HL7DefEcwFull:
-					return retval+="No tests yet for HL7DefFull.\r\n";
-			}
 			//Enable the correct eCW program link or HL7Def
 			switch(hl7TestInterfaceEnum) {
 				case HL7TestInterfaceEnum.HL7DefEcwTight:
@@ -36,9 +30,7 @@ namespace UnitTests {
 					HL7Defs.RefreshCache();
 					break;
 				case HL7TestInterfaceEnum.HL7DefEcwFull:
-					//HL7Defs.EnableInternalForTests("eCWFull");
-					//HL7Defs.RefreshCache();
-					//break;
+					return "No HL7DefEcwFull yet.\r\n";
 				case HL7TestInterfaceEnum.HL7DefEcwStandalone:
 					HL7Defs.EnableInternalForTests("eCWStandalone");
 					HL7Defs.RefreshCache();
@@ -63,10 +55,10 @@ namespace UnitTests {
 
 		///<summary>Test 1: Fail to locate the patient by PatNum in PID.2, so insert a new patient into the database.  Fail to locate the guarantor by PatNum in GT1.2, so insert a new patient into the database.  Set patient.Guarantor=guarantor.PatNum and guarantor.Guarantor=guarantor.PatNum.  Set patient.PriProv=preference.PracticeDefaultProv and guarantor.PriProv=preference.PracticeDefaultProv.  Set patient.BillingType=preference.PracticeDefaultBillType and guarantor.BillingType=preference.PracticeDefaultBillType.  Other patient fields: LName,FName,MiddleI,Birthdate,Gender,Race,Address,Address2,City,State,Zip,HmPhone,WkPhone,Position,SSN,FeeSched.  Other guarantor fields: LName,FName,MiddleI,Birthdate,Gender,Address,Address2,City,State,Zip,HmPhone,WkPhone,SSN.  EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Set patient.PatNum=10, patient.ChartNumber=A10, guarantor.PatNum=11, guarantor.ChartNumber="".  EcwOldStandalone,HL7DefEcwStandalone: Set patient.ChartNumber="10", guarantor.ChartNumber="11". (PatNums will be next auto-incremented value.)</summary>
 		public static string Test1(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
-				EVN|A04|20120901100000||
-				PID|1|10||A10|Smiths^Jan^F||19760210|M||Hispanic|420 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||534997812|||Standard
-				GT1|1|11|Smiths^Jon^F||420 Main Ave^Apt 7^Salem^MA^97330|5305554743|5303635432|19770730|F|||544071829";
+			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3"+"\r\n"
+				+"EVN|A04|20120901100000||\r\n"
+				+"PID|1|10||A10|Smiths^Jan^F||19760210|M||Hispanic|421 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||111226666|||Standard\r\n"
+				+"GT1|1|11|Smiths^Jon^F||421 Main Ave^Apt 7^Salem^MA^97330|5305554743|5303635432|19770730|F|||111225555";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -121,7 +113,7 @@ namespace UnitTests {
 			correctPat.Birthdate=new DateTime(1976,02,10);
 			correctPat.Gender=PatientGender.Male;
 			correctPat.Race=PatientRace.HispanicLatino;
-			correctPat.Address="420 Main Ave";
+			correctPat.Address="421 Main Ave";
 			correctPat.Address2="Apt 7";
 			correctPat.City="Salem";
 			correctPat.State="MA";
@@ -129,7 +121,7 @@ namespace UnitTests {
 			correctPat.HmPhone="(530)555-4045";
 			correctPat.WkPhone="(530)555-4234";
 			correctPat.Position=PatientPosition.Single;
-			correctPat.SSN="534997812";
+			correctPat.SSN="111226666";
 			correctPat.FeeSched=FeeScheds.GetByExactName("Standard").FeeSchedNum;
 			//Set up the rest of guar information
 			correctGuar.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
@@ -139,14 +131,14 @@ namespace UnitTests {
 			correctGuar.LName="Smiths";
 			correctGuar.Birthdate=new DateTime(1977,07,30);
 			correctGuar.Gender=PatientGender.Female;
-			correctGuar.Address="420 Main Ave";
+			correctGuar.Address="421 Main Ave";
 			correctGuar.Address2="Apt 7";
 			correctGuar.City="Salem";
 			correctGuar.State="MA";
 			correctGuar.Zip="97330";
 			correctGuar.HmPhone="(530)555-4743";
 			correctGuar.WkPhone="(530)363-5432";
-			correctGuar.SSN="544071829";
+			correctGuar.SSN="111225555";
 			string retval=CompareGuarAndPat(pat,correctPat,guar,correctGuar,hl7TestInterfaceEnum);
 			if(retval.Length>0) {
 				return "Test 1: "+retval;
@@ -156,10 +148,10 @@ namespace UnitTests {
 
 		///<summary>Test 2: Locate the patient inserted in TEST 1 with PID.2 and the guarantor from TEST 1 with GT1.2.  EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: PID.2 and GT1.2 are PatNum so locate by PatNum.  Update patient.ChartNumber to A11.  All other demographic information should be updated.  EcwOldStandalone,HL7DefEcwStandalone: PID.2 and GT1.2 are ChartNumber so locate by ChartNumber.  patient.ChartNumber is not changed.  All other demographic information should be updated.</summary>
 		public static string Test2(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
-				EVN|A04|20120901100000||
-				PID|1|10||A11|Smith^Jane^N||19760205|Female||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||Standard
-				GT1|1|11|Smith^John^L||420 Main St^Apt 17^Dallas^OR^97338|5035554743|5033635432|19770704|Male|||544071289";
+			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3"+"\r\n"
+				+"EVN|A04|20120901100000||\r\n"
+				+"PID|1|10||A11|Smith^Jane^N||19760205|Female||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||Standard\r\n"
+				+"GT1|1|11|Smith^John^L||421 Main St^Apt 17^Dallas^OR^97338|5035554743|5033635432|19770704|Male|||111223333";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -214,7 +206,7 @@ namespace UnitTests {
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
 			correctPat.Race=PatientRace.White;
-			correctPat.Address="420 Main St";
+			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";
 			correctPat.City="Dallas";
 			correctPat.State="OR";
@@ -222,7 +214,7 @@ namespace UnitTests {
 			correctPat.HmPhone="(503)555-4045";
 			correctPat.WkPhone="(503)555-4234";
 			correctPat.Position=PatientPosition.Married;
-			correctPat.SSN="543997812";
+			correctPat.SSN="111224444";
 			correctPat.FeeSched=FeeScheds.GetByExactName("Standard").FeeSchedNum;
 			//Set up the rest of guar information
 			correctGuar.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
@@ -232,14 +224,14 @@ namespace UnitTests {
 			correctGuar.LName="Smith";
 			correctGuar.Birthdate=new DateTime(1977,07,04);
 			correctGuar.Gender=PatientGender.Male;
-			correctGuar.Address="420 Main St";
+			correctGuar.Address="421 Main St";
 			correctGuar.Address2="Apt 17";
 			correctGuar.City="Dallas";
 			correctGuar.State="OR";
 			correctGuar.Zip="97338";
 			correctGuar.HmPhone="(503)555-4743";
 			correctGuar.WkPhone="(503)363-5432";
-			correctGuar.SSN="544071289";
+			correctGuar.SSN="111223333";
 			string retval=CompareGuarAndPat(pat,correctPat,guar,correctGuar,hl7TestInterfaceEnum);
 			if(retval.Length>0) {
 				return "Test 2: "+retval;
@@ -249,10 +241,10 @@ namespace UnitTests {
 
 		///<summary>Test 3: If either the FName or LName fields are blank, no information should be updated.  Compare test patient and guarantor before message to test patient and guarantor after message.</summary>
 		public static string Test3(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
-				EVN|A04|20120901100000||
-				PID|1|10||A10|Smith^^N||19760215|M||Asian|420 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||534997812|||Standard
-				GT1|1|11|^John^L||420 Main Ave^Apt 7^Salem^MA^97330|5305554743|5303635432|19770730|F|||544071829";
+			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3"+"\r\n"
+				+"EVN|A04|20120901100000||\r\n"
+				+"PID|1|10||A10|Smith^^N||19760215|M||Asian|421 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||111224444|||Standard\r\n"
+				+"GT1|1|11|^John^L||421 Main Ave^Apt 7^Salem^MA^97330|5305554743|5303635432|19770730|F|||111223333";
 			Patient correctPat=null;
 			Patient correctGuar=null;
 			switch(hl7TestInterfaceEnum) {
@@ -318,10 +310,10 @@ namespace UnitTests {
 
 		/// <summary>Test 4: -Insert two new patients, patient from PID and guarantor from GT1.  If birthdate is less than 8 digits, set to MinValue of 0001-01-01.  If birthdate is 8 digits or more, set to the correct precision with yyyyMMddHHmmss format and HHmmss... all optional.  patient.Birthdate=0001-01-01.  guarantor.Birthdate=1977-07-03 7:11 AM but inserted as date 1977-07-03.</summary>
 		public static string Test4(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3
-				EVN|A04|20120901100000||
-				PID|1|20||A100|Smith^Jane^N||197602|Female||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||Standard
-				GT1|1|21|Smith^John^L||420 Main St^Apt 17^Dallas^OR^97338|5035554743|5033635432|197707030711|Male|||544071289";
+			string msgtext=@"MSH|^~\&|||||20120901100000||ADT^A04||P|2.3"+"\r\n"
+				+"EVN|A04|20120901100000||\r\n"
+				+"PID|1|20||A100|Smith^Jane^N||197602|Female||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||Standard\r\n"
+				+"GT1|1|21|Smith^John^L||421 Main St^Apt 17^Dallas^OR^97338|5035554743|5033635432|197707030711|Male|||111223333";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -362,17 +354,28 @@ namespace UnitTests {
 			if(pat.Birthdate!=DateTime.MinValue) {
 				return "Test 4: Patient Birthdate should be 0001-01-01.\r\n";
 			}
-			if(guar.Birthdate!=new DateTime(1977,07,03,0,0,0)) {
-				return "Test 4: Guarantor Birthdate should be 1977-07-03.\r\n";
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldFull:
+				case HL7TestInterfaceEnum.EcwOldStandalone:
+				case HL7TestInterfaceEnum.EcwOldTight:
+					if(guar.Birthdate!=DateTime.MinValue) {
+						return "Test 4: Guarantor Birthdate should be 0001-01-01.\r\n";
+					}
+					break;
+				default:
+					if(guar.Birthdate!=new DateTime(1977,07,03,0,0,0)) {
+						return "Test 4: Guarantor Birthdate should be 1977-07-03.\r\n";
+					}
+					break;
 			}
 			return "Test 4: Passed.\r\n";
 		}
 
 		/// <summary>Test 5: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Fail to locate patient so insert new patient.  No PV1 or AIG segment.  New appointment so insert appointment into database with appointment.AptNum=100.  appointment.PatNum=30; appointment.AptStatus=ApptStatus.Scheduled; appointment.Note="Checkup"; appointment.AptDateTime="2012-09-01 10:00 AM"; appointment.Pattern="XXXX"; appointment.ProvNum=pat.PriProv=preference.PracticeDefaultProv.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test5(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup||||^^1200^20120901100000^20120901102000||||||||||||||
-				PID|1|30||A30|Smiths2^Jan2^L||19760210|Male||Hispanic|420 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||111224444|||Standard";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup||||^^1200^20120901100000^20120901102000||||||||||||||\r\n"
+				+"PID|1|30||A30|Smiths2^Jan2^L||19760210|Male||Hispanic|421 Main Ave^Apt 7^Salem^MA^97330||5305554045|5305554234||Single|||222334444|||Standard";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -428,9 +431,9 @@ namespace UnitTests {
 
 		///<summary>Test 6: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Locate the patient with PatNum in PID.2 and appointment with AptNum in SCH.1 (inserted in Test 5).  Update the appointment and patient information.  appointment.Note="Checkup and Fillings"; appointment.AptDateTime="2012-09-02 10:00 AM"; appointment.Pattern="XXXXXXXX".  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test6(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||
-				PID|1|30||A300|Smith2^Jane2^N||19760205|Female||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111223333|||Standard";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||\r\n"
+				+"PID|1|30||A300|Smith2^Jane2^N||19760205|Female||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||222334444|||Standard";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -472,7 +475,7 @@ namespace UnitTests {
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
 			correctPat.Race=PatientRace.White;
-			correctPat.Address="420 Main St";
+			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";
 			correctPat.City="Dallas";
 			correctPat.State="OR";
@@ -480,7 +483,7 @@ namespace UnitTests {
 			correctPat.HmPhone="(503)555-4045";
 			correctPat.WkPhone="(503)555-4234";
 			correctPat.Position=PatientPosition.Married;
-			correctPat.SSN="111223333";
+			correctPat.SSN="222334444";
 			correctPat.FeeSched=FeeScheds.GetByExactName("Standard").FeeSchedNum;
 			Appointment apt=Appointments.GetOneApt(100);
 			if(apt==null) {
@@ -514,14 +517,14 @@ namespace UnitTests {
 
 		///<summary>Test 7: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Before processing this message, change appointment.PatNum from appointment updated in Test 6 to 40.  Locate the patient with PID.2 and appointment with SCH.1.  Compare appointment.PatNum (now 40) to patient.PatNum (30) and since they don't match anymore, do not update any information.  We will use appointment.AptDateTime to verify that nothing was changed in the appointment table.  Compare patient before processing message to patient after processing to verify no changes were made.  After test return appointment.PatNum to 30 for TEST 8.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test7(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup and Fillings||||^^2400^20120903100000^20120903104000||||||||||||||
-				PID|1|30||A300|Smith2^Jane2^N||19760210|Male||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111223333|||Standard";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup and Fillings||||^^2400^20120903100000^20120903104000||||||||||||||\r\n"
+				+"PID|1|30||A300|Smith2^Jane2^N||19760210|Male||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||222334444|||Standard";
 			Patient correctPat=null;
 			Patient correctGuar=null;
 			switch(hl7TestInterfaceEnum) {
 				case HL7TestInterfaceEnum.EcwOldStandalone:
-				case HL7TestInterfaceEnum.HL7DefEcwStandalone:
+				case HL7TestInterfaceEnum.HL7DefEcwStandalone://same patient as test above
 					return "Test 7: Passed.\r\n";
 				default:
 					correctPat=Patients.GetPat(30);
@@ -577,9 +580,9 @@ namespace UnitTests {
 
 		///<summary>Test 8: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Locate the patient and appointment but since there is no LName, do not update any information.  We will use appointment.Note and patient information to verify that no information was changed.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test8(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup and Fillings and Crown||||^^2400^20120902100000^20120901104000||||||||||||||
-				PID|1|30||A300|^Jane2^N||19760205|Male||White|420 Test St^Apt 17^Dallas^OR^97338||5035554041|5035554234||Married|||111223333|||Standard";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup and Fillings and Crown||||^^2400^20120902100000^20120901104000||||||||||||||\r\n"
+				+"PID|1|30||A300|^Jane2^N||19760205|Male||White|421 Test St^Apt 17^Dallas^OR^97338||5035554041|5035554234||Married|||222334444|||Standard";
 			Patient correctPat=null;
 			Patient correctGuar=null;
 			switch(hl7TestInterfaceEnum) {
@@ -641,15 +644,15 @@ namespace UnitTests {
 
 		///<summary>Test 9: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Optional AIG segment is included so use that segment to insert a new provider.  provider.Abbr=DOC1; provider.EcwID=DOC1; provider.LName=Albert; provider.FName=Brian; provider.MI=S; appointment.ProvNum=provider.ProvNum; patient.PriProv=provider.ProvNum.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test9(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||
-				PID|1|30||A300|Smith2^Jane2^N||19760205|Female||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111223333|||Standard
-				AIG|1||DOC1^Albert, Brian S||||";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||\r\n"
+				+"PID|1|30||A300|Smith2^Jane2^N||19760205|Female||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||222334444|||Standard\r\n"
+				+"AIG|1||DOC1^Albert, Brian S||||";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
-					case HL7TestInterfaceEnum.EcwOldTight:
 					case HL7TestInterfaceEnum.EcwOldFull:
+					case HL7TestInterfaceEnum.EcwOldTight:
 						EcwSIU.ProcessMessage(msg,false);
 						break;
 					case HL7TestInterfaceEnum.EcwOldStandalone:
@@ -679,17 +682,28 @@ namespace UnitTests {
 				return "Test 9: Couldn't locate appointment.\r\n";
 			}
 			string retval="";
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldFull:
+				case HL7TestInterfaceEnum.EcwOldTight:
+					if(prov.LName!="Albert, Brian S") {
+						retval+="Provider.LName is not 'Albert, Brian S'.\r\n";
+					}
+					break;
+				case HL7TestInterfaceEnum.HL7DefEcwFull:
+				case HL7TestInterfaceEnum.HL7DefEcwTight:
+					if(prov.LName!="Albert") {
+						retval+="Provider.LName is not 'Albert'.\r\n";
+					}
+					if(prov.FName!="Brian") {
+						retval+="Provider.FName is not 'Brian'.\r\n";
+					}
+					if(prov.MI!="S") {
+						retval+="Provider.MI is not 'S'.\r\n";
+					}
+					break;
+			}
 			if(prov.Abbr!="DOC1") {
 				retval+="Provider.Abbr is not 'DOC1'.\r\n";
-			}
-			if(prov.LName!="Albert") {
-				retval+="Provider.LName is not 'Albert'.\r\n";
-			}
-			if(prov.FName!="Brian") {
-				retval+="Provider.FName is not 'Brian'.\r\n";
-			}
-			if(prov.MI!="S") {
-				retval+="Provider.MI is not 'S'.\r\n";
 			}
 			if(apt.ProvNum!=prov.ProvNum) {
 				retval+="Appointment.ProvNum does not match provider.ProvNum.\r\n";
@@ -705,10 +719,10 @@ namespace UnitTests {
 
 		///<summary>Test 10: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Use the PV1 segment to insert new provider and set appropriate fields as in Test 9.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
 		public static string Test10(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3
-				SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||
-				PID|1|30||A300|Smith2^Jane2^N||19760205|Male||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111223333|||Standard
-				PV1|1||||||DOC2^Lexington^Sarah^J||||||||||||";
+			string msgtext=@"MSH|^~\&|||||20120901100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|100|100|||||Checkup and Fillings||||^^2400^20120902100000^20120902104000||||||||||||||\r\n"
+				+"PID|1|30||A300|Smith2^Jane2^N||19760205|Male||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||222334444|||Standard\r\n"
+				+"PV1|1||||||DOC2^Lexington^Sarah^J||||||||||||";
 			MessageHL7 msg=new MessageHL7(msgtext);
 			try {
 				switch(hl7TestInterfaceEnum) {
@@ -770,7 +784,8 @@ namespace UnitTests {
 
 		///<summary>Test 11: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Add 2 D0230 procedures, a D0150 procedure, and a D2332 procedure all with complete status and ProcDate='2012-09-06' to patient with PatNum=10.  Set the D2332 procedurelog.ToothNum=26 and procedurelog.Surf=MID.  Make sure the procedurelog.ProcFee for D0230 is 20.00, the D0150 is 75.00, and the D2332 is 150.00.  Using DOC1 provider from TEST 9, schedule appointment for patient 10 with appointment.AptNum=500 and appointment.ProvNum=provider.ProvNum and attach the four procedures.  Create a DFT message for this patient, provider, appointment, and procedures.  EcwOldStandalone,HL7DefEcwStandalone: DFT messages are not created in Standalone mode.</summary>
 		public static string Test11(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone || hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
+			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone 
+				|| hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
 					return "Test 11: Passed.\r\n";
 			}
 			List<Procedure> procList=new List<Procedure>();
@@ -816,39 +831,56 @@ namespace UnitTests {
 			apt.ProvNum=Providers.GetProvByEcwID("DOC1").ProvNum;
 			long aptNum=Appointments.InsertIncludeAptNum(apt,true);
 			long provNum=apt.ProvNum;
-			Patient pat=Patients.GetPat(10);
+			Patient pat=Patients.GetPat(10); if(pat==null) {
+				return "Test 11: Couldn't locate patient.\r\n";
+			}
 			Patient oldPat=pat.Copy();
 			pat.PriProv=Providers.GetProvByEcwID("DOC1").ProvNum;
 			Patients.Update(pat,oldPat);
 			Patient guar=Patients.GetPat(11);
+			if(guar==null) {
+				return "Test 11: Couldn't locate guarantor.\r\n";
+			}
 			MessageHL7 msg=null;
 			try {
 				switch(hl7TestInterfaceEnum) {
+					//EcwOldStandalone and HL7DefEcwStandalone were handled higher up
 					case HL7TestInterfaceEnum.EcwOldFull:
-						return "Test 11: No DFT tests for EcwOldFull.\r\n";
 					case HL7TestInterfaceEnum.EcwOldTight:
 						OpenDentBusiness.HL7.EcwDFT dft=new OpenDentBusiness.HL7.EcwDFT();
 						dft.InitializeEcw(aptNum,provNum,pat,"Test Message","treatment",false);
 						msg=new MessageHL7(dft.GenerateMessage());
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
-						return "Test 11: No DFT tests for HL7DefEcwFull.\r\n";
-					default:
+					case HL7TestInterfaceEnum.HL7DefEcwTight:
 						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,aptNum).ToString());
+						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
+					default:
+						return "Test 11: interface not found.";
 				}
 			}
 			catch(Exception ex) {
 				return "Test 11: Message creation error. "+ex+".\r\n";
 			}
+			string provField="";
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldFull:
+				case HL7TestInterfaceEnum.EcwOldTight:
+					provField="DOC1^Albert, Brian S^^";
+					break;
+				default:
+					provField="DOC1^Albert^Brian^S";
+					break;
+			}
 			string msgtext=@"MSH|^~\&|OD||ECW||"+msg.Segments[0].GetFieldFullText(6)+"||DFT^P03||P|2.3\r\n"
 				+"EVN|P03|"+msg.Segments[1].GetFieldFullText(2)+"|\r\n"
-				+"PID|1|A11|10||Smith^Jane^N||19760205|F||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||\r\n"
-				+"PV1|||||||DOC1^Albert^Brian^S||||||||||||500|||||||||||||||||||||||||||||||\r\n"
-				+"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|75.00|||D0150|^\r\n"
-				+"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|20.00|||D0230|^\r\n"
-				+"FT1|3|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|20.00|||D0230|^\r\n"
-				+"FT1|4|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|150.00|||D2332|26^MID\r\n"
+				+"PID|1|A11|10||Smith^Jane^N||19760205|F||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||\r\n"
+				+"PV1|||||||"+provField+"||||||||||||500|||||||||||||||||||||||||||||||\r\n"
+				+"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|75.00|||D0150|^\r\n"
+				+"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|20.00|||D0230|^\r\n"
+				+"FT1|3|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|20.00|||D0230|^\r\n"
+				+"FT1|4|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|150.00|||D2332|26^MID\r\n"
 				+"ZX1|6|PDF|PATHOLOGY^Pathology Report^L|treatment|Test Message";
 			MessageHL7 correctMsg=new MessageHL7(msgtext);
 			string retval=CompareMsgs(msg,correctMsg);
@@ -860,7 +892,9 @@ namespace UnitTests {
 
 		///<summary>Test 12: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Create message with multiple providers.  Change the provider for the D2332 procedure on the appointment with AptNum=500 to DOC2 from Test 10.  Create DFT message again for this patient, provider, appointment, and procedures and verify that the FT1 segment for that procedure lists the correct provider.  EcwOldStandalone,HL7DefEcwStandalone: DFT messages are not created in Standalone mode.</summary>
 		public static string Test12(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone || hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
+			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone 
+				|| hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) 
+			{
 				return "Test 12: Passed.\r\n";
 			}
 			long aptNum=500;
@@ -887,6 +921,12 @@ namespace UnitTests {
 			Procedures.Update(proc,oldProc);
 			Patient pat=Patients.GetPat(10);
 			Patient guar=Patients.GetPat(11);
+			if(pat==null) {
+				return "Test 12: Couldn't locate patient.\r\n";
+			}
+			if(guar==null) {
+				return "Test 12: Couldn't locate guarantor.\r\n";
+			}
 			Provider prov=Providers.GetProvByEcwID("DOC1");
 			if(prov==null) {
 				return "Test 12: Couldn't locate DOC1 provider.\r\n";
@@ -895,31 +935,46 @@ namespace UnitTests {
 			MessageHL7 msg=null;
 			try {
 				switch(hl7TestInterfaceEnum) {
+					//EcwOldStandalone and HL7DefEcwStandalone were handled higher up
 					case HL7TestInterfaceEnum.EcwOldFull:
-						return "Test 12: No DFT tests for EcwOldFull.\r\n";
 					case HL7TestInterfaceEnum.EcwOldTight:
 						OpenDentBusiness.HL7.EcwDFT dft=new OpenDentBusiness.HL7.EcwDFT();
 						dft.InitializeEcw(aptNum,provNum,pat,"Test Message","treatment",false);
 						msg=new MessageHL7(dft.GenerateMessage());
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
-						return "Test 12: No DFT tests for HL7DefEcwFull.\r\n";
-					default:
+					case HL7TestInterfaceEnum.HL7DefEcwTight:
 						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,aptNum).ToString());
+						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
+					default:
+						return "Test 12: interface not found.";
 				}
 			}
 			catch(Exception ex) {
 				return "Test 12: Message creation error. "+ex+".\r\n";
 			}
+			string provField="";
+			string provField2="";
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldFull:
+				case HL7TestInterfaceEnum.EcwOldTight:
+					provField="DOC1^Albert, Brian S^^";
+					provField2="DOC2^Lexington^Sarah^J";
+					break;
+				default:
+					provField="DOC1^Albert^Brian^S";
+					provField2="DOC2^Lexington^Sarah^J";
+					break;
+			}
 			string msgtext=@"MSH|^~\&|OD||ECW||"+msg.Segments[0].GetFieldFullText(6)+"||DFT^P03||P|2.3\r\n"
 			  +"EVN|P03|"+msg.Segments[1].GetFieldFullText(2)+"|\r\n"
-			  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||\r\n"
-			  +"PV1|||||||DOC1^Albert^Brian^S||||||||||||500|||||||||||||||||||||||||||||||\r\n"
-			  +"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|75.00|||D0150|^\r\n"
-			  +"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|20.00|||D0230|^\r\n"
-			  +"FT1|3|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|20.00|||D0230|^\r\n"
-			  +"FT1|4|||20120906000000|20120906000000|CG||||1.0||||||||||DOC2^Lexington^Sarah^J|DOC2^Lexington^Sarah^J|150.00|||D2332|26^MID\r\n"
+			  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||\r\n"
+			  +"PV1|||||||"+provField+"||||||||||||500|||||||||||||||||||||||||||||||\r\n"
+			  +"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|75.00|||D0150|^\r\n"
+			  +"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|20.00|||D0230|^\r\n"
+			  +"FT1|3|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|20.00|||D0230|^\r\n"
+			  +"FT1|4|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField2+"|"+provField2+"|150.00|||D2332|26^MID\r\n"
 			  +"ZX1|6|PDF|PATHOLOGY^Pathology Report^L|treatment|Test Message";
 			MessageHL7 correctMsg=new MessageHL7(msgtext);
 			string retval=CompareMsgs(msg,correctMsg);
@@ -931,7 +986,8 @@ namespace UnitTests {
 
 		///<summary>Test 13: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Truncate D codes to Dxxxx, if not a D code don't truncate: Insert a procedure D2332A, with treatment area surface and ProcFee=200.00.  Insert another procedure 2332AA with treatment area surface and ProcFee=250.00.  Add a D2332A on tooth 1 with surfaces MOD, and a 2332AA on tooth 2 with surfaces MOD to patient's chart.  Schedule an appointment for patient with AptNum=600, appointment.ProvNum=ProvNum for provider DOC1 and attach the two procedures.  Create a DFT message for these procedures, appointment, patient, and provider and verify that the D2332A gets truncated to D2332 and the 2332AA doesn't get changed.  EcwOldStandalone,HL7DefEcwStandalone: DFT messages are not created in Standalone mode.</summary>
 		public static string Test13(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
-			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone || hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
+			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.EcwOldStandalone 
+				|| hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
 				return "Test 13: Passed.\r\n";
 			}
 			Provider prov=Providers.GetProvByEcwID("DOC1");
@@ -988,29 +1044,41 @@ namespace UnitTests {
 			MessageHL7 msg=null;
 			try {
 				switch(hl7TestInterfaceEnum) {
+					//EcwOldStandalone and HL7DefEcwStandalone were handled higher up
 					case HL7TestInterfaceEnum.EcwOldFull:
-						return "Test 13: No DFT tests for EcwOldFull.\r\n";
 					case HL7TestInterfaceEnum.EcwOldTight:
 						OpenDentBusiness.HL7.EcwDFT dft=new OpenDentBusiness.HL7.EcwDFT();
 						dft.InitializeEcw(apt.AptNum,prov.ProvNum,pat,"Test Message","treatment",false);
 						msg=new MessageHL7(dft.GenerateMessage());
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
-						return "Test 13: No DFT tests for HL7DefEcwFull.\r\n";
-					default:
+					case HL7TestInterfaceEnum.HL7DefEcwTight:
 						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,apt.AptNum).ToString());
+						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
+					default:
+						return "Test 13: interface not found.";
 				}
 			}
 			catch(Exception ex) {
 				return "Test 13: Message creation error. "+ex+".\r\n";
 			}
+			string provField="";
+			switch(hl7TestInterfaceEnum) {
+				case HL7TestInterfaceEnum.EcwOldFull:
+				case HL7TestInterfaceEnum.EcwOldTight:
+					provField="DOC1^Albert, Brian S^^";
+					break;
+				default:
+					provField="DOC1^Albert^Brian^S";
+					break;
+			}
 			string msgtext=@"MSH|^~\&|OD||ECW||"+msg.Segments[0].GetFieldFullText(6)+"||DFT^P03||P|2.3\r\n"
 			  +"EVN|P03|"+msg.Segments[1].GetFieldFullText(2)+"|\r\n"
-			  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||\r\n"
-			  +"PV1|||||||DOC1^Albert^Brian^S||||||||||||600|||||||||||||||||||||||||||||||\r\n"
-			  +"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|200.00|||D2332|1^MOD\r\n"
-			  +"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||DOC1^Albert^Brian^S|DOC1^Albert^Brian^S|250.00|||2332AA|2^MOD\r\n"
+			  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||\r\n"
+			  +"PV1|||||||"+provField+"||||||||||||600|||||||||||||||||||||||||||||||\r\n"
+			  +"FT1|1|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|200.00|||D2332|1^MOD\r\n"
+			  +"FT1|2|||20120906000000|20120906000000|CG||||1.0||||||||||"+provField+"|"+provField+"|250.00|||2332AA|2^MOD\r\n"
 			  +"ZX1|6|PDF|PATHOLOGY^Pathology Report^L|treatment|Test Message";
 			MessageHL7 correctMsg=new MessageHL7(msgtext);
 			string retval=CompareMsgs(msg,correctMsg);
@@ -1067,7 +1135,7 @@ namespace UnitTests {
 			//}
 			//string msgtext=@"MSH|^~\&|OD||ECW||"+msg.Segments[0].GetFieldFullText(6)+"||DFT^P03||P|2.3\r\n"
 			//  +"EVN|P03|"+msg.Segments[1].GetFieldFullText(2)+"|\r\n"
-			//  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|420 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||543997812|||\r\n"
+			//  +"PID|1|A11|10||Smith^Jane^N||19760205|F||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||111224444|||\r\n"
 			//  +"PV1|||||||DOC1^Albert^Brian^S||||||||||||600|||||||||||||||||||||||||||||||\r\n"
 			//  +"ZX1|6|PDF|PATHOLOGY^Pathology Report^L|treatment|Test Message";
 			//MessageHL7 correctMsg=new MessageHL7(msgtext);
