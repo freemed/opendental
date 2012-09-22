@@ -309,9 +309,9 @@ namespace OpenDentBusiness{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
-						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"'";
+						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"' ";
 					if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ, so never going to be Oracle
-						command+="OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"'";
+						command+="OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
 					}
 					command+=") ";
 				} 
