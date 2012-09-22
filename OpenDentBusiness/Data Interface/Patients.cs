@@ -243,18 +243,20 @@ namespace OpenDentBusiness{
 				}
 				regexp+=phonedigits[i];
 			}
-			string command= 
-				"SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
-				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email,"
-//todo: if for HQ, Oracle
-				+"GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone ";//this customer might have multiple extra phone numbers that match the param.
+			string command="SELECT patient.PatNum,LName,FName,MiddleI,Preferred,Birthdate,SSN,HmPhone,WkPhone,Address,PatStatus"
+				+",BillingType,ChartNumber,City,State,PriProv,SiteNum,Email ";
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ, so never going to be Oracle
+				command+=",GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone ";//this customer might have multiple extra phone numbers that match the param.
+			}
 			if(subscriberId!=""){
 				command+=",inssub.SubscriberId ";
 			}
-			command+="FROM patient "
-				+"LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
-			if(regexp!="" && DataConnection.DBtype==DatabaseType.MySql){
-				command+="AND phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
+			command+="FROM patient ";
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ, so never going to be Oracle
+				command+="LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
+				if(regexp!="") {
+					command+="AND phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
+				}
 			}
 			if(subscriberId!=""){
 				command+="LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
@@ -307,8 +309,11 @@ namespace OpenDentBusiness{
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
-						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"' "
-						+"OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"') ";
+						+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"'";
+					if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ, so never going to be Oracle
+						command+="OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"'";
+					}
+					command+=") ";
 				} 
 				else {//oracle
 					command+="AND ((SELECT REGEXP_INSTR(p.HmPhone,'"+POut.String(regexp)+"') FROM dual)<>0"
@@ -364,8 +369,10 @@ namespace OpenDentBusiness{
 			if(subscriberId!=""){
 				command+="AND inssub.SubscriberId LIKE '%"+POut.String(subscriberId)+"%' ";
 			}
-			command+="GROUP BY patient.PatNum "
-				+"ORDER BY LName,FName ";
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ
+				command+="GROUP BY patient.PatNum ";
+			}
+			command+="ORDER BY LName,FName ";
 			if(limit){
 				command=DbHelper.LimitOrderBy(command,40);
 			}
@@ -413,7 +420,9 @@ namespace OpenDentBusiness{
 				r["PriProv"]=Providers.GetAbbr(PIn.Long(table.Rows[i]["PriProv"].ToString()));
 				r["site"]=Sites.GetDescription(PIn.Long(table.Rows[i]["SiteNum"].ToString()));
 				r["Email"]=table.Rows[i]["Email"].ToString();
-				r["OtherPhone"]=table.Rows[i]["OtherPhone"].ToString();
+				if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ
+					r["OtherPhone"]=table.Rows[i]["OtherPhone"].ToString();
+				}
 				PtDataTable.Rows.Add(r);
 			}
 			return PtDataTable;
