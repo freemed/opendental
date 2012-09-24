@@ -48,10 +48,8 @@ namespace Crud {
 				}
 			}
 			for(int i=0;i<indexes.Count;i++) {
-				if(i<indexes.Count-1) {
-					strb.Append(",");
-				}
-				strb.Append(rn+tb+t2+"INDEX("+indexes[i].ColumnName+")"+(i==indexes.Count-1?"":","));
+				strb.Append(",");//There will always be a column defined before this, so we need to add a comma before we add an index.
+				strb.Append(rn+tb+t2+"INDEX("+indexes[i].ColumnName+")");
 			}
 			strb.Append(rn+tb+t2+") DEFAULT CHARSET=utf8\";");
 			strb.Append(rn+tb+t1+"Db.NonQ(command);");
