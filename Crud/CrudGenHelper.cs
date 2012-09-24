@@ -272,6 +272,7 @@ namespace Crud {
 			string dataTypeExpected2="";//if an alternate datatype is allowed
 			string dataTypeExpected3="";
 			string dataTypeExpected4="";
+			string dataTypeExpected5="";
 			if(specialColType==CrudSpecialColType.TimeStamp) {
 				dataTypeExpected="timestamp";
 			}
@@ -306,7 +307,7 @@ namespace Crud {
 					throw new ApplicationException("Type not yet supported: "+field.FieldType.Name);
 				case "Bitmap":
 					dataTypeExpected="mediumtext";
-					dataTypeExpected="text";//only for very small images
+					dataTypeExpected2="text";//only for very small images
 					break;
 				case "Boolean":
 					dataTypeExpected="tinyint";
@@ -345,12 +346,13 @@ namespace Crud {
 					dataTypeExpected2="text";
 					dataTypeExpected3="char";
 					dataTypeExpected4="mediumtext";
+					dataTypeExpected5="longtext";
 					break;
 				case "TimeSpan":
 					dataTypeExpected="time";
 					break;
 			}
-			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3 && dataTypeInDb!=dataTypeExpected4) {
+			if(dataTypeInDb!=dataTypeExpected && dataTypeInDb!=dataTypeExpected2 && dataTypeInDb!=dataTypeExpected3 && dataTypeInDb!=dataTypeExpected4 && dataTypeInDb!=dataTypeExpected5) {
 				throw new Exception(tablename+"."+field.Name+" type mismatch.  Look in the lines of code above for case \""+field.FieldType.Name+"\".  The types listed are what is allowed in the mysql database.  "+dataTypeInDb+" is not one of the allowed mysql types.");
 			}
 		}
