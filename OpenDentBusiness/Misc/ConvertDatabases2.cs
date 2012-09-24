@@ -10310,6 +10310,38 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE clinic ADD Fax varchar2(50)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS screenpat";
+					Db.NonQ(command);
+					command=@"CREATE TABLE screenpat (
+						ScreenPatNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						ScreenGroupNum bigint NOT NULL,
+						SheetNum bigint NOT NULL,
+						INDEX(PatNum),
+						INDEX(ScreenGroupNum),
+						INDEX(SheetNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE screenpat'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE screenpat (
+						ScreenPatNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						ScreenGroupNum number(20) NOT NULL,
+						SheetNum number(20) NOT NULL,
+						CONSTRAINT screenpat_ScreenPatNum PRIMARY KEY (ScreenPatNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX screenpat_PatNum ON screenpat (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX screenpat_ScreenGroupNum ON screenpat (ScreenGroupNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX screenpat_SheetNum ON screenpat (SheetNum)";
+					Db.NonQ(command);
+				}
 
 
 
@@ -10324,14 +10356,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
-
-
-
-
-
-
-
 
 
 
