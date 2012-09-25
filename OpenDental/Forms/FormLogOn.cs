@@ -200,7 +200,7 @@ namespace OpenDental{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				string password=textPassword.Text;
 				//if(Programs.UsingEcwTight()) {//ecw requires hash, but non-ecw requires actual password
-				if(Programs.UsingEcwTightOrFull()) {//ecw requires hash, but non-ecw requires actual password
+				if(Programs.UsingEcwTightOrFullDeprecated()) {//ecw requires hash, but non-ecw requires actual password
 					password=Userods.EncryptPassword(password,true);
 				}
 				Security.PasswordTyped=password;

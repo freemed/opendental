@@ -129,7 +129,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Using eClinicalWorks tight integration.</summary>
-		public static bool UsingEcwTight() {
+		public static bool UsingEcwTightDeprecated() {
 			//No need to check RemotingRole; no call to db.
 			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="0"){
 				return true;
@@ -138,7 +138,7 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Using eClinicalWorks full mode.</summary>
-		public static bool UsingEcwFull() {
+		public static bool UsingEcwFullDeprecated() {
 			//No need to check RemotingRole; no call to db.
 			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="2") {
 				return true;
@@ -147,9 +147,36 @@ namespace OpenDentBusiness{
 		}
 
 		/// <summary>Returns true if using eCW in tight or full mode.</summary>
-		public static bool UsingEcwTightOrFull() {
+		public static bool UsingEcwTightOrFullDeprecated() {
 			//No need to check RemotingRole; no call to db.
-			if(UsingEcwTight() || UsingEcwFull()) {
+			if(UsingEcwTightDeprecated() || UsingEcwFullDeprecated()) {
+				return true;
+			}
+			return false;
+		}
+		
+		/// <summary>Using eClinicalWorks tight integration.</summary>
+		public static bool UsingEcwTightMode() {
+			//No need to check RemotingRole; no call to db.
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="0") {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Using eClinicalWorks full mode.</summary>
+		public static bool UsingEcwFullMode() {
+			//No need to check RemotingRole; no call to db.
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="2") {
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>Returns true if using eCW in tight or full mode.</summary>
+		public static bool UsingEcwTightOrFullMode() {
+			//No need to check RemotingRole; no call to db.
+			if(UsingEcwTightMode() || UsingEcwFullMode()) {
 				return true;
 			}
 			return false;

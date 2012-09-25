@@ -3472,12 +3472,12 @@ namespace OpenDental{
 
 		///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
 		private bool UsingEcwTight() {
-			return Programs.UsingEcwTight();
+			return Programs.UsingEcwTightDeprecated();
 		}
 
 		///<summary>This reduces the number of places where Programs.UsingEcwTightOrFull() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
 		private bool UsingEcwTightOrFull() {
-			return Programs.UsingEcwTightOrFull();
+			return Programs.UsingEcwTightOrFullDeprecated();
 		}
 
 		///<summary>Causes the toolbars to be laid out again.</summary>
@@ -4300,8 +4300,8 @@ namespace OpenDental{
 				aptNum=procs[i].AptNum;
 				break;
 			}
-//todo: compare with: Bridges.ECW.AptNum
-			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,"P03","treatment",PatCur,FamCur.ListPats[0],aptNum);
+//todo: compare with: Bridges.ECW.AptNum, no need to generate PDF segment, pdfs only with eCW and this button not available with eCW integration
+			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,"P03",PatCur,FamCur.ListPats[0],aptNum,"treatment","PDF Segment");
 			if(messageHL7==null) {
 				MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
 				return;

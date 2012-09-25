@@ -2556,7 +2556,7 @@ namespace OpenDental{
 				return;
 			}
 			//Check for duplicate procedures on the appointment before sending the DFT to eCW.
-			if(Programs.UsingEcwTightOrFull() && Bridges.ECW.AptNum!=0) {
+			if(Programs.UsingEcwTightOrFullDeprecated() && Bridges.ECW.AptNum!=0) {
 				List<Procedure> procs=Procedures.GetProcsForSingle(Bridges.ECW.AptNum,false);
 				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
 				if(duplicateProcs!="") {
@@ -2646,7 +2646,7 @@ namespace OpenDental{
 				#endregion Canadian Lab Fees
 			}
 			//Send TP DFT HL7 message to ECW with embedded PDF when using tight integration only.
-			if(Programs.UsingEcwTightOrFull() && Bridges.ECW.AptNum!=0){
+			if(Programs.UsingEcwTightOrFullDeprecated() && Bridges.ECW.AptNum!=0){
 				PrepImageForPrinting();
 				MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 				pdfRenderer.Document=CreateDocument();
