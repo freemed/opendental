@@ -81,13 +81,16 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<HL7Def>>(MethodBase.GetCurrentMethod());
 			}
 			List<HL7Def> listInternal=new List<HL7Def>();
-			HL7Def def=GetInternalFromDb("eCWTight");//might be null
-			def=InternalEcwTight.GetDeepInternal(def);
+			HL7Def def;
+			def=GetInternalFromDb("eCWFull");//might be null
+			def=InternalEcwFull.GetDeepInternal(def);
 			listInternal.Add(def);
 			def=GetInternalFromDb("eCWStandalone");
 			def=InternalEcwStandalone.GetDeepInternal(def);
 			listInternal.Add(def);
-			//eCWFull
+			def=GetInternalFromDb("eCWTight");
+			def=InternalEcwTight.GetDeepInternal(def);
+			listInternal.Add(def);
 			//Add defs for other companies like Centricity here later.
 			return listInternal;
 		}
@@ -95,11 +98,14 @@ namespace OpenDentBusiness{
 		///<summary>Gets from C# internal code rather than db</summary>
 		private static void GetDeepForInternal(HL7Def def) {
 			//No need to check RemotingRole; no call to db.
-			if(def.InternalType.ToString()=="eCWTight") {
-				def=InternalEcwTight.GetDeepInternal(def);//def that we're passing in is guaranteed to not be null
+			if(def.InternalType=="eCWFull") {
+				def=InternalEcwFull.GetDeepInternal(def);//def that we're passing in is guaranteed to not be null
 			}
-			else if(def.InternalType.ToString()=="eCWStandalone") {
+			else if(def.InternalType=="eCWStandalone") {
 				def=InternalEcwStandalone.GetDeepInternal(def);
+			}
+			else if(def.InternalType=="eCWTight") {
+				def=InternalEcwTight.GetDeepInternal(def);
 			}
 			//no need to return a def because the original reference won't have been lost.
 		}
@@ -141,7 +147,7 @@ namespace OpenDentBusiness{
 			return customList;
 		}
 
-		///<summary>Only used from Unit Tests.</summary>
+		///<summary>Only used from Unit Tests.  Since we clear the db of hl7Defs we have to insert this internal def not update it.</summary>
 		public static void EnableInternalForTests(string internalType) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),internalType);
@@ -155,8 +161,11 @@ namespace OpenDentBusiness{
 					break;
 				}
 			}
+			if(hl7Def==null) {
+				return;
+			}
 			hl7Def.IsEnabled=true;
-			Update(hl7Def);
+			Insert(hl7Def);
 		}
 
 		///<summary></summary>

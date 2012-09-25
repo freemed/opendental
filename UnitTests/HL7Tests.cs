@@ -25,14 +25,16 @@ namespace UnitTests {
 			string retval="";
 			//Enable the correct eCW program link or HL7Def
 			switch(hl7TestInterfaceEnum) {
-				case HL7TestInterfaceEnum.HL7DefEcwTight:
-					HL7Defs.EnableInternalForTests("eCWTight");
+				case HL7TestInterfaceEnum.HL7DefEcwFull:
+					HL7Defs.EnableInternalForTests("eCWFull");
 					HL7Defs.RefreshCache();
 					break;
-				case HL7TestInterfaceEnum.HL7DefEcwFull:
-					return "No HL7DefEcwFull yet.\r\n";
 				case HL7TestInterfaceEnum.HL7DefEcwStandalone:
 					HL7Defs.EnableInternalForTests("eCWStandalone");
+					HL7Defs.RefreshCache();
+					break;
+				case HL7TestInterfaceEnum.HL7DefEcwTight:
+					HL7Defs.EnableInternalForTests("eCWTight");
 					HL7Defs.RefreshCache();
 					break;
 			}
@@ -853,7 +855,7 @@ namespace UnitTests {
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
 					case HL7TestInterfaceEnum.HL7DefEcwTight:
-						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,aptNum).ToString());
+						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03",pat,guar,aptNum,"treatment","Test Message").ToString());
 						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
 					default:
@@ -944,7 +946,7 @@ namespace UnitTests {
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
 					case HL7TestInterfaceEnum.HL7DefEcwTight:
-						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,aptNum).ToString());
+						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03",pat,guar,aptNum,"treatment","Test Message").ToString());
 						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
 					default:
@@ -1053,7 +1055,7 @@ namespace UnitTests {
 						break;
 					case HL7TestInterfaceEnum.HL7DefEcwFull:
 					case HL7TestInterfaceEnum.HL7DefEcwTight:
-						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03","treatment",pat,guar,apt.AptNum).ToString());
+						msg=new MessageHL7(OpenDentBusiness.HL7.MessageConstructor.GenerateDFT(procList,"P03",pat,guar,apt.AptNum,"treatment","Test Message").ToString());
 						//msg will be null if there's not DFT defined for the def.  Should handle results for those defs higher up
 						break;
 					default:
