@@ -392,7 +392,12 @@ namespace OpenDental{
 			par.Format=parformat;
 			font=MigraDocHelper.CreateFont(14,true);
 			if(Stmt.IsReceipt) {
-				text=Lan.g(this,"RECEIPT");
+				if(CultureInfo.CurrentCulture.Name=="en-NZ") {//English (New Zealand)
+					text=Lan.g(this,"TAX INVOICE");
+				}
+				else {
+					text=Lan.g(this,"RECEIPT");
+				}
 			}
 			else {
 				text=Lan.g(this,"STATEMENT");
@@ -461,6 +466,11 @@ namespace OpenDental{
 					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
 						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 						par.AddText("ABN: "+defaultProv.NationalProvID);
+						par.AddLineBreak();
+					}
+					if(CultureInfo.CurrentCulture.Name=="en-NZ") {//English (New Zealand)
+						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+						par.AddText("GST: "+defaultProv.SSN);
 						par.AddLineBreak();
 					}
 					par.AddText(PrefC.GetString(PrefName.PracticeAddress));
