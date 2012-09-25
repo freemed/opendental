@@ -436,12 +436,17 @@ namespace OpenDentBusiness
 					+Sout(sub.SubscriberID.Replace("-",""),80,2));//NM109 2/80 Identification Code: Situational. Required when NM102=1.
 				EndSegment(sw);//NM110 through NM112 are not used.
 				//In 4010s, at the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.  This did not make the transaction non-compliant, and they found it useful.
-				//In 5010s, Derek thinks someone told him to put the check back in.  Jordan wants to live dangerously and comment it out for now.
-				//If anyone ever wants us to exclude this data, we will document here who, and just exclude it for them.
-				bool subscIncludeAddressAndGender=true;
-				if(IsPostNTrack(clearhouse)) {
-					if(subscriber.PatNum!=patient.PatNum) { //This is the behavior that X12 specifies. Only included when subscriber=patient.
-						subscIncludeAddressAndGender=false;
+				//In 5010s, we will follow the X12 specification for most clearinghouses and only include subsc address when subscriber=patient.
+				//But for any clearinghouse who requests it, we will always include.  List them here:
+				//EmdeonMed, EmdeonDent: Always include.
+				//PostNTrack, BCBSIdaho: Only include when subscriber=patient.
+				bool subscIncludeAddressAndGender=false;
+				if(IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse)) {
+					subscIncludeAddressAndGender=true;
+				}
+				else {//everyone, including postntrack and bcbsIdaho
+					if(subscriber.PatNum==patient.PatNum) {
+						subscIncludeAddressAndGender=true;
 					}
 				}
 				if(subscIncludeAddressAndGender) {
@@ -1455,7 +1460,7 @@ namespace OpenDentBusiness
 						//	sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
 						//}
 						EndSegment(sw);//SV307 throug SV311 are either not used or are situational and we do not use.
-						//2400 TOO: Tooth Information. Number/Surface.
+						//2400 TOO: Tooth Information. Number/Surface. Multiple iterations of the TOO segment are allowed only when the quantity reported in Loop ID-2400 SV306 is equal to one.
 						if(procCode.TreatArea==TreatmentArea.Tooth) {
 							sw.Write("TOO"+s
 								+"JP"+s//TOO01 1/3 Code List Qualifier Code: JP=Universal National Tooth Designation System.
@@ -1700,6 +1705,7 @@ namespace OpenDentBusiness
 			return (clearinghouse.ISA08=="330989922");
 		}
 
+		///<summary>DentiCal is a carrier.</summary>
 		private static bool IsDentiCal(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="DENTICAL");
 		}
@@ -1718,10 +1724,6 @@ namespace OpenDentBusiness
 
 		private static bool IsInmediata(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="660610220");
-		}
-
-		private static bool IsPostNTrack(Clearinghouse clearinghouse) {
-			return (clearinghouse.ISA08=="PostnTrack");
 		}
 
 		private static bool IsTesia(Clearinghouse clearinghouse) {
@@ -1885,7 +1887,6 @@ namespace OpenDentBusiness
 			return "";
 		}
 
-
 		///<summary>01 Spouse, 18 Self, 19 Child, 20 Employee, 21 Unknown, 39 Organ Donor, 40 Cadaver Donor, 53 Life Partner, G8 Other Relationship.</summary>
 		private static string GetRelat(Relat relat) {
 			switch(relat) {
@@ -1988,8 +1989,7 @@ namespace OpenDentBusiness
 				case EnumClaimSpecialProgram.SecondOpinion_9:
 					return "09";//only valid for medical.
 			}
-		}
-		
+		}		
 
 		///<summary>This used to be an enumeration.</summary>
 		private static string GetFilingCode(InsPlan plan) {
@@ -2716,7 +2716,6 @@ namespace OpenDentBusiness
 			return false;
 		}
 
-
 		///<summary>Removes leading zeros in numbers such as 0.00 or 0.99, for Emdeon and maybe others.</summary>
 		private static string AmountToStrNoLeading(double amount) {
 			string result=amount.ToString("F");
@@ -2726,7 +2725,6 @@ namespace OpenDentBusiness
 			}
 			return result.Substring(i);
 		}
-
 
 	}
 }
