@@ -307,7 +307,7 @@ namespace OpenDental{
 			else{
 				gridIns.Visible=true;
 			}
-			if(Programs.UsingEcwFull()) {
+			if(Programs.UsingEcwFullDeprecated()) {
 				ToolBarMain.Buttons["Add"].Enabled=false;
 				ToolBarMain.Buttons["Delete"].Enabled=false;
 			}
@@ -783,11 +783,16 @@ namespace OpenDental{
 						}
 						break;
 					case "Language":
-						if(PatCur.Language==""){
+						if(PatCur.Language=="" || PatCur.Language==null){
 							row.Cells.Add("");
 						}
 						else{
-							row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
+							try {
+								row.Cells.Add(CultureInfo.GetCultureInfo(PatCur.Language).DisplayName);
+							}
+							catch {
+								row.Cells.Add(PatCur.Language);
+							}
 						}
 						break;
 					case "Clinic":

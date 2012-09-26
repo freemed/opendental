@@ -28,7 +28,7 @@ namespace OpenDentHL7 {
 		private void EcwOldSendAndReceive(){
 			ecwOldIsStandalone=true;//and for Mountainside
 			//if(Programs.UsingEcwTight()){
-			if(Programs.UsingEcwTightOrFull()) {
+			if(Programs.UsingEcwTightOrFullDeprecated()) {
 				ecwOldIsStandalone=false;
 			}
 			//#if DEBUG//just so I don't forget to remove it later.
@@ -129,7 +129,7 @@ namespace OpenDentHL7 {
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.Update(list[i]);//set the status to sent.
-				HL7Msgs.DeleteOldMessages();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
+				HL7Msgs.DeleteOldMsgText();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
 			}
 		}
 
