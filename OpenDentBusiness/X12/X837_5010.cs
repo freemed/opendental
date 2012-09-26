@@ -2601,6 +2601,10 @@ namespace OpenDentBusiness
 						Comma(strb);
 						strb.Append(procCode.AbbrDesc+" tooth range");
 					}
+					if(procCode.TreatArea==TreatmentArea.ToothRange && proc.UnitQty>1) {
+						Comma(strb);
+						strb.Append(procCode.AbbrDesc+" unit quantity must be 1 since area is tooth range");
+					}
 					if((procCode.TreatArea==TreatmentArea.Tooth || procCode.TreatArea==TreatmentArea.Surf)
 						&& !Tooth.IsValidDB(proc.ToothNum)) 
 					{
