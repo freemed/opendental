@@ -78,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 				provider.StateRxID           = PIn.String(table.Rows[i]["StateRxID"].ToString());
 				provider.EhrHasReportAccess  = PIn.Bool  (table.Rows[i]["EhrHasReportAccess"].ToString());
 				provider.IsNotPerson         = PIn.Bool  (table.Rows[i]["IsNotPerson"].ToString());
-				provider.StateWhereLicensed       = PIn.String(table.Rows[i]["StateWhereLicensed"].ToString());
+				provider.StateWhereLicensed  = PIn.String(table.Rows[i]["StateWhereLicensed"].ToString());
 				retVal.Add(provider);
 			}
 			return retVal;
@@ -199,7 +199,7 @@ namespace OpenDentBusiness.Crud{
 				+"StateRxID           = '"+POut.String(provider.StateRxID)+"', "
 				+"EhrHasReportAccess  =  "+POut.Bool  (provider.EhrHasReportAccess)+", "
 				+"IsNotPerson         =  "+POut.Bool  (provider.IsNotPerson)+", "
-				+"StateWhereLicensed       = '"+POut.String(provider.StateWhereLicensed)+"' "
+				+"StateWhereLicensed  = '"+POut.String(provider.StateWhereLicensed)+"' "
 				+"WHERE ProvNum = "+POut.Long(provider.ProvNum);
 			Db.NonQ(command);
 		}

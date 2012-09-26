@@ -107,6 +107,8 @@ namespace OpenDentBusiness {
 		public float DrugQty;
 		///<summary>Enum:ProcUnitQtyType For dental, the type is always sent electronically as MultiProcs. For institutional SV204, Days will be sent electronically if chosen, otherwise ServiceUnits will be sent. For medical SV103, MinutesAnesth will be sent electronically if chosen, otherwise ServiceUnits will be sent.</summary>
 		public ProcUnitQtyType UnitQtyType;
+		///<summary>FK to statement.StatementNum.  Only used when the statement in an invoice.</summary>
+		public long StatementNum;
 
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>

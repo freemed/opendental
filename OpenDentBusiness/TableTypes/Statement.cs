@@ -38,6 +38,10 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>The only effect of this flag is to change the text at the top of a statement from "statement" to "receipt".  It might later do more.</summary>
 		public bool IsReceipt;
+		///<summary>This flag is for marking a statement as Invoice.  In this case, it must have procedures and/or adjustments attached.</summary>
+		public bool IsInvoice;
+		///<summary>Only used if IsInvoice=true.  The first printout will not be a copy.  Subsequent printouts will show "copy" on them.</summary>
+		public bool IsInvoiceCopy;
 
 		public Statement Copy(){
 			return (Statement)this.MemberwiseClone();

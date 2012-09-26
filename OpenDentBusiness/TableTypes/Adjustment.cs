@@ -30,6 +30,8 @@ namespace OpenDentBusiness{
 		public DateTime DateEntry;
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;
+		///<summary>FK to statement.StatementNum.  Only used when the statement in an invoice.</summary>
+		public long StatementNum;
 
 		///<summary></summary>
 		public Adjustment Clone() {

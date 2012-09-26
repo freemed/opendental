@@ -61,6 +61,8 @@ namespace OpenDentBusiness.Crud{
 				statement.DocNum       = PIn.Long  (table.Rows[i]["DocNum"].ToString());
 				statement.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
 				statement.IsReceipt    = PIn.Bool  (table.Rows[i]["IsReceipt"].ToString());
+				statement.IsInvoice    = PIn.Bool  (table.Rows[i]["IsInvoice"].ToString());
+				statement.IsInvoiceCopy= PIn.Bool  (table.Rows[i]["IsInvoiceCopy"].ToString());
 				retVal.Add(statement);
 			}
 			return retVal;
@@ -101,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="StatementNum,";
 			}
-			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt) VALUES(";
+			command+="PatNum,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt,IsInvoice,IsInvoiceCopy) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(statement.StatementNum)+",";
 			}
@@ -119,7 +121,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (statement.IsSent)+","
 				+    POut.Long  (statement.DocNum)+","
 				//DateTStamp can only be set by MySQL
-				+    POut.Bool  (statement.IsReceipt)+")";
+				+    POut.Bool  (statement.IsReceipt)+","
+				+    POut.Bool  (statement.IsInvoice)+","
+				+    POut.Bool  (statement.IsInvoiceCopy)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -145,7 +149,9 @@ namespace OpenDentBusiness.Crud{
 				+"IsSent       =  "+POut.Bool  (statement.IsSent)+", "
 				+"DocNum       =  "+POut.Long  (statement.DocNum)+", "
 				//DateTStamp can only be set by MySQL
-				+"IsReceipt    =  "+POut.Bool  (statement.IsReceipt)+" "
+				+"IsReceipt    =  "+POut.Bool  (statement.IsReceipt)+", "
+				+"IsInvoice    =  "+POut.Bool  (statement.IsInvoice)+", "
+				+"IsInvoiceCopy=  "+POut.Bool  (statement.IsInvoiceCopy)+" "
 				+"WHERE StatementNum = "+POut.Long(statement.StatementNum);
 			Db.NonQ(command);
 		}
@@ -205,6 +211,14 @@ namespace OpenDentBusiness.Crud{
 			if(statement.IsReceipt != oldStatement.IsReceipt) {
 				if(command!=""){ command+=",";}
 				command+="IsReceipt = "+POut.Bool(statement.IsReceipt)+"";
+			}
+			if(statement.IsInvoice != oldStatement.IsInvoice) {
+				if(command!=""){ command+=",";}
+				command+="IsInvoice = "+POut.Bool(statement.IsInvoice)+"";
+			}
+			if(statement.IsInvoiceCopy != oldStatement.IsInvoiceCopy) {
+				if(command!=""){ command+=",";}
+				command+="IsInvoiceCopy = "+POut.Bool(statement.IsInvoiceCopy)+"";
 			}
 			if(command==""){
 				return;

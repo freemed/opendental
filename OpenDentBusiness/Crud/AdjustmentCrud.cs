@@ -46,17 +46,18 @@ namespace OpenDentBusiness.Crud{
 			Adjustment adjustment;
 			for(int i=0;i<table.Rows.Count;i++) {
 				adjustment=new Adjustment();
-				adjustment.AdjNum   = PIn.Long  (table.Rows[i]["AdjNum"].ToString());
-				adjustment.AdjDate  = PIn.Date  (table.Rows[i]["AdjDate"].ToString());
-				adjustment.AdjAmt   = PIn.Double(table.Rows[i]["AdjAmt"].ToString());
-				adjustment.PatNum   = PIn.Long  (table.Rows[i]["PatNum"].ToString());
-				adjustment.AdjType  = PIn.Long  (table.Rows[i]["AdjType"].ToString());
-				adjustment.ProvNum  = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
-				adjustment.AdjNote  = PIn.String(table.Rows[i]["AdjNote"].ToString());
-				adjustment.ProcDate = PIn.Date  (table.Rows[i]["ProcDate"].ToString());
-				adjustment.ProcNum  = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
-				adjustment.DateEntry= PIn.Date  (table.Rows[i]["DateEntry"].ToString());
-				adjustment.ClinicNum= PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				adjustment.AdjNum      = PIn.Long  (table.Rows[i]["AdjNum"].ToString());
+				adjustment.AdjDate     = PIn.Date  (table.Rows[i]["AdjDate"].ToString());
+				adjustment.AdjAmt      = PIn.Double(table.Rows[i]["AdjAmt"].ToString());
+				adjustment.PatNum      = PIn.Long  (table.Rows[i]["PatNum"].ToString());
+				adjustment.AdjType     = PIn.Long  (table.Rows[i]["AdjType"].ToString());
+				adjustment.ProvNum     = PIn.Long  (table.Rows[i]["ProvNum"].ToString());
+				adjustment.AdjNote     = PIn.String(table.Rows[i]["AdjNote"].ToString());
+				adjustment.ProcDate    = PIn.Date  (table.Rows[i]["ProcDate"].ToString());
+				adjustment.ProcNum     = PIn.Long  (table.Rows[i]["ProcNum"].ToString());
+				adjustment.DateEntry   = PIn.Date  (table.Rows[i]["DateEntry"].ToString());
+				adjustment.ClinicNum   = PIn.Long  (table.Rows[i]["ClinicNum"].ToString());
+				adjustment.StatementNum= PIn.Long  (table.Rows[i]["StatementNum"].ToString());
 				retVal.Add(adjustment);
 			}
 			return retVal;
@@ -97,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="AdjNum,";
 			}
-			command+="AdjDate,AdjAmt,PatNum,AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum) VALUES(";
+			command+="AdjDate,AdjAmt,PatNum,AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum,StatementNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(adjustment.AdjNum)+",";
 			}
@@ -111,7 +112,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (adjustment.ProcDate)+","
 				+    POut.Long  (adjustment.ProcNum)+","
 				+    DbHelper.Now()+","
-				+    POut.Long  (adjustment.ClinicNum)+")";
+				+    POut.Long  (adjustment.ClinicNum)+","
+				+    POut.Long  (adjustment.StatementNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,16 +126,17 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one Adjustment in the database.</summary>
 		internal static void Update(Adjustment adjustment){
 			string command="UPDATE adjustment SET "
-				+"AdjDate  =  "+POut.Date  (adjustment.AdjDate)+", "
-				+"AdjAmt   = '"+POut.Double(adjustment.AdjAmt)+"', "
-				+"PatNum   =  "+POut.Long  (adjustment.PatNum)+", "
-				+"AdjType  =  "+POut.Long  (adjustment.AdjType)+", "
-				+"ProvNum  =  "+POut.Long  (adjustment.ProvNum)+", "
-				+"AdjNote  = '"+POut.String(adjustment.AdjNote)+"', "
-				+"ProcDate =  "+POut.Date  (adjustment.ProcDate)+", "
-				+"ProcNum  =  "+POut.Long  (adjustment.ProcNum)+", "
+				+"AdjDate     =  "+POut.Date  (adjustment.AdjDate)+", "
+				+"AdjAmt      = '"+POut.Double(adjustment.AdjAmt)+"', "
+				+"PatNum      =  "+POut.Long  (adjustment.PatNum)+", "
+				+"AdjType     =  "+POut.Long  (adjustment.AdjType)+", "
+				+"ProvNum     =  "+POut.Long  (adjustment.ProvNum)+", "
+				+"AdjNote     = '"+POut.String(adjustment.AdjNote)+"', "
+				+"ProcDate    =  "+POut.Date  (adjustment.ProcDate)+", "
+				+"ProcNum     =  "+POut.Long  (adjustment.ProcNum)+", "
 				//DateEntry not allowed to change
-				+"ClinicNum=  "+POut.Long  (adjustment.ClinicNum)+" "
+				+"ClinicNum   =  "+POut.Long  (adjustment.ClinicNum)+", "
+				+"StatementNum=  "+POut.Long  (adjustment.StatementNum)+" "
 				+"WHERE AdjNum = "+POut.Long(adjustment.AdjNum);
 			Db.NonQ(command);
 		}
@@ -177,6 +180,10 @@ namespace OpenDentBusiness.Crud{
 			if(adjustment.ClinicNum != oldAdjustment.ClinicNum) {
 				if(command!=""){ command+=",";}
 				command+="ClinicNum = "+POut.Long(adjustment.ClinicNum)+"";
+			}
+			if(adjustment.StatementNum != oldAdjustment.StatementNum) {
+				if(command!=""){ command+=",";}
+				command+="StatementNum = "+POut.Long(adjustment.StatementNum)+"";
 			}
 			if(command==""){
 				return;

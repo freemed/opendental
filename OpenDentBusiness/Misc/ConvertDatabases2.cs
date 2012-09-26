@@ -10342,6 +10342,63 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX screenpat_SheetNum ON screenpat (SheetNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE adjustment ADD StatementNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE adjustment ADD INDEX (StatementNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE adjustment ADD StatementNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE adjustment SET StatementNum = 0 WHERE StatementNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE adjustment MODIFY StatementNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX adjustment_StatementNum ON adjustment (StatementNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD StatementNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (StatementNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD StatementNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET StatementNum = 0 WHERE StatementNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY StatementNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX procedurelog_StatementNum ON procedurelog (StatementNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE statement ADD IsInvoice tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE statement ADD IsInvoice number(3)";
+					Db.NonQ(command);
+					command="UPDATE statement SET IsInvoice = 0 WHERE IsInvoice IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE statement MODIFY IsInvoice NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE statement ADD IsInvoiceCopy tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE statement ADD IsInvoiceCopy number(3)";
+					Db.NonQ(command);
+					command="UPDATE statement SET IsInvoiceCopy = 0 WHERE IsInvoiceCopy IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE statement MODIFY IsInvoiceCopy NOT NULL";
+					Db.NonQ(command);
+				}
+			
 
 
 
@@ -10356,7 +10413,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
 
 
 
