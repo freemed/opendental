@@ -11,6 +11,7 @@ using MigraDoc.DocumentObjectModel;
 using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.DocumentObjectModel.Tables;
 using OpenDentBusiness;
+using OpenDentBusiness.HL7;
 using OpenDentBusiness.UI;
 using OpenDental.UI;
 using PdfSharp.Drawing;
@@ -1287,8 +1288,8 @@ namespace OpenDental{
 				tbTime.TopBorder[0,32]=System.Drawing.Color.Black;
 				tbTime.TopBorder[0,36]=System.Drawing.Color.Black;
 			}
-			//if(Programs.UsingEcwTight()) {
-			if(Programs.UsingEcwTightOrFull()) {
+			if(Programs.UsingEcwTightOrFullMode()) {
+				//These buttons are ONLY for eCW, not any other HL7 interface.
 				butComplete.Visible=true;
 				butPDF.Visible=true;
 				//for eCW, we need to hide some things--------------------
@@ -1347,9 +1348,9 @@ namespace OpenDental{
 			#endif
 		}
 
+		///<summary>If an eCW program link is turned on, then this attaches completed procs with the same date as the appt.</summary>
 		private void SetProceduresForECW() {
-			//if(!Programs.UsingEcwTight()){
-			if(!Programs.UsingEcwTightOrFull()) {
+			if(!Programs.UsingEcwTightOrFullMode()) {
 			  return;
 			}
 			List<long> procNums=new List<long>();
@@ -2356,8 +2357,8 @@ namespace OpenDental{
 				return false;
 			}
 			string aptPattern=Appointments.ConvertPatternTo5(strBTime.ToString());
-			//Only run appt overlap check if editing an appt from the chart module and not eCW.
-			if(IsInChartModule && !Programs.UsingEcwTightOrFull()) {
+			//Only run appt overlap check if editing an appt from the chart module and eCW program link not enabled.
+			if(IsInChartModule && !Programs.UsingEcwTightOrFullMode()) {
 				List<Appointment> apptList=Appointments.GetForPeriodList(AptCur.AptDateTime,AptCur.AptDateTime);
 				if(DoesOverlap(aptPattern,apptList)) {
 					MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
@@ -2552,6 +2553,7 @@ namespace OpenDental{
 		}
 
 		private void butPDF_Click(object sender,EventArgs e) {
+			//this will only happen for eCW HL7 interface users.
 			List<Procedure> procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
 			string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
 			if(duplicateProcs!="") {
@@ -2561,7 +2563,12 @@ namespace OpenDental{
 			//Send DFT to eCW containing a dummy procedure with this appointment in a .pdf file.	
 			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
-			Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",true);
+			if(HL7Defs.IsExistingHL7Enabled()) {
+				MessageConstructor.GenerateDFT(procs,"P03",pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+			}
+			else {
+				Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",true);
+			}
 			MsgBox.Show(this,"Notes PDF sent.");
 		}
 
@@ -2730,7 +2737,7 @@ namespace OpenDental{
 		}
 
 		private void butComplete_Click(object sender,EventArgs e) {
-			//This is only used with eCW.
+			//This is only used with eCW HL7 interface.
 			if(butComplete.Text=="Complete") {
 				List<Procedure> procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
 				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
@@ -2761,7 +2768,12 @@ namespace OpenDental{
 				}
 				//Send DFT to eCW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
-				Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",false);
+				if(HL7Defs.IsExistingHL7Enabled()) {
+					MessageConstructor.GenerateDFT(procs,"P03",pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				}
+				else {
+					Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",false);
+				}
 				CloseOD=true;
 				if(IsNew) {
 					SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,

@@ -228,7 +228,7 @@ namespace OpenDentHL7 {
 				File.WriteAllText(filename,list[i].MsgText);
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.Update(list[i]);//set the status to sent.
-				HL7Msgs.DeleteOldMessages();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
+				HL7Msgs.DeleteOldMsgText();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
 			}
 		}
 
@@ -330,22 +330,22 @@ namespace OpenDentHL7 {
 			hl7Msg.MsgText=strbFullMsg.ToString();		
 			strbFullMsg.Clear();//ready for the next message
 			if(isMalformed){
+				hl7Msg.HL7Status=HL7MessageStatus.InFailed;
 				hl7Msg.Note="This message is malformed so it was not processed.";
+				HL7Msgs.Insert(hl7Msg);
 			}
 			else{
 				try {
 					MessageHL7 messageHl7Object=new MessageHL7(hl7Msg.MsgText);//this creates an entire heirarchy of objects.
 					MessageParser.Process(messageHl7Object,IsVerboseLogging);
-					hl7Msg.HL7Status=HL7MessageStatus.InProcessed;
 				}
 				catch(Exception ex) {
-					hl7Msg.Note=ex.Message+"\r\n"+ex.StackTrace;
-					hl7Msg.HL7Status=HL7MessageStatus.InFailed;
+					EventLog.WriteEntry("OpenDentHL7","Error in OnDataRecieved when processing message:\r\n"+ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
 				}
 			}
-			HL7Msgs.Insert(hl7Msg);
-			dataBufferIncoming=new byte[8];//clear the buffer
-			socketIncomingWorker.BeginReceive(dataBufferIncoming,0,dataBufferIncoming.Length,SocketFlags.None,new AsyncCallback(OnDataReceived),null);
+			//The next two lines are not necessary.  After receiving the data just end and the socketIncomingMain will wait for the next incoming connection request.
+			//dataBufferIncoming=new byte[8];//clear the buffer
+			//socketIncomingWorker.BeginReceive(dataBufferIncoming,0,dataBufferIncoming.Length,SocketFlags.None,new AsyncCallback(OnDataReceived),null);
 		}
 		
 		private void TimerCallbackSendTCP(Object stateInfo) {
@@ -386,7 +386,7 @@ namespace OpenDentHL7 {
 				}
 				list[i].HL7Status=HL7MessageStatus.OutSent;
 				HL7Msgs.Update(list[i]);//set the status to sent.
-				HL7Msgs.DeleteOldMessages();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
+				HL7Msgs.DeleteOldMsgText();//This is inside the loop so that it happens less frequently.  To clean up incoming messages, we may move this someday.
 			}
 		}
 		

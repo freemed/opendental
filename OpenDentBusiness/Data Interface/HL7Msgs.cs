@@ -64,13 +64,13 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		///<summary>Deletes all hl7 messages that at least four months old, regardless of status.</summary>
-		public static void DeleteOldMessages() {
+		///<summary>Doesn't delete the old messages, but just the text of the message.  This avoids breaking MessageWasSent().  Only affects messages that are at least four months old, regardless of status.</summary>
+		public static void DeleteOldMsgText() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
 			}
-			string command="DELETE FROM hl7msg "
+			string command="UPDATE hl7msg SET MsgText='' "
 				+"WHERE DateTStamp < ADDDATE(CURDATE(),INTERVAL -4 MONTH)";
 			Db.NonQ(command);
 		}
