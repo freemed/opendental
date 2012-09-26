@@ -1871,6 +1871,7 @@ namespace OpenDental{
 		
 		///<summary>Performs a few tasks that must be done when local data is changed.</summary>
 		private void RefreshLocalDataPostCleanup(List<int> itypeList,bool isAll,params InvalidType[] itypes) {
+			#region IvalidType.Prefs
 			if(itypeList.Contains((int)InvalidType.Prefs) || isAll) {
 				if(PrefC.GetBool(PrefName.EasyHidePublicHealth)) {
 					menuItemSchools.Visible=false;
@@ -1894,17 +1895,6 @@ namespace OpenDental{
 				else {
 					myOutlookBar.Buttons[4].Caption=Lan.g(this,"Chart");
 				}
-				if(PrefC.GetBool(PrefName.EasyBasicModules)) {
-					myOutlookBar.Buttons[3].Visible=false;
-					myOutlookBar.Buttons[5].Visible=false;
-					myOutlookBar.Buttons[6].Visible=false;
-				}
-				else {
-					myOutlookBar.Buttons[3].Visible=true;
-					myOutlookBar.Buttons[5].Visible=true;
-					myOutlookBar.Buttons[6].Visible=true;
-				}
-				myOutlookBar.Invalidate();
 				if(PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
 					menuItemSchoolClass.Visible=false;
 					menuItemSchoolCourses.Visible=false;
@@ -1981,13 +1971,31 @@ namespace OpenDental{
 					userControlTasks1.Visible = false;
 				}
 				LayoutControls();
-			}//if(InvalidTypes.Prefs)
+			}
+			#endregion
+			#region InvalidType.Signals
 			if(itypeList.Contains((int)InvalidType.Signals) || isAll) {
 				FillSignalButtons(null);
 			}
+			#endregion
+			#region InvalidType.Programs
 			if(itypeList.Contains((int)InvalidType.Programs) || isAll) {
 				if(Programs.GetCur(ProgramName.PT).Enabled) {
 					Bridges.PaperlessTechnology.InitializeFileWatcher();
+				}
+			}
+			#endregion
+			#region InvalidType.Programs OR InvalidType.Prefs
+			if(itypeList.Contains((int)InvalidType.Programs) || itypeList.Contains((int)InvalidType.Prefs) || isAll) {
+				if(PrefC.GetBool(PrefName.EasyBasicModules)) {
+					myOutlookBar.Buttons[3].Visible=false;
+					myOutlookBar.Buttons[5].Visible=false;
+					myOutlookBar.Buttons[6].Visible=false;
+				}
+				else {
+					myOutlookBar.Buttons[3].Visible=true;
+					myOutlookBar.Buttons[5].Visible=true;
+					myOutlookBar.Buttons[6].Visible=true;
 				}
 				if(Programs.UsingEcwTightDeprecated()) {
 					myOutlookBar.Buttons[0].Visible=false;//Appt
@@ -2017,7 +2025,10 @@ namespace OpenDental{
 					myOutlookBar.Buttons[2].Visible=false;//Account module
 					myOutlookBar.Buttons[3].Visible=false;//TP module
 				}
+				myOutlookBar.Invalidate();
 			}
+			#endregion
+			#region InvalidType.ToolBut
 			if(itypeList.Contains((int)InvalidType.ToolBut) || isAll) {
 				ContrAccount2.LayoutToolBar();
 				ContrAppt2.LayoutToolBar();
@@ -2025,9 +2036,12 @@ namespace OpenDental{
 				ContrImages2.LayoutToolBar();
 				ContrFamily2.LayoutToolBar();
 			}
+			#endregion
+			#region InvalidType.Views
 			if(itypeList.Contains((int)InvalidType.Views) || isAll) {
 				ContrAppt2.FillViews();
 			}
+			#endregion
 			ContrTreat2.InitializeLocalData();//easier to leave this here for now than to split it.
 		}
 
