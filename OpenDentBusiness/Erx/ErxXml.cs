@@ -110,6 +110,14 @@ namespace OpenDentBusiness {
 			ncScript.LicensedPrescriber.dea=prov.DEANum;
 			ncScript.LicensedPrescriber.licenseState=prov.StateWhereLicensed;
 			ncScript.LicensedPrescriber.licenseNumber=prov.StateLicense;
+			if(emp!=null) {
+				ncScript.Staff=new StaffType();
+				ncScript.Staff.ID=emp.EmployeeNum.ToString();
+				ncScript.Staff.StaffName=new PersonNameType();
+				ncScript.Staff.StaffName.first=emp.FName;
+				ncScript.Staff.StaffName.last=emp.LName;
+				ncScript.Staff.StaffName.middle=emp.MiddleI;
+			}
 			ncScript.Patient=new PatientType();
 			ncScript.Patient.ID=pat.PatNum.ToString();
 			ncScript.Patient.PatientName=new PersonNameType();

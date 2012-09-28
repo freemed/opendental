@@ -3908,6 +3908,10 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
+			if(Security.CurUser.EmployeeNum==0 && Security.CurUser.ProvNum==0) {
+				MsgBox.Show(this,"This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
+				return;
+			}
 			if(PatCur==null) {
 				MsgBox.Show(this,"No patient selected.");
 				return;
