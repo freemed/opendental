@@ -3861,7 +3861,6 @@ namespace OpenDental{
 		private void Tool_eRx_Click() {
 			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
 			if(newCropAccountId==""){
-				//!Regex.IsMatch(newCropAccountId,"^[0-9]+\\-[0-9A-Za-z]{3}$")) { //Must match pattern of a number followed by a dash followed by 3 alpha-numeric characters.
 				//prepare the xml document to send--------------------------------------------------------------------------------------
 				XmlWriterSettings settings = new XmlWriterSettings();
 				settings.Indent = true;
@@ -3874,12 +3873,12 @@ namespace OpenDental{
 					writer.WriteEndElement();
 					writer.WriteEndElement();
 				}
-//#if DEBUG
-				//OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-//#else
+#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+#else
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-//#endif
+#endif
 				if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
 					IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
 					ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
