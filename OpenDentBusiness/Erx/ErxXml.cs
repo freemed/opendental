@@ -46,7 +46,7 @@ namespace OpenDentBusiness {
 			//}
 			ncScript.Account=new AccountTypeRx();
 			//Each LicensedPrescriberID must be unique within an account. Since we send ProvNum for LicensedPrescriberID, each OD database must have a unique AccountID.
-			ncScript.Account.ID="1";//todo.  This should be a long and complex alphanumeric so that we can prevent duplicates and also run checksums.
+			ncScript.Account.ID=PrefC.GetString(PrefName.NewCropAccountId);//Customer account number then a dash then a random alpha-numeric string of 3 characters.
 			ncScript.Account.accountName=practiceTitle;
 			ncScript.Account.siteID="1";//Always send 1.  For each AccountID/SiteID pair, a separate database will be created in NewCrop.
 			ncScript.Account.AccountAddress=new AddressType();

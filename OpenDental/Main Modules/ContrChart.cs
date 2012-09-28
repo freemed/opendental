@@ -13,7 +13,10 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
@@ -3856,6 +3859,53 @@ namespace OpenDental{
 		}
 
 		private void Tool_eRx_Click() {
+			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
+			if(newCropAccountId==""){
+				//!Regex.IsMatch(newCropAccountId,"^[0-9]+\\-[0-9A-Za-z]{3}$")) { //Must match pattern of a number followed by a dash followed by 3 alpha-numeric characters.
+				//prepare the xml document to send--------------------------------------------------------------------------------------
+				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Indent = true;
+				settings.IndentChars = ("    ");
+				StringBuilder strbuild=new StringBuilder();
+				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+					writer.WriteStartElement("CustomerIdRequest");
+					writer.WriteStartElement("RegistrationKey");
+					writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+					writer.WriteEndElement();
+					writer.WriteEndElement();
+				}
+//#if DEBUG
+				//OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+//#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+//#endif
+				if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
+					IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
+					ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+					proxy.Credentials=cred;
+					updateService.Proxy=proxy;
+				}
+				string patNum="";
+				try {
+					string result=updateService.RequestCustomerID(strbuild.ToString());//may throw error
+					XmlDocument doc=new XmlDocument();
+					doc.LoadXml(result);
+					XmlNode node=doc.SelectSingleNode("//CustomerIdResponse");
+					if(node!=null) {
+						patNum=node.InnerText;
+					}
+					if(patNum=="") {
+						throw new ApplicationException("Failed to validate registration key.");
+					}
+					newCropAccountId=patNum+"-"+CodeBase.MiscUtils.CreateRandomAlphaNumericString(3);
+					Prefs.UpdateString(PrefName.NewCropAccountId,newCropAccountId);
+				}
+				catch(Exception ex) {
+					MessageBox.Show(ex.Message);
+					return;
+				}
+			}
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
@@ -3920,7 +3970,7 @@ namespace OpenDental{
 					MessageBox.Show(Lan.g(this,"Clinic state abbreviation invalid")+": "+clinic.Description);
 					return;
 				}
-				string clinicZip=Regex.Replace(clinic.Zip,"[^0-9]*","");//Zip with all non-numeric characters removed.;
+				string clinicZip=Regex.Replace(clinic.Zip,"[^0-9]*","");//Zip with all non-numeric characters removed.
 				if(clinicZip.Length!=9) {
 					MessageBox.Show(Lan.g(this,"Clinic zip must be 9 digits")+": "+clinic.Description);
 					return;
@@ -3937,8 +3987,8 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Provider NPI missing")+": "+prov.Abbr);
 				return;
 			}
-			if(prov.StateWhereLicensed.Length!=2) {
-				MessageBox.Show(Lan.g(this,"Provider state where licensed must be a 2 character state abbreviation")+": "+prov.Abbr);
+			if(stateCodes.IndexOf(prov.StateWhereLicensed)<0) {
+				MessageBox.Show(Lan.g(this,"Provider state where licensed invalid")+": "+prov.Abbr);
 				return;
 			}
 			Employee emp=null;

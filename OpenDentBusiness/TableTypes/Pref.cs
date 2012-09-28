@@ -210,6 +210,8 @@ namespace OpenDentBusiness {
 		//MobileSyncLastFileNumber,
 		//MobileSyncPath,
 		MySqlVersion,
+		///<summary>There is no UI for user to change this.  Format is PatNum-RandomString.  Example: 1234-W6c</summary>
+		NewCropAccountId,
 		OpenDentalVendor,
 		OracleInsertId,
 		PasswordsMustBeStrong,

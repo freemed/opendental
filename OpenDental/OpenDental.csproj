@@ -5348,10 +5348,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_PayConnect_MerchantService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="http://70.90.133.65:1942/WebServiceCustomerUpdates/">
+    <WebReferenceUrl Include="http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\customerUpdates\</RelPath>
-      <UpdateFromURL>http://70.90.133.65:1942/WebServiceCustomerUpdates/</UpdateFromURL>
+      <UpdateFromURL>http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
