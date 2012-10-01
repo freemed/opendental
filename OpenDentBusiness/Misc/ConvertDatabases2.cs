@@ -10399,6 +10399,15 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('BillingDefaultsInvoiceNote','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'BillingDefaultsInvoiceNote','')";
+					Db.NonQ(command);
+				}
+			
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="INSERT INTO preference(PrefName,ValueString) VALUES('NewCropAccountId','')";
 					Db.NonQ(command);
 				}
