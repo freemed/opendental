@@ -345,6 +345,10 @@ namespace OpenDental{
 						thisImage=CDT.Class1.GetADA2006();
 						extension=".gif";
 					}
+					else if(ClaimFormCur.Items[i].ImageFileName=="ADA2012.gif") {
+						thisImage=CDT.Class1.GetADA2012();
+						extension=".gif";
+					}
 					else{
 						//In the case when the A to Z folders are not being used, an invalid form image path is returned
 						//and we simply print without the background image (just as if the background image were removed
