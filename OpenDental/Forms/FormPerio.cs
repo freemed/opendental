@@ -1498,6 +1498,10 @@ namespace OpenDental{
 		}
 
 		private void butSkip_Click(object sender, System.EventArgs e) {
+			if(listExams.SelectedIndex<0){//PerioExamCur could still be set to a deleted exam and would not be null, even if the patient has no exams.
+				MessageBox.Show(Lan.g(this,"Please select an exam first."));
+				return;
+			}
 			gridP.ToggleSkip(PerioExamCur.PerioExamNum);
 		}
 
