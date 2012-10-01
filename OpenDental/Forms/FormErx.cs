@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -22,6 +23,11 @@ namespace OpenDental {
 
 		private void FormErx_Load(object sender,EventArgs e) {
 			string clickThroughXml=ErxXml.BuildClickThroughXml(prov,emp,pat);
+#if DEBUG //To make capturing the XML easier.
+			string tempFile=Path.GetTempFileName()+".txt";
+			File.WriteAllText(tempFile,clickThroughXml);
+			File.Delete(tempFile);//Put a break point here to capture XML.
+#endif
 			string xmlBase64=System.Web.HttpUtility.HtmlEncode(Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(clickThroughXml)));
 			xmlBase64=xmlBase64.Replace("+","%2B");//A common base 64 character which needs to be escaped within URLs.
 			xmlBase64=xmlBase64.Replace("/","%2F");//A common base 64 character which needs to be escaped within URLs.

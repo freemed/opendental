@@ -15,8 +15,15 @@ namespace OpenDentBusiness {
 			NCScript ncScript=new NCScript();
 			ncScript.Credentials=new CredentialsType();
 			ncScript.Credentials.partnerName="OpenDental";//Assigned by NewCrop. Used globally for all customers.
-			ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
-			ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+			string newCropName=PrefC.GetString(PrefName.NewCropName);
+			if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
+				ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+			}
+			else { //Reseller
+				ncScript.Credentials.name=newCropName;
+				ncScript.Credentials.password=PrefC.GetString(PrefName.NewCropPassword);
+			}
 			ncScript.Credentials.productName="OpenDental";
 			ncScript.Credentials.productVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
 			ncScript.UserRole=new UserRoleType();

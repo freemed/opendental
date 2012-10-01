@@ -210,8 +210,12 @@ namespace OpenDentBusiness {
 		//MobileSyncLastFileNumber,
 		//MobileSyncPath,
 		MySqlVersion,
-		///<summary>There is no UI for user to change this.  Format is PatNum-RandomString.  Example: 1234-W6c</summary>
+		///<summary>There is no UI for user to change this.  Format, if OD customer, is PatNum-(RandomString)(CheckSum).  Example: 1234-W6c43.  Format for resellers is up to them.</summary>
 		NewCropAccountId,
+		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
+		NewCropName,
+		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
+		NewCropPassword,
 		OpenDentalVendor,
 		OracleInsertId,
 		PasswordsMustBeStrong,
