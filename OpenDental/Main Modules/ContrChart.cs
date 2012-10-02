@@ -4015,8 +4015,13 @@ namespace OpenDental{
 			else {
 				prov=Providers.GetProv(PatCur.PriProv);
 			}
-			if(prov.NationalProvID=="") {
-				MessageBox.Show(Lan.g(this,"Provider NPI missing")+": "+prov.Abbr);
+			string npi=Regex.Replace(prov.NationalProvID,"[^0-9]*","");//NPI with all non-numeric characters removed.
+			if(npi.Length!=10) {
+				MessageBox.Show(Lan.g(this,"Provider NPI must be 10 digits")+": "+prov.Abbr);
+				return;
+			}
+			if(prov.StateLicense=="") {
+				MessageBox.Show(Lan.g(this,"Provider state license missing")+": "+prov.Abbr);
 				return;
 			}
 			if(stateCodes.IndexOf(prov.StateWhereLicensed)<0) {
@@ -4031,9 +4036,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Patient birthdate missing.");
 				return;
 			}
-			string ssn=Regex.Replace(PatCur.SSN,"[^0-9]*","");//Removes all non-numerical characters.
-			if(ssn.Length!=9) {
-				MsgBox.Show(this,"Patient SSN must be 9 digits.");
+			if(PatCur.State!="" && stateCodes.IndexOf(PatCur.State)<0) {
+				MsgBox.Show(this,"Patient state abbreviation invalid");
 				return;
 			}
 			FormErx formErx=new FormErx();
