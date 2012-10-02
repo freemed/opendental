@@ -338,9 +338,6 @@ namespace OpenDental{
 			if(IsNew){
 				ScreenGroups.Insert(ScreenGroupCur);
 			}
-			if(PrefC.GetBool(PrefName.PublicHealthScreeningUsePat)) {
-
-			}
 			FillGrid();
 			if(ScreenList.Length>0){
 				OpenDentBusiness.Screen ScreenCur=ScreenList[0];

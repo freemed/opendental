@@ -70,12 +70,10 @@ namespace OpenDental{
 			this.checkUsePat.Text = "Attach screenings to patient records";
 			this.checkUsePat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkUsePat.UseVisualStyleBackColor = true;
-			this.checkUsePat.CheckedChanged += new System.EventHandler(this.checkUsePat_CheckedChanged);
 			// 
 			// comboExamSheets
 			// 
 			this.comboExamSheets.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboExamSheets.Enabled = false;
 			this.comboExamSheets.FormattingEnabled = true;
 			this.comboExamSheets.Location = new System.Drawing.Point(213, 50);
 			this.comboExamSheets.Name = "comboExamSheets";
