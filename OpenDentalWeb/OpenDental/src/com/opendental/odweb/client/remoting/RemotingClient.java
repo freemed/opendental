@@ -14,45 +14,45 @@ public class RemotingClient {
 	public static String ServerURI="http://localhost:52441/ServiceMain.asmx";
 
 		/**  */
-		public static int ProcessGetInt(DtoGetIntWeb dto) throws Exception {
+		public static int ProcessGetInt(DtoGetInt dto) throws Exception {
 			String result="";
 			try {
 				result=SendAndReceive(dto);
 				return Integer.getInteger(result);
 			}
 			catch(Exception ex) {
-				DtoExceptionWeb exception=(DtoExceptionWeb)DataTransferObjectWeb.Deserialize(result);
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
 		}
 		
 		/**  */
-		public static void ProcessGetVoid(DtoGetVoidWeb dto) throws Exception {
+		public static void ProcessGetVoid(DtoGetVoid dto) throws Exception {
 			String result="";
 			try {
 				result=SendAndReceive(dto);
 			}
 			catch(Exception ex) {
-				DtoExceptionWeb exception=(DtoExceptionWeb)DataTransferObjectWeb.Deserialize(result);
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
 		}
 		
 		/**  */
-		public static Object ProcessGetObject(DtoGetObjectWeb dto) throws Exception {
+		public static Object ProcessGetObject(DtoGetObject dto) throws Exception {
 			String result="";
 			try {
 				result=SendAndReceive(dto);
 				return result;
 			}
 			catch(Exception ex) {
-				DtoExceptionWeb exception=(DtoExceptionWeb)DataTransferObjectWeb.Deserialize(result);
+				DtoException exception=(DtoException)DataTransferObject.Deserialize(result);
 				throw new Exception(exception.Message);
 			}
 		}
 		
 		/**  */
-		static String SendAndReceive(DataTransferObjectWeb dto){
+		static String SendAndReceive(DataTransferObject dto){
 			String dtoString=dto.Serialize();
 			//Make a connection to the server here?  Probably not due to asynchronous calls. 
 			String url=HttpRequestTest.WEBSERVICE_URL;

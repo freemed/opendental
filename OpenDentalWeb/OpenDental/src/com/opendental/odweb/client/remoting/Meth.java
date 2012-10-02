@@ -7,7 +7,7 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. */
 		public static int GetInt(String classMethod,String[] paramTypes,Object... parameters) {
-			DtoGetIntWeb dto=(DtoGetIntWeb)new DataTransferObjectWeb();
+			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
 			dto.MethodName=classMethod;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 			return 1;
@@ -18,7 +18,7 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. */
 		public static Object GetObject(String classMethod,String[] paramTypes,Object... parameters) {
-			DtoGetIntWeb dto=(DtoGetIntWeb)new DataTransferObjectWeb();
+			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
 			dto.MethodName=classMethod;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 			return null;
@@ -29,7 +29,7 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. */
 		public static void GetVoid(String classMethod,String[] paramTypes,Object... parameters) {
-			DtoGetIntWeb dto=(DtoGetIntWeb)new DataTransferObjectWeb();
+			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
 			dto.MethodName=classMethod;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 		}

@@ -1,8 +1,8 @@
 package com.opendental.odweb.client.remoting;
 
-public class DataTransferObjectWeb {
+public class DataTransferObject {
 	/** Credentials are always passed and never null. */
-	public CredentialsWeb Credentials;
+	public Credentials Credentials;
 	/** This is the name of the method that we need to call.  "Class.Method" format.  Not used with GetTableLow. */
 	public String MethodName;
 	/** This is a list of parameters that we are passing.  They can be various kinds of objects. */
@@ -13,7 +13,7 @@ public class DataTransferObjectWeb {
 	public String DtoType;
 	
 	/** Constructor figures out the type of dto object that got instantiated. */
-	public DataTransferObjectWeb() {
+	public DataTransferObject() {
 		String dtoType=this.getClass().getName();//com.opendental.odweb.client.remoting.DtoGetInt
 		//In theory this will always be a fully qualified name so this check might be unnecessary.  It might even be better to have it fail...
 		if(dtoType.lastIndexOf('.')>0) {
@@ -50,7 +50,7 @@ public class DataTransferObjectWeb {
 		return xml.toString();
 	}
 	
-	public static DataTransferObjectWeb Deserialize(String data) {
+	public static DataTransferObject Deserialize(String data) {
 		// TODO Write deserializing code here.
 		return null;
 	}
