@@ -647,6 +647,20 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						}
 						break;
+					case "OtherInsExistsDent":
+						if(otherPlan.PlanNum!=0) {
+							if(!otherPlan.IsMedical) {
+								displayStrings[i]="X";
+							}
+						}
+						break;
+					case "OtherInsExistsMed":
+						if(otherPlan.PlanNum!=0) {
+							if(otherPlan.IsMedical) {
+								displayStrings[i]="X";
+							}
+						}
+						break;
 					case "OtherInsSubscrLastFirst":
 						if(otherPlan.PlanNum!=0) {
 							displayStrings[i]=otherSubsc.LName+", "+otherSubsc.FName+" "+otherSubsc.MiddleI;
@@ -1354,6 +1368,11 @@ namespace OpenDental{
 						break;
 					case "RadiographsNumAttached":
 						displayStrings[i]=ClaimCur.Radiographs.ToString();
+						break;
+					case "IsEnclosuresAtatched":
+						if(ClaimCur.Radiographs>0 || ClaimCur.AttachedImages>0 || ClaimCur.AttachedModels>0) {
+							displayStrings[i]="X";
+						}
 						break;
 					case "RadiographsNotAttached":
 						if(ClaimCur.Radiographs==0) {

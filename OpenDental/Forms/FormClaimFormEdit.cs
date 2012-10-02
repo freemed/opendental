@@ -656,6 +656,8 @@ namespace OpenDental{
 					case "IsGroupHealthPlan":
 					case "OtherInsExists":
 					case "OtherInsNotExists":
+					case "OtherInsExistsDent":
+					case "OtherInsExistsMed":
 					case "OtherInsSubscrIsMale":
 					case "OtherInsSubscrIsFemale":
 					case "OtherInsRelatIsSelf":
@@ -723,6 +725,7 @@ namespace OpenDental{
 					case "PlaceIsOtherLocation":
 					case "IsRadiographsAttached":
 					case "RadiographsNotAttached":
+					case "IsEnclosuresAtatched":
 					case "IsNotOrtho":
 					case "IsOrtho":
 					case "IsNotProsth":

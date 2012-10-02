@@ -27,6 +27,15 @@ namespace OpenDental {
 			}
 		}
 
+		private void checkUsePat_CheckedChanged(object sender,EventArgs e) {
+			if(checkUsePat.Checked) {
+				comboExamSheets.Enabled=true;
+			}
+			else {
+				comboExamSheets.Enabled=false;
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			Prefs.UpdateBool(PrefName.PublicHealthScreeningUsePat,checkUsePat.Checked);
 			Prefs.UpdateLong(PrefName.PublicHealthScreeningSheet,listSheets[comboExamSheets.SelectedIndex].SheetDefNum);

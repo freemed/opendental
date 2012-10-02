@@ -16,10 +16,19 @@ namespace OpenDentBusiness{
 			string command =
 				"SELECT * from screengroup "
 				+"WHERE SGDate >= "+POut.DateT(fromDate)+" "
-				+"AND SGDate <= "+POut.DateT(toDate.AddDays(1))+" "
+				+"AND SGDate < "+POut.DateT(toDate.AddDays(1))+" "//Was including entries form the next day. Changed from <= to <.
 				//added one day since it's calculated based on midnight.
 				+"ORDER BY SGDate,ScreenGroupNum";
 			return Crud.ScreenGroupCrud.SelectMany(command);
+		}
+
+		public static ScreenGroup GetScreenGroup(long screenGroupNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<ScreenGroup>(MethodBase.GetCurrentMethod(),screenGroupNum);
+			}
+			string command=
+				"SELECT * FROM screengroup WHERE ScreenGroupNum="+POut.Long(screenGroupNum);
+			return Crud.ScreenGroupCrud.SelectOne(command);
 		}
 
 		///<summary></summary>
@@ -51,6 +60,7 @@ namespace OpenDentBusiness{
 			command="DELETE from screengroup WHERE ScreenGroupNum ='"+POut.Long(Cur.ScreenGroupNum)+"'";
 			Db.NonQ(command);
 		}
+
 
 
 	}
