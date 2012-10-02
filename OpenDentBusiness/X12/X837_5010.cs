@@ -873,7 +873,7 @@ namespace OpenDentBusiness
 						+Sout(claim.OrigRefNum,50));//REF02 1/50 Reference Identification: Payer Claim Control Number.
 					EndSegment(sw);//REF03 and REF04 are not used.
 				}
-				//2300 REF: 9F (medical,institutional,dental) Referral Number. Situational. 
+				//2300 REF: 9F (medical,institutional,dental) Referral Number. Situational. Required when a referral number is assigned by the payer or Utilization Management Organization (UMO) AND a referral is involved.
 				if(claim.RefNumString!="") {
 					sw.Write("REF"+s
 						+"9F"+s//REF01 2/3 Reference Identification Qualifier: 9F=Referral Number.
