@@ -21,6 +21,13 @@ namespace OpenDental{
 		private MainMenu mainMenu;
 		private MenuItem menuItemSetup;
 		private List<ScreenGroup> ScreenGroupList;
+		public bool IsSelectionMode=false;
+		private UI.Button butLeft;
+		private UI.Button butRight;
+		private UI.Button butToday;
+		private Label label1;
+		public ScreenGroup ScreenGroupCur;
+		private DateTime dateCur;
 
 		///<summary></summary>
 		public FormScreenGroups()
@@ -61,14 +68,18 @@ namespace OpenDental{
 			this.butRefresh = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butLeft = new OpenDental.UI.Button();
+			this.butRight = new OpenDental.UI.Button();
+			this.butToday = new OpenDental.UI.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// textDateFrom
 			// 
-			this.textDateFrom.Location = new System.Drawing.Point(12, 9);
+			this.textDateFrom.Location = new System.Drawing.Point(150, 52);
 			this.textDateFrom.Name = "textDateFrom";
 			this.textDateFrom.Size = new System.Drawing.Size(69, 20);
 			this.textDateFrom.TabIndex = 74;
@@ -76,7 +87,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(75, 13);
+			this.label2.Location = new System.Drawing.Point(218, 56);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(25, 13);
 			this.label2.TabIndex = 77;
@@ -85,7 +96,7 @@ namespace OpenDental{
 			// 
 			// textDateTo
 			// 
-			this.textDateTo.Location = new System.Drawing.Point(102, 9);
+			this.textDateTo.Location = new System.Drawing.Point(243, 52);
 			this.textDateTo.Name = "textDateTo";
 			this.textDateTo.Size = new System.Drawing.Size(75, 20);
 			this.textDateTo.TabIndex = 76;
@@ -98,7 +109,7 @@ namespace OpenDental{
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(187, 10);
+			this.butRefresh.Location = new System.Drawing.Point(326, 51);
 			this.butRefresh.Name = "butRefresh";
 			this.butRefresh.Size = new System.Drawing.Size(55, 21);
 			this.butRefresh.TabIndex = 78;
@@ -115,7 +126,7 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(13, 321);
+			this.butAdd.Location = new System.Drawing.Point(13, 502);
 			this.butAdd.Name = "butAdd";
 			this.butAdd.Size = new System.Drawing.Size(70, 24);
 			this.butAdd.TabIndex = 79;
@@ -131,24 +142,12 @@ namespace OpenDental{
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butClose.Location = new System.Drawing.Point(172, 321);
+			this.butClose.Location = new System.Drawing.Point(441, 502);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(70, 24);
 			this.butClose.TabIndex = 79;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(13, 37);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(229, 267);
-			this.gridMain.TabIndex = 80;
-			this.gridMain.Title = "Screening Groups";
-			this.gridMain.TranslationName = null;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// mainMenu
 			// 
@@ -161,16 +160,86 @@ namespace OpenDental{
 			this.menuItemSetup.Text = "Setup";
 			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(13, 82);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(499, 402);
+			this.gridMain.TabIndex = 80;
+			this.gridMain.Title = "Screening Groups";
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(167, 13);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(39, 24);
+			this.butLeft.TabIndex = 78;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
+			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(307, 13);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(39, 24);
+			this.butRight.TabIndex = 78;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butToday
+			// 
+			this.butToday.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butToday.Autosize = true;
+			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butToday.CornerRadius = 4F;
+			this.butToday.Location = new System.Drawing.Point(215, 13);
+			this.butToday.Name = "butToday";
+			this.butToday.Size = new System.Drawing.Size(83, 24);
+			this.butToday.TabIndex = 78;
+			this.butToday.Text = "Today";
+			this.butToday.Click += new System.EventHandler(this.butToday_Click);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(92, 56);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(57, 13);
+			this.label1.TabIndex = 77;
+			this.label1.Text = "From";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// FormScreenGroups
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(255, 360);
+			this.ClientSize = new System.Drawing.Size(524, 541);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.textDateFrom);
 			this.Controls.Add(this.textDateTo);
+			this.Controls.Add(this.butRight);
+			this.Controls.Add(this.butLeft);
+			this.Controls.Add(this.butToday);
 			this.Controls.Add(this.butRefresh);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label2);
 			this.Menu = this.mainMenu;
 			this.Name = "FormScreenGroups";
@@ -185,7 +254,11 @@ namespace OpenDental{
 		#endregion
 
 		private void FormScreenings_Load(object sender, System.EventArgs e) {
-			textDateFrom.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
+			dateCur=DateTime.Today;
+			if(IsSelectionMode) {
+				butClose.Text="&OK";
+			}
+			textDateFrom.Text=DateTime.Today.ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
 		}
@@ -212,8 +285,13 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
+			if(IsSelectionMode) {
+				ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
+				DialogResult=DialogResult.OK;
+				return;
+			}
 			FormScreenGroupEdit FormSG=new FormScreenGroupEdit();
-			FormSG.ScreenGroupCur=ScreenGroupList[gridMain.SelectedIndices[0]];
+			FormSG.ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
 			FormSG.ShowDialog();
 			FillGrid();
 		}
@@ -269,12 +347,30 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		private void butToday_Click(object sender,EventArgs e) {
+			dateCur=DateTime.Today;
+			textDateFrom.Text=DateTime.Today.ToShortDateString();
+			textDateTo.Text=DateTime.Today.ToShortDateString();
+		}
+
+		private void butLeft_Click(object sender,EventArgs e) {
+			dateCur=dateCur.AddDays(-1);
+			textDateFrom.Text=dateCur.ToShortDateString();
+			textDateTo.Text=dateCur.ToShortDateString();
+		}
+
+		private void butRight_Click(object sender,EventArgs e) {
+			dateCur=dateCur.AddDays(1);
+			textDateFrom.Text=dateCur.ToShortDateString();
+			textDateTo.Text=dateCur.ToShortDateString();
+		}
+
 		private void butDelete_Click(object sender, System.EventArgs e) {
 			if(gridMain.SelectedIndices.Length!=1){
 				MessageBox.Show("Please select one item first.");
 				return;
 			}
-			ScreenGroup ScreenGroupCur=ScreenGroupList[gridMain.SelectedIndices[0]];
+			ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
 			OpenDentBusiness.Screen[] screenList=Screens.Refresh(ScreenGroupCur.ScreenGroupNum);
 			if(screenList.Length>0) {
 				MessageBox.Show("Not allowed to delete a screening group with items in it.");
@@ -285,6 +381,11 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
+			if(IsSelectionMode) {//button will say "OK"
+				ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
+				DialogResult=DialogResult.OK;
+				return;
+			}
 			DialogResult=DialogResult.Cancel;
 		}
 
