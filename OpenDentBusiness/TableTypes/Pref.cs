@@ -292,6 +292,7 @@ namespace OpenDentBusiness {
 		RecallEmailSubject,
 		RecallEmailSubject2,
 		RecallEmailSubject3,
+		RecallExcludeIfAnyFutureAppt,
 		RecallGroupByFamily,
 		RecallMaxNumberReminders,
 		RecallPostcardFamMsg,

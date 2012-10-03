@@ -9580,6 +9580,23 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.3.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_3_20();
+		}
+
+		private static void To12_3_20() {
+			if(FromVersion<new Version("12.3.20.0")) {
+				string command="";
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('RecallExcludeIfAnyFutureAppt','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'RecallExcludeIfAnyFutureAppt','0')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.3.20.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_4_0();
 		}
 
