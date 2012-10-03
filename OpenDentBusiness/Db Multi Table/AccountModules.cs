@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 			bool singlePatient=!intermingled;//so one or the other will be true
 			payPlanDue=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,0,showProcBreakdown,showNotes);
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,0,showProcBreakdown,showNotes,false);
 			GetMisc(fam,patNum);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
 			return retVal;
 		}
@@ -59,8 +59,12 @@ namespace OpenDentBusiness {
 			payPlanDue=0;
 			balanceForward=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
+			bool showProcBreakdown=PrefC.GetBool(PrefName.StatementShowProcBreakdown);
+			if(stmt.IsInvoice) {
+				showProcBreakdown=false;
+			}
 			GetAccount(patNum,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled,stmt.SinglePatient,
-				stmt.StatementNum,PrefC.GetBool(PrefName.StatementShowProcBreakdown),PrefC.GetBool(PrefName.StatementShowNotes));
+				stmt.StatementNum,showProcBreakdown,PrefC.GetBool(PrefName.StatementShowNotes),stmt.IsInvoice);
 			GetApptTable(fam,stmt.SinglePatient,patNum);//table= appts
 			GetMisc(fam,patNum);
 			return retVal;
@@ -450,10 +454,10 @@ namespace OpenDentBusiness {
 			table.Columns.Add("tth");
 		}
 		
-		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If StatementNum is not zero, then it's for a statement, and the resulting payplan table looks totally different.</summary>
-		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,long statementNum,bool showProcBreakdown,bool showNotes) {
+		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If StatementNum is not zero, then it's for a statement, and the resulting payplan table looks totally different.  If IsInvoice, this does some extra filtering.</summary>
+		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,long statementNum,bool showProcBreakdown,bool showNotes,bool isInvoice) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showNotes);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showNotes,isInvoice);
 				return;
 			}
 			DataConnection dcon=new DataConnection();
@@ -494,6 +498,9 @@ namespace OpenDentBusiness {
 			DateTime procdate;
 			decimal writeoff;
 			for(int i=0;i<rawClaimPay.Rows.Count;i++){
+				if(isInvoice) {//this could possibly be optimized later by not running the query in the first place.
+					break;
+				}
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
@@ -577,6 +584,18 @@ namespace OpenDentBusiness {
 				command+=") GROUP BY procedurelog.ProcNum ";
 			}
 			command+="ORDER BY procDate_";
+			if(isInvoice) {
+				//different query here.  Include all column names.
+				command="SELECT '' AS adj_,procedurelog.BaseUnits,procedurelog.ClinicNum,procedurecode.CodeNum,procedurecode.Descript,"
+					+"'' AS insPayAmt_,'' AS insPayEst_,procedurecode.LaymanTerm,procedurelog.MedicalCode,'' AS noBillIns_,procedurelog.PatNum,"
+					+"'' AS patPay_,procedurecode.ProcCode,"+DbHelper.DateColumn("procedurelog.ProcDate")+" procDate_,procedurelog.ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
+					+"procedurelog.ProvNum,procedurelog.Surf,procedurelog.ToothNum,procedurelog.ToothRange,procedurelog.UnitQty,"
+					+"'' AS writeOff_,'' AS unsent_,'' AS writeOffCap_ "
+					+"FROM procedurelog "
+					+"LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
+					+"WHERE StatementNum='"+POut.Long(statementNum)+"' "
+					+"ORDER BY procDate_";
+			}
 			DataTable rawProc=dcon.GetTable(command);
 			decimal insPayAmt;
 			decimal insPayEst;
@@ -709,6 +728,13 @@ namespace OpenDentBusiness {
 				command+="PatNum ="+POut.Long(fam.ListPats[i].PatNum)+" ";
 			}
 			command+=") ORDER BY AdjDate";
+			if(isInvoice) {
+				//different query here.  Include all column names.
+				command="SELECT AdjAmt,AdjDate,AdjNum,AdjType,ClinicNum,PatNum,ProvNum,AdjNote "
+					+"FROM adjustment "
+					+"WHERE StatementNum='"+POut.Long(statementNum)+"' "
+					+"ORDER BY AdjDate";
+			}
 			DataTable rawAdj=dcon.GetTable(command);
 			for(int i=0;i<rawAdj.Rows.Count;i++){
 				row=table.NewRow();
@@ -775,6 +801,9 @@ namespace OpenDentBusiness {
 			rawPay=dcon.GetTable(command);
 			decimal payamt;
 			for(int i=0;i<rawPay.Rows.Count;i++){
+				if(isInvoice) {
+					break;
+				}
 				//do not add rows that are attached to payment plans
 				if(rawPay.Rows[i]["PayPlanNum"].ToString()!="0"){
 					continue;
@@ -879,6 +908,9 @@ namespace OpenDentBusiness {
 			decimal patport;
 			string claimStatus;
 			for(int i=0;i<rawClaim.Rows.Count;i++){
+				if(isInvoice) {
+					break;
+				}
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
@@ -998,7 +1030,7 @@ namespace OpenDentBusiness {
 				rows.Add(row);
 			}
 			//Statement----------------------------------------------------------------------------------------
-			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum, Note, NoteBold "
+			command="SELECT DateSent,IsSent,Mode_,StatementNum,PatNum,Note,NoteBold,IsInvoice "
 				+"FROM statement "
 				+"WHERE (";
 			for(int i=0;i<fam.ListPats.Length;i++){
@@ -1015,6 +1047,9 @@ namespace OpenDentBusiness {
 			DataTable rawState=dcon.GetTable(command);
 			StatementMode _mode;
 			for(int i=0;i<rawState.Rows.Count;i++){
+				if(isInvoice) {
+					break;
+				}
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
@@ -1030,7 +1065,12 @@ namespace OpenDentBusiness {
 				dateT=PIn.DateT(rawState.Rows[i]["DateSent"].ToString());
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
-				row["description"]+=Lans.g("ContrAccount","Statement");
+				if(rawState.Rows[i]["IsInvoice"].ToString()=="0") {//not an invoice
+					row["description"]+=Lans.g("ContrAccount","Statement");
+				}
+				else {//Must be invoice
+					row["description"]+=Lans.g("ContrAccount","Invoice");
+				}
 				_mode=(StatementMode)PIn.Long(rawState.Rows[i]["Mode_"].ToString());
 				row["description"]+="-"+Lans.g("enumStatementMode",_mode.ToString());
 				if(rawState.Rows[i]["IsSent"].ToString()=="0"){
@@ -1101,6 +1141,9 @@ namespace OpenDentBusiness {
 			command+="ORDER BY PayPlanDate";
 			DataTable rawPayPlan=dcon.GetTable(command);
 			for(int i=0;i<rawPayPlan.Rows.Count;i++){
+				if(isInvoice) {
+					break;
+				}
 				row=table.NewRow();
 				row["AdjNum"]="0";
 				row["balance"]="";//fill this later
@@ -1170,7 +1213,7 @@ namespace OpenDentBusiness {
 			}
 			//rows.Sort(CompareCommRows);
 			//Pass off all the rows for the whole family in order to compute the patient balances----------------
-			GetPatientTable(fam,rows);
+			GetPatientTable(fam,rows,isInvoice);
 			//Regroup rows by patient---------------------------------------------------------------------------
 			DataTable[] rowsByPat=null;//will only used if multiple patients not intermingled
 			if(singlePatient){//This is usually used for Account module grid.
@@ -1562,8 +1605,8 @@ namespace OpenDentBusiness {
 			retVal.Tables.Add(table);
 		}
 
-		///<summary>All rows for the entire family are getting passed in here.  They have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient.</summary>
-		private static void GetPatientTable(Family fam,List<DataRow> rows){
+		///<summary>All rows for the entire family are getting passed in here.  (Except Invoices)  The rows have already been sorted.  Balances have not been computed, and we will do that here, separately for each patient (except invoices).</summary>
+		private static void GetPatientTable(Family fam,List<DataRow> rows,bool isInvoice){
 			//No need to check RemotingRole; no call to db.
 			//DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("patient");
@@ -1590,10 +1633,15 @@ namespace OpenDentBusiness {
 				row["name"]=fam.ListPats[p].GetNameLF();
 				row["PatNum"]=fam.ListPats[p].PatNum.ToString();
 				rowspat.Add(row);
-				if((double)bal!=fam.ListPats[p].EstBalance){
-					Patient patnew=fam.ListPats[p].Copy();
-					patnew.EstBalance=(double)bal;
-					Patients.Update(patnew,fam.ListPats[p]);
+				if(isInvoice) {
+					//we don't have all the rows, so we don't want to try to compute balance
+				}
+				else {
+					if((double)bal!=fam.ListPats[p].EstBalance) {
+						Patient patnew=fam.ListPats[p].Copy();
+						patnew.EstBalance=(double)bal;
+						Patients.Update(patnew,fam.ListPats[p]);
+					}
 				}
 			}
 			//Row for entire family

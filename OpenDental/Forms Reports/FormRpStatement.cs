@@ -303,11 +303,16 @@ namespace OpenDental{
 				return;
 			}
 			docc.ImgType=ImageType.Document;
-			if(Stmt.IsReceipt==true) {
-				docc.Description=Lan.g(this,"Receipt");
+			if(Stmt.IsInvoice) {
+				docc.Description=Lan.g(this,"Invoice");
 			}
 			else {
-				docc.Description=Lan.g(this,"Statement");
+				if(Stmt.IsReceipt==true) {
+					docc.Description=Lan.g(this,"Receipt");
+				}
+				else {
+					docc.Description=Lan.g(this,"Statement");
+				}
 			}
 			docc.DateCreated=stmt.DateSent;
 			Documents.Update(docc);
@@ -391,13 +396,16 @@ namespace OpenDental{
 			parformat.Alignment=ParagraphAlignment.Center;
 			par.Format=parformat;
 			font=MigraDocHelper.CreateFont(14,true);
-			if(Stmt.IsReceipt) {
-				if(CultureInfo.CurrentCulture.Name=="en-NZ") {//English (New Zealand)
+			if(Stmt.IsInvoice) {
+				if(CultureInfo.CurrentCulture.Name=="en-NZ" || CultureInfo.CurrentCulture.Name=="en-AU") {//New Zealand and Australia
 					text=Lan.g(this,"TAX INVOICE");
 				}
 				else {
-					text=Lan.g(this,"RECEIPT");
+					text=Lan.g(this,"INVOICE");
 				}
+			}
+			else if(Stmt.IsReceipt) {
+				text=Lan.g(this,"RECEIPT");
 			}
 			else {
 				text=Lan.g(this,"STATEMENT");
@@ -417,7 +425,24 @@ namespace OpenDental{
 			par.AddLineBreak();
 			par.AddFormattedText(text,font);
 			TextFrame frame;
-			#endregion
+			#endregion Heading
+			//"COPY" for foreign countries' TAX INVOICES----------------------------------------------
+			#region Tax Invoice Copy
+			if(Stmt.IsInvoiceCopy && CultureInfo.CurrentCulture.Name!="en-US") {//We don't show this for US.
+				font=MigraDocHelper.CreateFont(28,true,System.Drawing.Color.Red);
+				frame=section.AddTextFrame();
+				frame.RelativeVertical=RelativeVertical.Page;
+				frame.RelativeHorizontal=RelativeHorizontal.Page;
+				frame.MarginLeft=Unit.Zero;
+				frame.MarginTop=Unit.Zero;
+				frame.Top=TopPosition.Parse("0.35 in");
+				frame.Left=LeftPosition.Parse("5.4 in");
+				frame.Width=Unit.FromInch(3);
+				par=frame.AddParagraph();
+				par.Format.Font=font;
+				par.AddText("COPY");
+			}
+			#endregion Tax Invoice Copy
 			//Practice Address----------------------------------------------------------------------
 			#region Practice Address
 			if(PrefC.GetBool(PrefName.StatementShowReturnAddress)) {
@@ -438,6 +463,16 @@ namespace OpenDental{
 					par.Format.Font=font;
 					par.AddText(clinic.Description);
 					par.AddLineBreak();
+					if(CultureInfo.CurrentCulture.Name=="en-AU") {//Australia
+						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+						par.AddText("ABN: "+defaultProv.NationalProvID);
+						par.AddLineBreak();
+					}
+					if(CultureInfo.CurrentCulture.Name=="en-NZ") {//New Zealand
+						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+						par.AddText("GST: "+defaultProv.SSN);
+						par.AddLineBreak();
+					}
 					par.AddText(clinic.Address);
 					par.AddLineBreak();
 					if(clinic.Address2!="") {
@@ -463,12 +498,12 @@ namespace OpenDental{
 					par.Format.Font=font;
 					par.AddText(PrefC.GetString(PrefName.PracticeTitle));
 					par.AddLineBreak();
-					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
+					if(CultureInfo.CurrentCulture.Name=="en-AU"){//Australia
 						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 						par.AddText("ABN: "+defaultProv.NationalProvID);
 						par.AddLineBreak();
 					}
-					if(CultureInfo.CurrentCulture.Name=="en-NZ") {//English (New Zealand)
+					if(CultureInfo.CurrentCulture.Name=="en-NZ") {//New Zealand
 						Provider defaultProv=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
 						par.AddText("GST: "+defaultProv.SSN);
 						par.AddLineBreak();
@@ -792,7 +827,18 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			MigraDoc.DocumentObjectModel.Font fontBold=MigraDocHelper.CreateFont(10, true);
-			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			if(Stmt.IsInvoice) {
+				text=Lan.g(this,"Procedures:");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+				text=Lan.g(this,"Adjustments:");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+				text=Lan.g(this,"Total:");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+			}
+			else if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				text = Lan.g(this, "Balance:");
 				par.AddFormattedText(text, fontBold);
 				//par.AddLineBreak();
@@ -835,7 +881,37 @@ namespace OpenDental{
 			par.Format = parformat;
 			font = MigraDocHelper.CreateFont(10,false);
 			//numbers:
-			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
+			if(Stmt.IsInvoice) {
+				double adjAmt=0;
+				double procAmt=0;
+				DataTable tableAcct;
+				string tableName;
+				for(int i=0;i<dataSet.Tables.Count;i++) {
+					tableAcct=dataSet.Tables[i];
+					tableName=tableAcct.TableName;
+					if(!tableName.StartsWith("account")) {
+						continue;
+					}
+					for(int p=0;p<tableAcct.Rows.Count;p++) {
+						if(tableAcct.Rows[p]["AdjNum"].ToString()!="0") {
+							adjAmt-=PIn.Double(tableAcct.Rows[p]["creditsDouble"].ToString());
+							adjAmt+=PIn.Double(tableAcct.Rows[p]["chargesDouble"].ToString());
+						}
+						else {//must be a procedure
+							procAmt+=PIn.Double(tableAcct.Rows[p]["chargesDouble"].ToString());
+						}
+					}
+				}
+				text=procAmt.ToString("c");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+				text=adjAmt.ToString("c");
+				par.AddFormattedText(text,font);
+				par.AddLineBreak();
+				text=(procAmt+adjAmt).ToString("c");
+				par.AddFormattedText(text,fontBold);
+			}
+			else if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)){
 				text = PatGuar.BalTotal.ToString("c");
 				par.AddFormattedText(text, fontBold);
 				//par.AddLineBreak();
@@ -979,8 +1055,14 @@ namespace OpenDental{
 			gridPat.Columns.Add(gcol);
 			gcol=new ODGridColumn(Lan.g(this,"Credits"),60,HorizontalAlignment.Right);
 			gridPat.Columns.Add(gcol);
-			gcol=new ODGridColumn(Lan.g(this,"Balance"),60,HorizontalAlignment.Right);
-			gridPat.Columns.Add(gcol);
+			if(Stmt.IsInvoice) {
+				gcol=new ODGridColumn(Lan.g(this,"Total"),60,HorizontalAlignment.Right);
+				gridPat.Columns.Add(gcol);
+			}
+			else {
+				gcol=new ODGridColumn(Lan.g(this,"Balance"),60,HorizontalAlignment.Right);
+				gridPat.Columns.Add(gcol);
+			}
 			gridPat.Width=gridPat.WidthAllColumns+20;
 			gridPat.EndUpdate();
 			#endregion Body Table definition
@@ -1013,7 +1095,7 @@ namespace OpenDental{
 				gridPat.BeginUpdate();
 				gridPat.Rows.Clear();
 				//lineData=FamilyStatementDataList[famIndex].PatDataList[i].PatData;
-				for(int p=0;p<tableAccount.Rows.Count;p++){
+				for(int p=0;p<tableAccount.Rows.Count;p++) {
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 						if(Stmt.IsReceipt) {
 							if(tableAccount.Rows[p]["StatementNum"].ToString()!="0") {//Hide statement rows for Canadian receipts.
@@ -1041,17 +1123,17 @@ namespace OpenDental{
 						grow.Cells.Add(tableAccount.Rows[p]["ProcCode"].ToString());
 						grow.Cells.Add(tableAccount.Rows[p]["tth"].ToString());
 					}
-					if(CultureInfo.CurrentCulture.Name=="en-AU"){//English (Australia)
-						if(tableAccount.Rows[p]["prov"].ToString().Trim()!=""){
+					if(CultureInfo.CurrentCulture.Name=="en-AU") {//English (Australia)
+						if(tableAccount.Rows[p]["prov"].ToString().Trim()!="") {
 							grow.Cells.Add(tableAccount.Rows[p]["prov"].ToString()+" - "+tableAccount.Rows[p]["description"].ToString());
 						}
-						else{//No provider on this account row item, so don't put the extra leading characters.
+						else {//No provider on this account row item, so don't put the extra leading characters.
 							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 						}
 					}
 					else if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 						if(Stmt.IsReceipt) {
-							if(PIn.Long(tableAccount.Rows[p]["ProcNum"].ToString())==0) { 
+							if(PIn.Long(tableAccount.Rows[p]["ProcNum"].ToString())==0) {
 								grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 							}
 							else {//Only clear description for procedures.
@@ -1062,7 +1144,7 @@ namespace OpenDental{
 							grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 						}
 					}
-					else{//Assume English (United States)
+					else {//Assume English (United States)
 						grow.Cells.Add(tableAccount.Rows[p]["description"].ToString());
 					}
 					grow.Cells.Add(tableAccount.Rows[p]["charges"].ToString());
@@ -1091,7 +1173,7 @@ namespace OpenDental{
 			gridPat.Dispose();
 			//Future appointments---------------------------------------------------------------------------------------------
 			#region Future appointments
-			if(!Stmt.IsReceipt) {
+			if(!Stmt.IsReceipt && !Stmt.IsInvoice) {
 				font=MigraDocHelper.CreateFont(9);
 				DataTable tableAppt=dataSet.Tables["appts"];
 				if(tableAppt.Rows.Count>0) {

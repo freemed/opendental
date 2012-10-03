@@ -58,6 +58,15 @@ namespace OpenDentBusiness{
 			DeletedObjects.SetDeleted(DeletedObjectType.Statement,statementNum);
 		}
 
+		///<summary>For deleting a statement when user clicks Cancel.  No need to make entry in DeletedObject table.</summary>
+		public static void Delete(long statementNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
+				return;
+			}
+			Crud.StatementCrud.Delete(statementNum);
+		}
+
 		///<summary>Queries the database to determine if there are any unsent statements.</summary>
 		public static bool UnsentStatementsExist(){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

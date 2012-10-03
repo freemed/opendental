@@ -29,6 +29,15 @@ namespace OpenDentBusiness{
 			return Crud.AdjustmentCrud.SelectOne(adjNum);
 		}
 
+		public static void DetachFromInvoice(long statementNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
+				return;
+			}
+			string command="UPDATE adjustment SET StatementNum=0 WHERE StatementNum='"+POut.Long(statementNum)+"'";
+			Db.NonQ(command);
+		}
+
 		///<summary></summary>
 		public static void Update(Adjustment adj){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

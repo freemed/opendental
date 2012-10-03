@@ -46,6 +46,7 @@ namespace OpenDental {
 			//email
 			textBillingEmailSubject.Text=PrefC.GetString(PrefName.BillingEmailSubject);
 			textBillingEmailBody.Text=PrefC.GetString(PrefName.BillingEmailBodyText);
+			textInvoiceNote.Text=PrefC.GetString(PrefName.BillingDefaultsInvoiceNote);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -87,7 +88,8 @@ namespace OpenDental {
 				| Prefs.UpdateString(PrefName.BillingElectCreditCardChoices,cc)
 				| Prefs.UpdateString(PrefName.BillingElectClientAcctNumber,textClientAcctNumber.Text)
 				| Prefs.UpdateString(PrefName.BillingElectUserName,textUserName.Text)
-				| Prefs.UpdateString(PrefName.BillingElectPassword,textPassword.Text))
+				| Prefs.UpdateString(PrefName.BillingElectPassword,textPassword.Text)
+				| Prefs.UpdateString(PrefName.BillingDefaultsInvoiceNote,textInvoiceNote.Text))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

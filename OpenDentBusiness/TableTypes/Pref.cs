@@ -72,6 +72,7 @@ namespace OpenDentBusiness {
 		BillingChargeLastRun,
 		///<summary>Value is a string, either Billing or Finance.</summary>
 		BillingChargeOrFinanceIsDefault,
+		BillingDefaultsInvoiceNote,
 		BillingDefaultsIntermingle,
 		BillingDefaultsLastDays,
 		BillingDefaultsNote,
@@ -187,7 +188,7 @@ namespace OpenDentBusiness {
 		InsurancePlansShared,
 		IntermingleFamilyDefault,
 		LabelPatientDefaultSheetDefNum,
-		///<summary>Comma-delimited list of two-letter language names.</summary>
+		///<summary>Comma-delimited list of two-letter language names and custom language names.  The custom language names are the full string name and are not necessarily supported by Microsoft.</summary>
 		LanguagesUsedByPatients,
 		LetterMergePath,
 		MainWindowTitle,

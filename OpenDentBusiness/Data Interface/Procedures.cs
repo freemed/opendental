@@ -539,6 +539,16 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
+		public static void DetachFromInvoice(long statementNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),statementNum);
+				return;
+			}
+			string command="UPDATE procedurelog SET StatementNum=0 WHERE StatementNum='"+POut.Long(statementNum)+"'";
+			Db.NonQ(command);
+		}
+		
+
 
 		//--------------------Taken from Procedure class--------------------------------------------------
 
