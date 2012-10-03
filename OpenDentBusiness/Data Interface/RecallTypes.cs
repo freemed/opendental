@@ -261,6 +261,8 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (8,3,"+ProcedureCodes.GetCodeNum("D4341")+")";
 			Db.NonQ(command);
+			command="INSERT INTO recalltrigger (RecallTriggerNum,RecallTypeNum,CodeNum) VALUES (9,1,"+ProcedureCodes.GetCodeNum("D0120")+")";
+			Db.NonQ(command);
 			//Update the special types in preference table.
 			command="UPDATE preference SET ValueString='1' WHERE PrefName='RecallTypeSpecialProphy'";
 			Db.NonQ(command);
