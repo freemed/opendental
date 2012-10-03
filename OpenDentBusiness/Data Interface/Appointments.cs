@@ -424,7 +424,10 @@ namespace OpenDentBusiness{
 				+"AND (AptStatus=1 "//scheduled
 				+"OR AptStatus=4) ";//ASAP
 			if(provNum>0){
-				command+="AND (appointment.ProvNum="+POut.Long(provNum)+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
+				command+="AND ((appointment.ProvNum="+POut.Long(provNum)+" AND appointment.IsHygiene=0) "//only include doc if it's not a hyg appt
+					//"AND (appointment.ProvNum="+POut.Long(provNum)
+					//+" OR appointment.ProvHyg="+POut.Long(provNum)+") ";
+					+" OR (appointment.ProvHyg="+POut.Long(provNum)+" AND appointment.IsHygiene=1)) ";//only include hygienists if it's a hygiene appt
 			}
 			if(clinicNum>0) {
 				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
