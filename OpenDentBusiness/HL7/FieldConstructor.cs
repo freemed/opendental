@@ -16,7 +16,12 @@ namespace OpenDentBusiness.HL7 {
 			//big long list of fieldnames that we support
 			switch(fieldName){
 				case "apt.AptNum":
-					return apt.AptNum.ToString();
+					if(apt==null) {
+						return "";
+					}
+					else {
+						return apt.AptNum.ToString();
+					}
 				case "dateTime.Now":
 					return gDTM(DateTime.Now,14);
 				case "eventType":

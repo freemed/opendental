@@ -88,7 +88,7 @@ namespace OpenDentBusiness.HL7 {
 			return pattern.ToString();
 		}
 
-		///<summary>Supply in format UPIN^LastName^FirstName^MI (AIG) or UPIN^LastName, FirstName MI (PV1).  If UPIN(abbr) does not exist, provider gets created.  If name has changed, provider gets updated.  ProvNum is returned.  If blank, then returns 0.  If field is NULL, returns 0. For PV1, the provider.LName field will hold "LastName, FirstName MI". They can manually change later.</summary>
+		///<summary>Supply in format UPIN^LastName^FirstName^MI (PV1) or UPIN^LastName, FirstName MI (AIG).  If UPIN(abbr) does not exist, provider gets created.  If name has changed, provider gets updated.  ProvNum is returned.  If blank, then returns 0.  If field is NULL, returns 0. For PV1, the provider.LName field will hold "LastName, FirstName MI". They can manually change later.</summary>
 		public static long ProvProcess(FieldHL7 field) {
 			if(field==null) {
 				return 0;
@@ -107,17 +107,37 @@ namespace OpenDentBusiness.HL7 {
 				prov.Abbr=eID;//They can manually change this later.
 				prov.EcwID=eID;
 			}
-			if(prov.LName!=field.GetComponentVal(1)) {
-				provChanged=true;
-				prov.LName=field.GetComponentVal(1);
+			if(field.Components.Count==4) {//PV1 segment in format UPIN^LastName^FirstName^MI
+				if(prov.LName!=field.GetComponentVal(1)) {
+					provChanged=true;
+					prov.LName=field.GetComponentVal(1);
+				}
+				if(prov.FName!=field.GetComponentVal(2)) {
+					provChanged=true;
+					prov.FName=field.GetComponentVal(2);
+				}
+				if(prov.MI!=field.GetComponentVal(3)) {
+					provChanged=true;
+					prov.MI=field.GetComponentVal(3);
+				}
 			}
-			if(prov.FName!=field.GetComponentVal(2)) {
-				provChanged=true;
-				prov.FName=field.GetComponentVal(2);
-			}
-			if(prov.MI!=field.GetComponentVal(3)) {
-				provChanged=true;
-				prov.MI=field.GetComponentVal(3);
+			else if(field.Components.Count==2) {//AIG segment in format UPIN^LastName, FirstName MI
+				string[] components=field.GetComponentVal(1).Split(' ');
+				if(components.Length>0) {
+					components[0]=components[0].TrimEnd(',');
+					if(prov.LName!=components[0]) {
+						provChanged=true;
+						prov.LName=components[0];
+					}
+				}
+				if(components.Length>1 && prov.FName!=components[1]) {
+					provChanged=true;
+					prov.FName=components[1];
+				}
+				if(components.Length>2 && prov.MI!=components[2]) {
+					provChanged=true;
+					prov.MI=components[2];
+				}
 			}
 			if(isNewProv) {
 				Providers.Insert(prov);

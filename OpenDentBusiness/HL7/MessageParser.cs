@@ -25,6 +25,7 @@ namespace OpenDentBusiness.HL7 {
 			if(hl7Existing.Count>0) {//This message is already in the db
 				HL7MsgCur.HL7MsgNum=hl7Existing[0].HL7MsgNum;
 				HL7Msgs.UpdateDateTStamp(HL7MsgCur);
+				return;
 			}
 			else {
 				//Insert as InFailed until processing is complete.  Update once complete, PatNum will have correct value, AptNum will have correct value if SIU message or 0 if ADT, and status changed to InProcessed
@@ -33,6 +34,11 @@ namespace OpenDentBusiness.HL7 {
 			IsVerboseLogging=isVerboseLogging;
 			IsNewPat=false;
 			HL7Def def=HL7Defs.GetOneDeepEnabled();
+			if(def==null) {
+				HL7MsgCur.Note="Could not process HL7 message.  No HL7 definition is enabled.";
+				HL7Msgs.Update(HL7MsgCur);
+				return;
+			}
 			HL7DefMessage hl7defmsg=null;
 			for(int i=0;i<def.hl7DefMessages.Count;i++) {
 				if(def.hl7DefMessages[i].MessageType==msg.MsgType && def.hl7DefMessages[i].EventType==msg.EventType) {//check event type in case same message type can have multiple event types
@@ -42,20 +48,27 @@ namespace OpenDentBusiness.HL7 {
 			if(hl7defmsg==null) {//No message definition matches this message's MessageType and EventType
 				HL7MsgCur.Note="Could not process HL7 message.  No definition for this type of message in the enabled HL7Def.";
 				HL7Msgs.Update(HL7MsgCur);
-				throw new Exception("Could not process HL7 message.  No definition for this type of message in the enabled HL7Def.");
+				return;
 			}
 			string chartNum=null;
 			long patNum=0;
 			DateTime birthdate=DateTime.MinValue;
 			string patLName=null;
 			string patFName=null;
+			bool isExistingPID=false;//Needed to add note to hl7msg table if there isn't a PID segment in the message.
 			//Get patient in question, incoming messages must have a PID segment so use that to find the pat in question
 			for(int s=0;s<hl7defmsg.hl7DefSegments.Count;s++) {
 				if(hl7defmsg.hl7DefSegments[s].SegmentName!=SegmentNameHL7.PID) {
 					continue;
 				}
-				//we found the PID segment
 				int pidOrder=hl7defmsg.hl7DefSegments[s].ItemOrder;
+				//we found the PID segment in the def, make sure it exists in the msg
+				if(msg.Segments.Count<=pidOrder //If the number of segments in the message is less than the item order of the PID segment
+					|| msg.Segments[pidOrder].GetField(0).ToString()!="PID" //Or if the segment we expect to be the PID segment is not the PID segment
+				) {
+					break;
+				}
+				isExistingPID=true;
 				for(int f=0;f<hl7defmsg.hl7DefSegments[s].hl7DefFields.Count;f++) {//Go through fields of PID segment and get patnum, chartnum, patient name, and/or birthdate to locate patient
 					if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="pat.ChartNumber") {
 						int chartNumOrdinal=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
@@ -75,6 +88,11 @@ namespace OpenDentBusiness.HL7 {
 						patFName=msg.Segments[pidOrder].GetFieldComponent(patNameOrdinal,1);
 					}
 				}
+			}
+			if(!isExistingPID) {
+				HL7MsgCur.Note="Could not process the HL7 message due to missing PID segment.";
+				HL7Msgs.Update(HL7MsgCur);
+				return;
 			}
 			//We now have patnum, chartnum, patname, and/or birthdate so locate pat
 			Patient pat=null;

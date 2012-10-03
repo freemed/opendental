@@ -13,7 +13,9 @@ namespace OpenDentBusiness.HL7 {
 			//	pat.PatNum=patNum;
 			//}
 			//else 
-			if(pat.PatNum!=0 && pat.PatNum != patNum) {
+			if(!isStandalone //in standalone, the patnums won't match, so don't check
+				&& pat.PatNum!=0 && pat.PatNum!=patNum) 
+			{
 				throw new ApplicationException("Invalid patNum");
 			}
 			if(!isStandalone) {//when in tight integration mode
@@ -110,7 +112,7 @@ namespace OpenDentBusiness.HL7 {
 			//11. Guarantor relationship to patient.  We can't really do anything with this value
 			guar.SSN=seg.GetFieldFullText(12);
 			if(isNewGuar) {
-				Patients.Insert(guar,true);
+				Patients.Insert(guar,!useChartNumber);//if using chartnumber (standalone mode), then can't insert using existing PK
 				guarOld=guar.Copy();
 				guar.Guarantor=guar.PatNum;
 				Patients.Update(guar,guarOld);
