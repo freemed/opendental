@@ -132,8 +132,19 @@ namespace OpenDentBusiness{
 			command+="AND recall.DateDue >= "+POut.Date(fromDate)+" "
 				+"AND recall.DateDue <= "+POut.Date(toDate)+" "
 				+"AND recall.IsDisabled = 0 "
-				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") "
-				+"AND recall.DateScheduled='0001-01-01' "; //Only show rows where no future recall appointment.
+				+"AND recall.RecallTypeNum IN("+PrefC.GetString(PrefName.RecallTypesShowingInList)+") ";
+			if(PrefC.GetBool(PrefName.RecallExcludeIfAnyFutureAppt)) {
+				string datesql="CURDATE()";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					datesql="(SELECT CURRENT_DATE FROM dual)";
+				}
+				command+=@"AND NOT EXISTS(SELECT * FROM appointment WHERE
+					appointment.PatNum=recall.PatNum AND appointment.AptDateTime > "+datesql//early this morning
+					+" AND appointment.AptStatus IN(1,4)) ";//scheduled,ASAP
+			}
+			else{
+				command+="AND recall.DateScheduled='0001-01-01' "; //Only show rows where no future recall appointment.
+			}
 			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command+="GROUP BY recall.PatNum,recall.RecallTypeNum ";//GROUP BY RecallTypeNum forces both manual and prophy types to show independently.
 			}
