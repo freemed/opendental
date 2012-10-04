@@ -870,9 +870,16 @@ namespace OpenDentBusiness {
 						Patient pat=Patients.GetPat(PIn.Long(table.Rows[i]["PatNum"].ToString()));
 						command="SELECT CheckDate,CheckAmt FROM claimpayment WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
 						DataTable claimPayTable=Db.GetTable(command);
-						log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+":"+pat.GetNameFirstOrPrefL()
-							+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
-							+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+						if(pat==null) {
+							log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+" (invalid PatNum)"
+								+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
+								+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+						}
+						else {
+							log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+":"+pat.GetNameFirstOrPrefL()
+								+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
+								+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+						}
 					}
 					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
 				}
