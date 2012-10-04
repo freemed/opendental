@@ -53,6 +53,8 @@ namespace OpenDentBusiness {
 		ApptPrintFontSize,
 		ApptPrintTimeStart,
 		ApptPrintTimeStop,
+		///<summary>Deprecated, but must remain here to avoid breaking updates.</summary>
+		AtoZfolderNotRequired,
 		///<summary>Normally 1.  If this is set to 0, then that means images are being stored in the database.  This used to be called AtoZfolderNotRequired, but that name was confusing.</summary>
 		AtoZfolderUsed,
 		AutoResetTPEntryStatus,
