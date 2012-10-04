@@ -484,6 +484,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteWithInvalidClaimNum(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteMismatchPatNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDeleteEstimateWithInvalidProcNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcEstNoBillIns(verbose,isCheck);

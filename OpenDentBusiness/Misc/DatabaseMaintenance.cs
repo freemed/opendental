@@ -871,15 +871,22 @@ namespace OpenDentBusiness {
 						command="SELECT CheckDate,CheckAmt FROM claimpayment WHERE ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString();
 						DataTable claimPayTable=Db.GetTable(command);
 						if(pat==null) {
-							log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+" (invalid PatNum)"
-								+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
-								+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
+							//insert pat
+							Patient dummyPatient=new Patient();
+							dummyPatient.PatNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+							dummyPatient.Guarantor=dummyPatient.PatNum;
+							dummyPatient.FName="MISSING";
+							dummyPatient.LName="PATIENT";
+							dummyPatient.AddrNote="This patient was inserted due to claimprocs with invalid PatNum on "+DateTime.Now.ToShortDateString()+" while doing database maintenance.";
+							dummyPatient.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+							dummyPatient.PatStatus=PatientStatus.Archived;
+							dummyPatient.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
+							long dummyPatNum=Patients.Insert(dummyPatient,true);
+							pat=Patients.GetPat(dummyPatient.PatNum);
 						}
-						else {
-							log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+":"+pat.GetNameFirstOrPrefL()
-								+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
-								+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
-						}
+						log+="   Patient: #"+table.Rows[i]["PatNum"].ToString()+":"+pat.GetNameFirstOrPrefL()
+							+" Date: "+PIn.Date(claimPayTable.Rows[0]["CheckDate"].ToString()).ToShortDateString()
+							+" Amount: "+PIn.Double(claimPayTable.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
 					}
 					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
 				}
@@ -1145,6 +1152,35 @@ namespace OpenDentBusiness {
 				long numberFixed=Db.NonQ(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due to invalid ClaimNum: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string ClaimProcDeleteMismatchPatNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				//claimproc.PatNum != procedurelog.PatNum
+				command="SELECT COUNT(*) FROM claimproc "
+					+"WHERE ProcNum > 0 " 
+					+"AND claimproc.PatNum!=(SELECT procedurelog.PatNum FROM procedurelog WHERE claimproc.ProcNum=procedurelog.ProcNum) "
+					+"AND claimproc.InsPayAmt=0 AND claimproc.WriteOff=0";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs found with PatNum that doesn't match the procedure PatNum: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="DELETE FROM claimproc "
+					+"WHERE ProcNum > 0 " 
+					+"AND claimproc.PatNum!=(SELECT procedurelog.PatNum FROM procedurelog WHERE claimproc.ProcNum=procedurelog.ProcNum) "
+					+"AND claimproc.InsPayAmt=0 AND claimproc.WriteOff=0";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claimprocs deleted due to PatNum not matching the procedure PatNum: ")+numberFixed.ToString()+"\r\n";
 				}
 			}
 			return log;
