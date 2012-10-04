@@ -725,7 +725,7 @@ namespace OpenDental{
 					case "PlaceIsOtherLocation":
 					case "IsRadiographsAttached":
 					case "RadiographsNotAttached":
-					case "IsEnclosuresAtatched":
+					case "IsEnclosuresAttached":
 					case "IsNotOrtho":
 					case "IsOrtho":
 					case "IsNotProsth":
