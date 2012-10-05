@@ -61,10 +61,10 @@ namespace OpenDental{
 			this.label1.ForeColor = System.Drawing.Color.Firebrick;
 			this.label1.Location = new System.Drawing.Point(8, 3);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(576, 15);
+			this.label1.Size = new System.Drawing.Size(780, 15);
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Changes made to this appointment before the update to 12.3 will not be reflected " +
-    "below.";
+    "below, but can be found in the regular audit trail.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormAuditOneType
