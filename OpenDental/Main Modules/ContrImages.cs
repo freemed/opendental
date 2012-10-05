@@ -1415,6 +1415,7 @@ namespace OpenDental{
 			xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			if(ComputerPrefs.LocalComputer.ScanDocSelectSource) {
 				if(!EZTwain.SelectImageSource(this.Handle)) {//dialog to select source
+					Cursor=Cursors.Default;
 					return;//User clicked cancel.
 				}
 			}
