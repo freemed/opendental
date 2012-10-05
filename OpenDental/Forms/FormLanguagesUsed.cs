@@ -11,7 +11,7 @@ namespace OpenDental{
 	/// <summary>
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
-	public class FormLanguagesUsed : System.Windows.Forms.Form{
+	public class FormLanguagesUsed:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butCancel;
 		private ListBox listAvailable;
 		private Label label1;
@@ -28,11 +28,13 @@ namespace OpenDental{
 		private CultureInfo[] AllCultures;
 		private OpenDental.UI.Button butUp;
 		private OpenDental.UI.Button butDown;
+		private TextBox textCustom;
+		private Label label4;
+		private UI.Button butAddCustom;
 		private List<string> LangsUsed;
 
 		///<summary></summary>
-		public FormLanguagesUsed()
-		{
+		public FormLanguagesUsed() {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -41,16 +43,13 @@ namespace OpenDental{
 		}
 
 		///<summary>Clean up any resources being used.</summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
+		protected override void Dispose(bool disposing) {
+			if(disposing) {
+				if(components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
@@ -58,8 +57,7 @@ namespace OpenDental{
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
 		/// </summary>
-		private void InitializeComponent()
-		{
+		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLanguagesUsed));
 			this.listAvailable = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
@@ -72,6 +70,9 @@ namespace OpenDental{
 			this.butDelete = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
+			this.textCustom = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.butAddCustom = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// listAvailable
@@ -126,7 +127,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(649,434);
+			this.butOK.Location = new System.Drawing.Point(649,486);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 6;
@@ -141,7 +142,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(649,475);
+			this.butCancel.Location = new System.Drawing.Point(649,527);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 0;
@@ -208,10 +209,45 @@ namespace OpenDental{
 			this.butDown.TabIndex = 10;
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
+			// textCustom
+			// 
+			this.textCustom.Location = new System.Drawing.Point(32,531);
+			this.textCustom.Name = "textCustom";
+			this.textCustom.Size = new System.Drawing.Size(278,20);
+			this.textCustom.TabIndex = 11;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(30,504);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(281,23);
+			this.label4.TabIndex = 12;
+			this.label4.Text = "Custom";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butAddCustom
+			// 
+			this.butAddCustom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddCustom.Autosize = true;
+			this.butAddCustom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddCustom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddCustom.CornerRadius = 4F;
+			this.butAddCustom.Image = global::OpenDental.Properties.Resources.Right;
+			this.butAddCustom.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butAddCustom.Location = new System.Drawing.Point(340,527);
+			this.butAddCustom.Name = "butAddCustom";
+			this.butAddCustom.Size = new System.Drawing.Size(75,26);
+			this.butAddCustom.TabIndex = 13;
+			this.butAddCustom.Text = "Add";
+			this.butAddCustom.Click += new System.EventHandler(this.butAddCustom_Click);
+			// 
 			// FormLanguagesUsed
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(776,528);
+			this.ClientSize = new System.Drawing.Size(776,580);
+			this.Controls.Add(this.butAddCustom);
+			this.Controls.Add(this.label4);
+			this.Controls.Add(this.textCustom);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.butDelete);
@@ -232,6 +268,7 @@ namespace OpenDental{
 			this.Text = "Language Definitions";
 			this.Load += new System.EventHandler(this.FormLanguagesUsed_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 		#endregion
@@ -239,36 +276,41 @@ namespace OpenDental{
 		private void FormLanguagesUsed_Load(object sender,EventArgs e) {
 			AllCultures=CultureInfo.GetCultures(CultureTypes.NeutralCultures);
 			string[] culturedescripts=new string[AllCultures.Length];
-			for(int i=0;i<AllCultures.Length;i++){
+			for(int i=0;i<AllCultures.Length;i++) {
 				culturedescripts[i]=AllCultures[i].DisplayName;
 			}
 			Array.Sort(culturedescripts,AllCultures);//sort based on descriptions
-			for(int i=0;i<AllCultures.Length;i++){
+			for(int i=0;i<AllCultures.Length;i++) {
 				listAvailable.Items.Add(AllCultures[i].DisplayName);
 			}
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)==""){
+			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)=="") {
 				LangsUsed=new List<string>();
 			}
-			else{
+			else {
 				LangsUsed=new List<string>(PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(','));
 			}
 			FillListUsed();
 		}
 
-		private void FillListUsed(){
+		private void FillListUsed() {
 			listUsed.Items.Clear();
 			for(int i=0;i<LangsUsed.Count;i++) {
-				listUsed.Items.Add(CultureInfo.GetCultureInfo(LangsUsed[i]).DisplayName);
+				try {
+					listUsed.Items.Add(CultureInfo.GetCultureInfo(LangsUsed[i]).DisplayName);
+				}
+				catch(ArgumentException ex) {//Custom language.  There's not an obvious better way to do this. 
+					listUsed.Items.Add(LangsUsed[i]);
+				}
 			}
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			if(listAvailable.SelectedIndex==-1){
+			if(listAvailable.SelectedIndex==-1) {
 				MsgBox.Show(this,"Please select a language first");
 				return;
 			}
 			string lang=AllCultures[listAvailable.SelectedIndex].Name;//en,fr, etc
-			if(LangsUsed.Contains(lang)){
+			if(LangsUsed.Contains(lang)) {
 				MsgBox.Show(this,"Language already added.");
 				return;
 			}
@@ -290,7 +332,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a language first");
 				return;
 			}
-			if(listUsed.SelectedIndex==0){
+			if(listUsed.SelectedIndex==0) {
 				return;
 			}
 			int newIndex=listUsed.SelectedIndex-1;
@@ -313,10 +355,25 @@ namespace OpenDental{
 			listUsed.SetSelected(newIndex,true);
 		}
 
+		private void butAddCustom_Click(object sender,EventArgs e) {
+			if(textCustom.Text=="") {
+				MsgBox.Show(this,"Please enter a custom language first");
+				return;
+			}
+			string lang=textCustom.Text;
+			if(LangsUsed.Contains(lang)) {
+				MsgBox.Show(this,"Language already added.");
+				return;
+			}
+			LangsUsed.Add(lang);
+			textCustom.Clear();
+			FillListUsed();
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			string str="";
-			for(int i=0;i<LangsUsed.Count;i++){
-				if(i>0){
+			for(int i=0;i<LangsUsed.Count;i++) {
+				if(i>0) {
 					str+=",";
 				}
 				str+=LangsUsed[i];
@@ -325,19 +382,10 @@ namespace OpenDental{
 			//prefs refresh handled by the calling form.
 			DialogResult=DialogResult.OK;
 		}
-		
-		private void butCancel_Click(object sender, System.EventArgs e) {
+
+		private void butCancel_Click(object sender,System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-		
-
-		
-
-		
-
-		
-
 
 	}
 }

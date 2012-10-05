@@ -155,7 +155,7 @@ namespace OpenDental{
 		private ListBox listGuardians;
 		private OpenDental.UI.Button butAddGuardian;
 		///<summary>Will include the languages setup in the settings, and also the language of this patient if that language is not on the selection list.</summary>
-		private List<CultureInfo> languageList;
+		private List<string> languageList;
 		private OpenDental.UI.Button butGuardianDefaults;
 		private TextBox textAskToArriveEarly;
 		private Label label42;
@@ -1838,24 +1838,27 @@ namespace OpenDental{
 			textChartNumber.Text=PatCur.ChartNumber;
 			textEmployer.Text=Employers.GetName(PatCur.EmployerNum);
 			//textEmploymentNote.Text=PatCur.EmploymentNote;
-			languageList=new List<CultureInfo>();
+			languageList=new List<string>();
 			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!=""){
 				string[] lanstring=PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(',');
 				for(int i=0;i<lanstring.Length;i++) {
-					languageList.Add(CultureInfo.GetCultureInfo(lanstring[i]));
+					languageList.Add(lanstring[i]);
 				}
 			}
-			if(PatCur.Language!="" && PatCur.Language!=null && !languageList.Contains(CultureInfo.GetCultureInfo(PatCur.Language))){
-				languageList.Add(CultureInfo.GetCultureInfo(PatCur.Language));
+			if(PatCur.Language!="" && PatCur.Language!=null && !languageList.Contains(PatCur.Language)){
+				languageList.Add(PatCur.Language);
 			}
 			comboLanguage.Items.Add(Lan.g(this,"none"));//regardless of how many languages are listed, the first item is "none"
 			comboLanguage.SelectedIndex=0;
 			for(int i=0;i<languageList.Count;i++) {
-				comboLanguage.Items.Add(languageList[i].DisplayName);
-				if(PatCur.Language!="" && PatCur.Language!=null){
-					if(CultureInfo.GetCultureInfo(PatCur.Language)==languageList[i]) {
-						comboLanguage.SelectedIndex=i+1;
-					}
+				try {
+					comboLanguage.Items.Add(CultureInfo.GetCultureInfo(languageList[i]).DisplayName);
+				}
+				catch {
+					comboLanguage.Items.Add(languageList[i]);
+				}
+				if(PatCur.Language==languageList[i]) {
+					comboLanguage.SelectedIndex=i+1;
 				}
 			}
 			for(int i=0;i<ProviderC.ListShort.Count;i++){
@@ -2910,7 +2913,7 @@ namespace OpenDental{
 				PatCur.Language="";
 			}
 			else{
-				PatCur.Language=languageList[comboLanguage.SelectedIndex-1].Name;
+				PatCur.Language=languageList[comboLanguage.SelectedIndex-1];
 			}
 			PatCur.AddrNote=textAddrNotes.Text;
 			PatCur.DateFirstVisit=PIn.Date(textDateFirstVisit.Text);
