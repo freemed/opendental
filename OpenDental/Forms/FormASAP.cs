@@ -305,7 +305,12 @@ namespace OpenDental{
 					row.Cells.Add(ListASAP[i].AptDateTime.ToShortDateString());
 				}
 				row.Cells.Add(DefC.GetName(DefCat.RecallUnschedStatus,ListASAP[i].UnschedStatus));
-				row.Cells.Add(Providers.GetAbbr(ListASAP[i].ProvNum));
+				if(ListASAP[i].IsHygiene) {
+					row.Cells.Add(Providers.GetAbbr(ListASAP[i].ProvHyg));
+				}
+				else {
+					row.Cells.Add(Providers.GetAbbr(ListASAP[i].ProvNum));
+				}
 				row.Cells.Add(ListASAP[i].ProcDescript);
 				row.Cells.Add(ListASAP[i].Note);
 				grid.Rows.Add(row);
