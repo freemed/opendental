@@ -64,15 +64,15 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.listUsed = new System.Windows.Forms.ListBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butUp = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
-			this.butDown = new OpenDental.UI.Button();
 			this.textCustom = new System.Windows.Forms.TextBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butAddCustom = new OpenDental.UI.Button();
+			this.butDown = new OpenDental.UI.Button();
+			this.butUp = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// listAvailable
@@ -119,35 +119,51 @@ namespace OpenDental{
 			this.listUsed.Size = new System.Drawing.Size(278,134);
 			this.listUsed.TabIndex = 4;
 			// 
-			// butOK
+			// textCustom
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(649,486);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
-			this.butOK.TabIndex = 6;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			this.textCustom.Location = new System.Drawing.Point(32,531);
+			this.textCustom.Name = "textCustom";
+			this.textCustom.Size = new System.Drawing.Size(278,20);
+			this.textCustom.TabIndex = 11;
 			// 
-			// butCancel
+			// label4
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(649,527);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
-			this.butCancel.TabIndex = 0;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.label4.Location = new System.Drawing.Point(30,504);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(281,23);
+			this.label4.TabIndex = 12;
+			this.label4.Text = "Custom";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// butAddCustom
+			// 
+			this.butAddCustom.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAddCustom.Autosize = true;
+			this.butAddCustom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddCustom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddCustom.CornerRadius = 4F;
+			this.butAddCustom.Image = global::OpenDental.Properties.Resources.Right;
+			this.butAddCustom.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butAddCustom.Location = new System.Drawing.Point(340,527);
+			this.butAddCustom.Name = "butAddCustom";
+			this.butAddCustom.Size = new System.Drawing.Size(75,26);
+			this.butAddCustom.TabIndex = 13;
+			this.butAddCustom.Text = "Add";
+			this.butAddCustom.Click += new System.EventHandler(this.butAddCustom_Click);
+			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.Location = new System.Drawing.Point(618,250);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(53,26);
+			this.butDown.TabIndex = 10;
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
 			// 
@@ -195,51 +211,35 @@ namespace OpenDental{
 			this.butAdd.Text = "Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
-			// butDown
+			// butOK
 			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.Location = new System.Drawing.Point(618,250);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(53,26);
-			this.butDown.TabIndex = 10;
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(649,486);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.TabIndex = 6;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// textCustom
+			// butCancel
 			// 
-			this.textCustom.Location = new System.Drawing.Point(32,531);
-			this.textCustom.Name = "textCustom";
-			this.textCustom.Size = new System.Drawing.Size(278,20);
-			this.textCustom.TabIndex = 11;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(30,504);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(281,23);
-			this.label4.TabIndex = 12;
-			this.label4.Text = "Custom";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butAddCustom
-			// 
-			this.butAddCustom.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAddCustom.Autosize = true;
-			this.butAddCustom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddCustom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddCustom.CornerRadius = 4F;
-			this.butAddCustom.Image = global::OpenDental.Properties.Resources.Right;
-			this.butAddCustom.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.butAddCustom.Location = new System.Drawing.Point(340,527);
-			this.butAddCustom.Name = "butAddCustom";
-			this.butAddCustom.Size = new System.Drawing.Size(75,26);
-			this.butAddCustom.TabIndex = 13;
-			this.butAddCustom.Text = "Add";
-			this.butAddCustom.Click += new System.EventHandler(this.butAddCustom_Click);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(649,527);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.TabIndex = 0;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormLanguagesUsed
 			// 
