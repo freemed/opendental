@@ -891,7 +891,7 @@ namespace OpenDental{
 					ImageStore.DeleteDocuments(listdocs,patFolder);
 				}
 			}
-			else if(StmtCur.IsInvoice && checkIsSent.Checked) {
+			else if(StmtList==null && StmtCur.IsInvoice && checkIsSent.Checked) {
 				checkIsInvoiceCopy.Checked=true;
 			}
 		}
