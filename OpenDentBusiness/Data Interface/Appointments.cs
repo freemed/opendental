@@ -392,8 +392,8 @@ namespace OpenDentBusiness{
 			table.Columns.Add("AddrNote");
 			table.Columns.Add("AptNum");
 			table.Columns.Add("age");
-			table.Columns.Add("AptDateTime",typeof(DateTime));
-			table.Columns.Add("aptDateTime");
+			table.Columns.Add("AptDateTime",typeof(DateTime));//This will actually be DateTimeAskedToArrive
+			table.Columns.Add("aptDateTime");//This will actually be DateTimeAskedToArrive
 			table.Columns.Add("confirmed");
 			table.Columns.Add("contactMethod");
 			table.Columns.Add("email");//could be patient or guarantor email.
@@ -415,7 +415,7 @@ namespace OpenDentBusiness{
 				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.HmPhone,patient.TxtMsgOk,"
 				+"patient.WkPhone,patient.WirelessPhone,ProcDescript,Confirmed,Note,"
 				+"patient.AddrNote,AptNum,patient.MedUrgNote,patient.PreferConfirmMethod,"
-				+"guar.Email guarEmail,patient.Email,patient.Premed "
+				+"guar.Email guarEmail,patient.Email,patient.Premed,DateTimeAskedToArrive "
 				+"FROM patient,appointment,patient guar "
 				+"WHERE patient.PatNum=appointment.PatNum "
 				+"AND patient.Guarantor=guar.PatNum "
@@ -447,6 +447,7 @@ namespace OpenDentBusiness{
 			command+="ORDER BY AptDateTime";
 			DataTable rawtable=Db.GetTable(command);
 			DateTime dateT;
+			DateTime timeAskedToArrive;
 			Patient pat;
 			ContactMethod contmeth;
 			for(int i=0;i<rawtable.Rows.Count;i++) {
@@ -455,6 +456,10 @@ namespace OpenDentBusiness{
 				row["AptNum"]=rawtable.Rows[i]["AptNum"].ToString();
 				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				dateT=PIn.DateT(rawtable.Rows[i]["AptDateTime"].ToString());
+				timeAskedToArrive=PIn.DateT(rawtable.Rows[i]["DateTimeAskedToArrive"].ToString());
+				if(timeAskedToArrive.Year>1880) {
+					dateT=timeAskedToArrive;
+				}
 				row["AptDateTime"]=dateT;
 				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.Long(rawtable.Rows[i]["Confirmed"].ToString()));
