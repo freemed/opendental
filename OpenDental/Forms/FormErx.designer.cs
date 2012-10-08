@@ -39,6 +39,8 @@ namespace OpenDental{
 			this.browser.Size = new System.Drawing.Size(973,658);
 			this.browser.TabIndex = 4;
 			this.browser.Url = new System.Uri("",System.UriKind.Relative);
+			this.browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.browser_DocumentCompleted);
+			this.browser.NewWindow += new System.ComponentModel.CancelEventHandler(this.browser_NewWindow);
 			// 
 			// butCancel
 			// 

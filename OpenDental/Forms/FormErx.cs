@@ -11,17 +11,35 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormErx:Form {
 
+		private string browseToUrl="";
 		public Provider prov;
 		public Employee emp;
 		public Patient pat;
 
 		public FormErx() {
 			InitializeComponent();
-			browser.DocumentCompleted+=new WebBrowserDocumentCompletedEventHandler(browser_DocumentCompleted);
 			Lan.F(this);
 		}
 
+		public FormErx(string url) {
+			InitializeComponent();
+			Lan.F(this);
+			browseToUrl=url;
+		}
+
 		private void FormErx_Load(object sender,EventArgs e) {
+			Cursor=Cursors.WaitCursor;//work on this later if needed.
+			Application.DoEvents();
+			if(browseToUrl!="") { //Use the window as a simple web browswer when a URL is passed in.
+				Text="";
+				browser.Navigate(browseToUrl);
+				return;
+			}
+			ComposeNewRx();
+		}
+
+		///<summary>Uses the public prov, emp and pat variables to build a new prescription and load it within browser control. Loads the compose tab in NewCrop's web interface.</summary>
+		private void ComposeNewRx() {
 			string clickThroughXml=ErxXml.BuildClickThroughXml(prov,emp,pat);
 #if DEBUG //To make capturing the XML easier.
 			string tempFile=Path.GetTempFileName()+".txt";
@@ -35,9 +53,19 @@ namespace OpenDental {
 			String postdata="RxInput=base64:"+xmlBase64;
 			byte[] PostDataBytes=System.Text.Encoding.UTF8.GetBytes(postdata);
 			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
-			Cursor=Cursors.WaitCursor;//work on this later if needed.
-			Application.DoEvents();
 			browser.Navigate("http://preproduction.newcropaccounts.com/InterfaceV7/RxEntry.aspx","",PostDataBytes,additionalHeaders);
+		}
+
+		///<summary>This event fires when a link is clicked within the webbrowser control which opens in a new window.</summary>
+		private void browser_NewWindow(object sender,CancelEventArgs e) {			
+			//By default, new windows launched by clicking a link from within the webbrowser control, open in Internet Explorer, even if the system default is another web browser such as Mozilla.
+			//We had a problem with cookies not being carried over from our webbrowser control into Internet Explorer when a link is clicked.
+			//To preserve cookies, we intercept the new window creation, cancel it, then launch the destination URL in a new window within OD.
+			e.Cancel=true;//Cancel Internet Explorer from launching.
+			string destinationUrl=browser.StatusText;//This is the URL of the page that is supposed to open in a new window. For example, the "ScureScripts Drug History" link.
+			FormErx browserWindowNew=new FormErx(destinationUrl);//Open the page in a new window, but stay inside of OD.
+			browserWindowNew.WindowState=FormWindowState.Normal;
+			browserWindowNew.ShowDialog();
 		}
 
 		public void browser_DocumentCompleted(object sender,WebBrowserDocumentCompletedEventArgs e) {
