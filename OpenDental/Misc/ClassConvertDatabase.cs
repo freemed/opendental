@@ -30,12 +30,12 @@ namespace OpenDental{
 		public bool Convert(string fromVersion,string toVersion,bool silent) {
 			FromVersion=new Version(fromVersion);
 			ToVersion=new Version(toVersion);//Application.ProductVersion);
-			if(FromVersion==ToVersion) {
-				return true;//no conversion necessary
-			}
 			if(FromVersion>=new Version("3.4.0") && PrefC.GetBool(PrefName.CorruptedDatabase)){
 				MsgBox.Show(this,"Your database is corrupted because a conversion failed.  Please contact us.  This database is unusable and you will need to restore from a backup.");
 				return false;//shuts program down.
+			}
+			if(FromVersion==ToVersion) {
+				return true;//no conversion necessary
 			}
 			if(FromVersion.CompareTo(ToVersion)>0){//"Cannot convert database to an older version."
 				//no longer necessary to catch it here.  It will be handled soon enough in CheckProgramVersion
@@ -177,12 +177,12 @@ namespace OpenDental{
 			ConvertDatabases.FromVersion=FromVersion;
 			ConvertDatabases.To2_8_2();//begins going through the chain of conversion steps
 			Cursor.Current=Cursors.Default;
-			if(!silent) {
-				MsgBox.Show(this,"Conversion successful");
-			}
 			if(FromVersion>=new Version("3.4.0")){
 				//CacheL.Refresh(InvalidType.Prefs);//or it won't know it has to update in the next line.
 				Prefs.UpdateBool(PrefName.CorruptedDatabase,false,true);//more forceful refresh in order to properly change flag
+			}
+			if(!silent) {
+				MsgBox.Show(this,"Conversion successful");
 			}
 			Cache.Refresh(InvalidType.Prefs);
 			return true;
