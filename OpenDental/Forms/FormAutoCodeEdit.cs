@@ -64,56 +64,56 @@ namespace OpenDental{
 			// checkHidden
 			// 
 			this.checkHidden.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkHidden.Location = new System.Drawing.Point(390,14);
+			this.checkHidden.Location = new System.Drawing.Point(390, 14);
 			this.checkHidden.Name = "checkHidden";
-			this.checkHidden.Size = new System.Drawing.Size(124,18);
+			this.checkHidden.Size = new System.Drawing.Size(124, 18);
 			this.checkHidden.TabIndex = 1;
 			this.checkHidden.Text = "Hidden";
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(682,528);
+			this.butCancel.Location = new System.Drawing.Point(682, 528);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 20;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(682,494);
+			this.butOK.Location = new System.Drawing.Point(682, 494);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 19;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// textDescript
 			// 
-			this.textDescript.Location = new System.Drawing.Point(148,16);
+			this.textDescript.Location = new System.Drawing.Point(148, 16);
 			this.textDescript.Name = "textDescript";
-			this.textDescript.Size = new System.Drawing.Size(210,20);
+			this.textDescript.Size = new System.Drawing.Size(210, 20);
 			this.textDescript.TabIndex = 22;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(20,20);
+			this.label1.Location = new System.Drawing.Point(20, 20);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(122,16);
+			this.label1.Size = new System.Drawing.Size(122, 16);
 			this.label1.TabIndex = 23;
 			this.label1.Text = "Description";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -121,59 +121,59 @@ namespace OpenDental{
 			// tbAutoItem
 			// 
 			this.tbAutoItem.BackColor = System.Drawing.SystemColors.Window;
-			this.tbAutoItem.Location = new System.Drawing.Point(36,94);
+			this.tbAutoItem.Location = new System.Drawing.Point(36, 94);
 			this.tbAutoItem.Name = "tbAutoItem";
 			this.tbAutoItem.ScrollValue = 1;
 			this.tbAutoItem.SelectedIndices = new int[0];
 			this.tbAutoItem.SelectionMode = System.Windows.Forms.SelectionMode.One;
-			this.tbAutoItem.Size = new System.Drawing.Size(719,356);
+			this.tbAutoItem.Size = new System.Drawing.Size(719, 356);
 			this.tbAutoItem.TabIndex = 24;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(402,496);
+			this.label2.Location = new System.Drawing.Point(402, 496);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(246,56);
+			this.label2.Size = new System.Drawing.Size(246, 56);
 			this.label2.TabIndex = 26;
 			this.label2.Text = "Clicking Cancel does not undo changes already made to items.";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomRight;
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(36,72);
+			this.label3.Location = new System.Drawing.Point(36, 72);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(436,18);
+			this.label3.Size = new System.Drawing.Size(436, 18);
 			this.label3.TabIndex = 27;
 			this.label3.Text = "You may have duplicate codes  in the following list.";
 			// 
 			// butDelete
 			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Autosize = true;
 			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(158,478);
+			this.butDelete.Location = new System.Drawing.Point(158, 478);
 			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(88,26);
+			this.butDelete.Size = new System.Drawing.Size(88, 26);
 			this.butDelete.TabIndex = 29;
 			this.butDelete.Text = "&Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(36,478);
+			this.butAdd.Location = new System.Drawing.Point(36, 478);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(84,26);
+			this.butAdd.Size = new System.Drawing.Size(84, 26);
 			this.butAdd.TabIndex = 28;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -181,9 +181,9 @@ namespace OpenDental{
 			// checkLessIntrusive
 			// 
 			this.checkLessIntrusive.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkLessIntrusive.Location = new System.Drawing.Point(390,34);
+			this.checkLessIntrusive.Location = new System.Drawing.Point(390, 34);
 			this.checkLessIntrusive.Name = "checkLessIntrusive";
-			this.checkLessIntrusive.Size = new System.Drawing.Size(354,30);
+			this.checkLessIntrusive.Size = new System.Drawing.Size(354, 30);
 			this.checkLessIntrusive.TabIndex = 30;
 			this.checkLessIntrusive.Text = "Do not check codes in the procedure edit window, but only use this auto code for " +
     "procedure buttons.";
@@ -192,9 +192,9 @@ namespace OpenDental{
 			// FormAutoCodeEdit
 			// 
 			this.AcceptButton = this.butOK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(794,582);
+			this.ClientSize = new System.Drawing.Size(794, 582);
 			this.Controls.Add(this.checkLessIntrusive);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butAdd);
@@ -215,6 +215,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "FormAutoCodeEdit";
 			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormAutoCodeEdit_Closing);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAutoCodeEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormAutoCodeEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -322,7 +323,175 @@ namespace OpenDental{
       }
 		}
 
-		  
-
+		private void FormAutoCodeEdit_FormClosing(object sender,FormClosingEventArgs e) {
+			AutoCodeItems.RefreshCache();
+			AutoCodeConds.RefreshCache();
+			if(listForCode.Count==0) {//No entries. Let them close.
+				return;
+			}
+			for(int i=0;i<listForCode.Count;i++) {//Attach the conditions to the items for better organization
+				listForCode[i].ListConditions=new List<AutoCodeCond>();
+        for(int j=0;j<AutoCodeCondC.List.Length;j++){//Fill conditions for this AutoCodeItem
+          if(AutoCodeCondC.List[j].AutoCodeItemNum==listForCode[i].AutoCodeItemNum){
+						listForCode[i].ListConditions.Add(AutoCodeCondC.List[j]);
+          }
+        }
+			}
+			//Must have same number of conditions for each AutoCodeItem.----------------------------------------------------------------------------------
+			for(int i=1;i<listForCode.Count;i++) {//start at 1 and compare to the 0 index.
+				if(listForCode[i].ListConditions.Count!=listForCode[0].ListConditions.Count) {
+					MsgBox.Show(this,"All AutoCode items must have the same number of conditions.");
+					e.Cancel=true;
+					return;
+				}
+			}
+			//Check for duplicate AutoCodeItem condition lists.-------------------------------------------------------------------------------------------
+			for(int i=1;i<listForCode.Count;i++) {//start at 1 and compare to all lower indexed entries
+				for(int j=0;j<i;j++) {
+					int matches=0;//If the number of matches equals the number of entries
+					for(int k=0;k<listForCode[i].ListConditions.Count;k++) {//For each condition in i check for matches with conditions in j
+						string test1=listForCode[i].ListConditions[k].ToString();
+						string test2=listForCode[j].ListConditions[k].ToString();
+						if(listForCode[i].ListConditions[k].Cond==listForCode[j].ListConditions[k].Cond) {
+							matches++;
+						}
+					}
+					if(matches==listForCode[i].ListConditions.Count) {//Conditions match
+						MsgBox.Show(this,"Cannot have two AutoCode Items with duplicate conditions.");
+						e.Cancel=true;
+						return;
+					}
+				}
+			}		
+			//Decide which categories are involved.------------------------------------------------------------------------------------------------------
+			bool isAnt=false;//Not a category, could be isAntPost or isAntPreMol
+			bool isAntPost=false;
+			bool isAntPreMol=false;
+			bool isNumSurf=false;
+			bool isFirstEachAdd=false;
+			bool isMaxMand=false;
+			bool isPriPerm=false;
+			bool isPontRet=false;
+			for(int i=0;i<listForCode.Count;i++) {
+				//If the item matches the category, set the boolean to true.
+				for(int j=0;j<listForCode[i].ListConditions.Count;j++) {
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Anterior) {
+						isAnt=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Posterior) {
+						isAntPost=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Premolar
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Molar
+						) {
+						isAntPreMol=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.One_Surf
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Two_Surf
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Three_Surf
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Four_Surf
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Five_Surf
+						) {
+						isNumSurf=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.First
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.EachAdditional
+						) {
+						isFirstEachAdd=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Maxillary
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Mandibular
+						) {
+						isMaxMand=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Primary
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Permanent
+						) {
+						isPriPerm=true;
+						continue;
+					}
+					if(listForCode[i].ListConditions[j].Cond==AutoCondition.Pontic
+						|| listForCode[i].ListConditions[j].Cond==AutoCondition.Retainer
+						) {
+						isPontRet=true;
+						continue;
+					}
+				}
+			}
+			//After the loop, you had better have exactly the same number of booleans true as number of conditions on each item.--------------------
+			//Count how many categories were hit.
+			int numCategories=0;
+			if(isAnt) {//Not a category, could be isAntPost or isAntPreMol
+				if(isAntPost) {
+					numCategories++;
+				}
+				if(isAntPreMol){
+					numCategories++;
+					if(numCategories==2){
+						MsgBox.Show(this,"Cannot have Anterior/Posterior and Anterior/Premolar/Molar categories.");
+						e.Cancel=true;
+						return;
+					}
+				}
+			}
+			if(isNumSurf) {
+				numCategories++;
+			}
+			if(isFirstEachAdd) {
+				numCategories++;
+			}
+			if(isMaxMand) {
+				numCategories++;
+			}
+			if(isPriPerm) {
+				numCategories++;
+			}
+			if(isPontRet) {
+				numCategories++;
+			}
+			if(numCategories!=listForCode[0].ListConditions.Count) {
+				MessageBox.Show(Lan.g(this,"When using ")+listForCode[0].ListConditions.Count+Lan.g(this," condition(s), you must use conditions from ")											
+					+listForCode[0].ListConditions.Count+Lan.g(this," logical categories. You are using conditions from ")+numCategories+Lan.g(this," logical categories."));
+				e.Cancel=true;
+				return;
+			}
+			//Make sure that the number of AutoCodeItems is right. For example, if isAntPost and isNumSurf are the only true one, there should be 10 items.----------------------------------------
+			int reqNumAutoCodeItems=1;
+			if(isAnt) {//Could be isAntPost or isAntPreMol
+				if(isAntPost) {
+					reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+				}
+				if(isAntPreMol){
+					reqNumAutoCodeItems=reqNumAutoCodeItems*3;
+				}
+			}
+			if(isNumSurf) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*5;
+			}
+			if(isFirstEachAdd) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			}
+			if(isMaxMand) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			}
+			if(isPriPerm) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			}
+			if(isPontRet) {
+				reqNumAutoCodeItems=reqNumAutoCodeItems*2;
+			}
+			if(listForCode.Count!=reqNumAutoCodeItems) {
+				MessageBox.Show(Lan.g(this,"For the condition categories you are using, you should have ")
+					+reqNumAutoCodeItems+Lan.g(this," entries in your list. You only have ")+listForCode.Count+".");
+				e.Cancel=true;
+				return;
+			}
+		}
 	}
 }

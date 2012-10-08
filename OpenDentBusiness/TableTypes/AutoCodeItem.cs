@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace OpenDentBusiness{
 	
@@ -15,6 +16,10 @@ namespace OpenDentBusiness{
 		public string OldCode;
 		///<summary>FK to procedurecode.CodeNum</summary>
 		public long CodeNum;
+
+		///<summary>Only used in the validation section when closing FormAutoCodeEdit.  Will normally be empty.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public List<AutoCodeCond> ListConditions;
 	}
 
 
