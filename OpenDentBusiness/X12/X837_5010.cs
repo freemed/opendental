@@ -119,7 +119,7 @@ namespace OpenDentBusiness
 			List<PatPlan> patPlans;
 			Procedure proc;
 			ProcedureCode procCode;
-			Provider provTreat;//might be different for each proc
+			Provider provTreat;//claim level treating provider.
 			Provider billProv=null;
 			Clinic clinic=null;
 			seg=0;
@@ -1580,24 +1580,25 @@ namespace OpenDentBusiness
 						}
 					}
 					#endregion 2410 Service Drug Identification
+					Provider provTreatProc=provTreat;//procedure level treating provider.
 					//2410 REF: VY/XZ (medical,institutional) Prescription or Compound Drug Association Number. Situational. We do not use.
 					#region 2420 Service Providers (medical)
 					if(medType==EnumClaimMedType.Medical) {
 						if(claim.ProvTreat!=proc.ProvNum
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 							//2420A NM1: 82 (medical) Rendering Provider Name. Only if different from the claim.
-							provTreat=Providers.GetProv(proc.ProvNum);
-							WriteNM1Provider("82",sw,provTreat);
+							provTreatProc=Providers.GetProv(proc.ProvNum);
+							WriteNM1Provider("82",sw,provTreatProc);
 							//2420A PRV: (medical) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
 								+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
 								+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-								+X12Generator.GetTaxonomy(provTreat));//PRV03 1/50 Reference Identification: Taxonomy Code.
+								+X12Generator.GetTaxonomy(provTreatProc));//PRV03 1/50 Reference Identification: Taxonomy Code.
 							EndSegment(sw);//PRV04 through PRV06 not used.
 							//2420A REF: (medical) Rendering Provider Secondary Identification.
 							sw.Write("REF"+s
 								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-								+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification: 
+								+Sout(provTreatProc.StateLicense,50));//REF02 1/50 Reference Identification: 
 							EndSegment(sw);//REF03 1/80 Description: Not used. REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
 						}
 						//2420B NM1: Purchased Service Provider Name. Situational. We do not use.
@@ -1608,11 +1609,34 @@ namespace OpenDentBusiness
 						//2420C REF: (medical) Service Facility Location Secondary Identification. Situational. We do not use.
 						//2420D NM1: DQ (medical) Supervising Provider Name. Situational. We do not support.
 						//2420D REF: (medical) Supervising Provider Secondary Identification. Situational. We do not support.
-						//2420E NM1: DK (medical) Ordering Provider Name. Situational. We do not use.
-						//2420E N3: (medical) Ordering Provider Address. Situational. We do not use.
-						//2420E N4: (medical) Ordering Provider City, State, Zip Code. Situational. We do not use.
-						//2420E REF: (medical) Ordering Provider Secondary Identification. Situational. We do not use.
-						//2420E PER: (medical) Ordering Provider Contact Information. Situational. We do not use.
+						//Emdeon Medical requires loop 2420E when the claim is sent to DMERC (Medicaid) carriers, and they requested that we always include it.  We will do this because Emdeon Medical is our only medical clearinghouse.  Emdeon Medical will decide which carriers to remove it for before sending to the carrier. 
+						//2420E NM1: DK (medical) Ordering Provider Name. Situational. Required to be a person. All treating providers are now validated to be persons, both at claim and proc level.
+						WriteNM1Provider("DK",sw,provTreatProc);
+						//2420E N3: (medical) Ordering Provider Address. Situational.
+						sw.Write("N3"+s+Sout(billingAddress1,55));//N301 1/55 Address Information:
+						if(billingAddress2!="") {
+							sw.Write(s+Sout(billingAddress2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
+						}
+						EndSegment(sw);
+						//2420E N4: (medical) Ordering Provider City, State, Zip Code. Situational.
+						sw.Write("N4"+s
+							+Sout(billingCity,30)+s//N401 2/30 City Name:
+							+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
+							+Sout(billingZip,15));//N403 3/15 Postal Code:
+						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.						
+						//2420E REF: (medical) Ordering Provider Secondary Identification. Situational. Required before NPIs were in effect. We do not use this segment because we require NPI.
+						//2420E PER: (medical) Ordering Provider Contact Information. Situational.
+						sw.Write("PER"+s
+							+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
+							+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
+							+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+						if(clinic==null) {
+							sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04 1/256 Communication Number: Telephone number.
+						}
+						else {
+							sw.Write(Sout(clinic.Phone,256));//PER04 1/256 Communication Number: Telephone number.
+						}
+						EndSegment(sw);//PER05 through PER08 are situational and PER09 is not used. We do not use.
 						//2420F NM1: (medical) Referring Provider Name. Situational. We do not use.
 						//2420F REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
 						//2420G NM1: PW (medical) Ambulance Pick-up Location. Situational. We do not use.
@@ -1632,13 +1656,13 @@ namespace OpenDentBusiness
 						if(claim.ProvTreat!=proc.ProvNum
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
-							provTreat=Providers.GetProv(proc.ProvNum);
+							provTreatProc=Providers.GetProv(proc.ProvNum);
 							//2420C NM1: 82 (institutional) Rendering Provider Name. Situational. Only if different than claim attending (treating) prov. Person only, non-person not allowed.
-							WriteNM1Provider("82",sw,provTreat.FName,provTreat.MI,provTreat.LName,provTreat.NationalProvID,false);
+							WriteNM1Provider("82",sw,provTreatProc.FName,provTreatProc.MI,provTreatProc.LName,provTreatProc.NationalProvID,false);
 							//2420C REF: Rendering Provider Secondary Identification. Situational.
 							sw.Write("REF"+s
 								+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-								+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification: Valided to be present.
+								+Sout(provTreatProc.StateLicense,50));//REF02 1/50 Reference Identification: Valided to be present.
 							EndSegment(sw);//REF03 through REF04 are not used or situational.
 						}
 						//2420D NM1: DN (institutional) Referring Provider Name. Situational. We do not use.
@@ -1651,20 +1675,20 @@ namespace OpenDentBusiness
 							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
 							//2420A NM1: 82 (dental) Rendering Provider Name. Only if different from the claim.
-							provTreat=Providers.GetProv(proc.ProvNum);
-							WriteNM1Provider("82",sw,provTreat);
+							provTreatProc=Providers.GetProv(proc.ProvNum);
+							WriteNM1Provider("82",sw,provTreatProc);
 							//2420A PRV: (dental) Rendering Provider Specialty Information.
 							sw.Write("PRV"+s
 								+"PE"+s//PRV01 1/3 Provider Code: PE=Performing.
 								+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
-								+X12Generator.GetTaxonomy(provTreat));//PRV03 1/50 Reference Identification: Taxonomy Code.
+								+X12Generator.GetTaxonomy(provTreatProc));//PRV03 1/50 Reference Identification: Taxonomy Code.
 							EndSegment(sw);//PRV04 through PRV06 not used.
 							//2420A REF: (dental) Rendering Provider Secondary Identification. Never required because we always send NPI (validated).
 							if(!IsDentiCal(clearhouse)) { //Denti-Cal never wants this.
-								if(provTreat.StateLicense!="") {
+								if(provTreatProc.StateLicense!="") {
 									sw.Write("REF"+s
 										+"0B"+s//REF01 2/3 Reference Identification Qualifier: 0B=State License Number.
-										+Sout(provTreat.StateLicense,50));//REF02 1/50 Reference Identification: 
+										+Sout(provTreatProc.StateLicense,50));//REF02 1/50 Reference Identification: 
 									EndSegment(sw);//REF03 1/80 Description: Not used. REF04 Reference Identifier: Situational. Not used when REF01 is 0B or 1G.
 								}
 							}
@@ -1870,6 +1894,7 @@ namespace OpenDentBusiness
 			EndSegment(sw);//PRV04 through PRV06 are not used.
 		}
 
+		///<summary>Writes the segment terminator and a newline char to the stream and then increments the segment count.</summary>
 		private static void EndSegment(StreamWriter sw) {
 			sw.Write(endSegment);
 			seg++;
@@ -2197,10 +2222,6 @@ namespace OpenDentBusiness
 					Comma(strb);
 					strb.Append("Billing Prov cannot be a person.");
 				}
-				if(treatProv.IsNotPerson) {
-					Comma(strb);
-					strb.Append("Treat Prov must be a person.");
-				}
 			}
 			else if(claim.MedType==EnumClaimMedType.Dental) {
 				if(referral!=null && referral.IsDoctor && referral.NotPerson) {
@@ -2273,6 +2294,11 @@ namespace OpenDentBusiness
 				}
 			}
 			//treatProv
+			if(treatProv.IsNotPerson) {
+				Comma(strb);
+				strb.Append("Treat Prov must be a person.");
+				//Required now, because we send this as the ordering prov to Emdeon Medical.
+			}
 			if(treatProv.LName=="") {
 				Comma(strb);
 				strb.Append("Treating Prov LName");
@@ -2625,11 +2651,10 @@ namespace OpenDentBusiness
 				//Providers
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
-					if(claim.MedType==EnumClaimMedType.Institutional) {
-						if(treatProv.IsNotPerson) {
-							Comma(strb);
-							strb.Append("Treat Prov must be a person for proc "+procCode.ProcCode);
-						}
+					if(treatProv.IsNotPerson) {
+						Comma(strb);
+						strb.Append("Treat Prov must be a person for proc "+procCode.ProcCode);
+						//Required now, because we send this as the ordering prov to Emdeon Medical.
 					}
 					if(treatProv.LName=="") {
 						Comma(strb);
