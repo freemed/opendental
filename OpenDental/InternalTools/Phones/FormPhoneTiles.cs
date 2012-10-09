@@ -25,8 +25,10 @@ namespace OpenDental {
 		///<summary>This thread fills labelMsg</summary>
 		private Thread workerThread;
 		private List<Phone> phoneList;
-		///<summary>The number of tiles to show, must be an even integer.</summary>
-		private int TileCount=30;
+		///<summary>The number of tiles to show, no longer needs to be an even number.  Just make sure the window is big enough to show all tiles.</summary>
+		private int TileCount=45;
+		///<summary>How many phone tiles should show up in each column before creating a new column.</summary>
+		private int TilesPerColumn=15;
 
 		public List<Phone> PhoneList {
 			set { 
@@ -52,9 +54,9 @@ namespace OpenDental {
 			PhoneTile tile;
 			int x=0;
 			int y=0;
-			for(int i=0;i<TileCount;i++) {
+			for(int i=1;i<TileCount+1;i++) {
 				tile=new PhoneTile();
-				tile.Name="phoneTile"+(i+1).ToString();
+				tile.Name="phoneTile"+(i).ToString();
 				tile.LayoutHorizontal=true;
 				tile.Location=new Point(tile.Width*x,TileCount+(tile.Height*y));
 				//((PhoneTile)Controls.Find("phoneTile"+(i+1).ToString(),false)[0]);
@@ -65,7 +67,7 @@ namespace OpenDental {
 				tile.MenuStatus=menuStatus;
 				this.Controls.Add(tile);
 				y++;
-				if(y==TileCount/2){//Move over to the other column.
+				if(i%(TilesPerColumn)==0){//If number is divisble by the number of tiles per column, move over to a new column.  TilesPerColumn subtracts one because i is zero based.
 					y=0;
 					x++;
 				}

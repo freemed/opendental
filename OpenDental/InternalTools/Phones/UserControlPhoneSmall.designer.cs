@@ -28,6 +28,7 @@
 			this.menuItemAvailable = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemTraining = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemTeamAssist = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemWrapUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemOfflineAssist = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemUnavailable = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,7 +45,6 @@
 			this.menuItemManage = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemAdd = new System.Windows.Forms.ToolStripMenuItem();
 			this.phoneTile = new OpenDental.PhoneTile();
-			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStatus.SuspendLayout();
 			this.menuNumbers.SuspendLayout();
 			this.SuspendLayout();
@@ -69,7 +69,7 @@
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(179, 346);
+			this.menuStatus.Size = new System.Drawing.Size(179, 324);
 			// 
 			// menuItemAvailable
 			// 
@@ -91,6 +91,13 @@
 			this.menuItemTeamAssist.Size = new System.Drawing.Size(178, 22);
 			this.menuItemTeamAssist.Text = "TeamAssist";
 			this.menuItemTeamAssist.Click += new System.EventHandler(this.menuItemTeamAssist_Click);
+			// 
+			// menuItemNeedsHelp
+			// 
+			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
+			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
+			this.menuItemNeedsHelp.Text = "NeedsHelp";
+			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
 			// 
 			// menuItemWrapUp
 			// 
@@ -198,18 +205,11 @@
 			// 
 			this.phoneTile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.phoneTile.LayoutHorizontal = false;
-			this.phoneTile.Location = new System.Drawing.Point(0, 113);
+			this.phoneTile.Location = new System.Drawing.Point(0, 124);
 			this.phoneTile.Name = "phoneTile";
 			this.phoneTile.PhoneCur = null;
 			this.phoneTile.Size = new System.Drawing.Size(150, 122);
 			this.phoneTile.TabIndex = 0;
-			// 
-			// menuItemNeedsHelp
-			// 
-			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
-			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
-			this.menuItemNeedsHelp.Text = "NeedsHelp";
-			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
 			// 
 			// UserControlPhoneSmall
 			// 
@@ -218,7 +218,7 @@
 			this.Controls.Add(this.phoneTile);
 			this.DoubleBuffered = true;
 			this.Name = "UserControlPhoneSmall";
-			this.Size = new System.Drawing.Size(150, 239);
+			this.Size = new System.Drawing.Size(150, 250);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.UserControlPhoneSmall_Paint);
 			this.menuStatus.ResumeLayout(false);
 			this.menuNumbers.ResumeLayout(false);

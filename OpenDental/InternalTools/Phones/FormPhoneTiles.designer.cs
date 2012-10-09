@@ -32,6 +32,7 @@
 			this.menuItemAvailable = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemTraining = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemTeamAssist = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemWrapUp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemOfflineAssist = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemUnavailable = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,7 +47,6 @@
 			this.menuItemBreak = new System.Windows.Forms.ToolStripMenuItem();
 			this.checkBoxAll = new System.Windows.Forms.CheckBox();
 			this.butOverride = new OpenDental.UI.Button();
-			this.menuItemNeedsHelp = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuNumbers.SuspendLayout();
 			this.menuStatus.SuspendLayout();
 			this.SuspendLayout();
@@ -104,7 +104,7 @@
             this.menuItemHome,
             this.menuItemBreak});
 			this.menuStatus.Name = "menuStatus";
-			this.menuStatus.Size = new System.Drawing.Size(179, 346);
+			this.menuStatus.Size = new System.Drawing.Size(179, 324);
 			// 
 			// menuItemAvailable
 			// 
@@ -126,6 +126,13 @@
 			this.menuItemTeamAssist.Size = new System.Drawing.Size(178, 22);
 			this.menuItemTeamAssist.Text = "TeamAssist";
 			this.menuItemTeamAssist.Click += new System.EventHandler(this.menuItemTeamAssist_Click);
+			// 
+			// menuItemNeedsHelp
+			// 
+			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
+			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
+			this.menuItemNeedsHelp.Text = "NeedsHelp";
+			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
 			// 
 			// menuItemWrapUp
 			// 
@@ -210,7 +217,7 @@
 			// checkBoxAll
 			// 
 			this.checkBoxAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.checkBoxAll.Location = new System.Drawing.Point(843, 5);
+			this.checkBoxAll.Location = new System.Drawing.Point(1328, 5);
 			this.checkBoxAll.Name = "checkBoxAll";
 			this.checkBoxAll.Size = new System.Drawing.Size(104, 16);
 			this.checkBoxAll.TabIndex = 28;
@@ -232,18 +239,11 @@
 			this.butOverride.Text = "Settings";
 			this.butOverride.Click += new System.EventHandler(this.butOverride_Click);
 			// 
-			// menuItemNeedsHelp
-			// 
-			this.menuItemNeedsHelp.Name = "menuItemNeedsHelp";
-			this.menuItemNeedsHelp.Size = new System.Drawing.Size(178, 22);
-			this.menuItemNeedsHelp.Text = "NeedsHelp";
-			this.menuItemNeedsHelp.Click += new System.EventHandler(this.menuItemNeedsHelp_Click);
-			// 
 			// FormPhoneTiles
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(954, 787);
+			this.ClientSize = new System.Drawing.Size(1439, 802);
 			this.Controls.Add(this.checkBoxAll);
 			this.Controls.Add(this.labelMsg);
 			this.Controls.Add(this.butOverride);

@@ -54,36 +54,48 @@ namespace OpenDental {
 		private void UserControlPhoneSmall_Paint(object sender,PaintEventArgs e) {
 			Graphics g=e.Graphics;
 			g.FillRectangle(SystemBrushes.Control,this.Bounds);
-			if(phoneList==null){
+			if(phoneList==null) {
 				return;
 			}
-			int rows=5;
+			int rows=7;
 			int columns=7;
-			float wh=21.4f;
-			float hTot=wh*rows;
+			float boxWidth=21.4f;
+			float boxHeight=17f;
+			float hTot=boxHeight*rows;
 			float x=0f;
 			float y=0f;
 			//Create a white "background" rectangle so that any empty squares (no employees) will show as white boxes instead of no color.
-			g.FillRectangle(new SolidBrush(Color.White),x,y,wh*columns,wh*rows);
-			for(int i=0;i<phoneList.Count;i++){
-				using(SolidBrush brush=new SolidBrush(phoneList[i].ColorBar)){
-					g.FillRectangle(brush,x*wh,y*wh,wh,wh);
+			g.FillRectangle(new SolidBrush(Color.White),x,y,boxWidth*columns,boxHeight*rows);
+			for(int i=0;i<phoneList.Count;i++) {
+				//Colors the box a color based on the corresponding phone's status.
+				using(SolidBrush brush=new SolidBrush(phoneList[i].ColorBar)) {
+					g.FillRectangle(brush,x*boxWidth,y*boxHeight,boxWidth,boxHeight);
+				}
+				//Draw the extension number if a person is available at that extension.
+				if(phoneList[i].ClockStatus!=ClockStatusEnum.Home
+					&& phoneList[i].ClockStatus!=ClockStatusEnum.None) 
+				{
+					Font baseFont=new Font("Arial",7);
+					SizeF extSize=g.MeasureString(phoneList[i].Extension.ToString(),baseFont);
+					float padX=(boxWidth-extSize.Width)/2;
+					float padY=(boxHeight-extSize.Height)/2;
+					g.DrawString(phoneList[i].Extension.ToString(),baseFont,new SolidBrush(Color.Black),(x*boxWidth)+(padX),(y*boxHeight)+(padY));
 				}
 				x++;
-				if(x>=columns){
+				if(x>=columns) {
 					x=0f;
 					y++;
 				}
 			}
 			//horiz lines
-			for(int i=0;i<rows+1;i++){
-				g.DrawLine(Pens.Black,0,i*wh,Width,i*wh);
+			for(int i=0;i<rows+1;i++) {
+				g.DrawLine(Pens.Black,0,i*boxHeight,Width,i*boxHeight);
 			}
 			//Very bottom
 			g.DrawLine(Pens.Black,0,Height-1,Width,Height-1);
 			//vert
-			for(int i=0;i<columns;i++){
-				g.DrawLine(Pens.Black,i*wh,0,i*wh,hTot);
+			for(int i=0;i<columns;i++) {
+				g.DrawLine(Pens.Black,i*boxWidth,0,i*boxWidth,hTot);
 			}
 			g.DrawLine(Pens.Black,Width-1,0,Width-1,hTot);
 		}
