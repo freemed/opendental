@@ -587,8 +587,8 @@ namespace OpenDentBusiness{
 					//if this is the last entry for a given week
 					//else 
 					if(i==mergedAL.Count-1//if this is the last row 
-		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,DayOfWeek.Sunday)//or the next row has a
-		        != cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,DayOfWeek.Sunday))//different week of year
+		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+		        != cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 		      {
 						//row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);

@@ -735,8 +735,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,DayOfWeek.Sunday))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -907,6 +907,14 @@ namespace OpenDental{
 			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			//loop through all rows
 			for(int i=0;i<mergedAL.Count;i++) {
+				//DEBUG ONLY
+				int int1;
+				int int2;
+				if(i<mergedAL.Count-1) {//not last row.
+					int1 = cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek));//Default is 0-Sunday
+					int2 = cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek));
+				}
+				//END DEBUG ONLY
 				//ignore rows that aren't weekly totals
 				if(i<mergedAL.Count-1//if not the last row
 		      //if the next row has the same week as this row
