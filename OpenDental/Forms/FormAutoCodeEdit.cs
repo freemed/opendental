@@ -345,6 +345,9 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(listForCode[0].ListConditions.Count==0) {//Rest of the checks assume at least one condition.
+				return;
+			}
 			//Check for duplicate AutoCodeItem condition lists.-------------------------------------------------------------------------------------------
 			for(int i=1;i<listForCode.Count;i++) {//start at 1 and compare to all lower indexed entries
 				for(int j=0;j<i;j++) {
