@@ -815,6 +815,7 @@ namespace OpenDental {
 					if(!PayPlans.PlanIsPaidOff(payPlanList[0].PayPlanNum)) {
 						AddOneSplit();//the amount and date will be updated upon closing
 						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[0].PayPlanNum;
+						SetPaySplitProvAndClinicForPayPlan(SplitList[SplitList.Count-1]);
 					}
 				}
 				else {
@@ -827,6 +828,7 @@ namespace OpenDental {
 						//return PayPlanList[FormPPS.IndexSelected].Clone();
 						AddOneSplit();//the amount and date will be updated upon closing
 						SplitList[SplitList.Count-1].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
+						SetPaySplitProvAndClinicForPayPlan(SplitList[SplitList.Count-1]);
 					}
 				}
 				/*
@@ -1159,6 +1161,7 @@ namespace OpenDental {
 				}
 				else if(payPlanList.Count==1) { //if there is only one valid payplan
 					SplitList[0].PayPlanNum=payPlanList[0].PayPlanNum;
+					SetPaySplitProvAndClinicForPayPlan(SplitList[0]);
 				}
 				else {//multiple valid plans
 					List<PayPlanCharge> chargeList=PayPlanCharges.Refresh(SplitList[0].PatNum);
@@ -1168,6 +1171,7 @@ namespace OpenDental {
 					FormPPS.ShowDialog();
 					if(FormPPS.DialogResult==DialogResult.OK) {
 						SplitList[0].PayPlanNum=payPlanList[FormPPS.IndexSelected].PayPlanNum;
+						SetPaySplitProvAndClinicForPayPlan(SplitList[0]);
 					}
 					else {
 						checkPayPlan.Checked=false;
@@ -1184,6 +1188,7 @@ namespace OpenDental {
 			}
 			else {//payPlan unchecked
 				SplitList[0].PayPlanNum=0;
+				//User can go in and manually edit the provider and clinic if they need to at this point.
 			}
 			FillMain();
 		}
@@ -1199,6 +1204,22 @@ namespace OpenDental {
 			PaySplitCur.ClinicNum=PaymentCur.ClinicNum;
 			PaySplitCur.SplitAmt=PIn.Double(textAmount.Text);
 			SplitList.Add(PaySplitCur);
+		}
+
+		///<summary>Updates the passed in paysplit with the provider and clinic that is set for the payment plan charges.  PayPlanNum should already be set for the split.</summary>
+		private void SetPaySplitProvAndClinicForPayPlan(PaySplit split) {
+			if(split.PayPlanNum==0) {//PayPlanNum was not set, this should never happen.
+				return;
+			}
+			List<PayPlanCharge> charges=PayPlanCharges.GetForPayPlan(split.PayPlanNum);//The payment plan doesn't save/store this information
+			if(charges.Count>0) {//All charges linked to a payplan share the same clinic and provider.  Just use the first one in the list.
+				if(charges[0].ProvNum>0) {//This should never fail.
+					split.ProvNum=charges[0].ProvNum;
+				}
+				if(charges[0].ClinicNum>0) {//It is possible to not set a clinic for pay plan charges.
+					split.ClinicNum=charges[0].ClinicNum;
+				}
+			}
 		}
 
 		private void listPayType_Click(object sender,EventArgs e) {
