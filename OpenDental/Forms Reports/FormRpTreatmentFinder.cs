@@ -607,14 +607,14 @@ namespace OpenDental{
 			  row=new ODGridRow();
 				//Temporary filter just showing columns wanted. Probable it will become user defined.
 			  for(int j=0;j<table.Columns.Count;j++) {
-					if(j==0 || j==4 || j==5) {//PatNum,address,cityStateZip are just for the export report.
+					if(j==0 || j==4 || j==5 || j==6 || j==7) {//PatNum,address,city,State,Zip are just for the export report.
 						continue;
 					}
-					if(j==6 && PIn.Double(table.Rows[i][j].ToString())==0){
+					if(j==8 && PIn.Double(table.Rows[i][j].ToString())==0){
 						row.Cells.Add("");//don't show annual max for patients without ins or patients without annual max
 						continue;
 					}
-					if(j==9 && PIn.Double(table.Rows[i][6].ToString())==0){//if annualmax is 0
+					if(j==9 && PIn.Double(table.Rows[i][8].ToString())==0){//if annualmax is 0
 						row.Cells.Add("");//don't show amount remaining if no annual max
 						continue;
 					}
