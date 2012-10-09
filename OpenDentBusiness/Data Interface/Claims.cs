@@ -68,7 +68,7 @@ namespace OpenDentBusiness{
 				+"AND insplan.PlanNum = claim.PlanNum "
 				+"AND insplan.CarrierNum = carrier.CarrierNum "
 				+"AND (claim.ClaimStatus = 'S' "
-				+"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt>0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
+					+"OR (claim.ClaimStatus='R' AND claimproc.InsPayAmt!=0)) "//certain (very few) received claims will have payment amounts entered but not attached to payment
 				+"AND ClaimType != 'PreAuth' "
 				+"AND claimproc.ClaimPaymentNum=0 "
 				+"AND carrier.CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
