@@ -380,8 +380,8 @@ namespace OpenDental{
 			this.menuItemDisplayFields = new System.Windows.Forms.MenuItem();
 			this.menuItemEmail = new System.Windows.Forms.MenuItem();
 			this.menuItemEHR = new System.Windows.Forms.MenuItem();
-			this.menuItemHL7 = new System.Windows.Forms.MenuItem();
 			this.menuItemFeeScheds = new System.Windows.Forms.MenuItem();
+			this.menuItemHL7 = new System.Windows.Forms.MenuItem();
 			this.menuItemImaging = new System.Windows.Forms.MenuItem();
 			this.menuItemInsCats = new System.Windows.Forms.MenuItem();
 			this.menuItemInsFilingCodes = new System.Windows.Forms.MenuItem();
@@ -592,7 +592,7 @@ namespace OpenDental{
             this.menuItemEmail,
             this.menuItemEHR,
             this.menuItemFeeScheds,
-						this.menuItemHL7,
+            this.menuItemHL7,
             this.menuItemImaging,
             this.menuItemInsCats,
             this.menuItemInsFilingCodes,
@@ -1365,7 +1365,7 @@ namespace OpenDental{
 			this.panelPhoneSmall.Controls.Add(this.labelMsg);
 			this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
 			this.panelPhoneSmall.Name = "panelPhoneSmall";
-			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 250);
+			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 260);
 			this.panelPhoneSmall.TabIndex = 56;
 			// 
 			// butTriage
