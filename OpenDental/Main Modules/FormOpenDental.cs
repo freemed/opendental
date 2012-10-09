@@ -1365,7 +1365,7 @@ namespace OpenDental{
 			this.panelPhoneSmall.Controls.Add(this.labelMsg);
 			this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
 			this.panelPhoneSmall.Name = "panelPhoneSmall";
-			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 260);
+			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 265);
 			this.panelPhoneSmall.TabIndex = 56;
 			// 
 			// butTriage
