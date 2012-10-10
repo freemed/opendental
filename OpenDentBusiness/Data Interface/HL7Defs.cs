@@ -122,7 +122,7 @@ namespace OpenDentBusiness{
 			return true;
 		}
 
-		///<summary>Tells us whether there is an existing enable HL7Def.</summary>
+		///<summary>Tells us whether there is an existing enabled HL7Def.</summary>
 		public static bool IsExistingHL7Enabled() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod());

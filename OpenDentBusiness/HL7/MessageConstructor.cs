@@ -8,7 +8,7 @@ namespace OpenDentBusiness.HL7 {
 	public static class MessageConstructor {
 	
 		///<summary>Returns null if there is no DFT defined for the enabled HL7Def.</summary>
-		public static MessageHL7 GenerateDFT(List<Procedure> procList,string eventType,Patient pat,Patient guar,long aptNum,string pdfDescription,string pdfDataString) {//add event (A04 etc) parameters later if needed
+		public static MessageHL7 GenerateDFT(List<Procedure> procList,EventTypeHL7 eventType,Patient pat,Patient guar,long aptNum,string pdfDescription,string pdfDataString) {//add event (A04 etc) parameters later if needed
 			//In \\SERVERFILES\storage\OPEN DENTAL\Programmers Documents\Standards (X12, ADA, etc)\HL7\Version2.6\V26_CH02_Control_M4_JAN2007.doc
 			//On page 28, there is a Message Construction Pseudocode as well as a flowchart which might help.
 			Provider prov=Providers.GetProv(Patients.GetProvNum(pat));

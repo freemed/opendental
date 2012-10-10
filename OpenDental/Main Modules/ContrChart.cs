@@ -4387,7 +4387,7 @@ namespace OpenDental{
 				break;
 			}
 //todo: compare with: Bridges.ECW.AptNum, no need to generate PDF segment, pdfs only with eCW and this button not available with eCW integration
-			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,"P03",PatCur,FamCur.ListPats[0],aptNum,"treatment","PDF Segment");
+			MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,PatCur,FamCur.ListPats[0],aptNum,"treatment","PDF Segment");
 			if(messageHL7==null) {
 				MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
 				return;

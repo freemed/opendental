@@ -12,7 +12,7 @@ namespace OpenDentBusiness.HL7 {
 	///<summary>This is the engine that will construct our outgoing HL7 message fields.</summary>
 	public class FieldConstructor {
 
-		public static string GenerateDFT(HL7Def def,string fieldName,Patient pat,Provider prov,Procedure proc,Patient guar,Appointment apt,int sequenceNum,string eventType,string pdfDescription,string pdfDataString) {
+		public static string GenerateDFT(HL7Def def,string fieldName,Patient pat,Provider prov,Procedure proc,Patient guar,Appointment apt,int sequenceNum,EventTypeHL7 eventType,string pdfDescription,string pdfDataString) {
 			//big long list of fieldnames that we support
 			switch(fieldName){
 				case "apt.AptNum":
@@ -25,7 +25,7 @@ namespace OpenDentBusiness.HL7 {
 				case "dateTime.Now":
 					return gDTM(DateTime.Now,14);
 				case "eventType":
-					return eventType;
+					return eventType.ToString();
 				case "guar.addressCityStateZip":
 					return gConcat(def.ComponentSeparator,guar.Address,guar.Address2,guar.City,guar.State,guar.Zip);
 				case "guar.birthdateTime":
@@ -43,7 +43,7 @@ namespace OpenDentBusiness.HL7 {
 				case "guar.WkPhone":
 					return gXTN(guar.WkPhone,10);
 				case "messageType":
-					return gConcat(def.ComponentSeparator,"DFT",eventType);
+					return gConcat(def.ComponentSeparator,"DFT",eventType.ToString());
 				case "pat.addressCityStateZip":
 					return gConcat(def.ComponentSeparator,pat.Address,pat.Address2,pat.City,pat.State,pat.Zip);
 				case "pat.birthdateTime":

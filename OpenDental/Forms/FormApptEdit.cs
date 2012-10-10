@@ -2564,7 +2564,7 @@ namespace OpenDental{
 			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
 			if(HL7Defs.IsExistingHL7Enabled()) {
-				MessageConstructor.GenerateDFT(procs,"P03",pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
 			}
 			else {
 				Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",true);
@@ -2769,7 +2769,7 @@ namespace OpenDental{
 				//Send DFT to eCW containing the attached procedures for this appointment in a .pdf file.				
 				string pdfDataStr=GenerateProceduresIntoPdf();
 				if(HL7Defs.IsExistingHL7Enabled()) {
-					MessageConstructor.GenerateDFT(procs,"P03",pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+					MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
 				}
 				else {
 					Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",false);

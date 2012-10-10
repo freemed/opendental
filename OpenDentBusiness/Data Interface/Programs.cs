@@ -173,7 +173,7 @@ namespace OpenDentBusiness{
 			return false;
 		}
 
-		/// <summary>Returns true if using eCW in tight or full mode.</summary>
+		/// <summary>Returns true if using eCW in tight or full mode.  In these modes, appointments ARE allowed to overlap because we block users from seeing them.</summary>
 		public static bool UsingEcwTightOrFullMode() {
 			//No need to check RemotingRole; no call to db.
 			if(UsingEcwTightMode() || UsingEcwFullMode()) {
