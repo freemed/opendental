@@ -1037,7 +1037,7 @@ namespace OpenDentBusiness
 					sw.WriteLine("N4*"
 						+Sout(otherSubsc.City,30)+"*"//N401: City
 						+Sout(otherSubsc.State,2)+"*"//N402: State
-						+Sout(otherSubsc.Zip,15)+"~");//N403: Zip
+						+Sout(otherSubsc.Zip.Replace("-",""),15)+"~");//N403: Zip
 					//2330A REF: Other subscriber secondary ID. Not supported.
 					//2330B NM1: Other payer name
 					seg++;

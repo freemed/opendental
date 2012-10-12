@@ -1101,7 +1101,7 @@ namespace OpenDentBusiness
 						sw.Write("N4"+s
 							+Sout(billingCity,30)+s//N401 2/30 City Name:
 							+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
-							+Sout(billingZip,15));//N403 3/15 Postal Code:
+							+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
 						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.
 						//2310C REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use this.
 					}
@@ -1219,7 +1219,7 @@ namespace OpenDentBusiness
 					sw.Write("N4"+s
 						+Sout(otherSubsc.City,30)+s//N401 2/30 City Name:
 						+Sout(otherSubsc.State,2,2)+s//N402 2/2 State or Province Code:
-						+Sout(otherSubsc.Zip,15));//N403 3/15 Postal Code:
+						+Sout(otherSubsc.Zip.Replace("-",""),15));//N403 3/15 Postal Code:
 					EndSegment(sw);//N404 through N407 are either not required or are required when the address is outside of the United States.
 					//2330A REF: (medical,institutional,dental) Other Subscriber Secondary Identification. Situational. Not supported.
 					#endregion 2330A Other subscriber Name
@@ -1622,7 +1622,7 @@ namespace OpenDentBusiness
 						sw.Write("N4"+s
 							+Sout(billingCity,30)+s//N401 2/30 City Name:
 							+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
-							+Sout(billingZip,15));//N403 3/15 Postal Code:
+							+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
 						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.						
 						//2420E REF: (medical) Ordering Provider Secondary Identification. Situational. Required before NPIs were in effect. We do not use this segment because we require NPI.
 						//2420E PER: (medical) Ordering Provider Contact Information. Situational.
