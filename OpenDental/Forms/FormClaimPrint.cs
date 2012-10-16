@@ -216,7 +216,8 @@ namespace OpenDental{
 			pagesPrinted=0;
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(pd2.DefaultPageSettings.PrintableArea.Height<400) {//some printers report page size of 0.
+			if(pd2.DefaultPageSettings.PrintableArea.Width==0 || pd2.DefaultPageSettings.PrintableArea.Height<400) {//some printers report page size of 0.
+				//prevents bug in some printers that do not specify paper size
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
@@ -230,7 +231,8 @@ namespace OpenDental{
 			pagesPrinted=0;
 			pd2.OriginAtMargins=true;
 			pd2.DefaultPageSettings.Margins=new Margins(0,0,0,0);
-			if(pd2.DefaultPageSettings.PrintableArea.Height<400) {//some printers report page size of 0.
+			if(pd2.DefaultPageSettings.PrintableArea.Width==0 || pd2.DefaultPageSettings.PrintableArea.Height<400) {//some printers report page size of 0.
+				//prevents bug in some printers that do not specify paper size
 				pd2.DefaultPageSettings.PaperSize=new PaperSize("default",850,1100);
 			}
 			pd2.PrintPage+=new PrintPageEventHandler(this.pd2_PrintPage);
