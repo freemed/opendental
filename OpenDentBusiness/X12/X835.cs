@@ -9,335 +9,66 @@ namespace OpenDentBusiness
 	public class X835:X12object{
 
     private List<X12Segment> segments;
-//    ///<summary>NM1 of loop 2100A.</summary>
-//    private int segNumInfoSourceNM101;
-//    ///<summary>NM1 of loop 2100B.</summary>
-//    private int segNumInfoReceiverNM101;
-//    ///<summary>NM1 of loop 2100C.</summary>
-//    private List<int> segNumsBillingProviderNM1;
-//    ///<summary>NM1 of loop 2100D.</summary>
-//    private List<int> segNumsPatientDetailNM1;
-//    ///<summary>TRN of loop 2200D.</summary>
-//    private List<int> segNumsClaimTrackingNumberTRN;
+		///<summary>CLP of loop 2100. Claim payment information.</summary>
+		private List<int> segNumsCLP;
+		///<summary>SCC of loop 2110. Service (procedure) payment information.</summary>
+		private List<int> segNumsSVC;
 
     public static bool Is835(X12object xobj) {
-//      if(xobj.FunctGroups.Count!=1) {
-//        return false;
-//      }
-//      if(xobj.FunctGroups[0].Header.Get(1)=="HN") {
-//        return true;
-//      }
+      if(xobj.FunctGroups.Count!=1) {
+        return false;
+      }
+      if(xobj.FunctGroups[0].Header.Get(1)=="HP") {
+        return true;
+      }
       return false;
     }
 
     public X835(string messageText):base(messageText) {
       segments=FunctGroups[0].Transactions[0].Segments;
-//      segNumInfoSourceNM101=-1;
-//      segNumInfoReceiverNM101=-1;
-//      segNumsBillingProviderNM1=new List<int>();
-//      segNumsPatientDetailNM1=new List<int>();
-//      segNumsClaimTrackingNumberTRN=new List<int>();
-//      for(int i=0;i<segments.Count;i++) {
-//        X12Segment seg=segments[i];
-//        if(seg.SegmentID=="NM1") {
-//          string entityIdentifierCode=seg.Get(1);
-//          if(entityIdentifierCode=="AY" || entityIdentifierCode=="PR") {
-//            segNumInfoSourceNM101=i;
-//            i+=4;
-//          }
-//          else if(entityIdentifierCode=="41") {
-//            segNumInfoReceiverNM101=i;
-//            i+=3;
-//            seg=segments[i];
-//            while(seg.SegmentID=="STC") {
-//              i++;
-//              seg=segments[i];
-//            }
-//            i+=4;
-//          }
-//          else if(entityIdentifierCode=="85") {
-//            segNumsBillingProviderNM1.Add(i);
-//          }
-//          else if(entityIdentifierCode=="QC") {
-//            segNumsPatientDetailNM1.Add(i);
-//            //Loop 2200D: There can be multiple TRN segments for each NM1*QC.
-//            do {
-//              i++;
-//              segNumsClaimTrackingNumberTRN.Add(i);//a TRN segment is required at this location.
-//              i++;
-//              seg=segments[i];//at least one STC segment is required at this location.
-//              while(seg.SegmentID=="STC") {//there may be multiple STC segments.
-//                i++;
-//                seg=segments[i];
-//              }
-//              //Followed by 0 to 3 situational REF segments.
-//              for(int j=0;j<3 && (seg.SegmentID=="REF");j++) {
-//                i++;
-//                seg=segments[i];
-//              }
-//              //Followed by 0 or 1 DTP segments. 
-//              if(seg.SegmentID=="DTP") {
-//                i++;
-//                seg=segments[i];
-//              }
-//              //An entire iteration of loop 2200D is now finished. If another iteration is present, it will begin with a TRN segment.
-//            } while(seg.SegmentID=="TRN");
-//          }
-//        }
-//      }
+			segNumsCLP=new List<int>();
+			segNumsSVC=new List<int>();
+			for(int i=0;i<segments.Count;i++) { //All segments which have unique names within the 835 format can go inside this loop.
+				if(segments[i].SegmentID=="CLP") { //The only place CLP segments exist is within the 2100 loop.
+					segNumsCLP.Add(i);
+				}
+				else if(segments[i].SegmentID=="SVC") { //The only place SVC segments exist is within the 2110 loop.
+					segNumsSVC.Add(i);
+				}
+			}
     }
 
-//    ///<summary>NM101 of loop 2100A.</summary>
-//    public string GetInformationSourceType() {
-//      if(segNumInfoSourceNM101!=-1) {
-//        if(segments[segNumInfoSourceNM101].Get(1)=="AY") {
-//          return "Clearinghouse";
-//        }
-//        return "Payor";
-//      }
-//      return "";
-//    }
+		///<summary>CLP01 in loop 2100. Referred to in this format as a Patient Control Number. Do this first to get a list of all claim tracking numbers that are contained within this 835.  Then, for each claim tracking number, we can later retrieve specific information for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
+		public List<string> GetClaimTrackingNumbers() {
+			List<string> retVal=new List<string>();
+			for(int i=0;i<segNumsCLP.Count;i++) {
+				X12Segment seg=segments[segNumsCLP[i]];//CLP segment.
+				retVal.Add(seg.Get(1));//CLP01
+			}
+			return retVal;
+		}
 
-//    ///<summary>NM103 of loop 2100A.</summary>
-//    public string GetInformationSourceName() {
-//      if(segNumInfoSourceNM101!=-1) {
-//        return segments[segNumInfoSourceNM101].Get(3);
-//      }
-//      return "";
-//    }
-
-//    ///<summary>DTP03 of loop 2200A.</summary>
-//    public DateTime GetInformationSourceReceiptDate() {
-//      if(segNumInfoSourceNM101!=-1) {
-//        try {
-//          string dateStr=segments[segNumInfoSourceNM101+2].Get(3);
-//          int dateYear=PIn.Int(dateStr.Substring(0,4));
-//          int dateMonth=PIn.Int(dateStr.Substring(4,2));
-//          int dateDay=PIn.Int(dateStr.Substring(6,2));
-//          return new DateTime(dateYear,dateMonth,dateDay);
-//        }
-//        catch {
-//        }
-//      }
-//      return DateTime.MinValue;
-//    }
-
-//    ///<summary>DTP03 of loop 2200A.</summary>
-//    public DateTime GetInformationSourceProcessDate() {
-//      if(segNumInfoSourceNM101!=-1) {
-//        try {
-//          string dateStr=segments[segNumInfoSourceNM101+3].Get(3);
-//          int dateYear=PIn.Int(dateStr.Substring(0,4));
-//          int dateMonth=PIn.Int(dateStr.Substring(4,2));
-//          int dateDay=PIn.Int(dateStr.Substring(6,2));
-//          return new DateTime(dateYear,dateMonth,dateDay);
-//        }
-//        catch {
-//        }
-//      }
-//      return DateTime.MinValue;
-//    }
-
-//    ///<summary>Last STC segment in loop 2200B. Returns -1 on error.</summary>
-//    private int GetSegNumLastSTC2200B() {
-//      if(segNumInfoReceiverNM101!=-1) {
-//        int segNum=segNumInfoReceiverNM101+2;
-//        X12Segment seg=segments[segNum];
-//        while(seg.SegmentID=="STC") {
-//          segNum++;
-//          //End of message can happen because the QTY and AMT segments are situational, and so are the two HL segments after this.
-//          if(segNum>=segments.Count) {
-//            return segNum-1;
-//          }
-//          seg=segments[segNum];
-//        }
-//        return segNum-1;
-//      }
-//      return -1;
-//    }
-
-//    ///<summary>QTY02 of loop 2200B.</summary>
-//    public long GetQuantityAccepted() {
-//      int segNum=GetSegNumLastSTC2200B();
-//      if(segNum!=-1) {
-//        segNum++;
-//        if(segNum<segments.Count) {
-//          X12Segment seg=segments[segNum];
-//          if(seg.SegmentID=="QTY" && seg.Get(1)=="90") {
-//            return long.Parse(seg.Get(2));
-//          }
-//        }
-//      }
-//      return 0;
-//    }
-
-//    ///<summary>QTY02 of loop 2200B.</summary>
-//    public long GetQuantityRejected() {
-//      int segNum=GetSegNumLastSTC2200B();
-//      if(segNum!=-1) {
-//        segNum++;
-//        if(segNum<segments.Count) {
-//          X12Segment seg=segments[segNum];
-//          if(seg.SegmentID=="QTY") {
-//            try {
-//              if(seg.Get(1)=="AA") {
-//                return long.Parse(seg.Get(2));
-//              }
-//              else {
-//                segNum++;
-//                if(segNum<segments.Count) {
-//                  seg=segments[segNum];
-//                  if(seg.SegmentID=="QTY" && seg.Get(1)=="AA") {
-//                    return long.Parse(seg.Get(2));
-//                  }
-//                }
-//              }
-//            }
-//            catch {
-//            }
-//          }
-//        }
-//      }
-//      return 0;
-//    }
-
-//    ///<summary>AMT02 of loop 2200B.</summary>
-//    public double GetAmountAccepted() {
-//      int segNum=GetSegNumLastSTC2200B();
-//      if(segNum!=-1) {
-//        segNum++;
-//        if(segNum<segments.Count) {
-//          X12Segment seg=segments[segNum];
-//          while(seg.SegmentID=="QTY") {
-//            segNum++;
-//            if(segNum>=segments.Count) {
-//              return 0;
-//            }
-//            seg=segments[segNum];
-//          }
-//          if(seg.SegmentID=="AMT" && seg.Get(1)=="YU") {
-//            return double.Parse(seg.Get(2));
-//          }
-//        }
-//      }
-//      return 0;
-//    }
-
-//    ///<summary>AMT02 of loop 2200B.</summary>
-//    public double GetAmountRejected() {
-//      int segNum=GetSegNumLastSTC2200B();
-//      if(segNum!=-1) {
-//        segNum++;
-//        if(segNum<segments.Count) {
-//          X12Segment seg=segments[segNum];
-//          while(seg.SegmentID=="QTY") {
-//            segNum++;
-//            if(segNum>=segments.Count) {
-//              return 0;
-//            }
-//            seg=segments[segNum];
-//          }
-//          if(seg.SegmentID=="AMT") {
-//            if(seg.Get(1)=="YY") {
-//              return double.Parse(seg.Get(2));
-//            }
-//            else {
-//              segNum++;
-//              if(segNum<segments.Count) {
-//                seg=segments[segNum];
-//                if(seg.SegmentID=="AMT" && seg.Get(1)=="YY") {
-//                  return double.Parse(seg.Get(2));
-//                }
-//              }
-//            }
-//          }
-//        }
-//      }
-//      return 0;
-//    }
-
-//    ///<summary>TRN02 in loop 2200D. Do this first to get a list of all claim tracking numbers that are contained within this 835.  Then, for each claim tracking number, we can later retrieve the AckCode for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
-//    public List<string> GetClaimTrackingNumbers() {
-//      List<string> retVal=new List<string>();
-//      for(int i=0;i<segNumsClaimTrackingNumberTRN.Count;i++) {
-//        X12Segment seg=segments[segNumsClaimTrackingNumberTRN[i]];//TRN segment.
-//        retVal.Add(seg.Get(2));
-//      }
-//      return retVal;
-//    }
-
-//    ///<summary>Result will contain strings in the following order: Patient Last Name (NM103), Patient First Name (NM104), Patient Middle Name (NM105), Claim Status (STC03), Payor's Claim Control Number (REF02), Institutional Type of Bill (REF02), Claim Date Service Start (DTP03), Claim Date Service End (DTP03).</summary>
-//    public string[] GetClaimInfo(string trackingNumber) {
-//      string[] result=new string[8];
-//      for(int i=0;i<result.Length;i++) {
-//        result[i]="";
-//      }
-//      for(int i=0;i<segNumsClaimTrackingNumberTRN.Count;i++) {
-//        int segNum=segNumsClaimTrackingNumberTRN[i];
-//        X12Segment seg=segments[segNum];//TRN segment.
-//        if(seg.Get(2)==trackingNumber) { //TRN02
-//          //Locate the NM1 segment corresponding to the claim tracking number. One NM1 segment can be shared with multiple TRN segments.
-//          //The strategy is to locate the NM1 segment furthest down in the message that is above the TRN segment for the tracking number.
-//          int segNumNM1=segNumsPatientDetailNM1[segNumsPatientDetailNM1.Count-1];//very last NM1 segment
-//          for(int j=0;j<segNumsPatientDetailNM1.Count-1;j++) {
-//            if(segNum>segNumsPatientDetailNM1[j] && segNum<segNumsPatientDetailNM1[j+1]) {
-//              segNumNM1=segNumsPatientDetailNM1[j];
-//              break;
-//            }
-//          }
-//          seg=segments[segNumNM1];//NM1 segment.
-//          result[0]=seg.Get(3);//NM103 Last Name
-//          result[1]=seg.Get(4);//NM104 First Name
-//          result[2]=seg.Get(5);//NM105 Middle Name
-//          segNum++;
-//          seg=segments[segNum];//STC segment. At least one, maybe multiple, but we only care about the first one.
-//          if(seg.Get(3)=="WQ") { //STC03 = WQ
-//            result[3]="A";
-//          }
-//          else { //STC03 = U
-//            result[3]="R";
-//          }
-//          //Skip the remaining STC segments (if any).
-//          segNum++;
-//          seg=segments[segNum];
-//          while(seg.SegmentID=="STC") {
-//            segNum++;
-//            seg=segments[segNum];
-//          }
-//          while(seg.SegmentID=="REF") {
-//            string refIdQualifier=seg.Get(1);
-//            if(refIdQualifier=="1K") {
-//              result[4]=seg.Get(2);//REF02 Payor's Claim Control Number.
-//            }
-//            else if(refIdQualifier=="D9") {
-//              //REF02 Claim Identifier Number for Clearinghouse and Other Transmission Intermediary from the 837.
-//              //When we send this it is the same as the claim identifier/claim tracking number, so we don't use this for now.
-//            }
-//            else if(refIdQualifier=="BLT") {
-//              //REF02 Institutional Type of Bill that was sent in the 837.
-//              result[5]=seg.Get(2);
-//            }
-//            segNum++;
-//            seg=segments[segNum];
-//          }
-//          //The DTP segment for the date of service will not be present when an invalid date was originally sent to the carrier (even though the specifications have it marked as a required segment).
-//          if(seg.SegmentID=="DTP") {
-//            string dateServiceStr=seg.Get(3);
-//            int dateServiceStartYear=PIn.Int(dateServiceStr.Substring(0,4));
-//            int dateServiceStartMonth=PIn.Int(dateServiceStr.Substring(4,2));
-//            int dateServiceStartDay=PIn.Int(dateServiceStr.Substring(6,2));
-//            result[6]=(new DateTime(dateServiceStartYear,dateServiceStartMonth,dateServiceStartDay)).ToShortDateString();
-//            if(dateServiceStr.Length==17) { //Date range.
-//              int dateServiceEndYear=PIn.Int(dateServiceStr.Substring(9,4));
-//              int dateServiceEndMonth=PIn.Int(dateServiceStr.Substring(13,2));
-//              int dateServiceEndDay=PIn.Int(dateServiceStr.Substring(15,2));
-//              result[7]=(new DateTime(dateServiceEndYear,dateServiceEndMonth,dateServiceEndDay)).ToShortDateString();
-//            }
-//          }
-//        }
-//      }
-//      return result;
-//    }
+//    ///<summary>Result will contain strings in the following order: Claim Status Code (CLP02), Monetary Amount of submitted charges for this claim (CLP03), Monetary Amount paid on this claim (CLP04), Monetary Amount of patient responsibility (CLP05), Payer Claim Control Number (CLP07).</summary>
+    public string[] GetClaimInfo(string trackingNumber) {
+      string[] result=new string[5];
+      for(int i=0;i<result.Length;i++) {
+        result[i]="";
+      }
+      for(int i=0;i<segNumsCLP.Count;i++) {
+        int segNum=segNumsCLP[i];
+				X12Segment seg=segments[segNum];//CLP segment.
+				if(seg.Get(1)!=trackingNumber) {//CLP01
+					continue;
+				}
+				result[0]=seg.Get(2);//CLP02
+				result[1]=seg.Get(3);//CLP03
+				result[2]=seg.Get(4);//CLP04
+				result[3]=seg.Get(5);//CLP05
+				result[4]=seg.Get(7);//CLP07
+				break;
+      }
+      return result;
+    }
 
 //    public string GetHumanReadable() {
 //      string result=

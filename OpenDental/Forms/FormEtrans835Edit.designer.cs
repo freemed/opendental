@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEtrans277Edit));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEtrans835Edit));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
 			this.butRawMessage = new OpenDental.UI.Button();
@@ -51,7 +51,7 @@ namespace OpenDental{
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(710,493);
+			this.gridMain.Size = new System.Drawing.Size(966,610);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Claim Status and Information";
 			this.gridMain.TranslationName = "FormEtrans270Edit";
@@ -64,7 +64,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(644,557);
+			this.butOK.Location = new System.Drawing.Point(900,674);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -79,7 +79,7 @@ namespace OpenDental{
 			this.butRawMessage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRawMessage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRawMessage.CornerRadius = 4F;
-			this.butRawMessage.Location = new System.Drawing.Point(619,32);
+			this.butRawMessage.Location = new System.Drawing.Point(875,32);
 			this.butRawMessage.Name = "butRawMessage";
 			this.butRawMessage.Size = new System.Drawing.Size(100,24);
 			this.butRawMessage.TabIndex = 116;
@@ -188,10 +188,10 @@ namespace OpenDental{
 			this.label6.Text = "Process Date";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// FormEtrans277Edit
+			// FormEtrans835Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(728,589);
+			this.ClientSize = new System.Drawing.Size(984,706);
 			this.Controls.Add(this.textProcessDate);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.textReceiptDate);
@@ -209,7 +209,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butOK);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormEtrans277Edit";
+			this.Name = "FormEtrans835Edit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Claim Status Response From ";
 			this.Load += new System.EventHandler(this.FormEtrans277Edit_Load);
