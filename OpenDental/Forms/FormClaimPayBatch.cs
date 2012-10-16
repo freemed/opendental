@@ -1030,7 +1030,9 @@ namespace OpenDental{
 			}
 			if(ClaimPaymentCur.IsPartial) {
 				if(textAmount.Text==textTotal.Text) {
-					ShowSecondaryClaims();//always continues after this dlg
+					if(ClaimsAttached.Count>0) {
+						ShowSecondaryClaims();//always continues after this dlg
+					}
 					ClaimPaymentCur.IsPartial=false;
 					ClaimPayments.Update(ClaimPaymentCur);
 				}

@@ -384,7 +384,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(PIn.Double(textAmount.Text)==0) {
+			if(textAmount.Text=="") {
 				MsgBox.Show(this,"Please enter an amount.");
 				return;
 			}
