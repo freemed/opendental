@@ -438,13 +438,13 @@ namespace OpenDentBusiness
 				//In 4010s, at the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.  This did not make the transaction non-compliant, and they found it useful.
 				//In 5010s, we will follow the X12 specification for most clearinghouses and only include subsc address when subscriber=patient.
 				//But for any clearinghouse who requests it, we will always include.  List them here:
-				//EmdeonMed, EmdeonDent: Always include.
+				//EmdeonMed, EmdeonDent, ClaimConnect: Always include.
 				//PostNTrack, BCBSIdaho: Only include when subscriber=patient.
 				bool subscIncludeAddressAndGender=false;
-				if(IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse)) {
+				if(IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse) || IsClaimConnect(clearhouse)) {
 					subscIncludeAddressAndGender=true;
 				}
-				else {//everyone, including postntrack and bcbsIdaho
+				else {//X12 standard behavior for everyone else, including: postntrack, bcbsIdaho.
 					if(subscriber.PatNum==patient.PatNum) {
 						subscIncludeAddressAndGender=true;
 					}
@@ -811,7 +811,7 @@ namespace OpenDentBusiness
 				}
 				string pwk02="  ";
 				if(IsDentiCal(clearhouse)) {
-					pwk02="FT";//"File Transfer". Might be electronic or mail, but Dentail requires a value of FT here.
+					pwk02="FT";//"File Transfer". Might be electronic or mail, but Denti-Cal requires a value of FT here.
 				}
 				else {
 					if(claim.AttachedFlags.Contains("Mail")) {
