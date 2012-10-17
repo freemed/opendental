@@ -362,6 +362,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormProcNoteAppend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormProcNoteAppend.designer.cs">
+      <DependentUpon>FormProcNoteAppend.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormScreenPatEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2576,6 +2582,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormProcNoteAppend.resx">
+      <DependentUpon>FormProcNoteAppend.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormScreenPatEdit.resx">
       <DependentUpon>FormScreenPatEdit.cs</DependentUpon>

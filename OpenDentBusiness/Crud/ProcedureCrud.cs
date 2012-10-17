@@ -94,6 +94,7 @@ namespace OpenDentBusiness.Crud{
 				procedure.DrugQty           = PIn.Float (table.Rows[i]["DrugQty"].ToString());
 				procedure.UnitQtyType       = (ProcUnitQtyType)PIn.Int(table.Rows[i]["UnitQtyType"].ToString());
 				procedure.StatementNum      = PIn.Long  (table.Rows[i]["StatementNum"].ToString());
+				procedure.IsLocked          = PIn.Bool  (table.Rows[i]["IsLocked"].ToString());
 				retVal.Add(procedure);
 			}
 			return retVal;
@@ -134,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ProcNum,";
 			}
-			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis,DrugUnit,DrugQty,UnitQtyType,StatementNum) VALUES(";
+			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis,DrugUnit,DrugQty,UnitQtyType,StatementNum,IsLocked) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
@@ -185,7 +186,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)procedure.DrugUnit)+","
 				+    POut.Float (procedure.DrugQty)+","
 				+    POut.Int   ((int)procedure.UnitQtyType)+","
-				+    POut.Long  (procedure.StatementNum)+")";
+				+    POut.Long  (procedure.StatementNum)+","
+				+    POut.Bool  (procedure.IsLocked)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -244,7 +246,8 @@ namespace OpenDentBusiness.Crud{
 				+"DrugUnit          =  "+POut.Int   ((int)procedure.DrugUnit)+", "
 				+"DrugQty           =  "+POut.Float (procedure.DrugQty)+", "
 				+"UnitQtyType       =  "+POut.Int   ((int)procedure.UnitQtyType)+", "
-				+"StatementNum      =  "+POut.Long  (procedure.StatementNum)+" "
+				+"StatementNum      =  "+POut.Long  (procedure.StatementNum)+", "
+				+"IsLocked          =  "+POut.Bool  (procedure.IsLocked)+" "
 				+"WHERE ProcNum = "+POut.Long(procedure.ProcNum);
 			Db.NonQ(command);
 		}
@@ -436,6 +439,10 @@ namespace OpenDentBusiness.Crud{
 			if(procedure.StatementNum != oldProcedure.StatementNum) {
 				if(command!=""){ command+=",";}
 				command+="StatementNum = "+POut.Long(procedure.StatementNum)+"";
+			}
+			if(procedure.IsLocked != oldProcedure.IsLocked) {
+				if(command!=""){ command+=",";}
+				command+="IsLocked = "+POut.Bool(procedure.IsLocked)+"";
 			}
 			if(command==""){
 				return;
