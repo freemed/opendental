@@ -19,9 +19,9 @@ namespace OpenDentBusiness {
 		private static decimal balanceForward;
 
 		///<summary>If intermingled=true, the patnum of any family member will get entire family intermingled.</summary>
-		public static DataSet GetAll(long patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled,bool showProcBreakdown,bool showNotes) {
+		public static DataSet GetAll(long patNum,bool viewingInRecall,DateTime fromDate,DateTime toDate,bool intermingled,bool showProcBreakdown,bool showPayNotes,bool showAdjNotes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled,showProcBreakdown,showNotes);
+				return Meth.GetDS(MethodBase.GetCurrentMethod(),patNum,viewingInRecall,fromDate,toDate,intermingled,showProcBreakdown,showPayNotes,showAdjNotes);
 			} 
 			fam=Patients.GetFamily(patNum);
 			if(intermingled){
@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 			bool singlePatient=!intermingled;//so one or the other will be true
 			payPlanDue=0;
 			//Gets 3 tables: account(or account###,account###,etc), patient, payplan.
-			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,0,showProcBreakdown,showNotes,false);
+			GetAccount(patNum,fromDate,toDate,intermingled,singlePatient,0,showProcBreakdown,showPayNotes,false,showAdjNotes);
 			GetMisc(fam,patNum);//table = misc.  Just holds a few bits of info that we can't find anywhere else.
 			return retVal;
 		}
@@ -64,7 +64,8 @@ namespace OpenDentBusiness {
 				showProcBreakdown=false;
 			}
 			GetAccount(patNum,stmt.DateRangeFrom,stmt.DateRangeTo,stmt.Intermingled,stmt.SinglePatient,
-				stmt.StatementNum,showProcBreakdown,PrefC.GetBool(PrefName.StatementShowNotes),stmt.IsInvoice);
+				stmt.StatementNum,showProcBreakdown,PrefC.GetBool(PrefName.StatementShowNotes),stmt.IsInvoice,
+				PrefC.GetBool(PrefName.StatementShowAdjNotes));
 			GetApptTable(fam,stmt.SinglePatient,patNum);//table= appts
 			GetMisc(fam,patNum);
 			return retVal;
@@ -455,9 +456,9 @@ namespace OpenDentBusiness {
 		}
 		
 		///<summary>Also gets the patient table, which has one row for each family member. Also currently runs aging.  Also gets payplan table.  If StatementNum is not zero, then it's for a statement, and the resulting payplan table looks totally different.  If IsInvoice, this does some extra filtering.</summary>
-		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,long statementNum,bool showProcBreakdown,bool showNotes,bool isInvoice) {
+		private static void GetAccount(long patNum,DateTime fromDate,DateTime toDate,bool intermingled,bool singlePatient,long statementNum,bool showProcBreakdown,bool showPayNotes,bool isInvoice,bool showAdjNotes) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showNotes,isInvoice);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showPayNotes,isInvoice,showAdjNotes);
 				return;
 			}
 			DataConnection dcon=new DataConnection();
@@ -762,7 +763,7 @@ namespace OpenDentBusiness {
 				row["DateTime"]=dateT;
 				row["date"]=dateT.ToString(Lans.GetShortDateTimeFormat());
 				row["description"]=DefC.GetName(DefCat.AdjTypes,PIn.Long(rawAdj.Rows[i]["AdjType"].ToString()));
-				if(rawAdj.Rows[i]["AdjNote"].ToString() !="" && showNotes) {
+				if(rawAdj.Rows[i]["AdjNote"].ToString() !="" && showAdjNotes) {
 					//row["extraDetail"] = rawAdj.Rows[i]["AdjNote"].ToString();
 					row["description"]+="\r\n"+rawAdj.Rows[i]["AdjNote"].ToString();
 				}
@@ -844,7 +845,7 @@ namespace OpenDentBusiness {
 					row["description"]="";
 				}
 				//we might use DatePay here to add to description
-				if(rawPay.Rows[i]["PayNote"].ToString() !="" && showNotes) {
+				if(rawPay.Rows[i]["PayNote"].ToString() !="" && showPayNotes) {
 					if(rawPay.Rows[i]["PayType"].ToString()!="0") {//if not a txfr
 						row["description"]+="\r\n";
 					}
@@ -1076,6 +1077,7 @@ namespace OpenDentBusiness {
 				if(rawState.Rows[i]["IsSent"].ToString()=="0"){
 					row["description"]+=" "+Lans.g("ContrAccount","(unsent)");
 				}
+				/*We're not doing extra detail for statements unless we add a new pref for it.
 				extraDetail="";
 				if(rawState.Rows[i]["NoteBold"].ToString() !=""){
 					extraDetail+= rawState.Rows[i]["NoteBold"].ToString();
@@ -1089,7 +1091,7 @@ namespace OpenDentBusiness {
 				if(extraDetail!="" && showNotes) {
 					//row["description"]+="\r\n"+extraDetail;
 					//I don't think anyone wants to see this clutter.
-				}
+				}*/
 				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawState.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawState.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";

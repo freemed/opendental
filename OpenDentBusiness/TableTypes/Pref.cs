@@ -264,6 +264,7 @@ namespace OpenDentBusiness {
 		ProblemsIndicateNone,
 		///<summary>In FormProcCodes, this is the default for the ShowHidden checkbox.</summary>
 		ProcCodeListShowHidden,
+		ProcLockingIsAllowed,
 		ProcessSigsIntervalInSecs,
 		ProcGroupNoteDoesAggregate,
 		ProgramVersion,
@@ -351,7 +352,9 @@ namespace OpenDentBusiness {
 		StatementAccountsUseChartNumber,
 		StatementsCalcDueDate,
 		StatementShowCreditCard,
+		///<summary>Show payment notes.</summary>
 		StatementShowNotes,
+		StatementShowAdjNotes,
 		StatementShowProcBreakdown,
 		StatementShowReturnAddress,
 		StatementSummaryShowInsInfo,

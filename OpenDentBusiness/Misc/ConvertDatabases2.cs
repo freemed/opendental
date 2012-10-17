@@ -10469,6 +10469,40 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				Db.NonQ(command);
 				command="ALTER TABLE clockevent CHANGE AmountBonusAuto double NOT NULL default -1";
 				Db.NonQ(command);
+				command="SELECT ValueString FROM preference WHERE PrefName='StatementShowNotes'";
+				string prefStatementShowNotes=Db.GetScalar(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('StatementShowAdjNotes','"+prefStatementShowNotes+"')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'StatementShowAdjNotes','"+prefStatementShowNotes+"')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ProcLockingIsAllowed','0')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ProcLockingIsAllowed','0')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD IsLocked tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD IsLocked number(3)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET IsLocked = 0 WHERE IsLocked IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY IsLocked NOT NULL";
+					Db.NonQ(command);
+				}
+
+
+
+
 
 
 
@@ -10485,6 +10519,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
 
 
 

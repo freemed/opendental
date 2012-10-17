@@ -84,6 +84,7 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
+		///<summary>This handles situations where we have a usernum, but not a user.  And it handles usernum of zero.</summary>
 		public static string GetName(long userNum){
 			//No need to check RemotingRole; no call to db.
 			if(userNum==0){

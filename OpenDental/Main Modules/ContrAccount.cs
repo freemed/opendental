@@ -1872,7 +1872,7 @@ namespace OpenDental {
 				panelTotalOwes.Top=-38;
 				viewingInRecall=true;
 			}
-			DataSetMain=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily,checkShowDetail.Checked,true);
+			DataSetMain=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily,checkShowDetail.Checked,true,true);
 			FamCur=Patients.GetFamily(patNum);//for now, have to get family after dataset due to aging calc.
 			PatCur=FamCur.GetPatient(patNum);
 			PatientNoteCur=PatientNotes.Refresh(PatCur.PatNum,PatCur.Guarantor);
