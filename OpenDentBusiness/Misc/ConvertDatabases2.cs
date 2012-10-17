@@ -10465,9 +10465,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 		private static void To12_5_0() {
 			if(FromVersion<new Version("12.5.0.0")) {
 				string command;
-				command="ALTER TABLE clockevent CHANGE AmountBonus double NOT NULL default -1";
+				command="ALTER TABLE clockevent CHANGE AmountBonus AmountBonus double NOT NULL default -1";
 				Db.NonQ(command);
-				command="ALTER TABLE clockevent CHANGE AmountBonusAuto double NOT NULL default -1";
+				command="ALTER TABLE clockevent CHANGE AmountBonusAuto AmountBonusAuto double NOT NULL default -1";
 				Db.NonQ(command);
 				command="SELECT ValueString FROM preference WHERE PrefName='StatementShowNotes'";
 				string prefStatementShowNotes=Db.GetScalar(command);
