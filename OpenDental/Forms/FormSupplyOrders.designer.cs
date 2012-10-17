@@ -78,6 +78,7 @@ namespace OpenDental{
 			this.butNewOrder.Size = new System.Drawing.Size(95, 24);
 			this.butNewOrder.TabIndex = 16;
 			this.butNewOrder.Text = "New Order";
+			this.butNewOrder.Click += new System.EventHandler(this.butNewOrder_Click);
 			// 
 			// gridOrders
 			// 

@@ -30,11 +30,11 @@ namespace OpenDental {
 			ListSuppliers = Suppliers.CreateObjects();
 			ListOrdersAll = SupplyOrders.GetAll();
 			ListOrders = new List<SupplyOrder>();
-			fillComboSupplier();
+			FillComboSupplier();
 			FillGridOrder();
 		}
 
-		private void fillComboSupplier() {
+		private void FillComboSupplier() {
 			ListSuppliers=Suppliers.CreateObjects();
 			comboSupplier.Items.Clear();
 			comboSupplier.Items.Add(Lan.g(this,"All"));//add all to begining of list for composite listings.
@@ -67,7 +67,7 @@ namespace OpenDental {
 		}
 
 		private void butAddSupply_Click(object sender,EventArgs e) {
-			if(gridOrders.GetSelectedIndex() < 1) {//Nothing selected or ALL selected
+			if(gridOrders.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select a supply order to add items to first.");
 				return;
 			}
@@ -95,7 +95,7 @@ namespace OpenDental {
 		}
 
 		private void FillGridOrder() {
-			filterListOrder();
+			FilterListOrder();
 			gridOrders.BeginUpdate();
 			gridOrders.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),80);
@@ -121,7 +121,7 @@ namespace OpenDental {
 			gridOrders.EndUpdate();
 		}
 
-		private void filterListOrder() {
+		private void FilterListOrder() {
 			ListOrders.Clear();
 			long supplier=0;
 			if(comboSupplier.SelectedIndex < 1) {//this includes selecting All or not having anything selected.
@@ -213,6 +213,33 @@ namespace OpenDental {
 			FillGridOrder();
 			gridOrders.SetSelected(gridSelect,true);
 			FillGridOrderItem();
+		}
+
+		private void butNewOrder_Click(object sender,EventArgs e) {
+			if(comboSupplier.SelectedIndex < 1) {//Includes no items or the ALL supplier being selected.
+				MsgBox.Show(this,"Please select a supplier first.");
+				return;
+			}
+			for(int i=0;i<ListOrders.Count;i++) {
+				if(ListOrders[i].DatePlaced.Year>2200) {
+					MsgBox.Show(this,"Not allowed to add a new order when there is already one pending.  Please finish the other order instead.");
+					return;
+				}
+			}
+			SupplyOrder order=new SupplyOrder();
+			if(comboSupplier.SelectedIndex==0) {//Supplier "All".
+				order.SupplierNum=0;
+			}
+			else {//Specific supplier selected.
+				order.SupplierNum=ListSuppliers[comboSupplier.SelectedIndex-1].SupplierNum;//SelectedIndex-1 because "All" is first option.
+			}
+			order.IsNew=true;
+			order.DatePlaced=new DateTime(2500,1,1);
+			order.Note="";
+			SupplyOrders.Insert(order);
+			ListOrdersAll=SupplyOrders.GetAll();//Refresh the list all.
+			FillGridOrder();
+			gridOrders.SetSelected(ListOrders.Count-1,true);
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
