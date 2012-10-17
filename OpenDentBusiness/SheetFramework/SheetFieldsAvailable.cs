@@ -431,6 +431,7 @@ namespace OpenDentBusiness{
 		public static List<SheetFieldDef> GetExamSheet(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out) {
+				list.Add(NewOutput("sheet.DateTimeSheet"));
 			}
 			else if(outInCheck==OutInCheck.In){
 				list.Add(NewInput("misc"));
