@@ -26,6 +26,7 @@ using SparksToothChart;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
 using CodeBase;
+using SHDocVw;
 #if EHRTEST
 using EHR;
 #endif
@@ -266,7 +267,7 @@ namespace OpenDental{
 		private int Chartscrollval;
 		private OpenDental.UI.Button butECWdown;
 		private OpenDental.UI.Button butECWup;
-		private WebBrowser webBrowserEcw;
+		private System.Windows.Forms.WebBrowser webBrowserEcw;
 		private Panel panelEcw;
 		private Label labelECWerror;
 		private ContextMenu menuToothChart;
@@ -4040,11 +4041,23 @@ namespace OpenDental{
 				MsgBox.Show(this,"Patient state abbreviation invalid");
 				return;
 			}
-			FormErx formErx=new FormErx();
-			formErx.prov=prov;
-			formErx.emp=emp;
-			formErx.pat=PatCur;
-			formErx.ShowDialog();
+			//FormErx formErx=new FormErx();
+			//formErx.prov=prov;
+			//formErx.emp=emp;
+			//formErx.pat=PatCur;
+			//formErx.ShowDialog();
+			string clickThroughXml=ErxXml.BuildClickThroughXml(prov,emp,PatCur);
+			string xmlBase64=System.Web.HttpUtility.HtmlEncode(Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(clickThroughXml)));
+			xmlBase64=xmlBase64.Replace("+","%2B");//A common base 64 character which needs to be escaped within URLs.
+			xmlBase64=xmlBase64.Replace("/","%2F");//A common base 64 character which needs to be escaped within URLs.
+			xmlBase64=xmlBase64.Replace("=","%3D");//Base 64 strings usually end in '=', which could mean a new parameter definition within the URL so we escape.
+			String postdata="RxInput=base64:"+xmlBase64;
+			byte[] PostDataBytes=System.Text.Encoding.UTF8.GetBytes(postdata);
+			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
+			InternetExplorer IEControl=new InternetExplorer();
+			IWebBrowserApp IE=(IWebBrowserApp)IEControl;
+			IE.Visible=true;
+			IE.Navigate("http://preproduction.newcropaccounts.com/InterfaceV7/RxEntry.aspx",null,null,PostDataBytes,additionalHeaders);
 		}
 
 		private void Tool_LabCase_Click() {

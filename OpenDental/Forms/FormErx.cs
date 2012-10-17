@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -19,6 +20,9 @@ namespace OpenDental {
 		public FormErx() {
 			InitializeComponent();
 			Lan.F(this);
+			SHDocVw.WebBrowser axBrowser=(SHDocVw.WebBrowser)browser.ActiveXInstance;
+			//axBrowser.NewWindow2+=new SHDocVw.DWebBrowserEvents2_NewWindow3EventHandler(axBrowser_NewWindow2);
+			axBrowser.NewWindow3+=new SHDocVw.DWebBrowserEvents2_NewWindow3EventHandler(axBrowser_NewWindow3);
 		}
 
 		public FormErx(string url) {
@@ -57,15 +61,31 @@ namespace OpenDental {
 		}
 
 		///<summary>This event fires when a link is clicked within the webbrowser control which opens in a new window.</summary>
-		private void browser_NewWindow(object sender,CancelEventArgs e) {			
+		private void browser_NewWindow(object sender,CancelEventArgs e) {
 			//By default, new windows launched by clicking a link from within the webbrowser control, open in Internet Explorer, even if the system default is another web browser such as Mozilla.
 			//We had a problem with cookies not being carried over from our webbrowser control into Internet Explorer when a link is clicked.
 			//To preserve cookies, we intercept the new window creation, cancel it, then launch the destination URL in a new window within OD.
-			e.Cancel=true;//Cancel Internet Explorer from launching.
 			string destinationUrl=browser.StatusText;//This is the URL of the page that is supposed to open in a new window. For example, the "ScureScripts Drug History" link.
+			if(Regex.IsMatch(destinationUrl,"^.*javascript\\:.*$",RegexOptions.IgnoreCase)) {
+				return;
+			}
+			e.Cancel=true;//Cancel Internet Explorer from launching.
 			FormErx browserWindowNew=new FormErx(destinationUrl);//Open the page in a new window, but stay inside of OD.
 			browserWindowNew.WindowState=FormWindowState.Normal;
 			browserWindowNew.ShowDialog();
+		}
+
+		///<summary>This event fires when a javascript snippet calls window.open() to open a URL in a new browser window. When window.open() is called, our browser_NewWindow() event function does not fire.</summary>
+		//private void axBrowser_NewWindow2(object sender,AxSHDocVw.DWebBrowserEvents2_NewWindow2Event e) {
+		//  Form1 frmWB;
+		//  frmWB = new Form1();
+		//  frmWB.axWebBrowser1.RegisterAsBrowser = true;
+		//  e.ppDisp = frmWB.axWebBrowser1.Application;
+		//  frmWB.Visible = true;
+		//}
+
+		void axBrowser_NewWindow3(ref object ppDisp,ref bool Cancel,uint dwFlags,string bstrUrlContext,string bstrUrl) {
+			
 		}
 
 		public void browser_DocumentCompleted(object sender,WebBrowserDocumentCompletedEventArgs e) {
