@@ -27,8 +27,7 @@ namespace OpenDentHL7 {
 
 		private void EcwOldSendAndReceive(){
 			ecwOldIsStandalone=true;//and for Mountainside
-			//if(Programs.UsingEcwTight()){
-			if(Programs.UsingEcwTightOrFullDeprecated()) {
+			if(Programs.UsingEcwTightOrFullMode()) {
 				ecwOldIsStandalone=false;
 			}
 			//#if DEBUG//just so I don't forget to remove it later.

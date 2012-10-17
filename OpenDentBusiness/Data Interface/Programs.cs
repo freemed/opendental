@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 		/// <summary>Using eClinicalWorks tight integration.</summary>
 		public static bool UsingEcwTightDeprecated() {
 			//No need to check RemotingRole; no call to db.
-			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="0"){
+			if(Programs.IsEnabled(ProgramName.eClinicalWorks)	&& ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"eClinicalWorksMode")=="0") {
 				return true;
 			}
 			return false;

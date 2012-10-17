@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
+	///<summary>Not actually specific to eCW.  Using this for all HL7 interfaces where hl7def.ShowDemographics=Hide.</summary>
 	public partial class ContrFamilyEcw:UserControl {
 		private Patient PatCur;
 		private Family FamCur;

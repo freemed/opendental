@@ -20,7 +20,7 @@ namespace OpenDental {
 			AutomationL.Trigger(AutomationTrigger.CompleteProcedure,procCodes,apt.PatNum);
 		}
 
-		///<summary>Returns empty string if no duplicates, otherwise returns duplicate procedure information.</summary>
+		///<summary>Returns empty string if no duplicates, otherwise returns duplicate procedure information.  In all places where this is called, we are guaranteed to have the eCW bridge turned on.  So this is an eCW peculiarity rather than an HL7 restriction.  Other HL7 interfaces will not be checking for duplicate procedures unless we intentionally add that as a feature later.</summary>
 		public static string ProcsContainDuplicates(List<Procedure> procs) {
 			string info="";
 			List<Procedure> procsChecked=new List<Procedure>();

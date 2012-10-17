@@ -31,6 +31,7 @@ namespace OpenDentBusiness.HL7 {
 				if(hl7DefMessage.hl7DefSegments[s].SegmentName==SegmentNameHL7.FT1) {
 					countRepeat=procList.Count;
 				}
+				//for example, countRepeat can be zero in the case where we are only sending a PDF of the TP to eCW, and no procs.
 				for(int repeat=0;repeat<countRepeat;repeat++) {//FT1 is optional and can repeat so add as many FT1's as procs in procList
 					if(hl7DefMessage.hl7DefSegments[s].SegmentName==SegmentNameHL7.FT1) {
 						prov=Providers.GetProv(procList[repeat].ProvNum);

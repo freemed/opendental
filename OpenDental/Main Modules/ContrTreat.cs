@@ -19,6 +19,7 @@ using System.Globalization;
 using System.IO;
 using System.Threading;
 using OpenDental.UI;
+using OpenDentBusiness.HL7;
 using SparksToothChart;
 using OpenDentBusiness;
 using CodeBase;
@@ -2550,13 +2551,13 @@ namespace OpenDental{
 			ModuleSelected(PatCur.PatNum);
 		}
 
-		private void ToolBarMainCreate_Click(){
+		private void ToolBarMainCreate_Click(){//Save TP
 			if(gridPlans.SelectedIndices[0]!=0){
 				MsgBox.Show(this,"The default TP must be selected before saving a TP.  You can highlight some procedures in the default TP to save a TP with only those procedures in it.");
 				return;
 			}
 			//Check for duplicate procedures on the appointment before sending the DFT to eCW.
-			if(Programs.UsingEcwTightOrFullDeprecated() && Bridges.ECW.AptNum!=0) {
+			if(Programs.UsingEcwTightOrFullMode() && Bridges.ECW.AptNum!=0) {
 				List<Procedure> procs=Procedures.GetProcsForSingle(Bridges.ECW.AptNum,false);
 				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
 				if(duplicateProcs!="") {
@@ -2577,12 +2578,14 @@ namespace OpenDental{
 			ProcTP procTP;
 			Procedure proc;
 			int itemNo=0;
+			List<Procedure> procList=new List<Procedure>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				if(gridMain.Rows[gridMain.SelectedIndices[i]].Tag==null){
 					//user must have highlighted a subtotal row.
 					continue;
 				}
 				proc=(Procedure)gridMain.Rows[gridMain.SelectedIndices[i]].Tag;
+				procList.Add(proc);
 				procTP=new ProcTP();
 				procTP.TreatPlanNum=tp.TreatPlanNum;
 				procTP.PatNum=PatCur.PatNum;
@@ -2645,8 +2648,8 @@ namespace OpenDental{
 				itemNo++;*/
 				#endregion Canadian Lab Fees
 			}
-			//Send TP DFT HL7 message to ECW with embedded PDF when using tight integration only.
-			if(Programs.UsingEcwTightOrFullDeprecated() && Bridges.ECW.AptNum!=0){
+			//Send TP DFT HL7 message to ECW with embedded PDF when using tight or full integration only.
+			if(Programs.UsingEcwTightOrFullMode() && Bridges.ECW.AptNum!=0){
 				PrepImageForPrinting();
 				MigraDoc.Rendering.PdfDocumentRenderer pdfRenderer=new MigraDoc.Rendering.PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 				pdfRenderer.Document=CreateDocument();
@@ -2659,7 +2662,13 @@ namespace OpenDental{
 				//File.WriteAllBytes(tempFilePath,pdfBytes);
 				//#endregion
 				string pdfDataStr=Convert.ToBase64String(pdfBytes);
-				Bridges.ECW.SendHL7(Bridges.ECW.AptNum,PatCur.PriProv,PatCur,pdfDataStr,"treatment",true);
+				if(HL7Defs.IsExistingHL7Enabled()) {
+					//DFT messages that are PDF's only and do not include FT1 segments, so proc list can be null
+					MessageConstructor.GenerateDFT(procList,EventTypeHL7.P03,PatCur,Patients.GetPat(PatCur.Guarantor),Bridges.ECW.AptNum,"treatment",pdfDataStr);
+				}
+				else {
+					Bridges.ECW.SendHL7(Bridges.ECW.AptNum,PatCur.PriProv,PatCur,pdfDataStr,"treatment",true);
+				}
 			}
 			ModuleSelected(PatCur.PatNum);
 			for(int i=0;i<PlanList.Length;i++){

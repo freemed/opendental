@@ -3445,7 +3445,6 @@ namespace OpenDental{
 			if(ToolButItems.List!=null){
 				LayoutToolBar();
 				if(PatCur==null) {
-					//if(UsingEcwTight()) {
 					if(UsingEcwTightOrFull()) {
 						if(!Environment.Is64BitOperatingSystem) {
 							ToolBarMain.Buttons["Rx"].Enabled=false;
@@ -3476,12 +3475,12 @@ namespace OpenDental{
 
 		///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
 		private bool UsingEcwTight() {
-			return Programs.UsingEcwTightDeprecated();
+			return Programs.UsingEcwTightMode();
 		}
 
 		///<summary>This reduces the number of places where Programs.UsingEcwTightOrFull() is called.  This helps with organization.  All calls from ContrChart must pass through here.  They also must have been checked to not involve the Orion bridge or layout logic.</summary>
 		private bool UsingEcwTightOrFull() {
-			return Programs.UsingEcwTightOrFullDeprecated();
+			return Programs.UsingEcwTightOrFullMode();
 		}
 
 		///<summary>Causes the toolbars to be laid out again.</summary>
@@ -3654,7 +3653,6 @@ namespace OpenDental{
 				ToolBarMain.Buttons["Consent"].Enabled = true;
 				ToolBarMain.Buttons["ToothChart"].Enabled =true;
 				ToolBarMain.Buttons["ExamSheet"].Enabled=true;
-				//if(UsingEcwTight()) {
 				if(UsingEcwTightOrFull()) {
 					if(UsingEcwTight()) {
 						ToolBarMain.Buttons["Commlog"].Enabled=true;
@@ -3833,7 +3831,6 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
-			//if(UsingEcwTight()) {
 			if(UsingEcwTightOrFull() && Bridges.ECW.UserId!=0) {
 				VBbridges.Ecw.LoadRxForm((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath,(int)Bridges.ECW.AptNum);
 				//refresh the right panel:
@@ -9109,7 +9106,6 @@ namespace OpenDental{
 			if(panelNewH>panelImages.Bottom-toothChart.Bottom)
 				panelNewH=panelImages.Bottom-toothChart.Bottom;//keeps it from going too high
 			panelImages.Height=panelNewH;
-			//if(UsingEcwTight()) {//this might belong in ChartLayoutHelper
 			if(UsingEcwTightOrFull()) {//this might belong in ChartLayoutHelper
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1
@@ -9155,7 +9151,6 @@ namespace OpenDental{
 			}
 			selectedImageTab=tabControlImages.SelectedIndex;
 			FillImages();//it will not actually fill the images unless panelImages is visible
-			//if(UsingEcwTight()) {
 			if(UsingEcwTightOrFull()) {
 				if(panelImages.Visible) {
 					panelEcw.Height=tabControlImages.Top-panelEcw.Top+1-(panelImages.Height+2);

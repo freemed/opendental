@@ -12,7 +12,7 @@ namespace OpenDental {
 	public class ChartLayoutHelper {
 		///<summary>This reduces the number of places where Programs.UsingEcwTight() is called.  This helps with organization.  All calls within this class must pass through here. </summary>
 		private static bool UsingEcwTightOrFull() {
-			return Programs.UsingEcwTightOrFullDeprecated();
+			return Programs.UsingEcwTightOrFullMode();
 		}
 
 		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo,ToothChartWrapper toothChart,TextBox textTreatmentNotes) {
