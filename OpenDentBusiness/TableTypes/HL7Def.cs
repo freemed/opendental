@@ -48,6 +48,12 @@ namespace OpenDentBusiness{
 		public string HL7Server;
 		///<summary>The name of the HL7 service for this def.  Must begin with OpenDent...</summary>
 		public string HL7ServiceName;
+		///<summary>Enum:HL7ShowDemographics Hide,Show,Change,ChangeAndAdd</summary>
+		public HL7ShowDemographics ShowDemographics;
+		///<summary>Show Appointments module.</summary>
+		public bool ShowAppts;
+		///<summary>Show Account module</summary>
+		public bool ShowAccount;
 
 		///<Summary>List of messages associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
 		[CrudColumn(IsNotDbColumn=true)]
@@ -82,6 +88,17 @@ namespace OpenDentBusiness{
 		File,
 		///<summary>1</summary>
 		TcpIp
+	}
+
+	public enum HL7ShowDemographics {
+		///<summary>Cannot see or change.</summary>
+		Hide,
+		///<summary>Can see, but not change.</summary>
+		Show,
+		///<summary>Can change, but not add patients.  Might get overwritten by next incoming message.</summary>
+		Change,
+		///<summary>Can change and add patients.  Might get overwritten by next incoming message.</summary>
+		ChangeAndAdd
 	}
 
 	

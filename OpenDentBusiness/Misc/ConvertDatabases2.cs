@@ -10499,6 +10499,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE procedurelog MODIFY IsLocked NOT NULL";
 					Db.NonQ(command);
 				}
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE hl7def ADD ShowDemographics tinyint NOT NULL";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE hl7def ADD ShowDemographics number(3)";
+				Db.NonQ(command);
+				command="UPDATE hl7def SET ShowDemographics = 0 WHERE ShowDemographics IS NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE hl7def MODIFY ShowDemographics NOT NULL";
+				Db.NonQ(command);
+			}
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE hl7def ADD ShowAppts tinyint NOT NULL";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE hl7def ADD ShowAppts number(3)";
+				Db.NonQ(command);
+				command="UPDATE hl7def SET ShowAppts = 0 WHERE ShowAppts IS NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE hl7def MODIFY ShowAppts NOT NULL";
+				Db.NonQ(command);
+			}
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="ALTER TABLE hl7def ADD ShowAccount tinyint NOT NULL";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="ALTER TABLE hl7def ADD ShowAccount number(3)";
+				Db.NonQ(command);
+				command="UPDATE hl7def SET ShowAccount = 0 WHERE ShowAccount IS NULL";
+				Db.NonQ(command);
+				command="ALTER TABLE hl7def MODIFY ShowAccount NOT NULL";
+				Db.NonQ(command);
+			}
+				
 
 
 
@@ -10523,3 +10560,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 
 
+
+
+				
+
+			
