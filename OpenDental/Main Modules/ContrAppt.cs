@@ -3617,16 +3617,22 @@ namespace OpenDental {
 					}
 				}
 				else {
-					//DisplayOtherDlg(true);//It's faster just to jump to creating appt
-					FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
-					FormAO.InitialClick=true;
-					FormAO.MakeAppointment();
-					if(FormAO.OResult==OtherResult.Cancel) {
-						return;
+					if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
+						DisplayOtherDlg(true);
+//todo: compare with older version
+		//There's also a problem when first opening program, double clicking, selecting patient who has planned.  Buttons stay disabled.
+						//RefreshModuleDataPatient(FormAO.SelectedPatNum);//patient won't have changed
+						//OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 					}
-					ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
-					//RefreshModuleDataPatient(FormAO.SelectedPatNum);//patient won't have changed
-					//OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+					else {
+						FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
+						FormAO.InitialClick=true;
+						FormAO.MakeAppointment();
+						if(FormAO.OResult==OtherResult.Cancel) {
+							return;
+						}
+						ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
+					}
 					apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
 					if(apt!=null && DoesOverlap(apt)) {
 						Appointment aptOld=apt.Clone();
@@ -4351,6 +4357,10 @@ namespace OpenDental {
 			if(PatCur==null) {
 				return;
 			}
+			if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
+				DisplayOtherDlg(false);
+				return;
+			}
 			FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
 			FormAO.InitialClick=false;
 			FormAO.MakeAppointment();
@@ -4359,6 +4369,10 @@ namespace OpenDental {
 
 		private void butMakeRecall_Click(object sender,EventArgs e) {
 			if(PatCur==null) {
+				return;
+			}
+			if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
+				DisplayOtherDlg(false);
 				return;
 			}
 			FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
@@ -4380,6 +4394,10 @@ namespace OpenDental {
 
 		private void butFamRecall_Click(object sender,EventArgs e) {
 			if(PatCur==null) {
+				return;
+			}
+			if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
+				DisplayOtherDlg(false);
 				return;
 			}
 			FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown

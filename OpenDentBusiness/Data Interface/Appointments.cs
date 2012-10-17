@@ -1857,6 +1857,26 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
+		///<summary>Returns true if the patient has any broken appointments, future appointments, unscheduled appointments, or unsched planned appointments.  This adds intelligence when user attempts to schedule an appointment by only showing the appointments for the patient when needed rather than always.</summary>
+		public static bool HasPlannedEtc(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT COUNT(*) FROM appointment "
+				+"WHERE PatNum='"+POut.Long(patNum)+"' "
+				+"AND (AptStatus='"+POut.Long((int)ApptStatus.Broken)+"' "
+				+"OR AptStatus='"+POut.Long((int)ApptStatus.UnschedList)+"' "
+				+"OR (AptStatus='"+POut.Long((int)ApptStatus.Scheduled)+"' AND AptDateTime > "+DbHelper.Curdate()+" ) "//future scheduled
+				//planned appts that are already scheduled will also show because they are caught on the line above rather then on the next line
+				+"OR (AptStatus='"+POut.Long((int)ApptStatus.Planned)+"' "//planned, not sched
+				+"AND NOT EXISTS(SELECT * FROM appointment a2 WHERE a2.PatNum='"+POut.Long(patNum)+"' AND a2.NextAptNum=appointment.AptNum)) "
+				+")";
+			if(Db.GetScalar(command)=="0") {
+				return false;
+			}
+			return true;
+		}
+
 
 	}
 }
