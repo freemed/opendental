@@ -332,8 +332,8 @@ namespace OpenDental.Eclaims {
 			List<string> displayMessages=new List<string>();
 			List<int> displayMessageNumbers=new List<int>();
 			for(int i=0;i<noteOutputFlags.Length;i++) {
-				//We display notes on screen if they are marked as such or if they are marked to prompt the user for a decision.
-				if(PIn.Int(noteOutputFlags[i].valuestr)!=0 && PIn.Int(noteOutputFlags[i].valuestr)!=1) { 
+				//We display notes on screen only if they are marked with output flag 1 (display notes on screen). Output flag 0 (prompt) is ignored here because such notes are printed on the physical printout.
+				if(PIn.Int(noteOutputFlags[i].valuestr)!=1) { 
 					continue;
 				}
 				displayMessages.Add(noteTexts[i].valuestr);
@@ -2758,8 +2758,8 @@ namespace OpenDental.Eclaims {
 			doc.StartElement(verticalLine);
 			for(int i=0;i<noteTexts.Length;i++) {//noteTexts.Length<=32
 				if(i<noteOutputFlags.Length) {//Sometimes G26 exists without the output flags or the note numbers.
-					if(PIn.Int(noteOutputFlags[i].valuestr)!=2) {
-						continue;//Output flag of 2 means print. So, don't print this note.
+					if(PIn.Int(noteOutputFlags[i].valuestr)==1) {
+						continue;//We will print the notes if either the output flag is 2 (print) or 0 (prompt), but will not print notes with output flag 1 (display notes on screen).
 					}
 				}
 				if(i<noteNumbers.Length) {
