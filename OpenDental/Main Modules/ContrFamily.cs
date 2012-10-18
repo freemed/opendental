@@ -307,9 +307,19 @@ namespace OpenDental{
 			else{
 				gridIns.Visible=true;
 			}
-			if(Programs.UsingEcwFullDeprecated()) {
-				ToolBarMain.Buttons["Add"].Enabled=false;
-				ToolBarMain.Buttons["Delete"].Enabled=false;
+			//Cannot add new patients from OD select patient interface.  Patient must be added from HL7 message.
+			if(HL7Defs.IsExistingHL7Enabled()) {
+				HL7Def def=HL7Defs.GetOneDeepEnabled();
+				if(def.ShowDemographics!=HL7ShowDemographics.ChangeAndAdd) {
+					ToolBarMain.Buttons["Add"].Enabled=false;
+					ToolBarMain.Buttons["Delete"].Enabled=false;
+				}
+			}
+			else {
+				if(Programs.UsingEcwFullMode()) {
+					ToolBarMain.Buttons["Add"].Enabled=false;
+					ToolBarMain.Buttons["Delete"].Enabled=false;
+				}
 			}
 			FillPatientPicture();
 			FillPatientData();

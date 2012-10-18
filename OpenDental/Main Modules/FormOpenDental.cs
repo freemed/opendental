@@ -1995,27 +1995,30 @@ namespace OpenDental{
 					myOutlookBar.Buttons[5].Visible=true;
 					myOutlookBar.Buttons[6].Visible=true;
 				}
-				if(Programs.UsingEcwTightDeprecated()) {
-					myOutlookBar.Buttons[0].Visible=false;//Appt
-					//The button for Family will be visible, but it will behave differently.
-					//myOutlookBar.Buttons[1].Visible=false;//Family
-					myOutlookBar.Buttons[2].Visible=false;//Account
+				if(Programs.UsingEcwTightOrFullMode()) {//has nothing to do with HL7
 					if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"ShowImagesModule")=="1") {
 						myOutlookBar.Buttons[5].Visible=true;
 					}
 					else {
 						myOutlookBar.Buttons[5].Visible=false;
 					}
+				}
+				if(Programs.UsingEcwTightMode()) {//has nothing to do with HL7
 					myOutlookBar.Buttons[6].Visible=false;
 				}
-				else if(Programs.UsingEcwFullDeprecated()) {
-					//We might create a special Appt module for eCW full users so they can access Recall.
-					myOutlookBar.Buttons[0].Visible=false;//Appt
-					if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"ShowImagesModule")=="1") {
-						myOutlookBar.Buttons[5].Visible=true;
+				if(HL7Defs.IsExistingHL7Enabled()) {
+					HL7Def def=HL7Defs.GetOneDeepEnabled();
+					myOutlookBar.Buttons[0].Visible=def.ShowAppts;//Appt
+					myOutlookBar.Buttons[2].Visible=def.ShowAccount;//Account
+				}
+				else {//old eCW interfaces
+					if(Programs.UsingEcwTightMode()) {
+						myOutlookBar.Buttons[0].Visible=false;//Appt
+						myOutlookBar.Buttons[2].Visible=false;//Account
 					}
-					else {
-						myOutlookBar.Buttons[5].Visible=false;
+					else if(Programs.UsingEcwFullMode()) {
+						//We might create a special Appt module for eCW full users so they can access Recall.
+						myOutlookBar.Buttons[0].Visible=false;//Appt
 					}
 				}
 				if(Programs.UsingOrion) {
@@ -3339,17 +3342,32 @@ namespace OpenDental{
 					ContrAppt2.ModuleSelected(CurPatNum);
 					break;
 				case 1:
-					if(Programs.UsingEcwTightDeprecated()) {
-						//ContrFamily2Ecw.InitializeOnStartup();
-						ContrFamily2Ecw.Visible=true;
-						this.ActiveControl=this.ContrFamily2Ecw;
-						ContrFamily2Ecw.ModuleSelected(CurPatNum);
+					if(HL7Defs.IsExistingHL7Enabled()) {
+						HL7Def def=HL7Defs.GetOneDeepEnabled();
+						if(def.ShowDemographics==HL7ShowDemographics.Hide) {
+							ContrFamily2Ecw.Visible=true;
+							this.ActiveControl=this.ContrFamily2Ecw;
+							ContrFamily2Ecw.ModuleSelected(CurPatNum);
+						}
+						else {
+							ContrFamily2.InitializeOnStartup();
+							ContrFamily2.Visible=true;
+							this.ActiveControl=this.ContrFamily2;
+							ContrFamily2.ModuleSelected(CurPatNum);
+						}
 					}
 					else {
-						ContrFamily2.InitializeOnStartup();
-						ContrFamily2.Visible=true;
-						this.ActiveControl=this.ContrFamily2;
-						ContrFamily2.ModuleSelected(CurPatNum);
+						if(Programs.UsingEcwTightMode()) {
+							ContrFamily2Ecw.Visible=true;
+							this.ActiveControl=this.ContrFamily2Ecw;
+							ContrFamily2Ecw.ModuleSelected(CurPatNum);
+						}
+						else {
+							ContrFamily2.InitializeOnStartup();
+							ContrFamily2.Visible=true;
+							this.ActiveControl=this.ContrFamily2;
+							ContrFamily2.ModuleSelected(CurPatNum);
+						}
 					}
 					break;
 				case 2:

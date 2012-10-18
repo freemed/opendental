@@ -29,6 +29,9 @@ namespace OpenDentBusiness.HL7 {
 				def.InternalTypeVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
 				def.IsEnabled=false;
 				def.Note="";
+				def.ShowDemographics=HL7ShowDemographics.Hide;
+				def.ShowAccount=false;
+				def.ShowAppts=false;
 			}
 			def.hl7DefMessages=new List<HL7DefMessage>();//so that if this is called repeatedly, it won't pile on duplicate messages.
 			//in either case, now get all child objects, which can't be in the database.

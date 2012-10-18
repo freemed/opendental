@@ -48,6 +48,9 @@ namespace OpenDental {
 			textNote.Text=HL7DefCur.Note;
 			textHL7Server.Text=HL7DefCur.HL7Server;
 			textHL7ServiceName.Text=HL7DefCur.HL7ServiceName;
+			SetShowRadioButtons();
+			checkShowAccount.Checked=HL7DefCur.ShowAccount;
+			checkShowAppts.Checked=HL7DefCur.ShowAppts;
 			if(HL7DefCur.IsInternal) {
 				if(!HL7DefCur.IsEnabled) {
 					textDescription.ReadOnly=true;
@@ -64,6 +67,9 @@ namespace OpenDental {
 					textEscChar.ReadOnly=true;
 					textHL7Server.ReadOnly=true;
 					textHL7ServiceName.ReadOnly=true;
+					groupShowDemographics.Enabled=false;
+					checkShowAppts.Enabled=false;
+					checkShowAccount.Enabled=false;
 				}
 				butAdd.Enabled=false;
 				butDelete.Enabled=false;
@@ -106,6 +112,24 @@ namespace OpenDental {
 				}
 			}
 			gridMain.EndUpdate();
+		}
+
+		///<summary>Sets radio button for the current def's ShowDemographics setting.</summary>
+		private void SetShowRadioButtons() {
+			switch(HL7DefCur.ShowDemographics) {
+				case HL7ShowDemographics.Hide:
+					radioHide.Checked=true;
+					break;
+				case HL7ShowDemographics.Show:
+					radioShow.Checked=true;
+					break;
+				case HL7ShowDemographics.Change:
+					radioChange.Checked=true;
+					break;
+				case HL7ShowDemographics.ChangeAndAdd:
+					radioChangeAndAdd.Checked=true;
+					break;
+			}
 		}
 
 		private void butBrowseIn_Click(object sender,EventArgs e) {
@@ -160,6 +184,9 @@ namespace OpenDental {
 				textEscChar.ReadOnly=false;
 				textHL7Server.ReadOnly=false;
 				textHL7ServiceName.ReadOnly=false;
+				groupShowDemographics.Enabled=true;
+				checkShowAppts.Enabled=true;
+				checkShowAccount.Enabled=true;
 			}
 			else {
 				butBrowseIn.Enabled=false;
@@ -176,6 +203,9 @@ namespace OpenDental {
 				textEscChar.ReadOnly=true;
 				textHL7Server.ReadOnly=true;
 				textHL7ServiceName.ReadOnly=true;
+				groupShowDemographics.Enabled=false;
+				checkShowAppts.Enabled=false;
+				checkShowAccount.Enabled=false;
 			}
 		}
 
@@ -345,6 +375,20 @@ namespace OpenDental {
 			HL7DefCur.EscapeCharacter=textEscChar.Text;
 			HL7DefCur.Note=textNote.Text;
 			HL7DefCur.ModeTx=(ModeTxHL7)comboModeTx.SelectedIndex;
+			if(radioHide.Checked) {
+				HL7DefCur.ShowDemographics=HL7ShowDemographics.Hide;
+			}
+			else if(radioShow.Checked) {
+				HL7DefCur.ShowDemographics=HL7ShowDemographics.Show;
+			}
+			else if(radioChange.Checked) {
+				HL7DefCur.ShowDemographics=HL7ShowDemographics.Change;
+			}
+			else {//must be ChangeAndAdd
+				HL7DefCur.ShowDemographics=HL7ShowDemographics.ChangeAndAdd;
+			}
+			HL7DefCur.ShowAccount=checkShowAccount.Checked;
+			HL7DefCur.ShowAppts=checkShowAppts.Checked;
 			if(comboModeTx.SelectedIndex==(int)ModeTxHL7.File) {
 				HL7DefCur.IncomingFolder=textInPath.Text;
 				HL7DefCur.OutgoingFolder=textOutPath.Text;
@@ -401,7 +445,5 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
-		
 	}
 }

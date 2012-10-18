@@ -694,8 +694,17 @@ namespace OpenDental{
 			if(SelectionModeOnly){
 				groupAddPt.Visible=false;
 			}
-			if(Programs.UsingEcwTightOrFullDeprecated()) {
-				groupAddPt.Visible=false;
+			//Cannot add new patients from OD select patient interface.  Patient must be added from HL7 message.
+			if(HL7Defs.IsExistingHL7Enabled()) {
+				HL7Def def=HL7Defs.GetOneDeepEnabled();
+				if(def.ShowDemographics!=HL7ShowDemographics.ChangeAndAdd) {
+					groupAddPt.Visible=false;
+				}
+			}
+			else {
+				if(Programs.UsingEcwTightOrFullMode()) {
+					groupAddPt.Visible=false;
+				}
 			}
 			comboBillingType.Items.Add(Lan.g(this,"All"));
 			comboBillingType.SelectedIndex=0;
