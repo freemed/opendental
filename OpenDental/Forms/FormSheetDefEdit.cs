@@ -35,6 +35,12 @@ namespace OpenDental {
 		private Bitmap BmBackground;
 		private Graphics GraphicsBackground;
 
+		///<summary>Some controls (panels in this case) do not pass key events to the parent (the form in this case) even when the property KeyPreview is set.  Instead the default key functionality occurs.  An example would be the arrow keys.  By default arrow keys set focus to the "next" control.  Instead, want all key presses on this form and all of it's child controls to always call the FormSheetDefEdit_KeyDown method.</summary>
+		protected override bool ProcessCmdKey(ref Message msg,Keys keyData) {
+			FormSheetDefEdit_KeyDown(this,new KeyEventArgs(keyData));
+			return base.ProcessCmdKey(ref msg,keyData);
+		}
+
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
 			Lan.F(this);
