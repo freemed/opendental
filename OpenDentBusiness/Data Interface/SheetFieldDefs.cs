@@ -18,6 +18,17 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
+		///<summary>Gets all internal SheetFieldDefs from the database for a specific sheet, used in FormSheetFieldExam.</summary>
+		public static List<SheetFieldDef> GetForExamSheet(SheetDef sheetDef) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<SheetFieldDef>>(MethodBase.GetCurrentMethod(),sheetDef);
+			}
+			string command="SELECT * FROM sheetfielddef WHERE SheetDefNum="+POut.Long(sheetDef.SheetDefNum)+" "
+				+"AND ((FieldName!='misc' AND FieldName!='') OR (ReportableName!='')) "
+				+"GROUP BY FieldName,ReportableName";
+			return Crud.SheetFieldDefCrud.SelectMany(command);
+		}
+
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			SheetFieldDefC.Listt=Crud.SheetFieldDefCrud.TableToList(table);

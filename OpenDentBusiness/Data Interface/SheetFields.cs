@@ -43,6 +43,21 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		///<summary>Used in SheetFiller to fill patient letter with exam sheet information.  Will return null if no exam sheet matching the description exists for the patient.</summary>
+		public static List<SheetField> GetFieldsForPatientLetter(long patNum,string examDescript,string fieldName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<SheetField>>(MethodBase.GetCurrentMethod(),patNum,examDescript,fieldName);
+			}
+			Sheet sheet=Sheets.GetForPatientLetter(patNum,examDescript);
+			if(sheet==null) {
+				return null;
+			}
+			string command="SELECT * FROM sheetfield WHERE SheetNum="
+				+POut.Long(sheet.SheetNum)+" "
+				+"AND (RadioButtonGroup='"+POut.String(fieldName)+"' OR ReportableName='"+POut.String(fieldName)+"' OR FieldName='"+POut.String(fieldName)+"')";
+			return Crud.SheetFieldCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(SheetField sheetField) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

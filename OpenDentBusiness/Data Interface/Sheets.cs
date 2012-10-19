@@ -107,6 +107,20 @@ namespace OpenDentBusiness{
 			return Crud.SheetCrud.SelectMany(command);
 		}
 
+		///<summary>Gets the most recent Exam Sheet based on description to fill a patient letter.</summary>
+		public static Sheet GetForPatientLetter(long patNum,string examDescript) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,examDescript);
+			}
+			string command="SELECT * FROM sheet WHERE DateTimeSheet="
+				+"(SELECT MAX(DateTimeSheet) FROM sheet WHERE PatNum="+POut.Long(patNum)+" "
+				+"AND Description='"+POut.String(examDescript)+"') "
+				+"AND PatNum="+POut.Long(patNum)+" "
+				+"AND Description='"+POut.String(examDescript)+"' "
+				+"LIMIT 1";
+			return Crud.SheetCrud.SelectOne(command);
+		}
+
 		///<summary></summary>
 		public static long Insert(Sheet sheet) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
