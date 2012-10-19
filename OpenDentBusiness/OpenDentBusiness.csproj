@@ -735,6 +735,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\DictCustom.cs" />
     <Compile Include="TableTypes\ScreenPat.cs" />
     <Compile Include="TableTypes\ToothGridCell.cs" />
     <Compile Include="TableTypes\ToothGridCol.cs" />

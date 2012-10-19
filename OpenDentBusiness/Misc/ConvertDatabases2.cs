@@ -10535,6 +10535,26 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="ALTER TABLE hl7def MODIFY ShowAccount NOT NULL";
 				Db.NonQ(command);
 			}
+			if(DataConnection.DBtype==DatabaseType.MySql) {
+				command="DROP TABLE IF EXISTS dictcustom";
+				Db.NonQ(command);
+				command=@"CREATE TABLE dictcustom (
+					DictCustomNum bigint NOT NULL auto_increment PRIMARY KEY,
+					WordText varchar(255) NOT NULL
+					) DEFAULT CHARSET=utf8";
+				Db.NonQ(command);
+			}
+			else {//oracle
+				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE dictcustom'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+				Db.NonQ(command);
+				command=@"CREATE TABLE dictcustom (
+					DictCustomNum number(20) NOT NULL,
+					WordText varchar2(255),
+					CONSTRAINT dictcustom_DictCustomNum PRIMARY KEY (DictCustomNum)
+					)";
+				Db.NonQ(command);
+			}
+			
 				
 
 
@@ -10565,3 +10585,5 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				
 
 			
+
+				
