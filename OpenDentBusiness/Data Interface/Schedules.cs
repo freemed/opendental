@@ -720,8 +720,8 @@ namespace OpenDentBusiness{
 				command="DELETE FROM schedule WHERE "
 					+"SchedDate = "+POut.Date(schedDate)+" "
 					+"AND ScheduleNum != "+POut.Long(scheduleNum)+" "
-					+"AND StartTime = '"+startTime.ToString("hh:mm",new DateTimeFormatInfo())+":00' "
-					+"AND StopTime = '"+stopTime.ToString("hh:mm",new DateTimeFormatInfo())+":00' "
+					+"AND StartTime = "+POut.Time(startTime.TimeOfDay)+" "
+					+"AND StopTime = "+POut.Time(stopTime.TimeOfDay)+" "
 					+"AND (SELECT ops FROM tempBlockoutOps WHERE tempBlockoutOps.ScheduleNum=schedule.ScheduleNum) = '"+POut.String(ops)+"' ";
 				Db.NonQ(command);
 			}
