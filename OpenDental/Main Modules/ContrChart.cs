@@ -3859,6 +3859,9 @@ namespace OpenDental{
 		private void Tool_eRx_Click() {
 			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
 			if(newCropAccountId==""){
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want to enable NewCrop electronic prescriptions? The cost is $15/month for each prescribing provider.")) {
+					return;
+				}
 				//prepare the xml document to send--------------------------------------------------------------------------------------
 				XmlWriterSettings settings = new XmlWriterSettings();
 				settings.Indent = true;
