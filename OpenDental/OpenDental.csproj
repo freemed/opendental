@@ -2589,10 +2589,6 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormHL7PasswordCheck.resx">
-      <DependentUpon>FormHL7PasswordCheck.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcNoteAppend.resx">
       <DependentUpon>FormProcNoteAppend.cs</DependentUpon>
     </EmbeddedResource>
