@@ -1494,10 +1494,25 @@ namespace OpenDentBusiness
 					//2400 PWK: (institutional) Line Supplemental Information. Situational. We do not use.
 					//2400 CRC: (medical) Condition Indicator/Durable Medical Equipment. Situational. We do not use.
 					#region Service DTP
-					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim for dental and inst. Emdeon dental complains if this date is specified when not needed.
+					//2400 DTP: 472 (medical,institutional,dental) Service Date. Situaitonal. Required for medical. Required if different from claim for dental and inst.
 					if(claim.ClaimType!="PreAuth") {
-						//Always required for medical because there is no date of service at the claim level. Required for institutional and dental when procedure date of service is different from the claim date of service. Always required for clearinghouse Inmediata.
-						if(medType==EnumClaimMedType.Medical || proc.ProcDate!=claim.DateService || IsInmediata(clearhouse)) {
+						bool useProcDateService=false;
+						//Always required for medical because there is no date of service at the claim level.
+						if(medType==EnumClaimMedType.Medical) {
+							useProcDateService=true;
+						}
+						else { //Institutional and dental.
+							//Standard X12 behavior, preferred by the following clearinghouses: EmdeonDental.
+							//Required for institutional and dental when procedure date of service is different from the claim date of service.
+							if(proc.ProcDate!=claim.DateService) {
+								useProcDateService=true;
+							}
+						}
+						//The following clearinghouses always want this segment no matter what: Apex, Inmediata.
+						if(IsApex(clearhouse) || IsInmediata(clearhouse)) {
+							useProcDateService=true;
+						}
+						if(useProcDateService) {
 							sw.Write("DTP"+s
 								+"472"+s//DTP01 3/3 Date/Time Qualifier: 472=Service.
 								+"D8"+s//DTP02 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
@@ -1723,6 +1738,10 @@ namespace OpenDentBusiness
 				+groupControlNumber//GE02 1/9 Group Control Number: Must be identical to GS06.
 				+endSegment);
 			#endregion Trailers
+		}
+
+		private static bool IsApex(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="99999");
 		}
 
 		private static bool IsClaimConnect(Clearinghouse clearinghouse) {
