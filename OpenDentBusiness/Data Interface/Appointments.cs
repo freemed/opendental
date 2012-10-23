@@ -433,13 +433,13 @@ namespace OpenDentBusiness{
 				command+="AND appointment.ClinicNum="+POut.Long(clinicNum)+" ";
 			}
 			if(showRecall && !showNonRecall) {
-				command+="AND AptNum NOT IN ("
+				command+="AND AptNum IN ("
 					+"SELECT AptNum FROM procedurelog "
 					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"AND procedurecode.IsHygiene=1) ";
 			}
 			else if(!showRecall && showNonRecall) {
-			  command+="AND AptNum IN ("
+			  command+="AND AptNum NOT IN ("
 					+"SELECT AptNum FROM procedurelog "
 					+"INNER JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum "
 					+"AND procedurecode.IsHygiene=1) ";
