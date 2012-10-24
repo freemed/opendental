@@ -432,6 +432,40 @@ namespace OpenDentBusiness{
 			return providerList;
 		}
 
+		///<summary>Removes a provider from the future schedule.  Currently called after a provider is hidden.</summary>
+		public static void RemoveProvFromFutureSchedule(long provNum) {
+			//No need to check RemotingRole; no call to db.
+			if(provNum<1) {//Invalid provNum, nothing to do.
+				return;
+			}
+			List<long> provNums=new List<long>();
+			provNums.Add(provNum);
+			RemoveProvsFromFutureSchedule(provNums);
+		}
+
+		///<summary>Removes the providers from the future schedule.  Currently called from DBM to clean up hidden providers still on the schedule.</summary>
+		public static void RemoveProvsFromFutureSchedule(List<long> provNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),provNums);
+				return;
+			}
+			string provs="";
+			for(int i=0;i<provNums.Count;i++) {
+				if(provNums[i]<1) {//Invalid provNum, nothing to do.
+					continue;
+				}
+				if(i>0) {
+					provs+=",";
+				}
+				provs+=provNums[i].ToString();
+			}
+			if(provs=="") {//No valid provNums were passed in.  Simply return.
+				return;
+			}
+			string command="DELETE FROM schedule WHERE ProvNum IN ("+provs+") AND SchedDate > "+DbHelper.Now();
+			Db.NonQ(command);
+		}
+
 
 
 	}

@@ -602,6 +602,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.RefAttachDeleteWithInvalidReferral(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.SchedulesDeleteHiddenProviders(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.SchedulesDeleteShort(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.SchedulesDeleteProvClosed(verbose,isCheck);

@@ -1108,6 +1108,12 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(checkIsHidden.Checked) {
+				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Any future schedule for this provider will be deleted.  Continue?")) {
+					return;
+				}
+				Providers.RemoveProvFromFutureSchedule(ProvCur.ProvNum);
+			}
 			ProvCur.Abbr=textAbbr.Text;
 			ProvCur.LName=textLName.Text;
 			ProvCur.FName=textFName.Text;

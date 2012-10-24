@@ -3165,6 +3165,33 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string SchedulesDeleteHiddenProviders(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM Schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Hidden providers found on future schedules: ")+numFound+"\r\n";
+				}
+			}
+			else {//Fix
+				command="SELECT ProvNum FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM Schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
+				table=Db.GetTable(command);
+				List<long> provNums=new List<long>();
+				for(int i=0;i<table.Rows.Count;i++) {
+					provNums.Add(PIn.Long(table.Rows[i]["ProvNum"].ToString()));
+				}
+				Providers.RemoveProvsFromFutureSchedule(provNums);//Deletes future schedules for providers.
+				if(provNums.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Hidden providers found on future schedules fixed: ")+provNums.Count.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string SchedulesDeleteShort(bool verbose,bool isCheck) {
 			//No need to check RemotingRole; no call to db.
 			string log="";
