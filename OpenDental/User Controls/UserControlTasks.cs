@@ -429,14 +429,14 @@ namespace OpenDental {
 				}
 				if(TasksList[i].ObjectType==TaskObjectType.Patient) {
 					if(TasksList[i].KeyNum!=0) {
-						objDesc=Patients.GetPat(TasksList[i].KeyNum).GetNameLF()+" - ";
+						objDesc+=TasksList[i].PatientName;
 					}
 				}
 				else if(TasksList[i].ObjectType==TaskObjectType.Appointment) {
 					if(TasksList[i].KeyNum!=0) {
 						Appointment AptCur=Appointments.GetOneApt(TasksList[i].KeyNum);
 						if(AptCur!=null) {
-							objDesc=Patients.GetPat(AptCur.PatNum).GetNameLF()
+							objDesc=Patients.GetPat(AptCur.PatNum).GetNameLF()//this is going to stay. Still not optimized, but here at HQ, we don't use it.
 								+"  "+AptCur.AptDateTime.ToString()
 								+"  "+AptCur.ProcDescript
 								+"  "+AptCur.Note

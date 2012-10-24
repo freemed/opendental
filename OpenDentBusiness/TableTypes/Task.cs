@@ -43,6 +43,9 @@ namespace OpenDentBusiness{
 		///<Summary>Not a database column.  A string description of the parent of this task.  It will only include the immediate parent.  Only useful in the New and OpenTicket tabs.</Summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string ParentDesc;
+		///<Summary>Not a database column.  Attached patient's name (NameLF) if there is an attached patient.</Summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public string PatientName;
 
 		///<summary></summary>
 		public Task() {
