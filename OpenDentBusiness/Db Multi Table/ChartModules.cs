@@ -1259,22 +1259,22 @@ namespace OpenDentBusiness {
 				xInd=1;
 			}
 			else if(x["CommlogNum"].ToString()!="0") {
-				xInd=2;
+				xInd=2;//commlogs and tasks are intermingled and sorted by time
 			}
 			else if(x["TaskNum"].ToString()!="0") {
-				xInd=3;
+				xInd=2;//commlogs and tasks are intermingled and sorted by time
 			}
 			else if(x["EmailMessageNum"].ToString()!="0") {
-				xInd=4;
+				xInd=3;
 			}
 			else if(x["LabCaseNum"].ToString()!="0") {
-				xInd=5;
+				xInd=4;
 			}
 			else if(x["RxNum"].ToString()!="0") {
-				xInd=6;
+				xInd=5;
 			}
 			else if(x["SheetNum"].ToString()!="0") {
-				xInd=7;
+				xInd=6;
 			}
 			int yInd=0;
 			if(y["AptNum"].ToString()!="0") {
@@ -1284,22 +1284,22 @@ namespace OpenDentBusiness {
 				yInd=1;
 			}
 			else if(y["CommlogNum"].ToString()!="0") {
-				yInd=2;
+				yInd=2;//commlogs and tasks are intermingled and sorted by time
 			}
 			else if(y["TaskNum"].ToString()!="0") {
-				yInd=3;
+				yInd=2;//commlogs and tasks are intermingled and sorted by time
 			}
 			else if(y["EmailMessageNum"].ToString()!="0") {
-				yInd=4;
+				yInd=3;
 			}
 			else if(y["LabCaseNum"].ToString()!="0") {
-				yInd=5;
+				yInd=4;
 			}
 			else if(y["RxNum"].ToString()!="0") {
-				yInd=6;
+				yInd=5;
 			}
 			else if(y["SheetNum"].ToString()!="0") {
-				yInd=7;
+				yInd=6;
 			}
 			if(xInd!=yInd) {
 				return xInd.CompareTo(yInd);
@@ -1310,7 +1310,7 @@ namespace OpenDentBusiness {
 			}
 			//nothing below this point can be a procedure.
 			//dates are guaranteed to match at this point.
-			//they are also guaranteed to be the same type.
+			//they are also guaranteed to be the same type (commlogs and tasks intermingled).
 			//Sort other types by time-----------------------------------------------------------------------------------------------------------------------------
 			if(((DateTime)x["ProcDate"])!=((DateTime)y["ProcDate"])){
 			  return ((DateTime)x["ProcDate"]).CompareTo(((DateTime)y["ProcDate"]));
