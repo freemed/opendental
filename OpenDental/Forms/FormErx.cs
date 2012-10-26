@@ -57,7 +57,12 @@ namespace OpenDental {
 			String postdata="RxInput=base64:"+xmlBase64;
 			byte[] PostDataBytes=System.Text.Encoding.UTF8.GetBytes(postdata);
 			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
-			browser.Navigate("http://preproduction.newcropaccounts.com/InterfaceV7/RxEntry.aspx","",PostDataBytes,additionalHeaders);
+#if DEBUG
+			string newCropUrl="http://preproduction.newcropaccounts.com/interfaceV7/rxentry.aspx";
+#else //Debug
+			string newCropUrl="https://secure.newcropaccounts.com/interfacev7/rxentry.aspx";
+#endif
+			browser.Navigate(newCropUrl,"",PostDataBytes,additionalHeaders);
 		}
 
 		///<summary>This event fires when a link is clicked within the webbrowser control which opens in a new window.</summary>

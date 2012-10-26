@@ -3925,8 +3925,6 @@ namespace OpenDental{
 						validKey=true;
 					}
 				}
-//temp: remove this after testing:
-				validKey=true;
 				if(!validKey) {
 					string newCropName=PrefC.GetString(PrefName.NewCropName);
 					if(newCropName=="") {
@@ -4057,7 +4055,12 @@ namespace OpenDental{
 			InternetExplorer IEControl=new InternetExplorer();
 			IWebBrowserApp IE=(IWebBrowserApp)IEControl;
 			IE.Visible=true;
-			IE.Navigate("http://preproduction.newcropaccounts.com/InterfaceV7/RxEntry.aspx",null,null,PostDataBytes,additionalHeaders);
+#if DEBUG
+			string newCropUrl="http://preproduction.newcropaccounts.com/interfaceV7/rxentry.aspx";
+#else //Debug
+			string newCropUrl="https://secure.newcropaccounts.com/interfacev7/rxentry.aspx";
+#endif
+			IE.Navigate(newCropUrl,null,null,PostDataBytes,additionalHeaders);
 		}
 
 		private void Tool_LabCase_Click() {

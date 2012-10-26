@@ -17,8 +17,13 @@ namespace OpenDentBusiness {
 			ncScript.Credentials.partnerName="OpenDental";//Assigned by NewCrop. Used globally for all customers.
 			string newCropName=PrefC.GetString(PrefName.NewCropName);
 			if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
+#if DEBUG
 				ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
-				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.					
+#else
+				ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("HumacKlUtM1MLCHsZY/PH86W10AY5u2bukFp15lEKhT6zD/aa9nG//zYzbYgpH8+");//Assigned by NewCrop. Used globally for all customers.
+				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("I0Itlo5F3ZOYUSwMKpgbY5X6++XpUetMvrqj0vVB7bKzYwJlWtsLiFFgpMBplLaH");//Assigned by NewCrop. Used globally for all customers.					
+#endif
 			}
 			else { //Reseller
 				ncScript.Credentials.name=newCropName;
