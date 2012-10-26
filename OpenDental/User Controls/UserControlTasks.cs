@@ -429,7 +429,7 @@ namespace OpenDental {
 				}
 				if(TasksList[i].ObjectType==TaskObjectType.Patient) {
 					if(TasksList[i].KeyNum!=0) {
-						objDesc+=TasksList[i].PatientName;
+						objDesc+=TasksList[i].PatientName+" - ";
 					}
 				}
 				else if(TasksList[i].ObjectType==TaskObjectType.Appointment) {
