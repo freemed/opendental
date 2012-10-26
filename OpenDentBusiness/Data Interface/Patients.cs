@@ -733,7 +733,7 @@ namespace OpenDentBusiness{
 				+",secprov = '"    +POut.Long   (pat.SecProv)+"'"
 				+",feesched = '"   +POut.Long   (pat.FeeSched)+"'"
 				+",billingtype = '"+POut.Long   (pat.BillingType)+"'"
-				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
+				+" WHERE guarantor = '"+POut.Long(pat.Guarantor)+"'";
 			Db.NonQ(command);
 		}
 
@@ -750,7 +750,7 @@ namespace OpenDentBusiness{
 				+",State = '"      +POut.String(pat.State)+"'"
 				+",Zip = '"        +POut.String(pat.Zip)+"'"
 				+",HmPhone = '"    +POut.String(pat.HmPhone)+"'"
-				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
+				+" WHERE guarantor = '"+POut.Long(pat.Guarantor)+"'";
 			Db.NonQ(command);
 		}
 
@@ -762,7 +762,7 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE patient SET " 
 				+"AskToArriveEarly = '"   +POut.Int(pat.AskToArriveEarly)+"'"
-				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
+				+" WHERE guarantor = '"+POut.Long(pat.Guarantor)+"'";
 			DataTable table=Db.GetTable(command);
 		}
 
@@ -774,7 +774,7 @@ namespace OpenDentBusiness{
 			}
 			string command= "UPDATE patient SET " 
 				+"addrnote = '"   +POut.String(pat.AddrNote)+"'"
-				+" WHERE guarantor = '"+POut.Double(pat.Guarantor)+"'";
+				+" WHERE guarantor = '"+POut.Long(pat.Guarantor)+"'";
 			Db.NonQ(command);
 		}
 
