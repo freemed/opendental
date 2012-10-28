@@ -406,6 +406,9 @@ namespace OpenDental{
 			}
 			else if(Stmt.IsReceipt) {
 				text=Lan.g(this,"RECEIPT");
+				if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
+					text+=+" #"Stmt.StatementNum.ToString;
+				}
 			}
 			else {
 				text=Lan.g(this,"STATEMENT");
@@ -482,6 +485,9 @@ namespace OpenDental{
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 						par.AddText(clinic.Zip+" "+clinic.City);
 					}
+					else if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
+						par.AddText(clinic.City+" "+clinic.Zip);
+					}
 					else {
 						par.AddText(clinic.City+", "+clinic.State+" "+clinic.Zip);
 					}
@@ -516,6 +522,9 @@ namespace OpenDental{
 					}
 					if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 						par.AddText(PrefC.GetString(PrefName.PracticeZip)+" "+PrefC.GetString(PrefName.PracticeCity));
+					}
+					else if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
+						par.AddText(PrefC.GetString(PrefName.PracticeCity)+" "+PrefC.GetString(PrefName.PracticeZip));
 					}
 					else {
 						par.AddText(PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip));
@@ -673,6 +682,9 @@ namespace OpenDental{
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
 				par.AddText(PatGuar.Zip+" "+PatGuar.City);
+			}
+			else if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
+				par.AddText(PatGuar.City+" "+PatGuar.Zip);
 			}
 			else {
 				par.AddText(PatGuar.City+", "+PatGuar.State+" "+PatGuar.Zip);
