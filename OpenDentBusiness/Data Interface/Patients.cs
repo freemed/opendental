@@ -346,10 +346,10 @@ namespace OpenDentBusiness{
 			}
 			command+=billingsnippet;
 			if(hideInactive){
-				command+="AND PatStatus != '2' ";
+				command+="AND PatStatus != '"+POut.Int((int)PatientStatus.Inactive)+"' ";
 			}
 			if(!showArchived) {
-				command+="AND PatStatus != '3' AND PatStatus != '5' ";
+				command+="AND PatStatus != '"+POut.Int((int)PatientStatus.Archived)+"' AND PatStatus != '"+POut.Int((int)PatientStatus.Deceased)+"' ";
 			}
 			//if(showProspectiveOnly) {
 			//	command+="AND PatStatus = "+POut.Int((int)PatientStatus.Prospective)+" ";
