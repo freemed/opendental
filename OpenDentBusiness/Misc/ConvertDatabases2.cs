@@ -11185,6 +11185,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO claimformitem (ClaimFormItemNum,ClaimFormNum,ImageFileName,FieldName,FormatString,XPos,YPos,Width,Height) "
 					+"VALUES ("+GetClaimFormItemNum()+","+POut.Long(claimFormNum)+",'ADA2012.gif','','',17,15,815,1063)";
 				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '12.4.12.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
 			}
 			To12_5_0();
 		}
