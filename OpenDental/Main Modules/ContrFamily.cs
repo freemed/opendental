@@ -1043,6 +1043,9 @@ namespace OpenDental{
 				tempPat.SuperFamily=PatCur.SuperFamily;
 			}
 			Patients.Insert(tempPat,false);
+			CustReference custRef=new CustReference();
+			custRef.PatNum=tempPat.PatNum;
+			CustReferences.Insert(custRef);
 			FormPatientEdit FormPE=new FormPatientEdit(tempPat,FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();

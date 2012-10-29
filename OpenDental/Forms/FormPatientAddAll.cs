@@ -1336,6 +1336,9 @@ namespace OpenDental {
 			guar.AddrNote=textAddrNotes.Text;
 			guar.ClinicNum=Security.CurUser.ClinicNum;
 			Patients.Insert(guar,false);
+			CustReference custRef=new CustReference();
+			custRef.PatNum=guar.PatNum;
+			CustReferences.Insert(custRef);
 			Patient guarOld=guar.Copy();
 			guar.Guarantor=guar.PatNum;
 			Patients.Update(guar,guarOld);
@@ -1399,6 +1402,9 @@ namespace OpenDental {
 				pat2.ClinicNum=Security.CurUser.ClinicNum;
 				pat2.Guarantor=guar.Guarantor;
 				Patients.Insert(pat2,false);
+				custRef=new CustReference();
+				custRef.PatNum=pat2.PatNum;
+				CustReferences.Insert(custRef);
 				if(textReferral.Text!=""){
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
@@ -1440,6 +1446,9 @@ namespace OpenDental {
 				pat3.ClinicNum=Security.CurUser.ClinicNum;
 				pat3.Guarantor=guar.Guarantor;
 				Patients.Insert(pat3,false);
+				custRef=new CustReference();
+				custRef.PatNum=pat3.PatNum;
+				CustReferences.Insert(custRef);
 				if(textReferral.Text!=""){
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
@@ -1481,6 +1490,9 @@ namespace OpenDental {
 				pat4.ClinicNum=Security.CurUser.ClinicNum;
 				pat4.Guarantor=guar.Guarantor;
 				Patients.Insert(pat4,false);
+				custRef=new CustReference();
+				custRef.PatNum=pat4.PatNum;
+				CustReferences.Insert(custRef);
 				if(textReferral.Text!=""){
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
@@ -1522,6 +1534,9 @@ namespace OpenDental {
 				pat5.ClinicNum=Security.CurUser.ClinicNum;
 				pat5.Guarantor=guar.Guarantor;
 				Patients.Insert(pat5,false);
+				custRef=new CustReference();
+				custRef.PatNum=pat5.PatNum;
+				CustReferences.Insert(custRef);
 				if(textReferral.Text!=""){
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();

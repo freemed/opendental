@@ -1149,6 +1149,9 @@ namespace OpenDental{
 			}
 			PatCur.ClinicNum=Security.CurUser.ClinicNum;
 			Patients.Insert(PatCur,false);
+			CustReference custRef=new CustReference();
+			custRef.PatNum=PatCur.PatNum;
+			CustReferences.Insert(custRef);
 			Patient PatOld=PatCur.Copy();
 			PatCur.Guarantor=PatCur.PatNum;
 			Patients.Update(PatCur,PatOld);
