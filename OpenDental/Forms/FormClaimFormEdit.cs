@@ -606,6 +606,10 @@ namespace OpenDental{
 						thisImage=CDT.Class1.GetADA2006();
 						extension=".gif";
 					}
+					else if(ClaimFormCur.Items[i].ImageFileName=="ADA2012.gif"){
+						thisImage=CDT.Class1.GetADA2012();
+						extension=".gif";
+					}
 					else{
 						string fileName=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),ClaimFormCur.Items[i].ImageFileName);
 						if(!File.Exists(fileName)){
@@ -1215,7 +1219,11 @@ namespace OpenDental{
 					Image thisImage=null;
 					if(ClaimFormCur.Items[i].ImageFileName=="ADA2006.gif"){
 						thisImage=CDT.Class1.GetADA2006();
-					}else{
+					}
+					else if(ClaimFormCur.Items[i].ImageFileName=="ADA2012.gif"){
+						thisImage=CDT.Class1.GetADA2012();
+					}
+					else{
 						if(!File.Exists(fileName)){
 							MessageBox.Show("File not found.");
 							continue;
