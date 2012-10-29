@@ -7,13 +7,12 @@ using System.Xml;
 
 namespace OpenDentalWebService {
 	///<summary>This file is generated automatically by the crud, do not make any changes to this file because they will get overwritten.</summary>
-	public class ObjectSerialize {
-		///<summary>Goes through all the possible types of objects and returns the object serialized for Java.  This class negates the use of reflection which increases speed.</summary>
-		public string Serialize(string typeName,Object obj) {
-			StringBuilder strBuild=new StringBuilder();
-			XmlWriter writer=XmlWriter.Create(strBuild);
+	public class _GeneralTypes {
+
+		///<summary>Goes through all the possible types of objects and returns the object serialized for Java.</summary>
+		public static string Serialize(string typeName,Object obj) {
 			if(obj==null) {
-				//This should be handled before this method... Or throw an exception here?
+				//TODO: Throw an exception here?
 				return "";//Or don't do anything?
 			}
 			//Primitives--------------------------------------------------------------------
@@ -21,7 +20,7 @@ namespace OpenDentalWebService {
 				return "<int>"+((int)obj).ToString()+"</int>";
 			}
 			if(typeName=="long") {//Web app does not use longs.
-				//Convert to an integer or handle longs differently here.  
+				//Convert to an integer or handle longs differently.  
 				return "<int>"+Convert.ToInt32(((long)obj)).ToString()+"</int>";//If converting fails, throw an exception?
 			}
 			if(typeName=="bool") {
@@ -52,15 +51,17 @@ namespace OpenDentalWebService {
 			}
 			//Arrays------------------------------------------------------------------------
 			if(typeName.Contains("")){
-				return "";//This will need to be enhanced to handle simple and multidimensional arrays.
+				return "";//TODO: This will need to be enhanced to handle simple and possibly multidimensional arrays.
 			}
-			//The crud will dynamically generate everything below this line.
-			//OpenDentBusiness--------------------------------------------------------------
-			if(typeName=="Account") {
-				return Accounts.SerializeForJava(obj);
+			return "";//TODO: Throw an exception for unknown type.
+		}
+
+		///<summary>Returns the primitive or general object deserialized.</summary>
+		public static object Deserialize(string typeName,Object obj) {
+			if(typeName=="long") {
+				return (long)obj;
 			}
-			//Then do this for every single possible Open Dental object type. (Table types and even enums?)
-			return "";
+			return null;//TODO: Throw an exception for unknown type.
 		}
 
 	}

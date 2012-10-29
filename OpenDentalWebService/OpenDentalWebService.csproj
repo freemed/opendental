@@ -94,7 +94,8 @@
     <Compile Include="Remoting\DataTransferObject.cs" />
     <Compile Include="Remoting\DtoMethods.cs" />
     <Compile Include="Remoting\DtoObject.cs" />
-    <Compile Include="Remoting\ObjectSerialize.cs" />
+    <Compile Include="Serializing\_GeneralTypes.cs" />
+    <Compile Include="Serializing\Account.cs" />
     <Compile Include="ServiceMain.asmx.cs">
       <DependentUpon>ServiceMain.asmx</DependentUpon>
       <SubType>Component</SubType>

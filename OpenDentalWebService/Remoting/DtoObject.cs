@@ -16,6 +16,10 @@ namespace OpenDentalWebService {
 		public object Obj;
 
 		///<summary>This is the constructor that should be used normally because it automatically creates the TypeName.</summary>
+		public DtoObject() {
+		}
+
+		///<summary>This is the constructor that should be used normally because it automatically creates the TypeName.</summary>
 		public DtoObject(object obj,Type objType) {
 			Obj=obj;
 			//Type type=obj.GetType();
