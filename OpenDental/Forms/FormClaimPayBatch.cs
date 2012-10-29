@@ -776,6 +776,7 @@ namespace OpenDental{
 			FormClaimPayEdit FormCPE=new FormClaimPayEdit(ClaimPaymentCur);
 			FormCPE.ShowDialog();
 			FillClaimPayment();
+			FillGrids();//For customer 5769, who was getting ocassional Chinese chars in the Amount boxes.
 		}
 
 		private void butAttach_Click(object sender,EventArgs e) {
@@ -980,6 +981,8 @@ namespace OpenDental{
 			else {
 				textEobIsScanned.Text=Lan.g(this,"No");
 			}
+			FillClaimPayment();//For customer 5769, who was getting ocassional Chinese chars in the Amount boxes.
+			FillGrids();//ditto
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
