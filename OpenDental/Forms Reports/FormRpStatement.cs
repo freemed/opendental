@@ -407,7 +407,7 @@ namespace OpenDental{
 			else if(Stmt.IsReceipt) {
 				text=Lan.g(this,"RECEIPT");
 				if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
-					text+=+" #"+Stmt.StatementNum.ToString;
+					text+=" #"+Stmt.StatementNum.ToString();
 				}
 			}
 			else {
