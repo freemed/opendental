@@ -17,12 +17,14 @@ namespace OpenDentalWebService {
 			return CallMethod(classAndMethod,parameters);
 		}
 
-		///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Ex: OpenDentBusiness.Account.</summary>
+		///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.</summary>
 		public static object CallClassDeserializer(string typeName,string xml) {
 			#region Primitive and General Types
-			//TODO: Figure out if the desired object is a primitive/general type.  
-			//This part of the method will be static for the crud gen, any new primitive/general class should be manually added to the crud.
-			//Please make the crud have a unique "helper" method for this section.  Put the name of that method in a comment here so that we can quickly go to that method and add more primitives when needed.
+			if(typeName=="long") {//TODO: Figure out if the desired object is a primitive/general type.  
+				//This part of the method will be static for the crud gen, any new primitive/general class should be manually added to this section of the crud.  Then the programmer will need to manually add the new primitive or general type to the Serializing and Deserializing in Serializing.aaGeneralTypes.
+				//Please make the crud have a unique "helper" method when it generates this section.  Put the name of that method in a comment here so that we can quickly go and make changes for more primitives when needed.
+				aaGeneralTypes.Deserialize(typeName,xml);
+			}
 			#endregion
 			#region Open Dental Classes
 			if(typeName=="OpenDentBusiness.Account") {

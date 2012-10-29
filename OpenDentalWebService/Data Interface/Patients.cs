@@ -1,11 +1,16 @@
 ﻿using System;
-using System.Data;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Data;
 
 namespace OpenDentalWebService {
 	public class Patients {
+
+		///<summary></summary>
+		public static DataTable GetPtDataTable() {
+			DataTable table=new DataTable();
+			return table;
+		}
+
 
 	}
 }
