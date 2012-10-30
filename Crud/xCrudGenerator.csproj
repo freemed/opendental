@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CrudGenDataInterfaceWebService.cs" />
     <Compile Include="CrudGenDataInterface.cs" />
     <Compile Include="CrudGenHelper.cs" />
     <Compile Include="CrudQueries.cs" />
@@ -127,6 +128,10 @@
     <Compile Include="SnippetType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OpenDentalWebService\OpenDentalWebService.csproj">
+      <Project>{D5A6A29F-BDF4-419D-A54D-00DB8B482922}</Project>
+      <Name>OpenDentalWebService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
       <Name>OpenDentBusiness</Name>
