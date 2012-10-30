@@ -305,6 +305,7 @@
     <Compile Include="Remoting\DataTransferObject.cs" />
     <Compile Include="Remoting\DtoMethods.cs" />
     <Compile Include="Remoting\DtoObject.cs" />
+    <Compile Include="Remoting\SerializeStringEscapes.cs" />
     <Compile Include="Serializing\aaGeneralTypes.cs" />
     <Compile Include="Serializing\Account.cs" />
     <Compile Include="Serializing\Patient.cs" />

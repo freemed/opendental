@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using OpenDentalWebService.Serializing;
 
 namespace OpenDentalWebService {
 	///<summary>This file is generated automatically by the crud, do not make any changes to this file because they will get overwritten.</summary>

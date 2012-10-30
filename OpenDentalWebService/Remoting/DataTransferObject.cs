@@ -2,11 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Sockets;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.XPath;
 
 namespace OpenDentalWebService {
 	///<summary>Provides a base class for DTO classes.  A DTO class is a simple data storage object.</summary>
@@ -24,71 +21,70 @@ namespace OpenDentalWebService {
 
 		public string Serialize() {
 			StringBuilder strBuild=new StringBuilder();
-			//XmlWriter writer=XmlWriter.Create(strBuild);
-			//XmlSerializer serializer=GetDtoForType(this.Type);
-			//serializer.Serialize(writer,this);
-			//writer.Close();
+			//TODO: Write serialize code.
 			return strBuild.ToString();
 		}
 
 		public static DataTransferObject Deserialize(string data) {
-			StringReader strReader=new StringReader(data);
-			XmlTextReader reader=new XmlTextReader(strReader);
-			XmlDocument document=new XmlDocument();
 			DataTransferObject dto=null;
-			string strNodeName="";
-			while(reader.Read()) {
-				if(reader.NodeType!=XmlNodeType.Element) {
-					continue;
+			//XmlReader is said to be the quickest way to read XML as opposed to LINQ to XML or other methods of reading xml files.
+			using(XmlReader reader=XmlReader.Create(new StringReader(data))) {
+				reader.MoveToContent();
+				while(reader.Read()) {
+					//Only detect start elements.
+					if(!reader.IsStartElement()) {
+						continue;
+					}
+					switch(reader.Name) {
+						#region DtoType
+						case "DtoGetTable":
+						case "DtoGetTableLow":
+						case "DtoGetDS":
+						case "DtoGetLong":
+						case "DtoGetInt":
+						case "DtoGetVoid":
+						case "DtoGetObject":
+						case "DtoGetString":
+						case "DtoGetBool":
+							dto=GetDtoForType(reader.Name);//Set dto to the correct type.
+							break;
+						#endregion
+						#region Credentials
+						case "Credentials":
+							if(dto==null) {//This should never happen. 
+								//TODO: Throw an exception for unknown dto type.
+							}
+							//Create a new Credentials object.
+							Credentials creds=new Credentials();
+							//Read and set the UserName and Password elements.
+							reader.ReadToFollowing("UserName");
+							creds.Username=reader.Value;							
+							reader.ReadToFollowing("Password");
+							creds.Password=reader.Value;
+							dto.Credentials=creds;
+							break;
+						#endregion
+						#region MethodName
+						case "MethodName":
+							if(dto==null) {//This should never happen. 
+								//TODO: Throw an exception for unknown dto type.
+							}
+							dto.MethodName=reader.Value;
+							break;
+						#endregion
+						#region Params
+						case "Params":
+							if(dto==null) {//This should never happen. 
+								//TODO: Throw an exception for unknown dto type.
+							}
+							if(!reader.IsEmptyElement) {//Parameters are present.
+								SetParamsAndParamTypes(reader,dto);
+							}
+							break;
+						#endregion
+					}
 				}
-				strNodeName=reader.Name;
-				break;
 			}
-			dto=GetDtoForType(strNodeName);
-			dto.Type=strNodeName;
-			if(dto==null) {//This should never happen... Not sure if returning null is best solution.
-				CloseReaders(strReader,reader);
-				return null;
-			}
-			try {//Manually deserialize dto object without using XmlSerializer.  Old code: DataTransferObject retVal=(DataTransferObject)serializer.Deserialize(reader);
-				document.Load(reader);
-				XPathNavigator navigator=document.CreateNavigator();
-				XPathNavigator nav;
-				#region Credentials
-				nav=navigator.SelectSingleNode("//Credentials");
-				if(nav==null) {//There will always be Credentials.
-					CloseReaders(strReader,reader);
-					return null;
-				}
-				Credentials creds=new Credentials();
-				creds.Username=nav.SelectSingleNode("UserName").Value;
-				creds.Password=nav.SelectSingleNode("Password").Value;
-				dto.Credentials=creds;
-				#endregion
-				#region MethodName
-				nav=navigator.SelectSingleNode("//MethodName");
-				if(nav==null) {//There will always be a Method to call.  Otherwise, what is the point of this dto.
-					CloseReaders(strReader,reader);
-					return null;
-				}
-				dto.MethodName=nav.Value;
-				#endregion
-				#region Params
-				nav=navigator.SelectSingleNode("//Params");
-				if(nav==null) {//There will always be a params node but there might be no params.
-					CloseReaders(strReader,reader);
-					return null;
-				}
-				if(nav.Value!="") {//Parameters are present.  Deserialize them.
-					SetParamsAndParamTypes(nav,dto);
-				}
-				#endregion
-			}
-			catch(Exception) {
-				CloseReaders(strReader,reader);
-				return null;
-			}
-			CloseReaders(strReader,reader);
 			return dto;
 		}
 
@@ -131,29 +127,24 @@ namespace OpenDentalWebService {
 		}
 
 		///<summary>Correctly sets Params AND ParamTypes on the dto object based on the navigator passed in.</summary>
-		private static void SetParamsAndParamTypes(XPathNavigator nav,DataTransferObject dto) {
+		private static void SetParamsAndParamTypes(XmlReader reader,DataTransferObject dto) {
 			//The Params node is going to be a list of DtoObjects. Each has </TypeName> and </Obj>.  TypeName will give us the type and Obj will contain the serialized object.
 			//Loop through the nodes and call a function that will call each corresponding S class to deserialize the desired object correctly.
-			for(int i=0;i<5;i++) {//Not going to be a for loop.
-				DtoObject dtoObj=new DtoObject();
-				string typeName="";//Read the xml to figure out the type of object.
-				dtoObj.TypeName=typeName;
-				dto.ParamTypes.Add(typeName);
-				//Write code to strip out JUST the object and then call the get method.
-				//(Special logic most likely needed for List<> objects and primitives.)
-				string xml="";
-				object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
-				dto.Params.Add(dtoObj);
-			}
-		}
-
-		///<summary>Helper function to close the string and xml readers from the Deserialize method.</summary>
-		private static void CloseReaders(StringReader strReader,XmlTextReader reader) {
-			if(strReader!=null) {
-				strReader.Close();
-			}
-			if(reader!=null) {
-				reader.Close();
+			while(reader.Read()) {//Just read till the end of the xml stream because parameters are the last thing in any dto object anyway.
+				//Only detect start elements.
+				if(!reader.IsStartElement()) {
+					continue;
+				}
+				if(reader.Name=="TypeName") {
+					DtoObject dtoObj=new DtoObject();
+					string typeName=reader.Value;
+					dtoObj.TypeName=typeName;
+					dto.ParamTypes.Add(typeName);
+					reader.Read();//Moves down to <Obj>.
+					string xml="";//TODO: Write code to strip out JUST the "object" xml and then call CallClassDeserializer which can deserialize any of our objects.
+					object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
+					dto.Params.Add(dtoObj);
+				}
 			}
 		}
 
