@@ -2395,8 +2395,8 @@ namespace OpenDental {
 				}
 				List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
 				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptCur.AptNum,procsMultApts);
-				ArrayList doubleBookedCodes=new ArrayList();
-				AppointmentL.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
+				ArrayList doubleBookedCodes=
+					AppointmentL.GetDoubleBookedCodes(aptCur,DS.Tables["Appointments"].Copy(),procsMultApts,procsForOne);
 				if(doubleBookedCodes.Count>0) {//if some codes would be double booked
 					if(AppointmentRules.IsBlocked(doubleBookedCodes)) {
 						MessageBox.Show(Lan.g(this,"Not allowed to double book:")+" "
