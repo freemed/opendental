@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
+using System.Xml;
+using System.Drawing;
 
 namespace OpenDentalWebService {
 	///<summary>This file is generated automatically by the crud, do not make any changes to this file because they will get overwritten.</summary>
@@ -21,8 +24,37 @@ namespace OpenDentalWebService {
 
 		///<summary></summary>
 		public static OpenDentBusiness.Account Deserialize(string xml) {
-			//TODO: Make an example for the CRUD programmer.
-			return null;
+			OpenDentBusiness.Account account=new OpenDentBusiness.Account();
+			using(XmlReader reader=XmlReader.Create(new StringReader(xml))) {
+				reader.MoveToContent();
+				while(reader.Read()) {
+					//Only detect start elements.
+					if(!reader.IsStartElement()) {
+						continue;
+					}
+					switch(reader.Name) {
+						case "AccountNum":
+							account.AccountNum=reader.ReadContentAsLong();
+							break;
+						case "Description":
+							account.Description=reader.ReadContentAsString();
+							break;
+						case "AcctType":
+							account.AcctType=(OpenDentBusiness.AccountType)reader.ReadContentAsInt();
+							break;
+						case "BankNumber":
+							account.BankNumber=reader.ReadContentAsString();
+							break;
+						case "Inactive":
+							account.Inactive=reader.ReadContentAsString()!="0";
+							break;
+						case "AccountColor":
+							account.AccountColor=Color.FromArgb(reader.ReadContentAsInt());
+							break;
+					}
+				}
+			}
+			return account;
 		}
 
 
