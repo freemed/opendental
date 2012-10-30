@@ -29,8 +29,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.textSheet = new System.Windows.Forms.TextBox();
-			this.button1 = new OpenDental.UI.Button();
-			this.butScreenGroupSelect = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butPatSelect = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
@@ -38,7 +36,7 @@ namespace OpenDental{
 			// 
 			// textPatient
 			// 
-			this.textPatient.Location = new System.Drawing.Point(130, 28);
+			this.textPatient.Location = new System.Drawing.Point(130, 80);
 			this.textPatient.Name = "textPatient";
 			this.textPatient.ReadOnly = true;
 			this.textPatient.Size = new System.Drawing.Size(190, 20);
@@ -46,7 +44,7 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(58, 30);
+			this.label1.Location = new System.Drawing.Point(58, 82);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(66, 14);
 			this.label1.TabIndex = 5;
@@ -55,7 +53,7 @@ namespace OpenDental{
 			// 
 			// textScreenGroup
 			// 
-			this.textScreenGroup.Location = new System.Drawing.Point(130, 54);
+			this.textScreenGroup.Location = new System.Drawing.Point(130, 28);
 			this.textScreenGroup.Name = "textScreenGroup";
 			this.textScreenGroup.ReadOnly = true;
 			this.textScreenGroup.Size = new System.Drawing.Size(190, 20);
@@ -63,7 +61,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(13, 57);
+			this.label2.Location = new System.Drawing.Point(13, 31);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(111, 14);
 			this.label2.TabIndex = 5;
@@ -72,7 +70,7 @@ namespace OpenDental{
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(13, 83);
+			this.label3.Location = new System.Drawing.Point(13, 57);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(111, 14);
 			this.label3.TabIndex = 5;
@@ -81,39 +79,11 @@ namespace OpenDental{
 			// 
 			// textSheet
 			// 
-			this.textSheet.Location = new System.Drawing.Point(130, 80);
+			this.textSheet.Location = new System.Drawing.Point(130, 54);
 			this.textSheet.Name = "textSheet";
 			this.textSheet.ReadOnly = true;
 			this.textSheet.Size = new System.Drawing.Size(190, 20);
 			this.textSheet.TabIndex = 4;
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(326, 80);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(22, 20);
-			this.button1.TabIndex = 2;
-			this.button1.Text = "...";
-			this.button1.Click += new System.EventHandler(this.butScreenGroupSelect_Click);
-			// 
-			// butScreenGroupSelect
-			// 
-			this.butScreenGroupSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butScreenGroupSelect.Autosize = true;
-			this.butScreenGroupSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butScreenGroupSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butScreenGroupSelect.CornerRadius = 4F;
-			this.butScreenGroupSelect.Location = new System.Drawing.Point(326, 53);
-			this.butScreenGroupSelect.Name = "butScreenGroupSelect";
-			this.butScreenGroupSelect.Size = new System.Drawing.Size(22, 20);
-			this.butScreenGroupSelect.TabIndex = 2;
-			this.butScreenGroupSelect.Text = "...";
-			this.butScreenGroupSelect.Click += new System.EventHandler(this.butScreenGroupSelect_Click);
 			// 
 			// butOK
 			// 
@@ -123,7 +93,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(233, 138);
+			this.butOK.Location = new System.Drawing.Point(233, 125);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -137,7 +107,7 @@ namespace OpenDental{
 			this.butPatSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPatSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPatSelect.CornerRadius = 4F;
-			this.butPatSelect.Location = new System.Drawing.Point(326, 27);
+			this.butPatSelect.Location = new System.Drawing.Point(326, 79);
 			this.butPatSelect.Name = "butPatSelect";
 			this.butPatSelect.Size = new System.Drawing.Size(22, 20);
 			this.butPatSelect.TabIndex = 2;
@@ -152,7 +122,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(323, 138);
+			this.butCancel.Location = new System.Drawing.Point(323, 125);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -162,15 +132,13 @@ namespace OpenDental{
 			// FormScreenPatEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(421, 183);
+			this.ClientSize = new System.Drawing.Size(421, 170);
 			this.Controls.Add(this.label3);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textSheet);
 			this.Controls.Add(this.textScreenGroup);
 			this.Controls.Add(this.textPatient);
-			this.Controls.Add(this.button1);
-			this.Controls.Add(this.butScreenGroupSelect);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butPatSelect);
 			this.Controls.Add(this.butCancel);
@@ -190,11 +158,9 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textPatient;
 		private System.Windows.Forms.Label label1;
 		private UI.Button butPatSelect;
-		private UI.Button butScreenGroupSelect;
 		private System.Windows.Forms.TextBox textScreenGroup;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textSheet;
-		private UI.Button button1;
 	}
 }

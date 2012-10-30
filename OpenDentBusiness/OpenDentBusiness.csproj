@@ -306,6 +306,7 @@
     <Compile Include="Crud\SchoolCourseCrud.cs" />
     <Compile Include="Crud\ScreenCrud.cs" />
     <Compile Include="Crud\ScreenGroupCrud.cs" />
+    <Compile Include="Crud\ScreenPatCrud.cs" />
     <Compile Include="Crud\SecurityLogCrud.cs" />
     <Compile Include="Crud\SheetCrud.cs" />
     <Compile Include="Crud\SheetDefCrud.cs" />
@@ -395,6 +396,7 @@
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Data Interface\InsFilingCodeSubtypes.cs" />
     <Compile Include="Data Interface\RxNorms.cs" />
+    <Compile Include="Data Interface\ScreenPats.cs" />
     <Compile Include="Data Interface\Signalods.cs" />
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />

@@ -11,8 +11,9 @@ namespace OpenDental {
 	public partial class FormScreenPatEdit:Form {
 		public ScreenPat ScreenPatCur;
 		private Patient PatCur;
-		private ScreenGroup ScreenGroupCur;
-		private Sheet ExamSheetCur;
+		public ScreenGroup ScreenGroupCur;
+		private SheetDef ExamSheetDefCur;
+		public bool IsNew;
 
 		public FormScreenPatEdit() {
 			InitializeComponent();
@@ -20,28 +21,35 @@ namespace OpenDental {
 		}
 
 		private void FormScreenPatEdit_Load(object sender,EventArgs e) {
+			if(IsNew) {
+				ScreenPatCur.SheetNum=PrefC.GetLong(PrefName.PublicHealthScreeningSheet);
+			}
 			PatCur=Patients.GetPat(ScreenPatCur.PatNum);
-			textPatient.Text=PatCur.GetNameLF();
+			if(PatCur!=null) {
+				textPatient.Text=PatCur.GetNameLF();
+			}
 			ScreenGroupCur=ScreenGroups.GetScreenGroup(ScreenPatCur.ScreenGroupNum);
-			textScreenGroup.Text=ScreenGroupCur.Description;
-			ExamSheetCur=Sheets.GetSheet(ScreenPatCur.SheetNum);
-			textSheet.Text=ExamSheetCur.Description;
+			if(ScreenGroupCur!=null) {
+				textScreenGroup.Text=ScreenGroupCur.Description;
+			}
+			ExamSheetDefCur=SheetDefs.GetSheetDef(ScreenPatCur.SheetNum);
+			if(ExamSheetDefCur!=null) {
+				textSheet.Text=ExamSheetDefCur.Description;
+			}
 		}
 
 		private void butPatSelect_Click(object sender,EventArgs e) {
 			FormPatientSelect FormPS=new FormPatientSelect();
 			FormPS.ShowDialog();
 			PatCur=Patients.GetPat(FormPS.SelectedPatNum);
-		}
-
-		private void butScreenGroupSelect_Click(object sender,EventArgs e) {
-			FormScreenGroups FormSG=new FormScreenGroups();
-			FormSG.IsSelectionMode=true;
-			FormSG.ShowDialog();
-			ScreenGroupCur=FormSG.ScreenGroupCur;
+			ScreenPatCur.PatNum=PatCur.PatNum;
+			textPatient.Text=PatCur.GetNameLF();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				ScreenPats.Insert(ScreenPatCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

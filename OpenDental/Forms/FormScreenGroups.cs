@@ -21,7 +21,6 @@ namespace OpenDental{
 		private MainMenu mainMenu;
 		private MenuItem menuItemSetup;
 		private List<ScreenGroup> ScreenGroupList;
-		public bool IsSelectionMode=false;
 		private UI.Button butLeft;
 		private UI.Button butRight;
 		private UI.Button butToday;
@@ -255,9 +254,6 @@ namespace OpenDental{
 
 		private void FormScreenings_Load(object sender, System.EventArgs e) {
 			dateCur=DateTime.Today;
-			if(IsSelectionMode) {
-				butClose.Text="&OK";
-			}
 			textDateFrom.Text=DateTime.Today.ToShortDateString();
 			textDateTo.Text=DateTime.Today.ToShortDateString();
 			FillGrid();
@@ -285,11 +281,6 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			if(IsSelectionMode) {
-				ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
-				DialogResult=DialogResult.OK;
-				return;
-			}
 			FormScreenGroupEdit FormSG=new FormScreenGroupEdit();
 			FormSG.ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
 			FormSG.ShowDialog();
@@ -381,11 +372,6 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {
-			if(IsSelectionMode) {//button will say "OK"
-				ScreenGroupCur=ScreenGroupList[gridMain.GetSelectedIndex()];
-				DialogResult=DialogResult.OK;
-				return;
-			}
 			DialogResult=DialogResult.Cancel;
 		}
 

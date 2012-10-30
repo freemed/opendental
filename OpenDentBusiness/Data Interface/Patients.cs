@@ -2095,6 +2095,17 @@ FROM insplan";
 			Db.NonQ(command);
 		}
 
+		public static List<Patient> GetPatsForScreenGroup(long screenGroupNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),screenGroupNum);
+			}
+			if(screenGroupNum==0) {
+				return new List<Patient>();
+			}
+			string command = "SELECT * FROM patient WHERE PatNum IN (SELECT PatNum FROM screenpat WHERE ScreenGroupNum="+POut.Long(screenGroupNum)+")";
+			return Crud.PatientCrud.SelectMany(command);
+		}
+
 
 	}
 
