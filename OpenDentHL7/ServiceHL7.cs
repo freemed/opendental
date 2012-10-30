@@ -157,9 +157,9 @@ namespace OpenDentHL7 {
 			}
 			else {
 				CreateIncomingTcpListener();
-				//start a timer to poll the database and to send messages as needed
+				//start a timer to poll the database and to send messages as needed.  Every 3 seconds.  If more frequently, it tries to send more than one message simultaneously, crashing the service.
 				TimerCallback timercallbackSendTCP=new TimerCallback(TimerCallbackSendTCP);
-				timerSendTCP=new System.Threading.Timer(timercallbackSendTCP,null,1800,1800);
+				timerSendTCP=new System.Threading.Timer(timercallbackSendTCP,null,1800,3000);
 			}
 		}
 
