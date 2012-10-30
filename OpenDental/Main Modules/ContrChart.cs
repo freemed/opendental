@@ -3904,7 +3904,7 @@ namespace OpenDental{
 					checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+1])*3;
 					checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+2])*5;
 					checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+3])*7;
-					newCropAccountId+=(checkSum%100).ToString();
+					newCropAccountId+=(checkSum%100).ToString().PadLeft(2,'0');
 					Prefs.UpdateString(PrefName.NewCropAccountId,newCropAccountId);
 				}
 				catch(Exception ex) {
