@@ -242,7 +242,12 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			Cur.NewerDays=PIn.Int (textDays.Text);
+			int newerDays=PIn.Int(textDays.Text);
+			if(newerDays>3000) {
+				MsgBox.Show(this,"Days must be less that 3000.");
+				return;
+			}
+			Cur.NewerDays=newerDays;
 			Cur.NewerDate=PIn.Date(textDate.Text);
 			try{
 				if(IsNew) {
