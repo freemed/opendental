@@ -244,7 +244,7 @@ namespace OpenDental{
 			}
 			int newerDays=PIn.Int(textDays.Text);
 			if(newerDays>3000) {
-				MsgBox.Show(this,"Days must be less that 3000.");
+				MsgBox.Show(this,"Days must be less than 3000.");
 				return;
 			}
 			Cur.NewerDays=newerDays;
