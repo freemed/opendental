@@ -11,6 +11,8 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private Label label1;
+		private RadioButton radioGroupByProc;
+		private RadioButton radioGroupByPat;
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
@@ -37,53 +39,77 @@ namespace OpenDental{
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this.radioGroupByProc = new System.Windows.Forms.RadioButton();
+			this.radioGroupByPat = new System.Windows.Forms.RadioButton();
 			this.SuspendLayout();
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(336,105);
+			this.butCancel.Location = new System.Drawing.Point(336, 131);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75,26);
+			this.butCancel.Size = new System.Drawing.Size(75, 26);
 			this.butCancel.TabIndex = 19;
 			this.butCancel.Text = "&Cancel";
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(240,105);
+			this.butOK.Location = new System.Drawing.Point(240, 131);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75,26);
+			this.butOK.Size = new System.Drawing.Size(75, 26);
 			this.butOK.TabIndex = 18;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(21,20);
+			this.label1.Location = new System.Drawing.Point(21, 20);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(390,64);
+			this.label1.Size = new System.Drawing.Size(390, 64);
 			this.label1.TabIndex = 20;
 			this.label1.Text = "Helps find situations where the insurance payment plus any writeoff exceeds the f" +
     "ee.  See the manual for suggestions on how to handle the results.";
 			// 
+			// radioGroupByProc
+			// 
+			this.radioGroupByProc.Checked = true;
+			this.radioGroupByProc.Location = new System.Drawing.Point(72, 71);
+			this.radioGroupByProc.Name = "radioGroupByProc";
+			this.radioGroupByProc.Size = new System.Drawing.Size(160, 17);
+			this.radioGroupByProc.TabIndex = 21;
+			this.radioGroupByProc.TabStop = true;
+			this.radioGroupByProc.Text = "Group by procedure (default)";
+			this.radioGroupByProc.UseVisualStyleBackColor = true;
+			// 
+			// radioGroupByPat
+			// 
+			this.radioGroupByPat.Location = new System.Drawing.Point(72, 94);
+			this.radioGroupByPat.Name = "radioGroupByPat";
+			this.radioGroupByPat.Size = new System.Drawing.Size(160, 17);
+			this.radioGroupByPat.TabIndex = 21;
+			this.radioGroupByPat.Text = "Group by patient and date";
+			this.radioGroupByPat.UseVisualStyleBackColor = true;
+			// 
 			// FormRpInsOverpaid
 			// 
 			this.AcceptButton = this.butOK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(436,145);
+			this.ClientSize = new System.Drawing.Size(436, 171);
+			this.Controls.Add(this.radioGroupByPat);
+			this.Controls.Add(this.radioGroupByProc);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
@@ -109,14 +135,22 @@ namespace OpenDental{
 			ReportSimpleGrid report=new ReportSimpleGrid();
 			report.Query=@"SELECT procedurelog.PatNum,"+DbHelper.Concat("patient.LName","', '","patient.FName")+@" patname,
 procedurelog.ProcDate,
-procedurelog.ProcFee ""$sumfee"",
+SUM(procedurelog.ProcFee) ""$sumfee"",
 SUM((SELECT SUM(claimproc.InsPayAmt + claimproc.Writeoff) FROM claimproc WHERE claimproc.ProcNum=procedurelog.ProcNum)) AS
 ""$PaidAndWriteoff""
 FROM procedurelog
 LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum
 LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
-WHERE procedurelog.ProcStatus=2/*complete*/
-GROUP BY procedurelog.ProcNum
+WHERE procedurelog.ProcStatus=2/*complete*/";
+			if(radioGroupByProc.Checked){
+				report.Query+=@"
+GROUP BY procedurelog.ProcNum";
+			}
+			else if(radioGroupByPat.Checked){
+				report.Query+=@"
+GROUP BY procedurelog.PatNum,procedurelog.ProcDate";
+			}
+			report.Query+=@"
 HAVING ROUND($sumfee,3) < ROUND($PaidAndWriteoff,3)
 ORDER BY patname,ProcDate";
 			FormQuery FormQuery2=new FormQuery(report);
