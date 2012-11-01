@@ -236,6 +236,16 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a field name first.");
 				return;
 			}
+			if(SheetDefCur.SheetType==SheetTypeEnum.ExamSheet) {
+				if(textReportableName.Text.Contains(";") || textReportableName.Text.Contains(":")) {
+					MsgBox.Show(this,"Reportable name for Exam Sheet fields may not contain a ':' or a ';'.");
+					return;
+				}
+				if(textRadioGroupName.Text.Contains(";") || textRadioGroupName.Text.Contains(":")) {
+					MsgBox.Show(this,"Radio button group name for Exam Sheet fields may not contain a ':' or a ';'.");
+					return;
+				}
+			}
 			string fieldName=AvailFields[listFields.SelectedIndex].FieldName;
 			string radioButtonValue="";
 			#region Medical History Sheet

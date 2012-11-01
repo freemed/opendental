@@ -27,6 +27,12 @@ namespace OpenDental {
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
+			if(SheetDefCur.SheetType==SheetTypeEnum.PatientLetter) {
+				butExamSheet.Visible=true;
+			}
+			else {
+				butExamSheet.Visible=false;
+			}
 			textFieldValue.Text=SheetFieldDefCur.FieldValue;
 			InstalledFontCollection fColl=new InstalledFontCollection();
 			for(int i=0;i<fColl.Families.Length;i++){
@@ -206,6 +212,24 @@ namespace OpenDental {
 			labelTextW.Text=Lan.g(this,"TextW: ")+textW.ToString();
 		}
 
+		private void butExamSheet_Click(object sender,EventArgs e) {
+			FormSheetFieldExam FormE=new FormSheetFieldExam();
+			FormE.ShowDialog();
+			if(FormE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(textSelectionStart < textFieldValue.Text.Length-1) {//if cursor is not at the end of the text in textFieldValue, insert into text beginning at cursor
+				textFieldValue.Text=textFieldValue.Text.Substring(0,textSelectionStart)
+				+"["+FormE.ExamFieldSelected+"]"
+				+textFieldValue.Text.Substring(textSelectionStart);
+			}
+			else {//otherwise, just tack it on the end
+				textFieldValue.Text+="["+FormE.ExamFieldSelected+"]";
+			}
+			textFieldValue.Select(textSelectionStart+FormE.ExamFieldSelected.Length+2,0);
+			textFieldValue.Focus();
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			SheetFieldDefCur=null;
 			DialogResult=DialogResult.OK;
@@ -257,7 +281,6 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
-
 		
 
 		

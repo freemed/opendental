@@ -28,7 +28,6 @@ namespace OpenDental{
 			this.label1 = new System.Windows.Forms.Label();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
 			this.label10 = new System.Windows.Forms.Label();
 			this.listAvailFields = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
@@ -90,23 +89,6 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(15,376);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(77,24);
-			this.butDelete.TabIndex = 100;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
 			// label10
 			// 
 			this.label10.Location = new System.Drawing.Point(193,47);
@@ -123,6 +105,7 @@ namespace OpenDental{
 			this.listAvailFields.Name = "listAvailFields";
 			this.listAvailFields.Size = new System.Drawing.Size(142,290);
 			this.listAvailFields.TabIndex = 101;
+			this.listAvailFields.DoubleClick += new System.EventHandler(this.listAvailFields_DoubleClick);
 			// 
 			// FormSheetFieldExam
 			// 
@@ -130,7 +113,6 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(442,412);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.listAvailFields);
-			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.listExamSheets);
@@ -151,7 +133,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ListBox listExamSheets;
 		private System.Windows.Forms.Label label1;
-		private OpenDental.UI.Button butDelete;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.ListBox listAvailFields;
 	}

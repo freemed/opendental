@@ -80,6 +80,9 @@ namespace OpenDentBusiness{
 					retVal.Add("Parttime");
 					retVal.Add("Fulltime");
 					return retVal;
+				case "Race":
+					stringAr=Enum.GetNames(typeof(PatientRace));
+					break;
 			}
 			for(int i=0;i<stringAr.Length;i++) {
 				retVal.Add(stringAr[i]);
@@ -431,13 +434,21 @@ namespace OpenDentBusiness{
 		public static List<SheetFieldDef> GetExamSheet(OutInCheck outInCheck){
 			List<SheetFieldDef> list=new List<SheetFieldDef>();
 			if(outInCheck==OutInCheck.Out) {
+				list.Add(NewOutput("patient.priProvNameFL"));
 				list.Add(NewOutput("sheet.DateTimeSheet"));
 			}
-			else if(outInCheck==OutInCheck.In){
+			else if(outInCheck==OutInCheck.In) {
+				list.Add(NewInput("Birthdate"));
+				list.Add(NewInput("FName"));
+				list.Add(NewInput("LName"));
+				list.Add(NewInput("MiddleI"));
 				list.Add(NewInput("misc"));
+				list.Add(NewInput("Preferred"));
 			}
 			else if(outInCheck==OutInCheck.Check){
+				list.Add(NewCheck("Gender"));
 				list.Add(NewCheck("misc"));
+				list.Add(NewCheck("Race"));//This is really race/ethnicity combined.
 			}
 			return list;
 		}

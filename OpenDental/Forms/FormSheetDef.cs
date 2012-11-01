@@ -95,9 +95,16 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a sheet type first.");
 				return;
 			}
-			if(textDescription.Text==""){
+			if(textDescription.Text=="") {
 				MsgBox.Show(this,"Description may not be blank.");
 				return;
+			}
+			if((SheetTypeEnum)listSheetType.SelectedIndex==SheetTypeEnum.ExamSheet) {
+				//make sure description for exam sheet does not contain a ':' or a ';' because this interferes with pulling the exam sheet fields to fill a patient letter
+				if(textDescription.Text.Contains(":") || textDescription.Text.Contains(";")) {
+					MsgBox.Show(this,"Description for an Exam Sheet may not contain a ':' or a ';'.");
+					return;
+				}
 			}
 			if(comboFontName.Text==""){
 				//not going to bother testing for validity unless it will cause a crash.

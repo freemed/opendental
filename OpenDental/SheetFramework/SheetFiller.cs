@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Text;
 using OpenDentBusiness;
+using System.Text.RegularExpressions;
 
 namespace OpenDental{
 	public class SheetFiller {
@@ -715,6 +716,51 @@ namespace OpenDental{
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[practiceTitle]",PrefC.GetString(PrefName.PracticeTitle));
 				field.FieldValue=fldval;
+			}
+			//Fill Exam Sheet Fields----------------------------------------------------------------------------------------------
+			//Example: ExamSheet:MyExamSheet;MyField
+			if(sheet.SheetType==SheetTypeEnum.PatientLetter && pat!=null) {
+				foreach(SheetField field in sheet.SheetFields) {
+					if(field.FieldType!=SheetFieldType.StaticText) {
+						continue;
+					}
+					fldval=field.FieldValue;
+					string rgx=@"\[ExamSheet\:([^;]+);([^\]]+)\]";
+					Match match=Regex.Match(fldval,rgx);
+					while(match.Success) {
+						string examSheetDescript=match.Result("$1");
+						string fieldName=match.Result("$2");
+						List<SheetField> examFields=SheetFields.GetFieldsForPatientLetter(pat.PatNum,examSheetDescript,fieldName);//Either a list of fields (if radio button) or single field
+						if(examFields!=null && examFields.Count>0) {
+							if(examFields[0].RadioButtonGroup!="") {//a user defined 'misc' radio button check box, find the selected item and replace with reportable name
+								for(int i=0;i<examFields.Count;i++) {
+									if(examFields[i].FieldValue=="X") {
+										fldval=fldval.Replace(match.Value,examFields[i].ReportableName);
+										break;
+									}
+								}
+							}
+							else if(examFields[0].ReportableName!="") {//not a radio button so either user defined single misc check boxes or misc input field with reportable name
+									fldval=fldval.Replace(match.Value,examFields[0].FieldValue);
+							}
+							else if(examFields[0].FieldName!="" && examFields[0].FieldName!="misc") {//internally defined
+								if(examFields[0].RadioButtonValue=="") {//internally defined field, not part of a radio button group
+									fldval=fldval.Replace(match.Value,examFields[0].FieldValue);
+								}
+								else {//internally defined radio button, look for one selected
+									for(int i=0;i<examFields.Count;i++) {
+										if(examFields[i].FieldValue=="X") {
+											fldval=fldval.Replace(match.Value,examFields[i].RadioButtonValue);
+											break;
+										}
+									}
+								}
+							}
+						}
+						match=match.NextMatch();
+					}
+					field.FieldValue=fldval;
+				}
 			}
 		}
 
@@ -1563,8 +1609,36 @@ namespace OpenDental{
 		private static void FillFieldsForExamSheet(Sheet sheet,Patient pat) {
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
+					case "Birthdate":
+						field.FieldValue=pat.Birthdate.ToShortDateString();
+						break;
+					case "FName":
+						field.FieldValue=pat.FName;
+						break;
+					case "Gender":
+						if(field.RadioButtonValue==pat.Gender.ToString()) {
+							field.FieldValue="X";
+						}
+						break;
+					case "LName":
+						field.FieldValue=pat.LName;
+						break;
+					case "MiddleI":
+						field.FieldValue=pat.MiddleI;
+						break;
+					case "patient.priProvNameFL":
+						field.FieldValue=Providers.GetFormalName(pat.PriProv);
+						break;
+					case "Preferred":
+						field.FieldValue=pat.Preferred;
+						break;
+					case "Race":
+						if(field.RadioButtonValue==pat.Race.ToString()) {
+							field.FieldValue="X";
+						}
+						break;
 					case "sheet.DateTimeSheet":
-						field.FieldValue=sheet.DateTimeSheet.ToShortDateString();
+						field.FieldValue=sheet.DateTimeSheet.ToString();
 						break;
 				}
 			}

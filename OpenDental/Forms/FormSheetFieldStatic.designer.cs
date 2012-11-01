@@ -46,6 +46,7 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.labelTextW = new System.Windows.Forms.Label();
+			this.butExamSheet = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -288,10 +289,26 @@ namespace OpenDental{
 			this.labelTextW.Text = "TextW: ";
 			this.labelTextW.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// butExamSheet
+			// 
+			this.butExamSheet.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExamSheet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExamSheet.Autosize = true;
+			this.butExamSheet.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExamSheet.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExamSheet.CornerRadius = 4F;
+			this.butExamSheet.Location = new System.Drawing.Point(313,659);
+			this.butExamSheet.Name = "butExamSheet";
+			this.butExamSheet.Size = new System.Drawing.Size(98,24);
+			this.butExamSheet.TabIndex = 105;
+			this.butExamSheet.Text = "Exam Sheet Field";
+			this.butExamSheet.Click += new System.EventHandler(this.butExamSheet_Click);
+			// 
 			// FormSheetFieldStatic
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(884,691);
+			this.Controls.Add(this.butExamSheet);
 			this.Controls.Add(this.labelTextW);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.listFields);
@@ -346,5 +363,6 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listFields;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label labelTextW;
+		private UI.Button butExamSheet;
 	}
 }

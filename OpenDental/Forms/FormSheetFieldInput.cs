@@ -116,6 +116,12 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a font name first.");
 				return;
 			}
+			if(SheetDefCur.SheetType==SheetTypeEnum.ExamSheet) {
+				if(textReportableName.Text.Contains(";") || textReportableName.Text.Contains(":")) {
+					MsgBox.Show(this,"Reportable name for Exam Sheet fields may not contain a ':' or a ';'.");
+					return;
+				}
+			}
 			float fontSize;
 			try{
 				fontSize=float.Parse(textFontSize.Text);
