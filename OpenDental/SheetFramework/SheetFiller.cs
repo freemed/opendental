@@ -730,35 +730,37 @@ namespace OpenDental{
 					while(match.Success) {
 						string examSheetDescript=match.Result("$1");
 						string fieldName=match.Result("$2");
-						List<SheetField> examFields=SheetFields.GetFieldsForPatientLetter(pat.PatNum,examSheetDescript,fieldName);//Either a list of fields (if radio button) or single field
-						if(examFields!=null && examFields.Count>0) {
-							if(examFields[0].RadioButtonGroup!="") {//a user defined 'misc' radio button check box, find the selected item and replace with reportable name
+						List<SheetField> examFields=SheetFields.GetFieldFromExamSheet(pat.PatNum,examSheetDescript,fieldName);//Either a list of fields (if radio button) or single field
+						if(examFields==null || examFields.Count==0) {
+							match=match.NextMatch();
+							continue;
+						}
+						if(examFields[0].RadioButtonGroup!="") {//a user defined 'misc' radio button check box, find the selected item and replace with reportable name
+							for(int i=0;i<examFields.Count;i++) {
+								if(examFields[i].FieldValue=="X") {
+									fldval=fldval.Replace(match.Value,examFields[i].ReportableName);//each radio button in the group has a different reportable name.
+									break;
+								}
+							}
+						}
+						else if(examFields[0].ReportableName!="") {//not a radio button, so either user defined single misc check boxes or misc input field with reportable name
+							fldval=fldval.Replace(match.Value,examFields[0].FieldValue);//checkboxes from exam sheets will show as X or blank on letter.
+						}
+						else if(examFields[0].FieldName!="" && examFields[0].FieldName!="misc") {//internally defined
+							if(examFields[0].RadioButtonValue=="") {//internally defined field, not part of a radio button group
+								fldval=fldval.Replace(match.Value,examFields[0].FieldValue);//checkbox or input
+							}
+							else {//internally defined radio button, look for one selected
 								for(int i=0;i<examFields.Count;i++) {
 									if(examFields[i].FieldValue=="X") {
-										fldval=fldval.Replace(match.Value,examFields[i].ReportableName);
+										fldval=fldval.Replace(match.Value,examFields[i].RadioButtonValue);
 										break;
-									}
-								}
-							}
-							else if(examFields[0].ReportableName!="") {//not a radio button so either user defined single misc check boxes or misc input field with reportable name
-									fldval=fldval.Replace(match.Value,examFields[0].FieldValue);
-							}
-							else if(examFields[0].FieldName!="" && examFields[0].FieldName!="misc") {//internally defined
-								if(examFields[0].RadioButtonValue=="") {//internally defined field, not part of a radio button group
-									fldval=fldval.Replace(match.Value,examFields[0].FieldValue);
-								}
-								else {//internally defined radio button, look for one selected
-									for(int i=0;i<examFields.Count;i++) {
-										if(examFields[i].FieldValue=="X") {
-											fldval=fldval.Replace(match.Value,examFields[i].RadioButtonValue);
-											break;
-										}
 									}
 								}
 							}
 						}
 						match=match.NextMatch();
-					}
+					}//while
 					field.FieldValue=fldval;
 				}
 			}

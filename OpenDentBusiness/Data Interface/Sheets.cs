@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Gets the most recent Exam Sheet based on description to fill a patient letter.</summary>
-		public static Sheet GetForPatientLetter(long patNum,string examDescript) {
+		public static Sheet GetMostRecentExamSheet(long patNum,string examDescript) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Sheet>(MethodBase.GetCurrentMethod(),patNum,examDescript);
 			}

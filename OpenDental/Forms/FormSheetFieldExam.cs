@@ -36,7 +36,7 @@ namespace OpenDental {
 			listAvailFields.Sorted=true;//will alphabetize, since we are adding either FieldName,ReportableName, or RadioButtonGroup depending on field type
 			listAvailFields.Items.Clear();
 			//Add exam sheet fields to the list
-			List<SheetFieldDef> availFields=SheetFieldDefs.GetForExamSheet(AvailExamDefs[listExamSheets.SelectedIndex]);
+			List<SheetFieldDef> availFields=SheetFieldDefs.GetForExamSheet(AvailExamDefs[listExamSheets.SelectedIndex].SheetDefNum);
 			for(int i=0;i<availFields.Count;i++) {
 				if(availFields[i].FieldName=="") {
 					continue;

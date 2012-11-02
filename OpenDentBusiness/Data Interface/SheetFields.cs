@@ -43,12 +43,12 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Used in SheetFiller to fill patient letter with exam sheet information.  Will return null if no exam sheet matching the description exists for the patient.</summary>
-		public static List<SheetField> GetFieldsForPatientLetter(long patNum,string examDescript,string fieldName) {
+		///<summary>Used in SheetFiller to fill patient letter with exam sheet information.  Will return null if no exam sheet matching the description exists for the patient.  Usually just returns one field, but will return a list of fields if it's for a RadioButtonGroup.</summary>
+		public static List<SheetField> GetFieldFromExamSheet(long patNum,string examDescript,string fieldName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<SheetField>>(MethodBase.GetCurrentMethod(),patNum,examDescript,fieldName);
 			}
-			Sheet sheet=Sheets.GetForPatientLetter(patNum,examDescript);
+			Sheet sheet=Sheets.GetMostRecentExamSheet(patNum,examDescript);
 			if(sheet==null) {
 				return null;
 			}
