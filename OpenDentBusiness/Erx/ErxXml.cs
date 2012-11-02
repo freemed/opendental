@@ -110,13 +110,35 @@ namespace OpenDentBusiness {
 			ncScript.LicensedPrescriber.ID=prov.ProvNum.ToString();//A positive integer.
 			//UPIN is obsolete
 			ncScript.LicensedPrescriber.LicensedPrescriberName=new PersonNameType();
-			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName;//May be blank.
-			ncScript.LicensedPrescriber.LicensedPrescriberName.first=prov.FName;//May be blank.
+			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName.Trim();//Cannot be blank.
+			ncScript.LicensedPrescriber.LicensedPrescriberName.first=prov.FName.Trim();//Cannot be blank.
 			ncScript.LicensedPrescriber.LicensedPrescriberName.middle=prov.MI;//May be blank.
-			ncScript.LicensedPrescriber.dea=prov.DEANum;//May be blank.
+			//Suffix is validated in the chart to be blank or exactly one of the following: I,II,III,Jr.,Jr,Sr.,Sr
+			if(prov.Suffix=="I") {
+				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.I;
+			}
+			else if(prov.Suffix=="II") {
+				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.II;
+			}
+			else if(prov.Suffix=="III") {
+				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.III;
+			}
+			else if(prov.Suffix=="Jr." || prov.Suffix=="Jr") {
+				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Jr;
+			}
+			else if(prov.Suffix=="Sr." || prov.Suffix=="Sr") {
+				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Sr;
+			}
+			if(prov.DEANum.ToLower()=="none") {
+				ncScript.LicensedPrescriber.dea="NONE";
+			}
+			else {
+				ncScript.LicensedPrescriber.dea=prov.DEANum;
+			}
 			ncScript.LicensedPrescriber.licenseState=prov.StateWhereLicensed;//Validated to be a US state code in the chart.
 			ncScript.LicensedPrescriber.licenseNumber=prov.StateLicense;//Validated to exist in chart.
 			ncScript.LicensedPrescriber.npi=prov.NationalProvID;//Validated to be 10 digits in chart.
+			//ncScript.LicensedPrescriber.freeformCredentials=;//This is where DDS and DMD should go, but we don't support this yet. Probably not necessary anyway.
 			if(emp!=null) {
 				ncScript.Staff=new StaffType();
 				ncScript.Staff.ID=emp.EmployeeNum.ToString();//A positive integer.

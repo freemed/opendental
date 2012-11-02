@@ -3936,6 +3936,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.RxCreate)) {
 				return;
 			}
+			//Validation------------------------------------------------------------------------------------------------------------------------------------------------------
 			if(Security.CurUser.EmployeeNum==0 && Security.CurUser.ProvNum==0) {
 				MsgBox.Show(this,"This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
 				return;
@@ -3944,18 +3945,38 @@ namespace OpenDental{
 				MsgBox.Show(this,"No patient selected.");
 				return;
 			}
-			string practicePhone=Regex.Replace(PrefC.GetString(PrefName.PracticePhone),"[^0-9]*","");//Removes all non-digit characters.
-			if(practicePhone.Length!=10) {
-				MsgBox.Show(this,"Practice phone must be 10 digits.");
+			string practicePhone=PrefC.GetString(PrefName.PracticePhone);
+			if(!Regex.IsMatch(practicePhone,"^[0-9]{10}$")) {//"^[0-9]{10}(x[0-9]+)?$")) {
+				MsgBox.Show(this,"Practice phone must be exactly 10 digits.");
 				return;
 			}
-			string practiceFax=Regex.Replace(PrefC.GetString(PrefName.PracticeFax),"[^0-9]*","");//Removes all non-digit characters.
-			if(practiceFax.Length!=10) {
-				MsgBox.Show(this,"Practice fax must be 10 digits.");
+			if(practicePhone.StartsWith("555")) {
+				MsgBox.Show(this,"Practice phone cannot start with 555.");
+				return;
+			}
+			if(Regex.IsMatch(practicePhone,"^[0-9]{3}555[0-9]{4}$")) {
+				MsgBox.Show(this,"Practice phone cannot contain 555 in the middle 3 digits.");
+				return;
+			}
+			string practiceFax=PrefC.GetString(PrefName.PracticeFax);
+			if(!Regex.IsMatch(practiceFax,"^[0-9]{10}(x[0-9]+)?$")) {
+				MsgBox.Show(this,"Practice fax must be exactly 10 digits.");
+				return;
+			}
+			if(practiceFax.StartsWith("555")) {
+				MsgBox.Show(this,"Practice fax cannot start with 555.");
+				return;
+			}
+			if(Regex.IsMatch(practiceFax,"^[0-9]{3}555[0-9]{4}$")) {
+				MsgBox.Show(this,"Practice fax cannot contain 555 in the middle 3 digits.");
 				return;
 			}
 			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
 				MsgBox.Show(this,"Practice address blank.");
+				return;
+			}
+			if(Regex.IsMatch(PrefC.GetString(PrefName.PracticeAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+				MsgBox.Show(this,"Practice address cannot be a PO BOX.");
 				return;
 			}
 			if(PrefC.GetString(PrefName.PracticeCity)=="") {
@@ -3979,18 +4000,36 @@ namespace OpenDental{
 			}
 			if(!PrefC.GetBool(PrefName.EasyNoClinics) && PatCur.ClinicNum!=0) { //Using clinics and the patient is assigned to a clinic.
 				Clinic clinic=Clinics.GetClinic(PatCur.ClinicNum);
-				string clinicPhone=Regex.Replace(clinic.Phone,"[^0-9]*","");//Removes all non-digit characters.
-				if(clinicPhone.Length!=10) {
-					MessageBox.Show(Lan.g(this,"Clinic phone must be 10 digits")+": "+clinic.Description);
+				if(!Regex.IsMatch(clinic.Phone,"^[0-9]{10}?$")) {
+					MessageBox.Show(Lan.g(this,"Clinic phone must be exactly 10 digits")+": "+clinic.Description);
 					return;
 				}
-				string clinicFax=Regex.Replace(clinic.Fax,"[^0-9]*","");//Removes all non-digit characters.
-				if(clinicFax.Length!=10) {
-					MessageBox.Show(Lan.g(this,"Clinic fax must be 10 digits")+": "+clinic.Description);
+				if(clinic.Phone.StartsWith("555")) {
+					MessageBox.Show(Lan.g(this,"Clinic phone cannot start with 555")+": "+clinic.Description);
+					return;
+				}
+				if(Regex.IsMatch(clinic.Phone,"^[0-9]{3}555[0-9]{4}$")) {
+					MessageBox.Show(Lan.g(this,"Clinic phone cannot contain 555 in the middle 3 digits")+": "+clinic.Description);
+					return;
+				}
+				if(!Regex.IsMatch(clinic.Fax,"^[0-9]{10}?$")) {
+					MessageBox.Show(Lan.g(this,"Clinic fax must be exactly 10 digits")+": "+clinic.Description);
+					return;
+				}
+				if(clinic.Fax.StartsWith("555")) {
+					MessageBox.Show(Lan.g(this,"Clinic fax cannot start with 555")+": "+clinic.Description);
+					return;
+				}
+				if(Regex.IsMatch(clinic.Fax,"^[0-9]{3}555[0-9]{4}$")) {
+					MessageBox.Show(Lan.g(this,"Clinic fax cannot contain 555 in the middle 3 digits")+": "+clinic.Description);
 					return;
 				}
 				if(clinic.Address=="") {
 					MessageBox.Show(Lan.g(this,"Clinic address blank")+": "+clinic.Description);
+					return;
+				}
+				if(Regex.IsMatch(clinic.Address,".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+					MessageBox.Show(Lan.g(this,"Clinic address cannot be a PO BOX")+": "+clinic.Description);
 					return;
 				}
 				if(clinic.City=="") {
@@ -4014,9 +4053,39 @@ namespace OpenDental{
 			else {
 				prov=Providers.GetProv(PatCur.PriProv);
 			}
+			if(prov.IsNotPerson) {
+				MessageBox.Show(Lan.g(this,"Provider must be a person")+": "+prov.Abbr);
+				return;
+			}
+			string fname=prov.FName.Trim();
+			if(fname=="") {
+				MessageBox.Show(Lan.g(this,"Provider first name missing")+": "+prov.Abbr);
+				return;
+			}
+			if(Regex.Replace(fname,"[^A-Za-z\\-]*","")!=fname) {
+				MessageBox.Show(Lan.g(this,"Provider first name can only contain letters and dashes.")+": "+prov.Abbr);
+				return;
+			}
+			string lname=prov.LName.Trim();
+			if(lname=="") {
+				MessageBox.Show(Lan.g(this,"Provider last name missing")+": "+prov.Abbr);
+				return;
+			}
+			if(Regex.Replace(lname,"[^A-Za-z\\-]*","")!=lname) { //Will catch situations such as "Dale Jr. III" and "Ross DMD".
+				MessageBox.Show(Lan.g(this,"Provider last name can only contain letters and dashes.  Use the suffix box for I, II, III, Jr, or Sr")+": "+prov.Abbr);
+				return;
+			}
+			if(prov.Suffix!="" && prov.Suffix!="I" && prov.Suffix!="II" && prov.Suffix!="III" && prov.Suffix!="Jr." && prov.Suffix!="Jr" && prov.Suffix!="Sr." && prov.Suffix!="Sr") {
+				MessageBox.Show(Lan.g(this,"Provider suffix must be blank or I, II, III, Jr., Jr, Sr., or Sr")+": "+prov.Abbr);
+				return;
+			}
+			if(prov.DEANum.ToLower()!="none" && !Regex.IsMatch(prov.DEANum,"^[A-Za-z]{2}[0-9]{7}$")) {
+				MessageBox.Show(Lan.g(this,"Provider DEA Number must be 2 letters followed by 7 digits.  If no DEA Number, enter NONE.")+": "+prov.Abbr);
+				return;
+			}
 			string npi=Regex.Replace(prov.NationalProvID,"[^0-9]*","");//NPI with all non-numeric characters removed.
 			if(npi.Length!=10) {
-				MessageBox.Show(Lan.g(this,"Provider NPI must be 10 digits")+": "+prov.Abbr);
+				MessageBox.Show(Lan.g(this,"Provider NPI must be exactly 10 digits")+": "+prov.Abbr);
 				return;
 			}
 			if(prov.StateLicense=="") {
@@ -4061,6 +4130,10 @@ namespace OpenDental{
 			string newCropUrl="https://secure.newcropaccounts.com/interfacev7/rxentry.aspx";
 #endif
 			IE.Navigate(newCropUrl,null,null,PostDataBytes,additionalHeaders);
+			ErxLog erxLog=new ErxLog();
+			erxLog.PatNum=PatCur.PatNum;
+			erxLog.MsgText=clickThroughXml;
+			ErxLogs.Insert(erxLog);
 		}
 
 		private void Tool_LabCase_Click() {

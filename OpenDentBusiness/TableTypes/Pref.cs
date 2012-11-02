@@ -250,12 +250,14 @@ namespace OpenDentBusiness {
 		PracticeCity,
 		PracticeDefaultBillType,
 		PracticeDefaultProv,
+		///<summary>In USA and Canada, enforced to be exactly 10 digits or blank.</summary>
 		PracticeFax,
 		PracticePayToAddress,
 		PracticePayToAddress2,
 		PracticePayToCity,
 		PracticePayToST,
 		PracticePayToZip,
+		///<summary>In USA and Canada, enforced to be exactly 10 digits or blank.</summary>
 		PracticePhone,
 		PracticeST,
 		PracticeTitle,

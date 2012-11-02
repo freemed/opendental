@@ -11188,6 +11188,41 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.12.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_4_14();
+		}
+
+		private static void To12_4_14() {
+			if(FromVersion<new Version("12.4.14.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS erxlog";
+					Db.NonQ(command);
+					command=@"CREATE TABLE erxlog (
+						ErxLogNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						MsgText mediumtext NOT NULL,
+						DateTStamp timestamp,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE erxlog'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE erxlog (
+						ErxLogNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						MsgText clob,
+						DateTStamp timestamp,
+						CONSTRAINT erxlog_ErxLogNum PRIMARY KEY (ErxLogNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX erxlog_PatNum ON erxlog (PatNum)";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.4.14.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_5_0();
 		}
 
