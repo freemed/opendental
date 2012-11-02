@@ -3138,6 +3138,9 @@ namespace OpenDental{
 			if(insFilingCodeStr=="MC") { //Medicaid
 				insLine="C";
 			}
+			else if(patPlan==null) {//Plan was dropped.
+				//We only support one medical plan right now so defaulting to primary should be fine. 
+			}
 			else {
 				//If not Medicaid, then primary is on line A, secondary is on line B, and Tertiary is on line C.
 				if(patPlan.Ordinal==2) {
@@ -3265,19 +3268,19 @@ namespace OpenDental{
 					displayStrings[i]=Patients.GetPat(subCur.Subscriber).GetNameFLFormal();
 				}
 				else if(ClaimFormCur.Items[i].FieldName=="MedIns"+insLine+"Relation") { //MedInsARelation, MedInsBRelation, MedInsCRelation
-					if(patPlan.Relationship==Relat.Spouse) {
+					if(ClaimCur.PatRelat==Relat.Spouse) {
 						displayStrings[i]="01";
 					}
-					else if(patPlan.Relationship==Relat.Self) {
+					else if(ClaimCur.PatRelat==Relat.Self) {
 						displayStrings[i]="18";
 					}
-					else if(patPlan.Relationship==Relat.Child) {
+					else if(ClaimCur.PatRelat==Relat.Child) {
 						displayStrings[i]="19";
 					}
-					else if(patPlan.Relationship==Relat.Employee) {
+					else if(ClaimCur.PatRelat==Relat.Employee) {
 						displayStrings[i]="20";
 					}
-					else if(patPlan.Relationship==Relat.LifePartner) {
+					else if(ClaimCur.PatRelat==Relat.LifePartner) {
 						displayStrings[i]="53";
 					}
 					else {
