@@ -143,10 +143,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<Task>>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM task, "
+			string command="SELECT task.*, "
 				+"(SELECT LName FROM patient WHERE task.KeyNum=patient.PatNum AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+") LName, "
 				+"(SELECT FName FROM patient WHERE task.KeyNum=patient.PatNum AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+") FName, "
 				+"(SELECT Preferred FROM patient WHERE task.KeyNum=patient.PatNum AND task.ObjectType="+POut.Int((int)TaskObjectType.Patient)+") Preferred "
+				+"FROM task "
 				+"WHERE TaskListNum=0 "
 				+"AND DateTask < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=1 "
