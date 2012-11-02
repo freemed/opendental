@@ -19,6 +19,12 @@ namespace OpenDentalWebService {
 		///<summary>Used to quickly tell the type of DataTransferObject.</summary>
 		public string Type;
 
+		///<summary>Default constructor will simply instantiate the two lists Params and ParamTypes to make deserializing easier.</summary>
+		public DataTransferObject() {
+			Params=new List<DtoObject>();
+			ParamTypes=new List<string>();
+		}
+
 		public string Serialize() {
 			StringBuilder strBuild=new StringBuilder();
 			//TODO: Write serialize code.
@@ -29,7 +35,7 @@ namespace OpenDentalWebService {
 			DataTransferObject dto=null;
 			//XmlReader is said to be the quickest way to read XML as opposed to LINQ to XML or other methods of reading xml files.
 			using(XmlReader reader=XmlReader.Create(new StringReader(data))) {
-				reader.MoveToContent();
+				//reader.MoveToContent();
 				while(reader.Read()) {
 					//Only detect start elements.
 					if(!reader.IsStartElement()) {
@@ -57,10 +63,10 @@ namespace OpenDentalWebService {
 							//Create a new Credentials object.
 							Credentials creds=new Credentials();
 							//Read and set the UserName and Password elements.
-							reader.ReadToFollowing("UserName");
-							creds.Username=reader.Value;							
+							reader.ReadToFollowing("Username");
+							creds.Username=reader.ReadString();
 							reader.ReadToFollowing("Password");
-							creds.Password=reader.Value;
+							creds.Password=reader.ReadString();
 							dto.Credentials=creds;
 							break;
 						#endregion
@@ -69,7 +75,7 @@ namespace OpenDentalWebService {
 							if(dto==null) {//This should never happen. 
 								//TODO: Throw an exception for unknown dto type.
 							}
-							dto.MethodName=reader.Value;
+							dto.MethodName=reader.ReadString();
 							break;
 						#endregion
 						#region Params
@@ -128,20 +134,25 @@ namespace OpenDentalWebService {
 
 		///<summary>Correctly sets Params AND ParamTypes on the dto object based on the navigator passed in.</summary>
 		private static void SetParamsAndParamTypes(XmlReader reader,DataTransferObject dto) {
-			//The Params node is going to be a list of DtoObjects. Each has </TypeName> and </Obj>.  TypeName will give us the type and Obj will contain the serialized object.
-			//Loop through the nodes and call a function that will call each corresponding S class to deserialize the desired object correctly.
-			while(reader.Read()) {//Just read till the end of the xml stream because parameters are the last thing in any dto object anyway.
+			//The Params node is going to be a list of DtoObjects. Each has <TypeName /> and <Obj />.  TypeName will give us the fully qualified name and Obj will contain the entire object serialized.
+			while(reader.Read()) {//Just read till the end of the xml stream because parameters are the last thing in DtoObjects except for DtoGetObjects which are handled.
 				//Only detect start elements.
 				if(!reader.IsStartElement()) {
 					continue;
 				}
-				if(reader.Name=="TypeName") {
+				//DtoGetObjects will have an ObjectType node at the end.
+				if(reader.Name=="ObjectType" && dto.Type=="DtoGetObject") {
+					((DtoGetObject)dto).ObjectType=reader.ReadString();
+					continue;
+				}
+				if(reader.Name=="DtoObject") {//We only care about DtoObjects at this point.
 					DtoObject dtoObj=new DtoObject();
-					string typeName=reader.Value;
+					reader.ReadToFollowing("TypeName");
+					string typeName=reader.ReadString();
 					dtoObj.TypeName=typeName;
 					dto.ParamTypes.Add(typeName);
-					reader.Read();//Moves down to <Obj>.
-					string xml="";//TODO: Write code to strip out JUST the "object" xml and then call CallClassDeserializer which can deserialize any of our objects.
+					reader.ReadToFollowing("Obj");
+					string xml=reader.ReadInnerXml();//Read everything contained in the Obj node.
 					object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
 					dto.Params.Add(dtoObj);
 				}
