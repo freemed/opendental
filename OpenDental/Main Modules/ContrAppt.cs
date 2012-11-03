@@ -3619,10 +3619,6 @@ namespace OpenDental {
 				else {
 					if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
 						DisplayOtherDlg(true);
-//todo: compare with older version
-		//There's also a problem when first opening program, double clicking, selecting patient who has planned.  Buttons stay disabled.
-						//RefreshModuleDataPatient(FormAO.SelectedPatNum);//patient won't have changed
-						//OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 					}
 					else {
 						FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
@@ -3632,26 +3628,28 @@ namespace OpenDental {
 							return;
 						}
 						ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
-					}
-					apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
-					if(apt!=null && DoesOverlap(apt)) {
-						Appointment aptOld=apt.Clone();
-						MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
-						while(DoesOverlap(apt)) {
-							apt.Pattern=apt.Pattern.Substring(0,apt.Pattern.Length-1);
-							if(apt.Pattern.Length==1) {
-								break;
+						//RefreshModuleDataPatient(FormAO.SelectedPatNum);//patient won't have changed
+						//OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
+						apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
+						if(apt!=null && DoesOverlap(apt)) {
+							Appointment aptOld=apt.Clone();
+							MsgBox.Show(this,"Appointment is too long and would overlap another appointment.  Automatically shortened to fit.");
+							while(DoesOverlap(apt)) {
+								apt.Pattern=apt.Pattern.Substring(0,apt.Pattern.Length-1);
+								if(apt.Pattern.Length==1) {
+									break;
+								}
+							}
+							try {
+								Appointments.Update(apt,aptOld);
+							}
+							catch(ApplicationException ex) {
+								MessageBox.Show(ex.Message);
 							}
 						}
-						try {
-							Appointments.Update(apt,aptOld);
-						}
-						catch(ApplicationException ex) {
-							MessageBox.Show(ex.Message);
-						}
+						RefreshPeriod();
+						SetInvalid();
 					}
-					RefreshPeriod();
-					SetInvalid();
 				}
 			}
 		}
