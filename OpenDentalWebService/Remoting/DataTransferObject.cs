@@ -31,11 +31,11 @@ namespace OpenDentalWebService {
 			return strBuild.ToString();
 		}
 
+		///<summary>Deserializes the passed in xml into a DataTransferObject.  Throws exceptions.</summary>
 		public static DataTransferObject Deserialize(string data) {
 			DataTransferObject dto=null;
 			//XmlReader is said to be the quickest way to read XML as opposed to LINQ to XML or other methods of reading xml files.
 			using(XmlReader reader=XmlReader.Create(new StringReader(data))) {
-				//reader.MoveToContent();
 				while(reader.Read()) {
 					//Only detect start elements.
 					if(!reader.IsStartElement()) {
@@ -58,7 +58,7 @@ namespace OpenDentalWebService {
 						#region Credentials
 						case "Credentials":
 							if(dto==null) {//This should never happen. 
-								//TODO: Throw an exception for unknown dto type.
+								throw new NotSupportedException("Dto type not supported.");
 							}
 							//Create a new Credentials object.
 							Credentials creds=new Credentials();
@@ -73,7 +73,7 @@ namespace OpenDentalWebService {
 						#region MethodName
 						case "MethodName":
 							if(dto==null) {//This should never happen. 
-								//TODO: Throw an exception for unknown dto type.
+								throw new NotSupportedException("Dto type not supported.");
 							}
 							dto.MethodName=reader.ReadString();
 							break;
@@ -81,10 +81,15 @@ namespace OpenDentalWebService {
 						#region Params
 						case "Params":
 							if(dto==null) {//This should never happen. 
-								//TODO: Throw an exception for unknown dto type.
+								throw new NotSupportedException("Dto type not supported.");
 							}
 							if(!reader.IsEmptyElement) {//Parameters are present.
-								SetParamsAndParamTypes(reader,dto);
+								try {
+									SetParamsAndParamTypes(reader,dto);
+								}
+								catch {
+									throw;//Pass the exception up a layer.
+								}
 							}
 							break;
 						#endregion
@@ -94,7 +99,7 @@ namespace OpenDentalWebService {
 			return dto;
 		}
 
-		///<summary>Returns the correct DataTransferObject for the type of object passed in.</summary>
+		///<summary>Returns the correct DataTransferObject for the type of object passed in.  Returns null if unknown dtoType.</summary>
 		private static DataTransferObject GetDtoForType(string dtoType) {
 			DataTransferObject dto=null;
 			switch(dtoType) {
@@ -132,7 +137,7 @@ namespace OpenDentalWebService {
 			return dto;
 		}
 
-		///<summary>Correctly sets Params AND ParamTypes on the dto object based on the navigator passed in.</summary>
+		///<summary>Correctly sets Params AND ParamTypes on the dto object based on the navigator passed in.  Throws exceptions.</summary>
 		private static void SetParamsAndParamTypes(XmlReader reader,DataTransferObject dto) {
 			//The Params node is going to be a list of DtoObjects. Each has <TypeName /> and <Obj />.  TypeName will give us the fully qualified name and Obj will contain the entire object serialized.
 			while(reader.Read()) {//Just read till the end of the xml stream because parameters are the last thing in DtoObjects except for DtoGetObjects which are handled.
@@ -153,7 +158,12 @@ namespace OpenDentalWebService {
 					dto.ParamTypes.Add(typeName);
 					reader.ReadToFollowing("Obj");
 					string xml=reader.ReadInnerXml();//Read everything contained in the Obj node.
-					object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
+					try {
+						object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
+					}
+					catch {
+						throw;//Pass the exception up a layer.
+					}
 					dto.Params.Add(dtoObj);
 				}
 			}

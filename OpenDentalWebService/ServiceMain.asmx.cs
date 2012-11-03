@@ -26,7 +26,21 @@ namespace OpenDentalWebService {
 			//System.Threading.Thread.Sleep(100);//to test slowness issues with web service.
 #endif
 			#endregion
-			DataTransferObject dto=DataTransferObject.Deserialize(dtoString);
+			DataTransferObject dto=null;
+			try {
+				dto=DataTransferObject.Deserialize(dtoString);
+			}
+			catch(Exception e) {
+				DtoException dtoEx=new DtoException();
+				dtoEx.Message="Error deserializing the request:\r\n";
+				if(e.InnerException==null) {
+					dtoEx.Message+=e.Message;
+				}
+				else {
+					dtoEx.Message+=e.InnerException.Message;
+				}
+				return dtoEx.Serialize();
+			}
 			try {
 				switch(dto.Type) {
 					#region DtoGetTable
@@ -106,19 +120,20 @@ namespace OpenDentalWebService {
 					#endregion
 					#region Default DtoUnknown
 					default:
-						throw new NotSupportedException("Dto type not supported.");
+						throw new NotSupportedException("ProcessRequest, dto type not supported.");
 					#endregion
 				}
 			}
 			catch(Exception e) {
-				DtoException exception=new DtoException();
+				DtoException dtoEx=new DtoException();
+				dtoEx.Message="ProcessRequest, error processing the request:\r\n";
 				if(e.InnerException==null) {
-					exception.Message=e.Message;
+					dtoEx.Message+=e.Message;
 				}
 				else {
-					exception.Message=e.InnerException.Message;
+					dtoEx.Message+=e.InnerException.Message;
 				}
-				return exception.Serialize();
+				return dtoEx.Serialize();
 			}
 		}
 	}

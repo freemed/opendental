@@ -14,21 +14,26 @@ namespace OpenDentalWebService {
 			return CallMethod(classAndMethod,parameters);
 		}
 
-		///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.</summary>
+		///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Throws exceptions.</summary>
 		public static object CallClassDeserializer(string typeName,string xml) {
-			#region Primitive and General Types
-			if(typeName=="long") {//TODO: Figure out if the desired object is a primitive/general type.  
-				//This part of the method will be static for the crud gen, any new primitive/general class should be manually added to this section of the crud.  Then the programmer will need to manually add the new primitive or general type to the Serializing and Deserializing in Serializing.aaGeneralTypes.
-				//Please make the crud have a unique "helper" method when it generates this section.  Put the name of that method in a comment here so that we can quickly go and make changes for more primitives when needed.
-				aaGeneralTypes.Deserialize(typeName,xml);
+			try {
+				#region Primitive and General Types
+				if(typeName=="long") {//TODO: Figure out if the desired object is a primitive/general type.  
+					//This part of the method will be static for the crud gen, any new primitive/general class should be manually added to this section of the crud.  Then the programmer will need to manually add the new primitive or general type to the Serializing and Deserializing in Serializing.aaGeneralTypes.
+					//Please make the crud have a unique "helper" method when it generates this section.  Put the name of that method in a comment here so that we can quickly go and make changes for more primitives when needed.
+					return aaGeneralTypes.Deserialize(typeName,xml);
+				}
+				#endregion
+				#region Open Dental Classes
+				if(typeName=="OpenDentBusiness.Account") {
+					return Account.Deserialize(xml);
+				}
+				#endregion
 			}
-			#endregion
-			#region Open Dental Classes
-			if(typeName=="OpenDentBusiness.Account") {
-				return Account.Deserialize(xml);
+			catch {
+				throw new Exception("CallClassDeserializer, error deserializing class type: "+typeName);
 			}
-			#endregion
-			return null;//TODO: Throw an exception for unknown type?
+			throw new NotSupportedException("CallClassDeserializer, unsupported class type: "+typeName);
 		}
 
 		///<summary>Finds the corresponding class, instantiates an instance of that class and invokes the method with the parameters.  Void methods will return null.</summary>
@@ -41,7 +46,7 @@ namespace OpenDentalWebService {
 			if(className=="Patients") {
 				MethodPatients(methodName,parameters);
 			}
-			return null;//TODO: Throw exception for unknown class.
+			throw new NotSupportedException("CallMethod, unknown class: "+classAndMethod);
 		}
 
 		#region Method Calls
@@ -56,13 +61,13 @@ namespace OpenDentalWebService {
 				Accounts.Update((OpenDentBusiness.Account)parameters[0]);
 				return null;
 			}
-			return null;//TODO: Throw exception for unknown method.
+			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPatients(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			return null;//An exception should be thrown here stating that the method does not exist.
+			throw new NotSupportedException("MethodPatients, unknown method: "+methodName);
 		}
 
 		#endregion

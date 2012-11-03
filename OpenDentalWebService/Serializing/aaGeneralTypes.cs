@@ -48,7 +48,7 @@ namespace OpenDentalWebService {
 			if(typeName.Contains("")){
 				return "";//TODO: This will need to be enhanced to handle simple and possibly multidimensional arrays.
 			}
-			return "";//TODO: Throw an exception for unknown type.
+			throw new NotSupportedException("Serialize, unsupported primitive or general type: "+typeName);
 		}
 
 		///<summary>Returns the primitive or general object deserialized.</summary>
@@ -56,7 +56,7 @@ namespace OpenDentalWebService {
 			if(typeName=="long") {
 				//TODO: Use xmlreader to deserialize the xml and return and object of the desired type.
 			}
-			return null;//TODO: Throw an exception for unknown type.
+			throw new NotSupportedException("Deserialize, unsupported primitive or general type: "+typeName);
 		}
 
 
