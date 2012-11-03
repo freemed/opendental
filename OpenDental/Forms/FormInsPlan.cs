@@ -351,6 +351,8 @@ namespace OpenDental{
 			this.butPickCarrier = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
 			this.panelPlan = new System.Windows.Forms.Panel();
+			this.comboCobRule = new System.Windows.Forms.ComboBox();
+			this.label20 = new System.Windows.Forms.Label();
 			this.groupCanadian = new System.Windows.Forms.GroupBox();
 			this.label19 = new System.Windows.Forms.Label();
 			this.textCanadianInstCode = new System.Windows.Forms.TextBox();
@@ -379,8 +381,6 @@ namespace OpenDental{
 			this.butLabel = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.comboCobRule = new System.Windows.Forms.ComboBox();
-			this.label20 = new System.Windows.Forms.Label();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -750,12 +750,11 @@ namespace OpenDental{
 			// 
 			// textSubscNote
 			// 
-			this.textSubscNote.AcceptsReturn = true;
 			this.textSubscNote.Location = new System.Drawing.Point(57,75);
 			this.textSubscNote.Multiline = true;
 			this.textSubscNote.Name = "textSubscNote";
 			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textSubscNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textSubscNote.Size = new System.Drawing.Size(439,98);
 			this.textSubscNote.TabIndex = 5;
 			this.textSubscNote.Text = "1 - InsPlan subscriber\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show " +
@@ -1368,6 +1367,24 @@ namespace OpenDental{
 			this.panelPlan.Size = new System.Drawing.Size(454,438);
 			this.panelPlan.TabIndex = 0;
 			// 
+			// comboCobRule
+			// 
+			this.comboCobRule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboCobRule.Location = new System.Drawing.Point(115,512);
+			this.comboCobRule.MaxDropDownItems = 30;
+			this.comboCobRule.Name = "comboCobRule";
+			this.comboCobRule.Size = new System.Drawing.Size(111,21);
+			this.comboCobRule.TabIndex = 167;
+			// 
+			// label20
+			// 
+			this.label20.Location = new System.Drawing.Point(17,515);
+			this.label20.Name = "label20";
+			this.label20.Size = new System.Drawing.Size(95,15);
+			this.label20.TabIndex = 168;
+			this.label20.Text = "COB Rule";
+			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// groupCanadian
 			// 
 			this.groupCanadian.Controls.Add(this.label19);
@@ -1600,12 +1617,11 @@ namespace OpenDental{
 			// 
 			// textPlanNote
 			// 
-			this.textPlanNote.AcceptsReturn = true;
 			this.textPlanNote.Location = new System.Drawing.Point(14,581);
 			this.textPlanNote.Multiline = true;
 			this.textPlanNote.Name = "textPlanNote";
 			this.textPlanNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textPlanNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPlanNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textPlanNote.Size = new System.Drawing.Size(395,85);
 			this.textPlanNote.TabIndex = 1;
 			this.textPlanNote.Text = "1 - InsPlan\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59 " +
@@ -1675,24 +1691,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 14;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// comboCobRule
-			// 
-			this.comboCobRule.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCobRule.Location = new System.Drawing.Point(115,512);
-			this.comboCobRule.MaxDropDownItems = 30;
-			this.comboCobRule.Name = "comboCobRule";
-			this.comboCobRule.Size = new System.Drawing.Size(111,21);
-			this.comboCobRule.TabIndex = 167;
-			// 
-			// label20
-			// 
-			this.label20.Location = new System.Drawing.Point(17,515);
-			this.label20.Name = "label20";
-			this.label20.Size = new System.Drawing.Size(95,15);
-			this.label20.TabIndex = 168;
-			this.label20.Text = "COB Rule";
-			this.label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// FormInsPlan
 			// 

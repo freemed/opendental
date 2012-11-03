@@ -178,13 +178,12 @@ namespace OpenDental{
 			// 
 			// textQuery
 			// 
-			this.textQuery.AcceptsReturn = true;
 			this.textQuery.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textQuery.Location = new System.Drawing.Point(2,3);
 			this.textQuery.Multiline = true;
 			this.textQuery.Name = "textQuery";
 			this.textQuery.QuickPasteType = OpenDentBusiness.QuickPasteType.Query;
-			this.textQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textQuery.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textQuery.Size = new System.Drawing.Size(551,76);
 			this.textQuery.TabIndex = 16;
 			// 
@@ -347,7 +346,7 @@ namespace OpenDental{
 			this.printPreviewControl2.Name = "printPreviewControl2";
 			this.printPreviewControl2.Size = new System.Drawing.Size(842,538);
 			this.printPreviewControl2.TabIndex = 5;
-			this.printPreviewControl2.Zoom = 1;
+			this.printPreviewControl2.Zoom = 1D;
 			// 
 			// butFullPage
 			// 
@@ -515,9 +514,9 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Query";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormQuery_Closing);
 			this.Load += new System.EventHandler(this.FormQuery_Load);
 			this.Layout += new System.Windows.Forms.LayoutEventHandler(this.FormQuery_Layout);
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.FormQuery_Closing);
 			((System.ComponentModel.ISupportInitialize)(this.grid2)).EndInit();
 			this.panelTop.ResumeLayout(false);
 			this.panelTop.PerformLayout();

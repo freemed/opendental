@@ -102,6 +102,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(SchoolClasses.RefreshCache());
 				ds.Tables.Add(SchoolCourses.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.DictCustoms) || isAll) {
+				ds.Tables.Add(DictCustoms.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
 				ds.Tables.Add(DiseaseDefs.RefreshCache());
 				ds.Tables.Add(ICD9s.RefreshCache());
@@ -281,6 +284,9 @@ namespace OpenDentBusiness {
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll) {
 				SchoolClasses.FillCache(ds.Tables["SchoolClass"]);
 				SchoolClasses.FillCache(ds.Tables["SchoolCourse"]);
+			}
+			if(itypes.Contains((int)InvalidType.DictCustoms) || isAll) {
+				DictCustoms.FillCache(ds.Tables["DictCustom"]);
 			}
 			if(itypes.Contains((int)InvalidType.Diseases) || isAll) {
 				DiseaseDefs.FillCache(ds.Tables["DiseaseDef"]);

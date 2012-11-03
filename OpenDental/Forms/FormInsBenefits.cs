@@ -969,12 +969,11 @@ namespace OpenDental{
 			// 
 			// textSubscNote
 			// 
-			this.textSubscNote.AcceptsReturn = true;
 			this.textSubscNote.Location = new System.Drawing.Point(112,560);
 			this.textSubscNote.Multiline = true;
 			this.textSubscNote.Name = "textSubscNote";
 			this.textSubscNote.QuickPasteType = OpenDentBusiness.QuickPasteType.InsPlan;
-			this.textSubscNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textSubscNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textSubscNote.Size = new System.Drawing.Size(485,98);
 			this.textSubscNote.TabIndex = 161;
 			this.textSubscNote.Text = "1 - Benefits\r\n2\r\n3 lines will show here in 46 vert.\r\n4 lines will show here in 59" +

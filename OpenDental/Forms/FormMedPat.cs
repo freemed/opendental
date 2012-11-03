@@ -94,14 +94,14 @@ namespace OpenDental{
 			this.textPatNote = new OpenDental.ODtextBox();
 			this.butFormulary = new OpenDental.UI.Button();
 			this.groupOrder = new System.Windows.Forms.GroupBox();
+			this.label8 = new System.Windows.Forms.Label();
+			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.butTodayStop = new OpenDental.UI.Button();
 			this.butTodayStart = new OpenDental.UI.Button();
 			this.textDateStop = new OpenDental.ValidDate();
 			this.label7 = new System.Windows.Forms.Label();
 			this.textDateStart = new OpenDental.ValidDate();
 			this.label4 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.groupBox1.SuspendLayout();
 			this.groupOrder.SuspendLayout();
 			this.SuspendLayout();
@@ -265,12 +265,11 @@ namespace OpenDental{
 			// 
 			// textPatNote
 			// 
-			this.textPatNote.AcceptsReturn = true;
 			this.textPatNote.Location = new System.Drawing.Point(183,44);
 			this.textPatNote.Multiline = true;
 			this.textPatNote.Name = "textPatNote";
 			this.textPatNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicationPat;
-			this.textPatNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textPatNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textPatNote.Size = new System.Drawing.Size(348,111);
 			this.textPatNote.TabIndex = 11;
 			// 
@@ -306,6 +305,24 @@ namespace OpenDental{
 			this.groupOrder.Size = new System.Drawing.Size(565,215);
 			this.groupOrder.TabIndex = 64;
 			this.groupOrder.TabStop = false;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(65,22);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(116,17);
+			this.label8.TabIndex = 32;
+			this.label8.Text = "Provider";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboProv
+			// 
+			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboProv.FormattingEnabled = true;
+			this.comboProv.Location = new System.Drawing.Point(183,19);
+			this.comboProv.Name = "comboProv";
+			this.comboProv.Size = new System.Drawing.Size(207,21);
+			this.comboProv.TabIndex = 31;
 			// 
 			// butTodayStop
 			// 
@@ -366,24 +383,6 @@ namespace OpenDental{
 			this.label4.TabIndex = 12;
 			this.label4.Text = "Date Start";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(65,22);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(116,17);
-			this.label8.TabIndex = 32;
-			this.label8.Text = "Provider";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboProv
-			// 
-			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.FormattingEnabled = true;
-			this.comboProv.Location = new System.Drawing.Point(183,19);
-			this.comboProv.Name = "comboProv";
-			this.comboProv.Size = new System.Drawing.Size(207,21);
-			this.comboProv.TabIndex = 31;
 			// 
 			// FormMedPat
 			// 

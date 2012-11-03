@@ -112,12 +112,11 @@ namespace OpenDental{
 			// 
 			// textBodyText
 			// 
-			this.textBodyText.AcceptsReturn = true;
 			this.textBodyText.Location = new System.Drawing.Point(99,32);
 			this.textBodyText.Multiline = true;
 			this.textBodyText.Name = "textBodyText";
 			this.textBodyText.QuickPasteType = OpenDentBusiness.QuickPasteType.Email;
-			this.textBodyText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBodyText.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textBodyText.Size = new System.Drawing.Size(741,426);
 			this.textBodyText.TabIndex = 4;
 			// 

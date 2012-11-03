@@ -165,6 +165,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\NDde.dll</HintPath>
     </Reference>
+    <Reference Include="NHunspell">
+      <HintPath>..\Required dlls\NHunspell.dll</HintPath>
+    </Reference>
     <Reference Include="Org.Mentalis.Security, Version=1.0.13.715, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Org.Mentalis.Security.dll</HintPath>
@@ -361,6 +364,12 @@
     </Compile>
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormDictCustoms.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormDictCustoms.designer.cs">
+      <DependentUpon>FormDictCustoms.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormProcNoteAppend.cs">
       <SubType>Form</SubType>
@@ -2589,6 +2598,9 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormDictCustoms.resx">
+      <DependentUpon>FormDictCustoms.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcNoteAppend.resx">
       <DependentUpon>FormProcNoteAppend.cs</DependentUpon>
     </EmbeddedResource>
@@ -4696,6 +4708,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <None Include="Resources\en_US_aff" />
+    <None Include="Resources\en_US_dic" />
     <None Include="Web References\CallFireService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

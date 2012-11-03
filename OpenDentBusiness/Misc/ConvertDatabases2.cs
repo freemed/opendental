@@ -11275,71 +11275,61 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE procedurelog MODIFY IsLocked NOT NULL";
 					Db.NonQ(command);
 				}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE hl7def ADD ShowDemographics tinyint NOT NULL";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command="ALTER TABLE hl7def ADD ShowDemographics number(3)";
-				Db.NonQ(command);
-				command="UPDATE hl7def SET ShowDemographics = 0 WHERE ShowDemographics IS NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE hl7def MODIFY ShowDemographics NOT NULL";
-				Db.NonQ(command);
-			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE hl7def ADD ShowAppts tinyint NOT NULL";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command="ALTER TABLE hl7def ADD ShowAppts number(3)";
-				Db.NonQ(command);
-				command="UPDATE hl7def SET ShowAppts = 0 WHERE ShowAppts IS NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE hl7def MODIFY ShowAppts NOT NULL";
-				Db.NonQ(command);
-			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="ALTER TABLE hl7def ADD ShowAccount tinyint NOT NULL";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command="ALTER TABLE hl7def ADD ShowAccount number(3)";
-				Db.NonQ(command);
-				command="UPDATE hl7def SET ShowAccount = 0 WHERE ShowAccount IS NULL";
-				Db.NonQ(command);
-				command="ALTER TABLE hl7def MODIFY ShowAccount NOT NULL";
-				Db.NonQ(command);
-			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command="DROP TABLE IF EXISTS dictcustom";
-				Db.NonQ(command);
-				command=@"CREATE TABLE dictcustom (
-					DictCustomNum bigint NOT NULL auto_increment PRIMARY KEY,
-					WordText varchar(255) NOT NULL
-					) DEFAULT CHARSET=utf8";
-				Db.NonQ(command);
-			}
-			else {//oracle
-				command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE dictcustom'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-				Db.NonQ(command);
-				command=@"CREATE TABLE dictcustom (
-					DictCustomNum number(20) NOT NULL,
-					WordText varchar2(255),
-					CONSTRAINT dictcustom_DictCustomNum PRIMARY KEY (DictCustomNum)
-					)";
-				Db.NonQ(command);
-			}
-			
-				
-
-
-
-
-
-
-
-
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7def ADD ShowDemographics tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7def ADD ShowDemographics number(3)";
+					Db.NonQ(command);
+					command="UPDATE hl7def SET ShowDemographics = 0 WHERE ShowDemographics IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE hl7def MODIFY ShowDemographics NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7def ADD ShowAppts tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7def ADD ShowAppts number(3)";
+					Db.NonQ(command);
+					command="UPDATE hl7def SET ShowAppts = 0 WHERE ShowAppts IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE hl7def MODIFY ShowAppts NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE hl7def ADD ShowAccount tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE hl7def ADD ShowAccount number(3)";
+					Db.NonQ(command);
+					command="UPDATE hl7def SET ShowAccount = 0 WHERE ShowAccount IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE hl7def MODIFY ShowAccount NOT NULL";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS dictcustom";
+					Db.NonQ(command);
+					command=@"CREATE TABLE dictcustom (
+						DictCustomNum bigint NOT NULL auto_increment PRIMARY KEY,
+						WordText varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE dictcustom'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE dictcustom (
+						DictCustomNum number(20) NOT NULL,
+						WordText varchar2(255),
+						CONSTRAINT dictcustom_DictCustomNum PRIMARY KEY (DictCustomNum)
+						)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

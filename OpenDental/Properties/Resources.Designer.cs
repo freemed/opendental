@@ -288,6 +288,20 @@ namespace OpenDental.Properties {
             }
         }
         
+        internal static byte[] en_US_aff {
+            get {
+                object obj = ResourceManager.GetObject("en_US_aff", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        internal static byte[] en_US_dic {
+            get {
+                object obj = ResourceManager.GetObject("en_US_dic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to The GNU General Public License (GPL)
         ///

@@ -123,12 +123,11 @@ namespace OpenDental{
 			// 
 			// textQuery
 			// 
-			this.textQuery.AcceptsReturn = true;
 			this.textQuery.Location = new System.Drawing.Point(108,38);
 			this.textQuery.Multiline = true;
 			this.textQuery.Name = "textQuery";
 			this.textQuery.QuickPasteType = OpenDentBusiness.QuickPasteType.Query;
-			this.textQuery.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textQuery.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textQuery.Size = new System.Drawing.Size(624,588);
 			this.textQuery.TabIndex = 5;
 			// 

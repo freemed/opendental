@@ -34,7 +34,7 @@ namespace OpenDental{
 		//public string SelectedNote;
 		private bool localChanged;
 		///<summary>Set this property before calling this form. It will insert the value into this textbox.</summary>
-		public System.Windows.Forms.TextBox TextToFill;
+		public System.Windows.Forms.RichTextBox TextToFill;
 		///<summary></summary>
 		public QuickPasteType QuickType;
 

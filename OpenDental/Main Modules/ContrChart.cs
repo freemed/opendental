@@ -351,7 +351,7 @@ namespace OpenDental{
 		private void InitializeComponent(){
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContrChart));
-			SparksToothChart.ToothChartData toothChartData2 = new SparksToothChart.ToothChartData();
+			SparksToothChart.ToothChartData toothChartData1 = new SparksToothChart.ToothChartData();
 			this.textSurf = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.radioEntryCn = new System.Windows.Forms.RadioButton();
@@ -3174,8 +3174,8 @@ namespace OpenDental{
 			this.toothChart.PreferredPixelFormatNumber = 0;
 			this.toothChart.Size = new System.Drawing.Size(410,307);
 			this.toothChart.TabIndex = 194;
-			toothChartData2.SizeControl = new System.Drawing.Size(410,307);
-			this.toothChart.TcData = toothChartData2;
+			toothChartData1.SizeControl = new System.Drawing.Size(410,307);
+			this.toothChart.TcData = toothChartData1;
 			this.toothChart.UseHardware = false;
 			this.toothChart.SegmentDrawn += new SparksToothChart.ToothChartDrawEventHandler(this.toothChart_SegmentDrawn);
 			// 
@@ -3268,12 +3268,11 @@ namespace OpenDental{
 			// 
 			// textTreatmentNotes
 			// 
-			this.textTreatmentNotes.AcceptsReturn = true;
 			this.textTreatmentNotes.Location = new System.Drawing.Point(0,334);
 			this.textTreatmentNotes.Multiline = true;
 			this.textTreatmentNotes.Name = "textTreatmentNotes";
 			this.textTreatmentNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.ChartTreatment;
-			this.textTreatmentNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textTreatmentNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textTreatmentNotes.Size = new System.Drawing.Size(411,71);
 			this.textTreatmentNotes.TabIndex = 187;
 			this.textTreatmentNotes.TextChanged += new System.EventHandler(this.textTreatmentNotes_TextChanged);

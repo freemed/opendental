@@ -678,8 +678,8 @@ namespace OpenDental{
 			this.textCarrier1.Name = "textCarrier1";
 			this.textCarrier1.Size = new System.Drawing.Size(254,20);
 			this.textCarrier1.TabIndex = 3;
-			this.textCarrier1.Leave += new System.EventHandler(this.textCarrier1_Leave);
 			this.textCarrier1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier1_KeyUp);
+			this.textCarrier1.Leave += new System.EventHandler(this.textCarrier1_Leave);
 			// 
 			// label17
 			// 
@@ -770,8 +770,8 @@ namespace OpenDental{
 			this.textEmployer1.Name = "textEmployer1";
 			this.textEmployer1.Size = new System.Drawing.Size(254,20);
 			this.textEmployer1.TabIndex = 2;
-			this.textEmployer1.Leave += new System.EventHandler(this.textEmployer1_Leave);
 			this.textEmployer1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer1_KeyUp);
+			this.textEmployer1.Leave += new System.EventHandler(this.textEmployer1_Leave);
 			// 
 			// label18
 			// 
@@ -925,8 +925,8 @@ namespace OpenDental{
 			this.textEmployer2.Name = "textEmployer2";
 			this.textEmployer2.Size = new System.Drawing.Size(254,20);
 			this.textEmployer2.TabIndex = 2;
-			this.textEmployer2.Leave += new System.EventHandler(this.textEmployer2_Leave);
 			this.textEmployer2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textEmployer2_KeyUp);
+			this.textEmployer2.Leave += new System.EventHandler(this.textEmployer2_Leave);
 			// 
 			// label25
 			// 
@@ -1008,8 +1008,8 @@ namespace OpenDental{
 			this.textCarrier2.Name = "textCarrier2";
 			this.textCarrier2.Size = new System.Drawing.Size(254,20);
 			this.textCarrier2.TabIndex = 3;
-			this.textCarrier2.Leave += new System.EventHandler(this.textCarrier2_Leave);
 			this.textCarrier2.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textCarrier2_KeyUp);
+			this.textCarrier2.Leave += new System.EventHandler(this.textCarrier2_Leave);
 			// 
 			// label30
 			// 
@@ -1029,8 +1029,8 @@ namespace OpenDental{
 			this.textReferral.Name = "textReferral";
 			this.textReferral.Size = new System.Drawing.Size(237,20);
 			this.textReferral.TabIndex = 13;
-			this.textReferral.Leave += new System.EventHandler(this.textReferral_Leave);
 			this.textReferral.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textReferral_KeyUp);
+			this.textReferral.Leave += new System.EventHandler(this.textReferral_Leave);
 			// 
 			// textAge1
 			// 
@@ -1182,12 +1182,11 @@ namespace OpenDental{
 			// 
 			// textAddrNotes
 			// 
-			this.textAddrNotes.AcceptsReturn = true;
 			this.textAddrNotes.Location = new System.Drawing.Point(157,407);
 			this.textAddrNotes.Multiline = true;
 			this.textAddrNotes.Name = "textAddrNotes";
 			this.textAddrNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.PatAddressNote;
-			this.textAddrNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textAddrNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textAddrNotes.Size = new System.Drawing.Size(237,59);
 			this.textAddrNotes.TabIndex = 12;
 			// 

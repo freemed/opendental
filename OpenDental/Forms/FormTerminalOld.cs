@@ -355,12 +355,11 @@ namespace OpenDental{
 			// 
 			// textAddrNotes
 			// 
-			this.textAddrNotes.AcceptsReturn = true;
 			this.textAddrNotes.Location = new System.Drawing.Point(668,386);
 			this.textAddrNotes.Multiline = true;
 			this.textAddrNotes.Name = "textAddrNotes";
 			this.textAddrNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.PatAddressNote;
-			this.textAddrNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textAddrNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textAddrNotes.Size = new System.Drawing.Size(268,126);
 			this.textAddrNotes.TabIndex = 15;
 			// 

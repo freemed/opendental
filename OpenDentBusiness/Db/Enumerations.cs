@@ -283,6 +283,8 @@ namespace OpenDentBusiness{
 		Vaccines,
 		///<summary>53. Includes all 4 HL7Def tables.</summary>
 		HL7Defs,
+		///<summary>54</summary>
+		DictCustoms
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

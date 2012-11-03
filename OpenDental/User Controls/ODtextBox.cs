@@ -4,11 +4,14 @@ using System.Collections;
 using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using NHunspell;
+using System.Text.RegularExpressions;
+using OpenDental.UI;
 
 namespace OpenDental
 {
 	/// <summary>This is used instead of a regular textbox when quickpaste functionality is needed.</summary>
-	public class ODtextBox : System.Windows.Forms.TextBox{//System.ComponentModel.Component
+	public class ODtextBox : RichTextBox{//System.ComponentModel.Component
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.ComponentModel.Container components = null;// Required designer variable.
 		private QuickPasteType quickPasteType;
@@ -70,10 +73,10 @@ namespace OpenDental
 			// 
 			// ODtextBox
 			// 
-			this.AcceptsReturn = true;
+			//this.AcceptsReturn = true;
 			this.ContextMenu = this.contextMenu;
 			this.Multiline = true;
-			this.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 
 		}
 		#endregion
@@ -88,7 +91,6 @@ namespace OpenDental
 				quickPasteType=value;
 			}
 		}
-
 		private void contextMenu_Popup(object sender, System.EventArgs e) {
 			if(SelectionLength==0){
 				contextMenu.MenuItems[3].Enabled=false;//cut
@@ -147,15 +149,19 @@ namespace OpenDental
 		///<summary></summary>
 		protected override void OnKeyUp(KeyEventArgs e) {
 			base.OnKeyUp (e);
-			int originalLength=Text.Length;
-			int originalCaret=SelectionStart;
-			Text=QuickPasteNotes.Substitute(Text,quickPasteType);
-			if(Text.Length!=originalLength){
+			int originalLength=base.Text.Length;
+			int originalCaret=base.SelectionStart;
+			string newText=QuickPasteNotes.Substitute(Text,quickPasteType);
+			if(base.Text!=newText) {
+				base.Text=newText;
 				SelectionStart=originalCaret+Text.Length-originalLength;
 			}
 			//then CtrlQ
 			if(e.KeyCode==Keys.Q && e.Modifiers==Keys.Control){
 				ShowFullDialog();
+			}
+			if(e.KeyCode==Keys.Space || e.KeyCode==Keys.OemPeriod || e.KeyCode==Keys.OemQuestion) {
+			  checkSpelling();
 			}
 		}
 
@@ -165,6 +171,46 @@ namespace OpenDental
 			FormQ.QuickType=quickPasteType;
 			FormQ.ShowDialog();
 		}
+
+		private void checkSpelling() {
+			//FormattingInstructionCollection instructions=new FormattingInstructionCollection();
+			//Format formatUnderline=new Format();
+			//Format formatDefault=new Format();
+			//formatUnderline.UnderlineFormat=new UnderlineFormat(UnderlineStyle.Wave,UnderlineColor.Red);
+			//formatDefault.UnderlineFormat=new UnderlineFormat(UnderlineStyle.None,UnderlineColor.Black);
+			//int curPos=base.SelectionStart;
+			//string[] words=Regex.Split(Text,"([\\s])|(\\p{Po})");
+			//if(words.Length==0) {//deleted all text, just return
+			//  return;
+			//}
+			//Hunspell hunspell=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
+			//  //"en_US.aff","en_US.dic");
+			//Clear();
+			//for(int i=0;i<words.Length;i++) {
+			//  bool correct=false;
+			//  if(words[i].Length==0 || char.IsPunctuation(words[i][0])) {//Only spell check non-punctuation
+			//    correct=true;
+			//  }
+			//  if(!correct) {//Only check custom list if not empty string and not punctuation
+			//    for(int w=0;w<DictCustoms.Listt.Count;w++) {//compare to custom word list
+			//      if(DictCustoms.Listt[w].WordText.ToLower()==words[i].ToLower()) {//convert to lower case before comparing
+			//        correct=true;
+			//      }
+			//    }
+			//  }
+			//  if(!correct) {//Not empty string, not punctuation, not in custom dictionary, so spell check
+			//    correct=hunspell.Spell(words[i]);
+			//  }
+			//  int textLength=Text.Length;//before appending word
+			//  this.AppendText(words[i]);
+			//  if(!correct) {
+			//    instructions.Add(new FormattingInstruction(textLength,words[i].Length,formatUnderline));
+			//  }
+			//}
+			//base.BatchFormat(instructions);
+			//base.SelectionStart=curPos;
+		}
+
 
 		private void InsertDate(){
 			int caret=SelectionStart;

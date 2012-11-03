@@ -15,7 +15,7 @@ namespace OpenDental {
 			return Programs.UsingEcwTightOrFullMode();
 		}
 
-		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo,ToothChartWrapper toothChart,TextBox textTreatmentNotes) {
+		public static void Resize(ODGrid gridProg,Panel panelImages,Panel panelEcw,TabControl tabControlImages,Size ClientSize,ODGrid gridPtInfo,ToothChartWrapper toothChart,RichTextBox textTreatmentNotes) {
 			if(ProgramC.HListIsNull()) {
 				return;
 			}
@@ -82,7 +82,7 @@ namespace OpenDental {
 
 		public static void InitializeOnStartup(ContrChart contrChart,TabControl tabProc,ODGrid gridProg,Panel panelEcw,
 			TabControl tabControlImages,Size ClientSize,
-			ODGrid gridPtInfo,ToothChartWrapper toothChart,TextBox textTreatmentNotes,OpenDental.UI.Button butECWup,
+			ODGrid gridPtInfo,ToothChartWrapper toothChart,RichTextBox textTreatmentNotes,OpenDental.UI.Button butECWup,
 			OpenDental.UI.Button butECWdown,TabPage tabPatInfo)
 		{
 			tabProc.SelectedIndex=0;
@@ -132,7 +132,7 @@ namespace OpenDental {
 			}
 		}
 
-		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize,Panel panelEcw,TextBox textTreatmentNotes,ToothChartWrapper toothChart) {
+		public static void SetGridProgWidth(ODGrid gridProg,Size ClientSize,Panel panelEcw,RichTextBox textTreatmentNotes,ToothChartWrapper toothChart) {
 			if(UsingEcwTightOrFull()) {
 				//gridProg.Width=524;
 				if(gridProg.Columns !=null && gridProg.Columns.Count>0) {

@@ -183,6 +183,7 @@
     <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DepositCrud.cs" />
+    <Compile Include="Crud\DictCustomCrud.cs" />
     <Compile Include="Crud\DiseaseCrud.cs" />
     <Compile Include="Crud\DiseaseDefCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Data Interface\CustRefEntries.cs" />
     <Compile Include="Data Interface\CustReferences.cs" />
     <Compile Include="Data Interface\DashboardARs.cs" />
+    <Compile Include="Data Interface\DictCustoms.cs" />
     <Compile Include="Data Interface\DisplayFields.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -217,12 +217,11 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.AcceptsReturn = true;
 			this.textNote.Location = new System.Drawing.Point(82,217);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.CommLog;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(557,209);
 			this.textNote.TabIndex = 27;
 			this.textNote.TextChanged += new System.EventHandler(this.textNote_TextChanged);

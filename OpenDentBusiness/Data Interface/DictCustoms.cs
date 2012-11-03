@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM dictcustom ORDER BY ItemOrder";//stub query probably needs to be changed
+			string command="SELECT * FROM dictcustom ORDER BY WordText";//stub query probably needs to be changed
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DictCustom";
 			FillCache(table);
@@ -42,27 +42,6 @@ namespace OpenDentBusiness{
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.DictCustomCrud.TableToList(table);
-		}
-		#endregion
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<DictCustom> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<DictCustom>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM dictcustom WHERE PatNum = "+POut.Long(patNum);
-			return Crud.DictCustomCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one DictCustom from the db.</summary>
-		public static DictCustom GetOne(long dictCustomNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DictCustom>(MethodBase.GetCurrentMethod(),dictCustomNum);
-			}
-			return Crud.DictCustomCrud.SelectOne(dictCustomNum);
 		}
 
 		///<summary></summary>
@@ -89,9 +68,31 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),dictCustomNum);
 				return;
 			}
-			string command= "DELETE FROM dictcustom WHERE DictCustomNum = "+POut.Long(dictCustomNum);
-			Db.NonQ(command);
+			Crud.DictCustomCrud.Delete(dictCustomNum);
 		}
+		
+		///<summary>Gets one DictCustom from the db.</summary>
+		public static DictCustom GetOne(long dictCustomNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<DictCustom>(MethodBase.GetCurrentMethod(),dictCustomNum);
+			}
+			return Crud.DictCustomCrud.SelectOne(dictCustomNum);
+		}
+		#endregion
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary></summary>
+		public static List<DictCustom> Refresh(long patNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<DictCustom>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM dictcustom WHERE PatNum = "+POut.Long(patNum);
+			return Crud.DictCustomCrud.SelectMany(command);
+		}
+
+		
 		*/
 
 

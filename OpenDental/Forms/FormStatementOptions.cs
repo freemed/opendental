@@ -128,10 +128,10 @@ namespace OpenDental{
 			this.textDate = new System.Windows.Forms.TextBox();
 			this.checkIsReceipt = new System.Windows.Forms.CheckBox();
 			this.groupInvoice = new System.Windows.Forms.GroupBox();
+			this.textInvoiceNum = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.checkIsInvoiceCopy = new System.Windows.Forms.CheckBox();
 			this.checkIsInvoice = new System.Windows.Forms.CheckBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.textInvoiceNum = new System.Windows.Forms.TextBox();
 			this.groupFuchs.SuspendLayout();
 			this.groupDateRange.SuspendLayout();
 			this.groupInvoice.SuspendLayout();
@@ -190,12 +190,11 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.AcceptsReturn = true;
 			this.textNote.Location = new System.Drawing.Point(146,290);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(462,147);
 			this.textNote.TabIndex = 14;
 			// 
@@ -333,14 +332,13 @@ namespace OpenDental{
 			// 
 			// textNoteBold
 			// 
-			this.textNoteBold.AcceptsReturn = true;
 			this.textNoteBold.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textNoteBold.ForeColor = System.Drawing.Color.DarkRed;
 			this.textNoteBold.Location = new System.Drawing.Point(146,443);
 			this.textNoteBold.Multiline = true;
 			this.textNoteBold.Name = "textNoteBold";
 			this.textNoteBold.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
-			this.textNoteBold.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNoteBold.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNoteBold.Size = new System.Drawing.Size(462,74);
 			this.textNoteBold.TabIndex = 231;
 			// 
@@ -555,6 +553,23 @@ namespace OpenDental{
 			this.groupInvoice.TabStop = false;
 			this.groupInvoice.Text = "Invoice";
 			// 
+			// textInvoiceNum
+			// 
+			this.textInvoiceNum.Location = new System.Drawing.Point(134,55);
+			this.textInvoiceNum.Name = "textInvoiceNum";
+			this.textInvoiceNum.ReadOnly = true;
+			this.textInvoiceNum.Size = new System.Drawing.Size(108,20);
+			this.textInvoiceNum.TabIndex = 250;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(13,57);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(120,14);
+			this.label5.TabIndex = 249;
+			this.label5.Text = "Invoice Number";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// checkIsInvoiceCopy
 			// 
 			this.checkIsInvoiceCopy.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -577,23 +592,6 @@ namespace OpenDental{
 			this.checkIsInvoice.Text = "Invoice";
 			this.checkIsInvoice.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkIsInvoice.Click += new System.EventHandler(this.checkIsInvoice_Click);
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(13,57);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(120,14);
-			this.label5.TabIndex = 249;
-			this.label5.Text = "Invoice Number";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textInvoiceNum
-			// 
-			this.textInvoiceNum.Location = new System.Drawing.Point(134,55);
-			this.textInvoiceNum.Name = "textInvoiceNum";
-			this.textInvoiceNum.ReadOnly = true;
-			this.textInvoiceNum.Size = new System.Drawing.Size(108,20);
-			this.textInvoiceNum.TabIndex = 250;
 			// 
 			// FormStatementOptions
 			// 

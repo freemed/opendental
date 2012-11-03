@@ -288,12 +288,11 @@ namespace OpenDental{
 			// 
 			// textBillingEmailBody
 			// 
-			this.textBillingEmailBody.AcceptsReturn = true;
 			this.textBillingEmailBody.Location = new System.Drawing.Point(12,109);
 			this.textBillingEmailBody.Multiline = true;
 			this.textBillingEmailBody.Name = "textBillingEmailBody";
 			this.textBillingEmailBody.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
-			this.textBillingEmailBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textBillingEmailBody.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textBillingEmailBody.Size = new System.Drawing.Size(616,102);
 			this.textBillingEmailBody.TabIndex = 1;
 			// 
@@ -308,12 +307,11 @@ namespace OpenDental{
 			// 
 			// textNote
 			// 
-			this.textNote.AcceptsReturn = true;
 			this.textNote.Location = new System.Drawing.Point(24,90);
 			this.textNote.Multiline = true;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Statement;
-			this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNote.Size = new System.Drawing.Size(616,102);
 			this.textNote.TabIndex = 2;
 			// 

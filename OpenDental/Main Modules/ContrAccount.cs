@@ -1063,7 +1063,6 @@ namespace OpenDental {
 			// 
 			// textUrgFinNote
 			// 
-			this.textUrgFinNote.AcceptsReturn = true;
 			this.textUrgFinNote.BackColor = System.Drawing.Color.White;
 			this.textUrgFinNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textUrgFinNote.ForeColor = System.Drawing.Color.Red;
@@ -1071,7 +1070,7 @@ namespace OpenDental {
 			this.textUrgFinNote.Multiline = true;
 			this.textUrgFinNote.Name = "textUrgFinNote";
 			this.textUrgFinNote.QuickPasteType = OpenDentBusiness.QuickPasteType.None;
-			this.textUrgFinNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textUrgFinNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textUrgFinNote.Size = new System.Drawing.Size(178,77);
 			this.textUrgFinNote.TabIndex = 11;
 			this.textUrgFinNote.TextChanged += new System.EventHandler(this.textUrgFinNote_TextChanged);
@@ -1092,12 +1091,11 @@ namespace OpenDental {
 			// 
 			// textFinNotes
 			// 
-			this.textFinNotes.AcceptsReturn = true;
 			this.textFinNotes.Location = new System.Drawing.Point(0,278);
 			this.textFinNotes.Multiline = true;
 			this.textFinNotes.Name = "textFinNotes";
 			this.textFinNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.FinancialNotes;
-			this.textFinNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textFinNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textFinNotes.Size = new System.Drawing.Size(178,78);
 			this.textFinNotes.TabIndex = 70;
 			this.textFinNotes.TextChanged += new System.EventHandler(this.textFinNotes_TextChanged);
