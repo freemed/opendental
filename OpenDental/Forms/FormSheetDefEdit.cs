@@ -830,10 +830,10 @@ namespace OpenDental {
 				return;
 			}
 			if(field==null){
+				ClickedOnBlankSpace=true;
 				if(CtrlIsDown){
 					return;//so that you can add more to the previous selection
 				}
-				ClickedOnBlankSpace=true;
 				listFields.SelectedIndices.Clear();//clear the existing selection
 				panelMain.Refresh();
 				return;
