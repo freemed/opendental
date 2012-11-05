@@ -296,6 +296,20 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		///<summary>Make user enter password before allowing them to add patients through OD since this could be dangerous</summary>
+		private void RadioAddPts_Click(object sender,EventArgs e) {
+			InputBox pwd=new InputBox("In our online manual, on the HL7 page, look for the password and enter it below.");
+			if(pwd.ShowDialog()!=DialogResult.OK) {
+				SetShowRadioButtons();
+				return;
+			}
+			if(pwd.textResult.Text!="hl7") {
+				MessageBox.Show("Wrong password.");
+				SetShowRadioButtons();
+				return;
+			}
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			//validation
 			if(checkEnabled.Checked) {

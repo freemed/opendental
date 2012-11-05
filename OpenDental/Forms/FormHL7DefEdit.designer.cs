@@ -486,7 +486,7 @@ namespace OpenDental{
 			// 
 			// label20
 			// 
-			this.label20.Location = new System.Drawing.Point(157,53);
+			this.label20.Location = new System.Drawing.Point(158,53);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(251,31);
 			this.label20.TabIndex = 77;
@@ -498,7 +498,7 @@ namespace OpenDental{
 			// 
 			this.radioChangeAndAdd.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioChangeAndAdd.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioChangeAndAdd.Location = new System.Drawing.Point(25,69);
+			this.radioChangeAndAdd.Location = new System.Drawing.Point(26,69);
 			this.radioChangeAndAdd.Name = "radioChangeAndAdd";
 			this.radioChangeAndAdd.Size = new System.Drawing.Size(130,18);
 			this.radioChangeAndAdd.TabIndex = 3;
@@ -506,12 +506,13 @@ namespace OpenDental{
 			this.radioChangeAndAdd.Text = "Change and Add Pts";
 			this.radioChangeAndAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioChangeAndAdd.UseVisualStyleBackColor = true;
+			this.radioChangeAndAdd.Click += new System.EventHandler(this.RadioAddPts_Click);
 			// 
 			// radioChange
 			// 
 			this.radioChange.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioChange.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioChange.Location = new System.Drawing.Point(25,51);
+			this.radioChange.Location = new System.Drawing.Point(26,51);
 			this.radioChange.Name = "radioChange";
 			this.radioChange.Size = new System.Drawing.Size(130,18);
 			this.radioChange.TabIndex = 2;
@@ -524,7 +525,7 @@ namespace OpenDental{
 			// 
 			this.radioShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioShow.Location = new System.Drawing.Point(25,33);
+			this.radioShow.Location = new System.Drawing.Point(26,33);
 			this.radioShow.Name = "radioShow";
 			this.radioShow.Size = new System.Drawing.Size(130,18);
 			this.radioShow.TabIndex = 1;
@@ -537,7 +538,7 @@ namespace OpenDental{
 			// 
 			this.radioHide.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.radioHide.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioHide.Location = new System.Drawing.Point(25,15);
+			this.radioHide.Location = new System.Drawing.Point(26,15);
 			this.radioHide.Name = "radioHide";
 			this.radioHide.Size = new System.Drawing.Size(130,18);
 			this.radioHide.TabIndex = 0;
