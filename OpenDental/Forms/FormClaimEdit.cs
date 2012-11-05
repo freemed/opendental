@@ -4703,6 +4703,9 @@ namespace OpenDental{
 			FormCPT.ClaimProcsToEdit=cpList.ToArray();
 			FormCPT.ShowDialog();
 			if(FormCPT.DialogResult!=DialogResult.OK) {
+				//ClaimProcs were inserted already, refresh the list to reflect the new entries.
+				ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
+				FillGrids();
 				return;
 			}
 			//save changes now
