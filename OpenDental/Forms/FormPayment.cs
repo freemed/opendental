@@ -1469,10 +1469,10 @@ namespace OpenDental {
 				}
 			}
 			if(showApprovedAmtNotice && !xVoid && !xAdjust && !xReturn) {
-				if(MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")+" \r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
-					+"\r\n"+Lan.g(this,"Change the amount to match?"),"Alert",MessageBoxButtons.OKCancel,MessageBoxIcon.Exclamation)==DialogResult.OK) {
+				MessageBox.Show(Lan.g(this,"The amount you typed in: ")+amt.ToString("C")
+					+"\r\n"+Lan.g(this,"does not match the approved amount returned: ")+approvedAmt.ToString("C")
+					+"\r\n"+Lan.g(this,"The amount will be changed to reflect the approved amount charged."),"Alert",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
 					textAmount.Text=approvedAmt.ToString("F");
-				}
 			}
 			if(xAdjust) {
 				MessageBox.Show(Lan.g(this,"The amount will be changed to the X-Charge approved amount: ")+approvedAmt.ToString("C"));
