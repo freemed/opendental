@@ -45,78 +45,60 @@ namespace OpenDentalWebService {
 				switch(dto.Type) {
 					#region DtoGetTable
 					case "DtoGetTable":
-						return "";
+						DtoGetTable dtoGetTable=(DtoGetTable)dto;
+						//TODO: Check credentials.
+						DataTable table=(DataTable)DtoMethods.ProcessDtoObject(dto);
+						return aaGeneralTypes.Serialize("DataTable",table);
 					#endregion
 					#region DtoGetTableLow
-					case "DtoGetTableLow":
-						return "";
+					//case "DtoGetTableLow":
+					//  return "";
 					#endregion
 					#region DtoGetDS
-					case "DtoGetDS":
-						return "";
+					//case "DtoGetDS":
+					//  return "";
 					#endregion
 					#region DtoGetLong
 					case "DtoGetLong":
-						return "";
+						DtoGetLong dtoGetLong=(DtoGetLong)dto;
+						//TODO: Check credentials.
+						return aaGeneralTypes.Serialize("long",(long)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetInt
 					case "DtoGetInt":
 						DtoGetInt dtoGetInt=(DtoGetInt)dto;
-						//Check the credentials here somehow?//Userods.CheckCredentials(dtoGetInt.Credentials);//will throw exception if fails.
-						object result=DtoMethods.ProcessDtoObject(dtoGetInt);
-						return ((int)result).ToString();
-						//string className=dtoGetInt.MethodName.Split('.')[0];
-						//string methodName=dtoGetInt.MethodName.Split('.')[1];
-						//string assemb=Assembly.GetAssembly(typeof(Db)).FullName;//any OpenDentBusiness class will do.
-						//Type classType=Type.GetType("OpenDentBusiness."+className+","+assemb);
-						//DtoObject[] parameters=dtoGetInt.Params;
-						//Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
-						//MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-						//if(methodInfo==null) {
-						//  throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetInt.MethodName);
-						//}
-						//object[] paramObjs=DtoObject.GenerateObjects(parameters);
-						//int intResult=(int)methodInfo.Invoke(null,paramObjs);
-						//return intResult.ToString();
+						//TODO: Check credentials.
+						return aaGeneralTypes.Serialize("int",(int)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetVoid
 					case "DtoGetVoid":
+						DtoGetVoid dtoGetVoid=(DtoGetVoid)dto;
+						//TODO: Check credentials.
+						DtoMethods.ProcessDtoObject(dto);
 						return "";
 					#endregion
 					#region DtoGetObject
 					case "DtoGetObject":
-						//DtoGetObject dtoGetObject=(DtoGetObject)dto;
-						//string className=dtoGetObject.MethodName.Split('.')[0];
-						//string methodName=dtoGetObject.MethodName.Split('.')[1];
-						//if(className != "Security" || methodName != "LogInWeb") {//because credentials will be checked inside that method
-						//  Userods.CheckCredentials(dtoGetObject.Credentials);//will throw exception if fails.
-						//}
-						//string assemb=Assembly.GetAssembly(typeof(Db)).FullName;//any OpenDentBusiness class will do.
-						//Type classType=Type.GetType("OpenDentBusiness."+className+","+assemb);
-						//DtoObject[] parameters=dtoGetObject.Params;
-						//Type[] paramTypes=DtoObject.GenerateTypes(parameters,assemb);
-						//MethodInfo methodInfo=classType.GetMethod(methodName,paramTypes);
-						//if(methodInfo==null) {
-						//  throw new ApplicationException("Method not found with "+parameters.Length.ToString()+" parameters: "+dtoGetObject.MethodName);
-						//}
-						//if(className=="Security" && methodName=="LogInWeb") {
-						//  string mappedPath=Server.MapPath(".");
-						//  parameters[2]=new DtoObject(mappedPath,typeof(string));//because we can't access this variable from within OpenDentBusiness.
-						//  RemotingClient.RemotingRole=RemotingRole.ServerWeb;
-						//}
-						//object[] paramObjs=DtoObject.GenerateObjects(parameters);
-						//Object objResult=methodInfo.Invoke(null,paramObjs);
-						//Type returnType=methodInfo.ReturnType;
-						//return XmlConverter.Serialize(returnType,objResult);
-						return "";
+						DtoGetObject dtoGetObject=(DtoGetObject)dto;
+						//TODO: Check credentials.
+						DtoMethods.ProcessDtoObject(dto);
+						switch(((DtoGetObject)dto).ObjectType) {
+							case "":
+								return "";
+						}
+						throw new NotSupportedException("ProcessRequest, DtoGetObject ObjectType not supported yet.");
 					#endregion
 					#region DtoGetString
 					case "DtoGetString":
-						return "";
+						DtoGetString dtoGetString=(DtoGetString)dto;
+						//TODO: Check credentials.
+						return aaGeneralTypes.Serialize("string",(string)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetBool
 					case "DtoGetBool":
-						return "";
+						DtoGetBool dtoGetBool=(DtoGetBool)dto;
+						//TODO: Check credentials.
+						return aaGeneralTypes.Serialize("bool",(string)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region Default DtoUnknown
 					default:

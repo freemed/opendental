@@ -25,9 +25,15 @@ namespace OpenDentalWebService {
 			ParamTypes=new List<string>();
 		}
 
+		///<summary>DtoExceptions are currently the only DataTransferObjects to call this method.</summary>
 		public string Serialize() {
 			StringBuilder strBuild=new StringBuilder();
-			//TODO: Write serialize code.
+			strBuild.Append("<"+this.Type+">");
+			//Enhance this later to serialize all the other dto types if needed.  For now we only care about exception messages.
+			if(this.Type=="DtoException") {
+				strBuild.Append("<msg>").Append(SerializeStringEscapes.EscapeForXml(((DtoException)this).Message)).Append("</msg>");
+			}
+			strBuild.Append("</"+this.Type+">");
 			return strBuild.ToString();
 		}
 
@@ -84,12 +90,7 @@ namespace OpenDentalWebService {
 								throw new NotSupportedException("Deserialize, Dto type not supported.");
 							}
 							if(!reader.IsEmptyElement) {//Parameters are present.
-								try {
-									SetParamsAndParamTypes(reader,dto);
-								}
-								catch {
-									throw;//Pass the exception up a layer.
-								}
+								SetParamsAndParamTypes(reader,dto);
 							}
 							break;
 						#endregion
@@ -158,12 +159,7 @@ namespace OpenDentalWebService {
 					dto.ParamTypes.Add(typeName);
 					reader.ReadToFollowing("Obj");
 					string xml=reader.ReadInnerXml();//Read everything contained in the Obj node.
-					try {
-						dtoObj.Obj=DtoMethods.CallClassDeserializer(typeName,xml);
-					}
-					catch {
-						throw;//Pass the exception up a layer.
-					}
+					dtoObj.Obj=DtoMethods.CallClassDeserializer(typeName,xml);
 					dto.Params.Add(dtoObj);
 				}
 			}
