@@ -116,6 +116,9 @@ namespace OpenDentBusiness{
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have appointments using it:")+pats);
 			}
 			//check procedures for dependencies
+			//reassign procedure.ClinicNum=0 if the procs are status D.
+			command="UPDATE procedurelog SET ClinicNum=0 WHERE ProcStatus="+POut.Int((int)ProcStat.D);
+			Db.NonQ(command);
 			command="SELECT patient.LName,patient.FName FROM patient,procedurelog "
 				+"WHERE procedurelog.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=procedurelog.PatNum";
