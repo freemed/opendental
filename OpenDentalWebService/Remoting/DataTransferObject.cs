@@ -137,7 +137,7 @@ namespace OpenDentalWebService {
 			return dto;
 		}
 
-		///<summary>Correctly sets Params AND ParamTypes on the dto object based on the navigator passed in.  Throws exceptions.</summary>
+		///<summary>Correctly sets Params AND ParamTypes on the dto object.  Throws exceptions.</summary>
 		private static void SetParamsAndParamTypes(XmlReader reader,DataTransferObject dto) {
 			//The Params node is going to be a list of DtoObjects. Each has <TypeName /> and <Obj />.  TypeName will give us the fully qualified name and Obj will contain the entire object serialized.
 			while(reader.Read()) {//Just read till the end of the xml stream because parameters are the last thing in DtoObjects except for DtoGetObjects which are handled.
@@ -159,7 +159,7 @@ namespace OpenDentalWebService {
 					reader.ReadToFollowing("Obj");
 					string xml=reader.ReadInnerXml();//Read everything contained in the Obj node.
 					try {
-						object obj=DtoMethods.CallClassDeserializer(dtoObj.TypeName,xml);
+						dtoObj.Obj=DtoMethods.CallClassDeserializer(typeName,xml);
 					}
 					catch {
 						throw;//Pass the exception up a layer.
