@@ -34,6 +34,8 @@ namespace OpenDental {
 		private List<InsSub> SubList;
 		private InsSub Sub1;
 		private InsSub Sub2;
+		///<summary>In order to import insurance plans the sheet must contain Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone.  This variable gets set when the sheet loads and will indicate if all fileds are present for primary OR for secondary insurance.  Insurance should not attempt to import if this is false.</summary>
+		private bool HasRequiredInsFields;
 
 		public FormSheetImport() {
 			InitializeComponent();
@@ -162,6 +164,10 @@ namespace OpenDental {
 			}
 			FillRows();
 			FillGrid();
+			//All the fields have been loaded on the sheet at this point.  Set the required insurance boolean if this is a patient form.
+			if(SheetCur.SheetType==SheetTypeEnum.PatientForm) {
+				SetHasRequiredInsFields();
+			}
 		}
 
 		///<summary>This can only be run once when the form first opens.  After that, the rows are just edited.</summary>
@@ -1669,6 +1675,86 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		///<summary>Correctly sets the class wide boolean HasRequiredInsFields.  Loops through all the fields on the sheet and makes sure all the required insurance fields needed to import are present for primary OR for secondary insurance.  If some required fields are missing for an insurance, all related ins fields will have DoImport set to false.  Called after the list "Rows" has been filled.</summary>
+		private void SetHasRequiredInsFields() {
+			//Start off assuming that neither primary nor secondary have the required insurance fields necessary to import insurance.
+			HasRequiredInsFields=false;
+			if(CheckSheetForInsFields(true)) {//Check primary fields.
+				HasRequiredInsFields=true;
+			}
+			else {//Sheet does not have the required fields to import primary insurance.
+				SetDoImportToFalseForIns(true);//Unmark all primary ins fields for import.
+			}
+			if(CheckSheetForInsFields(false)) {//Primary does not have all of the required fields.  Check if secondary has them.
+				HasRequiredInsFields=true;
+			}
+			else {//Sheet does not have the required fields to import secondary insurance.
+				SetDoImportToFalseForIns(false);//Unmark all secondary ins fields for import.
+			}
+		}
+
+		///<summary>Returns true if all the required insurance fields needed to import are present on the current sheet.  Only call after the list "Rows" has been filled.</summary>
+		private bool CheckSheetForInsFields(bool isPrimary) {
+			string insStr="ins1";
+			if(!isPrimary) {
+				insStr="ins2";
+			}
+			//Load up all five required insurance rows.
+			SheetImportRow relationRow=GetImportRowByFieldName(insStr+"Relat");
+			SheetImportRow subscriberRow=GetImportRowByFieldName(insStr+"Subscriber");
+			SheetImportRow subscriberIdRow=GetImportRowByFieldName(insStr+"SubscriberID");
+			SheetImportRow carrierNameRow=GetImportRowByFieldName(insStr+"CarrierName");
+			SheetImportRow carrierPhoneRow=GetImportRowByFieldName(insStr+"CarrierPhone");
+			//Check if all of the required insurance fields exist on this sheet.
+			if(relationRow==null 
+		    || subscriberRow==null
+		    || subscriberIdRow==null
+		    || carrierNameRow==null
+		    || carrierPhoneRow==null) 
+			{
+				return false;
+			}
+			return true;
+		}
+
+		///<summary>Loops through the related ins fields and forces DoImport to false.</summary>
+		private void SetDoImportToFalseForIns(bool isPrimary) {
+			bool changed=false;
+			string insStr="ins1";
+			if(!isPrimary) {
+				insStr="ins2";
+			}
+			//Only five ins fields have the possibility of DoImport being automatically set to true.  The others require a double click.
+			SheetImportRow relationRow=GetImportRowByFieldName(insStr+"Relat");
+			SheetImportRow subscriberIdRow=GetImportRowByFieldName(insStr+"SubscriberID");
+			SheetImportRow employerNameRow=GetImportRowByFieldName(insStr+"EmployerName");
+			SheetImportRow groupNameRow=GetImportRowByFieldName(insStr+"GroupName");
+			SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
+			if(relationRow!=null) {
+				relationRow.DoImport=false;
+				changed=true;
+			}
+			if(subscriberIdRow!=null) {
+				subscriberIdRow.DoImport=false;
+				changed=true;
+			}
+			if(employerNameRow!=null) {
+				employerNameRow.DoImport=false;
+				changed=true;
+			}
+			if(groupNameRow!=null) {
+				groupNameRow.DoImport=false;
+				changed=true;
+			}
+			if(groupNumRow!=null) {
+				groupNumRow.DoImport=false;
+				changed=true;
+			}
+			if(changed) {
+				FillGrid();//A change was made, refresh the grid.
+			}
+		}
+
 		///<summary>Returns false if validation fails.  Returns true if all required insurance fields exist, import fields have valid values, and the insurance plan has been imported successfully.  The user will have the option to pick an existing ins plan.  If any fields on the selected plan do not exactly match the imported fields, they will be prompted to choose between the selected plan's values or to create a new ins plan with the import values.  After validating, the actual import of the new ins plan takes place.  That might consist of dropping the current plan and replacing it or simply inserting the new plan.</summary>
 		private bool ValidateAndImportInsurance(bool isPrimary) {
 			string insStr="";
@@ -1695,13 +1781,15 @@ namespace OpenDental {
 			SheetImportRow groupNumRow=GetImportRowByFieldName(insStr+"GroupNum");
 			//Check if the required insurance fields exist on this sheet.
 			//NOTE: Employer, group name and group num are optional fields.
+			//Checking for nulls in the required fields still needs to be here in this method in case the user has the required fields for one insurance plan but not enough for the other.  They will hit this code ONLY if they have flagged one of the fields on the "other" insurance plan for import that does not have all of the required fields.
 			if(relationRow==null 
 				|| subscriberRow==null
 				|| subscriberIdRow==null
 				|| carrierNameRow==null
-				|| carrierPhoneRow==null) {
+				|| carrierPhoneRow==null) 
+			{
 				MessageBox.Show(Lan.g(this,"Required ")+insWarnStr+Lan.g(this," fields are missing on this sheet.  You cannot import ")+insWarnStr
-					+Lan.g(this," with this sheet until it contains all of required fields.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName/CarrierPhone."));
+					+Lan.g(this," with this sheet until it contains all of required fields.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone."));
 				return false;
 			}
 			if(relationRow.ImpValObj==null 
@@ -1709,7 +1797,7 @@ namespace OpenDental {
 				|| (string)subscriberIdRow.ImpValObj==""
 				|| carrierNameRow.ImpValObj==null
 				|| carrierPhoneRow.ImpValObj==null) {
-				MessageBox.Show(Lan.g(this,"Cannot import ")+insWarnStr+Lan.g(this," until all required fields have been set.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName/CarrierPhone."));
+				MessageBox.Show(Lan.g(this,"Cannot import ")+insWarnStr+Lan.g(this," until all required fields have been set.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone."));
 				return false;
 			}
 			InsPlan plan=null;
@@ -1913,7 +2001,7 @@ namespace OpenDental {
 			return true;
 		}
 
-		///<summary>Displays a yes no cancel message to the user indicating that the import value does not match the selected plan.  They will choose to use the current plan's value or create a new plan.   Only called from ValidateAndImportInsurance.</summary>
+		///<summary>Displays a yes no cancel message to the user indicating that the import value does not match the selected plan.  They will choose to use the current plan's value or create a new plan.  Only called from ValidateAndImportInsurance.</summary>
 		private DialogResult InsuranceImportQuestion(string importValue,bool isPrimary) {
 			string insStr="primary ";
 			if(!isPrimary) {
@@ -1955,6 +2043,7 @@ namespace OpenDental {
 						continue;
 					}
 					switch(Rows[i].FieldName) {
+						#region Personal
 						case "LName":
 							PatCur.LName=Rows[i].ImpValDisplay;
 							break;
@@ -2007,6 +2096,8 @@ namespace OpenDental {
 							RefAttaches.Insert(ra);//no security to block this action.
 							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));
 							break;
+						#endregion
+						#region Address and Home Phone
 						//AddressSameForFam already set, but not really importable by itself
 						case "Address":
 							PatCur.Address=Rows[i].ImpValDisplay;
@@ -2026,32 +2117,40 @@ namespace OpenDental {
 						case "HmPhone":
 							PatCur.HmPhone=Rows[i].ImpValDisplay;
 							break;
+						#endregion
 					}
 				}
 				//Insurance importing happens before updating the patient information because there is a possibility of returning for more information.
-				#region Insurance importing
-				bool primaryImported=false;
-				if(importPriIns) {
-					if(!ValidateAndImportInsurance(true)) {
-						//Field missing or user chose to back out to correct information.
-						return;//Nothing has been updated so no harm in returning.
-					}
-					primaryImported=true;//Primary insurance was imported successfully.
-				}
-				if(importSecIns) {
-					if(!ValidateAndImportInsurance(false)) {
-						//Field missing or user chose to back out to correct information.
-						if(primaryImported) {
-							//Primary has been imported, we cannot return at this point.  Simply notify the user that secondary could not be imported correctly.
-							MsgBox.Show(this,"Primary insurance was imported successfully but secondary was unable to import.");
+				if(HasRequiredInsFields) {//Do not attempt to import any insurance unless they have the required fields for importing.
+					#region Insurance importing
+					bool primaryImported=false;
+					if(importPriIns) {//A primary insurance field was flagged for importing.
+						if(!ValidateAndImportInsurance(true)) {//Field missing or user chose to back out to correct information.
+							return;//Nothing has been updated so it's okay to just return here.
 						}
-						else {
-							//Secondary insurance was the only one set to import and nothing has been updated so no harm in returning.
-							return;
+						primaryImported=true;
+					}
+					if(importSecIns) {//A secondary insurance field was flagged for importing.
+						if(!ValidateAndImportInsurance(false)) {//Field missing or user chose to back out to correct information.
+							if(primaryImported) {
+								//Primary has been imported, we cannot return at this point.  Simply notify the user that secondary could not be imported correctly.
+								MsgBox.Show(this,"Primary insurance was imported successfully but secondary was unable to import.");
+							}
+							else {//Secondary had problems importing or the user chose to back out and correct information.
+								return;//Nothing has been updated so it's okay to just return here.
+							}
 						}
 					}
+					#endregion
 				}
-				#endregion
+				else {//Sheet does not contain the required ins fields.
+					if(importPriIns) {//The user has manually flagged a primary ins row for importing.
+						MsgBox.Show(this,"Required primary insurance fields are missing on this sheet.  You cannot import primary insurance with this sheet until it contains all of required fields.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone.");
+					}
+					if(importSecIns) {//The user has manually flagged a secondary ins row for importing.
+						MsgBox.Show(this,"Required secondary insurance fields are missing on this sheet.  You cannot import secondary insurance with this sheet until it contains all of required fields.  Required fields: Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone.");
+					}
+				}
 				//Patient information updating---------------------------------------------------------------------------------------------------------
 				Patients.Update(PatCur,patientOld);
 				if(AddressSameForFam) {
