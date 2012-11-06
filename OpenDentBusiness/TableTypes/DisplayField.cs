@@ -48,7 +48,7 @@ namespace OpenDentBusiness{
 
 
 	public enum DisplayFieldCategory{
-		///<summary>0</summary>
+		///<summary>0- This indicates progress notes.</summary>
 		None,
 		//<summary>0</summary>
 		//ProgressNotes,

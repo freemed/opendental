@@ -5160,7 +5160,7 @@ namespace OpenDental{
 			List<DisplayField> fields;
 			//DisplayFields.RefreshCache();
 			if(gridChartViews.Rows.Count==0) {//No chart views, Use default values.
-				fields=DisplayFields.GetForCategory(DisplayFieldCategory.None);
+				fields=DisplayFields.GetDefaultList(DisplayFieldCategory.None);
 				gridProg.Title="Progress Notes";
 				if(!chartCustViewChanged) {
 					checkSheets.Checked=true;

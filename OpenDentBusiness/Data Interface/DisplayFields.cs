@@ -51,7 +51,7 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<Summary>Returns an ordered list for just one category.  These are display fields that the user has entered, which are stored in the db, and then are pulled into the cache.</Summary>
+		///<Summary>Returns an ordered list for just one category.  Do not use with None, or it will malfunction.  These are display fields that the user has entered, which are stored in the db, and then are pulled into the cache.</Summary>
 		public static List<DisplayField> GetForCategory(DisplayFieldCategory category){
 			//No need to check RemotingRole; no call to db.
 			List<DisplayField> retVal=new List<DisplayField>();
