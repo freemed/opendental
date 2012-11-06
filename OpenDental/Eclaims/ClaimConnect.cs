@@ -50,7 +50,7 @@ namespace OpenDental.Eclaims
 					+"&Username="+clearhouse.LoginID
 					+"&Password="+clearhouse.Password
 					+"&UploaderName=OpenDental"//CONSTANT
-					+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString();//eg 3.4
+					+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString()+"."+myVersion.Build.ToString();//eg 12.3.24
 				webReq.KeepAlive=false;
 				webReq.Method="POST";
 				webReq.ContentType="application/x-www-form-urlencoded";
