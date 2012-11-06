@@ -9,7 +9,7 @@ namespace OpenDentalWebService {
 			StringBuilder strBuild=new StringBuilder();
 			int length=myString.Length;
 			for(int i=0;i<length;i++) {
-				String character=myString.Substring(i,i+1);
+				String character=myString.Substring(i,1);
 				if(character.Equals("<")) {
 					strBuild.Append("&lt;");
 					continue;

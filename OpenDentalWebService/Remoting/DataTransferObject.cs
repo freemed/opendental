@@ -58,7 +58,7 @@ namespace OpenDentalWebService {
 						#region Credentials
 						case "Credentials":
 							if(dto==null) {//This should never happen. 
-								throw new NotSupportedException("Dto type not supported.");
+								throw new NotSupportedException("Deserialize, Dto type not supported.");
 							}
 							//Create a new Credentials object.
 							Credentials creds=new Credentials();
@@ -73,7 +73,7 @@ namespace OpenDentalWebService {
 						#region MethodName
 						case "MethodName":
 							if(dto==null) {//This should never happen. 
-								throw new NotSupportedException("Dto type not supported.");
+								throw new NotSupportedException("Deserialize, Dto type not supported.");
 							}
 							dto.MethodName=reader.ReadString();
 							break;
@@ -81,7 +81,7 @@ namespace OpenDentalWebService {
 						#region Params
 						case "Params":
 							if(dto==null) {//This should never happen. 
-								throw new NotSupportedException("Dto type not supported.");
+								throw new NotSupportedException("Deserialize, Dto type not supported.");
 							}
 							if(!reader.IsEmptyElement) {//Parameters are present.
 								try {

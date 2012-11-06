@@ -126,7 +126,7 @@ namespace OpenDentalWebService {
 			}
 			catch(Exception e) {
 				DtoException dtoEx=new DtoException();
-				dtoEx.Message="ProcessRequest, error processing the request:\r\n";
+				dtoEx.Message="Error processing the request:\r\n";
 				if(e.InnerException==null) {
 					dtoEx.Message+=e.Message;
 				}
