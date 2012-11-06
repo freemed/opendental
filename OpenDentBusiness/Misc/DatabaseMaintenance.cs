@@ -627,6 +627,8 @@ namespace OpenDentBusiness {
 				"627223",1,"02",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusA,
 				//lee-power & associates
 				"627585",1,"02",claimTypes,canadianNetworkNumTelusB,
+				//local 1030 health benefity plan
+				"000118",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
 				//manion wilkins
 				"610158",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
 				//manitoba blue cross
@@ -669,6 +671,8 @@ namespace OpenDentBusiness {
 				"000096",1,"04",claimTypes,canadianNetworkNumTelusB,
 				//ses benefits
 				"610196",1,"04",claimTypes|reversalTypes,canadianNetworkNumTelusB,
+				//sheet metal workers local 30 benefit plan
+				"000119",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
 				//ssq societe d'assurance-vie inc.
 				"000079",1,"04",claimTypes,canadianNetworkNumCSI,
 				//standard life assurance company
@@ -679,6 +683,8 @@ namespace OpenDentBusiness {
 				"000080",1,"04",claimTypes,canadianNetworkNumCSI,
 				//syndicat des fonctionnaires municipaux mtl
 				"610677",1,"04",claimTypes|reversalTypes,canadianNetworkNumCSI,
+				//the building union of canada health beneift plan
+				"000120",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
 				//u.a. local 46 dental plan
 				"000115",1,"04",claimTypes|predeterminationTypes,canadianNetworkNumCSI,
 				//u.a. local 787 health trust fund dental plan

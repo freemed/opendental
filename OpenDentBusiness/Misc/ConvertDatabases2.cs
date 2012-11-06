@@ -11330,6 +11330,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				}
+				if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+					command="SELECT CanadianNetworkNum FROM canadiannetwork WHERE Abbrev='CSI' LIMIT 1";
+					long canadianNetworkNumCSI=PIn.Long(Db.GetScalar(command));
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000118'"; //local 1030 health benefit plan
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Local 1030 Health Benefit Plan','45 McIntosh Drive','','Markham','ON','L3R 8C7','1-800-263-3564','000118','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,1944)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000119'"; //sheet metal workers local 30 benefit plan
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('Sheet Metal Workers Local 30 Benefit Plan','45 McIntosh Drive','','Markham','ON','L3R 8C7','1-800-263-3564','000119','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,1944)";
+						Db.NonQ(command);
+					}
+					command="SELECT COUNT(*) FROM carrier WHERE ElectID='000120'"; //the building union of canada health benefit
+					if(Db.GetCount(command)=="0") {
+						command="INSERT INTO carrier (CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes) VALUES "+
+								"('The Building Union of Canada Health Benefit','45 McIntosh Drive','','Markham','ON','L3R 8C7','1-800-263-3564','000120','0','1','04',"+POut.Long(canadianNetworkNumCSI)+",'0',1,1944)";
+						Db.NonQ(command);
+					}
+				}
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
