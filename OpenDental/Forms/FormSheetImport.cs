@@ -34,7 +34,7 @@ namespace OpenDental {
 		private List<InsSub> SubList;
 		private InsSub Sub1;
 		private InsSub Sub2;
-		///<summary>In order to import insurance plans the sheet must contain Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone.  This variable gets set when the sheet loads and will indicate if all fileds are present for primary OR for secondary insurance.  Insurance should not attempt to import if this is false.</summary>
+		///<summary>In order to import insurance plans the sheet must contain Relationship, Subscriber, SubscriberID, CarrierName, and CarrierPhone.  This variable gets set when the sheet loads and will indicate if all fields are present for primary OR for secondary insurance.  Insurance should not attempt to import if this is false.</summary>
 		private bool HasRequiredInsFields;
 
 		public FormSheetImport() {
@@ -1685,7 +1685,7 @@ namespace OpenDental {
 			else {//Sheet does not have the required fields to import primary insurance.
 				SetDoImportToFalseForIns(true);//Unmark all primary ins fields for import.
 			}
-			if(CheckSheetForInsFields(false)) {//Primary does not have all of the required fields.  Check if secondary has them.
+			if(CheckSheetForInsFields(false)) {//Check secondary fields.
 				HasRequiredInsFields=true;
 			}
 			else {//Sheet does not have the required fields to import secondary insurance.
@@ -2125,13 +2125,15 @@ namespace OpenDental {
 					#region Insurance importing
 					bool primaryImported=false;
 					if(importPriIns) {//A primary insurance field was flagged for importing.
-						if(!ValidateAndImportInsurance(true)) {//Field missing or user chose to back out to correct information.
+						if(!ValidateAndImportInsurance(true)) {
+							//Field missing or user chose to back out to correct information.
 							return;//Nothing has been updated so it's okay to just return here.
 						}
 						primaryImported=true;
 					}
 					if(importSecIns) {//A secondary insurance field was flagged for importing.
-						if(!ValidateAndImportInsurance(false)) {//Field missing or user chose to back out to correct information.
+						if(!ValidateAndImportInsurance(false)) {
+							//Field missing or user chose to back out to correct information.
 							if(primaryImported) {
 								//Primary has been imported, we cannot return at this point.  Simply notify the user that secondary could not be imported correctly.
 								MsgBox.Show(this,"Primary insurance was imported successfully but secondary was unable to import.");
