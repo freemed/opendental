@@ -908,7 +908,7 @@ namespace OpenDental{
 		}
 
 		private void butTasks_Click(object sender, System.EventArgs e) {
-			LaunchTaskWindowWithList(0);
+			LaunchTaskWindow(false);
 			/*  //This is the old code exactly how it was before making the task window non-modal in case issues arise.
 			FormTasks FormT=new FormTasks();
 			FormT.ShowDialog();
@@ -946,17 +946,17 @@ namespace OpenDental{
 
 		///<summary>Only used internally to launch the task window with the Triage task list.</summary>
 		public void JumpToTriageTaskWindow() {
-			LaunchTaskWindowWithList(1697);//Triage list.
+			LaunchTaskWindow(true);
 		}
 
-		///<summary>Used to launch the task window preloaded with a certain task list open.  Pass 0 for default behavior.</summary>
-		private void LaunchTaskWindowWithList(long taskListNum) {
+		///<summary>Used to launch the task window preloaded with a certain task list open.  IsTriage is only used at OD HQ.</summary>
+		private void LaunchTaskWindow(bool isTriage) {
 			if(FormT==null || FormT.IsDisposed) {
 				FormT=new FormTasks();
 			}
 			FormT.Show();
-			if(taskListNum>0) {
-				FormT.LaunchWithTaskList(taskListNum);
+			if(isTriage) {
+				FormT.ShowTriage();
 			}
 			if(FormT.WindowState==FormWindowState.Minimized) {
 				FormT.WindowState=FormWindowState.Normal;

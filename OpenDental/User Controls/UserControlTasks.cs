@@ -38,6 +38,7 @@ namespace OpenDental {
 		public bool PopupsAreBlocked;
 		///<summary>All notes for the showing tasks, ordered by date time.</summary>
 		private List<TaskNote> TaskNoteList;
+		private const int _TriageListNum=1697;
 
 		public UserControlTasks() {
 			InitializeComponent();
@@ -118,24 +119,24 @@ namespace OpenDental {
 			gridMain.Invalidate();
 		}
 
-		///<summary>Used internally to open the task window with a specific task list loaded.</summary>
-		public void FillGridWithTaskList(long taskListNum) {
-			TaskList tlOne=TaskLists.GetOne(taskListNum);
+		///<summary>Used by OD HQ.</summary>
+		public void FillGridWithTriageList() {
+			TaskList tlOne=TaskLists.GetOne(_TriageListNum);
 			tabContr.SelectedTab=tabMain;
 			if(TreeHistory==null) {
 				TreeHistory=new List<TaskList>();
 			}
 			TreeHistory.Clear();
-			TreeHistory.Add(tlOne);			
+			TreeHistory.Add(tlOne);
 			if(TaskListsList==null) {
 				TaskListsList=new List<TaskList>();
 			}
 			TaskListsList.Clear();
 			if(TasksList==null) {
-			  TasksList=new List<Task>();
+				TasksList=new List<Task>();
 			}
 			TasksList.Clear();
-			TasksList=Tasks.RefreshChildren(taskListNum,false,cal.SelectionStart,Security.CurUser.UserNum,0);
+			TasksList=Tasks.RefreshChildren(_TriageListNum,false,cal.SelectionStart,Security.CurUser.UserNum,0);
 			FillTree();
 			FillGrid();
 		}
@@ -448,6 +449,7 @@ namespace OpenDental {
 					objDesc+=Userods.GetName(TasksList[i].UserNum)+" - ";
 				}
 				notes="";
+				bool hasNotes=false;
 				for(int n=0;n<TaskNoteList.Count;n++) {
 					if(TaskNoteList[n].TaskNum!=TasksList[i].TaskNum) {
 						continue;
@@ -457,6 +459,7 @@ namespace OpenDental {
 						+TaskNoteList[n].DateTimeNote.ToShortDateString()+" "
 						+TaskNoteList[n].DateTimeNote.ToShortTimeString()
 						+" - "+TaskNoteList[n].Note;
+					hasNotes=true;
 				}
 				row=new ODGridRow();
 				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//The new way
@@ -492,6 +495,19 @@ namespace OpenDental {
 					row.Cells.Add(TasksList[i].ParentDesc);
 				}
 				row.Cells.Add(dateStr+objDesc+TasksList[i].Descript+notes);
+				if(TasksList[i].TaskListNum==_TriageListNum) {
+					if(!hasNotes) {
+						row.ColorBackG=Color.LightBlue;
+					}
+					if(TasksList[i].Descript.Contains("CUSTOMER")
+						|| TasksList[i].Descript.Contains("DOWN")
+						|| TasksList[i].Descript.Contains("URGENT")
+						|| TasksList[i].Descript.Contains("CONFERENCE")
+						|| TasksList[i].Descript.Contains("!!")) 
+					{
+						row.ColorBackG=Color.Salmon;
+					}
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

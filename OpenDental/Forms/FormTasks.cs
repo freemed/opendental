@@ -117,9 +117,9 @@ namespace OpenDental{
 			//DialogResult=DialogResult.OK;
 		}
 
-		///<summary>Used internally to open the task window with a specific task list loaded.</summary>
-		public void LaunchWithTaskList(long taskListNum) {
-			userControlTasks1.FillGridWithTaskList(taskListNum);
+		///<summary>Used by OD HQ.</summary>
+		public void ShowTriage() {
+			userControlTasks1.FillGridWithTriageList();
 		}
 
 		///<summary>Simply tells the user task control to refresh the currently showing task list.</summary>
