@@ -51,6 +51,7 @@ and should be accessed/opened by C:/Program Files/Digirex/digirex.ini
 				else{
 					iniString+="ID="+pat.ChartNumber+"\r\n";
 				}
+				Provider priProv=Providers.GetProv(pat.PriProv);
 				iniString+="Gender="+pat.Gender.ToString()+"\r\n"
 				+"First="+pat.FName+"\r\n"
 				+"Last="+pat.LName+"\r\n"
@@ -58,7 +59,7 @@ and should be accessed/opened by C:/Program Files/Digirex/digirex.ini
 				+"Month="+pat.Birthdate.Month.ToString()+"\r\n"
 				+"Day="+pat.Birthdate.Day.ToString()+"\r\n"
 				+"[Dentist]\r\n"
-				+"ID="+pat.PriProv.ToString()+"\r\n"
+				+"ID="+priProv.Abbr+"\r\n"//Abbreviation is guaranteed non-blank, because of UI validation in the provider edit window.
 				+"Password=digirex";
 				// Write the string to a file.
 				string iniPath=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"System path to Apixia Digital Imaging ini file");
