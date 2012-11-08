@@ -6,10 +6,16 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Xml;
+using System.Xml.XPath;
 
 namespace xCrudGeneratorWebService {
 	public partial class Form1:Form {
 		private string SerialDir;
+		private string DtoMethodsDir;
+		private string JavaSClassesDir;
+		private string JavaTableTypesDir;
+		private XPathNavigator Navigator;
 		private const string rn="\r\n";
 		private const string t="\t";
 		private const string t2="\t\t";
@@ -26,9 +32,13 @@ namespace xCrudGeneratorWebService {
 
 		private void Form1_Load(object sender,EventArgs e) {
 			SerialDir=@"..\..\..\OpenDentalWebService\Serializing";
+			DtoMethodsDir=@"..\..\..\OpenDentalWebService\Remoting\DtoMethods.cs";
+			JavaSClassesDir=@"..\..\..\OpenDentalWeb\OpenDental\src\com\opendental\odweb\client\datainterface";
+			JavaTableTypesDir=@"..\..\..\OpenDentalWeb\OpenDental\src\com\opendental\odweb\client\tabletypes";
 			TableTypes=new List<Type>();
 			Type typeTableBase=typeof(TableBase);
 			Assembly assembly=Assembly.GetAssembly(typeTableBase);
+			Type[] t=assembly.GetTypes();
 			foreach(Type typeClass in assembly.GetTypes()){
 				if(typeClass.BaseType==typeTableBase) {
 					if(IsMobile(typeClass)) {
@@ -65,24 +75,120 @@ namespace xCrudGeneratorWebService {
 		private void butRun_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			StringBuilder strb;
+			StringBuilder strbDtoMethods=new StringBuilder();
+			StringBuilder strbCallMethod=new StringBuilder();
+			StringBuilder strbMethodCalls=new StringBuilder();
+			StartDtoMethods(strbDtoMethods);
+			StartCallMethod(strbCallMethod);
 			string className;
+			//this is so we can get the summary of the data types.
+			XmlDocument document=new XmlDocument();
+			document.Load(@"..\..\..\OpenDentBusiness\bin\Release\OpenDentBusiness.xml");
+			Navigator=document.CreateNavigator();
+			#region TableType loop
 			for(int i=0;i<TableTypes.Count;i++) {
 				className=TableTypes[i].Name;
 				FieldInfo[] fields=null;
 				fields=TableTypes[i].GetFields();
 				strb=new StringBuilder();
-				WriteAll(strb,className,fields);
+				WriteAllSerializing(strb,className,fields);
 				File.WriteAllText(Path.Combine(SerialDir,className+".cs"),strb.ToString());
+				strb.Clear();
+				WriteAlljavaDataInterface(strb,className);
+				File.WriteAllText(Path.Combine(JavaSClassesDir,GetSname(className)+".java"),strb.ToString());
+				strb.Clear();
+				WriteAlljavaTableTypes(strb,className,fields);
+				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+".java"),strb.ToString());
+				#region DtoMethods OpenDentalClasses
+				strbDtoMethods.Append(t4+"if(typeName==\"OpenDentBusiness."+className+"\") {"+rn
+					+t5+"return "+className+".Deserialize(xml);"+rn
+					+t4+"}"+rn);
+				#endregion
+				#region CallMethod 
+				strbCallMethod.Append(t3+"if(className==\""+GetSname(className)+"\") {"+rn
+					+t4+"return Method"+GetSname(className)+"(methodName,parameters);"+rn
+					+t3+"}"+rn);
+				#endregion
+				#region MethodCalls
+				WriteMethodCalls(strbMethodCalls,TableTypes[i]);
+				#endregion
 				Application.DoEvents();
 			}
+			#endregion
+			#region EndCallClassDeserializer
+			strbDtoMethods.Append(t4+"#endregion"+rn
+				+t3+"}"+rn
+				+t3+"catch {"+rn
+				+t4+"throw new Exception(\"CallClassDeserializer, error deserializing class type: \"+typeName);"+rn
+				+t3+"}"+rn
+				+t3+"throw new NotSupportedException(\"CallClassDeserializer, unsupported class type: \"+typeName);"+rn
+				+t2+"}"+rn+rn);
+			#endregion
+			#region EndCallMethod
+			strbCallMethod.Append(t3+"#endregion"+rn
+				+t3+"throw new NotSupportedException(\"CallMethod, unknown class: \"+classAndMethod);"+rn
+				+t2+"}"+rn+rn
+				+t2+"#region Method Calls"+rn+rn);
+			#endregion
+			strbDtoMethods.Append(strbCallMethod.ToString());
+			strbDtoMethods.Append(strbMethodCalls.ToString());
+			#region DtoMethods footer
+			//do after appending all inner methods
+			strbDtoMethods.Append(t2+"#endregion"+rn+rn
+				+t+"}"+rn+"}"+rn);
+			#endregion
+			File.WriteAllText(DtoMethodsDir,strbDtoMethods.ToString());
 			Cursor=Cursors.Default;
 			MessageBox.Show("Done");
 		}
+		
+		///<summary></summary>
+		private void StartDtoMethods(StringBuilder strb) {
+			#region class header
+			strb.Append("using System;"+rn
+				+"using System.Collections.Generic;"+rn+rn
+				+"namespace OpenDentalWebService {"+rn
+				+t+"///<summary>This file is generated automatically by the crud, do not make any changes to this file because they will get overwritten.</summary>"+rn
+				+t+"public class DtoMethods {"+rn);
+			#endregion
+			#region ProcessDtoObject
+			strb.Append(t2+"///<summary>Processes any type of data transfer object by calling the desired method.</summary>"+rn
+				+t2+"public static object ProcessDtoObject(DataTransferObject dto) {"+rn
+				+t3+"string classAndMethod=dto.MethodName;"+rn
+				+t3+"List<object> parameters=new List<object>();"+rn
+				+t3+"for(int i=0;i<dto.Params.Count;i++) {"+rn
+				+t4+"parameters.Add(dto.Params[i].Obj);"+rn
+				+t3+"}"+rn
+				+t3+"return CallMethod(classAndMethod,parameters);"+rn
+				+t2+"}"+rn+rn);
+			#endregion
+			#region CallClassDeserializer
+			strb.Append(t2+"///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Throws exceptions.</summary>"+rn
+				+t2+"public static object CallClassDeserializer(string typeName,string xml) {"+rn
+				+t3+"try {"+rn
+				+t4+"#region Primitive and General Types"+rn
+				+t4+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenTypes and manually add it there."+rn);
+			GetPrimGenTypes(strb);
+			strb.Append(t4+"#endregion"+rn
+				+t4+"#region Open Dental Classes"+rn);
+			#endregion
+		}
+
+		///<summary></summary>
+		private void StartCallMethod(StringBuilder strb) {
+			#region CallMethod header
+			strb.Append(t2+"///<summary>Finds the corresponding class, instantiates an instance of that class and invokes the method with the parameters.  Void methods will return null.</summary>"+rn
+				+t2+"private static object CallMethod(string classAndMethod,List<object> parameters) {"+rn
+				+t3+"string className=classAndMethod.Split('.')[0];"+rn
+				+t3+"string methodName=classAndMethod.Split('.')[1];"+rn
+				+t3+"#region SClasses"+rn);
+			#endregion
+		}
 
 		///<summary>Example of className is 'Account' or 'Patient'.</summary>
-		private void WriteAll(StringBuilder strb,string className,FieldInfo[] fields) {
+		private void WriteAllSerializing(StringBuilder strb,string className,FieldInfo[] fields) {
 			#region class header
-			strb.Append(@"using System;"+rn
+			strb.Append("using System;"+rn
 				+"using System.IO;"+rn
 				+"using System.Text;"+rn
 				+"using System.Xml;"+rn
@@ -117,14 +223,97 @@ namespace xCrudGeneratorWebService {
 			#endregion deserialize
 			#region footer
 			strb.Append(rn);
-			strb.Append(@"
-	}
-}");
+			strb.Append(rn+t+"}"+rn+"}");
 			#endregion footer
 		}
 
+		///<summary>Create java 's' class files.</summary>
+		private void WriteAlljavaDataInterface(StringBuilder strb,string className) {
+			#region class header
+			strb.Append("package com.opendental.odweb.client.datainterface;"+rn
+				+rn+"public class "+GetSname(className)+" {"+rn);
+			#endregion
+			#region footer
+			strb.Append(rn+rn+"}");
+			#endregion
+		}
+
+		///<summary>Create java table type files.</summary>
+		private void WriteAlljavaTableTypes(StringBuilder strb,string className,FieldInfo[] fields) {
+			#region class header
+			strb.Append("package com.opendental.odweb.client.tabletypes;"+rn
+				+rn+"import com.google.gwt.xml.client.Document;"+rn
+				+"import com.google.gwt.xml.client.XMLParser;"+rn
+				+"import com.opendental.odweb.client.remoting.SerializeStringEscapes;"+rn
+				+rn+"public class "+className+" {"+rn);
+			#endregion
+			#region fields
+			foreach(FieldInfo field in fields) {
+				string summary=GetSummary("F:OpenDentBusiness."+className+"."+field.Name);
+				if(summary=="") {
+					//this deals with the situation where the new data access layer has public Properties instead of public Fields.
+					summary=GetSummary("P:OpenDentBusiness."+className+"."+field.Name);
+				}
+				strb.Append(t2+"/** "+summary+" */"+rn);
+			}
+			#endregion
+			#region footer
+			strb.Append(rn+"}"+rn);
+			#endregion
+		}
+
+		///<summary>Create all method call for DtoMethods</summary>
+		private void WriteMethodCalls(StringBuilder strb,Type tableType) {
+			Type typeWSclasses=typeof(OpenDentalWebService.Accounts);
+			Assembly wSassembly=Assembly.GetAssembly(typeWSclasses);
+			Type wSType=null;
+			foreach(Type typeClass in wSassembly.GetTypes()) {
+				if(typeClass.Name==GetSname(tableType.Name)) {
+					wSType=typeClass;
+				}
+			}
+			if(wSType==null) {
+				return;
+			}
+			#region method header
+			strb.Append(t2+"///<summary></summary>"+rn
+				+t2+"private static object Method"+wSType.Name+"(string methodName,List<object> parameters) {"+rn
+				+t3+"//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes."+rn);
+			#endregion
+			#region MethodCalls
+			MethodInfo[] methodInfos=wSType.GetMethods();
+			foreach(MethodInfo methodInfo in methodInfos) {
+				if(!methodInfo.IsStatic) {
+					continue;
+				}
+				strb.Append(t3+"if(methodName==\""+methodInfo.Name+"\") {"+rn
+					+t4);
+				if(methodInfo.ReturnType.Name!="Void") {
+					strb.Append("return ");
+				}
+				strb.Append(GetSname(tableType.Name)+"."+methodInfo.Name+"(");
+				ParameterInfo[] paramInfos=methodInfo.GetParameters();
+				for(int i=0;i<paramInfos.Length;i++) {
+					if(i>0) {
+						strb.Append(",");
+					}
+					strb.Append("("+paramInfos[i].ParameterType.FullName.ToString()+")parameters["+i+"]");
+				}
+				strb.Append(");"+rn);
+				if(methodInfo.ReturnType.Name=="Void") {
+					strb.Append(t4+"return null;"+rn);
+				}
+				strb.Append(t3+"}"+rn);
+			}
+			#endregion
+			#region method footer
+			strb.Append(t3+"throw new NotSupportedException(\"MethodAccounts, unknown method: \"+methodName);"+rn
+				+t2+"}"+rn+rn);
+			#endregion
+		}
+
 		///<summary>Fill Serialize</summary>
-		private StringBuilder GetSerialize(StringBuilder strb,string className,FieldInfo[] fields) {
+		private void GetSerialize(StringBuilder strb,string className,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
 				if(IsNotDbColumn(field)) {//if not a db column, skip
 					continue;
@@ -162,20 +351,10 @@ namespace xCrudGeneratorWebService {
 						continue;
 				}
 			}
-			return strb;
-		}
-
-		///<summary>Normally false</summary>
-		private bool IsNotDbColumn(FieldInfo field) {
-			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
-			if(attributes.Length==0) {
-				return false;
-			}
-			return ((CrudColumnAttribute)attributes[0]).IsNotDbColumn;
 		}
 
 		///<summary></summary>
-		private StringBuilder GetDeserialize(StringBuilder strb,string className,FieldInfo[] fields) {
+		private void GetDeserialize(StringBuilder strb,string className,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
 				if(IsNotDbColumn(field)) {//if not a db column, skip
 					continue;
@@ -236,8 +415,64 @@ namespace xCrudGeneratorWebService {
 						continue;
 				}
 			}
-			return strb;
 		}
 
+		///<summary>Normally false</summary>
+		private bool IsNotDbColumn(FieldInfo field) {
+			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
+			if(attributes.Length==0) {
+				return false;
+			}
+			return ((CrudColumnAttribute)attributes[0]).IsNotDbColumn;
+		}
+
+		private static string GetSname(string typeClassName) {
+			string Sname=typeClassName;
+			if(typeClassName=="Etrans") {
+				return "Etranss";
+			}
+			if(typeClassName=="Language") {
+				return "Lans";
+			}
+			if(Sname.EndsWith("s")) {
+				Sname=Sname+"es";
+			}
+			else if(Sname.EndsWith("ch")) {
+				Sname=Sname+"es";
+			}
+			else if(Sname.EndsWith("ay")) {
+				Sname=Sname+"s";
+			}
+			else if(Sname.EndsWith("ey")) {//eg key
+				Sname=Sname+"s";
+			}
+			else if(Sname.EndsWith("y")) {
+				Sname=Sname.TrimEnd('y')+"ies";
+			}
+			else {
+				Sname=Sname+"s";
+			}
+			return Sname;
+		}
+
+		///<summary>Gets the summary from the xml file.  The full and correct member name must be supplied.</summary>
+		private string GetSummary(string member) {
+			XPathNavigator navOne=Navigator.SelectSingleNode("//member[@name='"+member+"']");
+			if(navOne==null) {
+				return "";
+			}
+			XPathNavigator nav=navOne.SelectSingleNode("summary");
+			if(nav==null) {
+				return "";
+			}
+			return navOne.SelectSingleNode("summary").Value;
+		}
+
+		///<summary>All of the primitive/general types handled by serialization/deserialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
+		private void GetPrimGenTypes(StringBuilder strb) {
+			strb.Append(t4+"if(typeName==\"long\") {"+rn
+				+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
+				+t4+"}"+rn);
+		}
 	}
 }
