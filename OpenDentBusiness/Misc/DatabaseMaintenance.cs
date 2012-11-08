@@ -3177,14 +3177,14 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			if(isCheck) {
-				command="SELECT COUNT(*) FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM Schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
+				command="SELECT COUNT(*) FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Hidden providers found on future schedules: ")+numFound+"\r\n";
 				}
 			}
 			else {//Fix
-				command="SELECT ProvNum FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM Schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
+				command="SELECT ProvNum FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM schedule WHERE SchedDate > "+DbHelper.Now()+" GROUP BY ProvNum)";
 				table=Db.GetTable(command);
 				List<long> provNums=new List<long>();
 				for(int i=0;i<table.Rows.Count;i++) {
