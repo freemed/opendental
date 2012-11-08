@@ -160,6 +160,7 @@
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\EobAttaches.cs" />
     <Compile Include="Data Interface\Equipments.cs" />
+    <Compile Include="Data Interface\ErxLogs.cs" />
     <Compile Include="Data Interface\EtransMessageTexts.cs" />
     <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\Fees.cs" />
@@ -518,6 +519,7 @@
     <Compile Include="Serializing\Equipment.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serializing\ErxLog.cs" />
     <Compile Include="Serializing\Etrans.cs">
       <SubType>Code</SubType>
     </Compile>
