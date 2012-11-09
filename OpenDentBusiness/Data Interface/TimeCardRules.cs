@@ -113,18 +113,10 @@ namespace OpenDentBusiness{
 				previousDate=DateTime.MinValue;
 				for(int b=0;b<breakList.Count;b++) {
 					if(breakList[b].TimeDisplayed2.Year<1880) {
-						//Cursor=Cursors.Default;
-						//MsgBox.Show(this,"Error. Employee break malformed.");
 						throw new Exception("Error. Employee break malformed.");
-						//FillMain(true);//in case some changes already made.
-						//return;
 					}
 					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
-						//Cursor=Cursors.Default;
-						//MsgBox.Show(this,"Error. One break spans multiple dates.");
 						throw new Exception("Error. One break spans multiple dates.");
-						//FillMain(true);//in case some changes already made.
-						//return;
 					}
 					//calc time for the one break
 					totalOne=breakList[b].TimeDisplayed2-breakList[b].TimeDisplayed1;
@@ -146,13 +138,8 @@ namespace OpenDentBusiness{
 								break;
 							}
 							if(c==0) {//we never found a match
-								//Cursor=Cursors.Default;
-								//MessageBox.Show("Error. Over breaks, but could not adjust because not regular time entered for date:"
-								//  +breakList[b].TimeDisplayed1.Date.ToShortDateString());
 								throw new Exception("Error. Over breaks, but could not adjust because not regular time entered for date:"
 								  +breakList[b].TimeDisplayed1.Date.ToShortDateString());
-								//FillMain(true);//in case some changes already made.
-								//return;
 							}
 						}
 					}
@@ -170,8 +157,6 @@ namespace OpenDentBusiness{
 				}
 				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero) {
 					if(afterTime > TimeSpan.Zero) {//already found a match, and this is a second match
-						//Cursor=Cursors.Default;
-						//MsgBox.Show(this,"Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
 						throw new Exception("Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
 						//return;
 					}
@@ -179,29 +164,21 @@ namespace OpenDentBusiness{
 				}
 				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero) {
 					if(overHours > TimeSpan.Zero) {//already found a match, and this is a second match
-						//Cursor=Cursors.Default;
-						//MsgBox.Show(this,"Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
 						throw new Exception("Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
 						//return;
 					}
 					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
 				}
 				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
-					//Cursor=Cursors.Default;
-					//MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
 					throw new Exception("Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
 					//return;
 				}
 				if(beforeTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
-					//Cursor=Cursors.Default;
-					//MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
 					throw new Exception("Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
 					//return;
 				}
 				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
 					if(beforeTime>TimeSpan.Zero) {//already found a match, and this is a second match
-						//Cursor=Cursors.Default;
-						//MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
 						throw new Exception("Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
 						//return;
 					}
@@ -214,16 +191,10 @@ namespace OpenDentBusiness{
 			previousDate=DateTime.MinValue;
 			for(int i=0;i<ClockEventList.Count;i++) {
 				if(ClockEventList[i].TimeDisplayed2.Year<1880) {
-					//Cursor=Cursors.Default;
-					//MsgBox.Show(this,"Error. Employee not clocked out.");
-					//FillMain(true);//in case some changes already made.
 					throw new Exception("Error. Employee not clocked out.");
 					//return;
 				}
 				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date) {
-					//Cursor=Cursors.Default;
-					//MsgBox.Show(this,"Error. One clock pair spans multiple dates.");
-					//FillMain(true);//in case some changes already made.
 					throw new Exception("Error. One clock pair spans multiple dates.");
 					//return;
 				}
@@ -275,13 +246,9 @@ namespace OpenDentBusiness{
 						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
 					}
 				}
-				//TODO: fix negative OT bug. If you work from 9-5 but take a 2 hour lunch, clock out for home. Clock back in 
-				//also, there is an issue with putting adjustments on the last time entry of the day if the adjustments are greater than the length of work for the day.
 				ClockEvents.Update(ClockEventList[i]);
 			}
 			AdjustBreaksHelper(EmployeeCur,StartDate,StopDate);
-			//FillMain(true);
-			//Cursor=Cursors.Default;
 		}
 
 		///<summary>This function is aesthetic and has no bearing on actual OT calculations. It adds adjustments to breaks so that when viewing them you can see if they went over 30 minutes.</summary>
@@ -296,15 +263,10 @@ namespace OpenDentBusiness{
 			DateTime previousDate=DateTime.MinValue;
 			for(int b=0;b<breakList.Count;b++) {
 				if(breakList[b].TimeDisplayed2.Year<1880) {
-					//Cursor=Cursors.Default;
-					//MsgBox.Show(this,"Error. Employee break malformed.");
-					//FillMain(true);//in case some changes already made.
 					return;
 				}
 				if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
-					//Cursor=Cursors.Default;
 					//MsgBox.Show(this,"Error. One break spans multiple dates.");
-					//FillMain(true);//in case some changes already made.
 					return;
 				}
 				//calc time for the one break
@@ -346,11 +308,10 @@ namespace OpenDentBusiness{
 				TimeAdjusts.Delete(TimeAdjustList[i]);
 			}
 			//then, fill grid
-			//FillMain(true);
 			Calendar cal=CultureInfo.CurrentCulture.Calendar;
 			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			List<TimeSpan> WeeklyTotals = new List<TimeSpan>();
-			WeeklyTotals = FillWeeklyTotalsHelper(true,EmployeeCur,mergedAL);//,StartDate,StopDate);
+			WeeklyTotals = FillWeeklyTotalsHelper(true,EmployeeCur,mergedAL);
 			//loop through all rows
 			for(int i=0;i<mergedAL.Count;i++) {
 				//ignore rows that aren't weekly totals
@@ -372,67 +333,13 @@ namespace OpenDentBusiness{
 				adjust.RegHours=-adjust.OTimeHours;
 				TimeAdjusts.Insert(adjust);
 			}
-			//FillMain(true);
 
 		}
 
 		
 		/// <summary>This was originally analogous to the FormTimeCard.FillGrid(), before this logic was moved to the business layer.</summary>
-		private static List<TimeSpan> FillWeeklyTotalsHelper(bool fromDB,Employee EmployeeCur,ArrayList mergedAL) {//,DateTime StartTime,DateTime StopTime) {
+		private static List<TimeSpan> FillWeeklyTotalsHelper(bool fromDB,Employee EmployeeCur,ArrayList mergedAL) {
 			List<TimeSpan> retVal = new List<TimeSpan>();
-			//This used to be fillGrid()
-			//if(fromDB) {
-			//List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartTime,StopTime,false);//PIn.Date(textDateStart.Text),	PIn.Date(textDateStop.Text),IsBreaks);
-			//if(IsBreaks) {
-			//  TimeAdjustList=new List<TimeAdjust>();
-			//}
-			//else {
-			//List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,StartTime,StopTime);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
-			//}
-			//}
-			//ArrayList mergedAL=new ArrayList();
-			//for(int i=0;i<ClockEventList.Count;i++) {
-			//  mergedAL.Add(ClockEventList[i]);
-			//}
-			//for(int i=0;i<TimeAdjustList.Count;i++) {
-			//  mergedAL.Add(TimeAdjustList[i]);
-			//}
-			//IComparer myComparer=new ObjectDateComparer();
-			//mergedAL.Sort(myComparer);
-			//gridMain.BeginUpdate();
-			//gridMain.Columns.Clear();
-			//ODGridColumn col=new ODGridColumn(Lan.g(this,"Date"),70);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Weekday"),70);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Altered"),50,HorizontalAlignment.Center);
-			//gridMain.Columns.Add(col);
-			//if(IsBreaks) {
-			//  col=new ODGridColumn(Lan.g(this,"Out"),60,HorizontalAlignment.Right);
-			//  gridMain.Columns.Add(col);
-			//  col=new ODGridColumn(Lan.g(this,"In"),60,HorizontalAlignment.Right);
-			//  gridMain.Columns.Add(col);
-			//}
-			//else {
-			//  col=new ODGridColumn(Lan.g(this,"In"),60,HorizontalAlignment.Right);
-			//  gridMain.Columns.Add(col);
-			//  col=new ODGridColumn(Lan.g(this,"Out"),60,HorizontalAlignment.Right);
-			//  gridMain.Columns.Add(col);
-			//}
-			//col=new ODGridColumn(Lan.g(this,"Total"),50,HorizontalAlignment.Right);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Adjust"),55,HorizontalAlignment.Right);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Overtime"),55,HorizontalAlignment.Right);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Daily"),50,HorizontalAlignment.Right);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Weekly"),50,HorizontalAlignment.Right);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Note"),5);
-			//gridMain.Columns.Add(col);
-			//gridMain.Rows.Clear();
-			//ODGridRow row;
 			TimeSpan[] WeeklyTotals=new TimeSpan[mergedAL.Count];
 			TimeSpan alteredSpan=new TimeSpan(0);//used to display altered times
 			TimeSpan oneSpan=new TimeSpan(0);//used to sum one pair of clock-in/clock-out
@@ -453,79 +360,20 @@ namespace OpenDentBusiness{
 			ClockEvent clock;
 			TimeAdjust adjust;
 			for(int i=0;i<mergedAL.Count;i++) {
-				//row=new ODGridRow();
 				type=mergedAL[i].GetType();
-				//row.Tag=mergedAL[i];
 				previousDate=curDate;
 				//clock event row---------------------------------------------------------------------------------------------
 				if(type==typeof(ClockEvent)) {
 					clock=(ClockEvent)mergedAL[i];
 					curDate=clock.TimeDisplayed1.Date;
-					//if(curDate==previousDate) {
-					//  row.Cells.Add("");
-					//  row.Cells.Add("");
-					//}
-					//else {
-					//  row.Cells.Add(curDate.ToShortDateString());
-					//  row.Cells.Add(curDate.DayOfWeek.ToString());
-					//}
-					//altered--------------------------------------
-					//string str="";
-					//if(clock.TimeEntered1!=clock.TimeDisplayed1) {
-					//  if(IsBreaks) {
-					//    str=Lan.g(this,"out");
-					//  }
-					//  else {
-					//    str=Lan.g(this,"in");
-					//  }
-					//}
-					//if(clock.TimeEntered2!=clock.TimeDisplayed2) {
-					//  if(str!="") {
-					//    str+="/";
-					//  }
-					//  if(IsBreaks) {
-					//    str+=Lan.g(this,"in");
-					//  }
-					//  else {
-					//    str+=Lan.g(this,"out");
-					//  }
-					//}
-					//row.Cells.Add(str);
-					//status--------------------------------------
-					//row.Cells.Add(clock.ClockStatus.ToString());
-					//in------------------------------------------
-					//row.Cells.Add(clock.TimeDisplayed1.ToShortTimeString());
-					//out-----------------------------
-					//if(clock.TimeDisplayed2.Year<1880) {
-					//  row.Cells.Add("");//not clocked out yet
-					//}
-					//else {
-					//  row.Cells.Add(clock.TimeDisplayed2.ToShortTimeString());
-					//}
-					//total-------------------------------
-					//if(IsBreaks) { //breaks
-					//  if(clock.TimeDisplayed2.Year<1880) {
-					//    row.Cells.Add("");
-					//  }
-					//  else {
-					//    oneSpan=clock.TimeDisplayed2-clock.TimeDisplayed1;
-					//    row.Cells.Add(ClockEvents.Format(oneSpan));
-					//    daySpan+=oneSpan;
-					//    periodSpan+=oneSpan;
-					//  }
-					//}
-					//else {//regular hours
 					if(clock.TimeDisplayed2.Year<1880) {
-						//row.Cells.Add("");
 					}
 					else {
 						oneSpan=clock.TimeDisplayed2-clock.TimeDisplayed1;
-						//row.Cells.Add(ClockEvents.Format(oneSpan));
 						daySpan+=oneSpan;
 						weekSpan+=oneSpan;
 						periodSpan+=oneSpan;
 					}
-					//}
 					//Adjust---------------------------------
 					oneAdj=TimeSpan.Zero;
 					if(clock.AdjustIsOverridden) {
@@ -537,7 +385,6 @@ namespace OpenDentBusiness{
 					daySpan+=oneAdj;
 					weekSpan+=oneAdj;
 					periodSpan+=oneAdj;
-					//row.Cells.Add(ClockEvents.Format(oneAdj));
 					//Overtime------------------------------
 					oneOT=TimeSpan.Zero;
 					if(clock.OTimeHours!=TimeSpan.FromHours(-1)) {//overridden
@@ -550,128 +397,53 @@ namespace OpenDentBusiness{
 					daySpan-=oneOT;
 					weekSpan-=oneOT;
 					periodSpan-=oneOT;
-					//row.Cells.Add(ClockEvents.Format(oneOT));
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
 		        || GetDateForRowHelper(mergedAL[i+1]) != curDate)//or the next row is a different date
 		      {
-						//if(IsBreaks) {
-						//  if(clock.TimeDisplayed2.Year<1880) {//if they have not clocked back in yet from break
-						//    //display the timespan of oneSpan using current time as the other number.
-						//    oneSpan=DateTime.Now-clock.TimeDisplayed1+TimeDelta;
-						//    row.Cells.Add(oneSpan.ToStringHmmss());
-						//    daySpan+=oneSpan;
-						//  }
-						//  else {
-						//    row.Cells.Add(ClockEvents.Format(daySpan));
-						//  }
-						//}
-						//else {
-						//  row.Cells.Add(ClockEvents.Format(daySpan));
-						//}
 						daySpan=new TimeSpan(0);
 					}
 					else {//not the last entry for the day
-						//row.Cells.Add("");
 					}
 					//Weekly-------------------------------------
 					WeeklyTotals[i]=weekSpan;
-					//if(IsBreaks) {
-					//  row.Cells.Add("");
-					//}
 					//if this is the last entry for a given week
-					//else 
 					if(i==mergedAL.Count-1//if this is the last row 
 		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
 		        != cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 		      {
-						//row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
 					}
-					else {
-						//row.Cells.Add(ClockEvents.Format(weekSpan));
-						//row.Cells.Add("");
-					}
-					//Note-----------------------------------------
-					//row.Cells.Add(clock.Note);
 				}
 				//adjustment row--------------------------------------------------------------------------------------
 				else if(type==typeof(TimeAdjust)) {
 					adjust=(TimeAdjust)mergedAL[i];
 					curDate=adjust.TimeEntry.Date;
-					//if(curDate==previousDate) {
-					//  row.Cells.Add("");
-					//  row.Cells.Add("");
-					//}
-					//else {
-					//  row.Cells.Add(curDate.ToShortDateString());
-					//  row.Cells.Add(curDate.DayOfWeek.ToString());
-					//}
-					//altered--------------------------------------
-					//row.Cells.Add(Lan.g(this,"Adjust"));//2
-					//row.ColorText=Color.Red;
-					//status--------------------------------------
-					//row.Cells.Add("");//3
-					//in/out------------------------------------------
-					//row.Cells.Add("");//4
-					//time-----------------------------
-					//rowCells.Add(adjust.TimeEntry.ToShortTimeString());//5
-					//total-------------------------------
-					//row.Cells.Add("");//
 					//Adjust------------------------------
 					daySpan+=adjust.RegHours;//might be negative
 					weekSpan+=adjust.RegHours;
 					periodSpan+=adjust.RegHours;
-					//row.Cells.Add(ClockEvents.Format(adjust.RegHours));//6
 					//Overtime------------------------------
 					otspan+=adjust.OTimeHours;
-					//row.Cells.Add(ClockEvents.Format(adjust.OTimeHours));//7
 					//Daily-----------------------------------
 					//if this is the last entry for a given date
 					if(i==mergedAL.Count-1//if this is the last row
 		        || GetDateForRowHelper(mergedAL[i+1]) != curDate)//or the next row is a different date
 		      {
-						//row.Cells.Add(ClockEvents.Format(daySpan));//
 						daySpan=new TimeSpan(0);
-					}
-					else {
-						//row.Cells.Add("");
 					}
 					//Weekly-------------------------------------
 					WeeklyTotals[i]=weekSpan;
-					//if(IsBreaks) {
-					//  row.Cells.Add("");
-					//}
 					//if this is the last entry for a given week
-					//else 
 					if(i==mergedAL.Count-1//if this is the last row 
 		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,DayOfWeek.Sunday)//or the next row has a
 		        != cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,DayOfWeek.Sunday))//different week of year
 		      {
-						//ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
-						//cell.ColorText=Color.Black;
-						//row.Cells.Add(cell);
 						weekSpan=new TimeSpan(0);
 					}
-					else {
-						//row.Cells.Add("");
-					}
-					//Note-----------------------------------------
-					//row.Cells.Add(adjust.Note);
 				}
-				//gridMain.Rows.Add(row);
 			}
-			//gridMain.EndUpdate();
-			//if(IsBreaks) {
-			//  textTotal.Text="";
-			//}
-			//else {
-			//  textTotal.Text=periodSpan.ToStringHmm();
-			//  textOvertime.Text=otspan.ToStringHmm();
-			//  textTotal2.Text=periodSpan.TotalHours.ToString("n");
-			//  textOvertime2.Text=otspan.TotalHours.ToString("n");
-			//}
 			foreach(TimeSpan week in WeeklyTotals) {
 				retVal.Add(week);
 			}
