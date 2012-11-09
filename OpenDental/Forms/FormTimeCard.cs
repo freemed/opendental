@@ -38,7 +38,7 @@ namespace OpenDental{
 		public int SelectedPayPeriod;
 		private Label labelOvertime;
 		private TextBox textOvertime;
-		private OpenDental.UI.Button butCompute;
+		private OpenDental.UI.Button butCalcWeekOT;
 		private OpenDental.UI.Button butPrint;
 		private List<TimeAdjust> TimeAdjustList;
 		private PrintDocument pd;
@@ -54,7 +54,7 @@ namespace OpenDental{
 		private TextBox textOvertime2;
 		private TextBox textTotal2;
 		public Employee EmployeeCur;
-		private OpenDental.UI.Button butDaily;
+		private OpenDental.UI.Button butCalcDaily;
 		private bool cannotEdit;
 
 		///<summary></summary>
@@ -100,6 +100,8 @@ namespace OpenDental{
 			this.textDatePaycheck = new System.Windows.Forms.TextBox();
 			this.textDateStop = new System.Windows.Forms.TextBox();
 			this.textDateStart = new System.Windows.Forms.TextBox();
+			this.butRight = new OpenDental.UI.Button();
+			this.butLeft = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.labelOvertime = new System.Windows.Forms.Label();
 			this.textOvertime = new System.Windows.Forms.TextBox();
@@ -109,12 +111,10 @@ namespace OpenDental{
 			this.textOvertime2 = new System.Windows.Forms.TextBox();
 			this.textTotal2 = new System.Windows.Forms.TextBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butDaily = new OpenDental.UI.Button();
+			this.butCalcDaily = new OpenDental.UI.Button();
 			this.butPrint = new OpenDental.UI.Button();
-			this.butCompute = new OpenDental.UI.Button();
+			this.butCalcWeekOT = new OpenDental.UI.Button();
 			this.butAdj = new OpenDental.UI.Button();
-			this.butRight = new OpenDental.UI.Button();
-			this.butLeft = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -204,6 +204,34 @@ namespace OpenDental{
 			this.textDateStart.ReadOnly = true;
 			this.textDateStart.Size = new System.Drawing.Size(100, 20);
 			this.textDateStart.TabIndex = 12;
+			// 
+			// butRight
+			// 
+			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRight.Autosize = true;
+			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRight.CornerRadius = 4F;
+			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
+			this.butRight.Location = new System.Drawing.Point(63, 18);
+			this.butRight.Name = "butRight";
+			this.butRight.Size = new System.Drawing.Size(39, 24);
+			this.butRight.TabIndex = 11;
+			this.butRight.Click += new System.EventHandler(this.butRight_Click);
+			// 
+			// butLeft
+			// 
+			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butLeft.Autosize = true;
+			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLeft.CornerRadius = 4F;
+			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
+			this.butLeft.Location = new System.Drawing.Point(13, 18);
+			this.butLeft.Name = "butLeft";
+			this.butLeft.Size = new System.Drawing.Size(39, 24);
+			this.butLeft.TabIndex = 10;
+			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
 			// label4
 			// 
@@ -296,21 +324,21 @@ namespace OpenDental{
 			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
-			// butDaily
+			// butCalcDaily
 			// 
-			this.butDaily.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDaily.Autosize = true;
-			this.butDaily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDaily.CornerRadius = 4F;
-			this.butDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDaily.Location = new System.Drawing.Point(139, 650);
-			this.butDaily.Name = "butDaily";
-			this.butDaily.Size = new System.Drawing.Size(78, 24);
-			this.butDaily.TabIndex = 23;
-			this.butDaily.Text = "Calc Daily";
-			this.butDaily.Click += new System.EventHandler(this.butDaily_Click);
+			this.butCalcDaily.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCalcDaily.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCalcDaily.Autosize = true;
+			this.butCalcDaily.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCalcDaily.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCalcDaily.CornerRadius = 4F;
+			this.butCalcDaily.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCalcDaily.Location = new System.Drawing.Point(139, 650);
+			this.butCalcDaily.Name = "butCalcDaily";
+			this.butCalcDaily.Size = new System.Drawing.Size(78, 24);
+			this.butCalcDaily.TabIndex = 23;
+			this.butCalcDaily.Text = "Calc Daily";
+			this.butCalcDaily.Click += new System.EventHandler(this.butCalcDaily_Click);
 			// 
 			// butPrint
 			// 
@@ -329,21 +357,21 @@ namespace OpenDental{
 			this.butPrint.Text = "Print";
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
 			// 
-			// butCompute
+			// butCalcWeekOT
 			// 
-			this.butCompute.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCompute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butCompute.Autosize = true;
-			this.butCompute.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCompute.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCompute.CornerRadius = 4F;
-			this.butCompute.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCompute.Location = new System.Drawing.Point(223, 650);
-			this.butCompute.Name = "butCompute";
-			this.butCompute.Size = new System.Drawing.Size(90, 24);
-			this.butCompute.TabIndex = 18;
-			this.butCompute.Text = "Calc Week OT";
-			this.butCompute.Click += new System.EventHandler(this.butCompute_Click);
+			this.butCalcWeekOT.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCalcWeekOT.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butCalcWeekOT.Autosize = true;
+			this.butCalcWeekOT.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCalcWeekOT.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCalcWeekOT.CornerRadius = 4F;
+			this.butCalcWeekOT.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butCalcWeekOT.Location = new System.Drawing.Point(223, 650);
+			this.butCalcWeekOT.Name = "butCalcWeekOT";
+			this.butCalcWeekOT.Size = new System.Drawing.Size(90, 24);
+			this.butCalcWeekOT.TabIndex = 18;
+			this.butCalcWeekOT.Text = "Calc Week OT";
+			this.butCalcWeekOT.Click += new System.EventHandler(this.butCalcWeekOT_Click);
 			// 
 			// butAdj
 			// 
@@ -361,34 +389,6 @@ namespace OpenDental{
 			this.butAdj.TabIndex = 15;
 			this.butAdj.Text = "Add Adjustment";
 			this.butAdj.Click += new System.EventHandler(this.butAdj_Click);
-			// 
-			// butRight
-			// 
-			this.butRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRight.Autosize = true;
-			this.butRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRight.CornerRadius = 4F;
-			this.butRight.Image = global::OpenDental.Properties.Resources.Right;
-			this.butRight.Location = new System.Drawing.Point(63, 18);
-			this.butRight.Name = "butRight";
-			this.butRight.Size = new System.Drawing.Size(39, 24);
-			this.butRight.TabIndex = 11;
-			this.butRight.Click += new System.EventHandler(this.butRight_Click);
-			// 
-			// butLeft
-			// 
-			this.butLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butLeft.Autosize = true;
-			this.butLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butLeft.CornerRadius = 4F;
-			this.butLeft.Image = global::OpenDental.Properties.Resources.Left;
-			this.butLeft.Location = new System.Drawing.Point(13, 18);
-			this.butLeft.Name = "butLeft";
-			this.butLeft.Size = new System.Drawing.Size(39, 24);
-			this.butLeft.TabIndex = 10;
-			this.butLeft.Click += new System.EventHandler(this.butLeft_Click);
 			// 
 			// butClose
 			// 
@@ -409,12 +409,12 @@ namespace OpenDental{
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(891, 686);
-			this.Controls.Add(this.butDaily);
+			this.Controls.Add(this.butCalcDaily);
 			this.Controls.Add(this.textOvertime2);
 			this.Controls.Add(this.textTotal2);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.butPrint);
-			this.Controls.Add(this.butCompute);
+			this.Controls.Add(this.butCalcWeekOT);
 			this.Controls.Add(this.labelOvertime);
 			this.Controls.Add(this.textOvertime);
 			this.Controls.Add(this.butAdj);
@@ -441,6 +441,10 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTimeCard_Load(object sender, System.EventArgs e){
+			Initialize(DateTime.Today);
+		}
+
+		public void Initialize(DateTime dateInitial){
 			//Check to see if the employee currently logged in can edit this time-card.
 			cannotEdit=Security.CurUser!=null &&
 				Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
@@ -448,18 +452,18 @@ namespace OpenDental{
 				PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			if(cannotEdit) {
 				butAdj.Enabled=false;
-				butCompute.Enabled=false;
+				butCalcWeekOT.Enabled=false;//butCompute.Enabled=false;
 			}
 			Text=Lan.g(this,"TimeCard for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
 				+(cannotEdit?" - You cannot modify your timecard":"");
 			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			if(SelectedPayPeriod==0) {
-				SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
+				SelectedPayPeriod=PayPeriods.GetForDate(dateInitial);
 			}
 			if(IsBreaks){
 				textOvertime.Visible=false;
 				labelOvertime.Visible=false;
-				butCompute.Visible=false;
+				butCalcWeekOT.Visible=false;//butCompute.Visible=false;
 				butAdj.Visible=false;
 			}
 			radioTimeCard.Checked=!IsBreaks;
@@ -502,10 +506,9 @@ namespace OpenDental{
 			IsBreaks=false;
 			textOvertime.Visible=true;
 			labelOvertime.Visible=true;
-			butDaily.Visible=true;
-			butCompute.Visible=true;
+			butCalcDaily.Visible=true;//butDaily.Visible=true;
+			butCalcWeekOT.Visible=true;//butCompute.Visible=true;
 			butAdj.Visible=true;
-			butDaily.Visible=true;
 			FillMain(true);
 		}
 
@@ -513,8 +516,8 @@ namespace OpenDental{
 			IsBreaks=true;
 			textOvertime.Visible=false;
 			labelOvertime.Visible=false;
-			butDaily.Visible=false;
-			butCompute.Visible=false;
+			butCalcDaily.Visible=false;//butDaily.Visible=false;
+			butCalcWeekOT.Visible=false;//butCompute.Visible=false;
 			butAdj.Visible=false;
 			//butDaily.Visible=false;
 			FillMain(true);
@@ -871,247 +874,21 @@ namespace OpenDental{
 			FillMain(true);
 		}
 
-		//private void butCompute_Click(object sender,EventArgs e) {
-		//  if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-		//    return;
-		//  }
-		//  TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
-		//  FillMain(true);
-		//}
-
-		//private void butDaily_Click(object sender,EventArgs e) {
-		//  if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-		//    return;
-		//  }
-		//  TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
-		//  FillMain(true);
-		//}
-
-		private void butCompute_Click(object sender,EventArgs e) {
+		private void butCalcWeekOT_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-			//first, delete all existing overtime entries
-			for(int i=0;i<TimeAdjustList.Count;i++) {
-				if(TimeAdjustList[i].OTimeHours==TimeSpan.Zero) {
-					continue;
-				}
-				if(!TimeAdjustList[i].IsAuto) {
-					continue;
-				}
-				TimeAdjusts.Delete(TimeAdjustList[i]);
-			}
-			//then, fill grid
-			FillMain(true);
-			Calendar cal=CultureInfo.CurrentCulture.Calendar;
-			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
-			//loop through all rows
-			for(int i=0;i<mergedAL.Count;i++) {
-				//DEBUG ONLY
-				int int1;
-				int int2;
-				if(i<mergedAL.Count-1) {//not last row.
-					int1 = cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek));//Default is 0-Sunday
-					int2 = cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek));
-				}
-				//END DEBUG ONLY
-				//ignore rows that aren't weekly totals
-				if(i<mergedAL.Count-1//if not the last row
-		      //if the next row has the same week as this row
-		      && cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
-		      == cal.GetWeekOfYear(GetDateForRow(i),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))) {
-					continue;
-				}
-				if(WeeklyTotals[i]<=TimeSpan.FromHours(40)) {
-					continue;
-				}
-				//found a weekly total over 40 hours
-				TimeAdjust adjust=new TimeAdjust();
-				adjust.IsAuto=true;
-				adjust.EmployeeNum=EmployeeCur.EmployeeNum;
-				adjust.TimeEntry=GetDateForRow(i).AddHours(20);//puts it at 8pm on the same day.
-				adjust.OTimeHours=WeeklyTotals[i]-TimeSpan.FromHours(40);
-				adjust.RegHours=-adjust.OTimeHours;
-				TimeAdjusts.Insert(adjust);
-			}
+			TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			FillMain(true);
 		}
 
-		private void butDaily_Click(object sender,EventArgs e) {
+		private void butCalcDaily_Click(object sender,EventArgs e) {
 			//not even visible if viewing breaks.
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-			Cursor=Cursors.WaitCursor;
-			DateTime previousDate;
-			//Over breaks-------------------------------------------------------------------------------------------------
-			if(PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks)) {
-				//set adj auto to zero for all.
-				for(int i=0;i<ClockEventList.Count;i++) {
-					ClockEventList[i].AdjustAuto=TimeSpan.Zero;
-					ClockEvents.Update(ClockEventList[i]);
-				}
-				List<ClockEvent> breakList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),true);
-				TimeSpan totalToday=TimeSpan.Zero;
-				TimeSpan totalOne=TimeSpan.Zero;
-				previousDate=DateTime.MinValue;
-				for(int b=0;b<breakList.Count;b++) {
-					if(breakList[b].TimeDisplayed2.Year<1880) {
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"Error. Employee break malformed.");
-						FillMain(true);//in case some changes already made.
-						return;
-					}
-					if(breakList[b].TimeDisplayed1.Date != breakList[b].TimeDisplayed2.Date) {
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"Error. One break spans multiple dates.");
-						FillMain(true);//in case some changes already made.
-						return;
-					}
-					//calc time for the one break
-					totalOne=breakList[b].TimeDisplayed2-breakList[b].TimeDisplayed1;
-					//calc daily total
-					if(previousDate.Date != breakList[b].TimeDisplayed1.Date) {//if date changed, this is the first pair of the day
-						totalToday=TimeSpan.Zero;//new day
-						previousDate=breakList[b].TimeDisplayed1.Date;//for the next loop
-					}
-					totalToday+=totalOne;
-					//decide if breaks for the day went over 30 min.
-					if(totalToday > TimeSpan.FromMinutes(31)) {//31 to prevent silly fractions less than 1.
-						//loop through all ClockEvents in this grid to find one to adjust.
-						//Go backwards to find the last entry for a given date.
-						for(int c=ClockEventList.Count-1;c>=0;c--) {
-							if(ClockEventList[c].TimeDisplayed1.Date==breakList[b].TimeDisplayed1.Date) {
-								ClockEventList[c].AdjustAuto-=(totalToday-TimeSpan.FromMinutes(30));
-								ClockEvents.Update(ClockEventList[c]);
-								totalToday=TimeSpan.FromMinutes(30);//reset to 30.  Therefore, any additional breaks will be wholly adjustments.
-								break;
-							}
-							if(c==0) {//we never found a match
-								Cursor=Cursors.Default;
-								MessageBox.Show("Error. Over breaks, but could not adjust because not regular time entered for date:"
-		              +breakList[b].TimeDisplayed1.Date.ToShortDateString());
-								FillMain(true);//in case some changes already made.
-								return;
-							}
-						}
-					}
-				}
-				FillMain(true);
-			}
-			//OT-------------------------------------------------------------------------------------------------------------
-			TimeSpan afterTime=TimeSpan.Zero;
-			TimeSpan beforeTime=TimeSpan.Zero;
-			TimeSpan overHours=TimeSpan.Zero;
-			//loop through timecardrules to find one rule of each kind.
-			for(int i=0;i<TimeCardRules.Listt.Count;i++) {
-				if(TimeCardRules.Listt[i].EmployeeNum!=0 && TimeCardRules.Listt[i].EmployeeNum!=EmployeeCur.EmployeeNum) {
-					continue;
-				}
-				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero) {
-					if(afterTime > TimeSpan.Zero) {//already found a match, and this is a second match
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
-						return;
-					}
-					afterTime=TimeCardRules.Listt[i].AfterTimeOfDay;
-				}
-				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero) {
-					if(overHours > TimeSpan.Zero) {//already found a match, and this is a second match
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
-						return;
-					}
-					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
-				}
-				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
-					Cursor=Cursors.Default;
-					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
-					return;
-				}
-				if(beforeTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
-					Cursor=Cursors.Default;
-					MsgBox.Show(this,"Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
-					return;
-				}
-				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
-					if(beforeTime>TimeSpan.Zero) {//already found a match, and this is a second match
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
-						return;
-					}
-					beforeTime=TimeCardRules.Listt[i].BeforeTimeOfDay;
-				}
-			}
-			//loop through all ClockEvents in this grid.
-			TimeSpan dailyTotal=TimeSpan.Zero;
-			TimeSpan pairTotal=TimeSpan.Zero;
-			previousDate=DateTime.MinValue;
-			for(int i=0;i<ClockEventList.Count;i++) {
-				if(ClockEventList[i].TimeDisplayed2.Year<1880) {
-					Cursor=Cursors.Default;
-					MsgBox.Show(this,"Error. Employee not clocked out.");
-					FillMain(true);//in case some changes already made.
-					return;
-				}
-				if(ClockEventList[i].TimeDisplayed1.Date != ClockEventList[i].TimeDisplayed2.Date) {
-					Cursor=Cursors.Default;
-					MsgBox.Show(this,"Error. One clock pair spans multiple dates.");
-					FillMain(true);//in case some changes already made.
-					return;
-				}
-				pairTotal=ClockEventList[i].TimeDisplayed2-ClockEventList[i].TimeDisplayed1;
-				//add any adjustments, manual or overrides.
-				if(ClockEventList[i].AdjustIsOverridden) {
-					pairTotal+=ClockEventList[i].Adjust;
-				}
-				else {
-					pairTotal+=ClockEventList[i].AdjustAuto;
-				}
-				//calc daily total
-				if(previousDate.Date != ClockEventList[i].TimeDisplayed1.Date) { //if date changed
-					dailyTotal=TimeSpan.Zero;//new day
-					previousDate=ClockEventList[i].TimeDisplayed1.Date;//for the next loop
-				}
-				dailyTotal+=pairTotal;
-				//handle OT
-				ClockEventList[i].OTimeAuto=TimeSpan.Zero;//set auto OT to zero.
-				if(ClockEventList[i].OTimeHours != TimeSpan.FromHours(-1)) {//if OT is overridden
-					//don't try to calc a time.
-					ClockEvents.Update(ClockEventList[i]);//just to possibly clear autoOT, even though it doesn't count.
-					//but still need to subtract OT from dailyTotal
-					dailyTotal-=ClockEventList[i].OTimeHours;
-					continue;
-				}
-				if(afterTime != TimeSpan.Zero) {
-					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTime) {//the start time is after time, so the whole pairTotal is OT
-						ClockEventList[i].OTimeAuto=pairTotal;
-					}
-					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTime) {//only the second time is after time
-						ClockEventList[i].OTimeAuto=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTime;//only a portion of the pairTotal is OT
-					}
-				}
-				if(beforeTime!=TimeSpan.Zero) {
-					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime) {//the end time is before time, so the whole pairTotal is OT
-						ClockEventList[i].OTimeAuto+=pairTotal;
-					}
-					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime) {//only the first time is before time
-						ClockEventList[i].OTimeAuto+=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
-					}
-				}
-				if(overHours != TimeSpan.Zero) {
-					//test dailyTotal
-					if(dailyTotal > overHours) {
-						ClockEventList[i].OTimeAuto=dailyTotal-overHours;
-						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
-					}
-				}
-				ClockEvents.Update(ClockEventList[i]);
-			}
+			TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			FillMain(true);
-			Cursor=Cursors.Default;
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {

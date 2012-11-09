@@ -97,9 +97,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Calculates daily overtime</summary>
 		public static void CalculateDailyOvertime(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
-			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-				return;
-			}
 			//Cursor=Cursors.WaitCursor;
 			DateTime previousDate;
 			List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,false);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
@@ -329,9 +326,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Calculates weekly overtime and inserts TimeAdjustments accordingly.</summary>
 		public static void CalculateWeeklyOvertime(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
-			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
-				return;
-			}
 			List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate);
 			List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,false);
 			ArrayList mergedAL = new ArrayList();
@@ -382,6 +376,8 @@ namespace OpenDentBusiness{
 
 		}
 
+		
+		/// <summary>This was originally analogous to the FormTimeCard.FillGrid(), before this logic was moved to the business layer.</summary>
 		private static List<TimeSpan> FillWeeklyTotalsHelper(bool fromDB,Employee EmployeeCur,ArrayList mergedAL) {//,DateTime StartTime,DateTime StopTime) {
 			List<TimeSpan> retVal = new List<TimeSpan>();
 			//This used to be fillGrid()

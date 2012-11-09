@@ -32,8 +32,8 @@ namespace OpenDental {
 			SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
 			FillPayPeriod();
 			FillMain();
-			butCompute.Visible=false;			//only until unit tests are complete.
-			butDaily.Visible=false;			//only until unit tests are complete.
+			//butCompute.Visible=false;			//only until unit tests are complete.
+			//butDaily.Visible=false;			//only until unit tests are complete.
 		}
 
 		private void FillMain() {
@@ -565,6 +565,7 @@ namespace OpenDental {
 			}
 		}
 
+		/*
 		private void butDayAndWeek_Click(object sender,EventArgs e) {
 			//not even visible if viewing breaks.
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
@@ -586,7 +587,7 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.Default;
 			FillMain();
-		}
+		}*/
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
