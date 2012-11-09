@@ -308,7 +308,10 @@ IEA*1*000012145~";
 				strb.Append("Prov TIN 9 digits");
 			}
 			X12Validate.BillProv(billProv,strb);
-			if(clinic==null) {
+			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				X12Validate.BillingAddress(strb);
+			}
+			else if(clinic==null) {
 				X12Validate.PracticeAddress(strb);
 			}
 			else {
