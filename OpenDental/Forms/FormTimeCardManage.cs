@@ -544,12 +544,12 @@ namespace OpenDental {
 					employeesList.Add(emp);
 				}
 			}
-			if(gridMain.SelectedIndices.Length==0) {//Nothing selected, run on all employees.
-				//MsgBox? for a warning?
-				foreach(Employee emp in Employees.ListLong) {
-					employeesList.Add(emp);
-				}
-			}
+			//if(gridMain.SelectedIndices.Length==0) {//Nothing selected, run on all employees.
+			//  //MsgBox? for a warning?
+			//  foreach(Employee emp in Employees.ListLong) {
+			//    employeesList.Add(emp);
+			//  }
+			//}
 			foreach(Employee EmployeeCur in employeesList) {
 				TimeCardRules.CalculateWeeklyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}

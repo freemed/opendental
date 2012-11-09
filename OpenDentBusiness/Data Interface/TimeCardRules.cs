@@ -290,13 +290,6 @@ namespace OpenDentBusiness{
 		public static void CalculateWeeklyOvertime(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
 			List<TimeAdjust> TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate);
 			List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,false);
-			ArrayList mergedAL = new ArrayList();
-			foreach(ClockEvent clockEvent in ClockEventList) {
-				mergedAL.Add(clockEvent);
-			}
-			foreach(TimeAdjust timeAdjust in TimeAdjustList) {
-				mergedAL.Add(timeAdjust);
-			}
 			//first, delete all existing overtime entries
 			for(int i=0;i<TimeAdjustList.Count;i++) {
 				if(TimeAdjustList[i].OTimeHours==TimeSpan.Zero) {
@@ -306,6 +299,15 @@ namespace OpenDentBusiness{
 					continue;
 				}
 				TimeAdjusts.Delete(TimeAdjustList[i]);
+			}
+			//refresh list after it has been cleaned up.
+			TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate);
+			ArrayList mergedAL = new ArrayList();
+			foreach(ClockEvent clockEvent in ClockEventList) {
+				mergedAL.Add(clockEvent);
+			}
+			foreach(TimeAdjust timeAdjust in TimeAdjustList) {
+				mergedAL.Add(timeAdjust);
 			}
 			//then, fill grid
 			Calendar cal=CultureInfo.CurrentCulture.Calendar;
