@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
+using OpenDental;
 
 namespace UnitTests {
 	public class AllTests {
@@ -1291,7 +1292,7 @@ namespace UnitTests {
 			return "20: Passed.  Both individual and family deductibles taken into account.\r\n";
 		}
 
-				///<summary></summary>
+		///<summary></summary>
 		public static string TestTwentyOne(int specificTest) {
 			if(specificTest != 0 && specificTest !=21){
 				return"";
@@ -1336,6 +1337,199 @@ namespace UnitTests {
 				throw new Exception("Estimated deduction should be 0, is " + claimProc1.DedEst + ".\r\n");
 			}
 			retVal+="21: Passed. Deductibles are not applied to procedures that are not covered.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentyTwo(int specificTest) {
+			if(specificTest != 0 && specificTest !=22) {
+				return "";
+			}
+			string suffix="22";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			Prefs.RefreshCache();
+			TimeCardRuleT.CreatePMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(16));
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(16).AddMinutes(40));
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
+			TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
+				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
+			}
+			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(40)) {
+				throw new Exception("Clock ovetime should be 40 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			}
+			retVal+="22: Passed. Overtime calculated properly after time of day.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentyThree(int specificTest) {
+			if(specificTest != 0 && specificTest !=23) {
+				return "";
+			}
+			string suffix="23";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			TimeCardRuleT.CreateAMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(7.5));
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(6),startDate.AddHours(16));
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40);
+			TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			if(ClockEvents.GetOne(clockEvent1).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
+				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).AdjustAuto.TotalMinutes + " minutes.\r\n");
+			}
+			if(ClockEvents.GetOne(clockEvent1).OTimeAuto!=TimeSpan.FromMinutes(90)) {
+				throw new Exception("Clock ovetime should be 90 minutes, instead it is " + ClockEvents.GetOne(clockEvent1).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			}
+			retVal+="23: Passed. Overtime calculated properly before time of day.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentyFour(int specificTest) {
+			if(specificTest != 0 && specificTest !=24) {
+				return "";
+			}
+			string suffix="24";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			TimeCardRuleT.CreateHoursTimeRule(emp.EmployeeNum,TimeSpan.FromHours(10));
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(13));
+			long clockEvent2 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(14),startDate.AddHours(21));
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(10),20);
+			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(16),20);
+			TimeCardRules.CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			if(ClockEvents.GetOne(clockEvent2).AdjustAuto!=TimeSpan.FromMinutes(-10)) {
+				throw new Exception("Clock adjustment should be -10 minutes, instead it is " + ClockEvents.GetOne(clockEvent2).AdjustAuto.TotalMinutes + " minutes.\r\n");
+			}
+			if(ClockEvents.GetOne(clockEvent2).OTimeAuto!=TimeSpan.FromMinutes(110)) {
+				throw new Exception("Clock ovetime should be 110 minutes, instead it is " + ClockEvents.GetOne(clockEvent2).OTimeAuto.TotalMinutes + " minutes.\r\n");
+			}
+			retVal+="24: Passed. Overtime calculated properly for total hours per day.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentyFive(int specificTest) {
+			if(specificTest != 0 && specificTest !=25) {
+				return "";
+			}
+			string suffix="25";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17));
+			long clockEvent2 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17));
+			long clockEvent3 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17));
+			long clockEvent4 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17));
+			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			TimeAdjust result = TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(13))[0];
+			if(result.RegHours!=TimeSpan.FromHours(-4)){
+				throw new Exception("Time adjustment to regular hours should be -4 hours, instead it is " + result.RegHours.TotalHours + " hours.\r\n");
+			}
+			if(result.OTimeHours!=TimeSpan.FromHours(4)) {
+				throw new Exception("Time adjustment to OT hours should be 4 hours, instead it is " + result.OTimeHours.TotalHours + " hours.\r\n");
+			}
+			retVal+="25: Passed. Overtime calculated properly for normal 40 hour work week.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentySix(int specificTest) {
+			if(specificTest != 0 && specificTest !=26) {
+				return "";
+			}
+			string suffix="26";
+			DateTime startDate=DateTime.Parse("2001-02-01");//This will create a pay period that splits a work week.
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriod payP2 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate.AddDays(14));
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17));
+			long clockEvent2 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17));
+			long clockEvent3 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17));
+			//new pay period
+			long clockEvent4 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17));
+			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			TimeCardRules.CalculateWeeklyOvertime(emp,payP2.DateStart,payP2.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			
+			TimeAdjust result = TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(28))[0];
+			if(result.RegHours!=TimeSpan.FromHours(-4)) {
+				throw new Exception("Time adjustment to regular hours should be -4 hours, instead it is " + result.RegHours.TotalHours + " hours.\r\n");
+			}
+			if(result.OTimeHours!=TimeSpan.FromHours(4)) {
+				throw new Exception("Time adjustment to OT hours should be 4 hours, instead it is " + result.OTimeHours.TotalHours + " hours.\r\n");
+			}
+			retVal+="26: Passed. Overtime calculated properly for work week spanning 2 pay periods.\r\n";
+			return retVal;
+		}
+
+		///<summary></summary>
+		public static string TestTwentySeven(int specificTest) {
+			if(specificTest != 0 && specificTest !=27) {
+				return "";
+			}
+			string suffix="27";
+			DateTime startDate=DateTime.Parse("2001-01-01");
+			Employee emp = EmployeeT.CreateEmployee(suffix);
+			PayPeriod payP1 = PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
+			PayPeriods.RefreshCache();
+			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,3);
+			TimeCardRules.RefreshCache();
+			long clockEvent1 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17));
+			long clockEvent2 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17));
+			//new work week
+			long clockEvent3 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17));
+			long clockEvent4 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17));
+			long clockEvent5 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(17));
+			long clockEvent6 = ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(5).AddHours(6),startDate.AddDays(5).AddHours(17));
+			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
+			//Validate
+			string retVal="";
+			//Check
+			TimeAdjust result = TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(28))[0];
+			if(result.RegHours!=TimeSpan.FromHours(-4)) {
+				throw new Exception("Time adjustment to regular hours should be -4 hours, instead it is " + result.RegHours.TotalHours + " hours.\r\n");
+			}
+			if(result.OTimeHours!=TimeSpan.FromHours(4)) {
+				throw new Exception("Time adjustment to OT hours should be 4 hours, instead it is " + result.OTimeHours.TotalHours + " hours.\r\n");
+			}
+			retVal+="27: Passed. Overtime calculated properly for work week not starting on Sunday.\r\n";
 			return retVal;
 		}
 

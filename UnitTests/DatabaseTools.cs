@@ -104,9 +104,12 @@ namespace UnitTests {
 
 		public static string ClearDb() {
 			string command=@"
+				DELETE FROM appointment;
 				DELETE FROM carrier;
 				DELETE FROM claim;
 				DELETE FROM claimproc;
+				DELETE FROM clockevent;
+				DELETE FROM employee;
 				DELETE FROM fee;
 				DELETE FROM feesched WHERE FeeSchedNum !=53; /*because this is the default fee schedule for providers*/
 				DELETE FROM hl7def;
@@ -114,8 +117,10 @@ namespace UnitTests {
 				DELETE FROM insplan;
 				DELETE FROM patient;
 				DELETE FROM patplan;
+				DELETE FROM payperiod;
 				DELETE FROM procedurelog;
-				DELETE FROM appointment;
+				DELETE FROM timeadjust;
+				DELETE FROM timecardrule;
 				";
 			DataCore.NonQ(command);
 			return "Database cleared of old data.\r\n";

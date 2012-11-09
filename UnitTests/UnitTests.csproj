@@ -99,6 +99,10 @@
     <Compile Include="BenefitT.cs" />
     <Compile Include="CarrierT.cs" />
     <Compile Include="ClaimT.cs" />
+    <Compile Include="ClockEventT.cs" />
+    <Compile Include="TimeCardRuleT.cs" />
+    <Compile Include="PayPeriodT.cs" />
+    <Compile Include="EmployeeT.cs" />
     <Compile Include="HL7Tests.cs" />
     <Compile Include="HL7Tests_old.cs">
       <SubType>Code</SubType>

@@ -288,6 +288,48 @@ namespace UnitTests {
 			catch(Exception ex) {
 				textResults.Text+="21: Failed. "+ex.Message;
 			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyTwo(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="22: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyThree(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="23: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyFour(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="24: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyFive(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="25: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentySix(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="26: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentySeven(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="27: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}
