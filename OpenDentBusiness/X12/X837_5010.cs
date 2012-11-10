@@ -2284,10 +2284,11 @@ namespace OpenDentBusiness
 				}
 			}
 			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+				X12Validate.BillingAddress(strb);
 				string zip=PrefC.GetString(PrefName.PracticeBillingZip);
 				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
 					Comma(strb);
-					strb.Append("Practice billing zip must contain nine digits");
+					strb.Append("Practice billing zip must contain nine digits");//this is more restrictive than in the check above.
 				}
 				if(Regex.IsMatch(PrefC.GetString(PrefName.PracticeBillingAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
 					Comma(strb);
@@ -2295,6 +2296,7 @@ namespace OpenDentBusiness
 				}
 			}
 			else if(clinic==null) {
+				X12Validate.PracticeAddress(strb);
 				string zip=PrefC.GetString(PrefName.PracticeZip);
 				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
 					Comma(strb);
@@ -2306,6 +2308,7 @@ namespace OpenDentBusiness
 				}
 			}
 			else {
+				X12Validate.Clinic(clinic,strb);
 				string zip=clinic.Zip;
 				if(!Regex.IsMatch(zip,"^[0-9]{5}\\-?[0-9]{4}$")) {
 					Comma(strb);
