@@ -2,7 +2,7 @@ package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
-import com.opendental.odweb.client.remoting.SerializeStringEscapes;
+import com.opendental.odweb.client.remoting.Serializing;
 
 public class Account {
 		/** Primary key. */
@@ -35,9 +35,9 @@ public class Account {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Account>");
 			sb.append("<AccountNum>").append(AccountNum).append("</AccountNum>");
-			sb.append("<Description>").append(SerializeStringEscapes.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<AcctType>").append(AcctType.ordinal()).append("</AcctType>");
-			sb.append("<BankNumber>").append(SerializeStringEscapes.EscapeForXml(BankNumber)).append("</BankNumber>");
+			sb.append("<BankNumber>").append(Serializing.EscapeForXml(BankNumber)).append("</BankNumber>");
 			sb.append("<Inactive>").append((Inactive)?1:0).append("</Inactive>");
 			sb.append("<AccountColor>").append(AccountColor).append("</AccountColor>");
 			sb.append("</Account>");

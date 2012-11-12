@@ -26,27 +26,26 @@ public class DataTransferObject {
 		StringBuilder xml=new StringBuilder();
 		//Header-------------------------------------------------------------------------------
 		xml.append("<?xml version=\"1.0\" encoding=\"utf-16\"?><"
-				+SerializeStringEscapes.EscapeForXml(Type)+" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+				+Serializing.EscapeForXml(Type)+" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
 		//Credentials will be differently than this--------------------------------------------
 		xml.append("<Credentials><UserName>"
-				+SerializeStringEscapes.EscapeForXml(Credentials.Username)+"</Username><Password>"
-				+SerializeStringEscapes.EscapeForXml(Credentials.Password)+"</Password></Credentials>");
+				+Serializing.EscapeForXml(Credentials.Username)+"</Username><Password>"
+				+Serializing.EscapeForXml(Credentials.Password)+"</Password></Credentials>");
 		//MethodName---------------------------------------------------------------------------
 		xml.append("<MethodName>"
-				+SerializeStringEscapes.EscapeForXml(MethodName)+"</MethodName>");
+				+Serializing.EscapeForXml(MethodName)+"</MethodName>");
 		//Parameters---------------------------------------------------------------------------
 		xml.append("<Params>");
 		for(int i=0;i<Params.length;i++) {//Loop through all the dto objects.
 			xml.append("<DtoObject>");
-			xml.append("<TypeName>"+SerializeStringEscapes.EscapeForXml(Params[i].TypeName)+"</TypeName>");
+			xml.append("<TypeName>"+Serializing.EscapeForXml(Params[i].TypeName)+"</TypeName>");
 			xml.append("<Obj>");
-			//Without reflection we cannot know what type of object this is so it has to be serialized before coming in here.
-			xml.append(Params[i].ObjSerialized);//Valid XML that does not need escaping.
+			xml.append(Params[i].ObjSerialized);//Already valid XML that does not need escaping.
 			xml.append("</Obj>");
 			xml.append("</DtoObject>");
 		}
 		xml.append("</Params>");
-		xml.append("</"+SerializeStringEscapes.EscapeForXml(Type)+">");//End of dto object.
+		xml.append("</"+Serializing.EscapeForXml(Type)+">");//End of dto object.
 		return xml.toString();
 	}
 	

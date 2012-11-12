@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.opendental.odweb.client.remoting.Meth;
 import com.opendental.odweb.client.tabletypes.Account;
 import com.opendental.odweb.client.tabletypes.Account.AccountType;
+import com.opendental.odweb.client.ui.MsgBox;
 
 public class Accounts {
 	
@@ -52,8 +53,12 @@ public class Accounts {
 	
 	/** Gets the balance of an account directly from the database. */
 	public static double GetBalance(int accountNum,AccountType acctType) {
-		String[] paramTypes= { "long","AccountType" };//The parameters in the C# method that we will be calling.
-		Meth.GetInt("Accounts.GetBalance",paramTypes,accountNum,acctType);
+		String[] paramTypes= { "long","AccountType" };//The parameter types in the C# method that we will be calling.
+		try {
+			Meth.GetInt("Accounts.GetBalance",paramTypes,accountNum,acctType);
+		} catch (Exception e) {
+			MsgBox.Show("Error:\r\n"+e.getMessage());
+		}
 		return 0;
 	}
 	

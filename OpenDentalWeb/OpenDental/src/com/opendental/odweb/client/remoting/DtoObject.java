@@ -8,15 +8,19 @@ public class DtoObject {
 	/** The actual object fully serialized. */
 	public String ObjSerialized;
 	
-	/** Sets the variables passed in and automatically sets ObjSerialized. */
-	public DtoObject(Object obj,String typeName) {
+	/** Sets the variables passed in and automatically sets ObjSerialized. 
+	 * @param obj Null is acceptable.
+	 * @param typeName Required to have a type of some kind.
+	 * @throws Exception The method call to GetSerializedString can throw an exception. */
+	public DtoObject(Object obj,String typeName) throws Exception {
 		Obj=obj;
 		TypeName=typeName;
 		ObjSerialized=GetSerializedString();
 	}
 	
-	/** We must pass in a matching array of types for situations where nulls are used in parameters.  Otherwise, we won't know the parameter type. */
-	public static DtoObject[] ConstructArray(String[] paramType,Object[] objArray) {
+	/** We must pass in a matching array of types for situations where nulls are used in parameters.  Otherwise, we won't know the parameter type. 
+	 * @throws Exception DtoObject constructor can throw an exception. */
+	public static DtoObject[] ConstructArray(String[] paramType,Object[] objArray) throws Exception {
 		DtoObject[] retVal=new DtoObject[objArray.length];
 		for(int i=0;i<objArray.length;i++) {
 			retVal[i]=new DtoObject(objArray[i],paramType[i]);
@@ -24,12 +28,19 @@ public class DtoObject {
 		return retVal;
 	}
 	
-	public String GetSerializedString() {
+	/** Loops through general types first.  If no match was found then it calls a method that loops through all the Open Dental types.  
+	 * @throws Exception Unsupported types will cause an exception so that we can enhance this method. */
+	public String GetSerializedString() throws Exception {
+		if(Obj==null) {
+			return "<"+TypeName+"/>";
+		}
+		String result;
 		//Figure out what type of object we're dealing with and return the serialized form.
 		String qualifiedName=Obj.getClass().getName();//Ex: ArrayList = "java.util.ArrayList"
 		//Primitives--------------------------------------------------------------------------------------------------------
 		if(qualifiedName=="Z") {//boolean "Z"
-			return "<Obj><boolean></boolean></Obj>";
+			result=(boolean)Obj?"1":"0";
+			return "<Obj><bool>"+result+"</bool></Obj>";
 		}
 		if(qualifiedName=="B") {//byte    "B"
 			
@@ -55,15 +66,17 @@ public class DtoObject {
 		if(qualifiedName=="java.lang.String") {//String  "java.lang.String"
 			
 		}
-		if(qualifiedName=="") {
-			
-		}
 		//Arrays------------------------------------------------------------------------------------------------------------
 		//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L...
 		//Object[]  "[Lcom.opendental.odweb.client.tabletypes.Account;" from Account[]
 		//int[]     "[I"
 		//String[]  "[Ljava.lang.String;"
-		return "";
+		//Open Dental Objects-----------------------------------------------------------------------------------------------
+		result=Serializing.GetSerializedObject(qualifiedName,Obj);
+		if(result!=null) {
+			return result;
+		}
+		throw new Exception("GetSerializedString, unsupported type: "+qualifiedName);
 	}
 	
 //	/** Takes any Java object and returns the C# fully qualified name. Ex: System.Int32 */
