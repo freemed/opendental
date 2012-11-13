@@ -97,8 +97,10 @@ public class Serializing {
 		Document doc=XMLParser.parse(xml);
 		String type="";// TODO Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException> 
 		if(type=="DtoException") {//Check for exceptions first.
-			
+			//Read the "msg" node and throw an exception with that error message.
+			throw new Exception(doc.getElementsByTagName("msg").item(0).getFirstChild().getNodeValue());
 		}
+		//Primitives-------------------------------------------------------------------------------------------------------
 		if(type=="boolean") {
 			
 		}
@@ -126,21 +128,48 @@ public class Serializing {
 		if(type=="String") {
 			
 		}
+		if(type=="DataT") {
+			return DeserializeDataTable(xml);
+		}
 		if(type.startsWith("List&lt;")) {
 			return DeserializeList(xml);
 		}
+		//Open Dental object-------------------------------------------------------------------------------------------------
+		Object result=DeserializeOpenDentalObject(type,xml);
+		if(result!=null) {
+			return result;
+		}
+		throw new Exception("GetDeserializedObject, unsupported type: "+type);
+	}
+	
+	/** Pass in the type and just the xml for that object.  Returns null if no match found. */
+	private static Object DeserializeOpenDentalObject(String type,String xml) throws Exception {
 		if(type=="Account") {
 			Account account=new Account();
 			account.DeserializeFromXml(xml);
 			return account;
 		}
-		throw new Exception("GetDeserializedObject, unsupported type: "+type);
+// TODO Cameron, write an if statement for every table type here:
+//		if(type=="Patient") {
+//			Patient patient=new Patient();
+//			patient.DeserializeFromXml(xml);
+//			return patient;
+//		}
+		return null;
 	}
 	
 	/** Pass in the entire xml response and this method will return a deserialized ArrayList.
 	 * @throws Exception Throws exception if the list cannot be deserialized. */
 	private static Object DeserializeList(String xml) throws Exception {
+		// TODO Figure out how to deserialize list objects without reflection here.
 		throw new Exception("DeserializeList, error deserializing list.");
+	}
+	
+	/** Pass in the entire xml response and this method will return a deserialized ArrayList.
+	 * @throws Exception Throws exception if the list cannot be deserialized. */
+	private static Object DeserializeDataTable(String xml) throws Exception {
+		// TODO Figure out how to deserialize data table objects here.
+		throw new Exception("DeserializeDataTable, error deserializing data table.");
 	}
 	
 }
