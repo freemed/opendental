@@ -79,7 +79,7 @@ namespace OpenDentalWebService {
 								return OpenDentBusiness.PIn.Double(reader.ReadString());
 						}
 						//List<?>-----------------------------------------------------------------------
-						if(typeName.StartsWith("List<")) {
+						if(typeName.StartsWith("List&lt;")) {
 							return "";//Not sure how to handle lists of objects without reflection just yet...
 						}
 						//Arrays------------------------------------------------------------------------

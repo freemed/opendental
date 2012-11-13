@@ -44,26 +44,29 @@ public class WindowPatientSelect extends DialogBox {
 		public void onClick(ClickEvent event) {
 			RequestBuilder builder=RemotingClient.GetRequestBuilder(Patients.GetPtDataTable());
 			try {//Try catch is required around http request.
-				builder.sendRequest(null, new RequestCallback(){
-					public void onResponseReceived(Request request,Response response) {	
-						if(200 == response.getStatusCode()) {
-							//The response might be a DtoException.  
-							// TODO Figure out a generalized way to deserialize responses from the server.
-							FillGrid();
-						}	else {
-							MsgBox.Show("Error status text: "+ response.getStatusText()
-								+"\r\nError status code:"+Integer.toString(response.getStatusCode())
-								+"\r\nError text: "+response.getText());
-						}
-					}
-					public void onError(Request request, Throwable exception) {		
-						MsgBox.Show("Error: "+exception.getMessage());
-					}
-				});
+				builder.sendRequest(null, new butOK_RequestCallback());
 			}
 			catch (RequestException e) {
 				MsgBox.Show("Error: "+e.getMessage());
 			}
+		}
+	}
+	
+	private class butOK_RequestCallback implements RequestCallback {		
+		public void onResponseReceived(Request request, Response response) {
+			if(response.getStatusCode()==200) {
+        //Result=response.getText();
+				// TODO Deserialize the dto object here and get back the desired object.
+				FillGrid();
+      } else {
+      	MsgBox.Show("Error status text: "+response.getStatusText()
+    			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
+    			+"\r\nError text: "+response.getText());
+      }
+		}
+		
+		public void onError(Request request, Throwable exception) {
+			MsgBox.Show("Error: "+exception.getMessage());
 		}
 	}
 	

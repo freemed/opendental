@@ -1,5 +1,7 @@
 package com.opendental.odweb.client.remoting;
 
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.tabletypes.Account;
 // TODO Cameron, there should be one of these for every table type and also in GetSerializedObject().  Everything else should be static.  Don't forget to change the crud when generating the table type classes so that they point to this new Serializing class instead of the old one.
 //import com.opendental.odweb.client.tabletypes.Patient;
@@ -38,10 +40,47 @@ public class Serializing {
     return strBuild.toString();
 	}
 
-	/** Loops through all the known objects and calls the corresponding classes serialize method.  Returns null if no matches.  
-	 * @param qualifiedName Pass in the fully qualified name of the object. Ex: com.opendental.odweb.client.tabletypes.Account 
-	 * @param obj Pass in the actual object so that it's SerializeToXml method can be called. */
-	public static String GetSerializedObject(String qualifiedName,Object obj) {
+	/** Loops through all the known objects and calls the corresponding classes serialize method.
+	 * @throws Exception Throws exception if type is not yet supported. */
+	public static String GetSerializedObject(Object obj) throws Exception {
+		String result;
+		//Figure out what type of object we're dealing with and return the serialized form.
+		String qualifiedName=obj.getClass().getName();//Ex: ArrayList = "java.util.ArrayList"
+		//Primitives--------------------------------------------------------------------------------------------------------
+		if(qualifiedName=="Z") {//boolean "Z"
+			result=(boolean)obj?"1":"0";
+			return "<Obj><bool>"+result+"</bool></Obj>";
+		}
+		if(qualifiedName=="B") {//byte    "B"
+			
+		}
+		if(qualifiedName=="C") {//char    "C"
+			
+		}
+		if(qualifiedName=="S") {//short   "S"
+			
+		}
+		if(qualifiedName=="I") {//int     "I"
+			
+		}
+		if(qualifiedName=="J") {//long    "J"
+			
+		}
+		if(qualifiedName=="F") {//float   "F"
+			
+		}
+		if(qualifiedName=="D") {//double  "D"
+			
+		}
+		if(qualifiedName=="java.lang.String") {//String  "java.lang.String"
+			
+		}
+		//Arrays------------------------------------------------------------------------------------------------------------
+		//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L...
+		//Object[]  "[Lcom.opendental.odweb.client.tabletypes.Account;" from Account[]
+		//int[]     "[I"
+		//String[]  "[Ljava.lang.String;"
+		//Open Dental Objects-----------------------------------------------------------------------------------------------
 		if(qualifiedName=="com.opendental.odweb.client.tabletypes.Account") {
 			return ((Account)obj).SerializeToXml();
 		}
@@ -49,7 +88,71 @@ public class Serializing {
 //		if(qualifiedName=="com.opendental.odweb.client.tabletypes.Patient") {
 //			return ((Patient)obj).SerializeToXml();
 //		}
-		return null;
+		throw new Exception("GetSerializedObject, unsupported type: "+qualifiedName);
+	}
+	
+	/** Loops through all the known objects and calls the corresponding classes deserialize method.
+	 * @throws Exception Throws exception if type is not yet supported or if a DtoException was returned. */
+	public static Object GetDeserializedObject(String xml) throws Exception {
+		Document doc=XMLParser.parse(xml);
+		String type="";// TODO Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException> 
+		if(type=="DtoException") {//Check for exceptions first.
+			
+		}
+		if(type=="boolean") {
+			
+		}
+		if(type=="byte") {
+			
+		}
+		if(type=="char") {
+			
+		}
+		if(type=="short") {
+			
+		}
+		if(type=="int") {
+			
+		}
+		if(type=="long") {
+			
+		}
+		if(type=="float") {
+			
+		}
+		if(type=="double") {
+			
+		}
+		if(type=="String") {
+			
+		}
+		if(type.startsWith("List&lt;")) {
+			return DeserializeList(xml);
+		}
+		if(type=="Account") {
+			Account account=new Account();
+			account.DeserializeFromXml(xml);
+			return account;
+		}
+		throw new Exception("GetDeserializedObject, unsupported type: "+type);
+	}
+	
+	/** Pass in the entire xml response and this method will return a deserialized ArrayList.
+	 * @throws Exception Throws exception if the list cannot be deserialized. */
+	private static Object DeserializeList(String xml) throws Exception {
+		throw new Exception("DeserializeList, error deserializing list.");
 	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+

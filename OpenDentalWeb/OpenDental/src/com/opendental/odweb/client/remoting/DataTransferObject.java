@@ -49,8 +49,9 @@ public class DataTransferObject {
 		return xml.toString();
 	}
 	
+	/**  */
 	public static DataTransferObject Deserialize(String data) {
-		// TODO Write deserializing code here.
+		// TODO Write deserializing code specifically for DataTransferObjects here if we end up needing it.
 		return null;
 	}
 	
