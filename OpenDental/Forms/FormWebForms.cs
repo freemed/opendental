@@ -480,7 +480,7 @@ namespace OpenDental {
 			Sheet sheet=Sheets.GetSheet(sheetNum);
 			FormSheetFillEdit FormSF=new FormSheetFillEdit(sheet);
 			FormSF.ShowDialog();
-			//FillGrid();//We must refresh the grid because the web form clicked might have been deleted by the user.
+			FillGrid();//We must refresh the grid because the web form clicked might have been deleted by the user.
 		}
 
 		private void gridMain_MouseUp(object sender,MouseEventArgs e) {
