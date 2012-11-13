@@ -602,7 +602,7 @@ namespace OpenDental{
 			TimeSpan periodSpan=new TimeSpan(0);//used to add up totals for entire page.
 			TimeSpan otspan=new TimeSpan(0);//overtime for the entire period
       Calendar cal=CultureInfo.CurrentCulture.Calendar;
-			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
+			CalendarWeekRule rule=CalendarWeekRule.FirstFullWeek;//CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			DateTime curDate=DateTime.MinValue;
 			DateTime previousDate=DateTime.MinValue;
 			Type type;
@@ -800,8 +800,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,DayOfWeek.Sunday)//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,DayOfWeek.Sunday))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;

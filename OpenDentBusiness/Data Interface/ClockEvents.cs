@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 				+" EmployeeNum = '"+POut.Long(empNum)+"'"
 				+" AND TimeDisplayed1 >= "+POut.Date(fromDate)
 				//adding a day takes it to midnight of the specified toDate
-				+" AND TimeDisplayed1 <= "+POut.Date(toDate.AddDays(1));
+				+" AND TimeDisplayed1 < "+POut.Date(toDate.AddDays(1));
 			if(isBreaks){
 				command+=" AND ClockStatus = '2'";
 			}

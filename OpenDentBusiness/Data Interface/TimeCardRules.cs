@@ -311,7 +311,8 @@ namespace OpenDentBusiness{
 			}
 			//then, fill grid
 			Calendar cal=CultureInfo.CurrentCulture.Calendar;
-			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
+			CalendarWeekRule rule=CalendarWeekRule.FirstFullWeek;//CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
+			//rule=CalendarWeekRule.FirstFullWeek;//CalendarWeekRule is an Enum. For these calculations, we want to use FirstFullWeek, not FirstDay;
 			List<TimeSpan> WeeklyTotals = new List<TimeSpan>();
 			WeeklyTotals = FillWeeklyTotalsHelper(true,EmployeeCur,mergedAL);
 			//loop through all rows
@@ -355,7 +356,7 @@ namespace OpenDentBusiness{
 			TimeSpan periodSpan=new TimeSpan(0);//used to add up totals for entire page.
 			TimeSpan otspan=new TimeSpan(0);//overtime for the entire period
 			Calendar cal=CultureInfo.CurrentCulture.Calendar;
-			CalendarWeekRule rule=CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
+			CalendarWeekRule rule=CalendarWeekRule.FirstFullWeek;// CultureInfo.CurrentCulture.DateTimeFormat.CalendarWeekRule;
 			DateTime curDate=DateTime.MinValue;
 			DateTime previousDate=DateTime.MinValue;
 			Type type;
@@ -439,8 +440,8 @@ namespace OpenDentBusiness{
 					WeeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,DayOfWeek.Sunday)//or the next row has a
-		        != cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,DayOfWeek.Sunday))//different week of year
+		        || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i+1]),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+		        != cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 		      {
 						weekSpan=new TimeSpan(0);
 					}
