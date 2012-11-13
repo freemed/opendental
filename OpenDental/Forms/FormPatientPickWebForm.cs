@@ -55,8 +55,8 @@ namespace OpenDental {
 			SelectedPatNum=listPats[e.Row].PatNum;
 			//Security log for patient select.
 			Patient pat=Patients.GetPat(SelectedPatNum);
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"In the 'Pick Patient for Web Form', this user double clicked a name in the suggested list.\r\n"
-				+"This caused the web form for this patient: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()+"\r\n"
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"In the 'Pick Patient for Web Form', this user double clicked a name in the suggested list.  "
+				+"This caused the web form for this patient: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()+"  "
 				+"to be manually attached to this other patient: "+pat.LName+", "+pat.FName+" "+pat.Birthdate.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
@@ -71,8 +71,8 @@ namespace OpenDental {
 			SelectedPatNum=FormPs.SelectedPatNum;
 			//Security log for patient select.
 			Patient pat=Patients.GetPat(SelectedPatNum);
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"In the 'Pick Patient for Web Form', this user clicked the 'Select' button.\r\n"
-				+"By clicking the 'Select' button, the web form for this patient: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()+"\r\n"
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SelectedPatNum,"In the 'Pick Patient for Web Form', this user clicked the 'Select' button.  "
+				+"By clicking the 'Select' button, the web form for this patient: "+LnameEntered+", "+FnameEntered+" "+BdateEntered.ToShortDateString()+"  "
 				+"was manually attached to this other patient: "+pat.LName+", "+pat.FName+" "+pat.Birthdate.ToShortDateString());
 			DialogResult=DialogResult.OK;
 		}
