@@ -5,11 +5,11 @@ import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
 
 public class Account {
-		/** Primary key. */
+		/** Primary key.. */
 		public int AccountNum;
 		/** . */
 		public String Description;
-		/** Enum:AccountType 0=Asset, 1=Liability, 2=Equity, 3=Income, 4=Expense */
+		/** Enum:AccountType Asset, Liability, Equity,Revenue, Expense */
 		public AccountType AcctType;
 		/** For asset accounts, this would be the bank account number for deposit slips. */
 		public String BankNumber;
@@ -17,7 +17,7 @@ public class Account {
 		public boolean Inactive;
 		/** . */
 		public int AccountColor;
-		
+
 		/** Deep copy of object. */
 		public Account Copy() {
 			Account account=new Account();
@@ -29,8 +29,8 @@ public class Account {
 			account.AccountColor=this.AccountColor;
 			return account;
 		}
-		
-		/** Serialize the object into XML */
+
+		/** Serialize the object into XML. */
 		public String SerializeToXml() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Account>");
@@ -43,7 +43,7 @@ public class Account {
 			sb.append("</Account>");
 			return sb.toString();
 		}
-		
+
 		/** Sets the variables for this object based on the values from the XML.
 		 * @param xml The XML passed in must be valid and contain a node for every variable on this object.
 		 * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */
@@ -61,20 +61,20 @@ public class Account {
 				throw e;
 			}
 		}
-		
+
 		/** Used in accounting for chart of accounts. */
-		public enum AccountType	{
-			/** 0- Asset */
+		public enum AccountType {
+			/** 0 */
 			Asset,
-			/** 1- Liability */
+			/** 1 */
 			Liability,
-			/** 2- Equity */
+			/** 2 */
 			Equity,
-			/** 3- Income */
+			/** 3 */
 			Income,
-			/** 4- Expense */
+			/** 4 */
 			Expense
 		}
-		
-		
+
+
 }
