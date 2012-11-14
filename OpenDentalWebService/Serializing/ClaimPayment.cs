@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<ClaimPayment>");
 			sb.Append("<ClaimPaymentNum>").Append(claimpayment.ClaimPaymentNum).Append("</ClaimPaymentNum>");
-			sb.Append("<CheckDate>").Append(claimpayment.CheckDate.ToLongDateString()).Append("</CheckDate>");
+			sb.Append("<CheckDate>").Append(claimpayment.CheckDate.ToString()).Append("</CheckDate>");
 			sb.Append("<CheckAmt>").Append(claimpayment.CheckAmt).Append("</CheckAmt>");
 			sb.Append("<CheckNum>").Append(SerializeStringEscapes.EscapeForXml(claimpayment.CheckNum)).Append("</CheckNum>");
 			sb.Append("<BankBranch>").Append(SerializeStringEscapes.EscapeForXml(claimpayment.BankBranch)).Append("</BankBranch>");
@@ -21,7 +21,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ClinicNum>").Append(claimpayment.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<DepositNum>").Append(claimpayment.DepositNum).Append("</DepositNum>");
 			sb.Append("<CarrierName>").Append(SerializeStringEscapes.EscapeForXml(claimpayment.CarrierName)).Append("</CarrierName>");
-			sb.Append("<DateIssued>").Append(claimpayment.DateIssued.ToLongDateString()).Append("</DateIssued>");
+			sb.Append("<DateIssued>").Append(claimpayment.DateIssued.ToString()).Append("</DateIssued>");
 			sb.Append("<IsPartial>").Append((claimpayment.IsPartial)?1:0).Append("</IsPartial>");
 			sb.Append("</ClaimPayment>");
 			return sb.ToString();

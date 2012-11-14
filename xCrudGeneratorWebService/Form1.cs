@@ -88,6 +88,10 @@ namespace xCrudGeneratorWebService {
 			#region TableType loop
 			for(int i=0;i<TableTypes.Count;i++) {
 				className=TableTypes[i].Name;
+				string docForjava="";
+				if(className=="Document") {
+					docForjava="od";
+				}
 				FieldInfo[] fields=null;
 				fields=TableTypes[i].GetFields();
 				strb=new StringBuilder();
@@ -95,10 +99,10 @@ namespace xCrudGeneratorWebService {
 				File.WriteAllText(Path.Combine(SerialDir,className+".cs"),strb.ToString());
 				strb.Clear();
 				WriteAlljavaDataInterface(strb,className);
-				File.WriteAllText(Path.Combine(JavaSClassesDir,GetSname(className)+".java"),strb.ToString());
+				File.WriteAllText(Path.Combine(JavaSClassesDir,GetSname(className+docForjava)+".java"),strb.ToString());
 				strb.Clear();
 				WriteAlljavaTableTypes(strb,className,fields);
-				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+".java"),strb.ToString());
+				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+docForjava+".java"),strb.ToString());
 				#region DtoMethods OpenDentalClasses
 				strbDtoMethods.Append(t4+"if(typeName==\"OpenDentBusiness."+className+"\") {"+rn
 					+t5+"return "+className+".Deserialize(xml);"+rn
@@ -229,6 +233,9 @@ namespace xCrudGeneratorWebService {
 
 		///<summary>Create java 's' class files.</summary>
 		private void WriteAlljavaDataInterface(StringBuilder strb,string className) {
+			if(className=="Document") {
+				className=className+"od";
+			}
 			#region class header
 			strb.Append("package com.opendental.odweb.client.datainterface;"+rn
 				+rn+"public class "+GetSname(className)+" {"+rn);
@@ -240,22 +247,70 @@ namespace xCrudGeneratorWebService {
 
 		///<summary>Create java table type files.</summary>
 		private void WriteAlljavaTableTypes(StringBuilder strb,string className,FieldInfo[] fields) {
+			String docForjava="";
+			if(className=="Document") {
+				docForjava="od";
+			}
+			StringBuilder strbEnums=new StringBuilder();
+			StringBuilder strbCopy=new StringBuilder();
 			#region class header
 			strb.Append("package com.opendental.odweb.client.tabletypes;"+rn
 				+rn+"import com.google.gwt.xml.client.Document;"+rn
 				+"import com.google.gwt.xml.client.XMLParser;"+rn
-				+"import com.opendental.odweb.client.remoting.SerializeStringEscapes;"+rn
-				+rn+"public class "+className+" {"+rn);
+				+"import com.opendental.odweb.client.remoting.Serializing;"+rn
+				+rn+"public class "+className+docForjava+" {"+rn);
 			#endregion
 			#region fields
 			foreach(FieldInfo field in fields) {
+				if(IsNotDbColumn(field)) {//if not a db column, skip
+					continue;
+				}
 				string summary=GetSummary("F:OpenDentBusiness."+className+"."+field.Name);
 				if(summary=="") {
 					//this deals with the situation where the new data access layer has public Properties instead of public Fields.
 					summary=GetSummary("P:OpenDentBusiness."+className+"."+field.Name);
 				}
 				strb.Append(t2+"/** "+summary+" */"+rn);
+				strb.Append(t2+"public ");
+				GetjavaDataType(strb,strbEnums,field);
+				strb.Append(" "+field.Name+";"+rn);
+				strbCopy.Append(t3+className.ToLower()+docForjava+"."+field.Name+"=this."+field.Name+";"+rn);
 			}
+			#endregion
+			#region copy()
+			strb.Append(rn+t2+"/** Deep copy of object. */"+rn
+				+t2+"public "+className+docForjava+" Copy() {"+rn
+				+t3+className+docForjava+" "+className.ToLower()+docForjava+"=new "+className+docForjava+"();"+rn
+				+strbCopy.ToString()
+				+t3+"return "+className.ToLower()+docForjava+";"+rn
+				+t2+"}"+rn);
+			#endregion
+			#region serialize
+			strb.Append(rn+t2+"/** Serialize the object into XML. */"+rn
+				+t2+"public String SerializeToXml() {"+rn
+				+t3+"StringBuilder sb=new StringBuilder();"+rn
+				+t3+"sb.append(\"<"+className+docForjava+">\");"+rn);
+			GetSerializeForjava(strb,fields);
+			strb.Append(t3+"sb.append(\"</"+className+docForjava+">\");"+rn
+				+t3+"return sb.toString();"+rn
+				+t2+"}"+rn);
+			#endregion
+			#region deserialize
+			strb.Append(rn+t2+"/** Sets the variables for this object based on the values from the XML."+rn
+				+t2+" * @param xml The XML passed in must be valid and contain a node for every variable on this object."+rn
+				+t2+" * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */"+rn
+				+t2+"public void DeserializeFromXml(String xml) throws Exception {"+rn
+				+t3+"try {"+rn
+				+t4+"Document doc=XMLParser.parse(xml);"+rn);
+			GetDeserializeForjava(strb,fields);
+			strb.Append(t3+"}"+rn
+				+t3+"catch(Exception e) {"+rn
+				+t4+"throw e;"+rn
+				+t3+"}"+rn
+				+t2+"}"+rn);
+			#endregion
+			#region enums
+			strb.Append(rn+strbEnums.ToString());
 			#endregion
 			#region footer
 			strb.Append(rn+"}"+rn);
@@ -264,8 +319,7 @@ namespace xCrudGeneratorWebService {
 
 		///<summary>Create all method call for DtoMethods</summary>
 		private void WriteMethodCalls(StringBuilder strb,Type tableType) {
-			Type typeWSclasses=typeof(OpenDentalWebService.Accounts);
-			Assembly wSassembly=Assembly.GetAssembly(typeWSclasses);
+			Assembly wSassembly=Assembly.GetAssembly(typeof(OpenDentalWebService.Accounts));
 			Type wSType=null;
 			foreach(Type typeClass in wSassembly.GetTypes()) {
 				if(typeClass.Name==GetSname(tableType.Name)) {
@@ -342,10 +396,8 @@ namespace xCrudGeneratorWebService {
 						strb.Append(className.ToLower()+"."+field.Name+".ToArgb()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "TimeSpan":
-						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
-						continue;
 					case "DateTime":
-						strb.Append(className.ToLower()+"."+field.Name+".ToLongDateString()).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					default:
 						continue;
@@ -417,6 +469,71 @@ namespace xCrudGeneratorWebService {
 			}
 		}
 
+		///<summary></summary>
+		private void GetSerializeForjava(StringBuilder strb,FieldInfo[] fields) {
+			foreach(FieldInfo field in fields) {
+				if(IsNotDbColumn(field)) {//if not a db column, skip
+					continue;
+				}
+				strb.Append(t3+"sb.append(\"<"+field.Name+">\").append(");
+				if(field.FieldType.BaseType.Name=="Enum") {
+					strb.Append(field.Name+".ordinal()).append(\"</"+field.Name+">\");"+rn);
+					continue;
+				}
+				switch(field.FieldType.Name) {
+					case "String":
+					case "TimeSpan":
+					case "DateTime":
+						strb.Append("Serializing.EscapeForXml("+field.Name+")");
+						break;
+					case "Boolean":
+						strb.Append("("+field.Name+")?1:0");
+						break;
+					default:
+						strb.Append(field.Name);
+						break;
+				}
+				strb.Append(").append(\"</"+field.Name+">\");"+rn);
+			}
+		}
+
+		///<summary></summary>
+		private void GetDeserializeForjava(StringBuilder strb,FieldInfo[] fields) {
+			foreach(FieldInfo field in fields) {
+				if(IsNotDbColumn(field)) {//if not a db column, skip
+					continue;
+				}
+				strb.Append(t4+field.Name+"=");
+				if(field.FieldType.BaseType.Name=="Enum") {
+					strb.Append(field.FieldType.Name+".values()[Integer.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue())];"+rn);
+					continue;
+				}
+				switch(field.FieldType.Name) {
+					case "Int32":
+					case "Int64":
+					case "Interval":
+					case "Color":
+						strb.Append("Integer.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Byte":
+						strb.Append("Byte.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Single":
+						strb.Append("Float.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Double":
+						strb.Append("Double.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Boolean":
+						strb.Append("(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue()==\"0\")?false:true;"+rn);
+						continue;
+					default:
+						strb.Append("doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue();"+rn);
+						continue;
+				}
+			}
+		}
+
 		///<summary>Normally false</summary>
 		private bool IsNotDbColumn(FieldInfo field) {
 			object[] attributes = field.GetCustomAttributes(typeof(CrudColumnAttribute),true);
@@ -473,6 +590,55 @@ namespace xCrudGeneratorWebService {
 			strb.Append(t4+"if(typeName==\"long\") {"+rn
 				+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
 				+t4+"}"+rn);
+		}
+
+		///<summary></summary>
+		private void GetjavaDataType(StringBuilder strb,StringBuilder strbEnums,FieldInfo field) {
+			if(field.FieldType.BaseType.Name=="Enum") {
+				strb.Append(field.FieldType.Name);
+				if(strbEnums.ToString().Contains(field.FieldType.Name)) {
+					return;
+				}
+				string summary=GetSummary("T:OpenDentBusiness."+field.FieldType.Name);
+				strbEnums.Append(t2+"/** "+summary+" */"+rn
+					+t2+"public enum "+field.FieldType.Name+" {"+rn);
+				string[] enumNames=field.FieldType.GetEnumNames();
+				for(int i=0;i<enumNames.Length;i++) {
+					if(i>0) {
+						strbEnums.Append(","+rn);
+					}
+					summary=GetSummary("F:OpenDentBusiness."+field.FieldType.Name+"."+enumNames[i]);
+					strbEnums.Append(t3+"/** "+summary+" */"+rn
+						+t3+enumNames[i]);
+				}
+				strbEnums.Append(rn+t2+"}"+rn+rn);
+				return;
+			}
+			switch(field.FieldType.Name) {
+				case "Int32":
+				case "Int64":
+				case "Interval":
+				case "Color":
+					strb.Append("int");
+					break;
+				case "Byte":
+					strb.Append("byte");
+					break;
+				case "Single":
+					strb.Append("float");
+					break;
+				case "Double":
+					strb.Append("double");
+					break;
+				case "String":
+				case "TimeSpan":
+				case "DateTime":
+					strb.Append("String");
+					break;
+				case "Boolean":
+					strb.Append("boolean");
+					break;
+			}
 		}
 	}
 }

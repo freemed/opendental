@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SheetNum>").Append(sheet.SheetNum).Append("</SheetNum>");
 			sb.Append("<SheetType>").Append((int)sheet.SheetType).Append("</SheetType>");
 			sb.Append("<PatNum>").Append(sheet.PatNum).Append("</PatNum>");
-			sb.Append("<DateTimeSheet>").Append(sheet.DateTimeSheet.ToLongDateString()).Append("</DateTimeSheet>");
+			sb.Append("<DateTimeSheet>").Append(sheet.DateTimeSheet.ToString()).Append("</DateTimeSheet>");
 			sb.Append("<FontSize>").Append(sheet.FontSize).Append("</FontSize>");
 			sb.Append("<FontName>").Append(SerializeStringEscapes.EscapeForXml(sheet.FontName)).Append("</FontName>");
 			sb.Append("<Width>").Append(sheet.Width).Append("</Width>");

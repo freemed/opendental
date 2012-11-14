@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<CustRefEntryNum>").Append(custrefentry.CustRefEntryNum).Append("</CustRefEntryNum>");
 			sb.Append("<PatNumCust>").Append(custrefentry.PatNumCust).Append("</PatNumCust>");
 			sb.Append("<PatNumRef>").Append(custrefentry.PatNumRef).Append("</PatNumRef>");
-			sb.Append("<DateEntry>").Append(custrefentry.DateEntry.ToLongDateString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(custrefentry.DateEntry.ToString()).Append("</DateEntry>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(custrefentry.Note)).Append("</Note>");
 			sb.Append("</CustRefEntry>");
 			return sb.ToString();

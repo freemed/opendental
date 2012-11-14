@@ -16,13 +16,13 @@ namespace OpenDentalWebService {
 			sb.Append("<ReferralNum>").Append(refattach.ReferralNum).Append("</ReferralNum>");
 			sb.Append("<PatNum>").Append(refattach.PatNum).Append("</PatNum>");
 			sb.Append("<ItemOrder>").Append(refattach.ItemOrder).Append("</ItemOrder>");
-			sb.Append("<RefDate>").Append(refattach.RefDate.ToLongDateString()).Append("</RefDate>");
+			sb.Append("<RefDate>").Append(refattach.RefDate.ToString()).Append("</RefDate>");
 			sb.Append("<IsFrom>").Append((refattach.IsFrom)?1:0).Append("</IsFrom>");
 			sb.Append("<RefToStatus>").Append((int)refattach.RefToStatus).Append("</RefToStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(refattach.Note)).Append("</Note>");
 			sb.Append("<IsTransitionOfCare>").Append((refattach.IsTransitionOfCare)?1:0).Append("</IsTransitionOfCare>");
 			sb.Append("<ProcNum>").Append(refattach.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateProcComplete>").Append(refattach.DateProcComplete.ToLongDateString()).Append("</DateProcComplete>");
+			sb.Append("<DateProcComplete>").Append(refattach.DateProcComplete.ToString()).Append("</DateProcComplete>");
 			sb.Append("</RefAttach>");
 			return sb.ToString();
 		}

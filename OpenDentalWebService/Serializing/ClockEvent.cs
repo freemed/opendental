@@ -14,12 +14,12 @@ namespace OpenDentalWebService {
 			sb.Append("<ClockEvent>");
 			sb.Append("<ClockEventNum>").Append(clockevent.ClockEventNum).Append("</ClockEventNum>");
 			sb.Append("<EmployeeNum>").Append(clockevent.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<TimeEntered1>").Append(clockevent.TimeEntered1.ToLongDateString()).Append("</TimeEntered1>");
-			sb.Append("<TimeDisplayed1>").Append(clockevent.TimeDisplayed1.ToLongDateString()).Append("</TimeDisplayed1>");
+			sb.Append("<TimeEntered1>").Append(clockevent.TimeEntered1.ToString()).Append("</TimeEntered1>");
+			sb.Append("<TimeDisplayed1>").Append(clockevent.TimeDisplayed1.ToString()).Append("</TimeDisplayed1>");
 			sb.Append("<ClockStatus>").Append((int)clockevent.ClockStatus).Append("</ClockStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(clockevent.Note)).Append("</Note>");
-			sb.Append("<TimeEntered2>").Append(clockevent.TimeEntered2.ToLongDateString()).Append("</TimeEntered2>");
-			sb.Append("<TimeDisplayed2>").Append(clockevent.TimeDisplayed2.ToLongDateString()).Append("</TimeDisplayed2>");
+			sb.Append("<TimeEntered2>").Append(clockevent.TimeEntered2.ToString()).Append("</TimeEntered2>");
+			sb.Append("<TimeDisplayed2>").Append(clockevent.TimeDisplayed2.ToString()).Append("</TimeDisplayed2>");
 			sb.Append("<OTimeHours>").Append(clockevent.OTimeHours.ToString()).Append("</OTimeHours>");
 			sb.Append("<OTimeAuto>").Append(clockevent.OTimeAuto.ToString()).Append("</OTimeAuto>");
 			sb.Append("<Adjust>").Append(clockevent.Adjust.ToString()).Append("</Adjust>");

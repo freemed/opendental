@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Commlog>");
 			sb.Append("<CommlogNum>").Append(commlog.CommlogNum).Append("</CommlogNum>");
 			sb.Append("<PatNum>").Append(commlog.PatNum).Append("</PatNum>");
-			sb.Append("<CommDateTime>").Append(commlog.CommDateTime.ToLongDateString()).Append("</CommDateTime>");
+			sb.Append("<CommDateTime>").Append(commlog.CommDateTime.ToString()).Append("</CommDateTime>");
 			sb.Append("<CommType>").Append(commlog.CommType).Append("</CommType>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(commlog.Note)).Append("</Note>");
 			sb.Append("<Mode_>").Append((int)commlog.Mode_).Append("</Mode_>");
@@ -22,8 +22,8 @@ namespace OpenDentalWebService {
 			sb.Append("<UserNum>").Append(commlog.UserNum).Append("</UserNum>");
 			sb.Append("<Signature>").Append(SerializeStringEscapes.EscapeForXml(commlog.Signature)).Append("</Signature>");
 			sb.Append("<SigIsTopaz>").Append((commlog.SigIsTopaz)?1:0).Append("</SigIsTopaz>");
-			sb.Append("<DateTStamp>").Append(commlog.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
-			sb.Append("<DateTimeEnd>").Append(commlog.DateTimeEnd.ToLongDateString()).Append("</DateTimeEnd>");
+			sb.Append("<DateTStamp>").Append(commlog.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTimeEnd>").Append(commlog.DateTimeEnd.ToString()).Append("</DateTimeEnd>");
 			sb.Append("</Commlog>");
 			return sb.ToString();
 		}

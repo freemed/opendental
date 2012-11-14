@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ICD9Num>").Append(icd9.ICD9Num).Append("</ICD9Num>");
 			sb.Append("<ICD9Code>").Append(SerializeStringEscapes.EscapeForXml(icd9.ICD9Code)).Append("</ICD9Code>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(icd9.Description)).Append("</Description>");
-			sb.Append("<DateTStamp>").Append(icd9.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(icd9.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("</ICD9>");
 			return sb.ToString();
 		}

@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Schedule>");
 			sb.Append("<ScheduleNum>").Append(schedule.ScheduleNum).Append("</ScheduleNum>");
-			sb.Append("<SchedDate>").Append(schedule.SchedDate.ToLongDateString()).Append("</SchedDate>");
+			sb.Append("<SchedDate>").Append(schedule.SchedDate.ToString()).Append("</SchedDate>");
 			sb.Append("<StartTime>").Append(schedule.StartTime.ToString()).Append("</StartTime>");
 			sb.Append("<StopTime>").Append(schedule.StopTime.ToString()).Append("</StopTime>");
 			sb.Append("<SchedType>").Append((int)schedule.SchedType).Append("</SchedType>");
@@ -22,7 +22,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(schedule.Note)).Append("</Note>");
 			sb.Append("<Status>").Append((int)schedule.Status).Append("</Status>");
 			sb.Append("<EmployeeNum>").Append(schedule.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<DateTStamp>").Append(schedule.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(schedule.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("</Schedule>");
 			return sb.ToString();
 		}

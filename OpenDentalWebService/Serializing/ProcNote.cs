@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ProcNoteNum>").Append(procnote.ProcNoteNum).Append("</ProcNoteNum>");
 			sb.Append("<PatNum>").Append(procnote.PatNum).Append("</PatNum>");
 			sb.Append("<ProcNum>").Append(procnote.ProcNum).Append("</ProcNum>");
-			sb.Append("<EntryDateTime>").Append(procnote.EntryDateTime.ToLongDateString()).Append("</EntryDateTime>");
+			sb.Append("<EntryDateTime>").Append(procnote.EntryDateTime.ToString()).Append("</EntryDateTime>");
 			sb.Append("<UserNum>").Append(procnote.UserNum).Append("</UserNum>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(procnote.Note)).Append("</Note>");
 			sb.Append("<SigIsTopaz>").Append((procnote.SigIsTopaz)?1:0).Append("</SigIsTopaz>");

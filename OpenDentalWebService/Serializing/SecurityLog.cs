@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SecurityLogNum>").Append(securitylog.SecurityLogNum).Append("</SecurityLogNum>");
 			sb.Append("<PermType>").Append((int)securitylog.PermType).Append("</PermType>");
 			sb.Append("<UserNum>").Append(securitylog.UserNum).Append("</UserNum>");
-			sb.Append("<LogDateTime>").Append(securitylog.LogDateTime.ToLongDateString()).Append("</LogDateTime>");
+			sb.Append("<LogDateTime>").Append(securitylog.LogDateTime.ToString()).Append("</LogDateTime>");
 			sb.Append("<LogText>").Append(SerializeStringEscapes.EscapeForXml(securitylog.LogText)).Append("</LogText>");
 			sb.Append("<PatNum>").Append(securitylog.PatNum).Append("</PatNum>");
 			sb.Append("<CompName>").Append(SerializeStringEscapes.EscapeForXml(securitylog.CompName)).Append("</CompName>");

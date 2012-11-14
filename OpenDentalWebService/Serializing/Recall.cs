@@ -14,18 +14,18 @@ namespace OpenDentalWebService {
 			sb.Append("<Recall>");
 			sb.Append("<RecallNum>").Append(recall.RecallNum).Append("</RecallNum>");
 			sb.Append("<PatNum>").Append(recall.PatNum).Append("</PatNum>");
-			sb.Append("<DateDueCalc>").Append(recall.DateDueCalc.ToLongDateString()).Append("</DateDueCalc>");
-			sb.Append("<DateDue>").Append(recall.DateDue.ToLongDateString()).Append("</DateDue>");
-			sb.Append("<DatePrevious>").Append(recall.DatePrevious.ToLongDateString()).Append("</DatePrevious>");
+			sb.Append("<DateDueCalc>").Append(recall.DateDueCalc.ToString()).Append("</DateDueCalc>");
+			sb.Append("<DateDue>").Append(recall.DateDue.ToString()).Append("</DateDue>");
+			sb.Append("<DatePrevious>").Append(recall.DatePrevious.ToString()).Append("</DatePrevious>");
 			sb.Append("<RecallInterval>").Append(recall.RecallInterval).Append("</RecallInterval>");
 			sb.Append("<RecallStatus>").Append(recall.RecallStatus).Append("</RecallStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(recall.Note)).Append("</Note>");
 			sb.Append("<IsDisabled>").Append((recall.IsDisabled)?1:0).Append("</IsDisabled>");
-			sb.Append("<DateTStamp>").Append(recall.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(recall.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<RecallTypeNum>").Append(recall.RecallTypeNum).Append("</RecallTypeNum>");
 			sb.Append("<DisableUntilBalance>").Append(recall.DisableUntilBalance).Append("</DisableUntilBalance>");
-			sb.Append("<DisableUntilDate>").Append(recall.DisableUntilDate.ToLongDateString()).Append("</DisableUntilDate>");
-			sb.Append("<DateScheduled>").Append(recall.DateScheduled.ToLongDateString()).Append("</DateScheduled>");
+			sb.Append("<DisableUntilDate>").Append(recall.DisableUntilDate.ToString()).Append("</DisableUntilDate>");
+			sb.Append("<DateScheduled>").Append(recall.DateScheduled.ToString()).Append("</DateScheduled>");
 			sb.Append("</Recall>");
 			return sb.ToString();
 		}

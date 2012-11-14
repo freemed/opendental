@@ -15,12 +15,12 @@ namespace OpenDentalWebService {
 			sb.Append("<TaskListNum>").Append(tasklist.TaskListNum).Append("</TaskListNum>");
 			sb.Append("<Descript>").Append(SerializeStringEscapes.EscapeForXml(tasklist.Descript)).Append("</Descript>");
 			sb.Append("<Parent>").Append(tasklist.Parent).Append("</Parent>");
-			sb.Append("<DateTL>").Append(tasklist.DateTL.ToLongDateString()).Append("</DateTL>");
+			sb.Append("<DateTL>").Append(tasklist.DateTL.ToString()).Append("</DateTL>");
 			sb.Append("<IsRepeating>").Append((tasklist.IsRepeating)?1:0).Append("</IsRepeating>");
 			sb.Append("<DateType>").Append((int)tasklist.DateType).Append("</DateType>");
 			sb.Append("<FromNum>").Append(tasklist.FromNum).Append("</FromNum>");
 			sb.Append("<ObjectType>").Append((int)tasklist.ObjectType).Append("</ObjectType>");
-			sb.Append("<DateTimeEntry>").Append(tasklist.DateTimeEntry.ToLongDateString()).Append("</DateTimeEntry>");
+			sb.Append("<DateTimeEntry>").Append(tasklist.DateTimeEntry.ToString()).Append("</DateTimeEntry>");
 			sb.Append("</TaskList>");
 			return sb.ToString();
 		}

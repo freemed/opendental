@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<EhrMeasureEvent>");
 			sb.Append("<EhrMeasureEventNum>").Append(ehrmeasureevent.EhrMeasureEventNum).Append("</EhrMeasureEventNum>");
-			sb.Append("<DateTEvent>").Append(ehrmeasureevent.DateTEvent.ToLongDateString()).Append("</DateTEvent>");
+			sb.Append("<DateTEvent>").Append(ehrmeasureevent.DateTEvent.ToString()).Append("</DateTEvent>");
 			sb.Append("<EventType>").Append((int)ehrmeasureevent.EventType).Append("</EventType>");
 			sb.Append("<PatNum>").Append(ehrmeasureevent.PatNum).Append("</PatNum>");
 			sb.Append("<MoreInfo>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasureevent.MoreInfo)).Append("</MoreInfo>");

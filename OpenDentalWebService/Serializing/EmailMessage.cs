@@ -18,7 +18,7 @@ namespace OpenDentalWebService {
 			sb.Append("<FromAddress>").Append(SerializeStringEscapes.EscapeForXml(emailmessage.FromAddress)).Append("</FromAddress>");
 			sb.Append("<Subject>").Append(SerializeStringEscapes.EscapeForXml(emailmessage.Subject)).Append("</Subject>");
 			sb.Append("<BodyText>").Append(SerializeStringEscapes.EscapeForXml(emailmessage.BodyText)).Append("</BodyText>");
-			sb.Append("<MsgDateTime>").Append(emailmessage.MsgDateTime.ToLongDateString()).Append("</MsgDateTime>");
+			sb.Append("<MsgDateTime>").Append(emailmessage.MsgDateTime.ToString()).Append("</MsgDateTime>");
 			sb.Append("<SentOrReceived>").Append((int)emailmessage.SentOrReceived).Append("</SentOrReceived>");
 			sb.Append("</EmailMessage>");
 			return sb.ToString();

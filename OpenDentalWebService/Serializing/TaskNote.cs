@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<TaskNoteNum>").Append(tasknote.TaskNoteNum).Append("</TaskNoteNum>");
 			sb.Append("<TaskNum>").Append(tasknote.TaskNum).Append("</TaskNum>");
 			sb.Append("<UserNum>").Append(tasknote.UserNum).Append("</UserNum>");
-			sb.Append("<DateTimeNote>").Append(tasknote.DateTimeNote.ToLongDateString()).Append("</DateTimeNote>");
+			sb.Append("<DateTimeNote>").Append(tasknote.DateTimeNote.ToString()).Append("</DateTimeNote>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(tasknote.Note)).Append("</Note>");
 			sb.Append("</TaskNote>");
 			return sb.ToString();

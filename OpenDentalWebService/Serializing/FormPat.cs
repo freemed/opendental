@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<FormPat>");
 			sb.Append("<FormPatNum>").Append(formpat.FormPatNum).Append("</FormPatNum>");
 			sb.Append("<PatNum>").Append(formpat.PatNum).Append("</PatNum>");
-			sb.Append("<FormDateTime>").Append(formpat.FormDateTime.ToLongDateString()).Append("</FormDateTime>");
+			sb.Append("<FormDateTime>").Append(formpat.FormDateTime.ToString()).Append("</FormDateTime>");
 			sb.Append("</FormPat>");
 			return sb.ToString();
 		}

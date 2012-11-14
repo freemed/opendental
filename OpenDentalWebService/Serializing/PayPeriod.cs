@@ -13,9 +13,9 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<PayPeriod>");
 			sb.Append("<PayPeriodNum>").Append(payperiod.PayPeriodNum).Append("</PayPeriodNum>");
-			sb.Append("<DateStart>").Append(payperiod.DateStart.ToLongDateString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(payperiod.DateStop.ToLongDateString()).Append("</DateStop>");
-			sb.Append("<DatePaycheck>").Append(payperiod.DatePaycheck.ToLongDateString()).Append("</DatePaycheck>");
+			sb.Append("<DateStart>").Append(payperiod.DateStart.ToString()).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(payperiod.DateStop.ToString()).Append("</DateStop>");
+			sb.Append("<DatePaycheck>").Append(payperiod.DatePaycheck.ToString()).Append("</DatePaycheck>");
 			sb.Append("</PayPeriod>");
 			return sb.ToString();
 		}

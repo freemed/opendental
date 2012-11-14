@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<DeletedObjectNum>").Append(deletedobject.DeletedObjectNum).Append("</DeletedObjectNum>");
 			sb.Append("<ObjectNum>").Append(deletedobject.ObjectNum).Append("</ObjectNum>");
 			sb.Append("<ObjectType>").Append((int)deletedobject.ObjectType).Append("</ObjectType>");
-			sb.Append("<DateTStamp>").Append(deletedobject.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(deletedobject.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("</DeletedObject>");
 			return sb.ToString();
 		}

@@ -23,7 +23,7 @@ namespace OpenDentalWebService {
 			sb.Append("<State>").Append(SerializeStringEscapes.EscapeForXml(pharmacy.State)).Append("</State>");
 			sb.Append("<Zip>").Append(SerializeStringEscapes.EscapeForXml(pharmacy.Zip)).Append("</Zip>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(pharmacy.Note)).Append("</Note>");
-			sb.Append("<DateTStamp>").Append(pharmacy.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(pharmacy.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("</Pharmacy>");
 			return sb.ToString();
 		}

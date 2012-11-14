@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Deposit>");
 			sb.Append("<DepositNum>").Append(deposit.DepositNum).Append("</DepositNum>");
-			sb.Append("<DateDeposit>").Append(deposit.DateDeposit.ToLongDateString()).Append("</DateDeposit>");
+			sb.Append("<DateDeposit>").Append(deposit.DateDeposit.ToString()).Append("</DateDeposit>");
 			sb.Append("<BankAccountInfo>").Append(SerializeStringEscapes.EscapeForXml(deposit.BankAccountInfo)).Append("</BankAccountInfo>");
 			sb.Append("<Amount>").Append(deposit.Amount).Append("</Amount>");
 			sb.Append("<Memo>").Append(SerializeStringEscapes.EscapeForXml(deposit.Memo)).Append("</Memo>");

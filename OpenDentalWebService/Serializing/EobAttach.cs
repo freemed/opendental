@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<EobAttach>");
 			sb.Append("<EobAttachNum>").Append(eobattach.EobAttachNum).Append("</EobAttachNum>");
 			sb.Append("<ClaimPaymentNum>").Append(eobattach.ClaimPaymentNum).Append("</ClaimPaymentNum>");
-			sb.Append("<DateTCreated>").Append(eobattach.DateTCreated.ToLongDateString()).Append("</DateTCreated>");
+			sb.Append("<DateTCreated>").Append(eobattach.DateTCreated.ToString()).Append("</DateTCreated>");
 			sb.Append("<FileName>").Append(SerializeStringEscapes.EscapeForXml(eobattach.FileName)).Append("</FileName>");
 			sb.Append("<RawBase64>").Append(SerializeStringEscapes.EscapeForXml(eobattach.RawBase64)).Append("</RawBase64>");
 			sb.Append("</EobAttach>");

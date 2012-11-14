@@ -1,6 +1,6 @@
 package com.opendental.odweb.client.datainterface;
 
-public class Documents {
+public class Documentods {
 
 
 }

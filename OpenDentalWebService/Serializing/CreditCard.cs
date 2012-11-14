@@ -18,11 +18,11 @@ namespace OpenDentalWebService {
 			sb.Append("<Zip>").Append(SerializeStringEscapes.EscapeForXml(creditcard.Zip)).Append("</Zip>");
 			sb.Append("<XChargeToken>").Append(SerializeStringEscapes.EscapeForXml(creditcard.XChargeToken)).Append("</XChargeToken>");
 			sb.Append("<CCNumberMasked>").Append(SerializeStringEscapes.EscapeForXml(creditcard.CCNumberMasked)).Append("</CCNumberMasked>");
-			sb.Append("<CCExpiration>").Append(creditcard.CCExpiration.ToLongDateString()).Append("</CCExpiration>");
+			sb.Append("<CCExpiration>").Append(creditcard.CCExpiration.ToString()).Append("</CCExpiration>");
 			sb.Append("<ItemOrder>").Append(creditcard.ItemOrder).Append("</ItemOrder>");
 			sb.Append("<ChargeAmt>").Append(creditcard.ChargeAmt).Append("</ChargeAmt>");
-			sb.Append("<DateStart>").Append(creditcard.DateStart.ToLongDateString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(creditcard.DateStop.ToLongDateString()).Append("</DateStop>");
+			sb.Append("<DateStart>").Append(creditcard.DateStart.ToString()).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(creditcard.DateStop.ToString()).Append("</DateStop>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(creditcard.Note)).Append("</Note>");
 			sb.Append("<PayPlanNum>").Append(creditcard.PayPlanNum).Append("</PayPlanNum>");
 			sb.Append("</CreditCard>");

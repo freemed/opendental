@@ -16,9 +16,9 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(medicationpat.PatNum).Append("</PatNum>");
 			sb.Append("<MedicationNum>").Append(medicationpat.MedicationNum).Append("</MedicationNum>");
 			sb.Append("<PatNote>").Append(SerializeStringEscapes.EscapeForXml(medicationpat.PatNote)).Append("</PatNote>");
-			sb.Append("<DateTStamp>").Append(medicationpat.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
-			sb.Append("<DateStart>").Append(medicationpat.DateStart.ToLongDateString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(medicationpat.DateStop.ToLongDateString()).Append("</DateStop>");
+			sb.Append("<DateTStamp>").Append(medicationpat.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateStart>").Append(medicationpat.DateStart.ToString()).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(medicationpat.DateStop.ToString()).Append("</DateStop>");
 			sb.Append("<ProvNum>").Append(medicationpat.ProvNum).Append("</ProvNum>");
 			sb.Append("</MedicationPat>");
 			return sb.ToString();

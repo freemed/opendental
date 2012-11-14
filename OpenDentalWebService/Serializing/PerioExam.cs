@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PerioExam>");
 			sb.Append("<PerioExamNum>").Append(perioexam.PerioExamNum).Append("</PerioExamNum>");
 			sb.Append("<PatNum>").Append(perioexam.PatNum).Append("</PatNum>");
-			sb.Append("<ExamDate>").Append(perioexam.ExamDate.ToLongDateString()).Append("</ExamDate>");
+			sb.Append("<ExamDate>").Append(perioexam.ExamDate.ToString()).Append("</ExamDate>");
 			sb.Append("<ProvNum>").Append(perioexam.ProvNum).Append("</ProvNum>");
 			sb.Append("</PerioExam>");
 			return sb.ToString();

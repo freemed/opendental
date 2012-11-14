@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ErxLogNum>").Append(erxlog.ErxLogNum).Append("</ErxLogNum>");
 			sb.Append("<PatNum>").Append(erxlog.PatNum).Append("</PatNum>");
 			sb.Append("<MsgText>").Append(SerializeStringEscapes.EscapeForXml(erxlog.MsgText)).Append("</MsgText>");
-			sb.Append("<DateTStamp>").Append(erxlog.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(erxlog.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("</ErxLog>");
 			return sb.ToString();
 		}

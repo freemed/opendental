@@ -13,15 +13,15 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Adjustment>");
 			sb.Append("<AdjNum>").Append(adjustment.AdjNum).Append("</AdjNum>");
-			sb.Append("<AdjDate>").Append(adjustment.AdjDate.ToLongDateString()).Append("</AdjDate>");
+			sb.Append("<AdjDate>").Append(adjustment.AdjDate.ToString()).Append("</AdjDate>");
 			sb.Append("<AdjAmt>").Append(adjustment.AdjAmt).Append("</AdjAmt>");
 			sb.Append("<PatNum>").Append(adjustment.PatNum).Append("</PatNum>");
 			sb.Append("<AdjType>").Append(adjustment.AdjType).Append("</AdjType>");
 			sb.Append("<ProvNum>").Append(adjustment.ProvNum).Append("</ProvNum>");
 			sb.Append("<AdjNote>").Append(SerializeStringEscapes.EscapeForXml(adjustment.AdjNote)).Append("</AdjNote>");
-			sb.Append("<ProcDate>").Append(adjustment.ProcDate.ToLongDateString()).Append("</ProcDate>");
+			sb.Append("<ProcDate>").Append(adjustment.ProcDate.ToString()).Append("</ProcDate>");
 			sb.Append("<ProcNum>").Append(adjustment.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateEntry>").Append(adjustment.DateEntry.ToLongDateString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(adjustment.DateEntry.ToString()).Append("</DateEntry>");
 			sb.Append("<ClinicNum>").Append(adjustment.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<StatementNum>").Append(adjustment.StatementNum).Append("</StatementNum>");
 			sb.Append("</Adjustment>");

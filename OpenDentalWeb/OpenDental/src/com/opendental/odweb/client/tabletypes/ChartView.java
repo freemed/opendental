@@ -1,0 +1,180 @@
+package com.opendental.odweb.client.tabletypes;
+
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.XMLParser;
+import com.opendental.odweb.client.remoting.Serializing;
+
+public class ChartView {
+		/** Primary key. */
+		public int ChartViewNum;
+		/** Description of this view.  Gets displayed at top of Progress Notes grid. */
+		public String Description;
+		/** 0-based order to display in lists. */
+		public int ItemOrder;
+		/** Enum:ChartViewProcStat None=0,TP=1,Complete=2,Existing Cur Prov=4,Existing Other Prov=8,Referred=16,Deleted=32,Condition=64,All=127. */
+		public ChartViewProcStat ProcStatuses;
+		/** Enum:ChartViewObjs None=0,Appointments=1,Comm Log=2,Comm Log Family=4,Tasks=8,Email=16,LabCases=32,Rx=64,Sheets=128,All=255. */
+		public ChartViewObjs ObjectTypes;
+		/** Set true to show procedure notes. */
+		public boolean ShowProcNotes;
+		/** Set true to enable audit mode. */
+		public boolean IsAudit;
+		/** Set true to only show information regarding the selected teeth. */
+		public boolean SelectedTeethOnly;
+		/** Enum:OrionStatus Which orion statuses to show. Will be zero if not orion. */
+		public OrionStatus OrionStatusFlags;
+		/** Enum:ChartViewDates  */
+		public ChartViewDates DatesShowing;
+
+		/** Deep copy of object. */
+		public ChartView Copy() {
+			ChartView chartview=new ChartView();
+			chartview.ChartViewNum=this.ChartViewNum;
+			chartview.Description=this.Description;
+			chartview.ItemOrder=this.ItemOrder;
+			chartview.ProcStatuses=this.ProcStatuses;
+			chartview.ObjectTypes=this.ObjectTypes;
+			chartview.ShowProcNotes=this.ShowProcNotes;
+			chartview.IsAudit=this.IsAudit;
+			chartview.SelectedTeethOnly=this.SelectedTeethOnly;
+			chartview.OrionStatusFlags=this.OrionStatusFlags;
+			chartview.DatesShowing=this.DatesShowing;
+			return chartview;
+		}
+
+		/** Serialize the object into XML. */
+		public String SerializeToXml() {
+			StringBuilder sb=new StringBuilder();
+			sb.append("<ChartView>");
+			sb.append("<ChartViewNum>").append(ChartViewNum).append("</ChartViewNum>");
+			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
+			sb.append("<ProcStatuses>").append(ProcStatuses.ordinal()).append("</ProcStatuses>");
+			sb.append("<ObjectTypes>").append(ObjectTypes.ordinal()).append("</ObjectTypes>");
+			sb.append("<ShowProcNotes>").append((ShowProcNotes)?1:0).append("</ShowProcNotes>");
+			sb.append("<IsAudit>").append((IsAudit)?1:0).append("</IsAudit>");
+			sb.append("<SelectedTeethOnly>").append((SelectedTeethOnly)?1:0).append("</SelectedTeethOnly>");
+			sb.append("<OrionStatusFlags>").append(OrionStatusFlags.ordinal()).append("</OrionStatusFlags>");
+			sb.append("<DatesShowing>").append(DatesShowing.ordinal()).append("</DatesShowing>");
+			sb.append("</ChartView>");
+			return sb.toString();
+		}
+
+		/** Sets the variables for this object based on the values from the XML.
+		 * @param xml The XML passed in must be valid and contain a node for every variable on this object.
+		 * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */
+		public void DeserializeFromXml(String xml) throws Exception {
+			try {
+				Document doc=XMLParser.parse(xml);
+				ChartViewNum=Integer.valueOf(doc.getElementsByTagName("ChartViewNum").item(0).getFirstChild().getNodeValue());
+				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
+				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
+				ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(doc.getElementsByTagName("ProcStatuses").item(0).getFirstChild().getNodeValue())];
+				ObjectTypes=ChartViewObjs.values()[Integer.valueOf(doc.getElementsByTagName("ObjectTypes").item(0).getFirstChild().getNodeValue())];
+				ShowProcNotes=(doc.getElementsByTagName("ShowProcNotes").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				IsAudit=(doc.getElementsByTagName("IsAudit").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				SelectedTeethOnly=(doc.getElementsByTagName("SelectedTeethOnly").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				OrionStatusFlags=OrionStatus.values()[Integer.valueOf(doc.getElementsByTagName("OrionStatusFlags").item(0).getFirstChild().getNodeValue())];
+				DatesShowing=ChartViewDates.values()[Integer.valueOf(doc.getElementsByTagName("DatesShowing").item(0).getFirstChild().getNodeValue())];
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}
+
+		/**  */
+		public enum ChartViewProcStat {
+			/** 0- None. */
+			None,
+			/** 1- Treatment Plan. */
+			TP,
+			/** 2- Complete. */
+			C,
+			/** 4- Existing Current Provider. */
+			EC,
+			/** 8- Existing Other Provider. */
+			EO,
+			/** 16- Referred Out. */
+			R,
+			/** 32- Deleted. */
+			D,
+			/** 64- Condition. */
+			Cn,
+			/** 127- All. */
+			All
+		}
+
+		/**  */
+		public enum ChartViewObjs {
+			/** 0- None */
+			None,
+			/** 1- Appointments */
+			Appointments,
+			/** 2- Comm Log */
+			CommLog,
+			/** 4- Comm Log Family */
+			CommLogFamily,
+			/** 8- Tasks */
+			Tasks,
+			/** 16- Email */
+			Email,
+			/** 32- Lab Cases */
+			LabCases,
+			/** 64- Rx */
+			Rx,
+			/** 128- Sheets */
+			Sheets,
+			/** 255- All */
+			All
+		}
+
+		/**  */
+		public enum OrionStatus {
+			/** 0- None.  While a normal orion proc would never have this status2, it is still needed for flags in ChartViews.  And it's also possible that a status2 slipped through the cracks and was not assigned, leaving it with this value. */
+			None,
+			/** 1– Treatment planned */
+			TP,
+			/** 2– Completed */
+			C,
+			/** 4– Existing prior to incarceration */
+			E,
+			/** 8– Refused treatment */
+			R,
+			/** 16– Referred out to specialist */
+			RO,
+			/** 32– Completed by specialist */
+			CS,
+			/** 64– Completed by registry */
+			CR,
+			/** 128- Cancelled, tx plan changed */
+			CA_Tx,
+			/** 256- Cancelled, eligible parole */
+			CA_EPRD,
+			/** 512- Cancelled, parole/discharge */
+			CA_PD,
+			/** 1024– Suspended, unacceptable plaque */
+			S,
+			/** 2048- Stop clock, multi visit */
+			ST,
+			/** 4096– Watch */
+			W,
+			/** 8192– Alternative */
+			A
+		}
+
+		/**  */
+		public enum ChartViewDates {
+			/** 0- All */
+			All,
+			/** 1- Today */
+			Today,
+			/** 2- Yesterday */
+			Yesterday,
+			/** 3- This Year */
+			ThisYear,
+			/** 4- Last Year */
+			LastYear
+		}
+
+
+}

@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(labpanel.PatNum).Append("</PatNum>");
 			sb.Append("<RawMessage>").Append(SerializeStringEscapes.EscapeForXml(labpanel.RawMessage)).Append("</RawMessage>");
 			sb.Append("<LabNameAddress>").Append(SerializeStringEscapes.EscapeForXml(labpanel.LabNameAddress)).Append("</LabNameAddress>");
-			sb.Append("<DateTStamp>").Append(labpanel.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(labpanel.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<SpecimenCondition>").Append(SerializeStringEscapes.EscapeForXml(labpanel.SpecimenCondition)).Append("</SpecimenCondition>");
 			sb.Append("<SpecimenSource>").Append(SerializeStringEscapes.EscapeForXml(labpanel.SpecimenSource)).Append("</SpecimenSource>");
 			sb.Append("<ServiceId>").Append(SerializeStringEscapes.EscapeForXml(labpanel.ServiceId)).Append("</ServiceId>");

@@ -16,8 +16,8 @@ namespace OpenDentalWebService {
 			sb.Append("<ProcNum>").Append(orionproc.ProcNum).Append("</ProcNum>");
 			sb.Append("<DPC>").Append((int)orionproc.DPC).Append("</DPC>");
 			sb.Append("<DPCpost>").Append((int)orionproc.DPCpost).Append("</DPCpost>");
-			sb.Append("<DateScheduleBy>").Append(orionproc.DateScheduleBy.ToLongDateString()).Append("</DateScheduleBy>");
-			sb.Append("<DateStopClock>").Append(orionproc.DateStopClock.ToLongDateString()).Append("</DateStopClock>");
+			sb.Append("<DateScheduleBy>").Append(orionproc.DateScheduleBy.ToString()).Append("</DateScheduleBy>");
+			sb.Append("<DateStopClock>").Append(orionproc.DateStopClock.ToString()).Append("</DateStopClock>");
 			sb.Append("<Status2>").Append((int)orionproc.Status2).Append("</Status2>");
 			sb.Append("<IsOnCall>").Append((orionproc.IsOnCall)?1:0).Append("</IsOnCall>");
 			sb.Append("<IsEffectiveComm>").Append((orionproc.IsEffectiveComm)?1:0).Append("</IsEffectiveComm>");

@@ -20,7 +20,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PatStatus>").Append((int)patient.PatStatus).Append("</PatStatus>");
 			sb.Append("<Gender>").Append((int)patient.Gender).Append("</Gender>");
 			sb.Append("<Position>").Append((int)patient.Position).Append("</Position>");
-			sb.Append("<Birthdate>").Append(patient.Birthdate.ToLongDateString()).Append("</Birthdate>");
+			sb.Append("<Birthdate>").Append(patient.Birthdate.ToString()).Append("</Birthdate>");
 			sb.Append("<SSN>").Append(SerializeStringEscapes.EscapeForXml(patient.SSN)).Append("</SSN>");
 			sb.Append("<Address>").Append(SerializeStringEscapes.EscapeForXml(patient.Address)).Append("</Address>");
 			sb.Append("<Address2>").Append(SerializeStringEscapes.EscapeForXml(patient.Address2)).Append("</Address2>");
@@ -60,7 +60,7 @@ namespace OpenDentalWebService {
 			sb.Append("<County>").Append(SerializeStringEscapes.EscapeForXml(patient.County)).Append("</County>");
 			sb.Append("<GradeLevel>").Append((int)patient.GradeLevel).Append("</GradeLevel>");
 			sb.Append("<Urgency>").Append((int)patient.Urgency).Append("</Urgency>");
-			sb.Append("<DateFirstVisit>").Append(patient.DateFirstVisit.ToLongDateString()).Append("</DateFirstVisit>");
+			sb.Append("<DateFirstVisit>").Append(patient.DateFirstVisit.ToString()).Append("</DateFirstVisit>");
 			sb.Append("<ClinicNum>").Append(patient.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<HasIns>").Append(SerializeStringEscapes.EscapeForXml(patient.HasIns)).Append("</HasIns>");
 			sb.Append("<TrophyFolder>").Append(SerializeStringEscapes.EscapeForXml(patient.TrophyFolder)).Append("</TrophyFolder>");
@@ -74,11 +74,11 @@ namespace OpenDentalWebService {
 			sb.Append("<SchedAfterTime>").Append(patient.SchedAfterTime.ToString()).Append("</SchedAfterTime>");
 			sb.Append("<SchedDayOfWeek>").Append(patient.SchedDayOfWeek).Append("</SchedDayOfWeek>");
 			sb.Append("<Language>").Append(SerializeStringEscapes.EscapeForXml(patient.Language)).Append("</Language>");
-			sb.Append("<AdmitDate>").Append(patient.AdmitDate.ToLongDateString()).Append("</AdmitDate>");
+			sb.Append("<AdmitDate>").Append(patient.AdmitDate.ToString()).Append("</AdmitDate>");
 			sb.Append("<Title>").Append(SerializeStringEscapes.EscapeForXml(patient.Title)).Append("</Title>");
 			sb.Append("<PayPlanDue>").Append(patient.PayPlanDue).Append("</PayPlanDue>");
 			sb.Append("<SiteNum>").Append(patient.SiteNum).Append("</SiteNum>");
-			sb.Append("<DateTStamp>").Append(patient.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(patient.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<ResponsParty>").Append(patient.ResponsParty).Append("</ResponsParty>");
 			sb.Append("<CanadianEligibilityCode>").Append(patient.CanadianEligibilityCode).Append("</CanadianEligibilityCode>");
 			sb.Append("<AskToArriveEarly>").Append(patient.AskToArriveEarly).Append("</AskToArriveEarly>");

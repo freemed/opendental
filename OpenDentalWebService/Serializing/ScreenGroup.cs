@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ScreenGroup>");
 			sb.Append("<ScreenGroupNum>").Append(screengroup.ScreenGroupNum).Append("</ScreenGroupNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(screengroup.Description)).Append("</Description>");
-			sb.Append("<SGDate>").Append(screengroup.SGDate.ToLongDateString()).Append("</SGDate>");
+			sb.Append("<SGDate>").Append(screengroup.SGDate.ToString()).Append("</SGDate>");
 			sb.Append("</ScreenGroup>");
 			return sb.ToString();
 		}

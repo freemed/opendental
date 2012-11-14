@@ -16,11 +16,11 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(disease.PatNum).Append("</PatNum>");
 			sb.Append("<DiseaseDefNum>").Append(disease.DiseaseDefNum).Append("</DiseaseDefNum>");
 			sb.Append("<PatNote>").Append(SerializeStringEscapes.EscapeForXml(disease.PatNote)).Append("</PatNote>");
-			sb.Append("<DateTStamp>").Append(disease.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(disease.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<ICD9Num>").Append(disease.ICD9Num).Append("</ICD9Num>");
 			sb.Append("<ProbStatus>").Append((int)disease.ProbStatus).Append("</ProbStatus>");
-			sb.Append("<DateStart>").Append(disease.DateStart.ToLongDateString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(disease.DateStop.ToLongDateString()).Append("</DateStop>");
+			sb.Append("<DateStart>").Append(disease.DateStart.ToString()).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(disease.DateStop.ToString()).Append("</DateStop>");
 			sb.Append("</Disease>");
 			return sb.ToString();
 		}

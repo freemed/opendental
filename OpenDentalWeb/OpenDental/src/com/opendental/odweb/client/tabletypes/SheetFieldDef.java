@@ -1,0 +1,164 @@
+package com.opendental.odweb.client.tabletypes;
+
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.XMLParser;
+import com.opendental.odweb.client.remoting.Serializing;
+
+public class SheetFieldDef {
+		/** Primary key. */
+		public int SheetFieldDefNum;
+		/** FK to sheetdef.SheetDefNum. */
+		public int SheetDefNum;
+		/** Enum:SheetFieldType  OutputText, InputField, StaticText,Parameter(only used for SheetField, not SheetFieldDef),Image,Drawing,Line,Rectangle,CheckBox,SigBox,PatImage. */
+		public SheetFieldType FieldType;
+		/** Mostly for OutputText, InputField, and CheckBox types.  Each sheet typically has a main datatable type.  For OutputText types, FieldName is usually the string representation of the database column for the main table.  For other tables, it can be of the form table.Column.  There may also be extra fields available that are not strictly pulled from the database.  Extra fields will start with lowercase to indicate that they are not pure database fields.  The list of available fields for each type in SheetFieldsAvailable.  Users can pick from that list.  Likewise, InputField types are internally tied to actions to persist the data.  So they are also hard coded and are available in SheetFieldsAvailable.  For static images, this is the full file name including extension, but without path.  Static images paths are reconstructed by looking in the AtoZ folder, SheetImages folder.  For Pat Images, this is an long FK/DefNum to the default folder for the image.  The filename of a PatImage will later be stored in FieldValue. */
+		public String FieldName;
+		/** For StaticText, this text can include bracketed fields, like [nameLF].  For OutputText and InputField, this will be blank.  For CheckBoxes, either X or blank.  Even if the checkbox is set to behave like a radio button. */
+		public String FieldValue;
+		/** The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField. */
+		public float FontSize;
+		/** The fontName for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField. */
+		public String FontName;
+		/** . */
+		public boolean FontIsBold;
+		/** In pixels. */
+		public int XPos;
+		/** In pixels. */
+		public int YPos;
+		/** The field will be constrained horizontally to this size.  Not allowed to be zero. */
+		public int Width;
+		/** The field will be constrained vertically to this size.  Not allowed to be 0.  It's not allowed to be zero so that it will be visible on the designer. */
+		public int Height;
+		/** Enum:GrowthBehaviorEnum */
+		public GrowthBehaviorEnum GrowthBehavior;
+		/** This is only used for checkboxes that you want to behave like radiobuttons.  Set the FieldName the same for each Checkbox in the group.  The FieldValue will likely be X for one of them and empty string for the others.  Each of them will have a different RadioButtonValue.  Whichever box has X, the RadioButtonValue for that box will be used when importing.  This field is not used for "misc" radiobutton groups. */
+		public String RadioButtonValue;
+		/** Name which identifies the group within which the radio button belongs. FieldName must be set to "misc" in order for the group to take effect. */
+		public String RadioButtonGroup;
+		/** Set to true if this field is required to have a value before the sheet is closed. */
+		public boolean IsRequired;
+		/** Tab stop order for all fields. One-based.  Only checkboxes and input fields can have values other than 0. */
+		public int TabOrder;
+		/** Allows reporting on misc fields. */
+		public String ReportableName;
+
+		/** Deep copy of object. */
+		public SheetFieldDef Copy() {
+			SheetFieldDef sheetfielddef=new SheetFieldDef();
+			sheetfielddef.SheetFieldDefNum=this.SheetFieldDefNum;
+			sheetfielddef.SheetDefNum=this.SheetDefNum;
+			sheetfielddef.FieldType=this.FieldType;
+			sheetfielddef.FieldName=this.FieldName;
+			sheetfielddef.FieldValue=this.FieldValue;
+			sheetfielddef.FontSize=this.FontSize;
+			sheetfielddef.FontName=this.FontName;
+			sheetfielddef.FontIsBold=this.FontIsBold;
+			sheetfielddef.XPos=this.XPos;
+			sheetfielddef.YPos=this.YPos;
+			sheetfielddef.Width=this.Width;
+			sheetfielddef.Height=this.Height;
+			sheetfielddef.GrowthBehavior=this.GrowthBehavior;
+			sheetfielddef.RadioButtonValue=this.RadioButtonValue;
+			sheetfielddef.RadioButtonGroup=this.RadioButtonGroup;
+			sheetfielddef.IsRequired=this.IsRequired;
+			sheetfielddef.TabOrder=this.TabOrder;
+			sheetfielddef.ReportableName=this.ReportableName;
+			return sheetfielddef;
+		}
+
+		/** Serialize the object into XML. */
+		public String SerializeToXml() {
+			StringBuilder sb=new StringBuilder();
+			sb.append("<SheetFieldDef>");
+			sb.append("<SheetFieldDefNum>").append(SheetFieldDefNum).append("</SheetFieldDefNum>");
+			sb.append("<SheetDefNum>").append(SheetDefNum).append("</SheetDefNum>");
+			sb.append("<FieldType>").append(FieldType.ordinal()).append("</FieldType>");
+			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FieldValue>").append(Serializing.EscapeForXml(FieldValue)).append("</FieldValue>");
+			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
+			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
+			sb.append("<FontIsBold>").append((FontIsBold)?1:0).append("</FontIsBold>");
+			sb.append("<XPos>").append(XPos).append("</XPos>");
+			sb.append("<YPos>").append(YPos).append("</YPos>");
+			sb.append("<Width>").append(Width).append("</Width>");
+			sb.append("<Height>").append(Height).append("</Height>");
+			sb.append("<GrowthBehavior>").append(GrowthBehavior.ordinal()).append("</GrowthBehavior>");
+			sb.append("<RadioButtonValue>").append(Serializing.EscapeForXml(RadioButtonValue)).append("</RadioButtonValue>");
+			sb.append("<RadioButtonGroup>").append(Serializing.EscapeForXml(RadioButtonGroup)).append("</RadioButtonGroup>");
+			sb.append("<IsRequired>").append((IsRequired)?1:0).append("</IsRequired>");
+			sb.append("<TabOrder>").append(TabOrder).append("</TabOrder>");
+			sb.append("<ReportableName>").append(Serializing.EscapeForXml(ReportableName)).append("</ReportableName>");
+			sb.append("</SheetFieldDef>");
+			return sb.toString();
+		}
+
+		/** Sets the variables for this object based on the values from the XML.
+		 * @param xml The XML passed in must be valid and contain a node for every variable on this object.
+		 * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */
+		public void DeserializeFromXml(String xml) throws Exception {
+			try {
+				Document doc=XMLParser.parse(xml);
+				SheetFieldDefNum=Integer.valueOf(doc.getElementsByTagName("SheetFieldDefNum").item(0).getFirstChild().getNodeValue());
+				SheetDefNum=Integer.valueOf(doc.getElementsByTagName("SheetDefNum").item(0).getFirstChild().getNodeValue());
+				FieldType=SheetFieldType.values()[Integer.valueOf(doc.getElementsByTagName("FieldType").item(0).getFirstChild().getNodeValue())];
+				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
+				FieldValue=doc.getElementsByTagName("FieldValue").item(0).getFirstChild().getNodeValue();
+				FontSize=Float.valueOf(doc.getElementsByTagName("FontSize").item(0).getFirstChild().getNodeValue());
+				FontName=doc.getElementsByTagName("FontName").item(0).getFirstChild().getNodeValue();
+				FontIsBold=(doc.getElementsByTagName("FontIsBold").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				XPos=Integer.valueOf(doc.getElementsByTagName("XPos").item(0).getFirstChild().getNodeValue());
+				YPos=Integer.valueOf(doc.getElementsByTagName("YPos").item(0).getFirstChild().getNodeValue());
+				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
+				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
+				GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(doc.getElementsByTagName("GrowthBehavior").item(0).getFirstChild().getNodeValue())];
+				RadioButtonValue=doc.getElementsByTagName("RadioButtonValue").item(0).getFirstChild().getNodeValue();
+				RadioButtonGroup=doc.getElementsByTagName("RadioButtonGroup").item(0).getFirstChild().getNodeValue();
+				IsRequired=(doc.getElementsByTagName("IsRequired").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				TabOrder=Integer.valueOf(doc.getElementsByTagName("TabOrder").item(0).getFirstChild().getNodeValue());
+				ReportableName=doc.getElementsByTagName("ReportableName").item(0).getFirstChild().getNodeValue();
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}
+
+		/**  */
+		public enum SheetFieldType {
+			/**  */
+			OutputText,
+			/**  */
+			InputField,
+			/**  */
+			StaticText,
+			/** 3-Stores a parameter other than the PatNum.  Not meant to be seen on the sheet.  Only used for SheetField, not SheetFieldDef. */
+			Parameter,
+			/**  */
+			Image,
+			/** 5-One sequence of dots that makes a line.  Continuous without any breaks.  Each time the pen is picked up, it creates a new field row in the database. */
+			Drawing,
+			/**  */
+			Line,
+			/**  */
+			Rectangle,
+			/** 8-A clickable area on the screen.  It's a form of input, so treated similarly to an InputField.  The X will go from corner to corner of the rectangle specified.  It can also behave like a radio button */
+			CheckBox,
+			/** 9-A signature box, either Topaz pad or directly on the screen with stylus/mouse.  The signature is encrypted based an a hash of all other field values in the entire sheet, excluding other SigBoxes.  The order is critical. */
+			SigBox,
+			/**  */
+			PatImage,
+			/**  */
+			Special
+		}
+
+		/** For sheetFields */
+		public enum GrowthBehaviorEnum {
+			/**  */
+			None,
+			/**  */
+			DownLocal,
+			/**  */
+			DownGlobal
+		}
+
+
+}

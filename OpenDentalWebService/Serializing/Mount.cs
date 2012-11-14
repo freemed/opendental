@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<MountNum>").Append(mount.MountNum).Append("</MountNum>");
 			sb.Append("<PatNum>").Append(mount.PatNum).Append("</PatNum>");
 			sb.Append("<DocCategory>").Append(mount.DocCategory).Append("</DocCategory>");
-			sb.Append("<DateCreated>").Append(mount.DateCreated.ToLongDateString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(mount.DateCreated.ToString()).Append("</DateCreated>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(mount.Description)).Append("</Description>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(mount.Note)).Append("</Note>");
 			sb.Append("<ImgType>").Append((int)mount.ImgType).Append("</ImgType>");

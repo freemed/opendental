@@ -16,12 +16,12 @@ namespace OpenDentalWebService {
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(equipment.Description)).Append("</Description>");
 			sb.Append("<SerialNumber>").Append(SerializeStringEscapes.EscapeForXml(equipment.SerialNumber)).Append("</SerialNumber>");
 			sb.Append("<ModelYear>").Append(SerializeStringEscapes.EscapeForXml(equipment.ModelYear)).Append("</ModelYear>");
-			sb.Append("<DatePurchased>").Append(equipment.DatePurchased.ToLongDateString()).Append("</DatePurchased>");
-			sb.Append("<DateSold>").Append(equipment.DateSold.ToLongDateString()).Append("</DateSold>");
+			sb.Append("<DatePurchased>").Append(equipment.DatePurchased.ToString()).Append("</DatePurchased>");
+			sb.Append("<DateSold>").Append(equipment.DateSold.ToString()).Append("</DateSold>");
 			sb.Append("<PurchaseCost>").Append(equipment.PurchaseCost).Append("</PurchaseCost>");
 			sb.Append("<MarketValue>").Append(equipment.MarketValue).Append("</MarketValue>");
 			sb.Append("<Location>").Append(SerializeStringEscapes.EscapeForXml(equipment.Location)).Append("</Location>");
-			sb.Append("<DateEntry>").Append(equipment.DateEntry.ToLongDateString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(equipment.DateEntry.ToString()).Append("</DateEntry>");
 			sb.Append("</Equipment>");
 			return sb.ToString();
 		}

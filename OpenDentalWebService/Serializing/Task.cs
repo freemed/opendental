@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Task>");
 			sb.Append("<TaskNum>").Append(task.TaskNum).Append("</TaskNum>");
 			sb.Append("<TaskListNum>").Append(task.TaskListNum).Append("</TaskListNum>");
-			sb.Append("<DateTask>").Append(task.DateTask.ToLongDateString()).Append("</DateTask>");
+			sb.Append("<DateTask>").Append(task.DateTask.ToString()).Append("</DateTask>");
 			sb.Append("<KeyNum>").Append(task.KeyNum).Append("</KeyNum>");
 			sb.Append("<Descript>").Append(SerializeStringEscapes.EscapeForXml(task.Descript)).Append("</Descript>");
 			sb.Append("<TaskStatus>").Append((int)task.TaskStatus).Append("</TaskStatus>");
@@ -22,9 +22,9 @@ namespace OpenDentalWebService {
 			sb.Append("<DateType>").Append((int)task.DateType).Append("</DateType>");
 			sb.Append("<FromNum>").Append(task.FromNum).Append("</FromNum>");
 			sb.Append("<ObjectType>").Append((int)task.ObjectType).Append("</ObjectType>");
-			sb.Append("<DateTimeEntry>").Append(task.DateTimeEntry.ToLongDateString()).Append("</DateTimeEntry>");
+			sb.Append("<DateTimeEntry>").Append(task.DateTimeEntry.ToString()).Append("</DateTimeEntry>");
 			sb.Append("<UserNum>").Append(task.UserNum).Append("</UserNum>");
-			sb.Append("<DateTimeFinished>").Append(task.DateTimeFinished.ToLongDateString()).Append("</DateTimeFinished>");
+			sb.Append("<DateTimeFinished>").Append(task.DateTimeFinished.ToString()).Append("</DateTimeFinished>");
 			sb.Append("</Task>");
 			return sb.ToString();
 		}

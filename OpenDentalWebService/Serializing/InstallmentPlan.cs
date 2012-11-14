@@ -14,8 +14,8 @@ namespace OpenDentalWebService {
 			sb.Append("<InstallmentPlan>");
 			sb.Append("<InstallmentPlanNum>").Append(installmentplan.InstallmentPlanNum).Append("</InstallmentPlanNum>");
 			sb.Append("<PatNum>").Append(installmentplan.PatNum).Append("</PatNum>");
-			sb.Append("<DateAgreement>").Append(installmentplan.DateAgreement.ToLongDateString()).Append("</DateAgreement>");
-			sb.Append("<DateFirstPayment>").Append(installmentplan.DateFirstPayment.ToLongDateString()).Append("</DateFirstPayment>");
+			sb.Append("<DateAgreement>").Append(installmentplan.DateAgreement.ToString()).Append("</DateAgreement>");
+			sb.Append("<DateFirstPayment>").Append(installmentplan.DateFirstPayment.ToString()).Append("</DateFirstPayment>");
 			sb.Append("<MonthlyPayment>").Append(installmentplan.MonthlyPayment).Append("</MonthlyPayment>");
 			sb.Append("<APR>").Append(installmentplan.APR).Append("</APR>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(installmentplan.Note)).Append("</Note>");

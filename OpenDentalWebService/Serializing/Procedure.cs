@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(procedure.PatNum).Append("</PatNum>");
 			sb.Append("<AptNum>").Append(procedure.AptNum).Append("</AptNum>");
 			sb.Append("<OldCode>").Append(SerializeStringEscapes.EscapeForXml(procedure.OldCode)).Append("</OldCode>");
-			sb.Append("<ProcDate>").Append(procedure.ProcDate.ToLongDateString()).Append("</ProcDate>");
+			sb.Append("<ProcDate>").Append(procedure.ProcDate.ToString()).Append("</ProcDate>");
 			sb.Append("<ProcFee>").Append(procedure.ProcFee).Append("</ProcFee>");
 			sb.Append("<Surf>").Append(SerializeStringEscapes.EscapeForXml(procedure.Surf)).Append("</Surf>");
 			sb.Append("<ToothNum>").Append(SerializeStringEscapes.EscapeForXml(procedure.ToothNum)).Append("</ToothNum>");
@@ -28,9 +28,9 @@ namespace OpenDentalWebService {
 			sb.Append("<PlannedAptNum>").Append(procedure.PlannedAptNum).Append("</PlannedAptNum>");
 			sb.Append("<PlaceService>").Append((int)procedure.PlaceService).Append("</PlaceService>");
 			sb.Append("<Prosthesis>").Append(SerializeStringEscapes.EscapeForXml(procedure.Prosthesis)).Append("</Prosthesis>");
-			sb.Append("<DateOriginalProsth>").Append(procedure.DateOriginalProsth.ToLongDateString()).Append("</DateOriginalProsth>");
+			sb.Append("<DateOriginalProsth>").Append(procedure.DateOriginalProsth.ToString()).Append("</DateOriginalProsth>");
 			sb.Append("<ClaimNote>").Append(SerializeStringEscapes.EscapeForXml(procedure.ClaimNote)).Append("</ClaimNote>");
-			sb.Append("<DateEntryC>").Append(procedure.DateEntryC.ToLongDateString()).Append("</DateEntryC>");
+			sb.Append("<DateEntryC>").Append(procedure.DateEntryC.ToString()).Append("</DateEntryC>");
 			sb.Append("<ClinicNum>").Append(procedure.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<MedicalCode>").Append(SerializeStringEscapes.EscapeForXml(procedure.MedicalCode)).Append("</MedicalCode>");
 			sb.Append("<DiagnosticCode>").Append(SerializeStringEscapes.EscapeForXml(procedure.DiagnosticCode)).Append("</DiagnosticCode>");
@@ -48,13 +48,13 @@ namespace OpenDentalWebService {
 			sb.Append("<BaseUnits>").Append(procedure.BaseUnits).Append("</BaseUnits>");
 			sb.Append("<StartTime>").Append(procedure.StartTime).Append("</StartTime>");
 			sb.Append("<StopTime>").Append(procedure.StopTime).Append("</StopTime>");
-			sb.Append("<DateTP>").Append(procedure.DateTP.ToLongDateString()).Append("</DateTP>");
+			sb.Append("<DateTP>").Append(procedure.DateTP.ToString()).Append("</DateTP>");
 			sb.Append("<SiteNum>").Append(procedure.SiteNum).Append("</SiteNum>");
 			sb.Append("<HideGraphics>").Append((procedure.HideGraphics)?1:0).Append("</HideGraphics>");
 			sb.Append("<CanadianTypeCodes>").Append(SerializeStringEscapes.EscapeForXml(procedure.CanadianTypeCodes)).Append("</CanadianTypeCodes>");
 			sb.Append("<ProcTime>").Append(procedure.ProcTime.ToString()).Append("</ProcTime>");
 			sb.Append("<ProcTimeEnd>").Append(procedure.ProcTimeEnd.ToString()).Append("</ProcTimeEnd>");
-			sb.Append("<DateTStamp>").Append(procedure.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(procedure.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<Prognosis>").Append(procedure.Prognosis).Append("</Prognosis>");
 			sb.Append("<DrugUnit>").Append((int)procedure.DrugUnit).Append("</DrugUnit>");
 			sb.Append("<DrugQty>").Append(procedure.DrugQty).Append("</DrugQty>");

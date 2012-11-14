@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM dictcustom ORDER BY WordText";//stub query probably needs to be changed
+			string command="SELECT * FROM dictcustom ORDER BY WordText";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="DictCustom";
 			FillCache(table);
@@ -70,14 +70,6 @@ namespace OpenDentBusiness{
 			}
 			Crud.DictCustomCrud.Delete(dictCustomNum);
 		}
-		
-		///<summary>Gets one DictCustom from the db.</summary>
-		public static DictCustom GetOne(long dictCustomNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<DictCustom>(MethodBase.GetCurrentMethod(),dictCustomNum);
-			}
-			return Crud.DictCustomCrud.SelectOne(dictCustomNum);
-		}
 		#endregion
 
 		/*
@@ -91,6 +83,15 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM dictcustom WHERE PatNum = "+POut.Long(patNum);
 			return Crud.DictCustomCrud.SelectMany(command);
 		}
+		
+		///<summary>Gets one DictCustom from the db.</summary>
+		public static DictCustom GetOne(long dictCustomNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<DictCustom>(MethodBase.GetCurrentMethod(),dictCustomNum);
+			}
+			return Crud.DictCustomCrud.SelectOne(dictCustomNum);
+		}
+		 
 
 		
 		*/

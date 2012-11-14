@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<MedicalOrderNum>").Append(medicalorder.MedicalOrderNum).Append("</MedicalOrderNum>");
 			sb.Append("<MedOrderType>").Append((int)medicalorder.MedOrderType).Append("</MedOrderType>");
 			sb.Append("<PatNum>").Append(medicalorder.PatNum).Append("</PatNum>");
-			sb.Append("<DateTimeOrder>").Append(medicalorder.DateTimeOrder.ToLongDateString()).Append("</DateTimeOrder>");
+			sb.Append("<DateTimeOrder>").Append(medicalorder.DateTimeOrder.ToString()).Append("</DateTimeOrder>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(medicalorder.Description)).Append("</Description>");
 			sb.Append("<IsDiscontinued>").Append((medicalorder.IsDiscontinued)?1:0).Append("</IsDiscontinued>");
 			sb.Append("<ProvNum>").Append(medicalorder.ProvNum).Append("</ProvNum>");

@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<AllergyDefNum>").Append(allergydef.AllergyDefNum).Append("</AllergyDefNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(allergydef.Description)).Append("</Description>");
 			sb.Append("<IsHidden>").Append((allergydef.IsHidden)?1:0).Append("</IsHidden>");
-			sb.Append("<DateTStamp>").Append(allergydef.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(allergydef.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<Snomed>").Append((int)allergydef.Snomed).Append("</Snomed>");
 			sb.Append("<MedicationNum>").Append(allergydef.MedicationNum).Append("</MedicationNum>");
 			sb.Append("</AllergyDef>");

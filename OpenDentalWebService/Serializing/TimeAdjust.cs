@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<TimeAdjust>");
 			sb.Append("<TimeAdjustNum>").Append(timeadjust.TimeAdjustNum).Append("</TimeAdjustNum>");
 			sb.Append("<EmployeeNum>").Append(timeadjust.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<TimeEntry>").Append(timeadjust.TimeEntry.ToLongDateString()).Append("</TimeEntry>");
+			sb.Append("<TimeEntry>").Append(timeadjust.TimeEntry.ToString()).Append("</TimeEntry>");
 			sb.Append("<RegHours>").Append(timeadjust.RegHours.ToString()).Append("</RegHours>");
 			sb.Append("<OTimeHours>").Append(timeadjust.OTimeHours.ToString()).Append("</OTimeHours>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(timeadjust.Note)).Append("</Note>");

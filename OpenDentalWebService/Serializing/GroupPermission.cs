@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<GroupPermission>");
 			sb.Append("<GroupPermNum>").Append(grouppermission.GroupPermNum).Append("</GroupPermNum>");
-			sb.Append("<NewerDate>").Append(grouppermission.NewerDate.ToLongDateString()).Append("</NewerDate>");
+			sb.Append("<NewerDate>").Append(grouppermission.NewerDate.ToString()).Append("</NewerDate>");
 			sb.Append("<NewerDays>").Append(grouppermission.NewerDays).Append("</NewerDays>");
 			sb.Append("<UserGroupNum>").Append(grouppermission.UserGroupNum).Append("</UserGroupNum>");
 			sb.Append("<PermType>").Append((int)grouppermission.PermType).Append("</PermType>");

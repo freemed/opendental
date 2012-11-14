@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<EhrSummaryCcd>");
 			sb.Append("<EhrSummaryCcdNum>").Append(ehrsummaryccd.EhrSummaryCcdNum).Append("</EhrSummaryCcdNum>");
 			sb.Append("<PatNum>").Append(ehrsummaryccd.PatNum).Append("</PatNum>");
-			sb.Append("<DateSummary>").Append(ehrsummaryccd.DateSummary.ToLongDateString()).Append("</DateSummary>");
+			sb.Append("<DateSummary>").Append(ehrsummaryccd.DateSummary.ToString()).Append("</DateSummary>");
 			sb.Append("<ContentSummary>").Append(SerializeStringEscapes.EscapeForXml(ehrsummaryccd.ContentSummary)).Append("</ContentSummary>");
 			sb.Append("</EhrSummaryCcd>");
 			return sb.ToString();

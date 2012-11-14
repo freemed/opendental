@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<HL7Status>").Append((int)hl7msg.HL7Status).Append("</HL7Status>");
 			sb.Append("<MsgText>").Append(SerializeStringEscapes.EscapeForXml(hl7msg.MsgText)).Append("</MsgText>");
 			sb.Append("<AptNum>").Append(hl7msg.AptNum).Append("</AptNum>");
-			sb.Append("<DateTStamp>").Append(hl7msg.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(hl7msg.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<PatNum>").Append(hl7msg.PatNum).Append("</PatNum>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(hl7msg.Note)).Append("</Note>");
 			sb.Append("</HL7Msg>");

@@ -15,12 +15,12 @@ namespace OpenDentalWebService {
 			sb.Append("<SignalNum>").Append(signalod.SignalNum).Append("</SignalNum>");
 			sb.Append("<FromUser>").Append(SerializeStringEscapes.EscapeForXml(signalod.FromUser)).Append("</FromUser>");
 			sb.Append("<ITypes>").Append(SerializeStringEscapes.EscapeForXml(signalod.ITypes)).Append("</ITypes>");
-			sb.Append("<DateViewing>").Append(signalod.DateViewing.ToLongDateString()).Append("</DateViewing>");
+			sb.Append("<DateViewing>").Append(signalod.DateViewing.ToString()).Append("</DateViewing>");
 			sb.Append("<SigType>").Append((int)signalod.SigType).Append("</SigType>");
 			sb.Append("<SigText>").Append(SerializeStringEscapes.EscapeForXml(signalod.SigText)).Append("</SigText>");
-			sb.Append("<SigDateTime>").Append(signalod.SigDateTime.ToLongDateString()).Append("</SigDateTime>");
+			sb.Append("<SigDateTime>").Append(signalod.SigDateTime.ToString()).Append("</SigDateTime>");
 			sb.Append("<ToUser>").Append(SerializeStringEscapes.EscapeForXml(signalod.ToUser)).Append("</ToUser>");
-			sb.Append("<AckTime>").Append(signalod.AckTime.ToLongDateString()).Append("</AckTime>");
+			sb.Append("<AckTime>").Append(signalod.AckTime.ToString()).Append("</AckTime>");
 			sb.Append("<TaskNum>").Append(signalod.TaskNum).Append("</TaskNum>");
 			sb.Append("</Signalod>");
 			return sb.ToString();

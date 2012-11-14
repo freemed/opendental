@@ -17,11 +17,11 @@ namespace OpenDentalWebService {
 			sb.Append("<LaboratoryNum>").Append(labcase.LaboratoryNum).Append("</LaboratoryNum>");
 			sb.Append("<AptNum>").Append(labcase.AptNum).Append("</AptNum>");
 			sb.Append("<PlannedAptNum>").Append(labcase.PlannedAptNum).Append("</PlannedAptNum>");
-			sb.Append("<DateTimeDue>").Append(labcase.DateTimeDue.ToLongDateString()).Append("</DateTimeDue>");
-			sb.Append("<DateTimeCreated>").Append(labcase.DateTimeCreated.ToLongDateString()).Append("</DateTimeCreated>");
-			sb.Append("<DateTimeSent>").Append(labcase.DateTimeSent.ToLongDateString()).Append("</DateTimeSent>");
-			sb.Append("<DateTimeRecd>").Append(labcase.DateTimeRecd.ToLongDateString()).Append("</DateTimeRecd>");
-			sb.Append("<DateTimeChecked>").Append(labcase.DateTimeChecked.ToLongDateString()).Append("</DateTimeChecked>");
+			sb.Append("<DateTimeDue>").Append(labcase.DateTimeDue.ToString()).Append("</DateTimeDue>");
+			sb.Append("<DateTimeCreated>").Append(labcase.DateTimeCreated.ToString()).Append("</DateTimeCreated>");
+			sb.Append("<DateTimeSent>").Append(labcase.DateTimeSent.ToString()).Append("</DateTimeSent>");
+			sb.Append("<DateTimeRecd>").Append(labcase.DateTimeRecd.ToString()).Append("</DateTimeRecd>");
+			sb.Append("<DateTimeChecked>").Append(labcase.DateTimeChecked.ToString()).Append("</DateTimeChecked>");
 			sb.Append("<ProvNum>").Append(labcase.ProvNum).Append("</ProvNum>");
 			sb.Append("<Instructions>").Append(SerializeStringEscapes.EscapeForXml(labcase.Instructions)).Append("</Instructions>");
 			sb.Append("<LabFee>").Append(labcase.LabFee).Append("</LabFee>");

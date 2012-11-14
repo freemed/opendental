@@ -14,9 +14,9 @@ namespace OpenDentalWebService {
 			sb.Append("<Statement>");
 			sb.Append("<StatementNum>").Append(statement.StatementNum).Append("</StatementNum>");
 			sb.Append("<PatNum>").Append(statement.PatNum).Append("</PatNum>");
-			sb.Append("<DateSent>").Append(statement.DateSent.ToLongDateString()).Append("</DateSent>");
-			sb.Append("<DateRangeFrom>").Append(statement.DateRangeFrom.ToLongDateString()).Append("</DateRangeFrom>");
-			sb.Append("<DateRangeTo>").Append(statement.DateRangeTo.ToLongDateString()).Append("</DateRangeTo>");
+			sb.Append("<DateSent>").Append(statement.DateSent.ToString()).Append("</DateSent>");
+			sb.Append("<DateRangeFrom>").Append(statement.DateRangeFrom.ToString()).Append("</DateRangeFrom>");
+			sb.Append("<DateRangeTo>").Append(statement.DateRangeTo.ToString()).Append("</DateRangeTo>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(statement.Note)).Append("</Note>");
 			sb.Append("<NoteBold>").Append(SerializeStringEscapes.EscapeForXml(statement.NoteBold)).Append("</NoteBold>");
 			sb.Append("<Mode_>").Append((int)statement.Mode_).Append("</Mode_>");
@@ -25,7 +25,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Intermingled>").Append((statement.Intermingled)?1:0).Append("</Intermingled>");
 			sb.Append("<IsSent>").Append((statement.IsSent)?1:0).Append("</IsSent>");
 			sb.Append("<DocNum>").Append(statement.DocNum).Append("</DocNum>");
-			sb.Append("<DateTStamp>").Append(statement.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(statement.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<IsReceipt>").Append((statement.IsReceipt)?1:0).Append("</IsReceipt>");
 			sb.Append("<IsInvoice>").Append((statement.IsInvoice)?1:0).Append("</IsInvoice>");
 			sb.Append("<IsInvoiceCopy>").Append((statement.IsInvoiceCopy)?1:0).Append("</IsInvoiceCopy>");

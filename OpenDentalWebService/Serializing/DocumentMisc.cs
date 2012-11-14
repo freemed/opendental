@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<DocumentMisc>");
 			sb.Append("<DocMiscNum>").Append(documentmisc.DocMiscNum).Append("</DocMiscNum>");
-			sb.Append("<DateCreated>").Append(documentmisc.DateCreated.ToLongDateString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(documentmisc.DateCreated.ToString()).Append("</DateCreated>");
 			sb.Append("<FileName>").Append(SerializeStringEscapes.EscapeForXml(documentmisc.FileName)).Append("</FileName>");
 			sb.Append("<DocMiscType>").Append((int)documentmisc.DocMiscType).Append("</DocMiscType>");
 			sb.Append("<RawBase64>").Append(SerializeStringEscapes.EscapeForXml(documentmisc.RawBase64)).Append("</RawBase64>");

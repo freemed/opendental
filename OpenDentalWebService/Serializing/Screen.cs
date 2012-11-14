@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Screen>");
 			sb.Append("<ScreenNum>").Append(screen.ScreenNum).Append("</ScreenNum>");
-			sb.Append("<ScreenDate>").Append(screen.ScreenDate.ToLongDateString()).Append("</ScreenDate>");
+			sb.Append("<ScreenDate>").Append(screen.ScreenDate.ToString()).Append("</ScreenDate>");
 			sb.Append("<GradeSchool>").Append(SerializeStringEscapes.EscapeForXml(screen.GradeSchool)).Append("</GradeSchool>");
 			sb.Append("<County>").Append(SerializeStringEscapes.EscapeForXml(screen.County)).Append("</County>");
 			sb.Append("<PlaceService>").Append((int)screen.PlaceService).Append("</PlaceService>");
@@ -30,7 +30,7 @@ namespace OpenDentalWebService {
 			sb.Append("<EarlyChildCaries>").Append((int)screen.EarlyChildCaries).Append("</EarlyChildCaries>");
 			sb.Append("<ExistingSealants>").Append((int)screen.ExistingSealants).Append("</ExistingSealants>");
 			sb.Append("<MissingAllTeeth>").Append((int)screen.MissingAllTeeth).Append("</MissingAllTeeth>");
-			sb.Append("<Birthdate>").Append(screen.Birthdate.ToLongDateString()).Append("</Birthdate>");
+			sb.Append("<Birthdate>").Append(screen.Birthdate.ToString()).Append("</Birthdate>");
 			sb.Append("<ScreenGroupNum>").Append(screen.ScreenGroupNum).Append("</ScreenGroupNum>");
 			sb.Append("<ScreenGroupOrder>").Append(screen.ScreenGroupOrder).Append("</ScreenGroupOrder>");
 			sb.Append("<Comments>").Append(SerializeStringEscapes.EscapeForXml(screen.Comments)).Append("</Comments>");

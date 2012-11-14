@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Computer>");
 			sb.Append("<ComputerNum>").Append(computer.ComputerNum).Append("</ComputerNum>");
 			sb.Append("<CompName>").Append(SerializeStringEscapes.EscapeForXml(computer.CompName)).Append("</CompName>");
-			sb.Append("<LastHeartBeat>").Append(computer.LastHeartBeat.ToLongDateString()).Append("</LastHeartBeat>");
+			sb.Append("<LastHeartBeat>").Append(computer.LastHeartBeat.ToString()).Append("</LastHeartBeat>");
 			sb.Append("</Computer>");
 			return sb.ToString();
 		}

@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<PhoneMetric>");
 			sb.Append("<PhoneMetricNum>").Append(phonemetric.PhoneMetricNum).Append("</PhoneMetricNum>");
-			sb.Append("<DateTimeEntry>").Append(phonemetric.DateTimeEntry.ToLongDateString()).Append("</DateTimeEntry>");
+			sb.Append("<DateTimeEntry>").Append(phonemetric.DateTimeEntry.ToString()).Append("</DateTimeEntry>");
 			sb.Append("<VoiceMails>").Append(phonemetric.VoiceMails).Append("</VoiceMails>");
 			sb.Append("<Triages>").Append(phonemetric.Triages).Append("</Triages>");
 			sb.Append("<MinutesBehind>").Append(phonemetric.MinutesBehind).Append("</MinutesBehind>");

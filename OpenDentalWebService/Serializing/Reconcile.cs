@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<AccountNum>").Append(reconcile.AccountNum).Append("</AccountNum>");
 			sb.Append("<StartingBal>").Append(reconcile.StartingBal).Append("</StartingBal>");
 			sb.Append("<EndingBal>").Append(reconcile.EndingBal).Append("</EndingBal>");
-			sb.Append("<DateReconcile>").Append(reconcile.DateReconcile.ToLongDateString()).Append("</DateReconcile>");
+			sb.Append("<DateReconcile>").Append(reconcile.DateReconcile.ToString()).Append("</DateReconcile>");
 			sb.Append("<IsLocked>").Append((reconcile.IsLocked)?1:0).Append("</IsLocked>");
 			sb.Append("</Reconcile>");
 			return sb.ToString();

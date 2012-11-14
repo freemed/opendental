@@ -22,7 +22,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(appointment.Note)).Append("</Note>");
 			sb.Append("<ProvNum>").Append(appointment.ProvNum).Append("</ProvNum>");
 			sb.Append("<ProvHyg>").Append(appointment.ProvHyg).Append("</ProvHyg>");
-			sb.Append("<AptDateTime>").Append(appointment.AptDateTime.ToLongDateString()).Append("</AptDateTime>");
+			sb.Append("<AptDateTime>").Append(appointment.AptDateTime.ToString()).Append("</AptDateTime>");
 			sb.Append("<NextAptNum>").Append(appointment.NextAptNum).Append("</NextAptNum>");
 			sb.Append("<UnschedStatus>").Append(appointment.UnschedStatus).Append("</UnschedStatus>");
 			sb.Append("<IsNewPatient>").Append((appointment.IsNewPatient)?1:0).Append("</IsNewPatient>");
@@ -30,13 +30,13 @@ namespace OpenDentalWebService {
 			sb.Append("<Assistant>").Append(appointment.Assistant).Append("</Assistant>");
 			sb.Append("<ClinicNum>").Append(appointment.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<IsHygiene>").Append((appointment.IsHygiene)?1:0).Append("</IsHygiene>");
-			sb.Append("<DateTStamp>").Append(appointment.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
-			sb.Append("<DateTimeArrived>").Append(appointment.DateTimeArrived.ToLongDateString()).Append("</DateTimeArrived>");
-			sb.Append("<DateTimeSeated>").Append(appointment.DateTimeSeated.ToLongDateString()).Append("</DateTimeSeated>");
-			sb.Append("<DateTimeDismissed>").Append(appointment.DateTimeDismissed.ToLongDateString()).Append("</DateTimeDismissed>");
+			sb.Append("<DateTStamp>").Append(appointment.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTimeArrived>").Append(appointment.DateTimeArrived.ToString()).Append("</DateTimeArrived>");
+			sb.Append("<DateTimeSeated>").Append(appointment.DateTimeSeated.ToString()).Append("</DateTimeSeated>");
+			sb.Append("<DateTimeDismissed>").Append(appointment.DateTimeDismissed.ToString()).Append("</DateTimeDismissed>");
 			sb.Append("<InsPlan1>").Append(appointment.InsPlan1).Append("</InsPlan1>");
 			sb.Append("<InsPlan2>").Append(appointment.InsPlan2).Append("</InsPlan2>");
-			sb.Append("<DateTimeAskedToArrive>").Append(appointment.DateTimeAskedToArrive.ToLongDateString()).Append("</DateTimeAskedToArrive>");
+			sb.Append("<DateTimeAskedToArrive>").Append(appointment.DateTimeAskedToArrive.ToString()).Append("</DateTimeAskedToArrive>");
 			sb.Append("<ProcsColored>").Append(SerializeStringEscapes.EscapeForXml(appointment.ProcsColored)).Append("</ProcsColored>");
 			sb.Append("<ColorOverride>").Append(appointment.ColorOverride.ToArgb()).Append("</ColorOverride>");
 			sb.Append("</Appointment>");

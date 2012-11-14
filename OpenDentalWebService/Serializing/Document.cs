@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Document>");
 			sb.Append("<DocNum>").Append(document.DocNum).Append("</DocNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(document.Description)).Append("</Description>");
-			sb.Append("<DateCreated>").Append(document.DateCreated.ToLongDateString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(document.DateCreated.ToString()).Append("</DateCreated>");
 			sb.Append("<DocCategory>").Append(document.DocCategory).Append("</DocCategory>");
 			sb.Append("<PatNum>").Append(document.PatNum).Append("</PatNum>");
 			sb.Append("<FileName>").Append(SerializeStringEscapes.EscapeForXml(document.FileName)).Append("</FileName>");
@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 			sb.Append("<WindowingMin>").Append(document.WindowingMin).Append("</WindowingMin>");
 			sb.Append("<WindowingMax>").Append(document.WindowingMax).Append("</WindowingMax>");
 			sb.Append("<MountItemNum>").Append(document.MountItemNum).Append("</MountItemNum>");
-			sb.Append("<DateTStamp>").Append(document.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(document.DateTStamp.ToString()).Append("</DateTStamp>");
 			sb.Append("<RawBase64>").Append(SerializeStringEscapes.EscapeForXml(document.RawBase64)).Append("</RawBase64>");
 			sb.Append("<Thumbnail>").Append(SerializeStringEscapes.EscapeForXml(document.Thumbnail)).Append("</Thumbnail>");
 			sb.Append("</Document>");

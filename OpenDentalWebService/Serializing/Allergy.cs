@@ -17,8 +17,8 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(allergy.PatNum).Append("</PatNum>");
 			sb.Append("<Reaction>").Append(SerializeStringEscapes.EscapeForXml(allergy.Reaction)).Append("</Reaction>");
 			sb.Append("<StatusIsActive>").Append((allergy.StatusIsActive)?1:0).Append("</StatusIsActive>");
-			sb.Append("<DateTStamp>").Append(allergy.DateTStamp.ToLongDateString()).Append("</DateTStamp>");
-			sb.Append("<DateAdverseReaction>").Append(allergy.DateAdverseReaction.ToLongDateString()).Append("</DateAdverseReaction>");
+			sb.Append("<DateTStamp>").Append(allergy.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateAdverseReaction>").Append(allergy.DateAdverseReaction.ToString()).Append("</DateAdverseReaction>");
 			sb.Append("</Allergy>");
 			return sb.ToString();
 		}

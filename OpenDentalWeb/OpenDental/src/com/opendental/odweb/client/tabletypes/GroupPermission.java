@@ -1,0 +1,193 @@
+package com.opendental.odweb.client.tabletypes;
+
+import com.google.gwt.xml.client.Document;
+import com.google.gwt.xml.client.XMLParser;
+import com.opendental.odweb.client.remoting.Serializing;
+
+public class GroupPermission {
+		/** Primary key. */
+		public int GroupPermNum;
+		/** Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission. */
+		public String NewerDate;
+		/** Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today. */
+		public int NewerDays;
+		/** FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted. */
+		public int UserGroupNum;
+		/** Enum:Permissions */
+		public Permissions PermType;
+
+		/** Deep copy of object. */
+		public GroupPermission Copy() {
+			GroupPermission grouppermission=new GroupPermission();
+			grouppermission.GroupPermNum=this.GroupPermNum;
+			grouppermission.NewerDate=this.NewerDate;
+			grouppermission.NewerDays=this.NewerDays;
+			grouppermission.UserGroupNum=this.UserGroupNum;
+			grouppermission.PermType=this.PermType;
+			return grouppermission;
+		}
+
+		/** Serialize the object into XML. */
+		public String SerializeToXml() {
+			StringBuilder sb=new StringBuilder();
+			sb.append("<GroupPermission>");
+			sb.append("<GroupPermNum>").append(GroupPermNum).append("</GroupPermNum>");
+			sb.append("<NewerDate>").append(Serializing.EscapeForXml(NewerDate)).append("</NewerDate>");
+			sb.append("<NewerDays>").append(NewerDays).append("</NewerDays>");
+			sb.append("<UserGroupNum>").append(UserGroupNum).append("</UserGroupNum>");
+			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");
+			sb.append("</GroupPermission>");
+			return sb.toString();
+		}
+
+		/** Sets the variables for this object based on the values from the XML.
+		 * @param xml The XML passed in must be valid and contain a node for every variable on this object.
+		 * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */
+		public void DeserializeFromXml(String xml) throws Exception {
+			try {
+				Document doc=XMLParser.parse(xml);
+				GroupPermNum=Integer.valueOf(doc.getElementsByTagName("GroupPermNum").item(0).getFirstChild().getNodeValue());
+				NewerDate=doc.getElementsByTagName("NewerDate").item(0).getFirstChild().getNodeValue();
+				NewerDays=Integer.valueOf(doc.getElementsByTagName("NewerDays").item(0).getFirstChild().getNodeValue());
+				UserGroupNum=Integer.valueOf(doc.getElementsByTagName("UserGroupNum").item(0).getFirstChild().getNodeValue());
+				PermType=Permissions.values()[Integer.valueOf(doc.getElementsByTagName("PermType").item(0).getFirstChild().getNodeValue())];
+			}
+			catch(Exception e) {
+				throw e;
+			}
+		}
+
+		/** A hard-coded list of permissions which may be granted to usergroups. */
+		public enum Permissions {
+			/** 0 */
+			None,
+			/** 1 */
+			AppointmentsModule,
+			/** 2 */
+			FamilyModule,
+			/** 3 */
+			AccountModule,
+			/** 4 */
+			TPModule,
+			/** 5 */
+			ChartModule,
+			/** 6 */
+			ImagesModule,
+			/** 7 */
+			ManageModule,
+			/** 8. Currently covers a wide variety of setup functions.  */
+			Setup,
+			/** 9 */
+			RxCreate,
+			/** 10. Uses date restrictions.  Covers editing AND deleting of completed procs.  Deleting non-completed procs is covered by ProcDelete. */
+			ProcComplEdit,
+			/** 11 */
+			ChooseDatabase,
+			/** 12 */
+			Schedules,
+			/** 13 */
+			Blockouts,
+			/** 14. Uses date restrictions. */
+			ClaimSentEdit,
+			/** 15 */
+			PaymentCreate,
+			/** 16. Uses date restrictions. */
+			PaymentEdit,
+			/** 17 */
+			AdjustmentCreate,
+			/** 18. Uses date restrictions. */
+			AdjustmentEdit,
+			/** 19 */
+			UserQuery,
+			/** 20.  Not used anymore. */
+			StartupSingleUserOld,
+			/** 21 Not used anymore. */
+			StartupMultiUserOld,
+			/** 22 */
+			Reports,
+			/** 23. Includes setting procedures complete. */
+			ProcComplCreate,
+			/** 24. At least one user must have this permission. */
+			SecurityAdmin,
+			/** 25.  */
+			AppointmentCreate,
+			/** 26 */
+			AppointmentMove,
+			/** 27 */
+			AppointmentEdit,
+			/** 28 */
+			Backup,
+			/** 29 */
+			TimecardsEditAll,
+			/** 30 */
+			DepositSlips,
+			/** 31. Uses date restrictions. */
+			AccountingEdit,
+			/** 32. Uses date restrictions. */
+			AccountingCreate,
+			/** 33 */
+			Accounting,
+			/** 34 */
+			AnesthesiaIntakeMeds,
+			/** 35 */
+			AnesthesiaControlMeds,
+			/** 36 */
+			InsPayCreate,
+			/** 37. Uses date restrictions. Also includes completed claimprocs even if unattached to an insurance check.  However, it's not actually enforced when creating a check because it would be very complex. */
+			InsPayEdit,
+			/** 38. Uses date restrictions. */
+			TreatPlanEdit,
+			/** 39 */
+			ReportProdInc,
+			/** 40. Uses date restrictions. */
+			TimecardDeleteEntry,
+			/** 41. Uses date restrictions. All other equipment functions are covered by .Setup. */
+			EquipmentDelete,
+			/** 42. Uses date restrictions. Also used in audit trail to log web form importing. */
+			SheetEdit,
+			/** 43. Uses date restrictions. */
+			CommlogEdit,
+			/** 44. Uses date restrictions. */
+			ImageDelete,
+			/** 45. Uses date restrictions. */
+			PerioEdit,
+			/** 46 */
+			ProcEditShowFee,
+			/** 47 */
+			AdjustmentEditZero,
+			/** 48 */
+			EhrEmergencyAccess,
+			/** 49. Uses date restrictions.  This only applies to non-completed procs.  Deletion of completed procs is covered by ProcComplEdit. */
+			ProcDelete,
+			/** 50 - Only used at OD HQ.  No user interface. */
+			EhrKeyAdd,
+			/** 51 */
+			Providers,
+			/** 52 */
+			EcwAppointmentRevise,
+			/** 53 */
+			ProcedureNote,
+			/** 54 */
+			ReferralAdd,
+			/** 55 */
+			InsPlanChangeSubsc,
+			/** 56 */
+			RefAttachAdd,
+			/** 57 */
+			RefAttachDelete,
+			/** 58 */
+			CarrierCreate,
+			/** 59 */
+			ReportDashboard,
+			/** 60 */
+			AutoNoteQuickNoteEdit,
+			/** 61 */
+			EquipmentSetup,
+			/** 62 */
+			Billing,
+			/** 63 */
+			ProblemEdit
+		}
+
+
+}

@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<JournalEntryNum>").Append(journalentry.JournalEntryNum).Append("</JournalEntryNum>");
 			sb.Append("<TransactionNum>").Append(journalentry.TransactionNum).Append("</TransactionNum>");
 			sb.Append("<AccountNum>").Append(journalentry.AccountNum).Append("</AccountNum>");
-			sb.Append("<DateDisplayed>").Append(journalentry.DateDisplayed.ToLongDateString()).Append("</DateDisplayed>");
+			sb.Append("<DateDisplayed>").Append(journalentry.DateDisplayed.ToString()).Append("</DateDisplayed>");
 			sb.Append("<DebitAmt>").Append(journalentry.DebitAmt).Append("</DebitAmt>");
 			sb.Append("<CreditAmt>").Append(journalentry.CreditAmt).Append("</CreditAmt>");
 			sb.Append("<Memo>").Append(SerializeStringEscapes.EscapeForXml(journalentry.Memo)).Append("</Memo>");

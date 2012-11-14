@@ -15,15 +15,15 @@ namespace OpenDentalWebService {
 			sb.Append("<SplitNum>").Append(paysplit.SplitNum).Append("</SplitNum>");
 			sb.Append("<SplitAmt>").Append(paysplit.SplitAmt).Append("</SplitAmt>");
 			sb.Append("<PatNum>").Append(paysplit.PatNum).Append("</PatNum>");
-			sb.Append("<ProcDate>").Append(paysplit.ProcDate.ToLongDateString()).Append("</ProcDate>");
+			sb.Append("<ProcDate>").Append(paysplit.ProcDate.ToString()).Append("</ProcDate>");
 			sb.Append("<PayNum>").Append(paysplit.PayNum).Append("</PayNum>");
 			sb.Append("<IsDiscount>").Append((paysplit.IsDiscount)?1:0).Append("</IsDiscount>");
 			sb.Append("<DiscountType>").Append(paysplit.DiscountType).Append("</DiscountType>");
 			sb.Append("<ProvNum>").Append(paysplit.ProvNum).Append("</ProvNum>");
 			sb.Append("<PayPlanNum>").Append(paysplit.PayPlanNum).Append("</PayPlanNum>");
-			sb.Append("<DatePay>").Append(paysplit.DatePay.ToLongDateString()).Append("</DatePay>");
+			sb.Append("<DatePay>").Append(paysplit.DatePay.ToString()).Append("</DatePay>");
 			sb.Append("<ProcNum>").Append(paysplit.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateEntry>").Append(paysplit.DateEntry.ToLongDateString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(paysplit.DateEntry.ToString()).Append("</DateEntry>");
 			sb.Append("<UnearnedType>").Append(paysplit.UnearnedType).Append("</UnearnedType>");
 			sb.Append("<ClinicNum>").Append(paysplit.ClinicNum).Append("</ClinicNum>");
 			sb.Append("</PaySplit>");
