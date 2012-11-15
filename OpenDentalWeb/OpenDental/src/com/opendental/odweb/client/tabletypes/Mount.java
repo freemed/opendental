@@ -48,7 +48,7 @@ public class Mount {
 			sb.append("<MountNum>").append(MountNum).append("</MountNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
-			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<ImgType>").append(ImgType.ordinal()).append("</ImgType>");

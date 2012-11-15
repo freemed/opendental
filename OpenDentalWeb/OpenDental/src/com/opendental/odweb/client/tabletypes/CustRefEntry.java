@@ -36,7 +36,7 @@ public class CustRefEntry {
 			sb.append("<CustRefEntryNum>").append(CustRefEntryNum).append("</CustRefEntryNum>");
 			sb.append("<PatNumCust>").append(PatNumCust).append("</PatNumCust>");
 			sb.append("<PatNumRef>").append(PatNumRef).append("</PatNumRef>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</CustRefEntry>");
 			return sb.toString();

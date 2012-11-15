@@ -34,7 +34,7 @@ public class DocumentMisc {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DocumentMisc>");
 			sb.append("<DocMiscNum>").append(DocMiscNum).append("</DocMiscNum>");
-			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
 			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
 			sb.append("<DocMiscType>").append(DocMiscType.ordinal()).append("</DocMiscType>");
 			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");

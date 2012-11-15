@@ -39,7 +39,7 @@ public class AllergyDef {
 			sb.append("<AllergyDefNum>").append(AllergyDefNum).append("</AllergyDefNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<Snomed>").append(Snomed.ordinal()).append("</Snomed>");
 			sb.append("<MedicationNum>").append(MedicationNum).append("</MedicationNum>");
 			sb.append("</AllergyDef>");

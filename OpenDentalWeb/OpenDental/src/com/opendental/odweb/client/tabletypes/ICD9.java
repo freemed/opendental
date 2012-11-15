@@ -33,7 +33,7 @@ public class ICD9 {
 			sb.append("<ICD9Num>").append(ICD9Num).append("</ICD9Num>");
 			sb.append("<ICD9Code>").append(Serializing.EscapeForXml(ICD9Code)).append("</ICD9Code>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</ICD9>");
 			return sb.toString();
 		}

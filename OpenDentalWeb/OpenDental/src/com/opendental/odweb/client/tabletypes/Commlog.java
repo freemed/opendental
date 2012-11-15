@@ -56,7 +56,7 @@ public class Commlog {
 			sb.append("<Commlog>");
 			sb.append("<CommlogNum>").append(CommlogNum).append("</CommlogNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<CommDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CommDateTime>");
+			sb.append("<CommDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(CommDateTime)).append("</CommDateTime>");
 			sb.append("<CommType>").append(CommType).append("</CommType>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
@@ -64,8 +64,8 @@ public class Commlog {
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
-			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEnd>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEnd)).append("</DateTimeEnd>");
 			sb.append("</Commlog>");
 			return sb.toString();
 		}

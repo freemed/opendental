@@ -36,7 +36,7 @@ public class TaskNote {
 			sb.append("<TaskNoteNum>").append(TaskNoteNum).append("</TaskNoteNum>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<DateTimeNote>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeNote>");
+			sb.append("<DateTimeNote>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeNote)).append("</DateTimeNote>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</TaskNote>");
 			return sb.toString();

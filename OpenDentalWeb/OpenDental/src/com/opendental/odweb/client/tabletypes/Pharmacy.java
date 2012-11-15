@@ -65,7 +65,7 @@ public class Pharmacy {
 			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
 			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</Pharmacy>");
 			return sb.toString();
 		}

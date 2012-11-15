@@ -51,7 +51,7 @@ public class JournalEntry {
 			sb.append("<JournalEntryNum>").append(JournalEntryNum).append("</JournalEntryNum>");
 			sb.append("<TransactionNum>").append(TransactionNum).append("</TransactionNum>");
 			sb.append("<AccountNum>").append(AccountNum).append("</AccountNum>");
-			sb.append("<DateDisplayed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDisplayed>");
+			sb.append("<DateDisplayed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDisplayed)).append("</DateDisplayed>");
 			sb.append("<DebitAmt>").append(DebitAmt).append("</DebitAmt>");
 			sb.append("<CreditAmt>").append(CreditAmt).append("</CreditAmt>");
 			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");

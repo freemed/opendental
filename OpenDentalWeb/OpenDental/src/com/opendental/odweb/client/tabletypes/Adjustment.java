@@ -55,15 +55,15 @@ public class Adjustment {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Adjustment>");
 			sb.append("<AdjNum>").append(AdjNum).append("</AdjNum>");
-			sb.append("<AdjDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AdjDate>");
+			sb.append("<AdjDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AdjDate)).append("</AdjDate>");
 			sb.append("<AdjAmt>").append(AdjAmt).append("</AdjAmt>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<AdjType>").append(AdjType).append("</AdjType>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("<AdjNote>").append(Serializing.EscapeForXml(AdjNote)).append("</AdjNote>");
-			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ProcDate)).append("</ProcDate>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<StatementNum>").append(StatementNum).append("</StatementNum>");
 			sb.append("</Adjustment>");

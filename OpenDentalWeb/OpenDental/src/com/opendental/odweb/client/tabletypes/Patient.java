@@ -251,7 +251,7 @@ public class Patient {
 			sb.append("<PatStatus>").append(PatStatus.ordinal()).append("</PatStatus>");
 			sb.append("<Gender>").append(Gender.ordinal()).append("</Gender>");
 			sb.append("<Position>").append(Position.ordinal()).append("</Position>");
-			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</Birthdate>");
+			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(Birthdate)).append("</Birthdate>");
 			sb.append("<SSN>").append(Serializing.EscapeForXml(SSN)).append("</SSN>");
 			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
 			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
@@ -291,7 +291,7 @@ public class Patient {
 			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
 			sb.append("<GradeLevel>").append(GradeLevel.ordinal()).append("</GradeLevel>");
 			sb.append("<Urgency>").append(Urgency.ordinal()).append("</Urgency>");
-			sb.append("<DateFirstVisit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateFirstVisit>");
+			sb.append("<DateFirstVisit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateFirstVisit)).append("</DateFirstVisit>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<HasIns>").append(Serializing.EscapeForXml(HasIns)).append("</HasIns>");
 			sb.append("<TrophyFolder>").append(Serializing.EscapeForXml(TrophyFolder)).append("</TrophyFolder>");
@@ -305,11 +305,11 @@ public class Patient {
 			sb.append("<SchedAfterTime>").append(Serializing.EscapeForXml(SchedAfterTime)).append("</SchedAfterTime>");
 			sb.append("<SchedDayOfWeek>").append(SchedDayOfWeek).append("</SchedDayOfWeek>");
 			sb.append("<Language>").append(Serializing.EscapeForXml(Language)).append("</Language>");
-			sb.append("<AdmitDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AdmitDate>");
+			sb.append("<AdmitDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AdmitDate)).append("</AdmitDate>");
 			sb.append("<Title>").append(Serializing.EscapeForXml(Title)).append("</Title>");
 			sb.append("<PayPlanDue>").append(PayPlanDue).append("</PayPlanDue>");
 			sb.append("<SiteNum>").append(SiteNum).append("</SiteNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<ResponsParty>").append(ResponsParty).append("</ResponsParty>");
 			sb.append("<CanadianEligibilityCode>").append(CanadianEligibilityCode).append("</CanadianEligibilityCode>");
 			sb.append("<AskToArriveEarly>").append(AskToArriveEarly).append("</AskToArriveEarly>");

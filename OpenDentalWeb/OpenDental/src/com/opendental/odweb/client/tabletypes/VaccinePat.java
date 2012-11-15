@@ -50,8 +50,8 @@ public class VaccinePat {
 			sb.append("<VaccinePat>");
 			sb.append("<VaccinePatNum>").append(VaccinePatNum).append("</VaccinePatNum>");
 			sb.append("<VaccineDefNum>").append(VaccineDefNum).append("</VaccineDefNum>");
-			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeStart>");
-			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEnd>");
+			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeStart)).append("</DateTimeStart>");
+			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEnd)).append("</DateTimeEnd>");
 			sb.append("<AdministeredAmt>").append(AdministeredAmt).append("</AdministeredAmt>");
 			sb.append("<DrugUnitNum>").append(DrugUnitNum).append("</DrugUnitNum>");
 			sb.append("<LotNumber>").append(Serializing.EscapeForXml(LotNumber)).append("</LotNumber>");

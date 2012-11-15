@@ -71,9 +71,9 @@ public class Statement {
 			sb.append("<Statement>");
 			sb.append("<StatementNum>").append(StatementNum).append("</StatementNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSent>");
-			sb.append("<DateRangeFrom>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateRangeFrom>");
-			sb.append("<DateRangeTo>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateRangeTo>");
+			sb.append("<DateSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSent)).append("</DateSent>");
+			sb.append("<DateRangeFrom>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateRangeFrom)).append("</DateRangeFrom>");
+			sb.append("<DateRangeTo>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateRangeTo)).append("</DateRangeTo>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<NoteBold>").append(Serializing.EscapeForXml(NoteBold)).append("</NoteBold>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
@@ -82,7 +82,7 @@ public class Statement {
 			sb.append("<Intermingled>").append((Intermingled)?1:0).append("</Intermingled>");
 			sb.append("<IsSent>").append((IsSent)?1:0).append("</IsSent>");
 			sb.append("<DocNum>").append(DocNum).append("</DocNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<IsReceipt>").append((IsReceipt)?1:0).append("</IsReceipt>");
 			sb.append("<IsInvoice>").append((IsInvoice)?1:0).append("</IsInvoice>");
 			sb.append("<IsInvoiceCopy>").append((IsInvoiceCopy)?1:0).append("</IsInvoiceCopy>");

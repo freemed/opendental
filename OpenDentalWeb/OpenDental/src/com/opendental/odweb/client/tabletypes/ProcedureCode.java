@@ -125,7 +125,7 @@ public class ProcedureCode {
 			sb.append("<BaseUnits>").append(BaseUnits).append("</BaseUnits>");
 			sb.append("<SubstitutionCode>").append(Serializing.EscapeForXml(SubstitutionCode)).append("</SubstitutionCode>");
 			sb.append("<SubstOnlyIf>").append(SubstOnlyIf.ordinal()).append("</SubstOnlyIf>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<IsMultiVisit>").append((IsMultiVisit)?1:0).append("</IsMultiVisit>");
 			sb.append("<DrugNDC>").append(Serializing.EscapeForXml(DrugNDC)).append("</DrugNDC>");
 			sb.append("<RevenueCodeDefault>").append(Serializing.EscapeForXml(RevenueCodeDefault)).append("</RevenueCodeDefault>");

@@ -50,9 +50,9 @@ public class LabResult {
 			sb.append("<LabResult>");
 			sb.append("<LabResultNum>").append(LabResultNum).append("</LabResultNum>");
 			sb.append("<LabPanelNum>").append(LabPanelNum).append("</LabPanelNum>");
-			sb.append("<DateTimeTest>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeTest>");
+			sb.append("<DateTimeTest>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeTest)).append("</DateTimeTest>");
 			sb.append("<TestName>").append(Serializing.EscapeForXml(TestName)).append("</TestName>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<TestID>").append(Serializing.EscapeForXml(TestID)).append("</TestID>");
 			sb.append("<ObsValue>").append(Serializing.EscapeForXml(ObsValue)).append("</ObsValue>");
 			sb.append("<ObsUnits>").append(Serializing.EscapeForXml(ObsUnits)).append("</ObsUnits>");

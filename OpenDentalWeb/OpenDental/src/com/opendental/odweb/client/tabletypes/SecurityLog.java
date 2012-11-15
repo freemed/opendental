@@ -45,7 +45,7 @@ public class SecurityLog {
 			sb.append("<SecurityLogNum>").append(SecurityLogNum).append("</SecurityLogNum>");
 			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<LogDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</LogDateTime>");
+			sb.append("<LogDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(LogDateTime)).append("</LogDateTime>");
 			sb.append("<LogText>").append(Serializing.EscapeForXml(LogText)).append("</LogText>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<CompName>").append(Serializing.EscapeForXml(CompName)).append("</CompName>");

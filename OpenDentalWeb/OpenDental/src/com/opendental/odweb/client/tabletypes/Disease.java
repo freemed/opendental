@@ -49,11 +49,11 @@ public class Disease {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DiseaseDefNum>").append(DiseaseDefNum).append("</DiseaseDefNum>");
 			sb.append("<PatNote>").append(Serializing.EscapeForXml(PatNote)).append("</PatNote>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<ICD9Num>").append(ICD9Num).append("</ICD9Num>");
 			sb.append("<ProbStatus>").append(ProbStatus.ordinal()).append("</ProbStatus>");
-			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
-			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
 			sb.append("</Disease>");
 			return sb.toString();
 		}

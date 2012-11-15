@@ -44,8 +44,8 @@ public class Allergy {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<Reaction>").append(Serializing.EscapeForXml(Reaction)).append("</Reaction>");
 			sb.append("<StatusIsActive>").append((StatusIsActive)?1:0).append("</StatusIsActive>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
-			sb.append("<DateAdverseReaction>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateAdverseReaction>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateAdverseReaction>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateAdverseReaction)).append("</DateAdverseReaction>");
 			sb.append("</Allergy>");
 			return sb.toString();
 		}

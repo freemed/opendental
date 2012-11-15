@@ -62,7 +62,7 @@ public class Payment {
 			sb.append("<Payment>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");
 			sb.append("<PayType>").append(PayType).append("</PayType>");
-			sb.append("<PayDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</PayDate>");
+			sb.append("<PayDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(PayDate)).append("</PayDate>");
 			sb.append("<PayAmt>").append(PayAmt).append("</PayAmt>");
 			sb.append("<CheckNum>").append(Serializing.EscapeForXml(CheckNum)).append("</CheckNum>");
 			sb.append("<BankBranch>").append(Serializing.EscapeForXml(BankBranch)).append("</BankBranch>");
@@ -70,7 +70,7 @@ public class Payment {
 			sb.append("<IsSplit>").append((IsSplit)?1:0).append("</IsSplit>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<Receipt>").append(Serializing.EscapeForXml(Receipt)).append("</Receipt>");
 			sb.append("<IsRecurringCC>").append((IsRecurringCC)?1:0).append("</IsRecurringCC>");

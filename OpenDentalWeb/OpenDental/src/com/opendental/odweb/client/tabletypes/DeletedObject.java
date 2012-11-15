@@ -33,7 +33,7 @@ public class DeletedObject {
 			sb.append("<DeletedObjectNum>").append(DeletedObjectNum).append("</DeletedObjectNum>");
 			sb.append("<ObjectNum>").append(ObjectNum).append("</ObjectNum>");
 			sb.append("<ObjectType>").append(ObjectType.ordinal()).append("</ObjectType>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</DeletedObject>");
 			return sb.toString();
 		}

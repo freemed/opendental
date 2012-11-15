@@ -52,12 +52,12 @@ public class Equipment {
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<SerialNumber>").append(Serializing.EscapeForXml(SerialNumber)).append("</SerialNumber>");
 			sb.append("<ModelYear>").append(Serializing.EscapeForXml(ModelYear)).append("</ModelYear>");
-			sb.append("<DatePurchased>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePurchased>");
-			sb.append("<DateSold>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSold>");
+			sb.append("<DatePurchased>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePurchased)).append("</DatePurchased>");
+			sb.append("<DateSold>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSold)).append("</DateSold>");
 			sb.append("<PurchaseCost>").append(PurchaseCost).append("</PurchaseCost>");
 			sb.append("<MarketValue>").append(MarketValue).append("</MarketValue>");
 			sb.append("<Location>").append(Serializing.EscapeForXml(Location)).append("</Location>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("</Equipment>");
 			return sb.toString();
 		}

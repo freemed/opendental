@@ -53,7 +53,7 @@ public class ReqStudent {
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<InstructorNum>").append(InstructorNum).append("</InstructorNum>");
-			sb.append("<DateCompleted>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCompleted>");
+			sb.append("<DateCompleted>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCompleted)).append("</DateCompleted>");
 			sb.append("</ReqStudent>");
 			return sb.toString();
 		}

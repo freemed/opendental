@@ -34,7 +34,7 @@ public class Transaction {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Transaction>");
 			sb.append("<TransactionNum>").append(TransactionNum).append("</TransactionNum>");
-			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEntry>");
+			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEntry)).append("</DateTimeEntry>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");

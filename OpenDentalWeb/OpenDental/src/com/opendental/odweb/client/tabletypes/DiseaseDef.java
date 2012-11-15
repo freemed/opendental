@@ -37,7 +37,7 @@ public class DiseaseDef {
 			sb.append("<DiseaseName>").append(Serializing.EscapeForXml(DiseaseName)).append("</DiseaseName>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</DiseaseDef>");
 			return sb.toString();
 		}

@@ -35,7 +35,7 @@ public class CustReference {
 			sb.append("<CustReference>");
 			sb.append("<CustReferenceNum>").append(CustReferenceNum).append("</CustReferenceNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateMostRecent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateMostRecent>");
+			sb.append("<DateMostRecent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateMostRecent)).append("</DateMostRecent>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<IsBadRef>").append((IsBadRef)?1:0).append("</IsBadRef>");
 			sb.append("</CustReference>");

@@ -52,8 +52,8 @@ public class OrionProc {
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
 			sb.append("<DPC>").append(DPC.ordinal()).append("</DPC>");
 			sb.append("<DPCpost>").append(DPCpost.ordinal()).append("</DPCpost>");
-			sb.append("<DateScheduleBy>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateScheduleBy>");
-			sb.append("<DateStopClock>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStopClock>");
+			sb.append("<DateScheduleBy>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateScheduleBy)).append("</DateScheduleBy>");
+			sb.append("<DateStopClock>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStopClock)).append("</DateStopClock>");
 			sb.append("<Status2>").append(Status2.ordinal()).append("</Status2>");
 			sb.append("<IsOnCall>").append((IsOnCall)?1:0).append("</IsOnCall>");
 			sb.append("<IsEffectiveComm>").append((IsEffectiveComm)?1:0).append("</IsEffectiveComm>");

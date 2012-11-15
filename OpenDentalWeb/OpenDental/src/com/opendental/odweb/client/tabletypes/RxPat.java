@@ -65,7 +65,7 @@ public class RxPat {
 			sb.append("<RxPat>");
 			sb.append("<RxNum>").append(RxNum).append("</RxNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<RxDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</RxDate>");
+			sb.append("<RxDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(RxDate)).append("</RxDate>");
 			sb.append("<Drug>").append(Serializing.EscapeForXml(Drug)).append("</Drug>");
 			sb.append("<Sig>").append(Serializing.EscapeForXml(Sig)).append("</Sig>");
 			sb.append("<Disp>").append(Serializing.EscapeForXml(Disp)).append("</Disp>");
@@ -74,7 +74,7 @@ public class RxPat {
 			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
 			sb.append("<PharmacyNum>").append(PharmacyNum).append("</PharmacyNum>");
 			sb.append("<IsControlled>").append((IsControlled)?1:0).append("</IsControlled>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<SendStatus>").append(SendStatus.ordinal()).append("</SendStatus>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("<DosageCode>").append(Serializing.EscapeForXml(DosageCode)).append("</DosageCode>");

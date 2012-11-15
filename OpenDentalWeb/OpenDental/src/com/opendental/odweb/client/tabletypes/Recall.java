@@ -62,18 +62,18 @@ public class Recall {
 			sb.append("<Recall>");
 			sb.append("<RecallNum>").append(RecallNum).append("</RecallNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateDueCalc>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDueCalc>");
-			sb.append("<DateDue>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDue>");
-			sb.append("<DatePrevious>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePrevious>");
+			sb.append("<DateDueCalc>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDueCalc)).append("</DateDueCalc>");
+			sb.append("<DateDue>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDue)).append("</DateDue>");
+			sb.append("<DatePrevious>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePrevious)).append("</DatePrevious>");
 			sb.append("<RecallInterval>").append(RecallInterval).append("</RecallInterval>");
 			sb.append("<RecallStatus>").append(RecallStatus).append("</RecallStatus>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<IsDisabled>").append((IsDisabled)?1:0).append("</IsDisabled>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<RecallTypeNum>").append(RecallTypeNum).append("</RecallTypeNum>");
 			sb.append("<DisableUntilBalance>").append(DisableUntilBalance).append("</DisableUntilBalance>");
-			sb.append("<DisableUntilDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DisableUntilDate>");
-			sb.append("<DateScheduled>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateScheduled>");
+			sb.append("<DisableUntilDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DisableUntilDate)).append("</DisableUntilDate>");
+			sb.append("<DateScheduled>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateScheduled)).append("</DateScheduled>");
 			sb.append("</Recall>");
 			return sb.toString();
 		}

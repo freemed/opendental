@@ -76,7 +76,7 @@ public class Etrans {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Etrans>");
 			sb.append("<EtransNum>").append(EtransNum).append("</EtransNum>");
-			sb.append("<DateTimeTrans>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeTrans>");
+			sb.append("<DateTimeTrans>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeTrans)).append("</DateTimeTrans>");
 			sb.append("<ClearingHouseNum>").append(ClearingHouseNum).append("</ClearingHouseNum>");
 			sb.append("<Etype>").append(Etype.ordinal()).append("</Etype>");
 			sb.append("<ClaimNum>").append(ClaimNum).append("</ClaimNum>");

@@ -721,7 +721,7 @@ namespace xCrudGeneratorWebService {
 						strb.Append("("+field.Name+")?1:0");
 						break;
 					case "DateTime":
-						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format(AptDateTime)");
+						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format("+field.Name+")");
 						break;
 					case "String":
 					case "TimeSpan":

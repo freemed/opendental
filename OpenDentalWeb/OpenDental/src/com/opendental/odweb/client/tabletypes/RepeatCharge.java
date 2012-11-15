@@ -43,8 +43,8 @@ public class RepeatCharge {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ProcCode>").append(Serializing.EscapeForXml(ProcCode)).append("</ProcCode>");
 			sb.append("<ChargeAmt>").append(ChargeAmt).append("</ChargeAmt>");
-			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
-			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</RepeatCharge>");
 			return sb.toString();

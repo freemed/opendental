@@ -43,7 +43,7 @@ public class HL7Msg {
 			sb.append("<HL7Status>").append(HL7Status.ordinal()).append("</HL7Status>");
 			sb.append("<MsgText>").append(Serializing.EscapeForXml(MsgText)).append("</MsgText>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</HL7Msg>");

@@ -41,7 +41,7 @@ public class TimeAdjust {
 			sb.append("<TimeAdjust>");
 			sb.append("<TimeAdjustNum>").append(TimeAdjustNum).append("</TimeAdjustNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<TimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeEntry>");
+			sb.append("<TimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntry)).append("</TimeEntry>");
 			sb.append("<RegHours>").append(Serializing.EscapeForXml(RegHours)).append("</RegHours>");
 			sb.append("<OTimeHours>").append(Serializing.EscapeForXml(OTimeHours)).append("</OTimeHours>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");

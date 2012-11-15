@@ -29,7 +29,7 @@ public class Computer {
 			sb.append("<Computer>");
 			sb.append("<ComputerNum>").append(ComputerNum).append("</ComputerNum>");
 			sb.append("<CompName>").append(Serializing.EscapeForXml(CompName)).append("</CompName>");
-			sb.append("<LastHeartBeat>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</LastHeartBeat>");
+			sb.append("<LastHeartBeat>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(LastHeartBeat)).append("</LastHeartBeat>");
 			sb.append("</Computer>");
 			return sb.toString();
 		}

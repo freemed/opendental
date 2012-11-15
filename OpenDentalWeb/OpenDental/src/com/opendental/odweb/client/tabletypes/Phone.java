@@ -77,7 +77,7 @@ public class Phone {
 			sb.append("<CustomerNumber>").append(Serializing.EscapeForXml(CustomerNumber)).append("</CustomerNumber>");
 			sb.append("<InOrOut>").append(Serializing.EscapeForXml(InOrOut)).append("</InOrOut>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeStart>");
+			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeStart)).append("</DateTimeStart>");
 			sb.append("<WebCamImage>").append(Serializing.EscapeForXml(WebCamImage)).append("</WebCamImage>");
 			sb.append("<ScreenshotPath>").append(Serializing.EscapeForXml(ScreenshotPath)).append("</ScreenshotPath>");
 			sb.append("<ScreenshotImage>").append(Serializing.EscapeForXml(ScreenshotImage)).append("</ScreenshotImage>");

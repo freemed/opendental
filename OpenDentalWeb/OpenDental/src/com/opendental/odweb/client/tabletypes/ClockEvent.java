@@ -65,12 +65,12 @@ public class ClockEvent {
 			sb.append("<ClockEvent>");
 			sb.append("<ClockEventNum>").append(ClockEventNum).append("</ClockEventNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<TimeEntered1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeEntered1>");
-			sb.append("<TimeDisplayed1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeDisplayed1>");
+			sb.append("<TimeEntered1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntered1)).append("</TimeEntered1>");
+			sb.append("<TimeDisplayed1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeDisplayed1)).append("</TimeDisplayed1>");
 			sb.append("<ClockStatus>").append(ClockStatus.ordinal()).append("</ClockStatus>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<TimeEntered2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeEntered2>");
-			sb.append("<TimeDisplayed2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeDisplayed2>");
+			sb.append("<TimeEntered2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntered2)).append("</TimeEntered2>");
+			sb.append("<TimeDisplayed2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeDisplayed2)).append("</TimeDisplayed2>");
 			sb.append("<OTimeHours>").append(Serializing.EscapeForXml(OTimeHours)).append("</OTimeHours>");
 			sb.append("<OTimeAuto>").append(Serializing.EscapeForXml(OTimeAuto)).append("</OTimeAuto>");
 			sb.append("<Adjust>").append(Serializing.EscapeForXml(Adjust)).append("</Adjust>");

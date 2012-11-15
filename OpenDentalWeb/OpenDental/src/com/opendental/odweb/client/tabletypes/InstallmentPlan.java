@@ -41,8 +41,8 @@ public class InstallmentPlan {
 			sb.append("<InstallmentPlan>");
 			sb.append("<InstallmentPlanNum>").append(InstallmentPlanNum).append("</InstallmentPlanNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateAgreement>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateAgreement>");
-			sb.append("<DateFirstPayment>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateFirstPayment>");
+			sb.append("<DateAgreement>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateAgreement)).append("</DateAgreement>");
+			sb.append("<DateFirstPayment>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateFirstPayment)).append("</DateFirstPayment>");
 			sb.append("<MonthlyPayment>").append(MonthlyPayment).append("</MonthlyPayment>");
 			sb.append("<APR>").append(APR).append("</APR>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");

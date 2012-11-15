@@ -34,7 +34,7 @@ public class GroupPermission {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<GroupPermission>");
 			sb.append("<GroupPermNum>").append(GroupPermNum).append("</GroupPermNum>");
-			sb.append("<NewerDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</NewerDate>");
+			sb.append("<NewerDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(NewerDate)).append("</NewerDate>");
 			sb.append("<NewerDays>").append(NewerDays).append("</NewerDays>");
 			sb.append("<UserGroupNum>").append(UserGroupNum).append("</UserGroupNum>");
 			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");

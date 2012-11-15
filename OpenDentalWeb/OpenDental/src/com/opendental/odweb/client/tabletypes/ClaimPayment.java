@@ -52,7 +52,7 @@ public class ClaimPayment {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimPayment>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
-			sb.append("<CheckDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CheckDate>");
+			sb.append("<CheckDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(CheckDate)).append("</CheckDate>");
 			sb.append("<CheckAmt>").append(CheckAmt).append("</CheckAmt>");
 			sb.append("<CheckNum>").append(Serializing.EscapeForXml(CheckNum)).append("</CheckNum>");
 			sb.append("<BankBranch>").append(Serializing.EscapeForXml(BankBranch)).append("</BankBranch>");
@@ -60,7 +60,7 @@ public class ClaimPayment {
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<CarrierName>").append(Serializing.EscapeForXml(CarrierName)).append("</CarrierName>");
-			sb.append("<DateIssued>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateIssued>");
+			sb.append("<DateIssued>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateIssued)).append("</DateIssued>");
 			sb.append("<IsPartial>").append((IsPartial)?1:0).append("</IsPartial>");
 			sb.append("</ClaimPayment>");
 			return sb.toString();

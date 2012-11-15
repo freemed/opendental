@@ -85,7 +85,7 @@ public class Screen {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Screen>");
 			sb.append("<ScreenNum>").append(ScreenNum).append("</ScreenNum>");
-			sb.append("<ScreenDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ScreenDate>");
+			sb.append("<ScreenDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ScreenDate)).append("</ScreenDate>");
 			sb.append("<GradeSchool>").append(Serializing.EscapeForXml(GradeSchool)).append("</GradeSchool>");
 			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
@@ -102,7 +102,7 @@ public class Screen {
 			sb.append("<EarlyChildCaries>").append(EarlyChildCaries.ordinal()).append("</EarlyChildCaries>");
 			sb.append("<ExistingSealants>").append(ExistingSealants.ordinal()).append("</ExistingSealants>");
 			sb.append("<MissingAllTeeth>").append(MissingAllTeeth.ordinal()).append("</MissingAllTeeth>");
-			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</Birthdate>");
+			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(Birthdate)).append("</Birthdate>");
 			sb.append("<ScreenGroupNum>").append(ScreenGroupNum).append("</ScreenGroupNum>");
 			sb.append("<ScreenGroupOrder>").append(ScreenGroupOrder).append("</ScreenGroupOrder>");
 			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");

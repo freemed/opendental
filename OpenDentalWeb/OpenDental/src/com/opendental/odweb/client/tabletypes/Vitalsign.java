@@ -60,7 +60,7 @@ public class Vitalsign {
 			sb.append("<Weight>").append(Weight).append("</Weight>");
 			sb.append("<BpSystolic>").append(BpSystolic).append("</BpSystolic>");
 			sb.append("<BpDiastolic>").append(BpDiastolic).append("</BpDiastolic>");
-			sb.append("<DateTaken>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTaken>");
+			sb.append("<DateTaken>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTaken)).append("</DateTaken>");
 			sb.append("<HasFollowupPlan>").append((HasFollowupPlan)?1:0).append("</HasFollowupPlan>");
 			sb.append("<IsIneligible>").append((IsIneligible)?1:0).append("</IsIneligible>");
 			sb.append("<Documentation>").append(Serializing.EscapeForXml(Documentation)).append("</Documentation>");

@@ -89,7 +89,7 @@ public class Documentod {
 			sb.append("<Documentod>");
 			sb.append("<DocNum>").append(DocNum).append("</DocNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
@@ -107,7 +107,7 @@ public class Documentod {
 			sb.append("<WindowingMin>").append(WindowingMin).append("</WindowingMin>");
 			sb.append("<WindowingMax>").append(WindowingMax).append("</WindowingMax>");
 			sb.append("<MountItemNum>").append(MountItemNum).append("</MountItemNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
 			sb.append("<Thumbnail>").append(Serializing.EscapeForXml(Thumbnail)).append("</Thumbnail>");
 			sb.append("</Documentod>");

@@ -58,9 +58,9 @@ public class RegistrationKey {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<RegKey>").append(Serializing.EscapeForXml(RegKey)).append("</RegKey>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<DateStarted>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStarted>");
-			sb.append("<DateDisabled>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDisabled>");
-			sb.append("<DateEnded>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEnded>");
+			sb.append("<DateStarted>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStarted)).append("</DateStarted>");
+			sb.append("<DateDisabled>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDisabled)).append("</DateDisabled>");
+			sb.append("<DateEnded>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEnded)).append("</DateEnded>");
 			sb.append("<IsForeign>").append((IsForeign)?1:0).append("</IsForeign>");
 			sb.append("<UsesServerVersion>").append((UsesServerVersion)?1:0).append("</UsesServerVersion>");
 			sb.append("<IsFreeVersion>").append((IsFreeVersion)?1:0).append("</IsFreeVersion>");

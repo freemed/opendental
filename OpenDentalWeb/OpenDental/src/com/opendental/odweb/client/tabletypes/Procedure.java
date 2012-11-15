@@ -169,7 +169,7 @@ public class Procedure {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<OldCode>").append(Serializing.EscapeForXml(OldCode)).append("</OldCode>");
-			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ProcDate)).append("</ProcDate>");
 			sb.append("<ProcFee>").append(ProcFee).append("</ProcFee>");
 			sb.append("<Surf>").append(Serializing.EscapeForXml(Surf)).append("</Surf>");
 			sb.append("<ToothNum>").append(Serializing.EscapeForXml(ToothNum)).append("</ToothNum>");
@@ -181,9 +181,9 @@ public class Procedure {
 			sb.append("<PlannedAptNum>").append(PlannedAptNum).append("</PlannedAptNum>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
 			sb.append("<Prosthesis>").append(Serializing.EscapeForXml(Prosthesis)).append("</Prosthesis>");
-			sb.append("<DateOriginalProsth>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateOriginalProsth>");
+			sb.append("<DateOriginalProsth>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateOriginalProsth)).append("</DateOriginalProsth>");
 			sb.append("<ClaimNote>").append(Serializing.EscapeForXml(ClaimNote)).append("</ClaimNote>");
-			sb.append("<DateEntryC>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntryC>");
+			sb.append("<DateEntryC>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntryC)).append("</DateEntryC>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<MedicalCode>").append(Serializing.EscapeForXml(MedicalCode)).append("</MedicalCode>");
 			sb.append("<DiagnosticCode>").append(Serializing.EscapeForXml(DiagnosticCode)).append("</DiagnosticCode>");
@@ -201,13 +201,13 @@ public class Procedure {
 			sb.append("<BaseUnits>").append(BaseUnits).append("</BaseUnits>");
 			sb.append("<StartTime>").append(StartTime).append("</StartTime>");
 			sb.append("<StopTime>").append(StopTime).append("</StopTime>");
-			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTP>");
+			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTP)).append("</DateTP>");
 			sb.append("<SiteNum>").append(SiteNum).append("</SiteNum>");
 			sb.append("<HideGraphics>").append((HideGraphics)?1:0).append("</HideGraphics>");
 			sb.append("<CanadianTypeCodes>").append(Serializing.EscapeForXml(CanadianTypeCodes)).append("</CanadianTypeCodes>");
 			sb.append("<ProcTime>").append(Serializing.EscapeForXml(ProcTime)).append("</ProcTime>");
 			sb.append("<ProcTimeEnd>").append(Serializing.EscapeForXml(ProcTimeEnd)).append("</ProcTimeEnd>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<Prognosis>").append(Prognosis).append("</Prognosis>");
 			sb.append("<DrugUnit>").append(DrugUnit.ordinal()).append("</DrugUnit>");
 			sb.append("<DrugQty>").append(DrugQty).append("</DrugQty>");

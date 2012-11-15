@@ -29,7 +29,7 @@ public class FormPat {
 			sb.append("<FormPat>");
 			sb.append("<FormPatNum>").append(FormPatNum).append("</FormPatNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<FormDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</FormDateTime>");
+			sb.append("<FormDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(FormDateTime)).append("</FormDateTime>");
 			sb.append("</FormPat>");
 			return sb.toString();
 		}

@@ -59,7 +59,7 @@ public class Task {
 			sb.append("<Task>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("<TaskListNum>").append(TaskListNum).append("</TaskListNum>");
-			sb.append("<DateTask>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTask>");
+			sb.append("<DateTask>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTask)).append("</DateTask>");
 			sb.append("<KeyNum>").append(KeyNum).append("</KeyNum>");
 			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
 			sb.append("<TaskStatus>").append(TaskStatus.ordinal()).append("</TaskStatus>");
@@ -67,9 +67,9 @@ public class Task {
 			sb.append("<DateType>").append(DateType.ordinal()).append("</DateType>");
 			sb.append("<FromNum>").append(FromNum).append("</FromNum>");
 			sb.append("<ObjectType>").append(ObjectType.ordinal()).append("</ObjectType>");
-			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEntry>");
+			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEntry)).append("</DateTimeEntry>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<DateTimeFinished>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeFinished>");
+			sb.append("<DateTimeFinished>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeFinished)).append("</DateTimeFinished>");
 			sb.append("</Task>");
 			return sb.toString();
 		}

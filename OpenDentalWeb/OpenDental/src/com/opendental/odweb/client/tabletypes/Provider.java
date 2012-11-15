@@ -140,7 +140,7 @@ public class Provider {
 			sb.append("<SchoolClassNum>").append(SchoolClassNum).append("</SchoolClassNum>");
 			sb.append("<NationalProvID>").append(Serializing.EscapeForXml(NationalProvID)).append("</NationalProvID>");
 			sb.append("<CanadianOfficeNum>").append(Serializing.EscapeForXml(CanadianOfficeNum)).append("</CanadianOfficeNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<AnesthProvType>").append(AnesthProvType).append("</AnesthProvType>");
 			sb.append("<TaxonomyCodeOverride>").append(Serializing.EscapeForXml(TaxonomyCodeOverride)).append("</TaxonomyCodeOverride>");
 			sb.append("<IsCDAnet>").append((IsCDAnet)?1:0).append("</IsCDAnet>");

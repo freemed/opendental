@@ -31,7 +31,7 @@ public class DashboardAR {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DashboardAR>");
 			sb.append("<DashboardARNum>").append(DashboardARNum).append("</DashboardARNum>");
-			sb.append("<DateCalc>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCalc>");
+			sb.append("<DateCalc>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCalc)).append("</DateCalc>");
 			sb.append("<BalTotal>").append(BalTotal).append("</BalTotal>");
 			sb.append("<InsEst>").append(InsEst).append("</InsEst>");
 			sb.append("</DashboardAR>");

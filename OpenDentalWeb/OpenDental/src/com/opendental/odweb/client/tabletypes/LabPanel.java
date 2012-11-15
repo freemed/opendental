@@ -52,7 +52,7 @@ public class LabPanel {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<RawMessage>").append(Serializing.EscapeForXml(RawMessage)).append("</RawMessage>");
 			sb.append("<LabNameAddress>").append(Serializing.EscapeForXml(LabNameAddress)).append("</LabNameAddress>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<SpecimenCondition>").append(Serializing.EscapeForXml(SpecimenCondition)).append("</SpecimenCondition>");
 			sb.append("<SpecimenSource>").append(Serializing.EscapeForXml(SpecimenSource)).append("</SpecimenSource>");
 			sb.append("<ServiceId>").append(Serializing.EscapeForXml(ServiceId)).append("</ServiceId>");

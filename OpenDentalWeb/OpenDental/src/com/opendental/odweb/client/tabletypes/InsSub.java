@@ -51,8 +51,8 @@ public class InsSub {
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
 			sb.append("<Subscriber>").append(Subscriber).append("</Subscriber>");
-			sb.append("<DateEffective>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEffective>");
-			sb.append("<DateTerm>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTerm>");
+			sb.append("<DateEffective>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEffective)).append("</DateEffective>");
+			sb.append("<DateTerm>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTerm)).append("</DateTerm>");
 			sb.append("<ReleaseInfo>").append((ReleaseInfo)?1:0).append("</ReleaseInfo>");
 			sb.append("<AssignBen>").append((AssignBen)?1:0).append("</AssignBen>");
 			sb.append("<SubscriberID>").append(Serializing.EscapeForXml(SubscriberID)).append("</SubscriberID>");

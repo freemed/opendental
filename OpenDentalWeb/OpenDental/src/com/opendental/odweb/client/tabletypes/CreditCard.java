@@ -63,11 +63,11 @@ public class CreditCard {
 			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
 			sb.append("<XChargeToken>").append(Serializing.EscapeForXml(XChargeToken)).append("</XChargeToken>");
 			sb.append("<CCNumberMasked>").append(Serializing.EscapeForXml(CCNumberMasked)).append("</CCNumberMasked>");
-			sb.append("<CCExpiration>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CCExpiration>");
+			sb.append("<CCExpiration>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(CCExpiration)).append("</CCExpiration>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<ChargeAmt>").append(ChargeAmt).append("</ChargeAmt>");
-			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
-			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
 			sb.append("</CreditCard>");

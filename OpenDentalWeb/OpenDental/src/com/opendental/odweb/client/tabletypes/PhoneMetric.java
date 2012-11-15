@@ -34,7 +34,7 @@ public class PhoneMetric {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PhoneMetric>");
 			sb.append("<PhoneMetricNum>").append(PhoneMetricNum).append("</PhoneMetricNum>");
-			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEntry>");
+			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEntry)).append("</DateTimeEntry>");
 			sb.append("<VoiceMails>").append(VoiceMails).append("</VoiceMails>");
 			sb.append("<Triages>").append(Triages).append("</Triages>");
 			sb.append("<MinutesBehind>").append(MinutesBehind).append("</MinutesBehind>");

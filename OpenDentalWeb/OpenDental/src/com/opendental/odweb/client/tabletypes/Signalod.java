@@ -51,12 +51,12 @@ public class Signalod {
 			sb.append("<SignalNum>").append(SignalNum).append("</SignalNum>");
 			sb.append("<FromUser>").append(Serializing.EscapeForXml(FromUser)).append("</FromUser>");
 			sb.append("<ITypes>").append(Serializing.EscapeForXml(ITypes)).append("</ITypes>");
-			sb.append("<DateViewing>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateViewing>");
+			sb.append("<DateViewing>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateViewing)).append("</DateViewing>");
 			sb.append("<SigType>").append(SigType.ordinal()).append("</SigType>");
 			sb.append("<SigText>").append(Serializing.EscapeForXml(SigText)).append("</SigText>");
-			sb.append("<SigDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</SigDateTime>");
+			sb.append("<SigDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(SigDateTime)).append("</SigDateTime>");
 			sb.append("<ToUser>").append(Serializing.EscapeForXml(ToUser)).append("</ToUser>");
-			sb.append("<AckTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AckTime>");
+			sb.append("<AckTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AckTime)).append("</AckTime>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("</Signalod>");
 			return sb.toString();

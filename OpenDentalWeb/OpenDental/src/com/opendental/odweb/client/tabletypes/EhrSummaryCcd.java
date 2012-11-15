@@ -32,7 +32,7 @@ public class EhrSummaryCcd {
 			sb.append("<EhrSummaryCcd>");
 			sb.append("<EhrSummaryCcdNum>").append(EhrSummaryCcdNum).append("</EhrSummaryCcdNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateSummary>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSummary>");
+			sb.append("<DateSummary>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSummary)).append("</DateSummary>");
 			sb.append("<ContentSummary>").append(Serializing.EscapeForXml(ContentSummary)).append("</ContentSummary>");
 			sb.append("</EhrSummaryCcd>");
 			return sb.toString();

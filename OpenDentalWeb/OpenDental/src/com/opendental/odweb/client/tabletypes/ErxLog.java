@@ -33,7 +33,7 @@ public class ErxLog {
 			sb.append("<ErxLogNum>").append(ErxLogNum).append("</ErxLogNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<MsgText>").append(Serializing.EscapeForXml(MsgText)).append("</MsgText>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</ErxLog>");
 			return sb.toString();
 		}

@@ -55,13 +55,13 @@ public class RefAttach {
 			sb.append("<ReferralNum>").append(ReferralNum).append("</ReferralNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<RefDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</RefDate>");
+			sb.append("<RefDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(RefDate)).append("</RefDate>");
 			sb.append("<IsFrom>").append((IsFrom)?1:0).append("</IsFrom>");
 			sb.append("<RefToStatus>").append(RefToStatus.ordinal()).append("</RefToStatus>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<IsTransitionOfCare>").append((IsTransitionOfCare)?1:0).append("</IsTransitionOfCare>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<DateProcComplete>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateProcComplete>");
+			sb.append("<DateProcComplete>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateProcComplete)).append("</DateProcComplete>");
 			sb.append("</RefAttach>");
 			return sb.toString();
 		}

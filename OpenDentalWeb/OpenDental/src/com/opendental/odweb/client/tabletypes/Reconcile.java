@@ -40,7 +40,7 @@ public class Reconcile {
 			sb.append("<AccountNum>").append(AccountNum).append("</AccountNum>");
 			sb.append("<StartingBal>").append(StartingBal).append("</StartingBal>");
 			sb.append("<EndingBal>").append(EndingBal).append("</EndingBal>");
-			sb.append("<DateReconcile>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateReconcile>");
+			sb.append("<DateReconcile>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateReconcile)).append("</DateReconcile>");
 			sb.append("<IsLocked>").append((IsLocked)?1:0).append("</IsLocked>");
 			sb.append("</Reconcile>");
 			return sb.toString();

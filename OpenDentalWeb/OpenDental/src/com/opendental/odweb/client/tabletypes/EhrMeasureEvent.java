@@ -34,7 +34,7 @@ public class EhrMeasureEvent {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrMeasureEvent>");
 			sb.append("<EhrMeasureEventNum>").append(EhrMeasureEventNum).append("</EhrMeasureEventNum>");
-			sb.append("<DateTEvent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTEvent>");
+			sb.append("<DateTEvent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTEvent)).append("</DateTEvent>");
 			sb.append("<EventType>").append(EventType.ordinal()).append("</EventType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<MoreInfo>").append(Serializing.EscapeForXml(MoreInfo)).append("</MoreInfo>");

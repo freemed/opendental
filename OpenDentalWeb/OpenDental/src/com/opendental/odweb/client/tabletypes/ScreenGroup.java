@@ -29,7 +29,7 @@ public class ScreenGroup {
 			sb.append("<ScreenGroup>");
 			sb.append("<ScreenGroupNum>").append(ScreenGroupNum).append("</ScreenGroupNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<SGDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</SGDate>");
+			sb.append("<SGDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(SGDate)).append("</SGDate>");
 			sb.append("</ScreenGroup>");
 			return sb.toString();
 		}

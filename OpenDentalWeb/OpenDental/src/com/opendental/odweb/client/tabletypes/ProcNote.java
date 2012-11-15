@@ -45,7 +45,7 @@ public class ProcNote {
 			sb.append("<ProcNoteNum>").append(ProcNoteNum).append("</ProcNoteNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<EntryDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</EntryDateTime>");
+			sb.append("<EntryDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(EntryDateTime)).append("</EntryDateTime>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");

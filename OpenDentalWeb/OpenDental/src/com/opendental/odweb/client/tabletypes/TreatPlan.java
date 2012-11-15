@@ -44,7 +44,7 @@ public class TreatPlan {
 			sb.append("<TreatPlan>");
 			sb.append("<TreatPlanNum>").append(TreatPlanNum).append("</TreatPlanNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTP>");
+			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTP)).append("</DateTP>");
 			sb.append("<Heading>").append(Serializing.EscapeForXml(Heading)).append("</Heading>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");

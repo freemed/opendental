@@ -48,7 +48,7 @@ public class EmailMessage {
 			sb.append("<FromAddress>").append(Serializing.EscapeForXml(FromAddress)).append("</FromAddress>");
 			sb.append("<Subject>").append(Serializing.EscapeForXml(Subject)).append("</Subject>");
 			sb.append("<BodyText>").append(Serializing.EscapeForXml(BodyText)).append("</BodyText>");
-			sb.append("<MsgDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</MsgDateTime>");
+			sb.append("<MsgDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(MsgDateTime)).append("</MsgDateTime>");
 			sb.append("<SentOrReceived>").append(SentOrReceived.ordinal()).append("</SentOrReceived>");
 			sb.append("</EmailMessage>");
 			return sb.toString();

@@ -63,15 +63,15 @@ public class PaySplit {
 			sb.append("<SplitNum>").append(SplitNum).append("</SplitNum>");
 			sb.append("<SplitAmt>").append(SplitAmt).append("</SplitAmt>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ProcDate)).append("</ProcDate>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");
 			sb.append("<IsDiscount>").append((IsDiscount)?1:0).append("</IsDiscount>");
 			sb.append("<DiscountType>").append(DiscountType).append("</DiscountType>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
-			sb.append("<DatePay>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePay>");
+			sb.append("<DatePay>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePay)).append("</DatePay>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<UnearnedType>").append(UnearnedType).append("</UnearnedType>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("</PaySplit>");

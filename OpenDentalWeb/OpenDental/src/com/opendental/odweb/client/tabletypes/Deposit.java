@@ -34,7 +34,7 @@ public class Deposit {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Deposit>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
-			sb.append("<DateDeposit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDeposit>");
+			sb.append("<DateDeposit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDeposit)).append("</DateDeposit>");
 			sb.append("<BankAccountInfo>").append(Serializing.EscapeForXml(BankAccountInfo)).append("</BankAccountInfo>");
 			sb.append("<Amount>").append(Amount).append("</Amount>");
 			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");

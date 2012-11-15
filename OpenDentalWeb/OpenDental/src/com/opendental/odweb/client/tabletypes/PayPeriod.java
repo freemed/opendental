@@ -31,9 +31,9 @@ public class PayPeriod {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PayPeriod>");
 			sb.append("<PayPeriodNum>").append(PayPeriodNum).append("</PayPeriodNum>");
-			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
-			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
-			sb.append("<DatePaycheck>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePaycheck>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
+			sb.append("<DatePaycheck>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePaycheck)).append("</DatePaycheck>");
 			sb.append("</PayPeriod>");
 			return sb.toString();
 		}

@@ -52,7 +52,7 @@ public class Schedule {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Schedule>");
 			sb.append("<ScheduleNum>").append(ScheduleNum).append("</ScheduleNum>");
-			sb.append("<SchedDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</SchedDate>");
+			sb.append("<SchedDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(SchedDate)).append("</SchedDate>");
 			sb.append("<StartTime>").append(Serializing.EscapeForXml(StartTime)).append("</StartTime>");
 			sb.append("<StopTime>").append(Serializing.EscapeForXml(StopTime)).append("</StopTime>");
 			sb.append("<SchedType>").append(SchedType.ordinal()).append("</SchedType>");
@@ -61,7 +61,7 @@ public class Schedule {
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Status>").append(Status.ordinal()).append("</Status>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("</Schedule>");
 			return sb.toString();
 		}

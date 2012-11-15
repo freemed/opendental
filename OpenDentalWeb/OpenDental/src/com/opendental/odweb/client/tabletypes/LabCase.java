@@ -62,11 +62,11 @@ public class LabCase {
 			sb.append("<LaboratoryNum>").append(LaboratoryNum).append("</LaboratoryNum>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<PlannedAptNum>").append(PlannedAptNum).append("</PlannedAptNum>");
-			sb.append("<DateTimeDue>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeDue>");
-			sb.append("<DateTimeCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeCreated>");
-			sb.append("<DateTimeSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSent>");
-			sb.append("<DateTimeRecd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeRecd>");
-			sb.append("<DateTimeChecked>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeChecked>");
+			sb.append("<DateTimeDue>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeDue)).append("</DateTimeDue>");
+			sb.append("<DateTimeCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeCreated)).append("</DateTimeCreated>");
+			sb.append("<DateTimeSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeSent)).append("</DateTimeSent>");
+			sb.append("<DateTimeRecd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeRecd)).append("</DateTimeRecd>");
+			sb.append("<DateTimeChecked>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeChecked)).append("</DateTimeChecked>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("<Instructions>").append(Serializing.EscapeForXml(Instructions)).append("</Instructions>");
 			sb.append("<LabFee>").append(LabFee).append("</LabFee>");

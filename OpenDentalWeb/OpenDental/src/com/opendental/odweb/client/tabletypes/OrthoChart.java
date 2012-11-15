@@ -35,7 +35,7 @@ public class OrthoChart {
 			sb.append("<OrthoChart>");
 			sb.append("<OrthoChartNum>").append(OrthoChartNum).append("</OrthoChartNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateService>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateService>");
+			sb.append("<DateService>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateService)).append("</DateService>");
 			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
 			sb.append("<FieldValue>").append(Serializing.EscapeForXml(FieldValue)).append("</FieldValue>");
 			sb.append("</OrthoChart>");

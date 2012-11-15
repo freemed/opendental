@@ -29,7 +29,7 @@ public class SupplyNeeded {
 			sb.append("<SupplyNeeded>");
 			sb.append("<SupplyNeededNum>").append(SupplyNeededNum).append("</SupplyNeededNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<DateAdded>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateAdded>");
+			sb.append("<DateAdded>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateAdded)).append("</DateAdded>");
 			sb.append("</SupplyNeeded>");
 			return sb.toString();
 		}

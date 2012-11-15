@@ -35,7 +35,7 @@ public class EobAttach {
 			sb.append("<EobAttach>");
 			sb.append("<EobAttachNum>").append(EobAttachNum).append("</EobAttachNum>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
-			sb.append("<DateTCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTCreated>");
+			sb.append("<DateTCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTCreated)).append("</DateTCreated>");
 			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
 			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
 			sb.append("</EobAttach>");

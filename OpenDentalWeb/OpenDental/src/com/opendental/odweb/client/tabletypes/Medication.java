@@ -40,7 +40,7 @@ public class Medication {
 			sb.append("<MedName>").append(Serializing.EscapeForXml(MedName)).append("</MedName>");
 			sb.append("<GenericNum>").append(GenericNum).append("</GenericNum>");
 			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("</Medication>");
 			return sb.toString();

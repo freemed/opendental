@@ -32,7 +32,7 @@ public class PerioExam {
 			sb.append("<PerioExam>");
 			sb.append("<PerioExamNum>").append(PerioExamNum).append("</PerioExamNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ExamDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ExamDate>");
+			sb.append("<ExamDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ExamDate)).append("</ExamDate>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("</PerioExam>");
 			return sb.toString();

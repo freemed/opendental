@@ -35,7 +35,7 @@ public class SupplyOrder {
 			sb.append("<SupplyOrder>");
 			sb.append("<SupplyOrderNum>").append(SupplyOrderNum).append("</SupplyOrderNum>");
 			sb.append("<SupplierNum>").append(SupplierNum).append("</SupplierNum>");
-			sb.append("<DatePlaced>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePlaced>");
+			sb.append("<DatePlaced>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePlaced)).append("</DatePlaced>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<AmountTotal>").append(AmountTotal).append("</AmountTotal>");
 			sb.append("</SupplyOrder>");

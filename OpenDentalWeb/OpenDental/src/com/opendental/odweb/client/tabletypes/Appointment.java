@@ -117,13 +117,13 @@ public class Appointment {
 			sb.append("<Assistant>").append(Assistant).append("</Assistant>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<IsHygiene>").append((IsHygiene)?1:0).append("</IsHygiene>");
-			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
-			sb.append("<DateTimeArrived>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeArrived>");
-			sb.append("<DateTimeSeated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSeated>");
-			sb.append("<DateTimeDismissed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeDismissed>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTimeArrived>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeArrived)).append("</DateTimeArrived>");
+			sb.append("<DateTimeSeated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeSeated)).append("</DateTimeSeated>");
+			sb.append("<DateTimeDismissed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeDismissed)).append("</DateTimeDismissed>");
 			sb.append("<InsPlan1>").append(InsPlan1).append("</InsPlan1>");
 			sb.append("<InsPlan2>").append(InsPlan2).append("</InsPlan2>");
-			sb.append("<DateTimeAskedToArrive>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeAskedToArrive>");
+			sb.append("<DateTimeAskedToArrive>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeAskedToArrive)).append("</DateTimeAskedToArrive>");
 			sb.append("<ProcsColored>").append(Serializing.EscapeForXml(ProcsColored)).append("</ProcsColored>");
 			sb.append("<ColorOverride>").append(ColorOverride).append("</ColorOverride>");
 			sb.append("</Appointment>");

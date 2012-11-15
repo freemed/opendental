@@ -60,7 +60,7 @@ public class Sheet {
 			sb.append("<SheetNum>").append(SheetNum).append("</SheetNum>");
 			sb.append("<SheetType>").append(SheetType.ordinal()).append("</SheetType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeSheet>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSheet>");
+			sb.append("<DateTimeSheet>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeSheet)).append("</DateTimeSheet>");
 			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
 			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
 			sb.append("<Width>").append(Width).append("</Width>");

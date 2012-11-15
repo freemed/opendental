@@ -42,7 +42,7 @@ public class MedicalOrder {
 			sb.append("<MedicalOrderNum>").append(MedicalOrderNum).append("</MedicalOrderNum>");
 			sb.append("<MedOrderType>").append(MedOrderType.ordinal()).append("</MedOrderType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeOrder>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeOrder>");
+			sb.append("<DateTimeOrder>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeOrder)).append("</DateTimeOrder>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<IsDiscontinued>").append((IsDiscontinued)?1:0).append("</IsDiscontinued>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");

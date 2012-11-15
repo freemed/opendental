@@ -52,7 +52,7 @@ public class PayPlanCharge {
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
 			sb.append("<Guarantor>").append(Guarantor).append("</Guarantor>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ChargeDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ChargeDate>");
+			sb.append("<ChargeDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ChargeDate)).append("</ChargeDate>");
 			sb.append("<Principal>").append(Principal).append("</Principal>");
 			sb.append("<Interest>").append(Interest).append("</Interest>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");

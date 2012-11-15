@@ -145,7 +145,7 @@ public class ClaimProc {
 			sb.append("<Remarks>").append(Serializing.EscapeForXml(Remarks)).append("</Remarks>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
-			sb.append("<DateCP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCP>");
+			sb.append("<DateCP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCP)).append("</DateCP>");
 			sb.append("<WriteOff>").append(WriteOff).append("</WriteOff>");
 			sb.append("<CodeSent>").append(Serializing.EscapeForXml(CodeSent)).append("</CodeSent>");
 			sb.append("<AllowedOverride>").append(AllowedOverride).append("</AllowedOverride>");
@@ -156,8 +156,8 @@ public class ClaimProc {
 			sb.append("<PaidOtherIns>").append(PaidOtherIns).append("</PaidOtherIns>");
 			sb.append("<BaseEst>").append(BaseEst).append("</BaseEst>");
 			sb.append("<CopayOverride>").append(CopayOverride).append("</CopayOverride>");
-			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
-			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ProcDate)).append("</ProcDate>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<LineNumber>").append(LineNumber).append("</LineNumber>");
 			sb.append("<DedEst>").append(DedEst).append("</DedEst>");
 			sb.append("<DedEstOverride>").append(DedEstOverride).append("</DedEstOverride>");
