@@ -198,34 +198,39 @@ namespace OpenDentBusiness
 				+"D8*"//DTP02: Format Qualifier.
 				+DateTime.Today.ToString("yyyyMMdd")+"~");//DTP03: Date
 			//2110C EQ: Subscriber Eligibility or Benefit Enquiry Information
-			//We can loop this 99 times to request very specific benefits.
+			//X12 documentation seems to say that we can loop this 99 times to request very specific benefits.
+			//ClaimConnect wants to see either an EQ*30 for "an eligibility request", or an EQ*35 for "a general benefits request".
+			//The director of vendor implementation at ClaimConnect has informed us that we should send an EQ*35 to get the full set of benefits.
+			seg++;
+			strb.AppendLine("EQ*35~");//Dental Care
+			//seg++;
 			//strb.AppendLine("EQ*30~");//EQ01: 30=General Coverage
-			seg++;
-			strb.AppendLine("EQ*23~");//Diagnostic
-			seg++;
-			strb.AppendLine("EQ*4~");//Diagnostic Xray
-			seg++;
-			strb.AppendLine("EQ*41~");//Routine Preventive
-			seg++;
-			strb.AppendLine("EQ*25~");//Restorative
-			seg++;
-			strb.AppendLine("EQ*26~");//Endo
-			seg++;
-			strb.AppendLine("EQ*24~");//Perio
-			seg++;
-			strb.AppendLine("EQ*40~");//Oral Surgery
-			seg++;
-			strb.AppendLine("EQ*36~");//Crowns
-			seg++;
-			strb.AppendLine("EQ*39~");//Prosth
-			seg++;
-			strb.AppendLine("EQ*27~");//Maxillofacial Prosth
-			seg++;
-			strb.AppendLine("EQ*37~");//Accident
-			seg++;
-			strb.AppendLine("EQ*38~");//Ortho
-			seg++;
-			strb.AppendLine("EQ*28~");//Adjunctive
+			//seg++;
+			//strb.AppendLine("EQ*23~");//Diagnostic
+			//seg++;
+			//strb.AppendLine("EQ*4~");//Diagnostic Xray
+			//seg++;
+			//strb.AppendLine("EQ*41~");//Routine Preventive
+			//seg++;
+			//strb.AppendLine("EQ*25~");//Restorative
+			//seg++;
+			//strb.AppendLine("EQ*26~");//Endo
+			//seg++;
+			//strb.AppendLine("EQ*24~");//Perio
+			//seg++;
+			//strb.AppendLine("EQ*40~");//Oral Surgery
+			//seg++;
+			//strb.AppendLine("EQ*36~");//Crowns
+			//seg++;
+			//strb.AppendLine("EQ*39~");//Prosth
+			//seg++;
+			//strb.AppendLine("EQ*27~");//Maxillofacial Prosth
+			//seg++;
+			//strb.AppendLine("EQ*37~");//Accident
+			//seg++;
+			//strb.AppendLine("EQ*38~");//Ortho
+			//seg++;
+			//strb.AppendLine("EQ*28~");//Adjunctive
 			//
 			//2000D If we add a dependent loop it would go here.  It would be about 20 lines.
 			//2100D, etc
