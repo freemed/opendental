@@ -78,6 +78,8 @@ namespace xCrudGeneratorWebService {
 			Cursor=Cursors.WaitCursor;
 			StringBuilder strb;
 			StringBuilder strbDtoMethods=new StringBuilder();
+			StringBuilder strbDtoClassesSerialize=new StringBuilder();
+			StringBuilder strbDtoClassesDeserialize=new StringBuilder();
 			StringBuilder strbCallMethod=new StringBuilder();
 			StringBuilder strbMethodCalls=new StringBuilder();
 			StringBuilder strbJavaSerial=new StringBuilder();
@@ -109,10 +111,13 @@ namespace xCrudGeneratorWebService {
 				strb.Clear();
 				WriteAlljavaTableTypes(strb,className,fields);
 				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+docForjava+".java"),strb.ToString());
-				#region DtoMethods OpenDentalClasses
-				strbDtoMethods.Append(t4+"if(typeName==\"OpenDentBusiness."+className+"\") {"+rn
-					+t5+"return "+className+".Deserialize(xml);"+rn
-					+t4+"}"+rn);
+				#region DtoMethods OpenDentalClasses for Serializing and Deserializing
+				strbDtoClassesSerialize.Append(t3+"if(typeName==\""+className+"\") {"+rn
+					+t4+"return "+className+".Serialize((OpenDentBusiness."+className+")obj);"+rn
+					+t3+"}"+rn);
+				strbDtoClassesDeserialize.Append(t3+"if(typeName==\"OpenDentBusiness."+className+"\") {"+rn
+					+t4+"return "+className+".Deserialize(xml);"+rn
+					+t3+"}"+rn);
 				#endregion
 				#region CallMethod 
 				strbCallMethod.Append(t3+"if(className==\""+GetSname(className)+"\") {"+rn
@@ -135,12 +140,25 @@ namespace xCrudGeneratorWebService {
 				Application.DoEvents();
 			}
 			#endregion
+			#region CallClassSerializer
+			StartCallClassSerializer(strbDtoMethods);
+			#endregion
+			#region Append OD Classes for Serializing
+			strbDtoMethods.Append(strbDtoClassesSerialize);
+			#endregion
+			#region EndCallClassSerializer
+			strbDtoMethods.Append(t3+"#endregion"+rn
+				+t3+"throw new NotSupportedException(\"CallClassSerializer, unsupported class type: \"+typeName);"+rn
+				+t2+"}"+rn+rn);
+			#endregion
+			#region CallClassDeserializer
+			StartCallClassDeserializer(strbDtoMethods);
+			#endregion
+			#region Append OD Classes for Deserializing
+			strbDtoMethods.Append(strbDtoClassesDeserialize);
+			#endregion
 			#region EndCallClassDeserializer
-			strbDtoMethods.Append(t4+"#endregion"+rn
-				+t3+"}"+rn
-				+t3+"catch {"+rn
-				+t4+"throw new Exception(\"CallClassDeserializer, error deserializing class type: \"+typeName);"+rn
-				+t3+"}"+rn
+			strbDtoMethods.Append(t3+"#endregion"+rn
 				+t3+"throw new NotSupportedException(\"CallClassDeserializer, unsupported class type: \"+typeName);"+rn
 				+t2+"}"+rn+rn);
 			#endregion
@@ -187,16 +205,26 @@ namespace xCrudGeneratorWebService {
 				+t3+"return CallMethod(classAndMethod,parameters);"+rn
 				+t2+"}"+rn+rn);
 			#endregion
-			#region CallClassDeserializer
-			strb.Append(t2+"///<summary>Calls the classes deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Throws exceptions.</summary>"+rn
+		}
+
+		private void StartCallClassSerializer(StringBuilder strb) {
+			strb.Append(t2+"///<summary>Calls the class serializer for any supported object, primitive or not.  Throws exceptions.</summary>"+rn
+				+t2+"public static object CallClassSerializer(string typeName,Object obj) {"+rn
+				+t3+"#region Primitive and General Types"+rn
+				+t3+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenSerializerTypes and manually add it there."+rn);
+			GetPrimGenSerializerTypes(strb);
+			strb.Append(t3+"#endregion"+rn
+				+t3+"#region Open Dental Classes"+rn);
+		}
+
+		private void StartCallClassDeserializer(StringBuilder strb) {
+			strb.Append(t2+"///<summary>Calls the class deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Throws exceptions.</summary>"+rn
 				+t2+"public static object CallClassDeserializer(string typeName,string xml) {"+rn
-				+t3+"try {"+rn
-				+t4+"#region Primitive and General Types"+rn
-				+t4+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenTypes and manually add it there."+rn);
-			GetPrimGenTypes(strb);
-			strb.Append(t4+"#endregion"+rn
-				+t4+"#region Open Dental Classes"+rn);
-			#endregion
+				+t3+"#region Primitive and General Types"+rn
+				+t3+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenDeserializerTypes and manually add it there."+rn);
+			GetPrimGenDeserializerTypes(strb);
+			strb.Append(t3+"#endregion"+rn
+				+t3+"#region Open Dental Classes"+rn);
 		}
 
 		///<summary></summary>
@@ -801,11 +829,48 @@ namespace xCrudGeneratorWebService {
 			return navOne.SelectSingleNode("summary").Value;
 		}
 
-		///<summary>All of the primitive/general types handled by serialization/deserialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
-		private void GetPrimGenTypes(StringBuilder strb) {
-			strb.Append(t4+"if(typeName==\"long\") {"+rn
+		///<summary>All of the primitive/general types handled by serialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
+		private void GetPrimGenSerializerTypes(StringBuilder strb) {
+			strb.Append(t3+"switch(typeName) {"+rn
+				+t4+@"case ""int"":"+rn
+				+t4+@"case ""long"":"+rn
+				+t4+@"case ""bool"":"+rn
+				+t4+@"case ""string"":"+rn
+				+t4+@"case ""char"":"+rn
+				+t4+@"case ""float"":"+rn
+				+t4+@"case ""byte"":"+rn
+				+t4+@"case ""double"":"+rn
+				+t4+@"case ""DataT"":"+rn
+				+t5+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+				+t3+"}"+rn);
+			//Lists.
+			strb.Append(t3+"if(typeName.StartsWith(\"List<\")) {//Lists."+rn
+				+t4+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+				+t3+"}"+rn);
+			//Arrays.
+			strb.Append(t3+"if(typeName.Contains(\"[\")) {//Arrays."+rn
+				+t4+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+				+t3+"}"+rn);
+		}
+
+		///<summary>All of the primitive/general types handled by deserialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
+		private void GetPrimGenDeserializerTypes(StringBuilder strb) {
+			strb.Append(t3+"switch(typeName) {"+rn
+				+t4+@"case ""int"":"+rn
+				+t4+@"case ""long"":"+rn
+				+t4+@"case ""bool"":"+rn
+				+t4+@"case ""string"":"+rn
+				+t4+@"case ""char"":"+rn
+				+t4+@"case ""float"":"+rn
+				+t4+@"case ""byte"":"+rn
+				+t4+@"case ""double"":"+rn
+				+t4+@"case ""List&lt;"":"+rn
 				+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
-				+t4+"}"+rn);
+				+t3+"}"+rn);
+			//Arrays.
+			strb.Append(t3+"if(typeName.Contains(\"[\")) {//Arrays."+rn
+				+t4+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
+				+t3+"}"+rn);
 		}
 
 		///<summary></summary>

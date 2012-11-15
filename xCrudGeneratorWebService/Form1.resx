@@ -118,6 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="label1.Text" xml:space="preserve">
-    <value>Set this project as the startup project.  Use Debug.  Push the run button.  It will recreate all files in OpenDentBusiness.Crud.  If, after running this tool, all the crud files fail to compile, you can either exclude OpenDentBusiness from compiling in the Config Manager, or you can revert all the crud files.</value>
+    <value>Set this project as the startup project.  Use Debug.  Push the run button and for the Web Service it will:
+- Create an "S" class if one does not exist.
+- Recreate all serializing classes.
+- Check the "S" classes for new methods and add them to the DtoMethods method calling.
+- Create a Java "S" if one does not exist.
+- Recreate all Java table type classes (which also contain serializing and deserializing).</value>
   </data>
 </root>
