@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
@@ -40,16 +41,16 @@ namespace OpenDentalWebService {
 				return "<double>"+OpenDentBusiness.POut.Double((double)obj)+"</double>";
 			}
 			//DataTable---------------------------------------------------------------------
-			if(typeName=="DataTable") {
+			if(typeName=="DataT") {
 				return SerializeDataTable((DataTable)obj);
 			}
 			//List<?>-----------------------------------------------------------------------
 			if(typeName.StartsWith("List<")) {
-				return"";//Not sure how to handle lists of objects without reflection just yet...
+				return SerializeList(typeName,obj);
 			}
 			//Arrays------------------------------------------------------------------------
 			if(typeName.Contains("[")){
-				return "";//TODO: This will need to be enhanced to handle simple and possibly multidimensional arrays.
+				return SerializeArray(typeName,obj);
 			}
 			throw new NotSupportedException("Serialize, unsupported primitive or general type: "+typeName);
 		}
@@ -127,6 +128,21 @@ namespace OpenDentalWebService {
 			result.Append("</DataT>");
 			return result.ToString();
 		}
+
+		///<summary>Helper function that will serialize any List.</summary>
+		private static string SerializeList(string typeName,Object obj) {
+			//Not sure how to handle lists of objects without reflection just yet...
+			return "";
+		}
+
+		///<summary>Helper function that will serialize any array.</summary>
+		private static string SerializeArray(string typeName,Object obj) {
+			//Not sure how to handle arrays without reflection just yet...
+			//This will most likely need to be enhanced to handle simple and possibly multidimensional arrays.
+			return "";
+		}
+
+
 
 
 

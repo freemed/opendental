@@ -48,7 +48,7 @@ namespace OpenDentalWebService {
 						DtoGetTable dtoGetTable=(DtoGetTable)dto;
 						//TODO: Check credentials.
 						DataTable table=(DataTable)DtoMethods.ProcessDtoObject(dto);
-						return aaGeneralTypes.Serialize("DataTable",table);
+						return aaGeneralTypes.Serialize("DataT",table);
 					#endregion
 					#region DtoGetTableLow
 					//case "DtoGetTableLow":
