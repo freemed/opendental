@@ -16,9 +16,9 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(registrationkey.PatNum).Append("</PatNum>");
 			sb.Append("<RegKey>").Append(SerializeStringEscapes.EscapeForXml(registrationkey.RegKey)).Append("</RegKey>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(registrationkey.Note)).Append("</Note>");
-			sb.Append("<DateStarted>").Append(registrationkey.DateStarted.ToString()).Append("</DateStarted>");
-			sb.Append("<DateDisabled>").Append(registrationkey.DateDisabled.ToString()).Append("</DateDisabled>");
-			sb.Append("<DateEnded>").Append(registrationkey.DateEnded.ToString()).Append("</DateEnded>");
+			sb.Append("<DateStarted>").Append(registrationkey.DateStarted.ToString("yyyyMMddHHmmss")).Append("</DateStarted>");
+			sb.Append("<DateDisabled>").Append(registrationkey.DateDisabled.ToString("yyyyMMddHHmmss")).Append("</DateDisabled>");
+			sb.Append("<DateEnded>").Append(registrationkey.DateEnded.ToString("yyyyMMddHHmmss")).Append("</DateEnded>");
 			sb.Append("<IsForeign>").Append((registrationkey.IsForeign)?1:0).Append("</IsForeign>");
 			sb.Append("<UsesServerVersion>").Append((registrationkey.UsesServerVersion)?1:0).Append("</UsesServerVersion>");
 			sb.Append("<IsFreeVersion>").Append((registrationkey.IsFreeVersion)?1:0).Append("</IsFreeVersion>");
@@ -52,13 +52,13 @@ namespace OpenDentalWebService {
 							registrationkey.Note=reader.ReadContentAsString();
 							break;
 						case "DateStarted":
-							registrationkey.DateStarted=DateTime.Parse(reader.ReadContentAsString());
+							registrationkey.DateStarted=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateDisabled":
-							registrationkey.DateDisabled=DateTime.Parse(reader.ReadContentAsString());
+							registrationkey.DateDisabled=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateEnded":
-							registrationkey.DateEnded=DateTime.Parse(reader.ReadContentAsString());
+							registrationkey.DateEnded=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "IsForeign":
 							registrationkey.IsForeign=reader.ReadContentAsString()!="0";

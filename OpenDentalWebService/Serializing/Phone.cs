@@ -23,7 +23,7 @@ namespace OpenDentalWebService {
 			sb.Append("<CustomerNumber>").Append(SerializeStringEscapes.EscapeForXml(phone.CustomerNumber)).Append("</CustomerNumber>");
 			sb.Append("<InOrOut>").Append(SerializeStringEscapes.EscapeForXml(phone.InOrOut)).Append("</InOrOut>");
 			sb.Append("<PatNum>").Append(phone.PatNum).Append("</PatNum>");
-			sb.Append("<DateTimeStart>").Append(phone.DateTimeStart.ToString()).Append("</DateTimeStart>");
+			sb.Append("<DateTimeStart>").Append(phone.DateTimeStart.ToString("yyyyMMddHHmmss")).Append("</DateTimeStart>");
 			sb.Append("<WebCamImage>").Append(SerializeStringEscapes.EscapeForXml(phone.WebCamImage)).Append("</WebCamImage>");
 			sb.Append("<ScreenshotPath>").Append(SerializeStringEscapes.EscapeForXml(phone.ScreenshotPath)).Append("</ScreenshotPath>");
 			sb.Append("<ScreenshotImage>").Append(SerializeStringEscapes.EscapeForXml(phone.ScreenshotImage)).Append("</ScreenshotImage>");
@@ -77,7 +77,7 @@ namespace OpenDentalWebService {
 							phone.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeStart":
-							phone.DateTimeStart=DateTime.Parse(reader.ReadContentAsString());
+							phone.DateTimeStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "WebCamImage":
 							phone.WebCamImage=reader.ReadContentAsString();

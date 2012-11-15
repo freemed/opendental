@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class OrthoChart {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class OrthoChart {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** Date of service. */
-		public String DateService;
+		public Date DateService;
 		/** . */
 		public String FieldName;
 		/** . */
@@ -33,7 +35,7 @@ public class OrthoChart {
 			sb.append("<OrthoChart>");
 			sb.append("<OrthoChartNum>").append(OrthoChartNum).append("</OrthoChartNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateService>").append(Serializing.EscapeForXml(DateService)).append("</DateService>");
+			sb.append("<DateService>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateService>");
 			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
 			sb.append("<FieldValue>").append(Serializing.EscapeForXml(FieldValue)).append("</FieldValue>");
 			sb.append("</OrthoChart>");
@@ -48,7 +50,7 @@ public class OrthoChart {
 				Document doc=XMLParser.parse(xml);
 				OrthoChartNum=Integer.valueOf(doc.getElementsByTagName("OrthoChartNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateService=doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue();
+				DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue());
 				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
 				FieldValue=doc.getElementsByTagName("FieldValue").item(0).getFirstChild().getNodeValue();
 			}

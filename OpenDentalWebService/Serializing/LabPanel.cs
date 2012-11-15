@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(labpanel.PatNum).Append("</PatNum>");
 			sb.Append("<RawMessage>").Append(SerializeStringEscapes.EscapeForXml(labpanel.RawMessage)).Append("</RawMessage>");
 			sb.Append("<LabNameAddress>").Append(SerializeStringEscapes.EscapeForXml(labpanel.LabNameAddress)).Append("</LabNameAddress>");
-			sb.Append("<DateTStamp>").Append(labpanel.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(labpanel.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<SpecimenCondition>").Append(SerializeStringEscapes.EscapeForXml(labpanel.SpecimenCondition)).Append("</SpecimenCondition>");
 			sb.Append("<SpecimenSource>").Append(SerializeStringEscapes.EscapeForXml(labpanel.SpecimenSource)).Append("</SpecimenSource>");
 			sb.Append("<ServiceId>").Append(SerializeStringEscapes.EscapeForXml(labpanel.ServiceId)).Append("</ServiceId>");
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							labpanel.LabNameAddress=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							labpanel.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							labpanel.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SpecimenCondition":
 							labpanel.SpecimenCondition=reader.ReadContentAsString();

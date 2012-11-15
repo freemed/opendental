@@ -18,7 +18,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Weight>").Append(vitalsign.Weight).Append("</Weight>");
 			sb.Append("<BpSystolic>").Append(vitalsign.BpSystolic).Append("</BpSystolic>");
 			sb.Append("<BpDiastolic>").Append(vitalsign.BpDiastolic).Append("</BpDiastolic>");
-			sb.Append("<DateTaken>").Append(vitalsign.DateTaken.ToString()).Append("</DateTaken>");
+			sb.Append("<DateTaken>").Append(vitalsign.DateTaken.ToString("yyyyMMddHHmmss")).Append("</DateTaken>");
 			sb.Append("<HasFollowupPlan>").Append((vitalsign.HasFollowupPlan)?1:0).Append("</HasFollowupPlan>");
 			sb.Append("<IsIneligible>").Append((vitalsign.IsIneligible)?1:0).Append("</IsIneligible>");
 			sb.Append("<Documentation>").Append(SerializeStringEscapes.EscapeForXml(vitalsign.Documentation)).Append("</Documentation>");
@@ -58,7 +58,7 @@ namespace OpenDentalWebService {
 							vitalsign.BpDiastolic=reader.ReadContentAsInt();
 							break;
 						case "DateTaken":
-							vitalsign.DateTaken=DateTime.Parse(reader.ReadContentAsString());
+							vitalsign.DateTaken=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "HasFollowupPlan":
 							vitalsign.HasFollowupPlan=reader.ReadContentAsString()!="0";

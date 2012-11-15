@@ -14,12 +14,12 @@ namespace OpenDentalWebService {
 			sb.Append("<ClockEvent>");
 			sb.Append("<ClockEventNum>").Append(clockevent.ClockEventNum).Append("</ClockEventNum>");
 			sb.Append("<EmployeeNum>").Append(clockevent.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<TimeEntered1>").Append(clockevent.TimeEntered1.ToString()).Append("</TimeEntered1>");
-			sb.Append("<TimeDisplayed1>").Append(clockevent.TimeDisplayed1.ToString()).Append("</TimeDisplayed1>");
+			sb.Append("<TimeEntered1>").Append(clockevent.TimeEntered1.ToString("yyyyMMddHHmmss")).Append("</TimeEntered1>");
+			sb.Append("<TimeDisplayed1>").Append(clockevent.TimeDisplayed1.ToString("yyyyMMddHHmmss")).Append("</TimeDisplayed1>");
 			sb.Append("<ClockStatus>").Append((int)clockevent.ClockStatus).Append("</ClockStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(clockevent.Note)).Append("</Note>");
-			sb.Append("<TimeEntered2>").Append(clockevent.TimeEntered2.ToString()).Append("</TimeEntered2>");
-			sb.Append("<TimeDisplayed2>").Append(clockevent.TimeDisplayed2.ToString()).Append("</TimeDisplayed2>");
+			sb.Append("<TimeEntered2>").Append(clockevent.TimeEntered2.ToString("yyyyMMddHHmmss")).Append("</TimeEntered2>");
+			sb.Append("<TimeDisplayed2>").Append(clockevent.TimeDisplayed2.ToString("yyyyMMddHHmmss")).Append("</TimeDisplayed2>");
 			sb.Append("<OTimeHours>").Append(clockevent.OTimeHours.ToString()).Append("</OTimeHours>");
 			sb.Append("<OTimeAuto>").Append(clockevent.OTimeAuto.ToString()).Append("</OTimeAuto>");
 			sb.Append("<Adjust>").Append(clockevent.Adjust.ToString()).Append("</Adjust>");
@@ -49,10 +49,10 @@ namespace OpenDentalWebService {
 							clockevent.EmployeeNum=reader.ReadContentAsLong();
 							break;
 						case "TimeEntered1":
-							clockevent.TimeEntered1=DateTime.Parse(reader.ReadContentAsString());
+							clockevent.TimeEntered1=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TimeDisplayed1":
-							clockevent.TimeDisplayed1=DateTime.Parse(reader.ReadContentAsString());
+							clockevent.TimeDisplayed1=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClockStatus":
 							clockevent.ClockStatus=(OpenDentBusiness.TimeClockStatus)reader.ReadContentAsInt();
@@ -61,10 +61,10 @@ namespace OpenDentalWebService {
 							clockevent.Note=reader.ReadContentAsString();
 							break;
 						case "TimeEntered2":
-							clockevent.TimeEntered2=DateTime.Parse(reader.ReadContentAsString());
+							clockevent.TimeEntered2=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TimeDisplayed2":
-							clockevent.TimeDisplayed2=DateTime.Parse(reader.ReadContentAsString());
+							clockevent.TimeDisplayed2=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "OTimeHours":
 							clockevent.OTimeHours=TimeSpan.Parse(reader.ReadContentAsString());

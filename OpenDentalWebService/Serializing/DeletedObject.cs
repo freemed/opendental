@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<DeletedObjectNum>").Append(deletedobject.DeletedObjectNum).Append("</DeletedObjectNum>");
 			sb.Append("<ObjectNum>").Append(deletedobject.ObjectNum).Append("</ObjectNum>");
 			sb.Append("<ObjectType>").Append((int)deletedobject.ObjectType).Append("</ObjectType>");
-			sb.Append("<DateTStamp>").Append(deletedobject.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(deletedobject.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("</DeletedObject>");
 			return sb.ToString();
 		}
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							deletedobject.ObjectType=(OpenDentBusiness.DeletedObjectType)reader.ReadContentAsInt();
 							break;
 						case "DateTStamp":
-							deletedobject.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							deletedobject.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

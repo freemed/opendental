@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 			sb.Append("<BaseUnits>").Append(procedurecode.BaseUnits).Append("</BaseUnits>");
 			sb.Append("<SubstitutionCode>").Append(SerializeStringEscapes.EscapeForXml(procedurecode.SubstitutionCode)).Append("</SubstitutionCode>");
 			sb.Append("<SubstOnlyIf>").Append((int)procedurecode.SubstOnlyIf).Append("</SubstOnlyIf>");
-			sb.Append("<DateTStamp>").Append(procedurecode.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(procedurecode.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<IsMultiVisit>").Append((procedurecode.IsMultiVisit)?1:0).Append("</IsMultiVisit>");
 			sb.Append("<DrugNDC>").Append(SerializeStringEscapes.EscapeForXml(procedurecode.DrugNDC)).Append("</DrugNDC>");
 			sb.Append("<RevenueCodeDefault>").Append(SerializeStringEscapes.EscapeForXml(procedurecode.RevenueCodeDefault)).Append("</RevenueCodeDefault>");
@@ -125,7 +125,7 @@ namespace OpenDentalWebService {
 							procedurecode.SubstOnlyIf=(OpenDentBusiness.SubstitutionCondition)reader.ReadContentAsInt();
 							break;
 						case "DateTStamp":
-							procedurecode.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							procedurecode.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "IsMultiVisit":
 							procedurecode.IsMultiVisit=reader.ReadContentAsString()!="0";

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class PayPlan {
 		/** Primary key */
@@ -12,7 +14,7 @@ public class PayPlan {
 		/** FK to patient.PatNum.  The person responsible for the payments.  Does not need to be in the same family as the patient.  Will be 0 if planNum has a value. */
 		public int Guarantor;
 		/** Date that the payment plan will display in the account. */
-		public String PayPlanDate;
+		public Date PayPlanDate;
 		/** Annual percentage rate.  eg 18.  This does not take into consideration any late payments, but only the percentage used to calculate the amortization schedule. */
 		public double APR;
 		/** Generally used to archive the terms when the amortization schedule is created. */
@@ -46,7 +48,7 @@ public class PayPlan {
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<Guarantor>").append(Guarantor).append("</Guarantor>");
-			sb.append("<PayPlanDate>").append(Serializing.EscapeForXml(PayPlanDate)).append("</PayPlanDate>");
+			sb.append("<PayPlanDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</PayPlanDate>");
 			sb.append("<APR>").append(APR).append("</APR>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
@@ -65,7 +67,7 @@ public class PayPlan {
 				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				Guarantor=Integer.valueOf(doc.getElementsByTagName("Guarantor").item(0).getFirstChild().getNodeValue());
-				PayPlanDate=doc.getElementsByTagName("PayPlanDate").item(0).getFirstChild().getNodeValue();
+				PayPlanDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("PayPlanDate").item(0).getFirstChild().getNodeValue());
 				APR=Double.valueOf(doc.getElementsByTagName("APR").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());

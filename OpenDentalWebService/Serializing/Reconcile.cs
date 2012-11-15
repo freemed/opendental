@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<AccountNum>").Append(reconcile.AccountNum).Append("</AccountNum>");
 			sb.Append("<StartingBal>").Append(reconcile.StartingBal).Append("</StartingBal>");
 			sb.Append("<EndingBal>").Append(reconcile.EndingBal).Append("</EndingBal>");
-			sb.Append("<DateReconcile>").Append(reconcile.DateReconcile.ToString()).Append("</DateReconcile>");
+			sb.Append("<DateReconcile>").Append(reconcile.DateReconcile.ToString("yyyyMMddHHmmss")).Append("</DateReconcile>");
 			sb.Append("<IsLocked>").Append((reconcile.IsLocked)?1:0).Append("</IsLocked>");
 			sb.Append("</Reconcile>");
 			return sb.ToString();
@@ -46,7 +46,7 @@ namespace OpenDentalWebService {
 							reconcile.EndingBal=reader.ReadContentAsDouble();
 							break;
 						case "DateReconcile":
-							reconcile.DateReconcile=DateTime.Parse(reader.ReadContentAsString());
+							reconcile.DateReconcile=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "IsLocked":
 							reconcile.IsLocked=reader.ReadContentAsString()!="0";

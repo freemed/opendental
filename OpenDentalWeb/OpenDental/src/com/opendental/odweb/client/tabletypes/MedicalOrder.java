@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class MedicalOrder {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class MedicalOrder {
 		/** FK to patient.PatNum */
 		public int PatNum;
 		/** Date and time of order. */
-		public String DateTimeOrder;
+		public Date DateTimeOrder;
 		/** User will be required to type entire order out from scratch. */
 		public String Description;
 		/** EHR requires Active/Discontinued status. 0=Active, 1=Discontinued. */
@@ -40,7 +42,7 @@ public class MedicalOrder {
 			sb.append("<MedicalOrderNum>").append(MedicalOrderNum).append("</MedicalOrderNum>");
 			sb.append("<MedOrderType>").append(MedOrderType.ordinal()).append("</MedOrderType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeOrder>").append(Serializing.EscapeForXml(DateTimeOrder)).append("</DateTimeOrder>");
+			sb.append("<DateTimeOrder>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeOrder>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<IsDiscontinued>").append((IsDiscontinued)?1:0).append("</IsDiscontinued>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
@@ -57,7 +59,7 @@ public class MedicalOrder {
 				MedicalOrderNum=Integer.valueOf(doc.getElementsByTagName("MedicalOrderNum").item(0).getFirstChild().getNodeValue());
 				MedOrderType=MedicalOrderType.values()[Integer.valueOf(doc.getElementsByTagName("MedOrderType").item(0).getFirstChild().getNodeValue())];
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTimeOrder=doc.getElementsByTagName("DateTimeOrder").item(0).getFirstChild().getNodeValue();
+				DateTimeOrder=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeOrder").item(0).getFirstChild().getNodeValue());
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
 				IsDiscontinued=(doc.getElementsByTagName("IsDiscontinued").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());

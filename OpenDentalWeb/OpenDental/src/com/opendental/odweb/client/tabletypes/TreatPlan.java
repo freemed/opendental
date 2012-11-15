@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class TreatPlan {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class TreatPlan {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** The date of the treatment plan */
-		public String DateTP;
+		public Date DateTP;
 		/** The heading that shows at the top of the treatment plan.  Usually 'Proposed Treatment Plan' */
 		public String Heading;
 		/** A note specific to this treatment plan that shows at the bottom. */
@@ -42,7 +44,7 @@ public class TreatPlan {
 			sb.append("<TreatPlan>");
 			sb.append("<TreatPlanNum>").append(TreatPlanNum).append("</TreatPlanNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTP>").append(Serializing.EscapeForXml(DateTP)).append("</DateTP>");
+			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTP>");
 			sb.append("<Heading>").append(Serializing.EscapeForXml(Heading)).append("</Heading>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");
@@ -60,7 +62,7 @@ public class TreatPlan {
 				Document doc=XMLParser.parse(xml);
 				TreatPlanNum=Integer.valueOf(doc.getElementsByTagName("TreatPlanNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTP=doc.getElementsByTagName("DateTP").item(0).getFirstChild().getNodeValue();
+				DateTP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTP").item(0).getFirstChild().getNodeValue());
 				Heading=doc.getElementsByTagName("Heading").item(0).getFirstChild().getNodeValue();
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();

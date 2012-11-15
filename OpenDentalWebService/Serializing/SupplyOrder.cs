@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SupplyOrder>");
 			sb.Append("<SupplyOrderNum>").Append(supplyorder.SupplyOrderNum).Append("</SupplyOrderNum>");
 			sb.Append("<SupplierNum>").Append(supplyorder.SupplierNum).Append("</SupplierNum>");
-			sb.Append("<DatePlaced>").Append(supplyorder.DatePlaced.ToString()).Append("</DatePlaced>");
+			sb.Append("<DatePlaced>").Append(supplyorder.DatePlaced.ToString("yyyyMMddHHmmss")).Append("</DatePlaced>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(supplyorder.Note)).Append("</Note>");
 			sb.Append("<AmountTotal>").Append(supplyorder.AmountTotal).Append("</AmountTotal>");
 			sb.Append("</SupplyOrder>");
@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 							supplyorder.SupplierNum=reader.ReadContentAsLong();
 							break;
 						case "DatePlaced":
-							supplyorder.DatePlaced=DateTime.Parse(reader.ReadContentAsString());
+							supplyorder.DatePlaced=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Note":
 							supplyorder.Note=reader.ReadContentAsString();

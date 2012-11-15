@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<OrthoChart>");
 			sb.Append("<OrthoChartNum>").Append(orthochart.OrthoChartNum).Append("</OrthoChartNum>");
 			sb.Append("<PatNum>").Append(orthochart.PatNum).Append("</PatNum>");
-			sb.Append("<DateService>").Append(orthochart.DateService.ToString()).Append("</DateService>");
+			sb.Append("<DateService>").Append(orthochart.DateService.ToString("yyyyMMddHHmmss")).Append("</DateService>");
 			sb.Append("<FieldName>").Append(SerializeStringEscapes.EscapeForXml(orthochart.FieldName)).Append("</FieldName>");
 			sb.Append("<FieldValue>").Append(SerializeStringEscapes.EscapeForXml(orthochart.FieldValue)).Append("</FieldValue>");
 			sb.Append("</OrthoChart>");
@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 							orthochart.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateService":
-							orthochart.DateService=DateTime.Parse(reader.ReadContentAsString());
+							orthochart.DateService=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "FieldName":
 							orthochart.FieldName=reader.ReadContentAsString();

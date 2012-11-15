@@ -25,7 +25,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Remarks>").Append(SerializeStringEscapes.EscapeForXml(claimproc.Remarks)).Append("</Remarks>");
 			sb.Append("<ClaimPaymentNum>").Append(claimproc.ClaimPaymentNum).Append("</ClaimPaymentNum>");
 			sb.Append("<PlanNum>").Append(claimproc.PlanNum).Append("</PlanNum>");
-			sb.Append("<DateCP>").Append(claimproc.DateCP.ToString()).Append("</DateCP>");
+			sb.Append("<DateCP>").Append(claimproc.DateCP.ToString("yyyyMMddHHmmss")).Append("</DateCP>");
 			sb.Append("<WriteOff>").Append(claimproc.WriteOff).Append("</WriteOff>");
 			sb.Append("<CodeSent>").Append(SerializeStringEscapes.EscapeForXml(claimproc.CodeSent)).Append("</CodeSent>");
 			sb.Append("<AllowedOverride>").Append(claimproc.AllowedOverride).Append("</AllowedOverride>");
@@ -36,8 +36,8 @@ namespace OpenDentalWebService {
 			sb.Append("<PaidOtherIns>").Append(claimproc.PaidOtherIns).Append("</PaidOtherIns>");
 			sb.Append("<BaseEst>").Append(claimproc.BaseEst).Append("</BaseEst>");
 			sb.Append("<CopayOverride>").Append(claimproc.CopayOverride).Append("</CopayOverride>");
-			sb.Append("<ProcDate>").Append(claimproc.ProcDate.ToString()).Append("</ProcDate>");
-			sb.Append("<DateEntry>").Append(claimproc.DateEntry.ToString()).Append("</DateEntry>");
+			sb.Append("<ProcDate>").Append(claimproc.ProcDate.ToString("yyyyMMddHHmmss")).Append("</ProcDate>");
+			sb.Append("<DateEntry>").Append(claimproc.DateEntry.ToString("yyyyMMddHHmmss")).Append("</DateEntry>");
 			sb.Append("<LineNumber>").Append(claimproc.LineNumber).Append("</LineNumber>");
 			sb.Append("<DedEst>").Append(claimproc.DedEst).Append("</DedEst>");
 			sb.Append("<DedEstOverride>").Append(claimproc.DedEstOverride).Append("</DedEstOverride>");
@@ -105,7 +105,7 @@ namespace OpenDentalWebService {
 							claimproc.PlanNum=reader.ReadContentAsLong();
 							break;
 						case "DateCP":
-							claimproc.DateCP=DateTime.Parse(reader.ReadContentAsString());
+							claimproc.DateCP=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "WriteOff":
 							claimproc.WriteOff=reader.ReadContentAsDouble();
@@ -138,10 +138,10 @@ namespace OpenDentalWebService {
 							claimproc.CopayOverride=reader.ReadContentAsDouble();
 							break;
 						case "ProcDate":
-							claimproc.ProcDate=DateTime.Parse(reader.ReadContentAsString());
+							claimproc.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateEntry":
-							claimproc.DateEntry=DateTime.Parse(reader.ReadContentAsString());
+							claimproc.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "LineNumber":
 							claimproc.LineNumber=(byte)reader.ReadContentAsInt();

@@ -15,15 +15,15 @@ namespace OpenDentalWebService {
 			sb.Append("<SplitNum>").Append(paysplit.SplitNum).Append("</SplitNum>");
 			sb.Append("<SplitAmt>").Append(paysplit.SplitAmt).Append("</SplitAmt>");
 			sb.Append("<PatNum>").Append(paysplit.PatNum).Append("</PatNum>");
-			sb.Append("<ProcDate>").Append(paysplit.ProcDate.ToString()).Append("</ProcDate>");
+			sb.Append("<ProcDate>").Append(paysplit.ProcDate.ToString("yyyyMMddHHmmss")).Append("</ProcDate>");
 			sb.Append("<PayNum>").Append(paysplit.PayNum).Append("</PayNum>");
 			sb.Append("<IsDiscount>").Append((paysplit.IsDiscount)?1:0).Append("</IsDiscount>");
 			sb.Append("<DiscountType>").Append(paysplit.DiscountType).Append("</DiscountType>");
 			sb.Append("<ProvNum>").Append(paysplit.ProvNum).Append("</ProvNum>");
 			sb.Append("<PayPlanNum>").Append(paysplit.PayPlanNum).Append("</PayPlanNum>");
-			sb.Append("<DatePay>").Append(paysplit.DatePay.ToString()).Append("</DatePay>");
+			sb.Append("<DatePay>").Append(paysplit.DatePay.ToString("yyyyMMddHHmmss")).Append("</DatePay>");
 			sb.Append("<ProcNum>").Append(paysplit.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateEntry>").Append(paysplit.DateEntry.ToString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(paysplit.DateEntry.ToString("yyyyMMddHHmmss")).Append("</DateEntry>");
 			sb.Append("<UnearnedType>").Append(paysplit.UnearnedType).Append("</UnearnedType>");
 			sb.Append("<ClinicNum>").Append(paysplit.ClinicNum).Append("</ClinicNum>");
 			sb.Append("</PaySplit>");
@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 							paysplit.PatNum=reader.ReadContentAsLong();
 							break;
 						case "ProcDate":
-							paysplit.ProcDate=DateTime.Parse(reader.ReadContentAsString());
+							paysplit.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PayNum":
 							paysplit.PayNum=reader.ReadContentAsLong();
@@ -69,13 +69,13 @@ namespace OpenDentalWebService {
 							paysplit.PayPlanNum=reader.ReadContentAsLong();
 							break;
 						case "DatePay":
-							paysplit.DatePay=DateTime.Parse(reader.ReadContentAsString());
+							paysplit.DatePay=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcNum":
 							paysplit.ProcNum=reader.ReadContentAsLong();
 							break;
 						case "DateEntry":
-							paysplit.DateEntry=DateTime.Parse(reader.ReadContentAsString());
+							paysplit.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UnearnedType":
 							paysplit.UnearnedType=reader.ReadContentAsLong();

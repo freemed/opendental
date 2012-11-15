@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ProcedureCode {
 		/** Primary Key.  This happened in version 4.8.7. */
@@ -52,7 +54,7 @@ public class ProcedureCode {
 		/** Enum:SubstitutionCondition Used so that posterior composites only substitute if tooth is molar.  Ins usually pays for premolar composites. */
 		public SubstitutionCondition SubstOnlyIf;
 		/** Last datetime that this row was inserted or updated. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** Set to true if the procedure takes more than one appointment to complete. */
 		public boolean IsMultiVisit;
 		/** 11 digits or blank, enforced.  For 837I */
@@ -123,7 +125,7 @@ public class ProcedureCode {
 			sb.append("<BaseUnits>").append(BaseUnits).append("</BaseUnits>");
 			sb.append("<SubstitutionCode>").append(Serializing.EscapeForXml(SubstitutionCode)).append("</SubstitutionCode>");
 			sb.append("<SubstOnlyIf>").append(SubstOnlyIf.ordinal()).append("</SubstOnlyIf>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<IsMultiVisit>").append((IsMultiVisit)?1:0).append("</IsMultiVisit>");
 			sb.append("<DrugNDC>").append(Serializing.EscapeForXml(DrugNDC)).append("</DrugNDC>");
 			sb.append("<RevenueCodeDefault>").append(Serializing.EscapeForXml(RevenueCodeDefault)).append("</RevenueCodeDefault>");
@@ -161,7 +163,7 @@ public class ProcedureCode {
 				BaseUnits=Integer.valueOf(doc.getElementsByTagName("BaseUnits").item(0).getFirstChild().getNodeValue());
 				SubstitutionCode=doc.getElementsByTagName("SubstitutionCode").item(0).getFirstChild().getNodeValue();
 				SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(doc.getElementsByTagName("SubstOnlyIf").item(0).getFirstChild().getNodeValue())];
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				IsMultiVisit=(doc.getElementsByTagName("IsMultiVisit").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				DrugNDC=doc.getElementsByTagName("DrugNDC").item(0).getFirstChild().getNodeValue();
 				RevenueCodeDefault=doc.getElementsByTagName("RevenueCodeDefault").item(0).getFirstChild().getNodeValue();

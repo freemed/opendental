@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class DeletedObject {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class DeletedObject {
 		/** Enum:DeletedObjectType  */
 		public DeletedObjectType ObjectType;
 		/** Updated any time the row is altered in any way. */
-		public String DateTStamp;
+		public Date DateTStamp;
 
 		/** Deep copy of object. */
 		public DeletedObject Copy() {
@@ -31,7 +33,7 @@ public class DeletedObject {
 			sb.append("<DeletedObjectNum>").append(DeletedObjectNum).append("</DeletedObjectNum>");
 			sb.append("<ObjectNum>").append(ObjectNum).append("</ObjectNum>");
 			sb.append("<ObjectType>").append(ObjectType.ordinal()).append("</ObjectType>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("</DeletedObject>");
 			return sb.toString();
 		}
@@ -45,7 +47,7 @@ public class DeletedObject {
 				DeletedObjectNum=Integer.valueOf(doc.getElementsByTagName("DeletedObjectNum").item(0).getFirstChild().getNodeValue());
 				ObjectNum=Integer.valueOf(doc.getElementsByTagName("ObjectNum").item(0).getFirstChild().getNodeValue());
 				ObjectType=DeletedObjectType.values()[Integer.valueOf(doc.getElementsByTagName("ObjectType").item(0).getFirstChild().getNodeValue())];
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

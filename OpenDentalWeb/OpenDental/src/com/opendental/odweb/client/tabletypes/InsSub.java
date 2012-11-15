@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class InsSub {
 		/** Primary key. */
@@ -12,9 +14,9 @@ public class InsSub {
 		/** FK to patient.PatNum. */
 		public int Subscriber;
 		/** Date plan became effective. */
-		public String DateEffective;
+		public Date DateEffective;
 		/** Date plan was terminated */
-		public String DateTerm;
+		public Date DateTerm;
 		/** Release of information signature is on file. */
 		public boolean ReleaseInfo;
 		/** Assignment of benefits signature is on file.  For Canada, this handles Payee Code, F01.  Option to pay other third party is not included. */
@@ -49,8 +51,8 @@ public class InsSub {
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
 			sb.append("<Subscriber>").append(Subscriber).append("</Subscriber>");
-			sb.append("<DateEffective>").append(Serializing.EscapeForXml(DateEffective)).append("</DateEffective>");
-			sb.append("<DateTerm>").append(Serializing.EscapeForXml(DateTerm)).append("</DateTerm>");
+			sb.append("<DateEffective>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEffective>");
+			sb.append("<DateTerm>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTerm>");
 			sb.append("<ReleaseInfo>").append((ReleaseInfo)?1:0).append("</ReleaseInfo>");
 			sb.append("<AssignBen>").append((AssignBen)?1:0).append("</AssignBen>");
 			sb.append("<SubscriberID>").append(Serializing.EscapeForXml(SubscriberID)).append("</SubscriberID>");
@@ -69,8 +71,8 @@ public class InsSub {
 				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
 				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
 				Subscriber=Integer.valueOf(doc.getElementsByTagName("Subscriber").item(0).getFirstChild().getNodeValue());
-				DateEffective=doc.getElementsByTagName("DateEffective").item(0).getFirstChild().getNodeValue();
-				DateTerm=doc.getElementsByTagName("DateTerm").item(0).getFirstChild().getNodeValue();
+				DateEffective=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEffective").item(0).getFirstChild().getNodeValue());
+				DateTerm=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTerm").item(0).getFirstChild().getNodeValue());
 				ReleaseInfo=(doc.getElementsByTagName("ReleaseInfo").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				AssignBen=(doc.getElementsByTagName("AssignBen").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				SubscriberID=doc.getElementsByTagName("SubscriberID").item(0).getFirstChild().getNodeValue();

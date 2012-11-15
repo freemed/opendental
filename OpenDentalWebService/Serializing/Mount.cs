@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<MountNum>").Append(mount.MountNum).Append("</MountNum>");
 			sb.Append("<PatNum>").Append(mount.PatNum).Append("</PatNum>");
 			sb.Append("<DocCategory>").Append(mount.DocCategory).Append("</DocCategory>");
-			sb.Append("<DateCreated>").Append(mount.DateCreated.ToString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(mount.DateCreated.ToString("yyyyMMddHHmmss")).Append("</DateCreated>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(mount.Description)).Append("</Description>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(mount.Note)).Append("</Note>");
 			sb.Append("<ImgType>").Append((int)mount.ImgType).Append("</ImgType>");
@@ -46,7 +46,7 @@ namespace OpenDentalWebService {
 							mount.DocCategory=reader.ReadContentAsLong();
 							break;
 						case "DateCreated":
-							mount.DateCreated=DateTime.Parse(reader.ReadContentAsString());
+							mount.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Description":
 							mount.Description=reader.ReadContentAsString();

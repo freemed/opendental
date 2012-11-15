@@ -13,9 +13,9 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<PayPeriod>");
 			sb.Append("<PayPeriodNum>").Append(payperiod.PayPeriodNum).Append("</PayPeriodNum>");
-			sb.Append("<DateStart>").Append(payperiod.DateStart.ToString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(payperiod.DateStop.ToString()).Append("</DateStop>");
-			sb.Append("<DatePaycheck>").Append(payperiod.DatePaycheck.ToString()).Append("</DatePaycheck>");
+			sb.Append("<DateStart>").Append(payperiod.DateStart.ToString("yyyyMMddHHmmss")).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(payperiod.DateStop.ToString("yyyyMMddHHmmss")).Append("</DateStop>");
+			sb.Append("<DatePaycheck>").Append(payperiod.DatePaycheck.ToString("yyyyMMddHHmmss")).Append("</DatePaycheck>");
 			sb.Append("</PayPeriod>");
 			return sb.ToString();
 		}
@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 							payperiod.PayPeriodNum=reader.ReadContentAsLong();
 							break;
 						case "DateStart":
-							payperiod.DateStart=DateTime.Parse(reader.ReadContentAsString());
+							payperiod.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStop":
-							payperiod.DateStop=DateTime.Parse(reader.ReadContentAsString());
+							payperiod.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DatePaycheck":
-							payperiod.DatePaycheck=DateTime.Parse(reader.ReadContentAsString());
+							payperiod.DatePaycheck=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

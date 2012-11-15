@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Disease {
 		/** Primary key. */
@@ -14,15 +16,15 @@ public class Disease {
 		/** Any note about this disease that is specific to this patient. */
 		public String PatNote;
 		/** The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value. */
 		public int ICD9Num;
 		/** Enum:ProblemStatus Active=0, Resolved=1, Inactive=2. */
 		public ProblemStatus ProbStatus;
 		/** Date that the disease was diagnosed.  Can be minval if unknown. */
-		public String DateStart;
+		public Date DateStart;
 		/** Date that the disease was set resolved or inactive.  Will be minval if still active.  ProbStatus should be used to determine if it is active or not. */
-		public String DateStop;
+		public Date DateStop;
 
 		/** Deep copy of object. */
 		public Disease Copy() {
@@ -47,11 +49,11 @@ public class Disease {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DiseaseDefNum>").append(DiseaseDefNum).append("</DiseaseDefNum>");
 			sb.append("<PatNote>").append(Serializing.EscapeForXml(PatNote)).append("</PatNote>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<ICD9Num>").append(ICD9Num).append("</ICD9Num>");
 			sb.append("<ProbStatus>").append(ProbStatus.ordinal()).append("</ProbStatus>");
-			sb.append("<DateStart>").append(Serializing.EscapeForXml(DateStart)).append("</DateStart>");
-			sb.append("<DateStop>").append(Serializing.EscapeForXml(DateStop)).append("</DateStop>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
 			sb.append("</Disease>");
 			return sb.toString();
 		}
@@ -66,11 +68,11 @@ public class Disease {
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				DiseaseDefNum=Integer.valueOf(doc.getElementsByTagName("DiseaseDefNum").item(0).getFirstChild().getNodeValue());
 				PatNote=doc.getElementsByTagName("PatNote").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				ICD9Num=Integer.valueOf(doc.getElementsByTagName("ICD9Num").item(0).getFirstChild().getNodeValue());
 				ProbStatus=ProblemStatus.values()[Integer.valueOf(doc.getElementsByTagName("ProbStatus").item(0).getFirstChild().getNodeValue())];
-				DateStart=doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue();
-				DateStop=doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue();
+				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
+				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

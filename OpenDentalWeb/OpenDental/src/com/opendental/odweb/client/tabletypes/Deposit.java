@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Deposit {
 		/** Primary key. */
 		public int DepositNum;
 		/** The date of the deposit. */
-		public String DateDeposit;
+		public Date DateDeposit;
 		/** User editable.  Usually includes name on the account and account number.  Possibly the bank name as well. */
 		public String BankAccountInfo;
 		/** Total amount of the deposit. User not allowed to directly edit. */
@@ -32,7 +34,7 @@ public class Deposit {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Deposit>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
-			sb.append("<DateDeposit>").append(Serializing.EscapeForXml(DateDeposit)).append("</DateDeposit>");
+			sb.append("<DateDeposit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDeposit>");
 			sb.append("<BankAccountInfo>").append(Serializing.EscapeForXml(BankAccountInfo)).append("</BankAccountInfo>");
 			sb.append("<Amount>").append(Amount).append("</Amount>");
 			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");
@@ -47,7 +49,7 @@ public class Deposit {
 			try {
 				Document doc=XMLParser.parse(xml);
 				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
-				DateDeposit=doc.getElementsByTagName("DateDeposit").item(0).getFirstChild().getNodeValue();
+				DateDeposit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateDeposit").item(0).getFirstChild().getNodeValue());
 				BankAccountInfo=doc.getElementsByTagName("BankAccountInfo").item(0).getFirstChild().getNodeValue();
 				Amount=Double.valueOf(doc.getElementsByTagName("Amount").item(0).getFirstChild().getNodeValue());
 				Memo=doc.getElementsByTagName("Memo").item(0).getFirstChild().getNodeValue();

@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class EhrMeasureEvent {
 		/** Primary key. */
 		public int EhrMeasureEventNum;
 		/** Date and time of measure event. */
-		public String DateTEvent;
+		public Date DateTEvent;
 		/** Enum: EhrMeasureEventType.  */
 		public EhrMeasureEventType EventType;
 		/** FK to patient.PatNum */
@@ -32,7 +34,7 @@ public class EhrMeasureEvent {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrMeasureEvent>");
 			sb.append("<EhrMeasureEventNum>").append(EhrMeasureEventNum).append("</EhrMeasureEventNum>");
-			sb.append("<DateTEvent>").append(Serializing.EscapeForXml(DateTEvent)).append("</DateTEvent>");
+			sb.append("<DateTEvent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTEvent>");
 			sb.append("<EventType>").append(EventType.ordinal()).append("</EventType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<MoreInfo>").append(Serializing.EscapeForXml(MoreInfo)).append("</MoreInfo>");
@@ -47,7 +49,7 @@ public class EhrMeasureEvent {
 			try {
 				Document doc=XMLParser.parse(xml);
 				EhrMeasureEventNum=Integer.valueOf(doc.getElementsByTagName("EhrMeasureEventNum").item(0).getFirstChild().getNodeValue());
-				DateTEvent=doc.getElementsByTagName("DateTEvent").item(0).getFirstChild().getNodeValue();
+				DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTEvent").item(0).getFirstChild().getNodeValue());
 				EventType=EhrMeasureEventType.values()[Integer.valueOf(doc.getElementsByTagName("EventType").item(0).getFirstChild().getNodeValue())];
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				MoreInfo=doc.getElementsByTagName("MoreInfo").item(0).getFirstChild().getNodeValue();

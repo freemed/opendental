@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Screen>");
 			sb.Append("<ScreenNum>").Append(screen.ScreenNum).Append("</ScreenNum>");
-			sb.Append("<ScreenDate>").Append(screen.ScreenDate.ToString()).Append("</ScreenDate>");
+			sb.Append("<ScreenDate>").Append(screen.ScreenDate.ToString("yyyyMMddHHmmss")).Append("</ScreenDate>");
 			sb.Append("<GradeSchool>").Append(SerializeStringEscapes.EscapeForXml(screen.GradeSchool)).Append("</GradeSchool>");
 			sb.Append("<County>").Append(SerializeStringEscapes.EscapeForXml(screen.County)).Append("</County>");
 			sb.Append("<PlaceService>").Append((int)screen.PlaceService).Append("</PlaceService>");
@@ -30,7 +30,7 @@ namespace OpenDentalWebService {
 			sb.Append("<EarlyChildCaries>").Append((int)screen.EarlyChildCaries).Append("</EarlyChildCaries>");
 			sb.Append("<ExistingSealants>").Append((int)screen.ExistingSealants).Append("</ExistingSealants>");
 			sb.Append("<MissingAllTeeth>").Append((int)screen.MissingAllTeeth).Append("</MissingAllTeeth>");
-			sb.Append("<Birthdate>").Append(screen.Birthdate.ToString()).Append("</Birthdate>");
+			sb.Append("<Birthdate>").Append(screen.Birthdate.ToString("yyyyMMddHHmmss")).Append("</Birthdate>");
 			sb.Append("<ScreenGroupNum>").Append(screen.ScreenGroupNum).Append("</ScreenGroupNum>");
 			sb.Append("<ScreenGroupOrder>").Append(screen.ScreenGroupOrder).Append("</ScreenGroupOrder>");
 			sb.Append("<Comments>").Append(SerializeStringEscapes.EscapeForXml(screen.Comments)).Append("</Comments>");
@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 							screen.ScreenNum=reader.ReadContentAsLong();
 							break;
 						case "ScreenDate":
-							screen.ScreenDate=DateTime.Parse(reader.ReadContentAsString());
+							screen.ScreenDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "GradeSchool":
 							screen.GradeSchool=reader.ReadContentAsString();
@@ -104,7 +104,7 @@ namespace OpenDentalWebService {
 							screen.MissingAllTeeth=(OpenDentBusiness.YN)reader.ReadContentAsInt();
 							break;
 						case "Birthdate":
-							screen.Birthdate=DateTime.Parse(reader.ReadContentAsString());
+							screen.Birthdate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ScreenGroupNum":
 							screen.ScreenGroupNum=reader.ReadContentAsLong();

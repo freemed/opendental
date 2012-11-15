@@ -16,11 +16,11 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(disease.PatNum).Append("</PatNum>");
 			sb.Append("<DiseaseDefNum>").Append(disease.DiseaseDefNum).Append("</DiseaseDefNum>");
 			sb.Append("<PatNote>").Append(SerializeStringEscapes.EscapeForXml(disease.PatNote)).Append("</PatNote>");
-			sb.Append("<DateTStamp>").Append(disease.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(disease.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<ICD9Num>").Append(disease.ICD9Num).Append("</ICD9Num>");
 			sb.Append("<ProbStatus>").Append((int)disease.ProbStatus).Append("</ProbStatus>");
-			sb.Append("<DateStart>").Append(disease.DateStart.ToString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(disease.DateStop.ToString()).Append("</DateStop>");
+			sb.Append("<DateStart>").Append(disease.DateStart.ToString("yyyyMMddHHmmss")).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(disease.DateStop.ToString("yyyyMMddHHmmss")).Append("</DateStop>");
 			sb.Append("</Disease>");
 			return sb.ToString();
 		}
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							disease.PatNote=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							disease.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							disease.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ICD9Num":
 							disease.ICD9Num=reader.ReadContentAsLong();
@@ -58,10 +58,10 @@ namespace OpenDentalWebService {
 							disease.ProbStatus=(OpenDentBusiness.ProblemStatus)reader.ReadContentAsInt();
 							break;
 						case "DateStart":
-							disease.DateStart=DateTime.Parse(reader.ReadContentAsString());
+							disease.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStop":
-							disease.DateStop=DateTime.Parse(reader.ReadContentAsString());
+							disease.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

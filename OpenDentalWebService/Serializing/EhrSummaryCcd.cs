@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<EhrSummaryCcd>");
 			sb.Append("<EhrSummaryCcdNum>").Append(ehrsummaryccd.EhrSummaryCcdNum).Append("</EhrSummaryCcdNum>");
 			sb.Append("<PatNum>").Append(ehrsummaryccd.PatNum).Append("</PatNum>");
-			sb.Append("<DateSummary>").Append(ehrsummaryccd.DateSummary.ToString()).Append("</DateSummary>");
+			sb.Append("<DateSummary>").Append(ehrsummaryccd.DateSummary.ToString("yyyyMMddHHmmss")).Append("</DateSummary>");
 			sb.Append("<ContentSummary>").Append(SerializeStringEscapes.EscapeForXml(ehrsummaryccd.ContentSummary)).Append("</ContentSummary>");
 			sb.Append("</EhrSummaryCcd>");
 			return sb.ToString();
@@ -38,7 +38,7 @@ namespace OpenDentalWebService {
 							ehrsummaryccd.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateSummary":
-							ehrsummaryccd.DateSummary=DateTime.Parse(reader.ReadContentAsString());
+							ehrsummaryccd.DateSummary=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ContentSummary":
 							ehrsummaryccd.ContentSummary=reader.ReadContentAsString();

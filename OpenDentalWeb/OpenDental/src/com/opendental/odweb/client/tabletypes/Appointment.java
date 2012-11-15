@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Appointment {
 		/** Primary key. */
@@ -26,7 +28,7 @@ public class Appointment {
 		/** FK to provider.ProvNum.  Optional.  Only used if a hygienist is assigned to this appt. */
 		public int ProvHyg;
 		/** Appointment Date and time.  If you need just the date or time for an SQL query, you can use DATE(AptDateTime) and TIME(AptDateTime) in your query. */
-		public String AptDateTime;
+		public Date AptDateTime;
 		/** FK to appointment.AptNum.  A better description of this field would be PlannedAptNum.  Only used to show that this apt is derived from specified planned apt. Otherwise, 0. */
 		public int NextAptNum;
 		/** FK to definition.DefNum.  The definition.Category in the definition table is DefCat.RecallUnschedStatus.  Only used if this is an Unsched or Planned appt. */
@@ -42,19 +44,19 @@ public class Appointment {
 		/** Set true if this is a hygiene appt.  The only purpose of this flag is to cause the hygiene provider's color to show.  This flag is frequently not set even when it is a hygiene appointment because some offices want the dentist color on the appointments. */
 		public boolean IsHygiene;
 		/** Automatically updated by MySQL every time a row is added or changed. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** The date and time that the patient checked in.  Date is largely ignored since it should be the same as the appt. */
-		public String DateTimeArrived;
+		public Date DateTimeArrived;
 		/** The date and time that the patient was seated in the chair in the operatory. */
-		public String DateTimeSeated;
+		public Date DateTimeSeated;
 		/** The date and time that the patient got up out of the chair */
-		public String DateTimeDismissed;
+		public Date DateTimeDismissed;
 		/** FK to insplan.PlanNum for the primary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan. */
 		public int InsPlan1;
 		/** FK to insplan.PlanNum for the secoondary insurance plan at the time the appointment is set complete. May be 0. We can't tell later which subscriber is involved; only the plan. */
 		public int InsPlan2;
 		/** Date and time patient asked to arrive, or minval if patient not asked to arrive at a different time than appt. */
-		public String DateTimeAskedToArrive;
+		public Date DateTimeAskedToArrive;
 		/** Stores XML for the procs colors */
 		public String ProcsColored;
 		/** If set to anything but 0, then this will override the graphic color for the appointment. */
@@ -107,7 +109,7 @@ public class Appointment {
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("<ProvHyg>").append(ProvHyg).append("</ProvHyg>");
-			sb.append("<AptDateTime>").append(Serializing.EscapeForXml(AptDateTime)).append("</AptDateTime>");
+			sb.append("<AptDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AptDateTime>");
 			sb.append("<NextAptNum>").append(NextAptNum).append("</NextAptNum>");
 			sb.append("<UnschedStatus>").append(UnschedStatus).append("</UnschedStatus>");
 			sb.append("<IsNewPatient>").append((IsNewPatient)?1:0).append("</IsNewPatient>");
@@ -115,13 +117,13 @@ public class Appointment {
 			sb.append("<Assistant>").append(Assistant).append("</Assistant>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<IsHygiene>").append((IsHygiene)?1:0).append("</IsHygiene>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
-			sb.append("<DateTimeArrived>").append(Serializing.EscapeForXml(DateTimeArrived)).append("</DateTimeArrived>");
-			sb.append("<DateTimeSeated>").append(Serializing.EscapeForXml(DateTimeSeated)).append("</DateTimeSeated>");
-			sb.append("<DateTimeDismissed>").append(Serializing.EscapeForXml(DateTimeDismissed)).append("</DateTimeDismissed>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTimeArrived>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeArrived>");
+			sb.append("<DateTimeSeated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSeated>");
+			sb.append("<DateTimeDismissed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeDismissed>");
 			sb.append("<InsPlan1>").append(InsPlan1).append("</InsPlan1>");
 			sb.append("<InsPlan2>").append(InsPlan2).append("</InsPlan2>");
-			sb.append("<DateTimeAskedToArrive>").append(Serializing.EscapeForXml(DateTimeAskedToArrive)).append("</DateTimeAskedToArrive>");
+			sb.append("<DateTimeAskedToArrive>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeAskedToArrive>");
 			sb.append("<ProcsColored>").append(Serializing.EscapeForXml(ProcsColored)).append("</ProcsColored>");
 			sb.append("<ColorOverride>").append(ColorOverride).append("</ColorOverride>");
 			sb.append("</Appointment>");
@@ -144,7 +146,7 @@ public class Appointment {
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
 				ProvHyg=Integer.valueOf(doc.getElementsByTagName("ProvHyg").item(0).getFirstChild().getNodeValue());
-				AptDateTime=doc.getElementsByTagName("AptDateTime").item(0).getFirstChild().getNodeValue();
+				AptDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AptDateTime").item(0).getFirstChild().getNodeValue());
 				NextAptNum=Integer.valueOf(doc.getElementsByTagName("NextAptNum").item(0).getFirstChild().getNodeValue());
 				UnschedStatus=Integer.valueOf(doc.getElementsByTagName("UnschedStatus").item(0).getFirstChild().getNodeValue());
 				IsNewPatient=(doc.getElementsByTagName("IsNewPatient").item(0).getFirstChild().getNodeValue()=="0")?false:true;
@@ -152,13 +154,13 @@ public class Appointment {
 				Assistant=Integer.valueOf(doc.getElementsByTagName("Assistant").item(0).getFirstChild().getNodeValue());
 				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
 				IsHygiene=(doc.getElementsByTagName("IsHygiene").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
-				DateTimeArrived=doc.getElementsByTagName("DateTimeArrived").item(0).getFirstChild().getNodeValue();
-				DateTimeSeated=doc.getElementsByTagName("DateTimeSeated").item(0).getFirstChild().getNodeValue();
-				DateTimeDismissed=doc.getElementsByTagName("DateTimeDismissed").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				DateTimeArrived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeArrived").item(0).getFirstChild().getNodeValue());
+				DateTimeSeated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeSeated").item(0).getFirstChild().getNodeValue());
+				DateTimeDismissed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeDismissed").item(0).getFirstChild().getNodeValue());
 				InsPlan1=Integer.valueOf(doc.getElementsByTagName("InsPlan1").item(0).getFirstChild().getNodeValue());
 				InsPlan2=Integer.valueOf(doc.getElementsByTagName("InsPlan2").item(0).getFirstChild().getNodeValue());
-				DateTimeAskedToArrive=doc.getElementsByTagName("DateTimeAskedToArrive").item(0).getFirstChild().getNodeValue();
+				DateTimeAskedToArrive=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeAskedToArrive").item(0).getFirstChild().getNodeValue());
 				ProcsColored=doc.getElementsByTagName("ProcsColored").item(0).getFirstChild().getNodeValue();
 				ColorOverride=Integer.valueOf(doc.getElementsByTagName("ColorOverride").item(0).getFirstChild().getNodeValue());
 			}

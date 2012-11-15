@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Computer {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class Computer {
 		/** Name of the computer. */
 		public String CompName;
 		/** Allows use to tell which computers are running.  All workstations record a heartbeat here at an interval of 3 minutes.  And when they shut down, they set this value to min.  So if the heartbeat is fairly fresh, then that's an accurate indicator of whether Open Dental is running on that computer. */
-		public String LastHeartBeat;
+		public Date LastHeartBeat;
 
 		/** Deep copy of object. */
 		public Computer Copy() {
@@ -27,7 +29,7 @@ public class Computer {
 			sb.append("<Computer>");
 			sb.append("<ComputerNum>").append(ComputerNum).append("</ComputerNum>");
 			sb.append("<CompName>").append(Serializing.EscapeForXml(CompName)).append("</CompName>");
-			sb.append("<LastHeartBeat>").append(Serializing.EscapeForXml(LastHeartBeat)).append("</LastHeartBeat>");
+			sb.append("<LastHeartBeat>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</LastHeartBeat>");
 			sb.append("</Computer>");
 			return sb.toString();
 		}
@@ -40,7 +42,7 @@ public class Computer {
 				Document doc=XMLParser.parse(xml);
 				ComputerNum=Integer.valueOf(doc.getElementsByTagName("ComputerNum").item(0).getFirstChild().getNodeValue());
 				CompName=doc.getElementsByTagName("CompName").item(0).getFirstChild().getNodeValue();
-				LastHeartBeat=doc.getElementsByTagName("LastHeartBeat").item(0).getFirstChild().getNodeValue();
+				LastHeartBeat=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("LastHeartBeat").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

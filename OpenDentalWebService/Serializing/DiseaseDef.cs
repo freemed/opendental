@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<DiseaseName>").Append(SerializeStringEscapes.EscapeForXml(diseasedef.DiseaseName)).Append("</DiseaseName>");
 			sb.Append("<ItemOrder>").Append(diseasedef.ItemOrder).Append("</ItemOrder>");
 			sb.Append("<IsHidden>").Append((diseasedef.IsHidden)?1:0).Append("</IsHidden>");
-			sb.Append("<DateTStamp>").Append(diseasedef.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(diseasedef.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("</DiseaseDef>");
 			return sb.ToString();
 		}
@@ -45,7 +45,7 @@ namespace OpenDentalWebService {
 							diseasedef.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							diseasedef.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							diseasedef.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

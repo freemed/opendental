@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ReqStudent {
 		/** Primary key. */
@@ -22,7 +24,7 @@ public class ReqStudent {
 		/** FK to provider.ProvNum */
 		public int InstructorNum;
 		/** The date that the requirement was completed. */
-		public String DateCompleted;
+		public Date DateCompleted;
 
 		/** Deep copy of object. */
 		public ReqStudent Copy() {
@@ -51,7 +53,7 @@ public class ReqStudent {
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<InstructorNum>").append(InstructorNum).append("</InstructorNum>");
-			sb.append("<DateCompleted>").append(Serializing.EscapeForXml(DateCompleted)).append("</DateCompleted>");
+			sb.append("<DateCompleted>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCompleted>");
 			sb.append("</ReqStudent>");
 			return sb.toString();
 		}
@@ -70,7 +72,7 @@ public class ReqStudent {
 				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				InstructorNum=Integer.valueOf(doc.getElementsByTagName("InstructorNum").item(0).getFirstChild().getNodeValue());
-				DateCompleted=doc.getElementsByTagName("DateCompleted").item(0).getFirstChild().getNodeValue();
+				DateCompleted=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCompleted").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

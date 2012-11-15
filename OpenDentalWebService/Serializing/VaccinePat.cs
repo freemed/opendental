@@ -14,8 +14,8 @@ namespace OpenDentalWebService {
 			sb.Append("<VaccinePat>");
 			sb.Append("<VaccinePatNum>").Append(vaccinepat.VaccinePatNum).Append("</VaccinePatNum>");
 			sb.Append("<VaccineDefNum>").Append(vaccinepat.VaccineDefNum).Append("</VaccineDefNum>");
-			sb.Append("<DateTimeStart>").Append(vaccinepat.DateTimeStart.ToString()).Append("</DateTimeStart>");
-			sb.Append("<DateTimeEnd>").Append(vaccinepat.DateTimeEnd.ToString()).Append("</DateTimeEnd>");
+			sb.Append("<DateTimeStart>").Append(vaccinepat.DateTimeStart.ToString("yyyyMMddHHmmss")).Append("</DateTimeStart>");
+			sb.Append("<DateTimeEnd>").Append(vaccinepat.DateTimeEnd.ToString("yyyyMMddHHmmss")).Append("</DateTimeEnd>");
 			sb.Append("<AdministeredAmt>").Append(vaccinepat.AdministeredAmt).Append("</AdministeredAmt>");
 			sb.Append("<DrugUnitNum>").Append(vaccinepat.DrugUnitNum).Append("</DrugUnitNum>");
 			sb.Append("<LotNumber>").Append(SerializeStringEscapes.EscapeForXml(vaccinepat.LotNumber)).Append("</LotNumber>");
@@ -44,10 +44,10 @@ namespace OpenDentalWebService {
 							vaccinepat.VaccineDefNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeStart":
-							vaccinepat.DateTimeStart=DateTime.Parse(reader.ReadContentAsString());
+							vaccinepat.DateTimeStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeEnd":
-							vaccinepat.DateTimeEnd=DateTime.Parse(reader.ReadContentAsString());
+							vaccinepat.DateTimeEnd=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AdministeredAmt":
 							vaccinepat.AdministeredAmt=reader.ReadContentAsFloat();

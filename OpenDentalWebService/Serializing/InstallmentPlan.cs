@@ -14,8 +14,8 @@ namespace OpenDentalWebService {
 			sb.Append("<InstallmentPlan>");
 			sb.Append("<InstallmentPlanNum>").Append(installmentplan.InstallmentPlanNum).Append("</InstallmentPlanNum>");
 			sb.Append("<PatNum>").Append(installmentplan.PatNum).Append("</PatNum>");
-			sb.Append("<DateAgreement>").Append(installmentplan.DateAgreement.ToString()).Append("</DateAgreement>");
-			sb.Append("<DateFirstPayment>").Append(installmentplan.DateFirstPayment.ToString()).Append("</DateFirstPayment>");
+			sb.Append("<DateAgreement>").Append(installmentplan.DateAgreement.ToString("yyyyMMddHHmmss")).Append("</DateAgreement>");
+			sb.Append("<DateFirstPayment>").Append(installmentplan.DateFirstPayment.ToString("yyyyMMddHHmmss")).Append("</DateFirstPayment>");
 			sb.Append("<MonthlyPayment>").Append(installmentplan.MonthlyPayment).Append("</MonthlyPayment>");
 			sb.Append("<APR>").Append(installmentplan.APR).Append("</APR>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(installmentplan.Note)).Append("</Note>");
@@ -41,10 +41,10 @@ namespace OpenDentalWebService {
 							installmentplan.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateAgreement":
-							installmentplan.DateAgreement=DateTime.Parse(reader.ReadContentAsString());
+							installmentplan.DateAgreement=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateFirstPayment":
-							installmentplan.DateFirstPayment=DateTime.Parse(reader.ReadContentAsString());
+							installmentplan.DateFirstPayment=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "MonthlyPayment":
 							installmentplan.MonthlyPayment=reader.ReadContentAsDouble();

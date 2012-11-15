@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Claim {
 		/** Primary key */
@@ -10,13 +12,13 @@ public class Claim {
 		/** FK to patient.PatNum */
 		public int PatNum;
 		/** Usually the same date as the procedures, but it can be changed if you wish. */
-		public String DateService;
+		public Date DateService;
 		/** Usually the date it was created.  It might be sent a few days later if you don't send your e-claims every day. */
-		public String DateSent;
+		public Date DateSent;
 		/** Single char: U,H,W,P,S,or R.  U=Unsent, H=Hold until pri received, W=Waiting in queue, S=Sent, R=Received.  A(adj) is no longer used.  P(prob sent) is no longer used. */
 		public String ClaimStatus;
 		/** Date the claim was received. */
-		public String DateReceived;
+		public Date DateReceived;
 		/** FK to insplan.PlanNum.  Every claim is attached to one plan. */
 		public int PlanNum;
 		/** FK to provider.ProvNum.  Treating provider for dental claims.  For institutional claims, this is called the attending provider. */
@@ -34,7 +36,7 @@ public class Claim {
 		/** Single char for No, Initial, or Replacement. */
 		public String IsProsthesis;
 		/** Date prior prosthesis was placed.  Note that this is only for paper claims.  E-claims have a date field on each individual procedure. */
-		public String PriorDate;
+		public Date PriorDate;
 		/** Note for patient for why insurance didn't pay as expected. */
 		public String ReasonUnderPaid;
 		/** Note to be sent to insurance. Max 255 char.  E-claims also have notes on each procedure. */
@@ -52,7 +54,7 @@ public class Claim {
 		/** blank or A=Auto, E=Employment, O=Other. */
 		public String AccidentRelated;
 		/** Date of accident, if applicable. */
-		public String AccidentDate;
+		public Date AccidentDate;
 		/** Accident state. */
 		public String AccidentST;
 		/** Enum:YN . */
@@ -62,7 +64,7 @@ public class Claim {
 		/** Remaining months of ortho. Valid values are 1-36. */
 		public byte OrthoRemainM;
 		/** Date ortho appliance placed. */
-		public String OrthoDate;
+		public Date OrthoDate;
 		/** Enum:Relat  Relationship to subscriber.  The relationship is copied from InsPlan when the claim is created.  It might need to be changed in both places. */
 		public Relat PatRelat;
 		/** FK to insplan.PlanNum.  Other coverage plan number.  0 if none.  This provides the user with total control over what other coverage shows. This obviously limits the coverage on a single claim to two insurance companies. */
@@ -94,13 +96,13 @@ public class Claim {
 		/** F18.  Y, N, or X(not a lower denture, crown, or bridge). */
 		public String CanadianIsInitialLower;
 		/** F19.  Mandatory if F18 is N. */
-		public String CanadianDateInitialLower;
+		public Date CanadianDateInitialLower;
 		/** F21.  If crown, not required.  If denture or bridge, required if F18 is N.  Single digit number code, 0-6.  We added type 7, which is crown. */
 		public byte CanadianMandProsthMaterial;
 		/** F15.  Y, N, or X(not an upper denture, crown, or bridge). */
 		public String CanadianIsInitialUpper;
 		/** F04.  Mandatory if F15 is N. */
-		public String CanadianDateInitialUpper;
+		public Date CanadianDateInitialUpper;
 		/** F20.  If crown, not required.  If denture or bridge, required if F15 is N.  0 indicates empty response.  Single digit number code, 1-6.  We added type 7, which is crown. */
 		public byte CanadianMaxProsthMaterial;
 		/** FK to inssub.InsSubNum. */
@@ -110,7 +112,7 @@ public class Claim {
 		/** G01 assigned by carrier/network and returned in acks.  Used for claim reversal. */
 		public String CanadaTransRefNum;
 		/** F37 Used for predeterminations. */
-		public String CanadaEstTreatStartDate;
+		public Date CanadaEstTreatStartDate;
 		/** F28 Used for predeterminations. */
 		public double CanadaInitialPayment;
 		/** F29 Used for predeterminations. */
@@ -138,7 +140,7 @@ public class Claim {
 		/** FK to definition.DefNum. Most users will leave this blank.  Some offices may set up tracking statuses such as 'review', 'hold', 'riskmanage', etc. */
 		public int CustomTracking;
 		/** Used for historical purposes only, not sent electronically. Automatically set when CorrectionType is not original and the claim is resent. */
-		public String DateResent;
+		public Date DateResent;
 		/** X12 CLM05-3. Usually set to original, but can be used to resubmit claims. */
 		public ClaimCorrectionType CorrectionType;
 		/** X12 CLM01. Unique identifier for the claim within the current database. Defaults to PatNum/ClaimNum, but can be edited by user. */
@@ -228,10 +230,10 @@ public class Claim {
 			sb.append("<Claim>");
 			sb.append("<ClaimNum>").append(ClaimNum).append("</ClaimNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateService>").append(Serializing.EscapeForXml(DateService)).append("</DateService>");
-			sb.append("<DateSent>").append(Serializing.EscapeForXml(DateSent)).append("</DateSent>");
+			sb.append("<DateService>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateService>");
+			sb.append("<DateSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSent>");
 			sb.append("<ClaimStatus>").append(Serializing.EscapeForXml(ClaimStatus)).append("</ClaimStatus>");
-			sb.append("<DateReceived>").append(Serializing.EscapeForXml(DateReceived)).append("</DateReceived>");
+			sb.append("<DateReceived>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateReceived>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
 			sb.append("<ProvTreat>").append(ProvTreat).append("</ProvTreat>");
 			sb.append("<ClaimFee>").append(ClaimFee).append("</ClaimFee>");
@@ -240,7 +242,7 @@ public class Claim {
 			sb.append("<DedApplied>").append(DedApplied).append("</DedApplied>");
 			sb.append("<PreAuthString>").append(Serializing.EscapeForXml(PreAuthString)).append("</PreAuthString>");
 			sb.append("<IsProsthesis>").append(Serializing.EscapeForXml(IsProsthesis)).append("</IsProsthesis>");
-			sb.append("<PriorDate>").append(Serializing.EscapeForXml(PriorDate)).append("</PriorDate>");
+			sb.append("<PriorDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</PriorDate>");
 			sb.append("<ReasonUnderPaid>").append(Serializing.EscapeForXml(ReasonUnderPaid)).append("</ReasonUnderPaid>");
 			sb.append("<ClaimNote>").append(Serializing.EscapeForXml(ClaimNote)).append("</ClaimNote>");
 			sb.append("<ClaimType>").append(Serializing.EscapeForXml(ClaimType)).append("</ClaimType>");
@@ -249,12 +251,12 @@ public class Claim {
 			sb.append("<RefNumString>").append(Serializing.EscapeForXml(RefNumString)).append("</RefNumString>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
 			sb.append("<AccidentRelated>").append(Serializing.EscapeForXml(AccidentRelated)).append("</AccidentRelated>");
-			sb.append("<AccidentDate>").append(Serializing.EscapeForXml(AccidentDate)).append("</AccidentDate>");
+			sb.append("<AccidentDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AccidentDate>");
 			sb.append("<AccidentST>").append(Serializing.EscapeForXml(AccidentST)).append("</AccidentST>");
 			sb.append("<EmployRelated>").append(EmployRelated.ordinal()).append("</EmployRelated>");
 			sb.append("<IsOrtho>").append((IsOrtho)?1:0).append("</IsOrtho>");
 			sb.append("<OrthoRemainM>").append(OrthoRemainM).append("</OrthoRemainM>");
-			sb.append("<OrthoDate>").append(Serializing.EscapeForXml(OrthoDate)).append("</OrthoDate>");
+			sb.append("<OrthoDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</OrthoDate>");
 			sb.append("<PatRelat>").append(PatRelat.ordinal()).append("</PatRelat>");
 			sb.append("<PlanNum2>").append(PlanNum2).append("</PlanNum2>");
 			sb.append("<PatRelat2>").append(PatRelat2.ordinal()).append("</PatRelat2>");
@@ -270,15 +272,15 @@ public class Claim {
 			sb.append("<CanadianReferralProviderNum>").append(Serializing.EscapeForXml(CanadianReferralProviderNum)).append("</CanadianReferralProviderNum>");
 			sb.append("<CanadianReferralReason>").append(CanadianReferralReason).append("</CanadianReferralReason>");
 			sb.append("<CanadianIsInitialLower>").append(Serializing.EscapeForXml(CanadianIsInitialLower)).append("</CanadianIsInitialLower>");
-			sb.append("<CanadianDateInitialLower>").append(Serializing.EscapeForXml(CanadianDateInitialLower)).append("</CanadianDateInitialLower>");
+			sb.append("<CanadianDateInitialLower>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CanadianDateInitialLower>");
 			sb.append("<CanadianMandProsthMaterial>").append(CanadianMandProsthMaterial).append("</CanadianMandProsthMaterial>");
 			sb.append("<CanadianIsInitialUpper>").append(Serializing.EscapeForXml(CanadianIsInitialUpper)).append("</CanadianIsInitialUpper>");
-			sb.append("<CanadianDateInitialUpper>").append(Serializing.EscapeForXml(CanadianDateInitialUpper)).append("</CanadianDateInitialUpper>");
+			sb.append("<CanadianDateInitialUpper>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CanadianDateInitialUpper>");
 			sb.append("<CanadianMaxProsthMaterial>").append(CanadianMaxProsthMaterial).append("</CanadianMaxProsthMaterial>");
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
 			sb.append("<InsSubNum2>").append(InsSubNum2).append("</InsSubNum2>");
 			sb.append("<CanadaTransRefNum>").append(Serializing.EscapeForXml(CanadaTransRefNum)).append("</CanadaTransRefNum>");
-			sb.append("<CanadaEstTreatStartDate>").append(Serializing.EscapeForXml(CanadaEstTreatStartDate)).append("</CanadaEstTreatStartDate>");
+			sb.append("<CanadaEstTreatStartDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CanadaEstTreatStartDate>");
 			sb.append("<CanadaInitialPayment>").append(CanadaInitialPayment).append("</CanadaInitialPayment>");
 			sb.append("<CanadaPaymentMode>").append(CanadaPaymentMode).append("</CanadaPaymentMode>");
 			sb.append("<CanadaTreatDuration>").append(CanadaTreatDuration).append("</CanadaTreatDuration>");
@@ -292,7 +294,7 @@ public class Claim {
 			sb.append("<AdmissionSourceCode>").append(Serializing.EscapeForXml(AdmissionSourceCode)).append("</AdmissionSourceCode>");
 			sb.append("<PatientStatusCode>").append(Serializing.EscapeForXml(PatientStatusCode)).append("</PatientStatusCode>");
 			sb.append("<CustomTracking>").append(CustomTracking).append("</CustomTracking>");
-			sb.append("<DateResent>").append(Serializing.EscapeForXml(DateResent)).append("</DateResent>");
+			sb.append("<DateResent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateResent>");
 			sb.append("<CorrectionType>").append(CorrectionType.ordinal()).append("</CorrectionType>");
 			sb.append("<ClaimIdentifier>").append(Serializing.EscapeForXml(ClaimIdentifier)).append("</ClaimIdentifier>");
 			sb.append("<OrigRefNum>").append(Serializing.EscapeForXml(OrigRefNum)).append("</OrigRefNum>");
@@ -308,10 +310,10 @@ public class Claim {
 				Document doc=XMLParser.parse(xml);
 				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateService=doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue();
-				DateSent=doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue();
+				DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue());
+				DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue());
 				ClaimStatus=doc.getElementsByTagName("ClaimStatus").item(0).getFirstChild().getNodeValue();
-				DateReceived=doc.getElementsByTagName("DateReceived").item(0).getFirstChild().getNodeValue();
+				DateReceived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateReceived").item(0).getFirstChild().getNodeValue());
 				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
 				ProvTreat=Integer.valueOf(doc.getElementsByTagName("ProvTreat").item(0).getFirstChild().getNodeValue());
 				ClaimFee=Double.valueOf(doc.getElementsByTagName("ClaimFee").item(0).getFirstChild().getNodeValue());
@@ -320,7 +322,7 @@ public class Claim {
 				DedApplied=Double.valueOf(doc.getElementsByTagName("DedApplied").item(0).getFirstChild().getNodeValue());
 				PreAuthString=doc.getElementsByTagName("PreAuthString").item(0).getFirstChild().getNodeValue();
 				IsProsthesis=doc.getElementsByTagName("IsProsthesis").item(0).getFirstChild().getNodeValue();
-				PriorDate=doc.getElementsByTagName("PriorDate").item(0).getFirstChild().getNodeValue();
+				PriorDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("PriorDate").item(0).getFirstChild().getNodeValue());
 				ReasonUnderPaid=doc.getElementsByTagName("ReasonUnderPaid").item(0).getFirstChild().getNodeValue();
 				ClaimNote=doc.getElementsByTagName("ClaimNote").item(0).getFirstChild().getNodeValue();
 				ClaimType=doc.getElementsByTagName("ClaimType").item(0).getFirstChild().getNodeValue();
@@ -329,12 +331,12 @@ public class Claim {
 				RefNumString=doc.getElementsByTagName("RefNumString").item(0).getFirstChild().getNodeValue();
 				PlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("PlaceService").item(0).getFirstChild().getNodeValue())];
 				AccidentRelated=doc.getElementsByTagName("AccidentRelated").item(0).getFirstChild().getNodeValue();
-				AccidentDate=doc.getElementsByTagName("AccidentDate").item(0).getFirstChild().getNodeValue();
+				AccidentDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AccidentDate").item(0).getFirstChild().getNodeValue());
 				AccidentST=doc.getElementsByTagName("AccidentST").item(0).getFirstChild().getNodeValue();
 				EmployRelated=YN.values()[Integer.valueOf(doc.getElementsByTagName("EmployRelated").item(0).getFirstChild().getNodeValue())];
 				IsOrtho=(doc.getElementsByTagName("IsOrtho").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				OrthoRemainM=Byte.valueOf(doc.getElementsByTagName("OrthoRemainM").item(0).getFirstChild().getNodeValue());
-				OrthoDate=doc.getElementsByTagName("OrthoDate").item(0).getFirstChild().getNodeValue();
+				OrthoDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("OrthoDate").item(0).getFirstChild().getNodeValue());
 				PatRelat=Relat.values()[Integer.valueOf(doc.getElementsByTagName("PatRelat").item(0).getFirstChild().getNodeValue())];
 				PlanNum2=Integer.valueOf(doc.getElementsByTagName("PlanNum2").item(0).getFirstChild().getNodeValue());
 				PatRelat2=Relat.values()[Integer.valueOf(doc.getElementsByTagName("PatRelat2").item(0).getFirstChild().getNodeValue())];
@@ -350,15 +352,15 @@ public class Claim {
 				CanadianReferralProviderNum=doc.getElementsByTagName("CanadianReferralProviderNum").item(0).getFirstChild().getNodeValue();
 				CanadianReferralReason=Byte.valueOf(doc.getElementsByTagName("CanadianReferralReason").item(0).getFirstChild().getNodeValue());
 				CanadianIsInitialLower=doc.getElementsByTagName("CanadianIsInitialLower").item(0).getFirstChild().getNodeValue();
-				CanadianDateInitialLower=doc.getElementsByTagName("CanadianDateInitialLower").item(0).getFirstChild().getNodeValue();
+				CanadianDateInitialLower=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadianDateInitialLower").item(0).getFirstChild().getNodeValue());
 				CanadianMandProsthMaterial=Byte.valueOf(doc.getElementsByTagName("CanadianMandProsthMaterial").item(0).getFirstChild().getNodeValue());
 				CanadianIsInitialUpper=doc.getElementsByTagName("CanadianIsInitialUpper").item(0).getFirstChild().getNodeValue();
-				CanadianDateInitialUpper=doc.getElementsByTagName("CanadianDateInitialUpper").item(0).getFirstChild().getNodeValue();
+				CanadianDateInitialUpper=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadianDateInitialUpper").item(0).getFirstChild().getNodeValue());
 				CanadianMaxProsthMaterial=Byte.valueOf(doc.getElementsByTagName("CanadianMaxProsthMaterial").item(0).getFirstChild().getNodeValue());
 				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
 				InsSubNum2=Integer.valueOf(doc.getElementsByTagName("InsSubNum2").item(0).getFirstChild().getNodeValue());
 				CanadaTransRefNum=doc.getElementsByTagName("CanadaTransRefNum").item(0).getFirstChild().getNodeValue();
-				CanadaEstTreatStartDate=doc.getElementsByTagName("CanadaEstTreatStartDate").item(0).getFirstChild().getNodeValue();
+				CanadaEstTreatStartDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadaEstTreatStartDate").item(0).getFirstChild().getNodeValue());
 				CanadaInitialPayment=Double.valueOf(doc.getElementsByTagName("CanadaInitialPayment").item(0).getFirstChild().getNodeValue());
 				CanadaPaymentMode=Byte.valueOf(doc.getElementsByTagName("CanadaPaymentMode").item(0).getFirstChild().getNodeValue());
 				CanadaTreatDuration=Byte.valueOf(doc.getElementsByTagName("CanadaTreatDuration").item(0).getFirstChild().getNodeValue());
@@ -372,7 +374,7 @@ public class Claim {
 				AdmissionSourceCode=doc.getElementsByTagName("AdmissionSourceCode").item(0).getFirstChild().getNodeValue();
 				PatientStatusCode=doc.getElementsByTagName("PatientStatusCode").item(0).getFirstChild().getNodeValue();
 				CustomTracking=Integer.valueOf(doc.getElementsByTagName("CustomTracking").item(0).getFirstChild().getNodeValue());
-				DateResent=doc.getElementsByTagName("DateResent").item(0).getFirstChild().getNodeValue();
+				DateResent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateResent").item(0).getFirstChild().getNodeValue());
 				CorrectionType=ClaimCorrectionType.values()[Integer.valueOf(doc.getElementsByTagName("CorrectionType").item(0).getFirstChild().getNodeValue())];
 				ClaimIdentifier=doc.getElementsByTagName("ClaimIdentifier").item(0).getFirstChild().getNodeValue();
 				OrigRefNum=doc.getElementsByTagName("OrigRefNum").item(0).getFirstChild().getNodeValue();

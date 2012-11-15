@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Schedule>");
 			sb.Append("<ScheduleNum>").Append(schedule.ScheduleNum).Append("</ScheduleNum>");
-			sb.Append("<SchedDate>").Append(schedule.SchedDate.ToString()).Append("</SchedDate>");
+			sb.Append("<SchedDate>").Append(schedule.SchedDate.ToString("yyyyMMddHHmmss")).Append("</SchedDate>");
 			sb.Append("<StartTime>").Append(schedule.StartTime.ToString()).Append("</StartTime>");
 			sb.Append("<StopTime>").Append(schedule.StopTime.ToString()).Append("</StopTime>");
 			sb.Append("<SchedType>").Append((int)schedule.SchedType).Append("</SchedType>");
@@ -22,7 +22,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(schedule.Note)).Append("</Note>");
 			sb.Append("<Status>").Append((int)schedule.Status).Append("</Status>");
 			sb.Append("<EmployeeNum>").Append(schedule.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<DateTStamp>").Append(schedule.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(schedule.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("</Schedule>");
 			return sb.ToString();
 		}
@@ -42,7 +42,7 @@ namespace OpenDentalWebService {
 							schedule.ScheduleNum=reader.ReadContentAsLong();
 							break;
 						case "SchedDate":
-							schedule.SchedDate=DateTime.Parse(reader.ReadContentAsString());
+							schedule.SchedDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "StartTime":
 							schedule.StartTime=TimeSpan.Parse(reader.ReadContentAsString());
@@ -69,7 +69,7 @@ namespace OpenDentalWebService {
 							schedule.EmployeeNum=reader.ReadContentAsLong();
 							break;
 						case "DateTStamp":
-							schedule.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							schedule.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

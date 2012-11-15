@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<CustReference>");
 			sb.Append("<CustReferenceNum>").Append(custreference.CustReferenceNum).Append("</CustReferenceNum>");
 			sb.Append("<PatNum>").Append(custreference.PatNum).Append("</PatNum>");
-			sb.Append("<DateMostRecent>").Append(custreference.DateMostRecent.ToString()).Append("</DateMostRecent>");
+			sb.Append("<DateMostRecent>").Append(custreference.DateMostRecent.ToString("yyyyMMddHHmmss")).Append("</DateMostRecent>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(custreference.Note)).Append("</Note>");
 			sb.Append("<IsBadRef>").Append((custreference.IsBadRef)?1:0).Append("</IsBadRef>");
 			sb.Append("</CustReference>");
@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 							custreference.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateMostRecent":
-							custreference.DateMostRecent=DateTime.Parse(reader.ReadContentAsString());
+							custreference.DateMostRecent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Note":
 							custreference.Note=reader.ReadContentAsString();

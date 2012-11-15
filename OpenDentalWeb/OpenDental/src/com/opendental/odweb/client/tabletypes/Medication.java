@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Medication {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class Medication {
 		/** Notes. */
 		public String Notes;
 		/** The last date and time this row was altered.  Not user editable. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** RxNorm Code identifier. */
 		public int RxCui;
 
@@ -38,7 +40,7 @@ public class Medication {
 			sb.append("<MedName>").append(Serializing.EscapeForXml(MedName)).append("</MedName>");
 			sb.append("<GenericNum>").append(GenericNum).append("</GenericNum>");
 			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("</Medication>");
 			return sb.toString();
@@ -54,7 +56,7 @@ public class Medication {
 				MedName=doc.getElementsByTagName("MedName").item(0).getFirstChild().getNodeValue();
 				GenericNum=Integer.valueOf(doc.getElementsByTagName("GenericNum").item(0).getFirstChild().getNodeValue());
 				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				RxCui=Integer.valueOf(doc.getElementsByTagName("RxCui").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {

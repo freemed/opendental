@@ -14,18 +14,18 @@ namespace OpenDentalWebService {
 			sb.Append("<Recall>");
 			sb.Append("<RecallNum>").Append(recall.RecallNum).Append("</RecallNum>");
 			sb.Append("<PatNum>").Append(recall.PatNum).Append("</PatNum>");
-			sb.Append("<DateDueCalc>").Append(recall.DateDueCalc.ToString()).Append("</DateDueCalc>");
-			sb.Append("<DateDue>").Append(recall.DateDue.ToString()).Append("</DateDue>");
-			sb.Append("<DatePrevious>").Append(recall.DatePrevious.ToString()).Append("</DatePrevious>");
+			sb.Append("<DateDueCalc>").Append(recall.DateDueCalc.ToString("yyyyMMddHHmmss")).Append("</DateDueCalc>");
+			sb.Append("<DateDue>").Append(recall.DateDue.ToString("yyyyMMddHHmmss")).Append("</DateDue>");
+			sb.Append("<DatePrevious>").Append(recall.DatePrevious.ToString("yyyyMMddHHmmss")).Append("</DatePrevious>");
 			sb.Append("<RecallInterval>").Append(recall.RecallInterval).Append("</RecallInterval>");
 			sb.Append("<RecallStatus>").Append(recall.RecallStatus).Append("</RecallStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(recall.Note)).Append("</Note>");
 			sb.Append("<IsDisabled>").Append((recall.IsDisabled)?1:0).Append("</IsDisabled>");
-			sb.Append("<DateTStamp>").Append(recall.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(recall.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<RecallTypeNum>").Append(recall.RecallTypeNum).Append("</RecallTypeNum>");
 			sb.Append("<DisableUntilBalance>").Append(recall.DisableUntilBalance).Append("</DisableUntilBalance>");
-			sb.Append("<DisableUntilDate>").Append(recall.DisableUntilDate.ToString()).Append("</DisableUntilDate>");
-			sb.Append("<DateScheduled>").Append(recall.DateScheduled.ToString()).Append("</DateScheduled>");
+			sb.Append("<DisableUntilDate>").Append(recall.DisableUntilDate.ToString("yyyyMMddHHmmss")).Append("</DisableUntilDate>");
+			sb.Append("<DateScheduled>").Append(recall.DateScheduled.ToString("yyyyMMddHHmmss")).Append("</DateScheduled>");
 			sb.Append("</Recall>");
 			return sb.ToString();
 		}
@@ -48,13 +48,13 @@ namespace OpenDentalWebService {
 							recall.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateDueCalc":
-							recall.DateDueCalc=DateTime.Parse(reader.ReadContentAsString());
+							recall.DateDueCalc=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateDue":
-							recall.DateDue=DateTime.Parse(reader.ReadContentAsString());
+							recall.DateDue=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DatePrevious":
-							recall.DatePrevious=DateTime.Parse(reader.ReadContentAsString());
+							recall.DatePrevious=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RecallInterval":
 							recall.RecallInterval=new OpenDentBusiness.Interval(reader.ReadContentAsInt());
@@ -69,7 +69,7 @@ namespace OpenDentalWebService {
 							recall.IsDisabled=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							recall.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							recall.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RecallTypeNum":
 							recall.RecallTypeNum=reader.ReadContentAsLong();
@@ -78,10 +78,10 @@ namespace OpenDentalWebService {
 							recall.DisableUntilBalance=reader.ReadContentAsDouble();
 							break;
 						case "DisableUntilDate":
-							recall.DisableUntilDate=DateTime.Parse(reader.ReadContentAsString());
+							recall.DisableUntilDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateScheduled":
-							recall.DateScheduled=DateTime.Parse(reader.ReadContentAsString());
+							recall.DateScheduled=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class PayPlanCharge {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class PayPlanCharge {
 		/** FK to patient.PatNum.  The patient account that the principal gets removed from. */
 		public int PatNum;
 		/** The date that the charge will show on the patient account.  Any charge with a future date will not show on the account yet and will not affect the balance. */
-		public String ChargeDate;
+		public Date ChargeDate;
 		/** The principal portion of this payment. */
 		public double Principal;
 		/** The interest portion of this payment. */
@@ -50,7 +52,7 @@ public class PayPlanCharge {
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
 			sb.append("<Guarantor>").append(Guarantor).append("</Guarantor>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ChargeDate>").append(Serializing.EscapeForXml(ChargeDate)).append("</ChargeDate>");
+			sb.append("<ChargeDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ChargeDate>");
 			sb.append("<Principal>").append(Principal).append("</Principal>");
 			sb.append("<Interest>").append(Interest).append("</Interest>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
@@ -70,7 +72,7 @@ public class PayPlanCharge {
 				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
 				Guarantor=Integer.valueOf(doc.getElementsByTagName("Guarantor").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ChargeDate=doc.getElementsByTagName("ChargeDate").item(0).getFirstChild().getNodeValue();
+				ChargeDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ChargeDate").item(0).getFirstChild().getNodeValue());
 				Principal=Double.valueOf(doc.getElementsByTagName("Principal").item(0).getFirstChild().getNodeValue());
 				Interest=Double.valueOf(doc.getElementsByTagName("Interest").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();

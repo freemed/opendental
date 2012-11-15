@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Reconcile {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class Reconcile {
 		/** User enters ending balance here. */
 		public double EndingBal;
 		/** The date that the reconcile was performed. */
-		public String DateReconcile;
+		public Date DateReconcile;
 		/** If StartingBal + sum of entries selected = EndingBal, then user can lock.  Unlock requires special permission, which nobody will have by default. */
 		public boolean IsLocked;
 
@@ -38,7 +40,7 @@ public class Reconcile {
 			sb.append("<AccountNum>").append(AccountNum).append("</AccountNum>");
 			sb.append("<StartingBal>").append(StartingBal).append("</StartingBal>");
 			sb.append("<EndingBal>").append(EndingBal).append("</EndingBal>");
-			sb.append("<DateReconcile>").append(Serializing.EscapeForXml(DateReconcile)).append("</DateReconcile>");
+			sb.append("<DateReconcile>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateReconcile>");
 			sb.append("<IsLocked>").append((IsLocked)?1:0).append("</IsLocked>");
 			sb.append("</Reconcile>");
 			return sb.toString();
@@ -54,7 +56,7 @@ public class Reconcile {
 				AccountNum=Integer.valueOf(doc.getElementsByTagName("AccountNum").item(0).getFirstChild().getNodeValue());
 				StartingBal=Double.valueOf(doc.getElementsByTagName("StartingBal").item(0).getFirstChild().getNodeValue());
 				EndingBal=Double.valueOf(doc.getElementsByTagName("EndingBal").item(0).getFirstChild().getNodeValue());
-				DateReconcile=doc.getElementsByTagName("DateReconcile").item(0).getFirstChild().getNodeValue();
+				DateReconcile=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateReconcile").item(0).getFirstChild().getNodeValue());
 				IsLocked=(doc.getElementsByTagName("IsLocked").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 			}
 			catch(Exception e) {

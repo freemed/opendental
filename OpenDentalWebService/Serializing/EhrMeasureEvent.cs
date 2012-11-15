@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<EhrMeasureEvent>");
 			sb.Append("<EhrMeasureEventNum>").Append(ehrmeasureevent.EhrMeasureEventNum).Append("</EhrMeasureEventNum>");
-			sb.Append("<DateTEvent>").Append(ehrmeasureevent.DateTEvent.ToString()).Append("</DateTEvent>");
+			sb.Append("<DateTEvent>").Append(ehrmeasureevent.DateTEvent.ToString("yyyyMMddHHmmss")).Append("</DateTEvent>");
 			sb.Append("<EventType>").Append((int)ehrmeasureevent.EventType).Append("</EventType>");
 			sb.Append("<PatNum>").Append(ehrmeasureevent.PatNum).Append("</PatNum>");
 			sb.Append("<MoreInfo>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasureevent.MoreInfo)).Append("</MoreInfo>");
@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 							ehrmeasureevent.EhrMeasureEventNum=reader.ReadContentAsLong();
 							break;
 						case "DateTEvent":
-							ehrmeasureevent.DateTEvent=DateTime.Parse(reader.ReadContentAsString());
+							ehrmeasureevent.DateTEvent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "EventType":
 							ehrmeasureevent.EventType=(OpenDentBusiness.EhrMeasureEventType)reader.ReadContentAsInt();

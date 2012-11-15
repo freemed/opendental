@@ -14,9 +14,9 @@ namespace OpenDentalWebService {
 			sb.Append("<Statement>");
 			sb.Append("<StatementNum>").Append(statement.StatementNum).Append("</StatementNum>");
 			sb.Append("<PatNum>").Append(statement.PatNum).Append("</PatNum>");
-			sb.Append("<DateSent>").Append(statement.DateSent.ToString()).Append("</DateSent>");
-			sb.Append("<DateRangeFrom>").Append(statement.DateRangeFrom.ToString()).Append("</DateRangeFrom>");
-			sb.Append("<DateRangeTo>").Append(statement.DateRangeTo.ToString()).Append("</DateRangeTo>");
+			sb.Append("<DateSent>").Append(statement.DateSent.ToString("yyyyMMddHHmmss")).Append("</DateSent>");
+			sb.Append("<DateRangeFrom>").Append(statement.DateRangeFrom.ToString("yyyyMMddHHmmss")).Append("</DateRangeFrom>");
+			sb.Append("<DateRangeTo>").Append(statement.DateRangeTo.ToString("yyyyMMddHHmmss")).Append("</DateRangeTo>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(statement.Note)).Append("</Note>");
 			sb.Append("<NoteBold>").Append(SerializeStringEscapes.EscapeForXml(statement.NoteBold)).Append("</NoteBold>");
 			sb.Append("<Mode_>").Append((int)statement.Mode_).Append("</Mode_>");
@@ -25,7 +25,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Intermingled>").Append((statement.Intermingled)?1:0).Append("</Intermingled>");
 			sb.Append("<IsSent>").Append((statement.IsSent)?1:0).Append("</IsSent>");
 			sb.Append("<DocNum>").Append(statement.DocNum).Append("</DocNum>");
-			sb.Append("<DateTStamp>").Append(statement.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(statement.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<IsReceipt>").Append((statement.IsReceipt)?1:0).Append("</IsReceipt>");
 			sb.Append("<IsInvoice>").Append((statement.IsInvoice)?1:0).Append("</IsInvoice>");
 			sb.Append("<IsInvoiceCopy>").Append((statement.IsInvoiceCopy)?1:0).Append("</IsInvoiceCopy>");
@@ -51,13 +51,13 @@ namespace OpenDentalWebService {
 							statement.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateSent":
-							statement.DateSent=DateTime.Parse(reader.ReadContentAsString());
+							statement.DateSent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateRangeFrom":
-							statement.DateRangeFrom=DateTime.Parse(reader.ReadContentAsString());
+							statement.DateRangeFrom=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateRangeTo":
-							statement.DateRangeTo=DateTime.Parse(reader.ReadContentAsString());
+							statement.DateRangeTo=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Note":
 							statement.Note=reader.ReadContentAsString();
@@ -84,7 +84,7 @@ namespace OpenDentalWebService {
 							statement.DocNum=reader.ReadContentAsLong();
 							break;
 						case "DateTStamp":
-							statement.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							statement.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "IsReceipt":
 							statement.IsReceipt=reader.ReadContentAsString()!="0";

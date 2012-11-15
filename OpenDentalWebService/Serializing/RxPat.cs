@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<RxPat>");
 			sb.Append("<RxNum>").Append(rxpat.RxNum).Append("</RxNum>");
 			sb.Append("<PatNum>").Append(rxpat.PatNum).Append("</PatNum>");
-			sb.Append("<RxDate>").Append(rxpat.RxDate.ToString()).Append("</RxDate>");
+			sb.Append("<RxDate>").Append(rxpat.RxDate.ToString("yyyyMMddHHmmss")).Append("</RxDate>");
 			sb.Append("<Drug>").Append(SerializeStringEscapes.EscapeForXml(rxpat.Drug)).Append("</Drug>");
 			sb.Append("<Sig>").Append(SerializeStringEscapes.EscapeForXml(rxpat.Sig)).Append("</Sig>");
 			sb.Append("<Disp>").Append(SerializeStringEscapes.EscapeForXml(rxpat.Disp)).Append("</Disp>");
@@ -23,7 +23,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Notes>").Append(SerializeStringEscapes.EscapeForXml(rxpat.Notes)).Append("</Notes>");
 			sb.Append("<PharmacyNum>").Append(rxpat.PharmacyNum).Append("</PharmacyNum>");
 			sb.Append("<IsControlled>").Append((rxpat.IsControlled)?1:0).Append("</IsControlled>");
-			sb.Append("<DateTStamp>").Append(rxpat.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(rxpat.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<SendStatus>").Append((int)rxpat.SendStatus).Append("</SendStatus>");
 			sb.Append("<RxCui>").Append(rxpat.RxCui).Append("</RxCui>");
 			sb.Append("<DosageCode>").Append(SerializeStringEscapes.EscapeForXml(rxpat.DosageCode)).Append("</DosageCode>");
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							rxpat.PatNum=reader.ReadContentAsLong();
 							break;
 						case "RxDate":
-							rxpat.RxDate=DateTime.Parse(reader.ReadContentAsString());
+							rxpat.RxDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Drug":
 							rxpat.Drug=reader.ReadContentAsString();
@@ -76,7 +76,7 @@ namespace OpenDentalWebService {
 							rxpat.IsControlled=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							rxpat.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							rxpat.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SendStatus":
 							rxpat.SendStatus=(OpenDentBusiness.RxSendStatus)reader.ReadContentAsInt();

@@ -3,16 +3,18 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class PayPeriod {
 		/** Primary key. */
 		public int PayPeriodNum;
 		/** The first day of the payperiod */
-		public String DateStart;
+		public Date DateStart;
 		/** The last day of the payperiod. */
-		public String DateStop;
+		public Date DateStop;
 		/** The date that paychecks will be dated.  A few days after the dateStop.  Optional. */
-		public String DatePaycheck;
+		public Date DatePaycheck;
 
 		/** Deep copy of object. */
 		public PayPeriod Copy() {
@@ -29,9 +31,9 @@ public class PayPeriod {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PayPeriod>");
 			sb.append("<PayPeriodNum>").append(PayPeriodNum).append("</PayPeriodNum>");
-			sb.append("<DateStart>").append(Serializing.EscapeForXml(DateStart)).append("</DateStart>");
-			sb.append("<DateStop>").append(Serializing.EscapeForXml(DateStop)).append("</DateStop>");
-			sb.append("<DatePaycheck>").append(Serializing.EscapeForXml(DatePaycheck)).append("</DatePaycheck>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
+			sb.append("<DatePaycheck>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePaycheck>");
 			sb.append("</PayPeriod>");
 			return sb.toString();
 		}
@@ -43,9 +45,9 @@ public class PayPeriod {
 			try {
 				Document doc=XMLParser.parse(xml);
 				PayPeriodNum=Integer.valueOf(doc.getElementsByTagName("PayPeriodNum").item(0).getFirstChild().getNodeValue());
-				DateStart=doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue();
-				DateStop=doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue();
-				DatePaycheck=doc.getElementsByTagName("DatePaycheck").item(0).getFirstChild().getNodeValue();
+				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
+				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
+				DatePaycheck=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePaycheck").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

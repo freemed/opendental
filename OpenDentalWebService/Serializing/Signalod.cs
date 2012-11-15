@@ -15,12 +15,12 @@ namespace OpenDentalWebService {
 			sb.Append("<SignalNum>").Append(signalod.SignalNum).Append("</SignalNum>");
 			sb.Append("<FromUser>").Append(SerializeStringEscapes.EscapeForXml(signalod.FromUser)).Append("</FromUser>");
 			sb.Append("<ITypes>").Append(SerializeStringEscapes.EscapeForXml(signalod.ITypes)).Append("</ITypes>");
-			sb.Append("<DateViewing>").Append(signalod.DateViewing.ToString()).Append("</DateViewing>");
+			sb.Append("<DateViewing>").Append(signalod.DateViewing.ToString("yyyyMMddHHmmss")).Append("</DateViewing>");
 			sb.Append("<SigType>").Append((int)signalod.SigType).Append("</SigType>");
 			sb.Append("<SigText>").Append(SerializeStringEscapes.EscapeForXml(signalod.SigText)).Append("</SigText>");
-			sb.Append("<SigDateTime>").Append(signalod.SigDateTime.ToString()).Append("</SigDateTime>");
+			sb.Append("<SigDateTime>").Append(signalod.SigDateTime.ToString("yyyyMMddHHmmss")).Append("</SigDateTime>");
 			sb.Append("<ToUser>").Append(SerializeStringEscapes.EscapeForXml(signalod.ToUser)).Append("</ToUser>");
-			sb.Append("<AckTime>").Append(signalod.AckTime.ToString()).Append("</AckTime>");
+			sb.Append("<AckTime>").Append(signalod.AckTime.ToString("yyyyMMddHHmmss")).Append("</AckTime>");
 			sb.Append("<TaskNum>").Append(signalod.TaskNum).Append("</TaskNum>");
 			sb.Append("</Signalod>");
 			return sb.ToString();
@@ -47,7 +47,7 @@ namespace OpenDentalWebService {
 							signalod.ITypes=reader.ReadContentAsString();
 							break;
 						case "DateViewing":
-							signalod.DateViewing=DateTime.Parse(reader.ReadContentAsString());
+							signalod.DateViewing=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SigType":
 							signalod.SigType=(OpenDentBusiness.SignalType)reader.ReadContentAsInt();
@@ -56,13 +56,13 @@ namespace OpenDentalWebService {
 							signalod.SigText=reader.ReadContentAsString();
 							break;
 						case "SigDateTime":
-							signalod.SigDateTime=DateTime.Parse(reader.ReadContentAsString());
+							signalod.SigDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ToUser":
 							signalod.ToUser=reader.ReadContentAsString();
 							break;
 						case "AckTime":
-							signalod.AckTime=DateTime.Parse(reader.ReadContentAsString());
+							signalod.AckTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TaskNum":
 							signalod.TaskNum=reader.ReadContentAsLong();

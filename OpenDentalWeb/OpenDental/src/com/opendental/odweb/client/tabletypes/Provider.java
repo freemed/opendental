@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Provider {
 		/** Primary key. */
@@ -52,7 +54,7 @@ public class Provider {
 		/** Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4. */
 		public String CanadianOfficeNum;
 		/** . */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/**  FK to ??. Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord */
 		public int AnesthProvType;
 		/** If none of the supplied taxonomies works.  This will show on claims. */
@@ -138,7 +140,7 @@ public class Provider {
 			sb.append("<SchoolClassNum>").append(SchoolClassNum).append("</SchoolClassNum>");
 			sb.append("<NationalProvID>").append(Serializing.EscapeForXml(NationalProvID)).append("</NationalProvID>");
 			sb.append("<CanadianOfficeNum>").append(Serializing.EscapeForXml(CanadianOfficeNum)).append("</CanadianOfficeNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<AnesthProvType>").append(AnesthProvType).append("</AnesthProvType>");
 			sb.append("<TaxonomyCodeOverride>").append(Serializing.EscapeForXml(TaxonomyCodeOverride)).append("</TaxonomyCodeOverride>");
 			sb.append("<IsCDAnet>").append((IsCDAnet)?1:0).append("</IsCDAnet>");
@@ -181,7 +183,7 @@ public class Provider {
 				SchoolClassNum=Integer.valueOf(doc.getElementsByTagName("SchoolClassNum").item(0).getFirstChild().getNodeValue());
 				NationalProvID=doc.getElementsByTagName("NationalProvID").item(0).getFirstChild().getNodeValue();
 				CanadianOfficeNum=doc.getElementsByTagName("CanadianOfficeNum").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				AnesthProvType=Integer.valueOf(doc.getElementsByTagName("AnesthProvType").item(0).getFirstChild().getNodeValue());
 				TaxonomyCodeOverride=doc.getElementsByTagName("TaxonomyCodeOverride").item(0).getFirstChild().getNodeValue();
 				IsCDAnet=(doc.getElementsByTagName("IsCDAnet").item(0).getFirstChild().getNodeValue()=="0")?false:true;

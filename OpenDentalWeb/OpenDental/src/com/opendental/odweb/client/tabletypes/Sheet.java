@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Sheet {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class Sheet {
 		/** FK to patient.PatNum.  A saved sheet is always attached to a patient (except deposit slip).  There are a few sheets that are so minor that they don't get saved, such as a Carrier label. */
 		public int PatNum;
 		/** The date and time of the sheet as it will be displayed in the commlog. */
-		public String DateTimeSheet;
+		public Date DateTimeSheet;
 		/** The default fontSize for the sheet.  The actual font must still be saved with each sheetField. */
 		public float FontSize;
 		/** The default fontName for the sheet.  The actual font must still be saved with each sheetField. */
@@ -58,7 +60,7 @@ public class Sheet {
 			sb.append("<SheetNum>").append(SheetNum).append("</SheetNum>");
 			sb.append("<SheetType>").append(SheetType.ordinal()).append("</SheetType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeSheet>").append(Serializing.EscapeForXml(DateTimeSheet)).append("</DateTimeSheet>");
+			sb.append("<DateTimeSheet>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSheet>");
 			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
 			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
 			sb.append("<Width>").append(Width).append("</Width>");
@@ -81,7 +83,7 @@ public class Sheet {
 				SheetNum=Integer.valueOf(doc.getElementsByTagName("SheetNum").item(0).getFirstChild().getNodeValue());
 				SheetType=SheetTypeEnum.values()[Integer.valueOf(doc.getElementsByTagName("SheetType").item(0).getFirstChild().getNodeValue())];
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTimeSheet=doc.getElementsByTagName("DateTimeSheet").item(0).getFirstChild().getNodeValue();
+				DateTimeSheet=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeSheet").item(0).getFirstChild().getNodeValue());
 				FontSize=Float.valueOf(doc.getElementsByTagName("FontSize").item(0).getFirstChild().getNodeValue());
 				FontName=doc.getElementsByTagName("FontName").item(0).getFirstChild().getNodeValue();
 				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());

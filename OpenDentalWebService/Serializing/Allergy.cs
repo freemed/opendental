@@ -17,8 +17,8 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(allergy.PatNum).Append("</PatNum>");
 			sb.Append("<Reaction>").Append(SerializeStringEscapes.EscapeForXml(allergy.Reaction)).Append("</Reaction>");
 			sb.Append("<StatusIsActive>").Append((allergy.StatusIsActive)?1:0).Append("</StatusIsActive>");
-			sb.Append("<DateTStamp>").Append(allergy.DateTStamp.ToString()).Append("</DateTStamp>");
-			sb.Append("<DateAdverseReaction>").Append(allergy.DateAdverseReaction.ToString()).Append("</DateAdverseReaction>");
+			sb.Append("<DateTStamp>").Append(allergy.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
+			sb.Append("<DateAdverseReaction>").Append(allergy.DateAdverseReaction.ToString("yyyyMMddHHmmss")).Append("</DateAdverseReaction>");
 			sb.Append("</Allergy>");
 			return sb.ToString();
 		}
@@ -50,10 +50,10 @@ namespace OpenDentalWebService {
 							allergy.StatusIsActive=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							allergy.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							allergy.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateAdverseReaction":
-							allergy.DateAdverseReaction=DateTime.Parse(reader.ReadContentAsString());
+							allergy.DateAdverseReaction=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class LabCase {
 		/** Primary key. */
@@ -16,15 +18,15 @@ public class LabCase {
 		/** FK to appointment.AptNum.  This is how a lab case is attached to a planned appointment in addition to the scheduled appointment. */
 		public int PlannedAptNum;
 		/** The due date that is put on the labslip.  NOT when you really need the labcase back, which is usually a day or two later and is the date of the appointment this case is attached to. */
-		public String DateTimeDue;
+		public Date DateTimeDue;
 		/** When this lab case was created. User can edit. */
-		public String DateTimeCreated;
+		public Date DateTimeCreated;
 		/** Time that it actually went out to the lab. */
-		public String DateTimeSent;
+		public Date DateTimeSent;
 		/** Date/time received back from the lab.  If this is filled, then the case is considered received. */
-		public String DateTimeRecd;
+		public Date DateTimeRecd;
 		/** Date/time that quality was checked.  It is now completely ready for the patient. */
-		public String DateTimeChecked;
+		public Date DateTimeChecked;
 		/** FK to provider.ProvNum. */
 		public int ProvNum;
 		/** The text instructions for this labcase. */
@@ -60,11 +62,11 @@ public class LabCase {
 			sb.append("<LaboratoryNum>").append(LaboratoryNum).append("</LaboratoryNum>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<PlannedAptNum>").append(PlannedAptNum).append("</PlannedAptNum>");
-			sb.append("<DateTimeDue>").append(Serializing.EscapeForXml(DateTimeDue)).append("</DateTimeDue>");
-			sb.append("<DateTimeCreated>").append(Serializing.EscapeForXml(DateTimeCreated)).append("</DateTimeCreated>");
-			sb.append("<DateTimeSent>").append(Serializing.EscapeForXml(DateTimeSent)).append("</DateTimeSent>");
-			sb.append("<DateTimeRecd>").append(Serializing.EscapeForXml(DateTimeRecd)).append("</DateTimeRecd>");
-			sb.append("<DateTimeChecked>").append(Serializing.EscapeForXml(DateTimeChecked)).append("</DateTimeChecked>");
+			sb.append("<DateTimeDue>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeDue>");
+			sb.append("<DateTimeCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeCreated>");
+			sb.append("<DateTimeSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeSent>");
+			sb.append("<DateTimeRecd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeRecd>");
+			sb.append("<DateTimeChecked>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeChecked>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("<Instructions>").append(Serializing.EscapeForXml(Instructions)).append("</Instructions>");
 			sb.append("<LabFee>").append(LabFee).append("</LabFee>");
@@ -83,11 +85,11 @@ public class LabCase {
 				LaboratoryNum=Integer.valueOf(doc.getElementsByTagName("LaboratoryNum").item(0).getFirstChild().getNodeValue());
 				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
 				PlannedAptNum=Integer.valueOf(doc.getElementsByTagName("PlannedAptNum").item(0).getFirstChild().getNodeValue());
-				DateTimeDue=doc.getElementsByTagName("DateTimeDue").item(0).getFirstChild().getNodeValue();
-				DateTimeCreated=doc.getElementsByTagName("DateTimeCreated").item(0).getFirstChild().getNodeValue();
-				DateTimeSent=doc.getElementsByTagName("DateTimeSent").item(0).getFirstChild().getNodeValue();
-				DateTimeRecd=doc.getElementsByTagName("DateTimeRecd").item(0).getFirstChild().getNodeValue();
-				DateTimeChecked=doc.getElementsByTagName("DateTimeChecked").item(0).getFirstChild().getNodeValue();
+				DateTimeDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeDue").item(0).getFirstChild().getNodeValue());
+				DateTimeCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeCreated").item(0).getFirstChild().getNodeValue());
+				DateTimeSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeSent").item(0).getFirstChild().getNodeValue());
+				DateTimeRecd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeRecd").item(0).getFirstChild().getNodeValue());
+				DateTimeChecked=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeChecked").item(0).getFirstChild().getNodeValue());
 				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
 				Instructions=doc.getElementsByTagName("Instructions").item(0).getFirstChild().getNodeValue();
 				LabFee=Double.valueOf(doc.getElementsByTagName("LabFee").item(0).getFirstChild().getNodeValue());

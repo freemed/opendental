@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Pharmacy {
 		/** Primary key. */
@@ -28,7 +30,7 @@ public class Pharmacy {
 		/** A freeform note for any info that is needed about the pharmacy, such as hours. */
 		public String Note;
 		/** The last date and time this row was altered.  Not user editable. */
-		public String DateTStamp;
+		public Date DateTStamp;
 
 		/** Deep copy of object. */
 		public Pharmacy Copy() {
@@ -63,7 +65,7 @@ public class Pharmacy {
 			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
 			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("</Pharmacy>");
 			return sb.toString();
 		}
@@ -85,7 +87,7 @@ public class Pharmacy {
 				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
 				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

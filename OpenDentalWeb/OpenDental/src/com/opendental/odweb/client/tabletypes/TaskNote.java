@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class TaskNote {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class TaskNote {
 		/** FK to user. The user who created this tasknote. */
 		public int UserNum;
 		/** Date and time the note was created (editable). */
-		public String DateTimeNote;
+		public Date DateTimeNote;
 		/** Note. Text that the user wishes to show on the task. */
 		public String Note;
 
@@ -34,7 +36,7 @@ public class TaskNote {
 			sb.append("<TaskNoteNum>").append(TaskNoteNum).append("</TaskNoteNum>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<DateTimeNote>").append(Serializing.EscapeForXml(DateTimeNote)).append("</DateTimeNote>");
+			sb.append("<DateTimeNote>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeNote>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</TaskNote>");
 			return sb.toString();
@@ -49,7 +51,7 @@ public class TaskNote {
 				TaskNoteNum=Integer.valueOf(doc.getElementsByTagName("TaskNoteNum").item(0).getFirstChild().getNodeValue());
 				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
 				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				DateTimeNote=doc.getElementsByTagName("DateTimeNote").item(0).getFirstChild().getNodeValue();
+				DateTimeNote=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeNote").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 			}
 			catch(Exception e) {

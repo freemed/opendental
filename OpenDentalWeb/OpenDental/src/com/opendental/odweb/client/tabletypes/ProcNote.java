@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ProcNote {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class ProcNote {
 		/** FK to procedurelog.ProcNum */
 		public int ProcNum;
 		/** The server time that this note was entered. Essentially a timestamp. */
-		public String EntryDateTime;
+		public Date EntryDateTime;
 		/** FK to userod.UserNum. */
 		public int UserNum;
 		/** The actual note. */
@@ -43,7 +45,7 @@ public class ProcNote {
 			sb.append("<ProcNoteNum>").append(ProcNoteNum).append("</ProcNoteNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<EntryDateTime>").append(Serializing.EscapeForXml(EntryDateTime)).append("</EntryDateTime>");
+			sb.append("<EntryDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</EntryDateTime>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
@@ -61,7 +63,7 @@ public class ProcNote {
 				ProcNoteNum=Integer.valueOf(doc.getElementsByTagName("ProcNoteNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				EntryDateTime=doc.getElementsByTagName("EntryDateTime").item(0).getFirstChild().getNodeValue();
+				EntryDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("EntryDateTime").item(0).getFirstChild().getNodeValue());
 				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;

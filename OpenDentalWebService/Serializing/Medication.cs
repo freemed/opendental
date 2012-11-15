@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<MedName>").Append(SerializeStringEscapes.EscapeForXml(medication.MedName)).Append("</MedName>");
 			sb.Append("<GenericNum>").Append(medication.GenericNum).Append("</GenericNum>");
 			sb.Append("<Notes>").Append(SerializeStringEscapes.EscapeForXml(medication.Notes)).Append("</Notes>");
-			sb.Append("<DateTStamp>").Append(medication.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(medication.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<RxCui>").Append(medication.RxCui).Append("</RxCui>");
 			sb.Append("</Medication>");
 			return sb.ToString();
@@ -46,7 +46,7 @@ namespace OpenDentalWebService {
 							medication.Notes=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							medication.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							medication.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RxCui":
 							medication.RxCui=reader.ReadContentAsLong();

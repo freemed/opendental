@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ScreenGroup {
 		/** Primary key */
@@ -10,7 +12,7 @@ public class ScreenGroup {
 		/** Up to the user. */
 		public String Description;
 		/** Date used to help order the groups. */
-		public String SGDate;
+		public Date SGDate;
 
 		/** Deep copy of object. */
 		public ScreenGroup Copy() {
@@ -27,7 +29,7 @@ public class ScreenGroup {
 			sb.append("<ScreenGroup>");
 			sb.append("<ScreenGroupNum>").append(ScreenGroupNum).append("</ScreenGroupNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<SGDate>").append(Serializing.EscapeForXml(SGDate)).append("</SGDate>");
+			sb.append("<SGDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</SGDate>");
 			sb.append("</ScreenGroup>");
 			return sb.toString();
 		}
@@ -40,7 +42,7 @@ public class ScreenGroup {
 				Document doc=XMLParser.parse(xml);
 				ScreenGroupNum=Integer.valueOf(doc.getElementsByTagName("ScreenGroupNum").item(0).getFirstChild().getNodeValue());
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				SGDate=doc.getElementsByTagName("SGDate").item(0).getFirstChild().getNodeValue();
+				SGDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("SGDate").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

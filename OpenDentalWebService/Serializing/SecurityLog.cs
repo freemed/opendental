@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SecurityLogNum>").Append(securitylog.SecurityLogNum).Append("</SecurityLogNum>");
 			sb.Append("<PermType>").Append((int)securitylog.PermType).Append("</PermType>");
 			sb.Append("<UserNum>").Append(securitylog.UserNum).Append("</UserNum>");
-			sb.Append("<LogDateTime>").Append(securitylog.LogDateTime.ToString()).Append("</LogDateTime>");
+			sb.Append("<LogDateTime>").Append(securitylog.LogDateTime.ToString("yyyyMMddHHmmss")).Append("</LogDateTime>");
 			sb.Append("<LogText>").Append(SerializeStringEscapes.EscapeForXml(securitylog.LogText)).Append("</LogText>");
 			sb.Append("<PatNum>").Append(securitylog.PatNum).Append("</PatNum>");
 			sb.Append("<CompName>").Append(SerializeStringEscapes.EscapeForXml(securitylog.CompName)).Append("</CompName>");
@@ -45,7 +45,7 @@ namespace OpenDentalWebService {
 							securitylog.UserNum=reader.ReadContentAsLong();
 							break;
 						case "LogDateTime":
-							securitylog.LogDateTime=DateTime.Parse(reader.ReadContentAsString());
+							securitylog.LogDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "LogText":
 							securitylog.LogText=reader.ReadContentAsString();

@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Schedule {
 		/** Primary key. */
 		public int ScheduleNum;
 		/** Date for this timeblock. */
-		public String SchedDate;
+		public Date SchedDate;
 		/** Start time for this timeblock. */
 		public String StartTime;
 		/** Stop time for this timeblock. */
@@ -26,7 +28,7 @@ public class Schedule {
 		/** FK to employee.EmployeeNum. */
 		public int EmployeeNum;
 		/** Last datetime that this row was inserted or updated. */
-		public String DateTStamp;
+		public Date DateTStamp;
 
 		/** Deep copy of object. */
 		public Schedule Copy() {
@@ -50,7 +52,7 @@ public class Schedule {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Schedule>");
 			sb.append("<ScheduleNum>").append(ScheduleNum).append("</ScheduleNum>");
-			sb.append("<SchedDate>").append(Serializing.EscapeForXml(SchedDate)).append("</SchedDate>");
+			sb.append("<SchedDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</SchedDate>");
 			sb.append("<StartTime>").append(Serializing.EscapeForXml(StartTime)).append("</StartTime>");
 			sb.append("<StopTime>").append(Serializing.EscapeForXml(StopTime)).append("</StopTime>");
 			sb.append("<SchedType>").append(SchedType.ordinal()).append("</SchedType>");
@@ -59,7 +61,7 @@ public class Schedule {
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Status>").append(Status.ordinal()).append("</Status>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("</Schedule>");
 			return sb.toString();
 		}
@@ -71,7 +73,7 @@ public class Schedule {
 			try {
 				Document doc=XMLParser.parse(xml);
 				ScheduleNum=Integer.valueOf(doc.getElementsByTagName("ScheduleNum").item(0).getFirstChild().getNodeValue());
-				SchedDate=doc.getElementsByTagName("SchedDate").item(0).getFirstChild().getNodeValue();
+				SchedDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("SchedDate").item(0).getFirstChild().getNodeValue());
 				StartTime=doc.getElementsByTagName("StartTime").item(0).getFirstChild().getNodeValue();
 				StopTime=doc.getElementsByTagName("StopTime").item(0).getFirstChild().getNodeValue();
 				SchedType=ScheduleType.values()[Integer.valueOf(doc.getElementsByTagName("SchedType").item(0).getFirstChild().getNodeValue())];
@@ -80,7 +82,7 @@ public class Schedule {
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				Status=SchedStatus.values()[Integer.valueOf(doc.getElementsByTagName("Status").item(0).getFirstChild().getNodeValue())];
 				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

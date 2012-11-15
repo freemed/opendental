@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Payment>");
 			sb.Append("<PayNum>").Append(payment.PayNum).Append("</PayNum>");
 			sb.Append("<PayType>").Append(payment.PayType).Append("</PayType>");
-			sb.Append("<PayDate>").Append(payment.PayDate.ToString()).Append("</PayDate>");
+			sb.Append("<PayDate>").Append(payment.PayDate.ToString("yyyyMMddHHmmss")).Append("</PayDate>");
 			sb.Append("<PayAmt>").Append(payment.PayAmt).Append("</PayAmt>");
 			sb.Append("<CheckNum>").Append(SerializeStringEscapes.EscapeForXml(payment.CheckNum)).Append("</CheckNum>");
 			sb.Append("<BankBranch>").Append(SerializeStringEscapes.EscapeForXml(payment.BankBranch)).Append("</BankBranch>");
@@ -22,7 +22,7 @@ namespace OpenDentalWebService {
 			sb.Append("<IsSplit>").Append((payment.IsSplit)?1:0).Append("</IsSplit>");
 			sb.Append("<PatNum>").Append(payment.PatNum).Append("</PatNum>");
 			sb.Append("<ClinicNum>").Append(payment.ClinicNum).Append("</ClinicNum>");
-			sb.Append("<DateEntry>").Append(payment.DateEntry.ToString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(payment.DateEntry.ToString("yyyyMMddHHmmss")).Append("</DateEntry>");
 			sb.Append("<DepositNum>").Append(payment.DepositNum).Append("</DepositNum>");
 			sb.Append("<Receipt>").Append(SerializeStringEscapes.EscapeForXml(payment.Receipt)).Append("</Receipt>");
 			sb.Append("<IsRecurringCC>").Append((payment.IsRecurringCC)?1:0).Append("</IsRecurringCC>");
@@ -48,7 +48,7 @@ namespace OpenDentalWebService {
 							payment.PayType=reader.ReadContentAsLong();
 							break;
 						case "PayDate":
-							payment.PayDate=DateTime.Parse(reader.ReadContentAsString());
+							payment.PayDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PayAmt":
 							payment.PayAmt=reader.ReadContentAsDouble();
@@ -72,7 +72,7 @@ namespace OpenDentalWebService {
 							payment.ClinicNum=reader.ReadContentAsLong();
 							break;
 						case "DateEntry":
-							payment.DateEntry=DateTime.Parse(reader.ReadContentAsString());
+							payment.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DepositNum":
 							payment.DepositNum=reader.ReadContentAsLong();

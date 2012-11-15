@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Procedure {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class Procedure {
 		/** No longer used. */
 		public String OldCode;
 		/** Procedure date that will show in the account as the date performed.  If just treatment planned, the date can be the date it was tp'd, or the date can be min val if we don't care.  Also see ProcTime column. */
-		public String ProcDate;
+		public Date ProcDate;
 		/** Procedure fee. */
 		public double ProcFee;
 		/** Surfaces, or use "UL" etc for quadrant, "2" etc for sextant, "U","L" for arches. */
@@ -38,11 +40,11 @@ public class Procedure {
 		/** Single char. Blank=no, I=Initial, R=Replacement. */
 		public String Prosthesis;
 		/** For a prosthesis Replacement, this is the original date. */
-		public String DateOriginalProsth;
+		public Date DateOriginalProsth;
 		/** This note used to go out on e-claims, but the new format does not allow it.  So we removed the UI for this field.  We will probably drop this field completely soon. */
 		public String ClaimNote;
 		/** This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later. */
-		public String DateEntryC;
+		public Date DateEntryC;
 		/** FK to clinic.ClinicNum.  0 if no clinic. */
 		public int ClinicNum;
 		/** FK to procedurecode.ProcCode. Optional. */
@@ -78,7 +80,7 @@ public class Procedure {
 		/** Stop time in military.  No longer used, but not deleting just in case someone has critical information stored here. */
 		public int StopTime;
 		/** The date that the procedure was originally treatment planned.  Does not change when marked complete. */
-		public String DateTP;
+		public Date DateTP;
 		/** FK to site.SiteNum. */
 		public int SiteNum;
 		/** Set to true to hide the chart graphics for this procedure.  For example, a crown was done, but then tooth extracted. */
@@ -90,7 +92,7 @@ public class Procedure {
 		/** Marks the time a procedure was finished. */
 		public String ProcTimeEnd;
 		/** Automatically updated by MySQL every time a row is added or changed. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** FK to definition.DefNum, which contains text of the Prognosis. */
 		public int Prognosis;
 		/** Enum:EnumProcDrugUnit For 837I and UB04 */
@@ -167,7 +169,7 @@ public class Procedure {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
 			sb.append("<OldCode>").append(Serializing.EscapeForXml(OldCode)).append("</OldCode>");
-			sb.append("<ProcDate>").append(Serializing.EscapeForXml(ProcDate)).append("</ProcDate>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
 			sb.append("<ProcFee>").append(ProcFee).append("</ProcFee>");
 			sb.append("<Surf>").append(Serializing.EscapeForXml(Surf)).append("</Surf>");
 			sb.append("<ToothNum>").append(Serializing.EscapeForXml(ToothNum)).append("</ToothNum>");
@@ -179,9 +181,9 @@ public class Procedure {
 			sb.append("<PlannedAptNum>").append(PlannedAptNum).append("</PlannedAptNum>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
 			sb.append("<Prosthesis>").append(Serializing.EscapeForXml(Prosthesis)).append("</Prosthesis>");
-			sb.append("<DateOriginalProsth>").append(Serializing.EscapeForXml(DateOriginalProsth)).append("</DateOriginalProsth>");
+			sb.append("<DateOriginalProsth>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateOriginalProsth>");
 			sb.append("<ClaimNote>").append(Serializing.EscapeForXml(ClaimNote)).append("</ClaimNote>");
-			sb.append("<DateEntryC>").append(Serializing.EscapeForXml(DateEntryC)).append("</DateEntryC>");
+			sb.append("<DateEntryC>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntryC>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<MedicalCode>").append(Serializing.EscapeForXml(MedicalCode)).append("</MedicalCode>");
 			sb.append("<DiagnosticCode>").append(Serializing.EscapeForXml(DiagnosticCode)).append("</DiagnosticCode>");
@@ -199,13 +201,13 @@ public class Procedure {
 			sb.append("<BaseUnits>").append(BaseUnits).append("</BaseUnits>");
 			sb.append("<StartTime>").append(StartTime).append("</StartTime>");
 			sb.append("<StopTime>").append(StopTime).append("</StopTime>");
-			sb.append("<DateTP>").append(Serializing.EscapeForXml(DateTP)).append("</DateTP>");
+			sb.append("<DateTP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTP>");
 			sb.append("<SiteNum>").append(SiteNum).append("</SiteNum>");
 			sb.append("<HideGraphics>").append((HideGraphics)?1:0).append("</HideGraphics>");
 			sb.append("<CanadianTypeCodes>").append(Serializing.EscapeForXml(CanadianTypeCodes)).append("</CanadianTypeCodes>");
 			sb.append("<ProcTime>").append(Serializing.EscapeForXml(ProcTime)).append("</ProcTime>");
 			sb.append("<ProcTimeEnd>").append(Serializing.EscapeForXml(ProcTimeEnd)).append("</ProcTimeEnd>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<Prognosis>").append(Prognosis).append("</Prognosis>");
 			sb.append("<DrugUnit>").append(DrugUnit.ordinal()).append("</DrugUnit>");
 			sb.append("<DrugQty>").append(DrugQty).append("</DrugQty>");
@@ -226,7 +228,7 @@ public class Procedure {
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
 				OldCode=doc.getElementsByTagName("OldCode").item(0).getFirstChild().getNodeValue();
-				ProcDate=doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue();
+				ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue());
 				ProcFee=Double.valueOf(doc.getElementsByTagName("ProcFee").item(0).getFirstChild().getNodeValue());
 				Surf=doc.getElementsByTagName("Surf").item(0).getFirstChild().getNodeValue();
 				ToothNum=doc.getElementsByTagName("ToothNum").item(0).getFirstChild().getNodeValue();
@@ -238,9 +240,9 @@ public class Procedure {
 				PlannedAptNum=Integer.valueOf(doc.getElementsByTagName("PlannedAptNum").item(0).getFirstChild().getNodeValue());
 				PlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("PlaceService").item(0).getFirstChild().getNodeValue())];
 				Prosthesis=doc.getElementsByTagName("Prosthesis").item(0).getFirstChild().getNodeValue();
-				DateOriginalProsth=doc.getElementsByTagName("DateOriginalProsth").item(0).getFirstChild().getNodeValue();
+				DateOriginalProsth=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateOriginalProsth").item(0).getFirstChild().getNodeValue());
 				ClaimNote=doc.getElementsByTagName("ClaimNote").item(0).getFirstChild().getNodeValue();
-				DateEntryC=doc.getElementsByTagName("DateEntryC").item(0).getFirstChild().getNodeValue();
+				DateEntryC=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntryC").item(0).getFirstChild().getNodeValue());
 				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
 				MedicalCode=doc.getElementsByTagName("MedicalCode").item(0).getFirstChild().getNodeValue();
 				DiagnosticCode=doc.getElementsByTagName("DiagnosticCode").item(0).getFirstChild().getNodeValue();
@@ -258,13 +260,13 @@ public class Procedure {
 				BaseUnits=Integer.valueOf(doc.getElementsByTagName("BaseUnits").item(0).getFirstChild().getNodeValue());
 				StartTime=Integer.valueOf(doc.getElementsByTagName("StartTime").item(0).getFirstChild().getNodeValue());
 				StopTime=Integer.valueOf(doc.getElementsByTagName("StopTime").item(0).getFirstChild().getNodeValue());
-				DateTP=doc.getElementsByTagName("DateTP").item(0).getFirstChild().getNodeValue();
+				DateTP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTP").item(0).getFirstChild().getNodeValue());
 				SiteNum=Integer.valueOf(doc.getElementsByTagName("SiteNum").item(0).getFirstChild().getNodeValue());
 				HideGraphics=(doc.getElementsByTagName("HideGraphics").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				CanadianTypeCodes=doc.getElementsByTagName("CanadianTypeCodes").item(0).getFirstChild().getNodeValue();
 				ProcTime=doc.getElementsByTagName("ProcTime").item(0).getFirstChild().getNodeValue();
 				ProcTimeEnd=doc.getElementsByTagName("ProcTimeEnd").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				Prognosis=Integer.valueOf(doc.getElementsByTagName("Prognosis").item(0).getFirstChild().getNodeValue());
 				DrugUnit=EnumProcDrugUnit.values()[Integer.valueOf(doc.getElementsByTagName("DrugUnit").item(0).getFirstChild().getNodeValue())];
 				DrugQty=Float.valueOf(doc.getElementsByTagName("DrugQty").item(0).getFirstChild().getNodeValue());

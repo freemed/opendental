@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Phone {
 		/** Primary key. */
@@ -28,7 +30,7 @@ public class Phone {
 		/** FK to patient.PatNum.  The customer. */
 		public int PatNum;
 		/** The date/time that the phonecall started.  Used to calculate how long user has been on phone. */
-		public String DateTimeStart;
+		public Date DateTimeStart;
 		/** The base64 representation of a bitmap. */
 		public String WebCamImage;
 		/** Full path to the most recent screenshot. */
@@ -75,7 +77,7 @@ public class Phone {
 			sb.append("<CustomerNumber>").append(Serializing.EscapeForXml(CustomerNumber)).append("</CustomerNumber>");
 			sb.append("<InOrOut>").append(Serializing.EscapeForXml(InOrOut)).append("</InOrOut>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateTimeStart>").append(Serializing.EscapeForXml(DateTimeStart)).append("</DateTimeStart>");
+			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeStart>");
 			sb.append("<WebCamImage>").append(Serializing.EscapeForXml(WebCamImage)).append("</WebCamImage>");
 			sb.append("<ScreenshotPath>").append(Serializing.EscapeForXml(ScreenshotPath)).append("</ScreenshotPath>");
 			sb.append("<ScreenshotImage>").append(Serializing.EscapeForXml(ScreenshotImage)).append("</ScreenshotImage>");
@@ -101,7 +103,7 @@ public class Phone {
 				CustomerNumber=doc.getElementsByTagName("CustomerNumber").item(0).getFirstChild().getNodeValue();
 				InOrOut=doc.getElementsByTagName("InOrOut").item(0).getFirstChild().getNodeValue();
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTimeStart=doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue();
+				DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue());
 				WebCamImage=doc.getElementsByTagName("WebCamImage").item(0).getFirstChild().getNodeValue();
 				ScreenshotPath=doc.getElementsByTagName("ScreenshotPath").item(0).getFirstChild().getNodeValue();
 				ScreenshotImage=doc.getElementsByTagName("ScreenshotImage").item(0).getFirstChild().getNodeValue();

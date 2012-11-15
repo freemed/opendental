@@ -18,11 +18,11 @@ namespace OpenDentalWebService {
 			sb.Append("<Zip>").Append(SerializeStringEscapes.EscapeForXml(creditcard.Zip)).Append("</Zip>");
 			sb.Append("<XChargeToken>").Append(SerializeStringEscapes.EscapeForXml(creditcard.XChargeToken)).Append("</XChargeToken>");
 			sb.Append("<CCNumberMasked>").Append(SerializeStringEscapes.EscapeForXml(creditcard.CCNumberMasked)).Append("</CCNumberMasked>");
-			sb.Append("<CCExpiration>").Append(creditcard.CCExpiration.ToString()).Append("</CCExpiration>");
+			sb.Append("<CCExpiration>").Append(creditcard.CCExpiration.ToString("yyyyMMddHHmmss")).Append("</CCExpiration>");
 			sb.Append("<ItemOrder>").Append(creditcard.ItemOrder).Append("</ItemOrder>");
 			sb.Append("<ChargeAmt>").Append(creditcard.ChargeAmt).Append("</ChargeAmt>");
-			sb.Append("<DateStart>").Append(creditcard.DateStart.ToString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(creditcard.DateStop.ToString()).Append("</DateStop>");
+			sb.Append("<DateStart>").Append(creditcard.DateStart.ToString("yyyyMMddHHmmss")).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(creditcard.DateStop.ToString("yyyyMMddHHmmss")).Append("</DateStop>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(creditcard.Note)).Append("</Note>");
 			sb.Append("<PayPlanNum>").Append(creditcard.PayPlanNum).Append("</PayPlanNum>");
 			sb.Append("</CreditCard>");
@@ -59,7 +59,7 @@ namespace OpenDentalWebService {
 							creditcard.CCNumberMasked=reader.ReadContentAsString();
 							break;
 						case "CCExpiration":
-							creditcard.CCExpiration=DateTime.Parse(reader.ReadContentAsString());
+							creditcard.CCExpiration=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ItemOrder":
 							creditcard.ItemOrder=reader.ReadContentAsInt();
@@ -68,10 +68,10 @@ namespace OpenDentalWebService {
 							creditcard.ChargeAmt=reader.ReadContentAsDouble();
 							break;
 						case "DateStart":
-							creditcard.DateStart=DateTime.Parse(reader.ReadContentAsString());
+							creditcard.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStop":
-							creditcard.DateStop=DateTime.Parse(reader.ReadContentAsString());
+							creditcard.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Note":
 							creditcard.Note=reader.ReadContentAsString();

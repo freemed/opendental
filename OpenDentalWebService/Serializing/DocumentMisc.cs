@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<DocumentMisc>");
 			sb.Append("<DocMiscNum>").Append(documentmisc.DocMiscNum).Append("</DocMiscNum>");
-			sb.Append("<DateCreated>").Append(documentmisc.DateCreated.ToString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(documentmisc.DateCreated.ToString("yyyyMMddHHmmss")).Append("</DateCreated>");
 			sb.Append("<FileName>").Append(SerializeStringEscapes.EscapeForXml(documentmisc.FileName)).Append("</FileName>");
 			sb.Append("<DocMiscType>").Append((int)documentmisc.DocMiscType).Append("</DocMiscType>");
 			sb.Append("<RawBase64>").Append(SerializeStringEscapes.EscapeForXml(documentmisc.RawBase64)).Append("</RawBase64>");
@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 							documentmisc.DocMiscNum=reader.ReadContentAsLong();
 							break;
 						case "DateCreated":
-							documentmisc.DateCreated=DateTime.Parse(reader.ReadContentAsString());
+							documentmisc.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "FileName":
 							documentmisc.FileName=reader.ReadContentAsString();

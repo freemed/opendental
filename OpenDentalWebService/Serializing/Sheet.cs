@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SheetNum>").Append(sheet.SheetNum).Append("</SheetNum>");
 			sb.Append("<SheetType>").Append((int)sheet.SheetType).Append("</SheetType>");
 			sb.Append("<PatNum>").Append(sheet.PatNum).Append("</PatNum>");
-			sb.Append("<DateTimeSheet>").Append(sheet.DateTimeSheet.ToString()).Append("</DateTimeSheet>");
+			sb.Append("<DateTimeSheet>").Append(sheet.DateTimeSheet.ToString("yyyyMMddHHmmss")).Append("</DateTimeSheet>");
 			sb.Append("<FontSize>").Append(sheet.FontSize).Append("</FontSize>");
 			sb.Append("<FontName>").Append(SerializeStringEscapes.EscapeForXml(sheet.FontName)).Append("</FontName>");
 			sb.Append("<Width>").Append(sheet.Width).Append("</Width>");
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							sheet.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeSheet":
-							sheet.DateTimeSheet=DateTime.Parse(reader.ReadContentAsString());
+							sheet.DateTimeSheet=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "FontSize":
 							sheet.FontSize=reader.ReadContentAsFloat();

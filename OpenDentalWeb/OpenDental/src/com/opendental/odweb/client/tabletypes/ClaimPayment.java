@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ClaimPayment {
 		/** Primary key. */
 		public int ClaimPaymentNum;
 		/** Date the check was entered into this system, not the date on the check. */
-		public String CheckDate;
+		public Date CheckDate;
 		/** The amount of the check. */
 		public double CheckAmt;
 		/** The check number. */
@@ -24,7 +26,7 @@ public class ClaimPayment {
 		/** Descriptive name of the carrier just for reporting purposes.  We use this because the CarrierNums could conceivably be different for the different claimprocs attached. */
 		public String CarrierName;
 		/** Date that the carrier issued the check. Date on the check. */
-		public String DateIssued;
+		public Date DateIssued;
 		/** . */
 		public boolean IsPartial;
 
@@ -50,7 +52,7 @@ public class ClaimPayment {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimPayment>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
-			sb.append("<CheckDate>").append(Serializing.EscapeForXml(CheckDate)).append("</CheckDate>");
+			sb.append("<CheckDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CheckDate>");
 			sb.append("<CheckAmt>").append(CheckAmt).append("</CheckAmt>");
 			sb.append("<CheckNum>").append(Serializing.EscapeForXml(CheckNum)).append("</CheckNum>");
 			sb.append("<BankBranch>").append(Serializing.EscapeForXml(BankBranch)).append("</BankBranch>");
@@ -58,7 +60,7 @@ public class ClaimPayment {
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<CarrierName>").append(Serializing.EscapeForXml(CarrierName)).append("</CarrierName>");
-			sb.append("<DateIssued>").append(Serializing.EscapeForXml(DateIssued)).append("</DateIssued>");
+			sb.append("<DateIssued>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateIssued>");
 			sb.append("<IsPartial>").append((IsPartial)?1:0).append("</IsPartial>");
 			sb.append("</ClaimPayment>");
 			return sb.toString();
@@ -71,7 +73,7 @@ public class ClaimPayment {
 			try {
 				Document doc=XMLParser.parse(xml);
 				ClaimPaymentNum=Integer.valueOf(doc.getElementsByTagName("ClaimPaymentNum").item(0).getFirstChild().getNodeValue());
-				CheckDate=doc.getElementsByTagName("CheckDate").item(0).getFirstChild().getNodeValue();
+				CheckDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CheckDate").item(0).getFirstChild().getNodeValue());
 				CheckAmt=Double.valueOf(doc.getElementsByTagName("CheckAmt").item(0).getFirstChild().getNodeValue());
 				CheckNum=doc.getElementsByTagName("CheckNum").item(0).getFirstChild().getNodeValue();
 				BankBranch=doc.getElementsByTagName("BankBranch").item(0).getFirstChild().getNodeValue();
@@ -79,7 +81,7 @@ public class ClaimPayment {
 				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
 				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
 				CarrierName=doc.getElementsByTagName("CarrierName").item(0).getFirstChild().getNodeValue();
-				DateIssued=doc.getElementsByTagName("DateIssued").item(0).getFirstChild().getNodeValue();
+				DateIssued=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateIssued").item(0).getFirstChild().getNodeValue());
 				IsPartial=(doc.getElementsByTagName("IsPartial").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 			}
 			catch(Exception e) {

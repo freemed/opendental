@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Transaction>");
 			sb.Append("<TransactionNum>").Append(transaction.TransactionNum).Append("</TransactionNum>");
-			sb.Append("<DateTimeEntry>").Append(transaction.DateTimeEntry.ToString()).Append("</DateTimeEntry>");
+			sb.Append("<DateTimeEntry>").Append(transaction.DateTimeEntry.ToString("yyyyMMddHHmmss")).Append("</DateTimeEntry>");
 			sb.Append("<UserNum>").Append(transaction.UserNum).Append("</UserNum>");
 			sb.Append("<DepositNum>").Append(transaction.DepositNum).Append("</DepositNum>");
 			sb.Append("<PayNum>").Append(transaction.PayNum).Append("</PayNum>");
@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 							transaction.TransactionNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeEntry":
-							transaction.DateTimeEntry=DateTime.Parse(reader.ReadContentAsString());
+							transaction.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UserNum":
 							transaction.UserNum=reader.ReadContentAsLong();

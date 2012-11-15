@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ErxLog {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class ErxLog {
 		/** Holds up to 16MB. */
 		public String MsgText;
 		/** Automatically updated by MySQL every time a row is added or changed. */
-		public String DateTStamp;
+		public Date DateTStamp;
 
 		/** Deep copy of object. */
 		public ErxLog Copy() {
@@ -31,7 +33,7 @@ public class ErxLog {
 			sb.append("<ErxLogNum>").append(ErxLogNum).append("</ErxLogNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<MsgText>").append(Serializing.EscapeForXml(MsgText)).append("</MsgText>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("</ErxLog>");
 			return sb.toString();
 		}
@@ -45,7 +47,7 @@ public class ErxLog {
 				ErxLogNum=Integer.valueOf(doc.getElementsByTagName("ErxLogNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				MsgText=doc.getElementsByTagName("MsgText").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class GroupPermission {
 		/** Primary key. */
 		public int GroupPermNum;
 		/** Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission. */
-		public String NewerDate;
+		public Date NewerDate;
 		/** Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today. */
 		public int NewerDays;
 		/** FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted. */
@@ -32,7 +34,7 @@ public class GroupPermission {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<GroupPermission>");
 			sb.append("<GroupPermNum>").append(GroupPermNum).append("</GroupPermNum>");
-			sb.append("<NewerDate>").append(Serializing.EscapeForXml(NewerDate)).append("</NewerDate>");
+			sb.append("<NewerDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</NewerDate>");
 			sb.append("<NewerDays>").append(NewerDays).append("</NewerDays>");
 			sb.append("<UserGroupNum>").append(UserGroupNum).append("</UserGroupNum>");
 			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");
@@ -47,7 +49,7 @@ public class GroupPermission {
 			try {
 				Document doc=XMLParser.parse(xml);
 				GroupPermNum=Integer.valueOf(doc.getElementsByTagName("GroupPermNum").item(0).getFirstChild().getNodeValue());
-				NewerDate=doc.getElementsByTagName("NewerDate").item(0).getFirstChild().getNodeValue();
+				NewerDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("NewerDate").item(0).getFirstChild().getNodeValue());
 				NewerDays=Integer.valueOf(doc.getElementsByTagName("NewerDays").item(0).getFirstChild().getNodeValue());
 				UserGroupNum=Integer.valueOf(doc.getElementsByTagName("UserGroupNum").item(0).getFirstChild().getNodeValue());
 				PermType=Permissions.values()[Integer.valueOf(doc.getElementsByTagName("PermType").item(0).getFirstChild().getNodeValue())];

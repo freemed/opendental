@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<GroupPermission>");
 			sb.Append("<GroupPermNum>").Append(grouppermission.GroupPermNum).Append("</GroupPermNum>");
-			sb.Append("<NewerDate>").Append(grouppermission.NewerDate.ToString()).Append("</NewerDate>");
+			sb.Append("<NewerDate>").Append(grouppermission.NewerDate.ToString("yyyyMMddHHmmss")).Append("</NewerDate>");
 			sb.Append("<NewerDays>").Append(grouppermission.NewerDays).Append("</NewerDays>");
 			sb.Append("<UserGroupNum>").Append(grouppermission.UserGroupNum).Append("</UserGroupNum>");
 			sb.Append("<PermType>").Append((int)grouppermission.PermType).Append("</PermType>");
@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 							grouppermission.GroupPermNum=reader.ReadContentAsLong();
 							break;
 						case "NewerDate":
-							grouppermission.NewerDate=DateTime.Parse(reader.ReadContentAsString());
+							grouppermission.NewerDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "NewerDays":
 							grouppermission.NewerDays=reader.ReadContentAsInt();

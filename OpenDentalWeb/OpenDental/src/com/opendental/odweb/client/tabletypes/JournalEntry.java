@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class JournalEntry {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class JournalEntry {
 		/** FK to account.AccountNum */
 		public int AccountNum;
 		/** Always the same for all journal entries within one transaction. */
-		public String DateDisplayed;
+		public Date DateDisplayed;
 		/** Negative numbers never allowed. */
 		public double DebitAmt;
 		/** Negative numbers never allowed. */
@@ -49,7 +51,7 @@ public class JournalEntry {
 			sb.append("<JournalEntryNum>").append(JournalEntryNum).append("</JournalEntryNum>");
 			sb.append("<TransactionNum>").append(TransactionNum).append("</TransactionNum>");
 			sb.append("<AccountNum>").append(AccountNum).append("</AccountNum>");
-			sb.append("<DateDisplayed>").append(Serializing.EscapeForXml(DateDisplayed)).append("</DateDisplayed>");
+			sb.append("<DateDisplayed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateDisplayed>");
 			sb.append("<DebitAmt>").append(DebitAmt).append("</DebitAmt>");
 			sb.append("<CreditAmt>").append(CreditAmt).append("</CreditAmt>");
 			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");
@@ -69,7 +71,7 @@ public class JournalEntry {
 				JournalEntryNum=Integer.valueOf(doc.getElementsByTagName("JournalEntryNum").item(0).getFirstChild().getNodeValue());
 				TransactionNum=Integer.valueOf(doc.getElementsByTagName("TransactionNum").item(0).getFirstChild().getNodeValue());
 				AccountNum=Integer.valueOf(doc.getElementsByTagName("AccountNum").item(0).getFirstChild().getNodeValue());
-				DateDisplayed=doc.getElementsByTagName("DateDisplayed").item(0).getFirstChild().getNodeValue();
+				DateDisplayed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateDisplayed").item(0).getFirstChild().getNodeValue());
 				DebitAmt=Double.valueOf(doc.getElementsByTagName("DebitAmt").item(0).getFirstChild().getNodeValue());
 				CreditAmt=Double.valueOf(doc.getElementsByTagName("CreditAmt").item(0).getFirstChild().getNodeValue());
 				Memo=doc.getElementsByTagName("Memo").item(0).getFirstChild().getNodeValue();

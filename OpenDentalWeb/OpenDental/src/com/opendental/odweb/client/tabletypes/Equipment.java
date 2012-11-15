@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Equipment {
 		/** Primary key. */
@@ -14,9 +16,9 @@ public class Equipment {
 		/** Limit 2 char. */
 		public String ModelYear;
 		/** Date when this corporation obtained the equipment.  Always has a valid value. */
-		public String DatePurchased;
+		public Date DatePurchased;
 		/** Normally 01-01-0001 if equipment still in possession.  Once sold, a date will be present. */
-		public String DateSold;
+		public Date DateSold;
 		/** . */
 		public double PurchaseCost;
 		/** . */
@@ -24,7 +26,7 @@ public class Equipment {
 		/** Freeform text. */
 		public String Location;
 		/** Security uses this date to lock older entries from accidental deletion.  Date, no time. */
-		public String DateEntry;
+		public Date DateEntry;
 
 		/** Deep copy of object. */
 		public Equipment Copy() {
@@ -50,12 +52,12 @@ public class Equipment {
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<SerialNumber>").append(Serializing.EscapeForXml(SerialNumber)).append("</SerialNumber>");
 			sb.append("<ModelYear>").append(Serializing.EscapeForXml(ModelYear)).append("</ModelYear>");
-			sb.append("<DatePurchased>").append(Serializing.EscapeForXml(DatePurchased)).append("</DatePurchased>");
-			sb.append("<DateSold>").append(Serializing.EscapeForXml(DateSold)).append("</DateSold>");
+			sb.append("<DatePurchased>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DatePurchased>");
+			sb.append("<DateSold>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSold>");
 			sb.append("<PurchaseCost>").append(PurchaseCost).append("</PurchaseCost>");
 			sb.append("<MarketValue>").append(MarketValue).append("</MarketValue>");
 			sb.append("<Location>").append(Serializing.EscapeForXml(Location)).append("</Location>");
-			sb.append("<DateEntry>").append(Serializing.EscapeForXml(DateEntry)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
 			sb.append("</Equipment>");
 			return sb.toString();
 		}
@@ -70,12 +72,12 @@ public class Equipment {
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
 				SerialNumber=doc.getElementsByTagName("SerialNumber").item(0).getFirstChild().getNodeValue();
 				ModelYear=doc.getElementsByTagName("ModelYear").item(0).getFirstChild().getNodeValue();
-				DatePurchased=doc.getElementsByTagName("DatePurchased").item(0).getFirstChild().getNodeValue();
-				DateSold=doc.getElementsByTagName("DateSold").item(0).getFirstChild().getNodeValue();
+				DatePurchased=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePurchased").item(0).getFirstChild().getNodeValue());
+				DateSold=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSold").item(0).getFirstChild().getNodeValue());
 				PurchaseCost=Double.valueOf(doc.getElementsByTagName("PurchaseCost").item(0).getFirstChild().getNodeValue());
 				MarketValue=Double.valueOf(doc.getElementsByTagName("MarketValue").item(0).getFirstChild().getNodeValue());
 				Location=doc.getElementsByTagName("Location").item(0).getFirstChild().getNodeValue();
-				DateEntry=doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue();
+				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

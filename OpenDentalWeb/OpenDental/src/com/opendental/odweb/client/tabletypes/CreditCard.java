@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class CreditCard {
 		/** Primary key. */
@@ -18,15 +20,15 @@ public class CreditCard {
 		/** Credit Card Number.  Will be stored masked: XXXXXXXXXXXX1234. */
 		public String CCNumberMasked;
 		/** Only month and year are used, the day will usually be 1. */
-		public String CCExpiration;
+		public Date CCExpiration;
 		/** The order that multiple cards will show.  Zero-based.  First one will be default. */
 		public int ItemOrder;
 		/** Amount set for recurring charges. */
 		public double ChargeAmt;
 		/** Start date for recurring charges. */
-		public String DateStart;
+		public Date DateStart;
 		/** Stop date for recurring charges. */
-		public String DateStop;
+		public Date DateStop;
 		/** Any notes about the credit card or account goes here. */
 		public String Note;
 		/** FK to payplan.PayPlanNum. */
@@ -61,11 +63,11 @@ public class CreditCard {
 			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
 			sb.append("<XChargeToken>").append(Serializing.EscapeForXml(XChargeToken)).append("</XChargeToken>");
 			sb.append("<CCNumberMasked>").append(Serializing.EscapeForXml(CCNumberMasked)).append("</CCNumberMasked>");
-			sb.append("<CCExpiration>").append(Serializing.EscapeForXml(CCExpiration)).append("</CCExpiration>");
+			sb.append("<CCExpiration>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CCExpiration>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<ChargeAmt>").append(ChargeAmt).append("</ChargeAmt>");
-			sb.append("<DateStart>").append(Serializing.EscapeForXml(DateStart)).append("</DateStart>");
-			sb.append("<DateStop>").append(Serializing.EscapeForXml(DateStop)).append("</DateStop>");
+			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStart>");
+			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStop>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<PayPlanNum>").append(PayPlanNum).append("</PayPlanNum>");
 			sb.append("</CreditCard>");
@@ -84,11 +86,11 @@ public class CreditCard {
 				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
 				XChargeToken=doc.getElementsByTagName("XChargeToken").item(0).getFirstChild().getNodeValue();
 				CCNumberMasked=doc.getElementsByTagName("CCNumberMasked").item(0).getFirstChild().getNodeValue();
-				CCExpiration=doc.getElementsByTagName("CCExpiration").item(0).getFirstChild().getNodeValue();
+				CCExpiration=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CCExpiration").item(0).getFirstChild().getNodeValue());
 				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
 				ChargeAmt=Double.valueOf(doc.getElementsByTagName("ChargeAmt").item(0).getFirstChild().getNodeValue());
-				DateStart=doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue();
-				DateStop=doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue();
+				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
+				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
 			}

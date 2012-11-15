@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<DashboardAR>");
 			sb.Append("<DashboardARNum>").Append(dashboardar.DashboardARNum).Append("</DashboardARNum>");
-			sb.Append("<DateCalc>").Append(dashboardar.DateCalc.ToString()).Append("</DateCalc>");
+			sb.Append("<DateCalc>").Append(dashboardar.DateCalc.ToString("yyyyMMddHHmmss")).Append("</DateCalc>");
 			sb.Append("<BalTotal>").Append(dashboardar.BalTotal).Append("</BalTotal>");
 			sb.Append("<InsEst>").Append(dashboardar.InsEst).Append("</InsEst>");
 			sb.Append("</DashboardAR>");
@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 							dashboardar.DashboardARNum=reader.ReadContentAsLong();
 							break;
 						case "DateCalc":
-							dashboardar.DateCalc=DateTime.Parse(reader.ReadContentAsString());
+							dashboardar.DateCalc=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "BalTotal":
 							dashboardar.BalTotal=reader.ReadContentAsDouble();

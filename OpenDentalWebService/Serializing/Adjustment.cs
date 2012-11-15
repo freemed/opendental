@@ -13,15 +13,15 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Adjustment>");
 			sb.Append("<AdjNum>").Append(adjustment.AdjNum).Append("</AdjNum>");
-			sb.Append("<AdjDate>").Append(adjustment.AdjDate.ToString()).Append("</AdjDate>");
+			sb.Append("<AdjDate>").Append(adjustment.AdjDate.ToString("yyyyMMddHHmmss")).Append("</AdjDate>");
 			sb.Append("<AdjAmt>").Append(adjustment.AdjAmt).Append("</AdjAmt>");
 			sb.Append("<PatNum>").Append(adjustment.PatNum).Append("</PatNum>");
 			sb.Append("<AdjType>").Append(adjustment.AdjType).Append("</AdjType>");
 			sb.Append("<ProvNum>").Append(adjustment.ProvNum).Append("</ProvNum>");
 			sb.Append("<AdjNote>").Append(SerializeStringEscapes.EscapeForXml(adjustment.AdjNote)).Append("</AdjNote>");
-			sb.Append("<ProcDate>").Append(adjustment.ProcDate.ToString()).Append("</ProcDate>");
+			sb.Append("<ProcDate>").Append(adjustment.ProcDate.ToString("yyyyMMddHHmmss")).Append("</ProcDate>");
 			sb.Append("<ProcNum>").Append(adjustment.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateEntry>").Append(adjustment.DateEntry.ToString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(adjustment.DateEntry.ToString("yyyyMMddHHmmss")).Append("</DateEntry>");
 			sb.Append("<ClinicNum>").Append(adjustment.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<StatementNum>").Append(adjustment.StatementNum).Append("</StatementNum>");
 			sb.Append("</Adjustment>");
@@ -43,7 +43,7 @@ namespace OpenDentalWebService {
 							adjustment.AdjNum=reader.ReadContentAsLong();
 							break;
 						case "AdjDate":
-							adjustment.AdjDate=DateTime.Parse(reader.ReadContentAsString());
+							adjustment.AdjDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AdjAmt":
 							adjustment.AdjAmt=reader.ReadContentAsDouble();
@@ -61,13 +61,13 @@ namespace OpenDentalWebService {
 							adjustment.AdjNote=reader.ReadContentAsString();
 							break;
 						case "ProcDate":
-							adjustment.ProcDate=DateTime.Parse(reader.ReadContentAsString());
+							adjustment.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcNum":
 							adjustment.ProcNum=reader.ReadContentAsLong();
 							break;
 						case "DateEntry":
-							adjustment.DateEntry=DateTime.Parse(reader.ReadContentAsString());
+							adjustment.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClinicNum":
 							adjustment.ClinicNum=reader.ReadContentAsLong();

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Payment {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class Payment {
 		/** FK to definition.DefNum.  This will be 0 if this is an income transfer to another provider. */
 		public int PayType;
 		/** The date that the payment displays on the patient account. */
-		public String PayDate;
+		public Date PayDate;
 		/** Amount of the payment.  Must equal the sum of the splits. */
 		public double PayAmt;
 		/** Check number is optional. */
@@ -26,7 +28,7 @@ public class Payment {
 		/** FK to clinic.ClinicNum.  Can be 0. Copied from patient.ClinicNum when creating payment, but user can override.  Not used in provider income transfers.  Cannot be used in financial reporting when grouping by clinic, because payments may be split between clinics. */
 		public int ClinicNum;
 		/** The date that this payment was entered.  Not user editable. */
-		public String DateEntry;
+		public Date DateEntry;
 		/** FK to deposit.DepositNum.  0 if not attached to any deposits.  Cash does not usually get attached to a deposit; only checks. */
 		public int DepositNum;
 		/** Text of printed receipt if the payment was done electronically. Allows reprinting if needed. Only used for PayConnect at the moment, but plans to use for XCharge as well. */
@@ -60,7 +62,7 @@ public class Payment {
 			sb.append("<Payment>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");
 			sb.append("<PayType>").append(PayType).append("</PayType>");
-			sb.append("<PayDate>").append(Serializing.EscapeForXml(PayDate)).append("</PayDate>");
+			sb.append("<PayDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</PayDate>");
 			sb.append("<PayAmt>").append(PayAmt).append("</PayAmt>");
 			sb.append("<CheckNum>").append(Serializing.EscapeForXml(CheckNum)).append("</CheckNum>");
 			sb.append("<BankBranch>").append(Serializing.EscapeForXml(BankBranch)).append("</BankBranch>");
@@ -68,7 +70,7 @@ public class Payment {
 			sb.append("<IsSplit>").append((IsSplit)?1:0).append("</IsSplit>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
-			sb.append("<DateEntry>").append(Serializing.EscapeForXml(DateEntry)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<Receipt>").append(Serializing.EscapeForXml(Receipt)).append("</Receipt>");
 			sb.append("<IsRecurringCC>").append((IsRecurringCC)?1:0).append("</IsRecurringCC>");
@@ -84,7 +86,7 @@ public class Payment {
 				Document doc=XMLParser.parse(xml);
 				PayNum=Integer.valueOf(doc.getElementsByTagName("PayNum").item(0).getFirstChild().getNodeValue());
 				PayType=Integer.valueOf(doc.getElementsByTagName("PayType").item(0).getFirstChild().getNodeValue());
-				PayDate=doc.getElementsByTagName("PayDate").item(0).getFirstChild().getNodeValue();
+				PayDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("PayDate").item(0).getFirstChild().getNodeValue());
 				PayAmt=Double.valueOf(doc.getElementsByTagName("PayAmt").item(0).getFirstChild().getNodeValue());
 				CheckNum=doc.getElementsByTagName("CheckNum").item(0).getFirstChild().getNodeValue();
 				BankBranch=doc.getElementsByTagName("BankBranch").item(0).getFirstChild().getNodeValue();
@@ -92,7 +94,7 @@ public class Payment {
 				IsSplit=(doc.getElementsByTagName("IsSplit").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				DateEntry=doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue();
+				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
 				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
 				Receipt=doc.getElementsByTagName("Receipt").item(0).getFirstChild().getNodeValue();
 				IsRecurringCC=(doc.getElementsByTagName("IsRecurringCC").item(0).getFirstChild().getNodeValue()=="0")?false:true;

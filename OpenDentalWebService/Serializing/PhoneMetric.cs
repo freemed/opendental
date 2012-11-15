@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<PhoneMetric>");
 			sb.Append("<PhoneMetricNum>").Append(phonemetric.PhoneMetricNum).Append("</PhoneMetricNum>");
-			sb.Append("<DateTimeEntry>").Append(phonemetric.DateTimeEntry.ToString()).Append("</DateTimeEntry>");
+			sb.Append("<DateTimeEntry>").Append(phonemetric.DateTimeEntry.ToString("yyyyMMddHHmmss")).Append("</DateTimeEntry>");
 			sb.Append("<VoiceMails>").Append(phonemetric.VoiceMails).Append("</VoiceMails>");
 			sb.Append("<Triages>").Append(phonemetric.Triages).Append("</Triages>");
 			sb.Append("<MinutesBehind>").Append(phonemetric.MinutesBehind).Append("</MinutesBehind>");
@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 							phonemetric.PhoneMetricNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeEntry":
-							phonemetric.DateTimeEntry=DateTime.Parse(reader.ReadContentAsString());
+							phonemetric.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "VoiceMails":
 							phonemetric.VoiceMails=reader.ReadContentAsInt();

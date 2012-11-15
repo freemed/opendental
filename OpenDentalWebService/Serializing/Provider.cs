@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SchoolClassNum>").Append(provider.SchoolClassNum).Append("</SchoolClassNum>");
 			sb.Append("<NationalProvID>").Append(SerializeStringEscapes.EscapeForXml(provider.NationalProvID)).Append("</NationalProvID>");
 			sb.Append("<CanadianOfficeNum>").Append(SerializeStringEscapes.EscapeForXml(provider.CanadianOfficeNum)).Append("</CanadianOfficeNum>");
-			sb.Append("<DateTStamp>").Append(provider.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(provider.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<AnesthProvType>").Append(provider.AnesthProvType).Append("</AnesthProvType>");
 			sb.Append("<TaxonomyCodeOverride>").Append(SerializeStringEscapes.EscapeForXml(provider.TaxonomyCodeOverride)).Append("</TaxonomyCodeOverride>");
 			sb.Append("<IsCDAnet>").Append((provider.IsCDAnet)?1:0).Append("</IsCDAnet>");
@@ -130,7 +130,7 @@ namespace OpenDentalWebService {
 							provider.CanadianOfficeNum=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							provider.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							provider.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AnesthProvType":
 							provider.AnesthProvType=reader.ReadContentAsLong();

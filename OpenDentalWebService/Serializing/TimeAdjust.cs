@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<TimeAdjust>");
 			sb.Append("<TimeAdjustNum>").Append(timeadjust.TimeAdjustNum).Append("</TimeAdjustNum>");
 			sb.Append("<EmployeeNum>").Append(timeadjust.EmployeeNum).Append("</EmployeeNum>");
-			sb.Append("<TimeEntry>").Append(timeadjust.TimeEntry.ToString()).Append("</TimeEntry>");
+			sb.Append("<TimeEntry>").Append(timeadjust.TimeEntry.ToString("yyyyMMddHHmmss")).Append("</TimeEntry>");
 			sb.Append("<RegHours>").Append(timeadjust.RegHours.ToString()).Append("</RegHours>");
 			sb.Append("<OTimeHours>").Append(timeadjust.OTimeHours.ToString()).Append("</OTimeHours>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(timeadjust.Note)).Append("</Note>");
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							timeadjust.EmployeeNum=reader.ReadContentAsLong();
 							break;
 						case "TimeEntry":
-							timeadjust.TimeEntry=DateTime.Parse(reader.ReadContentAsString());
+							timeadjust.TimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RegHours":
 							timeadjust.RegHours=TimeSpan.Parse(reader.ReadContentAsString());

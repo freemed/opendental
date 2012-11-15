@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<Etrans>");
 			sb.Append("<EtransNum>").Append(etrans.EtransNum).Append("</EtransNum>");
-			sb.Append("<DateTimeTrans>").Append(etrans.DateTimeTrans.ToString()).Append("</DateTimeTrans>");
+			sb.Append("<DateTimeTrans>").Append(etrans.DateTimeTrans.ToString("yyyyMMddHHmmss")).Append("</DateTimeTrans>");
 			sb.Append("<ClearingHouseNum>").Append(etrans.ClearingHouseNum).Append("</ClearingHouseNum>");
 			sb.Append("<Etype>").Append((int)etrans.Etype).Append("</Etype>");
 			sb.Append("<ClaimNum>").Append(etrans.ClaimNum).Append("</ClaimNum>");
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							etrans.EtransNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeTrans":
-							etrans.DateTimeTrans=DateTime.Parse(reader.ReadContentAsString());
+							etrans.DateTimeTrans=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClearingHouseNum":
 							etrans.ClearingHouseNum=reader.ReadContentAsLong();

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class SecurityLog {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class SecurityLog {
 		/** FK to user.UserNum */
 		public int UserNum;
 		/** The date and time of the entry.  It's value is set when inserting and can never change.  Even if a user changes the date on their ocmputer, this remains accurate because it uses server time. */
-		public String LogDateTime;
+		public Date LogDateTime;
 		/** The description of exactly what was done. Varies by permission type. */
 		public String LogText;
 		/** FK to patient.PatNum.  Can be 0 if not applicable. */
@@ -43,7 +45,7 @@ public class SecurityLog {
 			sb.append("<SecurityLogNum>").append(SecurityLogNum).append("</SecurityLogNum>");
 			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<LogDateTime>").append(Serializing.EscapeForXml(LogDateTime)).append("</LogDateTime>");
+			sb.append("<LogDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</LogDateTime>");
 			sb.append("<LogText>").append(Serializing.EscapeForXml(LogText)).append("</LogText>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<CompName>").append(Serializing.EscapeForXml(CompName)).append("</CompName>");
@@ -61,7 +63,7 @@ public class SecurityLog {
 				SecurityLogNum=Integer.valueOf(doc.getElementsByTagName("SecurityLogNum").item(0).getFirstChild().getNodeValue());
 				PermType=Permissions.values()[Integer.valueOf(doc.getElementsByTagName("PermType").item(0).getFirstChild().getNodeValue())];
 				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				LogDateTime=doc.getElementsByTagName("LogDateTime").item(0).getFirstChild().getNodeValue();
+				LogDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("LogDateTime").item(0).getFirstChild().getNodeValue());
 				LogText=doc.getElementsByTagName("LogText").item(0).getFirstChild().getNodeValue();
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				CompName=doc.getElementsByTagName("CompName").item(0).getFirstChild().getNodeValue();

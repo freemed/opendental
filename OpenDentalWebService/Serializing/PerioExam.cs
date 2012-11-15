@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PerioExam>");
 			sb.Append("<PerioExamNum>").Append(perioexam.PerioExamNum).Append("</PerioExamNum>");
 			sb.Append("<PatNum>").Append(perioexam.PatNum).Append("</PatNum>");
-			sb.Append("<ExamDate>").Append(perioexam.ExamDate.ToString()).Append("</ExamDate>");
+			sb.Append("<ExamDate>").Append(perioexam.ExamDate.ToString("yyyyMMddHHmmss")).Append("</ExamDate>");
 			sb.Append("<ProvNum>").Append(perioexam.ProvNum).Append("</ProvNum>");
 			sb.Append("</PerioExam>");
 			return sb.ToString();
@@ -38,7 +38,7 @@ namespace OpenDentalWebService {
 							perioexam.PatNum=reader.ReadContentAsLong();
 							break;
 						case "ExamDate":
-							perioexam.ExamDate=DateTime.Parse(reader.ReadContentAsString());
+							perioexam.ExamDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
 							perioexam.ProvNum=reader.ReadContentAsLong();

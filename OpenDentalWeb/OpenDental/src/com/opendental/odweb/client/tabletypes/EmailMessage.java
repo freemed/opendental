@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class EmailMessage {
 		/** Primary key. */
@@ -18,7 +20,7 @@ public class EmailMessage {
 		/** Body of the email */
 		public String BodyText;
 		/** Date and time the message was sent. Automated at the UI level. */
-		public String MsgDateTime;
+		public Date MsgDateTime;
 		/** 0=neither, 1=sent, 2=received. */
 		public CommSentOrReceived SentOrReceived;
 
@@ -46,7 +48,7 @@ public class EmailMessage {
 			sb.append("<FromAddress>").append(Serializing.EscapeForXml(FromAddress)).append("</FromAddress>");
 			sb.append("<Subject>").append(Serializing.EscapeForXml(Subject)).append("</Subject>");
 			sb.append("<BodyText>").append(Serializing.EscapeForXml(BodyText)).append("</BodyText>");
-			sb.append("<MsgDateTime>").append(Serializing.EscapeForXml(MsgDateTime)).append("</MsgDateTime>");
+			sb.append("<MsgDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</MsgDateTime>");
 			sb.append("<SentOrReceived>").append(SentOrReceived.ordinal()).append("</SentOrReceived>");
 			sb.append("</EmailMessage>");
 			return sb.toString();
@@ -64,7 +66,7 @@ public class EmailMessage {
 				FromAddress=doc.getElementsByTagName("FromAddress").item(0).getFirstChild().getNodeValue();
 				Subject=doc.getElementsByTagName("Subject").item(0).getFirstChild().getNodeValue();
 				BodyText=doc.getElementsByTagName("BodyText").item(0).getFirstChild().getNodeValue();
-				MsgDateTime=doc.getElementsByTagName("MsgDateTime").item(0).getFirstChild().getNodeValue();
+				MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("MsgDateTime").item(0).getFirstChild().getNodeValue());
 				SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(doc.getElementsByTagName("SentOrReceived").item(0).getFirstChild().getNodeValue())];
 			}
 			catch(Exception e) {

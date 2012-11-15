@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Statement {
 		/** Primary key. */
@@ -10,11 +12,11 @@ public class Statement {
 		/** FK to patient.PatNum. Typically the guarantor.  Can also be the patient for walkout statements. */
 		public int PatNum;
 		/** This will always be a valid and reasonable date regardless of whether it's actually been sent yet. */
-		public String DateSent;
+		public Date DateSent;
 		/** Typically 45 days before dateSent */
-		public String DateRangeFrom;
+		public Date DateRangeFrom;
 		/** Any date >= year 2200 is considered max val.  We generally try to automate this value to be the same date as the statement rather than the max val.  This is so that when payment plans are displayed, we can add approximately 10 days to effectively show the charge that will soon be due.  Adding the 10 days is not done until display time. */
-		public String DateRangeTo;
+		public Date DateRangeTo;
 		/** Can include line breaks.  This ordinary note will be in the standard font. */
 		public String Note;
 		/** More important notes may go here.  Font will be bold.  Color and size of text will be customizable in setup. */
@@ -32,7 +34,7 @@ public class Statement {
 		/** FK to document.DocNum when a pdf has been archived. */
 		public int DocNum;
 		/** Date/time last altered. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** The only effect of this flag is to change the text at the top of a statement from "statement" to "receipt".  It might later do more. */
 		public boolean IsReceipt;
 		/** This flag is for marking a statement as Invoice.  In this case, it must have procedures and/or adjustments attached. */
@@ -69,9 +71,9 @@ public class Statement {
 			sb.append("<Statement>");
 			sb.append("<StatementNum>").append(StatementNum).append("</StatementNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateSent>").append(Serializing.EscapeForXml(DateSent)).append("</DateSent>");
-			sb.append("<DateRangeFrom>").append(Serializing.EscapeForXml(DateRangeFrom)).append("</DateRangeFrom>");
-			sb.append("<DateRangeTo>").append(Serializing.EscapeForXml(DateRangeTo)).append("</DateRangeTo>");
+			sb.append("<DateSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSent>");
+			sb.append("<DateRangeFrom>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateRangeFrom>");
+			sb.append("<DateRangeTo>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateRangeTo>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<NoteBold>").append(Serializing.EscapeForXml(NoteBold)).append("</NoteBold>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
@@ -80,7 +82,7 @@ public class Statement {
 			sb.append("<Intermingled>").append((Intermingled)?1:0).append("</Intermingled>");
 			sb.append("<IsSent>").append((IsSent)?1:0).append("</IsSent>");
 			sb.append("<DocNum>").append(DocNum).append("</DocNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<IsReceipt>").append((IsReceipt)?1:0).append("</IsReceipt>");
 			sb.append("<IsInvoice>").append((IsInvoice)?1:0).append("</IsInvoice>");
 			sb.append("<IsInvoiceCopy>").append((IsInvoiceCopy)?1:0).append("</IsInvoiceCopy>");
@@ -96,9 +98,9 @@ public class Statement {
 				Document doc=XMLParser.parse(xml);
 				StatementNum=Integer.valueOf(doc.getElementsByTagName("StatementNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateSent=doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue();
-				DateRangeFrom=doc.getElementsByTagName("DateRangeFrom").item(0).getFirstChild().getNodeValue();
-				DateRangeTo=doc.getElementsByTagName("DateRangeTo").item(0).getFirstChild().getNodeValue();
+				DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue());
+				DateRangeFrom=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateRangeFrom").item(0).getFirstChild().getNodeValue());
+				DateRangeTo=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateRangeTo").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				NoteBold=doc.getElementsByTagName("NoteBold").item(0).getFirstChild().getNodeValue();
 				Mode_=StatementMode.values()[Integer.valueOf(doc.getElementsByTagName("Mode_").item(0).getFirstChild().getNodeValue())];
@@ -107,7 +109,7 @@ public class Statement {
 				Intermingled=(doc.getElementsByTagName("Intermingled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				IsSent=(doc.getElementsByTagName("IsSent").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				DocNum=Integer.valueOf(doc.getElementsByTagName("DocNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				IsReceipt=(doc.getElementsByTagName("IsReceipt").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				IsInvoice=(doc.getElementsByTagName("IsInvoice").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				IsInvoiceCopy=(doc.getElementsByTagName("IsInvoiceCopy").item(0).getFirstChild().getNodeValue()=="0")?false:true;

@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class VaccinePat {
 		/** Primary key. */
@@ -10,9 +12,9 @@ public class VaccinePat {
 		/** FK to vaccinedef.VaccineDefNum. */
 		public int VaccineDefNum;
 		/** The datetime that the vaccine was administered. */
-		public String DateTimeStart;
+		public Date DateTimeStart;
 		/** Typically set to the same as DateTimeStart.  User can change. */
-		public String DateTimeEnd;
+		public Date DateTimeEnd;
 		/** Size of the dose of the vaccine.  0 indicates unknown and gets converted to 999 on HL7 output. */
 		public float AdministeredAmt;
 		/** FK to drugunit.DrugUnitNum. Unit of measurement of the AdministeredAmt.  0 represents null. */
@@ -48,8 +50,8 @@ public class VaccinePat {
 			sb.append("<VaccinePat>");
 			sb.append("<VaccinePatNum>").append(VaccinePatNum).append("</VaccinePatNum>");
 			sb.append("<VaccineDefNum>").append(VaccineDefNum).append("</VaccineDefNum>");
-			sb.append("<DateTimeStart>").append(Serializing.EscapeForXml(DateTimeStart)).append("</DateTimeStart>");
-			sb.append("<DateTimeEnd>").append(Serializing.EscapeForXml(DateTimeEnd)).append("</DateTimeEnd>");
+			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeStart>");
+			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEnd>");
 			sb.append("<AdministeredAmt>").append(AdministeredAmt).append("</AdministeredAmt>");
 			sb.append("<DrugUnitNum>").append(DrugUnitNum).append("</DrugUnitNum>");
 			sb.append("<LotNumber>").append(Serializing.EscapeForXml(LotNumber)).append("</LotNumber>");
@@ -68,8 +70,8 @@ public class VaccinePat {
 				Document doc=XMLParser.parse(xml);
 				VaccinePatNum=Integer.valueOf(doc.getElementsByTagName("VaccinePatNum").item(0).getFirstChild().getNodeValue());
 				VaccineDefNum=Integer.valueOf(doc.getElementsByTagName("VaccineDefNum").item(0).getFirstChild().getNodeValue());
-				DateTimeStart=doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue();
-				DateTimeEnd=doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue();
+				DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue());
+				DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue());
 				AdministeredAmt=Float.valueOf(doc.getElementsByTagName("AdministeredAmt").item(0).getFirstChild().getNodeValue());
 				DrugUnitNum=Integer.valueOf(doc.getElementsByTagName("DrugUnitNum").item(0).getFirstChild().getNodeValue());
 				LotNumber=doc.getElementsByTagName("LotNumber").item(0).getFirstChild().getNodeValue();

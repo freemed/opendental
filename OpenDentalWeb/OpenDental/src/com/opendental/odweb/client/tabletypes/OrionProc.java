@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class OrionProc {
 		/** Primary key. */
@@ -14,9 +16,9 @@ public class OrionProc {
 		/** Enum:OrionDPC None=0,1A=1,1B=2,1C=3,2=4,3=5,4=6,5=7 */
 		public OrionDPC DPCpost;
 		/** System adds days to the diagnosis date based upon the DPC entered for that procedure. If DPC = none the system will return “No Schedule by Date”.  */
-		public String DateScheduleBy;
+		public Date DateScheduleBy;
 		/**  Default to current date.  Provider shall have to ability to edit with a previous date, but not a future date. */
-		public String DateStopClock;
+		public Date DateStopClock;
 		/** Enum:OrionStatus None=0,TP=1,C=2,E=4,R=8,RO=16,CS=32,CR=64,CA-Tx=128,CA-ERPD=256,CA-P/D=512,S=1024,ST=2048,W=4096,A=8192 */
 		public OrionStatus Status2;
 		/** . */
@@ -50,8 +52,8 @@ public class OrionProc {
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
 			sb.append("<DPC>").append(DPC.ordinal()).append("</DPC>");
 			sb.append("<DPCpost>").append(DPCpost.ordinal()).append("</DPCpost>");
-			sb.append("<DateScheduleBy>").append(Serializing.EscapeForXml(DateScheduleBy)).append("</DateScheduleBy>");
-			sb.append("<DateStopClock>").append(Serializing.EscapeForXml(DateStopClock)).append("</DateStopClock>");
+			sb.append("<DateScheduleBy>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateScheduleBy>");
+			sb.append("<DateStopClock>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateStopClock>");
 			sb.append("<Status2>").append(Status2.ordinal()).append("</Status2>");
 			sb.append("<IsOnCall>").append((IsOnCall)?1:0).append("</IsOnCall>");
 			sb.append("<IsEffectiveComm>").append((IsEffectiveComm)?1:0).append("</IsEffectiveComm>");
@@ -70,8 +72,8 @@ public class OrionProc {
 				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
 				DPC=OrionDPC.values()[Integer.valueOf(doc.getElementsByTagName("DPC").item(0).getFirstChild().getNodeValue())];
 				DPCpost=OrionDPC.values()[Integer.valueOf(doc.getElementsByTagName("DPCpost").item(0).getFirstChild().getNodeValue())];
-				DateScheduleBy=doc.getElementsByTagName("DateScheduleBy").item(0).getFirstChild().getNodeValue();
-				DateStopClock=doc.getElementsByTagName("DateStopClock").item(0).getFirstChild().getNodeValue();
+				DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateScheduleBy").item(0).getFirstChild().getNodeValue());
+				DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStopClock").item(0).getFirstChild().getNodeValue());
 				Status2=OrionStatus.values()[Integer.valueOf(doc.getElementsByTagName("Status2").item(0).getFirstChild().getNodeValue())];
 				IsOnCall=(doc.getElementsByTagName("IsOnCall").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				IsEffectiveComm=(doc.getElementsByTagName("IsEffectiveComm").item(0).getFirstChild().getNodeValue()=="0")?false:true;

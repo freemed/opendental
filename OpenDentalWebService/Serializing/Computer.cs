@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Computer>");
 			sb.Append("<ComputerNum>").Append(computer.ComputerNum).Append("</ComputerNum>");
 			sb.Append("<CompName>").Append(SerializeStringEscapes.EscapeForXml(computer.CompName)).Append("</CompName>");
-			sb.Append("<LastHeartBeat>").Append(computer.LastHeartBeat.ToString()).Append("</LastHeartBeat>");
+			sb.Append("<LastHeartBeat>").Append(computer.LastHeartBeat.ToString("yyyyMMddHHmmss")).Append("</LastHeartBeat>");
 			sb.Append("</Computer>");
 			return sb.ToString();
 		}
@@ -37,7 +37,7 @@ namespace OpenDentalWebService {
 							computer.CompName=reader.ReadContentAsString();
 							break;
 						case "LastHeartBeat":
-							computer.LastHeartBeat=DateTime.Parse(reader.ReadContentAsString());
+							computer.LastHeartBeat=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

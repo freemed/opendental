@@ -16,9 +16,9 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(medicationpat.PatNum).Append("</PatNum>");
 			sb.Append("<MedicationNum>").Append(medicationpat.MedicationNum).Append("</MedicationNum>");
 			sb.Append("<PatNote>").Append(SerializeStringEscapes.EscapeForXml(medicationpat.PatNote)).Append("</PatNote>");
-			sb.Append("<DateTStamp>").Append(medicationpat.DateTStamp.ToString()).Append("</DateTStamp>");
-			sb.Append("<DateStart>").Append(medicationpat.DateStart.ToString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(medicationpat.DateStop.ToString()).Append("</DateStop>");
+			sb.Append("<DateTStamp>").Append(medicationpat.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
+			sb.Append("<DateStart>").Append(medicationpat.DateStart.ToString("yyyyMMddHHmmss")).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(medicationpat.DateStop.ToString("yyyyMMddHHmmss")).Append("</DateStop>");
 			sb.Append("<ProvNum>").Append(medicationpat.ProvNum).Append("</ProvNum>");
 			sb.Append("</MedicationPat>");
 			return sb.ToString();
@@ -48,13 +48,13 @@ namespace OpenDentalWebService {
 							medicationpat.PatNote=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							medicationpat.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							medicationpat.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStart":
-							medicationpat.DateStart=DateTime.Parse(reader.ReadContentAsString());
+							medicationpat.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStop":
-							medicationpat.DateStop=DateTime.Parse(reader.ReadContentAsString());
+							medicationpat.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
 							medicationpat.ProvNum=reader.ReadContentAsLong();

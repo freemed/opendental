@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class EhrSummaryCcd {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class EhrSummaryCcd {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** Date that this Ccd was received. */
-		public String DateSummary;
+		public Date DateSummary;
 		/** The xml content of the received text file. */
 		public String ContentSummary;
 
@@ -30,7 +32,7 @@ public class EhrSummaryCcd {
 			sb.append("<EhrSummaryCcd>");
 			sb.append("<EhrSummaryCcdNum>").append(EhrSummaryCcdNum).append("</EhrSummaryCcdNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateSummary>").append(Serializing.EscapeForXml(DateSummary)).append("</DateSummary>");
+			sb.append("<DateSummary>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateSummary>");
 			sb.append("<ContentSummary>").append(Serializing.EscapeForXml(ContentSummary)).append("</ContentSummary>");
 			sb.append("</EhrSummaryCcd>");
 			return sb.toString();
@@ -44,7 +46,7 @@ public class EhrSummaryCcd {
 				Document doc=XMLParser.parse(xml);
 				EhrSummaryCcdNum=Integer.valueOf(doc.getElementsByTagName("EhrSummaryCcdNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateSummary=doc.getElementsByTagName("DateSummary").item(0).getFirstChild().getNodeValue();
+				DateSummary=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSummary").item(0).getFirstChild().getNodeValue());
 				ContentSummary=doc.getElementsByTagName("ContentSummary").item(0).getFirstChild().getNodeValue();
 			}
 			catch(Exception e) {

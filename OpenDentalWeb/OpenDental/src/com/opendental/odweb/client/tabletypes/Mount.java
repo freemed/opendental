@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Mount {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class Mount {
 		/** FK to definition.DefNum. Categories for documents. */
 		public int DocCategory;
 		/** The date at which the mount itself was created. Has no bearing on the creation date of the images the mount houses. */
-		public String DateCreated;
+		public Date DateCreated;
 		/** Used to provide a document description in the image module tree-view. */
 		public String Description;
 		/** To allow the user to enter specific information regarding the exam and tooth numbers, as well as points on interest in the xray images. */
@@ -46,7 +48,7 @@ public class Mount {
 			sb.append("<MountNum>").append(MountNum).append("</MountNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
-			sb.append("<DateCreated>").append(Serializing.EscapeForXml(DateCreated)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<ImgType>").append(ImgType.ordinal()).append("</ImgType>");
@@ -65,7 +67,7 @@ public class Mount {
 				MountNum=Integer.valueOf(doc.getElementsByTagName("MountNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				DocCategory=Integer.valueOf(doc.getElementsByTagName("DocCategory").item(0).getFirstChild().getNodeValue());
-				DateCreated=doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue();
+				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				ImgType=ImageType.values()[Integer.valueOf(doc.getElementsByTagName("ImgType").item(0).getFirstChild().getNodeValue())];

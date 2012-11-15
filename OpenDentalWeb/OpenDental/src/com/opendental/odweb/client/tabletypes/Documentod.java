@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Documentod {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class Documentod {
 		/** Description of the document. */
 		public String Description;
 		/** Date created. */
-		public String DateCreated;
+		public Date DateCreated;
 		/** FK to definition.DefNum. Categories for documents. */
 		public int DocCategory;
 		/** FK to patient.PatNum.  The document will be located in the patient folder of this patient. */
@@ -46,7 +48,7 @@ public class Documentod {
 		/** FK to mountitem.MountItemNum. If set, then this image will only show on a mount, not in the main tree. If set to 0, then no mount item is associated with this document. */
 		public int MountItemNum;
 		/** Date/time last altered. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** The raw file data encoded as base64.  Only used if there is no AtoZ folder. */
 		public String RawBase64;
 		/** Thumbnail encoded as base64.  Only present if not using AtoZ folder. 100x100 pixels, jpg, takes around 5.5k. */
@@ -87,7 +89,7 @@ public class Documentod {
 			sb.append("<Documentod>");
 			sb.append("<DocNum>").append(DocNum).append("</DocNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<DateCreated>").append(Serializing.EscapeForXml(DateCreated)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
@@ -105,7 +107,7 @@ public class Documentod {
 			sb.append("<WindowingMin>").append(WindowingMin).append("</WindowingMin>");
 			sb.append("<WindowingMax>").append(WindowingMax).append("</WindowingMax>");
 			sb.append("<MountItemNum>").append(MountItemNum).append("</MountItemNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
 			sb.append("<Thumbnail>").append(Serializing.EscapeForXml(Thumbnail)).append("</Thumbnail>");
 			sb.append("</Documentod>");
@@ -120,7 +122,7 @@ public class Documentod {
 				Document doc=XMLParser.parse(xml);
 				DocNum=Integer.valueOf(doc.getElementsByTagName("DocNum").item(0).getFirstChild().getNodeValue());
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DateCreated=doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue();
+				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
 				DocCategory=Integer.valueOf(doc.getElementsByTagName("DocCategory").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
@@ -138,7 +140,7 @@ public class Documentod {
 				WindowingMin=Integer.valueOf(doc.getElementsByTagName("WindowingMin").item(0).getFirstChild().getNodeValue());
 				WindowingMax=Integer.valueOf(doc.getElementsByTagName("WindowingMax").item(0).getFirstChild().getNodeValue());
 				MountItemNum=Integer.valueOf(doc.getElementsByTagName("MountItemNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				RawBase64=doc.getElementsByTagName("RawBase64").item(0).getFirstChild().getNodeValue();
 				Thumbnail=doc.getElementsByTagName("Thumbnail").item(0).getFirstChild().getNodeValue();
 			}

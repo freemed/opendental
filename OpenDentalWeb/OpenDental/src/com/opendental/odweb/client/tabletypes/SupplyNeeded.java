@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class SupplyNeeded {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class SupplyNeeded {
 		/** . */
 		public String Description;
 		/** . */
-		public String DateAdded;
+		public Date DateAdded;
 
 		/** Deep copy of object. */
 		public SupplyNeeded Copy() {
@@ -27,7 +29,7 @@ public class SupplyNeeded {
 			sb.append("<SupplyNeeded>");
 			sb.append("<SupplyNeededNum>").append(SupplyNeededNum).append("</SupplyNeededNum>");
 			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<DateAdded>").append(Serializing.EscapeForXml(DateAdded)).append("</DateAdded>");
+			sb.append("<DateAdded>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateAdded>");
 			sb.append("</SupplyNeeded>");
 			return sb.toString();
 		}
@@ -40,7 +42,7 @@ public class SupplyNeeded {
 				Document doc=XMLParser.parse(xml);
 				SupplyNeededNum=Integer.valueOf(doc.getElementsByTagName("SupplyNeededNum").item(0).getFirstChild().getNodeValue());
 				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DateAdded=doc.getElementsByTagName("DateAdded").item(0).getFirstChild().getNodeValue();
+				DateAdded=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateAdded").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

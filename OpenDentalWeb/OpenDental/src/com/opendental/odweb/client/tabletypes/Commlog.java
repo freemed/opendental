@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Commlog {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class Commlog {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** Date and time of entry */
-		public String CommDateTime;
+		public Date CommDateTime;
 		/** FK to definition.DefNum. This will be 0 if IsStatementSent.  Used to be an enumeration in previous versions. */
 		public int CommType;
 		/** Note for this commlog entry. */
@@ -26,9 +28,9 @@ public class Commlog {
 		/** True if signed using the Topaz signature pad, false otherwise. */
 		public boolean SigIsTopaz;
 		/** Automatically updated by MySQL every time a row is added or changed. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** Date and time when commlog ended.  Mainly for internal use. */
-		public String DateTimeEnd;
+		public Date DateTimeEnd;
 
 		/** Deep copy of object. */
 		public Commlog Copy() {
@@ -54,7 +56,7 @@ public class Commlog {
 			sb.append("<Commlog>");
 			sb.append("<CommlogNum>").append(CommlogNum).append("</CommlogNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<CommDateTime>").append(Serializing.EscapeForXml(CommDateTime)).append("</CommDateTime>");
+			sb.append("<CommDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</CommDateTime>");
 			sb.append("<CommType>").append(CommType).append("</CommType>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
@@ -62,8 +64,8 @@ public class Commlog {
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
-			sb.append("<DateTimeEnd>").append(Serializing.EscapeForXml(DateTimeEnd)).append("</DateTimeEnd>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEnd>");
 			sb.append("</Commlog>");
 			return sb.toString();
 		}
@@ -76,7 +78,7 @@ public class Commlog {
 				Document doc=XMLParser.parse(xml);
 				CommlogNum=Integer.valueOf(doc.getElementsByTagName("CommlogNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				CommDateTime=doc.getElementsByTagName("CommDateTime").item(0).getFirstChild().getNodeValue();
+				CommDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CommDateTime").item(0).getFirstChild().getNodeValue());
 				CommType=Integer.valueOf(doc.getElementsByTagName("CommType").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				Mode_=CommItemMode.values()[Integer.valueOf(doc.getElementsByTagName("Mode_").item(0).getFirstChild().getNodeValue())];
@@ -84,8 +86,8 @@ public class Commlog {
 				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
 				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();
 				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
-				DateTimeEnd=doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

@@ -16,13 +16,13 @@ namespace OpenDentalWebService {
 			sb.Append("<ReferralNum>").Append(refattach.ReferralNum).Append("</ReferralNum>");
 			sb.Append("<PatNum>").Append(refattach.PatNum).Append("</PatNum>");
 			sb.Append("<ItemOrder>").Append(refattach.ItemOrder).Append("</ItemOrder>");
-			sb.Append("<RefDate>").Append(refattach.RefDate.ToString()).Append("</RefDate>");
+			sb.Append("<RefDate>").Append(refattach.RefDate.ToString("yyyyMMddHHmmss")).Append("</RefDate>");
 			sb.Append("<IsFrom>").Append((refattach.IsFrom)?1:0).Append("</IsFrom>");
 			sb.Append("<RefToStatus>").Append((int)refattach.RefToStatus).Append("</RefToStatus>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(refattach.Note)).Append("</Note>");
 			sb.Append("<IsTransitionOfCare>").Append((refattach.IsTransitionOfCare)?1:0).Append("</IsTransitionOfCare>");
 			sb.Append("<ProcNum>").Append(refattach.ProcNum).Append("</ProcNum>");
-			sb.Append("<DateProcComplete>").Append(refattach.DateProcComplete.ToString()).Append("</DateProcComplete>");
+			sb.Append("<DateProcComplete>").Append(refattach.DateProcComplete.ToString("yyyyMMddHHmmss")).Append("</DateProcComplete>");
 			sb.Append("</RefAttach>");
 			return sb.ToString();
 		}
@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 							refattach.ItemOrder=reader.ReadContentAsInt();
 							break;
 						case "RefDate":
-							refattach.RefDate=DateTime.Parse(reader.ReadContentAsString());
+							refattach.RefDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "IsFrom":
 							refattach.IsFrom=reader.ReadContentAsString()!="0";
@@ -69,7 +69,7 @@ namespace OpenDentalWebService {
 							refattach.ProcNum=reader.ReadContentAsLong();
 							break;
 						case "DateProcComplete":
-							refattach.DateProcComplete=DateTime.Parse(reader.ReadContentAsString());
+							refattach.DateProcComplete=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

@@ -16,12 +16,12 @@ namespace OpenDentalWebService {
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(equipment.Description)).Append("</Description>");
 			sb.Append("<SerialNumber>").Append(SerializeStringEscapes.EscapeForXml(equipment.SerialNumber)).Append("</SerialNumber>");
 			sb.Append("<ModelYear>").Append(SerializeStringEscapes.EscapeForXml(equipment.ModelYear)).Append("</ModelYear>");
-			sb.Append("<DatePurchased>").Append(equipment.DatePurchased.ToString()).Append("</DatePurchased>");
-			sb.Append("<DateSold>").Append(equipment.DateSold.ToString()).Append("</DateSold>");
+			sb.Append("<DatePurchased>").Append(equipment.DatePurchased.ToString("yyyyMMddHHmmss")).Append("</DatePurchased>");
+			sb.Append("<DateSold>").Append(equipment.DateSold.ToString("yyyyMMddHHmmss")).Append("</DateSold>");
 			sb.Append("<PurchaseCost>").Append(equipment.PurchaseCost).Append("</PurchaseCost>");
 			sb.Append("<MarketValue>").Append(equipment.MarketValue).Append("</MarketValue>");
 			sb.Append("<Location>").Append(SerializeStringEscapes.EscapeForXml(equipment.Location)).Append("</Location>");
-			sb.Append("<DateEntry>").Append(equipment.DateEntry.ToString()).Append("</DateEntry>");
+			sb.Append("<DateEntry>").Append(equipment.DateEntry.ToString("yyyyMMddHHmmss")).Append("</DateEntry>");
 			sb.Append("</Equipment>");
 			return sb.ToString();
 		}
@@ -50,10 +50,10 @@ namespace OpenDentalWebService {
 							equipment.ModelYear=reader.ReadContentAsString();
 							break;
 						case "DatePurchased":
-							equipment.DatePurchased=DateTime.Parse(reader.ReadContentAsString());
+							equipment.DatePurchased=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateSold":
-							equipment.DateSold=DateTime.Parse(reader.ReadContentAsString());
+							equipment.DateSold=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PurchaseCost":
 							equipment.PurchaseCost=reader.ReadContentAsDouble();
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							equipment.Location=reader.ReadContentAsString();
 							break;
 						case "DateEntry":
-							equipment.DateEntry=DateTime.Parse(reader.ReadContentAsString());
+							equipment.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

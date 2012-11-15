@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class PerioExam {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class PerioExam {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** . */
-		public String ExamDate;
+		public Date ExamDate;
 		/** FK to provider.ProvNum. */
 		public int ProvNum;
 
@@ -30,7 +32,7 @@ public class PerioExam {
 			sb.append("<PerioExam>");
 			sb.append("<PerioExamNum>").append(PerioExamNum).append("</PerioExamNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ExamDate>").append(Serializing.EscapeForXml(ExamDate)).append("</ExamDate>");
+			sb.append("<ExamDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ExamDate>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
 			sb.append("</PerioExam>");
 			return sb.toString();
@@ -44,7 +46,7 @@ public class PerioExam {
 				Document doc=XMLParser.parse(xml);
 				PerioExamNum=Integer.valueOf(doc.getElementsByTagName("PerioExamNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ExamDate=doc.getElementsByTagName("ExamDate").item(0).getFirstChild().getNodeValue();
+				ExamDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ExamDate").item(0).getFirstChild().getNodeValue());
 				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {

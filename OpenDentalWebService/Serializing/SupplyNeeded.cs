@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SupplyNeeded>");
 			sb.Append("<SupplyNeededNum>").Append(supplyneeded.SupplyNeededNum).Append("</SupplyNeededNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(supplyneeded.Description)).Append("</Description>");
-			sb.Append("<DateAdded>").Append(supplyneeded.DateAdded.ToString()).Append("</DateAdded>");
+			sb.Append("<DateAdded>").Append(supplyneeded.DateAdded.ToString("yyyyMMddHHmmss")).Append("</DateAdded>");
 			sb.Append("</SupplyNeeded>");
 			return sb.ToString();
 		}
@@ -37,7 +37,7 @@ namespace OpenDentalWebService {
 							supplyneeded.Description=reader.ReadContentAsString();
 							break;
 						case "DateAdded":
-							supplyneeded.DateAdded=DateTime.Parse(reader.ReadContentAsString());
+							supplyneeded.DateAdded=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

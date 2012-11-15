@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class LabResult {
 		/** Primary key. */
@@ -10,11 +12,11 @@ public class LabResult {
 		/** FK to labpanel.LabPanelNum. */
 		public int LabPanelNum;
 		/** OBX-14. */
-		public String DateTimeTest;
+		public Date DateTimeTest;
 		/** OBX-3-1, text portion. */
 		public String TestName;
 		/** To be used for synch with web server. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** OBX-3-0, id portion, LOINC.  For example, 10676-5. */
 		public String TestID;
 		/** OBX-5. Value always stored as a string because the type might vary in the future. */
@@ -48,9 +50,9 @@ public class LabResult {
 			sb.append("<LabResult>");
 			sb.append("<LabResultNum>").append(LabResultNum).append("</LabResultNum>");
 			sb.append("<LabPanelNum>").append(LabPanelNum).append("</LabPanelNum>");
-			sb.append("<DateTimeTest>").append(Serializing.EscapeForXml(DateTimeTest)).append("</DateTimeTest>");
+			sb.append("<DateTimeTest>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeTest>");
 			sb.append("<TestName>").append(Serializing.EscapeForXml(TestName)).append("</TestName>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<TestID>").append(Serializing.EscapeForXml(TestID)).append("</TestID>");
 			sb.append("<ObsValue>").append(Serializing.EscapeForXml(ObsValue)).append("</ObsValue>");
 			sb.append("<ObsUnits>").append(Serializing.EscapeForXml(ObsUnits)).append("</ObsUnits>");
@@ -68,9 +70,9 @@ public class LabResult {
 				Document doc=XMLParser.parse(xml);
 				LabResultNum=Integer.valueOf(doc.getElementsByTagName("LabResultNum").item(0).getFirstChild().getNodeValue());
 				LabPanelNum=Integer.valueOf(doc.getElementsByTagName("LabPanelNum").item(0).getFirstChild().getNodeValue());
-				DateTimeTest=doc.getElementsByTagName("DateTimeTest").item(0).getFirstChild().getNodeValue();
+				DateTimeTest=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeTest").item(0).getFirstChild().getNodeValue());
 				TestName=doc.getElementsByTagName("TestName").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				TestID=doc.getElementsByTagName("TestID").item(0).getFirstChild().getNodeValue();
 				ObsValue=doc.getElementsByTagName("ObsValue").item(0).getFirstChild().getNodeValue();
 				ObsUnits=doc.getElementsByTagName("ObsUnits").item(0).getFirstChild().getNodeValue();

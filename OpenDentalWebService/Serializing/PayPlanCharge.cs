@@ -16,7 +16,7 @@ namespace OpenDentalWebService {
 			sb.Append("<PayPlanNum>").Append(payplancharge.PayPlanNum).Append("</PayPlanNum>");
 			sb.Append("<Guarantor>").Append(payplancharge.Guarantor).Append("</Guarantor>");
 			sb.Append("<PatNum>").Append(payplancharge.PatNum).Append("</PatNum>");
-			sb.Append("<ChargeDate>").Append(payplancharge.ChargeDate.ToString()).Append("</ChargeDate>");
+			sb.Append("<ChargeDate>").Append(payplancharge.ChargeDate.ToString("yyyyMMddHHmmss")).Append("</ChargeDate>");
 			sb.Append("<Principal>").Append(payplancharge.Principal).Append("</Principal>");
 			sb.Append("<Interest>").Append(payplancharge.Interest).Append("</Interest>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(payplancharge.Note)).Append("</Note>");
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							payplancharge.PatNum=reader.ReadContentAsLong();
 							break;
 						case "ChargeDate":
-							payplancharge.ChargeDate=DateTime.Parse(reader.ReadContentAsString());
+							payplancharge.ChargeDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Principal":
 							payplancharge.Principal=reader.ReadContentAsDouble();

@@ -22,7 +22,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(appointment.Note)).Append("</Note>");
 			sb.Append("<ProvNum>").Append(appointment.ProvNum).Append("</ProvNum>");
 			sb.Append("<ProvHyg>").Append(appointment.ProvHyg).Append("</ProvHyg>");
-			sb.Append("<AptDateTime>").Append(appointment.AptDateTime.ToString()).Append("</AptDateTime>");
+			sb.Append("<AptDateTime>").Append(appointment.AptDateTime.ToString("yyyyMMddHHmmss")).Append("</AptDateTime>");
 			sb.Append("<NextAptNum>").Append(appointment.NextAptNum).Append("</NextAptNum>");
 			sb.Append("<UnschedStatus>").Append(appointment.UnschedStatus).Append("</UnschedStatus>");
 			sb.Append("<IsNewPatient>").Append((appointment.IsNewPatient)?1:0).Append("</IsNewPatient>");
@@ -30,13 +30,13 @@ namespace OpenDentalWebService {
 			sb.Append("<Assistant>").Append(appointment.Assistant).Append("</Assistant>");
 			sb.Append("<ClinicNum>").Append(appointment.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<IsHygiene>").Append((appointment.IsHygiene)?1:0).Append("</IsHygiene>");
-			sb.Append("<DateTStamp>").Append(appointment.DateTStamp.ToString()).Append("</DateTStamp>");
-			sb.Append("<DateTimeArrived>").Append(appointment.DateTimeArrived.ToString()).Append("</DateTimeArrived>");
-			sb.Append("<DateTimeSeated>").Append(appointment.DateTimeSeated.ToString()).Append("</DateTimeSeated>");
-			sb.Append("<DateTimeDismissed>").Append(appointment.DateTimeDismissed.ToString()).Append("</DateTimeDismissed>");
+			sb.Append("<DateTStamp>").Append(appointment.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
+			sb.Append("<DateTimeArrived>").Append(appointment.DateTimeArrived.ToString("yyyyMMddHHmmss")).Append("</DateTimeArrived>");
+			sb.Append("<DateTimeSeated>").Append(appointment.DateTimeSeated.ToString("yyyyMMddHHmmss")).Append("</DateTimeSeated>");
+			sb.Append("<DateTimeDismissed>").Append(appointment.DateTimeDismissed.ToString("yyyyMMddHHmmss")).Append("</DateTimeDismissed>");
 			sb.Append("<InsPlan1>").Append(appointment.InsPlan1).Append("</InsPlan1>");
 			sb.Append("<InsPlan2>").Append(appointment.InsPlan2).Append("</InsPlan2>");
-			sb.Append("<DateTimeAskedToArrive>").Append(appointment.DateTimeAskedToArrive.ToString()).Append("</DateTimeAskedToArrive>");
+			sb.Append("<DateTimeAskedToArrive>").Append(appointment.DateTimeAskedToArrive.ToString("yyyyMMddHHmmss")).Append("</DateTimeAskedToArrive>");
 			sb.Append("<ProcsColored>").Append(SerializeStringEscapes.EscapeForXml(appointment.ProcsColored)).Append("</ProcsColored>");
 			sb.Append("<ColorOverride>").Append(appointment.ColorOverride.ToArgb()).Append("</ColorOverride>");
 			sb.Append("</Appointment>");
@@ -85,7 +85,7 @@ namespace OpenDentalWebService {
 							appointment.ProvHyg=reader.ReadContentAsLong();
 							break;
 						case "AptDateTime":
-							appointment.AptDateTime=DateTime.Parse(reader.ReadContentAsString());
+							appointment.AptDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "NextAptNum":
 							appointment.NextAptNum=reader.ReadContentAsLong();
@@ -109,16 +109,16 @@ namespace OpenDentalWebService {
 							appointment.IsHygiene=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							appointment.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							appointment.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeArrived":
-							appointment.DateTimeArrived=DateTime.Parse(reader.ReadContentAsString());
+							appointment.DateTimeArrived=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeSeated":
-							appointment.DateTimeSeated=DateTime.Parse(reader.ReadContentAsString());
+							appointment.DateTimeSeated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeDismissed":
-							appointment.DateTimeDismissed=DateTime.Parse(reader.ReadContentAsString());
+							appointment.DateTimeDismissed=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "InsPlan1":
 							appointment.InsPlan1=reader.ReadContentAsLong();
@@ -127,7 +127,7 @@ namespace OpenDentalWebService {
 							appointment.InsPlan2=reader.ReadContentAsLong();
 							break;
 						case "DateTimeAskedToArrive":
-							appointment.DateTimeAskedToArrive=DateTime.Parse(reader.ReadContentAsString());
+							appointment.DateTimeAskedToArrive=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcsColored":
 							appointment.ProcsColored=reader.ReadContentAsString();

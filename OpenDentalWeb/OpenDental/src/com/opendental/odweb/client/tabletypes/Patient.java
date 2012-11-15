@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Patient {
 		/** Primary key. */
@@ -22,7 +24,7 @@ public class Patient {
 		/** Enum:PatientPosition Marital status would probably be a better name for this column. */
 		public PatientPosition Position;
 		/** Age is not stored in the database.  Age is always calculated as needed from birthdate. */
-		public String Birthdate;
+		public Date Birthdate;
 		/** In the US, this is 9 digits, no dashes. For all other countries, any punctuation or format is allowed. */
 		public String SSN;
 		/** . */
@@ -102,7 +104,7 @@ public class Patient {
 		/** Enum:TreatmentUrgency Used in public health screenings. */
 		public TreatmentUrgency Urgency;
 		/** The date that the patient first visited the office.  Automated. */
-		public String DateFirstVisit;
+		public Date DateFirstVisit;
 		/** FK to clinic.ClinicNum. Can be zero if not attached to a clinic or no clinics set up. */
 		public int ClinicNum;
 		/** For now, an 'I' indicates that the patient has insurance.  This is only used when displaying appointments.  It will later be expanded.  User can't edit. */
@@ -130,7 +132,7 @@ public class Patient {
 		/** The primary language of the patient.  Typically en, fr, es, or similar.  If it's a custom language, then it might look like Tahitian. */
 		public String Language;
 		/** Used in hospitals.  It can be before the first visit date.  It typically gets set automatically by the hospital system. */
-		public String AdmitDate;
+		public Date AdmitDate;
 		/** Includes any punctuation.  For example, Mr., Mrs., Miss, Dr., etc.  There is no selection mechanism yet for user; they must simply type it in. */
 		public String Title;
 		/** . */
@@ -138,7 +140,7 @@ public class Patient {
 		/** FK to site.SiteNum. Can be zero. Replaces the old GradeSchool field with a proper foreign key. */
 		public int SiteNum;
 		/** The last date and time this row was altered.  Not user editable. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible for finances.  This is useful for nursing home residents.  Part of public health. */
 		public int ResponsParty;
 		/** C09.  Eligibility Exception Code.  A single digit 1-4.  0 is not acceptable for e-claims. 1=FT student, 2=disabled, 3=disabled student, 4=code not applicable.  Warning.  4 is a 0 if using CDAnet version 02. */
@@ -249,7 +251,7 @@ public class Patient {
 			sb.append("<PatStatus>").append(PatStatus.ordinal()).append("</PatStatus>");
 			sb.append("<Gender>").append(Gender.ordinal()).append("</Gender>");
 			sb.append("<Position>").append(Position.ordinal()).append("</Position>");
-			sb.append("<Birthdate>").append(Serializing.EscapeForXml(Birthdate)).append("</Birthdate>");
+			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</Birthdate>");
 			sb.append("<SSN>").append(Serializing.EscapeForXml(SSN)).append("</SSN>");
 			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
 			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
@@ -289,7 +291,7 @@ public class Patient {
 			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
 			sb.append("<GradeLevel>").append(GradeLevel.ordinal()).append("</GradeLevel>");
 			sb.append("<Urgency>").append(Urgency.ordinal()).append("</Urgency>");
-			sb.append("<DateFirstVisit>").append(Serializing.EscapeForXml(DateFirstVisit)).append("</DateFirstVisit>");
+			sb.append("<DateFirstVisit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateFirstVisit>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<HasIns>").append(Serializing.EscapeForXml(HasIns)).append("</HasIns>");
 			sb.append("<TrophyFolder>").append(Serializing.EscapeForXml(TrophyFolder)).append("</TrophyFolder>");
@@ -303,11 +305,11 @@ public class Patient {
 			sb.append("<SchedAfterTime>").append(Serializing.EscapeForXml(SchedAfterTime)).append("</SchedAfterTime>");
 			sb.append("<SchedDayOfWeek>").append(SchedDayOfWeek).append("</SchedDayOfWeek>");
 			sb.append("<Language>").append(Serializing.EscapeForXml(Language)).append("</Language>");
-			sb.append("<AdmitDate>").append(Serializing.EscapeForXml(AdmitDate)).append("</AdmitDate>");
+			sb.append("<AdmitDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</AdmitDate>");
 			sb.append("<Title>").append(Serializing.EscapeForXml(Title)).append("</Title>");
 			sb.append("<PayPlanDue>").append(PayPlanDue).append("</PayPlanDue>");
 			sb.append("<SiteNum>").append(SiteNum).append("</SiteNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<ResponsParty>").append(ResponsParty).append("</ResponsParty>");
 			sb.append("<CanadianEligibilityCode>").append(CanadianEligibilityCode).append("</CanadianEligibilityCode>");
 			sb.append("<AskToArriveEarly>").append(AskToArriveEarly).append("</AskToArriveEarly>");
@@ -334,7 +336,7 @@ public class Patient {
 				PatStatus=PatientStatus.values()[Integer.valueOf(doc.getElementsByTagName("PatStatus").item(0).getFirstChild().getNodeValue())];
 				Gender=PatientGender.values()[Integer.valueOf(doc.getElementsByTagName("Gender").item(0).getFirstChild().getNodeValue())];
 				Position=PatientPosition.values()[Integer.valueOf(doc.getElementsByTagName("Position").item(0).getFirstChild().getNodeValue())];
-				Birthdate=doc.getElementsByTagName("Birthdate").item(0).getFirstChild().getNodeValue();
+				Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("Birthdate").item(0).getFirstChild().getNodeValue());
 				SSN=doc.getElementsByTagName("SSN").item(0).getFirstChild().getNodeValue();
 				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
 				Address2=doc.getElementsByTagName("Address2").item(0).getFirstChild().getNodeValue();
@@ -374,7 +376,7 @@ public class Patient {
 				County=doc.getElementsByTagName("County").item(0).getFirstChild().getNodeValue();
 				GradeLevel=PatientGrade.values()[Integer.valueOf(doc.getElementsByTagName("GradeLevel").item(0).getFirstChild().getNodeValue())];
 				Urgency=TreatmentUrgency.values()[Integer.valueOf(doc.getElementsByTagName("Urgency").item(0).getFirstChild().getNodeValue())];
-				DateFirstVisit=doc.getElementsByTagName("DateFirstVisit").item(0).getFirstChild().getNodeValue();
+				DateFirstVisit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateFirstVisit").item(0).getFirstChild().getNodeValue());
 				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
 				HasIns=doc.getElementsByTagName("HasIns").item(0).getFirstChild().getNodeValue();
 				TrophyFolder=doc.getElementsByTagName("TrophyFolder").item(0).getFirstChild().getNodeValue();
@@ -388,11 +390,11 @@ public class Patient {
 				SchedAfterTime=doc.getElementsByTagName("SchedAfterTime").item(0).getFirstChild().getNodeValue();
 				SchedDayOfWeek=Byte.valueOf(doc.getElementsByTagName("SchedDayOfWeek").item(0).getFirstChild().getNodeValue());
 				Language=doc.getElementsByTagName("Language").item(0).getFirstChild().getNodeValue();
-				AdmitDate=doc.getElementsByTagName("AdmitDate").item(0).getFirstChild().getNodeValue();
+				AdmitDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AdmitDate").item(0).getFirstChild().getNodeValue());
 				Title=doc.getElementsByTagName("Title").item(0).getFirstChild().getNodeValue();
 				PayPlanDue=Double.valueOf(doc.getElementsByTagName("PayPlanDue").item(0).getFirstChild().getNodeValue());
 				SiteNum=Integer.valueOf(doc.getElementsByTagName("SiteNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				ResponsParty=Integer.valueOf(doc.getElementsByTagName("ResponsParty").item(0).getFirstChild().getNodeValue());
 				CanadianEligibilityCode=Byte.valueOf(doc.getElementsByTagName("CanadianEligibilityCode").item(0).getFirstChild().getNodeValue());
 				AskToArriveEarly=Integer.valueOf(doc.getElementsByTagName("AskToArriveEarly").item(0).getFirstChild().getNodeValue());

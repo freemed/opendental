@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class CustReference {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class CustReference {
 		/** FK to patient.PatNum. */
 		public int PatNum;
 		/** Most recent date the reference was used, loosely kept updated. */
-		public String DateMostRecent;
+		public Date DateMostRecent;
 		/** Notes specific to this customer as a reference. */
 		public String Note;
 		/** Set to true if this customer was a bad reference. */
@@ -33,7 +35,7 @@ public class CustReference {
 			sb.append("<CustReference>");
 			sb.append("<CustReferenceNum>").append(CustReferenceNum).append("</CustReferenceNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<DateMostRecent>").append(Serializing.EscapeForXml(DateMostRecent)).append("</DateMostRecent>");
+			sb.append("<DateMostRecent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateMostRecent>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<IsBadRef>").append((IsBadRef)?1:0).append("</IsBadRef>");
 			sb.append("</CustReference>");
@@ -48,7 +50,7 @@ public class CustReference {
 				Document doc=XMLParser.parse(xml);
 				CustReferenceNum=Integer.valueOf(doc.getElementsByTagName("CustReferenceNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateMostRecent=doc.getElementsByTagName("DateMostRecent").item(0).getFirstChild().getNodeValue();
+				DateMostRecent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateMostRecent").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				IsBadRef=(doc.getElementsByTagName("IsBadRef").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 			}

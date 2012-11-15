@@ -17,11 +17,11 @@ namespace OpenDentalWebService {
 			sb.Append("<LaboratoryNum>").Append(labcase.LaboratoryNum).Append("</LaboratoryNum>");
 			sb.Append("<AptNum>").Append(labcase.AptNum).Append("</AptNum>");
 			sb.Append("<PlannedAptNum>").Append(labcase.PlannedAptNum).Append("</PlannedAptNum>");
-			sb.Append("<DateTimeDue>").Append(labcase.DateTimeDue.ToString()).Append("</DateTimeDue>");
-			sb.Append("<DateTimeCreated>").Append(labcase.DateTimeCreated.ToString()).Append("</DateTimeCreated>");
-			sb.Append("<DateTimeSent>").Append(labcase.DateTimeSent.ToString()).Append("</DateTimeSent>");
-			sb.Append("<DateTimeRecd>").Append(labcase.DateTimeRecd.ToString()).Append("</DateTimeRecd>");
-			sb.Append("<DateTimeChecked>").Append(labcase.DateTimeChecked.ToString()).Append("</DateTimeChecked>");
+			sb.Append("<DateTimeDue>").Append(labcase.DateTimeDue.ToString("yyyyMMddHHmmss")).Append("</DateTimeDue>");
+			sb.Append("<DateTimeCreated>").Append(labcase.DateTimeCreated.ToString("yyyyMMddHHmmss")).Append("</DateTimeCreated>");
+			sb.Append("<DateTimeSent>").Append(labcase.DateTimeSent.ToString("yyyyMMddHHmmss")).Append("</DateTimeSent>");
+			sb.Append("<DateTimeRecd>").Append(labcase.DateTimeRecd.ToString("yyyyMMddHHmmss")).Append("</DateTimeRecd>");
+			sb.Append("<DateTimeChecked>").Append(labcase.DateTimeChecked.ToString("yyyyMMddHHmmss")).Append("</DateTimeChecked>");
 			sb.Append("<ProvNum>").Append(labcase.ProvNum).Append("</ProvNum>");
 			sb.Append("<Instructions>").Append(SerializeStringEscapes.EscapeForXml(labcase.Instructions)).Append("</Instructions>");
 			sb.Append("<LabFee>").Append(labcase.LabFee).Append("</LabFee>");
@@ -56,19 +56,19 @@ namespace OpenDentalWebService {
 							labcase.PlannedAptNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeDue":
-							labcase.DateTimeDue=DateTime.Parse(reader.ReadContentAsString());
+							labcase.DateTimeDue=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeCreated":
-							labcase.DateTimeCreated=DateTime.Parse(reader.ReadContentAsString());
+							labcase.DateTimeCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeSent":
-							labcase.DateTimeSent=DateTime.Parse(reader.ReadContentAsString());
+							labcase.DateTimeSent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeRecd":
-							labcase.DateTimeRecd=DateTime.Parse(reader.ReadContentAsString());
+							labcase.DateTimeRecd=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeChecked":
-							labcase.DateTimeChecked=DateTime.Parse(reader.ReadContentAsString());
+							labcase.DateTimeChecked=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
 							labcase.ProvNum=reader.ReadContentAsLong();

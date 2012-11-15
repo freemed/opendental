@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class DiseaseDef {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class DiseaseDef {
 		/** If hidden, the disease will still show on any patient that it was previously attached to, but it will not be available for future patients. */
 		public boolean IsHidden;
 		/** The last date and time this row was altered.  Not user editable. */
-		public String DateTStamp;
+		public Date DateTStamp;
 
 		/** Deep copy of object. */
 		public DiseaseDef Copy() {
@@ -35,7 +37,7 @@ public class DiseaseDef {
 			sb.append("<DiseaseName>").append(Serializing.EscapeForXml(DiseaseName)).append("</DiseaseName>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("</DiseaseDef>");
 			return sb.toString();
 		}
@@ -50,7 +52,7 @@ public class DiseaseDef {
 				DiseaseName=doc.getElementsByTagName("DiseaseName").item(0).getFirstChild().getNodeValue();
 				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
 				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

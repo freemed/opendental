@@ -15,8 +15,8 @@ namespace OpenDentalWebService {
 			sb.Append("<InsSubNum>").Append(inssub.InsSubNum).Append("</InsSubNum>");
 			sb.Append("<PlanNum>").Append(inssub.PlanNum).Append("</PlanNum>");
 			sb.Append("<Subscriber>").Append(inssub.Subscriber).Append("</Subscriber>");
-			sb.Append("<DateEffective>").Append(inssub.DateEffective.ToString()).Append("</DateEffective>");
-			sb.Append("<DateTerm>").Append(inssub.DateTerm.ToString()).Append("</DateTerm>");
+			sb.Append("<DateEffective>").Append(inssub.DateEffective.ToString("yyyyMMddHHmmss")).Append("</DateEffective>");
+			sb.Append("<DateTerm>").Append(inssub.DateTerm.ToString("yyyyMMddHHmmss")).Append("</DateTerm>");
 			sb.Append("<ReleaseInfo>").Append((inssub.ReleaseInfo)?1:0).Append("</ReleaseInfo>");
 			sb.Append("<AssignBen>").Append((inssub.AssignBen)?1:0).Append("</AssignBen>");
 			sb.Append("<SubscriberID>").Append(SerializeStringEscapes.EscapeForXml(inssub.SubscriberID)).Append("</SubscriberID>");
@@ -47,10 +47,10 @@ namespace OpenDentalWebService {
 							inssub.Subscriber=reader.ReadContentAsLong();
 							break;
 						case "DateEffective":
-							inssub.DateEffective=DateTime.Parse(reader.ReadContentAsString());
+							inssub.DateEffective=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTerm":
-							inssub.DateTerm=DateTime.Parse(reader.ReadContentAsString());
+							inssub.DateTerm=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ReleaseInfo":
 							inssub.ReleaseInfo=reader.ReadContentAsString()!="0";

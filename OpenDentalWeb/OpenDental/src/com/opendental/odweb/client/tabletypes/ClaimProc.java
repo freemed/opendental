@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class ClaimProc {
 		/** Primary key. */
@@ -32,7 +34,7 @@ public class ClaimProc {
 		/** FK to insplan.PlanNum */
 		public int PlanNum;
 		/** This is the date that is used for payment reports and tracks the payment date.  Always exactly matches the date of the ClaimPayment it's attached to.  See the note under Ledgers.ComputePayments.  This will eventually not be used for aging. The ProcDate will instead be used. See ProcDate. */
-		public String DateCP;
+		public Date DateCP;
 		/** Amount not covered by ins which is written off.  The writeoff estimate goes in a different column. */
 		public double WriteOff;
 		/** The procedure code that was sent to insurance. This is not necessarily the usual procedure code.  It will already have been trimmed to 5 char if it started with "D", or it could be the alternate code.  Not allowed to be blank if it is procedure. */
@@ -54,9 +56,9 @@ public class ClaimProc {
 		/** -1 if blank.  See description of CopayAmt.  This lets the user set a copay that will never be overwritten by automatic calculations. */
 		public double CopayOverride;
 		/** Date of the procedure.  Currently only used for tracking annual insurance benefits remaining. Important in Adjustments to benefits.  For total claim payments, MUST be the date of the procedures to correctly figure benefits.  Will eventually transition to use this field to actually calculate aging.  See the note under Ledgers.ComputePayments. */
-		public String ProcDate;
+		public Date ProcDate;
 		/** Date that it was changed to status received or supplemental.  It is usually attached to a claimPayment at that point, but not if user forgets.  This is still the date that it becomes important financial data.  Only applies if Received or Supplemental.  Otherwise, the date is disregarded.  User may never edit. Important in audit trail. */
-		public String DateEntry;
+		public Date DateEntry;
 		/** Assigned when claim is created as a way to order the procs showing on a claim.  Really only used in Canadian claims for now as F07. */
 		public byte LineNumber;
 		/** -1 if blank.  Not sure why we need to allow -1.  Calculated automatically.  User cannot edit, but can use DedEstOverride instead. */
@@ -143,7 +145,7 @@ public class ClaimProc {
 			sb.append("<Remarks>").append(Serializing.EscapeForXml(Remarks)).append("</Remarks>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
-			sb.append("<DateCP>").append(Serializing.EscapeForXml(DateCP)).append("</DateCP>");
+			sb.append("<DateCP>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCP>");
 			sb.append("<WriteOff>").append(WriteOff).append("</WriteOff>");
 			sb.append("<CodeSent>").append(Serializing.EscapeForXml(CodeSent)).append("</CodeSent>");
 			sb.append("<AllowedOverride>").append(AllowedOverride).append("</AllowedOverride>");
@@ -154,8 +156,8 @@ public class ClaimProc {
 			sb.append("<PaidOtherIns>").append(PaidOtherIns).append("</PaidOtherIns>");
 			sb.append("<BaseEst>").append(BaseEst).append("</BaseEst>");
 			sb.append("<CopayOverride>").append(CopayOverride).append("</CopayOverride>");
-			sb.append("<ProcDate>").append(Serializing.EscapeForXml(ProcDate)).append("</ProcDate>");
-			sb.append("<DateEntry>").append(Serializing.EscapeForXml(DateEntry)).append("</DateEntry>");
+			sb.append("<ProcDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ProcDate>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
 			sb.append("<LineNumber>").append(LineNumber).append("</LineNumber>");
 			sb.append("<DedEst>").append(DedEst).append("</DedEst>");
 			sb.append("<DedEstOverride>").append(DedEstOverride).append("</DedEstOverride>");
@@ -191,7 +193,7 @@ public class ClaimProc {
 				Remarks=doc.getElementsByTagName("Remarks").item(0).getFirstChild().getNodeValue();
 				ClaimPaymentNum=Integer.valueOf(doc.getElementsByTagName("ClaimPaymentNum").item(0).getFirstChild().getNodeValue());
 				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				DateCP=doc.getElementsByTagName("DateCP").item(0).getFirstChild().getNodeValue();
+				DateCP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCP").item(0).getFirstChild().getNodeValue());
 				WriteOff=Double.valueOf(doc.getElementsByTagName("WriteOff").item(0).getFirstChild().getNodeValue());
 				CodeSent=doc.getElementsByTagName("CodeSent").item(0).getFirstChild().getNodeValue();
 				AllowedOverride=Double.valueOf(doc.getElementsByTagName("AllowedOverride").item(0).getFirstChild().getNodeValue());
@@ -202,8 +204,8 @@ public class ClaimProc {
 				PaidOtherIns=Double.valueOf(doc.getElementsByTagName("PaidOtherIns").item(0).getFirstChild().getNodeValue());
 				BaseEst=Double.valueOf(doc.getElementsByTagName("BaseEst").item(0).getFirstChild().getNodeValue());
 				CopayOverride=Double.valueOf(doc.getElementsByTagName("CopayOverride").item(0).getFirstChild().getNodeValue());
-				ProcDate=doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue();
-				DateEntry=doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue();
+				ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue());
+				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
 				LineNumber=Byte.valueOf(doc.getElementsByTagName("LineNumber").item(0).getFirstChild().getNodeValue());
 				DedEst=Double.valueOf(doc.getElementsByTagName("DedEst").item(0).getFirstChild().getNodeValue());
 				DedEstOverride=Double.valueOf(doc.getElementsByTagName("DedEstOverride").item(0).getFirstChild().getNodeValue());

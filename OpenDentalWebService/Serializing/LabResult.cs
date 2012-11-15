@@ -14,9 +14,9 @@ namespace OpenDentalWebService {
 			sb.Append("<LabResult>");
 			sb.Append("<LabResultNum>").Append(labresult.LabResultNum).Append("</LabResultNum>");
 			sb.Append("<LabPanelNum>").Append(labresult.LabPanelNum).Append("</LabPanelNum>");
-			sb.Append("<DateTimeTest>").Append(labresult.DateTimeTest.ToString()).Append("</DateTimeTest>");
+			sb.Append("<DateTimeTest>").Append(labresult.DateTimeTest.ToString("yyyyMMddHHmmss")).Append("</DateTimeTest>");
 			sb.Append("<TestName>").Append(SerializeStringEscapes.EscapeForXml(labresult.TestName)).Append("</TestName>");
-			sb.Append("<DateTStamp>").Append(labresult.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(labresult.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<TestID>").Append(SerializeStringEscapes.EscapeForXml(labresult.TestID)).Append("</TestID>");
 			sb.Append("<ObsValue>").Append(SerializeStringEscapes.EscapeForXml(labresult.ObsValue)).Append("</ObsValue>");
 			sb.Append("<ObsUnits>").Append(SerializeStringEscapes.EscapeForXml(labresult.ObsUnits)).Append("</ObsUnits>");
@@ -44,13 +44,13 @@ namespace OpenDentalWebService {
 							labresult.LabPanelNum=reader.ReadContentAsLong();
 							break;
 						case "DateTimeTest":
-							labresult.DateTimeTest=DateTime.Parse(reader.ReadContentAsString());
+							labresult.DateTimeTest=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TestName":
 							labresult.TestName=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							labresult.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							labresult.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TestID":
 							labresult.TestID=reader.ReadContentAsString();

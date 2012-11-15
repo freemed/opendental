@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Screen {
 		/** Primary key */
 		public int ScreenNum;
 		/** The date of the screening. */
-		public String ScreenDate;
+		public Date ScreenDate;
 		/** FK to site.Description, although it will not crash if key absent. */
 		public String GradeSchool;
 		/** FK to county.CountyName, although it will not crash if key absent. */
@@ -42,7 +44,7 @@ public class Screen {
 		/** Enum:YN */
 		public YN MissingAllTeeth;
 		/** Optional */
-		public String Birthdate;
+		public Date Birthdate;
 		/** FK to screengroup.ScreenGroupNum. */
 		public int ScreenGroupNum;
 		/** The order of this item within its group. */
@@ -83,7 +85,7 @@ public class Screen {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Screen>");
 			sb.append("<ScreenNum>").append(ScreenNum).append("</ScreenNum>");
-			sb.append("<ScreenDate>").append(Serializing.EscapeForXml(ScreenDate)).append("</ScreenDate>");
+			sb.append("<ScreenDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</ScreenDate>");
 			sb.append("<GradeSchool>").append(Serializing.EscapeForXml(GradeSchool)).append("</GradeSchool>");
 			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
@@ -100,7 +102,7 @@ public class Screen {
 			sb.append("<EarlyChildCaries>").append(EarlyChildCaries.ordinal()).append("</EarlyChildCaries>");
 			sb.append("<ExistingSealants>").append(ExistingSealants.ordinal()).append("</ExistingSealants>");
 			sb.append("<MissingAllTeeth>").append(MissingAllTeeth.ordinal()).append("</MissingAllTeeth>");
-			sb.append("<Birthdate>").append(Serializing.EscapeForXml(Birthdate)).append("</Birthdate>");
+			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</Birthdate>");
 			sb.append("<ScreenGroupNum>").append(ScreenGroupNum).append("</ScreenGroupNum>");
 			sb.append("<ScreenGroupOrder>").append(ScreenGroupOrder).append("</ScreenGroupOrder>");
 			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");
@@ -115,7 +117,7 @@ public class Screen {
 			try {
 				Document doc=XMLParser.parse(xml);
 				ScreenNum=Integer.valueOf(doc.getElementsByTagName("ScreenNum").item(0).getFirstChild().getNodeValue());
-				ScreenDate=doc.getElementsByTagName("ScreenDate").item(0).getFirstChild().getNodeValue();
+				ScreenDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ScreenDate").item(0).getFirstChild().getNodeValue());
 				GradeSchool=doc.getElementsByTagName("GradeSchool").item(0).getFirstChild().getNodeValue();
 				County=doc.getElementsByTagName("County").item(0).getFirstChild().getNodeValue();
 				PlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("PlaceService").item(0).getFirstChild().getNodeValue())];
@@ -132,7 +134,7 @@ public class Screen {
 				EarlyChildCaries=YN.values()[Integer.valueOf(doc.getElementsByTagName("EarlyChildCaries").item(0).getFirstChild().getNodeValue())];
 				ExistingSealants=YN.values()[Integer.valueOf(doc.getElementsByTagName("ExistingSealants").item(0).getFirstChild().getNodeValue())];
 				MissingAllTeeth=YN.values()[Integer.valueOf(doc.getElementsByTagName("MissingAllTeeth").item(0).getFirstChild().getNodeValue())];
-				Birthdate=doc.getElementsByTagName("Birthdate").item(0).getFirstChild().getNodeValue();
+				Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("Birthdate").item(0).getFirstChild().getNodeValue());
 				ScreenGroupNum=Integer.valueOf(doc.getElementsByTagName("ScreenGroupNum").item(0).getFirstChild().getNodeValue());
 				ScreenGroupOrder=Integer.valueOf(doc.getElementsByTagName("ScreenGroupOrder").item(0).getFirstChild().getNodeValue());
 				Comments=doc.getElementsByTagName("Comments").item(0).getFirstChild().getNodeValue();

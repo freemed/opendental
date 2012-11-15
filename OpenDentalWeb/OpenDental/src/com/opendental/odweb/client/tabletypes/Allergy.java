@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Allergy {
 		/** Primary key. */
@@ -16,9 +18,9 @@ public class Allergy {
 		/** True if still an active allergy.  False helps hide it from the list of active allergies. */
 		public boolean StatusIsActive;
 		/** To be used for synch with web server for CertTimelyAccess. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** The historical date that the patient had the adverse reaction to this agent. */
-		public String DateAdverseReaction;
+		public Date DateAdverseReaction;
 
 		/** Deep copy of object. */
 		public Allergy Copy() {
@@ -42,8 +44,8 @@ public class Allergy {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<Reaction>").append(Serializing.EscapeForXml(Reaction)).append("</Reaction>");
 			sb.append("<StatusIsActive>").append((StatusIsActive)?1:0).append("</StatusIsActive>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
-			sb.append("<DateAdverseReaction>").append(Serializing.EscapeForXml(DateAdverseReaction)).append("</DateAdverseReaction>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
+			sb.append("<DateAdverseReaction>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateAdverseReaction>");
 			sb.append("</Allergy>");
 			return sb.toString();
 		}
@@ -59,8 +61,8 @@ public class Allergy {
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				Reaction=doc.getElementsByTagName("Reaction").item(0).getFirstChild().getNodeValue();
 				StatusIsActive=(doc.getElementsByTagName("StatusIsActive").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
-				DateAdverseReaction=doc.getElementsByTagName("DateAdverseReaction").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				DateAdverseReaction=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateAdverseReaction").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

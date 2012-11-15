@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class DashboardAR {
 		/** Primary key. */
 		public int DashboardARNum;
 		/** This date will always be the last day of a month. */
-		public String DateCalc;
+		public Date DateCalc;
 		/** Bal_0_30+Bal_31_60+Bal_61_90+BalOver90 for all patients.  This should also exactly equal BalTotal for all patients with positive amounts.  Negative BalTotals are credits, not A/R. */
 		public double BalTotal;
 		/** Sum of all InsEst for all patients for the month. */
@@ -29,7 +31,7 @@ public class DashboardAR {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DashboardAR>");
 			sb.append("<DashboardARNum>").append(DashboardARNum).append("</DashboardARNum>");
-			sb.append("<DateCalc>").append(Serializing.EscapeForXml(DateCalc)).append("</DateCalc>");
+			sb.append("<DateCalc>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCalc>");
 			sb.append("<BalTotal>").append(BalTotal).append("</BalTotal>");
 			sb.append("<InsEst>").append(InsEst).append("</InsEst>");
 			sb.append("</DashboardAR>");
@@ -43,7 +45,7 @@ public class DashboardAR {
 			try {
 				Document doc=XMLParser.parse(xml);
 				DashboardARNum=Integer.valueOf(doc.getElementsByTagName("DashboardARNum").item(0).getFirstChild().getNodeValue());
-				DateCalc=doc.getElementsByTagName("DateCalc").item(0).getFirstChild().getNodeValue();
+				DateCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCalc").item(0).getFirstChild().getNodeValue());
 				BalTotal=Double.valueOf(doc.getElementsByTagName("BalTotal").item(0).getFirstChild().getNodeValue());
 				InsEst=Double.valueOf(doc.getElementsByTagName("InsEst").item(0).getFirstChild().getNodeValue());
 			}

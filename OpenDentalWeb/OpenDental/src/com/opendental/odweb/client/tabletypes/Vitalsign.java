@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Vitalsign {
 		/** Primary key. */
@@ -18,7 +20,7 @@ public class Vitalsign {
 		/** Allowed to be 0. */
 		public int BpDiastolic;
 		/** The date that the vitalsigns were taken. */
-		public String DateTaken;
+		public Date DateTaken;
 		/** For an abnormal BMI measurement this must be true in order to meet quality measurement. */
 		public boolean HasFollowupPlan;
 		/** If a BMI was not recored, this must be true in order to meet quality measurement.  For children, this is used as an IsPregnant flag, the only valid reason for not taking BMI on children. */
@@ -58,7 +60,7 @@ public class Vitalsign {
 			sb.append("<Weight>").append(Weight).append("</Weight>");
 			sb.append("<BpSystolic>").append(BpSystolic).append("</BpSystolic>");
 			sb.append("<BpDiastolic>").append(BpDiastolic).append("</BpDiastolic>");
-			sb.append("<DateTaken>").append(Serializing.EscapeForXml(DateTaken)).append("</DateTaken>");
+			sb.append("<DateTaken>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTaken>");
 			sb.append("<HasFollowupPlan>").append((HasFollowupPlan)?1:0).append("</HasFollowupPlan>");
 			sb.append("<IsIneligible>").append((IsIneligible)?1:0).append("</IsIneligible>");
 			sb.append("<Documentation>").append(Serializing.EscapeForXml(Documentation)).append("</Documentation>");
@@ -80,7 +82,7 @@ public class Vitalsign {
 				Weight=Float.valueOf(doc.getElementsByTagName("Weight").item(0).getFirstChild().getNodeValue());
 				BpSystolic=Integer.valueOf(doc.getElementsByTagName("BpSystolic").item(0).getFirstChild().getNodeValue());
 				BpDiastolic=Integer.valueOf(doc.getElementsByTagName("BpDiastolic").item(0).getFirstChild().getNodeValue());
-				DateTaken=doc.getElementsByTagName("DateTaken").item(0).getFirstChild().getNodeValue();
+				DateTaken=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTaken").item(0).getFirstChild().getNodeValue());
 				HasFollowupPlan=(doc.getElementsByTagName("HasFollowupPlan").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				IsIneligible=(doc.getElementsByTagName("IsIneligible").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				Documentation=doc.getElementsByTagName("Documentation").item(0).getFirstChild().getNodeValue();

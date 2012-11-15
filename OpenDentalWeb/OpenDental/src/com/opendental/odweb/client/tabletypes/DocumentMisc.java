@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class DocumentMisc {
 		/** Primary key. */
 		public int DocMiscNum;
 		/** Date created. */
-		public String DateCreated;
+		public Date DateCreated;
 		/** The name the file would have if it was not in the database. Does not include any directory info. */
 		public String FileName;
 		/** Enum:DocumentMiscType Corresponds to the same subfolder within AtoZ folder. eg. UpdateFiles */
@@ -32,7 +34,7 @@ public class DocumentMisc {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DocumentMisc>");
 			sb.append("<DocMiscNum>").append(DocMiscNum).append("</DocMiscNum>");
-			sb.append("<DateCreated>").append(Serializing.EscapeForXml(DateCreated)).append("</DateCreated>");
+			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateCreated>");
 			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
 			sb.append("<DocMiscType>").append(DocMiscType.ordinal()).append("</DocMiscType>");
 			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
@@ -47,7 +49,7 @@ public class DocumentMisc {
 			try {
 				Document doc=XMLParser.parse(xml);
 				DocMiscNum=Integer.valueOf(doc.getElementsByTagName("DocMiscNum").item(0).getFirstChild().getNodeValue());
-				DateCreated=doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue();
+				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
 				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
 				DocMiscType=DocumentMiscType.values()[Integer.valueOf(doc.getElementsByTagName("DocMiscType").item(0).getFirstChild().getNodeValue())];
 				RawBase64=doc.getElementsByTagName("RawBase64").item(0).getFirstChild().getNodeValue();

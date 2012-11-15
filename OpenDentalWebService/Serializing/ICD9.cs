@@ -15,7 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ICD9Num>").Append(icd9.ICD9Num).Append("</ICD9Num>");
 			sb.Append("<ICD9Code>").Append(SerializeStringEscapes.EscapeForXml(icd9.ICD9Code)).Append("</ICD9Code>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(icd9.Description)).Append("</Description>");
-			sb.Append("<DateTStamp>").Append(icd9.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(icd9.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("</ICD9>");
 			return sb.ToString();
 		}
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							icd9.Description=reader.ReadContentAsString();
 							break;
 						case "DateTStamp":
-							icd9.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							icd9.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

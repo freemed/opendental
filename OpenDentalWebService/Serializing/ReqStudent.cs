@@ -20,7 +20,7 @@ namespace OpenDentalWebService {
 			sb.Append("<AptNum>").Append(reqstudent.AptNum).Append("</AptNum>");
 			sb.Append("<PatNum>").Append(reqstudent.PatNum).Append("</PatNum>");
 			sb.Append("<InstructorNum>").Append(reqstudent.InstructorNum).Append("</InstructorNum>");
-			sb.Append("<DateCompleted>").Append(reqstudent.DateCompleted.ToString()).Append("</DateCompleted>");
+			sb.Append("<DateCompleted>").Append(reqstudent.DateCompleted.ToString("yyyyMMddHHmmss")).Append("</DateCompleted>");
 			sb.Append("</ReqStudent>");
 			return sb.ToString();
 		}
@@ -61,7 +61,7 @@ namespace OpenDentalWebService {
 							reqstudent.InstructorNum=reader.ReadContentAsLong();
 							break;
 						case "DateCompleted":
-							reqstudent.DateCompleted=DateTime.Parse(reader.ReadContentAsString());
+							reqstudent.DateCompleted=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

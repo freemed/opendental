@@ -14,10 +14,10 @@ namespace OpenDentalWebService {
 			sb.Append("<Claim>");
 			sb.Append("<ClaimNum>").Append(claim.ClaimNum).Append("</ClaimNum>");
 			sb.Append("<PatNum>").Append(claim.PatNum).Append("</PatNum>");
-			sb.Append("<DateService>").Append(claim.DateService.ToString()).Append("</DateService>");
-			sb.Append("<DateSent>").Append(claim.DateSent.ToString()).Append("</DateSent>");
+			sb.Append("<DateService>").Append(claim.DateService.ToString("yyyyMMddHHmmss")).Append("</DateService>");
+			sb.Append("<DateSent>").Append(claim.DateSent.ToString("yyyyMMddHHmmss")).Append("</DateSent>");
 			sb.Append("<ClaimStatus>").Append(SerializeStringEscapes.EscapeForXml(claim.ClaimStatus)).Append("</ClaimStatus>");
-			sb.Append("<DateReceived>").Append(claim.DateReceived.ToString()).Append("</DateReceived>");
+			sb.Append("<DateReceived>").Append(claim.DateReceived.ToString("yyyyMMddHHmmss")).Append("</DateReceived>");
 			sb.Append("<PlanNum>").Append(claim.PlanNum).Append("</PlanNum>");
 			sb.Append("<ProvTreat>").Append(claim.ProvTreat).Append("</ProvTreat>");
 			sb.Append("<ClaimFee>").Append(claim.ClaimFee).Append("</ClaimFee>");
@@ -26,7 +26,7 @@ namespace OpenDentalWebService {
 			sb.Append("<DedApplied>").Append(claim.DedApplied).Append("</DedApplied>");
 			sb.Append("<PreAuthString>").Append(SerializeStringEscapes.EscapeForXml(claim.PreAuthString)).Append("</PreAuthString>");
 			sb.Append("<IsProsthesis>").Append(SerializeStringEscapes.EscapeForXml(claim.IsProsthesis)).Append("</IsProsthesis>");
-			sb.Append("<PriorDate>").Append(claim.PriorDate.ToString()).Append("</PriorDate>");
+			sb.Append("<PriorDate>").Append(claim.PriorDate.ToString("yyyyMMddHHmmss")).Append("</PriorDate>");
 			sb.Append("<ReasonUnderPaid>").Append(SerializeStringEscapes.EscapeForXml(claim.ReasonUnderPaid)).Append("</ReasonUnderPaid>");
 			sb.Append("<ClaimNote>").Append(SerializeStringEscapes.EscapeForXml(claim.ClaimNote)).Append("</ClaimNote>");
 			sb.Append("<ClaimType>").Append(SerializeStringEscapes.EscapeForXml(claim.ClaimType)).Append("</ClaimType>");
@@ -35,12 +35,12 @@ namespace OpenDentalWebService {
 			sb.Append("<RefNumString>").Append(SerializeStringEscapes.EscapeForXml(claim.RefNumString)).Append("</RefNumString>");
 			sb.Append("<PlaceService>").Append((int)claim.PlaceService).Append("</PlaceService>");
 			sb.Append("<AccidentRelated>").Append(SerializeStringEscapes.EscapeForXml(claim.AccidentRelated)).Append("</AccidentRelated>");
-			sb.Append("<AccidentDate>").Append(claim.AccidentDate.ToString()).Append("</AccidentDate>");
+			sb.Append("<AccidentDate>").Append(claim.AccidentDate.ToString("yyyyMMddHHmmss")).Append("</AccidentDate>");
 			sb.Append("<AccidentST>").Append(SerializeStringEscapes.EscapeForXml(claim.AccidentST)).Append("</AccidentST>");
 			sb.Append("<EmployRelated>").Append((int)claim.EmployRelated).Append("</EmployRelated>");
 			sb.Append("<IsOrtho>").Append((claim.IsOrtho)?1:0).Append("</IsOrtho>");
 			sb.Append("<OrthoRemainM>").Append(claim.OrthoRemainM).Append("</OrthoRemainM>");
-			sb.Append("<OrthoDate>").Append(claim.OrthoDate.ToString()).Append("</OrthoDate>");
+			sb.Append("<OrthoDate>").Append(claim.OrthoDate.ToString("yyyyMMddHHmmss")).Append("</OrthoDate>");
 			sb.Append("<PatRelat>").Append((int)claim.PatRelat).Append("</PatRelat>");
 			sb.Append("<PlanNum2>").Append(claim.PlanNum2).Append("</PlanNum2>");
 			sb.Append("<PatRelat2>").Append((int)claim.PatRelat2).Append("</PatRelat2>");
@@ -56,15 +56,15 @@ namespace OpenDentalWebService {
 			sb.Append("<CanadianReferralProviderNum>").Append(SerializeStringEscapes.EscapeForXml(claim.CanadianReferralProviderNum)).Append("</CanadianReferralProviderNum>");
 			sb.Append("<CanadianReferralReason>").Append(claim.CanadianReferralReason).Append("</CanadianReferralReason>");
 			sb.Append("<CanadianIsInitialLower>").Append(SerializeStringEscapes.EscapeForXml(claim.CanadianIsInitialLower)).Append("</CanadianIsInitialLower>");
-			sb.Append("<CanadianDateInitialLower>").Append(claim.CanadianDateInitialLower.ToString()).Append("</CanadianDateInitialLower>");
+			sb.Append("<CanadianDateInitialLower>").Append(claim.CanadianDateInitialLower.ToString("yyyyMMddHHmmss")).Append("</CanadianDateInitialLower>");
 			sb.Append("<CanadianMandProsthMaterial>").Append(claim.CanadianMandProsthMaterial).Append("</CanadianMandProsthMaterial>");
 			sb.Append("<CanadianIsInitialUpper>").Append(SerializeStringEscapes.EscapeForXml(claim.CanadianIsInitialUpper)).Append("</CanadianIsInitialUpper>");
-			sb.Append("<CanadianDateInitialUpper>").Append(claim.CanadianDateInitialUpper.ToString()).Append("</CanadianDateInitialUpper>");
+			sb.Append("<CanadianDateInitialUpper>").Append(claim.CanadianDateInitialUpper.ToString("yyyyMMddHHmmss")).Append("</CanadianDateInitialUpper>");
 			sb.Append("<CanadianMaxProsthMaterial>").Append(claim.CanadianMaxProsthMaterial).Append("</CanadianMaxProsthMaterial>");
 			sb.Append("<InsSubNum>").Append(claim.InsSubNum).Append("</InsSubNum>");
 			sb.Append("<InsSubNum2>").Append(claim.InsSubNum2).Append("</InsSubNum2>");
 			sb.Append("<CanadaTransRefNum>").Append(SerializeStringEscapes.EscapeForXml(claim.CanadaTransRefNum)).Append("</CanadaTransRefNum>");
-			sb.Append("<CanadaEstTreatStartDate>").Append(claim.CanadaEstTreatStartDate.ToString()).Append("</CanadaEstTreatStartDate>");
+			sb.Append("<CanadaEstTreatStartDate>").Append(claim.CanadaEstTreatStartDate.ToString("yyyyMMddHHmmss")).Append("</CanadaEstTreatStartDate>");
 			sb.Append("<CanadaInitialPayment>").Append(claim.CanadaInitialPayment).Append("</CanadaInitialPayment>");
 			sb.Append("<CanadaPaymentMode>").Append(claim.CanadaPaymentMode).Append("</CanadaPaymentMode>");
 			sb.Append("<CanadaTreatDuration>").Append(claim.CanadaTreatDuration).Append("</CanadaTreatDuration>");
@@ -78,7 +78,7 @@ namespace OpenDentalWebService {
 			sb.Append("<AdmissionSourceCode>").Append(SerializeStringEscapes.EscapeForXml(claim.AdmissionSourceCode)).Append("</AdmissionSourceCode>");
 			sb.Append("<PatientStatusCode>").Append(SerializeStringEscapes.EscapeForXml(claim.PatientStatusCode)).Append("</PatientStatusCode>");
 			sb.Append("<CustomTracking>").Append(claim.CustomTracking).Append("</CustomTracking>");
-			sb.Append("<DateResent>").Append(claim.DateResent.ToString()).Append("</DateResent>");
+			sb.Append("<DateResent>").Append(claim.DateResent.ToString("yyyyMMddHHmmss")).Append("</DateResent>");
 			sb.Append("<CorrectionType>").Append((int)claim.CorrectionType).Append("</CorrectionType>");
 			sb.Append("<ClaimIdentifier>").Append(SerializeStringEscapes.EscapeForXml(claim.ClaimIdentifier)).Append("</ClaimIdentifier>");
 			sb.Append("<OrigRefNum>").Append(SerializeStringEscapes.EscapeForXml(claim.OrigRefNum)).Append("</OrigRefNum>");
@@ -104,16 +104,16 @@ namespace OpenDentalWebService {
 							claim.PatNum=reader.ReadContentAsLong();
 							break;
 						case "DateService":
-							claim.DateService=DateTime.Parse(reader.ReadContentAsString());
+							claim.DateService=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateSent":
-							claim.DateSent=DateTime.Parse(reader.ReadContentAsString());
+							claim.DateSent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClaimStatus":
 							claim.ClaimStatus=reader.ReadContentAsString();
 							break;
 						case "DateReceived":
-							claim.DateReceived=DateTime.Parse(reader.ReadContentAsString());
+							claim.DateReceived=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PlanNum":
 							claim.PlanNum=reader.ReadContentAsLong();
@@ -140,7 +140,7 @@ namespace OpenDentalWebService {
 							claim.IsProsthesis=reader.ReadContentAsString();
 							break;
 						case "PriorDate":
-							claim.PriorDate=DateTime.Parse(reader.ReadContentAsString());
+							claim.PriorDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ReasonUnderPaid":
 							claim.ReasonUnderPaid=reader.ReadContentAsString();
@@ -167,7 +167,7 @@ namespace OpenDentalWebService {
 							claim.AccidentRelated=reader.ReadContentAsString();
 							break;
 						case "AccidentDate":
-							claim.AccidentDate=DateTime.Parse(reader.ReadContentAsString());
+							claim.AccidentDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AccidentST":
 							claim.AccidentST=reader.ReadContentAsString();
@@ -182,7 +182,7 @@ namespace OpenDentalWebService {
 							claim.OrthoRemainM=(byte)reader.ReadContentAsInt();
 							break;
 						case "OrthoDate":
-							claim.OrthoDate=DateTime.Parse(reader.ReadContentAsString());
+							claim.OrthoDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PatRelat":
 							claim.PatRelat=(OpenDentBusiness.Relat)reader.ReadContentAsInt();
@@ -230,7 +230,7 @@ namespace OpenDentalWebService {
 							claim.CanadianIsInitialLower=reader.ReadContentAsString();
 							break;
 						case "CanadianDateInitialLower":
-							claim.CanadianDateInitialLower=DateTime.Parse(reader.ReadContentAsString());
+							claim.CanadianDateInitialLower=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadianMandProsthMaterial":
 							claim.CanadianMandProsthMaterial=(byte)reader.ReadContentAsInt();
@@ -239,7 +239,7 @@ namespace OpenDentalWebService {
 							claim.CanadianIsInitialUpper=reader.ReadContentAsString();
 							break;
 						case "CanadianDateInitialUpper":
-							claim.CanadianDateInitialUpper=DateTime.Parse(reader.ReadContentAsString());
+							claim.CanadianDateInitialUpper=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadianMaxProsthMaterial":
 							claim.CanadianMaxProsthMaterial=(byte)reader.ReadContentAsInt();
@@ -254,7 +254,7 @@ namespace OpenDentalWebService {
 							claim.CanadaTransRefNum=reader.ReadContentAsString();
 							break;
 						case "CanadaEstTreatStartDate":
-							claim.CanadaEstTreatStartDate=DateTime.Parse(reader.ReadContentAsString());
+							claim.CanadaEstTreatStartDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadaInitialPayment":
 							claim.CanadaInitialPayment=reader.ReadContentAsDouble();
@@ -296,7 +296,7 @@ namespace OpenDentalWebService {
 							claim.CustomTracking=reader.ReadContentAsLong();
 							break;
 						case "DateResent":
-							claim.DateResent=DateTime.Parse(reader.ReadContentAsString());
+							claim.DateResent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CorrectionType":
 							claim.CorrectionType=(OpenDentBusiness.ClaimCorrectionType)reader.ReadContentAsInt();

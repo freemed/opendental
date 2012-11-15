@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class PhoneMetric {
 		/** Primary key. */
 		public int PhoneMetricNum;
 		/**  */
-		public String DateTimeEntry;
+		public Date DateTimeEntry;
 		/** Smallint -32768 to 32767. -1 means was unable to reach the server. */
 		public int VoiceMails;
 		/** Smallint -32768 to 32767 */
@@ -32,7 +34,7 @@ public class PhoneMetric {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PhoneMetric>");
 			sb.append("<PhoneMetricNum>").append(PhoneMetricNum).append("</PhoneMetricNum>");
-			sb.append("<DateTimeEntry>").append(Serializing.EscapeForXml(DateTimeEntry)).append("</DateTimeEntry>");
+			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEntry>");
 			sb.append("<VoiceMails>").append(VoiceMails).append("</VoiceMails>");
 			sb.append("<Triages>").append(Triages).append("</Triages>");
 			sb.append("<MinutesBehind>").append(MinutesBehind).append("</MinutesBehind>");
@@ -47,7 +49,7 @@ public class PhoneMetric {
 			try {
 				Document doc=XMLParser.parse(xml);
 				PhoneMetricNum=Integer.valueOf(doc.getElementsByTagName("PhoneMetricNum").item(0).getFirstChild().getNodeValue());
-				DateTimeEntry=doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue();
+				DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue());
 				VoiceMails=Integer.valueOf(doc.getElementsByTagName("VoiceMails").item(0).getFirstChild().getNodeValue());
 				Triages=Integer.valueOf(doc.getElementsByTagName("Triages").item(0).getFirstChild().getNodeValue());
 				MinutesBehind=Integer.valueOf(doc.getElementsByTagName("MinutesBehind").item(0).getFirstChild().getNodeValue());

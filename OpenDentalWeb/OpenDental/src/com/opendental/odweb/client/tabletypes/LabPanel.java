@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class LabPanel {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class LabPanel {
 		/** Both name and address in a single field.  OBR-20. */
 		public String LabNameAddress;
 		/** To be used for synch with web server. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** OBR-13.  Usually blank.  Example: hemolyzed. */
 		public String SpecimenCondition;
 		/** OBR-15.  Usually blank.  Example: LNA&Arterial Catheter&HL70070. */
@@ -50,7 +52,7 @@ public class LabPanel {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<RawMessage>").append(Serializing.EscapeForXml(RawMessage)).append("</RawMessage>");
 			sb.append("<LabNameAddress>").append(Serializing.EscapeForXml(LabNameAddress)).append("</LabNameAddress>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<SpecimenCondition>").append(Serializing.EscapeForXml(SpecimenCondition)).append("</SpecimenCondition>");
 			sb.append("<SpecimenSource>").append(Serializing.EscapeForXml(SpecimenSource)).append("</SpecimenSource>");
 			sb.append("<ServiceId>").append(Serializing.EscapeForXml(ServiceId)).append("</ServiceId>");
@@ -70,7 +72,7 @@ public class LabPanel {
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				RawMessage=doc.getElementsByTagName("RawMessage").item(0).getFirstChild().getNodeValue();
 				LabNameAddress=doc.getElementsByTagName("LabNameAddress").item(0).getFirstChild().getNodeValue();
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				SpecimenCondition=doc.getElementsByTagName("SpecimenCondition").item(0).getFirstChild().getNodeValue();
 				SpecimenSource=doc.getElementsByTagName("SpecimenSource").item(0).getFirstChild().getNodeValue();
 				ServiceId=doc.getElementsByTagName("ServiceId").item(0).getFirstChild().getNodeValue();

@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Document>");
 			sb.Append("<DocNum>").Append(document.DocNum).Append("</DocNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(document.Description)).Append("</Description>");
-			sb.Append("<DateCreated>").Append(document.DateCreated.ToString()).Append("</DateCreated>");
+			sb.Append("<DateCreated>").Append(document.DateCreated.ToString("yyyyMMddHHmmss")).Append("</DateCreated>");
 			sb.Append("<DocCategory>").Append(document.DocCategory).Append("</DocCategory>");
 			sb.Append("<PatNum>").Append(document.PatNum).Append("</PatNum>");
 			sb.Append("<FileName>").Append(SerializeStringEscapes.EscapeForXml(document.FileName)).Append("</FileName>");
@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 			sb.Append("<WindowingMin>").Append(document.WindowingMin).Append("</WindowingMin>");
 			sb.Append("<WindowingMax>").Append(document.WindowingMax).Append("</WindowingMax>");
 			sb.Append("<MountItemNum>").Append(document.MountItemNum).Append("</MountItemNum>");
-			sb.Append("<DateTStamp>").Append(document.DateTStamp.ToString()).Append("</DateTStamp>");
+			sb.Append("<DateTStamp>").Append(document.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
 			sb.Append("<RawBase64>").Append(SerializeStringEscapes.EscapeForXml(document.RawBase64)).Append("</RawBase64>");
 			sb.Append("<Thumbnail>").Append(SerializeStringEscapes.EscapeForXml(document.Thumbnail)).Append("</Thumbnail>");
 			sb.Append("</Document>");
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							document.Description=reader.ReadContentAsString();
 							break;
 						case "DateCreated":
-							document.DateCreated=DateTime.Parse(reader.ReadContentAsString());
+							document.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DocCategory":
 							document.DocCategory=reader.ReadContentAsLong();
@@ -111,7 +111,7 @@ namespace OpenDentalWebService {
 							document.MountItemNum=reader.ReadContentAsLong();
 							break;
 						case "DateTStamp":
-							document.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							document.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RawBase64":
 							document.RawBase64=reader.ReadContentAsString();

@@ -16,8 +16,8 @@ namespace OpenDentalWebService {
 			sb.Append("<PatNum>").Append(repeatcharge.PatNum).Append("</PatNum>");
 			sb.Append("<ProcCode>").Append(SerializeStringEscapes.EscapeForXml(repeatcharge.ProcCode)).Append("</ProcCode>");
 			sb.Append("<ChargeAmt>").Append(repeatcharge.ChargeAmt).Append("</ChargeAmt>");
-			sb.Append("<DateStart>").Append(repeatcharge.DateStart.ToString()).Append("</DateStart>");
-			sb.Append("<DateStop>").Append(repeatcharge.DateStop.ToString()).Append("</DateStop>");
+			sb.Append("<DateStart>").Append(repeatcharge.DateStart.ToString("yyyyMMddHHmmss")).Append("</DateStart>");
+			sb.Append("<DateStop>").Append(repeatcharge.DateStop.ToString("yyyyMMddHHmmss")).Append("</DateStop>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(repeatcharge.Note)).Append("</Note>");
 			sb.Append("</RepeatCharge>");
 			return sb.ToString();
@@ -47,10 +47,10 @@ namespace OpenDentalWebService {
 							repeatcharge.ChargeAmt=reader.ReadContentAsDouble();
 							break;
 						case "DateStart":
-							repeatcharge.DateStart=DateTime.Parse(reader.ReadContentAsString());
+							repeatcharge.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateStop":
-							repeatcharge.DateStop=DateTime.Parse(reader.ReadContentAsString());
+							repeatcharge.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Note":
 							repeatcharge.Note=reader.ReadContentAsString();

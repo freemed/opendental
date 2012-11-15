@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class CustRefEntry {
 		/** Primary key. */
@@ -12,7 +14,7 @@ public class CustRefEntry {
 		/** FK to patient.PatNum.  The chosen reference.  This is the customer who was given as a reference to the new customer. */
 		public int PatNumRef;
 		/** Date the reference was chosen. */
-		public String DateEntry;
+		public Date DateEntry;
 		/** Notes specific to this particular reference entry, mostly for a special reference situation. */
 		public String Note;
 
@@ -34,7 +36,7 @@ public class CustRefEntry {
 			sb.append("<CustRefEntryNum>").append(CustRefEntryNum).append("</CustRefEntryNum>");
 			sb.append("<PatNumCust>").append(PatNumCust).append("</PatNumCust>");
 			sb.append("<PatNumRef>").append(PatNumRef).append("</PatNumRef>");
-			sb.append("<DateEntry>").append(Serializing.EscapeForXml(DateEntry)).append("</DateEntry>");
+			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateEntry>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</CustRefEntry>");
 			return sb.toString();
@@ -49,7 +51,7 @@ public class CustRefEntry {
 				CustRefEntryNum=Integer.valueOf(doc.getElementsByTagName("CustRefEntryNum").item(0).getFirstChild().getNodeValue());
 				PatNumCust=Integer.valueOf(doc.getElementsByTagName("PatNumCust").item(0).getFirstChild().getNodeValue());
 				PatNumRef=Integer.valueOf(doc.getElementsByTagName("PatNumRef").item(0).getFirstChild().getNodeValue());
-				DateEntry=doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue();
+				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 			}
 			catch(Exception e) {

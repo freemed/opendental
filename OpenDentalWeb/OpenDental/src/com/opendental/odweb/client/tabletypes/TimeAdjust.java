@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class TimeAdjust {
 		/** Primary key. */
@@ -10,7 +12,7 @@ public class TimeAdjust {
 		/** FK to employee.EmployeeNum */
 		public int EmployeeNum;
 		/** The date and time that this entry will show on timecard. */
-		public String TimeEntry;
+		public Date TimeEntry;
 		/** The number of regular hours to adjust timecard by.  Can be + or -. */
 		public String RegHours;
 		/** Overtime hours. Usually +.  Automatically combined with a - adj to RegHours.  Another option is clockevent.OTimeHours. */
@@ -39,7 +41,7 @@ public class TimeAdjust {
 			sb.append("<TimeAdjust>");
 			sb.append("<TimeAdjustNum>").append(TimeAdjustNum).append("</TimeAdjustNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<TimeEntry>").append(Serializing.EscapeForXml(TimeEntry)).append("</TimeEntry>");
+			sb.append("<TimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</TimeEntry>");
 			sb.append("<RegHours>").append(Serializing.EscapeForXml(RegHours)).append("</RegHours>");
 			sb.append("<OTimeHours>").append(Serializing.EscapeForXml(OTimeHours)).append("</OTimeHours>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
@@ -56,7 +58,7 @@ public class TimeAdjust {
 				Document doc=XMLParser.parse(xml);
 				TimeAdjustNum=Integer.valueOf(doc.getElementsByTagName("TimeAdjustNum").item(0).getFirstChild().getNodeValue());
 				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				TimeEntry=doc.getElementsByTagName("TimeEntry").item(0).getFirstChild().getNodeValue();
+				TimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeEntry").item(0).getFirstChild().getNodeValue());
 				RegHours=doc.getElementsByTagName("RegHours").item(0).getFirstChild().getNodeValue();
 				OTimeHours=doc.getElementsByTagName("OTimeHours").item(0).getFirstChild().getNodeValue();
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();

@@ -14,7 +14,7 @@ namespace OpenDentalWebService {
 			sb.Append("<Commlog>");
 			sb.Append("<CommlogNum>").Append(commlog.CommlogNum).Append("</CommlogNum>");
 			sb.Append("<PatNum>").Append(commlog.PatNum).Append("</PatNum>");
-			sb.Append("<CommDateTime>").Append(commlog.CommDateTime.ToString()).Append("</CommDateTime>");
+			sb.Append("<CommDateTime>").Append(commlog.CommDateTime.ToString("yyyyMMddHHmmss")).Append("</CommDateTime>");
 			sb.Append("<CommType>").Append(commlog.CommType).Append("</CommType>");
 			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(commlog.Note)).Append("</Note>");
 			sb.Append("<Mode_>").Append((int)commlog.Mode_).Append("</Mode_>");
@@ -22,8 +22,8 @@ namespace OpenDentalWebService {
 			sb.Append("<UserNum>").Append(commlog.UserNum).Append("</UserNum>");
 			sb.Append("<Signature>").Append(SerializeStringEscapes.EscapeForXml(commlog.Signature)).Append("</Signature>");
 			sb.Append("<SigIsTopaz>").Append((commlog.SigIsTopaz)?1:0).Append("</SigIsTopaz>");
-			sb.Append("<DateTStamp>").Append(commlog.DateTStamp.ToString()).Append("</DateTStamp>");
-			sb.Append("<DateTimeEnd>").Append(commlog.DateTimeEnd.ToString()).Append("</DateTimeEnd>");
+			sb.Append("<DateTStamp>").Append(commlog.DateTStamp.ToString("yyyyMMddHHmmss")).Append("</DateTStamp>");
+			sb.Append("<DateTimeEnd>").Append(commlog.DateTimeEnd.ToString("yyyyMMddHHmmss")).Append("</DateTimeEnd>");
 			sb.Append("</Commlog>");
 			return sb.ToString();
 		}
@@ -46,7 +46,7 @@ namespace OpenDentalWebService {
 							commlog.PatNum=reader.ReadContentAsLong();
 							break;
 						case "CommDateTime":
-							commlog.CommDateTime=DateTime.Parse(reader.ReadContentAsString());
+							commlog.CommDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CommType":
 							commlog.CommType=reader.ReadContentAsLong();
@@ -70,10 +70,10 @@ namespace OpenDentalWebService {
 							commlog.SigIsTopaz=reader.ReadContentAsString()!="0";
 							break;
 						case "DateTStamp":
-							commlog.DateTStamp=DateTime.Parse(reader.ReadContentAsString());
+							commlog.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DateTimeEnd":
-							commlog.DateTimeEnd=DateTime.Parse(reader.ReadContentAsString());
+							commlog.DateTimeEnd=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

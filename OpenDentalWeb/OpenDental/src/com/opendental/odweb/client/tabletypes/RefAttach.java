@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class RefAttach {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class RefAttach {
 		/** Order to display in patient info. One-based.  Will be automated more in future. */
 		public int ItemOrder;
 		/** Date of referral. */
-		public String RefDate;
+		public Date RefDate;
 		/** true=from, false=to */
 		public boolean IsFrom;
 		/** Enum:ReferralToStatus 0=None,1=Declined,2=Scheduled,3=Consulted,4=InTreatment,5=Complete. */
@@ -26,7 +28,7 @@ public class RefAttach {
 		/** FK to procedurelog.ProcNum */
 		public int ProcNum;
 		/** . */
-		public String DateProcComplete;
+		public Date DateProcComplete;
 
 		/** Deep copy of object. */
 		public RefAttach Copy() {
@@ -53,13 +55,13 @@ public class RefAttach {
 			sb.append("<ReferralNum>").append(ReferralNum).append("</ReferralNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<RefDate>").append(Serializing.EscapeForXml(RefDate)).append("</RefDate>");
+			sb.append("<RefDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</RefDate>");
 			sb.append("<IsFrom>").append((IsFrom)?1:0).append("</IsFrom>");
 			sb.append("<RefToStatus>").append(RefToStatus.ordinal()).append("</RefToStatus>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("<IsTransitionOfCare>").append((IsTransitionOfCare)?1:0).append("</IsTransitionOfCare>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
-			sb.append("<DateProcComplete>").append(Serializing.EscapeForXml(DateProcComplete)).append("</DateProcComplete>");
+			sb.append("<DateProcComplete>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateProcComplete>");
 			sb.append("</RefAttach>");
 			return sb.toString();
 		}
@@ -74,13 +76,13 @@ public class RefAttach {
 				ReferralNum=Integer.valueOf(doc.getElementsByTagName("ReferralNum").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				RefDate=doc.getElementsByTagName("RefDate").item(0).getFirstChild().getNodeValue();
+				RefDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("RefDate").item(0).getFirstChild().getNodeValue());
 				IsFrom=(doc.getElementsByTagName("IsFrom").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				RefToStatus=ReferralToStatus.values()[Integer.valueOf(doc.getElementsByTagName("RefToStatus").item(0).getFirstChild().getNodeValue())];
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 				IsTransitionOfCare=(doc.getElementsByTagName("IsTransitionOfCare").item(0).getFirstChild().getNodeValue()=="0")?false:true;
 				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				DateProcComplete=doc.getElementsByTagName("DateProcComplete").item(0).getFirstChild().getNodeValue();
+				DateProcComplete=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateProcComplete").item(0).getFirstChild().getNodeValue());
 			}
 			catch(Exception e) {
 				throw e;

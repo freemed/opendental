@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Etrans {
 		/** Primary key. */
 		public int EtransNum;
 		/** The date and time of the transaction. */
-		public String DateTimeTrans;
+		public Date DateTimeTrans;
 		/** FK to clearinghouse.ClearinghouseNum .  Can be 0 if no clearinghouse was involved. */
 		public int ClearingHouseNum;
 		/** Enum:EtransType */
@@ -74,7 +76,7 @@ public class Etrans {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Etrans>");
 			sb.append("<EtransNum>").append(EtransNum).append("</EtransNum>");
-			sb.append("<DateTimeTrans>").append(Serializing.EscapeForXml(DateTimeTrans)).append("</DateTimeTrans>");
+			sb.append("<DateTimeTrans>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeTrans>");
 			sb.append("<ClearingHouseNum>").append(ClearingHouseNum).append("</ClearingHouseNum>");
 			sb.append("<Etype>").append(Etype.ordinal()).append("</Etype>");
 			sb.append("<ClaimNum>").append(ClaimNum).append("</ClaimNum>");
@@ -103,7 +105,7 @@ public class Etrans {
 			try {
 				Document doc=XMLParser.parse(xml);
 				EtransNum=Integer.valueOf(doc.getElementsByTagName("EtransNum").item(0).getFirstChild().getNodeValue());
-				DateTimeTrans=doc.getElementsByTagName("DateTimeTrans").item(0).getFirstChild().getNodeValue();
+				DateTimeTrans=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeTrans").item(0).getFirstChild().getNodeValue());
 				ClearingHouseNum=Integer.valueOf(doc.getElementsByTagName("ClearingHouseNum").item(0).getFirstChild().getNodeValue());
 				Etype=EtransType.values()[Integer.valueOf(doc.getElementsByTagName("Etype").item(0).getFirstChild().getNodeValue())];
 				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());

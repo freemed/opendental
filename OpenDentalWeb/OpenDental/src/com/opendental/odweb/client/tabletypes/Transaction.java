@@ -3,12 +3,14 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class Transaction {
 		/** Primary key. */
 		public int TransactionNum;
 		/** Not user editable.  Server time. */
-		public String DateTimeEntry;
+		public Date DateTimeEntry;
 		/** FK to user.UserNum. */
 		public int UserNum;
 		/** FK to deposit.DepositNum.  Will eventually be replaced by a source document table, and deposits will just be one of many types. */
@@ -32,7 +34,7 @@ public class Transaction {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Transaction>");
 			sb.append("<TransactionNum>").append(TransactionNum).append("</TransactionNum>");
-			sb.append("<DateTimeEntry>").append(Serializing.EscapeForXml(DateTimeEntry)).append("</DateTimeEntry>");
+			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTimeEntry>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");
@@ -47,7 +49,7 @@ public class Transaction {
 			try {
 				Document doc=XMLParser.parse(xml);
 				TransactionNum=Integer.valueOf(doc.getElementsByTagName("TransactionNum").item(0).getFirstChild().getNodeValue());
-				DateTimeEntry=doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue();
+				DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue());
 				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
 				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
 				PayNum=Integer.valueOf(doc.getElementsByTagName("PayNum").item(0).getFirstChild().getNodeValue());

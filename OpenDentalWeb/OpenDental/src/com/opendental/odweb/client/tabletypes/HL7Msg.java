@@ -3,6 +3,8 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import java.util.Date;
 
 public class HL7Msg {
 		/** Primary key. */
@@ -14,7 +16,7 @@ public class HL7Msg {
 		/** FK to appointment.AptNum.  Many of the messages contain "Visit ID" which is equivalent to our AptNum. */
 		public int AptNum;
 		/** Used to determine which messages are old so that they can be cleaned up. */
-		public String DateTStamp;
+		public Date DateTStamp;
 		/** Patient number. */
 		public int PatNum;
 		/** Maximum size 2000 characters. */
@@ -41,7 +43,7 @@ public class HL7Msg {
 			sb.append("<HL7Status>").append(HL7Status.ordinal()).append("</HL7Status>");
 			sb.append("<MsgText>").append(Serializing.EscapeForXml(MsgText)).append("</MsgText>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
-			sb.append("<DateTStamp>").append(Serializing.EscapeForXml(DateTStamp)).append("</DateTStamp>");
+			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AptDateTime)).append("</DateTStamp>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
 			sb.append("</HL7Msg>");
@@ -58,7 +60,7 @@ public class HL7Msg {
 				HL7Status=HL7MessageStatus.values()[Integer.valueOf(doc.getElementsByTagName("HL7Status").item(0).getFirstChild().getNodeValue())];
 				MsgText=doc.getElementsByTagName("MsgText").item(0).getFirstChild().getNodeValue();
 				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue();
+				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
 				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
 				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
 			}
