@@ -1,17 +1,14 @@
 package com.opendental.odweb.client.mainmodules;
 
-import java.util.Date;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.opendental.odweb.client.ui.MsgBox;
 import com.opendental.odweb.client.usercontrols.MenuBarMain;
 import com.opendental.odweb.client.usercontrols.MenuBarMainPatient;
 import com.opendental.odweb.client.usercontrols.LabelMainTitle;
@@ -46,8 +43,7 @@ public class WindowOpenDental implements EntryPoint {
 			vertPanelModules.add(ModuleCur);
 			hp.add(vertPanelModules);
 			
-			vertPanelMain.add(hp);
-			MsgBox.Show(DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict("20120112103000").toString());
+			vertPanelMain.add(hp);			
 		}
 		catch(Exception e){
 			e.printStackTrace();
