@@ -460,8 +460,15 @@ namespace xCrudGeneratorWebService {
 			strb.Append("package com.opendental.odweb.client.tabletypes;"+rn
 				+rn+"import com.google.gwt.xml.client.Document;"+rn
 				+"import com.google.gwt.xml.client.XMLParser;"+rn
-				+"import com.opendental.odweb.client.remoting.Serializing;"+rn
-				+rn+"public class "+className+docForjava+" {"+rn);
+				+"import com.opendental.odweb.client.remoting.Serializing;"+rn);
+			for(int i=0;i<fields.Length;i++) {
+				if(fields[i].FieldType.Name=="DateTime") {
+					strb.Append("import com.google.gwt.i18n.client.DateTimeFormat;"+rn
+						+"import java.util.Date;"+rn);
+					break;
+				}
+			}
+			strb.Append(rn+"public class "+className+docForjava+" {"+rn) ;
 			#endregion
 			#region fields
 			foreach(FieldInfo field in fields) {
@@ -599,10 +606,10 @@ namespace xCrudGeneratorWebService {
 						strb.Append(className.ToLower()+"."+field.Name+".ToArgb()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "TimeSpan":
-					case "DateTime":
 						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
-					default:
+					case "DateTime":
+						strb.Append(className.ToLower()+"."+field.Name+".ToString(\"yyyyMMddHHmmss\")).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 				}
 			}
@@ -663,7 +670,7 @@ namespace xCrudGeneratorWebService {
 							+t7+"break;"+rn);
 						continue;
 					case "DateTime":
-						strb.Append("DateTime.Parse(reader.ReadContentAsString());"+rn
+						strb.Append("DateTime.ParseExact(reader.ReadContentAsString(),\"yyyyMMddHHmmss\",null);"+rn
 							+t7+"break;"+rn);
 						continue;
 					default:
@@ -686,11 +693,13 @@ namespace xCrudGeneratorWebService {
 				switch(field.FieldType.Name) {
 					case "String":
 					case "TimeSpan":
-					case "DateTime":
 						strb.Append("Serializing.EscapeForXml("+field.Name+")");
 						break;
 					case "Boolean":
 						strb.Append("("+field.Name+")?1:0");
+						break;
+					case "DateTime":
+						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format(AptDateTime)");
 						break;
 					default:
 						strb.Append(field.Name);
@@ -729,6 +738,10 @@ namespace xCrudGeneratorWebService {
 						continue;
 					case "Boolean":
 						strb.Append("(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue()==\"0\")?false:true;"+rn);
+						continue;
+					case "DateTime":
+						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").parseStrict(doc.getElementsByTagName(\""+field.Name+"\")."
+							+"item(0).getFirstChild().getNodeValue());"+rn);
 						continue;
 					default:
 						strb.Append("doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue();"+rn);
@@ -835,11 +848,13 @@ namespace xCrudGeneratorWebService {
 					break;
 				case "String":
 				case "TimeSpan":
-				case "DateTime":
 					strb.Append("String");
 					break;
 				case "Boolean":
 					strb.Append("boolean");
+					break;
+				case "DateTime":
+					strb.Append("Date");
 					break;
 			}
 		}
