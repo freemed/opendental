@@ -56,7 +56,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CodeNum":
-							procedurecode.CodeNum=reader.ReadContentAsLong();
+							procedurecode.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcCode":
 							procedurecode.ProcCode=reader.ReadContentAsString();
@@ -71,10 +71,10 @@ namespace OpenDentalWebService {
 							procedurecode.ProcTime=reader.ReadContentAsString();
 							break;
 						case "ProcCat":
-							procedurecode.ProcCat=reader.ReadContentAsLong();
+							procedurecode.ProcCat=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TreatArea":
-							procedurecode.TreatArea=(OpenDentBusiness.TreatmentArea)reader.ReadContentAsInt();
+							procedurecode.TreatArea=(OpenDentBusiness.TreatmentArea)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "NoBillIns":
 							procedurecode.NoBillIns=reader.ReadContentAsString()!="0";
@@ -89,7 +89,7 @@ namespace OpenDentalWebService {
 							procedurecode.IsHygiene=reader.ReadContentAsString()!="0";
 							break;
 						case "GTypeNum":
-							procedurecode.GTypeNum=reader.ReadContentAsInt();
+							procedurecode.GTypeNum=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AlternateCode1":
 							procedurecode.AlternateCode1=reader.ReadContentAsString();
@@ -101,10 +101,10 @@ namespace OpenDentalWebService {
 							procedurecode.IsTaxed=reader.ReadContentAsString()!="0";
 							break;
 						case "PaintType":
-							procedurecode.PaintType=(OpenDentBusiness.ToothPaintingType)reader.ReadContentAsInt();
+							procedurecode.PaintType=(OpenDentBusiness.ToothPaintingType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "GraphicColor":
-							procedurecode.GraphicColor=Color.FromArgb(reader.ReadContentAsInt());
+							procedurecode.GraphicColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "LaymanTerm":
 							procedurecode.LaymanTerm=reader.ReadContentAsString();
@@ -116,13 +116,13 @@ namespace OpenDentalWebService {
 							procedurecode.PreExisting=reader.ReadContentAsString()!="0";
 							break;
 						case "BaseUnits":
-							procedurecode.BaseUnits=reader.ReadContentAsInt();
+							procedurecode.BaseUnits=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SubstitutionCode":
 							procedurecode.SubstitutionCode=reader.ReadContentAsString();
 							break;
 						case "SubstOnlyIf":
-							procedurecode.SubstOnlyIf=(OpenDentBusiness.SubstitutionCondition)reader.ReadContentAsInt();
+							procedurecode.SubstOnlyIf=(OpenDentBusiness.SubstitutionCondition)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							procedurecode.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -137,7 +137,7 @@ namespace OpenDentalWebService {
 							procedurecode.RevenueCodeDefault=reader.ReadContentAsString();
 							break;
 						case "ProvNumDefault":
-							procedurecode.ProvNumDefault=reader.ReadContentAsLong();
+							procedurecode.ProvNumDefault=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

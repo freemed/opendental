@@ -38,34 +38,34 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ApptViewItemNum":
-							apptviewitem.ApptViewItemNum=reader.ReadContentAsLong();
+							apptviewitem.ApptViewItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ApptViewNum":
-							apptviewitem.ApptViewNum=reader.ReadContentAsLong();
+							apptviewitem.ApptViewNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OpNum":
-							apptviewitem.OpNum=reader.ReadContentAsLong();
+							apptviewitem.OpNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							apptviewitem.ProvNum=reader.ReadContentAsLong();
+							apptviewitem.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ElementDesc":
 							apptviewitem.ElementDesc=reader.ReadContentAsString();
 							break;
 						case "ElementOrder":
-							apptviewitem.ElementOrder=(byte)reader.ReadContentAsInt();
+							apptviewitem.ElementOrder=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ElementColor":
-							apptviewitem.ElementColor=Color.FromArgb(reader.ReadContentAsInt());
+							apptviewitem.ElementColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "ElementAlignment":
-							apptviewitem.ElementAlignment=(OpenDentBusiness.ApptViewAlignment)reader.ReadContentAsInt();
+							apptviewitem.ElementAlignment=(OpenDentBusiness.ApptViewAlignment)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ApptFieldDefNum":
-							apptviewitem.ApptFieldDefNum=reader.ReadContentAsLong();
+							apptviewitem.ApptFieldDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatFieldDefNum":
-							apptviewitem.PatFieldDefNum=reader.ReadContentAsLong();
+							apptviewitem.PatFieldDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

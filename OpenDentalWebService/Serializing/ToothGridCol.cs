@@ -36,28 +36,28 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ToothGridColNum":
-							toothgridcol.ToothGridColNum=reader.ReadContentAsLong();
+							toothgridcol.ToothGridColNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SheetFieldNum":
-							toothgridcol.SheetFieldNum=reader.ReadContentAsLong();
+							toothgridcol.SheetFieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NameItem":
 							toothgridcol.NameItem=reader.ReadContentAsString();
 							break;
 						case "CellType":
-							toothgridcol.CellType=(OpenDentBusiness.ToothGridCellType)reader.ReadContentAsInt();
+							toothgridcol.CellType=(OpenDentBusiness.ToothGridCellType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							toothgridcol.ItemOrder=reader.ReadContentAsInt();
+							toothgridcol.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ColumnWidth":
-							toothgridcol.ColumnWidth=reader.ReadContentAsInt();
+							toothgridcol.ColumnWidth=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							toothgridcol.CodeNum=reader.ReadContentAsLong();
+							toothgridcol.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcStatus":
-							toothgridcol.ProcStatus=(OpenDentBusiness.ProcStat)reader.ReadContentAsInt();
+							toothgridcol.ProcStatus=(OpenDentBusiness.ProcStat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

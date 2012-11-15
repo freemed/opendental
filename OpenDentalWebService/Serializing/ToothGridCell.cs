@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ToothGridCellNum":
-							toothgridcell.ToothGridCellNum=reader.ReadContentAsLong();
+							toothgridcell.ToothGridCellNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SheetFieldNum":
-							toothgridcell.SheetFieldNum=reader.ReadContentAsLong();
+							toothgridcell.SheetFieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ToothGridColNum":
-							toothgridcell.ToothGridColNum=reader.ReadContentAsLong();
+							toothgridcell.ToothGridColNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ValueEntered":
 							toothgridcell.ValueEntered=reader.ReadContentAsString();

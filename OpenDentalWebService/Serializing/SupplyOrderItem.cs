@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SupplyOrderItemNum":
-							supplyorderitem.SupplyOrderItemNum=reader.ReadContentAsLong();
+							supplyorderitem.SupplyOrderItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SupplyOrderNum":
-							supplyorderitem.SupplyOrderNum=reader.ReadContentAsLong();
+							supplyorderitem.SupplyOrderNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SupplyNum":
-							supplyorderitem.SupplyNum=reader.ReadContentAsLong();
+							supplyorderitem.SupplyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Qty":
-							supplyorderitem.Qty=reader.ReadContentAsInt();
+							supplyorderitem.Qty=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Price":
-							supplyorderitem.Price=reader.ReadContentAsDouble();
+							supplyorderitem.Price=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

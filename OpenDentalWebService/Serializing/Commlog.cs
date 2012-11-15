@@ -40,28 +40,28 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CommlogNum":
-							commlog.CommlogNum=reader.ReadContentAsLong();
+							commlog.CommlogNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							commlog.PatNum=reader.ReadContentAsLong();
+							commlog.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CommDateTime":
 							commlog.CommDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CommType":
-							commlog.CommType=reader.ReadContentAsLong();
+							commlog.CommType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							commlog.Note=reader.ReadContentAsString();
 							break;
 						case "Mode_":
-							commlog.Mode_=(OpenDentBusiness.CommItemMode)reader.ReadContentAsInt();
+							commlog.Mode_=(OpenDentBusiness.CommItemMode)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SentOrReceived":
-							commlog.SentOrReceived=(OpenDentBusiness.CommSentOrReceived)reader.ReadContentAsInt();
+							commlog.SentOrReceived=(OpenDentBusiness.CommSentOrReceived)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "UserNum":
-							commlog.UserNum=reader.ReadContentAsLong();
+							commlog.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Signature":
 							commlog.Signature=reader.ReadContentAsString();

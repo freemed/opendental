@@ -30,7 +30,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EtransMessageTextNum":
-							etransmessagetext.EtransMessageTextNum=reader.ReadContentAsLong();
+							etransmessagetext.EtransMessageTextNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MessageText":
 							etransmessagetext.MessageText=reader.ReadContentAsString();

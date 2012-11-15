@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ScheduleNum":
-							schedule.ScheduleNum=reader.ReadContentAsLong();
+							schedule.ScheduleNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SchedDate":
 							schedule.SchedDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -51,22 +51,22 @@ namespace OpenDentalWebService {
 							schedule.StopTime=TimeSpan.Parse(reader.ReadContentAsString());
 							break;
 						case "SchedType":
-							schedule.SchedType=(OpenDentBusiness.ScheduleType)reader.ReadContentAsInt();
+							schedule.SchedType=(OpenDentBusiness.ScheduleType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							schedule.ProvNum=reader.ReadContentAsLong();
+							schedule.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BlockoutType":
-							schedule.BlockoutType=reader.ReadContentAsLong();
+							schedule.BlockoutType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							schedule.Note=reader.ReadContentAsString();
 							break;
 						case "Status":
-							schedule.Status=(OpenDentBusiness.SchedStatus)reader.ReadContentAsInt();
+							schedule.Status=(OpenDentBusiness.SchedStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "EmployeeNum":
-							schedule.EmployeeNum=reader.ReadContentAsLong();
+							schedule.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							schedule.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

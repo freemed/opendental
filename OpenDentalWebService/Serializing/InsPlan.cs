@@ -56,7 +56,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PlanNum":
-							insplan.PlanNum=reader.ReadContentAsLong();
+							insplan.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "GroupName":
 							insplan.GroupName=reader.ReadContentAsString();
@@ -68,13 +68,13 @@ namespace OpenDentalWebService {
 							insplan.PlanNote=reader.ReadContentAsString();
 							break;
 						case "FeeSched":
-							insplan.FeeSched=reader.ReadContentAsLong();
+							insplan.FeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlanType":
 							insplan.PlanType=reader.ReadContentAsString();
 							break;
 						case "ClaimFormNum":
-							insplan.ClaimFormNum=reader.ReadContentAsLong();
+							insplan.ClaimFormNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UseAltCode":
 							insplan.UseAltCode=reader.ReadContentAsString()!="0";
@@ -83,16 +83,16 @@ namespace OpenDentalWebService {
 							insplan.ClaimsUseUCR=reader.ReadContentAsString()!="0";
 							break;
 						case "CopayFeeSched":
-							insplan.CopayFeeSched=reader.ReadContentAsLong();
+							insplan.CopayFeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmployerNum":
-							insplan.EmployerNum=reader.ReadContentAsLong();
+							insplan.EmployerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CarrierNum":
-							insplan.CarrierNum=reader.ReadContentAsLong();
+							insplan.CarrierNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AllowedFeeSched":
-							insplan.AllowedFeeSched=reader.ReadContentAsLong();
+							insplan.AllowedFeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TrojanID":
 							insplan.TrojanID=reader.ReadContentAsString();
@@ -104,10 +104,10 @@ namespace OpenDentalWebService {
 							insplan.IsMedical=reader.ReadContentAsString()!="0";
 							break;
 						case "FilingCode":
-							insplan.FilingCode=reader.ReadContentAsLong();
+							insplan.FilingCode=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DentaideCardSequence":
-							insplan.DentaideCardSequence=(byte)reader.ReadContentAsInt();
+							insplan.DentaideCardSequence=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ShowBaseUnits":
 							insplan.ShowBaseUnits=reader.ReadContentAsString()!="0";
@@ -119,10 +119,10 @@ namespace OpenDentalWebService {
 							insplan.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "MonthRenew":
-							insplan.MonthRenew=(byte)reader.ReadContentAsInt();
+							insplan.MonthRenew=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "FilingCodeSubtype":
-							insplan.FilingCodeSubtype=reader.ReadContentAsLong();
+							insplan.FilingCodeSubtype=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CanadianPlanFlag":
 							insplan.CanadianPlanFlag=reader.ReadContentAsString();
@@ -137,7 +137,7 @@ namespace OpenDentalWebService {
 							insplan.RxBIN=reader.ReadContentAsString();
 							break;
 						case "CobRule":
-							insplan.CobRule=(OpenDentBusiness.EnumCobRule)reader.ReadContentAsInt();
+							insplan.CobRule=(OpenDentBusiness.EnumCobRule)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

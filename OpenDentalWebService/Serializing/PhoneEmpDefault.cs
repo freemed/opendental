@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmployeeNum":
-							phoneempdefault.EmployeeNum=reader.ReadContentAsLong();
+							phoneempdefault.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NoGraph":
 							phoneempdefault.NoGraph=reader.ReadContentAsString()!="0";
@@ -48,16 +48,16 @@ namespace OpenDentalWebService {
 							phoneempdefault.NoColor=reader.ReadContentAsString()!="0";
 							break;
 						case "RingGroups":
-							phoneempdefault.RingGroups=(OpenDentBusiness.AsteriskRingGroups)reader.ReadContentAsInt();
+							phoneempdefault.RingGroups=(OpenDentBusiness.AsteriskRingGroups)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "EmpName":
 							phoneempdefault.EmpName=reader.ReadContentAsString();
 							break;
 						case "PhoneExt":
-							phoneempdefault.PhoneExt=reader.ReadContentAsInt();
+							phoneempdefault.PhoneExt=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "StatusOverride":
-							phoneempdefault.StatusOverride=(OpenDentBusiness.PhoneEmpStatusOverride)reader.ReadContentAsInt();
+							phoneempdefault.StatusOverride=(OpenDentBusiness.PhoneEmpStatusOverride)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Notes":
 							phoneempdefault.Notes=reader.ReadContentAsString();

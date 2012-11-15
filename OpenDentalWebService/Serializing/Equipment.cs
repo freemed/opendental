@@ -38,7 +38,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EquipmentNum":
-							equipment.EquipmentNum=reader.ReadContentAsLong();
+							equipment.EquipmentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							equipment.Description=reader.ReadContentAsString();
@@ -56,10 +56,10 @@ namespace OpenDentalWebService {
 							equipment.DateSold=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PurchaseCost":
-							equipment.PurchaseCost=reader.ReadContentAsDouble();
+							equipment.PurchaseCost=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "MarketValue":
-							equipment.MarketValue=reader.ReadContentAsDouble();
+							equipment.MarketValue=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Location":
 							equipment.Location=reader.ReadContentAsString();

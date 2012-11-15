@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ComputerNum":
-							computer.ComputerNum=reader.ReadContentAsLong();
+							computer.ComputerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CompName":
 							computer.CompName=reader.ReadContentAsString();

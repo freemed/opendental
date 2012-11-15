@@ -34,7 +34,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AllergyDefNum":
-							allergydef.AllergyDefNum=reader.ReadContentAsLong();
+							allergydef.AllergyDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							allergydef.Description=reader.ReadContentAsString();
@@ -46,10 +46,10 @@ namespace OpenDentalWebService {
 							allergydef.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Snomed":
-							allergydef.Snomed=(OpenDentBusiness.SnomedAllergy)reader.ReadContentAsInt();
+							allergydef.Snomed=(OpenDentBusiness.SnomedAllergy)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MedicationNum":
-							allergydef.MedicationNum=reader.ReadContentAsLong();
+							allergydef.MedicationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

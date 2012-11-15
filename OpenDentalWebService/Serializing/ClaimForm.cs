@@ -37,7 +37,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimFormNum":
-							claimform.ClaimFormNum=reader.ReadContentAsLong();
+							claimform.ClaimFormNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							claimform.Description=reader.ReadContentAsString();
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							claimform.FontName=reader.ReadContentAsString();
 							break;
 						case "FontSize":
-							claimform.FontSize=reader.ReadContentAsFloat();
+							claimform.FontSize=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "UniqueID":
 							claimform.UniqueID=reader.ReadContentAsString();
@@ -58,10 +58,10 @@ namespace OpenDentalWebService {
 							claimform.PrintImages=reader.ReadContentAsString()!="0";
 							break;
 						case "OffsetX":
-							claimform.OffsetX=reader.ReadContentAsInt();
+							claimform.OffsetX=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "OffsetY":
-							claimform.OffsetY=reader.ReadContentAsInt();
+							claimform.OffsetY=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

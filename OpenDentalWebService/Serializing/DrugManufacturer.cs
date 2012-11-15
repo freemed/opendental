@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DrugManufacturerNum":
-							drugmanufacturer.DrugManufacturerNum=reader.ReadContentAsLong();
+							drugmanufacturer.DrugManufacturerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ManufacturerName":
 							drugmanufacturer.ManufacturerName=reader.ReadContentAsString();

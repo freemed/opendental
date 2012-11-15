@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "OrthoChartNum":
-							orthochart.OrthoChartNum=reader.ReadContentAsLong();
+							orthochart.OrthoChartNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							orthochart.PatNum=reader.ReadContentAsLong();
+							orthochart.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateService":
 							orthochart.DateService=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

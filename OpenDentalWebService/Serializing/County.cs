@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CountyNum":
-							county.CountyNum=reader.ReadContentAsLong();
+							county.CountyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CountyName":
 							county.CountyName=reader.ReadContentAsString();

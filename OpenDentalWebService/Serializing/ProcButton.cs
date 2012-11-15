@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcButtonNum":
-							procbutton.ProcButtonNum=reader.ReadContentAsLong();
+							procbutton.ProcButtonNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							procbutton.Description=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							procbutton.ItemOrder=reader.ReadContentAsInt();
+							procbutton.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Category":
-							procbutton.Category=reader.ReadContentAsLong();
+							procbutton.Category=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ButtonImage":
 							procbutton.ButtonImage=reader.ReadContentAsString();

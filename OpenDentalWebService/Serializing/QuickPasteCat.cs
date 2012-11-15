@@ -32,13 +32,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "QuickPasteCatNum":
-							quickpastecat.QuickPasteCatNum=reader.ReadContentAsLong();
+							quickpastecat.QuickPasteCatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							quickpastecat.Description=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							quickpastecat.ItemOrder=reader.ReadContentAsInt();
+							quickpastecat.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DefaultForTypes":
 							quickpastecat.DefaultForTypes=reader.ReadContentAsString();

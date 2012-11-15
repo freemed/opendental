@@ -45,10 +45,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "StatementNum":
-							statement.StatementNum=reader.ReadContentAsLong();
+							statement.StatementNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							statement.PatNum=reader.ReadContentAsLong();
+							statement.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateSent":
 							statement.DateSent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -66,7 +66,7 @@ namespace OpenDentalWebService {
 							statement.NoteBold=reader.ReadContentAsString();
 							break;
 						case "Mode_":
-							statement.Mode_=(OpenDentBusiness.StatementMode)reader.ReadContentAsInt();
+							statement.Mode_=(OpenDentBusiness.StatementMode)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "HidePayment":
 							statement.HidePayment=reader.ReadContentAsString()!="0";
@@ -81,7 +81,7 @@ namespace OpenDentalWebService {
 							statement.IsSent=reader.ReadContentAsString()!="0";
 							break;
 						case "DocNum":
-							statement.DocNum=reader.ReadContentAsLong();
+							statement.DocNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							statement.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

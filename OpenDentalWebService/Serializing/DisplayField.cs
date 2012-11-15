@@ -35,25 +35,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DisplayFieldNum":
-							displayfield.DisplayFieldNum=reader.ReadContentAsLong();
+							displayfield.DisplayFieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InternalName":
 							displayfield.InternalName=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							displayfield.ItemOrder=reader.ReadContentAsInt();
+							displayfield.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Description":
 							displayfield.Description=reader.ReadContentAsString();
 							break;
 						case "ColumnWidth":
-							displayfield.ColumnWidth=reader.ReadContentAsInt();
+							displayfield.ColumnWidth=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Category":
-							displayfield.Category=(OpenDentBusiness.DisplayFieldCategory)reader.ReadContentAsInt();
+							displayfield.Category=(OpenDentBusiness.DisplayFieldCategory)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ChartViewNum":
-							displayfield.ChartViewNum=reader.ReadContentAsLong();
+							displayfield.ChartViewNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

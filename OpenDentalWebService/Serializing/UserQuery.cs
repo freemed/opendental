@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "QueryNum":
-							userquery.QueryNum=reader.ReadContentAsLong();
+							userquery.QueryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							userquery.Description=reader.ReadContentAsString();

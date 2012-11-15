@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AutomationConditionNum":
-							automationcondition.AutomationConditionNum=reader.ReadContentAsLong();
+							automationcondition.AutomationConditionNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AutomationNum":
-							automationcondition.AutomationNum=reader.ReadContentAsLong();
+							automationcondition.AutomationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CompareField":
-							automationcondition.CompareField=(OpenDentBusiness.AutoCondField)reader.ReadContentAsInt();
+							automationcondition.CompareField=(OpenDentBusiness.AutoCondField)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Comparison":
-							automationcondition.Comparison=(OpenDentBusiness.AutoCondComparison)reader.ReadContentAsInt();
+							automationcondition.Comparison=(OpenDentBusiness.AutoCondComparison)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CompareString":
 							automationcondition.CompareString=reader.ReadContentAsString();

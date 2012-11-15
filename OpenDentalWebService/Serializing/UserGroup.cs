@@ -30,7 +30,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "UserGroupNum":
-							usergroup.UserGroupNum=reader.ReadContentAsLong();
+							usergroup.UserGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							usergroup.Description=reader.ReadContentAsString();

@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DiseaseDefNum":
-							diseasedef.DiseaseDefNum=reader.ReadContentAsLong();
+							diseasedef.DiseaseDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DiseaseName":
 							diseasedef.DiseaseName=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							diseasedef.ItemOrder=reader.ReadContentAsInt();
+							diseasedef.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							diseasedef.IsHidden=reader.ReadContentAsString()!="0";

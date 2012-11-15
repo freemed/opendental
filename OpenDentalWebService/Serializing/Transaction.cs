@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TransactionNum":
-							transaction.TransactionNum=reader.ReadContentAsLong();
+							transaction.TransactionNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeEntry":
 							transaction.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UserNum":
-							transaction.UserNum=reader.ReadContentAsLong();
+							transaction.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DepositNum":
-							transaction.DepositNum=reader.ReadContentAsLong();
+							transaction.DepositNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayNum":
-							transaction.PayNum=reader.ReadContentAsLong();
+							transaction.PayNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

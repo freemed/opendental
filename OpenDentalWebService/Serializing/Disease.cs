@@ -37,13 +37,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DiseaseNum":
-							disease.DiseaseNum=reader.ReadContentAsLong();
+							disease.DiseaseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							disease.PatNum=reader.ReadContentAsLong();
+							disease.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DiseaseDefNum":
-							disease.DiseaseDefNum=reader.ReadContentAsLong();
+							disease.DiseaseDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNote":
 							disease.PatNote=reader.ReadContentAsString();
@@ -52,10 +52,10 @@ namespace OpenDentalWebService {
 							disease.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ICD9Num":
-							disease.ICD9Num=reader.ReadContentAsLong();
+							disease.ICD9Num=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProbStatus":
-							disease.ProbStatus=(OpenDentBusiness.ProblemStatus)reader.ReadContentAsInt();
+							disease.ProbStatus=(OpenDentBusiness.ProblemStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateStart":
 							disease.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

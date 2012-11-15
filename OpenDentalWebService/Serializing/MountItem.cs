@@ -35,25 +35,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "MountItemNum":
-							mountitem.MountItemNum=reader.ReadContentAsLong();
+							mountitem.MountItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MountNum":
-							mountitem.MountNum=reader.ReadContentAsLong();
+							mountitem.MountNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Xpos":
-							mountitem.Xpos=reader.ReadContentAsInt();
+							mountitem.Xpos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Ypos":
-							mountitem.Ypos=reader.ReadContentAsInt();
+							mountitem.Ypos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "OrdinalPos":
-							mountitem.OrdinalPos=reader.ReadContentAsInt();
+							mountitem.OrdinalPos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Width":
-							mountitem.Width=reader.ReadContentAsInt();
+							mountitem.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							mountitem.Height=reader.ReadContentAsInt();
+							mountitem.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

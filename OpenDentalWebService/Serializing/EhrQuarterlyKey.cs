@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EhrQuarterlyKeyNum":
-							ehrquarterlykey.EhrQuarterlyKeyNum=reader.ReadContentAsLong();
+							ehrquarterlykey.EhrQuarterlyKeyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "YearValue":
-							ehrquarterlykey.YearValue=reader.ReadContentAsInt();
+							ehrquarterlykey.YearValue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "QuarterValue":
-							ehrquarterlykey.QuarterValue=reader.ReadContentAsInt();
+							ehrquarterlykey.QuarterValue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PracticeName":
 							ehrquarterlykey.PracticeName=reader.ReadContentAsString();
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							ehrquarterlykey.KeyValue=reader.ReadContentAsString();
 							break;
 						case "PatNum":
-							ehrquarterlykey.PatNum=reader.ReadContentAsLong();
+							ehrquarterlykey.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Notes":
 							ehrquarterlykey.Notes=reader.ReadContentAsString();

@@ -98,10 +98,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimNum":
-							claim.ClaimNum=reader.ReadContentAsLong();
+							claim.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							claim.PatNum=reader.ReadContentAsLong();
+							claim.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateService":
 							claim.DateService=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -116,22 +116,22 @@ namespace OpenDentalWebService {
 							claim.DateReceived=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PlanNum":
-							claim.PlanNum=reader.ReadContentAsLong();
+							claim.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvTreat":
-							claim.ProvTreat=reader.ReadContentAsLong();
+							claim.ProvTreat=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimFee":
-							claim.ClaimFee=reader.ReadContentAsDouble();
+							claim.ClaimFee=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsPayEst":
-							claim.InsPayEst=reader.ReadContentAsDouble();
+							claim.InsPayEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsPayAmt":
-							claim.InsPayAmt=reader.ReadContentAsDouble();
+							claim.InsPayAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DedApplied":
-							claim.DedApplied=reader.ReadContentAsDouble();
+							claim.DedApplied=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PreAuthString":
 							claim.PreAuthString=reader.ReadContentAsString();
@@ -152,16 +152,16 @@ namespace OpenDentalWebService {
 							claim.ClaimType=reader.ReadContentAsString();
 							break;
 						case "ProvBill":
-							claim.ProvBill=reader.ReadContentAsLong();
+							claim.ProvBill=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ReferringProv":
-							claim.ReferringProv=reader.ReadContentAsLong();
+							claim.ReferringProv=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RefNumString":
 							claim.RefNumString=reader.ReadContentAsString();
 							break;
 						case "PlaceService":
-							claim.PlaceService=(OpenDentBusiness.PlaceOfService)reader.ReadContentAsInt();
+							claim.PlaceService=(OpenDentBusiness.PlaceOfService)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AccidentRelated":
 							claim.AccidentRelated=reader.ReadContentAsString();
@@ -173,43 +173,43 @@ namespace OpenDentalWebService {
 							claim.AccidentST=reader.ReadContentAsString();
 							break;
 						case "EmployRelated":
-							claim.EmployRelated=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							claim.EmployRelated=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsOrtho":
 							claim.IsOrtho=reader.ReadContentAsString()!="0";
 							break;
 						case "OrthoRemainM":
-							claim.OrthoRemainM=(byte)reader.ReadContentAsInt();
+							claim.OrthoRemainM=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "OrthoDate":
 							claim.OrthoDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PatRelat":
-							claim.PatRelat=(OpenDentBusiness.Relat)reader.ReadContentAsInt();
+							claim.PatRelat=(OpenDentBusiness.Relat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PlanNum2":
-							claim.PlanNum2=reader.ReadContentAsLong();
+							claim.PlanNum2=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatRelat2":
-							claim.PatRelat2=(OpenDentBusiness.Relat)reader.ReadContentAsInt();
+							claim.PatRelat2=(OpenDentBusiness.Relat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "WriteOff":
-							claim.WriteOff=reader.ReadContentAsDouble();
+							claim.WriteOff=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Radiographs":
-							claim.Radiographs=(byte)reader.ReadContentAsInt();
+							claim.Radiographs=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							claim.ClinicNum=reader.ReadContentAsLong();
+							claim.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimForm":
-							claim.ClaimForm=reader.ReadContentAsLong();
+							claim.ClaimForm=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AttachedImages":
-							claim.AttachedImages=reader.ReadContentAsInt();
+							claim.AttachedImages=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AttachedModels":
-							claim.AttachedModels=reader.ReadContentAsInt();
+							claim.AttachedModels=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AttachedFlags":
 							claim.AttachedFlags=reader.ReadContentAsString();
@@ -224,7 +224,7 @@ namespace OpenDentalWebService {
 							claim.CanadianReferralProviderNum=reader.ReadContentAsString();
 							break;
 						case "CanadianReferralReason":
-							claim.CanadianReferralReason=(byte)reader.ReadContentAsInt();
+							claim.CanadianReferralReason=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadianIsInitialLower":
 							claim.CanadianIsInitialLower=reader.ReadContentAsString();
@@ -233,7 +233,7 @@ namespace OpenDentalWebService {
 							claim.CanadianDateInitialLower=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadianMandProsthMaterial":
-							claim.CanadianMandProsthMaterial=(byte)reader.ReadContentAsInt();
+							claim.CanadianMandProsthMaterial=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadianIsInitialUpper":
 							claim.CanadianIsInitialUpper=reader.ReadContentAsString();
@@ -242,13 +242,13 @@ namespace OpenDentalWebService {
 							claim.CanadianDateInitialUpper=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadianMaxProsthMaterial":
-							claim.CanadianMaxProsthMaterial=(byte)reader.ReadContentAsInt();
+							claim.CanadianMaxProsthMaterial=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "InsSubNum":
-							claim.InsSubNum=reader.ReadContentAsLong();
+							claim.InsSubNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InsSubNum2":
-							claim.InsSubNum2=reader.ReadContentAsLong();
+							claim.InsSubNum2=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CanadaTransRefNum":
 							claim.CanadaTransRefNum=reader.ReadContentAsString();
@@ -257,31 +257,31 @@ namespace OpenDentalWebService {
 							claim.CanadaEstTreatStartDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CanadaInitialPayment":
-							claim.CanadaInitialPayment=reader.ReadContentAsDouble();
+							claim.CanadaInitialPayment=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CanadaPaymentMode":
-							claim.CanadaPaymentMode=(byte)reader.ReadContentAsInt();
+							claim.CanadaPaymentMode=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadaTreatDuration":
-							claim.CanadaTreatDuration=(byte)reader.ReadContentAsInt();
+							claim.CanadaTreatDuration=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadaNumAnticipatedPayments":
-							claim.CanadaNumAnticipatedPayments=(byte)reader.ReadContentAsInt();
+							claim.CanadaNumAnticipatedPayments=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadaAnticipatedPayAmount":
-							claim.CanadaAnticipatedPayAmount=reader.ReadContentAsDouble();
+							claim.CanadaAnticipatedPayAmount=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PriorAuthorizationNumber":
 							claim.PriorAuthorizationNumber=reader.ReadContentAsString();
 							break;
 						case "SpecialProgramCode":
-							claim.SpecialProgramCode=(OpenDentBusiness.EnumClaimSpecialProgram)reader.ReadContentAsInt();
+							claim.SpecialProgramCode=(OpenDentBusiness.EnumClaimSpecialProgram)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "UniformBillType":
 							claim.UniformBillType=reader.ReadContentAsString();
 							break;
 						case "MedType":
-							claim.MedType=(OpenDentBusiness.EnumClaimMedType)reader.ReadContentAsInt();
+							claim.MedType=(OpenDentBusiness.EnumClaimMedType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AdmissionTypeCode":
 							claim.AdmissionTypeCode=reader.ReadContentAsString();
@@ -293,13 +293,13 @@ namespace OpenDentalWebService {
 							claim.PatientStatusCode=reader.ReadContentAsString();
 							break;
 						case "CustomTracking":
-							claim.CustomTracking=reader.ReadContentAsLong();
+							claim.CustomTracking=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateResent":
 							claim.DateResent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CorrectionType":
-							claim.CorrectionType=(OpenDentBusiness.ClaimCorrectionType)reader.ReadContentAsInt();
+							claim.CorrectionType=(OpenDentBusiness.ClaimCorrectionType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ClaimIdentifier":
 							claim.ClaimIdentifier=reader.ReadContentAsString();

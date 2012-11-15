@@ -41,10 +41,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CreditCardNum":
-							creditcard.CreditCardNum=reader.ReadContentAsLong();
+							creditcard.CreditCardNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							creditcard.PatNum=reader.ReadContentAsLong();
+							creditcard.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Address":
 							creditcard.Address=reader.ReadContentAsString();
@@ -62,10 +62,10 @@ namespace OpenDentalWebService {
 							creditcard.CCExpiration=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ItemOrder":
-							creditcard.ItemOrder=reader.ReadContentAsInt();
+							creditcard.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ChargeAmt":
-							creditcard.ChargeAmt=reader.ReadContentAsDouble();
+							creditcard.ChargeAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DateStart":
 							creditcard.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -77,7 +77,7 @@ namespace OpenDentalWebService {
 							creditcard.Note=reader.ReadContentAsString();
 							break;
 						case "PayPlanNum":
-							creditcard.PayPlanNum=reader.ReadContentAsLong();
+							creditcard.PayPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

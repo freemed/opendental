@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PopupNum":
-							popup.PopupNum=reader.ReadContentAsLong();
+							popup.PopupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							popup.PatNum=reader.ReadContentAsLong();
+							popup.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							popup.Description=reader.ReadContentAsString();
@@ -45,7 +45,7 @@ namespace OpenDentalWebService {
 							popup.IsDisabled=reader.ReadContentAsString()!="0";
 							break;
 						case "PopupLevel":
-							popup.PopupLevel=(OpenDentBusiness.EnumPopupLevel)reader.ReadContentAsInt();
+							popup.PopupLevel=(OpenDentBusiness.EnumPopupLevel)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

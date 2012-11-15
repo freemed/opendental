@@ -31,13 +31,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ElementNum":
-							sigbutdefelement.ElementNum=reader.ReadContentAsLong();
+							sigbutdefelement.ElementNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SigButDefNum":
-							sigbutdefelement.SigButDefNum=reader.ReadContentAsLong();
+							sigbutdefelement.SigButDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SigElementDefNum":
-							sigbutdefelement.SigElementDefNum=reader.ReadContentAsLong();
+							sigbutdefelement.SigElementDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

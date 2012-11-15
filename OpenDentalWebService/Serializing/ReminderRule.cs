@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReminderRuleNum":
-							reminderrule.ReminderRuleNum=reader.ReadContentAsLong();
+							reminderrule.ReminderRuleNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ReminderCriterion":
-							reminderrule.ReminderCriterion=(OpenDentBusiness.EhrCriterion)reader.ReadContentAsInt();
+							reminderrule.ReminderCriterion=(OpenDentBusiness.EhrCriterion)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CriterionFK":
-							reminderrule.CriterionFK=reader.ReadContentAsLong();
+							reminderrule.CriterionFK=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CriterionValue":
 							reminderrule.CriterionValue=reader.ReadContentAsString();

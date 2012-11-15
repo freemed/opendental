@@ -37,13 +37,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TaskListNum":
-							tasklist.TaskListNum=reader.ReadContentAsLong();
+							tasklist.TaskListNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							tasklist.Descript=reader.ReadContentAsString();
 							break;
 						case "Parent":
-							tasklist.Parent=reader.ReadContentAsLong();
+							tasklist.Parent=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTL":
 							tasklist.DateTL=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -52,13 +52,13 @@ namespace OpenDentalWebService {
 							tasklist.IsRepeating=reader.ReadContentAsString()!="0";
 							break;
 						case "DateType":
-							tasklist.DateType=(OpenDentBusiness.TaskDateType)reader.ReadContentAsInt();
+							tasklist.DateType=(OpenDentBusiness.TaskDateType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "FromNum":
-							tasklist.FromNum=reader.ReadContentAsLong();
+							tasklist.FromNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ObjectType":
-							tasklist.ObjectType=(OpenDentBusiness.TaskObjectType)reader.ReadContentAsInt();
+							tasklist.ObjectType=(OpenDentBusiness.TaskObjectType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTimeEntry":
 							tasklist.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

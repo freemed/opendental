@@ -32,13 +32,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PatFieldDefNum":
-							patfielddef.PatFieldDefNum=reader.ReadContentAsLong();
+							patfielddef.PatFieldDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FieldName":
 							patfielddef.FieldName=reader.ReadContentAsString();
 							break;
 						case "FieldType":
-							patfielddef.FieldType=(OpenDentBusiness.PatFieldType)reader.ReadContentAsInt();
+							patfielddef.FieldType=(OpenDentBusiness.PatFieldType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PickList":
 							patfielddef.PickList=reader.ReadContentAsString();

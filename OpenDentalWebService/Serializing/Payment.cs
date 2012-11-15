@@ -42,16 +42,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PayNum":
-							payment.PayNum=reader.ReadContentAsLong();
+							payment.PayNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayType":
-							payment.PayType=reader.ReadContentAsLong();
+							payment.PayType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayDate":
 							payment.PayDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PayAmt":
-							payment.PayAmt=reader.ReadContentAsDouble();
+							payment.PayAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CheckNum":
 							payment.CheckNum=reader.ReadContentAsString();
@@ -66,16 +66,16 @@ namespace OpenDentalWebService {
 							payment.IsSplit=reader.ReadContentAsString()!="0";
 							break;
 						case "PatNum":
-							payment.PatNum=reader.ReadContentAsLong();
+							payment.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							payment.ClinicNum=reader.ReadContentAsLong();
+							payment.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateEntry":
 							payment.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DepositNum":
-							payment.DepositNum=reader.ReadContentAsLong();
+							payment.DepositNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Receipt":
 							payment.Receipt=reader.ReadContentAsString();

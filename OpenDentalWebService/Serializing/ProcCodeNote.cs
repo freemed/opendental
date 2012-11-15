@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcCodeNoteNum":
-							proccodenote.ProcCodeNoteNum=reader.ReadContentAsLong();
+							proccodenote.ProcCodeNoteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							proccodenote.CodeNum=reader.ReadContentAsLong();
+							proccodenote.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							proccodenote.ProvNum=reader.ReadContentAsLong();
+							proccodenote.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							proccodenote.Note=reader.ReadContentAsString();

@@ -37,10 +37,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimFormItemNum":
-							claimformitem.ClaimFormItemNum=reader.ReadContentAsLong();
+							claimformitem.ClaimFormItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimFormNum":
-							claimformitem.ClaimFormNum=reader.ReadContentAsLong();
+							claimformitem.ClaimFormNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ImageFileName":
 							claimformitem.ImageFileName=reader.ReadContentAsString();
@@ -52,16 +52,16 @@ namespace OpenDentalWebService {
 							claimformitem.FormatString=reader.ReadContentAsString();
 							break;
 						case "XPos":
-							claimformitem.XPos=reader.ReadContentAsFloat();
+							claimformitem.XPos=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "YPos":
-							claimformitem.YPos=reader.ReadContentAsFloat();
+							claimformitem.YPos=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "Width":
-							claimformitem.Width=reader.ReadContentAsFloat();
+							claimformitem.Width=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "Height":
-							claimformitem.Height=reader.ReadContentAsFloat();
+							claimformitem.Height=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 					}
 				}

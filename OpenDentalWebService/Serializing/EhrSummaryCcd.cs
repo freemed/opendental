@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EhrSummaryCcdNum":
-							ehrsummaryccd.EhrSummaryCcdNum=reader.ReadContentAsLong();
+							ehrsummaryccd.EhrSummaryCcdNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							ehrsummaryccd.PatNum=reader.ReadContentAsLong();
+							ehrsummaryccd.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateSummary":
 							ehrsummaryccd.DateSummary=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CanadianNetworkNum":
-							canadiannetwork.CanadianNetworkNum=reader.ReadContentAsLong();
+							canadiannetwork.CanadianNetworkNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Abbrev":
 							canadiannetwork.Abbrev=reader.ReadContentAsString();

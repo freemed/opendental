@@ -31,13 +31,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ScheduleOpNum":
-							scheduleop.ScheduleOpNum=reader.ReadContentAsLong();
+							scheduleop.ScheduleOpNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ScheduleNum":
-							scheduleop.ScheduleNum=reader.ReadContentAsLong();
+							scheduleop.ScheduleNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OperatoryNum":
-							scheduleop.OperatoryNum=reader.ReadContentAsLong();
+							scheduleop.OperatoryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

@@ -34,13 +34,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "QuestionNum":
-							question.QuestionNum=reader.ReadContentAsLong();
+							question.QuestionNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							question.PatNum=reader.ReadContentAsLong();
+							question.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							question.ItemOrder=reader.ReadContentAsInt();
+							question.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Description":
 							question.Description=reader.ReadContentAsString();
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							question.Answer=reader.ReadContentAsString();
 							break;
 						case "FormPatNum":
-							question.FormPatNum=reader.ReadContentAsLong();
+							question.FormPatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

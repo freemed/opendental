@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LabTurnaroundNum":
-							labturnaround.LabTurnaroundNum=reader.ReadContentAsLong();
+							labturnaround.LabTurnaroundNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LaboratoryNum":
-							labturnaround.LaboratoryNum=reader.ReadContentAsLong();
+							labturnaround.LaboratoryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							labturnaround.Description=reader.ReadContentAsString();
 							break;
 						case "DaysPublished":
-							labturnaround.DaysPublished=reader.ReadContentAsInt();
+							labturnaround.DaysPublished=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DaysActual":
-							labturnaround.DaysActual=reader.ReadContentAsInt();
+							labturnaround.DaysActual=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

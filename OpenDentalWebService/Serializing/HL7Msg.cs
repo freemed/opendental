@@ -35,22 +35,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "HL7MsgNum":
-							hl7msg.HL7MsgNum=reader.ReadContentAsLong();
+							hl7msg.HL7MsgNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HL7Status":
-							hl7msg.HL7Status=(OpenDentBusiness.HL7MessageStatus)reader.ReadContentAsInt();
+							hl7msg.HL7Status=(OpenDentBusiness.HL7MessageStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MsgText":
 							hl7msg.MsgText=reader.ReadContentAsString();
 							break;
 						case "AptNum":
-							hl7msg.AptNum=reader.ReadContentAsLong();
+							hl7msg.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							hl7msg.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PatNum":
-							hl7msg.PatNum=reader.ReadContentAsLong();
+							hl7msg.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							hl7msg.Note=reader.ReadContentAsString();

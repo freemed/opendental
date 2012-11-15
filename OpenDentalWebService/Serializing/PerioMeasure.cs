@@ -39,37 +39,37 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PerioMeasureNum":
-							periomeasure.PerioMeasureNum=reader.ReadContentAsLong();
+							periomeasure.PerioMeasureNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PerioExamNum":
-							periomeasure.PerioExamNum=reader.ReadContentAsLong();
+							periomeasure.PerioExamNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SequenceType":
-							periomeasure.SequenceType=(OpenDentBusiness.PerioSequenceType)reader.ReadContentAsInt();
+							periomeasure.SequenceType=(OpenDentBusiness.PerioSequenceType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IntTooth":
-							periomeasure.IntTooth=reader.ReadContentAsInt();
+							periomeasure.IntTooth=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ToothValue":
-							periomeasure.ToothValue=reader.ReadContentAsInt();
+							periomeasure.ToothValue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MBvalue":
-							periomeasure.MBvalue=reader.ReadContentAsInt();
+							periomeasure.MBvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Bvalue":
-							periomeasure.Bvalue=reader.ReadContentAsInt();
+							periomeasure.Bvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DBvalue":
-							periomeasure.DBvalue=reader.ReadContentAsInt();
+							periomeasure.DBvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MLvalue":
-							periomeasure.MLvalue=reader.ReadContentAsInt();
+							periomeasure.MLvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Lvalue":
-							periomeasure.Lvalue=reader.ReadContentAsInt();
+							periomeasure.Lvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DLvalue":
-							periomeasure.DLvalue=reader.ReadContentAsInt();
+							periomeasure.DLvalue=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

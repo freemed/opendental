@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "FeeSchedNum":
-							feesched.FeeSchedNum=reader.ReadContentAsLong();
+							feesched.FeeSchedNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							feesched.Description=reader.ReadContentAsString();
 							break;
 						case "FeeSchedType":
-							feesched.FeeSchedType=(OpenDentBusiness.FeeScheduleType)reader.ReadContentAsInt();
+							feesched.FeeSchedType=(OpenDentBusiness.FeeScheduleType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							feesched.ItemOrder=reader.ReadContentAsInt();
+							feesched.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							feesched.IsHidden=reader.ReadContentAsString()!="0";

@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AppointmentRuleNum":
-							appointmentrule.AppointmentRuleNum=reader.ReadContentAsLong();
+							appointmentrule.AppointmentRuleNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RuleDesc":
 							appointmentrule.RuleDesc=reader.ReadContentAsString();

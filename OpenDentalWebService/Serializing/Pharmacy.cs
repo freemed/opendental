@@ -40,7 +40,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PharmacyNum":
-							pharmacy.PharmacyNum=reader.ReadContentAsLong();
+							pharmacy.PharmacyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PharmID":
 							pharmacy.PharmID=reader.ReadContentAsString();

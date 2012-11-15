@@ -41,28 +41,28 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SheetNum":
-							sheet.SheetNum=reader.ReadContentAsLong();
+							sheet.SheetNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SheetType":
-							sheet.SheetType=(OpenDentBusiness.SheetTypeEnum)reader.ReadContentAsInt();
+							sheet.SheetType=(OpenDentBusiness.SheetTypeEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							sheet.PatNum=reader.ReadContentAsLong();
+							sheet.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeSheet":
 							sheet.DateTimeSheet=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "FontSize":
-							sheet.FontSize=reader.ReadContentAsFloat();
+							sheet.FontSize=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "FontName":
 							sheet.FontName=reader.ReadContentAsString();
 							break;
 						case "Width":
-							sheet.Width=reader.ReadContentAsInt();
+							sheet.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							sheet.Height=reader.ReadContentAsInt();
+							sheet.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsLandscape":
 							sheet.IsLandscape=reader.ReadContentAsString()!="0";
@@ -74,7 +74,7 @@ namespace OpenDentalWebService {
 							sheet.Description=reader.ReadContentAsString();
 							break;
 						case "ShowInTerminal":
-							sheet.ShowInTerminal=(byte)reader.ReadContentAsInt();
+							sheet.ShowInTerminal=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "IsWebForm":
 							sheet.IsWebForm=reader.ReadContentAsString()!="0";

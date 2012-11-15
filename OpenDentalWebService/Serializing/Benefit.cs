@@ -40,40 +40,40 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "BenefitNum":
-							benefit.BenefitNum=reader.ReadContentAsLong();
+							benefit.BenefitNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlanNum":
-							benefit.PlanNum=reader.ReadContentAsLong();
+							benefit.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatPlanNum":
-							benefit.PatPlanNum=reader.ReadContentAsLong();
+							benefit.PatPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CovCatNum":
-							benefit.CovCatNum=reader.ReadContentAsLong();
+							benefit.CovCatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BenefitType":
-							benefit.BenefitType=(OpenDentBusiness.InsBenefitType)reader.ReadContentAsInt();
+							benefit.BenefitType=(OpenDentBusiness.InsBenefitType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Percent":
-							benefit.Percent=reader.ReadContentAsInt();
+							benefit.Percent=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MonetaryAmt":
-							benefit.MonetaryAmt=reader.ReadContentAsDouble();
+							benefit.MonetaryAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "TimePeriod":
-							benefit.TimePeriod=(OpenDentBusiness.BenefitTimePeriod)reader.ReadContentAsInt();
+							benefit.TimePeriod=(OpenDentBusiness.BenefitTimePeriod)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "QuantityQualifier":
-							benefit.QuantityQualifier=(OpenDentBusiness.BenefitQuantity)reader.ReadContentAsInt();
+							benefit.QuantityQualifier=(OpenDentBusiness.BenefitQuantity)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Quantity":
-							benefit.Quantity=(byte)reader.ReadContentAsInt();
+							benefit.Quantity=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							benefit.CodeNum=reader.ReadContentAsLong();
+							benefit.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CoverageLevel":
-							benefit.CoverageLevel=(OpenDentBusiness.BenefitCoverageLevel)reader.ReadContentAsInt();
+							benefit.CoverageLevel=(OpenDentBusiness.BenefitCoverageLevel)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

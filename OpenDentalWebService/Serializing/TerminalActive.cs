@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TerminalActiveNum":
-							terminalactive.TerminalActiveNum=reader.ReadContentAsLong();
+							terminalactive.TerminalActiveNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ComputerName":
 							terminalactive.ComputerName=reader.ReadContentAsString();
 							break;
 						case "TerminalStatus":
-							terminalactive.TerminalStatus=(OpenDentBusiness.TerminalStatusEnum)reader.ReadContentAsInt();
+							terminalactive.TerminalStatus=(OpenDentBusiness.TerminalStatusEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							terminalactive.PatNum=reader.ReadContentAsLong();
+							terminalactive.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

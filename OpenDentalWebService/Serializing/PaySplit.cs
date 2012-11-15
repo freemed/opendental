@@ -42,46 +42,46 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SplitNum":
-							paysplit.SplitNum=reader.ReadContentAsLong();
+							paysplit.SplitNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SplitAmt":
-							paysplit.SplitAmt=reader.ReadContentAsDouble();
+							paysplit.SplitAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							paysplit.PatNum=reader.ReadContentAsLong();
+							paysplit.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcDate":
 							paysplit.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "PayNum":
-							paysplit.PayNum=reader.ReadContentAsLong();
+							paysplit.PayNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsDiscount":
 							paysplit.IsDiscount=reader.ReadContentAsString()!="0";
 							break;
 						case "DiscountType":
-							paysplit.DiscountType=(byte)reader.ReadContentAsInt();
+							paysplit.DiscountType=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							paysplit.ProvNum=reader.ReadContentAsLong();
+							paysplit.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayPlanNum":
-							paysplit.PayPlanNum=reader.ReadContentAsLong();
+							paysplit.PayPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DatePay":
 							paysplit.DatePay=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcNum":
-							paysplit.ProcNum=reader.ReadContentAsLong();
+							paysplit.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateEntry":
 							paysplit.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UnearnedType":
-							paysplit.UnearnedType=reader.ReadContentAsLong();
+							paysplit.UnearnedType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							paysplit.ClinicNum=reader.ReadContentAsLong();
+							paysplit.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

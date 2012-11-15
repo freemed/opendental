@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RecallTypeNum":
-							recalltype.RecallTypeNum=reader.ReadContentAsLong();
+							recalltype.RecallTypeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							recalltype.Description=reader.ReadContentAsString();
 							break;
 						case "DefaultInterval":
-							recalltype.DefaultInterval=new OpenDentBusiness.Interval(reader.ReadContentAsInt());
+							recalltype.DefaultInterval=new OpenDentBusiness.Interval(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "TimePattern":
 							recalltype.TimePattern=reader.ReadContentAsString();

@@ -34,13 +34,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AccountNum":
-							account.AccountNum=reader.ReadContentAsLong();
+							account.AccountNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							account.Description=reader.ReadContentAsString();
 							break;
 						case "AcctType":
-							account.AcctType=(OpenDentBusiness.AccountType)reader.ReadContentAsInt();
+							account.AcctType=(OpenDentBusiness.AccountType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "BankNumber":
 							account.BankNumber=reader.ReadContentAsString();
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							account.Inactive=reader.ReadContentAsString()!="0";
 							break;
 						case "AccountColor":
-							account.AccountColor=Color.FromArgb(reader.ReadContentAsInt());
+							account.AccountColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 					}
 				}

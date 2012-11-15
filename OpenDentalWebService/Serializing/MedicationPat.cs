@@ -36,13 +36,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "MedicationPatNum":
-							medicationpat.MedicationPatNum=reader.ReadContentAsLong();
+							medicationpat.MedicationPatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							medicationpat.PatNum=reader.ReadContentAsLong();
+							medicationpat.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MedicationNum":
-							medicationpat.MedicationNum=reader.ReadContentAsLong();
+							medicationpat.MedicationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNote":
 							medicationpat.PatNote=reader.ReadContentAsString();
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							medicationpat.DateStop=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
-							medicationpat.ProvNum=reader.ReadContentAsLong();
+							medicationpat.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

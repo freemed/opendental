@@ -40,22 +40,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AdjNum":
-							adjustment.AdjNum=reader.ReadContentAsLong();
+							adjustment.AdjNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AdjDate":
 							adjustment.AdjDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AdjAmt":
-							adjustment.AdjAmt=reader.ReadContentAsDouble();
+							adjustment.AdjAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							adjustment.PatNum=reader.ReadContentAsLong();
+							adjustment.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AdjType":
-							adjustment.AdjType=reader.ReadContentAsLong();
+							adjustment.AdjType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							adjustment.ProvNum=reader.ReadContentAsLong();
+							adjustment.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AdjNote":
 							adjustment.AdjNote=reader.ReadContentAsString();
@@ -64,16 +64,16 @@ namespace OpenDentalWebService {
 							adjustment.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcNum":
-							adjustment.ProcNum=reader.ReadContentAsLong();
+							adjustment.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateEntry":
 							adjustment.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClinicNum":
-							adjustment.ClinicNum=reader.ReadContentAsLong();
+							adjustment.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "StatementNum":
-							adjustment.StatementNum=reader.ReadContentAsLong();
+							adjustment.StatementNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

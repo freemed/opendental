@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReqNeededNum":
-							reqneeded.ReqNeededNum=reader.ReadContentAsLong();
+							reqneeded.ReqNeededNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							reqneeded.Descript=reader.ReadContentAsString();
 							break;
 						case "SchoolCourseNum":
-							reqneeded.SchoolCourseNum=reader.ReadContentAsLong();
+							reqneeded.SchoolCourseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SchoolClassNum":
-							reqneeded.SchoolClassNum=reader.ReadContentAsLong();
+							reqneeded.SchoolClassNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

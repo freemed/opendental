@@ -41,40 +41,40 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TaskNum":
-							task.TaskNum=reader.ReadContentAsLong();
+							task.TaskNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TaskListNum":
-							task.TaskListNum=reader.ReadContentAsLong();
+							task.TaskListNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTask":
 							task.DateTask=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "KeyNum":
-							task.KeyNum=reader.ReadContentAsLong();
+							task.KeyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							task.Descript=reader.ReadContentAsString();
 							break;
 						case "TaskStatus":
-							task.TaskStatus=(OpenDentBusiness.TaskStatusEnum)reader.ReadContentAsInt();
+							task.TaskStatus=(OpenDentBusiness.TaskStatusEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsRepeating":
 							task.IsRepeating=reader.ReadContentAsString()!="0";
 							break;
 						case "DateType":
-							task.DateType=(OpenDentBusiness.TaskDateType)reader.ReadContentAsInt();
+							task.DateType=(OpenDentBusiness.TaskDateType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "FromNum":
-							task.FromNum=reader.ReadContentAsLong();
+							task.FromNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ObjectType":
-							task.ObjectType=(OpenDentBusiness.TaskObjectType)reader.ReadContentAsInt();
+							task.ObjectType=(OpenDentBusiness.TaskObjectType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTimeEntry":
 							task.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UserNum":
-							task.UserNum=reader.ReadContentAsLong();
+							task.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeFinished":
 							task.DateTimeFinished=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

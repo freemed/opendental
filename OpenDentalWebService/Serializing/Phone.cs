@@ -44,28 +44,28 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PhoneNum":
-							phone.PhoneNum=reader.ReadContentAsLong();
+							phone.PhoneNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Extension":
-							phone.Extension=reader.ReadContentAsInt();
+							phone.Extension=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "EmployeeName":
 							phone.EmployeeName=reader.ReadContentAsString();
 							break;
 						case "ClockStatus":
-							phone.ClockStatus=(OpenDentBusiness.ClockStatusEnum)reader.ReadContentAsInt();
+							phone.ClockStatus=(OpenDentBusiness.ClockStatusEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Description":
 							phone.Description=reader.ReadContentAsString();
 							break;
 						case "ColorBar":
-							phone.ColorBar=Color.FromArgb(reader.ReadContentAsInt());
+							phone.ColorBar=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "ColorText":
-							phone.ColorText=Color.FromArgb(reader.ReadContentAsInt());
+							phone.ColorText=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "EmployeeNum":
-							phone.EmployeeNum=reader.ReadContentAsLong();
+							phone.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CustomerNumber":
 							phone.CustomerNumber=reader.ReadContentAsString();
@@ -74,7 +74,7 @@ namespace OpenDentalWebService {
 							phone.InOrOut=reader.ReadContentAsString();
 							break;
 						case "PatNum":
-							phone.PatNum=reader.ReadContentAsLong();
+							phone.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeStart":
 							phone.DateTimeStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

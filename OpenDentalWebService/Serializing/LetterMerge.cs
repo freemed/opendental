@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LetterMergeNum":
-							lettermerge.LetterMergeNum=reader.ReadContentAsLong();
+							lettermerge.LetterMergeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							lettermerge.Description=reader.ReadContentAsString();
@@ -45,7 +45,7 @@ namespace OpenDentalWebService {
 							lettermerge.DataFileName=reader.ReadContentAsString();
 							break;
 						case "Category":
-							lettermerge.Category=reader.ReadContentAsLong();
+							lettermerge.Category=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

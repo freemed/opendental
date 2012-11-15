@@ -38,19 +38,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ChartViewNum":
-							chartview.ChartViewNum=reader.ReadContentAsLong();
+							chartview.ChartViewNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							chartview.Description=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							chartview.ItemOrder=reader.ReadContentAsInt();
+							chartview.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ProcStatuses":
-							chartview.ProcStatuses=(OpenDentBusiness.ChartViewProcStat)reader.ReadContentAsInt();
+							chartview.ProcStatuses=(OpenDentBusiness.ChartViewProcStat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ObjectTypes":
-							chartview.ObjectTypes=(OpenDentBusiness.ChartViewObjs)reader.ReadContentAsInt();
+							chartview.ObjectTypes=(OpenDentBusiness.ChartViewObjs)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ShowProcNotes":
 							chartview.ShowProcNotes=reader.ReadContentAsString()!="0";
@@ -62,10 +62,10 @@ namespace OpenDentalWebService {
 							chartview.SelectedTeethOnly=reader.ReadContentAsString()!="0";
 							break;
 						case "OrionStatusFlags":
-							chartview.OrionStatusFlags=(OpenDentBusiness.OrionStatus)reader.ReadContentAsInt();
+							chartview.OrionStatusFlags=(OpenDentBusiness.OrionStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DatesShowing":
-							chartview.DatesShowing=(OpenDentBusiness.ChartViewDates)reader.ReadContentAsInt();
+							chartview.DatesShowing=(OpenDentBusiness.ChartViewDates)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

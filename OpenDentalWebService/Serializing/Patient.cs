@@ -103,7 +103,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PatNum":
-							patient.PatNum=reader.ReadContentAsLong();
+							patient.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LName":
 							patient.LName=reader.ReadContentAsString();
@@ -118,13 +118,13 @@ namespace OpenDentalWebService {
 							patient.Preferred=reader.ReadContentAsString();
 							break;
 						case "PatStatus":
-							patient.PatStatus=(OpenDentBusiness.PatientStatus)reader.ReadContentAsInt();
+							patient.PatStatus=(OpenDentBusiness.PatientStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Gender":
-							patient.Gender=(OpenDentBusiness.PatientGender)reader.ReadContentAsInt();
+							patient.Gender=(OpenDentBusiness.PatientGender)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Position":
-							patient.Position=(OpenDentBusiness.PatientPosition)reader.ReadContentAsInt();
+							patient.Position=(OpenDentBusiness.PatientPosition)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Birthdate":
 							patient.Birthdate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -157,7 +157,7 @@ namespace OpenDentalWebService {
 							patient.WirelessPhone=reader.ReadContentAsString();
 							break;
 						case "Guarantor":
-							patient.Guarantor=reader.ReadContentAsLong();
+							patient.Guarantor=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CreditType":
 							patient.CreditType=reader.ReadContentAsString();
@@ -169,19 +169,19 @@ namespace OpenDentalWebService {
 							patient.Salutation=reader.ReadContentAsString();
 							break;
 						case "EstBalance":
-							patient.EstBalance=reader.ReadContentAsDouble();
+							patient.EstBalance=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PriProv":
-							patient.PriProv=reader.ReadContentAsLong();
+							patient.PriProv=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SecProv":
-							patient.SecProv=reader.ReadContentAsLong();
+							patient.SecProv=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FeeSched":
-							patient.FeeSched=reader.ReadContentAsLong();
+							patient.FeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BillingType":
-							patient.BillingType=reader.ReadContentAsLong();
+							patient.BillingType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ImageFolder":
 							patient.ImageFolder=reader.ReadContentAsString();
@@ -211,46 +211,46 @@ namespace OpenDentalWebService {
 							patient.MedicaidID=reader.ReadContentAsString();
 							break;
 						case "Bal_0_30":
-							patient.Bal_0_30=reader.ReadContentAsDouble();
+							patient.Bal_0_30=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Bal_31_60":
-							patient.Bal_31_60=reader.ReadContentAsDouble();
+							patient.Bal_31_60=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Bal_61_90":
-							patient.Bal_61_90=reader.ReadContentAsDouble();
+							patient.Bal_61_90=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "BalOver90":
-							patient.BalOver90=reader.ReadContentAsDouble();
+							patient.BalOver90=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsEst":
-							patient.InsEst=reader.ReadContentAsDouble();
+							patient.InsEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "BalTotal":
-							patient.BalTotal=reader.ReadContentAsDouble();
+							patient.BalTotal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "EmployerNum":
-							patient.EmployerNum=reader.ReadContentAsLong();
+							patient.EmployerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmploymentNote":
 							patient.EmploymentNote=reader.ReadContentAsString();
 							break;
 						case "Race":
-							patient.Race=(OpenDentBusiness.PatientRace)reader.ReadContentAsInt();
+							patient.Race=(OpenDentBusiness.PatientRace)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "County":
 							patient.County=reader.ReadContentAsString();
 							break;
 						case "GradeLevel":
-							patient.GradeLevel=(OpenDentBusiness.PatientGrade)reader.ReadContentAsInt();
+							patient.GradeLevel=(OpenDentBusiness.PatientGrade)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Urgency":
-							patient.Urgency=(OpenDentBusiness.TreatmentUrgency)reader.ReadContentAsInt();
+							patient.Urgency=(OpenDentBusiness.TreatmentUrgency)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateFirstVisit":
 							patient.DateFirstVisit=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClinicNum":
-							patient.ClinicNum=reader.ReadContentAsLong();
+							patient.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HasIns":
 							patient.HasIns=reader.ReadContentAsString();
@@ -268,13 +268,13 @@ namespace OpenDentalWebService {
 							patient.Ward=reader.ReadContentAsString();
 							break;
 						case "PreferConfirmMethod":
-							patient.PreferConfirmMethod=(OpenDentBusiness.ContactMethod)reader.ReadContentAsInt();
+							patient.PreferConfirmMethod=(OpenDentBusiness.ContactMethod)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PreferContactMethod":
-							patient.PreferContactMethod=(OpenDentBusiness.ContactMethod)reader.ReadContentAsInt();
+							patient.PreferContactMethod=(OpenDentBusiness.ContactMethod)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PreferRecallMethod":
-							patient.PreferRecallMethod=(OpenDentBusiness.ContactMethod)reader.ReadContentAsInt();
+							patient.PreferRecallMethod=(OpenDentBusiness.ContactMethod)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SchedBeforeTime":
 							patient.SchedBeforeTime=TimeSpan.Parse(reader.ReadContentAsString());
@@ -283,7 +283,7 @@ namespace OpenDentalWebService {
 							patient.SchedAfterTime=TimeSpan.Parse(reader.ReadContentAsString());
 							break;
 						case "SchedDayOfWeek":
-							patient.SchedDayOfWeek=(byte)reader.ReadContentAsInt();
+							patient.SchedDayOfWeek=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "Language":
 							patient.Language=reader.ReadContentAsString();
@@ -295,37 +295,37 @@ namespace OpenDentalWebService {
 							patient.Title=reader.ReadContentAsString();
 							break;
 						case "PayPlanDue":
-							patient.PayPlanDue=reader.ReadContentAsDouble();
+							patient.PayPlanDue=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "SiteNum":
-							patient.SiteNum=reader.ReadContentAsLong();
+							patient.SiteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							patient.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ResponsParty":
-							patient.ResponsParty=reader.ReadContentAsLong();
+							patient.ResponsParty=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CanadianEligibilityCode":
-							patient.CanadianEligibilityCode=(byte)reader.ReadContentAsInt();
+							patient.CanadianEligibilityCode=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "AskToArriveEarly":
-							patient.AskToArriveEarly=reader.ReadContentAsInt();
+							patient.AskToArriveEarly=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "OnlinePassword":
 							patient.OnlinePassword=reader.ReadContentAsString();
 							break;
 						case "SmokeStatus":
-							patient.SmokeStatus=(OpenDentBusiness.SmokingStatus)reader.ReadContentAsInt();
+							patient.SmokeStatus=(OpenDentBusiness.SmokingStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PreferContactConfidential":
-							patient.PreferContactConfidential=(OpenDentBusiness.ContactMethod)reader.ReadContentAsInt();
+							patient.PreferContactConfidential=(OpenDentBusiness.ContactMethod)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SuperFamily":
-							patient.SuperFamily=reader.ReadContentAsLong();
+							patient.SuperFamily=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TxtMsgOk":
-							patient.TxtMsgOk=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							patient.TxtMsgOk=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

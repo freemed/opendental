@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EobAttachNum":
-							eobattach.EobAttachNum=reader.ReadContentAsLong();
+							eobattach.EobAttachNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimPaymentNum":
-							eobattach.ClaimPaymentNum=reader.ReadContentAsLong();
+							eobattach.ClaimPaymentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTCreated":
 							eobattach.DateTCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

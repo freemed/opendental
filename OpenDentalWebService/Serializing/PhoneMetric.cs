@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PhoneMetricNum":
-							phonemetric.PhoneMetricNum=reader.ReadContentAsLong();
+							phonemetric.PhoneMetricNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeEntry":
 							phonemetric.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "VoiceMails":
-							phonemetric.VoiceMails=reader.ReadContentAsInt();
+							phonemetric.VoiceMails=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Triages":
-							phonemetric.Triages=reader.ReadContentAsInt();
+							phonemetric.Triages=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MinutesBehind":
-							phonemetric.MinutesBehind=reader.ReadContentAsInt();
+							phonemetric.MinutesBehind=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

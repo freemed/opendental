@@ -66,76 +66,76 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimProcNum":
-							claimproc.ClaimProcNum=reader.ReadContentAsLong();
+							claimproc.ClaimProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcNum":
-							claimproc.ProcNum=reader.ReadContentAsLong();
+							claimproc.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimNum":
-							claimproc.ClaimNum=reader.ReadContentAsLong();
+							claimproc.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							claimproc.PatNum=reader.ReadContentAsLong();
+							claimproc.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							claimproc.ProvNum=reader.ReadContentAsLong();
+							claimproc.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FeeBilled":
-							claimproc.FeeBilled=reader.ReadContentAsDouble();
+							claimproc.FeeBilled=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsPayEst":
-							claimproc.InsPayEst=reader.ReadContentAsDouble();
+							claimproc.InsPayEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DedApplied":
-							claimproc.DedApplied=reader.ReadContentAsDouble();
+							claimproc.DedApplied=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Status":
-							claimproc.Status=(OpenDentBusiness.ClaimProcStatus)reader.ReadContentAsInt();
+							claimproc.Status=(OpenDentBusiness.ClaimProcStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "InsPayAmt":
-							claimproc.InsPayAmt=reader.ReadContentAsDouble();
+							claimproc.InsPayAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Remarks":
 							claimproc.Remarks=reader.ReadContentAsString();
 							break;
 						case "ClaimPaymentNum":
-							claimproc.ClaimPaymentNum=reader.ReadContentAsLong();
+							claimproc.ClaimPaymentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlanNum":
-							claimproc.PlanNum=reader.ReadContentAsLong();
+							claimproc.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateCP":
 							claimproc.DateCP=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "WriteOff":
-							claimproc.WriteOff=reader.ReadContentAsDouble();
+							claimproc.WriteOff=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CodeSent":
 							claimproc.CodeSent=reader.ReadContentAsString();
 							break;
 						case "AllowedOverride":
-							claimproc.AllowedOverride=reader.ReadContentAsDouble();
+							claimproc.AllowedOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Percentage":
-							claimproc.Percentage=reader.ReadContentAsInt();
+							claimproc.Percentage=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PercentOverride":
-							claimproc.PercentOverride=reader.ReadContentAsInt();
+							claimproc.PercentOverride=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CopayAmt":
-							claimproc.CopayAmt=reader.ReadContentAsDouble();
+							claimproc.CopayAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "NoBillIns":
 							claimproc.NoBillIns=reader.ReadContentAsString()!="0";
 							break;
 						case "PaidOtherIns":
-							claimproc.PaidOtherIns=reader.ReadContentAsDouble();
+							claimproc.PaidOtherIns=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "BaseEst":
-							claimproc.BaseEst=reader.ReadContentAsDouble();
+							claimproc.BaseEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CopayOverride":
-							claimproc.CopayOverride=reader.ReadContentAsDouble();
+							claimproc.CopayOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "ProcDate":
 							claimproc.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -144,40 +144,40 @@ namespace OpenDentalWebService {
 							claimproc.DateEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "LineNumber":
-							claimproc.LineNumber=(byte)reader.ReadContentAsInt();
+							claimproc.LineNumber=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "DedEst":
-							claimproc.DedEst=reader.ReadContentAsDouble();
+							claimproc.DedEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DedEstOverride":
-							claimproc.DedEstOverride=reader.ReadContentAsDouble();
+							claimproc.DedEstOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsEstTotal":
-							claimproc.InsEstTotal=reader.ReadContentAsDouble();
+							claimproc.InsEstTotal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsEstTotalOverride":
-							claimproc.InsEstTotalOverride=reader.ReadContentAsDouble();
+							claimproc.InsEstTotalOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PaidOtherInsOverride":
-							claimproc.PaidOtherInsOverride=reader.ReadContentAsDouble();
+							claimproc.PaidOtherInsOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "EstimateNote":
 							claimproc.EstimateNote=reader.ReadContentAsString();
 							break;
 						case "WriteOffEst":
-							claimproc.WriteOffEst=reader.ReadContentAsDouble();
+							claimproc.WriteOffEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "WriteOffEstOverride":
-							claimproc.WriteOffEstOverride=reader.ReadContentAsDouble();
+							claimproc.WriteOffEstOverride=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							claimproc.ClinicNum=reader.ReadContentAsLong();
+							claimproc.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InsSubNum":
-							claimproc.InsSubNum=reader.ReadContentAsLong();
+							claimproc.InsSubNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PaymentRow":
-							claimproc.PaymentRow=reader.ReadContentAsInt();
+							claimproc.PaymentRow=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

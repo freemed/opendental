@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimAttachNum":
-							claimattach.ClaimAttachNum=reader.ReadContentAsLong();
+							claimattach.ClaimAttachNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimNum":
-							claimattach.ClaimNum=reader.ReadContentAsLong();
+							claimattach.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DisplayedFileName":
 							claimattach.DisplayedFileName=reader.ReadContentAsString();

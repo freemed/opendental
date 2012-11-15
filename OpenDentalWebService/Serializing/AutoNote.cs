@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AutoNoteNum":
-							autonote.AutoNoteNum=reader.ReadContentAsLong();
+							autonote.AutoNoteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AutoNoteName":
 							autonote.AutoNoteName=reader.ReadContentAsString();

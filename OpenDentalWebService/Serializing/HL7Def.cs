@@ -50,13 +50,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "HL7DefNum":
-							hl7def.HL7DefNum=reader.ReadContentAsLong();
+							hl7def.HL7DefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							hl7def.Description=reader.ReadContentAsString();
 							break;
 						case "ModeTx":
-							hl7def.ModeTx=(OpenDentBusiness.ModeTxHL7)reader.ReadContentAsInt();
+							hl7def.ModeTx=(OpenDentBusiness.ModeTxHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IncomingFolder":
 							hl7def.IncomingFolder=reader.ReadContentAsString();
@@ -107,7 +107,7 @@ namespace OpenDentalWebService {
 							hl7def.HL7ServiceName=reader.ReadContentAsString();
 							break;
 						case "ShowDemographics":
-							hl7def.ShowDemographics=(OpenDentBusiness.HL7ShowDemographics)reader.ReadContentAsInt();
+							hl7def.ShowDemographics=(OpenDentBusiness.HL7ShowDemographics)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ShowAppts":
 							hl7def.ShowAppts=reader.ReadContentAsString()!="0";

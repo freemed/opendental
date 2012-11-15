@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmployerNum":
-							employer.EmployerNum=reader.ReadContentAsLong();
+							employer.EmployerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmpName":
 							employer.EmpName=reader.ReadContentAsString();

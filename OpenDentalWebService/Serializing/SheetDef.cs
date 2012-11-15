@@ -36,25 +36,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SheetDefNum":
-							sheetdef.SheetDefNum=reader.ReadContentAsLong();
+							sheetdef.SheetDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							sheetdef.Description=reader.ReadContentAsString();
 							break;
 						case "SheetType":
-							sheetdef.SheetType=(OpenDentBusiness.SheetTypeEnum)reader.ReadContentAsInt();
+							sheetdef.SheetType=(OpenDentBusiness.SheetTypeEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "FontSize":
-							sheetdef.FontSize=reader.ReadContentAsFloat();
+							sheetdef.FontSize=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "FontName":
 							sheetdef.FontName=reader.ReadContentAsString();
 							break;
 						case "Width":
-							sheetdef.Width=reader.ReadContentAsInt();
+							sheetdef.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							sheetdef.Height=reader.ReadContentAsInt();
+							sheetdef.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsLandscape":
 							sheetdef.IsLandscape=reader.ReadContentAsString()!="0";

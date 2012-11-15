@@ -34,16 +34,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReconcileNum":
-							reconcile.ReconcileNum=reader.ReadContentAsLong();
+							reconcile.ReconcileNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AccountNum":
-							reconcile.AccountNum=reader.ReadContentAsLong();
+							reconcile.AccountNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "StartingBal":
-							reconcile.StartingBal=reader.ReadContentAsDouble();
+							reconcile.StartingBal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "EndingBal":
-							reconcile.EndingBal=reader.ReadContentAsDouble();
+							reconcile.EndingBal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DateReconcile":
 							reconcile.DateReconcile=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

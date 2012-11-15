@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "InsFilingCodeNum":
-							insfilingcode.InsFilingCodeNum=reader.ReadContentAsLong();
+							insfilingcode.InsFilingCodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							insfilingcode.Descript=reader.ReadContentAsString();
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							insfilingcode.EclaimCode=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							insfilingcode.ItemOrder=reader.ReadContentAsInt();
+							insfilingcode.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

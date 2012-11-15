@@ -40,10 +40,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RegistrationKeyNum":
-							registrationkey.RegistrationKeyNum=reader.ReadContentAsLong();
+							registrationkey.RegistrationKeyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							registrationkey.PatNum=reader.ReadContentAsLong();
+							registrationkey.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RegKey":
 							registrationkey.RegKey=reader.ReadContentAsString();
@@ -73,7 +73,7 @@ namespace OpenDentalWebService {
 							registrationkey.IsOnlyForTesting=reader.ReadContentAsString()!="0";
 							break;
 						case "VotesAllotted":
-							registrationkey.VotesAllotted=reader.ReadContentAsInt();
+							registrationkey.VotesAllotted=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

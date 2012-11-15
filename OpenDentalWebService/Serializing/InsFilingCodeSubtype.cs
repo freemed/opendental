@@ -31,10 +31,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "InsFilingCodeSubtypeNum":
-							insfilingcodesubtype.InsFilingCodeSubtypeNum=reader.ReadContentAsLong();
+							insfilingcodesubtype.InsFilingCodeSubtypeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InsFilingCodeNum":
-							insfilingcodesubtype.InsFilingCodeNum=reader.ReadContentAsLong();
+							insfilingcodesubtype.InsFilingCodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							insfilingcodesubtype.Descript=reader.ReadContentAsString();

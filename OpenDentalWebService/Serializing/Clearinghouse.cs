@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClearinghouseNum":
-							clearinghouse.ClearinghouseNum=reader.ReadContentAsLong();
+							clearinghouse.ClearinghouseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							clearinghouse.Description=reader.ReadContentAsString();
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							clearinghouse.Payors=reader.ReadContentAsString();
 							break;
 						case "Eformat":
-							clearinghouse.Eformat=(OpenDentBusiness.ElectronicClaimFormat)reader.ReadContentAsInt();
+							clearinghouse.Eformat=(OpenDentBusiness.ElectronicClaimFormat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ISA05":
 							clearinghouse.ISA05=reader.ReadContentAsString();
@@ -89,16 +89,16 @@ namespace OpenDentalWebService {
 							clearinghouse.ResponsePath=reader.ReadContentAsString();
 							break;
 						case "CommBridge":
-							clearinghouse.CommBridge=(OpenDentBusiness.EclaimsCommBridge)reader.ReadContentAsInt();
+							clearinghouse.CommBridge=(OpenDentBusiness.EclaimsCommBridge)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ClientProgram":
 							clearinghouse.ClientProgram=reader.ReadContentAsString();
 							break;
 						case "LastBatchNumber":
-							clearinghouse.LastBatchNumber=reader.ReadContentAsInt();
+							clearinghouse.LastBatchNumber=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ModemPort":
-							clearinghouse.ModemPort=(byte)reader.ReadContentAsInt();
+							clearinghouse.ModemPort=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "LoginID":
 							clearinghouse.LoginID=reader.ReadContentAsString();

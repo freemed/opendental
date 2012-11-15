@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmailTemplateNum":
-							emailtemplate.EmailTemplateNum=reader.ReadContentAsLong();
+							emailtemplate.EmailTemplateNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Subject":
 							emailtemplate.Subject=reader.ReadContentAsString();

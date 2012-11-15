@@ -38,16 +38,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ApptViewNum":
-							apptview.ApptViewNum=reader.ReadContentAsLong();
+							apptview.ApptViewNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							apptview.Description=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							apptview.ItemOrder=reader.ReadContentAsInt();
+							apptview.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RowsPerIncr":
-							apptview.RowsPerIncr=(byte)reader.ReadContentAsInt();
+							apptview.RowsPerIncr=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "OnlyScheduledProvs":
 							apptview.OnlyScheduledProvs=reader.ReadContentAsString()!="0";
@@ -59,13 +59,13 @@ namespace OpenDentalWebService {
 							apptview.OnlySchedAfterTime=TimeSpan.Parse(reader.ReadContentAsString());
 							break;
 						case "StackBehavUR":
-							apptview.StackBehavUR=(OpenDentBusiness.ApptViewStackBehavior)reader.ReadContentAsInt();
+							apptview.StackBehavUR=(OpenDentBusiness.ApptViewStackBehavior)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "StackBehavLR":
-							apptview.StackBehavLR=(OpenDentBusiness.ApptViewStackBehavior)reader.ReadContentAsInt();
+							apptview.StackBehavLR=(OpenDentBusiness.ApptViewStackBehavior)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							apptview.ClinicNum=reader.ReadContentAsLong();
+							apptview.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

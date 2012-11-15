@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "GroupPermNum":
-							grouppermission.GroupPermNum=reader.ReadContentAsLong();
+							grouppermission.GroupPermNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NewerDate":
 							grouppermission.NewerDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "NewerDays":
-							grouppermission.NewerDays=reader.ReadContentAsInt();
+							grouppermission.NewerDays=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "UserGroupNum":
-							grouppermission.UserGroupNum=reader.ReadContentAsLong();
+							grouppermission.UserGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PermType":
-							grouppermission.PermType=(OpenDentBusiness.Permissions)reader.ReadContentAsInt();
+							grouppermission.PermType=(OpenDentBusiness.Permissions)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

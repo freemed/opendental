@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ScreenGroupNum":
-							screengroup.ScreenGroupNum=reader.ReadContentAsLong();
+							screengroup.ScreenGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							screengroup.Description=reader.ReadContentAsString();

@@ -38,7 +38,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "OperatoryNum":
-							operatory.OperatoryNum=reader.ReadContentAsLong();
+							operatory.OperatoryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OpName":
 							operatory.OpName=reader.ReadContentAsString();
@@ -47,22 +47,22 @@ namespace OpenDentalWebService {
 							operatory.Abbrev=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							operatory.ItemOrder=reader.ReadContentAsInt();
+							operatory.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							operatory.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "ProvDentist":
-							operatory.ProvDentist=reader.ReadContentAsLong();
+							operatory.ProvDentist=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvHygienist":
-							operatory.ProvHygienist=reader.ReadContentAsLong();
+							operatory.ProvHygienist=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsHygiene":
 							operatory.IsHygiene=reader.ReadContentAsString()!="0";
 							break;
 						case "ClinicNum":
-							operatory.ClinicNum=reader.ReadContentAsLong();
+							operatory.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SetProspective":
 							operatory.SetProspective=reader.ReadContentAsString()!="0";

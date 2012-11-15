@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReferralNum":
-							referral.ReferralNum=reader.ReadContentAsLong();
+							referral.ReferralNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LName":
 							referral.LName=reader.ReadContentAsString();
@@ -69,7 +69,7 @@ namespace OpenDentalWebService {
 							referral.UsingTIN=reader.ReadContentAsString()!="0";
 							break;
 						case "Specialty":
-							referral.Specialty=(OpenDentBusiness.DentalSpecialty)reader.ReadContentAsInt();
+							referral.Specialty=(OpenDentBusiness.DentalSpecialty)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ST":
 							referral.ST=reader.ReadContentAsString();
@@ -108,13 +108,13 @@ namespace OpenDentalWebService {
 							referral.EMail=reader.ReadContentAsString();
 							break;
 						case "PatNum":
-							referral.PatNum=reader.ReadContentAsLong();
+							referral.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NationalProvID":
 							referral.NationalProvID=reader.ReadContentAsString();
 							break;
 						case "Slip":
-							referral.Slip=reader.ReadContentAsLong();
+							referral.Slip=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsDoctor":
 							referral.IsDoctor=reader.ReadContentAsString()!="0";

@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DepositNum":
-							deposit.DepositNum=reader.ReadContentAsLong();
+							deposit.DepositNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateDeposit":
 							deposit.DateDeposit=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -42,7 +42,7 @@ namespace OpenDentalWebService {
 							deposit.BankAccountInfo=reader.ReadContentAsString();
 							break;
 						case "Amount":
-							deposit.Amount=reader.ReadContentAsDouble();
+							deposit.Amount=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Memo":
 							deposit.Memo=reader.ReadContentAsString();

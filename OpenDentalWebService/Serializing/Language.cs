@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LanguageNum":
-							language.LanguageNum=reader.ReadContentAsLong();
+							language.LanguageNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EnglishComments":
 							language.EnglishComments=reader.ReadContentAsString();

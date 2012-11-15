@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DefNum":
-							def.DefNum=reader.ReadContentAsLong();
+							def.DefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Category":
-							def.Category=(OpenDentBusiness.DefCat)reader.ReadContentAsInt();
+							def.Category=(OpenDentBusiness.DefCat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							def.ItemOrder=reader.ReadContentAsInt();
+							def.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ItemName":
 							def.ItemName=reader.ReadContentAsString();
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							def.ItemValue=reader.ReadContentAsString();
 							break;
 						case "ItemColor":
-							def.ItemColor=Color.FromArgb(reader.ReadContentAsInt());
+							def.ItemColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "IsHidden":
 							def.IsHidden=reader.ReadContentAsString()!="0";

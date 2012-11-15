@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PrinterNum":
-							printer.PrinterNum=reader.ReadContentAsLong();
+							printer.PrinterNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ComputerNum":
-							printer.ComputerNum=reader.ReadContentAsLong();
+							printer.ComputerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PrintSit":
-							printer.PrintSit=(OpenDentBusiness.PrintSituation)reader.ReadContentAsInt();
+							printer.PrintSit=(OpenDentBusiness.PrintSituation)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PrinterName":
 							printer.PrinterName=reader.ReadContentAsString();

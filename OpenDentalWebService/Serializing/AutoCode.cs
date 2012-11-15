@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AutoCodeNum":
-							autocode.AutoCodeNum=reader.ReadContentAsLong();
+							autocode.AutoCodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							autocode.Description=reader.ReadContentAsString();

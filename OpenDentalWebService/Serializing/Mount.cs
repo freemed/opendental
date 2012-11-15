@@ -37,13 +37,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "MountNum":
-							mount.MountNum=reader.ReadContentAsLong();
+							mount.MountNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							mount.PatNum=reader.ReadContentAsLong();
+							mount.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DocCategory":
-							mount.DocCategory=reader.ReadContentAsLong();
+							mount.DocCategory=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateCreated":
 							mount.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -55,13 +55,13 @@ namespace OpenDentalWebService {
 							mount.Note=reader.ReadContentAsString();
 							break;
 						case "ImgType":
-							mount.ImgType=(OpenDentBusiness.ImageType)reader.ReadContentAsInt();
+							mount.ImgType=(OpenDentBusiness.ImageType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Width":
-							mount.Width=reader.ReadContentAsInt();
+							mount.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							mount.Height=reader.ReadContentAsInt();
+							mount.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

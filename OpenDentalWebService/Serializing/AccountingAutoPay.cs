@@ -31,10 +31,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AccountingAutoPayNum":
-							accountingautopay.AccountingAutoPayNum=reader.ReadContentAsLong();
+							accountingautopay.AccountingAutoPayNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayType":
-							accountingautopay.PayType=reader.ReadContentAsLong();
+							accountingautopay.PayType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PickList":
 							accountingautopay.PickList=reader.ReadContentAsString();

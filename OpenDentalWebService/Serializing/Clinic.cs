@@ -40,7 +40,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClinicNum":
-							clinic.ClinicNum=reader.ReadContentAsLong();
+							clinic.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							clinic.Description=reader.ReadContentAsString();
@@ -67,10 +67,10 @@ namespace OpenDentalWebService {
 							clinic.BankNumber=reader.ReadContentAsString();
 							break;
 						case "DefaultPlaceService":
-							clinic.DefaultPlaceService=(OpenDentBusiness.PlaceOfService)reader.ReadContentAsInt();
+							clinic.DefaultPlaceService=(OpenDentBusiness.PlaceOfService)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "InsBillingProv":
-							clinic.InsBillingProv=reader.ReadContentAsLong();
+							clinic.InsBillingProv=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Fax":
 							clinic.Fax=reader.ReadContentAsString();

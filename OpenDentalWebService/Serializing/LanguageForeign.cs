@@ -34,7 +34,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LanguageForeignNum":
-							languageforeign.LanguageForeignNum=reader.ReadContentAsLong();
+							languageforeign.LanguageForeignNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClassType":
 							languageforeign.ClassType=reader.ReadContentAsString();

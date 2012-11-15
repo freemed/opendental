@@ -38,13 +38,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "InsSubNum":
-							inssub.InsSubNum=reader.ReadContentAsLong();
+							inssub.InsSubNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlanNum":
-							inssub.PlanNum=reader.ReadContentAsLong();
+							inssub.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Subscriber":
-							inssub.Subscriber=reader.ReadContentAsLong();
+							inssub.Subscriber=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateEffective":
 							inssub.DateEffective=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

@@ -36,13 +36,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EduResourceNum":
-							eduresource.EduResourceNum=reader.ReadContentAsLong();
+							eduresource.EduResourceNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DiseaseDefNum":
-							eduresource.DiseaseDefNum=reader.ReadContentAsLong();
+							eduresource.DiseaseDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MedicationNum":
-							eduresource.MedicationNum=reader.ReadContentAsLong();
+							eduresource.MedicationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LabResultID":
 							eduresource.LabResultID=reader.ReadContentAsString();
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							eduresource.ResourceUrl=reader.ReadContentAsString();
 							break;
 						case "Icd9Num":
-							eduresource.Icd9Num=reader.ReadContentAsLong();
+							eduresource.Icd9Num=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

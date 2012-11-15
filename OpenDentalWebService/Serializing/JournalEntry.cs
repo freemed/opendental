@@ -38,22 +38,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "JournalEntryNum":
-							journalentry.JournalEntryNum=reader.ReadContentAsLong();
+							journalentry.JournalEntryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TransactionNum":
-							journalentry.TransactionNum=reader.ReadContentAsLong();
+							journalentry.TransactionNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AccountNum":
-							journalentry.AccountNum=reader.ReadContentAsLong();
+							journalentry.AccountNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateDisplayed":
 							journalentry.DateDisplayed=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DebitAmt":
-							journalentry.DebitAmt=reader.ReadContentAsDouble();
+							journalentry.DebitAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CreditAmt":
-							journalentry.CreditAmt=reader.ReadContentAsDouble();
+							journalentry.CreditAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Memo":
 							journalentry.Memo=reader.ReadContentAsString();
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							journalentry.CheckNumber=reader.ReadContentAsString();
 							break;
 						case "ReconcileNum":
-							journalentry.ReconcileNum=reader.ReadContentAsLong();
+							journalentry.ReconcileNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

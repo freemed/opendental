@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LaboratoryNum":
-							laboratory.LaboratoryNum=reader.ReadContentAsLong();
+							laboratory.LaboratoryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							laboratory.Description=reader.ReadContentAsString();
@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 							laboratory.Notes=reader.ReadContentAsString();
 							break;
 						case "Slip":
-							laboratory.Slip=reader.ReadContentAsLong();
+							laboratory.Slip=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Address":
 							laboratory.Address=reader.ReadContentAsString();

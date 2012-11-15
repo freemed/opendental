@@ -44,7 +44,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CarrierNum":
-							carrier.CarrierNum=reader.ReadContentAsLong();
+							carrier.CarrierNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CarrierName":
 							carrier.CarrierName=reader.ReadContentAsString();
@@ -80,16 +80,16 @@ namespace OpenDentalWebService {
 							carrier.CDAnetVersion=reader.ReadContentAsString();
 							break;
 						case "CanadianNetworkNum":
-							carrier.CanadianNetworkNum=reader.ReadContentAsLong();
+							carrier.CanadianNetworkNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							carrier.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "CanadianEncryptionMethod":
-							carrier.CanadianEncryptionMethod=(byte)reader.ReadContentAsInt();
+							carrier.CanadianEncryptionMethod=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "CanadianSupportedTypes":
-							carrier.CanadianSupportedTypes=(OpenDentBusiness.CanSupTransTypes)reader.ReadContentAsInt();
+							carrier.CanadianSupportedTypes=(OpenDentBusiness.CanSupTransTypes)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

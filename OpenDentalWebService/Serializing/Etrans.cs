@@ -47,61 +47,61 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EtransNum":
-							etrans.EtransNum=reader.ReadContentAsLong();
+							etrans.EtransNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeTrans":
 							etrans.DateTimeTrans=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClearingHouseNum":
-							etrans.ClearingHouseNum=reader.ReadContentAsLong();
+							etrans.ClearingHouseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Etype":
-							etrans.Etype=(OpenDentBusiness.EtransType)reader.ReadContentAsInt();
+							etrans.Etype=(OpenDentBusiness.EtransType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ClaimNum":
-							etrans.ClaimNum=reader.ReadContentAsLong();
+							etrans.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OfficeSequenceNumber":
-							etrans.OfficeSequenceNumber=reader.ReadContentAsInt();
+							etrans.OfficeSequenceNumber=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CarrierTransCounter":
-							etrans.CarrierTransCounter=reader.ReadContentAsInt();
+							etrans.CarrierTransCounter=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CarrierTransCounter2":
-							etrans.CarrierTransCounter2=reader.ReadContentAsInt();
+							etrans.CarrierTransCounter2=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CarrierNum":
-							etrans.CarrierNum=reader.ReadContentAsLong();
+							etrans.CarrierNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CarrierNum2":
-							etrans.CarrierNum2=reader.ReadContentAsLong();
+							etrans.CarrierNum2=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							etrans.PatNum=reader.ReadContentAsLong();
+							etrans.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BatchNumber":
-							etrans.BatchNumber=reader.ReadContentAsInt();
+							etrans.BatchNumber=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AckCode":
 							etrans.AckCode=reader.ReadContentAsString();
 							break;
 						case "TransSetNum":
-							etrans.TransSetNum=reader.ReadContentAsInt();
+							etrans.TransSetNum=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Note":
 							etrans.Note=reader.ReadContentAsString();
 							break;
 						case "EtransMessageTextNum":
-							etrans.EtransMessageTextNum=reader.ReadContentAsLong();
+							etrans.EtransMessageTextNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AckEtransNum":
-							etrans.AckEtransNum=reader.ReadContentAsLong();
+							etrans.AckEtransNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlanNum":
-							etrans.PlanNum=reader.ReadContentAsLong();
+							etrans.PlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InsSubNum":
-							etrans.InsSubNum=reader.ReadContentAsLong();
+							etrans.InsSubNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

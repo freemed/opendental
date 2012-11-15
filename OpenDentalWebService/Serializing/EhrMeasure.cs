@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EhrMeasureNum":
-							ehrmeasure.EhrMeasureNum=reader.ReadContentAsLong();
+							ehrmeasure.EhrMeasureNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MeasureType":
-							ehrmeasure.MeasureType=(OpenDentBusiness.EhrMeasureType)reader.ReadContentAsInt();
+							ehrmeasure.MeasureType=(OpenDentBusiness.EhrMeasureType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Numerator":
-							ehrmeasure.Numerator=reader.ReadContentAsInt();
+							ehrmeasure.Numerator=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Denominator":
-							ehrmeasure.Denominator=reader.ReadContentAsInt();
+							ehrmeasure.Denominator=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

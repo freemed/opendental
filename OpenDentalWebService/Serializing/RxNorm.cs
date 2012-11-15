@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RxNormNum":
-							rxnorm.RxNormNum=reader.ReadContentAsLong();
+							rxnorm.RxNormNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RxCui":
 							rxnorm.RxCui=reader.ReadContentAsString();

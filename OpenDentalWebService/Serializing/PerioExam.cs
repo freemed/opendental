@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PerioExamNum":
-							perioexam.PerioExamNum=reader.ReadContentAsLong();
+							perioexam.PerioExamNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							perioexam.PatNum=reader.ReadContentAsLong();
+							perioexam.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ExamDate":
 							perioexam.ExamDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
-							perioexam.ProvNum=reader.ReadContentAsLong();
+							perioexam.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

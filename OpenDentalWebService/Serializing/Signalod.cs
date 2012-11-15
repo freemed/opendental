@@ -38,7 +38,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SignalNum":
-							signalod.SignalNum=reader.ReadContentAsLong();
+							signalod.SignalNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FromUser":
 							signalod.FromUser=reader.ReadContentAsString();
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							signalod.DateViewing=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SigType":
-							signalod.SigType=(OpenDentBusiness.SignalType)reader.ReadContentAsInt();
+							signalod.SigType=(OpenDentBusiness.SignalType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SigText":
 							signalod.SigText=reader.ReadContentAsString();
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							signalod.AckTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "TaskNum":
-							signalod.TaskNum=reader.ReadContentAsLong();
+							signalod.TaskNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

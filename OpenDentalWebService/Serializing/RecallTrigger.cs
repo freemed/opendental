@@ -31,13 +31,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RecallTriggerNum":
-							recalltrigger.RecallTriggerNum=reader.ReadContentAsLong();
+							recalltrigger.RecallTriggerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RecallTypeNum":
-							recalltrigger.RecallTypeNum=reader.ReadContentAsLong();
+							recalltrigger.RecallTypeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							recalltrigger.CodeNum=reader.ReadContentAsLong();
+							recalltrigger.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

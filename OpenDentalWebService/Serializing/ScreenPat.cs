@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ScreenPatNum":
-							screenpat.ScreenPatNum=reader.ReadContentAsLong();
+							screenpat.ScreenPatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							screenpat.PatNum=reader.ReadContentAsLong();
+							screenpat.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ScreenGroupNum":
-							screenpat.ScreenGroupNum=reader.ReadContentAsLong();
+							screenpat.ScreenGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SheetNum":
-							screenpat.SheetNum=reader.ReadContentAsLong();
+							screenpat.SheetNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

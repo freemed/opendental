@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcApptColorNum":
-							procapptcolor.ProcApptColorNum=reader.ReadContentAsLong();
+							procapptcolor.ProcApptColorNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeRange":
 							procapptcolor.CodeRange=reader.ReadContentAsString();
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							procapptcolor.ShowPreviousDate=reader.ReadContentAsString()!="0";
 							break;
 						case "ColorText":
-							procapptcolor.ColorText=Color.FromArgb(reader.ReadContentAsInt());
+							procapptcolor.ColorText=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 					}
 				}

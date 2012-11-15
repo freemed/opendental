@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DrugUnitNum":
-							drugunit.DrugUnitNum=reader.ReadContentAsLong();
+							drugunit.DrugUnitNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UnitIdentifier":
 							drugunit.UnitIdentifier=reader.ReadContentAsString();

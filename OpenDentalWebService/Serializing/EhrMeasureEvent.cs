@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EhrMeasureEventNum":
-							ehrmeasureevent.EhrMeasureEventNum=reader.ReadContentAsLong();
+							ehrmeasureevent.EhrMeasureEventNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTEvent":
 							ehrmeasureevent.DateTEvent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "EventType":
-							ehrmeasureevent.EventType=(OpenDentBusiness.EhrMeasureEventType)reader.ReadContentAsInt();
+							ehrmeasureevent.EventType=(OpenDentBusiness.EhrMeasureEventType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							ehrmeasureevent.PatNum=reader.ReadContentAsLong();
+							ehrmeasureevent.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MoreInfo":
 							ehrmeasureevent.MoreInfo=reader.ReadContentAsString();

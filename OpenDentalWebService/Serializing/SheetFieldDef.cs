@@ -46,13 +46,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SheetFieldDefNum":
-							sheetfielddef.SheetFieldDefNum=reader.ReadContentAsLong();
+							sheetfielddef.SheetFieldDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SheetDefNum":
-							sheetfielddef.SheetDefNum=reader.ReadContentAsLong();
+							sheetfielddef.SheetDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FieldType":
-							sheetfielddef.FieldType=(OpenDentBusiness.SheetFieldType)reader.ReadContentAsInt();
+							sheetfielddef.FieldType=(OpenDentBusiness.SheetFieldType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "FieldName":
 							sheetfielddef.FieldName=reader.ReadContentAsString();
@@ -61,7 +61,7 @@ namespace OpenDentalWebService {
 							sheetfielddef.FieldValue=reader.ReadContentAsString();
 							break;
 						case "FontSize":
-							sheetfielddef.FontSize=reader.ReadContentAsFloat();
+							sheetfielddef.FontSize=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "FontName":
 							sheetfielddef.FontName=reader.ReadContentAsString();
@@ -70,19 +70,19 @@ namespace OpenDentalWebService {
 							sheetfielddef.FontIsBold=reader.ReadContentAsString()!="0";
 							break;
 						case "XPos":
-							sheetfielddef.XPos=reader.ReadContentAsInt();
+							sheetfielddef.XPos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "YPos":
-							sheetfielddef.YPos=reader.ReadContentAsInt();
+							sheetfielddef.YPos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Width":
-							sheetfielddef.Width=reader.ReadContentAsInt();
+							sheetfielddef.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							sheetfielddef.Height=reader.ReadContentAsInt();
+							sheetfielddef.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "GrowthBehavior":
-							sheetfielddef.GrowthBehavior=(OpenDentBusiness.GrowthBehaviorEnum)reader.ReadContentAsInt();
+							sheetfielddef.GrowthBehavior=(OpenDentBusiness.GrowthBehaviorEnum)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RadioButtonValue":
 							sheetfielddef.RadioButtonValue=reader.ReadContentAsString();
@@ -94,7 +94,7 @@ namespace OpenDentalWebService {
 							sheetfielddef.IsRequired=reader.ReadContentAsString()!="0";
 							break;
 						case "TabOrder":
-							sheetfielddef.TabOrder=reader.ReadContentAsInt();
+							sheetfielddef.TabOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ReportableName":
 							sheetfielddef.ReportableName=reader.ReadContentAsString();

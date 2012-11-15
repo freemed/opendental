@@ -34,10 +34,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimValCodeLogNum":
-							claimvalcodelog.ClaimValCodeLogNum=reader.ReadContentAsLong();
+							claimvalcodelog.ClaimValCodeLogNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimNum":
-							claimvalcodelog.ClaimNum=reader.ReadContentAsLong();
+							claimvalcodelog.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimField":
 							claimvalcodelog.ClaimField=reader.ReadContentAsString();
@@ -46,10 +46,10 @@ namespace OpenDentalWebService {
 							claimvalcodelog.ValCode=reader.ReadContentAsString();
 							break;
 						case "ValAmount":
-							claimvalcodelog.ValAmount=reader.ReadContentAsDouble();
+							claimvalcodelog.ValAmount=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Ordinal":
-							claimvalcodelog.Ordinal=reader.ReadContentAsInt();
+							claimvalcodelog.Ordinal=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

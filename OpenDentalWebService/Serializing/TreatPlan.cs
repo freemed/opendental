@@ -36,10 +36,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TreatPlanNum":
-							treatplan.TreatPlanNum=reader.ReadContentAsLong();
+							treatplan.TreatPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							treatplan.PatNum=reader.ReadContentAsLong();
+							treatplan.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTP":
 							treatplan.DateTP=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							treatplan.SigIsTopaz=reader.ReadContentAsString()!="0";
 							break;
 						case "ResponsParty":
-							treatplan.ResponsParty=reader.ReadContentAsLong();
+							treatplan.ResponsParty=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

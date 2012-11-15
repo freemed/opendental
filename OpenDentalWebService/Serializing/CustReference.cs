@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CustReferenceNum":
-							custreference.CustReferenceNum=reader.ReadContentAsLong();
+							custreference.CustReferenceNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							custreference.PatNum=reader.ReadContentAsLong();
+							custreference.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateMostRecent":
 							custreference.DateMostRecent=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

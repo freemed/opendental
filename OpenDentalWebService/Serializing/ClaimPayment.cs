@@ -39,13 +39,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimPaymentNum":
-							claimpayment.ClaimPaymentNum=reader.ReadContentAsLong();
+							claimpayment.ClaimPaymentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CheckDate":
 							claimpayment.CheckDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "CheckAmt":
-							claimpayment.CheckAmt=reader.ReadContentAsDouble();
+							claimpayment.CheckAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "CheckNum":
 							claimpayment.CheckNum=reader.ReadContentAsString();
@@ -57,10 +57,10 @@ namespace OpenDentalWebService {
 							claimpayment.Note=reader.ReadContentAsString();
 							break;
 						case "ClinicNum":
-							claimpayment.ClinicNum=reader.ReadContentAsLong();
+							claimpayment.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DepositNum":
-							claimpayment.DepositNum=reader.ReadContentAsLong();
+							claimpayment.DepositNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CarrierName":
 							claimpayment.CarrierName=reader.ReadContentAsString();

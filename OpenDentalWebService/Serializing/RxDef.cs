@@ -36,7 +36,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RxDefNum":
-							rxdef.RxDefNum=reader.ReadContentAsLong();
+							rxdef.RxDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Drug":
 							rxdef.Drug=reader.ReadContentAsString();
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							rxdef.IsControlled=reader.ReadContentAsString()!="0";
 							break;
 						case "RxCui":
-							rxdef.RxCui=reader.ReadContentAsLong();
+							rxdef.RxCui=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

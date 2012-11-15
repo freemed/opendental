@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProviderIdentNum":
-							providerident.ProviderIdentNum=reader.ReadContentAsLong();
+							providerident.ProviderIdentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							providerident.ProvNum=reader.ReadContentAsLong();
+							providerident.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayorID":
 							providerident.PayorID=reader.ReadContentAsString();
 							break;
 						case "SuppIDType":
-							providerident.SuppIDType=(OpenDentBusiness.ProviderSupplementalID)reader.ReadContentAsInt();
+							providerident.SuppIDType=(OpenDentBusiness.ProviderSupplementalID)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IDNumber":
 							providerident.IDNumber=reader.ReadContentAsString();

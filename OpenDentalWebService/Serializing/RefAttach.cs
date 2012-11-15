@@ -39,16 +39,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RefAttachNum":
-							refattach.RefAttachNum=reader.ReadContentAsLong();
+							refattach.RefAttachNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ReferralNum":
-							refattach.ReferralNum=reader.ReadContentAsLong();
+							refattach.ReferralNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							refattach.PatNum=reader.ReadContentAsLong();
+							refattach.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							refattach.ItemOrder=reader.ReadContentAsInt();
+							refattach.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RefDate":
 							refattach.RefDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							refattach.IsFrom=reader.ReadContentAsString()!="0";
 							break;
 						case "RefToStatus":
-							refattach.RefToStatus=(OpenDentBusiness.ReferralToStatus)reader.ReadContentAsInt();
+							refattach.RefToStatus=(OpenDentBusiness.ReferralToStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Note":
 							refattach.Note=reader.ReadContentAsString();
@@ -66,7 +66,7 @@ namespace OpenDentalWebService {
 							refattach.IsTransitionOfCare=reader.ReadContentAsString()!="0";
 							break;
 						case "ProcNum":
-							refattach.ProcNum=reader.ReadContentAsLong();
+							refattach.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateProcComplete":
 							refattach.DateProcComplete=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "GuardianNum":
-							guardian.GuardianNum=reader.ReadContentAsLong();
+							guardian.GuardianNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNumChild":
-							guardian.PatNumChild=reader.ReadContentAsLong();
+							guardian.PatNumChild=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNumGuardian":
-							guardian.PatNumGuardian=reader.ReadContentAsLong();
+							guardian.PatNumGuardian=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Relationship":
-							guardian.Relationship=(OpenDentBusiness.GuardianRelationship)reader.ReadContentAsInt();
+							guardian.Relationship=(OpenDentBusiness.GuardianRelationship)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

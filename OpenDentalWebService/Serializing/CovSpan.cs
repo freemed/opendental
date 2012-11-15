@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CovSpanNum":
-							covspan.CovSpanNum=reader.ReadContentAsLong();
+							covspan.CovSpanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CovCatNum":
-							covspan.CovCatNum=reader.ReadContentAsLong();
+							covspan.CovCatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FromCode":
 							covspan.FromCode=reader.ReadContentAsString();

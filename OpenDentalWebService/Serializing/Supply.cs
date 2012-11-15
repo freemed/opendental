@@ -37,10 +37,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SupplyNum":
-							supply.SupplyNum=reader.ReadContentAsLong();
+							supply.SupplyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SupplierNum":
-							supply.SupplierNum=reader.ReadContentAsLong();
+							supply.SupplierNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CatalogNumber":
 							supply.CatalogNumber=reader.ReadContentAsString();
@@ -49,19 +49,19 @@ namespace OpenDentalWebService {
 							supply.Descript=reader.ReadContentAsString();
 							break;
 						case "Category":
-							supply.Category=reader.ReadContentAsLong();
+							supply.Category=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							supply.ItemOrder=reader.ReadContentAsInt();
+							supply.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "LevelDesired":
-							supply.LevelDesired=reader.ReadContentAsFloat();
+							supply.LevelDesired=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							supply.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "Price":
-							supply.Price=reader.ReadContentAsDouble();
+							supply.Price=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

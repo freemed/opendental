@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PatNum":
-							patientnote.PatNum=reader.ReadContentAsLong();
+							patientnote.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FamFinancial":
 							patientnote.FamFinancial=reader.ReadContentAsString();

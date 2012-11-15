@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "UserNum":
-							userod.UserNum=reader.ReadContentAsLong();
+							userod.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UserName":
 							userod.UserName=reader.ReadContentAsString();
@@ -50,25 +50,25 @@ namespace OpenDentalWebService {
 							userod.Password=reader.ReadContentAsString();
 							break;
 						case "UserGroupNum":
-							userod.UserGroupNum=reader.ReadContentAsLong();
+							userod.UserGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmployeeNum":
-							userod.EmployeeNum=reader.ReadContentAsLong();
+							userod.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							userod.ClinicNum=reader.ReadContentAsLong();
+							userod.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							userod.ProvNum=reader.ReadContentAsLong();
+							userod.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							userod.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "TaskListInBox":
-							userod.TaskListInBox=reader.ReadContentAsLong();
+							userod.TaskListInBox=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AnesthProvType":
-							userod.AnesthProvType=reader.ReadContentAsInt();
+							userod.AnesthProvType=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DefaultHidePopups":
 							userod.DefaultHidePopups=reader.ReadContentAsString()!="0";

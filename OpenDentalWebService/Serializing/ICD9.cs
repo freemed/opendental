@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ICD9Num":
-							icd9.ICD9Num=reader.ReadContentAsLong();
+							icd9.ICD9Num=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ICD9Code":
 							icd9.ICD9Code=reader.ReadContentAsString();

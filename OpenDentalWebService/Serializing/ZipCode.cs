@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ZipCodeNum":
-							zipcode.ZipCodeNum=reader.ReadContentAsLong();
+							zipcode.ZipCodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ZipCodeDigits":
 							zipcode.ZipCodeDigits=reader.ReadContentAsString();

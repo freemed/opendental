@@ -36,13 +36,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SecurityLogNum":
-							securitylog.SecurityLogNum=reader.ReadContentAsLong();
+							securitylog.SecurityLogNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PermType":
-							securitylog.PermType=(OpenDentBusiness.Permissions)reader.ReadContentAsInt();
+							securitylog.PermType=(OpenDentBusiness.Permissions)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "UserNum":
-							securitylog.UserNum=reader.ReadContentAsLong();
+							securitylog.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LogDateTime":
 							securitylog.LogDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -51,13 +51,13 @@ namespace OpenDentalWebService {
 							securitylog.LogText=reader.ReadContentAsString();
 							break;
 						case "PatNum":
-							securitylog.PatNum=reader.ReadContentAsLong();
+							securitylog.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CompName":
 							securitylog.CompName=reader.ReadContentAsString();
 							break;
 						case "FKey":
-							securitylog.FKey=reader.ReadContentAsLong();
+							securitylog.FKey=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

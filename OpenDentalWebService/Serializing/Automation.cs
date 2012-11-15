@@ -36,25 +36,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AutomationNum":
-							automation.AutomationNum=reader.ReadContentAsLong();
+							automation.AutomationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							automation.Description=reader.ReadContentAsString();
 							break;
 						case "Autotrigger":
-							automation.Autotrigger=(OpenDentBusiness.AutomationTrigger)reader.ReadContentAsInt();
+							automation.Autotrigger=(OpenDentBusiness.AutomationTrigger)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ProcCodes":
 							automation.ProcCodes=reader.ReadContentAsString();
 							break;
 						case "AutoAction":
-							automation.AutoAction=(OpenDentBusiness.AutomationAction)reader.ReadContentAsInt();
+							automation.AutoAction=(OpenDentBusiness.AutomationAction)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SheetDefNum":
-							automation.SheetDefNum=reader.ReadContentAsLong();
+							automation.SheetDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CommType":
-							automation.CommType=reader.ReadContentAsLong();
+							automation.CommType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MessageContent":
 							automation.MessageContent=reader.ReadContentAsString();

@@ -38,34 +38,34 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PayPlanChargeNum":
-							payplancharge.PayPlanChargeNum=reader.ReadContentAsLong();
+							payplancharge.PayPlanChargeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayPlanNum":
-							payplancharge.PayPlanNum=reader.ReadContentAsLong();
+							payplancharge.PayPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Guarantor":
-							payplancharge.Guarantor=reader.ReadContentAsLong();
+							payplancharge.Guarantor=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							payplancharge.PatNum=reader.ReadContentAsLong();
+							payplancharge.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ChargeDate":
 							payplancharge.ChargeDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Principal":
-							payplancharge.Principal=reader.ReadContentAsDouble();
+							payplancharge.Principal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Interest":
-							payplancharge.Interest=reader.ReadContentAsDouble();
+							payplancharge.Interest=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Note":
 							payplancharge.Note=reader.ReadContentAsString();
 							break;
 						case "ProvNum":
-							payplancharge.ProvNum=reader.ReadContentAsLong();
+							payplancharge.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							payplancharge.ClinicNum=reader.ReadContentAsLong();
+							payplancharge.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

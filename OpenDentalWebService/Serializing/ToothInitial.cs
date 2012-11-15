@@ -35,25 +35,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ToothInitialNum":
-							toothinitial.ToothInitialNum=reader.ReadContentAsLong();
+							toothinitial.ToothInitialNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							toothinitial.PatNum=reader.ReadContentAsLong();
+							toothinitial.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ToothNum":
 							toothinitial.ToothNum=reader.ReadContentAsString();
 							break;
 						case "InitialType":
-							toothinitial.InitialType=(OpenDentBusiness.ToothInitialType)reader.ReadContentAsInt();
+							toothinitial.InitialType=(OpenDentBusiness.ToothInitialType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Movement":
-							toothinitial.Movement=reader.ReadContentAsFloat();
+							toothinitial.Movement=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "DrawingSegment":
 							toothinitial.DrawingSegment=reader.ReadContentAsString();
 							break;
 						case "ColorDraw":
-							toothinitial.ColorDraw=Color.FromArgb(reader.ReadContentAsInt());
+							toothinitial.ColorDraw=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 					}
 				}

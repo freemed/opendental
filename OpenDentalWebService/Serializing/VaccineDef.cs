@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "VaccineDefNum":
-							vaccinedef.VaccineDefNum=reader.ReadContentAsLong();
+							vaccinedef.VaccineDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CVXCode":
 							vaccinedef.CVXCode=reader.ReadContentAsString();
@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 							vaccinedef.VaccineName=reader.ReadContentAsString();
 							break;
 						case "DrugManufacturerNum":
-							vaccinedef.DrugManufacturerNum=reader.ReadContentAsLong();
+							vaccinedef.DrugManufacturerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

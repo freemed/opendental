@@ -38,10 +38,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "VaccinePatNum":
-							vaccinepat.VaccinePatNum=reader.ReadContentAsLong();
+							vaccinepat.VaccinePatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "VaccineDefNum":
-							vaccinepat.VaccineDefNum=reader.ReadContentAsLong();
+							vaccinepat.VaccineDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeStart":
 							vaccinepat.DateTimeStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -50,16 +50,16 @@ namespace OpenDentalWebService {
 							vaccinepat.DateTimeEnd=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AdministeredAmt":
-							vaccinepat.AdministeredAmt=reader.ReadContentAsFloat();
+							vaccinepat.AdministeredAmt=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "DrugUnitNum":
-							vaccinepat.DrugUnitNum=reader.ReadContentAsLong();
+							vaccinepat.DrugUnitNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LotNumber":
 							vaccinepat.LotNumber=reader.ReadContentAsString();
 							break;
 						case "PatNum":
-							vaccinepat.PatNum=reader.ReadContentAsLong();
+							vaccinepat.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NotGiven":
 							vaccinepat.NotGiven=reader.ReadContentAsString()!="0";

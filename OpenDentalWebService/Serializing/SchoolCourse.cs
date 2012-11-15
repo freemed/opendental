@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SchoolCourseNum":
-							schoolcourse.SchoolCourseNum=reader.ReadContentAsLong();
+							schoolcourse.SchoolCourseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CourseID":
 							schoolcourse.CourseID=reader.ReadContentAsString();

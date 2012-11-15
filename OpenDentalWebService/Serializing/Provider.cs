@@ -61,13 +61,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProvNum":
-							provider.ProvNum=reader.ReadContentAsLong();
+							provider.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Abbr":
 							provider.Abbr=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							provider.ItemOrder=reader.ReadContentAsInt();
+							provider.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "LName":
 							provider.LName=reader.ReadContentAsString();
@@ -82,10 +82,10 @@ namespace OpenDentalWebService {
 							provider.Suffix=reader.ReadContentAsString();
 							break;
 						case "FeeSched":
-							provider.FeeSched=reader.ReadContentAsLong();
+							provider.FeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Specialty":
-							provider.Specialty=(OpenDentBusiness.DentalSpecialty)reader.ReadContentAsInt();
+							provider.Specialty=(OpenDentBusiness.DentalSpecialty)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SSN":
 							provider.SSN=reader.ReadContentAsString();
@@ -100,7 +100,7 @@ namespace OpenDentalWebService {
 							provider.IsSecondary=reader.ReadContentAsString()!="0";
 							break;
 						case "ProvColor":
-							provider.ProvColor=Color.FromArgb(reader.ReadContentAsInt());
+							provider.ProvColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "IsHidden":
 							provider.IsHidden=reader.ReadContentAsString()!="0";
@@ -118,10 +118,10 @@ namespace OpenDentalWebService {
 							provider.MedicaidID=reader.ReadContentAsString();
 							break;
 						case "OutlineColor":
-							provider.OutlineColor=Color.FromArgb(reader.ReadContentAsInt());
+							provider.OutlineColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "SchoolClassNum":
-							provider.SchoolClassNum=reader.ReadContentAsLong();
+							provider.SchoolClassNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NationalProvID":
 							provider.NationalProvID=reader.ReadContentAsString();
@@ -133,7 +133,7 @@ namespace OpenDentalWebService {
 							provider.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "AnesthProvType":
-							provider.AnesthProvType=reader.ReadContentAsLong();
+							provider.AnesthProvType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TaxonomyCodeOverride":
 							provider.TaxonomyCodeOverride=reader.ReadContentAsString();

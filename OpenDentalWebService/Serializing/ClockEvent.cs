@@ -43,10 +43,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClockEventNum":
-							clockevent.ClockEventNum=reader.ReadContentAsLong();
+							clockevent.ClockEventNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmployeeNum":
-							clockevent.EmployeeNum=reader.ReadContentAsLong();
+							clockevent.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TimeEntered1":
 							clockevent.TimeEntered1=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -55,7 +55,7 @@ namespace OpenDentalWebService {
 							clockevent.TimeDisplayed1=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClockStatus":
-							clockevent.ClockStatus=(OpenDentBusiness.TimeClockStatus)reader.ReadContentAsInt();
+							clockevent.ClockStatus=(OpenDentBusiness.TimeClockStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Note":
 							clockevent.Note=reader.ReadContentAsString();
@@ -82,10 +82,10 @@ namespace OpenDentalWebService {
 							clockevent.AdjustIsOverridden=reader.ReadContentAsString()!="0";
 							break;
 						case "AmountBonus":
-							clockevent.AmountBonus=reader.ReadContentAsDouble();
+							clockevent.AmountBonus=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "AmountBonusAuto":
-							clockevent.AmountBonusAuto=reader.ReadContentAsDouble();
+							clockevent.AmountBonusAuto=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

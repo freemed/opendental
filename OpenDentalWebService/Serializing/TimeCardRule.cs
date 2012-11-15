@@ -34,10 +34,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TimeCardRuleNum":
-							timecardrule.TimeCardRuleNum=reader.ReadContentAsLong();
+							timecardrule.TimeCardRuleNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmployeeNum":
-							timecardrule.EmployeeNum=reader.ReadContentAsLong();
+							timecardrule.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OverHoursPerDay":
 							timecardrule.OverHoursPerDay=TimeSpan.Parse(reader.ReadContentAsString());
@@ -49,7 +49,7 @@ namespace OpenDentalWebService {
 							timecardrule.BeforeTimeOfDay=TimeSpan.Parse(reader.ReadContentAsString());
 							break;
 						case "AmtDiff":
-							timecardrule.AmtDiff=reader.ReadContentAsDouble();
+							timecardrule.AmtDiff=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ApptFieldNum":
-							apptfield.ApptFieldNum=reader.ReadContentAsLong();
+							apptfield.ApptFieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptNum":
-							apptfield.AptNum=reader.ReadContentAsLong();
+							apptfield.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FieldName":
 							apptfield.FieldName=reader.ReadContentAsString();

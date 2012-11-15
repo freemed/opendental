@@ -45,22 +45,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcTPNum":
-							proctp.ProcTPNum=reader.ReadContentAsLong();
+							proctp.ProcTPNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TreatPlanNum":
-							proctp.TreatPlanNum=reader.ReadContentAsLong();
+							proctp.TreatPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							proctp.PatNum=reader.ReadContentAsLong();
+							proctp.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcNumOrig":
-							proctp.ProcNumOrig=reader.ReadContentAsLong();
+							proctp.ProcNumOrig=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							proctp.ItemOrder=reader.ReadContentAsInt();
+							proctp.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Priority":
-							proctp.Priority=reader.ReadContentAsLong();
+							proctp.Priority=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ToothNumTP":
 							proctp.ToothNumTP=reader.ReadContentAsString();
@@ -75,19 +75,19 @@ namespace OpenDentalWebService {
 							proctp.Descript=reader.ReadContentAsString();
 							break;
 						case "FeeAmt":
-							proctp.FeeAmt=reader.ReadContentAsDouble();
+							proctp.FeeAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PriInsAmt":
-							proctp.PriInsAmt=reader.ReadContentAsDouble();
+							proctp.PriInsAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "SecInsAmt":
-							proctp.SecInsAmt=reader.ReadContentAsDouble();
+							proctp.SecInsAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "PatAmt":
-							proctp.PatAmt=reader.ReadContentAsDouble();
+							proctp.PatAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Discount":
-							proctp.Discount=reader.ReadContentAsDouble();
+							proctp.Discount=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Prognosis":
 							proctp.Prognosis=reader.ReadContentAsString();

@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PlannedApptNum":
-							plannedappt.PlannedApptNum=reader.ReadContentAsLong();
+							plannedappt.PlannedApptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							plannedappt.PatNum=reader.ReadContentAsLong();
+							plannedappt.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptNum":
-							plannedappt.AptNum=reader.ReadContentAsLong();
+							plannedappt.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							plannedappt.ItemOrder=reader.ReadContentAsInt();
+							plannedappt.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

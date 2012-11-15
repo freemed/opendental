@@ -36,19 +36,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReplicationServerNum":
-							replicationserver.ReplicationServerNum=reader.ReadContentAsLong();
+							replicationserver.ReplicationServerNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							replicationserver.Descript=reader.ReadContentAsString();
 							break;
 						case "ServerId":
-							replicationserver.ServerId=reader.ReadContentAsInt();
+							replicationserver.ServerId=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RangeStart":
-							replicationserver.RangeStart=reader.ReadContentAsLong();
+							replicationserver.RangeStart=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RangeEnd":
-							replicationserver.RangeEnd=reader.ReadContentAsLong();
+							replicationserver.RangeEnd=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AtoZpath":
 							replicationserver.AtoZpath=reader.ReadContentAsString();

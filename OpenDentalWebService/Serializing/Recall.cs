@@ -42,10 +42,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RecallNum":
-							recall.RecallNum=reader.ReadContentAsLong();
+							recall.RecallNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							recall.PatNum=reader.ReadContentAsLong();
+							recall.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateDueCalc":
 							recall.DateDueCalc=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -57,10 +57,10 @@ namespace OpenDentalWebService {
 							recall.DatePrevious=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RecallInterval":
-							recall.RecallInterval=new OpenDentBusiness.Interval(reader.ReadContentAsInt());
+							recall.RecallInterval=new OpenDentBusiness.Interval(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "RecallStatus":
-							recall.RecallStatus=reader.ReadContentAsLong();
+							recall.RecallStatus=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							recall.Note=reader.ReadContentAsString();
@@ -72,10 +72,10 @@ namespace OpenDentalWebService {
 							recall.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "RecallTypeNum":
-							recall.RecallTypeNum=reader.ReadContentAsLong();
+							recall.RecallTypeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DisableUntilBalance":
-							recall.DisableUntilBalance=reader.ReadContentAsDouble();
+							recall.DisableUntilBalance=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DisableUntilDate":
 							recall.DisableUntilDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

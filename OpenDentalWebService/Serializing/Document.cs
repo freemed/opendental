@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DocNum":
-							document.DocNum=reader.ReadContentAsLong();
+							document.DocNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							document.Description=reader.ReadContentAsString();
@@ -60,22 +60,22 @@ namespace OpenDentalWebService {
 							document.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "DocCategory":
-							document.DocCategory=reader.ReadContentAsLong();
+							document.DocCategory=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							document.PatNum=reader.ReadContentAsLong();
+							document.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FileName":
 							document.FileName=reader.ReadContentAsString();
 							break;
 						case "ImgType":
-							document.ImgType=(OpenDentBusiness.ImageType)reader.ReadContentAsInt();
+							document.ImgType=(OpenDentBusiness.ImageType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsFlipped":
 							document.IsFlipped=reader.ReadContentAsString()!="0";
 							break;
 						case "DegreesRotated":
-							document.DegreesRotated=reader.ReadContentAsInt();
+							document.DegreesRotated=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ToothNumbers":
 							document.ToothNumbers=reader.ReadContentAsString();
@@ -90,25 +90,25 @@ namespace OpenDentalWebService {
 							document.Signature=reader.ReadContentAsString();
 							break;
 						case "CropX":
-							document.CropX=reader.ReadContentAsInt();
+							document.CropX=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CropY":
-							document.CropY=reader.ReadContentAsInt();
+							document.CropY=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CropW":
-							document.CropW=reader.ReadContentAsInt();
+							document.CropW=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CropH":
-							document.CropH=reader.ReadContentAsInt();
+							document.CropH=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "WindowingMin":
-							document.WindowingMin=reader.ReadContentAsInt();
+							document.WindowingMin=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "WindowingMax":
-							document.WindowingMax=reader.ReadContentAsInt();
+							document.WindowingMax=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MountItemNum":
-							document.MountItemNum=reader.ReadContentAsLong();
+							document.MountItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							document.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

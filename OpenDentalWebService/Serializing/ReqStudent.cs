@@ -37,28 +37,28 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ReqStudentNum":
-							reqstudent.ReqStudentNum=reader.ReadContentAsLong();
+							reqstudent.ReqStudentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ReqNeededNum":
-							reqstudent.ReqNeededNum=reader.ReadContentAsLong();
+							reqstudent.ReqNeededNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							reqstudent.Descript=reader.ReadContentAsString();
 							break;
 						case "SchoolCourseNum":
-							reqstudent.SchoolCourseNum=reader.ReadContentAsLong();
+							reqstudent.SchoolCourseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							reqstudent.ProvNum=reader.ReadContentAsLong();
+							reqstudent.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptNum":
-							reqstudent.AptNum=reader.ReadContentAsLong();
+							reqstudent.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							reqstudent.PatNum=reader.ReadContentAsLong();
+							reqstudent.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InstructorNum":
-							reqstudent.InstructorNum=reader.ReadContentAsLong();
+							reqstudent.InstructorNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateCompleted":
 							reqstudent.DateCompleted=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

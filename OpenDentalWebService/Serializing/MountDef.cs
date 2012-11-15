@@ -34,22 +34,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "MountDefNum":
-							mountdef.MountDefNum=reader.ReadContentAsLong();
+							mountdef.MountDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							mountdef.Description=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							mountdef.ItemOrder=reader.ReadContentAsInt();
+							mountdef.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsRadiograph":
 							mountdef.IsRadiograph=reader.ReadContentAsString()!="0";
 							break;
 						case "Width":
-							mountdef.Width=reader.ReadContentAsInt();
+							mountdef.Width=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Height":
-							mountdef.Height=reader.ReadContentAsInt();
+							mountdef.Height=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

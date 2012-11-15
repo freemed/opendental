@@ -31,10 +31,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "FieldNum":
-							lettermergefield.FieldNum=reader.ReadContentAsLong();
+							lettermergefield.FieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LetterMergeNum":
-							lettermergefield.LetterMergeNum=reader.ReadContentAsLong();
+							lettermergefield.LetterMergeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FieldName":
 							lettermergefield.FieldName=reader.ReadContentAsString();

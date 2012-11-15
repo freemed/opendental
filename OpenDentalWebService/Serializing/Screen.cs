@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ScreenNum":
-							screen.ScreenNum=reader.ReadContentAsLong();
+							screen.ScreenNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ScreenDate":
 							screen.ScreenDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -62,55 +62,55 @@ namespace OpenDentalWebService {
 							screen.County=reader.ReadContentAsString();
 							break;
 						case "PlaceService":
-							screen.PlaceService=(OpenDentBusiness.PlaceOfService)reader.ReadContentAsInt();
+							screen.PlaceService=(OpenDentBusiness.PlaceOfService)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							screen.ProvNum=reader.ReadContentAsLong();
+							screen.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvName":
 							screen.ProvName=reader.ReadContentAsString();
 							break;
 						case "Gender":
-							screen.Gender=(OpenDentBusiness.PatientGender)reader.ReadContentAsInt();
+							screen.Gender=(OpenDentBusiness.PatientGender)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Race":
-							screen.Race=(OpenDentBusiness.PatientRace)reader.ReadContentAsInt();
+							screen.Race=(OpenDentBusiness.PatientRace)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "GradeLevel":
-							screen.GradeLevel=(OpenDentBusiness.PatientGrade)reader.ReadContentAsInt();
+							screen.GradeLevel=(OpenDentBusiness.PatientGrade)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Age":
-							screen.Age=(byte)reader.ReadContentAsInt();
+							screen.Age=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "Urgency":
-							screen.Urgency=(OpenDentBusiness.TreatmentUrgency)reader.ReadContentAsInt();
+							screen.Urgency=(OpenDentBusiness.TreatmentUrgency)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "HasCaries":
-							screen.HasCaries=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.HasCaries=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "NeedsSealants":
-							screen.NeedsSealants=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.NeedsSealants=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CariesExperience":
-							screen.CariesExperience=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.CariesExperience=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "EarlyChildCaries":
-							screen.EarlyChildCaries=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.EarlyChildCaries=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ExistingSealants":
-							screen.ExistingSealants=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.ExistingSealants=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MissingAllTeeth":
-							screen.MissingAllTeeth=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							screen.MissingAllTeeth=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Birthdate":
 							screen.Birthdate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ScreenGroupNum":
-							screen.ScreenGroupNum=reader.ReadContentAsLong();
+							screen.ScreenGroupNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ScreenGroupOrder":
-							screen.ScreenGroupOrder=reader.ReadContentAsInt();
+							screen.ScreenGroupOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Comments":
 							screen.Comments=reader.ReadContentAsString();

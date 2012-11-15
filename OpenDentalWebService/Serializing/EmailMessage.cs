@@ -36,10 +36,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmailMessageNum":
-							emailmessage.EmailMessageNum=reader.ReadContentAsLong();
+							emailmessage.EmailMessageNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							emailmessage.PatNum=reader.ReadContentAsLong();
+							emailmessage.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ToAddress":
 							emailmessage.ToAddress=reader.ReadContentAsString();
@@ -57,7 +57,7 @@ namespace OpenDentalWebService {
 							emailmessage.MsgDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SentOrReceived":
-							emailmessage.SentOrReceived=(OpenDentBusiness.CommSentOrReceived)reader.ReadContentAsInt();
+							emailmessage.SentOrReceived=(OpenDentBusiness.CommSentOrReceived)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

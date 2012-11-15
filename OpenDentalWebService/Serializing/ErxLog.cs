@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ErxLogNum":
-							erxlog.ErxLogNum=reader.ReadContentAsLong();
+							erxlog.ErxLogNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							erxlog.PatNum=reader.ReadContentAsLong();
+							erxlog.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MsgText":
 							erxlog.MsgText=reader.ReadContentAsString();

@@ -40,22 +40,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "VitalsignNum":
-							vitalsign.VitalsignNum=reader.ReadContentAsLong();
+							vitalsign.VitalsignNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							vitalsign.PatNum=reader.ReadContentAsLong();
+							vitalsign.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Height":
-							vitalsign.Height=reader.ReadContentAsFloat();
+							vitalsign.Height=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "Weight":
-							vitalsign.Weight=reader.ReadContentAsFloat();
+							vitalsign.Weight=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "BpSystolic":
-							vitalsign.BpSystolic=reader.ReadContentAsInt();
+							vitalsign.BpSystolic=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "BpDiastolic":
-							vitalsign.BpDiastolic=reader.ReadContentAsInt();
+							vitalsign.BpDiastolic=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTaken":
 							vitalsign.DateTaken=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

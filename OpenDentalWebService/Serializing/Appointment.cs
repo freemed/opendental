@@ -55,43 +55,43 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AptNum":
-							appointment.AptNum=reader.ReadContentAsLong();
+							appointment.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							appointment.PatNum=reader.ReadContentAsLong();
+							appointment.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptStatus":
-							appointment.AptStatus=(OpenDentBusiness.ApptStatus)reader.ReadContentAsInt();
+							appointment.AptStatus=(OpenDentBusiness.ApptStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Pattern":
 							appointment.Pattern=reader.ReadContentAsString();
 							break;
 						case "Confirmed":
-							appointment.Confirmed=reader.ReadContentAsLong();
+							appointment.Confirmed=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TimeLocked":
 							appointment.TimeLocked=reader.ReadContentAsString()!="0";
 							break;
 						case "Op":
-							appointment.Op=reader.ReadContentAsLong();
+							appointment.Op=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							appointment.Note=reader.ReadContentAsString();
 							break;
 						case "ProvNum":
-							appointment.ProvNum=reader.ReadContentAsLong();
+							appointment.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProvHyg":
-							appointment.ProvHyg=reader.ReadContentAsLong();
+							appointment.ProvHyg=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptDateTime":
 							appointment.AptDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "NextAptNum":
-							appointment.NextAptNum=reader.ReadContentAsLong();
+							appointment.NextAptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UnschedStatus":
-							appointment.UnschedStatus=reader.ReadContentAsLong();
+							appointment.UnschedStatus=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsNewPatient":
 							appointment.IsNewPatient=reader.ReadContentAsString()!="0";
@@ -100,10 +100,10 @@ namespace OpenDentalWebService {
 							appointment.ProcDescript=reader.ReadContentAsString();
 							break;
 						case "Assistant":
-							appointment.Assistant=reader.ReadContentAsLong();
+							appointment.Assistant=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClinicNum":
-							appointment.ClinicNum=reader.ReadContentAsLong();
+							appointment.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsHygiene":
 							appointment.IsHygiene=reader.ReadContentAsString()!="0";
@@ -121,10 +121,10 @@ namespace OpenDentalWebService {
 							appointment.DateTimeDismissed=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "InsPlan1":
-							appointment.InsPlan1=reader.ReadContentAsLong();
+							appointment.InsPlan1=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "InsPlan2":
-							appointment.InsPlan2=reader.ReadContentAsLong();
+							appointment.InsPlan2=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeAskedToArrive":
 							appointment.DateTimeAskedToArrive=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -133,7 +133,7 @@ namespace OpenDentalWebService {
 							appointment.ProcsColored=reader.ReadContentAsString();
 							break;
 						case "ColorOverride":
-							appointment.ColorOverride=Color.FromArgb(reader.ReadContentAsInt());
+							appointment.ColorOverride=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 					}
 				}

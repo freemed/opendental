@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ContactNum":
-							contact.ContactNum=reader.ReadContentAsLong();
+							contact.ContactNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LName":
 							contact.LName=reader.ReadContentAsString();
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							contact.Fax=reader.ReadContentAsString();
 							break;
 						case "Category":
-							contact.Category=reader.ReadContentAsLong();
+							contact.Category=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Notes":
 							contact.Notes=reader.ReadContentAsString();

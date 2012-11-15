@@ -41,19 +41,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LabCaseNum":
-							labcase.LabCaseNum=reader.ReadContentAsLong();
+							labcase.LabCaseNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							labcase.PatNum=reader.ReadContentAsLong();
+							labcase.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LaboratoryNum":
-							labcase.LaboratoryNum=reader.ReadContentAsLong();
+							labcase.LaboratoryNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptNum":
-							labcase.AptNum=reader.ReadContentAsLong();
+							labcase.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlannedAptNum":
-							labcase.PlannedAptNum=reader.ReadContentAsLong();
+							labcase.PlannedAptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeDue":
 							labcase.DateTimeDue=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -71,13 +71,13 @@ namespace OpenDentalWebService {
 							labcase.DateTimeChecked=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProvNum":
-							labcase.ProvNum=reader.ReadContentAsLong();
+							labcase.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Instructions":
 							labcase.Instructions=reader.ReadContentAsString();
 							break;
 						case "LabFee":
-							labcase.LabFee=reader.ReadContentAsDouble();
+							labcase.LabFee=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

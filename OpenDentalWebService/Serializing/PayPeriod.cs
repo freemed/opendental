@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PayPeriodNum":
-							payperiod.PayPeriodNum=reader.ReadContentAsLong();
+							payperiod.PayPeriodNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateStart":
 							payperiod.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

@@ -33,13 +33,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TaskNoteNum":
-							tasknote.TaskNoteNum=reader.ReadContentAsLong();
+							tasknote.TaskNoteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TaskNum":
-							tasknote.TaskNum=reader.ReadContentAsLong();
+							tasknote.TaskNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UserNum":
-							tasknote.UserNum=reader.ReadContentAsLong();
+							tasknote.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeNote":
 							tasknote.DateTimeNote=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

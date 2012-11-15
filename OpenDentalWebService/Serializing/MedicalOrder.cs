@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "MedicalOrderNum":
-							medicalorder.MedicalOrderNum=reader.ReadContentAsLong();
+							medicalorder.MedicalOrderNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MedOrderType":
-							medicalorder.MedOrderType=(OpenDentBusiness.MedicalOrderType)reader.ReadContentAsInt();
+							medicalorder.MedOrderType=(OpenDentBusiness.MedicalOrderType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							medicalorder.PatNum=reader.ReadContentAsLong();
+							medicalorder.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeOrder":
 							medicalorder.DateTimeOrder=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 							medicalorder.IsDiscontinued=reader.ReadContentAsString()!="0";
 							break;
 						case "ProvNum":
-							medicalorder.ProvNum=reader.ReadContentAsLong();
+							medicalorder.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

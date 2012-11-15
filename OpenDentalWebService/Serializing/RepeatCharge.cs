@@ -35,16 +35,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RepeatChargeNum":
-							repeatcharge.RepeatChargeNum=reader.ReadContentAsLong();
+							repeatcharge.RepeatChargeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							repeatcharge.PatNum=reader.ReadContentAsLong();
+							repeatcharge.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcCode":
 							repeatcharge.ProcCode=reader.ReadContentAsString();
 							break;
 						case "ChargeAmt":
-							repeatcharge.ChargeAmt=reader.ReadContentAsDouble();
+							repeatcharge.ChargeAmt=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "DateStart":
 							repeatcharge.DateStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

@@ -32,13 +32,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ToolButItemNum":
-							toolbutitem.ToolButItemNum=reader.ReadContentAsLong();
+							toolbutitem.ToolButItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProgramNum":
-							toolbutitem.ProgramNum=reader.ReadContentAsLong();
+							toolbutitem.ProgramNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ToolBar":
-							toolbutitem.ToolBar=(OpenDentBusiness.ToolBarsAvail)reader.ReadContentAsInt();
+							toolbutitem.ToolBar=(OpenDentBusiness.ToolBarsAvail)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ButtonText":
 							toolbutitem.ButtonText=reader.ReadContentAsString();

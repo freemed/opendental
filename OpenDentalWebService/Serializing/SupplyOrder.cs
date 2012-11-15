@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SupplyOrderNum":
-							supplyorder.SupplyOrderNum=reader.ReadContentAsLong();
+							supplyorder.SupplyOrderNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "SupplierNum":
-							supplyorder.SupplierNum=reader.ReadContentAsLong();
+							supplyorder.SupplierNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DatePlaced":
 							supplyorder.DatePlaced=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -45,7 +45,7 @@ namespace OpenDentalWebService {
 							supplyorder.Note=reader.ReadContentAsString();
 							break;
 						case "AmountTotal":
-							supplyorder.AmountTotal=reader.ReadContentAsDouble();
+							supplyorder.AmountTotal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

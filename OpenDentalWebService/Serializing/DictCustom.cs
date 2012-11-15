@@ -30,7 +30,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DictCustomNum":
-							dictcustom.DictCustomNum=reader.ReadContentAsLong();
+							dictcustom.DictCustomNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "WordText":
 							dictcustom.WordText=reader.ReadContentAsString();

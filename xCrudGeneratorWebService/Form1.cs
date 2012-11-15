@@ -617,15 +617,12 @@ namespace xCrudGeneratorWebService {
 				}
 				switch(field.FieldType.Name) {
 					case "Byte":
+					case "Double":
+					case "Interval": //intervals are stored in db as int
 					case "Int32": //int
 					case "Int64": //long
 					case "Single": //float
-					case "Double":
-					case "Interval": //intervals are stored in db as int
 						strb.Append(className.ToLower()+"."+field.Name+").Append(\"</"+field.Name+">\");"+rn);
-						continue;
-					case "String":
-						strb.Append("SerializeStringEscapes.EscapeForXml("+className.ToLower()+"."+field.Name+")).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "Boolean":
 						strb.Append("("+className.ToLower()+"."+field.Name+")?1:0).Append(\"</"+field.Name+">\");"+rn);
@@ -633,11 +630,14 @@ namespace xCrudGeneratorWebService {
 					case "Color":
 						strb.Append(className.ToLower()+"."+field.Name+".ToArgb()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
-					case "TimeSpan":
-						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
-						continue;
 					case "DateTime":
 						strb.Append(className.ToLower()+"."+field.Name+".ToString(\"yyyyMMddHHmmss\")).Append(\"</"+field.Name+">\");"+rn);
+						continue;
+					case "String":
+						strb.Append("SerializeStringEscapes.EscapeForXml("+className.ToLower()+"."+field.Name+")).Append(\"</"+field.Name+">\");"+rn);
+						continue;
+					case "TimeSpan":
+						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 				}
 			}
@@ -652,56 +652,54 @@ namespace xCrudGeneratorWebService {
 				strb.Append(t6+"case \""+field.Name+"\":"+rn
 					+t7+className.ToLower()+"."+field.Name+"=");
 				if(field.FieldType.IsEnum) {
-					strb.Append("(OpenDentBusiness."+field.FieldType.Name+")reader.ReadContentAsInt();"+rn
+					strb.Append("(OpenDentBusiness."+field.FieldType.Name+")System.Convert.ToInt32(reader.ReadContentAsString());"+rn
 						+t7+"break;"+rn);
 					continue;
 				}
 				switch(field.FieldType.Name) {
-					case "Byte":
-						strb.Append("(byte)reader.ReadContentAsInt();"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "Interval":
-						strb.Append("new OpenDentBusiness.Interval(reader.ReadContentAsInt());"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "Int32": //int
-						strb.Append("reader.ReadContentAsInt();"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "Int64": //long
-						strb.Append("reader.ReadContentAsLong();"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "Single": //float
-						strb.Append("reader.ReadContentAsFloat();"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "Double":
-						strb.Append("reader.ReadContentAsDouble();"+rn
-							+t7+"break;"+rn);
-						continue;
-					case "String":
-						strb.Append("reader.ReadContentAsString();"+rn
-							+t7+"break;"+rn);
-						continue;
 					case "Boolean":
 						strb.Append("reader.ReadContentAsString()!=\"0\";"+rn
 							+t7+"break;"+rn);
 						continue;
-					case "Color":
-						strb.Append("Color.FromArgb(reader.ReadContentAsInt());"+rn
+					case "Byte":
+						strb.Append("System.Convert.ToByte(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
-					case "TimeSpan":
-						strb.Append("TimeSpan.Parse(reader.ReadContentAsString());"+rn
+					case "Color":
+						strb.Append("Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "DateTime":
 						strb.Append("DateTime.ParseExact(reader.ReadContentAsString(),\"yyyyMMddHHmmss\",null);"+rn
 							+t7+"break;"+rn);
 						continue;
-					default:
+					case "Double":
+						strb.Append("System.Convert.ToDouble(reader.ReadContentAsString());"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "Int32": //int
+						strb.Append("System.Convert.ToInt32(reader.ReadContentAsString());"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "Int64": //long
+						strb.Append("System.Convert.ToInt64(reader.ReadContentAsString());"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "Interval":
+						strb.Append("new OpenDentBusiness.Interval(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "Single": //float
+						strb.Append("System.Convert.ToSingle(reader.ReadContentAsString());"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "String":
+						strb.Append("reader.ReadContentAsString();"+rn
+							+t7+"break;"+rn);
+						continue;
+					case "TimeSpan":
+						strb.Append("TimeSpan.Parse(reader.ReadContentAsString());"+rn
+							+t7+"break;"+rn);
 						continue;
 				}
 			}
@@ -719,15 +717,15 @@ namespace xCrudGeneratorWebService {
 					continue;
 				}
 				switch(field.FieldType.Name) {
-					case "String":
-					case "TimeSpan":
-						strb.Append("Serializing.EscapeForXml("+field.Name+")");
-						break;
 					case "Boolean":
 						strb.Append("("+field.Name+")?1:0");
 						break;
 					case "DateTime":
 						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format(AptDateTime)");
+						break;
+					case "String":
+					case "TimeSpan":
+						strb.Append("Serializing.EscapeForXml("+field.Name+")");
 						break;
 					default:
 						strb.Append(field.Name);
@@ -749,27 +747,27 @@ namespace xCrudGeneratorWebService {
 					continue;
 				}
 				switch(field.FieldType.Name) {
+					case "Color":
 					case "Int32":
 					case "Int64":
 					case "Interval":
-					case "Color":
 						strb.Append("Integer.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
-						continue;
-					case "Byte":
-						strb.Append("Byte.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
-						continue;
-					case "Single":
-						strb.Append("Float.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
-						continue;
-					case "Double":
-						strb.Append("Double.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
 						continue;
 					case "Boolean":
 						strb.Append("(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue()==\"0\")?false:true;"+rn);
 						continue;
+					case "Byte":
+						strb.Append("Byte.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
 					case "DateTime":
 						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").parseStrict(doc.getElementsByTagName(\""+field.Name+"\")."
 							+"item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Double":
+						strb.Append("Double.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
+						continue;
+					case "Single":
+						strb.Append("Float.valueOf(doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue());"+rn);
 						continue;
 					default:
 						strb.Append("doc.getElementsByTagName(\""+field.Name+"\").item(0).getFirstChild().getNodeValue();"+rn);
@@ -896,30 +894,30 @@ namespace xCrudGeneratorWebService {
 				return;
 			}
 			switch(field.FieldType.Name) {
+				case "Color":
 				case "Int32":
 				case "Int64":
 				case "Interval":
-				case "Color":
 					strb.Append("int");
-					break;
-				case "Byte":
-					strb.Append("byte");
-					break;
-				case "Single":
-					strb.Append("float");
-					break;
-				case "Double":
-					strb.Append("double");
-					break;
-				case "String":
-				case "TimeSpan":
-					strb.Append("String");
 					break;
 				case "Boolean":
 					strb.Append("boolean");
 					break;
+				case "Byte":
+					strb.Append("byte");
+					break;
 				case "DateTime":
 					strb.Append("Date");
+					break;
+				case "Double":
+					strb.Append("double");
+					break;
+				case "Single":
+					strb.Append("float");
+					break;
+				case "String":
+				case "TimeSpan":
+					strb.Append("String");
 					break;
 			}
 		}

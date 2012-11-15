@@ -34,7 +34,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ElectIDNum":
-							electid.ElectIDNum=reader.ReadContentAsLong();
+							electid.ElectIDNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PayorID":
 							electid.PayorID=reader.ReadContentAsString();

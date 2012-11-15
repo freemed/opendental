@@ -35,10 +35,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "TimeAdjustNum":
-							timeadjust.TimeAdjustNum=reader.ReadContentAsLong();
+							timeadjust.TimeAdjustNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmployeeNum":
-							timeadjust.EmployeeNum=reader.ReadContentAsLong();
+							timeadjust.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "TimeEntry":
 							timeadjust.TimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

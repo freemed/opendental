@@ -39,7 +39,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CentralConnectionNum":
-							centralconnection.CentralConnectionNum=reader.ReadContentAsLong();
+							centralconnection.CentralConnectionNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ServerName":
 							centralconnection.ServerName=reader.ReadContentAsString();
@@ -66,7 +66,7 @@ namespace OpenDentalWebService {
 							centralconnection.Note=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							centralconnection.ItemOrder=reader.ReadContentAsInt();
+							centralconnection.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "WebServiceIsEcw":
 							centralconnection.WebServiceIsEcw=reader.ReadContentAsString()!="0";

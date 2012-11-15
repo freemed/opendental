@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ComputerPrefNum":
-							computerpref.ComputerPrefNum=reader.ReadContentAsLong();
+							computerpref.ComputerPrefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ComputerName":
 							computerpref.ComputerName=reader.ReadContentAsString();
@@ -60,7 +60,7 @@ namespace OpenDentalWebService {
 							computerpref.GraphicsUseHardware=reader.ReadContentAsString()!="0";
 							break;
 						case "GraphicsSimple":
-							computerpref.GraphicsSimple=(OpenDentBusiness.DrawingMode)reader.ReadContentAsInt();
+							computerpref.GraphicsSimple=(OpenDentBusiness.DrawingMode)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SensorType":
 							computerpref.SensorType=reader.ReadContentAsString();
@@ -69,16 +69,16 @@ namespace OpenDentalWebService {
 							computerpref.SensorBinned=reader.ReadContentAsString()!="0";
 							break;
 						case "SensorPort":
-							computerpref.SensorPort=reader.ReadContentAsInt();
+							computerpref.SensorPort=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SensorExposure":
-							computerpref.SensorExposure=reader.ReadContentAsInt();
+							computerpref.SensorExposure=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "GraphicsDoubleBuffering":
 							computerpref.GraphicsDoubleBuffering=reader.ReadContentAsString()!="0";
 							break;
 						case "PreferredPixelFormatNum":
-							computerpref.PreferredPixelFormatNum=reader.ReadContentAsInt();
+							computerpref.PreferredPixelFormatNum=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "AtoZpath":
 							computerpref.AtoZpath=reader.ReadContentAsString();
@@ -87,19 +87,19 @@ namespace OpenDentalWebService {
 							computerpref.TaskKeepListHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "TaskDock":
-							computerpref.TaskDock=reader.ReadContentAsInt();
+							computerpref.TaskDock=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "TaskX":
-							computerpref.TaskX=reader.ReadContentAsInt();
+							computerpref.TaskX=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "TaskY":
-							computerpref.TaskY=reader.ReadContentAsInt();
+							computerpref.TaskY=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DirectXFormat":
 							computerpref.DirectXFormat=reader.ReadContentAsString();
 							break;
 						case "RecentApptView":
-							computerpref.RecentApptView=(byte)reader.ReadContentAsInt();
+							computerpref.RecentApptView=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ScanDocSelectSource":
 							computerpref.ScanDocSelectSource=reader.ReadContentAsString()!="0";
@@ -114,10 +114,10 @@ namespace OpenDentalWebService {
 							computerpref.ScanDocGrayscale=reader.ReadContentAsString()!="0";
 							break;
 						case "ScanDocResolution":
-							computerpref.ScanDocResolution=reader.ReadContentAsInt();
+							computerpref.ScanDocResolution=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ScanDocQuality":
-							computerpref.ScanDocQuality=(byte)reader.ReadContentAsInt();
+							computerpref.ScanDocQuality=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 					}
 				}

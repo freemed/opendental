@@ -35,7 +35,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmployeeNum":
-							employee.EmployeeNum=reader.ReadContentAsLong();
+							employee.EmployeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LName":
 							employee.LName=reader.ReadContentAsString();
@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 							employee.ClockStatus=reader.ReadContentAsString();
 							break;
 						case "PhoneExt":
-							employee.PhoneExt=reader.ReadContentAsInt();
+							employee.PhoneExt=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

@@ -41,10 +41,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ClaimCondCodeLogNum":
-							claimcondcodelog.ClaimCondCodeLogNum=reader.ReadContentAsLong();
+							claimcondcodelog.ClaimCondCodeLogNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ClaimNum":
-							claimcondcodelog.ClaimNum=reader.ReadContentAsLong();
+							claimcondcodelog.ClaimNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Code0":
 							claimcondcodelog.Code0=reader.ReadContentAsString();

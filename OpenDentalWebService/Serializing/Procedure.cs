@@ -77,13 +77,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcNum":
-							procedure.ProcNum=reader.ReadContentAsLong();
+							procedure.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							procedure.PatNum=reader.ReadContentAsLong();
+							procedure.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AptNum":
-							procedure.AptNum=reader.ReadContentAsLong();
+							procedure.AptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OldCode":
 							procedure.OldCode=reader.ReadContentAsString();
@@ -92,7 +92,7 @@ namespace OpenDentalWebService {
 							procedure.ProcDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ProcFee":
-							procedure.ProcFee=reader.ReadContentAsDouble();
+							procedure.ProcFee=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "Surf":
 							procedure.Surf=reader.ReadContentAsString();
@@ -104,22 +104,22 @@ namespace OpenDentalWebService {
 							procedure.ToothRange=reader.ReadContentAsString();
 							break;
 						case "Priority":
-							procedure.Priority=reader.ReadContentAsLong();
+							procedure.Priority=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcStatus":
-							procedure.ProcStatus=(OpenDentBusiness.ProcStat)reader.ReadContentAsInt();
+							procedure.ProcStatus=(OpenDentBusiness.ProcStat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ProvNum":
-							procedure.ProvNum=reader.ReadContentAsLong();
+							procedure.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Dx":
-							procedure.Dx=reader.ReadContentAsLong();
+							procedure.Dx=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlannedAptNum":
-							procedure.PlannedAptNum=reader.ReadContentAsLong();
+							procedure.PlannedAptNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PlaceService":
-							procedure.PlaceService=(OpenDentBusiness.PlaceOfService)reader.ReadContentAsInt();
+							procedure.PlaceService=(OpenDentBusiness.PlaceOfService)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Prosthesis":
 							procedure.Prosthesis=reader.ReadContentAsString();
@@ -134,7 +134,7 @@ namespace OpenDentalWebService {
 							procedure.DateEntryC=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "ClinicNum":
-							procedure.ClinicNum=reader.ReadContentAsLong();
+							procedure.ClinicNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MedicalCode":
 							procedure.MedicalCode=reader.ReadContentAsString();
@@ -146,16 +146,16 @@ namespace OpenDentalWebService {
 							procedure.IsPrincDiag=reader.ReadContentAsString()!="0";
 							break;
 						case "ProcNumLab":
-							procedure.ProcNumLab=reader.ReadContentAsLong();
+							procedure.ProcNumLab=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BillingTypeOne":
-							procedure.BillingTypeOne=reader.ReadContentAsLong();
+							procedure.BillingTypeOne=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "BillingTypeTwo":
-							procedure.BillingTypeTwo=reader.ReadContentAsLong();
+							procedure.BillingTypeTwo=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							procedure.CodeNum=reader.ReadContentAsLong();
+							procedure.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeMod1":
 							procedure.CodeMod1=reader.ReadContentAsString();
@@ -173,22 +173,22 @@ namespace OpenDentalWebService {
 							procedure.RevCode=reader.ReadContentAsString();
 							break;
 						case "UnitQty":
-							procedure.UnitQty=reader.ReadContentAsInt();
+							procedure.UnitQty=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "BaseUnits":
-							procedure.BaseUnits=reader.ReadContentAsInt();
+							procedure.BaseUnits=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "StartTime":
-							procedure.StartTime=reader.ReadContentAsInt();
+							procedure.StartTime=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "StopTime":
-							procedure.StopTime=reader.ReadContentAsInt();
+							procedure.StopTime=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTP":
 							procedure.DateTP=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SiteNum":
-							procedure.SiteNum=reader.ReadContentAsLong();
+							procedure.SiteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HideGraphics":
 							procedure.HideGraphics=reader.ReadContentAsString()!="0";
@@ -206,19 +206,19 @@ namespace OpenDentalWebService {
 							procedure.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Prognosis":
-							procedure.Prognosis=reader.ReadContentAsLong();
+							procedure.Prognosis=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DrugUnit":
-							procedure.DrugUnit=(OpenDentBusiness.EnumProcDrugUnit)reader.ReadContentAsInt();
+							procedure.DrugUnit=(OpenDentBusiness.EnumProcDrugUnit)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DrugQty":
-							procedure.DrugQty=reader.ReadContentAsFloat();
+							procedure.DrugQty=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "UnitQtyType":
-							procedure.UnitQtyType=(OpenDentBusiness.ProcUnitQtyType)reader.ReadContentAsInt();
+							procedure.UnitQtyType=(OpenDentBusiness.ProcUnitQtyType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "StatementNum":
-							procedure.StatementNum=reader.ReadContentAsLong();
+							procedure.StatementNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsLocked":
 							procedure.IsLocked=reader.ReadContentAsString()!="0";

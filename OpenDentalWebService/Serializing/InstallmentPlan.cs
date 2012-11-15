@@ -35,10 +35,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "InstallmentPlanNum":
-							installmentplan.InstallmentPlanNum=reader.ReadContentAsLong();
+							installmentplan.InstallmentPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							installmentplan.PatNum=reader.ReadContentAsLong();
+							installmentplan.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateAgreement":
 							installmentplan.DateAgreement=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -47,10 +47,10 @@ namespace OpenDentalWebService {
 							installmentplan.DateFirstPayment=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "MonthlyPayment":
-							installmentplan.MonthlyPayment=reader.ReadContentAsDouble();
+							installmentplan.MonthlyPayment=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "APR":
-							installmentplan.APR=reader.ReadContentAsFloat();
+							installmentplan.APR=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "Note":
 							installmentplan.Note=reader.ReadContentAsString();

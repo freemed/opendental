@@ -43,10 +43,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RxNum":
-							rxpat.RxNum=reader.ReadContentAsLong();
+							rxpat.RxNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							rxpat.PatNum=reader.ReadContentAsLong();
+							rxpat.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RxDate":
 							rxpat.RxDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -64,13 +64,13 @@ namespace OpenDentalWebService {
 							rxpat.Refills=reader.ReadContentAsString();
 							break;
 						case "ProvNum":
-							rxpat.ProvNum=reader.ReadContentAsLong();
+							rxpat.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Notes":
 							rxpat.Notes=reader.ReadContentAsString();
 							break;
 						case "PharmacyNum":
-							rxpat.PharmacyNum=reader.ReadContentAsLong();
+							rxpat.PharmacyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "IsControlled":
 							rxpat.IsControlled=reader.ReadContentAsString()!="0";
@@ -79,10 +79,10 @@ namespace OpenDentalWebService {
 							rxpat.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "SendStatus":
-							rxpat.SendStatus=(OpenDentBusiness.RxSendStatus)reader.ReadContentAsInt();
+							rxpat.SendStatus=(OpenDentBusiness.RxSendStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RxCui":
-							rxpat.RxCui=reader.ReadContentAsLong();
+							rxpat.RxCui=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DosageCode":
 							rxpat.DosageCode=reader.ReadContentAsString();

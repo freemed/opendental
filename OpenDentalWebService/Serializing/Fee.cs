@@ -35,16 +35,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "FeeNum":
-							fee.FeeNum=reader.ReadContentAsLong();
+							fee.FeeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Amount":
-							fee.Amount=reader.ReadContentAsDouble();
+							fee.Amount=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "OldCode":
 							fee.OldCode=reader.ReadContentAsString();
 							break;
 						case "FeeSched":
-							fee.FeeSched=reader.ReadContentAsLong();
+							fee.FeeSched=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "UseDefaultFee":
 							fee.UseDefaultFee=reader.ReadContentAsString()!="0";
@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 							fee.UseDefaultCov=reader.ReadContentAsString()!="0";
 							break;
 						case "CodeNum":
-							fee.CodeNum=reader.ReadContentAsLong();
+							fee.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

@@ -35,19 +35,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "HL7DefFieldNum":
-							hl7deffield.HL7DefFieldNum=reader.ReadContentAsLong();
+							hl7deffield.HL7DefFieldNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HL7DefSegmentNum":
-							hl7deffield.HL7DefSegmentNum=reader.ReadContentAsLong();
+							hl7deffield.HL7DefSegmentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OrdinalPos":
-							hl7deffield.OrdinalPos=reader.ReadContentAsInt();
+							hl7deffield.OrdinalPos=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "TableId":
 							hl7deffield.TableId=reader.ReadContentAsString();
 							break;
 						case "DataType":
-							hl7deffield.DataType=(OpenDentBusiness.DataTypeHL7)reader.ReadContentAsInt();
+							hl7deffield.DataType=(OpenDentBusiness.DataTypeHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "FieldName":
 							hl7deffield.FieldName=reader.ReadContentAsString();

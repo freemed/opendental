@@ -31,10 +31,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "FormPatNum":
-							formpat.FormPatNum=reader.ReadContentAsLong();
+							formpat.FormPatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							formpat.PatNum=reader.ReadContentAsLong();
+							formpat.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "FormDateTime":
 							formpat.FormDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

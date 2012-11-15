@@ -32,10 +32,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EmailAttachNum":
-							emailattach.EmailAttachNum=reader.ReadContentAsLong();
+							emailattach.EmailAttachNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EmailMessageNum":
-							emailattach.EmailMessageNum=reader.ReadContentAsLong();
+							emailattach.EmailMessageNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DisplayedFileName":
 							emailattach.DisplayedFileName=reader.ReadContentAsString();

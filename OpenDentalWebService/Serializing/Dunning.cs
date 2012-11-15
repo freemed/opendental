@@ -34,19 +34,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DunningNum":
-							dunning.DunningNum=reader.ReadContentAsLong();
+							dunning.DunningNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DunMessage":
 							dunning.DunMessage=reader.ReadContentAsString();
 							break;
 						case "BillingType":
-							dunning.BillingType=reader.ReadContentAsLong();
+							dunning.BillingType=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AgeAccount":
-							dunning.AgeAccount=(byte)reader.ReadContentAsInt();
+							dunning.AgeAccount=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "InsIsPending":
-							dunning.InsIsPending=(OpenDentBusiness.YN)reader.ReadContentAsInt();
+							dunning.InsIsPending=(OpenDentBusiness.YN)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "MessageBold":
 							dunning.MessageBold=reader.ReadContentAsString();

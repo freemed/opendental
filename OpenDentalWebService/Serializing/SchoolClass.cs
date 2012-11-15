@@ -31,10 +31,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SchoolClassNum":
-							schoolclass.SchoolClassNum=reader.ReadContentAsLong();
+							schoolclass.SchoolClassNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "GradYear":
-							schoolclass.GradYear=reader.ReadContentAsInt();
+							schoolclass.GradYear=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Descript":
 							schoolclass.Descript=reader.ReadContentAsString();

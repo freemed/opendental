@@ -33,16 +33,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SigButDefNum":
-							sigbutdef.SigButDefNum=reader.ReadContentAsLong();
+							sigbutdef.SigButDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ButtonText":
 							sigbutdef.ButtonText=reader.ReadContentAsString();
 							break;
 						case "ButtonIndex":
-							sigbutdef.ButtonIndex=reader.ReadContentAsInt();
+							sigbutdef.ButtonIndex=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SynchIcon":
-							sigbutdef.SynchIcon=(byte)reader.ReadContentAsInt();
+							sigbutdef.SynchIcon=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "ComputerName":
 							sigbutdef.ComputerName=reader.ReadContentAsString();

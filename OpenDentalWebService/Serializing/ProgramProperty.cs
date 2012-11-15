@@ -33,10 +33,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProgramPropertyNum":
-							programproperty.ProgramPropertyNum=reader.ReadContentAsLong();
+							programproperty.ProgramPropertyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProgramNum":
-							programproperty.ProgramNum=reader.ReadContentAsLong();
+							programproperty.ProgramNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PropertyDesc":
 							programproperty.PropertyDesc=reader.ReadContentAsString();

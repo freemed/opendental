@@ -38,16 +38,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "OrionProcNum":
-							orionproc.OrionProcNum=reader.ReadContentAsLong();
+							orionproc.OrionProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcNum":
-							orionproc.ProcNum=reader.ReadContentAsLong();
+							orionproc.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DPC":
-							orionproc.DPC=(OpenDentBusiness.OrionDPC)reader.ReadContentAsInt();
+							orionproc.DPC=(OpenDentBusiness.OrionDPC)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DPCpost":
-							orionproc.DPCpost=(OpenDentBusiness.OrionDPC)reader.ReadContentAsInt();
+							orionproc.DPCpost=(OpenDentBusiness.OrionDPC)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateScheduleBy":
 							orionproc.DateScheduleBy=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -56,7 +56,7 @@ namespace OpenDentalWebService {
 							orionproc.DateStopClock=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "Status2":
-							orionproc.Status2=(OpenDentBusiness.OrionStatus)reader.ReadContentAsInt();
+							orionproc.Status2=(OpenDentBusiness.OrionStatus)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "IsOnCall":
 							orionproc.IsOnCall=reader.ReadContentAsString()!="0";

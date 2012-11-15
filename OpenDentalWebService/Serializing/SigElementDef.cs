@@ -35,16 +35,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "SigElementDefNum":
-							sigelementdef.SigElementDefNum=reader.ReadContentAsLong();
+							sigelementdef.SigElementDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LightRow":
-							sigelementdef.LightRow=(byte)reader.ReadContentAsInt();
+							sigelementdef.LightRow=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "LightColor":
-							sigelementdef.LightColor=Color.FromArgb(reader.ReadContentAsInt());
+							sigelementdef.LightColor=Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));
 							break;
 						case "SigElementType":
-							sigelementdef.SigElementType=(OpenDentBusiness.SignalElementType)reader.ReadContentAsInt();
+							sigelementdef.SigElementType=(OpenDentBusiness.SignalElementType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "SigText":
 							sigelementdef.SigText=reader.ReadContentAsString();
@@ -53,7 +53,7 @@ namespace OpenDentalWebService {
 							sigelementdef.Sound=reader.ReadContentAsString();
 							break;
 						case "ItemOrder":
-							sigelementdef.ItemOrder=reader.ReadContentAsInt();
+							sigelementdef.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

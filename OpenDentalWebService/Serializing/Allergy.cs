@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "AllergyNum":
-							allergy.AllergyNum=reader.ReadContentAsLong();
+							allergy.AllergyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AllergyDefNum":
-							allergy.AllergyDefNum=reader.ReadContentAsLong();
+							allergy.AllergyDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							allergy.PatNum=reader.ReadContentAsLong();
+							allergy.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Reaction":
 							allergy.Reaction=reader.ReadContentAsString();

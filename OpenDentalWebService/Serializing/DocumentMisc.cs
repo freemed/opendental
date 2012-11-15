@@ -33,7 +33,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DocMiscNum":
-							documentmisc.DocMiscNum=reader.ReadContentAsLong();
+							documentmisc.DocMiscNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateCreated":
 							documentmisc.DateCreated=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -42,7 +42,7 @@ namespace OpenDentalWebService {
 							documentmisc.FileName=reader.ReadContentAsString();
 							break;
 						case "DocMiscType":
-							documentmisc.DocMiscType=(OpenDentBusiness.DocumentMiscType)reader.ReadContentAsInt();
+							documentmisc.DocMiscType=(OpenDentBusiness.DocumentMiscType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "RawBase64":
 							documentmisc.RawBase64=reader.ReadContentAsString();

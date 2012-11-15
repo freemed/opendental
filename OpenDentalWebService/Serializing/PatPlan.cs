@@ -35,25 +35,25 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PatPlanNum":
-							patplan.PatPlanNum=reader.ReadContentAsLong();
+							patplan.PatPlanNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							patplan.PatNum=reader.ReadContentAsLong();
+							patplan.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Ordinal":
-							patplan.Ordinal=(byte)reader.ReadContentAsInt();
+							patplan.Ordinal=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "IsPending":
 							patplan.IsPending=reader.ReadContentAsString()!="0";
 							break;
 						case "Relationship":
-							patplan.Relationship=(OpenDentBusiness.Relat)reader.ReadContentAsInt();
+							patplan.Relationship=(OpenDentBusiness.Relat)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "PatID":
 							patplan.PatID=reader.ReadContentAsString();
 							break;
 						case "InsSubNum":
-							patplan.InsSubNum=reader.ReadContentAsLong();
+							patplan.InsSubNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

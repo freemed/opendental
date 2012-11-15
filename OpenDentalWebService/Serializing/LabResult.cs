@@ -38,10 +38,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LabResultNum":
-							labresult.LabResultNum=reader.ReadContentAsLong();
+							labresult.LabResultNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LabPanelNum":
-							labresult.LabPanelNum=reader.ReadContentAsLong();
+							labresult.LabPanelNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateTimeTest":
 							labresult.DateTimeTest=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							labresult.ObsRange=reader.ReadContentAsString();
 							break;
 						case "AbnormalFlag":
-							labresult.AbnormalFlag=(OpenDentBusiness.LabAbnormalFlag)reader.ReadContentAsInt();
+							labresult.AbnormalFlag=(OpenDentBusiness.LabAbnormalFlag)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

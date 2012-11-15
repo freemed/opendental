@@ -36,19 +36,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcNoteNum":
-							procnote.ProcNoteNum=reader.ReadContentAsLong();
+							procnote.ProcNoteNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							procnote.PatNum=reader.ReadContentAsLong();
+							procnote.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcNum":
-							procnote.ProcNum=reader.ReadContentAsLong();
+							procnote.ProcNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "EntryDateTime":
 							procnote.EntryDateTime=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "UserNum":
-							procnote.UserNum=reader.ReadContentAsLong();
+							procnote.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Note":
 							procnote.Note=reader.ReadContentAsString();

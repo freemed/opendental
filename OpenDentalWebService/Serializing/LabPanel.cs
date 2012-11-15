@@ -38,10 +38,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LabPanelNum":
-							labpanel.LabPanelNum=reader.ReadContentAsLong();
+							labpanel.LabPanelNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							labpanel.PatNum=reader.ReadContentAsLong();
+							labpanel.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RawMessage":
 							labpanel.RawMessage=reader.ReadContentAsString();
@@ -65,7 +65,7 @@ namespace OpenDentalWebService {
 							labpanel.ServiceName=reader.ReadContentAsString();
 							break;
 						case "MedicalOrderNum":
-							labpanel.MedicalOrderNum=reader.ReadContentAsLong();
+							labpanel.MedicalOrderNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

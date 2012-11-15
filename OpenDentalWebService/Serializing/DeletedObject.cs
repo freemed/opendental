@@ -32,13 +32,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DeletedObjectNum":
-							deletedobject.DeletedObjectNum=reader.ReadContentAsLong();
+							deletedobject.DeletedObjectNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ObjectNum":
-							deletedobject.ObjectNum=reader.ReadContentAsLong();
+							deletedobject.ObjectNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ObjectType":
-							deletedobject.ObjectType=(OpenDentBusiness.DeletedObjectType)reader.ReadContentAsInt();
+							deletedobject.ObjectType=(OpenDentBusiness.DeletedObjectType)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "DateTStamp":
 							deletedobject.DateTStamp=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);

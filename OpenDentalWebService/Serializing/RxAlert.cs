@@ -34,19 +34,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "RxAlertNum":
-							rxalert.RxAlertNum=reader.ReadContentAsLong();
+							rxalert.RxAlertNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "RxDefNum":
-							rxalert.RxDefNum=reader.ReadContentAsLong();
+							rxalert.RxDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DiseaseDefNum":
-							rxalert.DiseaseDefNum=reader.ReadContentAsLong();
+							rxalert.DiseaseDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "AllergyDefNum":
-							rxalert.AllergyDefNum=reader.ReadContentAsLong();
+							rxalert.AllergyDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MedicationNum":
-							rxalert.MedicationNum=reader.ReadContentAsLong();
+							rxalert.MedicationNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NotificationMsg":
 							rxalert.NotificationMsg=reader.ReadContentAsString();

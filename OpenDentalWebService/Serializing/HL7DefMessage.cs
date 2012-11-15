@@ -35,22 +35,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "HL7DefMessageNum":
-							hl7defmessage.HL7DefMessageNum=reader.ReadContentAsLong();
+							hl7defmessage.HL7DefMessageNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HL7DefNum":
-							hl7defmessage.HL7DefNum=reader.ReadContentAsLong();
+							hl7defmessage.HL7DefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "MessageType":
-							hl7defmessage.MessageType=(OpenDentBusiness.MessageTypeHL7)reader.ReadContentAsInt();
+							hl7defmessage.MessageType=(OpenDentBusiness.MessageTypeHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "EventType":
-							hl7defmessage.EventType=(OpenDentBusiness.EventTypeHL7)reader.ReadContentAsInt();
+							hl7defmessage.EventType=(OpenDentBusiness.EventTypeHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "InOrOut":
-							hl7defmessage.InOrOut=(OpenDentBusiness.InOutHL7)reader.ReadContentAsInt();
+							hl7defmessage.InOrOut=(OpenDentBusiness.InOutHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							hl7defmessage.ItemOrder=reader.ReadContentAsInt();
+							hl7defmessage.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Note":
 							hl7defmessage.Note=reader.ReadContentAsString();

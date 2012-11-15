@@ -33,19 +33,19 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "ProcButtonItemNum":
-							procbuttonitem.ProcButtonItemNum=reader.ReadContentAsLong();
+							procbuttonitem.ProcButtonItemNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ProcButtonNum":
-							procbuttonitem.ProcButtonNum=reader.ReadContentAsLong();
+							procbuttonitem.ProcButtonNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "OldCode":
 							procbuttonitem.OldCode=reader.ReadContentAsString();
 							break;
 						case "AutoCodeNum":
-							procbuttonitem.AutoCodeNum=reader.ReadContentAsLong();
+							procbuttonitem.AutoCodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "CodeNum":
-							procbuttonitem.CodeNum=reader.ReadContentAsLong();
+							procbuttonitem.CodeNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

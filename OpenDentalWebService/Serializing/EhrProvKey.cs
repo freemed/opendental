@@ -36,10 +36,10 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "EhrProvKeyNum":
-							ehrprovkey.EhrProvKeyNum=reader.ReadContentAsLong();
+							ehrprovkey.EhrProvKeyNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PatNum":
-							ehrprovkey.PatNum=reader.ReadContentAsLong();
+							ehrprovkey.PatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "LName":
 							ehrprovkey.LName=reader.ReadContentAsString();
@@ -51,7 +51,7 @@ namespace OpenDentalWebService {
 							ehrprovkey.ProvKey=reader.ReadContentAsString();
 							break;
 						case "FullTimeEquiv":
-							ehrprovkey.FullTimeEquiv=reader.ReadContentAsFloat();
+							ehrprovkey.FullTimeEquiv=System.Convert.ToSingle(reader.ReadContentAsString());
 							break;
 						case "Notes":
 							ehrprovkey.Notes=reader.ReadContentAsString();

@@ -31,7 +31,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "LetterNum":
-							letter.LetterNum=reader.ReadContentAsLong();
+							letter.LetterNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							letter.Description=reader.ReadContentAsString();

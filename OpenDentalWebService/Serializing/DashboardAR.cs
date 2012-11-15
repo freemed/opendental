@@ -32,16 +32,16 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "DashboardARNum":
-							dashboardar.DashboardARNum=reader.ReadContentAsLong();
+							dashboardar.DashboardARNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "DateCalc":
 							dashboardar.DateCalc=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 						case "BalTotal":
-							dashboardar.BalTotal=reader.ReadContentAsDouble();
+							dashboardar.BalTotal=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 						case "InsEst":
-							dashboardar.InsEst=reader.ReadContentAsDouble();
+							dashboardar.InsEst=System.Convert.ToDouble(reader.ReadContentAsString());
 							break;
 					}
 				}

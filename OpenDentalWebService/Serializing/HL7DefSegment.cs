@@ -35,13 +35,13 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "HL7DefSegmentNum":
-							hl7defsegment.HL7DefSegmentNum=reader.ReadContentAsLong();
+							hl7defsegment.HL7DefSegmentNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "HL7DefMessageNum":
-							hl7defsegment.HL7DefMessageNum=reader.ReadContentAsLong();
+							hl7defsegment.HL7DefMessageNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "ItemOrder":
-							hl7defsegment.ItemOrder=reader.ReadContentAsInt();
+							hl7defsegment.ItemOrder=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CanRepeat":
 							hl7defsegment.CanRepeat=reader.ReadContentAsString()!="0";
@@ -50,7 +50,7 @@ namespace OpenDentalWebService {
 							hl7defsegment.IsOptional=reader.ReadContentAsString()!="0";
 							break;
 						case "SegmentName":
-							hl7defsegment.SegmentName=(OpenDentBusiness.SegmentNameHL7)reader.ReadContentAsInt();
+							hl7defsegment.SegmentName=(OpenDentBusiness.SegmentNameHL7)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "Note":
 							hl7defsegment.Note=reader.ReadContentAsString();

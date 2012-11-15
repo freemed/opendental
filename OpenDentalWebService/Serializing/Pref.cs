@@ -32,7 +32,7 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "PrefNum":
-							pref.PrefNum=reader.ReadContentAsLong();
+							pref.PrefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "PrefName":
 							pref.PrefName=reader.ReadContentAsString();

@@ -34,22 +34,22 @@ namespace OpenDentalWebService {
 					}
 					switch(reader.Name) {
 						case "CovCatNum":
-							covcat.CovCatNum=reader.ReadContentAsLong();
+							covcat.CovCatNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "Description":
 							covcat.Description=reader.ReadContentAsString();
 							break;
 						case "DefaultPercent":
-							covcat.DefaultPercent=reader.ReadContentAsInt();
+							covcat.DefaultPercent=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CovOrder":
-							covcat.CovOrder=(byte)reader.ReadContentAsInt();
+							covcat.CovOrder=System.Convert.ToByte(reader.ReadContentAsString());
 							break;
 						case "IsHidden":
 							covcat.IsHidden=reader.ReadContentAsString()!="0";
 							break;
 						case "EbenefitCat":
-							covcat.EbenefitCat=(OpenDentBusiness.EbenefitCategory)reader.ReadContentAsInt();
+							covcat.EbenefitCat=(OpenDentBusiness.EbenefitCategory)System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}
