@@ -1877,6 +1877,9 @@ namespace OpenDental{
 				if(CultureInfo.CurrentCulture.Name=="nl-BE"	&& displayStrings[i]==""){//Dutch Belgium
 					displayStrings[i]="*   *   *";
 				}
+				if(isRenaissance) {//Renaissance eclaims only: Remove newlines from display strings to prevent formatting issues, because the .rss file format requires each field on a single line.
+					displayStrings[i]=displayStrings[i].Replace("\r","").Replace("\n","");
+				}
 			}//for
 		}
 	
