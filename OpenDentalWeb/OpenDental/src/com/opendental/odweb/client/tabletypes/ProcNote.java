@@ -60,14 +60,30 @@ public class ProcNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcNoteNum=Integer.valueOf(doc.getElementsByTagName("ProcNoteNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				EntryDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("EntryDateTime").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProcNoteNum")!=null) {
+					ProcNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNoteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EntryDateTime")!=null) {
+					EntryDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"EntryDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				}
 			}
 			catch(Exception e) {
 				throw e;

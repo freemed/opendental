@@ -68,16 +68,36 @@ public class VaccinePat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				VaccinePatNum=Integer.valueOf(doc.getElementsByTagName("VaccinePatNum").item(0).getFirstChild().getNodeValue());
-				VaccineDefNum=Integer.valueOf(doc.getElementsByTagName("VaccineDefNum").item(0).getFirstChild().getNodeValue());
-				DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue());
-				DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue());
-				AdministeredAmt=Float.valueOf(doc.getElementsByTagName("AdministeredAmt").item(0).getFirstChild().getNodeValue());
-				DrugUnitNum=Integer.valueOf(doc.getElementsByTagName("DrugUnitNum").item(0).getFirstChild().getNodeValue());
-				LotNumber=doc.getElementsByTagName("LotNumber").item(0).getFirstChild().getNodeValue();
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				NotGiven=(doc.getElementsByTagName("NotGiven").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"VaccinePatNum")!=null) {
+					VaccinePatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VaccinePatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"VaccineDefNum")!=null) {
+					VaccineDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VaccineDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeStart")!=null) {
+					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeEnd")!=null) {
+					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEnd"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdministeredAmt")!=null) {
+					AdministeredAmt=Float.valueOf(Serializing.GetXmlNodeValue(doc,"AdministeredAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DrugUnitNum")!=null) {
+					DrugUnitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugUnitNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LotNumber")!=null) {
+					LotNumber=Serializing.GetXmlNodeValue(doc,"LotNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NotGiven")!=null) {
+					NotGiven=(Serializing.GetXmlNodeValue(doc,"NotGiven")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

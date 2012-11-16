@@ -180,44 +180,120 @@ public class ClaimProc {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimProcNum=Integer.valueOf(doc.getElementsByTagName("ClaimProcNum").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				FeeBilled=Double.valueOf(doc.getElementsByTagName("FeeBilled").item(0).getFirstChild().getNodeValue());
-				InsPayEst=Double.valueOf(doc.getElementsByTagName("InsPayEst").item(0).getFirstChild().getNodeValue());
-				DedApplied=Double.valueOf(doc.getElementsByTagName("DedApplied").item(0).getFirstChild().getNodeValue());
-				Status=ClaimProcStatus.values()[Integer.valueOf(doc.getElementsByTagName("Status").item(0).getFirstChild().getNodeValue())];
-				InsPayAmt=Double.valueOf(doc.getElementsByTagName("InsPayAmt").item(0).getFirstChild().getNodeValue());
-				Remarks=doc.getElementsByTagName("Remarks").item(0).getFirstChild().getNodeValue();
-				ClaimPaymentNum=Integer.valueOf(doc.getElementsByTagName("ClaimPaymentNum").item(0).getFirstChild().getNodeValue());
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				DateCP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCP").item(0).getFirstChild().getNodeValue());
-				WriteOff=Double.valueOf(doc.getElementsByTagName("WriteOff").item(0).getFirstChild().getNodeValue());
-				CodeSent=doc.getElementsByTagName("CodeSent").item(0).getFirstChild().getNodeValue();
-				AllowedOverride=Double.valueOf(doc.getElementsByTagName("AllowedOverride").item(0).getFirstChild().getNodeValue());
-				Percentage=Integer.valueOf(doc.getElementsByTagName("Percentage").item(0).getFirstChild().getNodeValue());
-				PercentOverride=Integer.valueOf(doc.getElementsByTagName("PercentOverride").item(0).getFirstChild().getNodeValue());
-				CopayAmt=Double.valueOf(doc.getElementsByTagName("CopayAmt").item(0).getFirstChild().getNodeValue());
-				NoBillIns=(doc.getElementsByTagName("NoBillIns").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PaidOtherIns=Double.valueOf(doc.getElementsByTagName("PaidOtherIns").item(0).getFirstChild().getNodeValue());
-				BaseEst=Double.valueOf(doc.getElementsByTagName("BaseEst").item(0).getFirstChild().getNodeValue());
-				CopayOverride=Double.valueOf(doc.getElementsByTagName("CopayOverride").item(0).getFirstChild().getNodeValue());
-				ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue());
-				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
-				LineNumber=Byte.valueOf(doc.getElementsByTagName("LineNumber").item(0).getFirstChild().getNodeValue());
-				DedEst=Double.valueOf(doc.getElementsByTagName("DedEst").item(0).getFirstChild().getNodeValue());
-				DedEstOverride=Double.valueOf(doc.getElementsByTagName("DedEstOverride").item(0).getFirstChild().getNodeValue());
-				InsEstTotal=Double.valueOf(doc.getElementsByTagName("InsEstTotal").item(0).getFirstChild().getNodeValue());
-				InsEstTotalOverride=Double.valueOf(doc.getElementsByTagName("InsEstTotalOverride").item(0).getFirstChild().getNodeValue());
-				PaidOtherInsOverride=Double.valueOf(doc.getElementsByTagName("PaidOtherInsOverride").item(0).getFirstChild().getNodeValue());
-				EstimateNote=doc.getElementsByTagName("EstimateNote").item(0).getFirstChild().getNodeValue();
-				WriteOffEst=Double.valueOf(doc.getElementsByTagName("WriteOffEst").item(0).getFirstChild().getNodeValue());
-				WriteOffEstOverride=Double.valueOf(doc.getElementsByTagName("WriteOffEstOverride").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
-				PaymentRow=Integer.valueOf(doc.getElementsByTagName("PaymentRow").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ClaimProcNum")!=null) {
+					ClaimProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeBilled")!=null) {
+					FeeBilled=Double.valueOf(Serializing.GetXmlNodeValue(doc,"FeeBilled"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPayEst")!=null) {
+					InsPayEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsPayEst"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DedApplied")!=null) {
+					DedApplied=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DedApplied"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Status")!=null) {
+					Status=ClaimProcStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Status"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPayAmt")!=null) {
+					InsPayAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsPayAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Remarks")!=null) {
+					Remarks=Serializing.GetXmlNodeValue(doc,"Remarks");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum")!=null) {
+					ClaimPaymentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCP")!=null) {
+					DateCP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCP"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WriteOff")!=null) {
+					WriteOff=Double.valueOf(Serializing.GetXmlNodeValue(doc,"WriteOff"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeSent")!=null) {
+					CodeSent=Serializing.GetXmlNodeValue(doc,"CodeSent");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AllowedOverride")!=null) {
+					AllowedOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AllowedOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Percentage")!=null) {
+					Percentage=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Percentage"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PercentOverride")!=null) {
+					PercentOverride=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PercentOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CopayAmt")!=null) {
+					CopayAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CopayAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoBillIns")!=null) {
+					NoBillIns=(Serializing.GetXmlNodeValue(doc,"NoBillIns")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PaidOtherIns")!=null) {
+					PaidOtherIns=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PaidOtherIns"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BaseEst")!=null) {
+					BaseEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"BaseEst"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CopayOverride")!=null) {
+					CopayOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CopayOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcDate")!=null) {
+					ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ProcDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LineNumber")!=null) {
+					LineNumber=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"LineNumber"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DedEst")!=null) {
+					DedEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DedEst"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DedEstOverride")!=null) {
+					DedEstOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DedEstOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsEstTotal")!=null) {
+					InsEstTotal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsEstTotal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsEstTotalOverride")!=null) {
+					InsEstTotalOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsEstTotalOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PaidOtherInsOverride")!=null) {
+					PaidOtherInsOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PaidOtherInsOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EstimateNote")!=null) {
+					EstimateNote=Serializing.GetXmlNodeValue(doc,"EstimateNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WriteOffEst")!=null) {
+					WriteOffEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"WriteOffEst"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WriteOffEstOverride")!=null) {
+					WriteOffEstOverride=Double.valueOf(Serializing.GetXmlNodeValue(doc,"WriteOffEstOverride"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PaymentRow")!=null) {
+					PaymentRow=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PaymentRow"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

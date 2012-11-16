@@ -38,9 +38,15 @@ public class Site {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SiteNum=Integer.valueOf(doc.getElementsByTagName("SiteNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"SiteNum")!=null) {
+					SiteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SiteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

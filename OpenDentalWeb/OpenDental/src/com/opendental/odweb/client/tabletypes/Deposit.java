@@ -48,11 +48,21 @@ public class Deposit {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
-				DateDeposit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateDeposit").item(0).getFirstChild().getNodeValue());
-				BankAccountInfo=doc.getElementsByTagName("BankAccountInfo").item(0).getFirstChild().getNodeValue();
-				Amount=Double.valueOf(doc.getElementsByTagName("Amount").item(0).getFirstChild().getNodeValue());
-				Memo=doc.getElementsByTagName("Memo").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateDeposit")!=null) {
+					DateDeposit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDeposit"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BankAccountInfo")!=null) {
+					BankAccountInfo=Serializing.GetXmlNodeValue(doc,"BankAccountInfo");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Amount")!=null) {
+					Amount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Amount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Memo")!=null) {
+					Memo=Serializing.GetXmlNodeValue(doc,"Memo");
+				}
 			}
 			catch(Exception e) {
 				throw e;

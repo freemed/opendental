@@ -42,10 +42,18 @@ public class RxNorm {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RxNormNum=Integer.valueOf(doc.getElementsByTagName("RxNormNum").item(0).getFirstChild().getNodeValue());
-				RxCui=doc.getElementsByTagName("RxCui").item(0).getFirstChild().getNodeValue();
-				MmslCode=doc.getElementsByTagName("MmslCode").item(0).getFirstChild().getNodeValue();
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"RxNormNum")!=null) {
+					RxNormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxNormNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Serializing.GetXmlNodeValue(doc,"RxCui");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MmslCode")!=null) {
+					MmslCode=Serializing.GetXmlNodeValue(doc,"MmslCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
 			}
 			catch(Exception e) {
 				throw e;

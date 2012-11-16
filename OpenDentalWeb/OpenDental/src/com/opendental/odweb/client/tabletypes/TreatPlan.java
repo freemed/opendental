@@ -60,14 +60,30 @@ public class TreatPlan {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TreatPlanNum=Integer.valueOf(doc.getElementsByTagName("TreatPlanNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTP").item(0).getFirstChild().getNodeValue());
-				Heading=doc.getElementsByTagName("Heading").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();
-				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ResponsParty=Integer.valueOf(doc.getElementsByTagName("ResponsParty").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TreatPlanNum")!=null) {
+					TreatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TreatPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTP")!=null) {
+					DateTP=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTP"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Heading")!=null) {
+					Heading=Serializing.GetXmlNodeValue(doc,"Heading");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ResponsParty")!=null) {
+					ResponsParty=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ResponsParty"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

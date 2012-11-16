@@ -72,17 +72,39 @@ public class Schedule {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ScheduleNum=Integer.valueOf(doc.getElementsByTagName("ScheduleNum").item(0).getFirstChild().getNodeValue());
-				SchedDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("SchedDate").item(0).getFirstChild().getNodeValue());
-				StartTime=doc.getElementsByTagName("StartTime").item(0).getFirstChild().getNodeValue();
-				StopTime=doc.getElementsByTagName("StopTime").item(0).getFirstChild().getNodeValue();
-				SchedType=ScheduleType.values()[Integer.valueOf(doc.getElementsByTagName("SchedType").item(0).getFirstChild().getNodeValue())];
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				BlockoutType=Integer.valueOf(doc.getElementsByTagName("BlockoutType").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				Status=SchedStatus.values()[Integer.valueOf(doc.getElementsByTagName("Status").item(0).getFirstChild().getNodeValue())];
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ScheduleNum")!=null) {
+					ScheduleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScheduleNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchedDate")!=null) {
+					SchedDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"SchedDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StartTime")!=null) {
+					StartTime=Serializing.GetXmlNodeValue(doc,"StartTime");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StopTime")!=null) {
+					StopTime=Serializing.GetXmlNodeValue(doc,"StopTime");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchedType")!=null) {
+					SchedType=ScheduleType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchedType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BlockoutType")!=null) {
+					BlockoutType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BlockoutType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Status")!=null) {
+					Status=SchedStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Status"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

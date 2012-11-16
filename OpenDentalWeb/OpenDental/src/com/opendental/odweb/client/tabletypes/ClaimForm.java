@@ -62,15 +62,33 @@ public class ClaimForm {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimFormNum=Integer.valueOf(doc.getElementsByTagName("ClaimFormNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				FontName=doc.getElementsByTagName("FontName").item(0).getFirstChild().getNodeValue();
-				FontSize=Float.valueOf(doc.getElementsByTagName("FontSize").item(0).getFirstChild().getNodeValue());
-				UniqueID=doc.getElementsByTagName("UniqueID").item(0).getFirstChild().getNodeValue();
-				PrintImages=(doc.getElementsByTagName("PrintImages").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				OffsetX=Integer.valueOf(doc.getElementsByTagName("OffsetX").item(0).getFirstChild().getNodeValue());
-				OffsetY=Integer.valueOf(doc.getElementsByTagName("OffsetY").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UniqueID")!=null) {
+					UniqueID=Serializing.GetXmlNodeValue(doc,"UniqueID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PrintImages")!=null) {
+					PrintImages=(Serializing.GetXmlNodeValue(doc,"PrintImages")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OffsetX")!=null) {
+					OffsetX=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OffsetX"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OffsetY")!=null) {
+					OffsetY=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OffsetY"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

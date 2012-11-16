@@ -54,13 +54,27 @@ public class ToothInitial {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ToothInitialNum=Integer.valueOf(doc.getElementsByTagName("ToothInitialNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ToothNum=doc.getElementsByTagName("ToothNum").item(0).getFirstChild().getNodeValue();
-				InitialType=ToothInitialType.values()[Integer.valueOf(doc.getElementsByTagName("InitialType").item(0).getFirstChild().getNodeValue())];
-				Movement=Float.valueOf(doc.getElementsByTagName("Movement").item(0).getFirstChild().getNodeValue());
-				DrawingSegment=doc.getElementsByTagName("DrawingSegment").item(0).getFirstChild().getNodeValue();
-				ColorDraw=Integer.valueOf(doc.getElementsByTagName("ColorDraw").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ToothInitialNum")!=null) {
+					ToothInitialNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothInitialNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothNum")!=null) {
+					ToothNum=Serializing.GetXmlNodeValue(doc,"ToothNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InitialType")!=null) {
+					InitialType=ToothInitialType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InitialType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Movement")!=null) {
+					Movement=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Movement"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DrawingSegment")!=null) {
+					DrawingSegment=Serializing.GetXmlNodeValue(doc,"DrawingSegment");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColorDraw")!=null) {
+					ColorDraw=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorDraw"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

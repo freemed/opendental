@@ -48,11 +48,21 @@ public class CustReference {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CustReferenceNum=Integer.valueOf(doc.getElementsByTagName("CustReferenceNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateMostRecent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateMostRecent").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				IsBadRef=(doc.getElementsByTagName("IsBadRef").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"CustReferenceNum")!=null) {
+					CustReferenceNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CustReferenceNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateMostRecent")!=null) {
+					DateMostRecent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateMostRecent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsBadRef")!=null) {
+					IsBadRef=(Serializing.GetXmlNodeValue(doc,"IsBadRef")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -50,12 +50,24 @@ public class Dunning {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DunningNum=Integer.valueOf(doc.getElementsByTagName("DunningNum").item(0).getFirstChild().getNodeValue());
-				DunMessage=doc.getElementsByTagName("DunMessage").item(0).getFirstChild().getNodeValue();
-				BillingType=Integer.valueOf(doc.getElementsByTagName("BillingType").item(0).getFirstChild().getNodeValue());
-				AgeAccount=Byte.valueOf(doc.getElementsByTagName("AgeAccount").item(0).getFirstChild().getNodeValue());
-				InsIsPending=YN.values()[Integer.valueOf(doc.getElementsByTagName("InsIsPending").item(0).getFirstChild().getNodeValue())];
-				MessageBold=doc.getElementsByTagName("MessageBold").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DunningNum")!=null) {
+					DunningNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DunningNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DunMessage")!=null) {
+					DunMessage=Serializing.GetXmlNodeValue(doc,"DunMessage");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BillingType")!=null) {
+					BillingType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BillingType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AgeAccount")!=null) {
+					AgeAccount=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"AgeAccount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsIsPending")!=null) {
+					InsIsPending=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsIsPending"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MessageBold")!=null) {
+					MessageBold=Serializing.GetXmlNodeValue(doc,"MessageBold");
+				}
 			}
 			catch(Exception e) {
 				throw e;

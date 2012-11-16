@@ -138,34 +138,90 @@ public class InsPlan {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				GroupName=doc.getElementsByTagName("GroupName").item(0).getFirstChild().getNodeValue();
-				GroupNum=doc.getElementsByTagName("GroupNum").item(0).getFirstChild().getNodeValue();
-				PlanNote=doc.getElementsByTagName("PlanNote").item(0).getFirstChild().getNodeValue();
-				FeeSched=Integer.valueOf(doc.getElementsByTagName("FeeSched").item(0).getFirstChild().getNodeValue());
-				PlanType=doc.getElementsByTagName("PlanType").item(0).getFirstChild().getNodeValue();
-				ClaimFormNum=Integer.valueOf(doc.getElementsByTagName("ClaimFormNum").item(0).getFirstChild().getNodeValue());
-				UseAltCode=(doc.getElementsByTagName("UseAltCode").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ClaimsUseUCR=(doc.getElementsByTagName("ClaimsUseUCR").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				CopayFeeSched=Integer.valueOf(doc.getElementsByTagName("CopayFeeSched").item(0).getFirstChild().getNodeValue());
-				EmployerNum=Integer.valueOf(doc.getElementsByTagName("EmployerNum").item(0).getFirstChild().getNodeValue());
-				CarrierNum=Integer.valueOf(doc.getElementsByTagName("CarrierNum").item(0).getFirstChild().getNodeValue());
-				AllowedFeeSched=Integer.valueOf(doc.getElementsByTagName("AllowedFeeSched").item(0).getFirstChild().getNodeValue());
-				TrojanID=doc.getElementsByTagName("TrojanID").item(0).getFirstChild().getNodeValue();
-				DivisionNo=doc.getElementsByTagName("DivisionNo").item(0).getFirstChild().getNodeValue();
-				IsMedical=(doc.getElementsByTagName("IsMedical").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				FilingCode=Integer.valueOf(doc.getElementsByTagName("FilingCode").item(0).getFirstChild().getNodeValue());
-				DentaideCardSequence=Byte.valueOf(doc.getElementsByTagName("DentaideCardSequence").item(0).getFirstChild().getNodeValue());
-				ShowBaseUnits=(doc.getElementsByTagName("ShowBaseUnits").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				CodeSubstNone=(doc.getElementsByTagName("CodeSubstNone").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				MonthRenew=Byte.valueOf(doc.getElementsByTagName("MonthRenew").item(0).getFirstChild().getNodeValue());
-				FilingCodeSubtype=Integer.valueOf(doc.getElementsByTagName("FilingCodeSubtype").item(0).getFirstChild().getNodeValue());
-				CanadianPlanFlag=doc.getElementsByTagName("CanadianPlanFlag").item(0).getFirstChild().getNodeValue();
-				CanadianDiagnosticCode=doc.getElementsByTagName("CanadianDiagnosticCode").item(0).getFirstChild().getNodeValue();
-				CanadianInstitutionCode=doc.getElementsByTagName("CanadianInstitutionCode").item(0).getFirstChild().getNodeValue();
-				RxBIN=doc.getElementsByTagName("RxBIN").item(0).getFirstChild().getNodeValue();
-				CobRule=EnumCobRule.values()[Integer.valueOf(doc.getElementsByTagName("CobRule").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GroupName")!=null) {
+					GroupName=Serializing.GetXmlNodeValue(doc,"GroupName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GroupNum")!=null) {
+					GroupNum=Serializing.GetXmlNodeValue(doc,"GroupNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNote")!=null) {
+					PlanNote=Serializing.GetXmlNodeValue(doc,"PlanNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanType")!=null) {
+					PlanType=Serializing.GetXmlNodeValue(doc,"PlanType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UseAltCode")!=null) {
+					UseAltCode=(Serializing.GetXmlNodeValue(doc,"UseAltCode")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimsUseUCR")!=null) {
+					ClaimsUseUCR=(Serializing.GetXmlNodeValue(doc,"ClaimsUseUCR")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CopayFeeSched")!=null) {
+					CopayFeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CopayFeeSched"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployerNum")!=null) {
+					EmployerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AllowedFeeSched")!=null) {
+					AllowedFeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllowedFeeSched"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TrojanID")!=null) {
+					TrojanID=Serializing.GetXmlNodeValue(doc,"TrojanID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DivisionNo")!=null) {
+					DivisionNo=Serializing.GetXmlNodeValue(doc,"DivisionNo");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsMedical")!=null) {
+					IsMedical=(Serializing.GetXmlNodeValue(doc,"IsMedical")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FilingCode")!=null) {
+					FilingCode=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FilingCode"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DentaideCardSequence")!=null) {
+					DentaideCardSequence=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"DentaideCardSequence"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowBaseUnits")!=null) {
+					ShowBaseUnits=(Serializing.GetXmlNodeValue(doc,"ShowBaseUnits")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeSubstNone")!=null) {
+					CodeSubstNone=(Serializing.GetXmlNodeValue(doc,"CodeSubstNone")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MonthRenew")!=null) {
+					MonthRenew=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"MonthRenew"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FilingCodeSubtype")!=null) {
+					FilingCodeSubtype=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FilingCodeSubtype"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianPlanFlag")!=null) {
+					CanadianPlanFlag=Serializing.GetXmlNodeValue(doc,"CanadianPlanFlag");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianDiagnosticCode")!=null) {
+					CanadianDiagnosticCode=Serializing.GetXmlNodeValue(doc,"CanadianDiagnosticCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianInstitutionCode")!=null) {
+					CanadianInstitutionCode=Serializing.GetXmlNodeValue(doc,"CanadianInstitutionCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxBIN")!=null) {
+					RxBIN=Serializing.GetXmlNodeValue(doc,"RxBIN");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CobRule")!=null) {
+					CobRule=EnumCobRule.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CobRule"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -46,11 +46,21 @@ public class AppointmentRule {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AppointmentRuleNum=Integer.valueOf(doc.getElementsByTagName("AppointmentRuleNum").item(0).getFirstChild().getNodeValue());
-				RuleDesc=doc.getElementsByTagName("RuleDesc").item(0).getFirstChild().getNodeValue();
-				CodeStart=doc.getElementsByTagName("CodeStart").item(0).getFirstChild().getNodeValue();
-				CodeEnd=doc.getElementsByTagName("CodeEnd").item(0).getFirstChild().getNodeValue();
-				IsEnabled=(doc.getElementsByTagName("IsEnabled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"AppointmentRuleNum")!=null) {
+					AppointmentRuleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AppointmentRuleNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RuleDesc")!=null) {
+					RuleDesc=Serializing.GetXmlNodeValue(doc,"RuleDesc");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeStart")!=null) {
+					CodeStart=Serializing.GetXmlNodeValue(doc,"CodeStart");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeEnd")!=null) {
+					CodeEnd=Serializing.GetXmlNodeValue(doc,"CodeEnd");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsEnabled")!=null) {
+					IsEnabled=(Serializing.GetXmlNodeValue(doc,"IsEnabled")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

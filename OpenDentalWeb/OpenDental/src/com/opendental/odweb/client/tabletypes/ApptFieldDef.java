@@ -42,10 +42,18 @@ public class ApptFieldDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ApptFieldDefNum=Integer.valueOf(doc.getElementsByTagName("ApptFieldDefNum").item(0).getFirstChild().getNodeValue());
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FieldType=ApptFieldType.values()[Integer.valueOf(doc.getElementsByTagName("FieldType").item(0).getFirstChild().getNodeValue())];
-				PickList=doc.getElementsByTagName("PickList").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum")!=null) {
+					ApptFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldType")!=null) {
+					FieldType=ApptFieldType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PickList")!=null) {
+					PickList=Serializing.GetXmlNodeValue(doc,"PickList");
+				}
 			}
 			catch(Exception e) {
 				throw e;

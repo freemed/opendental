@@ -88,21 +88,51 @@ public class RxPat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RxNum=Integer.valueOf(doc.getElementsByTagName("RxNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				RxDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("RxDate").item(0).getFirstChild().getNodeValue());
-				Drug=doc.getElementsByTagName("Drug").item(0).getFirstChild().getNodeValue();
-				Sig=doc.getElementsByTagName("Sig").item(0).getFirstChild().getNodeValue();
-				Disp=doc.getElementsByTagName("Disp").item(0).getFirstChild().getNodeValue();
-				Refills=doc.getElementsByTagName("Refills").item(0).getFirstChild().getNodeValue();
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				PharmacyNum=Integer.valueOf(doc.getElementsByTagName("PharmacyNum").item(0).getFirstChild().getNodeValue());
-				IsControlled=(doc.getElementsByTagName("IsControlled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				SendStatus=RxSendStatus.values()[Integer.valueOf(doc.getElementsByTagName("SendStatus").item(0).getFirstChild().getNodeValue())];
-				RxCui=Integer.valueOf(doc.getElementsByTagName("RxCui").item(0).getFirstChild().getNodeValue());
-				DosageCode=doc.getElementsByTagName("DosageCode").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"RxNum")!=null) {
+					RxNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxDate")!=null) {
+					RxDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"RxDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Drug")!=null) {
+					Drug=Serializing.GetXmlNodeValue(doc,"Drug");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Sig")!=null) {
+					Sig=Serializing.GetXmlNodeValue(doc,"Sig");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Disp")!=null) {
+					Disp=Serializing.GetXmlNodeValue(doc,"Disp");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Refills")!=null) {
+					Refills=Serializing.GetXmlNodeValue(doc,"Refills");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PharmacyNum")!=null) {
+					PharmacyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PharmacyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsControlled")!=null) {
+					IsControlled=(Serializing.GetXmlNodeValue(doc,"IsControlled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SendStatus")!=null) {
+					SendStatus=RxSendStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SendStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DosageCode")!=null) {
+					DosageCode=Serializing.GetXmlNodeValue(doc,"DosageCode");
+				}
 			}
 			catch(Exception e) {
 				throw e;

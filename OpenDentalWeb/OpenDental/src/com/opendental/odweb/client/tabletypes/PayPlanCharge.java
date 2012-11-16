@@ -68,16 +68,36 @@ public class PayPlanCharge {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PayPlanChargeNum=Integer.valueOf(doc.getElementsByTagName("PayPlanChargeNum").item(0).getFirstChild().getNodeValue());
-				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
-				Guarantor=Integer.valueOf(doc.getElementsByTagName("Guarantor").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ChargeDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ChargeDate").item(0).getFirstChild().getNodeValue());
-				Principal=Double.valueOf(doc.getElementsByTagName("Principal").item(0).getFirstChild().getNodeValue());
-				Interest=Double.valueOf(doc.getElementsByTagName("Interest").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PayPlanChargeNum")!=null) {
+					PayPlanChargeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPlanChargeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayPlanNum")!=null) {
+					PayPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Guarantor")!=null) {
+					Guarantor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Guarantor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ChargeDate")!=null) {
+					ChargeDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ChargeDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Principal")!=null) {
+					Principal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Principal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Interest")!=null) {
+					Interest=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Interest"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

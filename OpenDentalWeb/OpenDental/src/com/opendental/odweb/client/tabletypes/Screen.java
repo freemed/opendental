@@ -116,28 +116,72 @@ public class Screen {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ScreenNum=Integer.valueOf(doc.getElementsByTagName("ScreenNum").item(0).getFirstChild().getNodeValue());
-				ScreenDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ScreenDate").item(0).getFirstChild().getNodeValue());
-				GradeSchool=doc.getElementsByTagName("GradeSchool").item(0).getFirstChild().getNodeValue();
-				County=doc.getElementsByTagName("County").item(0).getFirstChild().getNodeValue();
-				PlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("PlaceService").item(0).getFirstChild().getNodeValue())];
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				ProvName=doc.getElementsByTagName("ProvName").item(0).getFirstChild().getNodeValue();
-				Gender=PatientGender.values()[Integer.valueOf(doc.getElementsByTagName("Gender").item(0).getFirstChild().getNodeValue())];
-				Race=PatientRace.values()[Integer.valueOf(doc.getElementsByTagName("Race").item(0).getFirstChild().getNodeValue())];
-				GradeLevel=PatientGrade.values()[Integer.valueOf(doc.getElementsByTagName("GradeLevel").item(0).getFirstChild().getNodeValue())];
-				Age=Byte.valueOf(doc.getElementsByTagName("Age").item(0).getFirstChild().getNodeValue());
-				Urgency=TreatmentUrgency.values()[Integer.valueOf(doc.getElementsByTagName("Urgency").item(0).getFirstChild().getNodeValue())];
-				HasCaries=YN.values()[Integer.valueOf(doc.getElementsByTagName("HasCaries").item(0).getFirstChild().getNodeValue())];
-				NeedsSealants=YN.values()[Integer.valueOf(doc.getElementsByTagName("NeedsSealants").item(0).getFirstChild().getNodeValue())];
-				CariesExperience=YN.values()[Integer.valueOf(doc.getElementsByTagName("CariesExperience").item(0).getFirstChild().getNodeValue())];
-				EarlyChildCaries=YN.values()[Integer.valueOf(doc.getElementsByTagName("EarlyChildCaries").item(0).getFirstChild().getNodeValue())];
-				ExistingSealants=YN.values()[Integer.valueOf(doc.getElementsByTagName("ExistingSealants").item(0).getFirstChild().getNodeValue())];
-				MissingAllTeeth=YN.values()[Integer.valueOf(doc.getElementsByTagName("MissingAllTeeth").item(0).getFirstChild().getNodeValue())];
-				Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("Birthdate").item(0).getFirstChild().getNodeValue());
-				ScreenGroupNum=Integer.valueOf(doc.getElementsByTagName("ScreenGroupNum").item(0).getFirstChild().getNodeValue());
-				ScreenGroupOrder=Integer.valueOf(doc.getElementsByTagName("ScreenGroupOrder").item(0).getFirstChild().getNodeValue());
-				Comments=doc.getElementsByTagName("Comments").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ScreenNum")!=null) {
+					ScreenNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenDate")!=null) {
+					ScreenDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ScreenDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GradeSchool")!=null) {
+					GradeSchool=Serializing.GetXmlNodeValue(doc,"GradeSchool");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"County")!=null) {
+					County=Serializing.GetXmlNodeValue(doc,"County");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlaceService")!=null) {
+					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlaceService"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvName")!=null) {
+					ProvName=Serializing.GetXmlNodeValue(doc,"ProvName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Gender")!=null) {
+					Gender=PatientGender.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Gender"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Race")!=null) {
+					Race=PatientRace.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Race"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GradeLevel")!=null) {
+					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GradeLevel"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Age")!=null) {
+					Age=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Age"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Urgency")!=null) {
+					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Urgency"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HasCaries")!=null) {
+					HasCaries=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HasCaries"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NeedsSealants")!=null) {
+					NeedsSealants=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"NeedsSealants"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CariesExperience")!=null) {
+					CariesExperience=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CariesExperience"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EarlyChildCaries")!=null) {
+					EarlyChildCaries=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EarlyChildCaries"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ExistingSealants")!=null) {
+					ExistingSealants=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ExistingSealants"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MissingAllTeeth")!=null) {
+					MissingAllTeeth=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MissingAllTeeth"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Birthdate")!=null) {
+					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"Birthdate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum")!=null) {
+					ScreenGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupOrder")!=null) {
+					ScreenGroupOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				}
 			}
 			catch(Exception e) {
 				throw e;

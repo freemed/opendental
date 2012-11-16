@@ -38,9 +38,15 @@ public class TaskUnread {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TaskUnreadNum=Integer.valueOf(doc.getElementsByTagName("TaskUnreadNum").item(0).getFirstChild().getNodeValue());
-				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TaskUnreadNum")!=null) {
+					TaskUnreadNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskUnreadNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

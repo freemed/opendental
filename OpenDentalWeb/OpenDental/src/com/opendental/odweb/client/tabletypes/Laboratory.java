@@ -70,17 +70,39 @@ public class Laboratory {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LaboratoryNum=Integer.valueOf(doc.getElementsByTagName("LaboratoryNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Phone=doc.getElementsByTagName("Phone").item(0).getFirstChild().getNodeValue();
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				Slip=Integer.valueOf(doc.getElementsByTagName("Slip").item(0).getFirstChild().getNodeValue());
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				Email=doc.getElementsByTagName("Email").item(0).getFirstChild().getNodeValue();
-				WirelessPhone=doc.getElementsByTagName("WirelessPhone").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Slip")!=null) {
+					Slip=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Slip"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.GetXmlNodeValue(doc,"State");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Email")!=null) {
+					Email=Serializing.GetXmlNodeValue(doc,"Email");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WirelessPhone")!=null) {
+					WirelessPhone=Serializing.GetXmlNodeValue(doc,"WirelessPhone");
+				}
 			}
 			catch(Exception e) {
 				throw e;

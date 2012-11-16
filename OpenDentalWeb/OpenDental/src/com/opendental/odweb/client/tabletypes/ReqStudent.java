@@ -64,15 +64,33 @@ public class ReqStudent {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReqStudentNum=Integer.valueOf(doc.getElementsByTagName("ReqStudentNum").item(0).getFirstChild().getNodeValue());
-				ReqNeededNum=Integer.valueOf(doc.getElementsByTagName("ReqNeededNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				SchoolCourseNum=Integer.valueOf(doc.getElementsByTagName("SchoolCourseNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				InstructorNum=Integer.valueOf(doc.getElementsByTagName("InstructorNum").item(0).getFirstChild().getNodeValue());
-				DateCompleted=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCompleted").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ReqStudentNum")!=null) {
+					ReqStudentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReqStudentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReqNeededNum")!=null) {
+					ReqNeededNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReqNeededNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum")!=null) {
+					SchoolCourseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InstructorNum")!=null) {
+					InstructorNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InstructorNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCompleted")!=null) {
+					DateCompleted=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCompleted"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -54,13 +54,27 @@ public class Def {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DefNum=Integer.valueOf(doc.getElementsByTagName("DefNum").item(0).getFirstChild().getNodeValue());
-				Category=DefCat.values()[Integer.valueOf(doc.getElementsByTagName("Category").item(0).getFirstChild().getNodeValue())];
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				ItemName=doc.getElementsByTagName("ItemName").item(0).getFirstChild().getNodeValue();
-				ItemValue=doc.getElementsByTagName("ItemValue").item(0).getFirstChild().getNodeValue();
-				ItemColor=Integer.valueOf(doc.getElementsByTagName("ItemColor").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"DefNum")!=null) {
+					DefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
+					Category=DefCat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemName")!=null) {
+					ItemName=Serializing.GetXmlNodeValue(doc,"ItemName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemValue")!=null) {
+					ItemValue=Serializing.GetXmlNodeValue(doc,"ItemValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemColor")!=null) {
+					ItemColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

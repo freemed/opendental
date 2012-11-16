@@ -34,8 +34,12 @@ public class EtransMessageText {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EtransMessageTextNum=Integer.valueOf(doc.getElementsByTagName("EtransMessageTextNum").item(0).getFirstChild().getNodeValue());
-				MessageText=doc.getElementsByTagName("MessageText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
+					EtransMessageTextNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MessageText")!=null) {
+					MessageText=Serializing.GetXmlNodeValue(doc,"MessageText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

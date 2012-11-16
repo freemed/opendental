@@ -42,10 +42,18 @@ public class QuickPasteCat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				QuickPasteCatNum=Integer.valueOf(doc.getElementsByTagName("QuickPasteCatNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				DefaultForTypes=doc.getElementsByTagName("DefaultForTypes").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
+					QuickPasteCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultForTypes")!=null) {
+					DefaultForTypes=Serializing.GetXmlNodeValue(doc,"DefaultForTypes");
+				}
 			}
 			catch(Exception e) {
 				throw e;

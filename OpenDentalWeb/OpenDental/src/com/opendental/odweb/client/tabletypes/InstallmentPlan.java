@@ -56,13 +56,27 @@ public class InstallmentPlan {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				InstallmentPlanNum=Integer.valueOf(doc.getElementsByTagName("InstallmentPlanNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateAgreement=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateAgreement").item(0).getFirstChild().getNodeValue());
-				DateFirstPayment=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateFirstPayment").item(0).getFirstChild().getNodeValue());
-				MonthlyPayment=Double.valueOf(doc.getElementsByTagName("MonthlyPayment").item(0).getFirstChild().getNodeValue());
-				APR=Float.valueOf(doc.getElementsByTagName("APR").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"InstallmentPlanNum")!=null) {
+					InstallmentPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InstallmentPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateAgreement")!=null) {
+					DateAgreement=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateAgreement"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateFirstPayment")!=null) {
+					DateFirstPayment=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateFirstPayment"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MonthlyPayment")!=null) {
+					MonthlyPayment=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MonthlyPayment"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"APR")!=null) {
+					APR=Float.valueOf(Serializing.GetXmlNodeValue(doc,"APR"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

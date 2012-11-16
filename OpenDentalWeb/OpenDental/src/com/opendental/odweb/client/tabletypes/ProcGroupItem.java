@@ -38,9 +38,15 @@ public class ProcGroupItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcGroupItemNum=Integer.valueOf(doc.getElementsByTagName("ProcGroupItemNum").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				GroupNum=Integer.valueOf(doc.getElementsByTagName("GroupNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ProcGroupItemNum")!=null) {
+					ProcGroupItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcGroupItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GroupNum")!=null) {
+					GroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GroupNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

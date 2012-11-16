@@ -54,13 +54,27 @@ public class MountItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				MountItemNum=Integer.valueOf(doc.getElementsByTagName("MountItemNum").item(0).getFirstChild().getNodeValue());
-				MountNum=Integer.valueOf(doc.getElementsByTagName("MountNum").item(0).getFirstChild().getNodeValue());
-				Xpos=Integer.valueOf(doc.getElementsByTagName("Xpos").item(0).getFirstChild().getNodeValue());
-				Ypos=Integer.valueOf(doc.getElementsByTagName("Ypos").item(0).getFirstChild().getNodeValue());
-				OrdinalPos=Integer.valueOf(doc.getElementsByTagName("OrdinalPos").item(0).getFirstChild().getNodeValue());
-				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"MountItemNum")!=null) {
+					MountItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MountNum")!=null) {
+					MountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Xpos")!=null) {
+					Xpos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Xpos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Ypos")!=null) {
+					Ypos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Ypos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrdinalPos")!=null) {
+					OrdinalPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrdinalPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

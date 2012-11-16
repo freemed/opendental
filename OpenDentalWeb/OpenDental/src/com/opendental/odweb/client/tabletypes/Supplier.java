@@ -58,14 +58,30 @@ public class Supplier {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SupplierNum=Integer.valueOf(doc.getElementsByTagName("SupplierNum").item(0).getFirstChild().getNodeValue());
-				Name=doc.getElementsByTagName("Name").item(0).getFirstChild().getNodeValue();
-				Phone=doc.getElementsByTagName("Phone").item(0).getFirstChild().getNodeValue();
-				CustomerId=doc.getElementsByTagName("CustomerId").item(0).getFirstChild().getNodeValue();
-				Website=doc.getElementsByTagName("Website").item(0).getFirstChild().getNodeValue();
-				UserName=doc.getElementsByTagName("UserName").item(0).getFirstChild().getNodeValue();
-				Password=doc.getElementsByTagName("Password").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"SupplierNum")!=null) {
+					SupplierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Name")!=null) {
+					Name=Serializing.GetXmlNodeValue(doc,"Name");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CustomerId")!=null) {
+					CustomerId=Serializing.GetXmlNodeValue(doc,"CustomerId");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Website")!=null) {
+					Website=Serializing.GetXmlNodeValue(doc,"Website");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserName")!=null) {
+					UserName=Serializing.GetXmlNodeValue(doc,"UserName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

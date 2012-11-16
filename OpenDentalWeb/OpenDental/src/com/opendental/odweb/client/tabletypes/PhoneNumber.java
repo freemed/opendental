@@ -38,9 +38,15 @@ public class PhoneNumber {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PhoneNumberNum=Integer.valueOf(doc.getElementsByTagName("PhoneNumberNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				PhoneNumberVal=doc.getElementsByTagName("PhoneNumberVal").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"PhoneNumberNum")!=null) {
+					PhoneNumberNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneNumberNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PhoneNumberVal")!=null) {
+					PhoneNumberVal=Serializing.GetXmlNodeValue(doc,"PhoneNumberVal");
+				}
 			}
 			catch(Exception e) {
 				throw e;

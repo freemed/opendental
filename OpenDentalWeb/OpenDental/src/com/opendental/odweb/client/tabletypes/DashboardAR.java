@@ -44,10 +44,18 @@ public class DashboardAR {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DashboardARNum=Integer.valueOf(doc.getElementsByTagName("DashboardARNum").item(0).getFirstChild().getNodeValue());
-				DateCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCalc").item(0).getFirstChild().getNodeValue());
-				BalTotal=Double.valueOf(doc.getElementsByTagName("BalTotal").item(0).getFirstChild().getNodeValue());
-				InsEst=Double.valueOf(doc.getElementsByTagName("InsEst").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"DashboardARNum")!=null) {
+					DashboardARNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DashboardARNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCalc")!=null) {
+					DateCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCalc"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BalTotal")!=null) {
+					BalTotal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"BalTotal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsEst")!=null) {
+					InsEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsEst"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

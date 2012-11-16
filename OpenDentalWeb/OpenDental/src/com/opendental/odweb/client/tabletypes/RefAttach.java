@@ -72,17 +72,39 @@ public class RefAttach {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RefAttachNum=Integer.valueOf(doc.getElementsByTagName("RefAttachNum").item(0).getFirstChild().getNodeValue());
-				ReferralNum=Integer.valueOf(doc.getElementsByTagName("ReferralNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				RefDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("RefDate").item(0).getFirstChild().getNodeValue());
-				IsFrom=(doc.getElementsByTagName("IsFrom").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				RefToStatus=ReferralToStatus.values()[Integer.valueOf(doc.getElementsByTagName("RefToStatus").item(0).getFirstChild().getNodeValue())];
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				IsTransitionOfCare=(doc.getElementsByTagName("IsTransitionOfCare").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				DateProcComplete=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateProcComplete").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"RefAttachNum")!=null) {
+					RefAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RefAttachNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReferralNum")!=null) {
+					ReferralNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReferralNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RefDate")!=null) {
+					RefDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"RefDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsFrom")!=null) {
+					IsFrom=(Serializing.GetXmlNodeValue(doc,"IsFrom")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RefToStatus")!=null) {
+					RefToStatus=ReferralToStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RefToStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsTransitionOfCare")!=null) {
+					IsTransitionOfCare=(Serializing.GetXmlNodeValue(doc,"IsTransitionOfCare")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateProcComplete")!=null) {
+					DateProcComplete=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateProcComplete"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

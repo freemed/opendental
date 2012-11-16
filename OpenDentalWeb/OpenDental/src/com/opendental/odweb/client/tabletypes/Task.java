@@ -80,19 +80,45 @@ public class Task {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
-				TaskListNum=Integer.valueOf(doc.getElementsByTagName("TaskListNum").item(0).getFirstChild().getNodeValue());
-				DateTask=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTask").item(0).getFirstChild().getNodeValue());
-				KeyNum=Integer.valueOf(doc.getElementsByTagName("KeyNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				TaskStatus=TaskStatusEnum.values()[Integer.valueOf(doc.getElementsByTagName("TaskStatus").item(0).getFirstChild().getNodeValue())];
-				IsRepeating=(doc.getElementsByTagName("IsRepeating").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateType=TaskDateType.values()[Integer.valueOf(doc.getElementsByTagName("DateType").item(0).getFirstChild().getNodeValue())];
-				FromNum=Integer.valueOf(doc.getElementsByTagName("FromNum").item(0).getFirstChild().getNodeValue());
-				ObjectType=TaskObjectType.values()[Integer.valueOf(doc.getElementsByTagName("ObjectType").item(0).getFirstChild().getNodeValue())];
-				DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				DateTimeFinished=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeFinished").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskListNum")!=null) {
+					TaskListNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTask")!=null) {
+					DateTask=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTask"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"KeyNum")!=null) {
+					KeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"KeyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskStatus")!=null) {
+					TaskStatus=TaskStatusEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsRepeating")!=null) {
+					IsRepeating=(Serializing.GetXmlNodeValue(doc,"IsRepeating")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateType")!=null) {
+					DateType=TaskDateType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DateType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FromNum")!=null) {
+					FromNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FromNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObjectType")!=null) {
+					ObjectType=TaskObjectType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeEntry")!=null) {
+					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeFinished")!=null) {
+					DateTimeFinished=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeFinished"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -76,18 +76,42 @@ public class RegistrationKey {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RegistrationKeyNum=Integer.valueOf(doc.getElementsByTagName("RegistrationKeyNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				RegKey=doc.getElementsByTagName("RegKey").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				DateStarted=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStarted").item(0).getFirstChild().getNodeValue());
-				DateDisabled=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateDisabled").item(0).getFirstChild().getNodeValue());
-				DateEnded=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEnded").item(0).getFirstChild().getNodeValue());
-				IsForeign=(doc.getElementsByTagName("IsForeign").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				UsesServerVersion=(doc.getElementsByTagName("UsesServerVersion").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsFreeVersion=(doc.getElementsByTagName("IsFreeVersion").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsOnlyForTesting=(doc.getElementsByTagName("IsOnlyForTesting").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				VotesAllotted=Integer.valueOf(doc.getElementsByTagName("VotesAllotted").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"RegistrationKeyNum")!=null) {
+					RegistrationKeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RegistrationKeyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RegKey")!=null) {
+					RegKey=Serializing.GetXmlNodeValue(doc,"RegKey");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStarted")!=null) {
+					DateStarted=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStarted"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateDisabled")!=null) {
+					DateDisabled=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDisabled"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEnded")!=null) {
+					DateEnded=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEnded"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsForeign")!=null) {
+					IsForeign=(Serializing.GetXmlNodeValue(doc,"IsForeign")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UsesServerVersion")!=null) {
+					UsesServerVersion=(Serializing.GetXmlNodeValue(doc,"UsesServerVersion")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsFreeVersion")!=null) {
+					IsFreeVersion=(Serializing.GetXmlNodeValue(doc,"IsFreeVersion")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsOnlyForTesting")!=null) {
+					IsOnlyForTesting=(Serializing.GetXmlNodeValue(doc,"IsOnlyForTesting")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"VotesAllotted")!=null) {
+					VotesAllotted=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VotesAllotted"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

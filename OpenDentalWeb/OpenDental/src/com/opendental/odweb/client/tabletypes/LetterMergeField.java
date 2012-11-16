@@ -38,9 +38,15 @@ public class LetterMergeField {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				FieldNum=Integer.valueOf(doc.getElementsByTagName("FieldNum").item(0).getFirstChild().getNodeValue());
-				LetterMergeNum=Integer.valueOf(doc.getElementsByTagName("LetterMergeNum").item(0).getFirstChild().getNodeValue());
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"FieldNum")!=null) {
+					FieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LetterMergeNum")!=null) {
+					LetterMergeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LetterMergeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

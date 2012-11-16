@@ -42,10 +42,18 @@ public class PlannedAppt {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PlannedApptNum=Integer.valueOf(doc.getElementsByTagName("PlannedApptNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PlannedApptNum")!=null) {
+					PlannedApptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlannedApptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -42,10 +42,18 @@ public class TerminalActive {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TerminalActiveNum=Integer.valueOf(doc.getElementsByTagName("TerminalActiveNum").item(0).getFirstChild().getNodeValue());
-				ComputerName=doc.getElementsByTagName("ComputerName").item(0).getFirstChild().getNodeValue();
-				TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(doc.getElementsByTagName("TerminalStatus").item(0).getFirstChild().getNodeValue())];
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TerminalActiveNum")!=null) {
+					TerminalActiveNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TerminalActiveNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TerminalStatus")!=null) {
+					TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TerminalStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

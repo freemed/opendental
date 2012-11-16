@@ -54,13 +54,27 @@ public class EhrQuarterlyKey {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EhrQuarterlyKeyNum=Integer.valueOf(doc.getElementsByTagName("EhrQuarterlyKeyNum").item(0).getFirstChild().getNodeValue());
-				YearValue=Integer.valueOf(doc.getElementsByTagName("YearValue").item(0).getFirstChild().getNodeValue());
-				QuarterValue=Integer.valueOf(doc.getElementsByTagName("QuarterValue").item(0).getFirstChild().getNodeValue());
-				PracticeName=doc.getElementsByTagName("PracticeName").item(0).getFirstChild().getNodeValue();
-				KeyValue=doc.getElementsByTagName("KeyValue").item(0).getFirstChild().getNodeValue();
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EhrQuarterlyKeyNum")!=null) {
+					EhrQuarterlyKeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrQuarterlyKeyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"YearValue")!=null) {
+					YearValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"YearValue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"QuarterValue")!=null) {
+					QuarterValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuarterValue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PracticeName")!=null) {
+					PracticeName=Serializing.GetXmlNodeValue(doc,"PracticeName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"KeyValue")!=null) {
+					KeyValue=Serializing.GetXmlNodeValue(doc,"KeyValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
 			}
 			catch(Exception e) {
 				throw e;

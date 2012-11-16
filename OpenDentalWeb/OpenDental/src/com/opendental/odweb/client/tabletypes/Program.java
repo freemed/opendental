@@ -58,14 +58,30 @@ public class Program {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProgramNum=Integer.valueOf(doc.getElementsByTagName("ProgramNum").item(0).getFirstChild().getNodeValue());
-				ProgName=doc.getElementsByTagName("ProgName").item(0).getFirstChild().getNodeValue();
-				ProgDesc=doc.getElementsByTagName("ProgDesc").item(0).getFirstChild().getNodeValue();
-				Enabled=(doc.getElementsByTagName("Enabled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Path=doc.getElementsByTagName("Path").item(0).getFirstChild().getNodeValue();
-				CommandLine=doc.getElementsByTagName("CommandLine").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				PluginDllName=doc.getElementsByTagName("PluginDllName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProgramNum")!=null) {
+					ProgramNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProgName")!=null) {
+					ProgName=Serializing.GetXmlNodeValue(doc,"ProgName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProgDesc")!=null) {
+					ProgDesc=Serializing.GetXmlNodeValue(doc,"ProgDesc");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Enabled")!=null) {
+					Enabled=(Serializing.GetXmlNodeValue(doc,"Enabled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Path")!=null) {
+					Path=Serializing.GetXmlNodeValue(doc,"Path");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CommandLine")!=null) {
+					CommandLine=Serializing.GetXmlNodeValue(doc,"CommandLine");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PluginDllName")!=null) {
+					PluginDllName=Serializing.GetXmlNodeValue(doc,"PluginDllName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -120,29 +120,75 @@ public class Documentod {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DocNum=Integer.valueOf(doc.getElementsByTagName("DocNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
-				DocCategory=Integer.valueOf(doc.getElementsByTagName("DocCategory").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
-				ImgType=ImageType.values()[Integer.valueOf(doc.getElementsByTagName("ImgType").item(0).getFirstChild().getNodeValue())];
-				IsFlipped=(doc.getElementsByTagName("IsFlipped").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DegreesRotated=Integer.valueOf(doc.getElementsByTagName("DegreesRotated").item(0).getFirstChild().getNodeValue());
-				ToothNumbers=doc.getElementsByTagName("ToothNumbers").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();
-				CropX=Integer.valueOf(doc.getElementsByTagName("CropX").item(0).getFirstChild().getNodeValue());
-				CropY=Integer.valueOf(doc.getElementsByTagName("CropY").item(0).getFirstChild().getNodeValue());
-				CropW=Integer.valueOf(doc.getElementsByTagName("CropW").item(0).getFirstChild().getNodeValue());
-				CropH=Integer.valueOf(doc.getElementsByTagName("CropH").item(0).getFirstChild().getNodeValue());
-				WindowingMin=Integer.valueOf(doc.getElementsByTagName("WindowingMin").item(0).getFirstChild().getNodeValue());
-				WindowingMax=Integer.valueOf(doc.getElementsByTagName("WindowingMax").item(0).getFirstChild().getNodeValue());
-				MountItemNum=Integer.valueOf(doc.getElementsByTagName("MountItemNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				RawBase64=doc.getElementsByTagName("RawBase64").item(0).getFirstChild().getNodeValue();
-				Thumbnail=doc.getElementsByTagName("Thumbnail").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DocNum")!=null) {
+					DocNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DocCategory")!=null) {
+					DocCategory=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocCategory"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ImgType")!=null) {
+					ImgType=ImageType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ImgType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsFlipped")!=null) {
+					IsFlipped=(Serializing.GetXmlNodeValue(doc,"IsFlipped")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DegreesRotated")!=null) {
+					DegreesRotated=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DegreesRotated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothNumbers")!=null) {
+					ToothNumbers=Serializing.GetXmlNodeValue(doc,"ToothNumbers");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CropX")!=null) {
+					CropX=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropX"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CropY")!=null) {
+					CropY=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropY"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CropW")!=null) {
+					CropW=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropW"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CropH")!=null) {
+					CropH=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropH"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WindowingMin")!=null) {
+					WindowingMin=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"WindowingMin"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WindowingMax")!=null) {
+					WindowingMax=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"WindowingMax"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MountItemNum")!=null) {
+					MountItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Thumbnail")!=null) {
+					Thumbnail=Serializing.GetXmlNodeValue(doc,"Thumbnail");
+				}
 			}
 			catch(Exception e) {
 				throw e;

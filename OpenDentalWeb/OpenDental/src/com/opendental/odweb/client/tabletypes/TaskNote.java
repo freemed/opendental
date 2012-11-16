@@ -48,11 +48,21 @@ public class TaskNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TaskNoteNum=Integer.valueOf(doc.getElementsByTagName("TaskNoteNum").item(0).getFirstChild().getNodeValue());
-				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				DateTimeNote=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeNote").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"TaskNoteNum")!=null) {
+					TaskNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNoteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeNote")!=null) {
+					DateTimeNote=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeNote"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

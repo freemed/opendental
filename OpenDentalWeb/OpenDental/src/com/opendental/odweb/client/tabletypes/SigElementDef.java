@@ -54,13 +54,27 @@ public class SigElementDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SigElementDefNum=Integer.valueOf(doc.getElementsByTagName("SigElementDefNum").item(0).getFirstChild().getNodeValue());
-				LightRow=Byte.valueOf(doc.getElementsByTagName("LightRow").item(0).getFirstChild().getNodeValue());
-				LightColor=Integer.valueOf(doc.getElementsByTagName("LightColor").item(0).getFirstChild().getNodeValue());
-				SigElementType=SignalElementType.values()[Integer.valueOf(doc.getElementsByTagName("SigElementType").item(0).getFirstChild().getNodeValue())];
-				SigText=doc.getElementsByTagName("SigText").item(0).getFirstChild().getNodeValue();
-				Sound=doc.getElementsByTagName("Sound").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SigElementDefNum")!=null) {
+					SigElementDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LightRow")!=null) {
+					LightRow=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"LightRow"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LightColor")!=null) {
+					LightColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LightColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigElementType")!=null) {
+					SigElementType=SignalElementType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigText")!=null) {
+					SigText=Serializing.GetXmlNodeValue(doc,"SigText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Sound")!=null) {
+					Sound=Serializing.GetXmlNodeValue(doc,"Sound");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

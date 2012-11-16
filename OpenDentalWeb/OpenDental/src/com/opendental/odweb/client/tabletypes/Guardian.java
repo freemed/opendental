@@ -42,10 +42,18 @@ public class Guardian {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				GuardianNum=Integer.valueOf(doc.getElementsByTagName("GuardianNum").item(0).getFirstChild().getNodeValue());
-				PatNumChild=Integer.valueOf(doc.getElementsByTagName("PatNumChild").item(0).getFirstChild().getNodeValue());
-				PatNumGuardian=Integer.valueOf(doc.getElementsByTagName("PatNumGuardian").item(0).getFirstChild().getNodeValue());
-				Relationship=GuardianRelationship.values()[Integer.valueOf(doc.getElementsByTagName("Relationship").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"GuardianNum")!=null) {
+					GuardianNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GuardianNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNumChild")!=null) {
+					PatNumChild=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumChild"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNumGuardian")!=null) {
+					PatNumGuardian=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumGuardian"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Relationship")!=null) {
+					Relationship=GuardianRelationship.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Relationship"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

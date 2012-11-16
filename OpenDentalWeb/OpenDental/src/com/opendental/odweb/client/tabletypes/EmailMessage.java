@@ -60,14 +60,30 @@ public class EmailMessage {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EmailMessageNum=Integer.valueOf(doc.getElementsByTagName("EmailMessageNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ToAddress=doc.getElementsByTagName("ToAddress").item(0).getFirstChild().getNodeValue();
-				FromAddress=doc.getElementsByTagName("FromAddress").item(0).getFirstChild().getNodeValue();
-				Subject=doc.getElementsByTagName("Subject").item(0).getFirstChild().getNodeValue();
-				BodyText=doc.getElementsByTagName("BodyText").item(0).getFirstChild().getNodeValue();
-				MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("MsgDateTime").item(0).getFirstChild().getNodeValue());
-				SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(doc.getElementsByTagName("SentOrReceived").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"EmailMessageNum")!=null) {
+					EmailMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailMessageNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToAddress")!=null) {
+					ToAddress=Serializing.GetXmlNodeValue(doc,"ToAddress");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FromAddress")!=null) {
+					FromAddress=Serializing.GetXmlNodeValue(doc,"FromAddress");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Subject")!=null) {
+					Subject=Serializing.GetXmlNodeValue(doc,"Subject");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BodyText")!=null) {
+					BodyText=Serializing.GetXmlNodeValue(doc,"BodyText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MsgDateTime")!=null) {
+					MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"MsgDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SentOrReceived")!=null) {
+					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SentOrReceived"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

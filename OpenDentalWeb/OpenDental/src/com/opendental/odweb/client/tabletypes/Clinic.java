@@ -74,18 +74,42 @@ public class Clinic {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				Address2=doc.getElementsByTagName("Address2").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				Phone=doc.getElementsByTagName("Phone").item(0).getFirstChild().getNodeValue();
-				BankNumber=doc.getElementsByTagName("BankNumber").item(0).getFirstChild().getNodeValue();
-				DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("DefaultPlaceService").item(0).getFirstChild().getNodeValue())];
-				InsBillingProv=Integer.valueOf(doc.getElementsByTagName("InsBillingProv").item(0).getFirstChild().getNodeValue());
-				Fax=doc.getElementsByTagName("Fax").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.GetXmlNodeValue(doc,"State");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BankNumber")!=null) {
+					BankNumber=Serializing.GetXmlNodeValue(doc,"BankNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultPlaceService")!=null) {
+					DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefaultPlaceService"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsBillingProv")!=null) {
+					InsBillingProv=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsBillingProv"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Fax")!=null) {
+					Fax=Serializing.GetXmlNodeValue(doc,"Fax");
+				}
 			}
 			catch(Exception e) {
 				throw e;

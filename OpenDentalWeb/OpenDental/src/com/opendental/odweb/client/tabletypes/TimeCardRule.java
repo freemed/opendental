@@ -50,12 +50,24 @@ public class TimeCardRule {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TimeCardRuleNum=Integer.valueOf(doc.getElementsByTagName("TimeCardRuleNum").item(0).getFirstChild().getNodeValue());
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				OverHoursPerDay=doc.getElementsByTagName("OverHoursPerDay").item(0).getFirstChild().getNodeValue();
-				AfterTimeOfDay=doc.getElementsByTagName("AfterTimeOfDay").item(0).getFirstChild().getNodeValue();
-				BeforeTimeOfDay=doc.getElementsByTagName("BeforeTimeOfDay").item(0).getFirstChild().getNodeValue();
-				AmtDiff=Double.valueOf(doc.getElementsByTagName("AmtDiff").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TimeCardRuleNum")!=null) {
+					TimeCardRuleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimeCardRuleNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OverHoursPerDay")!=null) {
+					OverHoursPerDay=Serializing.GetXmlNodeValue(doc,"OverHoursPerDay");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AfterTimeOfDay")!=null) {
+					AfterTimeOfDay=Serializing.GetXmlNodeValue(doc,"AfterTimeOfDay");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BeforeTimeOfDay")!=null) {
+					BeforeTimeOfDay=Serializing.GetXmlNodeValue(doc,"BeforeTimeOfDay");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AmtDiff")!=null) {
+					AmtDiff=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmtDiff"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

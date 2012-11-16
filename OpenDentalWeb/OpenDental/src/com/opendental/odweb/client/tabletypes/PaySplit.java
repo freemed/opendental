@@ -84,20 +84,48 @@ public class PaySplit {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SplitNum=Integer.valueOf(doc.getElementsByTagName("SplitNum").item(0).getFirstChild().getNodeValue());
-				SplitAmt=Double.valueOf(doc.getElementsByTagName("SplitAmt").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue());
-				PayNum=Integer.valueOf(doc.getElementsByTagName("PayNum").item(0).getFirstChild().getNodeValue());
-				IsDiscount=(doc.getElementsByTagName("IsDiscount").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DiscountType=Byte.valueOf(doc.getElementsByTagName("DiscountType").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
-				DatePay=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePay").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
-				UnearnedType=Integer.valueOf(doc.getElementsByTagName("UnearnedType").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SplitNum")!=null) {
+					SplitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SplitNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SplitAmt")!=null) {
+					SplitAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"SplitAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcDate")!=null) {
+					ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ProcDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayNum")!=null) {
+					PayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsDiscount")!=null) {
+					IsDiscount=(Serializing.GetXmlNodeValue(doc,"IsDiscount")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DiscountType")!=null) {
+					DiscountType=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"DiscountType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayPlanNum")!=null) {
+					PayPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatePay")!=null) {
+					DatePay=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePay"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UnearnedType")!=null) {
+					UnearnedType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UnearnedType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -140,34 +140,90 @@ public class ProcedureCode {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
-				ProcCode=doc.getElementsByTagName("ProcCode").item(0).getFirstChild().getNodeValue();
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				AbbrDesc=doc.getElementsByTagName("AbbrDesc").item(0).getFirstChild().getNodeValue();
-				ProcTime=doc.getElementsByTagName("ProcTime").item(0).getFirstChild().getNodeValue();
-				ProcCat=Integer.valueOf(doc.getElementsByTagName("ProcCat").item(0).getFirstChild().getNodeValue());
-				TreatArea=TreatmentArea.values()[Integer.valueOf(doc.getElementsByTagName("TreatArea").item(0).getFirstChild().getNodeValue())];
-				NoBillIns=(doc.getElementsByTagName("NoBillIns").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsProsth=(doc.getElementsByTagName("IsProsth").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DefaultNote=doc.getElementsByTagName("DefaultNote").item(0).getFirstChild().getNodeValue();
-				IsHygiene=(doc.getElementsByTagName("IsHygiene").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				GTypeNum=Integer.valueOf(doc.getElementsByTagName("GTypeNum").item(0).getFirstChild().getNodeValue());
-				AlternateCode1=doc.getElementsByTagName("AlternateCode1").item(0).getFirstChild().getNodeValue();
-				MedicalCode=doc.getElementsByTagName("MedicalCode").item(0).getFirstChild().getNodeValue();
-				IsTaxed=(doc.getElementsByTagName("IsTaxed").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PaintType=ToothPaintingType.values()[Integer.valueOf(doc.getElementsByTagName("PaintType").item(0).getFirstChild().getNodeValue())];
-				GraphicColor=Integer.valueOf(doc.getElementsByTagName("GraphicColor").item(0).getFirstChild().getNodeValue());
-				LaymanTerm=doc.getElementsByTagName("LaymanTerm").item(0).getFirstChild().getNodeValue();
-				IsCanadianLab=(doc.getElementsByTagName("IsCanadianLab").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PreExisting=(doc.getElementsByTagName("PreExisting").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				BaseUnits=Integer.valueOf(doc.getElementsByTagName("BaseUnits").item(0).getFirstChild().getNodeValue());
-				SubstitutionCode=doc.getElementsByTagName("SubstitutionCode").item(0).getFirstChild().getNodeValue();
-				SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(doc.getElementsByTagName("SubstOnlyIf").item(0).getFirstChild().getNodeValue())];
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				IsMultiVisit=(doc.getElementsByTagName("IsMultiVisit").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DrugNDC=doc.getElementsByTagName("DrugNDC").item(0).getFirstChild().getNodeValue();
-				RevenueCodeDefault=doc.getElementsByTagName("RevenueCodeDefault").item(0).getFirstChild().getNodeValue();
-				ProvNumDefault=Integer.valueOf(doc.getElementsByTagName("ProvNumDefault").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcCode")!=null) {
+					ProcCode=Serializing.GetXmlNodeValue(doc,"ProcCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AbbrDesc")!=null) {
+					AbbrDesc=Serializing.GetXmlNodeValue(doc,"AbbrDesc");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcTime")!=null) {
+					ProcTime=Serializing.GetXmlNodeValue(doc,"ProcTime");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcCat")!=null) {
+					ProcCat=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcCat"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TreatArea")!=null) {
+					TreatArea=TreatmentArea.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TreatArea"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoBillIns")!=null) {
+					NoBillIns=(Serializing.GetXmlNodeValue(doc,"NoBillIns")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsProsth")!=null) {
+					IsProsth=(Serializing.GetXmlNodeValue(doc,"IsProsth")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultNote")!=null) {
+					DefaultNote=Serializing.GetXmlNodeValue(doc,"DefaultNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHygiene")!=null) {
+					IsHygiene=(Serializing.GetXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GTypeNum")!=null) {
+					GTypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GTypeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AlternateCode1")!=null) {
+					AlternateCode1=Serializing.GetXmlNodeValue(doc,"AlternateCode1");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicalCode")!=null) {
+					MedicalCode=Serializing.GetXmlNodeValue(doc,"MedicalCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsTaxed")!=null) {
+					IsTaxed=(Serializing.GetXmlNodeValue(doc,"IsTaxed")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PaintType")!=null) {
+					PaintType=ToothPaintingType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PaintType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GraphicColor")!=null) {
+					GraphicColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GraphicColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LaymanTerm")!=null) {
+					LaymanTerm=Serializing.GetXmlNodeValue(doc,"LaymanTerm");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsCanadianLab")!=null) {
+					IsCanadianLab=(Serializing.GetXmlNodeValue(doc,"IsCanadianLab")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PreExisting")!=null) {
+					PreExisting=(Serializing.GetXmlNodeValue(doc,"PreExisting")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BaseUnits")!=null) {
+					BaseUnits=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BaseUnits"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SubstitutionCode")!=null) {
+					SubstitutionCode=Serializing.GetXmlNodeValue(doc,"SubstitutionCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SubstOnlyIf")!=null) {
+					SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SubstOnlyIf"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsMultiVisit")!=null) {
+					IsMultiVisit=(Serializing.GetXmlNodeValue(doc,"IsMultiVisit")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DrugNDC")!=null) {
+					DrugNDC=Serializing.GetXmlNodeValue(doc,"DrugNDC");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RevenueCodeDefault")!=null) {
+					RevenueCodeDefault=Serializing.GetXmlNodeValue(doc,"RevenueCodeDefault");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNumDefault")!=null) {
+					ProvNumDefault=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNumDefault"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

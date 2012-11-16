@@ -58,14 +58,30 @@ public class ReplicationServer {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReplicationServerNum=Integer.valueOf(doc.getElementsByTagName("ReplicationServerNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				ServerId=Integer.valueOf(doc.getElementsByTagName("ServerId").item(0).getFirstChild().getNodeValue());
-				RangeStart=Integer.valueOf(doc.getElementsByTagName("RangeStart").item(0).getFirstChild().getNodeValue());
-				RangeEnd=Integer.valueOf(doc.getElementsByTagName("RangeEnd").item(0).getFirstChild().getNodeValue());
-				AtoZpath=doc.getElementsByTagName("AtoZpath").item(0).getFirstChild().getNodeValue();
-				UpdateBlocked=(doc.getElementsByTagName("UpdateBlocked").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SlaveMonitor=doc.getElementsByTagName("SlaveMonitor").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ReplicationServerNum")!=null) {
+					ReplicationServerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReplicationServerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ServerId")!=null) {
+					ServerId=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ServerId"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RangeStart")!=null) {
+					RangeStart=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RangeStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RangeEnd")!=null) {
+					RangeEnd=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RangeEnd"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AtoZpath")!=null) {
+					AtoZpath=Serializing.GetXmlNodeValue(doc,"AtoZpath");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UpdateBlocked")!=null) {
+					UpdateBlocked=(Serializing.GetXmlNodeValue(doc,"UpdateBlocked")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SlaveMonitor")!=null) {
+					SlaveMonitor=Serializing.GetXmlNodeValue(doc,"SlaveMonitor");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -34,8 +34,12 @@ public class UserGroup {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				UserGroupNum=Integer.valueOf(doc.getElementsByTagName("UserGroupNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
 			}
 			catch(Exception e) {
 				throw e;

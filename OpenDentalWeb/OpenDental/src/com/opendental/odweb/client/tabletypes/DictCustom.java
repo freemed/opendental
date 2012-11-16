@@ -34,8 +34,12 @@ public class DictCustom {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DictCustomNum=Integer.valueOf(doc.getElementsByTagName("DictCustomNum").item(0).getFirstChild().getNodeValue());
-				WordText=doc.getElementsByTagName("WordText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DictCustomNum")!=null) {
+					DictCustomNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DictCustomNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WordText")!=null) {
+					WordText=Serializing.GetXmlNodeValue(doc,"WordText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

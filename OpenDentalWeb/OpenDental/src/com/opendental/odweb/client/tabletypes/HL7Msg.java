@@ -56,13 +56,27 @@ public class HL7Msg {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				HL7MsgNum=Integer.valueOf(doc.getElementsByTagName("HL7MsgNum").item(0).getFirstChild().getNodeValue());
-				HL7Status=HL7MessageStatus.values()[Integer.valueOf(doc.getElementsByTagName("HL7Status").item(0).getFirstChild().getNodeValue())];
-				MsgText=doc.getElementsByTagName("MsgText").item(0).getFirstChild().getNodeValue();
-				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"HL7MsgNum")!=null) {
+					HL7MsgNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7MsgNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7Status")!=null) {
+					HL7Status=HL7MessageStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7Status"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MsgText")!=null) {
+					MsgText=Serializing.GetXmlNodeValue(doc,"MsgText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

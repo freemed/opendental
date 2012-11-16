@@ -76,18 +76,42 @@ public class Pharmacy {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PharmacyNum=Integer.valueOf(doc.getElementsByTagName("PharmacyNum").item(0).getFirstChild().getNodeValue());
-				PharmID=doc.getElementsByTagName("PharmID").item(0).getFirstChild().getNodeValue();
-				StoreName=doc.getElementsByTagName("StoreName").item(0).getFirstChild().getNodeValue();
-				Phone=doc.getElementsByTagName("Phone").item(0).getFirstChild().getNodeValue();
-				Fax=doc.getElementsByTagName("Fax").item(0).getFirstChild().getNodeValue();
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				Address2=doc.getElementsByTagName("Address2").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PharmacyNum")!=null) {
+					PharmacyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PharmacyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PharmID")!=null) {
+					PharmID=Serializing.GetXmlNodeValue(doc,"PharmID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StoreName")!=null) {
+					StoreName=Serializing.GetXmlNodeValue(doc,"StoreName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Fax")!=null) {
+					Fax=Serializing.GetXmlNodeValue(doc,"Fax");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.GetXmlNodeValue(doc,"State");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -44,10 +44,18 @@ public class PayPeriod {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PayPeriodNum=Integer.valueOf(doc.getElementsByTagName("PayPeriodNum").item(0).getFirstChild().getNodeValue());
-				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
-				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
-				DatePaycheck=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePaycheck").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PayPeriodNum")!=null) {
+					PayPeriodNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPeriodNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatePaycheck")!=null) {
+					DatePaycheck=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePaycheck"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

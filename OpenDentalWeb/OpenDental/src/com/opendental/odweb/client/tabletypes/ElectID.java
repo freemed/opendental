@@ -50,12 +50,24 @@ public class ElectID {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ElectIDNum=Integer.valueOf(doc.getElementsByTagName("ElectIDNum").item(0).getFirstChild().getNodeValue());
-				PayorID=doc.getElementsByTagName("PayorID").item(0).getFirstChild().getNodeValue();
-				CarrierName=doc.getElementsByTagName("CarrierName").item(0).getFirstChild().getNodeValue();
-				IsMedicaid=(doc.getElementsByTagName("IsMedicaid").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ProviderTypes=doc.getElementsByTagName("ProviderTypes").item(0).getFirstChild().getNodeValue();
-				Comments=doc.getElementsByTagName("Comments").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ElectIDNum")!=null) {
+					ElectIDNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElectIDNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayorID")!=null) {
+					PayorID=Serializing.GetXmlNodeValue(doc,"PayorID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierName")!=null) {
+					CarrierName=Serializing.GetXmlNodeValue(doc,"CarrierName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsMedicaid")!=null) {
+					IsMedicaid=(Serializing.GetXmlNodeValue(doc,"IsMedicaid")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProviderTypes")!=null) {
+					ProviderTypes=Serializing.GetXmlNodeValue(doc,"ProviderTypes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				}
 			}
 			catch(Exception e) {
 				throw e;

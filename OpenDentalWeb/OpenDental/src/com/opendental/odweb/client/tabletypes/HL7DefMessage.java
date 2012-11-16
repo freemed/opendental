@@ -54,13 +54,27 @@ public class HL7DefMessage {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				HL7DefMessageNum=Integer.valueOf(doc.getElementsByTagName("HL7DefMessageNum").item(0).getFirstChild().getNodeValue());
-				HL7DefNum=Integer.valueOf(doc.getElementsByTagName("HL7DefNum").item(0).getFirstChild().getNodeValue());
-				MessageType=MessageTypeHL7.values()[Integer.valueOf(doc.getElementsByTagName("MessageType").item(0).getFirstChild().getNodeValue())];
-				EventType=EventTypeHL7.values()[Integer.valueOf(doc.getElementsByTagName("EventType").item(0).getFirstChild().getNodeValue())];
-				InOrOut=InOutHL7.values()[Integer.valueOf(doc.getElementsByTagName("InOrOut").item(0).getFirstChild().getNodeValue())];
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
+					HL7DefMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefNum")!=null) {
+					HL7DefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MessageType")!=null) {
+					MessageType=MessageTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MessageType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EventType")!=null) {
+					EventType=EventTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EventType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InOrOut")!=null) {
+					InOrOut=InOutHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InOrOut"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

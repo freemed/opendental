@@ -68,16 +68,36 @@ public class OrionProc {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				OrionProcNum=Integer.valueOf(doc.getElementsByTagName("OrionProcNum").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				DPC=OrionDPC.values()[Integer.valueOf(doc.getElementsByTagName("DPC").item(0).getFirstChild().getNodeValue())];
-				DPCpost=OrionDPC.values()[Integer.valueOf(doc.getElementsByTagName("DPCpost").item(0).getFirstChild().getNodeValue())];
-				DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateScheduleBy").item(0).getFirstChild().getNodeValue());
-				DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStopClock").item(0).getFirstChild().getNodeValue());
-				Status2=OrionStatus.values()[Integer.valueOf(doc.getElementsByTagName("Status2").item(0).getFirstChild().getNodeValue())];
-				IsOnCall=(doc.getElementsByTagName("IsOnCall").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsEffectiveComm=(doc.getElementsByTagName("IsEffectiveComm").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsRepair=(doc.getElementsByTagName("IsRepair").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"OrionProcNum")!=null) {
+					OrionProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrionProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DPC")!=null) {
+					DPC=OrionDPC.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DPC"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DPCpost")!=null) {
+					DPCpost=OrionDPC.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DPCpost"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateScheduleBy")!=null) {
+					DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateScheduleBy"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStopClock")!=null) {
+					DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStopClock"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Status2")!=null) {
+					Status2=OrionStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Status2"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsOnCall")!=null) {
+					IsOnCall=(Serializing.GetXmlNodeValue(doc,"IsOnCall")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsEffectiveComm")!=null) {
+					IsEffectiveComm=(Serializing.GetXmlNodeValue(doc,"IsEffectiveComm")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsRepair")!=null) {
+					IsRepair=(Serializing.GetXmlNodeValue(doc,"IsRepair")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

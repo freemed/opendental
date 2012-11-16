@@ -48,11 +48,21 @@ public class CustRefEntry {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CustRefEntryNum=Integer.valueOf(doc.getElementsByTagName("CustRefEntryNum").item(0).getFirstChild().getNodeValue());
-				PatNumCust=Integer.valueOf(doc.getElementsByTagName("PatNumCust").item(0).getFirstChild().getNodeValue());
-				PatNumRef=Integer.valueOf(doc.getElementsByTagName("PatNumRef").item(0).getFirstChild().getNodeValue());
-				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"CustRefEntryNum")!=null) {
+					CustRefEntryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CustRefEntryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNumCust")!=null) {
+					PatNumCust=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumCust"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNumRef")!=null) {
+					PatNumRef=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumRef"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -56,13 +56,27 @@ public class RepeatCharge {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RepeatChargeNum=Integer.valueOf(doc.getElementsByTagName("RepeatChargeNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ProcCode=doc.getElementsByTagName("ProcCode").item(0).getFirstChild().getNodeValue();
-				ChargeAmt=Double.valueOf(doc.getElementsByTagName("ChargeAmt").item(0).getFirstChild().getNodeValue());
-				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
-				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"RepeatChargeNum")!=null) {
+					RepeatChargeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RepeatChargeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcCode")!=null) {
+					ProcCode=Serializing.GetXmlNodeValue(doc,"ProcCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ChargeAmt")!=null) {
+					ChargeAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ChargeAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

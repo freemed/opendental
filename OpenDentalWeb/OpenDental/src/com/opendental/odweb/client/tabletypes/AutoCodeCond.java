@@ -38,9 +38,15 @@ public class AutoCodeCond {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AutoCodeCondNum=Integer.valueOf(doc.getElementsByTagName("AutoCodeCondNum").item(0).getFirstChild().getNodeValue());
-				AutoCodeItemNum=Integer.valueOf(doc.getElementsByTagName("AutoCodeItemNum").item(0).getFirstChild().getNodeValue());
-				Cond=AutoCondition.values()[Integer.valueOf(doc.getElementsByTagName("Cond").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"AutoCodeCondNum")!=null) {
+					AutoCodeCondNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoCodeCondNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AutoCodeItemNum")!=null) {
+					AutoCodeItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoCodeItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Cond")!=null) {
+					Cond=AutoCondition.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Cond"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

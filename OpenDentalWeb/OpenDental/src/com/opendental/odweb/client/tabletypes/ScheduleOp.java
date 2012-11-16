@@ -38,9 +38,15 @@ public class ScheduleOp {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ScheduleOpNum=Integer.valueOf(doc.getElementsByTagName("ScheduleOpNum").item(0).getFirstChild().getNodeValue());
-				ScheduleNum=Integer.valueOf(doc.getElementsByTagName("ScheduleNum").item(0).getFirstChild().getNodeValue());
-				OperatoryNum=Integer.valueOf(doc.getElementsByTagName("OperatoryNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ScheduleOpNum")!=null) {
+					ScheduleOpNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScheduleOpNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScheduleNum")!=null) {
+					ScheduleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScheduleNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OperatoryNum")!=null) {
+					OperatoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OperatoryNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

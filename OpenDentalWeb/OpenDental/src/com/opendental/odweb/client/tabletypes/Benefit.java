@@ -74,18 +74,42 @@ public class Benefit {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				BenefitNum=Integer.valueOf(doc.getElementsByTagName("BenefitNum").item(0).getFirstChild().getNodeValue());
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				PatPlanNum=Integer.valueOf(doc.getElementsByTagName("PatPlanNum").item(0).getFirstChild().getNodeValue());
-				CovCatNum=Integer.valueOf(doc.getElementsByTagName("CovCatNum").item(0).getFirstChild().getNodeValue());
-				BenefitType=InsBenefitType.values()[Integer.valueOf(doc.getElementsByTagName("BenefitType").item(0).getFirstChild().getNodeValue())];
-				Percent=Integer.valueOf(doc.getElementsByTagName("Percent").item(0).getFirstChild().getNodeValue());
-				MonetaryAmt=Double.valueOf(doc.getElementsByTagName("MonetaryAmt").item(0).getFirstChild().getNodeValue());
-				TimePeriod=BenefitTimePeriod.values()[Integer.valueOf(doc.getElementsByTagName("TimePeriod").item(0).getFirstChild().getNodeValue())];
-				QuantityQualifier=BenefitQuantity.values()[Integer.valueOf(doc.getElementsByTagName("QuantityQualifier").item(0).getFirstChild().getNodeValue())];
-				Quantity=Byte.valueOf(doc.getElementsByTagName("Quantity").item(0).getFirstChild().getNodeValue());
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
-				CoverageLevel=BenefitCoverageLevel.values()[Integer.valueOf(doc.getElementsByTagName("CoverageLevel").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"BenefitNum")!=null) {
+					BenefitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BenefitNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatPlanNum")!=null) {
+					PatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BenefitType")!=null) {
+					BenefitType=InsBenefitType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BenefitType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Percent")!=null) {
+					Percent=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Percent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MonetaryAmt")!=null) {
+					MonetaryAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MonetaryAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimePeriod")!=null) {
+					TimePeriod=BenefitTimePeriod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimePeriod"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"QuantityQualifier")!=null) {
+					QuantityQualifier=BenefitQuantity.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuantityQualifier"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Quantity")!=null) {
+					Quantity=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Quantity"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CoverageLevel")!=null) {
+					CoverageLevel=BenefitCoverageLevel.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CoverageLevel"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

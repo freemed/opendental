@@ -48,11 +48,21 @@ public class Transaction {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TransactionNum=Integer.valueOf(doc.getElementsByTagName("TransactionNum").item(0).getFirstChild().getNodeValue());
-				DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
-				PayNum=Integer.valueOf(doc.getElementsByTagName("PayNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TransactionNum")!=null) {
+					TransactionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransactionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeEntry")!=null) {
+					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayNum")!=null) {
+					PayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

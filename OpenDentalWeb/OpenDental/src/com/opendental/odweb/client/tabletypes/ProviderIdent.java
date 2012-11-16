@@ -46,11 +46,21 @@ public class ProviderIdent {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProviderIdentNum=Integer.valueOf(doc.getElementsByTagName("ProviderIdentNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				PayorID=doc.getElementsByTagName("PayorID").item(0).getFirstChild().getNodeValue();
-				SuppIDType=ProviderSupplementalID.values()[Integer.valueOf(doc.getElementsByTagName("SuppIDType").item(0).getFirstChild().getNodeValue())];
-				IDNumber=doc.getElementsByTagName("IDNumber").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProviderIdentNum")!=null) {
+					ProviderIdentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProviderIdentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayorID")!=null) {
+					PayorID=Serializing.GetXmlNodeValue(doc,"PayorID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SuppIDType")!=null) {
+					SuppIDType=ProviderSupplementalID.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SuppIDType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IDNumber")!=null) {
+					IDNumber=Serializing.GetXmlNodeValue(doc,"IDNumber");
+				}
 			}
 			catch(Exception e) {
 				throw e;

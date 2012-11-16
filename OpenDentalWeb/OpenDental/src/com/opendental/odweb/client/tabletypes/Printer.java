@@ -46,11 +46,21 @@ public class Printer {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PrinterNum=Integer.valueOf(doc.getElementsByTagName("PrinterNum").item(0).getFirstChild().getNodeValue());
-				ComputerNum=Integer.valueOf(doc.getElementsByTagName("ComputerNum").item(0).getFirstChild().getNodeValue());
-				PrintSit=PrintSituation.values()[Integer.valueOf(doc.getElementsByTagName("PrintSit").item(0).getFirstChild().getNodeValue())];
-				PrinterName=doc.getElementsByTagName("PrinterName").item(0).getFirstChild().getNodeValue();
-				DisplayPrompt=(doc.getElementsByTagName("DisplayPrompt").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"PrinterNum")!=null) {
+					PrinterNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PrinterNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerNum")!=null) {
+					ComputerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ComputerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PrintSit")!=null) {
+					PrintSit=PrintSituation.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PrintSit"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PrinterName")!=null) {
+					PrinterName=Serializing.GetXmlNodeValue(doc,"PrinterName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DisplayPrompt")!=null) {
+					DisplayPrompt=(Serializing.GetXmlNodeValue(doc,"DisplayPrompt")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

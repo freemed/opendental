@@ -64,15 +64,33 @@ public class Mount {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				MountNum=Integer.valueOf(doc.getElementsByTagName("MountNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DocCategory=Integer.valueOf(doc.getElementsByTagName("DocCategory").item(0).getFirstChild().getNodeValue());
-				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ImgType=ImageType.values()[Integer.valueOf(doc.getElementsByTagName("ImgType").item(0).getFirstChild().getNodeValue())];
-				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"MountNum")!=null) {
+					MountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DocCategory")!=null) {
+					DocCategory=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocCategory"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ImgType")!=null) {
+					ImgType=ImageType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ImgType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

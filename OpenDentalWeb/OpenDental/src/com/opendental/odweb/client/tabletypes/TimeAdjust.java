@@ -56,13 +56,27 @@ public class TimeAdjust {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TimeAdjustNum=Integer.valueOf(doc.getElementsByTagName("TimeAdjustNum").item(0).getFirstChild().getNodeValue());
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				TimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeEntry").item(0).getFirstChild().getNodeValue());
-				RegHours=doc.getElementsByTagName("RegHours").item(0).getFirstChild().getNodeValue();
-				OTimeHours=doc.getElementsByTagName("OTimeHours").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				IsAuto=(doc.getElementsByTagName("IsAuto").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"TimeAdjustNum")!=null) {
+					TimeAdjustNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimeAdjustNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeEntry")!=null) {
+					TimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RegHours")!=null) {
+					RegHours=Serializing.GetXmlNodeValue(doc,"RegHours");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OTimeHours")!=null) {
+					OTimeHours=Serializing.GetXmlNodeValue(doc,"OTimeHours");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsAuto")!=null) {
+					IsAuto=(Serializing.GetXmlNodeValue(doc,"IsAuto")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

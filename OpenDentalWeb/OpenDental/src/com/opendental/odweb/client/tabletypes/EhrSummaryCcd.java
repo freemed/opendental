@@ -44,10 +44,18 @@ public class EhrSummaryCcd {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EhrSummaryCcdNum=Integer.valueOf(doc.getElementsByTagName("EhrSummaryCcdNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateSummary=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSummary").item(0).getFirstChild().getNodeValue());
-				ContentSummary=doc.getElementsByTagName("ContentSummary").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EhrSummaryCcdNum")!=null) {
+					EhrSummaryCcdNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrSummaryCcdNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateSummary")!=null) {
+					DateSummary=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSummary"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ContentSummary")!=null) {
+					ContentSummary=Serializing.GetXmlNodeValue(doc,"ContentSummary");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -42,10 +42,18 @@ public class QuestionDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				QuestionDefNum=Integer.valueOf(doc.getElementsByTagName("QuestionDefNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				QuestType=QuestionType.values()[Integer.valueOf(doc.getElementsByTagName("QuestType").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"QuestionDefNum")!=null) {
+					QuestionDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuestionDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"QuestType")!=null) {
+					QuestType=QuestionType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuestType"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -70,17 +70,39 @@ public class PerioMeasure {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PerioMeasureNum=Integer.valueOf(doc.getElementsByTagName("PerioMeasureNum").item(0).getFirstChild().getNodeValue());
-				PerioExamNum=Integer.valueOf(doc.getElementsByTagName("PerioExamNum").item(0).getFirstChild().getNodeValue());
-				SequenceType=PerioSequenceType.values()[Integer.valueOf(doc.getElementsByTagName("SequenceType").item(0).getFirstChild().getNodeValue())];
-				IntTooth=Integer.valueOf(doc.getElementsByTagName("IntTooth").item(0).getFirstChild().getNodeValue());
-				ToothValue=Integer.valueOf(doc.getElementsByTagName("ToothValue").item(0).getFirstChild().getNodeValue());
-				MBvalue=Integer.valueOf(doc.getElementsByTagName("MBvalue").item(0).getFirstChild().getNodeValue());
-				Bvalue=Integer.valueOf(doc.getElementsByTagName("Bvalue").item(0).getFirstChild().getNodeValue());
-				DBvalue=Integer.valueOf(doc.getElementsByTagName("DBvalue").item(0).getFirstChild().getNodeValue());
-				MLvalue=Integer.valueOf(doc.getElementsByTagName("MLvalue").item(0).getFirstChild().getNodeValue());
-				Lvalue=Integer.valueOf(doc.getElementsByTagName("Lvalue").item(0).getFirstChild().getNodeValue());
-				DLvalue=Integer.valueOf(doc.getElementsByTagName("DLvalue").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PerioMeasureNum")!=null) {
+					PerioMeasureNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PerioMeasureNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PerioExamNum")!=null) {
+					PerioExamNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PerioExamNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SequenceType")!=null) {
+					SequenceType=PerioSequenceType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SequenceType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IntTooth")!=null) {
+					IntTooth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"IntTooth"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothValue")!=null) {
+					ToothValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothValue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MBvalue")!=null) {
+					MBvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MBvalue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Bvalue")!=null) {
+					Bvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Bvalue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DBvalue")!=null) {
+					DBvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DBvalue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MLvalue")!=null) {
+					MLvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MLvalue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Lvalue")!=null) {
+					Lvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Lvalue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DLvalue")!=null) {
+					DLvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DLvalue"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

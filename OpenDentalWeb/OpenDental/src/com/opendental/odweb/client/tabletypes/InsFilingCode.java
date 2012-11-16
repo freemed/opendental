@@ -42,10 +42,18 @@ public class InsFilingCode {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				InsFilingCodeNum=Integer.valueOf(doc.getElementsByTagName("InsFilingCodeNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				EclaimCode=doc.getElementsByTagName("EclaimCode").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
+					InsFilingCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EclaimCode")!=null) {
+					EclaimCode=Serializing.GetXmlNodeValue(doc,"EclaimCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

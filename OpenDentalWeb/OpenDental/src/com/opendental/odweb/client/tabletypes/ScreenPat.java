@@ -42,10 +42,18 @@ public class ScreenPat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ScreenPatNum=Integer.valueOf(doc.getElementsByTagName("ScreenPatNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ScreenGroupNum=Integer.valueOf(doc.getElementsByTagName("ScreenGroupNum").item(0).getFirstChild().getNodeValue());
-				SheetNum=Integer.valueOf(doc.getElementsByTagName("SheetNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ScreenPatNum")!=null) {
+					ScreenPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenPatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum")!=null) {
+					ScreenGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SheetNum")!=null) {
+					SheetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

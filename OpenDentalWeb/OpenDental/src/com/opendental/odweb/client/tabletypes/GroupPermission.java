@@ -48,11 +48,21 @@ public class GroupPermission {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				GroupPermNum=Integer.valueOf(doc.getElementsByTagName("GroupPermNum").item(0).getFirstChild().getNodeValue());
-				NewerDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("NewerDate").item(0).getFirstChild().getNodeValue());
-				NewerDays=Integer.valueOf(doc.getElementsByTagName("NewerDays").item(0).getFirstChild().getNodeValue());
-				UserGroupNum=Integer.valueOf(doc.getElementsByTagName("UserGroupNum").item(0).getFirstChild().getNodeValue());
-				PermType=Permissions.values()[Integer.valueOf(doc.getElementsByTagName("PermType").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"GroupPermNum")!=null) {
+					GroupPermNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GroupPermNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NewerDate")!=null) {
+					NewerDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"NewerDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NewerDays")!=null) {
+					NewerDays=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"NewerDays"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PermType")!=null) {
+					PermType=Permissions.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PermType"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

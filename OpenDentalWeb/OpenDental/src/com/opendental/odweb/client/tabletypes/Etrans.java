@@ -104,25 +104,63 @@ public class Etrans {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EtransNum=Integer.valueOf(doc.getElementsByTagName("EtransNum").item(0).getFirstChild().getNodeValue());
-				DateTimeTrans=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeTrans").item(0).getFirstChild().getNodeValue());
-				ClearingHouseNum=Integer.valueOf(doc.getElementsByTagName("ClearingHouseNum").item(0).getFirstChild().getNodeValue());
-				Etype=EtransType.values()[Integer.valueOf(doc.getElementsByTagName("Etype").item(0).getFirstChild().getNodeValue())];
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				OfficeSequenceNumber=Integer.valueOf(doc.getElementsByTagName("OfficeSequenceNumber").item(0).getFirstChild().getNodeValue());
-				CarrierTransCounter=Integer.valueOf(doc.getElementsByTagName("CarrierTransCounter").item(0).getFirstChild().getNodeValue());
-				CarrierTransCounter2=Integer.valueOf(doc.getElementsByTagName("CarrierTransCounter2").item(0).getFirstChild().getNodeValue());
-				CarrierNum=Integer.valueOf(doc.getElementsByTagName("CarrierNum").item(0).getFirstChild().getNodeValue());
-				CarrierNum2=Integer.valueOf(doc.getElementsByTagName("CarrierNum2").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				BatchNumber=Integer.valueOf(doc.getElementsByTagName("BatchNumber").item(0).getFirstChild().getNodeValue());
-				AckCode=doc.getElementsByTagName("AckCode").item(0).getFirstChild().getNodeValue();
-				TransSetNum=Integer.valueOf(doc.getElementsByTagName("TransSetNum").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				EtransMessageTextNum=Integer.valueOf(doc.getElementsByTagName("EtransMessageTextNum").item(0).getFirstChild().getNodeValue());
-				AckEtransNum=Integer.valueOf(doc.getElementsByTagName("AckEtransNum").item(0).getFirstChild().getNodeValue());
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"EtransNum")!=null) {
+					EtransNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeTrans")!=null) {
+					DateTimeTrans=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeTrans"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClearingHouseNum")!=null) {
+					ClearingHouseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClearingHouseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Etype")!=null) {
+					Etype=EtransType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Etype"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OfficeSequenceNumber")!=null) {
+					OfficeSequenceNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OfficeSequenceNumber"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter")!=null) {
+					CarrierTransCounter=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter2")!=null) {
+					CarrierTransCounter2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierNum2")!=null) {
+					CarrierNum2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BatchNumber")!=null) {
+					BatchNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BatchNumber"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AckCode")!=null) {
+					AckCode=Serializing.GetXmlNodeValue(doc,"AckCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TransSetNum")!=null) {
+					TransSetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransSetNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
+					EtransMessageTextNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AckEtransNum")!=null) {
+					AckEtransNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AckEtransNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

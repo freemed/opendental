@@ -78,19 +78,45 @@ public class ClaimCondCodeLog {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimCondCodeLogNum=Integer.valueOf(doc.getElementsByTagName("ClaimCondCodeLogNum").item(0).getFirstChild().getNodeValue());
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				Code0=doc.getElementsByTagName("Code0").item(0).getFirstChild().getNodeValue();
-				Code1=doc.getElementsByTagName("Code1").item(0).getFirstChild().getNodeValue();
-				Code2=doc.getElementsByTagName("Code2").item(0).getFirstChild().getNodeValue();
-				Code3=doc.getElementsByTagName("Code3").item(0).getFirstChild().getNodeValue();
-				Code4=doc.getElementsByTagName("Code4").item(0).getFirstChild().getNodeValue();
-				Code5=doc.getElementsByTagName("Code5").item(0).getFirstChild().getNodeValue();
-				Code6=doc.getElementsByTagName("Code6").item(0).getFirstChild().getNodeValue();
-				Code7=doc.getElementsByTagName("Code7").item(0).getFirstChild().getNodeValue();
-				Code8=doc.getElementsByTagName("Code8").item(0).getFirstChild().getNodeValue();
-				Code9=doc.getElementsByTagName("Code9").item(0).getFirstChild().getNodeValue();
-				Code10=doc.getElementsByTagName("Code10").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ClaimCondCodeLogNum")!=null) {
+					ClaimCondCodeLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimCondCodeLogNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code0")!=null) {
+					Code0=Serializing.GetXmlNodeValue(doc,"Code0");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code1")!=null) {
+					Code1=Serializing.GetXmlNodeValue(doc,"Code1");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code2")!=null) {
+					Code2=Serializing.GetXmlNodeValue(doc,"Code2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code3")!=null) {
+					Code3=Serializing.GetXmlNodeValue(doc,"Code3");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code4")!=null) {
+					Code4=Serializing.GetXmlNodeValue(doc,"Code4");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code5")!=null) {
+					Code5=Serializing.GetXmlNodeValue(doc,"Code5");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code6")!=null) {
+					Code6=Serializing.GetXmlNodeValue(doc,"Code6");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code7")!=null) {
+					Code7=Serializing.GetXmlNodeValue(doc,"Code7");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code8")!=null) {
+					Code8=Serializing.GetXmlNodeValue(doc,"Code8");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code9")!=null) {
+					Code9=Serializing.GetXmlNodeValue(doc,"Code9");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Code10")!=null) {
+					Code10=Serializing.GetXmlNodeValue(doc,"Code10");
+				}
 			}
 			catch(Exception e) {
 				throw e;

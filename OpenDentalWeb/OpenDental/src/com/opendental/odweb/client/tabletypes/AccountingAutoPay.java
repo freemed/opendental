@@ -38,9 +38,15 @@ public class AccountingAutoPay {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AccountingAutoPayNum=Integer.valueOf(doc.getElementsByTagName("AccountingAutoPayNum").item(0).getFirstChild().getNodeValue());
-				PayType=Integer.valueOf(doc.getElementsByTagName("PayType").item(0).getFirstChild().getNodeValue());
-				PickList=doc.getElementsByTagName("PickList").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"AccountingAutoPayNum")!=null) {
+					AccountingAutoPayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountingAutoPayNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayType")!=null) {
+					PayType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PickList")!=null) {
+					PickList=Serializing.GetXmlNodeValue(doc,"PickList");
+				}
 			}
 			catch(Exception e) {
 				throw e;

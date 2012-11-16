@@ -68,16 +68,36 @@ public class Signalod {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SignalNum=Integer.valueOf(doc.getElementsByTagName("SignalNum").item(0).getFirstChild().getNodeValue());
-				FromUser=doc.getElementsByTagName("FromUser").item(0).getFirstChild().getNodeValue();
-				ITypes=doc.getElementsByTagName("ITypes").item(0).getFirstChild().getNodeValue();
-				DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateViewing").item(0).getFirstChild().getNodeValue());
-				SigType=SignalType.values()[Integer.valueOf(doc.getElementsByTagName("SigType").item(0).getFirstChild().getNodeValue())];
-				SigText=doc.getElementsByTagName("SigText").item(0).getFirstChild().getNodeValue();
-				SigDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("SigDateTime").item(0).getFirstChild().getNodeValue());
-				ToUser=doc.getElementsByTagName("ToUser").item(0).getFirstChild().getNodeValue();
-				AckTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AckTime").item(0).getFirstChild().getNodeValue());
-				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SignalNum")!=null) {
+					SignalNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SignalNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FromUser")!=null) {
+					FromUser=Serializing.GetXmlNodeValue(doc,"FromUser");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ITypes")!=null) {
+					ITypes=Serializing.GetXmlNodeValue(doc,"ITypes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateViewing")!=null) {
+					DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateViewing"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigType")!=null) {
+					SigType=SignalType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigText")!=null) {
+					SigText=Serializing.GetXmlNodeValue(doc,"SigText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigDateTime")!=null) {
+					SigDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"SigDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToUser")!=null) {
+					ToUser=Serializing.GetXmlNodeValue(doc,"ToUser");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AckTime")!=null) {
+					AckTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AckTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

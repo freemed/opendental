@@ -46,11 +46,21 @@ public class LetterMerge {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LetterMergeNum=Integer.valueOf(doc.getElementsByTagName("LetterMergeNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				TemplateName=doc.getElementsByTagName("TemplateName").item(0).getFirstChild().getNodeValue();
-				DataFileName=doc.getElementsByTagName("DataFileName").item(0).getFirstChild().getNodeValue();
-				Category=Integer.valueOf(doc.getElementsByTagName("Category").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"LetterMergeNum")!=null) {
+					LetterMergeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LetterMergeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TemplateName")!=null) {
+					TemplateName=Serializing.GetXmlNodeValue(doc,"TemplateName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DataFileName")!=null) {
+					DataFileName=Serializing.GetXmlNodeValue(doc,"DataFileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

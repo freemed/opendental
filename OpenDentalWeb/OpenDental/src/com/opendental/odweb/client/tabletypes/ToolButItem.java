@@ -42,10 +42,18 @@ public class ToolButItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ToolButItemNum=Integer.valueOf(doc.getElementsByTagName("ToolButItemNum").item(0).getFirstChild().getNodeValue());
-				ProgramNum=Integer.valueOf(doc.getElementsByTagName("ProgramNum").item(0).getFirstChild().getNodeValue());
-				ToolBar=ToolBarsAvail.values()[Integer.valueOf(doc.getElementsByTagName("ToolBar").item(0).getFirstChild().getNodeValue())];
-				ButtonText=doc.getElementsByTagName("ButtonText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ToolButItemNum")!=null) {
+					ToolButItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToolButItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProgramNum")!=null) {
+					ProgramNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToolBar")!=null) {
+					ToolBar=ToolBarsAvail.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToolBar"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ButtonText")!=null) {
+					ButtonText=Serializing.GetXmlNodeValue(doc,"ButtonText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

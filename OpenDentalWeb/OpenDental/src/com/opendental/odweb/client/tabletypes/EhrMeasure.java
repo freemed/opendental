@@ -42,10 +42,18 @@ public class EhrMeasure {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EhrMeasureNum=Integer.valueOf(doc.getElementsByTagName("EhrMeasureNum").item(0).getFirstChild().getNodeValue());
-				MeasureType=EhrMeasureType.values()[Integer.valueOf(doc.getElementsByTagName("MeasureType").item(0).getFirstChild().getNodeValue())];
-				Numerator=Integer.valueOf(doc.getElementsByTagName("Numerator").item(0).getFirstChild().getNodeValue());
-				Denominator=Integer.valueOf(doc.getElementsByTagName("Denominator").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"EhrMeasureNum")!=null) {
+					EhrMeasureNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrMeasureNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MeasureType")!=null) {
+					MeasureType=EhrMeasureType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MeasureType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Numerator")!=null) {
+					Numerator=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Numerator"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Denominator")!=null) {
+					Denominator=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Denominator"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

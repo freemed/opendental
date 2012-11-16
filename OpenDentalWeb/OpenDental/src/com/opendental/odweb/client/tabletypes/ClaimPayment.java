@@ -72,17 +72,39 @@ public class ClaimPayment {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimPaymentNum=Integer.valueOf(doc.getElementsByTagName("ClaimPaymentNum").item(0).getFirstChild().getNodeValue());
-				CheckDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CheckDate").item(0).getFirstChild().getNodeValue());
-				CheckAmt=Double.valueOf(doc.getElementsByTagName("CheckAmt").item(0).getFirstChild().getNodeValue());
-				CheckNum=doc.getElementsByTagName("CheckNum").item(0).getFirstChild().getNodeValue();
-				BankBranch=doc.getElementsByTagName("BankBranch").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				DepositNum=Integer.valueOf(doc.getElementsByTagName("DepositNum").item(0).getFirstChild().getNodeValue());
-				CarrierName=doc.getElementsByTagName("CarrierName").item(0).getFirstChild().getNodeValue();
-				DateIssued=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateIssued").item(0).getFirstChild().getNodeValue());
-				IsPartial=(doc.getElementsByTagName("IsPartial").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum")!=null) {
+					ClaimPaymentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CheckDate")!=null) {
+					CheckDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CheckDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CheckAmt")!=null) {
+					CheckAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CheckAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CheckNum")!=null) {
+					CheckNum=Serializing.GetXmlNodeValue(doc,"CheckNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BankBranch")!=null) {
+					BankBranch=Serializing.GetXmlNodeValue(doc,"BankBranch");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierName")!=null) {
+					CarrierName=Serializing.GetXmlNodeValue(doc,"CarrierName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateIssued")!=null) {
+					DateIssued=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateIssued"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsPartial")!=null) {
+					IsPartial=(Serializing.GetXmlNodeValue(doc,"IsPartial")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

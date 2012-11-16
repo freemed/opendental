@@ -136,33 +136,87 @@ public class Appointment {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				AptStatus=ApptStatus.values()[Integer.valueOf(doc.getElementsByTagName("AptStatus").item(0).getFirstChild().getNodeValue())];
-				Pattern=doc.getElementsByTagName("Pattern").item(0).getFirstChild().getNodeValue();
-				Confirmed=Integer.valueOf(doc.getElementsByTagName("Confirmed").item(0).getFirstChild().getNodeValue());
-				TimeLocked=(doc.getElementsByTagName("TimeLocked").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Op=Integer.valueOf(doc.getElementsByTagName("Op").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				ProvHyg=Integer.valueOf(doc.getElementsByTagName("ProvHyg").item(0).getFirstChild().getNodeValue());
-				AptDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AptDateTime").item(0).getFirstChild().getNodeValue());
-				NextAptNum=Integer.valueOf(doc.getElementsByTagName("NextAptNum").item(0).getFirstChild().getNodeValue());
-				UnschedStatus=Integer.valueOf(doc.getElementsByTagName("UnschedStatus").item(0).getFirstChild().getNodeValue());
-				IsNewPatient=(doc.getElementsByTagName("IsNewPatient").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ProcDescript=doc.getElementsByTagName("ProcDescript").item(0).getFirstChild().getNodeValue();
-				Assistant=Integer.valueOf(doc.getElementsByTagName("Assistant").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				IsHygiene=(doc.getElementsByTagName("IsHygiene").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				DateTimeArrived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeArrived").item(0).getFirstChild().getNodeValue());
-				DateTimeSeated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeSeated").item(0).getFirstChild().getNodeValue());
-				DateTimeDismissed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeDismissed").item(0).getFirstChild().getNodeValue());
-				InsPlan1=Integer.valueOf(doc.getElementsByTagName("InsPlan1").item(0).getFirstChild().getNodeValue());
-				InsPlan2=Integer.valueOf(doc.getElementsByTagName("InsPlan2").item(0).getFirstChild().getNodeValue());
-				DateTimeAskedToArrive=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeAskedToArrive").item(0).getFirstChild().getNodeValue());
-				ProcsColored=doc.getElementsByTagName("ProcsColored").item(0).getFirstChild().getNodeValue();
-				ColorOverride=Integer.valueOf(doc.getElementsByTagName("ColorOverride").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptStatus")!=null) {
+					AptStatus=ApptStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Pattern")!=null) {
+					Pattern=Serializing.GetXmlNodeValue(doc,"Pattern");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Confirmed")!=null) {
+					Confirmed=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Confirmed"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeLocked")!=null) {
+					TimeLocked=(Serializing.GetXmlNodeValue(doc,"TimeLocked")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Op")!=null) {
+					Op=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Op"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvHyg")!=null) {
+					ProvHyg=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvHyg"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptDateTime")!=null) {
+					AptDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AptDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NextAptNum")!=null) {
+					NextAptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"NextAptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UnschedStatus")!=null) {
+					UnschedStatus=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UnschedStatus"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsNewPatient")!=null) {
+					IsNewPatient=(Serializing.GetXmlNodeValue(doc,"IsNewPatient")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcDescript")!=null) {
+					ProcDescript=Serializing.GetXmlNodeValue(doc,"ProcDescript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Assistant")!=null) {
+					Assistant=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Assistant"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHygiene")!=null) {
+					IsHygiene=(Serializing.GetXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeArrived")!=null) {
+					DateTimeArrived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeArrived"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeSeated")!=null) {
+					DateTimeSeated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeSeated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeDismissed")!=null) {
+					DateTimeDismissed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeDismissed"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPlan1")!=null) {
+					InsPlan1=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsPlan1"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPlan2")!=null) {
+					InsPlan2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsPlan2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeAskedToArrive")!=null) {
+					DateTimeAskedToArrive=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeAskedToArrive"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcsColored")!=null) {
+					ProcsColored=Serializing.GetXmlNodeValue(doc,"ProcsColored");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColorOverride")!=null) {
+					ColorOverride=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorOverride"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

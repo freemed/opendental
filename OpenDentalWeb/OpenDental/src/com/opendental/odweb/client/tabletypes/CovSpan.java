@@ -42,10 +42,18 @@ public class CovSpan {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CovSpanNum=Integer.valueOf(doc.getElementsByTagName("CovSpanNum").item(0).getFirstChild().getNodeValue());
-				CovCatNum=Integer.valueOf(doc.getElementsByTagName("CovCatNum").item(0).getFirstChild().getNodeValue());
-				FromCode=doc.getElementsByTagName("FromCode").item(0).getFirstChild().getNodeValue();
-				ToCode=doc.getElementsByTagName("ToCode").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"CovSpanNum")!=null) {
+					CovSpanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovSpanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FromCode")!=null) {
+					FromCode=Serializing.GetXmlNodeValue(doc,"FromCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToCode")!=null) {
+					ToCode=Serializing.GetXmlNodeValue(doc,"ToCode");
+				}
 			}
 			catch(Exception e) {
 				throw e;

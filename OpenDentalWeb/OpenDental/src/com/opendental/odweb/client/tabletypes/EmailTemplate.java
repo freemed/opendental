@@ -38,9 +38,15 @@ public class EmailTemplate {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EmailTemplateNum=Integer.valueOf(doc.getElementsByTagName("EmailTemplateNum").item(0).getFirstChild().getNodeValue());
-				Subject=doc.getElementsByTagName("Subject").item(0).getFirstChild().getNodeValue();
-				BodyText=doc.getElementsByTagName("BodyText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EmailTemplateNum")!=null) {
+					EmailTemplateNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailTemplateNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Subject")!=null) {
+					Subject=Serializing.GetXmlNodeValue(doc,"Subject");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BodyText")!=null) {
+					BodyText=Serializing.GetXmlNodeValue(doc,"BodyText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

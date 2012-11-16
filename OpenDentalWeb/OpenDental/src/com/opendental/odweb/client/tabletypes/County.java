@@ -38,9 +38,15 @@ public class County {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CountyNum=Integer.valueOf(doc.getElementsByTagName("CountyNum").item(0).getFirstChild().getNodeValue());
-				CountyName=doc.getElementsByTagName("CountyName").item(0).getFirstChild().getNodeValue();
-				CountyCode=doc.getElementsByTagName("CountyCode").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"CountyNum")!=null) {
+					CountyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CountyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CountyName")!=null) {
+					CountyName=Serializing.GetXmlNodeValue(doc,"CountyName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CountyCode")!=null) {
+					CountyCode=Serializing.GetXmlNodeValue(doc,"CountyCode");
+				}
 			}
 			catch(Exception e) {
 				throw e;

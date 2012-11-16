@@ -54,13 +54,27 @@ public class Contact {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ContactNum=Integer.valueOf(doc.getElementsByTagName("ContactNum").item(0).getFirstChild().getNodeValue());
-				LName=doc.getElementsByTagName("LName").item(0).getFirstChild().getNodeValue();
-				FName=doc.getElementsByTagName("FName").item(0).getFirstChild().getNodeValue();
-				WkPhone=doc.getElementsByTagName("WkPhone").item(0).getFirstChild().getNodeValue();
-				Fax=doc.getElementsByTagName("Fax").item(0).getFirstChild().getNodeValue();
-				Category=Integer.valueOf(doc.getElementsByTagName("Category").item(0).getFirstChild().getNodeValue());
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ContactNum")!=null) {
+					ContactNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ContactNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WkPhone")!=null) {
+					WkPhone=Serializing.GetXmlNodeValue(doc,"WkPhone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Fax")!=null) {
+					Fax=Serializing.GetXmlNodeValue(doc,"Fax");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
 			}
 			catch(Exception e) {
 				throw e;

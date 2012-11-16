@@ -80,19 +80,45 @@ public class LabCase {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LabCaseNum=Integer.valueOf(doc.getElementsByTagName("LabCaseNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				LaboratoryNum=Integer.valueOf(doc.getElementsByTagName("LaboratoryNum").item(0).getFirstChild().getNodeValue());
-				AptNum=Integer.valueOf(doc.getElementsByTagName("AptNum").item(0).getFirstChild().getNodeValue());
-				PlannedAptNum=Integer.valueOf(doc.getElementsByTagName("PlannedAptNum").item(0).getFirstChild().getNodeValue());
-				DateTimeDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeDue").item(0).getFirstChild().getNodeValue());
-				DateTimeCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeCreated").item(0).getFirstChild().getNodeValue());
-				DateTimeSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeSent").item(0).getFirstChild().getNodeValue());
-				DateTimeRecd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeRecd").item(0).getFirstChild().getNodeValue());
-				DateTimeChecked=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeChecked").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				Instructions=doc.getElementsByTagName("Instructions").item(0).getFirstChild().getNodeValue();
-				LabFee=Double.valueOf(doc.getElementsByTagName("LabFee").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"LabCaseNum")!=null) {
+					LabCaseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabCaseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlannedAptNum")!=null) {
+					PlannedAptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlannedAptNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeDue")!=null) {
+					DateTimeDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeDue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeCreated")!=null) {
+					DateTimeCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeCreated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeSent")!=null) {
+					DateTimeSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeSent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeRecd")!=null) {
+					DateTimeRecd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeRecd"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeChecked")!=null) {
+					DateTimeChecked=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeChecked"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Instructions")!=null) {
+					Instructions=Serializing.GetXmlNodeValue(doc,"Instructions");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabFee")!=null) {
+					LabFee=Double.valueOf(Serializing.GetXmlNodeValue(doc,"LabFee"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

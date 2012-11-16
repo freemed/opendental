@@ -56,13 +56,27 @@ public class Allergy {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AllergyNum=Integer.valueOf(doc.getElementsByTagName("AllergyNum").item(0).getFirstChild().getNodeValue());
-				AllergyDefNum=Integer.valueOf(doc.getElementsByTagName("AllergyDefNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Reaction=doc.getElementsByTagName("Reaction").item(0).getFirstChild().getNodeValue();
-				StatusIsActive=(doc.getElementsByTagName("StatusIsActive").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				DateAdverseReaction=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateAdverseReaction").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"AllergyNum")!=null) {
+					AllergyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AllergyDefNum")!=null) {
+					AllergyDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Reaction")!=null) {
+					Reaction=Serializing.GetXmlNodeValue(doc,"Reaction");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StatusIsActive")!=null) {
+					StatusIsActive=(Serializing.GetXmlNodeValue(doc,"StatusIsActive")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateAdverseReaction")!=null) {
+					DateAdverseReaction=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateAdverseReaction"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -54,13 +54,27 @@ public class PatientNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				FamFinancial=doc.getElementsByTagName("FamFinancial").item(0).getFirstChild().getNodeValue();
-				ApptPhone=doc.getElementsByTagName("ApptPhone").item(0).getFirstChild().getNodeValue();
-				Medical=doc.getElementsByTagName("Medical").item(0).getFirstChild().getNodeValue();
-				Service=doc.getElementsByTagName("Service").item(0).getFirstChild().getNodeValue();
-				MedicalComp=doc.getElementsByTagName("MedicalComp").item(0).getFirstChild().getNodeValue();
-				Treatment=doc.getElementsByTagName("Treatment").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FamFinancial")!=null) {
+					FamFinancial=Serializing.GetXmlNodeValue(doc,"FamFinancial");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ApptPhone")!=null) {
+					ApptPhone=Serializing.GetXmlNodeValue(doc,"ApptPhone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Medical")!=null) {
+					Medical=Serializing.GetXmlNodeValue(doc,"Medical");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Service")!=null) {
+					Service=Serializing.GetXmlNodeValue(doc,"Service");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicalComp")!=null) {
+					MedicalComp=Serializing.GetXmlNodeValue(doc,"MedicalComp");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Treatment")!=null) {
+					Treatment=Serializing.GetXmlNodeValue(doc,"Treatment");
+				}
 			}
 			catch(Exception e) {
 				throw e;

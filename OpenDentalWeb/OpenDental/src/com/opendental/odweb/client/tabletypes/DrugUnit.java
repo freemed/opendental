@@ -38,9 +38,15 @@ public class DrugUnit {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DrugUnitNum=Integer.valueOf(doc.getElementsByTagName("DrugUnitNum").item(0).getFirstChild().getNodeValue());
-				UnitIdentifier=doc.getElementsByTagName("UnitIdentifier").item(0).getFirstChild().getNodeValue();
-				UnitText=doc.getElementsByTagName("UnitText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DrugUnitNum")!=null) {
+					DrugUnitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugUnitNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UnitIdentifier")!=null) {
+					UnitIdentifier=Serializing.GetXmlNodeValue(doc,"UnitIdentifier");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UnitText")!=null) {
+					UnitText=Serializing.GetXmlNodeValue(doc,"UnitText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

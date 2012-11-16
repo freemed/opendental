@@ -58,14 +58,30 @@ public class EduResource {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EduResourceNum=Integer.valueOf(doc.getElementsByTagName("EduResourceNum").item(0).getFirstChild().getNodeValue());
-				DiseaseDefNum=Integer.valueOf(doc.getElementsByTagName("DiseaseDefNum").item(0).getFirstChild().getNodeValue());
-				MedicationNum=Integer.valueOf(doc.getElementsByTagName("MedicationNum").item(0).getFirstChild().getNodeValue());
-				LabResultID=doc.getElementsByTagName("LabResultID").item(0).getFirstChild().getNodeValue();
-				LabResultName=doc.getElementsByTagName("LabResultName").item(0).getFirstChild().getNodeValue();
-				LabResultCompare=doc.getElementsByTagName("LabResultCompare").item(0).getFirstChild().getNodeValue();
-				ResourceUrl=doc.getElementsByTagName("ResourceUrl").item(0).getFirstChild().getNodeValue();
-				Icd9Num=Integer.valueOf(doc.getElementsByTagName("Icd9Num").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"EduResourceNum")!=null) {
+					EduResourceNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EduResourceNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabResultID")!=null) {
+					LabResultID=Serializing.GetXmlNodeValue(doc,"LabResultID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabResultName")!=null) {
+					LabResultName=Serializing.GetXmlNodeValue(doc,"LabResultName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabResultCompare")!=null) {
+					LabResultCompare=Serializing.GetXmlNodeValue(doc,"LabResultCompare");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ResourceUrl")!=null) {
+					ResourceUrl=Serializing.GetXmlNodeValue(doc,"ResourceUrl");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Icd9Num")!=null) {
+					Icd9Num=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Icd9Num"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -90,22 +90,54 @@ public class Carrier {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CarrierNum=Integer.valueOf(doc.getElementsByTagName("CarrierNum").item(0).getFirstChild().getNodeValue());
-				CarrierName=doc.getElementsByTagName("CarrierName").item(0).getFirstChild().getNodeValue();
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				Address2=doc.getElementsByTagName("Address2").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				Phone=doc.getElementsByTagName("Phone").item(0).getFirstChild().getNodeValue();
-				ElectID=doc.getElementsByTagName("ElectID").item(0).getFirstChild().getNodeValue();
-				NoSendElect=(doc.getElementsByTagName("NoSendElect").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsCDA=(doc.getElementsByTagName("IsCDA").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				CDAnetVersion=doc.getElementsByTagName("CDAnetVersion").item(0).getFirstChild().getNodeValue();
-				CanadianNetworkNum=Integer.valueOf(doc.getElementsByTagName("CanadianNetworkNum").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				CanadianEncryptionMethod=Byte.valueOf(doc.getElementsByTagName("CanadianEncryptionMethod").item(0).getFirstChild().getNodeValue());
-				CanadianSupportedTypes=CanSupTransTypes.values()[Integer.valueOf(doc.getElementsByTagName("CanadianSupportedTypes").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CarrierName")!=null) {
+					CarrierName=Serializing.GetXmlNodeValue(doc,"CarrierName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.GetXmlNodeValue(doc,"State");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ElectID")!=null) {
+					ElectID=Serializing.GetXmlNodeValue(doc,"ElectID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoSendElect")!=null) {
+					NoSendElect=(Serializing.GetXmlNodeValue(doc,"NoSendElect")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsCDA")!=null) {
+					IsCDA=(Serializing.GetXmlNodeValue(doc,"IsCDA")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CDAnetVersion")!=null) {
+					CDAnetVersion=Serializing.GetXmlNodeValue(doc,"CDAnetVersion");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum")!=null) {
+					CanadianNetworkNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianEncryptionMethod")!=null) {
+					CanadianEncryptionMethod=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianEncryptionMethod"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianSupportedTypes")!=null) {
+					CanadianSupportedTypes=CanSupTransTypes.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianSupportedTypes"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -42,10 +42,18 @@ public class ClaimAttach {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimAttachNum=Integer.valueOf(doc.getElementsByTagName("ClaimAttachNum").item(0).getFirstChild().getNodeValue());
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				DisplayedFileName=doc.getElementsByTagName("DisplayedFileName").item(0).getFirstChild().getNodeValue();
-				ActualFileName=doc.getElementsByTagName("ActualFileName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ClaimAttachNum")!=null) {
+					ClaimAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimAttachNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DisplayedFileName")!=null) {
+					DisplayedFileName=Serializing.GetXmlNodeValue(doc,"DisplayedFileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ActualFileName")!=null) {
+					ActualFileName=Serializing.GetXmlNodeValue(doc,"ActualFileName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

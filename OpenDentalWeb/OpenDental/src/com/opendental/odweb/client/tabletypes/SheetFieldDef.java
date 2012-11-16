@@ -98,24 +98,60 @@ public class SheetFieldDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SheetFieldDefNum=Integer.valueOf(doc.getElementsByTagName("SheetFieldDefNum").item(0).getFirstChild().getNodeValue());
-				SheetDefNum=Integer.valueOf(doc.getElementsByTagName("SheetDefNum").item(0).getFirstChild().getNodeValue());
-				FieldType=SheetFieldType.values()[Integer.valueOf(doc.getElementsByTagName("FieldType").item(0).getFirstChild().getNodeValue())];
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FieldValue=doc.getElementsByTagName("FieldValue").item(0).getFirstChild().getNodeValue();
-				FontSize=Float.valueOf(doc.getElementsByTagName("FontSize").item(0).getFirstChild().getNodeValue());
-				FontName=doc.getElementsByTagName("FontName").item(0).getFirstChild().getNodeValue();
-				FontIsBold=(doc.getElementsByTagName("FontIsBold").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				XPos=Integer.valueOf(doc.getElementsByTagName("XPos").item(0).getFirstChild().getNodeValue());
-				YPos=Integer.valueOf(doc.getElementsByTagName("YPos").item(0).getFirstChild().getNodeValue());
-				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
-				GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(doc.getElementsByTagName("GrowthBehavior").item(0).getFirstChild().getNodeValue())];
-				RadioButtonValue=doc.getElementsByTagName("RadioButtonValue").item(0).getFirstChild().getNodeValue();
-				RadioButtonGroup=doc.getElementsByTagName("RadioButtonGroup").item(0).getFirstChild().getNodeValue();
-				IsRequired=(doc.getElementsByTagName("IsRequired").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				TabOrder=Integer.valueOf(doc.getElementsByTagName("TabOrder").item(0).getFirstChild().getNodeValue());
-				ReportableName=doc.getElementsByTagName("ReportableName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"SheetFieldDefNum")!=null) {
+					SheetFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetFieldDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SheetDefNum")!=null) {
+					SheetDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldType")!=null) {
+					FieldType=SheetFieldType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldValue")!=null) {
+					FieldValue=Serializing.GetXmlNodeValue(doc,"FieldValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontIsBold")!=null) {
+					FontIsBold=(Serializing.GetXmlNodeValue(doc,"FontIsBold")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"XPos")!=null) {
+					XPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"XPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"YPos")!=null) {
+					YPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"YPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GrowthBehavior")!=null) {
+					GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GrowthBehavior"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RadioButtonValue")!=null) {
+					RadioButtonValue=Serializing.GetXmlNodeValue(doc,"RadioButtonValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RadioButtonGroup")!=null) {
+					RadioButtonGroup=Serializing.GetXmlNodeValue(doc,"RadioButtonGroup");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsRequired")!=null) {
+					IsRequired=(Serializing.GetXmlNodeValue(doc,"IsRequired")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TabOrder")!=null) {
+					TabOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TabOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReportableName")!=null) {
+					ReportableName=Serializing.GetXmlNodeValue(doc,"ReportableName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

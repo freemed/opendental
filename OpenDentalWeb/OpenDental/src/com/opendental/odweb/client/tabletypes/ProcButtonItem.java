@@ -46,11 +46,21 @@ public class ProcButtonItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcButtonItemNum=Integer.valueOf(doc.getElementsByTagName("ProcButtonItemNum").item(0).getFirstChild().getNodeValue());
-				ProcButtonNum=Integer.valueOf(doc.getElementsByTagName("ProcButtonNum").item(0).getFirstChild().getNodeValue());
-				OldCode=doc.getElementsByTagName("OldCode").item(0).getFirstChild().getNodeValue();
-				AutoCodeNum=Integer.valueOf(doc.getElementsByTagName("AutoCodeNum").item(0).getFirstChild().getNodeValue());
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ProcButtonItemNum")!=null) {
+					ProcButtonItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcButtonItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcButtonNum")!=null) {
+					ProcButtonNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcButtonNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OldCode")!=null) {
+					OldCode=Serializing.GetXmlNodeValue(doc,"OldCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AutoCodeNum")!=null) {
+					AutoCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoCodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

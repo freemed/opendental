@@ -62,15 +62,33 @@ public class Supply {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SupplyNum=Integer.valueOf(doc.getElementsByTagName("SupplyNum").item(0).getFirstChild().getNodeValue());
-				SupplierNum=Integer.valueOf(doc.getElementsByTagName("SupplierNum").item(0).getFirstChild().getNodeValue());
-				CatalogNumber=doc.getElementsByTagName("CatalogNumber").item(0).getFirstChild().getNodeValue();
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				Category=Integer.valueOf(doc.getElementsByTagName("Category").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				LevelDesired=Float.valueOf(doc.getElementsByTagName("LevelDesired").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Price=Double.valueOf(doc.getElementsByTagName("Price").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SupplyNum")!=null) {
+					SupplyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SupplierNum")!=null) {
+					SupplierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CatalogNumber")!=null) {
+					CatalogNumber=Serializing.GetXmlNodeValue(doc,"CatalogNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LevelDesired")!=null) {
+					LevelDesired=Float.valueOf(Serializing.GetXmlNodeValue(doc,"LevelDesired"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Price")!=null) {
+					Price=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Price"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

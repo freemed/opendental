@@ -44,10 +44,18 @@ public class DeletedObject {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DeletedObjectNum=Integer.valueOf(doc.getElementsByTagName("DeletedObjectNum").item(0).getFirstChild().getNodeValue());
-				ObjectNum=Integer.valueOf(doc.getElementsByTagName("ObjectNum").item(0).getFirstChild().getNodeValue());
-				ObjectType=DeletedObjectType.values()[Integer.valueOf(doc.getElementsByTagName("ObjectType").item(0).getFirstChild().getNodeValue())];
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"DeletedObjectNum")!=null) {
+					DeletedObjectNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DeletedObjectNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObjectNum")!=null) {
+					ObjectNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObjectType")!=null) {
+					ObjectType=DeletedObjectType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

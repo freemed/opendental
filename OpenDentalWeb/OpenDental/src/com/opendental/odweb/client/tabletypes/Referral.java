@@ -118,29 +118,75 @@ public class Referral {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReferralNum=Integer.valueOf(doc.getElementsByTagName("ReferralNum").item(0).getFirstChild().getNodeValue());
-				LName=doc.getElementsByTagName("LName").item(0).getFirstChild().getNodeValue();
-				FName=doc.getElementsByTagName("FName").item(0).getFirstChild().getNodeValue();
-				MName=doc.getElementsByTagName("MName").item(0).getFirstChild().getNodeValue();
-				SSN=doc.getElementsByTagName("SSN").item(0).getFirstChild().getNodeValue();
-				UsingTIN=(doc.getElementsByTagName("UsingTIN").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Specialty=DentalSpecialty.values()[Integer.valueOf(doc.getElementsByTagName("Specialty").item(0).getFirstChild().getNodeValue())];
-				ST=doc.getElementsByTagName("ST").item(0).getFirstChild().getNodeValue();
-				Telephone=doc.getElementsByTagName("Telephone").item(0).getFirstChild().getNodeValue();
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				Address2=doc.getElementsByTagName("Address2").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				Phone2=doc.getElementsByTagName("Phone2").item(0).getFirstChild().getNodeValue();
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				NotPerson=(doc.getElementsByTagName("NotPerson").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Title=doc.getElementsByTagName("Title").item(0).getFirstChild().getNodeValue();
-				EMail=doc.getElementsByTagName("EMail").item(0).getFirstChild().getNodeValue();
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				NationalProvID=doc.getElementsByTagName("NationalProvID").item(0).getFirstChild().getNodeValue();
-				Slip=Integer.valueOf(doc.getElementsByTagName("Slip").item(0).getFirstChild().getNodeValue());
-				IsDoctor=(doc.getElementsByTagName("IsDoctor").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"ReferralNum")!=null) {
+					ReferralNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReferralNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MName")!=null) {
+					MName=Serializing.GetXmlNodeValue(doc,"MName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SSN")!=null) {
+					SSN=Serializing.GetXmlNodeValue(doc,"SSN");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UsingTIN")!=null) {
+					UsingTIN=(Serializing.GetXmlNodeValue(doc,"UsingTIN")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Specialty")!=null) {
+					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Specialty"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ST")!=null) {
+					ST=Serializing.GetXmlNodeValue(doc,"ST");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Telephone")!=null) {
+					Telephone=Serializing.GetXmlNodeValue(doc,"Telephone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Phone2")!=null) {
+					Phone2=Serializing.GetXmlNodeValue(doc,"Phone2");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NotPerson")!=null) {
+					NotPerson=(Serializing.GetXmlNodeValue(doc,"NotPerson")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Title")!=null) {
+					Title=Serializing.GetXmlNodeValue(doc,"Title");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EMail")!=null) {
+					EMail=Serializing.GetXmlNodeValue(doc,"EMail");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NationalProvID")!=null) {
+					NationalProvID=Serializing.GetXmlNodeValue(doc,"NationalProvID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Slip")!=null) {
+					Slip=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Slip"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsDoctor")!=null) {
+					IsDoctor=(Serializing.GetXmlNodeValue(doc,"IsDoctor")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

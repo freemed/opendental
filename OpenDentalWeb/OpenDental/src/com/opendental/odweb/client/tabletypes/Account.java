@@ -50,12 +50,24 @@ public class Account {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AccountNum=Integer.valueOf(doc.getElementsByTagName("AccountNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				AcctType=AccountType.values()[Integer.valueOf(doc.getElementsByTagName("AcctType").item(0).getFirstChild().getNodeValue())];
-				BankNumber=doc.getElementsByTagName("BankNumber").item(0).getFirstChild().getNodeValue();
-				Inactive=(doc.getElementsByTagName("Inactive").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				AccountColor=Integer.valueOf(doc.getElementsByTagName("AccountColor").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"AccountNum")!=null) {
+					AccountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AcctType")!=null) {
+					AcctType=AccountType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AcctType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BankNumber")!=null) {
+					BankNumber=Serializing.GetXmlNodeValue(doc,"BankNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Inactive")!=null) {
+					Inactive=(Serializing.GetXmlNodeValue(doc,"Inactive")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccountColor")!=null) {
+					AccountColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountColor"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

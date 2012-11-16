@@ -46,11 +46,21 @@ public class ProcCodeNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcCodeNoteNum=Integer.valueOf(doc.getElementsByTagName("ProcCodeNoteNum").item(0).getFirstChild().getNodeValue());
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ProcTime=doc.getElementsByTagName("ProcTime").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProcCodeNoteNum")!=null) {
+					ProcCodeNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcCodeNoteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcTime")!=null) {
+					ProcTime=Serializing.GetXmlNodeValue(doc,"ProcTime");
+				}
 			}
 			catch(Exception e) {
 				throw e;

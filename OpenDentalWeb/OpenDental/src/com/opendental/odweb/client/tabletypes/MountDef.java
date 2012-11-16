@@ -50,12 +50,24 @@ public class MountDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				MountDefNum=Integer.valueOf(doc.getElementsByTagName("MountDefNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				IsRadiograph=(doc.getElementsByTagName("IsRadiograph").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"MountDefNum")!=null) {
+					MountDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsRadiograph")!=null) {
+					IsRadiograph=(Serializing.GetXmlNodeValue(doc,"IsRadiograph")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -42,10 +42,18 @@ public class UserQuery {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				QueryNum=Integer.valueOf(doc.getElementsByTagName("QueryNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
-				QueryText=doc.getElementsByTagName("QueryText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"QueryNum")!=null) {
+					QueryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QueryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"QueryText")!=null) {
+					QueryText=Serializing.GetXmlNodeValue(doc,"QueryText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

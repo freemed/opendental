@@ -50,12 +50,24 @@ public class RxAlert {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RxAlertNum=Integer.valueOf(doc.getElementsByTagName("RxAlertNum").item(0).getFirstChild().getNodeValue());
-				RxDefNum=Integer.valueOf(doc.getElementsByTagName("RxDefNum").item(0).getFirstChild().getNodeValue());
-				DiseaseDefNum=Integer.valueOf(doc.getElementsByTagName("DiseaseDefNum").item(0).getFirstChild().getNodeValue());
-				AllergyDefNum=Integer.valueOf(doc.getElementsByTagName("AllergyDefNum").item(0).getFirstChild().getNodeValue());
-				MedicationNum=Integer.valueOf(doc.getElementsByTagName("MedicationNum").item(0).getFirstChild().getNodeValue());
-				NotificationMsg=doc.getElementsByTagName("NotificationMsg").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"RxAlertNum")!=null) {
+					RxAlertNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxAlertNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxDefNum")!=null) {
+					RxDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AllergyDefNum")!=null) {
+					AllergyDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NotificationMsg")!=null) {
+					NotificationMsg=Serializing.GetXmlNodeValue(doc,"NotificationMsg");
+				}
 			}
 			catch(Exception e) {
 				throw e;

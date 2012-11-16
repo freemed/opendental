@@ -46,11 +46,21 @@ public class CanadianNetwork {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CanadianNetworkNum=Integer.valueOf(doc.getElementsByTagName("CanadianNetworkNum").item(0).getFirstChild().getNodeValue());
-				Abbrev=doc.getElementsByTagName("Abbrev").item(0).getFirstChild().getNodeValue();
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				CanadianTransactionPrefix=doc.getElementsByTagName("CanadianTransactionPrefix").item(0).getFirstChild().getNodeValue();
-				CanadianIsRprHandler=(doc.getElementsByTagName("CanadianIsRprHandler").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum")!=null) {
+					CanadianNetworkNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Abbrev")!=null) {
+					Abbrev=Serializing.GetXmlNodeValue(doc,"Abbrev");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianTransactionPrefix")!=null) {
+					CanadianTransactionPrefix=Serializing.GetXmlNodeValue(doc,"CanadianTransactionPrefix");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianIsRprHandler")!=null) {
+					CanadianIsRprHandler=(Serializing.GetXmlNodeValue(doc,"CanadianIsRprHandler")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

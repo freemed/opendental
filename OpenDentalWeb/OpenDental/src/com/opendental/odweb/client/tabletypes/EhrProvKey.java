@@ -58,14 +58,30 @@ public class EhrProvKey {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EhrProvKeyNum=Integer.valueOf(doc.getElementsByTagName("EhrProvKeyNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				LName=doc.getElementsByTagName("LName").item(0).getFirstChild().getNodeValue();
-				FName=doc.getElementsByTagName("FName").item(0).getFirstChild().getNodeValue();
-				ProvKey=doc.getElementsByTagName("ProvKey").item(0).getFirstChild().getNodeValue();
-				FullTimeEquiv=Float.valueOf(doc.getElementsByTagName("FullTimeEquiv").item(0).getFirstChild().getNodeValue());
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				HasReportAccess=(doc.getElementsByTagName("HasReportAccess").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"EhrProvKeyNum")!=null) {
+					EhrProvKeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrProvKeyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvKey")!=null) {
+					ProvKey=Serializing.GetXmlNodeValue(doc,"ProvKey");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FullTimeEquiv")!=null) {
+					FullTimeEquiv=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FullTimeEquiv"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HasReportAccess")!=null) {
+					HasReportAccess=(Serializing.GetXmlNodeValue(doc,"HasReportAccess")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

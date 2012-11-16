@@ -38,9 +38,15 @@ public class SigElement {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SigElementNum=Integer.valueOf(doc.getElementsByTagName("SigElementNum").item(0).getFirstChild().getNodeValue());
-				SigElementDefNum=Integer.valueOf(doc.getElementsByTagName("SigElementDefNum").item(0).getFirstChild().getNodeValue());
-				SignalNum=Integer.valueOf(doc.getElementsByTagName("SignalNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SigElementNum")!=null) {
+					SigElementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigElementDefNum")!=null) {
+					SigElementDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SignalNum")!=null) {
+					SignalNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SignalNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

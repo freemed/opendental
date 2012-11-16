@@ -78,19 +78,45 @@ public class Userod {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				UserName=doc.getElementsByTagName("UserName").item(0).getFirstChild().getNodeValue();
-				Password=doc.getElementsByTagName("Password").item(0).getFirstChild().getNodeValue();
-				UserGroupNum=Integer.valueOf(doc.getElementsByTagName("UserGroupNum").item(0).getFirstChild().getNodeValue());
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				TaskListInBox=Integer.valueOf(doc.getElementsByTagName("TaskListInBox").item(0).getFirstChild().getNodeValue());
-				AnesthProvType=Integer.valueOf(doc.getElementsByTagName("AnesthProvType").item(0).getFirstChild().getNodeValue());
-				DefaultHidePopups=(doc.getElementsByTagName("DefaultHidePopups").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PasswordIsStrong=(doc.getElementsByTagName("PasswordIsStrong").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ClinicIsRestricted=(doc.getElementsByTagName("ClinicIsRestricted").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserName")!=null) {
+					UserName=Serializing.GetXmlNodeValue(doc,"UserName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskListInBox")!=null) {
+					TaskListInBox=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListInBox"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AnesthProvType")!=null) {
+					AnesthProvType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AnesthProvType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultHidePopups")!=null) {
+					DefaultHidePopups=(Serializing.GetXmlNodeValue(doc,"DefaultHidePopups")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PasswordIsStrong")!=null) {
+					PasswordIsStrong=(Serializing.GetXmlNodeValue(doc,"PasswordIsStrong")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicIsRestricted")!=null) {
+					ClinicIsRestricted=(Serializing.GetXmlNodeValue(doc,"ClinicIsRestricted")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

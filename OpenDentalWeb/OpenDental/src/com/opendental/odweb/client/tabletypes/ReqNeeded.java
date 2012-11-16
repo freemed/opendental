@@ -42,10 +42,18 @@ public class ReqNeeded {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReqNeededNum=Integer.valueOf(doc.getElementsByTagName("ReqNeededNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				SchoolCourseNum=Integer.valueOf(doc.getElementsByTagName("SchoolCourseNum").item(0).getFirstChild().getNodeValue());
-				SchoolClassNum=Integer.valueOf(doc.getElementsByTagName("SchoolClassNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ReqNeededNum")!=null) {
+					ReqNeededNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReqNeededNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum")!=null) {
+					SchoolCourseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchoolClassNum")!=null) {
+					SchoolClassNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolClassNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

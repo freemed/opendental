@@ -68,16 +68,36 @@ public class LabPanel {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LabPanelNum=Integer.valueOf(doc.getElementsByTagName("LabPanelNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				RawMessage=doc.getElementsByTagName("RawMessage").item(0).getFirstChild().getNodeValue();
-				LabNameAddress=doc.getElementsByTagName("LabNameAddress").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				SpecimenCondition=doc.getElementsByTagName("SpecimenCondition").item(0).getFirstChild().getNodeValue();
-				SpecimenSource=doc.getElementsByTagName("SpecimenSource").item(0).getFirstChild().getNodeValue();
-				ServiceId=doc.getElementsByTagName("ServiceId").item(0).getFirstChild().getNodeValue();
-				ServiceName=doc.getElementsByTagName("ServiceName").item(0).getFirstChild().getNodeValue();
-				MedicalOrderNum=Integer.valueOf(doc.getElementsByTagName("MedicalOrderNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"LabPanelNum")!=null) {
+					LabPanelNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabPanelNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RawMessage")!=null) {
+					RawMessage=Serializing.GetXmlNodeValue(doc,"RawMessage");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabNameAddress")!=null) {
+					LabNameAddress=Serializing.GetXmlNodeValue(doc,"LabNameAddress");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SpecimenCondition")!=null) {
+					SpecimenCondition=Serializing.GetXmlNodeValue(doc,"SpecimenCondition");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SpecimenSource")!=null) {
+					SpecimenSource=Serializing.GetXmlNodeValue(doc,"SpecimenSource");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ServiceId")!=null) {
+					ServiceId=Serializing.GetXmlNodeValue(doc,"ServiceId");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ServiceName")!=null) {
+					ServiceName=Serializing.GetXmlNodeValue(doc,"ServiceName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum")!=null) {
+					MedicalOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

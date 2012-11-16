@@ -54,13 +54,27 @@ public class PatPlan {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PatPlanNum=Integer.valueOf(doc.getElementsByTagName("PatPlanNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Ordinal=Byte.valueOf(doc.getElementsByTagName("Ordinal").item(0).getFirstChild().getNodeValue());
-				IsPending=(doc.getElementsByTagName("IsPending").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Relationship=Relat.values()[Integer.valueOf(doc.getElementsByTagName("Relationship").item(0).getFirstChild().getNodeValue())];
-				PatID=doc.getElementsByTagName("PatID").item(0).getFirstChild().getNodeValue();
-				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PatPlanNum")!=null) {
+					PatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Ordinal")!=null) {
+					Ordinal=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Ordinal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsPending")!=null) {
+					IsPending=(Serializing.GetXmlNodeValue(doc,"IsPending")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Relationship")!=null) {
+					Relationship=Relat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Relationship"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatID")!=null) {
+					PatID=Serializing.GetXmlNodeValue(doc,"PatID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

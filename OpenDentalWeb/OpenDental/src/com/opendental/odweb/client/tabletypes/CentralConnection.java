@@ -70,17 +70,39 @@ public class CentralConnection {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CentralConnectionNum=Integer.valueOf(doc.getElementsByTagName("CentralConnectionNum").item(0).getFirstChild().getNodeValue());
-				ServerName=doc.getElementsByTagName("ServerName").item(0).getFirstChild().getNodeValue();
-				DatabaseName=doc.getElementsByTagName("DatabaseName").item(0).getFirstChild().getNodeValue();
-				MySqlUser=doc.getElementsByTagName("MySqlUser").item(0).getFirstChild().getNodeValue();
-				MySqlPassword=doc.getElementsByTagName("MySqlPassword").item(0).getFirstChild().getNodeValue();
-				ServiceURI=doc.getElementsByTagName("ServiceURI").item(0).getFirstChild().getNodeValue();
-				OdUser=doc.getElementsByTagName("OdUser").item(0).getFirstChild().getNodeValue();
-				OdPassword=doc.getElementsByTagName("OdPassword").item(0).getFirstChild().getNodeValue();
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				WebServiceIsEcw=(doc.getElementsByTagName("WebServiceIsEcw").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"CentralConnectionNum")!=null) {
+					CentralConnectionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CentralConnectionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ServerName")!=null) {
+					ServerName=Serializing.GetXmlNodeValue(doc,"ServerName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatabaseName")!=null) {
+					DatabaseName=Serializing.GetXmlNodeValue(doc,"DatabaseName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MySqlUser")!=null) {
+					MySqlUser=Serializing.GetXmlNodeValue(doc,"MySqlUser");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MySqlPassword")!=null) {
+					MySqlPassword=Serializing.GetXmlNodeValue(doc,"MySqlPassword");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ServiceURI")!=null) {
+					ServiceURI=Serializing.GetXmlNodeValue(doc,"ServiceURI");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OdUser")!=null) {
+					OdUser=Serializing.GetXmlNodeValue(doc,"OdUser");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OdPassword")!=null) {
+					OdPassword=Serializing.GetXmlNodeValue(doc,"OdPassword");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WebServiceIsEcw")!=null) {
+					WebServiceIsEcw=(Serializing.GetXmlNodeValue(doc,"WebServiceIsEcw")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

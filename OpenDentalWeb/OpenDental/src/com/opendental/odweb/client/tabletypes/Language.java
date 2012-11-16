@@ -46,11 +46,21 @@ public class Language {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LanguageNum=Integer.valueOf(doc.getElementsByTagName("LanguageNum").item(0).getFirstChild().getNodeValue());
-				EnglishComments=doc.getElementsByTagName("EnglishComments").item(0).getFirstChild().getNodeValue();
-				ClassType=doc.getElementsByTagName("ClassType").item(0).getFirstChild().getNodeValue();
-				English=doc.getElementsByTagName("English").item(0).getFirstChild().getNodeValue();
-				IsObsolete=(doc.getElementsByTagName("IsObsolete").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"LanguageNum")!=null) {
+					LanguageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LanguageNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EnglishComments")!=null) {
+					EnglishComments=Serializing.GetXmlNodeValue(doc,"EnglishComments");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClassType")!=null) {
+					ClassType=Serializing.GetXmlNodeValue(doc,"ClassType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"English")!=null) {
+					English=Serializing.GetXmlNodeValue(doc,"English");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsObsolete")!=null) {
+					IsObsolete=(Serializing.GetXmlNodeValue(doc,"IsObsolete")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

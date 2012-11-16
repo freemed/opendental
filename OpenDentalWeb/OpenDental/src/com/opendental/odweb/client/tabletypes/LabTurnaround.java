@@ -46,11 +46,21 @@ public class LabTurnaround {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LabTurnaroundNum=Integer.valueOf(doc.getElementsByTagName("LabTurnaroundNum").item(0).getFirstChild().getNodeValue());
-				LaboratoryNum=Integer.valueOf(doc.getElementsByTagName("LaboratoryNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DaysPublished=Integer.valueOf(doc.getElementsByTagName("DaysPublished").item(0).getFirstChild().getNodeValue());
-				DaysActual=Integer.valueOf(doc.getElementsByTagName("DaysActual").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"LabTurnaroundNum")!=null) {
+					LabTurnaroundNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabTurnaroundNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DaysPublished")!=null) {
+					DaysPublished=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DaysPublished"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DaysActual")!=null) {
+					DaysActual=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DaysActual"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

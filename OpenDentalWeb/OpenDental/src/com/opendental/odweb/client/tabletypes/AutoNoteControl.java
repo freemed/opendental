@@ -46,11 +46,21 @@ public class AutoNoteControl {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AutoNoteControlNum=Integer.valueOf(doc.getElementsByTagName("AutoNoteControlNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				ControlType=doc.getElementsByTagName("ControlType").item(0).getFirstChild().getNodeValue();
-				ControlLabel=doc.getElementsByTagName("ControlLabel").item(0).getFirstChild().getNodeValue();
-				ControlOptions=doc.getElementsByTagName("ControlOptions").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"AutoNoteControlNum")!=null) {
+					AutoNoteControlNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoNoteControlNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ControlType")!=null) {
+					ControlType=Serializing.GetXmlNodeValue(doc,"ControlType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ControlLabel")!=null) {
+					ControlLabel=Serializing.GetXmlNodeValue(doc,"ControlLabel");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ControlOptions")!=null) {
+					ControlOptions=Serializing.GetXmlNodeValue(doc,"ControlOptions");
+				}
 			}
 			catch(Exception e) {
 				throw e;

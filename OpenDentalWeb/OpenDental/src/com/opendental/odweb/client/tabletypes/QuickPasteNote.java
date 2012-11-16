@@ -46,11 +46,21 @@ public class QuickPasteNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				QuickPasteNoteNum=Integer.valueOf(doc.getElementsByTagName("QuickPasteNoteNum").item(0).getFirstChild().getNodeValue());
-				QuickPasteCatNum=Integer.valueOf(doc.getElementsByTagName("QuickPasteCatNum").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				Abbreviation=doc.getElementsByTagName("Abbreviation").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"QuickPasteNoteNum")!=null) {
+					QuickPasteNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteNoteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
+					QuickPasteCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Abbreviation")!=null) {
+					Abbreviation=Serializing.GetXmlNodeValue(doc,"Abbreviation");
+				}
 			}
 			catch(Exception e) {
 				throw e;

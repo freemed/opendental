@@ -38,9 +38,15 @@ public class SigButDefElement {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ElementNum=Integer.valueOf(doc.getElementsByTagName("ElementNum").item(0).getFirstChild().getNodeValue());
-				SigButDefNum=Integer.valueOf(doc.getElementsByTagName("SigButDefNum").item(0).getFirstChild().getNodeValue());
-				SigElementDefNum=Integer.valueOf(doc.getElementsByTagName("SigElementDefNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ElementNum")!=null) {
+					ElementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElementNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigButDefNum")!=null) {
+					SigButDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigButDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigElementDefNum")!=null) {
+					SigElementDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementDefNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -126,31 +126,81 @@ public class Clearinghouse {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClearinghouseNum=Integer.valueOf(doc.getElementsByTagName("ClearinghouseNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ExportPath=doc.getElementsByTagName("ExportPath").item(0).getFirstChild().getNodeValue();
-				Payors=doc.getElementsByTagName("Payors").item(0).getFirstChild().getNodeValue();
-				Eformat=ElectronicClaimFormat.values()[Integer.valueOf(doc.getElementsByTagName("Eformat").item(0).getFirstChild().getNodeValue())];
-				ISA05=doc.getElementsByTagName("ISA05").item(0).getFirstChild().getNodeValue();
-				SenderTIN=doc.getElementsByTagName("SenderTIN").item(0).getFirstChild().getNodeValue();
-				ISA07=doc.getElementsByTagName("ISA07").item(0).getFirstChild().getNodeValue();
-				ISA08=doc.getElementsByTagName("ISA08").item(0).getFirstChild().getNodeValue();
-				ISA15=doc.getElementsByTagName("ISA15").item(0).getFirstChild().getNodeValue();
-				Password=doc.getElementsByTagName("Password").item(0).getFirstChild().getNodeValue();
-				ResponsePath=doc.getElementsByTagName("ResponsePath").item(0).getFirstChild().getNodeValue();
-				CommBridge=EclaimsCommBridge.values()[Integer.valueOf(doc.getElementsByTagName("CommBridge").item(0).getFirstChild().getNodeValue())];
-				ClientProgram=doc.getElementsByTagName("ClientProgram").item(0).getFirstChild().getNodeValue();
-				LastBatchNumber=Integer.valueOf(doc.getElementsByTagName("LastBatchNumber").item(0).getFirstChild().getNodeValue());
-				ModemPort=Byte.valueOf(doc.getElementsByTagName("ModemPort").item(0).getFirstChild().getNodeValue());
-				LoginID=doc.getElementsByTagName("LoginID").item(0).getFirstChild().getNodeValue();
-				SenderName=doc.getElementsByTagName("SenderName").item(0).getFirstChild().getNodeValue();
-				SenderTelephone=doc.getElementsByTagName("SenderTelephone").item(0).getFirstChild().getNodeValue();
-				GS03=doc.getElementsByTagName("GS03").item(0).getFirstChild().getNodeValue();
-				ISA02=doc.getElementsByTagName("ISA02").item(0).getFirstChild().getNodeValue();
-				ISA04=doc.getElementsByTagName("ISA04").item(0).getFirstChild().getNodeValue();
-				ISA16=doc.getElementsByTagName("ISA16").item(0).getFirstChild().getNodeValue();
-				SeparatorData=doc.getElementsByTagName("SeparatorData").item(0).getFirstChild().getNodeValue();
-				SeparatorSegment=doc.getElementsByTagName("SeparatorSegment").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ClearinghouseNum")!=null) {
+					ClearinghouseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClearinghouseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ExportPath")!=null) {
+					ExportPath=Serializing.GetXmlNodeValue(doc,"ExportPath");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Payors")!=null) {
+					Payors=Serializing.GetXmlNodeValue(doc,"Payors");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Eformat")!=null) {
+					Eformat=ElectronicClaimFormat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Eformat"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA05")!=null) {
+					ISA05=Serializing.GetXmlNodeValue(doc,"ISA05");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SenderTIN")!=null) {
+					SenderTIN=Serializing.GetXmlNodeValue(doc,"SenderTIN");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA07")!=null) {
+					ISA07=Serializing.GetXmlNodeValue(doc,"ISA07");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA08")!=null) {
+					ISA08=Serializing.GetXmlNodeValue(doc,"ISA08");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA15")!=null) {
+					ISA15=Serializing.GetXmlNodeValue(doc,"ISA15");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ResponsePath")!=null) {
+					ResponsePath=Serializing.GetXmlNodeValue(doc,"ResponsePath");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CommBridge")!=null) {
+					CommBridge=EclaimsCommBridge.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommBridge"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClientProgram")!=null) {
+					ClientProgram=Serializing.GetXmlNodeValue(doc,"ClientProgram");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LastBatchNumber")!=null) {
+					LastBatchNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LastBatchNumber"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ModemPort")!=null) {
+					ModemPort=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ModemPort"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LoginID")!=null) {
+					LoginID=Serializing.GetXmlNodeValue(doc,"LoginID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SenderName")!=null) {
+					SenderName=Serializing.GetXmlNodeValue(doc,"SenderName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SenderTelephone")!=null) {
+					SenderTelephone=Serializing.GetXmlNodeValue(doc,"SenderTelephone");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GS03")!=null) {
+					GS03=Serializing.GetXmlNodeValue(doc,"GS03");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA02")!=null) {
+					ISA02=Serializing.GetXmlNodeValue(doc,"ISA02");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA04")!=null) {
+					ISA04=Serializing.GetXmlNodeValue(doc,"ISA04");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ISA16")!=null) {
+					ISA16=Serializing.GetXmlNodeValue(doc,"ISA16");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SeparatorData")!=null) {
+					SeparatorData=Serializing.GetXmlNodeValue(doc,"SeparatorData");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SeparatorSegment")!=null) {
+					SeparatorSegment=Serializing.GetXmlNodeValue(doc,"SeparatorSegment");
+				}
 			}
 			catch(Exception e) {
 				throw e;

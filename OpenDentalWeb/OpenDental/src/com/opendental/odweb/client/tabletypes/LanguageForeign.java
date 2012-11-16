@@ -50,12 +50,24 @@ public class LanguageForeign {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LanguageForeignNum=Integer.valueOf(doc.getElementsByTagName("LanguageForeignNum").item(0).getFirstChild().getNodeValue());
-				ClassType=doc.getElementsByTagName("ClassType").item(0).getFirstChild().getNodeValue();
-				English=doc.getElementsByTagName("English").item(0).getFirstChild().getNodeValue();
-				Culture=doc.getElementsByTagName("Culture").item(0).getFirstChild().getNodeValue();
-				Translation=doc.getElementsByTagName("Translation").item(0).getFirstChild().getNodeValue();
-				Comments=doc.getElementsByTagName("Comments").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"LanguageForeignNum")!=null) {
+					LanguageForeignNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LanguageForeignNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClassType")!=null) {
+					ClassType=Serializing.GetXmlNodeValue(doc,"ClassType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"English")!=null) {
+					English=Serializing.GetXmlNodeValue(doc,"English");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Culture")!=null) {
+					Culture=Serializing.GetXmlNodeValue(doc,"Culture");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Translation")!=null) {
+					Translation=Serializing.GetXmlNodeValue(doc,"Translation");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -46,11 +46,21 @@ public class Popup {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PopupNum=Integer.valueOf(doc.getElementsByTagName("PopupNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				IsDisabled=(doc.getElementsByTagName("IsDisabled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PopupLevel=EnumPopupLevel.values()[Integer.valueOf(doc.getElementsByTagName("PopupLevel").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"PopupNum")!=null) {
+					PopupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PopupNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsDisabled")!=null) {
+					IsDisabled=(Serializing.GetXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PopupLevel")!=null) {
+					PopupLevel=EnumPopupLevel.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PopupLevel"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

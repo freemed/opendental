@@ -54,13 +54,27 @@ public class HL7DefField {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				HL7DefFieldNum=Integer.valueOf(doc.getElementsByTagName("HL7DefFieldNum").item(0).getFirstChild().getNodeValue());
-				HL7DefSegmentNum=Integer.valueOf(doc.getElementsByTagName("HL7DefSegmentNum").item(0).getFirstChild().getNodeValue());
-				OrdinalPos=Integer.valueOf(doc.getElementsByTagName("OrdinalPos").item(0).getFirstChild().getNodeValue());
-				TableId=doc.getElementsByTagName("TableId").item(0).getFirstChild().getNodeValue();
-				DataType=DataTypeHL7.values()[Integer.valueOf(doc.getElementsByTagName("DataType").item(0).getFirstChild().getNodeValue())];
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FixedText=doc.getElementsByTagName("FixedText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefFieldNum")!=null) {
+					HL7DefFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefFieldNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
+					HL7DefSegmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrdinalPos")!=null) {
+					OrdinalPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrdinalPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TableId")!=null) {
+					TableId=Serializing.GetXmlNodeValue(doc,"TableId");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DataType")!=null) {
+					DataType=DataTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DataType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FixedText")!=null) {
+					FixedText=Serializing.GetXmlNodeValue(doc,"FixedText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

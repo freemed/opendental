@@ -38,9 +38,15 @@ public class InsFilingCodeSubtype {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				InsFilingCodeSubtypeNum=Integer.valueOf(doc.getElementsByTagName("InsFilingCodeSubtypeNum").item(0).getFirstChild().getNodeValue());
-				InsFilingCodeNum=Integer.valueOf(doc.getElementsByTagName("InsFilingCodeNum").item(0).getFirstChild().getNodeValue());
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeSubtypeNum")!=null) {
+					InsFilingCodeSubtypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeSubtypeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
+					InsFilingCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
 			}
 			catch(Exception e) {
 				throw e;

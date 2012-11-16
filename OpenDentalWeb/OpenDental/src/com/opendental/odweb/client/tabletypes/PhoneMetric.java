@@ -48,11 +48,21 @@ public class PhoneMetric {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PhoneMetricNum=Integer.valueOf(doc.getElementsByTagName("PhoneMetricNum").item(0).getFirstChild().getNodeValue());
-				DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEntry").item(0).getFirstChild().getNodeValue());
-				VoiceMails=Integer.valueOf(doc.getElementsByTagName("VoiceMails").item(0).getFirstChild().getNodeValue());
-				Triages=Integer.valueOf(doc.getElementsByTagName("Triages").item(0).getFirstChild().getNodeValue());
-				MinutesBehind=Integer.valueOf(doc.getElementsByTagName("MinutesBehind").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"PhoneMetricNum")!=null) {
+					PhoneMetricNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneMetricNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeEntry")!=null) {
+					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"VoiceMails")!=null) {
+					VoiceMails=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VoiceMails"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Triages")!=null) {
+					Triages=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Triages"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MinutesBehind")!=null) {
+					MinutesBehind=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MinutesBehind"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

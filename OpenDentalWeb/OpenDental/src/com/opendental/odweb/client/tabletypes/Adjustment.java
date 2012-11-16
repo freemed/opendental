@@ -76,18 +76,42 @@ public class Adjustment {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AdjNum=Integer.valueOf(doc.getElementsByTagName("AdjNum").item(0).getFirstChild().getNodeValue());
-				AdjDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AdjDate").item(0).getFirstChild().getNodeValue());
-				AdjAmt=Double.valueOf(doc.getElementsByTagName("AdjAmt").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				AdjType=Integer.valueOf(doc.getElementsByTagName("AdjType").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				AdjNote=doc.getElementsByTagName("AdjNote").item(0).getFirstChild().getNodeValue();
-				ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("ProcDate").item(0).getFirstChild().getNodeValue());
-				ProcNum=Integer.valueOf(doc.getElementsByTagName("ProcNum").item(0).getFirstChild().getNodeValue());
-				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				StatementNum=Integer.valueOf(doc.getElementsByTagName("StatementNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"AdjNum")!=null) {
+					AdjNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AdjNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjDate")!=null) {
+					AdjDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AdjDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjAmt")!=null) {
+					AdjAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AdjAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjType")!=null) {
+					AdjType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AdjType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjNote")!=null) {
+					AdjNote=Serializing.GetXmlNodeValue(doc,"AdjNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcDate")!=null) {
+					ProcDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ProcDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StatementNum")!=null) {
+					StatementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StatementNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

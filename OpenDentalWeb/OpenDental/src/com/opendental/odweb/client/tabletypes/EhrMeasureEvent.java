@@ -48,11 +48,21 @@ public class EhrMeasureEvent {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EhrMeasureEventNum=Integer.valueOf(doc.getElementsByTagName("EhrMeasureEventNum").item(0).getFirstChild().getNodeValue());
-				DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTEvent").item(0).getFirstChild().getNodeValue());
-				EventType=EhrMeasureEventType.values()[Integer.valueOf(doc.getElementsByTagName("EventType").item(0).getFirstChild().getNodeValue())];
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				MoreInfo=doc.getElementsByTagName("MoreInfo").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EhrMeasureEventNum")!=null) {
+					EhrMeasureEventNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrMeasureEventNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTEvent")!=null) {
+					DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTEvent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EventType")!=null) {
+					EventType=EhrMeasureEventType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EventType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MoreInfo")!=null) {
+					MoreInfo=Serializing.GetXmlNodeValue(doc,"MoreInfo");
+				}
 			}
 			catch(Exception e) {
 				throw e;

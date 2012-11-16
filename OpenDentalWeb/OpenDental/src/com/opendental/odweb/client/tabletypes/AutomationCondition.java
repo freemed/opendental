@@ -46,11 +46,21 @@ public class AutomationCondition {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AutomationConditionNum=Integer.valueOf(doc.getElementsByTagName("AutomationConditionNum").item(0).getFirstChild().getNodeValue());
-				AutomationNum=Integer.valueOf(doc.getElementsByTagName("AutomationNum").item(0).getFirstChild().getNodeValue());
-				CompareField=AutoCondField.values()[Integer.valueOf(doc.getElementsByTagName("CompareField").item(0).getFirstChild().getNodeValue())];
-				Comparison=AutoCondComparison.values()[Integer.valueOf(doc.getElementsByTagName("Comparison").item(0).getFirstChild().getNodeValue())];
-				CompareString=doc.getElementsByTagName("CompareString").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"AutomationConditionNum")!=null) {
+					AutomationConditionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationConditionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AutomationNum")!=null) {
+					AutomationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CompareField")!=null) {
+					CompareField=AutoCondField.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CompareField"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Comparison")!=null) {
+					Comparison=AutoCondComparison.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Comparison"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CompareString")!=null) {
+					CompareString=Serializing.GetXmlNodeValue(doc,"CompareString");
+				}
 			}
 			catch(Exception e) {
 				throw e;

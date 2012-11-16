@@ -40,9 +40,15 @@ public class SupplyNeeded {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SupplyNeededNum=Integer.valueOf(doc.getElementsByTagName("SupplyNeededNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DateAdded=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateAdded").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SupplyNeededNum")!=null) {
+					SupplyNeededNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyNeededNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateAdded")!=null) {
+					DateAdded=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateAdded"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

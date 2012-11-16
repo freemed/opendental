@@ -38,9 +38,15 @@ public class TaskSubscription {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TaskSubscriptionNum=Integer.valueOf(doc.getElementsByTagName("TaskSubscriptionNum").item(0).getFirstChild().getNodeValue());
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				TaskListNum=Integer.valueOf(doc.getElementsByTagName("TaskListNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TaskSubscriptionNum")!=null) {
+					TaskSubscriptionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskSubscriptionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskListNum")!=null) {
+					TaskListNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

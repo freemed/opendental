@@ -94,23 +94,57 @@ public class ProcTP {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcTPNum=Integer.valueOf(doc.getElementsByTagName("ProcTPNum").item(0).getFirstChild().getNodeValue());
-				TreatPlanNum=Integer.valueOf(doc.getElementsByTagName("TreatPlanNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ProcNumOrig=Integer.valueOf(doc.getElementsByTagName("ProcNumOrig").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				Priority=Integer.valueOf(doc.getElementsByTagName("Priority").item(0).getFirstChild().getNodeValue());
-				ToothNumTP=doc.getElementsByTagName("ToothNumTP").item(0).getFirstChild().getNodeValue();
-				Surf=doc.getElementsByTagName("Surf").item(0).getFirstChild().getNodeValue();
-				ProcCode=doc.getElementsByTagName("ProcCode").item(0).getFirstChild().getNodeValue();
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
-				FeeAmt=Double.valueOf(doc.getElementsByTagName("FeeAmt").item(0).getFirstChild().getNodeValue());
-				PriInsAmt=Double.valueOf(doc.getElementsByTagName("PriInsAmt").item(0).getFirstChild().getNodeValue());
-				SecInsAmt=Double.valueOf(doc.getElementsByTagName("SecInsAmt").item(0).getFirstChild().getNodeValue());
-				PatAmt=Double.valueOf(doc.getElementsByTagName("PatAmt").item(0).getFirstChild().getNodeValue());
-				Discount=Double.valueOf(doc.getElementsByTagName("Discount").item(0).getFirstChild().getNodeValue());
-				Prognosis=doc.getElementsByTagName("Prognosis").item(0).getFirstChild().getNodeValue();
-				Dx=doc.getElementsByTagName("Dx").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProcTPNum")!=null) {
+					ProcTPNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcTPNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TreatPlanNum")!=null) {
+					TreatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TreatPlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcNumOrig")!=null) {
+					ProcNumOrig=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNumOrig"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Priority")!=null) {
+					Priority=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Priority"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothNumTP")!=null) {
+					ToothNumTP=Serializing.GetXmlNodeValue(doc,"ToothNumTP");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Surf")!=null) {
+					Surf=Serializing.GetXmlNodeValue(doc,"Surf");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcCode")!=null) {
+					ProcCode=Serializing.GetXmlNodeValue(doc,"ProcCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeAmt")!=null) {
+					FeeAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"FeeAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PriInsAmt")!=null) {
+					PriInsAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PriInsAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SecInsAmt")!=null) {
+					SecInsAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"SecInsAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatAmt")!=null) {
+					PatAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PatAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Discount")!=null) {
+					Discount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Discount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Prognosis")!=null) {
+					Prognosis=Serializing.GetXmlNodeValue(doc,"Prognosis");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Dx")!=null) {
+					Dx=Serializing.GetXmlNodeValue(doc,"Dx");
+				}
 			}
 			catch(Exception e) {
 				throw e;

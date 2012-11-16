@@ -44,10 +44,18 @@ public class ErxLog {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ErxLogNum=Integer.valueOf(doc.getElementsByTagName("ErxLogNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				MsgText=doc.getElementsByTagName("MsgText").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ErxLogNum")!=null) {
+					ErxLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ErxLogNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MsgText")!=null) {
+					MsgText=Serializing.GetXmlNodeValue(doc,"MsgText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

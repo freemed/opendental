@@ -96,23 +96,57 @@ public class Statement {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				StatementNum=Integer.valueOf(doc.getElementsByTagName("StatementNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue());
-				DateRangeFrom=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateRangeFrom").item(0).getFirstChild().getNodeValue());
-				DateRangeTo=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateRangeTo").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				NoteBold=doc.getElementsByTagName("NoteBold").item(0).getFirstChild().getNodeValue();
-				Mode_=StatementMode.values()[Integer.valueOf(doc.getElementsByTagName("Mode_").item(0).getFirstChild().getNodeValue())];
-				HidePayment=(doc.getElementsByTagName("HidePayment").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SinglePatient=(doc.getElementsByTagName("SinglePatient").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Intermingled=(doc.getElementsByTagName("Intermingled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsSent=(doc.getElementsByTagName("IsSent").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DocNum=Integer.valueOf(doc.getElementsByTagName("DocNum").item(0).getFirstChild().getNodeValue());
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				IsReceipt=(doc.getElementsByTagName("IsReceipt").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsInvoice=(doc.getElementsByTagName("IsInvoice").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsInvoiceCopy=(doc.getElementsByTagName("IsInvoiceCopy").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"StatementNum")!=null) {
+					StatementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StatementNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateSent")!=null) {
+					DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateRangeFrom")!=null) {
+					DateRangeFrom=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateRangeFrom"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateRangeTo")!=null) {
+					DateRangeTo=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateRangeTo"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoteBold")!=null) {
+					NoteBold=Serializing.GetXmlNodeValue(doc,"NoteBold");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Mode_")!=null) {
+					Mode_=StatementMode.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Mode_"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HidePayment")!=null) {
+					HidePayment=(Serializing.GetXmlNodeValue(doc,"HidePayment")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SinglePatient")!=null) {
+					SinglePatient=(Serializing.GetXmlNodeValue(doc,"SinglePatient")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Intermingled")!=null) {
+					Intermingled=(Serializing.GetXmlNodeValue(doc,"Intermingled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsSent")!=null) {
+					IsSent=(Serializing.GetXmlNodeValue(doc,"IsSent")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DocNum")!=null) {
+					DocNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsReceipt")!=null) {
+					IsReceipt=(Serializing.GetXmlNodeValue(doc,"IsReceipt")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsInvoice")!=null) {
+					IsInvoice=(Serializing.GetXmlNodeValue(doc,"IsInvoice")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsInvoiceCopy")!=null) {
+					IsInvoiceCopy=(Serializing.GetXmlNodeValue(doc,"IsInvoiceCopy")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

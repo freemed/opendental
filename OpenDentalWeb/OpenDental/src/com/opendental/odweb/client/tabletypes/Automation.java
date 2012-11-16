@@ -58,14 +58,30 @@ public class Automation {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AutomationNum=Integer.valueOf(doc.getElementsByTagName("AutomationNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Autotrigger=AutomationTrigger.values()[Integer.valueOf(doc.getElementsByTagName("Autotrigger").item(0).getFirstChild().getNodeValue())];
-				ProcCodes=doc.getElementsByTagName("ProcCodes").item(0).getFirstChild().getNodeValue();
-				AutoAction=AutomationAction.values()[Integer.valueOf(doc.getElementsByTagName("AutoAction").item(0).getFirstChild().getNodeValue())];
-				SheetDefNum=Integer.valueOf(doc.getElementsByTagName("SheetDefNum").item(0).getFirstChild().getNodeValue());
-				CommType=Integer.valueOf(doc.getElementsByTagName("CommType").item(0).getFirstChild().getNodeValue());
-				MessageContent=doc.getElementsByTagName("MessageContent").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"AutomationNum")!=null) {
+					AutomationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Autotrigger")!=null) {
+					Autotrigger=AutomationTrigger.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Autotrigger"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcCodes")!=null) {
+					ProcCodes=Serializing.GetXmlNodeValue(doc,"ProcCodes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AutoAction")!=null) {
+					AutoAction=AutomationAction.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoAction"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SheetDefNum")!=null) {
+					SheetDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CommType")!=null) {
+					CommType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MessageContent")!=null) {
+					MessageContent=Serializing.GetXmlNodeValue(doc,"MessageContent");
+				}
 			}
 			catch(Exception e) {
 				throw e;

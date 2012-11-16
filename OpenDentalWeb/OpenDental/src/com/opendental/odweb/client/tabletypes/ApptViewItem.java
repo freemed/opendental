@@ -66,16 +66,36 @@ public class ApptViewItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ApptViewItemNum=Integer.valueOf(doc.getElementsByTagName("ApptViewItemNum").item(0).getFirstChild().getNodeValue());
-				ApptViewNum=Integer.valueOf(doc.getElementsByTagName("ApptViewNum").item(0).getFirstChild().getNodeValue());
-				OpNum=Integer.valueOf(doc.getElementsByTagName("OpNum").item(0).getFirstChild().getNodeValue());
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				ElementDesc=doc.getElementsByTagName("ElementDesc").item(0).getFirstChild().getNodeValue();
-				ElementOrder=Byte.valueOf(doc.getElementsByTagName("ElementOrder").item(0).getFirstChild().getNodeValue());
-				ElementColor=Integer.valueOf(doc.getElementsByTagName("ElementColor").item(0).getFirstChild().getNodeValue());
-				ElementAlignment=ApptViewAlignment.values()[Integer.valueOf(doc.getElementsByTagName("ElementAlignment").item(0).getFirstChild().getNodeValue())];
-				ApptFieldDefNum=Integer.valueOf(doc.getElementsByTagName("ApptFieldDefNum").item(0).getFirstChild().getNodeValue());
-				PatFieldDefNum=Integer.valueOf(doc.getElementsByTagName("PatFieldDefNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ApptViewItemNum")!=null) {
+					ApptViewItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ApptViewNum")!=null) {
+					ApptViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OpNum")!=null) {
+					OpNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OpNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ElementDesc")!=null) {
+					ElementDesc=Serializing.GetXmlNodeValue(doc,"ElementDesc");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ElementOrder")!=null) {
+					ElementOrder=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ElementOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ElementColor")!=null) {
+					ElementColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElementColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ElementAlignment")!=null) {
+					ElementAlignment=ApptViewAlignment.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElementAlignment"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum")!=null) {
+					ApptFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum")!=null) {
+					PatFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

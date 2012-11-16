@@ -66,16 +66,36 @@ public class ApptView {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ApptViewNum=Integer.valueOf(doc.getElementsByTagName("ApptViewNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				RowsPerIncr=Byte.valueOf(doc.getElementsByTagName("RowsPerIncr").item(0).getFirstChild().getNodeValue());
-				OnlyScheduledProvs=(doc.getElementsByTagName("OnlyScheduledProvs").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				OnlySchedBeforeTime=doc.getElementsByTagName("OnlySchedBeforeTime").item(0).getFirstChild().getNodeValue();
-				OnlySchedAfterTime=doc.getElementsByTagName("OnlySchedAfterTime").item(0).getFirstChild().getNodeValue();
-				StackBehavUR=ApptViewStackBehavior.values()[Integer.valueOf(doc.getElementsByTagName("StackBehavUR").item(0).getFirstChild().getNodeValue())];
-				StackBehavLR=ApptViewStackBehavior.values()[Integer.valueOf(doc.getElementsByTagName("StackBehavLR").item(0).getFirstChild().getNodeValue())];
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ApptViewNum")!=null) {
+					ApptViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RowsPerIncr")!=null) {
+					RowsPerIncr=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"RowsPerIncr"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OnlyScheduledProvs")!=null) {
+					OnlyScheduledProvs=(Serializing.GetXmlNodeValue(doc,"OnlyScheduledProvs")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OnlySchedBeforeTime")!=null) {
+					OnlySchedBeforeTime=Serializing.GetXmlNodeValue(doc,"OnlySchedBeforeTime");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OnlySchedAfterTime")!=null) {
+					OnlySchedAfterTime=Serializing.GetXmlNodeValue(doc,"OnlySchedAfterTime");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StackBehavUR")!=null) {
+					StackBehavUR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StackBehavUR"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StackBehavLR")!=null) {
+					StackBehavLR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StackBehavLR"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

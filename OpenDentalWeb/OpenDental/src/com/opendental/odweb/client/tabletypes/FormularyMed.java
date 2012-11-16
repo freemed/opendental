@@ -38,9 +38,15 @@ public class FormularyMed {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				FormularyMedNum=Integer.valueOf(doc.getElementsByTagName("FormularyMedNum").item(0).getFirstChild().getNodeValue());
-				FormularyNum=Integer.valueOf(doc.getElementsByTagName("FormularyNum").item(0).getFirstChild().getNodeValue());
-				MedicationNum=Integer.valueOf(doc.getElementsByTagName("MedicationNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"FormularyMedNum")!=null) {
+					FormularyMedNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FormularyMedNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FormularyNum")!=null) {
+					FormularyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FormularyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

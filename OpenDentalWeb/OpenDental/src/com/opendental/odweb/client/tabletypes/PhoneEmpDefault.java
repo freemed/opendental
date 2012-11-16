@@ -70,17 +70,39 @@ public class PhoneEmpDefault {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				NoGraph=(doc.getElementsByTagName("NoGraph").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				NoColor=(doc.getElementsByTagName("NoColor").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				RingGroups=AsteriskRingGroups.values()[Integer.valueOf(doc.getElementsByTagName("RingGroups").item(0).getFirstChild().getNodeValue())];
-				EmpName=doc.getElementsByTagName("EmpName").item(0).getFirstChild().getNodeValue();
-				PhoneExt=Integer.valueOf(doc.getElementsByTagName("PhoneExt").item(0).getFirstChild().getNodeValue());
-				StatusOverride=PhoneEmpStatusOverride.values()[Integer.valueOf(doc.getElementsByTagName("StatusOverride").item(0).getFirstChild().getNodeValue())];
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				ComputerName=doc.getElementsByTagName("ComputerName").item(0).getFirstChild().getNodeValue();
-				IsPrivateScreen=(doc.getElementsByTagName("IsPrivateScreen").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsTriageOperator=(doc.getElementsByTagName("IsTriageOperator").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoGraph")!=null) {
+					NoGraph=(Serializing.GetXmlNodeValue(doc,"NoGraph")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NoColor")!=null) {
+					NoColor=(Serializing.GetXmlNodeValue(doc,"NoColor")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RingGroups")!=null) {
+					RingGroups=AsteriskRingGroups.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RingGroups"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmpName")!=null) {
+					EmpName=Serializing.GetXmlNodeValue(doc,"EmpName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PhoneExt")!=null) {
+					PhoneExt=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneExt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StatusOverride")!=null) {
+					StatusOverride=PhoneEmpStatusOverride.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StatusOverride"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsPrivateScreen")!=null) {
+					IsPrivateScreen=(Serializing.GetXmlNodeValue(doc,"IsPrivateScreen")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsTriageOperator")!=null) {
+					IsTriageOperator=(Serializing.GetXmlNodeValue(doc,"IsTriageOperator")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

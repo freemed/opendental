@@ -40,9 +40,15 @@ public class Computer {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ComputerNum=Integer.valueOf(doc.getElementsByTagName("ComputerNum").item(0).getFirstChild().getNodeValue());
-				CompName=doc.getElementsByTagName("CompName").item(0).getFirstChild().getNodeValue();
-				LastHeartBeat=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("LastHeartBeat").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ComputerNum")!=null) {
+					ComputerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ComputerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CompName")!=null) {
+					CompName=Serializing.GetXmlNodeValue(doc,"CompName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LastHeartBeat")!=null) {
+					LastHeartBeat=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"LastHeartBeat"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

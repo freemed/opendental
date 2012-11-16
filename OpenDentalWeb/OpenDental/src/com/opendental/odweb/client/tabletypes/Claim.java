@@ -308,76 +308,216 @@ public class Claim {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue());
-				DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSent").item(0).getFirstChild().getNodeValue());
-				ClaimStatus=doc.getElementsByTagName("ClaimStatus").item(0).getFirstChild().getNodeValue();
-				DateReceived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateReceived").item(0).getFirstChild().getNodeValue());
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				ProvTreat=Integer.valueOf(doc.getElementsByTagName("ProvTreat").item(0).getFirstChild().getNodeValue());
-				ClaimFee=Double.valueOf(doc.getElementsByTagName("ClaimFee").item(0).getFirstChild().getNodeValue());
-				InsPayEst=Double.valueOf(doc.getElementsByTagName("InsPayEst").item(0).getFirstChild().getNodeValue());
-				InsPayAmt=Double.valueOf(doc.getElementsByTagName("InsPayAmt").item(0).getFirstChild().getNodeValue());
-				DedApplied=Double.valueOf(doc.getElementsByTagName("DedApplied").item(0).getFirstChild().getNodeValue());
-				PreAuthString=doc.getElementsByTagName("PreAuthString").item(0).getFirstChild().getNodeValue();
-				IsProsthesis=doc.getElementsByTagName("IsProsthesis").item(0).getFirstChild().getNodeValue();
-				PriorDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("PriorDate").item(0).getFirstChild().getNodeValue());
-				ReasonUnderPaid=doc.getElementsByTagName("ReasonUnderPaid").item(0).getFirstChild().getNodeValue();
-				ClaimNote=doc.getElementsByTagName("ClaimNote").item(0).getFirstChild().getNodeValue();
-				ClaimType=doc.getElementsByTagName("ClaimType").item(0).getFirstChild().getNodeValue();
-				ProvBill=Integer.valueOf(doc.getElementsByTagName("ProvBill").item(0).getFirstChild().getNodeValue());
-				ReferringProv=Integer.valueOf(doc.getElementsByTagName("ReferringProv").item(0).getFirstChild().getNodeValue());
-				RefNumString=doc.getElementsByTagName("RefNumString").item(0).getFirstChild().getNodeValue();
-				PlaceService=PlaceOfService.values()[Integer.valueOf(doc.getElementsByTagName("PlaceService").item(0).getFirstChild().getNodeValue())];
-				AccidentRelated=doc.getElementsByTagName("AccidentRelated").item(0).getFirstChild().getNodeValue();
-				AccidentDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("AccidentDate").item(0).getFirstChild().getNodeValue());
-				AccidentST=doc.getElementsByTagName("AccidentST").item(0).getFirstChild().getNodeValue();
-				EmployRelated=YN.values()[Integer.valueOf(doc.getElementsByTagName("EmployRelated").item(0).getFirstChild().getNodeValue())];
-				IsOrtho=(doc.getElementsByTagName("IsOrtho").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				OrthoRemainM=Byte.valueOf(doc.getElementsByTagName("OrthoRemainM").item(0).getFirstChild().getNodeValue());
-				OrthoDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("OrthoDate").item(0).getFirstChild().getNodeValue());
-				PatRelat=Relat.values()[Integer.valueOf(doc.getElementsByTagName("PatRelat").item(0).getFirstChild().getNodeValue())];
-				PlanNum2=Integer.valueOf(doc.getElementsByTagName("PlanNum2").item(0).getFirstChild().getNodeValue());
-				PatRelat2=Relat.values()[Integer.valueOf(doc.getElementsByTagName("PatRelat2").item(0).getFirstChild().getNodeValue())];
-				WriteOff=Double.valueOf(doc.getElementsByTagName("WriteOff").item(0).getFirstChild().getNodeValue());
-				Radiographs=Byte.valueOf(doc.getElementsByTagName("Radiographs").item(0).getFirstChild().getNodeValue());
-				ClinicNum=Integer.valueOf(doc.getElementsByTagName("ClinicNum").item(0).getFirstChild().getNodeValue());
-				ClaimForm=Integer.valueOf(doc.getElementsByTagName("ClaimForm").item(0).getFirstChild().getNodeValue());
-				AttachedImages=Integer.valueOf(doc.getElementsByTagName("AttachedImages").item(0).getFirstChild().getNodeValue());
-				AttachedModels=Integer.valueOf(doc.getElementsByTagName("AttachedModels").item(0).getFirstChild().getNodeValue());
-				AttachedFlags=doc.getElementsByTagName("AttachedFlags").item(0).getFirstChild().getNodeValue();
-				AttachmentID=doc.getElementsByTagName("AttachmentID").item(0).getFirstChild().getNodeValue();
-				CanadianMaterialsForwarded=doc.getElementsByTagName("CanadianMaterialsForwarded").item(0).getFirstChild().getNodeValue();
-				CanadianReferralProviderNum=doc.getElementsByTagName("CanadianReferralProviderNum").item(0).getFirstChild().getNodeValue();
-				CanadianReferralReason=Byte.valueOf(doc.getElementsByTagName("CanadianReferralReason").item(0).getFirstChild().getNodeValue());
-				CanadianIsInitialLower=doc.getElementsByTagName("CanadianIsInitialLower").item(0).getFirstChild().getNodeValue();
-				CanadianDateInitialLower=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadianDateInitialLower").item(0).getFirstChild().getNodeValue());
-				CanadianMandProsthMaterial=Byte.valueOf(doc.getElementsByTagName("CanadianMandProsthMaterial").item(0).getFirstChild().getNodeValue());
-				CanadianIsInitialUpper=doc.getElementsByTagName("CanadianIsInitialUpper").item(0).getFirstChild().getNodeValue();
-				CanadianDateInitialUpper=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadianDateInitialUpper").item(0).getFirstChild().getNodeValue());
-				CanadianMaxProsthMaterial=Byte.valueOf(doc.getElementsByTagName("CanadianMaxProsthMaterial").item(0).getFirstChild().getNodeValue());
-				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
-				InsSubNum2=Integer.valueOf(doc.getElementsByTagName("InsSubNum2").item(0).getFirstChild().getNodeValue());
-				CanadaTransRefNum=doc.getElementsByTagName("CanadaTransRefNum").item(0).getFirstChild().getNodeValue();
-				CanadaEstTreatStartDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CanadaEstTreatStartDate").item(0).getFirstChild().getNodeValue());
-				CanadaInitialPayment=Double.valueOf(doc.getElementsByTagName("CanadaInitialPayment").item(0).getFirstChild().getNodeValue());
-				CanadaPaymentMode=Byte.valueOf(doc.getElementsByTagName("CanadaPaymentMode").item(0).getFirstChild().getNodeValue());
-				CanadaTreatDuration=Byte.valueOf(doc.getElementsByTagName("CanadaTreatDuration").item(0).getFirstChild().getNodeValue());
-				CanadaNumAnticipatedPayments=Byte.valueOf(doc.getElementsByTagName("CanadaNumAnticipatedPayments").item(0).getFirstChild().getNodeValue());
-				CanadaAnticipatedPayAmount=Double.valueOf(doc.getElementsByTagName("CanadaAnticipatedPayAmount").item(0).getFirstChild().getNodeValue());
-				PriorAuthorizationNumber=doc.getElementsByTagName("PriorAuthorizationNumber").item(0).getFirstChild().getNodeValue();
-				SpecialProgramCode=EnumClaimSpecialProgram.values()[Integer.valueOf(doc.getElementsByTagName("SpecialProgramCode").item(0).getFirstChild().getNodeValue())];
-				UniformBillType=doc.getElementsByTagName("UniformBillType").item(0).getFirstChild().getNodeValue();
-				MedType=EnumClaimMedType.values()[Integer.valueOf(doc.getElementsByTagName("MedType").item(0).getFirstChild().getNodeValue())];
-				AdmissionTypeCode=doc.getElementsByTagName("AdmissionTypeCode").item(0).getFirstChild().getNodeValue();
-				AdmissionSourceCode=doc.getElementsByTagName("AdmissionSourceCode").item(0).getFirstChild().getNodeValue();
-				PatientStatusCode=doc.getElementsByTagName("PatientStatusCode").item(0).getFirstChild().getNodeValue();
-				CustomTracking=Integer.valueOf(doc.getElementsByTagName("CustomTracking").item(0).getFirstChild().getNodeValue());
-				DateResent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateResent").item(0).getFirstChild().getNodeValue());
-				CorrectionType=ClaimCorrectionType.values()[Integer.valueOf(doc.getElementsByTagName("CorrectionType").item(0).getFirstChild().getNodeValue())];
-				ClaimIdentifier=doc.getElementsByTagName("ClaimIdentifier").item(0).getFirstChild().getNodeValue();
-				OrigRefNum=doc.getElementsByTagName("OrigRefNum").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateService")!=null) {
+					DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateService"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateSent")!=null) {
+					DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimStatus")!=null) {
+					ClaimStatus=Serializing.GetXmlNodeValue(doc,"ClaimStatus");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateReceived")!=null) {
+					DateReceived=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateReceived"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvTreat")!=null) {
+					ProvTreat=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvTreat"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimFee")!=null) {
+					ClaimFee=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFee"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPayEst")!=null) {
+					InsPayEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsPayEst"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsPayAmt")!=null) {
+					InsPayAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsPayAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DedApplied")!=null) {
+					DedApplied=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DedApplied"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PreAuthString")!=null) {
+					PreAuthString=Serializing.GetXmlNodeValue(doc,"PreAuthString");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsProsthesis")!=null) {
+					IsProsthesis=Serializing.GetXmlNodeValue(doc,"IsProsthesis");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PriorDate")!=null) {
+					PriorDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"PriorDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReasonUnderPaid")!=null) {
+					ReasonUnderPaid=Serializing.GetXmlNodeValue(doc,"ReasonUnderPaid");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNote")!=null) {
+					ClaimNote=Serializing.GetXmlNodeValue(doc,"ClaimNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimType")!=null) {
+					ClaimType=Serializing.GetXmlNodeValue(doc,"ClaimType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvBill")!=null) {
+					ProvBill=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvBill"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReferringProv")!=null) {
+					ReferringProv=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReferringProv"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RefNumString")!=null) {
+					RefNumString=Serializing.GetXmlNodeValue(doc,"RefNumString");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlaceService")!=null) {
+					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlaceService"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccidentRelated")!=null) {
+					AccidentRelated=Serializing.GetXmlNodeValue(doc,"AccidentRelated");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccidentDate")!=null) {
+					AccidentDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AccidentDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccidentST")!=null) {
+					AccidentST=Serializing.GetXmlNodeValue(doc,"AccidentST");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployRelated")!=null) {
+					EmployRelated=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployRelated"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsOrtho")!=null) {
+					IsOrtho=(Serializing.GetXmlNodeValue(doc,"IsOrtho")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrthoRemainM")!=null) {
+					OrthoRemainM=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"OrthoRemainM"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrthoDate")!=null) {
+					OrthoDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"OrthoDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatRelat")!=null) {
+					PatRelat=Relat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatRelat"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum2")!=null) {
+					PlanNum2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatRelat2")!=null) {
+					PatRelat2=Relat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatRelat2"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WriteOff")!=null) {
+					WriteOff=Double.valueOf(Serializing.GetXmlNodeValue(doc,"WriteOff"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Radiographs")!=null) {
+					Radiographs=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Radiographs"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimForm")!=null) {
+					ClaimForm=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimForm"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AttachedImages")!=null) {
+					AttachedImages=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AttachedImages"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AttachedModels")!=null) {
+					AttachedModels=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AttachedModels"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AttachedFlags")!=null) {
+					AttachedFlags=Serializing.GetXmlNodeValue(doc,"AttachedFlags");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AttachmentID")!=null) {
+					AttachmentID=Serializing.GetXmlNodeValue(doc,"AttachmentID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianMaterialsForwarded")!=null) {
+					CanadianMaterialsForwarded=Serializing.GetXmlNodeValue(doc,"CanadianMaterialsForwarded");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianReferralProviderNum")!=null) {
+					CanadianReferralProviderNum=Serializing.GetXmlNodeValue(doc,"CanadianReferralProviderNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianReferralReason")!=null) {
+					CanadianReferralReason=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianReferralReason"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianIsInitialLower")!=null) {
+					CanadianIsInitialLower=Serializing.GetXmlNodeValue(doc,"CanadianIsInitialLower");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianDateInitialLower")!=null) {
+					CanadianDateInitialLower=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CanadianDateInitialLower"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianMandProsthMaterial")!=null) {
+					CanadianMandProsthMaterial=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianMandProsthMaterial"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianIsInitialUpper")!=null) {
+					CanadianIsInitialUpper=Serializing.GetXmlNodeValue(doc,"CanadianIsInitialUpper");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianDateInitialUpper")!=null) {
+					CanadianDateInitialUpper=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CanadianDateInitialUpper"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianMaxProsthMaterial")!=null) {
+					CanadianMaxProsthMaterial=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianMaxProsthMaterial"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum2")!=null) {
+					InsSubNum2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaTransRefNum")!=null) {
+					CanadaTransRefNum=Serializing.GetXmlNodeValue(doc,"CanadaTransRefNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaEstTreatStartDate")!=null) {
+					CanadaEstTreatStartDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CanadaEstTreatStartDate"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaInitialPayment")!=null) {
+					CanadaInitialPayment=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CanadaInitialPayment"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaPaymentMode")!=null) {
+					CanadaPaymentMode=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadaPaymentMode"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaTreatDuration")!=null) {
+					CanadaTreatDuration=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadaTreatDuration"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaNumAnticipatedPayments")!=null) {
+					CanadaNumAnticipatedPayments=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadaNumAnticipatedPayments"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadaAnticipatedPayAmount")!=null) {
+					CanadaAnticipatedPayAmount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CanadaAnticipatedPayAmount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PriorAuthorizationNumber")!=null) {
+					PriorAuthorizationNumber=Serializing.GetXmlNodeValue(doc,"PriorAuthorizationNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SpecialProgramCode")!=null) {
+					SpecialProgramCode=EnumClaimSpecialProgram.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SpecialProgramCode"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UniformBillType")!=null) {
+					UniformBillType=Serializing.GetXmlNodeValue(doc,"UniformBillType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedType")!=null) {
+					MedType=EnumClaimMedType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdmissionTypeCode")!=null) {
+					AdmissionTypeCode=Serializing.GetXmlNodeValue(doc,"AdmissionTypeCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdmissionSourceCode")!=null) {
+					AdmissionSourceCode=Serializing.GetXmlNodeValue(doc,"AdmissionSourceCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatientStatusCode")!=null) {
+					PatientStatusCode=Serializing.GetXmlNodeValue(doc,"PatientStatusCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CustomTracking")!=null) {
+					CustomTracking=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CustomTracking"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateResent")!=null) {
+					DateResent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateResent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CorrectionType")!=null) {
+					CorrectionType=ClaimCorrectionType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CorrectionType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimIdentifier")!=null) {
+					ClaimIdentifier=Serializing.GetXmlNodeValue(doc,"ClaimIdentifier");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrigRefNum")!=null) {
+					OrigRefNum=Serializing.GetXmlNodeValue(doc,"OrigRefNum");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -76,18 +76,42 @@ public class Commlog {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CommlogNum=Integer.valueOf(doc.getElementsByTagName("CommlogNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				CommDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CommDateTime").item(0).getFirstChild().getNodeValue());
-				CommType=Integer.valueOf(doc.getElementsByTagName("CommType").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				Mode_=CommItemMode.values()[Integer.valueOf(doc.getElementsByTagName("Mode_").item(0).getFirstChild().getNodeValue())];
-				SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(doc.getElementsByTagName("SentOrReceived").item(0).getFirstChild().getNodeValue())];
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				Signature=doc.getElementsByTagName("Signature").item(0).getFirstChild().getNodeValue();
-				SigIsTopaz=(doc.getElementsByTagName("SigIsTopaz").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeEnd").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"CommlogNum")!=null) {
+					CommlogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommlogNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CommDateTime")!=null) {
+					CommDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CommDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CommType")!=null) {
+					CommType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Mode_")!=null) {
+					Mode_=CommItemMode.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Mode_"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SentOrReceived")!=null) {
+					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SentOrReceived"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeEnd")!=null) {
+					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEnd"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -38,9 +38,15 @@ public class RecallTrigger {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RecallTriggerNum=Integer.valueOf(doc.getElementsByTagName("RecallTriggerNum").item(0).getFirstChild().getNodeValue());
-				RecallTypeNum=Integer.valueOf(doc.getElementsByTagName("RecallTypeNum").item(0).getFirstChild().getNodeValue());
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"RecallTriggerNum")!=null) {
+					RecallTriggerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallTriggerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RecallTypeNum")!=null) {
+					RecallTypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallTypeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

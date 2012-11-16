@@ -46,11 +46,21 @@ public class SupplyOrderItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SupplyOrderItemNum=Integer.valueOf(doc.getElementsByTagName("SupplyOrderItemNum").item(0).getFirstChild().getNodeValue());
-				SupplyOrderNum=Integer.valueOf(doc.getElementsByTagName("SupplyOrderNum").item(0).getFirstChild().getNodeValue());
-				SupplyNum=Integer.valueOf(doc.getElementsByTagName("SupplyNum").item(0).getFirstChild().getNodeValue());
-				Qty=Integer.valueOf(doc.getElementsByTagName("Qty").item(0).getFirstChild().getNodeValue());
-				Price=Double.valueOf(doc.getElementsByTagName("Price").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SupplyOrderItemNum")!=null) {
+					SupplyOrderItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyOrderItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum")!=null) {
+					SupplyOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SupplyNum")!=null) {
+					SupplyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Qty")!=null) {
+					Qty=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Qty"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Price")!=null) {
+					Price=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Price"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

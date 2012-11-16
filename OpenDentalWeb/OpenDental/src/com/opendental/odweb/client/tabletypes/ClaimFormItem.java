@@ -62,15 +62,33 @@ public class ClaimFormItem {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimFormItemNum=Integer.valueOf(doc.getElementsByTagName("ClaimFormItemNum").item(0).getFirstChild().getNodeValue());
-				ClaimFormNum=Integer.valueOf(doc.getElementsByTagName("ClaimFormNum").item(0).getFirstChild().getNodeValue());
-				ImageFileName=doc.getElementsByTagName("ImageFileName").item(0).getFirstChild().getNodeValue();
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FormatString=doc.getElementsByTagName("FormatString").item(0).getFirstChild().getNodeValue();
-				XPos=Float.valueOf(doc.getElementsByTagName("XPos").item(0).getFirstChild().getNodeValue());
-				YPos=Float.valueOf(doc.getElementsByTagName("YPos").item(0).getFirstChild().getNodeValue());
-				Width=Float.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Float.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ClaimFormItemNum")!=null) {
+					ClaimFormItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormItemNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ImageFileName")!=null) {
+					ImageFileName=Serializing.GetXmlNodeValue(doc,"ImageFileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FormatString")!=null) {
+					FormatString=Serializing.GetXmlNodeValue(doc,"FormatString");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"XPos")!=null) {
+					XPos=Float.valueOf(Serializing.GetXmlNodeValue(doc,"XPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"YPos")!=null) {
+					YPos=Float.valueOf(Serializing.GetXmlNodeValue(doc,"YPos"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

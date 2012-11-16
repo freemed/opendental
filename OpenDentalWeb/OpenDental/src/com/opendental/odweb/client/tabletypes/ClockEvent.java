@@ -88,21 +88,51 @@ public class ClockEvent {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClockEventNum=Integer.valueOf(doc.getElementsByTagName("ClockEventNum").item(0).getFirstChild().getNodeValue());
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				TimeEntered1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeEntered1").item(0).getFirstChild().getNodeValue());
-				TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeDisplayed1").item(0).getFirstChild().getNodeValue());
-				ClockStatus=TimeClockStatus.values()[Integer.valueOf(doc.getElementsByTagName("ClockStatus").item(0).getFirstChild().getNodeValue())];
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				TimeEntered2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeEntered2").item(0).getFirstChild().getNodeValue());
-				TimeDisplayed2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("TimeDisplayed2").item(0).getFirstChild().getNodeValue());
-				OTimeHours=doc.getElementsByTagName("OTimeHours").item(0).getFirstChild().getNodeValue();
-				OTimeAuto=doc.getElementsByTagName("OTimeAuto").item(0).getFirstChild().getNodeValue();
-				Adjust=doc.getElementsByTagName("Adjust").item(0).getFirstChild().getNodeValue();
-				AdjustAuto=doc.getElementsByTagName("AdjustAuto").item(0).getFirstChild().getNodeValue();
-				AdjustIsOverridden=(doc.getElementsByTagName("AdjustIsOverridden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				AmountBonus=Double.valueOf(doc.getElementsByTagName("AmountBonus").item(0).getFirstChild().getNodeValue());
-				AmountBonusAuto=Double.valueOf(doc.getElementsByTagName("AmountBonusAuto").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ClockEventNum")!=null) {
+					ClockEventNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockEventNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeEntered1")!=null) {
+					TimeEntered1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntered1"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeDisplayed1")!=null) {
+					TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeDisplayed1"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=TimeClockStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeEntered2")!=null) {
+					TimeEntered2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntered2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimeDisplayed2")!=null) {
+					TimeDisplayed2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeDisplayed2"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OTimeHours")!=null) {
+					OTimeHours=Serializing.GetXmlNodeValue(doc,"OTimeHours");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OTimeAuto")!=null) {
+					OTimeAuto=Serializing.GetXmlNodeValue(doc,"OTimeAuto");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Adjust")!=null) {
+					Adjust=Serializing.GetXmlNodeValue(doc,"Adjust");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjustAuto")!=null) {
+					AdjustAuto=Serializing.GetXmlNodeValue(doc,"AdjustAuto");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AdjustIsOverridden")!=null) {
+					AdjustIsOverridden=(Serializing.GetXmlNodeValue(doc,"AdjustIsOverridden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AmountBonus")!=null) {
+					AmountBonus=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmountBonus"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AmountBonusAuto")!=null) {
+					AmountBonusAuto=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmountBonusAuto"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -54,13 +54,27 @@ public class HL7DefSegment {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				HL7DefSegmentNum=Integer.valueOf(doc.getElementsByTagName("HL7DefSegmentNum").item(0).getFirstChild().getNodeValue());
-				HL7DefMessageNum=Integer.valueOf(doc.getElementsByTagName("HL7DefMessageNum").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				CanRepeat=(doc.getElementsByTagName("CanRepeat").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsOptional=(doc.getElementsByTagName("IsOptional").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SegmentName=SegmentNameHL7.values()[Integer.valueOf(doc.getElementsByTagName("SegmentName").item(0).getFirstChild().getNodeValue())];
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
+					HL7DefSegmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
+					HL7DefMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanRepeat")!=null) {
+					CanRepeat=(Serializing.GetXmlNodeValue(doc,"CanRepeat")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsOptional")!=null) {
+					IsOptional=(Serializing.GetXmlNodeValue(doc,"IsOptional")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SegmentName")!=null) {
+					SegmentName=SegmentNameHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SegmentName"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
 			}
 			catch(Exception e) {
 				throw e;

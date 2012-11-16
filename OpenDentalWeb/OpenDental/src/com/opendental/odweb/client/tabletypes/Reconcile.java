@@ -52,12 +52,24 @@ public class Reconcile {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReconcileNum=Integer.valueOf(doc.getElementsByTagName("ReconcileNum").item(0).getFirstChild().getNodeValue());
-				AccountNum=Integer.valueOf(doc.getElementsByTagName("AccountNum").item(0).getFirstChild().getNodeValue());
-				StartingBal=Double.valueOf(doc.getElementsByTagName("StartingBal").item(0).getFirstChild().getNodeValue());
-				EndingBal=Double.valueOf(doc.getElementsByTagName("EndingBal").item(0).getFirstChild().getNodeValue());
-				DateReconcile=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateReconcile").item(0).getFirstChild().getNodeValue());
-				IsLocked=(doc.getElementsByTagName("IsLocked").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"ReconcileNum")!=null) {
+					ReconcileNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReconcileNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccountNum")!=null) {
+					AccountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StartingBal")!=null) {
+					StartingBal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"StartingBal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EndingBal")!=null) {
+					EndingBal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"EndingBal"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateReconcile")!=null) {
+					DateReconcile=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateReconcile"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsLocked")!=null) {
+					IsLocked=(Serializing.GetXmlNodeValue(doc,"IsLocked")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

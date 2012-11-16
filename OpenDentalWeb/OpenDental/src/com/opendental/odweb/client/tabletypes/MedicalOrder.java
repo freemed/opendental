@@ -56,13 +56,27 @@ public class MedicalOrder {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				MedicalOrderNum=Integer.valueOf(doc.getElementsByTagName("MedicalOrderNum").item(0).getFirstChild().getNodeValue());
-				MedOrderType=MedicalOrderType.values()[Integer.valueOf(doc.getElementsByTagName("MedOrderType").item(0).getFirstChild().getNodeValue())];
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTimeOrder=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeOrder").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				IsDiscontinued=(doc.getElementsByTagName("IsDiscontinued").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum")!=null) {
+					MedicalOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedOrderType")!=null) {
+					MedOrderType=MedicalOrderType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedOrderType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeOrder")!=null) {
+					DateTimeOrder=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsDiscontinued")!=null) {
+					IsDiscontinued=(Serializing.GetXmlNodeValue(doc,"IsDiscontinued")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

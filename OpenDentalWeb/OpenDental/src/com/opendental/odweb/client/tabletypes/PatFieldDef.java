@@ -42,10 +42,18 @@ public class PatFieldDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PatFieldDefNum=Integer.valueOf(doc.getElementsByTagName("PatFieldDefNum").item(0).getFirstChild().getNodeValue());
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FieldType=PatFieldType.values()[Integer.valueOf(doc.getElementsByTagName("FieldType").item(0).getFirstChild().getNodeValue())];
-				PickList=doc.getElementsByTagName("PickList").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum")!=null) {
+					PatFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldType")!=null) {
+					FieldType=PatFieldType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PickList")!=null) {
+					PickList=Serializing.GetXmlNodeValue(doc,"PickList");
+				}
 			}
 			catch(Exception e) {
 				throw e;

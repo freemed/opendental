@@ -92,22 +92,54 @@ public class Phone {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PhoneNum=Integer.valueOf(doc.getElementsByTagName("PhoneNum").item(0).getFirstChild().getNodeValue());
-				Extension=Integer.valueOf(doc.getElementsByTagName("Extension").item(0).getFirstChild().getNodeValue());
-				EmployeeName=doc.getElementsByTagName("EmployeeName").item(0).getFirstChild().getNodeValue();
-				ClockStatus=ClockStatusEnum.values()[Integer.valueOf(doc.getElementsByTagName("ClockStatus").item(0).getFirstChild().getNodeValue())];
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ColorBar=Integer.valueOf(doc.getElementsByTagName("ColorBar").item(0).getFirstChild().getNodeValue());
-				ColorText=Integer.valueOf(doc.getElementsByTagName("ColorText").item(0).getFirstChild().getNodeValue());
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				CustomerNumber=doc.getElementsByTagName("CustomerNumber").item(0).getFirstChild().getNodeValue();
-				InOrOut=doc.getElementsByTagName("InOrOut").item(0).getFirstChild().getNodeValue();
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeStart").item(0).getFirstChild().getNodeValue());
-				WebCamImage=doc.getElementsByTagName("WebCamImage").item(0).getFirstChild().getNodeValue();
-				ScreenshotPath=doc.getElementsByTagName("ScreenshotPath").item(0).getFirstChild().getNodeValue();
-				ScreenshotImage=doc.getElementsByTagName("ScreenshotImage").item(0).getFirstChild().getNodeValue();
-				CustomerNumberRaw=doc.getElementsByTagName("CustomerNumberRaw").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"PhoneNum")!=null) {
+					PhoneNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Extension")!=null) {
+					Extension=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Extension"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeName")!=null) {
+					EmployeeName=Serializing.GetXmlNodeValue(doc,"EmployeeName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=ClockStatusEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColorBar")!=null) {
+					ColorBar=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorBar"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColorText")!=null) {
+					ColorText=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorText"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CustomerNumber")!=null) {
+					CustomerNumber=Serializing.GetXmlNodeValue(doc,"CustomerNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InOrOut")!=null) {
+					InOrOut=Serializing.GetXmlNodeValue(doc,"InOrOut");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeStart")!=null) {
+					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"WebCamImage")!=null) {
+					WebCamImage=Serializing.GetXmlNodeValue(doc,"WebCamImage");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenshotPath")!=null) {
+					ScreenshotPath=Serializing.GetXmlNodeValue(doc,"ScreenshotPath");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScreenshotImage")!=null) {
+					ScreenshotImage=Serializing.GetXmlNodeValue(doc,"ScreenshotImage");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CustomerNumberRaw")!=null) {
+					CustomerNumberRaw=Serializing.GetXmlNodeValue(doc,"CustomerNumberRaw");
+				}
 			}
 			catch(Exception e) {
 				throw e;

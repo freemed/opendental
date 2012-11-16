@@ -58,14 +58,30 @@ public class ToothGridDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ToothGridDefNum=Integer.valueOf(doc.getElementsByTagName("ToothGridDefNum").item(0).getFirstChild().getNodeValue());
-				NameInternal=doc.getElementsByTagName("NameInternal").item(0).getFirstChild().getNodeValue();
-				NameShowing=doc.getElementsByTagName("NameShowing").item(0).getFirstChild().getNodeValue();
-				CellType=ToothGridCellType.values()[Integer.valueOf(doc.getElementsByTagName("CellType").item(0).getFirstChild().getNodeValue())];
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				ColumnWidth=Integer.valueOf(doc.getElementsByTagName("ColumnWidth").item(0).getFirstChild().getNodeValue());
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
-				ProcStatus=ProcStat.values()[Integer.valueOf(doc.getElementsByTagName("ProcStatus").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"ToothGridDefNum")!=null) {
+					ToothGridDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NameInternal")!=null) {
+					NameInternal=Serializing.GetXmlNodeValue(doc,"NameInternal");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NameShowing")!=null) {
+					NameShowing=Serializing.GetXmlNodeValue(doc,"NameShowing");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CellType")!=null) {
+					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CellType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColumnWidth")!=null) {
+					ColumnWidth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColumnWidth"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcStatus")!=null) {
+					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcStatus"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

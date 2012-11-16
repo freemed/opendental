@@ -50,12 +50,24 @@ public class ClaimValCodeLog {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ClaimValCodeLogNum=Integer.valueOf(doc.getElementsByTagName("ClaimValCodeLogNum").item(0).getFirstChild().getNodeValue());
-				ClaimNum=Integer.valueOf(doc.getElementsByTagName("ClaimNum").item(0).getFirstChild().getNodeValue());
-				ClaimField=doc.getElementsByTagName("ClaimField").item(0).getFirstChild().getNodeValue();
-				ValCode=doc.getElementsByTagName("ValCode").item(0).getFirstChild().getNodeValue();
-				ValAmount=Double.valueOf(doc.getElementsByTagName("ValAmount").item(0).getFirstChild().getNodeValue());
-				Ordinal=Integer.valueOf(doc.getElementsByTagName("Ordinal").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ClaimValCodeLogNum")!=null) {
+					ClaimValCodeLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimValCodeLogNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimField")!=null) {
+					ClaimField=Serializing.GetXmlNodeValue(doc,"ClaimField");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ValCode")!=null) {
+					ValCode=Serializing.GetXmlNodeValue(doc,"ValCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ValAmount")!=null) {
+					ValAmount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ValAmount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Ordinal")!=null) {
+					Ordinal=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Ordinal"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

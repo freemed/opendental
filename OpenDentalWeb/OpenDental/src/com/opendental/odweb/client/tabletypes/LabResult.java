@@ -68,16 +68,36 @@ public class LabResult {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LabResultNum=Integer.valueOf(doc.getElementsByTagName("LabResultNum").item(0).getFirstChild().getNodeValue());
-				LabPanelNum=Integer.valueOf(doc.getElementsByTagName("LabPanelNum").item(0).getFirstChild().getNodeValue());
-				DateTimeTest=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTimeTest").item(0).getFirstChild().getNodeValue());
-				TestName=doc.getElementsByTagName("TestName").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				TestID=doc.getElementsByTagName("TestID").item(0).getFirstChild().getNodeValue();
-				ObsValue=doc.getElementsByTagName("ObsValue").item(0).getFirstChild().getNodeValue();
-				ObsUnits=doc.getElementsByTagName("ObsUnits").item(0).getFirstChild().getNodeValue();
-				ObsRange=doc.getElementsByTagName("ObsRange").item(0).getFirstChild().getNodeValue();
-				AbnormalFlag=LabAbnormalFlag.values()[Integer.valueOf(doc.getElementsByTagName("AbnormalFlag").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"LabResultNum")!=null) {
+					LabResultNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabResultNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LabPanelNum")!=null) {
+					LabPanelNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabPanelNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTimeTest")!=null) {
+					DateTimeTest=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeTest"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TestName")!=null) {
+					TestName=Serializing.GetXmlNodeValue(doc,"TestName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TestID")!=null) {
+					TestID=Serializing.GetXmlNodeValue(doc,"TestID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObsValue")!=null) {
+					ObsValue=Serializing.GetXmlNodeValue(doc,"ObsValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObsUnits")!=null) {
+					ObsUnits=Serializing.GetXmlNodeValue(doc,"ObsUnits");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObsRange")!=null) {
+					ObsRange=Serializing.GetXmlNodeValue(doc,"ObsRange");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AbnormalFlag")!=null) {
+					AbnormalFlag=LabAbnormalFlag.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AbnormalFlag"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

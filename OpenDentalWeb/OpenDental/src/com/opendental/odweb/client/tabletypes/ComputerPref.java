@@ -120,29 +120,75 @@ public class ComputerPref {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ComputerPrefNum=Integer.valueOf(doc.getElementsByTagName("ComputerPrefNum").item(0).getFirstChild().getNodeValue());
-				ComputerName=doc.getElementsByTagName("ComputerName").item(0).getFirstChild().getNodeValue();
-				GraphicsUseHardware=(doc.getElementsByTagName("GraphicsUseHardware").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				GraphicsSimple=DrawingMode.values()[Integer.valueOf(doc.getElementsByTagName("GraphicsSimple").item(0).getFirstChild().getNodeValue())];
-				SensorType=doc.getElementsByTagName("SensorType").item(0).getFirstChild().getNodeValue();
-				SensorBinned=(doc.getElementsByTagName("SensorBinned").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SensorPort=Integer.valueOf(doc.getElementsByTagName("SensorPort").item(0).getFirstChild().getNodeValue());
-				SensorExposure=Integer.valueOf(doc.getElementsByTagName("SensorExposure").item(0).getFirstChild().getNodeValue());
-				GraphicsDoubleBuffering=(doc.getElementsByTagName("GraphicsDoubleBuffering").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				PreferredPixelFormatNum=Integer.valueOf(doc.getElementsByTagName("PreferredPixelFormatNum").item(0).getFirstChild().getNodeValue());
-				AtoZpath=doc.getElementsByTagName("AtoZpath").item(0).getFirstChild().getNodeValue();
-				TaskKeepListHidden=(doc.getElementsByTagName("TaskKeepListHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				TaskDock=Integer.valueOf(doc.getElementsByTagName("TaskDock").item(0).getFirstChild().getNodeValue());
-				TaskX=Integer.valueOf(doc.getElementsByTagName("TaskX").item(0).getFirstChild().getNodeValue());
-				TaskY=Integer.valueOf(doc.getElementsByTagName("TaskY").item(0).getFirstChild().getNodeValue());
-				DirectXFormat=doc.getElementsByTagName("DirectXFormat").item(0).getFirstChild().getNodeValue();
-				RecentApptView=Byte.valueOf(doc.getElementsByTagName("RecentApptView").item(0).getFirstChild().getNodeValue());
-				ScanDocSelectSource=(doc.getElementsByTagName("ScanDocSelectSource").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ScanDocShowOptions=(doc.getElementsByTagName("ScanDocShowOptions").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ScanDocDuplex=(doc.getElementsByTagName("ScanDocDuplex").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ScanDocGrayscale=(doc.getElementsByTagName("ScanDocGrayscale").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ScanDocResolution=Integer.valueOf(doc.getElementsByTagName("ScanDocResolution").item(0).getFirstChild().getNodeValue());
-				ScanDocQuality=Byte.valueOf(doc.getElementsByTagName("ScanDocQuality").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ComputerPrefNum")!=null) {
+					ComputerPrefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ComputerPrefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GraphicsUseHardware")!=null) {
+					GraphicsUseHardware=(Serializing.GetXmlNodeValue(doc,"GraphicsUseHardware")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GraphicsSimple")!=null) {
+					GraphicsSimple=DrawingMode.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GraphicsSimple"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SensorType")!=null) {
+					SensorType=Serializing.GetXmlNodeValue(doc,"SensorType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SensorBinned")!=null) {
+					SensorBinned=(Serializing.GetXmlNodeValue(doc,"SensorBinned")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SensorPort")!=null) {
+					SensorPort=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SensorPort"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SensorExposure")!=null) {
+					SensorExposure=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SensorExposure"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GraphicsDoubleBuffering")!=null) {
+					GraphicsDoubleBuffering=(Serializing.GetXmlNodeValue(doc,"GraphicsDoubleBuffering")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PreferredPixelFormatNum")!=null) {
+					PreferredPixelFormatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PreferredPixelFormatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AtoZpath")!=null) {
+					AtoZpath=Serializing.GetXmlNodeValue(doc,"AtoZpath");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskKeepListHidden")!=null) {
+					TaskKeepListHidden=(Serializing.GetXmlNodeValue(doc,"TaskKeepListHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskDock")!=null) {
+					TaskDock=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskDock"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskX")!=null) {
+					TaskX=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskX"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskY")!=null) {
+					TaskY=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskY"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DirectXFormat")!=null) {
+					DirectXFormat=Serializing.GetXmlNodeValue(doc,"DirectXFormat");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RecentApptView")!=null) {
+					RecentApptView=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"RecentApptView"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocSelectSource")!=null) {
+					ScanDocSelectSource=(Serializing.GetXmlNodeValue(doc,"ScanDocSelectSource")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocShowOptions")!=null) {
+					ScanDocShowOptions=(Serializing.GetXmlNodeValue(doc,"ScanDocShowOptions")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocDuplex")!=null) {
+					ScanDocDuplex=(Serializing.GetXmlNodeValue(doc,"ScanDocDuplex")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocGrayscale")!=null) {
+					ScanDocGrayscale=(Serializing.GetXmlNodeValue(doc,"ScanDocGrayscale")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocResolution")!=null) {
+					ScanDocResolution=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScanDocResolution"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ScanDocQuality")!=null) {
+					ScanDocQuality=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ScanDocQuality"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

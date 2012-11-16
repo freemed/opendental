@@ -46,11 +46,21 @@ public class FeeSched {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				FeeSchedNum=Integer.valueOf(doc.getElementsByTagName("FeeSchedNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				FeeSchedType=FeeScheduleType.values()[Integer.valueOf(doc.getElementsByTagName("FeeSchedType").item(0).getFirstChild().getNodeValue())];
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"FeeSchedNum")!=null) {
+					FeeSchedNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSchedNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeSchedType")!=null) {
+					FeeSchedType=FeeScheduleType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSchedType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

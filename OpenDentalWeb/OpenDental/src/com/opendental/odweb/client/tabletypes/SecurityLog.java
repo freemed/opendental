@@ -60,14 +60,30 @@ public class SecurityLog {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SecurityLogNum=Integer.valueOf(doc.getElementsByTagName("SecurityLogNum").item(0).getFirstChild().getNodeValue());
-				PermType=Permissions.values()[Integer.valueOf(doc.getElementsByTagName("PermType").item(0).getFirstChild().getNodeValue())];
-				UserNum=Integer.valueOf(doc.getElementsByTagName("UserNum").item(0).getFirstChild().getNodeValue());
-				LogDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("LogDateTime").item(0).getFirstChild().getNodeValue());
-				LogText=doc.getElementsByTagName("LogText").item(0).getFirstChild().getNodeValue();
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				CompName=doc.getElementsByTagName("CompName").item(0).getFirstChild().getNodeValue();
-				FKey=Integer.valueOf(doc.getElementsByTagName("FKey").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SecurityLogNum")!=null) {
+					SecurityLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SecurityLogNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PermType")!=null) {
+					PermType=Permissions.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PermType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LogDateTime")!=null) {
+					LogDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"LogDateTime"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LogText")!=null) {
+					LogText=Serializing.GetXmlNodeValue(doc,"LogText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CompName")!=null) {
+					CompName=Serializing.GetXmlNodeValue(doc,"CompName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FKey")!=null) {
+					FKey=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FKey"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

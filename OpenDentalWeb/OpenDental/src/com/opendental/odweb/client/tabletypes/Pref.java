@@ -42,10 +42,18 @@ public class Pref {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				PrefNum=Integer.valueOf(doc.getElementsByTagName("PrefNum").item(0).getFirstChild().getNodeValue());
-				PrefName=doc.getElementsByTagName("PrefName").item(0).getFirstChild().getNodeValue();
-				ValueString=doc.getElementsByTagName("ValueString").item(0).getFirstChild().getNodeValue();
-				Comments=doc.getElementsByTagName("Comments").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"PrefNum")!=null) {
+					PrefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PrefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PrefName")!=null) {
+					PrefName=Serializing.GetXmlNodeValue(doc,"PrefName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ValueString")!=null) {
+					ValueString=Serializing.GetXmlNodeValue(doc,"ValueString");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -48,11 +48,21 @@ public class SupplyOrder {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SupplyOrderNum=Integer.valueOf(doc.getElementsByTagName("SupplyOrderNum").item(0).getFirstChild().getNodeValue());
-				SupplierNum=Integer.valueOf(doc.getElementsByTagName("SupplierNum").item(0).getFirstChild().getNodeValue());
-				DatePlaced=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePlaced").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				AmountTotal=Double.valueOf(doc.getElementsByTagName("AmountTotal").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum")!=null) {
+					SupplyOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SupplierNum")!=null) {
+					SupplierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplierNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatePlaced")!=null) {
+					DatePlaced=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePlaced"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AmountTotal")!=null) {
+					AmountTotal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmountTotal"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

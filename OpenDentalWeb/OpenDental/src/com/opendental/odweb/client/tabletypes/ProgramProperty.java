@@ -46,11 +46,21 @@ public class ProgramProperty {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProgramPropertyNum=Integer.valueOf(doc.getElementsByTagName("ProgramPropertyNum").item(0).getFirstChild().getNodeValue());
-				ProgramNum=Integer.valueOf(doc.getElementsByTagName("ProgramNum").item(0).getFirstChild().getNodeValue());
-				PropertyDesc=doc.getElementsByTagName("PropertyDesc").item(0).getFirstChild().getNodeValue();
-				PropertyValue=doc.getElementsByTagName("PropertyValue").item(0).getFirstChild().getNodeValue();
-				ComputerName=doc.getElementsByTagName("ComputerName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProgramPropertyNum")!=null) {
+					ProgramPropertyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramPropertyNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProgramNum")!=null) {
+					ProgramNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PropertyDesc")!=null) {
+					PropertyDesc=Serializing.GetXmlNodeValue(doc,"PropertyDesc");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PropertyValue")!=null) {
+					PropertyValue=Serializing.GetXmlNodeValue(doc,"PropertyValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

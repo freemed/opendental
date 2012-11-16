@@ -50,12 +50,24 @@ public class Question {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				QuestionNum=Integer.valueOf(doc.getElementsByTagName("QuestionNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				Answer=doc.getElementsByTagName("Answer").item(0).getFirstChild().getNodeValue();
-				FormPatNum=Integer.valueOf(doc.getElementsByTagName("FormPatNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"QuestionNum")!=null) {
+					QuestionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuestionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Answer")!=null) {
+					Answer=Serializing.GetXmlNodeValue(doc,"Answer");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FormPatNum")!=null) {
+					FormPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FormPatNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -52,12 +52,24 @@ public class Medication {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				MedicationNum=Integer.valueOf(doc.getElementsByTagName("MedicationNum").item(0).getFirstChild().getNodeValue());
-				MedName=doc.getElementsByTagName("MedName").item(0).getFirstChild().getNodeValue();
-				GenericNum=Integer.valueOf(doc.getElementsByTagName("GenericNum").item(0).getFirstChild().getNodeValue());
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				RxCui=Integer.valueOf(doc.getElementsByTagName("RxCui").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedName")!=null) {
+					MedName=Serializing.GetXmlNodeValue(doc,"MedName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"GenericNum")!=null) {
+					GenericNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GenericNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

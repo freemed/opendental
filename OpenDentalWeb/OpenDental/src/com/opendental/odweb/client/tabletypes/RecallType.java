@@ -46,11 +46,21 @@ public class RecallType {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RecallTypeNum=Integer.valueOf(doc.getElementsByTagName("RecallTypeNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DefaultInterval=Integer.valueOf(doc.getElementsByTagName("DefaultInterval").item(0).getFirstChild().getNodeValue());
-				TimePattern=doc.getElementsByTagName("TimePattern").item(0).getFirstChild().getNodeValue();
-				Procedures=doc.getElementsByTagName("Procedures").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"RecallTypeNum")!=null) {
+					RecallTypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallTypeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultInterval")!=null) {
+					DefaultInterval=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefaultInterval"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TimePattern")!=null) {
+					TimePattern=Serializing.GetXmlNodeValue(doc,"TimePattern");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Procedures")!=null) {
+					Procedures=Serializing.GetXmlNodeValue(doc,"Procedures");
+				}
 			}
 			catch(Exception e) {
 				throw e;

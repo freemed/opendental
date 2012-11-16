@@ -46,11 +46,21 @@ public class ZipCode {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ZipCodeNum=Integer.valueOf(doc.getElementsByTagName("ZipCodeNum").item(0).getFirstChild().getNodeValue());
-				ZipCodeDigits=doc.getElementsByTagName("ZipCodeDigits").item(0).getFirstChild().getNodeValue();
-				City=doc.getElementsByTagName("City").item(0).getFirstChild().getNodeValue();
-				State=doc.getElementsByTagName("State").item(0).getFirstChild().getNodeValue();
-				IsFrequent=(doc.getElementsByTagName("IsFrequent").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"ZipCodeNum")!=null) {
+					ZipCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ZipCodeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ZipCodeDigits")!=null) {
+					ZipCodeDigits=Serializing.GetXmlNodeValue(doc,"ZipCodeDigits");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.GetXmlNodeValue(doc,"City");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.GetXmlNodeValue(doc,"State");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsFrequent")!=null) {
+					IsFrequent=(Serializing.GetXmlNodeValue(doc,"IsFrequent")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

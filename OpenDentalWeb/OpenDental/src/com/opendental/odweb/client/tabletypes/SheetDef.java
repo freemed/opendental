@@ -58,14 +58,30 @@ public class SheetDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SheetDefNum=Integer.valueOf(doc.getElementsByTagName("SheetDefNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				SheetType=SheetTypeEnum.values()[Integer.valueOf(doc.getElementsByTagName("SheetType").item(0).getFirstChild().getNodeValue())];
-				FontSize=Float.valueOf(doc.getElementsByTagName("FontSize").item(0).getFirstChild().getNodeValue());
-				FontName=doc.getElementsByTagName("FontName").item(0).getFirstChild().getNodeValue();
-				Width=Integer.valueOf(doc.getElementsByTagName("Width").item(0).getFirstChild().getNodeValue());
-				Height=Integer.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
-				IsLandscape=(doc.getElementsByTagName("IsLandscape").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"SheetDefNum")!=null) {
+					SheetDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SheetType")!=null) {
+					SheetType=SheetTypeEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsLandscape")!=null) {
+					IsLandscape=(Serializing.GetXmlNodeValue(doc,"IsLandscape")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

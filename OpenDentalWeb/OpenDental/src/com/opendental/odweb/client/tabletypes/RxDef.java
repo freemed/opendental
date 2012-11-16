@@ -58,14 +58,30 @@ public class RxDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				RxDefNum=Integer.valueOf(doc.getElementsByTagName("RxDefNum").item(0).getFirstChild().getNodeValue());
-				Drug=doc.getElementsByTagName("Drug").item(0).getFirstChild().getNodeValue();
-				Sig=doc.getElementsByTagName("Sig").item(0).getFirstChild().getNodeValue();
-				Disp=doc.getElementsByTagName("Disp").item(0).getFirstChild().getNodeValue();
-				Refills=doc.getElementsByTagName("Refills").item(0).getFirstChild().getNodeValue();
-				Notes=doc.getElementsByTagName("Notes").item(0).getFirstChild().getNodeValue();
-				IsControlled=(doc.getElementsByTagName("IsControlled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				RxCui=Integer.valueOf(doc.getElementsByTagName("RxCui").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"RxDefNum")!=null) {
+					RxDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Drug")!=null) {
+					Drug=Serializing.GetXmlNodeValue(doc,"Drug");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Sig")!=null) {
+					Sig=Serializing.GetXmlNodeValue(doc,"Sig");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Disp")!=null) {
+					Disp=Serializing.GetXmlNodeValue(doc,"Disp");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Refills")!=null) {
+					Refills=Serializing.GetXmlNodeValue(doc,"Refills");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsControlled")!=null) {
+					IsControlled=(Serializing.GetXmlNodeValue(doc,"IsControlled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

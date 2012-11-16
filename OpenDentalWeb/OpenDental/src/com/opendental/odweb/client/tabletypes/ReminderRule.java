@@ -46,11 +46,21 @@ public class ReminderRule {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ReminderRuleNum=Integer.valueOf(doc.getElementsByTagName("ReminderRuleNum").item(0).getFirstChild().getNodeValue());
-				ReminderCriterion=EhrCriterion.values()[Integer.valueOf(doc.getElementsByTagName("ReminderCriterion").item(0).getFirstChild().getNodeValue())];
-				CriterionFK=Integer.valueOf(doc.getElementsByTagName("CriterionFK").item(0).getFirstChild().getNodeValue());
-				CriterionValue=doc.getElementsByTagName("CriterionValue").item(0).getFirstChild().getNodeValue();
-				Message=doc.getElementsByTagName("Message").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ReminderRuleNum")!=null) {
+					ReminderRuleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReminderRuleNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReminderCriterion")!=null) {
+					ReminderCriterion=EhrCriterion.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReminderCriterion"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CriterionFK")!=null) {
+					CriterionFK=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CriterionFK"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CriterionValue")!=null) {
+					CriterionValue=Serializing.GetXmlNodeValue(doc,"CriterionValue");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Message")!=null) {
+					Message=Serializing.GetXmlNodeValue(doc,"Message");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -48,11 +48,21 @@ public class OrthoChart {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				OrthoChartNum=Integer.valueOf(doc.getElementsByTagName("OrthoChartNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateService").item(0).getFirstChild().getNodeValue());
-				FieldName=doc.getElementsByTagName("FieldName").item(0).getFirstChild().getNodeValue();
-				FieldValue=doc.getElementsByTagName("FieldValue").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"OrthoChartNum")!=null) {
+					OrthoChartNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrthoChartNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateService")!=null) {
+					DateService=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateService"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldValue")!=null) {
+					FieldValue=Serializing.GetXmlNodeValue(doc,"FieldValue");
+				}
 			}
 			catch(Exception e) {
 				throw e;

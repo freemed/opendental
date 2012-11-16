@@ -54,13 +54,27 @@ public class Employee {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EmployeeNum=Integer.valueOf(doc.getElementsByTagName("EmployeeNum").item(0).getFirstChild().getNodeValue());
-				LName=doc.getElementsByTagName("LName").item(0).getFirstChild().getNodeValue();
-				FName=doc.getElementsByTagName("FName").item(0).getFirstChild().getNodeValue();
-				MiddleI=doc.getElementsByTagName("MiddleI").item(0).getFirstChild().getNodeValue();
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ClockStatus=doc.getElementsByTagName("ClockStatus").item(0).getFirstChild().getNodeValue();
-				PhoneExt=Integer.valueOf(doc.getElementsByTagName("PhoneExt").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MiddleI")!=null) {
+					MiddleI=Serializing.GetXmlNodeValue(doc,"MiddleI");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=Serializing.GetXmlNodeValue(doc,"ClockStatus");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PhoneExt")!=null) {
+					PhoneExt=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneExt"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

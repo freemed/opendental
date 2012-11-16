@@ -68,16 +68,36 @@ public class JournalEntry {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				JournalEntryNum=Integer.valueOf(doc.getElementsByTagName("JournalEntryNum").item(0).getFirstChild().getNodeValue());
-				TransactionNum=Integer.valueOf(doc.getElementsByTagName("TransactionNum").item(0).getFirstChild().getNodeValue());
-				AccountNum=Integer.valueOf(doc.getElementsByTagName("AccountNum").item(0).getFirstChild().getNodeValue());
-				DateDisplayed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateDisplayed").item(0).getFirstChild().getNodeValue());
-				DebitAmt=Double.valueOf(doc.getElementsByTagName("DebitAmt").item(0).getFirstChild().getNodeValue());
-				CreditAmt=Double.valueOf(doc.getElementsByTagName("CreditAmt").item(0).getFirstChild().getNodeValue());
-				Memo=doc.getElementsByTagName("Memo").item(0).getFirstChild().getNodeValue();
-				Splits=doc.getElementsByTagName("Splits").item(0).getFirstChild().getNodeValue();
-				CheckNumber=doc.getElementsByTagName("CheckNumber").item(0).getFirstChild().getNodeValue();
-				ReconcileNum=Integer.valueOf(doc.getElementsByTagName("ReconcileNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"JournalEntryNum")!=null) {
+					JournalEntryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"JournalEntryNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TransactionNum")!=null) {
+					TransactionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransactionNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AccountNum")!=null) {
+					AccountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateDisplayed")!=null) {
+					DateDisplayed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDisplayed"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DebitAmt")!=null) {
+					DebitAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DebitAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CreditAmt")!=null) {
+					CreditAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CreditAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Memo")!=null) {
+					Memo=Serializing.GetXmlNodeValue(doc,"Memo");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Splits")!=null) {
+					Splits=Serializing.GetXmlNodeValue(doc,"Splits");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CheckNumber")!=null) {
+					CheckNumber=Serializing.GetXmlNodeValue(doc,"CheckNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReconcileNum")!=null) {
+					ReconcileNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReconcileNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

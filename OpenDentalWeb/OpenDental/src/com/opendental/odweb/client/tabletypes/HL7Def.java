@@ -114,28 +114,72 @@ public class HL7Def {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				HL7DefNum=Integer.valueOf(doc.getElementsByTagName("HL7DefNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ModeTx=ModeTxHL7.values()[Integer.valueOf(doc.getElementsByTagName("ModeTx").item(0).getFirstChild().getNodeValue())];
-				IncomingFolder=doc.getElementsByTagName("IncomingFolder").item(0).getFirstChild().getNodeValue();
-				OutgoingFolder=doc.getElementsByTagName("OutgoingFolder").item(0).getFirstChild().getNodeValue();
-				IncomingPort=doc.getElementsByTagName("IncomingPort").item(0).getFirstChild().getNodeValue();
-				OutgoingIpPort=doc.getElementsByTagName("OutgoingIpPort").item(0).getFirstChild().getNodeValue();
-				FieldSeparator=doc.getElementsByTagName("FieldSeparator").item(0).getFirstChild().getNodeValue();
-				ComponentSeparator=doc.getElementsByTagName("ComponentSeparator").item(0).getFirstChild().getNodeValue();
-				SubcomponentSeparator=doc.getElementsByTagName("SubcomponentSeparator").item(0).getFirstChild().getNodeValue();
-				RepetitionSeparator=doc.getElementsByTagName("RepetitionSeparator").item(0).getFirstChild().getNodeValue();
-				EscapeCharacter=doc.getElementsByTagName("EscapeCharacter").item(0).getFirstChild().getNodeValue();
-				IsInternal=(doc.getElementsByTagName("IsInternal").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				InternalType=doc.getElementsByTagName("InternalType").item(0).getFirstChild().getNodeValue();
-				InternalTypeVersion=doc.getElementsByTagName("InternalTypeVersion").item(0).getFirstChild().getNodeValue();
-				IsEnabled=(doc.getElementsByTagName("IsEnabled").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				HL7Server=doc.getElementsByTagName("HL7Server").item(0).getFirstChild().getNodeValue();
-				HL7ServiceName=doc.getElementsByTagName("HL7ServiceName").item(0).getFirstChild().getNodeValue();
-				ShowDemographics=HL7ShowDemographics.values()[Integer.valueOf(doc.getElementsByTagName("ShowDemographics").item(0).getFirstChild().getNodeValue())];
-				ShowAppts=(doc.getElementsByTagName("ShowAppts").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ShowAccount=(doc.getElementsByTagName("ShowAccount").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"HL7DefNum")!=null) {
+					HL7DefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ModeTx")!=null) {
+					ModeTx=ModeTxHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ModeTx"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IncomingFolder")!=null) {
+					IncomingFolder=Serializing.GetXmlNodeValue(doc,"IncomingFolder");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OutgoingFolder")!=null) {
+					OutgoingFolder=Serializing.GetXmlNodeValue(doc,"OutgoingFolder");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IncomingPort")!=null) {
+					IncomingPort=Serializing.GetXmlNodeValue(doc,"IncomingPort");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OutgoingIpPort")!=null) {
+					OutgoingIpPort=Serializing.GetXmlNodeValue(doc,"OutgoingIpPort");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FieldSeparator")!=null) {
+					FieldSeparator=Serializing.GetXmlNodeValue(doc,"FieldSeparator");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComponentSeparator")!=null) {
+					ComponentSeparator=Serializing.GetXmlNodeValue(doc,"ComponentSeparator");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SubcomponentSeparator")!=null) {
+					SubcomponentSeparator=Serializing.GetXmlNodeValue(doc,"SubcomponentSeparator");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RepetitionSeparator")!=null) {
+					RepetitionSeparator=Serializing.GetXmlNodeValue(doc,"RepetitionSeparator");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EscapeCharacter")!=null) {
+					EscapeCharacter=Serializing.GetXmlNodeValue(doc,"EscapeCharacter");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsInternal")!=null) {
+					IsInternal=(Serializing.GetXmlNodeValue(doc,"IsInternal")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InternalType")!=null) {
+					InternalType=Serializing.GetXmlNodeValue(doc,"InternalType");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"InternalTypeVersion")!=null) {
+					InternalTypeVersion=Serializing.GetXmlNodeValue(doc,"InternalTypeVersion");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsEnabled")!=null) {
+					IsEnabled=(Serializing.GetXmlNodeValue(doc,"IsEnabled")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7Server")!=null) {
+					HL7Server=Serializing.GetXmlNodeValue(doc,"HL7Server");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HL7ServiceName")!=null) {
+					HL7ServiceName=Serializing.GetXmlNodeValue(doc,"HL7ServiceName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowDemographics")!=null) {
+					ShowDemographics=HL7ShowDemographics.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ShowDemographics"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowAppts")!=null) {
+					ShowAppts=(Serializing.GetXmlNodeValue(doc,"ShowAppts")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowAccount")!=null) {
+					ShowAccount=(Serializing.GetXmlNodeValue(doc,"ShowAccount")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

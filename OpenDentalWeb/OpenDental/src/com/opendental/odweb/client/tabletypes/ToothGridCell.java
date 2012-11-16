@@ -46,11 +46,21 @@ public class ToothGridCell {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ToothGridCellNum=Integer.valueOf(doc.getElementsByTagName("ToothGridCellNum").item(0).getFirstChild().getNodeValue());
-				SheetFieldNum=Integer.valueOf(doc.getElementsByTagName("SheetFieldNum").item(0).getFirstChild().getNodeValue());
-				ToothGridColNum=Integer.valueOf(doc.getElementsByTagName("ToothGridColNum").item(0).getFirstChild().getNodeValue());
-				ValueEntered=doc.getElementsByTagName("ValueEntered").item(0).getFirstChild().getNodeValue();
-				ToothNum=doc.getElementsByTagName("ToothNum").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ToothGridCellNum")!=null) {
+					ToothGridCellNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridCellNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SheetFieldNum")!=null) {
+					SheetFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetFieldNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothGridColNum")!=null) {
+					ToothGridColNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridColNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ValueEntered")!=null) {
+					ValueEntered=Serializing.GetXmlNodeValue(doc,"ValueEntered");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ToothNum")!=null) {
+					ToothNum=Serializing.GetXmlNodeValue(doc,"ToothNum");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -48,11 +48,21 @@ public class DocumentMisc {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DocMiscNum=Integer.valueOf(doc.getElementsByTagName("DocMiscNum").item(0).getFirstChild().getNodeValue());
-				DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateCreated").item(0).getFirstChild().getNodeValue());
-				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
-				DocMiscType=DocumentMiscType.values()[Integer.valueOf(doc.getElementsByTagName("DocMiscType").item(0).getFirstChild().getNodeValue())];
-				RawBase64=doc.getElementsByTagName("RawBase64").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DocMiscNum")!=null) {
+					DocMiscNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocMiscNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DocMiscType")!=null) {
+					DocMiscType=DocumentMiscType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocMiscType"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				}
 			}
 			catch(Exception e) {
 				throw e;

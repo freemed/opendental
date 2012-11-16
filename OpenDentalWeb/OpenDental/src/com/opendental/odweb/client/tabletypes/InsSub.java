@@ -68,16 +68,36 @@ public class InsSub {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				InsSubNum=Integer.valueOf(doc.getElementsByTagName("InsSubNum").item(0).getFirstChild().getNodeValue());
-				PlanNum=Integer.valueOf(doc.getElementsByTagName("PlanNum").item(0).getFirstChild().getNodeValue());
-				Subscriber=Integer.valueOf(doc.getElementsByTagName("Subscriber").item(0).getFirstChild().getNodeValue());
-				DateEffective=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEffective").item(0).getFirstChild().getNodeValue());
-				DateTerm=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTerm").item(0).getFirstChild().getNodeValue());
-				ReleaseInfo=(doc.getElementsByTagName("ReleaseInfo").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				AssignBen=(doc.getElementsByTagName("AssignBen").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SubscriberID=doc.getElementsByTagName("SubscriberID").item(0).getFirstChild().getNodeValue();
-				BenefitNotes=doc.getElementsByTagName("BenefitNotes").item(0).getFirstChild().getNodeValue();
-				SubscNote=doc.getElementsByTagName("SubscNote").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Subscriber")!=null) {
+					Subscriber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Subscriber"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEffective")!=null) {
+					DateEffective=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEffective"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTerm")!=null) {
+					DateTerm=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTerm"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ReleaseInfo")!=null) {
+					ReleaseInfo=(Serializing.GetXmlNodeValue(doc,"ReleaseInfo")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AssignBen")!=null) {
+					AssignBen=(Serializing.GetXmlNodeValue(doc,"AssignBen")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SubscriberID")!=null) {
+					SubscriberID=Serializing.GetXmlNodeValue(doc,"SubscriberID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BenefitNotes")!=null) {
+					BenefitNotes=Serializing.GetXmlNodeValue(doc,"BenefitNotes");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SubscNote")!=null) {
+					SubscNote=Serializing.GetXmlNodeValue(doc,"SubscNote");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -80,19 +80,45 @@ public class CreditCard {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CreditCardNum=Integer.valueOf(doc.getElementsByTagName("CreditCardNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Address=doc.getElementsByTagName("Address").item(0).getFirstChild().getNodeValue();
-				Zip=doc.getElementsByTagName("Zip").item(0).getFirstChild().getNodeValue();
-				XChargeToken=doc.getElementsByTagName("XChargeToken").item(0).getFirstChild().getNodeValue();
-				CCNumberMasked=doc.getElementsByTagName("CCNumberMasked").item(0).getFirstChild().getNodeValue();
-				CCExpiration=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("CCExpiration").item(0).getFirstChild().getNodeValue());
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				ChargeAmt=Double.valueOf(doc.getElementsByTagName("ChargeAmt").item(0).getFirstChild().getNodeValue());
-				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
-				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
-				Note=doc.getElementsByTagName("Note").item(0).getFirstChild().getNodeValue();
-				PayPlanNum=Integer.valueOf(doc.getElementsByTagName("PayPlanNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"CreditCardNum")!=null) {
+					CreditCardNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CreditCardNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"XChargeToken")!=null) {
+					XChargeToken=Serializing.GetXmlNodeValue(doc,"XChargeToken");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CCNumberMasked")!=null) {
+					CCNumberMasked=Serializing.GetXmlNodeValue(doc,"CCNumberMasked");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CCExpiration")!=null) {
+					CCExpiration=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CCExpiration"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ChargeAmt")!=null) {
+					ChargeAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ChargeAmt"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PayPlanNum")!=null) {
+					PayPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPlanNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

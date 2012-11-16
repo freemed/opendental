@@ -44,10 +44,18 @@ public class ICD9 {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ICD9Num=Integer.valueOf(doc.getElementsByTagName("ICD9Num").item(0).getFirstChild().getNodeValue());
-				ICD9Code=doc.getElementsByTagName("ICD9Code").item(0).getFirstChild().getNodeValue();
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ICD9Num")!=null) {
+					ICD9Num=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ICD9Num"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ICD9Code")!=null) {
+					ICD9Code=Serializing.GetXmlNodeValue(doc,"ICD9Code");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

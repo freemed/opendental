@@ -46,11 +46,21 @@ public class SigButDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SigButDefNum=Integer.valueOf(doc.getElementsByTagName("SigButDefNum").item(0).getFirstChild().getNodeValue());
-				ButtonText=doc.getElementsByTagName("ButtonText").item(0).getFirstChild().getNodeValue();
-				ButtonIndex=Integer.valueOf(doc.getElementsByTagName("ButtonIndex").item(0).getFirstChild().getNodeValue());
-				SynchIcon=Byte.valueOf(doc.getElementsByTagName("SynchIcon").item(0).getFirstChild().getNodeValue());
-				ComputerName=doc.getElementsByTagName("ComputerName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"SigButDefNum")!=null) {
+					SigButDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigButDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ButtonText")!=null) {
+					ButtonText=Serializing.GetXmlNodeValue(doc,"ButtonText");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ButtonIndex")!=null) {
+					ButtonIndex=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ButtonIndex"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SynchIcon")!=null) {
+					SynchIcon=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"SynchIcon"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

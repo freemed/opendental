@@ -50,12 +50,24 @@ public class CovCat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				CovCatNum=Integer.valueOf(doc.getElementsByTagName("CovCatNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				DefaultPercent=Integer.valueOf(doc.getElementsByTagName("DefaultPercent").item(0).getFirstChild().getNodeValue());
-				CovOrder=Byte.valueOf(doc.getElementsByTagName("CovOrder").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				EbenefitCat=EbenefitCategory.values()[Integer.valueOf(doc.getElementsByTagName("EbenefitCat").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DefaultPercent")!=null) {
+					DefaultPercent=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefaultPercent"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CovOrder")!=null) {
+					CovOrder=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CovOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EbenefitCat")!=null) {
+					EbenefitCat=EbenefitCategory.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EbenefitCat"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

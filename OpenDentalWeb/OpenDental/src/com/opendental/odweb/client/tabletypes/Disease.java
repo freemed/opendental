@@ -64,15 +64,33 @@ public class Disease {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DiseaseNum=Integer.valueOf(doc.getElementsByTagName("DiseaseNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				DiseaseDefNum=Integer.valueOf(doc.getElementsByTagName("DiseaseDefNum").item(0).getFirstChild().getNodeValue());
-				PatNote=doc.getElementsByTagName("PatNote").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				ICD9Num=Integer.valueOf(doc.getElementsByTagName("ICD9Num").item(0).getFirstChild().getNodeValue());
-				ProbStatus=ProblemStatus.values()[Integer.valueOf(doc.getElementsByTagName("ProbStatus").item(0).getFirstChild().getNodeValue())];
-				DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStart").item(0).getFirstChild().getNodeValue());
-				DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateStop").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"DiseaseNum")!=null) {
+					DiseaseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNote")!=null) {
+					PatNote=Serializing.GetXmlNodeValue(doc,"PatNote");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ICD9Num")!=null) {
+					ICD9Num=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ICD9Num"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProbStatus")!=null) {
+					ProbStatus=ProblemStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProbStatus"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

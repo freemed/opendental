@@ -38,9 +38,15 @@ public class Letter {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				LetterNum=Integer.valueOf(doc.getElementsByTagName("LetterNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				BodyText=doc.getElementsByTagName("BodyText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"LetterNum")!=null) {
+					LetterNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LetterNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BodyText")!=null) {
+					BodyText=Serializing.GetXmlNodeValue(doc,"BodyText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

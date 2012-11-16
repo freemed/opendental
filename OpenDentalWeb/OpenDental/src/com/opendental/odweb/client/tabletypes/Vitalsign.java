@@ -76,18 +76,42 @@ public class Vitalsign {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				VitalsignNum=Integer.valueOf(doc.getElementsByTagName("VitalsignNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				Height=Float.valueOf(doc.getElementsByTagName("Height").item(0).getFirstChild().getNodeValue());
-				Weight=Float.valueOf(doc.getElementsByTagName("Weight").item(0).getFirstChild().getNodeValue());
-				BpSystolic=Integer.valueOf(doc.getElementsByTagName("BpSystolic").item(0).getFirstChild().getNodeValue());
-				BpDiastolic=Integer.valueOf(doc.getElementsByTagName("BpDiastolic").item(0).getFirstChild().getNodeValue());
-				DateTaken=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTaken").item(0).getFirstChild().getNodeValue());
-				HasFollowupPlan=(doc.getElementsByTagName("HasFollowupPlan").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsIneligible=(doc.getElementsByTagName("IsIneligible").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				Documentation=doc.getElementsByTagName("Documentation").item(0).getFirstChild().getNodeValue();
-				ChildGotNutrition=(doc.getElementsByTagName("ChildGotNutrition").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ChildGotPhysCouns=(doc.getElementsByTagName("ChildGotPhysCouns").item(0).getFirstChild().getNodeValue()=="0")?false:true;
+				if(Serializing.GetXmlNodeValue(doc,"VitalsignNum")!=null) {
+					VitalsignNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VitalsignNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
+					Height=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Weight")!=null) {
+					Weight=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Weight"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BpSystolic")!=null) {
+					BpSystolic=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BpSystolic"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BpDiastolic")!=null) {
+					BpDiastolic=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BpDiastolic"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTaken")!=null) {
+					DateTaken=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTaken"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"HasFollowupPlan")!=null) {
+					HasFollowupPlan=(Serializing.GetXmlNodeValue(doc,"HasFollowupPlan")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsIneligible")!=null) {
+					IsIneligible=(Serializing.GetXmlNodeValue(doc,"IsIneligible")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Documentation")!=null) {
+					Documentation=Serializing.GetXmlNodeValue(doc,"Documentation");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ChildGotNutrition")!=null) {
+					ChildGotNutrition=(Serializing.GetXmlNodeValue(doc,"ChildGotNutrition")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ChildGotPhysCouns")!=null) {
+					ChildGotPhysCouns=(Serializing.GetXmlNodeValue(doc,"ChildGotPhysCouns")=="0")?false:true;
+				}
 			}
 			catch(Exception e) {
 				throw e;

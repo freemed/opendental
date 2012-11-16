@@ -38,9 +38,15 @@ public class AutoNote {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				AutoNoteNum=Integer.valueOf(doc.getElementsByTagName("AutoNoteNum").item(0).getFirstChild().getNodeValue());
-				AutoNoteName=doc.getElementsByTagName("AutoNoteName").item(0).getFirstChild().getNodeValue();
-				MainText=doc.getElementsByTagName("MainText").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"AutoNoteNum")!=null) {
+					AutoNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoNoteNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AutoNoteName")!=null) {
+					AutoNoteName=Serializing.GetXmlNodeValue(doc,"AutoNoteName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MainText")!=null) {
+					MainText=Serializing.GetXmlNodeValue(doc,"MainText");
+				}
 			}
 			catch(Exception e) {
 				throw e;

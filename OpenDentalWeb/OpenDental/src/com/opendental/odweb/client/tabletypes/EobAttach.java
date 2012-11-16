@@ -48,11 +48,21 @@ public class EobAttach {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EobAttachNum=Integer.valueOf(doc.getElementsByTagName("EobAttachNum").item(0).getFirstChild().getNodeValue());
-				ClaimPaymentNum=Integer.valueOf(doc.getElementsByTagName("ClaimPaymentNum").item(0).getFirstChild().getNodeValue());
-				DateTCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTCreated").item(0).getFirstChild().getNodeValue());
-				FileName=doc.getElementsByTagName("FileName").item(0).getFirstChild().getNodeValue();
-				RawBase64=doc.getElementsByTagName("RawBase64").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EobAttachNum")!=null) {
+					EobAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EobAttachNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum")!=null) {
+					ClaimPaymentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTCreated")!=null) {
+					DateTCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTCreated"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				}
 			}
 			catch(Exception e) {
 				throw e;

@@ -160,39 +160,105 @@ public class Provider {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProvNum=Integer.valueOf(doc.getElementsByTagName("ProvNum").item(0).getFirstChild().getNodeValue());
-				Abbr=doc.getElementsByTagName("Abbr").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				LName=doc.getElementsByTagName("LName").item(0).getFirstChild().getNodeValue();
-				FName=doc.getElementsByTagName("FName").item(0).getFirstChild().getNodeValue();
-				MI=doc.getElementsByTagName("MI").item(0).getFirstChild().getNodeValue();
-				Suffix=doc.getElementsByTagName("Suffix").item(0).getFirstChild().getNodeValue();
-				FeeSched=Integer.valueOf(doc.getElementsByTagName("FeeSched").item(0).getFirstChild().getNodeValue());
-				Specialty=DentalSpecialty.values()[Integer.valueOf(doc.getElementsByTagName("Specialty").item(0).getFirstChild().getNodeValue())];
-				SSN=doc.getElementsByTagName("SSN").item(0).getFirstChild().getNodeValue();
-				StateLicense=doc.getElementsByTagName("StateLicense").item(0).getFirstChild().getNodeValue();
-				DEANum=doc.getElementsByTagName("DEANum").item(0).getFirstChild().getNodeValue();
-				IsSecondary=(doc.getElementsByTagName("IsSecondary").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ProvColor=Integer.valueOf(doc.getElementsByTagName("ProvColor").item(0).getFirstChild().getNodeValue());
-				IsHidden=(doc.getElementsByTagName("IsHidden").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				UsingTIN=(doc.getElementsByTagName("UsingTIN").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				BlueCrossID=doc.getElementsByTagName("BlueCrossID").item(0).getFirstChild().getNodeValue();
-				SigOnFile=(doc.getElementsByTagName("SigOnFile").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				MedicaidID=doc.getElementsByTagName("MedicaidID").item(0).getFirstChild().getNodeValue();
-				OutlineColor=Integer.valueOf(doc.getElementsByTagName("OutlineColor").item(0).getFirstChild().getNodeValue());
-				SchoolClassNum=Integer.valueOf(doc.getElementsByTagName("SchoolClassNum").item(0).getFirstChild().getNodeValue());
-				NationalProvID=doc.getElementsByTagName("NationalProvID").item(0).getFirstChild().getNodeValue();
-				CanadianOfficeNum=doc.getElementsByTagName("CanadianOfficeNum").item(0).getFirstChild().getNodeValue();
-				DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateTStamp").item(0).getFirstChild().getNodeValue());
-				AnesthProvType=Integer.valueOf(doc.getElementsByTagName("AnesthProvType").item(0).getFirstChild().getNodeValue());
-				TaxonomyCodeOverride=doc.getElementsByTagName("TaxonomyCodeOverride").item(0).getFirstChild().getNodeValue();
-				IsCDAnet=(doc.getElementsByTagName("IsCDAnet").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				EcwID=doc.getElementsByTagName("EcwID").item(0).getFirstChild().getNodeValue();
-				EhrKey=doc.getElementsByTagName("EhrKey").item(0).getFirstChild().getNodeValue();
-				StateRxID=doc.getElementsByTagName("StateRxID").item(0).getFirstChild().getNodeValue();
-				EhrHasReportAccess=(doc.getElementsByTagName("EhrHasReportAccess").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsNotPerson=(doc.getElementsByTagName("IsNotPerson").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				StateWhereLicensed=doc.getElementsByTagName("StateWhereLicensed").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Abbr")!=null) {
+					Abbr=Serializing.GetXmlNodeValue(doc,"Abbr");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MI")!=null) {
+					MI=Serializing.GetXmlNodeValue(doc,"MI");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Suffix")!=null) {
+					Suffix=Serializing.GetXmlNodeValue(doc,"Suffix");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Specialty")!=null) {
+					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Specialty"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SSN")!=null) {
+					SSN=Serializing.GetXmlNodeValue(doc,"SSN");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StateLicense")!=null) {
+					StateLicense=Serializing.GetXmlNodeValue(doc,"StateLicense");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DEANum")!=null) {
+					DEANum=Serializing.GetXmlNodeValue(doc,"DEANum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsSecondary")!=null) {
+					IsSecondary=(Serializing.GetXmlNodeValue(doc,"IsSecondary")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProvColor")!=null) {
+					ProvColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UsingTIN")!=null) {
+					UsingTIN=(Serializing.GetXmlNodeValue(doc,"UsingTIN")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"BlueCrossID")!=null) {
+					BlueCrossID=Serializing.GetXmlNodeValue(doc,"BlueCrossID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SigOnFile")!=null) {
+					SigOnFile=(Serializing.GetXmlNodeValue(doc,"SigOnFile")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MedicaidID")!=null) {
+					MedicaidID=Serializing.GetXmlNodeValue(doc,"MedicaidID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OutlineColor")!=null) {
+					OutlineColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OutlineColor"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SchoolClassNum")!=null) {
+					SchoolClassNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolClassNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"NationalProvID")!=null) {
+					NationalProvID=Serializing.GetXmlNodeValue(doc,"NationalProvID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CanadianOfficeNum")!=null) {
+					CanadianOfficeNum=Serializing.GetXmlNodeValue(doc,"CanadianOfficeNum");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"AnesthProvType")!=null) {
+					AnesthProvType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AnesthProvType"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaxonomyCodeOverride")!=null) {
+					TaxonomyCodeOverride=Serializing.GetXmlNodeValue(doc,"TaxonomyCodeOverride");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsCDAnet")!=null) {
+					IsCDAnet=(Serializing.GetXmlNodeValue(doc,"IsCDAnet")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EcwID")!=null) {
+					EcwID=Serializing.GetXmlNodeValue(doc,"EcwID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EhrKey")!=null) {
+					EhrKey=Serializing.GetXmlNodeValue(doc,"EhrKey");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StateRxID")!=null) {
+					StateRxID=Serializing.GetXmlNodeValue(doc,"StateRxID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EhrHasReportAccess")!=null) {
+					EhrHasReportAccess=(Serializing.GetXmlNodeValue(doc,"EhrHasReportAccess")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsNotPerson")!=null) {
+					IsNotPerson=(Serializing.GetXmlNodeValue(doc,"IsNotPerson")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"StateWhereLicensed")!=null) {
+					StateWhereLicensed=Serializing.GetXmlNodeValue(doc,"StateWhereLicensed");
+				}
 			}
 			catch(Exception e) {
 				throw e;

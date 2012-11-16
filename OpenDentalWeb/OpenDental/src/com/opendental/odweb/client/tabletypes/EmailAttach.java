@@ -42,10 +42,18 @@ public class EmailAttach {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EmailAttachNum=Integer.valueOf(doc.getElementsByTagName("EmailAttachNum").item(0).getFirstChild().getNodeValue());
-				EmailMessageNum=Integer.valueOf(doc.getElementsByTagName("EmailMessageNum").item(0).getFirstChild().getNodeValue());
-				DisplayedFileName=doc.getElementsByTagName("DisplayedFileName").item(0).getFirstChild().getNodeValue();
-				ActualFileName=doc.getElementsByTagName("ActualFileName").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"EmailAttachNum")!=null) {
+					EmailAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailAttachNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"EmailMessageNum")!=null) {
+					EmailMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailMessageNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DisplayedFileName")!=null) {
+					DisplayedFileName=Serializing.GetXmlNodeValue(doc,"DisplayedFileName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ActualFileName")!=null) {
+					ActualFileName=Serializing.GetXmlNodeValue(doc,"ActualFileName");
+				}
 			}
 			catch(Exception e) {
 				throw e;

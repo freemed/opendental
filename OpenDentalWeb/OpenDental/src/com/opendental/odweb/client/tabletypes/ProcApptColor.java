@@ -42,10 +42,18 @@ public class ProcApptColor {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ProcApptColorNum=Integer.valueOf(doc.getElementsByTagName("ProcApptColorNum").item(0).getFirstChild().getNodeValue());
-				CodeRange=doc.getElementsByTagName("CodeRange").item(0).getFirstChild().getNodeValue();
-				ShowPreviousDate=(doc.getElementsByTagName("ShowPreviousDate").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				ColorText=Integer.valueOf(doc.getElementsByTagName("ColorText").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"ProcApptColorNum")!=null) {
+					ProcApptColorNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcApptColorNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeRange")!=null) {
+					CodeRange=Serializing.GetXmlNodeValue(doc,"CodeRange");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowPreviousDate")!=null) {
+					ShowPreviousDate=(Serializing.GetXmlNodeValue(doc,"ShowPreviousDate")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ColorText")!=null) {
+					ColorText=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorText"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

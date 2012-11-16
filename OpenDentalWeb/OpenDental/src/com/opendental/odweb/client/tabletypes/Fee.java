@@ -54,13 +54,27 @@ public class Fee {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				FeeNum=Integer.valueOf(doc.getElementsByTagName("FeeNum").item(0).getFirstChild().getNodeValue());
-				Amount=Double.valueOf(doc.getElementsByTagName("Amount").item(0).getFirstChild().getNodeValue());
-				OldCode=doc.getElementsByTagName("OldCode").item(0).getFirstChild().getNodeValue();
-				FeeSched=Integer.valueOf(doc.getElementsByTagName("FeeSched").item(0).getFirstChild().getNodeValue());
-				UseDefaultFee=(doc.getElementsByTagName("UseDefaultFee").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				UseDefaultCov=(doc.getElementsByTagName("UseDefaultCov").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				CodeNum=Integer.valueOf(doc.getElementsByTagName("CodeNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"FeeNum")!=null) {
+					FeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Amount")!=null) {
+					Amount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Amount"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OldCode")!=null) {
+					OldCode=Serializing.GetXmlNodeValue(doc,"OldCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UseDefaultFee")!=null) {
+					UseDefaultFee=(Serializing.GetXmlNodeValue(doc,"UseDefaultFee")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"UseDefaultCov")!=null) {
+					UseDefaultCov=(Serializing.GetXmlNodeValue(doc,"UseDefaultCov")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

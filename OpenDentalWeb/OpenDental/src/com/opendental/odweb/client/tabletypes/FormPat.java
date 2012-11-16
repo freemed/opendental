@@ -40,9 +40,15 @@ public class FormPat {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				FormPatNum=Integer.valueOf(doc.getElementsByTagName("FormPatNum").item(0).getFirstChild().getNodeValue());
-				PatNum=Integer.valueOf(doc.getElementsByTagName("PatNum").item(0).getFirstChild().getNodeValue());
-				FormDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("FormDateTime").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"FormPatNum")!=null) {
+					FormPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FormPatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"FormDateTime")!=null) {
+					FormDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"FormDateTime"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

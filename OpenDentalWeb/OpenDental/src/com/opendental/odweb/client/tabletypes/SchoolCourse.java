@@ -38,9 +38,15 @@ public class SchoolCourse {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				SchoolCourseNum=Integer.valueOf(doc.getElementsByTagName("SchoolCourseNum").item(0).getFirstChild().getNodeValue());
-				CourseID=doc.getElementsByTagName("CourseID").item(0).getFirstChild().getNodeValue();
-				Descript=doc.getElementsByTagName("Descript").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum")!=null) {
+					SchoolCourseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CourseID")!=null) {
+					CourseID=Serializing.GetXmlNodeValue(doc,"CourseID");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				}
 			}
 			catch(Exception e) {
 				throw e;

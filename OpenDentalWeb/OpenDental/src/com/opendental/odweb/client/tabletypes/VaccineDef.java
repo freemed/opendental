@@ -42,10 +42,18 @@ public class VaccineDef {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				VaccineDefNum=Integer.valueOf(doc.getElementsByTagName("VaccineDefNum").item(0).getFirstChild().getNodeValue());
-				CVXCode=doc.getElementsByTagName("CVXCode").item(0).getFirstChild().getNodeValue();
-				VaccineName=doc.getElementsByTagName("VaccineName").item(0).getFirstChild().getNodeValue();
-				DrugManufacturerNum=Integer.valueOf(doc.getElementsByTagName("DrugManufacturerNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"VaccineDefNum")!=null) {
+					VaccineDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VaccineDefNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"CVXCode")!=null) {
+					CVXCode=Serializing.GetXmlNodeValue(doc,"CVXCode");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"VaccineName")!=null) {
+					VaccineName=Serializing.GetXmlNodeValue(doc,"VaccineName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DrugManufacturerNum")!=null) {
+					DrugManufacturerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugManufacturerNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

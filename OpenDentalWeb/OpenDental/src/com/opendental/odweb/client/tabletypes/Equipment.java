@@ -68,16 +68,36 @@ public class Equipment {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				EquipmentNum=Integer.valueOf(doc.getElementsByTagName("EquipmentNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				SerialNumber=doc.getElementsByTagName("SerialNumber").item(0).getFirstChild().getNodeValue();
-				ModelYear=doc.getElementsByTagName("ModelYear").item(0).getFirstChild().getNodeValue();
-				DatePurchased=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DatePurchased").item(0).getFirstChild().getNodeValue());
-				DateSold=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateSold").item(0).getFirstChild().getNodeValue());
-				PurchaseCost=Double.valueOf(doc.getElementsByTagName("PurchaseCost").item(0).getFirstChild().getNodeValue());
-				MarketValue=Double.valueOf(doc.getElementsByTagName("MarketValue").item(0).getFirstChild().getNodeValue());
-				Location=doc.getElementsByTagName("Location").item(0).getFirstChild().getNodeValue();
-				DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(doc.getElementsByTagName("DateEntry").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"EquipmentNum")!=null) {
+					EquipmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EquipmentNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SerialNumber")!=null) {
+					SerialNumber=Serializing.GetXmlNodeValue(doc,"SerialNumber");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ModelYear")!=null) {
+					ModelYear=Serializing.GetXmlNodeValue(doc,"ModelYear");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatePurchased")!=null) {
+					DatePurchased=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePurchased"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateSold")!=null) {
+					DateSold=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSold"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"PurchaseCost")!=null) {
+					PurchaseCost=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PurchaseCost"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"MarketValue")!=null) {
+					MarketValue=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MarketValue"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Location")!=null) {
+					Location=Serializing.GetXmlNodeValue(doc,"Location");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

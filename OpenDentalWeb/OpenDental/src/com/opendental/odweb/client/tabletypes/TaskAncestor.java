@@ -38,9 +38,15 @@ public class TaskAncestor {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				TaskAncestorNum=Integer.valueOf(doc.getElementsByTagName("TaskAncestorNum").item(0).getFirstChild().getNodeValue());
-				TaskNum=Integer.valueOf(doc.getElementsByTagName("TaskNum").item(0).getFirstChild().getNodeValue());
-				TaskListNum=Integer.valueOf(doc.getElementsByTagName("TaskListNum").item(0).getFirstChild().getNodeValue());
+				if(Serializing.GetXmlNodeValue(doc,"TaskAncestorNum")!=null) {
+					TaskAncestorNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskAncestorNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"TaskListNum")!=null) {
+					TaskListNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListNum"));
+				}
 			}
 			catch(Exception e) {
 				throw e;

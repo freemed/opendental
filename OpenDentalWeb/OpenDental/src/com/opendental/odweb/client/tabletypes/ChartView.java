@@ -66,16 +66,36 @@ public class ChartView {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				ChartViewNum=Integer.valueOf(doc.getElementsByTagName("ChartViewNum").item(0).getFirstChild().getNodeValue());
-				Description=doc.getElementsByTagName("Description").item(0).getFirstChild().getNodeValue();
-				ItemOrder=Integer.valueOf(doc.getElementsByTagName("ItemOrder").item(0).getFirstChild().getNodeValue());
-				ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(doc.getElementsByTagName("ProcStatuses").item(0).getFirstChild().getNodeValue())];
-				ObjectTypes=ChartViewObjs.values()[Integer.valueOf(doc.getElementsByTagName("ObjectTypes").item(0).getFirstChild().getNodeValue())];
-				ShowProcNotes=(doc.getElementsByTagName("ShowProcNotes").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				IsAudit=(doc.getElementsByTagName("IsAudit").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				SelectedTeethOnly=(doc.getElementsByTagName("SelectedTeethOnly").item(0).getFirstChild().getNodeValue()=="0")?false:true;
-				OrionStatusFlags=OrionStatus.values()[Integer.valueOf(doc.getElementsByTagName("OrionStatusFlags").item(0).getFirstChild().getNodeValue())];
-				DatesShowing=ChartViewDates.values()[Integer.valueOf(doc.getElementsByTagName("DatesShowing").item(0).getFirstChild().getNodeValue())];
+				if(Serializing.GetXmlNodeValue(doc,"ChartViewNum")!=null) {
+					ChartViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ChartViewNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ProcStatuses")!=null) {
+					ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcStatuses"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ObjectTypes")!=null) {
+					ObjectTypes=ChartViewObjs.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectTypes"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ShowProcNotes")!=null) {
+					ShowProcNotes=(Serializing.GetXmlNodeValue(doc,"ShowProcNotes")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"IsAudit")!=null) {
+					IsAudit=(Serializing.GetXmlNodeValue(doc,"IsAudit")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"SelectedTeethOnly")!=null) {
+					SelectedTeethOnly=(Serializing.GetXmlNodeValue(doc,"SelectedTeethOnly")=="0")?false:true;
+				}
+				if(Serializing.GetXmlNodeValue(doc,"OrionStatusFlags")!=null) {
+					OrionStatusFlags=OrionStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrionStatusFlags"))];
+				}
+				if(Serializing.GetXmlNodeValue(doc,"DatesShowing")!=null) {
+					DatesShowing=ChartViewDates.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DatesShowing"))];
+				}
 			}
 			catch(Exception e) {
 				throw e;

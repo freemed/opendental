@@ -38,9 +38,15 @@ public class DrugManufacturer {
 		public void DeserializeFromXml(String xml) throws Exception {
 			try {
 				Document doc=XMLParser.parse(xml);
-				DrugManufacturerNum=Integer.valueOf(doc.getElementsByTagName("DrugManufacturerNum").item(0).getFirstChild().getNodeValue());
-				ManufacturerName=doc.getElementsByTagName("ManufacturerName").item(0).getFirstChild().getNodeValue();
-				ManufacturerCode=doc.getElementsByTagName("ManufacturerCode").item(0).getFirstChild().getNodeValue();
+				if(Serializing.GetXmlNodeValue(doc,"DrugManufacturerNum")!=null) {
+					DrugManufacturerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugManufacturerNum"));
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ManufacturerName")!=null) {
+					ManufacturerName=Serializing.GetXmlNodeValue(doc,"ManufacturerName");
+				}
+				if(Serializing.GetXmlNodeValue(doc,"ManufacturerCode")!=null) {
+					ManufacturerCode=Serializing.GetXmlNodeValue(doc,"ManufacturerCode");
+				}
 			}
 			catch(Exception e) {
 				throw e;
