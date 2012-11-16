@@ -6997,12 +6997,11 @@ namespace OpenDental{
 						continue;//only entered if n=0, so they don't get entered more than once.
 					}
 					else if(tArea==TreatmentArea.Quad){
-						switch(quadCount){
+						switch(quadCount%4){
 							case 0: ProcCur.Surf="UR"; break;
 							case 1: ProcCur.Surf="UL"; break;
 							case 2: ProcCur.Surf="LL"; break;
 							case 3: ProcCur.Surf="LR"; break;
-							default: ProcCur.Surf="UR"; break;//this could happen.
 						}
 						quadCount++;
 						AddQuick(ProcCur);
@@ -7099,12 +7098,11 @@ namespace OpenDental{
 						continue;//only entered if n=0, so they don't get entered more than once.
 					}
 					else if(tArea==TreatmentArea.Quad){
-						switch(quadCount){
+						switch(quadCount%4){
 							case 0: ProcCur.Surf="UR"; break;
 							case 1: ProcCur.Surf="UL"; break;
 							case 2: ProcCur.Surf="LL"; break;
 							case 3: ProcCur.Surf="LR"; break;
-							default: ProcCur.Surf="UR"; break;//this could happen.
 						}
 						quadCount++;
 						AddQuick(ProcCur);
