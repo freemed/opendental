@@ -1118,6 +1118,14 @@ namespace OpenDental{
 							}
 						}
 					}
+					if(CultureInfo.CurrentCulture.Name=="en-US") {
+						if(Stmt.IsReceipt) {
+							if(tableAccount.Rows[p]["PayNum"].ToString()=="0") {//Hide everything except patient payments
+								continue;
+							}
+						}
+						//js Some additional features would be nice for receipts, such as hiding the bal column, the aging, and the amount due sections.
+					}
 					grow=new ODGridRow();
 					grow.Cells.Add(tableAccount.Rows[p]["date"].ToString());
 					grow.Cells.Add(tableAccount.Rows[p]["patient"].ToString());
