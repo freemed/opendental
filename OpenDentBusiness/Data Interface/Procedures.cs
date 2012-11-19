@@ -1051,13 +1051,18 @@ namespace OpenDentBusiness {
 		///<summary>Used whenever a procedure changes or a plan changes.  All estimates for a given procedure must be updated. This frequently includes adding claimprocs, but can also just edit the appropriate existing claimprocs. Skips status=Adjustment,CapClaim,Preauth,Supplemental.  Also fixes date,status,and provnum if appropriate.  The claimProc list only needs to include claimprocs for this proc, although it can include more.  Only set isInitialEntry true from Chart module; it is for cap procs.  loopList only contains information about procedures that come before this one in a list such as TP or claim.</summary>
 		public static void ComputeEstimates(Procedure proc,long patNum,ref List<ClaimProc> claimProcs,bool isInitialEntry,List<InsPlan> PlanList,List<PatPlan> patPlans,List<Benefit> benefitList,List<ClaimProcHist> histList,List<ClaimProcHist> loopList,bool saveToDb,int patientAge,List<InsSub> subList) {
 			//No need to check RemotingRole; no call to db.
-			bool doCreate=true;
+			bool isHistorical=false;
 			if(proc.ProcDate<DateTime.Today && proc.ProcStatus==ProcStat.C) {
 				//don't automatically create an estimate for completed procedures
 				//especially if they are older than today
 				//Very important after a conversion from another software.
 				//This may need to be relaxed a little for offices that enter treatment a few days after it's done.
-				doCreate=false;
+				isHistorical=true;
+				for(int i=0;i<PlanList.Count;i++) {
+					if(PlanList[i].PlanType=="c") {//11/19/12 js We had a specific complaint where changing plan type to capitation automatically added WOs to historical procs.
+						return;
+					}
+				}
 			}
 			//first test to see if each estimate matches an existing patPlan (current coverage),
 			//delete any other estimates
@@ -1103,7 +1108,7 @@ namespace OpenDentBusiness {
 			bool cpAdded=false;
 			//loop through all patPlans (current coverage), and add any missing estimates
 			for(int p=0;p<patPlans.Count;p++) {//typically, loop will only have length of 1 or 2
-				if(!doCreate) {
+				if(isHistorical) {
 					break;
 				}
 				//test to see if estimate exists
