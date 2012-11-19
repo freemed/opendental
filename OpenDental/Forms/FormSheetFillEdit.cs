@@ -620,7 +620,8 @@ namespace OpenDental {
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.Email2Address;
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
-				message.Subject=SheetCur.Description.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
+				message.Subject=Lan.g(this,"RE: ")+Patients.GetLim(SheetCur.PatNum).GetNameLF();//works even if patnum invalid
+					//SheetCur.Description.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
 				EmailAttach attach=new EmailAttach();
 				string shortFileName=Regex.Replace(SheetCur.Description.ToString(), @"[^\w,'@-_()&]", ""); 
 				attach.DisplayedFileName=shortFileName+".pdf";
