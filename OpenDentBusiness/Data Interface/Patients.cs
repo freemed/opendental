@@ -465,7 +465,7 @@ namespace OpenDentBusiness{
 			return new Patient();
 		}
 
-		/// <summary>Gets nine of the most useful fields from the db for the given patnum.</summary>
+		/// <summary>Gets nine of the most useful fields from the db for the given patnum.  If invalid PatNum, returns new Patient rather than null.</summary>
 		public static Patient GetLim(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
