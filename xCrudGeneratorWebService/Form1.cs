@@ -112,10 +112,10 @@ namespace xCrudGeneratorWebService {
 				WriteAlljavaTableTypes(strb,className,fields);
 				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+docForjava+".java"),strb.ToString());
 				#region DtoMethods OpenDentalClasses for Serializing and Deserializing
-				strbDtoClassesSerialize.Append(t3+"if(typeName==\""+className+"\") {"+rn
+				strbDtoClassesSerialize.Append(t3+"if(objectType==\""+"OpenDentBusiness."+className+"\") {"+rn
 					+t4+"return "+className+".Serialize((OpenDentBusiness."+className+")obj);"+rn
 					+t3+"}"+rn);
-				strbDtoClassesDeserialize.Append(t3+"if(typeName==\"OpenDentBusiness."+className+"\") {"+rn
+				strbDtoClassesDeserialize.Append(t3+"if(typeName==\""+className+"\") {"+rn
 					+t4+"return "+className+".Deserialize(xml);"+rn
 					+t3+"}"+rn);
 				#endregion
@@ -148,7 +148,7 @@ namespace xCrudGeneratorWebService {
 			#endregion
 			#region EndCallClassSerializer
 			strbDtoMethods.Append(t3+"#endregion"+rn
-				+t3+"throw new NotSupportedException(\"CallClassSerializer, unsupported class type: \"+typeName);"+rn
+				+t3+"throw new NotSupportedException(\"CallClassSerializer, unsupported class type: \"+objectType);"+rn
 				+t2+"}"+rn+rn);
 			#endregion
 			#region CallClassDeserializer
@@ -208,8 +208,8 @@ namespace xCrudGeneratorWebService {
 		}
 
 		private void StartCallClassSerializer(StringBuilder strb) {
-			strb.Append(t2+"///<summary>Calls the class serializer for any supported object, primitive or not.  Throws exceptions.</summary>"+rn
-				+t2+"public static object CallClassSerializer(string typeName,Object obj) {"+rn
+			strb.Append(t2+"///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified.  Ex: System.Int32 or OpenDentBusiness.Account.  Throws exceptions.</summary>"+rn
+				+t2+"public static string CallClassSerializer(string objectType,Object obj) {"+rn
 				+t3+"#region Primitive and General Types"+rn
 				+t3+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenSerializerTypes and manually add it there."+rn);
 			GetPrimGenSerializerTypes(strb);
@@ -848,25 +848,25 @@ namespace xCrudGeneratorWebService {
 
 		///<summary>All of the primitive/general types handled by serialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
 		private void GetPrimGenSerializerTypes(StringBuilder strb) {
-			strb.Append(t3+"switch(typeName) {"+rn
-				+t4+@"case ""int"":"+rn
-				+t4+@"case ""long"":"+rn
-				+t4+@"case ""bool"":"+rn
-				+t4+@"case ""string"":"+rn
-				+t4+@"case ""char"":"+rn
-				+t4+@"case ""float"":"+rn
-				+t4+@"case ""byte"":"+rn
-				+t4+@"case ""double"":"+rn
+			strb.Append(t3+"switch(objectType) {"+rn
+				+t4+@"case ""System.Int32"":"+rn
+				+t4+@"case ""System.Int64"":"+rn     //long
+				+t4+@"case ""System.Boolean"":"+rn
+				+t4+@"case ""System.String"":"+rn
+				+t4+@"case ""System.Char"":"+rn
+				+t4+@"case ""System.Single"":"+rn    //float
+				+t4+@"case ""System.Byte"":"+rn
+				+t4+@"case ""System.Double"":"+rn
 				+t4+@"case ""DataT"":"+rn
-				+t5+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+				+t5+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
 				+t3+"}"+rn);
 			//Lists.
-			strb.Append(t3+"if(typeName.StartsWith(\"List<\")) {//Lists."+rn
-				+t4+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+			strb.Append(t3+"if(objectType.StartsWith(\"List<\")) {//Lists."+rn
+				+t4+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
 				+t3+"}"+rn);
 			//Arrays.
-			strb.Append(t3+"if(typeName.Contains(\"[\")) {//Arrays."+rn
-				+t4+"return aaGeneralTypes.Serialize(typeName,obj);"+rn
+			strb.Append(t3+"if(objectType.Contains(\"[\")) {//Arrays."+rn
+				+t4+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
 				+t3+"}"+rn);
 		}
 

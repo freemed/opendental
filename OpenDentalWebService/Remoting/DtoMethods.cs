@@ -14,674 +14,674 @@ namespace OpenDentalWebService {
 			return CallMethod(classAndMethod,parameters);
 		}
 
-		///<summary>Calls the class serializer for any supported object, primitive or not.  Throws exceptions.</summary>
-		public static object CallClassSerializer(string typeName,Object obj) {
+		///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified.  Ex: System.Int32 or OpenDentBusiness.Account.  Throws exceptions.</summary>
+		public static string CallClassSerializer(string objectType,Object obj) {
 			#region Primitive and General Types
 			//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenSerializerTypes and manually add it there.
-			switch(typeName) {
-				case "int":
-				case "long":
-				case "bool":
-				case "string":
-				case "char":
-				case "float":
-				case "byte":
-				case "double":
+			switch(objectType) {
+				case "System.Int32":
+				case "System.Int64":
+				case "System.Boolean":
+				case "System.String":
+				case "System.Char":
+				case "System.Single":
+				case "System.Byte":
+				case "System.Double":
 				case "DataT":
-					return aaGeneralTypes.Serialize(typeName,obj);
+					return aaGeneralTypes.Serialize(objectType,obj);
 			}
-			if(typeName.StartsWith("List<")) {//Lists.
-				return aaGeneralTypes.Serialize(typeName,obj);
+			if(objectType.StartsWith("List<")) {//Lists.
+				return aaGeneralTypes.Serialize(objectType,obj);
 			}
-			if(typeName.Contains("[")) {//Arrays.
-				return aaGeneralTypes.Serialize(typeName,obj);
+			if(objectType.Contains("[")) {//Arrays.
+				return aaGeneralTypes.Serialize(objectType,obj);
 			}
 			#endregion
 			#region Open Dental Classes
-			if(typeName=="Account") {
+			if(objectType=="OpenDentBusiness.Account") {
 				return Account.Serialize((OpenDentBusiness.Account)obj);
 			}
-			if(typeName=="AccountingAutoPay") {
+			if(objectType=="OpenDentBusiness.AccountingAutoPay") {
 				return AccountingAutoPay.Serialize((OpenDentBusiness.AccountingAutoPay)obj);
 			}
-			if(typeName=="Adjustment") {
+			if(objectType=="OpenDentBusiness.Adjustment") {
 				return Adjustment.Serialize((OpenDentBusiness.Adjustment)obj);
 			}
-			if(typeName=="Allergy") {
+			if(objectType=="OpenDentBusiness.Allergy") {
 				return Allergy.Serialize((OpenDentBusiness.Allergy)obj);
 			}
-			if(typeName=="AllergyDef") {
+			if(objectType=="OpenDentBusiness.AllergyDef") {
 				return AllergyDef.Serialize((OpenDentBusiness.AllergyDef)obj);
 			}
-			if(typeName=="Appointment") {
+			if(objectType=="OpenDentBusiness.Appointment") {
 				return Appointment.Serialize((OpenDentBusiness.Appointment)obj);
 			}
-			if(typeName=="AppointmentRule") {
+			if(objectType=="OpenDentBusiness.AppointmentRule") {
 				return AppointmentRule.Serialize((OpenDentBusiness.AppointmentRule)obj);
 			}
-			if(typeName=="ApptField") {
+			if(objectType=="OpenDentBusiness.ApptField") {
 				return ApptField.Serialize((OpenDentBusiness.ApptField)obj);
 			}
-			if(typeName=="ApptFieldDef") {
+			if(objectType=="OpenDentBusiness.ApptFieldDef") {
 				return ApptFieldDef.Serialize((OpenDentBusiness.ApptFieldDef)obj);
 			}
-			if(typeName=="ApptView") {
+			if(objectType=="OpenDentBusiness.ApptView") {
 				return ApptView.Serialize((OpenDentBusiness.ApptView)obj);
 			}
-			if(typeName=="ApptViewItem") {
+			if(objectType=="OpenDentBusiness.ApptViewItem") {
 				return ApptViewItem.Serialize((OpenDentBusiness.ApptViewItem)obj);
 			}
-			if(typeName=="AutoCode") {
+			if(objectType=="OpenDentBusiness.AutoCode") {
 				return AutoCode.Serialize((OpenDentBusiness.AutoCode)obj);
 			}
-			if(typeName=="AutoCodeCond") {
+			if(objectType=="OpenDentBusiness.AutoCodeCond") {
 				return AutoCodeCond.Serialize((OpenDentBusiness.AutoCodeCond)obj);
 			}
-			if(typeName=="AutoCodeItem") {
+			if(objectType=="OpenDentBusiness.AutoCodeItem") {
 				return AutoCodeItem.Serialize((OpenDentBusiness.AutoCodeItem)obj);
 			}
-			if(typeName=="Automation") {
+			if(objectType=="OpenDentBusiness.Automation") {
 				return Automation.Serialize((OpenDentBusiness.Automation)obj);
 			}
-			if(typeName=="AutomationCondition") {
+			if(objectType=="OpenDentBusiness.AutomationCondition") {
 				return AutomationCondition.Serialize((OpenDentBusiness.AutomationCondition)obj);
 			}
-			if(typeName=="AutoNote") {
+			if(objectType=="OpenDentBusiness.AutoNote") {
 				return AutoNote.Serialize((OpenDentBusiness.AutoNote)obj);
 			}
-			if(typeName=="AutoNoteControl") {
+			if(objectType=="OpenDentBusiness.AutoNoteControl") {
 				return AutoNoteControl.Serialize((OpenDentBusiness.AutoNoteControl)obj);
 			}
-			if(typeName=="Benefit") {
+			if(objectType=="OpenDentBusiness.Benefit") {
 				return Benefit.Serialize((OpenDentBusiness.Benefit)obj);
 			}
-			if(typeName=="CanadianNetwork") {
+			if(objectType=="OpenDentBusiness.CanadianNetwork") {
 				return CanadianNetwork.Serialize((OpenDentBusiness.CanadianNetwork)obj);
 			}
-			if(typeName=="Carrier") {
+			if(objectType=="OpenDentBusiness.Carrier") {
 				return Carrier.Serialize((OpenDentBusiness.Carrier)obj);
 			}
-			if(typeName=="CentralConnection") {
+			if(objectType=="OpenDentBusiness.CentralConnection") {
 				return CentralConnection.Serialize((OpenDentBusiness.CentralConnection)obj);
 			}
-			if(typeName=="ChartView") {
+			if(objectType=="OpenDentBusiness.ChartView") {
 				return ChartView.Serialize((OpenDentBusiness.ChartView)obj);
 			}
-			if(typeName=="Claim") {
+			if(objectType=="OpenDentBusiness.Claim") {
 				return Claim.Serialize((OpenDentBusiness.Claim)obj);
 			}
-			if(typeName=="ClaimAttach") {
+			if(objectType=="OpenDentBusiness.ClaimAttach") {
 				return ClaimAttach.Serialize((OpenDentBusiness.ClaimAttach)obj);
 			}
-			if(typeName=="ClaimCondCodeLog") {
+			if(objectType=="OpenDentBusiness.ClaimCondCodeLog") {
 				return ClaimCondCodeLog.Serialize((OpenDentBusiness.ClaimCondCodeLog)obj);
 			}
-			if(typeName=="ClaimForm") {
+			if(objectType=="OpenDentBusiness.ClaimForm") {
 				return ClaimForm.Serialize((OpenDentBusiness.ClaimForm)obj);
 			}
-			if(typeName=="ClaimFormItem") {
+			if(objectType=="OpenDentBusiness.ClaimFormItem") {
 				return ClaimFormItem.Serialize((OpenDentBusiness.ClaimFormItem)obj);
 			}
-			if(typeName=="ClaimPayment") {
+			if(objectType=="OpenDentBusiness.ClaimPayment") {
 				return ClaimPayment.Serialize((OpenDentBusiness.ClaimPayment)obj);
 			}
-			if(typeName=="ClaimProc") {
+			if(objectType=="OpenDentBusiness.ClaimProc") {
 				return ClaimProc.Serialize((OpenDentBusiness.ClaimProc)obj);
 			}
-			if(typeName=="ClaimValCodeLog") {
+			if(objectType=="OpenDentBusiness.ClaimValCodeLog") {
 				return ClaimValCodeLog.Serialize((OpenDentBusiness.ClaimValCodeLog)obj);
 			}
-			if(typeName=="Clearinghouse") {
+			if(objectType=="OpenDentBusiness.Clearinghouse") {
 				return Clearinghouse.Serialize((OpenDentBusiness.Clearinghouse)obj);
 			}
-			if(typeName=="Clinic") {
+			if(objectType=="OpenDentBusiness.Clinic") {
 				return Clinic.Serialize((OpenDentBusiness.Clinic)obj);
 			}
-			if(typeName=="ClockEvent") {
+			if(objectType=="OpenDentBusiness.ClockEvent") {
 				return ClockEvent.Serialize((OpenDentBusiness.ClockEvent)obj);
 			}
-			if(typeName=="Commlog") {
+			if(objectType=="OpenDentBusiness.Commlog") {
 				return Commlog.Serialize((OpenDentBusiness.Commlog)obj);
 			}
-			if(typeName=="Computer") {
+			if(objectType=="OpenDentBusiness.Computer") {
 				return Computer.Serialize((OpenDentBusiness.Computer)obj);
 			}
-			if(typeName=="ComputerPref") {
+			if(objectType=="OpenDentBusiness.ComputerPref") {
 				return ComputerPref.Serialize((OpenDentBusiness.ComputerPref)obj);
 			}
-			if(typeName=="Contact") {
+			if(objectType=="OpenDentBusiness.Contact") {
 				return Contact.Serialize((OpenDentBusiness.Contact)obj);
 			}
-			if(typeName=="County") {
+			if(objectType=="OpenDentBusiness.County") {
 				return County.Serialize((OpenDentBusiness.County)obj);
 			}
-			if(typeName=="CovCat") {
+			if(objectType=="OpenDentBusiness.CovCat") {
 				return CovCat.Serialize((OpenDentBusiness.CovCat)obj);
 			}
-			if(typeName=="CovSpan") {
+			if(objectType=="OpenDentBusiness.CovSpan") {
 				return CovSpan.Serialize((OpenDentBusiness.CovSpan)obj);
 			}
-			if(typeName=="CreditCard") {
+			if(objectType=="OpenDentBusiness.CreditCard") {
 				return CreditCard.Serialize((OpenDentBusiness.CreditCard)obj);
 			}
-			if(typeName=="CustRefEntry") {
+			if(objectType=="OpenDentBusiness.CustRefEntry") {
 				return CustRefEntry.Serialize((OpenDentBusiness.CustRefEntry)obj);
 			}
-			if(typeName=="CustReference") {
+			if(objectType=="OpenDentBusiness.CustReference") {
 				return CustReference.Serialize((OpenDentBusiness.CustReference)obj);
 			}
-			if(typeName=="DashboardAR") {
+			if(objectType=="OpenDentBusiness.DashboardAR") {
 				return DashboardAR.Serialize((OpenDentBusiness.DashboardAR)obj);
 			}
-			if(typeName=="Def") {
+			if(objectType=="OpenDentBusiness.Def") {
 				return Def.Serialize((OpenDentBusiness.Def)obj);
 			}
-			if(typeName=="DeletedObject") {
+			if(objectType=="OpenDentBusiness.DeletedObject") {
 				return DeletedObject.Serialize((OpenDentBusiness.DeletedObject)obj);
 			}
-			if(typeName=="Deposit") {
+			if(objectType=="OpenDentBusiness.Deposit") {
 				return Deposit.Serialize((OpenDentBusiness.Deposit)obj);
 			}
-			if(typeName=="DictCustom") {
+			if(objectType=="OpenDentBusiness.DictCustom") {
 				return DictCustom.Serialize((OpenDentBusiness.DictCustom)obj);
 			}
-			if(typeName=="Disease") {
+			if(objectType=="OpenDentBusiness.Disease") {
 				return Disease.Serialize((OpenDentBusiness.Disease)obj);
 			}
-			if(typeName=="DiseaseDef") {
+			if(objectType=="OpenDentBusiness.DiseaseDef") {
 				return DiseaseDef.Serialize((OpenDentBusiness.DiseaseDef)obj);
 			}
-			if(typeName=="DisplayField") {
+			if(objectType=="OpenDentBusiness.DisplayField") {
 				return DisplayField.Serialize((OpenDentBusiness.DisplayField)obj);
 			}
-			if(typeName=="Document") {
+			if(objectType=="OpenDentBusiness.Document") {
 				return Document.Serialize((OpenDentBusiness.Document)obj);
 			}
-			if(typeName=="DocumentMisc") {
+			if(objectType=="OpenDentBusiness.DocumentMisc") {
 				return DocumentMisc.Serialize((OpenDentBusiness.DocumentMisc)obj);
 			}
-			if(typeName=="DrugManufacturer") {
+			if(objectType=="OpenDentBusiness.DrugManufacturer") {
 				return DrugManufacturer.Serialize((OpenDentBusiness.DrugManufacturer)obj);
 			}
-			if(typeName=="DrugUnit") {
+			if(objectType=="OpenDentBusiness.DrugUnit") {
 				return DrugUnit.Serialize((OpenDentBusiness.DrugUnit)obj);
 			}
-			if(typeName=="Dunning") {
+			if(objectType=="OpenDentBusiness.Dunning") {
 				return Dunning.Serialize((OpenDentBusiness.Dunning)obj);
 			}
-			if(typeName=="EduResource") {
+			if(objectType=="OpenDentBusiness.EduResource") {
 				return EduResource.Serialize((OpenDentBusiness.EduResource)obj);
 			}
-			if(typeName=="EhrMeasure") {
+			if(objectType=="OpenDentBusiness.EhrMeasure") {
 				return EhrMeasure.Serialize((OpenDentBusiness.EhrMeasure)obj);
 			}
-			if(typeName=="EhrMeasureEvent") {
+			if(objectType=="OpenDentBusiness.EhrMeasureEvent") {
 				return EhrMeasureEvent.Serialize((OpenDentBusiness.EhrMeasureEvent)obj);
 			}
-			if(typeName=="EhrProvKey") {
+			if(objectType=="OpenDentBusiness.EhrProvKey") {
 				return EhrProvKey.Serialize((OpenDentBusiness.EhrProvKey)obj);
 			}
-			if(typeName=="EhrQuarterlyKey") {
+			if(objectType=="OpenDentBusiness.EhrQuarterlyKey") {
 				return EhrQuarterlyKey.Serialize((OpenDentBusiness.EhrQuarterlyKey)obj);
 			}
-			if(typeName=="EhrSummaryCcd") {
+			if(objectType=="OpenDentBusiness.EhrSummaryCcd") {
 				return EhrSummaryCcd.Serialize((OpenDentBusiness.EhrSummaryCcd)obj);
 			}
-			if(typeName=="ElectID") {
+			if(objectType=="OpenDentBusiness.ElectID") {
 				return ElectID.Serialize((OpenDentBusiness.ElectID)obj);
 			}
-			if(typeName=="EmailAttach") {
+			if(objectType=="OpenDentBusiness.EmailAttach") {
 				return EmailAttach.Serialize((OpenDentBusiness.EmailAttach)obj);
 			}
-			if(typeName=="EmailMessage") {
+			if(objectType=="OpenDentBusiness.EmailMessage") {
 				return EmailMessage.Serialize((OpenDentBusiness.EmailMessage)obj);
 			}
-			if(typeName=="EmailTemplate") {
+			if(objectType=="OpenDentBusiness.EmailTemplate") {
 				return EmailTemplate.Serialize((OpenDentBusiness.EmailTemplate)obj);
 			}
-			if(typeName=="Employee") {
+			if(objectType=="OpenDentBusiness.Employee") {
 				return Employee.Serialize((OpenDentBusiness.Employee)obj);
 			}
-			if(typeName=="Employer") {
+			if(objectType=="OpenDentBusiness.Employer") {
 				return Employer.Serialize((OpenDentBusiness.Employer)obj);
 			}
-			if(typeName=="EobAttach") {
+			if(objectType=="OpenDentBusiness.EobAttach") {
 				return EobAttach.Serialize((OpenDentBusiness.EobAttach)obj);
 			}
-			if(typeName=="Equipment") {
+			if(objectType=="OpenDentBusiness.Equipment") {
 				return Equipment.Serialize((OpenDentBusiness.Equipment)obj);
 			}
-			if(typeName=="ErxLog") {
+			if(objectType=="OpenDentBusiness.ErxLog") {
 				return ErxLog.Serialize((OpenDentBusiness.ErxLog)obj);
 			}
-			if(typeName=="Etrans") {
+			if(objectType=="OpenDentBusiness.Etrans") {
 				return Etrans.Serialize((OpenDentBusiness.Etrans)obj);
 			}
-			if(typeName=="EtransMessageText") {
+			if(objectType=="OpenDentBusiness.EtransMessageText") {
 				return EtransMessageText.Serialize((OpenDentBusiness.EtransMessageText)obj);
 			}
-			if(typeName=="Fee") {
+			if(objectType=="OpenDentBusiness.Fee") {
 				return Fee.Serialize((OpenDentBusiness.Fee)obj);
 			}
-			if(typeName=="FeeSched") {
+			if(objectType=="OpenDentBusiness.FeeSched") {
 				return FeeSched.Serialize((OpenDentBusiness.FeeSched)obj);
 			}
-			if(typeName=="FormPat") {
+			if(objectType=="OpenDentBusiness.FormPat") {
 				return FormPat.Serialize((OpenDentBusiness.FormPat)obj);
 			}
-			if(typeName=="Formulary") {
+			if(objectType=="OpenDentBusiness.Formulary") {
 				return Formulary.Serialize((OpenDentBusiness.Formulary)obj);
 			}
-			if(typeName=="FormularyMed") {
+			if(objectType=="OpenDentBusiness.FormularyMed") {
 				return FormularyMed.Serialize((OpenDentBusiness.FormularyMed)obj);
 			}
-			if(typeName=="GroupPermission") {
+			if(objectType=="OpenDentBusiness.GroupPermission") {
 				return GroupPermission.Serialize((OpenDentBusiness.GroupPermission)obj);
 			}
-			if(typeName=="Guardian") {
+			if(objectType=="OpenDentBusiness.Guardian") {
 				return Guardian.Serialize((OpenDentBusiness.Guardian)obj);
 			}
-			if(typeName=="HL7Def") {
+			if(objectType=="OpenDentBusiness.HL7Def") {
 				return HL7Def.Serialize((OpenDentBusiness.HL7Def)obj);
 			}
-			if(typeName=="HL7DefField") {
+			if(objectType=="OpenDentBusiness.HL7DefField") {
 				return HL7DefField.Serialize((OpenDentBusiness.HL7DefField)obj);
 			}
-			if(typeName=="HL7DefMessage") {
+			if(objectType=="OpenDentBusiness.HL7DefMessage") {
 				return HL7DefMessage.Serialize((OpenDentBusiness.HL7DefMessage)obj);
 			}
-			if(typeName=="HL7DefSegment") {
+			if(objectType=="OpenDentBusiness.HL7DefSegment") {
 				return HL7DefSegment.Serialize((OpenDentBusiness.HL7DefSegment)obj);
 			}
-			if(typeName=="HL7Msg") {
+			if(objectType=="OpenDentBusiness.HL7Msg") {
 				return HL7Msg.Serialize((OpenDentBusiness.HL7Msg)obj);
 			}
-			if(typeName=="ICD9") {
+			if(objectType=="OpenDentBusiness.ICD9") {
 				return ICD9.Serialize((OpenDentBusiness.ICD9)obj);
 			}
-			if(typeName=="InsFilingCode") {
+			if(objectType=="OpenDentBusiness.InsFilingCode") {
 				return InsFilingCode.Serialize((OpenDentBusiness.InsFilingCode)obj);
 			}
-			if(typeName=="InsFilingCodeSubtype") {
+			if(objectType=="OpenDentBusiness.InsFilingCodeSubtype") {
 				return InsFilingCodeSubtype.Serialize((OpenDentBusiness.InsFilingCodeSubtype)obj);
 			}
-			if(typeName=="InsPlan") {
+			if(objectType=="OpenDentBusiness.InsPlan") {
 				return InsPlan.Serialize((OpenDentBusiness.InsPlan)obj);
 			}
-			if(typeName=="InsSub") {
+			if(objectType=="OpenDentBusiness.InsSub") {
 				return InsSub.Serialize((OpenDentBusiness.InsSub)obj);
 			}
-			if(typeName=="InstallmentPlan") {
+			if(objectType=="OpenDentBusiness.InstallmentPlan") {
 				return InstallmentPlan.Serialize((OpenDentBusiness.InstallmentPlan)obj);
 			}
-			if(typeName=="JournalEntry") {
+			if(objectType=="OpenDentBusiness.JournalEntry") {
 				return JournalEntry.Serialize((OpenDentBusiness.JournalEntry)obj);
 			}
-			if(typeName=="LabCase") {
+			if(objectType=="OpenDentBusiness.LabCase") {
 				return LabCase.Serialize((OpenDentBusiness.LabCase)obj);
 			}
-			if(typeName=="Laboratory") {
+			if(objectType=="OpenDentBusiness.Laboratory") {
 				return Laboratory.Serialize((OpenDentBusiness.Laboratory)obj);
 			}
-			if(typeName=="LabPanel") {
+			if(objectType=="OpenDentBusiness.LabPanel") {
 				return LabPanel.Serialize((OpenDentBusiness.LabPanel)obj);
 			}
-			if(typeName=="LabResult") {
+			if(objectType=="OpenDentBusiness.LabResult") {
 				return LabResult.Serialize((OpenDentBusiness.LabResult)obj);
 			}
-			if(typeName=="LabTurnaround") {
+			if(objectType=="OpenDentBusiness.LabTurnaround") {
 				return LabTurnaround.Serialize((OpenDentBusiness.LabTurnaround)obj);
 			}
-			if(typeName=="Language") {
+			if(objectType=="OpenDentBusiness.Language") {
 				return Language.Serialize((OpenDentBusiness.Language)obj);
 			}
-			if(typeName=="LanguageForeign") {
+			if(objectType=="OpenDentBusiness.LanguageForeign") {
 				return LanguageForeign.Serialize((OpenDentBusiness.LanguageForeign)obj);
 			}
-			if(typeName=="Letter") {
+			if(objectType=="OpenDentBusiness.Letter") {
 				return Letter.Serialize((OpenDentBusiness.Letter)obj);
 			}
-			if(typeName=="LetterMerge") {
+			if(objectType=="OpenDentBusiness.LetterMerge") {
 				return LetterMerge.Serialize((OpenDentBusiness.LetterMerge)obj);
 			}
-			if(typeName=="LetterMergeField") {
+			if(objectType=="OpenDentBusiness.LetterMergeField") {
 				return LetterMergeField.Serialize((OpenDentBusiness.LetterMergeField)obj);
 			}
-			if(typeName=="MedicalOrder") {
+			if(objectType=="OpenDentBusiness.MedicalOrder") {
 				return MedicalOrder.Serialize((OpenDentBusiness.MedicalOrder)obj);
 			}
-			if(typeName=="Medication") {
+			if(objectType=="OpenDentBusiness.Medication") {
 				return Medication.Serialize((OpenDentBusiness.Medication)obj);
 			}
-			if(typeName=="MedicationPat") {
+			if(objectType=="OpenDentBusiness.MedicationPat") {
 				return MedicationPat.Serialize((OpenDentBusiness.MedicationPat)obj);
 			}
-			if(typeName=="Mount") {
+			if(objectType=="OpenDentBusiness.Mount") {
 				return Mount.Serialize((OpenDentBusiness.Mount)obj);
 			}
-			if(typeName=="MountDef") {
+			if(objectType=="OpenDentBusiness.MountDef") {
 				return MountDef.Serialize((OpenDentBusiness.MountDef)obj);
 			}
-			if(typeName=="MountItem") {
+			if(objectType=="OpenDentBusiness.MountItem") {
 				return MountItem.Serialize((OpenDentBusiness.MountItem)obj);
 			}
-			if(typeName=="MountItemDef") {
+			if(objectType=="OpenDentBusiness.MountItemDef") {
 				return MountItemDef.Serialize((OpenDentBusiness.MountItemDef)obj);
 			}
-			if(typeName=="Operatory") {
+			if(objectType=="OpenDentBusiness.Operatory") {
 				return Operatory.Serialize((OpenDentBusiness.Operatory)obj);
 			}
-			if(typeName=="OrionProc") {
+			if(objectType=="OpenDentBusiness.OrionProc") {
 				return OrionProc.Serialize((OpenDentBusiness.OrionProc)obj);
 			}
-			if(typeName=="OrthoChart") {
+			if(objectType=="OpenDentBusiness.OrthoChart") {
 				return OrthoChart.Serialize((OpenDentBusiness.OrthoChart)obj);
 			}
-			if(typeName=="PatField") {
+			if(objectType=="OpenDentBusiness.PatField") {
 				return PatField.Serialize((OpenDentBusiness.PatField)obj);
 			}
-			if(typeName=="PatFieldDef") {
+			if(objectType=="OpenDentBusiness.PatFieldDef") {
 				return PatFieldDef.Serialize((OpenDentBusiness.PatFieldDef)obj);
 			}
-			if(typeName=="Patient") {
+			if(objectType=="OpenDentBusiness.Patient") {
 				return Patient.Serialize((OpenDentBusiness.Patient)obj);
 			}
-			if(typeName=="PatientNote") {
+			if(objectType=="OpenDentBusiness.PatientNote") {
 				return PatientNote.Serialize((OpenDentBusiness.PatientNote)obj);
 			}
-			if(typeName=="PatPlan") {
+			if(objectType=="OpenDentBusiness.PatPlan") {
 				return PatPlan.Serialize((OpenDentBusiness.PatPlan)obj);
 			}
-			if(typeName=="Payment") {
+			if(objectType=="OpenDentBusiness.Payment") {
 				return Payment.Serialize((OpenDentBusiness.Payment)obj);
 			}
-			if(typeName=="PayPeriod") {
+			if(objectType=="OpenDentBusiness.PayPeriod") {
 				return PayPeriod.Serialize((OpenDentBusiness.PayPeriod)obj);
 			}
-			if(typeName=="PayPlan") {
+			if(objectType=="OpenDentBusiness.PayPlan") {
 				return PayPlan.Serialize((OpenDentBusiness.PayPlan)obj);
 			}
-			if(typeName=="PayPlanCharge") {
+			if(objectType=="OpenDentBusiness.PayPlanCharge") {
 				return PayPlanCharge.Serialize((OpenDentBusiness.PayPlanCharge)obj);
 			}
-			if(typeName=="PaySplit") {
+			if(objectType=="OpenDentBusiness.PaySplit") {
 				return PaySplit.Serialize((OpenDentBusiness.PaySplit)obj);
 			}
-			if(typeName=="PerioExam") {
+			if(objectType=="OpenDentBusiness.PerioExam") {
 				return PerioExam.Serialize((OpenDentBusiness.PerioExam)obj);
 			}
-			if(typeName=="PerioMeasure") {
+			if(objectType=="OpenDentBusiness.PerioMeasure") {
 				return PerioMeasure.Serialize((OpenDentBusiness.PerioMeasure)obj);
 			}
-			if(typeName=="Pharmacy") {
+			if(objectType=="OpenDentBusiness.Pharmacy") {
 				return Pharmacy.Serialize((OpenDentBusiness.Pharmacy)obj);
 			}
-			if(typeName=="Phone") {
+			if(objectType=="OpenDentBusiness.Phone") {
 				return Phone.Serialize((OpenDentBusiness.Phone)obj);
 			}
-			if(typeName=="PhoneEmpDefault") {
+			if(objectType=="OpenDentBusiness.PhoneEmpDefault") {
 				return PhoneEmpDefault.Serialize((OpenDentBusiness.PhoneEmpDefault)obj);
 			}
-			if(typeName=="PhoneMetric") {
+			if(objectType=="OpenDentBusiness.PhoneMetric") {
 				return PhoneMetric.Serialize((OpenDentBusiness.PhoneMetric)obj);
 			}
-			if(typeName=="PhoneNumber") {
+			if(objectType=="OpenDentBusiness.PhoneNumber") {
 				return PhoneNumber.Serialize((OpenDentBusiness.PhoneNumber)obj);
 			}
-			if(typeName=="PlannedAppt") {
+			if(objectType=="OpenDentBusiness.PlannedAppt") {
 				return PlannedAppt.Serialize((OpenDentBusiness.PlannedAppt)obj);
 			}
-			if(typeName=="Popup") {
+			if(objectType=="OpenDentBusiness.Popup") {
 				return Popup.Serialize((OpenDentBusiness.Popup)obj);
 			}
-			if(typeName=="Pref") {
+			if(objectType=="OpenDentBusiness.Pref") {
 				return Pref.Serialize((OpenDentBusiness.Pref)obj);
 			}
-			if(typeName=="Printer") {
+			if(objectType=="OpenDentBusiness.Printer") {
 				return Printer.Serialize((OpenDentBusiness.Printer)obj);
 			}
-			if(typeName=="ProcApptColor") {
+			if(objectType=="OpenDentBusiness.ProcApptColor") {
 				return ProcApptColor.Serialize((OpenDentBusiness.ProcApptColor)obj);
 			}
-			if(typeName=="ProcButton") {
+			if(objectType=="OpenDentBusiness.ProcButton") {
 				return ProcButton.Serialize((OpenDentBusiness.ProcButton)obj);
 			}
-			if(typeName=="ProcButtonItem") {
+			if(objectType=="OpenDentBusiness.ProcButtonItem") {
 				return ProcButtonItem.Serialize((OpenDentBusiness.ProcButtonItem)obj);
 			}
-			if(typeName=="ProcCodeNote") {
+			if(objectType=="OpenDentBusiness.ProcCodeNote") {
 				return ProcCodeNote.Serialize((OpenDentBusiness.ProcCodeNote)obj);
 			}
-			if(typeName=="Procedure") {
+			if(objectType=="OpenDentBusiness.Procedure") {
 				return Procedure.Serialize((OpenDentBusiness.Procedure)obj);
 			}
-			if(typeName=="ProcedureCode") {
+			if(objectType=="OpenDentBusiness.ProcedureCode") {
 				return ProcedureCode.Serialize((OpenDentBusiness.ProcedureCode)obj);
 			}
-			if(typeName=="ProcGroupItem") {
+			if(objectType=="OpenDentBusiness.ProcGroupItem") {
 				return ProcGroupItem.Serialize((OpenDentBusiness.ProcGroupItem)obj);
 			}
-			if(typeName=="ProcNote") {
+			if(objectType=="OpenDentBusiness.ProcNote") {
 				return ProcNote.Serialize((OpenDentBusiness.ProcNote)obj);
 			}
-			if(typeName=="ProcTP") {
+			if(objectType=="OpenDentBusiness.ProcTP") {
 				return ProcTP.Serialize((OpenDentBusiness.ProcTP)obj);
 			}
-			if(typeName=="Program") {
+			if(objectType=="OpenDentBusiness.Program") {
 				return Program.Serialize((OpenDentBusiness.Program)obj);
 			}
-			if(typeName=="ProgramProperty") {
+			if(objectType=="OpenDentBusiness.ProgramProperty") {
 				return ProgramProperty.Serialize((OpenDentBusiness.ProgramProperty)obj);
 			}
-			if(typeName=="Provider") {
+			if(objectType=="OpenDentBusiness.Provider") {
 				return Provider.Serialize((OpenDentBusiness.Provider)obj);
 			}
-			if(typeName=="ProviderIdent") {
+			if(objectType=="OpenDentBusiness.ProviderIdent") {
 				return ProviderIdent.Serialize((OpenDentBusiness.ProviderIdent)obj);
 			}
-			if(typeName=="Question") {
+			if(objectType=="OpenDentBusiness.Question") {
 				return Question.Serialize((OpenDentBusiness.Question)obj);
 			}
-			if(typeName=="QuestionDef") {
+			if(objectType=="OpenDentBusiness.QuestionDef") {
 				return QuestionDef.Serialize((OpenDentBusiness.QuestionDef)obj);
 			}
-			if(typeName=="QuickPasteCat") {
+			if(objectType=="OpenDentBusiness.QuickPasteCat") {
 				return QuickPasteCat.Serialize((OpenDentBusiness.QuickPasteCat)obj);
 			}
-			if(typeName=="QuickPasteNote") {
+			if(objectType=="OpenDentBusiness.QuickPasteNote") {
 				return QuickPasteNote.Serialize((OpenDentBusiness.QuickPasteNote)obj);
 			}
-			if(typeName=="Recall") {
+			if(objectType=="OpenDentBusiness.Recall") {
 				return Recall.Serialize((OpenDentBusiness.Recall)obj);
 			}
-			if(typeName=="RecallTrigger") {
+			if(objectType=="OpenDentBusiness.RecallTrigger") {
 				return RecallTrigger.Serialize((OpenDentBusiness.RecallTrigger)obj);
 			}
-			if(typeName=="RecallType") {
+			if(objectType=="OpenDentBusiness.RecallType") {
 				return RecallType.Serialize((OpenDentBusiness.RecallType)obj);
 			}
-			if(typeName=="Reconcile") {
+			if(objectType=="OpenDentBusiness.Reconcile") {
 				return Reconcile.Serialize((OpenDentBusiness.Reconcile)obj);
 			}
-			if(typeName=="RefAttach") {
+			if(objectType=="OpenDentBusiness.RefAttach") {
 				return RefAttach.Serialize((OpenDentBusiness.RefAttach)obj);
 			}
-			if(typeName=="Referral") {
+			if(objectType=="OpenDentBusiness.Referral") {
 				return Referral.Serialize((OpenDentBusiness.Referral)obj);
 			}
-			if(typeName=="RegistrationKey") {
+			if(objectType=="OpenDentBusiness.RegistrationKey") {
 				return RegistrationKey.Serialize((OpenDentBusiness.RegistrationKey)obj);
 			}
-			if(typeName=="ReminderRule") {
+			if(objectType=="OpenDentBusiness.ReminderRule") {
 				return ReminderRule.Serialize((OpenDentBusiness.ReminderRule)obj);
 			}
-			if(typeName=="RepeatCharge") {
+			if(objectType=="OpenDentBusiness.RepeatCharge") {
 				return RepeatCharge.Serialize((OpenDentBusiness.RepeatCharge)obj);
 			}
-			if(typeName=="ReplicationServer") {
+			if(objectType=="OpenDentBusiness.ReplicationServer") {
 				return ReplicationServer.Serialize((OpenDentBusiness.ReplicationServer)obj);
 			}
-			if(typeName=="ReqNeeded") {
+			if(objectType=="OpenDentBusiness.ReqNeeded") {
 				return ReqNeeded.Serialize((OpenDentBusiness.ReqNeeded)obj);
 			}
-			if(typeName=="ReqStudent") {
+			if(objectType=="OpenDentBusiness.ReqStudent") {
 				return ReqStudent.Serialize((OpenDentBusiness.ReqStudent)obj);
 			}
-			if(typeName=="RxAlert") {
+			if(objectType=="OpenDentBusiness.RxAlert") {
 				return RxAlert.Serialize((OpenDentBusiness.RxAlert)obj);
 			}
-			if(typeName=="RxDef") {
+			if(objectType=="OpenDentBusiness.RxDef") {
 				return RxDef.Serialize((OpenDentBusiness.RxDef)obj);
 			}
-			if(typeName=="RxNorm") {
+			if(objectType=="OpenDentBusiness.RxNorm") {
 				return RxNorm.Serialize((OpenDentBusiness.RxNorm)obj);
 			}
-			if(typeName=="RxPat") {
+			if(objectType=="OpenDentBusiness.RxPat") {
 				return RxPat.Serialize((OpenDentBusiness.RxPat)obj);
 			}
-			if(typeName=="Schedule") {
+			if(objectType=="OpenDentBusiness.Schedule") {
 				return Schedule.Serialize((OpenDentBusiness.Schedule)obj);
 			}
-			if(typeName=="ScheduleOp") {
+			if(objectType=="OpenDentBusiness.ScheduleOp") {
 				return ScheduleOp.Serialize((OpenDentBusiness.ScheduleOp)obj);
 			}
-			if(typeName=="SchoolClass") {
+			if(objectType=="OpenDentBusiness.SchoolClass") {
 				return SchoolClass.Serialize((OpenDentBusiness.SchoolClass)obj);
 			}
-			if(typeName=="SchoolCourse") {
+			if(objectType=="OpenDentBusiness.SchoolCourse") {
 				return SchoolCourse.Serialize((OpenDentBusiness.SchoolCourse)obj);
 			}
-			if(typeName=="Screen") {
+			if(objectType=="OpenDentBusiness.Screen") {
 				return Screen.Serialize((OpenDentBusiness.Screen)obj);
 			}
-			if(typeName=="ScreenGroup") {
+			if(objectType=="OpenDentBusiness.ScreenGroup") {
 				return ScreenGroup.Serialize((OpenDentBusiness.ScreenGroup)obj);
 			}
-			if(typeName=="ScreenPat") {
+			if(objectType=="OpenDentBusiness.ScreenPat") {
 				return ScreenPat.Serialize((OpenDentBusiness.ScreenPat)obj);
 			}
-			if(typeName=="SecurityLog") {
+			if(objectType=="OpenDentBusiness.SecurityLog") {
 				return SecurityLog.Serialize((OpenDentBusiness.SecurityLog)obj);
 			}
-			if(typeName=="Sheet") {
+			if(objectType=="OpenDentBusiness.Sheet") {
 				return Sheet.Serialize((OpenDentBusiness.Sheet)obj);
 			}
-			if(typeName=="SheetDef") {
+			if(objectType=="OpenDentBusiness.SheetDef") {
 				return SheetDef.Serialize((OpenDentBusiness.SheetDef)obj);
 			}
-			if(typeName=="SheetField") {
+			if(objectType=="OpenDentBusiness.SheetField") {
 				return SheetField.Serialize((OpenDentBusiness.SheetField)obj);
 			}
-			if(typeName=="SheetFieldDef") {
+			if(objectType=="OpenDentBusiness.SheetFieldDef") {
 				return SheetFieldDef.Serialize((OpenDentBusiness.SheetFieldDef)obj);
 			}
-			if(typeName=="SigButDef") {
+			if(objectType=="OpenDentBusiness.SigButDef") {
 				return SigButDef.Serialize((OpenDentBusiness.SigButDef)obj);
 			}
-			if(typeName=="SigButDefElement") {
+			if(objectType=="OpenDentBusiness.SigButDefElement") {
 				return SigButDefElement.Serialize((OpenDentBusiness.SigButDefElement)obj);
 			}
-			if(typeName=="SigElement") {
+			if(objectType=="OpenDentBusiness.SigElement") {
 				return SigElement.Serialize((OpenDentBusiness.SigElement)obj);
 			}
-			if(typeName=="SigElementDef") {
+			if(objectType=="OpenDentBusiness.SigElementDef") {
 				return SigElementDef.Serialize((OpenDentBusiness.SigElementDef)obj);
 			}
-			if(typeName=="Signalod") {
+			if(objectType=="OpenDentBusiness.Signalod") {
 				return Signalod.Serialize((OpenDentBusiness.Signalod)obj);
 			}
-			if(typeName=="Site") {
+			if(objectType=="OpenDentBusiness.Site") {
 				return Site.Serialize((OpenDentBusiness.Site)obj);
 			}
-			if(typeName=="Statement") {
+			if(objectType=="OpenDentBusiness.Statement") {
 				return Statement.Serialize((OpenDentBusiness.Statement)obj);
 			}
-			if(typeName=="Supplier") {
+			if(objectType=="OpenDentBusiness.Supplier") {
 				return Supplier.Serialize((OpenDentBusiness.Supplier)obj);
 			}
-			if(typeName=="Supply") {
+			if(objectType=="OpenDentBusiness.Supply") {
 				return Supply.Serialize((OpenDentBusiness.Supply)obj);
 			}
-			if(typeName=="SupplyNeeded") {
+			if(objectType=="OpenDentBusiness.SupplyNeeded") {
 				return SupplyNeeded.Serialize((OpenDentBusiness.SupplyNeeded)obj);
 			}
-			if(typeName=="SupplyOrder") {
+			if(objectType=="OpenDentBusiness.SupplyOrder") {
 				return SupplyOrder.Serialize((OpenDentBusiness.SupplyOrder)obj);
 			}
-			if(typeName=="SupplyOrderItem") {
+			if(objectType=="OpenDentBusiness.SupplyOrderItem") {
 				return SupplyOrderItem.Serialize((OpenDentBusiness.SupplyOrderItem)obj);
 			}
-			if(typeName=="Task") {
+			if(objectType=="OpenDentBusiness.Task") {
 				return Task.Serialize((OpenDentBusiness.Task)obj);
 			}
-			if(typeName=="TaskAncestor") {
+			if(objectType=="OpenDentBusiness.TaskAncestor") {
 				return TaskAncestor.Serialize((OpenDentBusiness.TaskAncestor)obj);
 			}
-			if(typeName=="TaskList") {
+			if(objectType=="OpenDentBusiness.TaskList") {
 				return TaskList.Serialize((OpenDentBusiness.TaskList)obj);
 			}
-			if(typeName=="TaskNote") {
+			if(objectType=="OpenDentBusiness.TaskNote") {
 				return TaskNote.Serialize((OpenDentBusiness.TaskNote)obj);
 			}
-			if(typeName=="TaskSubscription") {
+			if(objectType=="OpenDentBusiness.TaskSubscription") {
 				return TaskSubscription.Serialize((OpenDentBusiness.TaskSubscription)obj);
 			}
-			if(typeName=="TaskUnread") {
+			if(objectType=="OpenDentBusiness.TaskUnread") {
 				return TaskUnread.Serialize((OpenDentBusiness.TaskUnread)obj);
 			}
-			if(typeName=="TerminalActive") {
+			if(objectType=="OpenDentBusiness.TerminalActive") {
 				return TerminalActive.Serialize((OpenDentBusiness.TerminalActive)obj);
 			}
-			if(typeName=="TimeAdjust") {
+			if(objectType=="OpenDentBusiness.TimeAdjust") {
 				return TimeAdjust.Serialize((OpenDentBusiness.TimeAdjust)obj);
 			}
-			if(typeName=="TimeCardRule") {
+			if(objectType=="OpenDentBusiness.TimeCardRule") {
 				return TimeCardRule.Serialize((OpenDentBusiness.TimeCardRule)obj);
 			}
-			if(typeName=="ToolButItem") {
+			if(objectType=="OpenDentBusiness.ToolButItem") {
 				return ToolButItem.Serialize((OpenDentBusiness.ToolButItem)obj);
 			}
-			if(typeName=="ToothGridCell") {
+			if(objectType=="OpenDentBusiness.ToothGridCell") {
 				return ToothGridCell.Serialize((OpenDentBusiness.ToothGridCell)obj);
 			}
-			if(typeName=="ToothGridCol") {
+			if(objectType=="OpenDentBusiness.ToothGridCol") {
 				return ToothGridCol.Serialize((OpenDentBusiness.ToothGridCol)obj);
 			}
-			if(typeName=="ToothGridDef") {
+			if(objectType=="OpenDentBusiness.ToothGridDef") {
 				return ToothGridDef.Serialize((OpenDentBusiness.ToothGridDef)obj);
 			}
-			if(typeName=="ToothInitial") {
+			if(objectType=="OpenDentBusiness.ToothInitial") {
 				return ToothInitial.Serialize((OpenDentBusiness.ToothInitial)obj);
 			}
-			if(typeName=="Transaction") {
+			if(objectType=="OpenDentBusiness.Transaction") {
 				return Transaction.Serialize((OpenDentBusiness.Transaction)obj);
 			}
-			if(typeName=="TreatPlan") {
+			if(objectType=="OpenDentBusiness.TreatPlan") {
 				return TreatPlan.Serialize((OpenDentBusiness.TreatPlan)obj);
 			}
-			if(typeName=="UserGroup") {
+			if(objectType=="OpenDentBusiness.UserGroup") {
 				return UserGroup.Serialize((OpenDentBusiness.UserGroup)obj);
 			}
-			if(typeName=="Userod") {
+			if(objectType=="OpenDentBusiness.Userod") {
 				return Userod.Serialize((OpenDentBusiness.Userod)obj);
 			}
-			if(typeName=="UserQuery") {
+			if(objectType=="OpenDentBusiness.UserQuery") {
 				return UserQuery.Serialize((OpenDentBusiness.UserQuery)obj);
 			}
-			if(typeName=="VaccineDef") {
+			if(objectType=="OpenDentBusiness.VaccineDef") {
 				return VaccineDef.Serialize((OpenDentBusiness.VaccineDef)obj);
 			}
-			if(typeName=="VaccinePat") {
+			if(objectType=="OpenDentBusiness.VaccinePat") {
 				return VaccinePat.Serialize((OpenDentBusiness.VaccinePat)obj);
 			}
-			if(typeName=="Vitalsign") {
+			if(objectType=="OpenDentBusiness.Vitalsign") {
 				return Vitalsign.Serialize((OpenDentBusiness.Vitalsign)obj);
 			}
-			if(typeName=="ZipCode") {
+			if(objectType=="OpenDentBusiness.ZipCode") {
 				return ZipCode.Serialize((OpenDentBusiness.ZipCode)obj);
 			}
 			#endregion
-			throw new NotSupportedException("CallClassSerializer, unsupported class type: "+typeName);
+			throw new NotSupportedException("CallClassSerializer, unsupported class type: "+objectType);
 		}
 
 		///<summary>Calls the class deserializer based on the typeName passed in.  Mainly used for deserializing parameters on DtoObjects.  Throws exceptions.</summary>
@@ -705,646 +705,646 @@ namespace OpenDentalWebService {
 			}
 			#endregion
 			#region Open Dental Classes
-			if(typeName=="OpenDentBusiness.Account") {
+			if(typeName=="Account") {
 				return Account.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AccountingAutoPay") {
+			if(typeName=="AccountingAutoPay") {
 				return AccountingAutoPay.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Adjustment") {
+			if(typeName=="Adjustment") {
 				return Adjustment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Allergy") {
+			if(typeName=="Allergy") {
 				return Allergy.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AllergyDef") {
+			if(typeName=="AllergyDef") {
 				return AllergyDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Appointment") {
+			if(typeName=="Appointment") {
 				return Appointment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AppointmentRule") {
+			if(typeName=="AppointmentRule") {
 				return AppointmentRule.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ApptField") {
+			if(typeName=="ApptField") {
 				return ApptField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ApptFieldDef") {
+			if(typeName=="ApptFieldDef") {
 				return ApptFieldDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ApptView") {
+			if(typeName=="ApptView") {
 				return ApptView.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ApptViewItem") {
+			if(typeName=="ApptViewItem") {
 				return ApptViewItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutoCode") {
+			if(typeName=="AutoCode") {
 				return AutoCode.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutoCodeCond") {
+			if(typeName=="AutoCodeCond") {
 				return AutoCodeCond.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutoCodeItem") {
+			if(typeName=="AutoCodeItem") {
 				return AutoCodeItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Automation") {
+			if(typeName=="Automation") {
 				return Automation.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutomationCondition") {
+			if(typeName=="AutomationCondition") {
 				return AutomationCondition.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutoNote") {
+			if(typeName=="AutoNote") {
 				return AutoNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.AutoNoteControl") {
+			if(typeName=="AutoNoteControl") {
 				return AutoNoteControl.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Benefit") {
+			if(typeName=="Benefit") {
 				return Benefit.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CanadianNetwork") {
+			if(typeName=="CanadianNetwork") {
 				return CanadianNetwork.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Carrier") {
+			if(typeName=="Carrier") {
 				return Carrier.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CentralConnection") {
+			if(typeName=="CentralConnection") {
 				return CentralConnection.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ChartView") {
+			if(typeName=="ChartView") {
 				return ChartView.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Claim") {
+			if(typeName=="Claim") {
 				return Claim.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimAttach") {
+			if(typeName=="ClaimAttach") {
 				return ClaimAttach.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimCondCodeLog") {
+			if(typeName=="ClaimCondCodeLog") {
 				return ClaimCondCodeLog.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimForm") {
+			if(typeName=="ClaimForm") {
 				return ClaimForm.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimFormItem") {
+			if(typeName=="ClaimFormItem") {
 				return ClaimFormItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimPayment") {
+			if(typeName=="ClaimPayment") {
 				return ClaimPayment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimProc") {
+			if(typeName=="ClaimProc") {
 				return ClaimProc.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClaimValCodeLog") {
+			if(typeName=="ClaimValCodeLog") {
 				return ClaimValCodeLog.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Clearinghouse") {
+			if(typeName=="Clearinghouse") {
 				return Clearinghouse.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Clinic") {
+			if(typeName=="Clinic") {
 				return Clinic.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ClockEvent") {
+			if(typeName=="ClockEvent") {
 				return ClockEvent.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Commlog") {
+			if(typeName=="Commlog") {
 				return Commlog.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Computer") {
+			if(typeName=="Computer") {
 				return Computer.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ComputerPref") {
+			if(typeName=="ComputerPref") {
 				return ComputerPref.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Contact") {
+			if(typeName=="Contact") {
 				return Contact.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.County") {
+			if(typeName=="County") {
 				return County.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CovCat") {
+			if(typeName=="CovCat") {
 				return CovCat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CovSpan") {
+			if(typeName=="CovSpan") {
 				return CovSpan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CreditCard") {
+			if(typeName=="CreditCard") {
 				return CreditCard.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CustRefEntry") {
+			if(typeName=="CustRefEntry") {
 				return CustRefEntry.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.CustReference") {
+			if(typeName=="CustReference") {
 				return CustReference.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DashboardAR") {
+			if(typeName=="DashboardAR") {
 				return DashboardAR.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Def") {
+			if(typeName=="Def") {
 				return Def.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DeletedObject") {
+			if(typeName=="DeletedObject") {
 				return DeletedObject.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Deposit") {
+			if(typeName=="Deposit") {
 				return Deposit.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DictCustom") {
+			if(typeName=="DictCustom") {
 				return DictCustom.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Disease") {
+			if(typeName=="Disease") {
 				return Disease.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DiseaseDef") {
+			if(typeName=="DiseaseDef") {
 				return DiseaseDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DisplayField") {
+			if(typeName=="DisplayField") {
 				return DisplayField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Document") {
+			if(typeName=="Document") {
 				return Document.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DocumentMisc") {
+			if(typeName=="DocumentMisc") {
 				return DocumentMisc.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DrugManufacturer") {
+			if(typeName=="DrugManufacturer") {
 				return DrugManufacturer.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.DrugUnit") {
+			if(typeName=="DrugUnit") {
 				return DrugUnit.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Dunning") {
+			if(typeName=="Dunning") {
 				return Dunning.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EduResource") {
+			if(typeName=="EduResource") {
 				return EduResource.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EhrMeasure") {
+			if(typeName=="EhrMeasure") {
 				return EhrMeasure.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EhrMeasureEvent") {
+			if(typeName=="EhrMeasureEvent") {
 				return EhrMeasureEvent.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EhrProvKey") {
+			if(typeName=="EhrProvKey") {
 				return EhrProvKey.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EhrQuarterlyKey") {
+			if(typeName=="EhrQuarterlyKey") {
 				return EhrQuarterlyKey.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EhrSummaryCcd") {
+			if(typeName=="EhrSummaryCcd") {
 				return EhrSummaryCcd.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ElectID") {
+			if(typeName=="ElectID") {
 				return ElectID.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EmailAttach") {
+			if(typeName=="EmailAttach") {
 				return EmailAttach.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EmailMessage") {
+			if(typeName=="EmailMessage") {
 				return EmailMessage.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EmailTemplate") {
+			if(typeName=="EmailTemplate") {
 				return EmailTemplate.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Employee") {
+			if(typeName=="Employee") {
 				return Employee.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Employer") {
+			if(typeName=="Employer") {
 				return Employer.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EobAttach") {
+			if(typeName=="EobAttach") {
 				return EobAttach.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Equipment") {
+			if(typeName=="Equipment") {
 				return Equipment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ErxLog") {
+			if(typeName=="ErxLog") {
 				return ErxLog.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Etrans") {
+			if(typeName=="Etrans") {
 				return Etrans.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.EtransMessageText") {
+			if(typeName=="EtransMessageText") {
 				return EtransMessageText.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Fee") {
+			if(typeName=="Fee") {
 				return Fee.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.FeeSched") {
+			if(typeName=="FeeSched") {
 				return FeeSched.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.FormPat") {
+			if(typeName=="FormPat") {
 				return FormPat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Formulary") {
+			if(typeName=="Formulary") {
 				return Formulary.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.FormularyMed") {
+			if(typeName=="FormularyMed") {
 				return FormularyMed.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.GroupPermission") {
+			if(typeName=="GroupPermission") {
 				return GroupPermission.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Guardian") {
+			if(typeName=="Guardian") {
 				return Guardian.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.HL7Def") {
+			if(typeName=="HL7Def") {
 				return HL7Def.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.HL7DefField") {
+			if(typeName=="HL7DefField") {
 				return HL7DefField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.HL7DefMessage") {
+			if(typeName=="HL7DefMessage") {
 				return HL7DefMessage.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.HL7DefSegment") {
+			if(typeName=="HL7DefSegment") {
 				return HL7DefSegment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.HL7Msg") {
+			if(typeName=="HL7Msg") {
 				return HL7Msg.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ICD9") {
+			if(typeName=="ICD9") {
 				return ICD9.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.InsFilingCode") {
+			if(typeName=="InsFilingCode") {
 				return InsFilingCode.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.InsFilingCodeSubtype") {
+			if(typeName=="InsFilingCodeSubtype") {
 				return InsFilingCodeSubtype.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.InsPlan") {
+			if(typeName=="InsPlan") {
 				return InsPlan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.InsSub") {
+			if(typeName=="InsSub") {
 				return InsSub.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.InstallmentPlan") {
+			if(typeName=="InstallmentPlan") {
 				return InstallmentPlan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.JournalEntry") {
+			if(typeName=="JournalEntry") {
 				return JournalEntry.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LabCase") {
+			if(typeName=="LabCase") {
 				return LabCase.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Laboratory") {
+			if(typeName=="Laboratory") {
 				return Laboratory.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LabPanel") {
+			if(typeName=="LabPanel") {
 				return LabPanel.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LabResult") {
+			if(typeName=="LabResult") {
 				return LabResult.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LabTurnaround") {
+			if(typeName=="LabTurnaround") {
 				return LabTurnaround.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Language") {
+			if(typeName=="Language") {
 				return Language.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LanguageForeign") {
+			if(typeName=="LanguageForeign") {
 				return LanguageForeign.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Letter") {
+			if(typeName=="Letter") {
 				return Letter.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LetterMerge") {
+			if(typeName=="LetterMerge") {
 				return LetterMerge.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.LetterMergeField") {
+			if(typeName=="LetterMergeField") {
 				return LetterMergeField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.MedicalOrder") {
+			if(typeName=="MedicalOrder") {
 				return MedicalOrder.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Medication") {
+			if(typeName=="Medication") {
 				return Medication.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.MedicationPat") {
+			if(typeName=="MedicationPat") {
 				return MedicationPat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Mount") {
+			if(typeName=="Mount") {
 				return Mount.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.MountDef") {
+			if(typeName=="MountDef") {
 				return MountDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.MountItem") {
+			if(typeName=="MountItem") {
 				return MountItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.MountItemDef") {
+			if(typeName=="MountItemDef") {
 				return MountItemDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Operatory") {
+			if(typeName=="Operatory") {
 				return Operatory.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.OrionProc") {
+			if(typeName=="OrionProc") {
 				return OrionProc.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.OrthoChart") {
+			if(typeName=="OrthoChart") {
 				return OrthoChart.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PatField") {
+			if(typeName=="PatField") {
 				return PatField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PatFieldDef") {
+			if(typeName=="PatFieldDef") {
 				return PatFieldDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Patient") {
+			if(typeName=="Patient") {
 				return Patient.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PatientNote") {
+			if(typeName=="PatientNote") {
 				return PatientNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PatPlan") {
+			if(typeName=="PatPlan") {
 				return PatPlan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Payment") {
+			if(typeName=="Payment") {
 				return Payment.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PayPeriod") {
+			if(typeName=="PayPeriod") {
 				return PayPeriod.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PayPlan") {
+			if(typeName=="PayPlan") {
 				return PayPlan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PayPlanCharge") {
+			if(typeName=="PayPlanCharge") {
 				return PayPlanCharge.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PaySplit") {
+			if(typeName=="PaySplit") {
 				return PaySplit.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PerioExam") {
+			if(typeName=="PerioExam") {
 				return PerioExam.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PerioMeasure") {
+			if(typeName=="PerioMeasure") {
 				return PerioMeasure.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Pharmacy") {
+			if(typeName=="Pharmacy") {
 				return Pharmacy.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Phone") {
+			if(typeName=="Phone") {
 				return Phone.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PhoneEmpDefault") {
+			if(typeName=="PhoneEmpDefault") {
 				return PhoneEmpDefault.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PhoneMetric") {
+			if(typeName=="PhoneMetric") {
 				return PhoneMetric.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PhoneNumber") {
+			if(typeName=="PhoneNumber") {
 				return PhoneNumber.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.PlannedAppt") {
+			if(typeName=="PlannedAppt") {
 				return PlannedAppt.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Popup") {
+			if(typeName=="Popup") {
 				return Popup.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Pref") {
+			if(typeName=="Pref") {
 				return Pref.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Printer") {
+			if(typeName=="Printer") {
 				return Printer.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcApptColor") {
+			if(typeName=="ProcApptColor") {
 				return ProcApptColor.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcButton") {
+			if(typeName=="ProcButton") {
 				return ProcButton.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcButtonItem") {
+			if(typeName=="ProcButtonItem") {
 				return ProcButtonItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcCodeNote") {
+			if(typeName=="ProcCodeNote") {
 				return ProcCodeNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Procedure") {
+			if(typeName=="Procedure") {
 				return Procedure.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcedureCode") {
+			if(typeName=="ProcedureCode") {
 				return ProcedureCode.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcGroupItem") {
+			if(typeName=="ProcGroupItem") {
 				return ProcGroupItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcNote") {
+			if(typeName=="ProcNote") {
 				return ProcNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProcTP") {
+			if(typeName=="ProcTP") {
 				return ProcTP.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Program") {
+			if(typeName=="Program") {
 				return Program.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProgramProperty") {
+			if(typeName=="ProgramProperty") {
 				return ProgramProperty.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Provider") {
+			if(typeName=="Provider") {
 				return Provider.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ProviderIdent") {
+			if(typeName=="ProviderIdent") {
 				return ProviderIdent.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Question") {
+			if(typeName=="Question") {
 				return Question.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.QuestionDef") {
+			if(typeName=="QuestionDef") {
 				return QuestionDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.QuickPasteCat") {
+			if(typeName=="QuickPasteCat") {
 				return QuickPasteCat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.QuickPasteNote") {
+			if(typeName=="QuickPasteNote") {
 				return QuickPasteNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Recall") {
+			if(typeName=="Recall") {
 				return Recall.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RecallTrigger") {
+			if(typeName=="RecallTrigger") {
 				return RecallTrigger.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RecallType") {
+			if(typeName=="RecallType") {
 				return RecallType.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Reconcile") {
+			if(typeName=="Reconcile") {
 				return Reconcile.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RefAttach") {
+			if(typeName=="RefAttach") {
 				return RefAttach.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Referral") {
+			if(typeName=="Referral") {
 				return Referral.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RegistrationKey") {
+			if(typeName=="RegistrationKey") {
 				return RegistrationKey.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ReminderRule") {
+			if(typeName=="ReminderRule") {
 				return ReminderRule.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RepeatCharge") {
+			if(typeName=="RepeatCharge") {
 				return RepeatCharge.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ReplicationServer") {
+			if(typeName=="ReplicationServer") {
 				return ReplicationServer.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ReqNeeded") {
+			if(typeName=="ReqNeeded") {
 				return ReqNeeded.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ReqStudent") {
+			if(typeName=="ReqStudent") {
 				return ReqStudent.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RxAlert") {
+			if(typeName=="RxAlert") {
 				return RxAlert.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RxDef") {
+			if(typeName=="RxDef") {
 				return RxDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RxNorm") {
+			if(typeName=="RxNorm") {
 				return RxNorm.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.RxPat") {
+			if(typeName=="RxPat") {
 				return RxPat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Schedule") {
+			if(typeName=="Schedule") {
 				return Schedule.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ScheduleOp") {
+			if(typeName=="ScheduleOp") {
 				return ScheduleOp.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SchoolClass") {
+			if(typeName=="SchoolClass") {
 				return SchoolClass.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SchoolCourse") {
+			if(typeName=="SchoolCourse") {
 				return SchoolCourse.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Screen") {
+			if(typeName=="Screen") {
 				return Screen.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ScreenGroup") {
+			if(typeName=="ScreenGroup") {
 				return ScreenGroup.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ScreenPat") {
+			if(typeName=="ScreenPat") {
 				return ScreenPat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SecurityLog") {
+			if(typeName=="SecurityLog") {
 				return SecurityLog.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Sheet") {
+			if(typeName=="Sheet") {
 				return Sheet.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SheetDef") {
+			if(typeName=="SheetDef") {
 				return SheetDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SheetField") {
+			if(typeName=="SheetField") {
 				return SheetField.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SheetFieldDef") {
+			if(typeName=="SheetFieldDef") {
 				return SheetFieldDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SigButDef") {
+			if(typeName=="SigButDef") {
 				return SigButDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SigButDefElement") {
+			if(typeName=="SigButDefElement") {
 				return SigButDefElement.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SigElement") {
+			if(typeName=="SigElement") {
 				return SigElement.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SigElementDef") {
+			if(typeName=="SigElementDef") {
 				return SigElementDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Signalod") {
+			if(typeName=="Signalod") {
 				return Signalod.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Site") {
+			if(typeName=="Site") {
 				return Site.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Statement") {
+			if(typeName=="Statement") {
 				return Statement.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Supplier") {
+			if(typeName=="Supplier") {
 				return Supplier.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Supply") {
+			if(typeName=="Supply") {
 				return Supply.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SupplyNeeded") {
+			if(typeName=="SupplyNeeded") {
 				return SupplyNeeded.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SupplyOrder") {
+			if(typeName=="SupplyOrder") {
 				return SupplyOrder.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.SupplyOrderItem") {
+			if(typeName=="SupplyOrderItem") {
 				return SupplyOrderItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Task") {
+			if(typeName=="Task") {
 				return Task.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TaskAncestor") {
+			if(typeName=="TaskAncestor") {
 				return TaskAncestor.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TaskList") {
+			if(typeName=="TaskList") {
 				return TaskList.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TaskNote") {
+			if(typeName=="TaskNote") {
 				return TaskNote.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TaskSubscription") {
+			if(typeName=="TaskSubscription") {
 				return TaskSubscription.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TaskUnread") {
+			if(typeName=="TaskUnread") {
 				return TaskUnread.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TerminalActive") {
+			if(typeName=="TerminalActive") {
 				return TerminalActive.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TimeAdjust") {
+			if(typeName=="TimeAdjust") {
 				return TimeAdjust.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TimeCardRule") {
+			if(typeName=="TimeCardRule") {
 				return TimeCardRule.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ToolButItem") {
+			if(typeName=="ToolButItem") {
 				return ToolButItem.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ToothGridCell") {
+			if(typeName=="ToothGridCell") {
 				return ToothGridCell.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ToothGridCol") {
+			if(typeName=="ToothGridCol") {
 				return ToothGridCol.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ToothGridDef") {
+			if(typeName=="ToothGridDef") {
 				return ToothGridDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ToothInitial") {
+			if(typeName=="ToothInitial") {
 				return ToothInitial.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Transaction") {
+			if(typeName=="Transaction") {
 				return Transaction.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.TreatPlan") {
+			if(typeName=="TreatPlan") {
 				return TreatPlan.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.UserGroup") {
+			if(typeName=="UserGroup") {
 				return UserGroup.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Userod") {
+			if(typeName=="Userod") {
 				return Userod.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.UserQuery") {
+			if(typeName=="UserQuery") {
 				return UserQuery.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.VaccineDef") {
+			if(typeName=="VaccineDef") {
 				return VaccineDef.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.VaccinePat") {
+			if(typeName=="VaccinePat") {
 				return VaccinePat.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.Vitalsign") {
+			if(typeName=="Vitalsign") {
 				return Vitalsign.Deserialize(xml);
 			}
-			if(typeName=="OpenDentBusiness.ZipCode") {
+			if(typeName=="ZipCode") {
 				return ZipCode.Deserialize(xml);
 			}
 			#endregion

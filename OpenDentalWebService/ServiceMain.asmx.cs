@@ -62,13 +62,13 @@ namespace OpenDentalWebService {
 					case "DtoGetLong":
 						DtoGetLong dtoGetLong=(DtoGetLong)dto;
 						//TODO: Check credentials.
-						return aaGeneralTypes.Serialize("long",(long)DtoMethods.ProcessDtoObject(dto));
+						return aaGeneralTypes.Serialize("System.Int64",(long)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetInt
 					case "DtoGetInt":
 						DtoGetInt dtoGetInt=(DtoGetInt)dto;
 						//TODO: Check credentials.
-						return aaGeneralTypes.Serialize("int",(int)DtoMethods.ProcessDtoObject(dto));
+						return aaGeneralTypes.Serialize("System.Int32",(int)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetVoid
 					case "DtoGetVoid":
@@ -81,24 +81,20 @@ namespace OpenDentalWebService {
 					case "DtoGetObject":
 						DtoGetObject dtoGetObject=(DtoGetObject)dto;
 						//TODO: Check credentials.
-						DtoMethods.ProcessDtoObject(dto);
-						switch(((DtoGetObject)dto).ObjectType) {
-							case "":
-								return "";
-						}
+						return DtoMethods.CallClassSerializer(dtoGetObject.ObjectType,DtoMethods.ProcessDtoObject(dto));
 						throw new NotSupportedException("ProcessRequest, DtoGetObject ObjectType not supported yet.");
 					#endregion
 					#region DtoGetString
 					case "DtoGetString":
 						DtoGetString dtoGetString=(DtoGetString)dto;
 						//TODO: Check credentials.
-						return aaGeneralTypes.Serialize("string",(string)DtoMethods.ProcessDtoObject(dto));
+						return aaGeneralTypes.Serialize("System.String",(string)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region DtoGetBool
 					case "DtoGetBool":
 						DtoGetBool dtoGetBool=(DtoGetBool)dto;
 						//TODO: Check credentials.
-						return aaGeneralTypes.Serialize("bool",(string)DtoMethods.ProcessDtoObject(dto));
+						return aaGeneralTypes.Serialize("System.Boolean",(string)DtoMethods.ProcessDtoObject(dto));
 					#endregion
 					#region Default DtoUnknown
 					default:

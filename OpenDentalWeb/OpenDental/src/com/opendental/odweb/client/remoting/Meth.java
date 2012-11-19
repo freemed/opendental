@@ -4,7 +4,7 @@ public class Meth {
 	
 		/** Creates. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
-		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
+		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static DtoGetTable GetTable(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
@@ -18,7 +18,7 @@ public class Meth {
 	
 		/** Calls the server to query the database for an integer. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
-		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
+		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. Use type names for C#.  Ex: long, Patient
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static int GetInt(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
@@ -30,7 +30,7 @@ public class Meth {
 		
 		/** Calls the server to query the database for an object. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
-		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
+		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static Object GetObject(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
@@ -42,7 +42,7 @@ public class Meth {
 		
 		/** Calls the server to query the database expecting no result. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
-		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. 
+		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static void GetVoid(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
