@@ -2320,10 +2320,13 @@ namespace OpenDentBusiness
 				}
 			}
 			//treatProv
-			if(treatProv.IsNotPerson) {
-				Comma(strb);
-				strb.Append("Treat Prov must be a person.");
-				//Required now, because we send this as the ordering prov to Emdeon Medical.
+			if(claim.MedType==EnumClaimMedType.Medical) {
+				//Required now for Medical, because we send this as the ordering prov to Emdeon Medical in loop 2420E.
+				//But could just be annoying in Dental, and should definitely allow for Institutional (customer complaint).
+				if(treatProv.IsNotPerson) {
+					Comma(strb);
+					strb.Append("Treat Prov must be a person.");
+				}
 			}
 			if(treatProv.LName=="") {
 				Comma(strb);
