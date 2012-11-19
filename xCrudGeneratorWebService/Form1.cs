@@ -106,9 +106,11 @@ namespace xCrudGeneratorWebService {
 				WriteAllSerializing(strb,className,fields);
 				File.WriteAllText(Path.Combine(SerialDir,className+".cs"),strb.ToString());
 				strb.Clear();
-				WriteAlljavaDataInterface(strb,className);
-				File.WriteAllText(Path.Combine(JavaSClassesDir,GetSname(className+docForjava)+".java"),strb.ToString());
-				strb.Clear();
+				if(!File.Exists(Path.Combine(JavaSClassesDir,GetSname(className+docForjava)+".java"))) {//Only create a java S class if one does not already exist.
+					WriteAlljavaDataInterface(strb,className);
+					File.WriteAllText(Path.Combine(JavaSClassesDir,GetSname(className+docForjava)+".java"),strb.ToString());
+					strb.Clear();
+				}
 				WriteAlljavaTableTypes(strb,className,fields);
 				File.WriteAllText(Path.Combine(JavaTableTypesDir,className+docForjava+".java"),strb.ToString());
 				#region DtoMethods OpenDentalClasses for Serializing and Deserializing
