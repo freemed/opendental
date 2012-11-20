@@ -100,7 +100,7 @@ namespace OpenDentalWebService {
 			return dto;
 		}
 
-		///<summary>Returns the correct DataTransferObject for the type of object passed in.  Returns null if unknown dtoType.</summary>
+		///<summary>Returns the correct DataTransferObject for the type of object passed in.  Sets dto.Type to the passed in string.  Returns null if unknown dtoType.</summary>
 		private static DataTransferObject GetDtoForType(string dtoType) {
 			DataTransferObject dto=null;
 			switch(dtoType) {
@@ -134,6 +134,9 @@ namespace OpenDentalWebService {
 				case "DtoException":
 					dto=new DtoException();
 					break;
+			}
+			if(dto!=null) {
+				dto.Type=dtoType;
 			}
 			return dto;
 		}

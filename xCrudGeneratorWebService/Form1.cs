@@ -601,7 +601,8 @@ namespace xCrudGeneratorWebService {
 					if(i>0) {
 						strb.Append(",");
 					}
-					strb.Append("("+paramInfos[i].ParameterType.FullName.ToString()+")parameters["+i+"]");
+					//strb.Append("("+paramInfos[i].ParameterType.FullName.ToString()+")parameters["+i+"]");
+					strb.Append(GetParameterStringForMethodCall(paramInfos[i].ParameterType,i));
 				}
 				strb.Append(");"+rn);
 				if(methodInfo.ReturnType.Name=="Void") {
@@ -614,6 +615,43 @@ namespace xCrudGeneratorWebService {
 			strb.Append(t3+"throw new NotSupportedException(\"MethodAccounts, unknown method: \"+methodName);"+rn
 				+t2+"}"+rn+rn);
 			#endregion
+		}
+
+		///<summary>Helper function mainly for primitive casting.  A typical result will look like this: "(OpenDentBusiness.Account)parameters[1]"</summary>
+		private string GetParameterStringForMethodCall(Type type,int i) {
+			string fullName=type.FullName.ToString();
+			switch(fullName) {
+				case "System.Boolean":
+					return "Convert.ToBoolean(parameters["+i+"])";
+				case "System.Byte":
+					return "Convert.ToByte(parameters["+i+"])";
+				case "System.Char":
+					return "Convert.ToChar(parameters["+i+"])";
+				case "System.Decimal":
+					return "Convert.ToDecimal(parameters["+i+"])";
+				case "System.Double":
+					return "Convert.ToDouble(parameters["+i+"])";
+				case "System.Single":
+					return "Convert.ToSingle(parameters["+i+"])";
+				case "System.Int32":
+					return "Convert.ToInt32(parameters["+i+"])";
+				case "System.Int64":
+					return "Convert.ToInt64(parameters["+i+"])";
+				case "System.SByte":
+					return "Convert.ToSByte(parameters["+i+"])";
+				case "System.Int16":
+					return "Convert.ToInt16(parameters["+i+"])";
+				case "System.String":
+					return "Convert.ToString(parameters["+i+"])";
+				case "System.UInt32":
+					return "Convert.ToUInt32(parameters["+i+"])";
+				case "System.UInt64":
+					return "Convert.ToUInt64(parameters["+i+"])";
+				case "System.UInt16":
+					return "Convert.ToUInt16(parameters["+i+"])";
+				default://Not a primitive.
+					return "("+fullName+")parameters["+i+"]";
+			}
 		}
 
 		///<summary>Fill Serialize</summary>

@@ -16,15 +16,21 @@ namespace OpenDentalWebService {
 	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 	[ToolboxItem(false)]
 	public class ServiceMain:System.Web.Services.WebService {
+		private OpenDentBusiness.DataConnection con=null;
 
-		///<summary>Pass in a serialized dto.  It returns a dto which must be deserialized by the client.</summary>
+		///<summary>Pass in a serialized dto.  It returns the desired object in xml or a dto exception which must be deserialized by the client.</summary>
 		[WebMethod]
 		[ScriptMethod(UseHttpGet=true)]
 		public string ProcessRequest(string dtoString) {
 			#region DEBUG
-#if DEBUG
-			//System.Threading.Thread.Sleep(100);//to test slowness issues with web service.
-#endif
+			#if DEBUG
+			//TODO Remove from DEBUG and enhance to use an xml config file?
+			if(con==null) {
+				//Create database connection for testing purposes:
+				con=new OpenDentBusiness.DataConnection();
+				con.SetDb("localhost","development125","root","","","",DatabaseType.MySql);
+			}
+			#endif
 			#endregion
 			DataTransferObject dto=null;
 			try {
