@@ -510,6 +510,15 @@ namespace OpenDental {
 					employeesList.Add(emp);
 				}
 			}
+			string errors="";
+			foreach(Employee EmployeeCur in employeesList) {
+				errors+=TimeCardRules.ValidatePayPeriod(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			}
+			if(errors != "") {
+				MsgBox.Show(this,errors);
+				Cursor=Cursors.Default;
+				return;
+			}
 			foreach(Employee EmployeeCur in employeesList) {
 				TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			}

@@ -95,7 +95,87 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Calculates daily overtime</summary>
+		///<summary>Validates pay period before making any adjustments.</summary>
+		public static string ValidatePayPeriod(Employee EmployeeCur, DateTime StartDate,DateTime StopDate) {
+			List<ClockEvent> breakList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,true);
+			List<ClockEvent> ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,StartDate,StopDate,false);
+			bool errorFound=false;
+			string retVal="Timecard errors for employee : "+Employees.GetNameFL(EmployeeCur)+"\r\n";
+			//Validate clock events
+			foreach(ClockEvent cCur in ClockEventList){
+				if(cCur.TimeDisplayed2.Year < 1880){
+					retVal+="  "+cCur.TimeDisplayed1.ToShortDateString()+" : Employee not clocked out.\r\n";
+					errorFound=true;
+				}
+				else if(cCur.TimeDisplayed1.Date != cCur.TimeDisplayed2.Date){
+					retVal+="  "+cCur.TimeDisplayed1.ToShortDateString()+" : Clock entry spans multiple days.\r\n";
+					errorFound=true;
+				}
+			}
+			//Validate Breaks
+			foreach(ClockEvent bCur in breakList) {
+				if(bCur.TimeDisplayed2.Year<1880) {
+					retVal+="  "+bCur.TimeDisplayed1.ToShortDateString()+" : Employee not clocked in from break.\r\n";
+					errorFound=true;
+				}
+				if(bCur.TimeDisplayed1.Date != bCur.TimeDisplayed2.Date) {
+					retVal+="  "+bCur.TimeDisplayed1.ToShortDateString()+" : One break spans multiple days.\r\n";
+					errorFound=true;
+				}
+				for(int c=ClockEventList.Count-1;c>=0;c--) {
+					if(ClockEventList[c].TimeDisplayed1.Date==bCur.TimeDisplayed1.Date) {
+						break;
+					}
+					if(c==0) {//we never found a match
+						retVal+="  "+bCur.TimeDisplayed1.ToShortDateString()+" : Break found during non-working day.\r\n";
+						errorFound=true;
+					}
+				}
+			}
+			//Validate OT Rules
+			bool amRuleFound=false;
+			bool pmRuleFound=false;
+			bool hourRuleFound=false;
+			TimeCardRules.RefreshCache();
+			foreach(TimeCardRule tcrCur in TimeCardRules.listt){
+				if(tcrCur.EmployeeNum!=EmployeeCur.EmployeeNum){
+					continue;//Does not apply to this employee.
+				}
+				if(tcrCur.AfterTimeOfDay > TimeSpan.Zero){
+					if(pmRuleFound){
+						retVal+="  Multiple timecard rules for after time of day found. Only one allowed.\r\n";
+						errorFound=true;
+					}
+					pmRuleFound=true;
+				}
+				if(tcrCur.BeforeTimeOfDay > TimeSpan.Zero){
+					if(amRuleFound){
+						retVal+="  Multiple timecard rules for before time of day found. Only one allowed.\r\n";
+						errorFound=true;
+					}
+					amRuleFound=true;
+				}
+				if(tcrCur.OverHoursPerDay > TimeSpan.Zero){
+					if(hourRuleFound){
+						retVal+="  Multiple timecard rules for hours per day found. Only one allowed.\r\n";
+						errorFound=true;
+					}
+					hourRuleFound=true;
+				}
+				if(pmRuleFound&&hourRuleFound){
+					retVal+="  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.\r\n";
+					errorFound=true;
+				}
+				if(amRuleFound&&hourRuleFound){
+					retVal+="  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.\r\n";
+					errorFound=true;
+				}
+			}
+			retVal+="\r\n";
+			return (errorFound?retVal:"");
+		}
+
+		///<summary>Calculates daily overtime. Throws exceptions when encountering errors, though all errors SHOULD have been caught already by using the ValidatePayPeriod() function and generating a msgbox.</summary>
 		public static void CalculateDailyOvertime(Employee EmployeeCur,DateTime StartDate,DateTime StopDate) {
 			//Cursor=Cursors.WaitCursor;
 			DateTime previousDate;

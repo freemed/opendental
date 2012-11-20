@@ -887,6 +887,11 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
+			string errors = TimeCardRules.ValidatePayPeriod(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			if(errors != "") {
+				MsgBox.Show(this,errors);
+				return;
+			}
 			TimeCardRules.CalculateDailyOvertime(EmployeeCur,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			FillMain(true);
 		}
