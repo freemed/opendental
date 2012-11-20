@@ -292,30 +292,30 @@ namespace xCrudGeneratorWebService {
 				+t2+"//Figure out what type of object we're dealing with and return the serialized form."+rn
 				+t2+"String qualifiedName=obj.getClass().getName();//Ex: ArrayList = \"java.util.ArrayList\""+rn
 				+t2+"//Primitives--------------------------------------------------------------------------------------------------------"+rn
-				+t2+"if(qualifiedName==\"Z\") {//boolean \"Z\""+rn
-				+t3+"result=(boolean)obj?\"1\":\"0\";"+rn
+				+t2+"if(qualifiedName==\"Z\" || qualifiedName==\"java.lang.Boolean\") {//boolean  \"Z\""+rn
+				+t3+"result=(Boolean)obj?\"1\":\"0\";"+rn
 				+t3+"return \"<bool>\"+result+\"</bool>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"B\") {//byte    \"B\""+rn
-				+t3+"return \"<byte>\"+(byte)obj+\"</byte>\";"+rn
+				+t2+"if(qualifiedName==\"B\" || qualifiedName==\"java.lang.Byte\") {//byte  \"B\""+rn
+				+t3+"return \"<byte>\"+(Byte)obj+\"</byte>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"C\") {//char    \"C\""+rn
-				+t3+"return \"<char>\"+(char)obj+\"</char>\";"+rn
+				+t2+"if(qualifiedName==\"C\" || qualifiedName==\"java.lang.Character\") {//char  \"C\""+rn
+				+t3+"return \"<char>\"+(Character)obj+\"</char>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"S\") {//short   \"S\""+rn
-				+t3+"return \"<short>\"+(short)obj+\"</short>\";"+rn
+				+t2+"if(qualifiedName==\"S\" || qualifiedName==\"java.lang.Short\") {//short  \"S\""+rn
+				+t3+"return \"<short>\"+(Short)obj+\"</short>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"I\") {//int     \"I\""+rn
-				+t3+"return \"<int>\"+(int)obj+\"</int>\";"+rn
+				+t2+"if(qualifiedName==\"I\" || qualifiedName==\"java.lang.Integer\") {//int  \"I\""+rn
+				+t3+"return \"<int>\"+(Integer)obj+\"</int>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"J\") {//long    \"J\""+rn
-				+t3+"//return \"<long>\"+(long)obj+\"</long>\";"+rn
+				+t2+"if(qualifiedName==\"J\" || qualifiedName==\"java.lang.Long\") {//long  \"J\""+rn
+				+t3+"//return \"<long>\"+(Long)obj+\"</long>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"F\") {//float   \"F\""+rn
-				+t3+"return \"<float>\"+(float)obj+\"</float>\";"+rn
+				+t2+"if(qualifiedName==\"F\" || qualifiedName==\"java.lang.Float\") {//float  \"F\""+rn
+				+t3+"return \"<float>\"+(Float)obj+\"</float>\";"+rn
 				+t2+"}"+rn
-				+t2+"if(qualifiedName==\"D\") {//double  \"D\""+rn
-				+t3+"return \"<double>\"+(double)obj+\"</double>\";"+rn
+				+t2+"if(qualifiedName==\"D\" || qualifiedName==\"java.lang.Double\") {//double  \"D\""+rn
+				+t3+"return \"<double>\"+(Double)obj+\"</double>\";"+rn
 				+t2+"}"+rn
 				+t2+"if(qualifiedName==\"java.lang.String\") {//String  \"java.lang.String\""+rn
 				+t3+"return \"<string>\"+(String)obj+\"</string>\";"+rn

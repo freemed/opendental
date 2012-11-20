@@ -32,6 +32,7 @@ namespace OpenDentalWebService {
 			}
 			catch(Exception e) {
 				DtoException dtoEx=new DtoException();
+				dtoEx.Type="DtoException";
 				dtoEx.Message="Error deserializing the request:\r\n";
 				if(e.InnerException==null) {
 					dtoEx.Message+=e.Message;
@@ -104,6 +105,7 @@ namespace OpenDentalWebService {
 			}
 			catch(Exception e) {
 				DtoException dtoEx=new DtoException();
+				dtoEx.Type="DtoException";
 				dtoEx.Message="Error processing the request:\r\n";
 				if(e.InnerException==null) {
 					dtoEx.Message+=e.Message;

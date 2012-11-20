@@ -47,30 +47,30 @@ public class Serializing {
 		//Figure out what type of object we're dealing with and return the serialized form.
 		String qualifiedName=obj.getClass().getName();//Ex: ArrayList = "java.util.ArrayList"
 		//Primitives--------------------------------------------------------------------------------------------------------
-		if(qualifiedName=="Z") {//boolean "Z"
-			result=(boolean)obj?"1":"0";
+		if(qualifiedName=="Z" || qualifiedName=="java.lang.Boolean") {//boolean  "Z"
+			result=(Boolean)obj?"1":"0";
 			return "<bool>"+result+"</bool>";
 		}
-		if(qualifiedName=="B") {//byte    "B"
-			return "<byte>"+(byte)obj+"</byte>";
+		if(qualifiedName=="B" || qualifiedName=="java.lang.Byte") {//byte  "B"
+			return "<byte>"+(Byte)obj+"</byte>";
 		}
-		if(qualifiedName=="C") {//char    "C"
-			return "<char>"+(char)obj+"</char>";
+		if(qualifiedName=="C" || qualifiedName=="java.lang.Character") {//char  "C"
+			return "<char>"+(Character)obj+"</char>";
 		}
-		if(qualifiedName=="S") {//short   "S"
-			return "<short>"+(short)obj+"</short>";
+		if(qualifiedName=="S" || qualifiedName=="java.lang.Short") {//short  "S"
+			return "<short>"+(Short)obj+"</short>";
 		}
-		if(qualifiedName=="I") {//int     "I"
-			return "<int>"+(int)obj+"</int>";
+		if(qualifiedName=="I" || qualifiedName=="java.lang.Integer") {//int  "I"
+			return "<int>"+(Integer)obj+"</int>";
 		}
-		if(qualifiedName=="J") {//long    "J"
-			//return "<long>"+(long)obj+"</long>";
+		if(qualifiedName=="J" || qualifiedName=="java.lang.Long") {//long  "J"
+			//return "<long>"+(Long)obj+"</long>";
 		}
-		if(qualifiedName=="F") {//float   "F"
-			return "<float>"+(float)obj+"</float>";
+		if(qualifiedName=="F" || qualifiedName=="java.lang.Float") {//float  "F"
+			return "<float>"+(Float)obj+"</float>";
 		}
-		if(qualifiedName=="D") {//double  "D"
-			return "<double>"+(double)obj+"</double>";
+		if(qualifiedName=="D" || qualifiedName=="java.lang.Double") {//double  "D"
+			return "<double>"+(Double)obj+"</double>";
 		}
 		if(qualifiedName=="java.lang.String") {//String  "java.lang.String"
 			return "<string>"+(String)obj+"</string>";

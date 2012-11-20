@@ -8,8 +8,9 @@ public class Meth {
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static DtoGetTable GetTable(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
-			DtoGetTable dto=(DtoGetTable)new DataTransferObject();
+			DtoGetTable dto=new DtoGetTable();
 			dto.MethodName=classMethod;
+			dto.ParamTypes=paramTypes;
 			if(paramTypes.length>0){
 				dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 			}
@@ -22,8 +23,9 @@ public class Meth {
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static int GetInt(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
-			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
+			DtoGetInt dto=new DtoGetInt();
 			dto.MethodName=classMethod;
+			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 			return 1;
 		}
@@ -34,8 +36,9 @@ public class Meth {
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static Object GetObject(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
-			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
+			DtoGetObject dto=new DtoGetObject();
 			dto.MethodName=classMethod;
+			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 			return null;
 		}
@@ -46,8 +49,9 @@ public class Meth {
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static void GetVoid(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
-			DtoGetInt dto=(DtoGetInt)new DataTransferObject();
+			DtoGetVoid dto=new DtoGetVoid();
 			dto.MethodName=classMethod;
+			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 		}
 		
