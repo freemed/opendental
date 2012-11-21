@@ -1935,7 +1935,8 @@ namespace OpenDental{
 					if(ComputerPrefs.LocalComputer.TaskKeepListHidden) {
 						userControlTasks1.Visible = false;
 					}
-					else {//task list show
+					//else {//task list show
+					else if(this.WindowState!=FormWindowState.Minimized) {//task list show and window is not minimized.
 						userControlTasks1.Visible = true;
 						userControlTasks1.InitializeOnStartup();
 						if(ComputerPrefs.LocalComputer.TaskDock == 0) {//bottom
