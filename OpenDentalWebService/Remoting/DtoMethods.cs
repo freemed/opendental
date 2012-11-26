@@ -2704,8 +2704,8 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		private static object MethodPatients(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			if(methodName=="GetPtDataTable") {
-				return Patients.GetPtDataTable();
+			if(methodName=="GetPtDataTableTest") {
+				return Patients.GetPtDataTableTest(Convert.ToInt64(parameters[0]),Convert.ToInt64(parameters[1]));
 			}
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}

@@ -259,6 +259,7 @@ namespace OpenDental {
 			string password=ProgramProperties.GetPropVal(prog.ProgramNum,"Password");
 			#region Card Charge Loop
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				#region X-Charge
 				if(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()!="" &&
 					CreditCards.IsDuplicateXChargeToken(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString())) 
 				{
@@ -329,29 +330,32 @@ namespace OpenDental {
 					}
 					recurringResultFile+=resultText+"\r\n\r\n";
 				}
+				#endregion
 				if(insertPayment) {
 					Patient patCur=Patients.GetPat(patNum);
-					long provider=Patients.GetProvNum(patCur);
 					Payment paymentCur=new Payment();
 					paymentCur.DateEntry=nowDateTime.Date;
 					paymentCur.PayDate=GetPayDate(PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["LatestPayment"].ToString()),
 						PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["DateStart"].ToString()));
 					paymentCur.PatNum=patCur.PatNum;
-					paymentCur.ClinicNum=patCur.ClinicNum;
+					paymentCur.ClinicNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["ClinicNum"].ToString());
 					paymentCur.PayType=PIn.Int(ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType"));
 					paymentCur.PayAmt=amt;
 					paymentCur.PayNote=resultText;
 					paymentCur.IsRecurringCC=true;
 					Payments.Insert(paymentCur);
-					DataTable dt=Patients.GetPaymentStartingBalances(patCur.Guarantor,paymentCur.PayNum);
-					double highestAmt=0;
-					for(int j=0;j<dt.Rows.Count;j++) {//Apply the payment towards the provider that the family owes the most money to.
-						double afterIns=PIn.Double(dt.Rows[j]["AfterIns"].ToString());
-						if(highestAmt>=afterIns) {
-							continue;
+					long provNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["ProvNum"].ToString());//for payment plans only
+					if(provNum==0) {//Regular payments need to apply to the provider that the family owes the most money to.
+						DataTable dt=Patients.GetPaymentStartingBalances(patCur.Guarantor,paymentCur.PayNum);
+						double highestAmt=0;
+						for(int j=0;j<dt.Rows.Count;j++) {
+							double afterIns=PIn.Double(dt.Rows[j]["AfterIns"].ToString());
+							if(highestAmt>=afterIns) {
+								continue;
+							}
+							highestAmt=afterIns;
+							provNum=PIn.Long(dt.Rows[j]["ProvNum"].ToString());
 						}
-						highestAmt=afterIns;
-						provider=PIn.Long(dt.Rows[j]["ProvNum"].ToString());
 					}
 					PaySplit split=new PaySplit();
 					split.PatNum=paymentCur.PatNum;
@@ -359,7 +363,7 @@ namespace OpenDental {
 					split.PayNum=paymentCur.PayNum;
 					split.ProcDate=paymentCur.PayDate;
 					split.DatePay=paymentCur.PayDate;
-					split.ProvNum=provider;
+					split.ProvNum=provNum;
 					split.SplitAmt=paymentCur.PayAmt;
 					split.PayPlanNum=PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PayPlanNum"].ToString());
 					PaySplits.Insert(split);
