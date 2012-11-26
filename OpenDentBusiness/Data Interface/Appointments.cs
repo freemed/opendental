@@ -566,6 +566,7 @@ namespace OpenDentBusiness{
 			}
 			command+=" WHERE AptNum="+POut.Long(aptNum);
 			Db.NonQ(command);
+			Plugins.HookAddCode(null, "Appointments.SetConfirmed_end", aptNum, newStatus); 
 		}
 
 		///<summary>Sets the new pattern for an appointment.  This is how resizing is done.  Must contain only / and X, with each char representing 5 minutes.</summary>
