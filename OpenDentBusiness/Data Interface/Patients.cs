@@ -914,7 +914,7 @@ namespace OpenDentBusiness{
 			}
 			command+="WHERE ";
 			if(excludeInactive){
-				command+="(patstatus != '2') AND ";
+				command+="EXISTS (SELECT * FROM patient p2 WHERE p2.Guarantor=patient.Guarantor AND p2.PatStatus != "+POut.Int((int)PatientStatus.Inactive)+") AND ";
 			}
 			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
 				command+="(BalTotal";
