@@ -21,6 +21,9 @@ namespace OpenDental {
 			textUser.Text=Userods.GetName(TaskNoteCur.UserNum);
 			textNote.Text=TaskNoteCur.Note;
 			this.Top+=150;
+			if(TaskNoteCur.IsNew) {
+				textDateTime.ReadOnly=true;
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
