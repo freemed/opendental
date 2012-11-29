@@ -1337,7 +1337,7 @@ namespace OpenDentBusiness
 						sw.Write("SV1"+s
 							//SV101 Composite Medical Procedure Identifier
 							+"HC"+isa16//SV101-1 2/2 Product/Service ID Qualifier: HC=Health Care.
-							+Sout(proc.MedicalCode));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported //TODO: Shouldn't we be using claimProcs[j].CodeSent? Accounts for medical codes and alternate codes.
+							+Sout(claimProcs[j].CodeSent));//SV101-2 1/48 Product/Service ID: Procedure code. The rest of SV101 is not supported.
 						if(proc.CodeMod1!="" || proc.CodeMod2!="" || proc.CodeMod3!="" || proc.CodeMod4!="" || proc.ClaimNote!="") {
 							sw.Write(isa16+Sout(proc.CodeMod1));//SV101-3 2/2 Procedure Modifier: Situational.
 						}
@@ -2261,10 +2261,6 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Billing Prov FName");
 			}
-			if(billProv.SSN.Length<2) {
-				Comma(strb);
-				strb.Append("Billing Prov SSN");
-			}
 			if(billProv.NationalProvID.Length<2) {
 				Comma(strb);
 				strb.Append("Billing Prov NPI");
@@ -2273,15 +2269,13 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Billing Prov Taxonomy Code must be 10 characters");
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-				if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {
-					Comma(strb);
-					strb.Append("Billing Prov SSN/TIN must be a 9 digit number");
-				}
-				if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
-					Comma(strb);
-					strb.Append("Billing Prov NPI must be a 10 digit number with an optional prefix of 80840");
-				}
+			if(!Regex.IsMatch(billProv.SSN,"^[0-9]{9}$")) {//and >=2
+				Comma(strb);
+				strb.Append("Billing Prov SSN/TIN must be a 9 digit number");
+			}
+			if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+				Comma(strb);
+				strb.Append("Billing Prov NPI must be a 10 digit number with an optional prefix of 80840");
 			}
 			if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
 				X12Validate.BillingAddress(strb);
@@ -2336,10 +2330,6 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Treating Prov FName");
 			}
-			if(treatProv.SSN.Length<2) {
-				Comma(strb);
-				strb.Append("Treating Prov SSN/TIN");
-			}
 			if(treatProv.NationalProvID.Length<2) {
 				Comma(strb);
 				strb.Append("Treating Prov NPI");
@@ -2348,15 +2338,13 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Treating Prov Taxonomy Code must be 10 characters");
 			}
-			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-				if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
-					Comma(strb);
-					strb.Append("Treating Prov SSN/TIN for claim must be a 9 digit number");
-				}
-				if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
-					Comma(strb);
-					strb.Append("Treating Prov NPI for claim must be a 10 digit number with an optional prefix of 80840");
-				}
+			if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) { //and >=2
+				Comma(strb);
+				strb.Append("Treating Prov SSN/TIN for claim must be a 9 digit number");
+			}
+			if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+				Comma(strb);
+				strb.Append("Treating Prov NPI for claim must be a 10 digit number with an optional prefix of 80840");
 			}
 			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
 				Comma(strb);
@@ -2377,7 +2365,6 @@ namespace OpenDentBusiness
 			}
 			Carrier carrier=Carriers.GetCarrier(insPlan.CarrierNum);
 			PatPlan patPlan=PatPlans.GetFromList(patPlans,claim.InsSubNum);//can be null
-			//if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//X12 is always United States
 			if(patPlan!=null && patPlan.PatID!="") {
 				Comma(strb);
 				strb.Append("Create a new insurance plan instead of using the optional patient ID");
@@ -2433,7 +2420,6 @@ namespace OpenDentBusiness
 					strb.Append("Secondary Relationship");
 				}
 				PatPlan patPlan2=PatPlans.GetFromList(patPlans,claim.InsSubNum2);//can be null
-				//if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//X12 is always United States
 				if(patPlan2!=null && patPlan2.PatID!="") {
 					Comma(strb);
 					strb.Append("Create a new insurance plan instead of using the optional patient ID for the other insurance plan");
@@ -2614,7 +2600,7 @@ namespace OpenDentBusiness
 						Comma(strb);
 						strb.Append(procCode.AbbrDesc+" mod4");
 					}
-					if(Regex.IsMatch(procCode.MedicalCode,"^[0-9]{3}99$") && proc.ClaimNote.Trim()=="") { //CPT codes ending in 99.
+					if(Regex.IsMatch(claimProcs[i].CodeSent,"^[0-9]{3}99$") && proc.ClaimNote.Trim()=="") { //CPT codes ending in 99.
 						Comma(strb);
 						strb.Append(procCode.AbbrDesc+" proc e-claim note missing");
 					}
@@ -2693,10 +2679,6 @@ namespace OpenDentBusiness
 						Comma(strb);
 						strb.Append("Treat Prov FName for proc "+procCode.ProcCode);
 					}
-					if(treatProv.SSN.Length<2) {
-						Comma(strb);
-						strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode);
-					}
 					if(treatProv.NationalProvID.Length<2) {
 						Comma(strb);
 						strb.Append("Treat Prov NPI for proc "+procCode.ProcCode);
@@ -2707,15 +2689,13 @@ namespace OpenDentBusiness
 							strb.Append("Treating Prov Taxonomy Code for proc "+procCode.ProcCode+" must be 10 characters");
 						}
 					}
-					if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-						if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {
-							Comma(strb);
-							strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
-						}
-						if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
-							Comma(strb);
-							strb.Append("Treat Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
-						}
+					if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {//and >=2
+						Comma(strb);
+						strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
+					}
+					if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
+						Comma(strb);
+						strb.Append("Treat Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
 					}
 					//will add any other checks as needed. Can't think of any others at the moment.
 				}
