@@ -1004,9 +1004,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a description.");
 				return false;
 			}
-			if(checkDone.Checked) {//This is the only place in the whole program that user is allowed to set done.
+			if(checkDone.Checked) {
 				TaskCur.TaskStatus=TaskStatusEnum.Done;//global even if new status is tracked by user
-				//don't clear out taskreads, because someone might not have read the task before it was marked complete.
+				TaskUnreads.DeleteForTask(TaskCur.TaskNum);//clear out taskunreads. We have too many tasks to read the done ones.
 			}
 			else {//because it can't be both new and done.
 				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
