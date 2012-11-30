@@ -1668,11 +1668,17 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov SSN");
 			}
-			if(treatProv.NationalProvID.Length<2) {
+			//if(treatProv.NationalProvID.Length<2) {
+			//  if(strb.Length!=0) {
+			//    strb.Append(",");
+			//  }
+			//  strb.Append("Treating Prov NPI");
+			//}
+			if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
-				strb.Append("Treating Prov NPI");
+				strb.Append("Treating Prov NPI must be a 10 digit number with an optional prefix of 80840");
 			}
 			if(treatProv.TaxonomyCodeOverride.Length>0 && treatProv.TaxonomyCodeOverride.Length!=10) {
 				if(strb.Length!=0) {
@@ -1686,14 +1692,14 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov Lic #");
 			}
-			if(insPlan.IsMedical) {
-				if(treatProv.NationalProvID.Length<2) {
-					if(strb.Length!=0) {
-						strb.Append(",");
-					}
-					strb.Append("Treating Prov NPI");
-				}
-			}
+			//if(insPlan.IsMedical) {
+			//  if(treatProv.NationalProvID.Length<2) {
+			//    if(strb.Length!=0) {
+			//      strb.Append(",");
+			//    }
+			//    strb.Append("Treating Prov NPI");
+			//  }
+			//}
 			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");

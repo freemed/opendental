@@ -79,9 +79,13 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Billing Prov SSN");
 			}
-			if(billProv.NationalProvID.Length<2) {
+			//if(billProv.NationalProvID.Length<2) {
+			//  Comma(strb);
+			//  strb.Append("Billing Prov NPI");
+			//}
+			if(!Regex.IsMatch(billProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				Comma(strb);
-				strb.Append("Billing Prov NPI");
+				strb.Append("Billing Prov NPI must be a 10 digit number with an optional prefix of 80840");
 			}
 			if(billProv.TaxonomyCodeOverride.Length>0 && billProv.TaxonomyCodeOverride.Length!=10) {
 				Comma(strb);
