@@ -1668,12 +1668,6 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov SSN");
 			}
-			//if(treatProv.NationalProvID.Length<2) {
-			//  if(strb.Length!=0) {
-			//    strb.Append(",");
-			//  }
-			//  strb.Append("Treating Prov NPI");
-			//}
 			if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				if(strb.Length!=0) {
 					strb.Append(",");
@@ -1692,14 +1686,6 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov Lic #");
 			}
-			//if(insPlan.IsMedical) {
-			//  if(treatProv.NationalProvID.Length<2) {
-			//    if(strb.Length!=0) {
-			//      strb.Append(",");
-			//    }
-			//    strb.Append("Treating Prov NPI");
-			//  }
-			//}
 			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
