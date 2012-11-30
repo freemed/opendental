@@ -274,13 +274,13 @@ namespace OpenDental{
 			// 
 			// label11
 			// 
-			this.label11.Location = new System.Drawing.Point(207, 193);
+			this.label11.Location = new System.Drawing.Point(204, 194);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(498, 37);
+			this.label11.Size = new System.Drawing.Size(498, 32);
 			this.label11.TabIndex = 38;
-			this.label11.Text = "The current phone extension for this employee.  Can change from day to day.  If t" +
-    "his employee is not working today, and you need to use their regular extension, " +
-    " set this value to 400+";
+			this.label11.Text = "Phone extension for this employee.  Change this number to 0 if you are going to b" +
+    "e floating.  Changing the extension to 0 will allow you to use the manage module" +
+    " to clock in and out.";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label12
@@ -311,13 +311,12 @@ namespace OpenDental{
 			// 
 			// label15
 			// 
-			this.label15.Location = new System.Drawing.Point(362, 355);
+			this.label15.Location = new System.Drawing.Point(363, 355);
 			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(350, 46);
+			this.label15.Size = new System.Drawing.Size(350, 48);
 			this.label15.TabIndex = 42;
-			this.label15.Text = "If your computer IP matches your phone extension, do not set this value.  This is" +
-    " mostly used by remote users.  Not usually needed for floaters because your IP w" +
-    "ill match your extension.";
+			this.label15.Text = "Do NOT set computer name unless approved by management.  Used when the IP does no" +
+    "t match the extension.  Not used by floaters.";
 			// 
 			// label16
 			// 

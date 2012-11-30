@@ -1076,8 +1076,11 @@ namespace OpenDental{
 
 		private void butClockIn_Click(object sender,System.EventArgs e) {
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
-				MessageBox.Show("Not allowed");
-				return;
+				//Check if the employee set their ext to 0 in the phoneempdefault table.
+				if(PhoneEmpDefaults.GetByExtAndEmp(0,EmployeeCur.EmployeeNum)==null) {
+					MessageBox.Show("Not allowed.  Use the small phone panel or the \"Big\" phone window to clock in.\r\nIf you are trying to clock in as a \"floater\", you need to set your extension to 0 first before using this Clock In button.");
+					return;
+				}
 			}
 			try{
 				ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
@@ -1086,7 +1089,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			EmployeeCur.ClockStatus=Lan.g(this,"Working");;
+			EmployeeCur.ClockStatus=Lan.g(this,"Working");
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
 			//if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
@@ -1096,8 +1099,11 @@ namespace OpenDental{
 
 		private void butClockOut_Click(object sender,System.EventArgs e) {
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
-				MessageBox.Show("Not allowed");
-				return;
+				//Check if the employee set their ext to 0 in the phoneempdefault table.
+				if(PhoneEmpDefaults.GetByExtAndEmp(0,EmployeeCur.EmployeeNum)==null) {
+					MessageBox.Show("Not allowed.  Use the small phone panel or the \"Big\" phone window to clock out.\r\nIf you are trying to clock out as a \"floater\", you need to set your extension to 0 first before using this Clock Out For: button.");
+					return;
+				}
 			}
 			if(listStatus.SelectedIndex==-1){
 				MsgBox.Show(this,"Please select a status first.");
