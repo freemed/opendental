@@ -38,7 +38,7 @@ namespace OpenDentBusiness{
 			DataTable table=Db.GetTable(command);
 			TaskStatusEnum taskStatus=(TaskStatusEnum)PIn.Int(table.Rows[0]["TaskStatus"].ToString());
 			long userNumOwner=PIn.Long(table.Rows[0]["UserNum"].ToString());
-			if(taskStatus==TaskStatusEnum.Done) {
+			if(taskStatus==TaskStatusEnum.Done) {//
 				return;
 			}
 			//Set it unread for the original owner of the task.
@@ -93,6 +93,16 @@ namespace OpenDentBusiness{
 			taskUnread.UserNum=userNum;
 			Insert(taskUnread);
 		}
+
+		public static void DeleteForTask(long taskNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),taskNum);
+				return;
+			}
+			string command="DELETE FROM taskunread WHERE TaskNum = "+POut.Long(taskNum);
+			Db.NonQ(command);
+		}
+
 
 
 	}

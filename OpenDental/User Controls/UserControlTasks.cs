@@ -776,14 +776,13 @@ namespace OpenDental {
 			}
 			try {
 				Tasks.Update(task,oldTask);
-				TaskUnreads.SetRead(Security.CurUser.UserNum,task.TaskNum);
-				DataValid.SetInvalidTask(task.TaskNum,false);
+				TaskUnreads.DeleteForTask(task.TaskNum);
+				DataValid.SetInvalidTask(task.TaskNum,false);//this causes an immediate local refresh of the grid
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			//FillGrid();
 		}
 
 		private void Edit_Clicked() {
@@ -967,10 +966,9 @@ namespace OpenDental {
 				}
 				else if(ClipTask!=null) {
 					Tasks.Delete(ClipTask.TaskNum);
-					DataValid.SetInvalidTask(ClipTask.TaskNum,false);
+					DataValid.SetInvalidTask(ClipTask.TaskNum,false);//this causes an immediate local refresh of the grid
 				}
 			}
-			//FillGrid();
 		}
 
 		private void SendToMe_Clicked() {
