@@ -1,7 +1,6 @@
 package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
-import com.google.gwt.xml.client.XMLParser;
 import com.opendental.odweb.client.remoting.Serializing;
 
 public class SigElement {
@@ -32,12 +31,11 @@ public class SigElement {
 			return sb.toString();
 		}
 
-		/** Sets the variables for this object based on the values from the XML.
-		 * @param xml The XML passed in must be valid and contain a node for every variable on this object.
-		 * @throws Exception Deserialize is encased in a try catch and will pass any thrown exception on. */
-		public void DeserializeFromXml(String xml) throws Exception {
+		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
+		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
+		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
+		public void DeserializeFromXml(Document doc) throws Exception {
 			try {
-				Document doc=XMLParser.parse(xml);
 				if(Serializing.GetXmlNodeValue(doc,"SigElementNum")!=null) {
 					SigElementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementNum"));
 				}
