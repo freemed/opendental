@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.ui;
+package com.opendental.odweb.client.data;
 
 import java.util.ArrayList;
 

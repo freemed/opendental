@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.ui;
+package com.opendental.odweb.client.data;
 
 public class DataCell {
 
@@ -19,6 +19,6 @@ public class DataCell {
 	}
 
 	public void SetText(String text) {
-		Text = text;
+		Text=text;
 	}
 }

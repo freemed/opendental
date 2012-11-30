@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.ui;
+package com.opendental.odweb.client.data;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class DataTable {
 	}
 
 	public void SetTableName(String tableName) {
-		TableName = tableName;
+		TableName=tableName;
 	}
 
 	
