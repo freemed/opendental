@@ -28,7 +28,6 @@ namespace OpenDental {
 			if(PatCur!=null) {
 				textPatient.Text=PatCur.GetNameLF();
 			}
-			ScreenGroupCur=ScreenGroups.GetScreenGroup(ScreenPatCur.ScreenGroupNum);
 			if(ScreenGroupCur!=null) {
 				textScreenGroup.Text=ScreenGroupCur.Description;
 			}
@@ -38,13 +37,16 @@ namespace OpenDental {
 			}
 		}
 
-		private void butPatSelect_Click(object sender,EventArgs e) {
+		/*private void butPatSelect_Click(object sender,EventArgs e) {
 			FormPatientSelect FormPS=new FormPatientSelect();
 			FormPS.ShowDialog();
+			if(FormPS.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			PatCur=Patients.GetPat(FormPS.SelectedPatNum);
 			ScreenPatCur.PatNum=PatCur.PatNum;
 			textPatient.Text=PatCur.GetNameLF();
-		}
+		}*/
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(IsNew) {

@@ -395,6 +395,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Name"),300);
 			gridMain.Columns.Add(col);
+//todo: birthdate
 			col=new ODGridColumn(Lan.g(this,"Age"),80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Race"),80);
@@ -547,14 +548,35 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			if(PrefC.GetBool(PrefName.PublicHealthScreeningUsePat)) {
+				/*
 				FormScreenPatEdit FormSPE=new FormScreenPatEdit();
 				FormSPE.IsNew=true;
 				while(true) {
 					FormSPE.ScreenPatCur=new ScreenPat();
 					FormSPE.ScreenPatCur.ScreenGroupNum=ScreenGroupCur.ScreenGroupNum;
 					FormSPE.ScreenPatCur.SheetNum=PrefC.GetLong(PrefName.PublicHealthScreeningSheet);
+					FormSPE.ScreenGroupCur=ScreenGroupCur;
+					FormSPE.ScreenGroupCur.Description=textDescription.Text;
 					FormSPE.ShowDialog();
 					if(FormSPE.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					FillGridScreenPat();
+				}
+				*/
+				FormScreenPatEdit FormSPE=new FormScreenPatEdit();
+				while(true) {
+					FormPatientSelect FormPS=new FormPatientSelect();
+					FormPS.ShowDialog();
+					if(FormPS.DialogResult!=DialogResult.OK) {
+						return;
+					}
+					ScreenPat screenPat=new ScreenPat();
+					screenPat.ScreenGroupNum=ScreenGroupCur.ScreenGroupNum;
+					screenPat.SheetNum=PrefC.GetLong(PrefName.PublicHealthScreeningSheet);
+					screenPat.PatNum=FormPS.SelectedPatNum;
+					ScreenPats.Insert(screenPat);
+					if(FormPS.DialogResult!=DialogResult.OK) {
 						return;
 					}
 					FillGridScreenPat();
@@ -585,12 +607,15 @@ namespace OpenDental{
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(PrefC.GetBool(PrefName.PublicHealthScreeningUsePat)){
-				FormScreenPatEdit FormSPE=new FormScreenPatEdit();
-				FormSPE.ScreenGroupCur=ScreenGroupCur;
-				FormSPE.IsNew=false;
-				FormSPE.ScreenPatCur=ListScreenPats[e.Row];
-				FormSPE.ShowDialog();
-				FillGrid();
+//todo: Bring up the attached sheet for this patient or create a new sheet for this patient.
+				
+				//FormScreenPatEdit FormSPE=new FormScreenPatEdit();
+				//FormSPE.ScreenGroupCur=ScreenGroupCur;
+				//FormSPE.ScreenGroupCur.Description=textDescription.Text;
+				//FormSPE.IsNew=false;
+				//FormSPE.ScreenPatCur=ListScreenPats[e.Row];
+				//FormSPE.ShowDialog();
+				//FillGrid();
 			}
 			else{
 				FormScreenEdit FormSE=new FormScreenEdit();

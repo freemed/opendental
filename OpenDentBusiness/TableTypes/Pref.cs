@@ -273,7 +273,7 @@ namespace OpenDentBusiness {
 		ProviderIncomeTransferShows,
 		///<summary>FK to sheet.SheetNum. Must be an exam sheet. Only makes sense if PublicHealthScreeningUsePat is true.</summary>
 		PublicHealthScreeningSheet,
-		///<summary>Boolean. Initially set to 0.</summary>
+		///<summary>Boolean. Initially set to 0.  When in this mode, screenings will be attached to actual PatNums rather than just freeform text names.</summary>
 		PublicHealthScreeningUsePat,
 		QuickBooksCompanyFile,
 		QuickBooksDepositAccounts,

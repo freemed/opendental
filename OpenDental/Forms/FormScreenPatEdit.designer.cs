@@ -30,7 +30,6 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textSheet = new System.Windows.Forms.TextBox();
 			this.butOK = new OpenDental.UI.Button();
-			this.butPatSelect = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
@@ -100,20 +99,6 @@ namespace OpenDental{
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
-			// butPatSelect
-			// 
-			this.butPatSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPatSelect.Autosize = true;
-			this.butPatSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPatSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPatSelect.CornerRadius = 4F;
-			this.butPatSelect.Location = new System.Drawing.Point(326, 79);
-			this.butPatSelect.Name = "butPatSelect";
-			this.butPatSelect.Size = new System.Drawing.Size(22, 20);
-			this.butPatSelect.TabIndex = 2;
-			this.butPatSelect.Text = "...";
-			this.butPatSelect.Click += new System.EventHandler(this.butPatSelect_Click);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -140,7 +125,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textScreenGroup);
 			this.Controls.Add(this.textPatient);
 			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butPatSelect);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormScreenPatEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -157,7 +141,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.TextBox textPatient;
 		private System.Windows.Forms.Label label1;
-		private UI.Button butPatSelect;
 		private System.Windows.Forms.TextBox textScreenGroup;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label3;

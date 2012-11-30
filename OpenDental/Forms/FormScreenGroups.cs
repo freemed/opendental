@@ -19,7 +19,6 @@ namespace OpenDental{
 		private UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private MainMenu mainMenu;
-		private MenuItem menuItemSetup;
 		private List<ScreenGroup> ScreenGroupList;
 		private UI.Button butLeft;
 		private UI.Button butRight;
@@ -68,7 +67,6 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
 			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butLeft = new OpenDental.UI.Button();
 			this.butRight = new OpenDental.UI.Button();
@@ -147,17 +145,6 @@ namespace OpenDental{
 			this.butClose.TabIndex = 79;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// mainMenu
-			// 
-			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSetup});
-			// 
-			// menuItemSetup
-			// 
-			this.menuItemSetup.Index = 0;
-			this.menuItemSetup.Text = "Setup";
-			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
 			// gridMain
 			// 
@@ -315,10 +302,12 @@ namespace OpenDental{
 			FillGrid();
 		}
 
+		/*
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			FormScreenSetup FormSS=new FormScreenSetup();
 			FormSS.ShowDialog();
 		}
+		*/
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormScreenGroupEdit FormSG=new FormScreenGroupEdit();
