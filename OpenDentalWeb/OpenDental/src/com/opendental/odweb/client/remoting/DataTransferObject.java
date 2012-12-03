@@ -27,8 +27,8 @@ public class DataTransferObject {
 		//Header-------------------------------------------------------------------------------
 		xml.append("<?xml version=\"1.0\" encoding=\"utf-16\"?><"
 				+Serializing.EscapeForXml(Type)+" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
-		//Credentials will be differently than this--------------------------------------------
-		xml.append("<Credentials><UserName>"
+		//Credentials -------------------------------------------------------------------------
+		xml.append("<Credentials><Username>"
 				+Serializing.EscapeForXml(Credentials.Username)+"</Username><Password>"
 				+Serializing.EscapeForXml(Credentials.Password)+"</Password></Credentials>");
 		//MethodName---------------------------------------------------------------------------

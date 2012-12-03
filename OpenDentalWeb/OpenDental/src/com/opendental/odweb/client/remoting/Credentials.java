@@ -7,4 +7,11 @@ public class Credentials {
 	public String Username;
 	/**  */
 	public String Password;
+	
+	/** Constructor that will set the Username and Password to the passed in values */
+	public Credentials(String username,String password) {
+		Username=username;
+		Password=password;
+	}
+	
 }

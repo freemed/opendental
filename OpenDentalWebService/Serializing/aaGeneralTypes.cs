@@ -41,7 +41,7 @@ namespace OpenDentalWebService {
 				return "<double>"+OpenDentBusiness.POut.Double((double)obj)+"</double>";
 			}
 			//DataTable---------------------------------------------------------------------
-			if(objectType=="DataT") {
+			if(objectType=="DataTable") {
 				return SerializeDataTable((DataTable)obj);
 			}
 			//List<?>-----------------------------------------------------------------------
@@ -100,7 +100,7 @@ namespace OpenDentalWebService {
 		///<summary>Helper function that will serialize a data table by looping through the rows and columns.</summary>
 		private static string SerializeDataTable(DataTable table) {
 			StringBuilder result=new StringBuilder();
-			result.Append("<DataT>");
+			result.Append("<DataTable>");
 			//Table name.
 			result.Append("<Name>").Append(table.TableName).Append("</Name>");
 			//Column names.
@@ -125,7 +125,7 @@ namespace OpenDentalWebService {
 				result.Append("</y>");
 			}
 			result.Append("</Cells>");
-			result.Append("</DataT>");
+			result.Append("</DataTable>");
 			return result.ToString();
 		}
 
