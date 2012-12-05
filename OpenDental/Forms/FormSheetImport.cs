@@ -17,6 +17,8 @@ namespace OpenDental {
 		public Document DocCur;
 		private List<SheetImportRow> Rows;
 		private Patient PatCur;
+		///<summary>A copy of the patient when the form loads.  Used to know the what will change upon import.</summary>
+		private Patient PatOld;
 		private Family Fam;
 		///<summary>We must have a readily available bool, whether or not this checkbox field is present on the sheet.  It gets set at the very beginning, then gets changes based on user input on the sheet and in this window.</summary>
 		private bool AddressSameForFam;
@@ -45,6 +47,7 @@ namespace OpenDental {
 		private void FormSheetImport_Load(object sender,EventArgs e) {
 			if(SheetCur!=null) {
 				PatCur=Patients.GetPat(SheetCur.PatNum);
+				PatOld=PatCur.Copy();
 			}
 			else {
 				#region Acro
@@ -2026,7 +2029,6 @@ namespace OpenDental {
 			}
 			#region Patient Form
 			if(SheetCur.SheetType==SheetTypeEnum.PatientForm) {
-				Patient patientOld=PatCur.Copy();
 				bool importPriIns=false;
 				bool importSecIns=false;
 				for(int i=0;i<Rows.Count;i++) {
@@ -2154,7 +2156,7 @@ namespace OpenDental {
 					}
 				}
 				//Patient information updating---------------------------------------------------------------------------------------------------------
-				Patients.Update(PatCur,patientOld);
+				Patients.Update(PatCur,PatOld);
 				if(AddressSameForFam) {
 					Patients.UpdateAddressForFam(PatCur);
 				}
