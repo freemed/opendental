@@ -382,11 +382,15 @@ namespace OpenDental{
 				}
 				//ops
 				opdesc="";
-				for(int o=0;o<SchedList[i].Ops.Count;o++){
-					if(o>0){
+				for(int o=0;o<SchedList[i].Ops.Count;o++) {
+					Operatory op=Operatories.GetOperatory(SchedList[i].Ops[o]);
+					if(op.IsHidden) {//Skip hidden operatories because it just confuses users.
+						continue;
+					}
+					if(opdesc!="") {
 						opdesc+=",";
 					}
-					opdesc+=Operatories.GetAbbrev(SchedList[i].Ops[o]);
+					opdesc+=op.Abbrev;
 				}
 				row.Cells.Add(opdesc);
 				//note

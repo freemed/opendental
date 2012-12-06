@@ -82,7 +82,7 @@ namespace OpenDentBusiness{
 			return -1;
 		}
 
-		///<summary></summary>
+		///<summary>Gets operatory from the cache.</summary>
 		public static Operatory GetOperatory(long operatoryNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<OperatoryC.Listt.Count;i++) {
