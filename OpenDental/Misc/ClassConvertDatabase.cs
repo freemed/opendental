@@ -74,8 +74,10 @@ namespace OpenDental{
 			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
 				&& !ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
 			{
+#if DEBUG
 				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return false;
+#endif
 			}
 			//If MyISAM and InnoDb mix, then try to fix
 			if(DataConnection.DBtype==DatabaseType.MySql) {//not for Oracle
