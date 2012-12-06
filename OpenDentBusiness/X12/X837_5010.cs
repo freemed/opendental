@@ -498,7 +498,7 @@ namespace OpenDentBusiness
 					electid="00000";
 				}
 				if(electid.Length<3) {
-					electid="06126";
+					electid="06126";//paper claims
 				}
 				sw.Write(Sout(electid,80,2));//NM109 2/80 Identification Code: PayorID.
 				EndSegment(sw);//NM110 through NM112 Not Used.
@@ -1250,7 +1250,7 @@ namespace OpenDentBusiness
 						+"PI"+s);//NM108 1/2 Identification Code Qualifier: PI=Payor Identification. XV must be used after national plan ID mandated.
 					//NM109 2/80 Identification Code:
 					if(otherCarrier.ElectID.Length<3) {
-						sw.Write("06126");
+						sw.Write("06126");//paper claims
 					}
 					else {
 						sw.Write(Sout(otherCarrier.ElectID,80,2));
@@ -1624,34 +1624,36 @@ namespace OpenDentBusiness
 						//2420C REF: (medical) Service Facility Location Secondary Identification. Situational. We do not use.
 						//2420D NM1: DQ (medical) Supervising Provider Name. Situational. We do not support.
 						//2420D REF: (medical) Supervising Provider Secondary Identification. Situational. We do not support.
-						//Emdeon Medical requires loop 2420E when the claim is sent to DMERC (Medicaid) carriers, and they requested that we always include it.  We will do this because Emdeon Medical is our only medical clearinghouse.  Emdeon Medical will decide which carriers to remove it for before sending to the carrier. 
-						//2420E NM1: DK (medical) Ordering Provider Name. Situational. Required to be a person. All treating providers are now validated to be persons, both at claim and proc level.
-						WriteNM1Provider("DK",sw,provTreatProc);
-						//2420E N3: (medical) Ordering Provider Address. Situational.
-						sw.Write("N3"+s+Sout(billingAddress1,55));//N301 1/55 Address Information:
-						if(billingAddress2!="") {
-							sw.Write(s+Sout(billingAddress2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
+						//Emdeon Medical requires loop 2420E when the claim is sent to DMERC (Medicaid) carriers. This loop can only be used for a provider that is a person, not an organization, so we don't send this loop if not a person.
+						if(!provTreatProc.IsNotPerson) { //Treating provider is a person.
+							//2420E NM1: DK (medical) Ordering Provider Name. Situational. Required to be a person.
+							WriteNM1Provider("DK",sw,provTreatProc);
+							//2420E N3: (medical) Ordering Provider Address. Situational.
+							sw.Write("N3"+s+Sout(billingAddress1,55));//N301 1/55 Address Information:
+							if(billingAddress2!="") {
+								sw.Write(s+Sout(billingAddress2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
+							}
+							EndSegment(sw);
+							//2420E N4: (medical) Ordering Provider City, State, Zip Code. Situational.
+							sw.Write("N4"+s
+								+Sout(billingCity,30)+s//N401 2/30 City Name:
+								+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
+								+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
+							EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.						
+							//2420E REF: (medical) Ordering Provider Secondary Identification. Situational. Required before NPIs were in effect. We do not use this segment because we require NPI.
+							//2420E PER: (medical) Ordering Provider Contact Information. Situational.
+							sw.Write("PER"+s
+								+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
+								+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
+								+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
+							if(clinic==null) {
+								sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04 1/256 Communication Number: Telephone number.
+							}
+							else {
+								sw.Write(Sout(clinic.Phone,256));//PER04 1/256 Communication Number: Telephone number.
+							}
+							EndSegment(sw);//PER05 through PER08 are situational and PER09 is not used. We do not use.
 						}
-						EndSegment(sw);
-						//2420E N4: (medical) Ordering Provider City, State, Zip Code. Situational.
-						sw.Write("N4"+s
-							+Sout(billingCity,30)+s//N401 2/30 City Name:
-							+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
-							+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
-						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.						
-						//2420E REF: (medical) Ordering Provider Secondary Identification. Situational. Required before NPIs were in effect. We do not use this segment because we require NPI.
-						//2420E PER: (medical) Ordering Provider Contact Information. Situational.
-						sw.Write("PER"+s
-							+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
-							+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
-							+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-						if(clinic==null) {
-							sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04 1/256 Communication Number: Telephone number.
-						}
-						else {
-							sw.Write(Sout(clinic.Phone,256));//PER04 1/256 Communication Number: Telephone number.
-						}
-						EndSegment(sw);//PER05 through PER08 are situational and PER09 is not used. We do not use.
 						//2420F NM1: (medical) Referring Provider Name. Situational. We do not use.
 						//2420F REF: (medical) Referring Provider Secondary Identification. Situational. We do not use.
 						//2420G NM1: PW (medical) Ambulance Pick-up Location. Situational. We do not use.
@@ -2314,14 +2316,6 @@ namespace OpenDentBusiness
 				}
 			}
 			//treatProv
-			if(claim.MedType==EnumClaimMedType.Medical) {
-				//Required now for Medical, because we send this as the ordering prov to Emdeon Medical in loop 2420E.
-				//But could just be annoying in Dental, and should definitely allow for Institutional (customer complaint).
-				if(treatProv.IsNotPerson) {
-					Comma(strb);
-					strb.Append("Treat Prov must be a person.");
-				}
-			}
 			if(treatProv.LName=="") {
 				Comma(strb);
 				strb.Append("Treating Prov LName");
@@ -2666,11 +2660,6 @@ namespace OpenDentBusiness
 				//Providers
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];
-					if(treatProv.IsNotPerson) {
-						Comma(strb);
-						strb.Append("Treat Prov must be a person for proc "+procCode.ProcCode);
-						//Required now, because we send this as the ordering prov to Emdeon Medical.
-					}
 					if(treatProv.LName=="") {
 						Comma(strb);
 						strb.Append("Treat Prov LName for proc "+procCode.ProcCode);
