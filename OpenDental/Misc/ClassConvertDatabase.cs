@@ -74,7 +74,7 @@ namespace OpenDental{
 			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
 				&& !ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
 			{
-#if DEBUG
+#if !DEBUG
 				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server: ")+PrefC.GetString(PrefName.WebServiceServerName));
 				return false;
 #endif
