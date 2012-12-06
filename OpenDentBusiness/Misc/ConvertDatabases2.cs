@@ -11223,6 +11223,28 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.14.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_4_22();
+		}
+
+		private static void To12_4_22() {
+			if(FromVersion<new Version("12.4.22.0")) {
+				string command;
+				//Claimstream clearinghouse.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ('Claimstream','"+POut.String(@"C:\ccd\abc\")+"','000090','3','','','','','','','','15','"+POut.String(@"C:\ccd\abc\ccdws.exe")+"',0,0,'','','','','','','','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"INSERT INTO clearinghouse(ClearinghouseNum,Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Claimstream','"+POut.String(@"C:\ccd\abc\")+"','000090','3','','','','','','','','15','"+POut.String(@"C:\ccd\abc\ccdws.exe")+"',0,0,'','','','','','','','','')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '12.4.22.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_5_0();
 		}
 

@@ -4710,6 +4710,7 @@
     </Compile>
     <None Include="Resources\en_US_aff" />
     <None Include="Resources\en_US_dic" />
+    <None Include="Resources\OPENDENTAL.pem" />
     <None Include="Web References\CallFireService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

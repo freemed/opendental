@@ -286,7 +286,7 @@ namespace OpenDental{
 				//MsgBox.Show(this,"Clearinghouse does not have a valid Report Path set.");
 				return;
 			}
-			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.CDAnet){
+			if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].Eformat==ElectronicClaimFormat.Canadian) {
 				//the report path is shared with many other important files.  Do not process anything.  Comm is synchronous only.
 				return;
 			}

@@ -3408,12 +3408,12 @@ namespace OpenDental{
 				return;
 			}
 			if(clearhouse.CommBridge!=EclaimsCommBridge.ClaimConnect
-				&& clearhouse.CommBridge!=EclaimsCommBridge.CDAnet) 
+				&& clearhouse.Eformat!=ElectronicClaimFormat.Canadian)
 			{
 				MsgBox.Show(this,"So far, eligibility checks only work with ClaimConnect and CDAnet.");
 				return;
 			}
-			if(clearhouse.CommBridge==EclaimsCommBridge.CDAnet) {
+			if(clearhouse.Eformat==ElectronicClaimFormat.Canadian) {
 				EligibilityCheckCanada();
 				return;
 			}

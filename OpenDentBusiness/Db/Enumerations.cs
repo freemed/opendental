@@ -835,8 +835,8 @@ namespace OpenDentBusiness{
 		AOS,
 		///<summary>8</summary>
 		PostnTrack,
-		///<summary>9 Canada</summary>
-		CDAnet,
+		///<summary>9 Canadian clearinghouse.</summary>
+		ITRANS,
 		///<summary>10</summary>
 		Tesia,
 		///<summary>11</summary>
@@ -846,7 +846,9 @@ namespace OpenDentBusiness{
 		///<summary>13</summary>
 		DentiCal,
 		///<summary>14</summary>
-		EmdeonMedical
+		EmdeonMedical,
+		///<summary>15 Canadian clearinghouse.</summary>
+		Claimstream,
 	}
 
 	///<summary></summary>
