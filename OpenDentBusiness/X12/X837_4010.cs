@@ -1343,7 +1343,7 @@ namespace OpenDentBusiness
 			//if(electID==null){
 			//	return;
 			//}
-			if(electID!=null && electID.IsMedicaid) {
+			if(electID!=null && electID.IsMedicaid && prov.MedicaidID.Trim().Length>2) {
 				retVal++;
 				sw.WriteLine("REF*"
 					+"1D*"//REF01: ID qualifier. 1D=Medicaid
