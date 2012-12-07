@@ -368,7 +368,8 @@ namespace OpenDentBusiness
 				}*/
 				#endregion
 				#region Subscriber
-				if(i==0 || claimItems[i].PatNum3 != claimItems[i-1].PatNum3//if patient changed
+				if(i==0 || newTrans
+					|| claimItems[i].PatNum3 != claimItems[i-1].PatNum3//if patient changed
 					|| claimItems[i].ProvBill1 != claimItems[i-1].ProvBill1)//or prov has changed
 				{
 					if(claimItems[i].PatNum3==claimItems[i].Subscriber2) {//if patient is the subscriber
@@ -1716,6 +1717,7 @@ namespace OpenDentBusiness
 				}
 				strb.Append("BillProv Medicaid ID");
 			}
+			Patient patient=Patients.GetPat(claim.PatNum);
 			if(claim.PlanNum2>0) {
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
@@ -1726,26 +1728,29 @@ namespace OpenDentBusiness
 					}
 					strb.Append("Secondary Subscriber Birthdate");
 				}
+				if(subscriber2.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
+					X12Validate.Subscriber2(subscriber2,strb);
+				}
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
-				if(carrier2.Address=="") {
+				if(carrier2.Address.Trim()=="") {
 					if(strb.Length!=0) {
 						strb.Append(",");
 					}
 					strb.Append("Secondary Carrier Address");
 				}
-				if(carrier2.City.Length<2) {
+				if(carrier2.City.Trim().Length<2) {
 					if(strb.Length!=0) {
 						strb.Append(",");
 					}
 					strb.Append("Secondary Carrier City");
 				}
-				if(carrier2.State.Length!=2) {
+				if(carrier2.State.Trim().Length!=2) {
 					if(strb.Length!=0) {
 						strb.Append(",");
 					}
 					strb.Append("Secondary Carrier State(2 char)");
 				}
-				if(carrier2.Zip.Length<3) {
+				if(carrier2.Zip.Trim().Length<3) {
 					if(strb.Length!=0) {
 						strb.Append(",");
 					}
@@ -1783,8 +1788,10 @@ namespace OpenDentBusiness
 				}
 				strb.Append("SubscriberID");
 			}
-			Patient patient=Patients.GetPat(claim.PatNum);
 			Patient subscriber=Patients.GetPat(sub.Subscriber);
+			if(subscriber.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
+				X12Validate.Subscriber(subscriber,strb);
+			}
 			if(claim.PatNum != sub.Subscriber//if patient is not subscriber
 				&& claim.PatRelat==Relat.Self) {//and relat is self
 				if(strb.Length!=0) {
@@ -1792,25 +1799,25 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Claim Relationship");
 			}
-			if(patient.Address=="") {
+			if(patient.Address.Trim()=="") {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Patient Address");
 			}
-			if(patient.City.Length<2) {
+			if(patient.City.Trim().Length<2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Patient City");
 			}
-			if(patient.State.Length!=2) {
+			if(patient.State.Trim().Length!=2) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}
 				strb.Append("Patient State");
 			}
-			if(patient.Zip.Length<3) {
+			if(patient.Zip.Trim().Length<3) {
 				if(strb.Length!=0) {
 					strb.Append(",");
 				}

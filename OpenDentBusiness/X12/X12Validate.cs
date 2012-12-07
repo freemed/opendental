@@ -47,19 +47,19 @@ namespace OpenDentBusiness {
 
 		///<summary>StringBuilder does not get altered if no invalid data.</summary>
 		public static void Carrier(Carrier carrier,StringBuilder strb) {
-			if(carrier.Address=="") {
+			if(carrier.Address.Trim()=="") {
 				Comma(strb);
 				strb.Append("Carrier Address");
 			}
-			if(carrier.City.Length<2) {
+			if(carrier.City.Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Carrier City");
 			}
-			if(carrier.State.Length!=2) {
+			if(carrier.State.Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Carrier State(2 char)");
 			}
-			if(carrier.Zip.Length<3) {
+			if(carrier.Zip.Trim().Length<3) {
 				Comma(strb);
 				strb.Append("Carrier Zip");
 			}
@@ -103,19 +103,19 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Practice Phone");
 			}
-			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
+			if(PrefC.GetString(PrefName.PracticeAddress).Trim()=="") {
 				Comma(strb);
 				strb.Append("Practice Address");
 			}
-			if(PrefC.GetString(PrefName.PracticeCity).Length<2) {
+			if(PrefC.GetString(PrefName.PracticeCity).Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Practice City");
 			}
-			if(PrefC.GetString(PrefName.PracticeST).Length!=2) {
+			if(PrefC.GetString(PrefName.PracticeST).Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Practice State(2 char)");
 			}
-			if(PrefC.GetString(PrefName.PracticeZip).Length<3) {
+			if(PrefC.GetString(PrefName.PracticeZip).Trim().Length<3) {
 				Comma(strb);
 				strb.Append("Practice Zip");
 			}
@@ -127,19 +127,19 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Practice Phone");
 			}
-			if(PrefC.GetString(PrefName.PracticeBillingAddress)=="") {
+			if(PrefC.GetString(PrefName.PracticeBillingAddress).Trim()=="") {
 				Comma(strb);
 				strb.Append("Billing Address");
 			}
-			if(PrefC.GetString(PrefName.PracticeBillingCity).Length<2) {
+			if(PrefC.GetString(PrefName.PracticeBillingCity).Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Billing City");
 			}
-			if(PrefC.GetString(PrefName.PracticeBillingST).Length!=2) {
+			if(PrefC.GetString(PrefName.PracticeBillingST).Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Billing State(2 char)");
 			}
-			if(PrefC.GetString(PrefName.PracticeBillingZip).Length<3) {
+			if(PrefC.GetString(PrefName.PracticeBillingZip).Trim().Length<3) {
 				Comma(strb);
 				strb.Append("Billing Zip");
 			}
@@ -152,21 +152,61 @@ namespace OpenDentBusiness {
 				Comma(strb);
 				strb.Append("Clinic Phone");
 			}
-			if(clinic.Address=="") {
+			if(clinic.Address.Trim()=="") {
 				Comma(strb);
 				strb.Append("Clinic Address");
 			}
-			if(clinic.City.Length<2) {
+			if(clinic.City.Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Clinic City");
 			}
-			if(clinic.State.Length!=2) {
+			if(clinic.State.Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Clinic State(2 char)");
 			}
-			if(clinic.Zip.Length<3) {
+			if(clinic.Zip.Trim().Length<3) {
 				Comma(strb);
 				strb.Append("Clinic Zip");
+			}
+		}
+
+		///<summary>Just subscriber address for now. Other fields (ex subscriber id) are checked elsewhere. We might want to move all subscriber checks here some day.</summary>
+		public static void Subscriber(Patient subscriber,StringBuilder strb) {
+			if(subscriber.Address.Trim()=="") {
+				Comma(strb);
+				strb.Append("Subscriber Address");
+			}
+			if(subscriber.City.Trim()=="") {
+				Comma(strb);
+				strb.Append("Subscriber City");
+			}
+			if(subscriber.State.Trim()=="") {
+				Comma(strb);
+				strb.Append("Subscriber State");
+			}
+			if(subscriber.Zip.Trim().Length<3) {
+				Comma(strb);
+				strb.Append("Subscriber Zip");
+			}
+		}
+
+		///<summary>Just subscriber address for now. Other fields (ex subscriber id) are checked elsewhere. We might want to move all subscriber checks here some day.</summary>
+		public static void Subscriber2(Patient subscriber2,StringBuilder strb) {
+			if(subscriber2.Address.Trim()=="") {
+				Comma(strb);
+				strb.Append("Secondary Subscriber Address");
+			}
+			if(subscriber2.City.Trim()=="") {
+				Comma(strb);
+				strb.Append("Secondary Subscriber City");
+			}
+			if(subscriber2.State.Trim()=="") {
+				Comma(strb);
+				strb.Append("Secondary Subscriber State");
+			}
+			if(subscriber2.Zip.Trim().Length<3) {
+				Comma(strb);
+				strb.Append("Secondary Subscriber Zip");
 			}
 		}
 

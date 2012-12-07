@@ -2388,23 +2388,28 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("BillProv Medicaid ID");
 			}
+			Patient patient=Patients.GetPat(claim.PatNum);
 			if(claim.PlanNum2>0) {
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
+				Patient subscriber2=Patients.GetPat(sub2.Subscriber); //Always exists because validated in UI.
+				if(subscriber2.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
+					X12Validate.Subscriber2(subscriber2,strb);
+				}
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
-				if(carrier2.Address=="") {
+				if(carrier2.Address.Trim()=="") {
 					Comma(strb);
 					strb.Append("Secondary Carrier Address");
 				}
-				if(carrier2.City.Length<2) {
+				if(carrier2.City.Trim().Length<2) {
 					Comma(strb);
 					strb.Append("Secondary Carrier City");
 				}
-				if(carrier2.State.Length!=2) {
+				if(carrier2.State.Trim().Length!=2) {
 					Comma(strb);
 					strb.Append("Secondary Carrier State(2 char)");
 				}
-				if(carrier2.Zip.Length<3) {
+				if(carrier2.Zip.Trim().Length<3) {
 					Comma(strb);
 					strb.Append("Secondary Carrier Zip");
 				}
@@ -2439,8 +2444,10 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("SubscriberID");
 			}
-			Patient patient=Patients.GetPat(claim.PatNum);
 			Patient subscriber=Patients.GetPat(sub.Subscriber);
+			if(subscriber.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
+				X12Validate.Subscriber(subscriber,strb);
+			}
 			if(subscriber.Birthdate.Year<1880) {
 				Comma(strb);
 				strb.Append("Subscriber Birthdate");
@@ -2450,19 +2457,19 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Claim Relationship");
 			}
-			if(patient.Address=="") {
+			if(patient.Address.Trim()=="") {
 				Comma(strb);
 				strb.Append("Patient Address");
 			}
-			if(patient.City.Length<2) {
+			if(patient.City.Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Patient City");
 			}
-			if(patient.State.Length!=2) {
+			if(patient.State.Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Patient State");
 			}
-			if(patient.Zip.Length<3) {
+			if(patient.Zip.Trim().Length<3) {
 				Comma(strb);
 				strb.Append("Patient Zip");
 			}
