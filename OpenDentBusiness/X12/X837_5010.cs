@@ -493,14 +493,7 @@ namespace OpenDentBusiness
 					+s//NM106 1/10 Name Prefix: Not used.
 					+s//NM107 1/10 Name Suffix: Not used.
 					+"PI"+s);//NM108 1/2 Identification Code Qualifier: PI=Payor Identification.
-				string electid=carrier.ElectID;
-				if(electid=="" && IsTesia(clearhouse)) {//only for Tesia
-					electid="00000";
-				}
-				if(electid.Length<3) {
-					electid="06126";//paper claims
-				}
-				sw.Write(Sout(electid,80,2));//NM109 2/80 Identification Code: PayorID.
+				sw.Write(Sout(GetCarrierElectID(carrier,clearhouse),80,2));//NM109 2/80 Identification Code: PayorID.
 				EndSegment(sw);//NM110 through NM112 Not Used.
 				//2010BB N3: (medical,institutional,dental) Payer Address.
 				sw.Write("N3"+s+Sout(carrier.Address,55));//N301 1/55 Address Information:
@@ -1248,13 +1241,7 @@ namespace OpenDentBusiness
 						+s//NM106 1/10 Name Prefix: Not used.
 						+s//NM107 1/10 Name Suffix: Not used.
 						+"PI"+s);//NM108 1/2 Identification Code Qualifier: PI=Payor Identification. XV must be used after national plan ID mandated.
-					//NM109 2/80 Identification Code:
-					if(otherCarrier.ElectID.Length<3) {
-						sw.Write("06126");//paper claims
-					}
-					else {
-						sw.Write(Sout(otherCarrier.ElectID,80,2));
-					}
+					sw.Write(Sout(GetCarrierElectID(otherCarrier,clearhouse),80,2));//NM109 2/80 Identification Code:
 					EndSegment(sw);//NM110 through NM112 not used.
 					//2230B N3: (medical,institutional,dental) Other Payer Address. Situational. We don't support.
 					//2330B N4: (medical,institutional,dental) Other Payer City, State, Zip Code. Situational. We don't support.
@@ -1923,6 +1910,20 @@ namespace OpenDentBusiness
 		private static void EndSegment(StreamWriter sw) {
 			sw.Write(endSegment);
 			seg++;
+		}
+
+		private static string GetCarrierElectID(Carrier carrier,Clearinghouse clearhouse) {
+			string electid=carrier.ElectID;
+			if(electid=="" && IsApex(clearhouse)) {//only for Apex
+				return "PAPRM";//paper claims
+			}
+			if(electid=="" && IsTesia(clearhouse)) {//only for Tesia
+				return "00000";//paper claims
+			}
+			if(electid.Length<3) {
+				return "06126";//paper claims
+			}
+			return electid;
 		}
 
 		private static string GetGender(PatientGender patGender) {
