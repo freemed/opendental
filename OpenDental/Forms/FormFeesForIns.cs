@@ -419,7 +419,7 @@ namespace OpenDental{
 				return;
 			}
 			InputBox passBox=new InputBox("To prevent accidental changes, please enter password.  It can be found in our manual.");
-			passBox.Show();
+			passBox.ShowDialog();//
 			if(passBox.DialogResult!=DialogResult.OK) {
 				return;
 			}
