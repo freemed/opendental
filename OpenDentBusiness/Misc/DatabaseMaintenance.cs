@@ -1834,7 +1834,7 @@ namespace OpenDentBusiness {
 				}
 				//payplan---------------------------------------------------------------------------------------------------
 				command="SELECT COUNT(*) FROM payplan "
-					+"WHERE PlanNum NOT IN (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum)";
+					+"WHERE EXISTS (SELECT PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum AND inssub.PlanNum!=payplan.PlanNum)";
 				numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched payplan InsSubNum/PlanNum values: ")+numFound+"\r\n";
@@ -1949,9 +1949,9 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched etrans InsSubNum/PlanNum fixed: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
-				//payplan---------------------------------------------------------------------------------------------------
-				command="UPDATE payplan SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum) "
-					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum)";
+				//payplan--------------------------------------------------------------------------------------------------
+				command="UPDATE payplan SET PlanNum=(SELECT PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum) "
+					+"WHERE EXISTS (SELECT PlanNum FROM inssub WHERE inssub.InsSubNum=payplan.InsSubNum AND inssub.PlanNum!=payplan.PlanNum)";
 				numFixed=Db.NonQ(command);
 				if(numFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched payplan InsSubNum/PlanNum fixed: ")+numFixed.ToString()+"\r\n";
