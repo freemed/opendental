@@ -611,10 +611,19 @@ namespace OpenDentBusiness
 				#endregion
 				#region Claim
 				//2300 CLM: Claim
+				//the next 8 lines fix a rare bug where the total doesn't match the sum of the procs.  This would result in invalid X12
+				decimal claimFeeBilled=0;
+				for(int j=0;j<claimProcs.Count;j++) {
+					claimFeeBilled+=(decimal)claimProcs[j].FeeBilled;
+				}
+				if(claimFeeBilled!=(decimal)claim.ClaimFee) {
+					claim.ClaimFee=(double)claimFeeBilled;
+					Claims.Update(claim);
+				}
 				seg++;
 				sw.Write("CLM*"
 					+Sout(claim.PatNum.ToString()+"/"+claim.ClaimNum.ToString(),20)+"*"//CLM01: A unique id. Can support 20 char.  By using both PatNum and ClaimNum, it is possible to search for a patient as well as to ensure uniqueness. We might need to allow user to override for claims based on preauths.
-					+claim.ClaimFee.ToString()+"*"//CLM02: Claim Fee
+					+claimFeeBilled.ToString("f2")+"*"//CLM02: Claim Fee
 					+"**"//CLM03 & 04 not used
 					+GetPlaceService(claim.PlaceService)+"::1*"//CLM05: place+1. 1=Original claim
 					+"Y*"//CLM06: prov sig on file (always yes)

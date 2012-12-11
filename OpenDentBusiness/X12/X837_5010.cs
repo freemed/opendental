@@ -590,9 +590,18 @@ namespace OpenDentBusiness
 				else if(claim.CorrectionType==ClaimCorrectionType.Void) {
 					claimFrequencyTypeCode="8";
 				}
+				//the next 8 lines fix a rare bug where the total doesn't match the sum of the procs.  This would result in invalid X12
+				decimal claimFeeBilled=0;
+				for(int j=0;j<claimProcs.Count;j++) {
+					claimFeeBilled+=(decimal)claimProcs[j].FeeBilled;
+				}
+				if(claimFeeBilled!=(decimal)claim.ClaimFee) {
+					claim.ClaimFee=(double)claimFeeBilled;
+				  Claims.Update(claim);
+				}
 				sw.Write("CLM"+s
 					+Sout(clm01,20)+s//CLM01 1/38 Claim Submitter's Identifier: A unique id. Carriers are not required to handle more than 20 char. 
-					+claim.ClaimFee.ToString()+s//CLM02 1/18 Monetary Amount:
+					+claimFeeBilled.ToString("f2")+s//CLM02 1/18 Monetary Amount:
 					+s//CLM03 1/2 Claim Filing Indicator Code: Not used.
 					+s);//CLM04 1/2 Non-Institutional Claim Type Code: Not used.
 				//CLM05 (medical,institutional,dental) Health Care Services Location Information.
