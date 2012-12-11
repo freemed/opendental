@@ -38,7 +38,13 @@ namespace OpenDental {
 		}
 
 		private void butSetup_Click(object sender,EventArgs e) {
-			//TODO
+			FormToothGridDef FormTGD = new FormToothGridDef();
+			//FormTGD.SheetFieldDefCur=SheetFieldDefCur;
+			FormTGD.ShowDialog();
+			if(FormTGD.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			//SheetFieldDefCur=FormTGD.SheetFieldDefCur;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {

@@ -46,6 +46,14 @@ namespace OpenDentBusiness{
 		}
 		#endregion*/
 
+		public static List<ToothGridDef> Refresh(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<ToothGridDef>>(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT * FROM toothgriddef WHERE toothgriddefnum = "+POut.Long(patNum);
+			return Crud.ToothGridDefCrud.SelectMany(command);
+		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 

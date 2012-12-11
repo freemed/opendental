@@ -336,6 +336,17 @@ namespace OpenDental {
 				}
 				if(SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.Special) {
 					//TODO:
+					if(listFields.SelectedIndices.Contains(i)) {
+						pen=penRed;
+						brush=brushRed;
+					}
+					else {
+						pen=penBlue;
+						brush=brushBlue;
+					}
+					g.DrawRectangle(pen,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos,
+						SheetDefCur.SheetFieldDefs[i].Width,SheetDefCur.SheetFieldDefs[i].Height);
+					g.DrawString("(Special:Tooth Grid)",Font,brush,SheetDefCur.SheetFieldDefs[i].XPos,SheetDefCur.SheetFieldDefs[i].YPos);
 					continue;
 				}
 				fontstyle=FontStyle.Regular;

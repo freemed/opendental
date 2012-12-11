@@ -8,6 +8,8 @@ namespace OpenDentBusiness{
 		///<summary>Primary key.</summary>
 		[CrudColumn(IsPriKey=true)]
 		public long ToothGridDefNum;
+		///<summary>FK to sheetfielddef.SheetFieldDefNum</summary>
+		public long SheetFieldDefNum;
 		///<summary>This is the internal name that OD uses to identify the column.  Blank if this is a user-defined column.  We will keep a hard-coded list of available NameInternals in the code to pick from.</summary>
 		public string NameInternal;
 		///<summary>The user may override the internal name for display purposes.  If this is a user-defined column, this is the only name, since there is no NameInternal.</summary>
@@ -22,6 +24,7 @@ namespace OpenDentBusiness{
 		public long CodeNum;
 		///<summary>Enum:ProcStat  If these flow into main program, then this is the status that the new procs will have.</summary>
 		public ProcStat ProcStatus;
+		
 
 		public ToothGridDef Copy() {
 			return (ToothGridDef)this.MemberwiseClone();
