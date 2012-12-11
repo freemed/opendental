@@ -3983,11 +3983,15 @@ namespace OpenDental{
 				return;
 			}
 			List <string> stateCodes=new List <string> (new string[] {
+				//50 States.
 				"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",
 				"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
 				"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
 				"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
-				"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY" });
+				"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY",
+				//US territories. Reference http://www.itl.nist.gov/fipspubs/fip5-2.htm
+				"AS","FM","GU","MH","MP","PW","PR","UM","VI",
+			});
 			if(stateCodes.IndexOf(PrefC.GetString(PrefName.PracticeST))<0) {
 				MsgBox.Show(this,"Practice state abbreviation invalid.");
 				return;
