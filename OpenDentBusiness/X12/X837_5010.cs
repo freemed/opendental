@@ -1186,6 +1186,14 @@ namespace OpenDentBusiness
 						EndSegment(sw);//AMT03 Not used.
 						//2320 AMT: A8 (medical,institutional,dental) COB Total Non-Covered Amount. Situational. Can be set when primary claim was not adjudicated. We do not use.
 					}
+					if(IsClaimConnect(clearhouse)) {
+						//2320 DMG: Other subscriber demographics. This segment is not allowed in X12. ClaimConnect requires this information anyway. They will fix their validator later.
+						sw.Write("DMG"+s
+							+"D8"+s//DMG01 2/3 Date Time Period Format Qualifier: D8=Date Expressed in Format CCYYMMDD.
+							+otherSubsc.Birthdate.ToString("yyyyMMdd")+s//DMG02 1/35 Date Time Period: Birthdate. The othet subscriber birtdate is validated.
+							+GetGender(otherSubsc.Gender));//DMG03 1/1 Gender Code: F=Female, M=Male, U=Unknown.
+							EndSegment(sw);
+					}
 					//2320 OI: (medical,institutional,dental) Other Insurance Coverage Information.
 					sw.Write("OI"+s
 						+s//OI01 1/2 Claim Filing Indicator Code: Not used.
@@ -2405,6 +2413,10 @@ namespace OpenDentBusiness
 				Patient subscriber2=Patients.GetPat(sub2.Subscriber); //Always exists because validated in UI.
 				if(subscriber2.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
 					X12Validate.Subscriber2(subscriber2,strb);
+				}
+				if(subscriber2.Birthdate.Year<1880) {
+					Comma(strb);
+					strb.Append("Secondary Subscriber Birthdate");
 				}
 				Carrier carrier2=Carriers.GetCarrier(insPlan2.CarrierNum);
 				if(carrier2.Address.Trim()=="") {

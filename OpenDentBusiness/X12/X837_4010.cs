@@ -469,7 +469,8 @@ namespace OpenDentBusiness
 					seg++;
 					if(subscriber.Birthdate.Year<1900) {
 						sw.WriteLine("DMG*D8*"//DMG01: use D8
-								+subscriber.Birthdate.ToString("19000101")+"*"//DMG02: birthdate
+								+subscriber.Birthdate.ToString("19000101")+"*"//DMG02: birthdate.
+								//We probably do this because users complained that they didn't have access to the subsriber dob.  Nobody has ever complained about this.
 								+GetGender(subscriber.Gender)+"~");//DMG03: gender. F,M,or U
 					}
 					else {
@@ -1808,6 +1809,7 @@ namespace OpenDentBusiness
 				strb.Append("SubscriberID");
 			}
 			Patient subscriber=Patients.GetPat(sub.Subscriber);
+			//We do not need to validate subscriber DOB, because the date '01/01/1900' will be sent above if the DOB is before the year 1900.
 			if(subscriber.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
 				X12Validate.Subscriber(subscriber,strb);
 			}
