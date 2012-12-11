@@ -118,6 +118,7 @@ namespace OpenDental {
 		}
 
 		private void listFields_SelectedIndexChanged(object sender,EventArgs e) {
+			labelMiscInstructions.Visible=false;
 			labelReportableName.Visible=false;
 			textReportableName.Visible=false;
 			groupRadio.Visible=false;
@@ -152,6 +153,7 @@ namespace OpenDental {
 				}
 			}
 			if(AvailFields[listFields.SelectedIndex].FieldName=="misc") {
+				labelMiscInstructions.Visible=true;
 				labelReportableName.Visible=true;
 				textReportableName.Visible=true;
 				textReportableName.Text=SheetFieldDefCur.ReportableName;//will either be "" or saved ReportableName.
@@ -160,6 +162,7 @@ namespace OpenDental {
 				checkRequired.Visible=true;
 			}
 			else {
+				labelMiscInstructions.Visible=false;
 				labelReportableName.Visible=false;
 				textReportableName.Visible=false;
 				textReportableName.Text="";
