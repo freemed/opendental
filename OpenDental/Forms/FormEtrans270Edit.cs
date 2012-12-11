@@ -232,8 +232,11 @@ namespace OpenDental {
 					return;
 				}
 			}
+			Benefit ben;
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				benList.Add(listEB[gridMain.SelectedIndices[i]].Benefitt);
+				ben=listEB[gridMain.SelectedIndices[i]].Benefitt;
+				ben.PlanNum=PlanNum;
+				benList.Add(ben);
 			}
 			FillGridBen();
 		}
