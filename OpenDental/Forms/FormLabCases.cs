@@ -365,6 +365,10 @@ namespace OpenDental{
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
+			if(gridMain.Rows.Count<1) {
+				MsgBox.Show(this,"Nothing to print.");
+				return;
+			}
 			pagesPrinted=0;
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);

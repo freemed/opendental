@@ -705,18 +705,11 @@ namespace OpenDental{
 				SheetUtil.CalculateHeights(sheet,this.CreateGraphics());
 				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 				FormS.ShowDialog();
-				//if(FormS.DialogResult!=DialogResult.OK) {
-				//	sheet=null;
-				//	return;
-				//}
 			}
 			else {//edit existing
 				SheetFields.GetFieldsAndParameters(sheet);
 				FormSheetFillEdit FormS=new FormSheetFillEdit(sheet);
 				FormS.ShowDialog();
-				//if(FormS.DialogResult!=DialogResult.OK) {
-				//	return;
-				//}
 			}
 			//refresh
 			sheet=Sheets.GetLabSlip(CaseCur.PatNum,CaseCur.LabCaseNum);
@@ -725,14 +718,12 @@ namespace OpenDental{
 			}
 			else {
 				butSlip.Text=Lan.g(this,"Edit Slip");
+				butCancel.Enabled=false;//user can still click X to close window, but we do handle that as well.
 			}
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(IsNew){
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
+			//whether new or not
 			if(!MsgBox.Show(this,true,"Delete Lab Case?")){
 				return;
 			}
@@ -862,10 +853,12 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew) {
-				if(sheet!=null) {
-					Sheets.DeleteObject(sheet.SheetNum);	
+				if(sheet==null) {
+					LabCases.Delete(CaseCur.LabCaseNum);
 				}
-				LabCases.Delete(CaseCur.LabCaseNum);
+				else {//user created and possibly printed a lab slip.  We can't let them delete this lab case
+					//lab cases are always created ahead of time, so no need to save here
+				}
 			}
 		}
 

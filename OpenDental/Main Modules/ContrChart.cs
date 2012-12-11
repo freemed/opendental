@@ -4150,9 +4150,7 @@ namespace OpenDental{
 			FormL.CaseCur=lab;
 			FormL.IsNew=true;
 			FormL.ShowDialog();
-			if(FormL.DialogResult!=DialogResult.OK){
-				return;
-			}
+			//needs to always refresh due to complex ok/cancel
 			ModuleSelected(PatCur.PatNum);
 		}
 
@@ -6320,9 +6318,7 @@ namespace OpenDental{
 				FormLabCaseEdit FormL=new FormLabCaseEdit();
 				FormL.CaseCur=lab;
 				FormL.ShowDialog();
-				if(FormL.DialogResult!=DialogResult.OK) {
-					return;
-				}
+				//needs to always refresh due to complex ok/cancel
 			}
 			else if(row["TaskNum"].ToString()!="0") {
 				Task task=Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));

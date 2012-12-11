@@ -4157,9 +4157,6 @@ namespace OpenDental {
 				FormLabCaseEdit FormL = new FormLabCaseEdit();
 				FormL.CaseCur = lab;
 				FormL.ShowDialog();
-				if(FormL.DialogResult != DialogResult.OK) {
-					return;
-				}
 			}
 			else if(row["TaskNum"].ToString() != "0") {
 				Task task = Tasks.GetOne(PIn.Long(row["TaskNum"].ToString()));

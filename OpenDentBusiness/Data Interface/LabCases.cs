@@ -197,26 +197,23 @@ namespace OpenDentBusiness{
 			Crud.LabCaseCrud.Update(labCase);
 		}
 
-		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
+		///<summary>Surround with try/catch.  Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(long labCaseNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),labCaseNum);
 				return;
 			}
-			string command;
-			/*
-			//check patients for dependencies
-			string command="SELECT LName,FName FROM patient WHERE LabCaseNum ="
-				+POut.PInt(LabCase.LabCaseNum);
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count>0){
-				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
-					pats+="\r";
-					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
-				}
-				throw new Exception(Lans.g("LabCases","Cannot delete LabCase because ")+pats);
-			}*/
+			//check for dependencies
+			string command="SELECT count(*) FROM sheet,sheetfield "
+				+"WHERE sheet.SheetNum=sheetfield.SheetNum"
+				+" AND sheet.PatNum= (SELECT patnum FROM labcase WHERE labcase.LabCaseNum="+POut.Long(labCaseNum)+")"
+				+" AND sheet.SheetType="+POut.Long((int)SheetTypeEnum.LabSlip)
+				+" AND sheetfield.FieldType="+POut.Long((int)SheetFieldType.Parameter)
+				+" AND sheetfield.FieldName='LabCaseNum' "
+				+"AND sheetfield.FieldValue='"+POut.Long(labCaseNum)+"'";
+			if(PIn.Int(Db.GetCount(command))!=0) {
+				throw new Exception(Lans.g("LabCases","Cannot delete LabCase because lab slip is still attached."));
+			}
 			//delete
 			command= "DELETE FROM labcase WHERE LabCaseNum = "+POut.Long(labCaseNum);
  			Db.NonQ(command);
