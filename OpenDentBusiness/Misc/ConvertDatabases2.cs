@@ -11374,6 +11374,34 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ(command);
 					}
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS wikipage";
+					Db.NonQ(command);
+					command=@"CREATE TABLE wikipage (
+						WikiPageNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UserNum bigint NOT NULL,
+						DateTimeSaved date NOT NULL DEFAULT '0001-01-01',
+						PageTitle varchar(255) NOT NULL,
+						PageContent MEDIUMTEXT,
+						INDEX(UserNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE wikipage'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE wikipage (
+						WikiPageNum number(20) NOT NULL,
+						UserNum number(20) NOT NULL,
+						DateTimeSaved date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						PageTitle varchar2(255),
+						PageContent clob,
+						CONSTRAINT wikipage_WikiPageNum PRIMARY KEY (WikiPageNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX wikipage_UserNum ON wikipage (UserNum)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
@@ -11386,8 +11414,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
-
 
 
 

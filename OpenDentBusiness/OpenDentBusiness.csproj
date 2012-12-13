@@ -348,6 +348,7 @@
     <Compile Include="Crud\VaccineDefCrud.cs" />
     <Compile Include="Crud\VaccinePatCrud.cs" />
     <Compile Include="Crud\VitalsignCrud.cs" />
+    <Compile Include="Crud\WikiPageCrud.cs" />
     <Compile Include="Crud\ZipCodeCrud.cs" />
     <Compile Include="Data Interface\Allergies.cs" />
     <Compile Include="Data Interface\AllergyDefs.cs" />
@@ -441,6 +442,7 @@
     <Compile Include="Data Interface\VaccineDefs.cs" />
     <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
+    <Compile Include="Data Interface\WikiPages.cs" />
     <Compile Include="Db Multi Table\DashboardQueries.cs" />
     <Compile Include="Db Multi Table\EhrPatListElements.cs" />
     <Compile Include="Db Multi Table\EhrPatListElement.cs" />
@@ -741,6 +743,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\WikiPage.cs" />
     <Compile Include="TableTypes\DictCustom.cs" />
     <Compile Include="TableTypes\ErxLog.cs" />
     <Compile Include="TableTypes\ScreenPat.cs" />
