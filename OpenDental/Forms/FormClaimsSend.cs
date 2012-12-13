@@ -484,6 +484,21 @@ namespace OpenDental{
 				customTracking=DefC.Long[(int)DefCat.ClaimCustomTracking][comboCustomTracking.SelectedIndex-1].DefNum;
 			}
 			listQueue=Claims.GetQueueList(0,clinicNum,customTracking);
+			//The next 13 lines delete any claims that exist without any claim procs.  The db maint does the same thing.
+			//We will eventually prevent it, both when deleting a claimproc from inside a claim and from inside a procedure.
+			List<ClaimSendQueueItem> listQueueShort=new List<ClaimSendQueueItem>();
+			for(int i=0;i<listQueue.Length;i++) {
+				List<ClaimProc> claimProcList=ClaimProcs.RefreshForClaim(listQueue[i].ClaimNum);
+				List<ClaimProc> claimProcs=ClaimProcs.GetForSendClaim(claimProcList,listQueue[i].ClaimNum);
+				if(claimProcs.Count==0) {
+					Claim claimWithNoProcs=Claims.GetClaim(listQueue[i].ClaimNum);
+					Claims.Delete(claimWithNoProcs);
+				}
+				else {
+					listQueueShort.Add(listQueue[i]);
+				}
+			}
+			listQueue=listQueueShort.ToArray();
 			for(int i=0;i<listQueue.Length;i++) {
 				Eclaims.Eclaims.GetMissingData(listQueue[i]);
 			}
