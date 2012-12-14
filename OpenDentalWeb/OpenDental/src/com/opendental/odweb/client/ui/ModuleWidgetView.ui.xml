@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+  <g:HeaderPanel>
+    <!-- Header. -->
+    <g:HTMLPanel>
+      <div ui:field='nameElem'>Name</div>
+    </g:HTMLPanel>
+
+    <!-- Content. -->
+    <g:SimplePanel ui:field='modulePanel' />
+  </g:HeaderPanel>
+
+</ui:UiBinder> 

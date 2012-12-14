@@ -1,8 +1,5 @@
 package com.opendental.odweb.client.ui;
 
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -38,8 +35,6 @@ public class ODGrid extends Composite implements ClickHandler {
 	public ODGridColumnCollection Columns;
 	/** The collection of ODGridRows assigned to ODGrid. */
 	public ODGridRowCollection Rows;
-	//Testing
-	private Canvas canvas;
 	
 	/** Creates a new ODGrid. */
 	public ODGrid() {
@@ -55,20 +50,9 @@ public class ODGrid extends Composite implements ClickHandler {
 		LabelTitle=new Label(title);
 		ColumnHeaders=new TableColumnHeaders();
 		Body=new TableBody();		
-		canvas=Canvas.createIfSupported();
-		canvas.setHeight("100px");
-		canvas.setWidth("100px");
-		canvas.setCoordinateSpaceHeight(100);
-		canvas.setCoordinateSpaceWidth(100);
 		Container.add(LabelTitle);
 		Container.add(ColumnHeaders);
 		Container.add(Body);
-		if(canvas==null) {
-			Container.add(new Label("Your browser does not support HTML5.  Please upgrade your browser to view this window."));
-		}
-		else {
-			Container.add(canvas);
-		}
 		//We have to call initWidget in the constructor because this class extends Composite. 
 		initWidget(Container);
 	}
@@ -169,47 +153,33 @@ public class ODGrid extends Composite implements ClickHandler {
 	
 	/**  */
 	private void DrawBackG() {
-		//Since we are using an AbsolutePanel as the container, we'll be able to have a widget pose as the background.
-		Context2d context=canvas.getContext2d();
-		context.setFillStyle(CssColor.make("red"));
-		context.fillRect(0, 0, canvas.getCoordinateSpaceWidth(), canvas.getCoordinateSpaceHeight());
+		//Not worried about a background yet.
 	}
 	
 	/**  */
 	private void DrawRows() {
 		for(int i=0;i<Rows.size();i++) {
 			// TODO Figure out if the row is visible here.
-			//The row is visible so draw it.
-			DrawRow(i);
+			DrawRow(i);//The row is visible so draw it.
 		}
 	}
 	
 	/**  */
 	private void DrawRow(int rowI) {
-		Context2d context=canvas.getContext2d();
-		context.lineTo(50.5,0.5);
-		context.stroke();
-		context.lineTo(50.5,50.5);
-		context.stroke();
-		context.lineTo(0.5, 50.5);
-		context.stroke();
-		context.lineTo(0.5, 0.5);
-		context.stroke();
-		
-		//Figure out if the row is selected.
+		// TODO Figure out if the row is selected here.
 		//Draw all of the columns.
 		for(int i=0;i<Columns.size();i++) {
 		}
 	}
 	
-	/**  */
+	/** Must be called after computing the columns and rows so that the dimensions of the table are known. */
 	private void DrawTitleAndHeaders() {
-		
+		// TODO Make the necessary method calls to set up the title and headers for the columns. 
 	}
 	
 	/**  */
 	private void DrawOutline() {
-		//Since we are using an AbsolutePanel as the container, we'll be able to have a widget pose as the outline.
+		//Not worried about outline yet.
 	}
 	
 	//Clicking-------------------------------------------------------------------------------------------------------------------
@@ -277,6 +247,16 @@ public class ODGrid extends Composite implements ClickHandler {
 		private void AddRow() {
 			RowCount++;
 			this.resize(RowCount,ColumnCount);
+		}
+		
+		/** Sets the width for the table body. Pass in an integer and it converts it to a CSS unit.  Ex: 5 turns into "5px". */
+		private void SetGridWidth(int width) {
+			super.setWidth(width+"px");
+		}
+		
+		/** Sets the height for the table body. Pass in an integer and it converts it to a CSS unit.  Ex: 5 turns into "5px". */
+		private void SetGridHeight(int height) {
+			super.setHeight(height+"px");
 		}
 	}
 

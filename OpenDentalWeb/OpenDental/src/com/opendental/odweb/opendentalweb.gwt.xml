@@ -6,5 +6,5 @@
   <inherits name="com.google.gwt.http.HTTP"/>
   <inherits name="com.google.gwt.xml.XML"/>
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='com.opendental.odweb.client.mainmodules.WindowOpenDental'></entry-point>
+  <entry-point class='com.opendental.odweb.client.mainmodules.ProgramEntry'></entry-point>
 </module>
