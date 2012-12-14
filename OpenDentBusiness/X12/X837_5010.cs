@@ -1079,9 +1079,9 @@ namespace OpenDentBusiness
 							WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 						}
 					}
-					//2310C NM1: 77 (dental) Service Facility Location Name. Situational. Only required if PlaceService is 21,22,31, or 35. 35 does not exist in CPT, so we assume 33.
-					if(claim.PlaceService==PlaceOfService.InpatHospital || claim.PlaceService==PlaceOfService.OutpatHospital
-						|| claim.PlaceService==PlaceOfService.SkilledNursFac || claim.PlaceService==PlaceOfService.CustodialCareFacility) {//AdultLivCareFac
+					//2310C NM1: 77 (dental) Service Facility Location Name. Conditions different than 4010.  Do not send if same as location as 2010AA Billing Provider.
+					/*
+					if() {//js removed this section on 12/14/12 because nobody seems to care about it and we were never sending it anyway.
 						sw.Write("NM1"+s
 							+"77"+s//NM101 2/3 Entity Identifier Code: 77=Service Location.
 							+"2"+s//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
@@ -1106,7 +1106,7 @@ namespace OpenDentBusiness
 							+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
 						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.
 						//2310C REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use this.
-					}
+					}*/
 					//2310D NM1: (dental) Assistant Surgeon Name. Situational. We do not support.
 					//2310D PRV: (dental) Assistant Surgeon Specialty Information. We do not support.
 					//2310D REF: (dental) Assistant Surgeon Secondary Identification. We do not support.
