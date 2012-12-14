@@ -11402,6 +11402,35 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE INDEX wikipage_UserNum ON wikipage (UserNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS emailaddress";
+					Db.NonQ(command);
+					command=@"CREATE TABLE emailaddress (
+						EmailAddressNum bigint NOT NULL auto_increment PRIMARY KEY,
+						SMPTserver varchar(255) NOT NULL,
+						EmailUsername varchar(255) NOT NULL,
+						EmailPassword varchar(255) NOT NULL,
+						ServerPort int NOT NULL,
+						UseSSL tinyint NOT NULL,
+						SenderAddress varchar(255) NOT NULL
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE emailaddress'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE emailaddress (
+						EmailAddressNum number(20) NOT NULL,
+						SMPTserver varchar2(255),
+						EmailUsername varchar2(255),
+						EmailPassword varchar2(255),
+						ServerPort number(11) NOT NULL,
+						UseSSL number(3) NOT NULL,
+						SenderAddress varchar2(255),
+						CONSTRAINT emailaddress_EmailAddressNum PRIMARY KEY (EmailAddressNum)
+						)";
+					Db.NonQ(command);
+				}
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

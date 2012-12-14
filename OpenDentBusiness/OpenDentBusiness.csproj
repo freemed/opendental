@@ -199,6 +199,7 @@
     <Compile Include="Crud\EhrQuarterlyKeyCrud.cs" />
     <Compile Include="Crud\EhrSummaryCcdCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
+    <Compile Include="Crud\EmailAddressCrud.cs" />
     <Compile Include="Crud\EmailAttachCrud.cs" />
     <Compile Include="Crud\EmailMessageCrud.cs" />
     <Compile Include="Crud\EmailTemplateCrud.cs" />
@@ -375,6 +376,7 @@
     <Compile Include="Data Interface\EhrProvKeys.cs" />
     <Compile Include="Data Interface\EhrQuarterlyKeys.cs" />
     <Compile Include="Data Interface\EhrSummaryCcds.cs" />
+    <Compile Include="Data Interface\EmailAddresses.cs" />
     <Compile Include="Data Interface\EobAttaches.cs" />
     <Compile Include="Data Interface\ErxLogs.cs" />
     <Compile Include="Data Interface\Formularies.cs" />
@@ -745,6 +747,7 @@
     <Compile Include="TableTypes\CentralConnection.cs" />
     <Compile Include="TableTypes\WikiPage.cs" />
     <Compile Include="TableTypes\DictCustom.cs" />
+    <Compile Include="TableTypes\EmailAddress.cs" />
     <Compile Include="TableTypes\ErxLog.cs" />
     <Compile Include="TableTypes\ScreenPat.cs" />
     <Compile Include="TableTypes\ToothGridCell.cs" />
