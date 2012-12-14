@@ -380,6 +380,12 @@
     <Compile Include="Forms\FormDictCustoms.designer.cs">
       <DependentUpon>FormDictCustoms.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFeeSchedPickRemote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFeeSchedPickRemote.designer.cs">
+      <DependentUpon>FormFeeSchedPickRemote.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormProcNoteAppend.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2616,6 +2622,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormDictCustoms.resx">
       <DependentUpon>FormDictCustoms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFeeSchedPickRemote.resx">
+      <DependentUpon>FormFeeSchedPickRemote.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcNoteAppend.resx">
       <DependentUpon>FormProcNoteAppend.cs</DependentUpon>

@@ -4,9 +4,14 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental{
 	/// <summary>
@@ -41,6 +46,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butUpdate;
 		private Label label5;
 		private OpenDental.UI.Button butImportEcw;
+		private UI.Button butImportCanada;
 		///<summary>The defNum of the fee schedule that is currently displayed in the main window.</summary>
 		private long SchedNum;
 
@@ -95,13 +101,14 @@ namespace OpenDental{
 			this.textPercent = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
+			this.butImportCanada = new OpenDental.UI.Button();
+			this.butImportEcw = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butExport = new OpenDental.UI.Button();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butUpdate = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.butImportEcw = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -286,16 +293,45 @@ namespace OpenDental{
 			// 
 			// groupBox5
 			// 
+			this.groupBox5.Controls.Add(this.butImportCanada);
 			this.groupBox5.Controls.Add(this.butImportEcw);
 			this.groupBox5.Controls.Add(this.butImport);
 			this.groupBox5.Controls.Add(this.butExport);
 			this.groupBox5.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.groupBox5.Location = new System.Drawing.Point(15,188);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(205,87);
+			this.groupBox5.Size = new System.Drawing.Size(205,121);
 			this.groupBox5.TabIndex = 5;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Export/Import";
+			// 
+			// butImportCanada
+			// 
+			this.butImportCanada.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImportCanada.Autosize = true;
+			this.butImportCanada.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImportCanada.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImportCanada.CornerRadius = 4F;
+			this.butImportCanada.Location = new System.Drawing.Point(107,85);
+			this.butImportCanada.Name = "butImportCanada";
+			this.butImportCanada.Size = new System.Drawing.Size(84,24);
+			this.butImportCanada.TabIndex = 7;
+			this.butImportCanada.Text = "Import Canada";
+			this.butImportCanada.Click += new System.EventHandler(this.butImportCanada_Click);
+			// 
+			// butImportEcw
+			// 
+			this.butImportEcw.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImportEcw.Autosize = true;
+			this.butImportEcw.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImportEcw.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImportEcw.CornerRadius = 4F;
+			this.butImportEcw.Location = new System.Drawing.Point(107,55);
+			this.butImportEcw.Name = "butImportEcw";
+			this.butImportEcw.Size = new System.Drawing.Size(84,24);
+			this.butImportEcw.TabIndex = 6;
+			this.butImportEcw.Text = "Import eCW";
+			this.butImportEcw.Click += new System.EventHandler(this.butImportEcw_Click);
 			// 
 			// butImport
 			// 
@@ -304,9 +340,9 @@ namespace OpenDental{
 			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
-			this.butImport.Location = new System.Drawing.Point(116,25);
+			this.butImport.Location = new System.Drawing.Point(107,25);
 			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75,24);
+			this.butImport.Size = new System.Drawing.Size(84,24);
 			this.butImport.TabIndex = 5;
 			this.butImport.Text = "Import";
 			this.butImport.Click += new System.EventHandler(this.butImport_Click);
@@ -367,31 +403,17 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(392,290);
+			this.butClose.Location = new System.Drawing.Point(364,305);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,24);
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "&Cancel";
 			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// butImportEcw
-			// 
-			this.butImportEcw.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butImportEcw.Autosize = true;
-			this.butImportEcw.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImportEcw.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImportEcw.CornerRadius = 4F;
-			this.butImportEcw.Location = new System.Drawing.Point(116,55);
-			this.butImportEcw.Name = "butImportEcw";
-			this.butImportEcw.Size = new System.Drawing.Size(75,24);
-			this.butImportEcw.TabIndex = 6;
-			this.butImportEcw.Text = "Import eCW";
-			this.butImportEcw.Click += new System.EventHandler(this.butImportEcw_Click);
-			// 
 			// FormFeeSchedTools
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(492,341);
+			this.ClientSize = new System.Drawing.Size(464,356);
 			this.Controls.Add(this.groupBox6);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupBox3);
@@ -424,6 +446,9 @@ namespace OpenDental{
 			}
 			if(!Programs.IsEnabled(ProgramName.eClinicalWorks)) {
 				butImportEcw.Visible=false;
+			}
+			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				butImportCanada.Visible=false;
 			}
 		}
 
@@ -696,6 +721,64 @@ namespace OpenDental{
 			}
 			MessageBox.Show(displayMsg);
 			DialogResult=DialogResult.OK;
+		}
+
+		private void butImportCanada_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,true,"If you want a clean slate, the current fee schedule should be cleared first.  When imported, any fees that are found in the text file will overwrite values of the current fee schedule showing in the main window.  Are you sure you want to continue?")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			FormFeeSchedPickRemote formPick=new FormFeeSchedPickRemote();
+			formPick.Url=@"http://www.opendental.com/feescanada/";
+			if(formPick.ShowDialog()!=DialogResult.OK) {
+				Cursor=Cursors.Default;
+				return;
+			}
+			Cursor=Cursors.WaitCursor;//original wait cursor seems to go away for some reason.
+			Application.DoEvents();
+			string tempFile=Path.GetTempFileName();
+			WebClient myWebClient=new WebClient();
+			try {
+				myWebClient.DownloadFile(formPick.FileUrlChosen,tempFile);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
+				Cursor=Cursors.Default;
+				return;
+			}
+			string feeData=File.ReadAllText(tempFile);
+			File.Delete(tempFile);
+			string[] feeLines=feeData.Split('\n');
+			double feeAmt;
+			long numImported=0;
+			long numSkipped=0;
+			for(int i=0;i<feeLines.Length;i++) {
+				string[] fields=feeLines[i].Split('\t');
+				if(fields.Length>1) {// && fields[1]!=""){//we no longer skip blank fees
+					string procCode=fields[0];
+					if(ProcedureCodes.IsValidCode(procCode)) { //The Fees.Import() function will not import fees for codes that do not exist.
+						if(fields[1]=="") {
+							feeAmt=-1;//triggers deletion of existing fee, but no insert.
+						}
+						else {
+							feeAmt=PIn.Double(fields[1]);
+						}
+						Fees.Import(procCode,feeAmt,SchedNum);
+						numImported++;
+					}
+					else {
+						numSkipped++;
+					}
+				}
+			}
+			DataValid.SetInvalid(InvalidType.Fees);
+			Cursor=Cursors.Default;
+			DialogResult=DialogResult.OK;
+			string outputMessage=Lan.g(this,"Done. Number imported")+": "+numImported;
+			if(numSkipped>0) {
+				outputMessage+=" "+Lan.g(this,"Number skipped")+": "+numSkipped;
+			}
+			MessageBox.Show(outputMessage);
 		}
 
 		private void butUpdate_Click(object sender,EventArgs e) {
