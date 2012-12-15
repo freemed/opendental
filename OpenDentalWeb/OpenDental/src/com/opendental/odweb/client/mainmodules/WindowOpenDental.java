@@ -29,8 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.opendental.odweb.client.ui.ModuleWidget;
-import com.opendental.odweb.client.usercontrols.OutlookBar;
-import com.opendental.odweb.client.usercontrols.OutlookButton;
+import com.opendental.odweb.client.usercontrols.*;
 
 /** This is where the shell of the Open Dental Web App lives. */
 public class WindowOpenDental extends ResizeComposite {
@@ -58,7 +57,13 @@ public class WindowOpenDental extends ResizeComposite {
 	/** The outlook bar on the left used to navigate to different modules. */
   @UiField(provided=true)
   OutlookBar outlookBar;
-	
+  /** The main menu.  Holds options like Log Off, File, Setup, etc. */
+  @UiField
+  MenuBarMain mainMenu;
+  /** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
+  @UiField
+  MenuBarMainPatient mainToolBar;
+  
 	public WindowOpenDental() {
 		final SingleSelectionModel<OutlookButton> selectionModel=new SingleSelectionModel<OutlookButton>();
 		outlookBar=new OutlookBar(selectionModel);
@@ -68,13 +73,13 @@ public class WindowOpenDental extends ResizeComposite {
         setModule(selectionModel.getSelectedObject().getButtonIndex());
       }
     });
-    // Initialize the UI binder.
+    //Initialize the UI binder.
     initWidget(uiBinder.createAndBindUi(this));  
-    //Default to the Appts module.
-    setModule(0);
+    //Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
+    setModule(-1);
 	}
 	
-	/** Set the module to display.
+	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
    * @param index The index of the module that needs to be displayed. */
   public void setModule(int index) {
     //Clear the old handler.
@@ -88,13 +93,15 @@ public class WindowOpenDental extends ResizeComposite {
       contentPanel.setWidget(null);
       return;
     }
-    //Setup the main tool bar here.
-    // Show the widget.
+    // TODO Setup the main tool bar here.
     showModule();
   }
 
+  /** Gets the corresponding module in regards to the selected index of the module buttons. */
 	private ModuleWidget getModuleAtIndex(int index) {
 		switch(index) {
+			case -1:
+				return null;
 			case 0:
 				if(contrAppt==null) {
 					contrAppt=new ContrAppt();
@@ -135,8 +142,11 @@ public class WindowOpenDental extends ResizeComposite {
 		return null;
 	}
 
+	/** Sets the visible module in the content panel to moduleCur.  OK if moduleCur is null. */
 	private void showModule() {
 		if(moduleCur==null) {
+			//Disable all the widgets?
+			//Have a default Open Dental logo with welcom text.  This would save time loading in case the user does not need the appts module yet.
 			return;
 		}
 		contentPanel.setWidget(moduleCur);

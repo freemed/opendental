@@ -16,15 +16,19 @@
       border-bottom: 1px solid #3c756e;
 	}
 	
-	.menuBar {
+	.mainMenuBar {
       background-color: #e8eeee;
       border-bottom: 1px solid #3c756e;
-      padding: 0px 10px;
+	}
+	
+	.patientMenuBar {
+      background-color: #e8eeee;
+      border-top: 1px solid #3c756e;
+      border-bottom: 1px solid #3c756e;
 	}
 	
 	.moduleList {
 	  background-color: #3c756e;
-	  border-right: 1px solid #d8e2e1;
 	}
     
     .moduleContent {
@@ -46,34 +50,25 @@
   <g:DockLayoutPanel unit='PT'>
     
     <!-- Title bar that contains the selected patient information. -->
-    <g:north size='25'>
+    <g:north size='32'>
       <g:HTMLPanel styleName='{style.titleBar}'>
         <table ui:field='mainTitle' cellpadding='0' cellspacing='0'>
+        	<img src='http://www.opendental.com/images/LogoTiny.png' />
         	<!-- Put the title bar widget here. -->
         </table>
       </g:HTMLPanel>
     </g:north>
 
     <!-- Main Menu Bar. -->
-    <g:north size='15'>
-      <g:HTMLPanel styleName='{style.menuBar}'>
-        <table cellpadding='0' cellspacing='0' width='100%'>
-          <tr>
-            <td>
-              <table cellpadding='0' cellspacing='0'>
-              	<!-- Put the menu bar widget here. -->
-              </table>
-            </td>
-          </tr>
-        </table>
-      </g:HTMLPanel>
+    <g:north size='17'>
+    	<s:MenuBarMain ui:field="mainMenu" />
     </g:north>
 
 	<!-- Module buttons and the module content area. -->
     <g:center>
       <g:DockLayoutPanel unit='PX'>
         <!-- Modules Tree. -->
-        <g:lineStart size='55'>
+        <g:lineStart size='56'>
           <g:ScrollPanel styleName='{style.moduleList}'>
             <s:OutlookBar ui:field='outlookBar' />
           </g:ScrollPanel>
@@ -83,9 +78,9 @@
         <g:center>
           <g:DockLayoutPanel unit='PT'>
           	<!-- This is where the menu bar with Select Patient, E-mail, etc. will be kept. -->
-            <g:north size='20'>
-              <g:FlowPanel ui:field='mainToolBar' styleName='{style.menuBar}'>
-              	<!-- Put the tool bar main widget here. -->
+            <g:north size='18'>
+              <g:FlowPanel ui:field='mainToolBarPanel' styleName='{style.patientMenuBar}'>
+              	<s:MenuBarMainPatient ui:field='mainToolBar'/>
               </g:FlowPanel>
             </g:north>
 
@@ -99,3 +94,10 @@
     </g:center>
   </g:DockLayoutPanel>
 </ui:UiBinder>
+
+
+
+
+
+
+
