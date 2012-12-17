@@ -35,7 +35,7 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			gridFeeSchedFiles.BeginUpdate();
 			gridFeeSchedFiles.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableApptProcs","Stat"),35);
+			ODGridColumn col=new ODGridColumn("",35);
 			gridFeeSchedFiles.Columns.Add(col);
 			gridFeeSchedFiles.Rows.Clear();
 			ODGridRow row;
