@@ -11,20 +11,20 @@ public class DataTable {
 	public DataTable() {
 		Columns=new ArrayList<DataColumn>();
 		Rows=new ArrayList<DataRow>();
-		SetTableName("");
+		setTableName("");
 	}
 	
 	public DataTable(String tableName) {
 		Columns=new ArrayList<DataColumn>();
 		Rows=new ArrayList<DataRow>();
-		SetTableName(tableName);
+		setTableName(tableName);
 	}
 
-	public String GetTableName() {
+	public String getTableName() {
 		return TableName;
 	}
 
-	public void SetTableName(String tableName) {
+	public void setTableName(String tableName) {
 		TableName=tableName;
 	}
 

@@ -18,7 +18,7 @@ public class EhrMeasureEvent {
 		public String MoreInfo;
 
 		/** Deep copy of object. */
-		public EhrMeasureEvent Copy() {
+		public EhrMeasureEvent deepCopy() {
 			EhrMeasureEvent ehrmeasureevent=new EhrMeasureEvent();
 			ehrmeasureevent.EhrMeasureEventNum=this.EhrMeasureEventNum;
 			ehrmeasureevent.DateTEvent=this.DateTEvent;
@@ -29,14 +29,14 @@ public class EhrMeasureEvent {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrMeasureEvent>");
 			sb.append("<EhrMeasureEventNum>").append(EhrMeasureEventNum).append("</EhrMeasureEventNum>");
 			sb.append("<DateTEvent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTEvent)).append("</DateTEvent>");
 			sb.append("<EventType>").append(EventType.ordinal()).append("</EventType>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<MoreInfo>").append(Serializing.EscapeForXml(MoreInfo)).append("</MoreInfo>");
+			sb.append("<MoreInfo>").append(Serializing.escapeForXml(MoreInfo)).append("</MoreInfo>");
 			sb.append("</EhrMeasureEvent>");
 			return sb.toString();
 		}
@@ -44,22 +44,22 @@ public class EhrMeasureEvent {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EhrMeasureEventNum")!=null) {
-					EhrMeasureEventNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrMeasureEventNum"));
+				if(Serializing.getXmlNodeValue(doc,"EhrMeasureEventNum")!=null) {
+					EhrMeasureEventNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrMeasureEventNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTEvent")!=null) {
-					DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTEvent"));
+				if(Serializing.getXmlNodeValue(doc,"DateTEvent")!=null) {
+					DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTEvent"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EventType")!=null) {
-					EventType=EhrMeasureEventType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EventType"))];
+				if(Serializing.getXmlNodeValue(doc,"EventType")!=null) {
+					EventType=EhrMeasureEventType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EventType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MoreInfo")!=null) {
-					MoreInfo=Serializing.GetXmlNodeValue(doc,"MoreInfo");
+				if(Serializing.getXmlNodeValue(doc,"MoreInfo")!=null) {
+					MoreInfo=Serializing.getXmlNodeValue(doc,"MoreInfo");
 				}
 			}
 			catch(Exception e) {

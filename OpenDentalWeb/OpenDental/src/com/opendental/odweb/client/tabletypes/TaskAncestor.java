@@ -12,7 +12,7 @@ public class TaskAncestor {
 		public int TaskListNum;
 
 		/** Deep copy of object. */
-		public TaskAncestor Copy() {
+		public TaskAncestor deepCopy() {
 			TaskAncestor taskancestor=new TaskAncestor();
 			taskancestor.TaskAncestorNum=this.TaskAncestorNum;
 			taskancestor.TaskNum=this.TaskNum;
@@ -21,7 +21,7 @@ public class TaskAncestor {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TaskAncestor>");
 			sb.append("<TaskAncestorNum>").append(TaskAncestorNum).append("</TaskAncestorNum>");
@@ -34,16 +34,16 @@ public class TaskAncestor {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TaskAncestorNum")!=null) {
-					TaskAncestorNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskAncestorNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskAncestorNum")!=null) {
+					TaskAncestorNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskAncestorNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
-					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskListNum")!=null) {
-					TaskListNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskListNum")!=null) {
+					TaskListNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskListNum"));
 				}
 			}
 			catch(Exception e) {

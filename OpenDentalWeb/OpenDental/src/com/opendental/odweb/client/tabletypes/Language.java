@@ -16,7 +16,7 @@ public class Language {
 		public boolean IsObsolete;
 
 		/** Deep copy of object. */
-		public Language Copy() {
+		public Language deepCopy() {
 			Language language=new Language();
 			language.LanguageNum=this.LanguageNum;
 			language.EnglishComments=this.EnglishComments;
@@ -27,13 +27,13 @@ public class Language {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Language>");
 			sb.append("<LanguageNum>").append(LanguageNum).append("</LanguageNum>");
-			sb.append("<EnglishComments>").append(Serializing.EscapeForXml(EnglishComments)).append("</EnglishComments>");
-			sb.append("<ClassType>").append(Serializing.EscapeForXml(ClassType)).append("</ClassType>");
-			sb.append("<English>").append(Serializing.EscapeForXml(English)).append("</English>");
+			sb.append("<EnglishComments>").append(Serializing.escapeForXml(EnglishComments)).append("</EnglishComments>");
+			sb.append("<ClassType>").append(Serializing.escapeForXml(ClassType)).append("</ClassType>");
+			sb.append("<English>").append(Serializing.escapeForXml(English)).append("</English>");
 			sb.append("<IsObsolete>").append((IsObsolete)?1:0).append("</IsObsolete>");
 			sb.append("</Language>");
 			return sb.toString();
@@ -42,22 +42,22 @@ public class Language {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LanguageNum")!=null) {
-					LanguageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LanguageNum"));
+				if(Serializing.getXmlNodeValue(doc,"LanguageNum")!=null) {
+					LanguageNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LanguageNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EnglishComments")!=null) {
-					EnglishComments=Serializing.GetXmlNodeValue(doc,"EnglishComments");
+				if(Serializing.getXmlNodeValue(doc,"EnglishComments")!=null) {
+					EnglishComments=Serializing.getXmlNodeValue(doc,"EnglishComments");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClassType")!=null) {
-					ClassType=Serializing.GetXmlNodeValue(doc,"ClassType");
+				if(Serializing.getXmlNodeValue(doc,"ClassType")!=null) {
+					ClassType=Serializing.getXmlNodeValue(doc,"ClassType");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"English")!=null) {
-					English=Serializing.GetXmlNodeValue(doc,"English");
+				if(Serializing.getXmlNodeValue(doc,"English")!=null) {
+					English=Serializing.getXmlNodeValue(doc,"English");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsObsolete")!=null) {
-					IsObsolete=(Serializing.GetXmlNodeValue(doc,"IsObsolete")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsObsolete")!=null) {
+					IsObsolete=(Serializing.getXmlNodeValue(doc,"IsObsolete")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

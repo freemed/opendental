@@ -18,7 +18,7 @@ public class LanguageForeign {
 		public String Comments;
 
 		/** Deep copy of object. */
-		public LanguageForeign Copy() {
+		public LanguageForeign deepCopy() {
 			LanguageForeign languageforeign=new LanguageForeign();
 			languageforeign.LanguageForeignNum=this.LanguageForeignNum;
 			languageforeign.ClassType=this.ClassType;
@@ -30,15 +30,15 @@ public class LanguageForeign {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LanguageForeign>");
 			sb.append("<LanguageForeignNum>").append(LanguageForeignNum).append("</LanguageForeignNum>");
-			sb.append("<ClassType>").append(Serializing.EscapeForXml(ClassType)).append("</ClassType>");
-			sb.append("<English>").append(Serializing.EscapeForXml(English)).append("</English>");
-			sb.append("<Culture>").append(Serializing.EscapeForXml(Culture)).append("</Culture>");
-			sb.append("<Translation>").append(Serializing.EscapeForXml(Translation)).append("</Translation>");
-			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");
+			sb.append("<ClassType>").append(Serializing.escapeForXml(ClassType)).append("</ClassType>");
+			sb.append("<English>").append(Serializing.escapeForXml(English)).append("</English>");
+			sb.append("<Culture>").append(Serializing.escapeForXml(Culture)).append("</Culture>");
+			sb.append("<Translation>").append(Serializing.escapeForXml(Translation)).append("</Translation>");
+			sb.append("<Comments>").append(Serializing.escapeForXml(Comments)).append("</Comments>");
 			sb.append("</LanguageForeign>");
 			return sb.toString();
 		}
@@ -46,25 +46,25 @@ public class LanguageForeign {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LanguageForeignNum")!=null) {
-					LanguageForeignNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LanguageForeignNum"));
+				if(Serializing.getXmlNodeValue(doc,"LanguageForeignNum")!=null) {
+					LanguageForeignNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LanguageForeignNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClassType")!=null) {
-					ClassType=Serializing.GetXmlNodeValue(doc,"ClassType");
+				if(Serializing.getXmlNodeValue(doc,"ClassType")!=null) {
+					ClassType=Serializing.getXmlNodeValue(doc,"ClassType");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"English")!=null) {
-					English=Serializing.GetXmlNodeValue(doc,"English");
+				if(Serializing.getXmlNodeValue(doc,"English")!=null) {
+					English=Serializing.getXmlNodeValue(doc,"English");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Culture")!=null) {
-					Culture=Serializing.GetXmlNodeValue(doc,"Culture");
+				if(Serializing.getXmlNodeValue(doc,"Culture")!=null) {
+					Culture=Serializing.getXmlNodeValue(doc,"Culture");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Translation")!=null) {
-					Translation=Serializing.GetXmlNodeValue(doc,"Translation");
+				if(Serializing.getXmlNodeValue(doc,"Translation")!=null) {
+					Translation=Serializing.getXmlNodeValue(doc,"Translation");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
-					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				if(Serializing.getXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.getXmlNodeValue(doc,"Comments");
 				}
 			}
 			catch(Exception e) {

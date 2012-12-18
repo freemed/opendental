@@ -30,7 +30,7 @@ public class Clinic {
 		public String Fax;
 
 		/** Deep copy of object. */
-		public Clinic Copy() {
+		public Clinic deepCopy() {
 			Clinic clinic=new Clinic();
 			clinic.ClinicNum=this.ClinicNum;
 			clinic.Description=this.Description;
@@ -48,21 +48,21 @@ public class Clinic {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Clinic>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
-			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
-			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
-			sb.append("<Phone>").append(Serializing.EscapeForXml(Phone)).append("</Phone>");
-			sb.append("<BankNumber>").append(Serializing.EscapeForXml(BankNumber)).append("</BankNumber>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<Address>").append(Serializing.escapeForXml(Address)).append("</Address>");
+			sb.append("<Address2>").append(Serializing.escapeForXml(Address2)).append("</Address2>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<State>").append(Serializing.escapeForXml(State)).append("</State>");
+			sb.append("<Zip>").append(Serializing.escapeForXml(Zip)).append("</Zip>");
+			sb.append("<Phone>").append(Serializing.escapeForXml(Phone)).append("</Phone>");
+			sb.append("<BankNumber>").append(Serializing.escapeForXml(BankNumber)).append("</BankNumber>");
 			sb.append("<DefaultPlaceService>").append(DefaultPlaceService.ordinal()).append("</DefaultPlaceService>");
 			sb.append("<InsBillingProv>").append(InsBillingProv).append("</InsBillingProv>");
-			sb.append("<Fax>").append(Serializing.EscapeForXml(Fax)).append("</Fax>");
+			sb.append("<Fax>").append(Serializing.escapeForXml(Fax)).append("</Fax>");
 			sb.append("</Clinic>");
 			return sb.toString();
 		}
@@ -70,43 +70,43 @@ public class Clinic {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
-					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				if(Serializing.getXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.getXmlNodeValue(doc,"Address");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
-					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				if(Serializing.getXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.getXmlNodeValue(doc,"Address2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
-					State=Serializing.GetXmlNodeValue(doc,"State");
+				if(Serializing.getXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.getXmlNodeValue(doc,"State");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
-					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				if(Serializing.getXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.getXmlNodeValue(doc,"Zip");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
-					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				if(Serializing.getXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.getXmlNodeValue(doc,"Phone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BankNumber")!=null) {
-					BankNumber=Serializing.GetXmlNodeValue(doc,"BankNumber");
+				if(Serializing.getXmlNodeValue(doc,"BankNumber")!=null) {
+					BankNumber=Serializing.getXmlNodeValue(doc,"BankNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DefaultPlaceService")!=null) {
-					DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefaultPlaceService"))];
+				if(Serializing.getXmlNodeValue(doc,"DefaultPlaceService")!=null) {
+					DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPlaceService"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsBillingProv")!=null) {
-					InsBillingProv=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsBillingProv"));
+				if(Serializing.getXmlNodeValue(doc,"InsBillingProv")!=null) {
+					InsBillingProv=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsBillingProv"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Fax")!=null) {
-					Fax=Serializing.GetXmlNodeValue(doc,"Fax");
+				if(Serializing.getXmlNodeValue(doc,"Fax")!=null) {
+					Fax=Serializing.getXmlNodeValue(doc,"Fax");
 				}
 			}
 			catch(Exception e) {

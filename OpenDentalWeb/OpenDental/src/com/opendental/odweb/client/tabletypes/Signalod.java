@@ -28,7 +28,7 @@ public class Signalod {
 		public int TaskNum;
 
 		/** Deep copy of object. */
-		public Signalod Copy() {
+		public Signalod deepCopy() {
 			Signalod signalod=new Signalod();
 			signalod.SignalNum=this.SignalNum;
 			signalod.FromUser=this.FromUser;
@@ -44,17 +44,17 @@ public class Signalod {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Signalod>");
 			sb.append("<SignalNum>").append(SignalNum).append("</SignalNum>");
-			sb.append("<FromUser>").append(Serializing.EscapeForXml(FromUser)).append("</FromUser>");
-			sb.append("<ITypes>").append(Serializing.EscapeForXml(ITypes)).append("</ITypes>");
+			sb.append("<FromUser>").append(Serializing.escapeForXml(FromUser)).append("</FromUser>");
+			sb.append("<ITypes>").append(Serializing.escapeForXml(ITypes)).append("</ITypes>");
 			sb.append("<DateViewing>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateViewing)).append("</DateViewing>");
 			sb.append("<SigType>").append(SigType.ordinal()).append("</SigType>");
-			sb.append("<SigText>").append(Serializing.EscapeForXml(SigText)).append("</SigText>");
+			sb.append("<SigText>").append(Serializing.escapeForXml(SigText)).append("</SigText>");
 			sb.append("<SigDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(SigDateTime)).append("</SigDateTime>");
-			sb.append("<ToUser>").append(Serializing.EscapeForXml(ToUser)).append("</ToUser>");
+			sb.append("<ToUser>").append(Serializing.escapeForXml(ToUser)).append("</ToUser>");
 			sb.append("<AckTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AckTime)).append("</AckTime>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("</Signalod>");
@@ -64,37 +64,37 @@ public class Signalod {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SignalNum")!=null) {
-					SignalNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SignalNum"));
+				if(Serializing.getXmlNodeValue(doc,"SignalNum")!=null) {
+					SignalNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SignalNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FromUser")!=null) {
-					FromUser=Serializing.GetXmlNodeValue(doc,"FromUser");
+				if(Serializing.getXmlNodeValue(doc,"FromUser")!=null) {
+					FromUser=Serializing.getXmlNodeValue(doc,"FromUser");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ITypes")!=null) {
-					ITypes=Serializing.GetXmlNodeValue(doc,"ITypes");
+				if(Serializing.getXmlNodeValue(doc,"ITypes")!=null) {
+					ITypes=Serializing.getXmlNodeValue(doc,"ITypes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateViewing")!=null) {
-					DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateViewing"));
+				if(Serializing.getXmlNodeValue(doc,"DateViewing")!=null) {
+					DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateViewing"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigType")!=null) {
-					SigType=SignalType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigType"))];
+				if(Serializing.getXmlNodeValue(doc,"SigType")!=null) {
+					SigType=SignalType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigText")!=null) {
-					SigText=Serializing.GetXmlNodeValue(doc,"SigText");
+				if(Serializing.getXmlNodeValue(doc,"SigText")!=null) {
+					SigText=Serializing.getXmlNodeValue(doc,"SigText");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigDateTime")!=null) {
-					SigDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"SigDateTime"));
+				if(Serializing.getXmlNodeValue(doc,"SigDateTime")!=null) {
+					SigDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"SigDateTime"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToUser")!=null) {
-					ToUser=Serializing.GetXmlNodeValue(doc,"ToUser");
+				if(Serializing.getXmlNodeValue(doc,"ToUser")!=null) {
+					ToUser=Serializing.getXmlNodeValue(doc,"ToUser");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AckTime")!=null) {
-					AckTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AckTime"));
+				if(Serializing.getXmlNodeValue(doc,"AckTime")!=null) {
+					AckTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"AckTime"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
-					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskNum"));
 				}
 			}
 			catch(Exception e) {

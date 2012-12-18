@@ -12,7 +12,7 @@ public class PhoneNumber {
 		public String PhoneNumberVal;
 
 		/** Deep copy of object. */
-		public PhoneNumber Copy() {
+		public PhoneNumber deepCopy() {
 			PhoneNumber phonenumber=new PhoneNumber();
 			phonenumber.PhoneNumberNum=this.PhoneNumberNum;
 			phonenumber.PatNum=this.PatNum;
@@ -21,12 +21,12 @@ public class PhoneNumber {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PhoneNumber>");
 			sb.append("<PhoneNumberNum>").append(PhoneNumberNum).append("</PhoneNumberNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<PhoneNumberVal>").append(Serializing.EscapeForXml(PhoneNumberVal)).append("</PhoneNumberVal>");
+			sb.append("<PhoneNumberVal>").append(Serializing.escapeForXml(PhoneNumberVal)).append("</PhoneNumberVal>");
 			sb.append("</PhoneNumber>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class PhoneNumber {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PhoneNumberNum")!=null) {
-					PhoneNumberNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneNumberNum"));
+				if(Serializing.getXmlNodeValue(doc,"PhoneNumberNum")!=null) {
+					PhoneNumberNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneNumberNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PhoneNumberVal")!=null) {
-					PhoneNumberVal=Serializing.GetXmlNodeValue(doc,"PhoneNumberVal");
+				if(Serializing.getXmlNodeValue(doc,"PhoneNumberVal")!=null) {
+					PhoneNumberVal=Serializing.getXmlNodeValue(doc,"PhoneNumberVal");
 				}
 			}
 			catch(Exception e) {

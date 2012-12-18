@@ -14,7 +14,7 @@ public class ScreenPat {
 		public int SheetNum;
 
 		/** Deep copy of object. */
-		public ScreenPat Copy() {
+		public ScreenPat deepCopy() {
 			ScreenPat screenpat=new ScreenPat();
 			screenpat.ScreenPatNum=this.ScreenPatNum;
 			screenpat.PatNum=this.PatNum;
@@ -24,7 +24,7 @@ public class ScreenPat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ScreenPat>");
 			sb.append("<ScreenPatNum>").append(ScreenPatNum).append("</ScreenPatNum>");
@@ -38,19 +38,19 @@ public class ScreenPat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ScreenPatNum")!=null) {
-					ScreenPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenPatNum"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenPatNum")!=null) {
+					ScreenPatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ScreenPatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum")!=null) {
-					ScreenGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenGroupNum")!=null) {
+					ScreenGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ScreenGroupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetNum")!=null) {
-					SheetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetNum")!=null) {
+					SheetNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetNum"));
 				}
 			}
 			catch(Exception e) {

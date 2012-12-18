@@ -12,7 +12,7 @@ public class SigElement {
 		public int SignalNum;
 
 		/** Deep copy of object. */
-		public SigElement Copy() {
+		public SigElement deepCopy() {
 			SigElement sigelement=new SigElement();
 			sigelement.SigElementNum=this.SigElementNum;
 			sigelement.SigElementDefNum=this.SigElementDefNum;
@@ -21,7 +21,7 @@ public class SigElement {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SigElement>");
 			sb.append("<SigElementNum>").append(SigElementNum).append("</SigElementNum>");
@@ -34,16 +34,16 @@ public class SigElement {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SigElementNum")!=null) {
-					SigElementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementNum"));
+				if(Serializing.getXmlNodeValue(doc,"SigElementNum")!=null) {
+					SigElementNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigElementNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigElementDefNum")!=null) {
-					SigElementDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"SigElementDefNum")!=null) {
+					SigElementDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigElementDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SignalNum")!=null) {
-					SignalNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SignalNum"));
+				if(Serializing.getXmlNodeValue(doc,"SignalNum")!=null) {
+					SignalNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SignalNum"));
 				}
 			}
 			catch(Exception e) {

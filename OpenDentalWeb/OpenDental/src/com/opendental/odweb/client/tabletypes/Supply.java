@@ -24,7 +24,7 @@ public class Supply {
 		public double Price;
 
 		/** Deep copy of object. */
-		public Supply Copy() {
+		public Supply deepCopy() {
 			Supply supply=new Supply();
 			supply.SupplyNum=this.SupplyNum;
 			supply.SupplierNum=this.SupplierNum;
@@ -39,13 +39,13 @@ public class Supply {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Supply>");
 			sb.append("<SupplyNum>").append(SupplyNum).append("</SupplyNum>");
 			sb.append("<SupplierNum>").append(SupplierNum).append("</SupplierNum>");
-			sb.append("<CatalogNumber>").append(Serializing.EscapeForXml(CatalogNumber)).append("</CatalogNumber>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
+			sb.append("<CatalogNumber>").append(Serializing.escapeForXml(CatalogNumber)).append("</CatalogNumber>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
 			sb.append("<Category>").append(Category).append("</Category>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<LevelDesired>").append(LevelDesired).append("</LevelDesired>");
@@ -58,34 +58,34 @@ public class Supply {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SupplyNum")!=null) {
-					SupplyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplyNum")!=null) {
+					SupplyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SupplierNum")!=null) {
-					SupplierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplierNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplierNum")!=null) {
+					SupplierNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplierNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CatalogNumber")!=null) {
-					CatalogNumber=Serializing.GetXmlNodeValue(doc,"CatalogNumber");
+				if(Serializing.getXmlNodeValue(doc,"CatalogNumber")!=null) {
+					CatalogNumber=Serializing.getXmlNodeValue(doc,"CatalogNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
-					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LevelDesired")!=null) {
-					LevelDesired=Float.valueOf(Serializing.GetXmlNodeValue(doc,"LevelDesired"));
+				if(Serializing.getXmlNodeValue(doc,"LevelDesired")!=null) {
+					LevelDesired=Float.valueOf(Serializing.getXmlNodeValue(doc,"LevelDesired"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Price")!=null) {
-					Price=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Price"));
+				if(Serializing.getXmlNodeValue(doc,"Price")!=null) {
+					Price=Double.valueOf(Serializing.getXmlNodeValue(doc,"Price"));
 				}
 			}
 			catch(Exception e) {

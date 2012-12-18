@@ -32,7 +32,7 @@ public class Commlog {
 		public Date DateTimeEnd;
 
 		/** Deep copy of object. */
-		public Commlog Copy() {
+		public Commlog deepCopy() {
 			Commlog commlog=new Commlog();
 			commlog.CommlogNum=this.CommlogNum;
 			commlog.PatNum=this.PatNum;
@@ -50,18 +50,18 @@ public class Commlog {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Commlog>");
 			sb.append("<CommlogNum>").append(CommlogNum).append("</CommlogNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<CommDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(CommDateTime)).append("</CommDateTime>");
 			sb.append("<CommType>").append(CommType).append("</CommType>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
 			sb.append("<SentOrReceived>").append(SentOrReceived.ordinal()).append("</SentOrReceived>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");
+			sb.append("<Signature>").append(Serializing.escapeForXml(Signature)).append("</Signature>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEnd)).append("</DateTimeEnd>");
@@ -72,43 +72,43 @@ public class Commlog {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CommlogNum")!=null) {
-					CommlogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommlogNum"));
+				if(Serializing.getXmlNodeValue(doc,"CommlogNum")!=null) {
+					CommlogNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CommlogNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CommDateTime")!=null) {
-					CommDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"CommDateTime"));
+				if(Serializing.getXmlNodeValue(doc,"CommDateTime")!=null) {
+					CommDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"CommDateTime"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CommType")!=null) {
-					CommType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommType"));
+				if(Serializing.getXmlNodeValue(doc,"CommType")!=null) {
+					CommType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CommType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Mode_")!=null) {
-					Mode_=CommItemMode.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Mode_"))];
+				if(Serializing.getXmlNodeValue(doc,"Mode_")!=null) {
+					Mode_=CommItemMode.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SentOrReceived")!=null) {
-					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SentOrReceived"))];
+				if(Serializing.getXmlNodeValue(doc,"SentOrReceived")!=null) {
+					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
-					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				if(Serializing.getXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.getXmlNodeValue(doc,"Signature");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
-					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.getXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeEnd")!=null) {
-					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEnd"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeEnd")!=null) {
+					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEnd"));
 				}
 			}
 			catch(Exception e) {

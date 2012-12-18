@@ -26,7 +26,7 @@ public class ApptView {
 		public int ClinicNum;
 
 		/** Deep copy of object. */
-		public ApptView Copy() {
+		public ApptView deepCopy() {
 			ApptView apptview=new ApptView();
 			apptview.ApptViewNum=this.ApptViewNum;
 			apptview.Description=this.Description;
@@ -42,16 +42,16 @@ public class ApptView {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ApptView>");
 			sb.append("<ApptViewNum>").append(ApptViewNum).append("</ApptViewNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<RowsPerIncr>").append(RowsPerIncr).append("</RowsPerIncr>");
 			sb.append("<OnlyScheduledProvs>").append((OnlyScheduledProvs)?1:0).append("</OnlyScheduledProvs>");
-			sb.append("<OnlySchedBeforeTime>").append(Serializing.EscapeForXml(OnlySchedBeforeTime)).append("</OnlySchedBeforeTime>");
-			sb.append("<OnlySchedAfterTime>").append(Serializing.EscapeForXml(OnlySchedAfterTime)).append("</OnlySchedAfterTime>");
+			sb.append("<OnlySchedBeforeTime>").append(Serializing.escapeForXml(OnlySchedBeforeTime)).append("</OnlySchedBeforeTime>");
+			sb.append("<OnlySchedAfterTime>").append(Serializing.escapeForXml(OnlySchedAfterTime)).append("</OnlySchedAfterTime>");
 			sb.append("<StackBehavUR>").append(StackBehavUR.ordinal()).append("</StackBehavUR>");
 			sb.append("<StackBehavLR>").append(StackBehavLR.ordinal()).append("</StackBehavLR>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
@@ -62,37 +62,37 @@ public class ApptView {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ApptViewNum")!=null) {
-					ApptViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewNum"));
+				if(Serializing.getXmlNodeValue(doc,"ApptViewNum")!=null) {
+					ApptViewNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptViewNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RowsPerIncr")!=null) {
-					RowsPerIncr=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"RowsPerIncr"));
+				if(Serializing.getXmlNodeValue(doc,"RowsPerIncr")!=null) {
+					RowsPerIncr=Byte.valueOf(Serializing.getXmlNodeValue(doc,"RowsPerIncr"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OnlyScheduledProvs")!=null) {
-					OnlyScheduledProvs=(Serializing.GetXmlNodeValue(doc,"OnlyScheduledProvs")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"OnlyScheduledProvs")!=null) {
+					OnlyScheduledProvs=(Serializing.getXmlNodeValue(doc,"OnlyScheduledProvs")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OnlySchedBeforeTime")!=null) {
-					OnlySchedBeforeTime=Serializing.GetXmlNodeValue(doc,"OnlySchedBeforeTime");
+				if(Serializing.getXmlNodeValue(doc,"OnlySchedBeforeTime")!=null) {
+					OnlySchedBeforeTime=Serializing.getXmlNodeValue(doc,"OnlySchedBeforeTime");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OnlySchedAfterTime")!=null) {
-					OnlySchedAfterTime=Serializing.GetXmlNodeValue(doc,"OnlySchedAfterTime");
+				if(Serializing.getXmlNodeValue(doc,"OnlySchedAfterTime")!=null) {
+					OnlySchedAfterTime=Serializing.getXmlNodeValue(doc,"OnlySchedAfterTime");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StackBehavUR")!=null) {
-					StackBehavUR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StackBehavUR"))];
+				if(Serializing.getXmlNodeValue(doc,"StackBehavUR")!=null) {
+					StackBehavUR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavUR"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StackBehavLR")!=null) {
-					StackBehavLR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StackBehavLR"))];
+				if(Serializing.getXmlNodeValue(doc,"StackBehavLR")!=null) {
+					StackBehavLR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavLR"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
 			}
 			catch(Exception e) {

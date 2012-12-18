@@ -18,7 +18,7 @@ public class RxAlert {
 		public String NotificationMsg;
 
 		/** Deep copy of object. */
-		public RxAlert Copy() {
+		public RxAlert deepCopy() {
 			RxAlert rxalert=new RxAlert();
 			rxalert.RxAlertNum=this.RxAlertNum;
 			rxalert.RxDefNum=this.RxDefNum;
@@ -30,7 +30,7 @@ public class RxAlert {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RxAlert>");
 			sb.append("<RxAlertNum>").append(RxAlertNum).append("</RxAlertNum>");
@@ -38,7 +38,7 @@ public class RxAlert {
 			sb.append("<DiseaseDefNum>").append(DiseaseDefNum).append("</DiseaseDefNum>");
 			sb.append("<AllergyDefNum>").append(AllergyDefNum).append("</AllergyDefNum>");
 			sb.append("<MedicationNum>").append(MedicationNum).append("</MedicationNum>");
-			sb.append("<NotificationMsg>").append(Serializing.EscapeForXml(NotificationMsg)).append("</NotificationMsg>");
+			sb.append("<NotificationMsg>").append(Serializing.escapeForXml(NotificationMsg)).append("</NotificationMsg>");
 			sb.append("</RxAlert>");
 			return sb.toString();
 		}
@@ -46,25 +46,25 @@ public class RxAlert {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RxAlertNum")!=null) {
-					RxAlertNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxAlertNum"));
+				if(Serializing.getXmlNodeValue(doc,"RxAlertNum")!=null) {
+					RxAlertNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxAlertNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxDefNum")!=null) {
-					RxDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"RxDefNum")!=null) {
+					RxDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
-					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DiseaseDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AllergyDefNum")!=null) {
-					AllergyDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"AllergyDefNum")!=null) {
+					AllergyDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AllergyDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
-					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NotificationMsg")!=null) {
-					NotificationMsg=Serializing.GetXmlNodeValue(doc,"NotificationMsg");
+				if(Serializing.getXmlNodeValue(doc,"NotificationMsg")!=null) {
+					NotificationMsg=Serializing.getXmlNodeValue(doc,"NotificationMsg");
 				}
 			}
 			catch(Exception e) {

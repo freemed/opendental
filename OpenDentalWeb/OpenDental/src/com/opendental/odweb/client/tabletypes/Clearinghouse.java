@@ -56,7 +56,7 @@ public class Clearinghouse {
 		public String SeparatorSegment;
 
 		/** Deep copy of object. */
-		public Clearinghouse Copy() {
+		public Clearinghouse deepCopy() {
 			Clearinghouse clearinghouse=new Clearinghouse();
 			clearinghouse.ClearinghouseNum=this.ClearinghouseNum;
 			clearinghouse.Description=this.Description;
@@ -87,34 +87,34 @@ public class Clearinghouse {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Clearinghouse>");
 			sb.append("<ClearinghouseNum>").append(ClearinghouseNum).append("</ClearinghouseNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<ExportPath>").append(Serializing.EscapeForXml(ExportPath)).append("</ExportPath>");
-			sb.append("<Payors>").append(Serializing.EscapeForXml(Payors)).append("</Payors>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<ExportPath>").append(Serializing.escapeForXml(ExportPath)).append("</ExportPath>");
+			sb.append("<Payors>").append(Serializing.escapeForXml(Payors)).append("</Payors>");
 			sb.append("<Eformat>").append(Eformat.ordinal()).append("</Eformat>");
-			sb.append("<ISA05>").append(Serializing.EscapeForXml(ISA05)).append("</ISA05>");
-			sb.append("<SenderTIN>").append(Serializing.EscapeForXml(SenderTIN)).append("</SenderTIN>");
-			sb.append("<ISA07>").append(Serializing.EscapeForXml(ISA07)).append("</ISA07>");
-			sb.append("<ISA08>").append(Serializing.EscapeForXml(ISA08)).append("</ISA08>");
-			sb.append("<ISA15>").append(Serializing.EscapeForXml(ISA15)).append("</ISA15>");
-			sb.append("<Password>").append(Serializing.EscapeForXml(Password)).append("</Password>");
-			sb.append("<ResponsePath>").append(Serializing.EscapeForXml(ResponsePath)).append("</ResponsePath>");
+			sb.append("<ISA05>").append(Serializing.escapeForXml(ISA05)).append("</ISA05>");
+			sb.append("<SenderTIN>").append(Serializing.escapeForXml(SenderTIN)).append("</SenderTIN>");
+			sb.append("<ISA07>").append(Serializing.escapeForXml(ISA07)).append("</ISA07>");
+			sb.append("<ISA08>").append(Serializing.escapeForXml(ISA08)).append("</ISA08>");
+			sb.append("<ISA15>").append(Serializing.escapeForXml(ISA15)).append("</ISA15>");
+			sb.append("<Password>").append(Serializing.escapeForXml(Password)).append("</Password>");
+			sb.append("<ResponsePath>").append(Serializing.escapeForXml(ResponsePath)).append("</ResponsePath>");
 			sb.append("<CommBridge>").append(CommBridge.ordinal()).append("</CommBridge>");
-			sb.append("<ClientProgram>").append(Serializing.EscapeForXml(ClientProgram)).append("</ClientProgram>");
+			sb.append("<ClientProgram>").append(Serializing.escapeForXml(ClientProgram)).append("</ClientProgram>");
 			sb.append("<LastBatchNumber>").append(LastBatchNumber).append("</LastBatchNumber>");
 			sb.append("<ModemPort>").append(ModemPort).append("</ModemPort>");
-			sb.append("<LoginID>").append(Serializing.EscapeForXml(LoginID)).append("</LoginID>");
-			sb.append("<SenderName>").append(Serializing.EscapeForXml(SenderName)).append("</SenderName>");
-			sb.append("<SenderTelephone>").append(Serializing.EscapeForXml(SenderTelephone)).append("</SenderTelephone>");
-			sb.append("<GS03>").append(Serializing.EscapeForXml(GS03)).append("</GS03>");
-			sb.append("<ISA02>").append(Serializing.EscapeForXml(ISA02)).append("</ISA02>");
-			sb.append("<ISA04>").append(Serializing.EscapeForXml(ISA04)).append("</ISA04>");
-			sb.append("<ISA16>").append(Serializing.EscapeForXml(ISA16)).append("</ISA16>");
-			sb.append("<SeparatorData>").append(Serializing.EscapeForXml(SeparatorData)).append("</SeparatorData>");
-			sb.append("<SeparatorSegment>").append(Serializing.EscapeForXml(SeparatorSegment)).append("</SeparatorSegment>");
+			sb.append("<LoginID>").append(Serializing.escapeForXml(LoginID)).append("</LoginID>");
+			sb.append("<SenderName>").append(Serializing.escapeForXml(SenderName)).append("</SenderName>");
+			sb.append("<SenderTelephone>").append(Serializing.escapeForXml(SenderTelephone)).append("</SenderTelephone>");
+			sb.append("<GS03>").append(Serializing.escapeForXml(GS03)).append("</GS03>");
+			sb.append("<ISA02>").append(Serializing.escapeForXml(ISA02)).append("</ISA02>");
+			sb.append("<ISA04>").append(Serializing.escapeForXml(ISA04)).append("</ISA04>");
+			sb.append("<ISA16>").append(Serializing.escapeForXml(ISA16)).append("</ISA16>");
+			sb.append("<SeparatorData>").append(Serializing.escapeForXml(SeparatorData)).append("</SeparatorData>");
+			sb.append("<SeparatorSegment>").append(Serializing.escapeForXml(SeparatorSegment)).append("</SeparatorSegment>");
 			sb.append("</Clearinghouse>");
 			return sb.toString();
 		}
@@ -122,82 +122,82 @@ public class Clearinghouse {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClearinghouseNum")!=null) {
-					ClearinghouseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClearinghouseNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClearinghouseNum")!=null) {
+					ClearinghouseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClearinghouseNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ExportPath")!=null) {
-					ExportPath=Serializing.GetXmlNodeValue(doc,"ExportPath");
+				if(Serializing.getXmlNodeValue(doc,"ExportPath")!=null) {
+					ExportPath=Serializing.getXmlNodeValue(doc,"ExportPath");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Payors")!=null) {
-					Payors=Serializing.GetXmlNodeValue(doc,"Payors");
+				if(Serializing.getXmlNodeValue(doc,"Payors")!=null) {
+					Payors=Serializing.getXmlNodeValue(doc,"Payors");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Eformat")!=null) {
-					Eformat=ElectronicClaimFormat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Eformat"))];
+				if(Serializing.getXmlNodeValue(doc,"Eformat")!=null) {
+					Eformat=ElectronicClaimFormat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Eformat"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA05")!=null) {
-					ISA05=Serializing.GetXmlNodeValue(doc,"ISA05");
+				if(Serializing.getXmlNodeValue(doc,"ISA05")!=null) {
+					ISA05=Serializing.getXmlNodeValue(doc,"ISA05");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SenderTIN")!=null) {
-					SenderTIN=Serializing.GetXmlNodeValue(doc,"SenderTIN");
+				if(Serializing.getXmlNodeValue(doc,"SenderTIN")!=null) {
+					SenderTIN=Serializing.getXmlNodeValue(doc,"SenderTIN");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA07")!=null) {
-					ISA07=Serializing.GetXmlNodeValue(doc,"ISA07");
+				if(Serializing.getXmlNodeValue(doc,"ISA07")!=null) {
+					ISA07=Serializing.getXmlNodeValue(doc,"ISA07");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA08")!=null) {
-					ISA08=Serializing.GetXmlNodeValue(doc,"ISA08");
+				if(Serializing.getXmlNodeValue(doc,"ISA08")!=null) {
+					ISA08=Serializing.getXmlNodeValue(doc,"ISA08");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA15")!=null) {
-					ISA15=Serializing.GetXmlNodeValue(doc,"ISA15");
+				if(Serializing.getXmlNodeValue(doc,"ISA15")!=null) {
+					ISA15=Serializing.getXmlNodeValue(doc,"ISA15");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
-					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				if(Serializing.getXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.getXmlNodeValue(doc,"Password");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ResponsePath")!=null) {
-					ResponsePath=Serializing.GetXmlNodeValue(doc,"ResponsePath");
+				if(Serializing.getXmlNodeValue(doc,"ResponsePath")!=null) {
+					ResponsePath=Serializing.getXmlNodeValue(doc,"ResponsePath");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CommBridge")!=null) {
-					CommBridge=EclaimsCommBridge.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommBridge"))];
+				if(Serializing.getXmlNodeValue(doc,"CommBridge")!=null) {
+					CommBridge=EclaimsCommBridge.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CommBridge"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClientProgram")!=null) {
-					ClientProgram=Serializing.GetXmlNodeValue(doc,"ClientProgram");
+				if(Serializing.getXmlNodeValue(doc,"ClientProgram")!=null) {
+					ClientProgram=Serializing.getXmlNodeValue(doc,"ClientProgram");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LastBatchNumber")!=null) {
-					LastBatchNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LastBatchNumber"));
+				if(Serializing.getXmlNodeValue(doc,"LastBatchNumber")!=null) {
+					LastBatchNumber=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LastBatchNumber"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ModemPort")!=null) {
-					ModemPort=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ModemPort"));
+				if(Serializing.getXmlNodeValue(doc,"ModemPort")!=null) {
+					ModemPort=Byte.valueOf(Serializing.getXmlNodeValue(doc,"ModemPort"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LoginID")!=null) {
-					LoginID=Serializing.GetXmlNodeValue(doc,"LoginID");
+				if(Serializing.getXmlNodeValue(doc,"LoginID")!=null) {
+					LoginID=Serializing.getXmlNodeValue(doc,"LoginID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SenderName")!=null) {
-					SenderName=Serializing.GetXmlNodeValue(doc,"SenderName");
+				if(Serializing.getXmlNodeValue(doc,"SenderName")!=null) {
+					SenderName=Serializing.getXmlNodeValue(doc,"SenderName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SenderTelephone")!=null) {
-					SenderTelephone=Serializing.GetXmlNodeValue(doc,"SenderTelephone");
+				if(Serializing.getXmlNodeValue(doc,"SenderTelephone")!=null) {
+					SenderTelephone=Serializing.getXmlNodeValue(doc,"SenderTelephone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GS03")!=null) {
-					GS03=Serializing.GetXmlNodeValue(doc,"GS03");
+				if(Serializing.getXmlNodeValue(doc,"GS03")!=null) {
+					GS03=Serializing.getXmlNodeValue(doc,"GS03");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA02")!=null) {
-					ISA02=Serializing.GetXmlNodeValue(doc,"ISA02");
+				if(Serializing.getXmlNodeValue(doc,"ISA02")!=null) {
+					ISA02=Serializing.getXmlNodeValue(doc,"ISA02");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA04")!=null) {
-					ISA04=Serializing.GetXmlNodeValue(doc,"ISA04");
+				if(Serializing.getXmlNodeValue(doc,"ISA04")!=null) {
+					ISA04=Serializing.getXmlNodeValue(doc,"ISA04");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ISA16")!=null) {
-					ISA16=Serializing.GetXmlNodeValue(doc,"ISA16");
+				if(Serializing.getXmlNodeValue(doc,"ISA16")!=null) {
+					ISA16=Serializing.getXmlNodeValue(doc,"ISA16");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SeparatorData")!=null) {
-					SeparatorData=Serializing.GetXmlNodeValue(doc,"SeparatorData");
+				if(Serializing.getXmlNodeValue(doc,"SeparatorData")!=null) {
+					SeparatorData=Serializing.getXmlNodeValue(doc,"SeparatorData");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SeparatorSegment")!=null) {
-					SeparatorSegment=Serializing.GetXmlNodeValue(doc,"SeparatorSegment");
+				if(Serializing.getXmlNodeValue(doc,"SeparatorSegment")!=null) {
+					SeparatorSegment=Serializing.getXmlNodeValue(doc,"SeparatorSegment");
 				}
 			}
 			catch(Exception e) {
@@ -243,8 +243,8 @@ public class Clearinghouse {
 			AOS,
 			/** 8 */
 			PostnTrack,
-			/** 9 Canada */
-			CDAnet,
+			/**  */
+			ITRANS,
 			/** 10 */
 			Tesia,
 			/** 11 */
@@ -254,7 +254,9 @@ public class Clearinghouse {
 			/** 13 */
 			DentiCal,
 			/** 14 */
-			EmdeonMedical
+			EmdeonMedical,
+			/**  */
+			Claimstream
 		}
 
 

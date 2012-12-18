@@ -26,7 +26,7 @@ public class Operatory {
 		public boolean SetProspective;
 
 		/** Deep copy of object. */
-		public Operatory Copy() {
+		public Operatory deepCopy() {
 			Operatory operatory=new Operatory();
 			operatory.OperatoryNum=this.OperatoryNum;
 			operatory.OpName=this.OpName;
@@ -42,12 +42,12 @@ public class Operatory {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Operatory>");
 			sb.append("<OperatoryNum>").append(OperatoryNum).append("</OperatoryNum>");
-			sb.append("<OpName>").append(Serializing.EscapeForXml(OpName)).append("</OpName>");
-			sb.append("<Abbrev>").append(Serializing.EscapeForXml(Abbrev)).append("</Abbrev>");
+			sb.append("<OpName>").append(Serializing.escapeForXml(OpName)).append("</OpName>");
+			sb.append("<Abbrev>").append(Serializing.escapeForXml(Abbrev)).append("</Abbrev>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<ProvDentist>").append(ProvDentist).append("</ProvDentist>");
@@ -62,37 +62,37 @@ public class Operatory {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"OperatoryNum")!=null) {
-					OperatoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OperatoryNum"));
+				if(Serializing.getXmlNodeValue(doc,"OperatoryNum")!=null) {
+					OperatoryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OperatoryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OpName")!=null) {
-					OpName=Serializing.GetXmlNodeValue(doc,"OpName");
+				if(Serializing.getXmlNodeValue(doc,"OpName")!=null) {
+					OpName=Serializing.getXmlNodeValue(doc,"OpName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Abbrev")!=null) {
-					Abbrev=Serializing.GetXmlNodeValue(doc,"Abbrev");
+				if(Serializing.getXmlNodeValue(doc,"Abbrev")!=null) {
+					Abbrev=Serializing.getXmlNodeValue(doc,"Abbrev");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvDentist")!=null) {
-					ProvDentist=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvDentist"));
+				if(Serializing.getXmlNodeValue(doc,"ProvDentist")!=null) {
+					ProvDentist=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvDentist"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvHygienist")!=null) {
-					ProvHygienist=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvHygienist"));
+				if(Serializing.getXmlNodeValue(doc,"ProvHygienist")!=null) {
+					ProvHygienist=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvHygienist"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHygiene")!=null) {
-					IsHygiene=(Serializing.GetXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHygiene")!=null) {
+					IsHygiene=(Serializing.getXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SetProspective")!=null) {
-					SetProspective=(Serializing.GetXmlNodeValue(doc,"SetProspective")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"SetProspective")!=null) {
+					SetProspective=(Serializing.getXmlNodeValue(doc,"SetProspective")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

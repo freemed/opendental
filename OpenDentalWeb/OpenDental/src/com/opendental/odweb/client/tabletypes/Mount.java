@@ -26,7 +26,7 @@ public class Mount {
 		public int Height;
 
 		/** Deep copy of object. */
-		public Mount Copy() {
+		public Mount deepCopy() {
 			Mount mount=new Mount();
 			mount.MountNum=this.MountNum;
 			mount.PatNum=this.PatNum;
@@ -41,15 +41,15 @@ public class Mount {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Mount>");
 			sb.append("<MountNum>").append(MountNum).append("</MountNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
 			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<ImgType>").append(ImgType.ordinal()).append("</ImgType>");
 			sb.append("<Width>").append(Width).append("</Width>");
 			sb.append("<Height>").append(Height).append("</Height>");
@@ -60,34 +60,34 @@ public class Mount {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"MountNum")!=null) {
-					MountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountNum"));
+				if(Serializing.getXmlNodeValue(doc,"MountNum")!=null) {
+					MountNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MountNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DocCategory")!=null) {
-					DocCategory=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocCategory"));
+				if(Serializing.getXmlNodeValue(doc,"DocCategory")!=null) {
+					DocCategory=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocCategory"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
-					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				if(Serializing.getXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateCreated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ImgType")!=null) {
-					ImgType=ImageType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ImgType"))];
+				if(Serializing.getXmlNodeValue(doc,"ImgType")!=null) {
+					ImgType=ImageType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
-					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Width"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
 			}
 			catch(Exception e) {

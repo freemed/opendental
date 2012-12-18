@@ -22,7 +22,7 @@ public class Automation {
 		public String MessageContent;
 
 		/** Deep copy of object. */
-		public Automation Copy() {
+		public Automation deepCopy() {
 			Automation automation=new Automation();
 			automation.AutomationNum=this.AutomationNum;
 			automation.Description=this.Description;
@@ -36,17 +36,17 @@ public class Automation {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Automation>");
 			sb.append("<AutomationNum>").append(AutomationNum).append("</AutomationNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<Autotrigger>").append(Autotrigger.ordinal()).append("</Autotrigger>");
-			sb.append("<ProcCodes>").append(Serializing.EscapeForXml(ProcCodes)).append("</ProcCodes>");
+			sb.append("<ProcCodes>").append(Serializing.escapeForXml(ProcCodes)).append("</ProcCodes>");
 			sb.append("<AutoAction>").append(AutoAction.ordinal()).append("</AutoAction>");
 			sb.append("<SheetDefNum>").append(SheetDefNum).append("</SheetDefNum>");
 			sb.append("<CommType>").append(CommType).append("</CommType>");
-			sb.append("<MessageContent>").append(Serializing.EscapeForXml(MessageContent)).append("</MessageContent>");
+			sb.append("<MessageContent>").append(Serializing.escapeForXml(MessageContent)).append("</MessageContent>");
 			sb.append("</Automation>");
 			return sb.toString();
 		}
@@ -54,31 +54,31 @@ public class Automation {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AutomationNum")!=null) {
-					AutomationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutomationNum")!=null) {
+					AutomationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutomationNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Autotrigger")!=null) {
-					Autotrigger=AutomationTrigger.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Autotrigger"))];
+				if(Serializing.getXmlNodeValue(doc,"Autotrigger")!=null) {
+					Autotrigger=AutomationTrigger.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Autotrigger"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcCodes")!=null) {
-					ProcCodes=Serializing.GetXmlNodeValue(doc,"ProcCodes");
+				if(Serializing.getXmlNodeValue(doc,"ProcCodes")!=null) {
+					ProcCodes=Serializing.getXmlNodeValue(doc,"ProcCodes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AutoAction")!=null) {
-					AutoAction=AutomationAction.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoAction"))];
+				if(Serializing.getXmlNodeValue(doc,"AutoAction")!=null) {
+					AutoAction=AutomationAction.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoAction"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetDefNum")!=null) {
-					SheetDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetDefNum")!=null) {
+					SheetDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CommType")!=null) {
-					CommType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CommType"));
+				if(Serializing.getXmlNodeValue(doc,"CommType")!=null) {
+					CommType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CommType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MessageContent")!=null) {
-					MessageContent=Serializing.GetXmlNodeValue(doc,"MessageContent");
+				if(Serializing.getXmlNodeValue(doc,"MessageContent")!=null) {
+					MessageContent=Serializing.getXmlNodeValue(doc,"MessageContent");
 				}
 			}
 			catch(Exception e) {

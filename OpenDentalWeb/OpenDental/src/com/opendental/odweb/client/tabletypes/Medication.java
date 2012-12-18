@@ -20,7 +20,7 @@ public class Medication {
 		public int RxCui;
 
 		/** Deep copy of object. */
-		public Medication Copy() {
+		public Medication deepCopy() {
 			Medication medication=new Medication();
 			medication.MedicationNum=this.MedicationNum;
 			medication.MedName=this.MedName;
@@ -32,13 +32,13 @@ public class Medication {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Medication>");
 			sb.append("<MedicationNum>").append(MedicationNum).append("</MedicationNum>");
-			sb.append("<MedName>").append(Serializing.EscapeForXml(MedName)).append("</MedName>");
+			sb.append("<MedName>").append(Serializing.escapeForXml(MedName)).append("</MedName>");
 			sb.append("<GenericNum>").append(GenericNum).append("</GenericNum>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("</Medication>");
@@ -48,25 +48,25 @@ public class Medication {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
-					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedName")!=null) {
-					MedName=Serializing.GetXmlNodeValue(doc,"MedName");
+				if(Serializing.getXmlNodeValue(doc,"MedName")!=null) {
+					MedName=Serializing.getXmlNodeValue(doc,"MedName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GenericNum")!=null) {
-					GenericNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GenericNum"));
+				if(Serializing.getXmlNodeValue(doc,"GenericNum")!=null) {
+					GenericNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GenericNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
-					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				if(Serializing.getXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxCui"));
 				}
 			}
 			catch(Exception e) {

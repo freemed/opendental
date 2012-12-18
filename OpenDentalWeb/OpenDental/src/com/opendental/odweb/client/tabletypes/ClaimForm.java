@@ -24,7 +24,7 @@ public class ClaimForm {
 		public int OffsetY;
 
 		/** Deep copy of object. */
-		public ClaimForm Copy() {
+		public ClaimForm deepCopy() {
 			ClaimForm claimform=new ClaimForm();
 			claimform.ClaimFormNum=this.ClaimFormNum;
 			claimform.Description=this.Description;
@@ -39,15 +39,15 @@ public class ClaimForm {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimForm>");
 			sb.append("<ClaimFormNum>").append(ClaimFormNum).append("</ClaimFormNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
-			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
+			sb.append("<FontName>").append(Serializing.escapeForXml(FontName)).append("</FontName>");
 			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
-			sb.append("<UniqueID>").append(Serializing.EscapeForXml(UniqueID)).append("</UniqueID>");
+			sb.append("<UniqueID>").append(Serializing.escapeForXml(UniqueID)).append("</UniqueID>");
 			sb.append("<PrintImages>").append((PrintImages)?1:0).append("</PrintImages>");
 			sb.append("<OffsetX>").append(OffsetX).append("</OffsetX>");
 			sb.append("<OffsetY>").append(OffsetY).append("</OffsetY>");
@@ -58,34 +58,34 @@ public class ClaimForm {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
-					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimFormNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
-					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				if(Serializing.getXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.getXmlNodeValue(doc,"FontName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
-					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				if(Serializing.getXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.getXmlNodeValue(doc,"FontSize"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UniqueID")!=null) {
-					UniqueID=Serializing.GetXmlNodeValue(doc,"UniqueID");
+				if(Serializing.getXmlNodeValue(doc,"UniqueID")!=null) {
+					UniqueID=Serializing.getXmlNodeValue(doc,"UniqueID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PrintImages")!=null) {
-					PrintImages=(Serializing.GetXmlNodeValue(doc,"PrintImages")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"PrintImages")!=null) {
+					PrintImages=(Serializing.getXmlNodeValue(doc,"PrintImages")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OffsetX")!=null) {
-					OffsetX=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OffsetX"));
+				if(Serializing.getXmlNodeValue(doc,"OffsetX")!=null) {
+					OffsetX=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OffsetX"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OffsetY")!=null) {
-					OffsetY=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OffsetY"));
+				if(Serializing.getXmlNodeValue(doc,"OffsetY")!=null) {
+					OffsetY=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OffsetY"));
 				}
 			}
 			catch(Exception e) {

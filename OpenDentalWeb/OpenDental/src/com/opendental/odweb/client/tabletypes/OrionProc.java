@@ -28,7 +28,7 @@ public class OrionProc {
 		public boolean IsRepair;
 
 		/** Deep copy of object. */
-		public OrionProc Copy() {
+		public OrionProc deepCopy() {
 			OrionProc orionproc=new OrionProc();
 			orionproc.OrionProcNum=this.OrionProcNum;
 			orionproc.ProcNum=this.ProcNum;
@@ -44,7 +44,7 @@ public class OrionProc {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<OrionProc>");
 			sb.append("<OrionProcNum>").append(OrionProcNum).append("</OrionProcNum>");
@@ -64,37 +64,37 @@ public class OrionProc {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"OrionProcNum")!=null) {
-					OrionProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrionProcNum"));
+				if(Serializing.getXmlNodeValue(doc,"OrionProcNum")!=null) {
+					OrionProcNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OrionProcNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
-					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DPC")!=null) {
-					DPC=OrionDPC.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DPC"))];
+				if(Serializing.getXmlNodeValue(doc,"DPC")!=null) {
+					DPC=OrionDPC.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DPC"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DPCpost")!=null) {
-					DPCpost=OrionDPC.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DPCpost"))];
+				if(Serializing.getXmlNodeValue(doc,"DPCpost")!=null) {
+					DPCpost=OrionDPC.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DPCpost"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateScheduleBy")!=null) {
-					DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateScheduleBy"));
+				if(Serializing.getXmlNodeValue(doc,"DateScheduleBy")!=null) {
+					DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateScheduleBy"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStopClock")!=null) {
-					DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStopClock"));
+				if(Serializing.getXmlNodeValue(doc,"DateStopClock")!=null) {
+					DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStopClock"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Status2")!=null) {
-					Status2=OrionStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Status2"))];
+				if(Serializing.getXmlNodeValue(doc,"Status2")!=null) {
+					Status2=OrionStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Status2"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsOnCall")!=null) {
-					IsOnCall=(Serializing.GetXmlNodeValue(doc,"IsOnCall")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsOnCall")!=null) {
+					IsOnCall=(Serializing.getXmlNodeValue(doc,"IsOnCall")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsEffectiveComm")!=null) {
-					IsEffectiveComm=(Serializing.GetXmlNodeValue(doc,"IsEffectiveComm")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsEffectiveComm")!=null) {
+					IsEffectiveComm=(Serializing.getXmlNodeValue(doc,"IsEffectiveComm")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsRepair")!=null) {
-					IsRepair=(Serializing.GetXmlNodeValue(doc,"IsRepair")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsRepair")!=null) {
+					IsRepair=(Serializing.getXmlNodeValue(doc,"IsRepair")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

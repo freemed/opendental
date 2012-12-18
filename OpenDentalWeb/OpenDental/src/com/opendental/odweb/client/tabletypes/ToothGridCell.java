@@ -16,7 +16,7 @@ public class ToothGridCell {
 		public String ToothNum;
 
 		/** Deep copy of object. */
-		public ToothGridCell Copy() {
+		public ToothGridCell deepCopy() {
 			ToothGridCell toothgridcell=new ToothGridCell();
 			toothgridcell.ToothGridCellNum=this.ToothGridCellNum;
 			toothgridcell.SheetFieldNum=this.SheetFieldNum;
@@ -27,14 +27,14 @@ public class ToothGridCell {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ToothGridCell>");
 			sb.append("<ToothGridCellNum>").append(ToothGridCellNum).append("</ToothGridCellNum>");
 			sb.append("<SheetFieldNum>").append(SheetFieldNum).append("</SheetFieldNum>");
 			sb.append("<ToothGridColNum>").append(ToothGridColNum).append("</ToothGridColNum>");
-			sb.append("<ValueEntered>").append(Serializing.EscapeForXml(ValueEntered)).append("</ValueEntered>");
-			sb.append("<ToothNum>").append(Serializing.EscapeForXml(ToothNum)).append("</ToothNum>");
+			sb.append("<ValueEntered>").append(Serializing.escapeForXml(ValueEntered)).append("</ValueEntered>");
+			sb.append("<ToothNum>").append(Serializing.escapeForXml(ToothNum)).append("</ToothNum>");
 			sb.append("</ToothGridCell>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class ToothGridCell {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ToothGridCellNum")!=null) {
-					ToothGridCellNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridCellNum"));
+				if(Serializing.getXmlNodeValue(doc,"ToothGridCellNum")!=null) {
+					ToothGridCellNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothGridCellNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetFieldNum")!=null) {
-					SheetFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetFieldNum")!=null) {
+					SheetFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToothGridColNum")!=null) {
-					ToothGridColNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridColNum"));
+				if(Serializing.getXmlNodeValue(doc,"ToothGridColNum")!=null) {
+					ToothGridColNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothGridColNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ValueEntered")!=null) {
-					ValueEntered=Serializing.GetXmlNodeValue(doc,"ValueEntered");
+				if(Serializing.getXmlNodeValue(doc,"ValueEntered")!=null) {
+					ValueEntered=Serializing.getXmlNodeValue(doc,"ValueEntered");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToothNum")!=null) {
-					ToothNum=Serializing.GetXmlNodeValue(doc,"ToothNum");
+				if(Serializing.getXmlNodeValue(doc,"ToothNum")!=null) {
+					ToothNum=Serializing.getXmlNodeValue(doc,"ToothNum");
 				}
 			}
 			catch(Exception e) {

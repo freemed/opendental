@@ -54,7 +54,7 @@ public class Documentod {
 		public String Thumbnail;
 
 		/** Deep copy of object. */
-		public Documentod Copy() {
+		public Documentod deepCopy() {
 			Documentod documentod=new Documentod();
 			documentod.DocNum=this.DocNum;
 			documentod.Description=this.Description;
@@ -83,22 +83,22 @@ public class Documentod {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Documentod>");
 			sb.append("<DocNum>").append(DocNum).append("</DocNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
 			sb.append("<DocCategory>").append(DocCategory).append("</DocCategory>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
+			sb.append("<FileName>").append(Serializing.escapeForXml(FileName)).append("</FileName>");
 			sb.append("<ImgType>").append(ImgType.ordinal()).append("</ImgType>");
 			sb.append("<IsFlipped>").append((IsFlipped)?1:0).append("</IsFlipped>");
 			sb.append("<DegreesRotated>").append(DegreesRotated).append("</DegreesRotated>");
-			sb.append("<ToothNumbers>").append(Serializing.EscapeForXml(ToothNumbers)).append("</ToothNumbers>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<ToothNumbers>").append(Serializing.escapeForXml(ToothNumbers)).append("</ToothNumbers>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
-			sb.append("<Signature>").append(Serializing.EscapeForXml(Signature)).append("</Signature>");
+			sb.append("<Signature>").append(Serializing.escapeForXml(Signature)).append("</Signature>");
 			sb.append("<CropX>").append(CropX).append("</CropX>");
 			sb.append("<CropY>").append(CropY).append("</CropY>");
 			sb.append("<CropW>").append(CropW).append("</CropW>");
@@ -107,8 +107,8 @@ public class Documentod {
 			sb.append("<WindowingMax>").append(WindowingMax).append("</WindowingMax>");
 			sb.append("<MountItemNum>").append(MountItemNum).append("</MountItemNum>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
-			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
-			sb.append("<Thumbnail>").append(Serializing.EscapeForXml(Thumbnail)).append("</Thumbnail>");
+			sb.append("<RawBase64>").append(Serializing.escapeForXml(RawBase64)).append("</RawBase64>");
+			sb.append("<Thumbnail>").append(Serializing.escapeForXml(Thumbnail)).append("</Thumbnail>");
 			sb.append("</Documentod>");
 			return sb.toString();
 		}
@@ -116,76 +116,76 @@ public class Documentod {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DocNum")!=null) {
-					DocNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocNum"));
+				if(Serializing.getXmlNodeValue(doc,"DocNum")!=null) {
+					DocNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
-					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				if(Serializing.getXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateCreated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DocCategory")!=null) {
-					DocCategory=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocCategory"));
+				if(Serializing.getXmlNodeValue(doc,"DocCategory")!=null) {
+					DocCategory=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocCategory"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
-					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				if(Serializing.getXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ImgType")!=null) {
-					ImgType=ImageType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ImgType"))];
+				if(Serializing.getXmlNodeValue(doc,"ImgType")!=null) {
+					ImgType=ImageType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsFlipped")!=null) {
-					IsFlipped=(Serializing.GetXmlNodeValue(doc,"IsFlipped")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsFlipped")!=null) {
+					IsFlipped=(Serializing.getXmlNodeValue(doc,"IsFlipped")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DegreesRotated")!=null) {
-					DegreesRotated=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DegreesRotated"));
+				if(Serializing.getXmlNodeValue(doc,"DegreesRotated")!=null) {
+					DegreesRotated=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DegreesRotated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToothNumbers")!=null) {
-					ToothNumbers=Serializing.GetXmlNodeValue(doc,"ToothNumbers");
+				if(Serializing.getXmlNodeValue(doc,"ToothNumbers")!=null) {
+					ToothNumbers=Serializing.getXmlNodeValue(doc,"ToothNumbers");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")!=null) {
-					SigIsTopaz=(Serializing.GetXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.getXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Signature")!=null) {
-					Signature=Serializing.GetXmlNodeValue(doc,"Signature");
+				if(Serializing.getXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.getXmlNodeValue(doc,"Signature");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CropX")!=null) {
-					CropX=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropX"));
+				if(Serializing.getXmlNodeValue(doc,"CropX")!=null) {
+					CropX=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CropX"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CropY")!=null) {
-					CropY=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropY"));
+				if(Serializing.getXmlNodeValue(doc,"CropY")!=null) {
+					CropY=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CropY"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CropW")!=null) {
-					CropW=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropW"));
+				if(Serializing.getXmlNodeValue(doc,"CropW")!=null) {
+					CropW=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CropW"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CropH")!=null) {
-					CropH=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CropH"));
+				if(Serializing.getXmlNodeValue(doc,"CropH")!=null) {
+					CropH=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CropH"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WindowingMin")!=null) {
-					WindowingMin=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"WindowingMin"));
+				if(Serializing.getXmlNodeValue(doc,"WindowingMin")!=null) {
+					WindowingMin=Integer.valueOf(Serializing.getXmlNodeValue(doc,"WindowingMin"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WindowingMax")!=null) {
-					WindowingMax=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"WindowingMax"));
+				if(Serializing.getXmlNodeValue(doc,"WindowingMax")!=null) {
+					WindowingMax=Integer.valueOf(Serializing.getXmlNodeValue(doc,"WindowingMax"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MountItemNum")!=null) {
-					MountItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"MountItemNum")!=null) {
+					MountItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MountItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
-					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				if(Serializing.getXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.getXmlNodeValue(doc,"RawBase64");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Thumbnail")!=null) {
-					Thumbnail=Serializing.GetXmlNodeValue(doc,"Thumbnail");
+				if(Serializing.getXmlNodeValue(doc,"Thumbnail")!=null) {
+					Thumbnail=Serializing.getXmlNodeValue(doc,"Thumbnail");
 				}
 			}
 			catch(Exception e) {

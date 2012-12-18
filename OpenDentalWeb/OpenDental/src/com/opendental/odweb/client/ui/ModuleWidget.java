@@ -67,7 +67,7 @@ public abstract class ModuleWidget extends SimpleLayoutPanel {
     asyncOnInitialize(new AsyncCallback<Widget>() {
       public void onFailure(Throwable reason) {
       	moduleInitializing=false;
-        MsgBox.Show("Failed to download code for this module ("+reason+")");
+        MsgBox.show("Failed to download code for this module ("+reason+")");
       }
       
       public void onSuccess(Widget result) {

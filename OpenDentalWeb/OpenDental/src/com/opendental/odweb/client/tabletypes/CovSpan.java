@@ -14,7 +14,7 @@ public class CovSpan {
 		public String ToCode;
 
 		/** Deep copy of object. */
-		public CovSpan Copy() {
+		public CovSpan deepCopy() {
 			CovSpan covspan=new CovSpan();
 			covspan.CovSpanNum=this.CovSpanNum;
 			covspan.CovCatNum=this.CovCatNum;
@@ -24,13 +24,13 @@ public class CovSpan {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<CovSpan>");
 			sb.append("<CovSpanNum>").append(CovSpanNum).append("</CovSpanNum>");
 			sb.append("<CovCatNum>").append(CovCatNum).append("</CovCatNum>");
-			sb.append("<FromCode>").append(Serializing.EscapeForXml(FromCode)).append("</FromCode>");
-			sb.append("<ToCode>").append(Serializing.EscapeForXml(ToCode)).append("</ToCode>");
+			sb.append("<FromCode>").append(Serializing.escapeForXml(FromCode)).append("</FromCode>");
+			sb.append("<ToCode>").append(Serializing.escapeForXml(ToCode)).append("</ToCode>");
 			sb.append("</CovSpan>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class CovSpan {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CovSpanNum")!=null) {
-					CovSpanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovSpanNum"));
+				if(Serializing.getXmlNodeValue(doc,"CovSpanNum")!=null) {
+					CovSpanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CovSpanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
-					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				if(Serializing.getXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CovCatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FromCode")!=null) {
-					FromCode=Serializing.GetXmlNodeValue(doc,"FromCode");
+				if(Serializing.getXmlNodeValue(doc,"FromCode")!=null) {
+					FromCode=Serializing.getXmlNodeValue(doc,"FromCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToCode")!=null) {
-					ToCode=Serializing.GetXmlNodeValue(doc,"ToCode");
+				if(Serializing.getXmlNodeValue(doc,"ToCode")!=null) {
+					ToCode=Serializing.getXmlNodeValue(doc,"ToCode");
 				}
 			}
 			catch(Exception e) {

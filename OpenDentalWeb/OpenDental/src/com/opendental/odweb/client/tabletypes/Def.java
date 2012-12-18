@@ -20,7 +20,7 @@ public class Def {
 		public boolean IsHidden;
 
 		/** Deep copy of object. */
-		public Def Copy() {
+		public Def deepCopy() {
 			Def def=new Def();
 			def.DefNum=this.DefNum;
 			def.Category=this.Category;
@@ -33,14 +33,14 @@ public class Def {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Def>");
 			sb.append("<DefNum>").append(DefNum).append("</DefNum>");
 			sb.append("<Category>").append(Category.ordinal()).append("</Category>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<ItemName>").append(Serializing.EscapeForXml(ItemName)).append("</ItemName>");
-			sb.append("<ItemValue>").append(Serializing.EscapeForXml(ItemValue)).append("</ItemValue>");
+			sb.append("<ItemName>").append(Serializing.escapeForXml(ItemName)).append("</ItemName>");
+			sb.append("<ItemValue>").append(Serializing.escapeForXml(ItemValue)).append("</ItemValue>");
 			sb.append("<ItemColor>").append(ItemColor).append("</ItemColor>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("</Def>");
@@ -50,28 +50,28 @@ public class Def {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DefNum")!=null) {
-					DefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefNum"));
+				if(Serializing.getXmlNodeValue(doc,"DefNum")!=null) {
+					DefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
-					Category=DefCat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"))];
+				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
+					Category=DefCat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemName")!=null) {
-					ItemName=Serializing.GetXmlNodeValue(doc,"ItemName");
+				if(Serializing.getXmlNodeValue(doc,"ItemName")!=null) {
+					ItemName=Serializing.getXmlNodeValue(doc,"ItemName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemValue")!=null) {
-					ItemValue=Serializing.GetXmlNodeValue(doc,"ItemValue");
+				if(Serializing.getXmlNodeValue(doc,"ItemValue")!=null) {
+					ItemValue=Serializing.getXmlNodeValue(doc,"ItemValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemColor")!=null) {
-					ItemColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemColor"));
+				if(Serializing.getXmlNodeValue(doc,"ItemColor")!=null) {
+					ItemColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemColor"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

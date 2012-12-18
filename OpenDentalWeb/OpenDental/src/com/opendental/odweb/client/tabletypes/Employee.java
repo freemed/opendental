@@ -20,7 +20,7 @@ public class Employee {
 		public int PhoneExt;
 
 		/** Deep copy of object. */
-		public Employee Copy() {
+		public Employee deepCopy() {
 			Employee employee=new Employee();
 			employee.EmployeeNum=this.EmployeeNum;
 			employee.LName=this.LName;
@@ -33,15 +33,15 @@ public class Employee {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Employee>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<LName>").append(Serializing.EscapeForXml(LName)).append("</LName>");
-			sb.append("<FName>").append(Serializing.EscapeForXml(FName)).append("</FName>");
-			sb.append("<MiddleI>").append(Serializing.EscapeForXml(MiddleI)).append("</MiddleI>");
+			sb.append("<LName>").append(Serializing.escapeForXml(LName)).append("</LName>");
+			sb.append("<FName>").append(Serializing.escapeForXml(FName)).append("</FName>");
+			sb.append("<MiddleI>").append(Serializing.escapeForXml(MiddleI)).append("</MiddleI>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
-			sb.append("<ClockStatus>").append(Serializing.EscapeForXml(ClockStatus)).append("</ClockStatus>");
+			sb.append("<ClockStatus>").append(Serializing.escapeForXml(ClockStatus)).append("</ClockStatus>");
 			sb.append("<PhoneExt>").append(PhoneExt).append("</PhoneExt>");
 			sb.append("</Employee>");
 			return sb.toString();
@@ -50,28 +50,28 @@ public class Employee {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
-					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				if(Serializing.getXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.getXmlNodeValue(doc,"LName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
-					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				if(Serializing.getXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.getXmlNodeValue(doc,"FName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MiddleI")!=null) {
-					MiddleI=Serializing.GetXmlNodeValue(doc,"MiddleI");
+				if(Serializing.getXmlNodeValue(doc,"MiddleI")!=null) {
+					MiddleI=Serializing.getXmlNodeValue(doc,"MiddleI");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=Serializing.GetXmlNodeValue(doc,"ClockStatus");
+				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=Serializing.getXmlNodeValue(doc,"ClockStatus");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PhoneExt")!=null) {
-					PhoneExt=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneExt"));
+				if(Serializing.getXmlNodeValue(doc,"PhoneExt")!=null) {
+					PhoneExt=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneExt"));
 				}
 			}
 			catch(Exception e) {

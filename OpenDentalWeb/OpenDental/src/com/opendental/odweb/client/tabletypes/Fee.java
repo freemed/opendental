@@ -20,7 +20,7 @@ public class Fee {
 		public int CodeNum;
 
 		/** Deep copy of object. */
-		public Fee Copy() {
+		public Fee deepCopy() {
 			Fee fee=new Fee();
 			fee.FeeNum=this.FeeNum;
 			fee.Amount=this.Amount;
@@ -33,12 +33,12 @@ public class Fee {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Fee>");
 			sb.append("<FeeNum>").append(FeeNum).append("</FeeNum>");
 			sb.append("<Amount>").append(Amount).append("</Amount>");
-			sb.append("<OldCode>").append(Serializing.EscapeForXml(OldCode)).append("</OldCode>");
+			sb.append("<OldCode>").append(Serializing.escapeForXml(OldCode)).append("</OldCode>");
 			sb.append("<FeeSched>").append(FeeSched).append("</FeeSched>");
 			sb.append("<UseDefaultFee>").append((UseDefaultFee)?1:0).append("</UseDefaultFee>");
 			sb.append("<UseDefaultCov>").append((UseDefaultCov)?1:0).append("</UseDefaultCov>");
@@ -50,28 +50,28 @@ public class Fee {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"FeeNum")!=null) {
-					FeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"FeeNum")!=null) {
+					FeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Amount")!=null) {
-					Amount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Amount"));
+				if(Serializing.getXmlNodeValue(doc,"Amount")!=null) {
+					Amount=Double.valueOf(Serializing.getXmlNodeValue(doc,"Amount"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OldCode")!=null) {
-					OldCode=Serializing.GetXmlNodeValue(doc,"OldCode");
+				if(Serializing.getXmlNodeValue(doc,"OldCode")!=null) {
+					OldCode=Serializing.getXmlNodeValue(doc,"OldCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
-					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				if(Serializing.getXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSched"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UseDefaultFee")!=null) {
-					UseDefaultFee=(Serializing.GetXmlNodeValue(doc,"UseDefaultFee")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"UseDefaultFee")!=null) {
+					UseDefaultFee=(Serializing.getXmlNodeValue(doc,"UseDefaultFee")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UseDefaultCov")!=null) {
-					UseDefaultCov=(Serializing.GetXmlNodeValue(doc,"UseDefaultCov")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"UseDefaultCov")!=null) {
+					UseDefaultCov=(Serializing.getXmlNodeValue(doc,"UseDefaultCov")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
 			}
 			catch(Exception e) {

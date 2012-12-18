@@ -14,7 +14,7 @@ public class QuickPasteCat {
 		public String DefaultForTypes;
 
 		/** Deep copy of object. */
-		public QuickPasteCat Copy() {
+		public QuickPasteCat deepCopy() {
 			QuickPasteCat quickpastecat=new QuickPasteCat();
 			quickpastecat.QuickPasteCatNum=this.QuickPasteCatNum;
 			quickpastecat.Description=this.Description;
@@ -24,13 +24,13 @@ public class QuickPasteCat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<QuickPasteCat>");
 			sb.append("<QuickPasteCatNum>").append(QuickPasteCatNum).append("</QuickPasteCatNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<DefaultForTypes>").append(Serializing.EscapeForXml(DefaultForTypes)).append("</DefaultForTypes>");
+			sb.append("<DefaultForTypes>").append(Serializing.escapeForXml(DefaultForTypes)).append("</DefaultForTypes>");
 			sb.append("</QuickPasteCat>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class QuickPasteCat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
-					QuickPasteCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum"));
+				if(Serializing.getXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
+					QuickPasteCatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuickPasteCatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DefaultForTypes")!=null) {
-					DefaultForTypes=Serializing.GetXmlNodeValue(doc,"DefaultForTypes");
+				if(Serializing.getXmlNodeValue(doc,"DefaultForTypes")!=null) {
+					DefaultForTypes=Serializing.getXmlNodeValue(doc,"DefaultForTypes");
 				}
 			}
 			catch(Exception e) {

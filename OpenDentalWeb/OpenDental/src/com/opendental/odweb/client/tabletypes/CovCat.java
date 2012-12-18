@@ -18,7 +18,7 @@ public class CovCat {
 		public EbenefitCategory EbenefitCat;
 
 		/** Deep copy of object. */
-		public CovCat Copy() {
+		public CovCat deepCopy() {
 			CovCat covcat=new CovCat();
 			covcat.CovCatNum=this.CovCatNum;
 			covcat.Description=this.Description;
@@ -30,11 +30,11 @@ public class CovCat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<CovCat>");
 			sb.append("<CovCatNum>").append(CovCatNum).append("</CovCatNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<DefaultPercent>").append(DefaultPercent).append("</DefaultPercent>");
 			sb.append("<CovOrder>").append(CovOrder).append("</CovOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
@@ -46,25 +46,25 @@ public class CovCat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
-					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				if(Serializing.getXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CovCatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DefaultPercent")!=null) {
-					DefaultPercent=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DefaultPercent"));
+				if(Serializing.getXmlNodeValue(doc,"DefaultPercent")!=null) {
+					DefaultPercent=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPercent"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CovOrder")!=null) {
-					CovOrder=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CovOrder"));
+				if(Serializing.getXmlNodeValue(doc,"CovOrder")!=null) {
+					CovOrder=Byte.valueOf(Serializing.getXmlNodeValue(doc,"CovOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EbenefitCat")!=null) {
-					EbenefitCat=EbenefitCategory.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EbenefitCat"))];
+				if(Serializing.getXmlNodeValue(doc,"EbenefitCat")!=null) {
+					EbenefitCat=EbenefitCategory.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EbenefitCat"))];
 				}
 			}
 			catch(Exception e) {

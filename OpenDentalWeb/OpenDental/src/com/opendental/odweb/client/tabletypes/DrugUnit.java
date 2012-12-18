@@ -12,7 +12,7 @@ public class DrugUnit {
 		public String UnitText;
 
 		/** Deep copy of object. */
-		public DrugUnit Copy() {
+		public DrugUnit deepCopy() {
 			DrugUnit drugunit=new DrugUnit();
 			drugunit.DrugUnitNum=this.DrugUnitNum;
 			drugunit.UnitIdentifier=this.UnitIdentifier;
@@ -21,12 +21,12 @@ public class DrugUnit {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DrugUnit>");
 			sb.append("<DrugUnitNum>").append(DrugUnitNum).append("</DrugUnitNum>");
-			sb.append("<UnitIdentifier>").append(Serializing.EscapeForXml(UnitIdentifier)).append("</UnitIdentifier>");
-			sb.append("<UnitText>").append(Serializing.EscapeForXml(UnitText)).append("</UnitText>");
+			sb.append("<UnitIdentifier>").append(Serializing.escapeForXml(UnitIdentifier)).append("</UnitIdentifier>");
+			sb.append("<UnitText>").append(Serializing.escapeForXml(UnitText)).append("</UnitText>");
 			sb.append("</DrugUnit>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class DrugUnit {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DrugUnitNum")!=null) {
-					DrugUnitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugUnitNum"));
+				if(Serializing.getXmlNodeValue(doc,"DrugUnitNum")!=null) {
+					DrugUnitNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DrugUnitNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UnitIdentifier")!=null) {
-					UnitIdentifier=Serializing.GetXmlNodeValue(doc,"UnitIdentifier");
+				if(Serializing.getXmlNodeValue(doc,"UnitIdentifier")!=null) {
+					UnitIdentifier=Serializing.getXmlNodeValue(doc,"UnitIdentifier");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UnitText")!=null) {
-					UnitText=Serializing.GetXmlNodeValue(doc,"UnitText");
+				if(Serializing.getXmlNodeValue(doc,"UnitText")!=null) {
+					UnitText=Serializing.getXmlNodeValue(doc,"UnitText");
 				}
 			}
 			catch(Exception e) {

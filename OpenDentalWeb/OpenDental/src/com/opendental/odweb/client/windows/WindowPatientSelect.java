@@ -21,7 +21,7 @@ import com.opendental.odweb.client.ui.*;
 
 public class WindowPatientSelect extends ODWindow {
 	private DataTable PatientTable=new DataTable();
-	@UiField(provided=true) ODGrid GridMain;
+	@UiField(provided=true) ODGrid gridMain;
 	@UiField DockPanel panelContainer;
 	@UiField Button butSearch;
 	@UiField Button butCancel;
@@ -35,33 +35,33 @@ public class WindowPatientSelect extends ODWindow {
 		super("Patient Select");
 		//Fills the @UiField objects.
 		//Fill the container panel that will hold everything on this window.
-		GridMain=new ODGrid("Select Patient");
-		GridMain.setHeightAndWidth(500,500);
+		gridMain=new ODGrid("Select Patient");
+		gridMain.setHeightAndWidth(500,500);
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
-		FillGrid();
+		fillGrid();
 	}
 	
 	/** Refreshes the patient grid with the information in the PatientTable.  Does nothing if PatientTable is null. */
-	private void FillGrid() {
-		GridMain.BeginUpdate();
-		GridMain.Columns.clear();
+	private void fillGrid() {
+		gridMain.beginUpdate();
+		gridMain.Columns.clear();
 		ODGridColumn col=new ODGridColumn("PatNum",80);
-		GridMain.Columns.add(col);
+		gridMain.Columns.add(col);
 		col=new ODGridColumn("Test",80);
-		GridMain.Columns.add(col);
+		gridMain.Columns.add(col);
 		col=new ODGridColumn("Test2",80);
-		GridMain.Columns.add(col);
-		GridMain.Rows.clear();
+		gridMain.Columns.add(col);
+		gridMain.Rows.clear();
 		ODGridRow row;
 		for(int i=0;i<PatientTable.Rows.size();i++) {
 			row=new ODGridRow();
-			row.Cells.Add(PatientTable.Rows.get(i).GetCells().get(0).GetText());
-			row.Cells.Add(PatientTable.Rows.get(i).GetCells().get(1).GetText());
-			row.Cells.Add(PatientTable.Rows.get(i).GetCells().get(2).GetText());
-			GridMain.Rows.add(row);
+			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(0).getText());
+			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(1).getText());
+			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(2).getText());
+			gridMain.Rows.add(row);
 		}
-		GridMain.EndUpdate();
+		gridMain.endUpdate();
 	}
 
 	@UiHandler("butSearch")
@@ -71,7 +71,7 @@ public class WindowPatientSelect extends ODWindow {
 			builder.sendRequest(null, new butSearch_RequestCallback());
 		}
 		catch (RequestException e) {
-			MsgBox.Show("Error: "+e.getMessage());
+			MsgBox.show("Error: "+e.getMessage());
 		}
 	}
 	
@@ -79,21 +79,21 @@ public class WindowPatientSelect extends ODWindow {
 		public void onResponseReceived(Request request, Response response) {
 			if(response.getStatusCode()==200) {
 				try {
-					PatientTable=(DataTable)Serializing.GetDeserializedObject(response.getText());
+					PatientTable=(DataTable)Serializing.getDeserializedObject(response.getText());
 				} catch (Exception e) {
-					MsgBox.Show(e.getMessage());//This will be a more specific error.
+					MsgBox.show(e.getMessage());//This will be a more specific error.
 				}
-				FillGrid();
+				fillGrid();
       } 
 			else {
-      	MsgBox.Show("Error status text: "+response.getStatusText()
+      	MsgBox.show("Error status text: "+response.getStatusText()
     			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
     			+"\r\nError text: "+response.getText());
       }
 		}
 		
 		public void onError(Request request, Throwable exception) {
-			MsgBox.Show("Error: "+exception.getMessage());
+			MsgBox.show("Error: "+exception.getMessage());
 		}
 	}
 	

@@ -52,7 +52,7 @@ public class Screen {
 		public String Comments;
 
 		/** Deep copy of object. */
-		public Screen Copy() {
+		public Screen deepCopy() {
 			Screen screen=new Screen();
 			screen.ScreenNum=this.ScreenNum;
 			screen.ScreenDate=this.ScreenDate;
@@ -80,16 +80,16 @@ public class Screen {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Screen>");
 			sb.append("<ScreenNum>").append(ScreenNum).append("</ScreenNum>");
 			sb.append("<ScreenDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(ScreenDate)).append("</ScreenDate>");
-			sb.append("<GradeSchool>").append(Serializing.EscapeForXml(GradeSchool)).append("</GradeSchool>");
-			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
+			sb.append("<GradeSchool>").append(Serializing.escapeForXml(GradeSchool)).append("</GradeSchool>");
+			sb.append("<County>").append(Serializing.escapeForXml(County)).append("</County>");
 			sb.append("<PlaceService>").append(PlaceService.ordinal()).append("</PlaceService>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<ProvName>").append(Serializing.EscapeForXml(ProvName)).append("</ProvName>");
+			sb.append("<ProvName>").append(Serializing.escapeForXml(ProvName)).append("</ProvName>");
 			sb.append("<Gender>").append(Gender.ordinal()).append("</Gender>");
 			sb.append("<Race>").append(Race.ordinal()).append("</Race>");
 			sb.append("<GradeLevel>").append(GradeLevel.ordinal()).append("</GradeLevel>");
@@ -104,7 +104,7 @@ public class Screen {
 			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(Birthdate)).append("</Birthdate>");
 			sb.append("<ScreenGroupNum>").append(ScreenGroupNum).append("</ScreenGroupNum>");
 			sb.append("<ScreenGroupOrder>").append(ScreenGroupOrder).append("</ScreenGroupOrder>");
-			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");
+			sb.append("<Comments>").append(Serializing.escapeForXml(Comments)).append("</Comments>");
 			sb.append("</Screen>");
 			return sb.toString();
 		}
@@ -112,73 +112,73 @@ public class Screen {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ScreenNum")!=null) {
-					ScreenNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenNum"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenNum")!=null) {
+					ScreenNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ScreenNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenDate")!=null) {
-					ScreenDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ScreenDate"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenDate")!=null) {
+					ScreenDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"ScreenDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GradeSchool")!=null) {
-					GradeSchool=Serializing.GetXmlNodeValue(doc,"GradeSchool");
+				if(Serializing.getXmlNodeValue(doc,"GradeSchool")!=null) {
+					GradeSchool=Serializing.getXmlNodeValue(doc,"GradeSchool");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"County")!=null) {
-					County=Serializing.GetXmlNodeValue(doc,"County");
+				if(Serializing.getXmlNodeValue(doc,"County")!=null) {
+					County=Serializing.getXmlNodeValue(doc,"County");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlaceService")!=null) {
-					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlaceService"))];
+				if(Serializing.getXmlNodeValue(doc,"PlaceService")!=null) {
+					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvName")!=null) {
-					ProvName=Serializing.GetXmlNodeValue(doc,"ProvName");
+				if(Serializing.getXmlNodeValue(doc,"ProvName")!=null) {
+					ProvName=Serializing.getXmlNodeValue(doc,"ProvName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Gender")!=null) {
-					Gender=PatientGender.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Gender"))];
+				if(Serializing.getXmlNodeValue(doc,"Gender")!=null) {
+					Gender=PatientGender.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Gender"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Race")!=null) {
-					Race=PatientRace.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Race"))];
+				if(Serializing.getXmlNodeValue(doc,"Race")!=null) {
+					Race=PatientRace.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Race"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GradeLevel")!=null) {
-					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GradeLevel"))];
+				if(Serializing.getXmlNodeValue(doc,"GradeLevel")!=null) {
+					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Age")!=null) {
-					Age=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Age"));
+				if(Serializing.getXmlNodeValue(doc,"Age")!=null) {
+					Age=Byte.valueOf(Serializing.getXmlNodeValue(doc,"Age"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Urgency")!=null) {
-					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Urgency"))];
+				if(Serializing.getXmlNodeValue(doc,"Urgency")!=null) {
+					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HasCaries")!=null) {
-					HasCaries=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HasCaries"))];
+				if(Serializing.getXmlNodeValue(doc,"HasCaries")!=null) {
+					HasCaries=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"HasCaries"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NeedsSealants")!=null) {
-					NeedsSealants=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"NeedsSealants"))];
+				if(Serializing.getXmlNodeValue(doc,"NeedsSealants")!=null) {
+					NeedsSealants=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"NeedsSealants"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CariesExperience")!=null) {
-					CariesExperience=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CariesExperience"))];
+				if(Serializing.getXmlNodeValue(doc,"CariesExperience")!=null) {
+					CariesExperience=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CariesExperience"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EarlyChildCaries")!=null) {
-					EarlyChildCaries=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EarlyChildCaries"))];
+				if(Serializing.getXmlNodeValue(doc,"EarlyChildCaries")!=null) {
+					EarlyChildCaries=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EarlyChildCaries"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ExistingSealants")!=null) {
-					ExistingSealants=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ExistingSealants"))];
+				if(Serializing.getXmlNodeValue(doc,"ExistingSealants")!=null) {
+					ExistingSealants=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ExistingSealants"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MissingAllTeeth")!=null) {
-					MissingAllTeeth=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MissingAllTeeth"))];
+				if(Serializing.getXmlNodeValue(doc,"MissingAllTeeth")!=null) {
+					MissingAllTeeth=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MissingAllTeeth"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Birthdate")!=null) {
-					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"Birthdate"));
+				if(Serializing.getXmlNodeValue(doc,"Birthdate")!=null) {
+					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"Birthdate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum")!=null) {
-					ScreenGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenGroupNum")!=null) {
+					ScreenGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ScreenGroupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenGroupOrder")!=null) {
-					ScreenGroupOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ScreenGroupOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ScreenGroupOrder")!=null) {
+					ScreenGroupOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ScreenGroupOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
-					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				if(Serializing.getXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.getXmlNodeValue(doc,"Comments");
 				}
 			}
 			catch(Exception e) {

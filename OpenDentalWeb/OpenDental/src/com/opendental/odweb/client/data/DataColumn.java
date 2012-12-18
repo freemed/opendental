@@ -7,19 +7,19 @@ public class DataColumn {
 	
 	/** Creates an empty DataColumn. */
 	public DataColumn() {
-		SetHeading("");
+		setHeading("");
 	}
 	
 	/** Creates an empty DataColumn and sets the heading to the passed in value. */
 	public DataColumn(String heading) {
-		SetHeading(heading);
+		setHeading(heading);
 	}
 	
-	public String GetHeading() {
+	public String getHeading() {
 		return Heading;
 	}
 	
-	public void SetHeading(String heading) {
+	public void setHeading(String heading) {
 		Heading=heading;
 	}
 	

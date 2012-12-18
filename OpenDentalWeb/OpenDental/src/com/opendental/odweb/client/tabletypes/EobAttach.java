@@ -18,7 +18,7 @@ public class EobAttach {
 		public String RawBase64;
 
 		/** Deep copy of object. */
-		public EobAttach Copy() {
+		public EobAttach deepCopy() {
 			EobAttach eobattach=new EobAttach();
 			eobattach.EobAttachNum=this.EobAttachNum;
 			eobattach.ClaimPaymentNum=this.ClaimPaymentNum;
@@ -29,14 +29,14 @@ public class EobAttach {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EobAttach>");
 			sb.append("<EobAttachNum>").append(EobAttachNum).append("</EobAttachNum>");
 			sb.append("<ClaimPaymentNum>").append(ClaimPaymentNum).append("</ClaimPaymentNum>");
 			sb.append("<DateTCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTCreated)).append("</DateTCreated>");
-			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
-			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
+			sb.append("<FileName>").append(Serializing.escapeForXml(FileName)).append("</FileName>");
+			sb.append("<RawBase64>").append(Serializing.escapeForXml(RawBase64)).append("</RawBase64>");
 			sb.append("</EobAttach>");
 			return sb.toString();
 		}
@@ -44,22 +44,22 @@ public class EobAttach {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EobAttachNum")!=null) {
-					EobAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EobAttachNum"));
+				if(Serializing.getXmlNodeValue(doc,"EobAttachNum")!=null) {
+					EobAttachNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EobAttachNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum")!=null) {
-					ClaimPaymentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimPaymentNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimPaymentNum")!=null) {
+					ClaimPaymentNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimPaymentNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTCreated")!=null) {
-					DateTCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTCreated"));
+				if(Serializing.getXmlNodeValue(doc,"DateTCreated")!=null) {
+					DateTCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTCreated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
-					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				if(Serializing.getXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
-					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				if(Serializing.getXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.getXmlNodeValue(doc,"RawBase64");
 				}
 			}
 			catch(Exception e) {

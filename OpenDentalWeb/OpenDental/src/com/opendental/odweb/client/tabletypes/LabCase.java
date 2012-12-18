@@ -34,7 +34,7 @@ public class LabCase {
 		public double LabFee;
 
 		/** Deep copy of object. */
-		public LabCase Copy() {
+		public LabCase deepCopy() {
 			LabCase labcase=new LabCase();
 			labcase.LabCaseNum=this.LabCaseNum;
 			labcase.PatNum=this.PatNum;
@@ -53,7 +53,7 @@ public class LabCase {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LabCase>");
 			sb.append("<LabCaseNum>").append(LabCaseNum).append("</LabCaseNum>");
@@ -67,7 +67,7 @@ public class LabCase {
 			sb.append("<DateTimeRecd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeRecd)).append("</DateTimeRecd>");
 			sb.append("<DateTimeChecked>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeChecked)).append("</DateTimeChecked>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<Instructions>").append(Serializing.EscapeForXml(Instructions)).append("</Instructions>");
+			sb.append("<Instructions>").append(Serializing.escapeForXml(Instructions)).append("</Instructions>");
 			sb.append("<LabFee>").append(LabFee).append("</LabFee>");
 			sb.append("</LabCase>");
 			return sb.toString();
@@ -76,46 +76,46 @@ public class LabCase {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LabCaseNum")!=null) {
-					LabCaseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabCaseNum"));
+				if(Serializing.getXmlNodeValue(doc,"LabCaseNum")!=null) {
+					LabCaseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LabCaseNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
-					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				if(Serializing.getXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LaboratoryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
-					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				if(Serializing.getXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AptNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlannedAptNum")!=null) {
-					PlannedAptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlannedAptNum"));
+				if(Serializing.getXmlNodeValue(doc,"PlannedAptNum")!=null) {
+					PlannedAptNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlannedAptNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeDue")!=null) {
-					DateTimeDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeDue"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeDue")!=null) {
+					DateTimeDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeDue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeCreated")!=null) {
-					DateTimeCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeCreated"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeCreated")!=null) {
+					DateTimeCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeCreated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeSent")!=null) {
-					DateTimeSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeSent"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeSent")!=null) {
+					DateTimeSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeSent"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeRecd")!=null) {
-					DateTimeRecd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeRecd"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeRecd")!=null) {
+					DateTimeRecd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeRecd"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeChecked")!=null) {
-					DateTimeChecked=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeChecked"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeChecked")!=null) {
+					DateTimeChecked=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeChecked"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Instructions")!=null) {
-					Instructions=Serializing.GetXmlNodeValue(doc,"Instructions");
+				if(Serializing.getXmlNodeValue(doc,"Instructions")!=null) {
+					Instructions=Serializing.getXmlNodeValue(doc,"Instructions");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LabFee")!=null) {
-					LabFee=Double.valueOf(Serializing.GetXmlNodeValue(doc,"LabFee"));
+				if(Serializing.getXmlNodeValue(doc,"LabFee")!=null) {
+					LabFee=Double.valueOf(Serializing.getXmlNodeValue(doc,"LabFee"));
 				}
 			}
 			catch(Exception e) {

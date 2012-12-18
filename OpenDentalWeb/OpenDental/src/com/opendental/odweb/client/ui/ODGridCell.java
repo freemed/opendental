@@ -5,12 +5,12 @@ public class ODGridCell {
 	
 	/** Creates a new ODGridCell. */
 	public ODGridCell() {
-		SetText("");
+		setText("");
 	}
 	
 	/** Creates a new ODGridCell and sets the text to the passed in value. */
 	public ODGridCell(String text) {
-		SetText(text);
+		setText(text);
 	}
 
 	/** Gets the text for the current cell. */
@@ -18,7 +18,7 @@ public class ODGridCell {
 		return text;
 	}
 
-	public void SetText(String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 

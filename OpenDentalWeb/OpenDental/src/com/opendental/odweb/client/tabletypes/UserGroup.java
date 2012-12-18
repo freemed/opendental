@@ -10,7 +10,7 @@ public class UserGroup {
 		public String Description;
 
 		/** Deep copy of object. */
-		public UserGroup Copy() {
+		public UserGroup deepCopy() {
 			UserGroup usergroup=new UserGroup();
 			usergroup.UserGroupNum=this.UserGroupNum;
 			usergroup.Description=this.Description;
@@ -18,11 +18,11 @@ public class UserGroup {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<UserGroup>");
 			sb.append("<UserGroupNum>").append(UserGroupNum).append("</UserGroupNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("</UserGroup>");
 			return sb.toString();
 		}
@@ -30,13 +30,13 @@ public class UserGroup {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
-					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserGroupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 			}
 			catch(Exception e) {

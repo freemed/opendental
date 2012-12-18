@@ -32,7 +32,7 @@ public class ClaimCondCodeLog {
 		public String Code10;
 
 		/** Deep copy of object. */
-		public ClaimCondCodeLog Copy() {
+		public ClaimCondCodeLog deepCopy() {
 			ClaimCondCodeLog claimcondcodelog=new ClaimCondCodeLog();
 			claimcondcodelog.ClaimCondCodeLogNum=this.ClaimCondCodeLogNum;
 			claimcondcodelog.ClaimNum=this.ClaimNum;
@@ -51,22 +51,22 @@ public class ClaimCondCodeLog {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimCondCodeLog>");
 			sb.append("<ClaimCondCodeLogNum>").append(ClaimCondCodeLogNum).append("</ClaimCondCodeLogNum>");
 			sb.append("<ClaimNum>").append(ClaimNum).append("</ClaimNum>");
-			sb.append("<Code0>").append(Serializing.EscapeForXml(Code0)).append("</Code0>");
-			sb.append("<Code1>").append(Serializing.EscapeForXml(Code1)).append("</Code1>");
-			sb.append("<Code2>").append(Serializing.EscapeForXml(Code2)).append("</Code2>");
-			sb.append("<Code3>").append(Serializing.EscapeForXml(Code3)).append("</Code3>");
-			sb.append("<Code4>").append(Serializing.EscapeForXml(Code4)).append("</Code4>");
-			sb.append("<Code5>").append(Serializing.EscapeForXml(Code5)).append("</Code5>");
-			sb.append("<Code6>").append(Serializing.EscapeForXml(Code6)).append("</Code6>");
-			sb.append("<Code7>").append(Serializing.EscapeForXml(Code7)).append("</Code7>");
-			sb.append("<Code8>").append(Serializing.EscapeForXml(Code8)).append("</Code8>");
-			sb.append("<Code9>").append(Serializing.EscapeForXml(Code9)).append("</Code9>");
-			sb.append("<Code10>").append(Serializing.EscapeForXml(Code10)).append("</Code10>");
+			sb.append("<Code0>").append(Serializing.escapeForXml(Code0)).append("</Code0>");
+			sb.append("<Code1>").append(Serializing.escapeForXml(Code1)).append("</Code1>");
+			sb.append("<Code2>").append(Serializing.escapeForXml(Code2)).append("</Code2>");
+			sb.append("<Code3>").append(Serializing.escapeForXml(Code3)).append("</Code3>");
+			sb.append("<Code4>").append(Serializing.escapeForXml(Code4)).append("</Code4>");
+			sb.append("<Code5>").append(Serializing.escapeForXml(Code5)).append("</Code5>");
+			sb.append("<Code6>").append(Serializing.escapeForXml(Code6)).append("</Code6>");
+			sb.append("<Code7>").append(Serializing.escapeForXml(Code7)).append("</Code7>");
+			sb.append("<Code8>").append(Serializing.escapeForXml(Code8)).append("</Code8>");
+			sb.append("<Code9>").append(Serializing.escapeForXml(Code9)).append("</Code9>");
+			sb.append("<Code10>").append(Serializing.escapeForXml(Code10)).append("</Code10>");
 			sb.append("</ClaimCondCodeLog>");
 			return sb.toString();
 		}
@@ -74,46 +74,46 @@ public class ClaimCondCodeLog {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClaimCondCodeLogNum")!=null) {
-					ClaimCondCodeLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimCondCodeLogNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimCondCodeLogNum")!=null) {
+					ClaimCondCodeLogNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimCondCodeLogNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
-					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code0")!=null) {
-					Code0=Serializing.GetXmlNodeValue(doc,"Code0");
+				if(Serializing.getXmlNodeValue(doc,"Code0")!=null) {
+					Code0=Serializing.getXmlNodeValue(doc,"Code0");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code1")!=null) {
-					Code1=Serializing.GetXmlNodeValue(doc,"Code1");
+				if(Serializing.getXmlNodeValue(doc,"Code1")!=null) {
+					Code1=Serializing.getXmlNodeValue(doc,"Code1");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code2")!=null) {
-					Code2=Serializing.GetXmlNodeValue(doc,"Code2");
+				if(Serializing.getXmlNodeValue(doc,"Code2")!=null) {
+					Code2=Serializing.getXmlNodeValue(doc,"Code2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code3")!=null) {
-					Code3=Serializing.GetXmlNodeValue(doc,"Code3");
+				if(Serializing.getXmlNodeValue(doc,"Code3")!=null) {
+					Code3=Serializing.getXmlNodeValue(doc,"Code3");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code4")!=null) {
-					Code4=Serializing.GetXmlNodeValue(doc,"Code4");
+				if(Serializing.getXmlNodeValue(doc,"Code4")!=null) {
+					Code4=Serializing.getXmlNodeValue(doc,"Code4");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code5")!=null) {
-					Code5=Serializing.GetXmlNodeValue(doc,"Code5");
+				if(Serializing.getXmlNodeValue(doc,"Code5")!=null) {
+					Code5=Serializing.getXmlNodeValue(doc,"Code5");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code6")!=null) {
-					Code6=Serializing.GetXmlNodeValue(doc,"Code6");
+				if(Serializing.getXmlNodeValue(doc,"Code6")!=null) {
+					Code6=Serializing.getXmlNodeValue(doc,"Code6");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code7")!=null) {
-					Code7=Serializing.GetXmlNodeValue(doc,"Code7");
+				if(Serializing.getXmlNodeValue(doc,"Code7")!=null) {
+					Code7=Serializing.getXmlNodeValue(doc,"Code7");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code8")!=null) {
-					Code8=Serializing.GetXmlNodeValue(doc,"Code8");
+				if(Serializing.getXmlNodeValue(doc,"Code8")!=null) {
+					Code8=Serializing.getXmlNodeValue(doc,"Code8");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code9")!=null) {
-					Code9=Serializing.GetXmlNodeValue(doc,"Code9");
+				if(Serializing.getXmlNodeValue(doc,"Code9")!=null) {
+					Code9=Serializing.getXmlNodeValue(doc,"Code9");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Code10")!=null) {
-					Code10=Serializing.GetXmlNodeValue(doc,"Code10");
+				if(Serializing.getXmlNodeValue(doc,"Code10")!=null) {
+					Code10=Serializing.getXmlNodeValue(doc,"Code10");
 				}
 			}
 			catch(Exception e) {

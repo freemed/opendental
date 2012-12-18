@@ -28,7 +28,7 @@ public class InsSub {
 		public String SubscNote;
 
 		/** Deep copy of object. */
-		public InsSub Copy() {
+		public InsSub deepCopy() {
 			InsSub inssub=new InsSub();
 			inssub.InsSubNum=this.InsSubNum;
 			inssub.PlanNum=this.PlanNum;
@@ -44,7 +44,7 @@ public class InsSub {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<InsSub>");
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
@@ -54,9 +54,9 @@ public class InsSub {
 			sb.append("<DateTerm>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTerm)).append("</DateTerm>");
 			sb.append("<ReleaseInfo>").append((ReleaseInfo)?1:0).append("</ReleaseInfo>");
 			sb.append("<AssignBen>").append((AssignBen)?1:0).append("</AssignBen>");
-			sb.append("<SubscriberID>").append(Serializing.EscapeForXml(SubscriberID)).append("</SubscriberID>");
-			sb.append("<BenefitNotes>").append(Serializing.EscapeForXml(BenefitNotes)).append("</BenefitNotes>");
-			sb.append("<SubscNote>").append(Serializing.EscapeForXml(SubscNote)).append("</SubscNote>");
+			sb.append("<SubscriberID>").append(Serializing.escapeForXml(SubscriberID)).append("</SubscriberID>");
+			sb.append("<BenefitNotes>").append(Serializing.escapeForXml(BenefitNotes)).append("</BenefitNotes>");
+			sb.append("<SubscNote>").append(Serializing.escapeForXml(SubscNote)).append("</SubscNote>");
 			sb.append("</InsSub>");
 			return sb.toString();
 		}
@@ -64,37 +64,37 @@ public class InsSub {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
-					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsSubNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
-					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Subscriber")!=null) {
-					Subscriber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Subscriber"));
+				if(Serializing.getXmlNodeValue(doc,"Subscriber")!=null) {
+					Subscriber=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Subscriber"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateEffective")!=null) {
-					DateEffective=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEffective"));
+				if(Serializing.getXmlNodeValue(doc,"DateEffective")!=null) {
+					DateEffective=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateEffective"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTerm")!=null) {
-					DateTerm=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTerm"));
+				if(Serializing.getXmlNodeValue(doc,"DateTerm")!=null) {
+					DateTerm=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTerm"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ReleaseInfo")!=null) {
-					ReleaseInfo=(Serializing.GetXmlNodeValue(doc,"ReleaseInfo")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ReleaseInfo")!=null) {
+					ReleaseInfo=(Serializing.getXmlNodeValue(doc,"ReleaseInfo")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AssignBen")!=null) {
-					AssignBen=(Serializing.GetXmlNodeValue(doc,"AssignBen")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"AssignBen")!=null) {
+					AssignBen=(Serializing.getXmlNodeValue(doc,"AssignBen")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SubscriberID")!=null) {
-					SubscriberID=Serializing.GetXmlNodeValue(doc,"SubscriberID");
+				if(Serializing.getXmlNodeValue(doc,"SubscriberID")!=null) {
+					SubscriberID=Serializing.getXmlNodeValue(doc,"SubscriberID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BenefitNotes")!=null) {
-					BenefitNotes=Serializing.GetXmlNodeValue(doc,"BenefitNotes");
+				if(Serializing.getXmlNodeValue(doc,"BenefitNotes")!=null) {
+					BenefitNotes=Serializing.getXmlNodeValue(doc,"BenefitNotes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SubscNote")!=null) {
-					SubscNote=Serializing.GetXmlNodeValue(doc,"SubscNote");
+				if(Serializing.getXmlNodeValue(doc,"SubscNote")!=null) {
+					SubscNote=Serializing.getXmlNodeValue(doc,"SubscNote");
 				}
 			}
 			catch(Exception e) {

@@ -16,7 +16,7 @@ public class SigButDef {
 		public String ComputerName;
 
 		/** Deep copy of object. */
-		public SigButDef Copy() {
+		public SigButDef deepCopy() {
 			SigButDef sigbutdef=new SigButDef();
 			sigbutdef.SigButDefNum=this.SigButDefNum;
 			sigbutdef.ButtonText=this.ButtonText;
@@ -27,14 +27,14 @@ public class SigButDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SigButDef>");
 			sb.append("<SigButDefNum>").append(SigButDefNum).append("</SigButDefNum>");
-			sb.append("<ButtonText>").append(Serializing.EscapeForXml(ButtonText)).append("</ButtonText>");
+			sb.append("<ButtonText>").append(Serializing.escapeForXml(ButtonText)).append("</ButtonText>");
 			sb.append("<ButtonIndex>").append(ButtonIndex).append("</ButtonIndex>");
 			sb.append("<SynchIcon>").append(SynchIcon).append("</SynchIcon>");
-			sb.append("<ComputerName>").append(Serializing.EscapeForXml(ComputerName)).append("</ComputerName>");
+			sb.append("<ComputerName>").append(Serializing.escapeForXml(ComputerName)).append("</ComputerName>");
 			sb.append("</SigButDef>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class SigButDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SigButDefNum")!=null) {
-					SigButDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigButDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"SigButDefNum")!=null) {
+					SigButDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigButDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ButtonText")!=null) {
-					ButtonText=Serializing.GetXmlNodeValue(doc,"ButtonText");
+				if(Serializing.getXmlNodeValue(doc,"ButtonText")!=null) {
+					ButtonText=Serializing.getXmlNodeValue(doc,"ButtonText");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ButtonIndex")!=null) {
-					ButtonIndex=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ButtonIndex"));
+				if(Serializing.getXmlNodeValue(doc,"ButtonIndex")!=null) {
+					ButtonIndex=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ButtonIndex"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SynchIcon")!=null) {
-					SynchIcon=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"SynchIcon"));
+				if(Serializing.getXmlNodeValue(doc,"SynchIcon")!=null) {
+					SynchIcon=Byte.valueOf(Serializing.getXmlNodeValue(doc,"SynchIcon"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
-					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				if(Serializing.getXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
 			}
 			catch(Exception e) {

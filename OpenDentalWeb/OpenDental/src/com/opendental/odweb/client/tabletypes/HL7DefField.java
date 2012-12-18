@@ -20,7 +20,7 @@ public class HL7DefField {
 		public String FixedText;
 
 		/** Deep copy of object. */
-		public HL7DefField Copy() {
+		public HL7DefField deepCopy() {
 			HL7DefField hl7deffield=new HL7DefField();
 			hl7deffield.HL7DefFieldNum=this.HL7DefFieldNum;
 			hl7deffield.HL7DefSegmentNum=this.HL7DefSegmentNum;
@@ -33,16 +33,16 @@ public class HL7DefField {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<HL7DefField>");
 			sb.append("<HL7DefFieldNum>").append(HL7DefFieldNum).append("</HL7DefFieldNum>");
 			sb.append("<HL7DefSegmentNum>").append(HL7DefSegmentNum).append("</HL7DefSegmentNum>");
 			sb.append("<OrdinalPos>").append(OrdinalPos).append("</OrdinalPos>");
-			sb.append("<TableId>").append(Serializing.EscapeForXml(TableId)).append("</TableId>");
+			sb.append("<TableId>").append(Serializing.escapeForXml(TableId)).append("</TableId>");
 			sb.append("<DataType>").append(DataType.ordinal()).append("</DataType>");
-			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
-			sb.append("<FixedText>").append(Serializing.EscapeForXml(FixedText)).append("</FixedText>");
+			sb.append("<FieldName>").append(Serializing.escapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FixedText>").append(Serializing.escapeForXml(FixedText)).append("</FixedText>");
 			sb.append("</HL7DefField>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class HL7DefField {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefFieldNum")!=null) {
-					HL7DefFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefFieldNum")!=null) {
+					HL7DefFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
-					HL7DefSegmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
+					HL7DefSegmentNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefSegmentNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OrdinalPos")!=null) {
-					OrdinalPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrdinalPos"));
+				if(Serializing.getXmlNodeValue(doc,"OrdinalPos")!=null) {
+					OrdinalPos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OrdinalPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TableId")!=null) {
-					TableId=Serializing.GetXmlNodeValue(doc,"TableId");
+				if(Serializing.getXmlNodeValue(doc,"TableId")!=null) {
+					TableId=Serializing.getXmlNodeValue(doc,"TableId");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DataType")!=null) {
-					DataType=DataTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DataType"))];
+				if(Serializing.getXmlNodeValue(doc,"DataType")!=null) {
+					DataType=DataTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DataType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
-					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FixedText")!=null) {
-					FixedText=Serializing.GetXmlNodeValue(doc,"FixedText");
+				if(Serializing.getXmlNodeValue(doc,"FixedText")!=null) {
+					FixedText=Serializing.getXmlNodeValue(doc,"FixedText");
 				}
 			}
 			catch(Exception e) {

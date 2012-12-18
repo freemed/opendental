@@ -15,7 +15,7 @@ public class DtoObject {
 	public DtoObject(Object obj,String typeName) throws Exception {
 		Obj=obj;
 		TypeName=typeName;
-		ObjSerialized=GetSerializedString();
+		ObjSerialized=getSerializedString();
 	}
 	
 	/** We must pass in a matching array of types for situations where nulls are used in parameters.  Otherwise, we won't know the parameter type. 
@@ -30,11 +30,11 @@ public class DtoObject {
 	
 	/** Loops through general types first.  If no match was found then it calls a method that loops through all the Open Dental types. 
 	 * @throws Exception Throws unsupported type exception. */
-	public String GetSerializedString() throws Exception {
+	public String getSerializedString() throws Exception {
 		if(Obj==null) {
 			return "<"+TypeName+"/>";
 		}
-		return Serializing.GetSerializedObject(Obj);
+		return Serializing.getSerializedObject(Obj);
 	}
 	
 	

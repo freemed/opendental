@@ -16,7 +16,7 @@ public class DashboardAR {
 		public double InsEst;
 
 		/** Deep copy of object. */
-		public DashboardAR Copy() {
+		public DashboardAR deepCopy() {
 			DashboardAR dashboardar=new DashboardAR();
 			dashboardar.DashboardARNum=this.DashboardARNum;
 			dashboardar.DateCalc=this.DateCalc;
@@ -26,7 +26,7 @@ public class DashboardAR {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DashboardAR>");
 			sb.append("<DashboardARNum>").append(DashboardARNum).append("</DashboardARNum>");
@@ -40,19 +40,19 @@ public class DashboardAR {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DashboardARNum")!=null) {
-					DashboardARNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DashboardARNum"));
+				if(Serializing.getXmlNodeValue(doc,"DashboardARNum")!=null) {
+					DashboardARNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DashboardARNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateCalc")!=null) {
-					DateCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCalc"));
+				if(Serializing.getXmlNodeValue(doc,"DateCalc")!=null) {
+					DateCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateCalc"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BalTotal")!=null) {
-					BalTotal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"BalTotal"));
+				if(Serializing.getXmlNodeValue(doc,"BalTotal")!=null) {
+					BalTotal=Double.valueOf(Serializing.getXmlNodeValue(doc,"BalTotal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsEst")!=null) {
-					InsEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsEst"));
+				if(Serializing.getXmlNodeValue(doc,"InsEst")!=null) {
+					InsEst=Double.valueOf(Serializing.getXmlNodeValue(doc,"InsEst"));
 				}
 			}
 			catch(Exception e) {

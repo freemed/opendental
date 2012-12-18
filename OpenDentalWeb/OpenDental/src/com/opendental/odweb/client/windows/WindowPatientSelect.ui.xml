@@ -6,7 +6,7 @@
 
 	  <g:DockPanel ui:field="panelContainer">
 	    <g:Dock direction="CENTER">
-	  		<od:ODGrid ui:field="GridMain"/>
+	  		<od:ODGrid ui:field="gridMain"/>
 		</g:Dock>
 		<g:Dock direction="EAST">
 		  <g:VerticalPanel>

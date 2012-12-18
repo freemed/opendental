@@ -16,7 +16,7 @@ public class EhrSummaryCcd {
 		public String ContentSummary;
 
 		/** Deep copy of object. */
-		public EhrSummaryCcd Copy() {
+		public EhrSummaryCcd deepCopy() {
 			EhrSummaryCcd ehrsummaryccd=new EhrSummaryCcd();
 			ehrsummaryccd.EhrSummaryCcdNum=this.EhrSummaryCcdNum;
 			ehrsummaryccd.PatNum=this.PatNum;
@@ -26,13 +26,13 @@ public class EhrSummaryCcd {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrSummaryCcd>");
 			sb.append("<EhrSummaryCcdNum>").append(EhrSummaryCcdNum).append("</EhrSummaryCcdNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DateSummary>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSummary)).append("</DateSummary>");
-			sb.append("<ContentSummary>").append(Serializing.EscapeForXml(ContentSummary)).append("</ContentSummary>");
+			sb.append("<ContentSummary>").append(Serializing.escapeForXml(ContentSummary)).append("</ContentSummary>");
 			sb.append("</EhrSummaryCcd>");
 			return sb.toString();
 		}
@@ -40,19 +40,19 @@ public class EhrSummaryCcd {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EhrSummaryCcdNum")!=null) {
-					EhrSummaryCcdNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrSummaryCcdNum"));
+				if(Serializing.getXmlNodeValue(doc,"EhrSummaryCcdNum")!=null) {
+					EhrSummaryCcdNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrSummaryCcdNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateSummary")!=null) {
-					DateSummary=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSummary"));
+				if(Serializing.getXmlNodeValue(doc,"DateSummary")!=null) {
+					DateSummary=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateSummary"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ContentSummary")!=null) {
-					ContentSummary=Serializing.GetXmlNodeValue(doc,"ContentSummary");
+				if(Serializing.getXmlNodeValue(doc,"ContentSummary")!=null) {
+					ContentSummary=Serializing.getXmlNodeValue(doc,"ContentSummary");
 				}
 			}
 			catch(Exception e) {

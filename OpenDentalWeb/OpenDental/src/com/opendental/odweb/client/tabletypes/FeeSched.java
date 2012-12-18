@@ -16,7 +16,7 @@ public class FeeSched {
 		public boolean IsHidden;
 
 		/** Deep copy of object. */
-		public FeeSched Copy() {
+		public FeeSched deepCopy() {
 			FeeSched feesched=new FeeSched();
 			feesched.FeeSchedNum=this.FeeSchedNum;
 			feesched.Description=this.Description;
@@ -27,11 +27,11 @@ public class FeeSched {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<FeeSched>");
 			sb.append("<FeeSchedNum>").append(FeeSchedNum).append("</FeeSchedNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<FeeSchedType>").append(FeeSchedType.ordinal()).append("</FeeSchedType>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
@@ -42,22 +42,22 @@ public class FeeSched {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"FeeSchedNum")!=null) {
-					FeeSchedNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSchedNum"));
+				if(Serializing.getXmlNodeValue(doc,"FeeSchedNum")!=null) {
+					FeeSchedNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSchedNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FeeSchedType")!=null) {
-					FeeSchedType=FeeScheduleType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSchedType"))];
+				if(Serializing.getXmlNodeValue(doc,"FeeSchedType")!=null) {
+					FeeSchedType=FeeScheduleType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSchedType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

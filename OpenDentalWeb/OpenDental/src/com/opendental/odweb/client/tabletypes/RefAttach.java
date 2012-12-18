@@ -30,7 +30,7 @@ public class RefAttach {
 		public Date DateProcComplete;
 
 		/** Deep copy of object. */
-		public RefAttach Copy() {
+		public RefAttach deepCopy() {
 			RefAttach refattach=new RefAttach();
 			refattach.RefAttachNum=this.RefAttachNum;
 			refattach.ReferralNum=this.ReferralNum;
@@ -47,7 +47,7 @@ public class RefAttach {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RefAttach>");
 			sb.append("<RefAttachNum>").append(RefAttachNum).append("</RefAttachNum>");
@@ -57,7 +57,7 @@ public class RefAttach {
 			sb.append("<RefDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(RefDate)).append("</RefDate>");
 			sb.append("<IsFrom>").append((IsFrom)?1:0).append("</IsFrom>");
 			sb.append("<RefToStatus>").append(RefToStatus.ordinal()).append("</RefToStatus>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<IsTransitionOfCare>").append((IsTransitionOfCare)?1:0).append("</IsTransitionOfCare>");
 			sb.append("<ProcNum>").append(ProcNum).append("</ProcNum>");
 			sb.append("<DateProcComplete>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateProcComplete)).append("</DateProcComplete>");
@@ -68,40 +68,40 @@ public class RefAttach {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RefAttachNum")!=null) {
-					RefAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RefAttachNum"));
+				if(Serializing.getXmlNodeValue(doc,"RefAttachNum")!=null) {
+					RefAttachNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RefAttachNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ReferralNum")!=null) {
-					ReferralNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReferralNum"));
+				if(Serializing.getXmlNodeValue(doc,"ReferralNum")!=null) {
+					ReferralNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReferralNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RefDate")!=null) {
-					RefDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"RefDate"));
+				if(Serializing.getXmlNodeValue(doc,"RefDate")!=null) {
+					RefDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"RefDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsFrom")!=null) {
-					IsFrom=(Serializing.GetXmlNodeValue(doc,"IsFrom")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsFrom")!=null) {
+					IsFrom=(Serializing.getXmlNodeValue(doc,"IsFrom")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RefToStatus")!=null) {
-					RefToStatus=ReferralToStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RefToStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"RefToStatus")!=null) {
+					RefToStatus=ReferralToStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"RefToStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsTransitionOfCare")!=null) {
-					IsTransitionOfCare=(Serializing.GetXmlNodeValue(doc,"IsTransitionOfCare")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsTransitionOfCare")!=null) {
+					IsTransitionOfCare=(Serializing.getXmlNodeValue(doc,"IsTransitionOfCare")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
-					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateProcComplete")!=null) {
-					DateProcComplete=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateProcComplete"));
+				if(Serializing.getXmlNodeValue(doc,"DateProcComplete")!=null) {
+					DateProcComplete=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateProcComplete"));
 				}
 			}
 			catch(Exception e) {

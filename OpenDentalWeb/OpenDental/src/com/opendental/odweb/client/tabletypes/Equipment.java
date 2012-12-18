@@ -28,7 +28,7 @@ public class Equipment {
 		public Date DateEntry;
 
 		/** Deep copy of object. */
-		public Equipment Copy() {
+		public Equipment deepCopy() {
 			Equipment equipment=new Equipment();
 			equipment.EquipmentNum=this.EquipmentNum;
 			equipment.Description=this.Description;
@@ -44,18 +44,18 @@ public class Equipment {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Equipment>");
 			sb.append("<EquipmentNum>").append(EquipmentNum).append("</EquipmentNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<SerialNumber>").append(Serializing.EscapeForXml(SerialNumber)).append("</SerialNumber>");
-			sb.append("<ModelYear>").append(Serializing.EscapeForXml(ModelYear)).append("</ModelYear>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<SerialNumber>").append(Serializing.escapeForXml(SerialNumber)).append("</SerialNumber>");
+			sb.append("<ModelYear>").append(Serializing.escapeForXml(ModelYear)).append("</ModelYear>");
 			sb.append("<DatePurchased>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePurchased)).append("</DatePurchased>");
 			sb.append("<DateSold>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSold)).append("</DateSold>");
 			sb.append("<PurchaseCost>").append(PurchaseCost).append("</PurchaseCost>");
 			sb.append("<MarketValue>").append(MarketValue).append("</MarketValue>");
-			sb.append("<Location>").append(Serializing.EscapeForXml(Location)).append("</Location>");
+			sb.append("<Location>").append(Serializing.escapeForXml(Location)).append("</Location>");
 			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("</Equipment>");
 			return sb.toString();
@@ -64,37 +64,37 @@ public class Equipment {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EquipmentNum")!=null) {
-					EquipmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EquipmentNum"));
+				if(Serializing.getXmlNodeValue(doc,"EquipmentNum")!=null) {
+					EquipmentNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EquipmentNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SerialNumber")!=null) {
-					SerialNumber=Serializing.GetXmlNodeValue(doc,"SerialNumber");
+				if(Serializing.getXmlNodeValue(doc,"SerialNumber")!=null) {
+					SerialNumber=Serializing.getXmlNodeValue(doc,"SerialNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ModelYear")!=null) {
-					ModelYear=Serializing.GetXmlNodeValue(doc,"ModelYear");
+				if(Serializing.getXmlNodeValue(doc,"ModelYear")!=null) {
+					ModelYear=Serializing.getXmlNodeValue(doc,"ModelYear");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DatePurchased")!=null) {
-					DatePurchased=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePurchased"));
+				if(Serializing.getXmlNodeValue(doc,"DatePurchased")!=null) {
+					DatePurchased=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DatePurchased"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateSold")!=null) {
-					DateSold=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSold"));
+				if(Serializing.getXmlNodeValue(doc,"DateSold")!=null) {
+					DateSold=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateSold"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PurchaseCost")!=null) {
-					PurchaseCost=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PurchaseCost"));
+				if(Serializing.getXmlNodeValue(doc,"PurchaseCost")!=null) {
+					PurchaseCost=Double.valueOf(Serializing.getXmlNodeValue(doc,"PurchaseCost"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MarketValue")!=null) {
-					MarketValue=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MarketValue"));
+				if(Serializing.getXmlNodeValue(doc,"MarketValue")!=null) {
+					MarketValue=Double.valueOf(Serializing.getXmlNodeValue(doc,"MarketValue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Location")!=null) {
-					Location=Serializing.GetXmlNodeValue(doc,"Location");
+				if(Serializing.getXmlNodeValue(doc,"Location")!=null) {
+					Location=Serializing.getXmlNodeValue(doc,"Location");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
-					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				if(Serializing.getXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateEntry"));
 				}
 			}
 			catch(Exception e) {

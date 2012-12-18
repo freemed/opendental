@@ -22,7 +22,7 @@ public class EhrProvKey {
 		public boolean HasReportAccess;
 
 		/** Deep copy of object. */
-		public EhrProvKey Copy() {
+		public EhrProvKey deepCopy() {
 			EhrProvKey ehrprovkey=new EhrProvKey();
 			ehrprovkey.EhrProvKeyNum=this.EhrProvKeyNum;
 			ehrprovkey.PatNum=this.PatNum;
@@ -36,16 +36,16 @@ public class EhrProvKey {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrProvKey>");
 			sb.append("<EhrProvKeyNum>").append(EhrProvKeyNum).append("</EhrProvKeyNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<LName>").append(Serializing.EscapeForXml(LName)).append("</LName>");
-			sb.append("<FName>").append(Serializing.EscapeForXml(FName)).append("</FName>");
-			sb.append("<ProvKey>").append(Serializing.EscapeForXml(ProvKey)).append("</ProvKey>");
+			sb.append("<LName>").append(Serializing.escapeForXml(LName)).append("</LName>");
+			sb.append("<FName>").append(Serializing.escapeForXml(FName)).append("</FName>");
+			sb.append("<ProvKey>").append(Serializing.escapeForXml(ProvKey)).append("</ProvKey>");
 			sb.append("<FullTimeEquiv>").append(FullTimeEquiv).append("</FullTimeEquiv>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("<HasReportAccess>").append((HasReportAccess)?1:0).append("</HasReportAccess>");
 			sb.append("</EhrProvKey>");
 			return sb.toString();
@@ -54,31 +54,31 @@ public class EhrProvKey {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EhrProvKeyNum")!=null) {
-					EhrProvKeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrProvKeyNum"));
+				if(Serializing.getXmlNodeValue(doc,"EhrProvKeyNum")!=null) {
+					EhrProvKeyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrProvKeyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
-					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				if(Serializing.getXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.getXmlNodeValue(doc,"LName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
-					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				if(Serializing.getXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.getXmlNodeValue(doc,"FName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvKey")!=null) {
-					ProvKey=Serializing.GetXmlNodeValue(doc,"ProvKey");
+				if(Serializing.getXmlNodeValue(doc,"ProvKey")!=null) {
+					ProvKey=Serializing.getXmlNodeValue(doc,"ProvKey");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FullTimeEquiv")!=null) {
-					FullTimeEquiv=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FullTimeEquiv"));
+				if(Serializing.getXmlNodeValue(doc,"FullTimeEquiv")!=null) {
+					FullTimeEquiv=Float.valueOf(Serializing.getXmlNodeValue(doc,"FullTimeEquiv"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HasReportAccess")!=null) {
-					HasReportAccess=(Serializing.GetXmlNodeValue(doc,"HasReportAccess")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"HasReportAccess")!=null) {
+					HasReportAccess=(Serializing.getXmlNodeValue(doc,"HasReportAccess")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

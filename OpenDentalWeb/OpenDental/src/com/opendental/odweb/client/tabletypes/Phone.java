@@ -40,7 +40,7 @@ public class Phone {
 		public String CustomerNumberRaw;
 
 		/** Deep copy of object. */
-		public Phone Copy() {
+		public Phone deepCopy() {
 			Phone phone=new Phone();
 			phone.PhoneNum=this.PhoneNum;
 			phone.Extension=this.Extension;
@@ -62,25 +62,25 @@ public class Phone {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Phone>");
 			sb.append("<PhoneNum>").append(PhoneNum).append("</PhoneNum>");
 			sb.append("<Extension>").append(Extension).append("</Extension>");
-			sb.append("<EmployeeName>").append(Serializing.EscapeForXml(EmployeeName)).append("</EmployeeName>");
+			sb.append("<EmployeeName>").append(Serializing.escapeForXml(EmployeeName)).append("</EmployeeName>");
 			sb.append("<ClockStatus>").append(ClockStatus.ordinal()).append("</ClockStatus>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ColorBar>").append(ColorBar).append("</ColorBar>");
 			sb.append("<ColorText>").append(ColorText).append("</ColorText>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<CustomerNumber>").append(Serializing.EscapeForXml(CustomerNumber)).append("</CustomerNumber>");
-			sb.append("<InOrOut>").append(Serializing.EscapeForXml(InOrOut)).append("</InOrOut>");
+			sb.append("<CustomerNumber>").append(Serializing.escapeForXml(CustomerNumber)).append("</CustomerNumber>");
+			sb.append("<InOrOut>").append(Serializing.escapeForXml(InOrOut)).append("</InOrOut>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DateTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeStart)).append("</DateTimeStart>");
-			sb.append("<WebCamImage>").append(Serializing.EscapeForXml(WebCamImage)).append("</WebCamImage>");
-			sb.append("<ScreenshotPath>").append(Serializing.EscapeForXml(ScreenshotPath)).append("</ScreenshotPath>");
-			sb.append("<ScreenshotImage>").append(Serializing.EscapeForXml(ScreenshotImage)).append("</ScreenshotImage>");
-			sb.append("<CustomerNumberRaw>").append(Serializing.EscapeForXml(CustomerNumberRaw)).append("</CustomerNumberRaw>");
+			sb.append("<WebCamImage>").append(Serializing.escapeForXml(WebCamImage)).append("</WebCamImage>");
+			sb.append("<ScreenshotPath>").append(Serializing.escapeForXml(ScreenshotPath)).append("</ScreenshotPath>");
+			sb.append("<ScreenshotImage>").append(Serializing.escapeForXml(ScreenshotImage)).append("</ScreenshotImage>");
+			sb.append("<CustomerNumberRaw>").append(Serializing.escapeForXml(CustomerNumberRaw)).append("</CustomerNumberRaw>");
 			sb.append("</Phone>");
 			return sb.toString();
 		}
@@ -88,55 +88,55 @@ public class Phone {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PhoneNum")!=null) {
-					PhoneNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneNum"));
+				if(Serializing.getXmlNodeValue(doc,"PhoneNum")!=null) {
+					PhoneNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Extension")!=null) {
-					Extension=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Extension"));
+				if(Serializing.getXmlNodeValue(doc,"Extension")!=null) {
+					Extension=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Extension"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeName")!=null) {
-					EmployeeName=Serializing.GetXmlNodeValue(doc,"EmployeeName");
+				if(Serializing.getXmlNodeValue(doc,"EmployeeName")!=null) {
+					EmployeeName=Serializing.getXmlNodeValue(doc,"EmployeeName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=ClockStatusEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=ClockStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColorBar")!=null) {
-					ColorBar=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorBar"));
+				if(Serializing.getXmlNodeValue(doc,"ColorBar")!=null) {
+					ColorBar=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColorBar"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColorText")!=null) {
-					ColorText=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorText"));
+				if(Serializing.getXmlNodeValue(doc,"ColorText")!=null) {
+					ColorText=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColorText"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CustomerNumber")!=null) {
-					CustomerNumber=Serializing.GetXmlNodeValue(doc,"CustomerNumber");
+				if(Serializing.getXmlNodeValue(doc,"CustomerNumber")!=null) {
+					CustomerNumber=Serializing.getXmlNodeValue(doc,"CustomerNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InOrOut")!=null) {
-					InOrOut=Serializing.GetXmlNodeValue(doc,"InOrOut");
+				if(Serializing.getXmlNodeValue(doc,"InOrOut")!=null) {
+					InOrOut=Serializing.getXmlNodeValue(doc,"InOrOut");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeStart")!=null) {
-					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeStart")!=null) {
+					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WebCamImage")!=null) {
-					WebCamImage=Serializing.GetXmlNodeValue(doc,"WebCamImage");
+				if(Serializing.getXmlNodeValue(doc,"WebCamImage")!=null) {
+					WebCamImage=Serializing.getXmlNodeValue(doc,"WebCamImage");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenshotPath")!=null) {
-					ScreenshotPath=Serializing.GetXmlNodeValue(doc,"ScreenshotPath");
+				if(Serializing.getXmlNodeValue(doc,"ScreenshotPath")!=null) {
+					ScreenshotPath=Serializing.getXmlNodeValue(doc,"ScreenshotPath");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ScreenshotImage")!=null) {
-					ScreenshotImage=Serializing.GetXmlNodeValue(doc,"ScreenshotImage");
+				if(Serializing.getXmlNodeValue(doc,"ScreenshotImage")!=null) {
+					ScreenshotImage=Serializing.getXmlNodeValue(doc,"ScreenshotImage");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CustomerNumberRaw")!=null) {
-					CustomerNumberRaw=Serializing.GetXmlNodeValue(doc,"CustomerNumberRaw");
+				if(Serializing.getXmlNodeValue(doc,"CustomerNumberRaw")!=null) {
+					CustomerNumberRaw=Serializing.getXmlNodeValue(doc,"CustomerNumberRaw");
 				}
 			}
 			catch(Exception e) {

@@ -38,7 +38,7 @@ public class ClockEvent {
 		public double AmountBonusAuto;
 
 		/** Deep copy of object. */
-		public ClockEvent Copy() {
+		public ClockEvent deepCopy() {
 			ClockEvent clockevent=new ClockEvent();
 			clockevent.ClockEventNum=this.ClockEventNum;
 			clockevent.EmployeeNum=this.EmployeeNum;
@@ -59,7 +59,7 @@ public class ClockEvent {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClockEvent>");
 			sb.append("<ClockEventNum>").append(ClockEventNum).append("</ClockEventNum>");
@@ -67,13 +67,13 @@ public class ClockEvent {
 			sb.append("<TimeEntered1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntered1)).append("</TimeEntered1>");
 			sb.append("<TimeDisplayed1>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeDisplayed1)).append("</TimeDisplayed1>");
 			sb.append("<ClockStatus>").append(ClockStatus.ordinal()).append("</ClockStatus>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<TimeEntered2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntered2)).append("</TimeEntered2>");
 			sb.append("<TimeDisplayed2>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeDisplayed2)).append("</TimeDisplayed2>");
-			sb.append("<OTimeHours>").append(Serializing.EscapeForXml(OTimeHours)).append("</OTimeHours>");
-			sb.append("<OTimeAuto>").append(Serializing.EscapeForXml(OTimeAuto)).append("</OTimeAuto>");
-			sb.append("<Adjust>").append(Serializing.EscapeForXml(Adjust)).append("</Adjust>");
-			sb.append("<AdjustAuto>").append(Serializing.EscapeForXml(AdjustAuto)).append("</AdjustAuto>");
+			sb.append("<OTimeHours>").append(Serializing.escapeForXml(OTimeHours)).append("</OTimeHours>");
+			sb.append("<OTimeAuto>").append(Serializing.escapeForXml(OTimeAuto)).append("</OTimeAuto>");
+			sb.append("<Adjust>").append(Serializing.escapeForXml(Adjust)).append("</Adjust>");
+			sb.append("<AdjustAuto>").append(Serializing.escapeForXml(AdjustAuto)).append("</AdjustAuto>");
 			sb.append("<AdjustIsOverridden>").append((AdjustIsOverridden)?1:0).append("</AdjustIsOverridden>");
 			sb.append("<AmountBonus>").append(AmountBonus).append("</AmountBonus>");
 			sb.append("<AmountBonusAuto>").append(AmountBonusAuto).append("</AmountBonusAuto>");
@@ -84,52 +84,52 @@ public class ClockEvent {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClockEventNum")!=null) {
-					ClockEventNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockEventNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClockEventNum")!=null) {
+					ClockEventNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockEventNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimeEntered1")!=null) {
-					TimeEntered1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntered1"));
+				if(Serializing.getXmlNodeValue(doc,"TimeEntered1")!=null) {
+					TimeEntered1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeEntered1"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimeDisplayed1")!=null) {
-					TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeDisplayed1"));
+				if(Serializing.getXmlNodeValue(doc,"TimeDisplayed1")!=null) {
+					TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeDisplayed1"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=TimeClockStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClockStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
+					ClockStatus=TimeClockStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimeEntered2")!=null) {
-					TimeEntered2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntered2"));
+				if(Serializing.getXmlNodeValue(doc,"TimeEntered2")!=null) {
+					TimeEntered2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeEntered2"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimeDisplayed2")!=null) {
-					TimeDisplayed2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeDisplayed2"));
+				if(Serializing.getXmlNodeValue(doc,"TimeDisplayed2")!=null) {
+					TimeDisplayed2=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeDisplayed2"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OTimeHours")!=null) {
-					OTimeHours=Serializing.GetXmlNodeValue(doc,"OTimeHours");
+				if(Serializing.getXmlNodeValue(doc,"OTimeHours")!=null) {
+					OTimeHours=Serializing.getXmlNodeValue(doc,"OTimeHours");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OTimeAuto")!=null) {
-					OTimeAuto=Serializing.GetXmlNodeValue(doc,"OTimeAuto");
+				if(Serializing.getXmlNodeValue(doc,"OTimeAuto")!=null) {
+					OTimeAuto=Serializing.getXmlNodeValue(doc,"OTimeAuto");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Adjust")!=null) {
-					Adjust=Serializing.GetXmlNodeValue(doc,"Adjust");
+				if(Serializing.getXmlNodeValue(doc,"Adjust")!=null) {
+					Adjust=Serializing.getXmlNodeValue(doc,"Adjust");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AdjustAuto")!=null) {
-					AdjustAuto=Serializing.GetXmlNodeValue(doc,"AdjustAuto");
+				if(Serializing.getXmlNodeValue(doc,"AdjustAuto")!=null) {
+					AdjustAuto=Serializing.getXmlNodeValue(doc,"AdjustAuto");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AdjustIsOverridden")!=null) {
-					AdjustIsOverridden=(Serializing.GetXmlNodeValue(doc,"AdjustIsOverridden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"AdjustIsOverridden")!=null) {
+					AdjustIsOverridden=(Serializing.getXmlNodeValue(doc,"AdjustIsOverridden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AmountBonus")!=null) {
-					AmountBonus=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmountBonus"));
+				if(Serializing.getXmlNodeValue(doc,"AmountBonus")!=null) {
+					AmountBonus=Double.valueOf(Serializing.getXmlNodeValue(doc,"AmountBonus"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AmountBonusAuto")!=null) {
-					AmountBonusAuto=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmountBonusAuto"));
+				if(Serializing.getXmlNodeValue(doc,"AmountBonusAuto")!=null) {
+					AmountBonusAuto=Double.valueOf(Serializing.getXmlNodeValue(doc,"AmountBonusAuto"));
 				}
 			}
 			catch(Exception e) {

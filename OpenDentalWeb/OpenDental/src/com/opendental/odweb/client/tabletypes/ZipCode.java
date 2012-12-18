@@ -16,7 +16,7 @@ public class ZipCode {
 		public boolean IsFrequent;
 
 		/** Deep copy of object. */
-		public ZipCode Copy() {
+		public ZipCode deepCopy() {
 			ZipCode zipcode=new ZipCode();
 			zipcode.ZipCodeNum=this.ZipCodeNum;
 			zipcode.ZipCodeDigits=this.ZipCodeDigits;
@@ -27,13 +27,13 @@ public class ZipCode {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ZipCode>");
 			sb.append("<ZipCodeNum>").append(ZipCodeNum).append("</ZipCodeNum>");
-			sb.append("<ZipCodeDigits>").append(Serializing.EscapeForXml(ZipCodeDigits)).append("</ZipCodeDigits>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
+			sb.append("<ZipCodeDigits>").append(Serializing.escapeForXml(ZipCodeDigits)).append("</ZipCodeDigits>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<State>").append(Serializing.escapeForXml(State)).append("</State>");
 			sb.append("<IsFrequent>").append((IsFrequent)?1:0).append("</IsFrequent>");
 			sb.append("</ZipCode>");
 			return sb.toString();
@@ -42,22 +42,22 @@ public class ZipCode {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ZipCodeNum")!=null) {
-					ZipCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ZipCodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"ZipCodeNum")!=null) {
+					ZipCodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ZipCodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ZipCodeDigits")!=null) {
-					ZipCodeDigits=Serializing.GetXmlNodeValue(doc,"ZipCodeDigits");
+				if(Serializing.getXmlNodeValue(doc,"ZipCodeDigits")!=null) {
+					ZipCodeDigits=Serializing.getXmlNodeValue(doc,"ZipCodeDigits");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
-					State=Serializing.GetXmlNodeValue(doc,"State");
+				if(Serializing.getXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.getXmlNodeValue(doc,"State");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsFrequent")!=null) {
-					IsFrequent=(Serializing.GetXmlNodeValue(doc,"IsFrequent")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsFrequent")!=null) {
+					IsFrequent=(Serializing.getXmlNodeValue(doc,"IsFrequent")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

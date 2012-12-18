@@ -9,15 +9,15 @@ public class DataRow {
 		Cells=new DataCellList();
 	}
 
-	public DataCellList GetCells() {
+	public DataCellList getCells() {
 		return Cells;
 	}
 
-	public void AddCell(String value) {
+	public void addCell(String value) {
 		Cells.add(new DataCell(value));
 	}
 	
-	public void ClearCells() {
+	public void clearCells() {
 		Cells.clear();
 	}
 	

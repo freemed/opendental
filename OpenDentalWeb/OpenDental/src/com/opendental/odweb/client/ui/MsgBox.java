@@ -48,7 +48,7 @@ public class MsgBox extends PopupPanel {
 		setWidget(contentPanel);
 	}
 
-	public static void Show(String text) {
+	public static void show(String text) {
 		MsgBox msgBox=new MsgBox(text);
 		msgBox.show();
 	}

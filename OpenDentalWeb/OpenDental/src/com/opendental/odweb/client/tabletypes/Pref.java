@@ -14,7 +14,7 @@ public class Pref {
 		public String Comments;
 
 		/** Deep copy of object. */
-		public Pref Copy() {
+		public Pref deepCopy() {
 			Pref pref=new Pref();
 			pref.PrefNum=this.PrefNum;
 			pref.PrefName=this.PrefName;
@@ -24,13 +24,13 @@ public class Pref {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Pref>");
 			sb.append("<PrefNum>").append(PrefNum).append("</PrefNum>");
-			sb.append("<PrefName>").append(Serializing.EscapeForXml(PrefName)).append("</PrefName>");
-			sb.append("<ValueString>").append(Serializing.EscapeForXml(ValueString)).append("</ValueString>");
-			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");
+			sb.append("<PrefName>").append(Serializing.escapeForXml(PrefName)).append("</PrefName>");
+			sb.append("<ValueString>").append(Serializing.escapeForXml(ValueString)).append("</ValueString>");
+			sb.append("<Comments>").append(Serializing.escapeForXml(Comments)).append("</Comments>");
 			sb.append("</Pref>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class Pref {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PrefNum")!=null) {
-					PrefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PrefNum"));
+				if(Serializing.getXmlNodeValue(doc,"PrefNum")!=null) {
+					PrefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PrefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PrefName")!=null) {
-					PrefName=Serializing.GetXmlNodeValue(doc,"PrefName");
+				if(Serializing.getXmlNodeValue(doc,"PrefName")!=null) {
+					PrefName=Serializing.getXmlNodeValue(doc,"PrefName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ValueString")!=null) {
-					ValueString=Serializing.GetXmlNodeValue(doc,"ValueString");
+				if(Serializing.getXmlNodeValue(doc,"ValueString")!=null) {
+					ValueString=Serializing.getXmlNodeValue(doc,"ValueString");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
-					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				if(Serializing.getXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.getXmlNodeValue(doc,"Comments");
 				}
 			}
 			catch(Exception e) {

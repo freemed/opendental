@@ -30,7 +30,7 @@ public class Benefit {
 		public BenefitCoverageLevel CoverageLevel;
 
 		/** Deep copy of object. */
-		public Benefit Copy() {
+		public Benefit deepCopy() {
 			Benefit benefit=new Benefit();
 			benefit.BenefitNum=this.BenefitNum;
 			benefit.PlanNum=this.PlanNum;
@@ -48,7 +48,7 @@ public class Benefit {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Benefit>");
 			sb.append("<BenefitNum>").append(BenefitNum).append("</BenefitNum>");
@@ -70,43 +70,43 @@ public class Benefit {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"BenefitNum")!=null) {
-					BenefitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BenefitNum"));
+				if(Serializing.getXmlNodeValue(doc,"BenefitNum")!=null) {
+					BenefitNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BenefitNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
-					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatPlanNum")!=null) {
-					PatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatPlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatPlanNum")!=null) {
+					PatPlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatPlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CovCatNum")!=null) {
-					CovCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CovCatNum"));
+				if(Serializing.getXmlNodeValue(doc,"CovCatNum")!=null) {
+					CovCatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CovCatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BenefitType")!=null) {
-					BenefitType=InsBenefitType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BenefitType"))];
+				if(Serializing.getXmlNodeValue(doc,"BenefitType")!=null) {
+					BenefitType=InsBenefitType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"BenefitType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Percent")!=null) {
-					Percent=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Percent"));
+				if(Serializing.getXmlNodeValue(doc,"Percent")!=null) {
+					Percent=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Percent"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MonetaryAmt")!=null) {
-					MonetaryAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MonetaryAmt"));
+				if(Serializing.getXmlNodeValue(doc,"MonetaryAmt")!=null) {
+					MonetaryAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"MonetaryAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimePeriod")!=null) {
-					TimePeriod=BenefitTimePeriod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimePeriod"))];
+				if(Serializing.getXmlNodeValue(doc,"TimePeriod")!=null) {
+					TimePeriod=BenefitTimePeriod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TimePeriod"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"QuantityQualifier")!=null) {
-					QuantityQualifier=BenefitQuantity.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuantityQualifier"))];
+				if(Serializing.getXmlNodeValue(doc,"QuantityQualifier")!=null) {
+					QuantityQualifier=BenefitQuantity.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuantityQualifier"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Quantity")!=null) {
-					Quantity=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Quantity"));
+				if(Serializing.getXmlNodeValue(doc,"Quantity")!=null) {
+					Quantity=Byte.valueOf(Serializing.getXmlNodeValue(doc,"Quantity"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CoverageLevel")!=null) {
-					CoverageLevel=BenefitCoverageLevel.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CoverageLevel"))];
+				if(Serializing.getXmlNodeValue(doc,"CoverageLevel")!=null) {
+					CoverageLevel=BenefitCoverageLevel.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CoverageLevel"))];
 				}
 			}
 			catch(Exception e) {

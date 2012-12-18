@@ -12,7 +12,7 @@ public class AutoCodeCond {
 		public AutoCondition Cond;
 
 		/** Deep copy of object. */
-		public AutoCodeCond Copy() {
+		public AutoCodeCond deepCopy() {
 			AutoCodeCond autocodecond=new AutoCodeCond();
 			autocodecond.AutoCodeCondNum=this.AutoCodeCondNum;
 			autocodecond.AutoCodeItemNum=this.AutoCodeItemNum;
@@ -21,7 +21,7 @@ public class AutoCodeCond {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<AutoCodeCond>");
 			sb.append("<AutoCodeCondNum>").append(AutoCodeCondNum).append("</AutoCodeCondNum>");
@@ -34,16 +34,16 @@ public class AutoCodeCond {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AutoCodeCondNum")!=null) {
-					AutoCodeCondNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoCodeCondNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutoCodeCondNum")!=null) {
+					AutoCodeCondNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoCodeCondNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AutoCodeItemNum")!=null) {
-					AutoCodeItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoCodeItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutoCodeItemNum")!=null) {
+					AutoCodeItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoCodeItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Cond")!=null) {
-					Cond=AutoCondition.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Cond"))];
+				if(Serializing.getXmlNodeValue(doc,"Cond")!=null) {
+					Cond=AutoCondition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Cond"))];
 				}
 			}
 			catch(Exception e) {

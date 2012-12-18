@@ -46,7 +46,7 @@ public class Etrans {
 		public int InsSubNum;
 
 		/** Deep copy of object. */
-		public Etrans Copy() {
+		public Etrans deepCopy() {
 			Etrans etrans=new Etrans();
 			etrans.EtransNum=this.EtransNum;
 			etrans.DateTimeTrans=this.DateTimeTrans;
@@ -71,7 +71,7 @@ public class Etrans {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Etrans>");
 			sb.append("<EtransNum>").append(EtransNum).append("</EtransNum>");
@@ -86,9 +86,9 @@ public class Etrans {
 			sb.append("<CarrierNum2>").append(CarrierNum2).append("</CarrierNum2>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<BatchNumber>").append(BatchNumber).append("</BatchNumber>");
-			sb.append("<AckCode>").append(Serializing.EscapeForXml(AckCode)).append("</AckCode>");
+			sb.append("<AckCode>").append(Serializing.escapeForXml(AckCode)).append("</AckCode>");
 			sb.append("<TransSetNum>").append(TransSetNum).append("</TransSetNum>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<EtransMessageTextNum>").append(EtransMessageTextNum).append("</EtransMessageTextNum>");
 			sb.append("<AckEtransNum>").append(AckEtransNum).append("</AckEtransNum>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
@@ -100,64 +100,64 @@ public class Etrans {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EtransNum")!=null) {
-					EtransNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransNum"));
+				if(Serializing.getXmlNodeValue(doc,"EtransNum")!=null) {
+					EtransNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EtransNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeTrans")!=null) {
-					DateTimeTrans=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeTrans"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeTrans")!=null) {
+					DateTimeTrans=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeTrans"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClearingHouseNum")!=null) {
-					ClearingHouseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClearingHouseNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClearingHouseNum")!=null) {
+					ClearingHouseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClearingHouseNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Etype")!=null) {
-					Etype=EtransType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Etype"))];
+				if(Serializing.getXmlNodeValue(doc,"Etype")!=null) {
+					Etype=EtransType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Etype"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
-					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OfficeSequenceNumber")!=null) {
-					OfficeSequenceNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OfficeSequenceNumber"));
+				if(Serializing.getXmlNodeValue(doc,"OfficeSequenceNumber")!=null) {
+					OfficeSequenceNumber=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OfficeSequenceNumber"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter")!=null) {
-					CarrierTransCounter=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierTransCounter")!=null) {
+					CarrierTransCounter=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierTransCounter"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter2")!=null) {
-					CarrierTransCounter2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierTransCounter2"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierTransCounter2")!=null) {
+					CarrierTransCounter2=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierTransCounter2"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
-					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierNum2")!=null) {
-					CarrierNum2=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum2"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierNum2")!=null) {
+					CarrierNum2=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierNum2"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BatchNumber")!=null) {
-					BatchNumber=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BatchNumber"));
+				if(Serializing.getXmlNodeValue(doc,"BatchNumber")!=null) {
+					BatchNumber=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BatchNumber"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AckCode")!=null) {
-					AckCode=Serializing.GetXmlNodeValue(doc,"AckCode");
+				if(Serializing.getXmlNodeValue(doc,"AckCode")!=null) {
+					AckCode=Serializing.getXmlNodeValue(doc,"AckCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TransSetNum")!=null) {
-					TransSetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransSetNum"));
+				if(Serializing.getXmlNodeValue(doc,"TransSetNum")!=null) {
+					TransSetNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TransSetNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
-					EtransMessageTextNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum"));
+				if(Serializing.getXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
+					EtransMessageTextNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EtransMessageTextNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AckEtransNum")!=null) {
-					AckEtransNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AckEtransNum"));
+				if(Serializing.getXmlNodeValue(doc,"AckEtransNum")!=null) {
+					AckEtransNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AckEtransNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
-					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
-					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsSubNum"));
 				}
 			}
 			catch(Exception e) {

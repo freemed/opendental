@@ -20,7 +20,7 @@ public class ToothInitial {
 		public int ColorDraw;
 
 		/** Deep copy of object. */
-		public ToothInitial Copy() {
+		public ToothInitial deepCopy() {
 			ToothInitial toothinitial=new ToothInitial();
 			toothinitial.ToothInitialNum=this.ToothInitialNum;
 			toothinitial.PatNum=this.PatNum;
@@ -33,15 +33,15 @@ public class ToothInitial {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ToothInitial>");
 			sb.append("<ToothInitialNum>").append(ToothInitialNum).append("</ToothInitialNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ToothNum>").append(Serializing.EscapeForXml(ToothNum)).append("</ToothNum>");
+			sb.append("<ToothNum>").append(Serializing.escapeForXml(ToothNum)).append("</ToothNum>");
 			sb.append("<InitialType>").append(InitialType.ordinal()).append("</InitialType>");
 			sb.append("<Movement>").append(Movement).append("</Movement>");
-			sb.append("<DrawingSegment>").append(Serializing.EscapeForXml(DrawingSegment)).append("</DrawingSegment>");
+			sb.append("<DrawingSegment>").append(Serializing.escapeForXml(DrawingSegment)).append("</DrawingSegment>");
 			sb.append("<ColorDraw>").append(ColorDraw).append("</ColorDraw>");
 			sb.append("</ToothInitial>");
 			return sb.toString();
@@ -50,28 +50,28 @@ public class ToothInitial {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ToothInitialNum")!=null) {
-					ToothInitialNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothInitialNum"));
+				if(Serializing.getXmlNodeValue(doc,"ToothInitialNum")!=null) {
+					ToothInitialNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothInitialNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToothNum")!=null) {
-					ToothNum=Serializing.GetXmlNodeValue(doc,"ToothNum");
+				if(Serializing.getXmlNodeValue(doc,"ToothNum")!=null) {
+					ToothNum=Serializing.getXmlNodeValue(doc,"ToothNum");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InitialType")!=null) {
-					InitialType=ToothInitialType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InitialType"))];
+				if(Serializing.getXmlNodeValue(doc,"InitialType")!=null) {
+					InitialType=ToothInitialType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"InitialType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Movement")!=null) {
-					Movement=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Movement"));
+				if(Serializing.getXmlNodeValue(doc,"Movement")!=null) {
+					Movement=Float.valueOf(Serializing.getXmlNodeValue(doc,"Movement"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DrawingSegment")!=null) {
-					DrawingSegment=Serializing.GetXmlNodeValue(doc,"DrawingSegment");
+				if(Serializing.getXmlNodeValue(doc,"DrawingSegment")!=null) {
+					DrawingSegment=Serializing.getXmlNodeValue(doc,"DrawingSegment");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColorDraw")!=null) {
-					ColorDraw=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorDraw"));
+				if(Serializing.getXmlNodeValue(doc,"ColorDraw")!=null) {
+					ColorDraw=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColorDraw"));
 				}
 			}
 			catch(Exception e) {

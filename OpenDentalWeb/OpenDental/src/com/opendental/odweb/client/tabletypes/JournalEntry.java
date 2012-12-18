@@ -28,7 +28,7 @@ public class JournalEntry {
 		public int ReconcileNum;
 
 		/** Deep copy of object. */
-		public JournalEntry Copy() {
+		public JournalEntry deepCopy() {
 			JournalEntry journalentry=new JournalEntry();
 			journalentry.JournalEntryNum=this.JournalEntryNum;
 			journalentry.TransactionNum=this.TransactionNum;
@@ -44,7 +44,7 @@ public class JournalEntry {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<JournalEntry>");
 			sb.append("<JournalEntryNum>").append(JournalEntryNum).append("</JournalEntryNum>");
@@ -53,9 +53,9 @@ public class JournalEntry {
 			sb.append("<DateDisplayed>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDisplayed)).append("</DateDisplayed>");
 			sb.append("<DebitAmt>").append(DebitAmt).append("</DebitAmt>");
 			sb.append("<CreditAmt>").append(CreditAmt).append("</CreditAmt>");
-			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");
-			sb.append("<Splits>").append(Serializing.EscapeForXml(Splits)).append("</Splits>");
-			sb.append("<CheckNumber>").append(Serializing.EscapeForXml(CheckNumber)).append("</CheckNumber>");
+			sb.append("<Memo>").append(Serializing.escapeForXml(Memo)).append("</Memo>");
+			sb.append("<Splits>").append(Serializing.escapeForXml(Splits)).append("</Splits>");
+			sb.append("<CheckNumber>").append(Serializing.escapeForXml(CheckNumber)).append("</CheckNumber>");
 			sb.append("<ReconcileNum>").append(ReconcileNum).append("</ReconcileNum>");
 			sb.append("</JournalEntry>");
 			return sb.toString();
@@ -64,37 +64,37 @@ public class JournalEntry {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"JournalEntryNum")!=null) {
-					JournalEntryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"JournalEntryNum"));
+				if(Serializing.getXmlNodeValue(doc,"JournalEntryNum")!=null) {
+					JournalEntryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"JournalEntryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TransactionNum")!=null) {
-					TransactionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransactionNum"));
+				if(Serializing.getXmlNodeValue(doc,"TransactionNum")!=null) {
+					TransactionNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TransactionNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AccountNum")!=null) {
-					AccountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountNum"));
+				if(Serializing.getXmlNodeValue(doc,"AccountNum")!=null) {
+					AccountNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AccountNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateDisplayed")!=null) {
-					DateDisplayed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDisplayed"));
+				if(Serializing.getXmlNodeValue(doc,"DateDisplayed")!=null) {
+					DateDisplayed=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateDisplayed"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DebitAmt")!=null) {
-					DebitAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DebitAmt"));
+				if(Serializing.getXmlNodeValue(doc,"DebitAmt")!=null) {
+					DebitAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"DebitAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CreditAmt")!=null) {
-					CreditAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"CreditAmt"));
+				if(Serializing.getXmlNodeValue(doc,"CreditAmt")!=null) {
+					CreditAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"CreditAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Memo")!=null) {
-					Memo=Serializing.GetXmlNodeValue(doc,"Memo");
+				if(Serializing.getXmlNodeValue(doc,"Memo")!=null) {
+					Memo=Serializing.getXmlNodeValue(doc,"Memo");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Splits")!=null) {
-					Splits=Serializing.GetXmlNodeValue(doc,"Splits");
+				if(Serializing.getXmlNodeValue(doc,"Splits")!=null) {
+					Splits=Serializing.getXmlNodeValue(doc,"Splits");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CheckNumber")!=null) {
-					CheckNumber=Serializing.GetXmlNodeValue(doc,"CheckNumber");
+				if(Serializing.getXmlNodeValue(doc,"CheckNumber")!=null) {
+					CheckNumber=Serializing.getXmlNodeValue(doc,"CheckNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ReconcileNum")!=null) {
-					ReconcileNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReconcileNum"));
+				if(Serializing.getXmlNodeValue(doc,"ReconcileNum")!=null) {
+					ReconcileNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReconcileNum"));
 				}
 			}
 			catch(Exception e) {

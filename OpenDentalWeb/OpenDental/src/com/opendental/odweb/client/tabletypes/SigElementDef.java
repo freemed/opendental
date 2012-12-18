@@ -20,7 +20,7 @@ public class SigElementDef {
 		public int ItemOrder;
 
 		/** Deep copy of object. */
-		public SigElementDef Copy() {
+		public SigElementDef deepCopy() {
 			SigElementDef sigelementdef=new SigElementDef();
 			sigelementdef.SigElementDefNum=this.SigElementDefNum;
 			sigelementdef.LightRow=this.LightRow;
@@ -33,15 +33,15 @@ public class SigElementDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SigElementDef>");
 			sb.append("<SigElementDefNum>").append(SigElementDefNum).append("</SigElementDefNum>");
 			sb.append("<LightRow>").append(LightRow).append("</LightRow>");
 			sb.append("<LightColor>").append(LightColor).append("</LightColor>");
 			sb.append("<SigElementType>").append(SigElementType.ordinal()).append("</SigElementType>");
-			sb.append("<SigText>").append(Serializing.EscapeForXml(SigText)).append("</SigText>");
-			sb.append("<Sound>").append(Serializing.EscapeForXml(Sound)).append("</Sound>");
+			sb.append("<SigText>").append(Serializing.escapeForXml(SigText)).append("</SigText>");
+			sb.append("<Sound>").append(Serializing.escapeForXml(Sound)).append("</Sound>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("</SigElementDef>");
 			return sb.toString();
@@ -50,28 +50,28 @@ public class SigElementDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SigElementDefNum")!=null) {
-					SigElementDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"SigElementDefNum")!=null) {
+					SigElementDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigElementDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LightRow")!=null) {
-					LightRow=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"LightRow"));
+				if(Serializing.getXmlNodeValue(doc,"LightRow")!=null) {
+					LightRow=Byte.valueOf(Serializing.getXmlNodeValue(doc,"LightRow"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LightColor")!=null) {
-					LightColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LightColor"));
+				if(Serializing.getXmlNodeValue(doc,"LightColor")!=null) {
+					LightColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LightColor"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigElementType")!=null) {
-					SigElementType=SignalElementType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SigElementType"))];
+				if(Serializing.getXmlNodeValue(doc,"SigElementType")!=null) {
+					SigElementType=SignalElementType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigElementType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SigText")!=null) {
-					SigText=Serializing.GetXmlNodeValue(doc,"SigText");
+				if(Serializing.getXmlNodeValue(doc,"SigText")!=null) {
+					SigText=Serializing.getXmlNodeValue(doc,"SigText");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Sound")!=null) {
-					Sound=Serializing.GetXmlNodeValue(doc,"Sound");
+				if(Serializing.getXmlNodeValue(doc,"Sound")!=null) {
+					Sound=Serializing.getXmlNodeValue(doc,"Sound");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
 			}
 			catch(Exception e) {

@@ -14,7 +14,7 @@ public class TerminalActive {
 		public int PatNum;
 
 		/** Deep copy of object. */
-		public TerminalActive Copy() {
+		public TerminalActive deepCopy() {
 			TerminalActive terminalactive=new TerminalActive();
 			terminalactive.TerminalActiveNum=this.TerminalActiveNum;
 			terminalactive.ComputerName=this.ComputerName;
@@ -24,11 +24,11 @@ public class TerminalActive {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TerminalActive>");
 			sb.append("<TerminalActiveNum>").append(TerminalActiveNum).append("</TerminalActiveNum>");
-			sb.append("<ComputerName>").append(Serializing.EscapeForXml(ComputerName)).append("</ComputerName>");
+			sb.append("<ComputerName>").append(Serializing.escapeForXml(ComputerName)).append("</ComputerName>");
 			sb.append("<TerminalStatus>").append(TerminalStatus.ordinal()).append("</TerminalStatus>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("</TerminalActive>");
@@ -38,19 +38,19 @@ public class TerminalActive {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TerminalActiveNum")!=null) {
-					TerminalActiveNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TerminalActiveNum"));
+				if(Serializing.getXmlNodeValue(doc,"TerminalActiveNum")!=null) {
+					TerminalActiveNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TerminalActiveNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
-					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				if(Serializing.getXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TerminalStatus")!=null) {
-					TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TerminalStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"TerminalStatus")!=null) {
+					TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TerminalStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
 			}
 			catch(Exception e) {

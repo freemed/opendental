@@ -45,7 +45,7 @@ public class Accounts {
 		ArrayList<Account> listShort=new ArrayList<Account>();
 		for(int i=0;i<ListLong.size();i++){
 			if(!ListLong.get(i).Inactive) {
-				listShort.add(ListLong.get(i).Copy());
+				listShort.add(ListLong.get(i).deepCopy());
 			}
 		}
 		ListShort=listShort;
@@ -55,9 +55,9 @@ public class Accounts {
 	public static double GetBalance(int accountNum,AccountType acctType) {
 		String[] paramTypes= { "long","AccountType" };//The parameter types in the C# method that we will be calling.
 		try {
-			Meth.GetInt("Accounts.GetBalance",paramTypes,accountNum,acctType);
+			Meth.getInt("Accounts.GetBalance",paramTypes,accountNum,acctType);
 		} catch (Exception e) {
-			MsgBox.Show("Error:\r\n"+e.getMessage());
+			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
 		return 0;
 	}

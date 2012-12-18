@@ -62,7 +62,7 @@ public class InsPlan {
 		public EnumCobRule CobRule;
 
 		/** Deep copy of object. */
-		public InsPlan Copy() {
+		public InsPlan deepCopy() {
 			InsPlan insplan=new InsPlan();
 			insplan.PlanNum=this.PlanNum;
 			insplan.GroupName=this.GroupName;
@@ -96,15 +96,15 @@ public class InsPlan {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<InsPlan>");
 			sb.append("<PlanNum>").append(PlanNum).append("</PlanNum>");
-			sb.append("<GroupName>").append(Serializing.EscapeForXml(GroupName)).append("</GroupName>");
-			sb.append("<GroupNum>").append(Serializing.EscapeForXml(GroupNum)).append("</GroupNum>");
-			sb.append("<PlanNote>").append(Serializing.EscapeForXml(PlanNote)).append("</PlanNote>");
+			sb.append("<GroupName>").append(Serializing.escapeForXml(GroupName)).append("</GroupName>");
+			sb.append("<GroupNum>").append(Serializing.escapeForXml(GroupNum)).append("</GroupNum>");
+			sb.append("<PlanNote>").append(Serializing.escapeForXml(PlanNote)).append("</PlanNote>");
 			sb.append("<FeeSched>").append(FeeSched).append("</FeeSched>");
-			sb.append("<PlanType>").append(Serializing.EscapeForXml(PlanType)).append("</PlanType>");
+			sb.append("<PlanType>").append(Serializing.escapeForXml(PlanType)).append("</PlanType>");
 			sb.append("<ClaimFormNum>").append(ClaimFormNum).append("</ClaimFormNum>");
 			sb.append("<UseAltCode>").append((UseAltCode)?1:0).append("</UseAltCode>");
 			sb.append("<ClaimsUseUCR>").append((ClaimsUseUCR)?1:0).append("</ClaimsUseUCR>");
@@ -112,8 +112,8 @@ public class InsPlan {
 			sb.append("<EmployerNum>").append(EmployerNum).append("</EmployerNum>");
 			sb.append("<CarrierNum>").append(CarrierNum).append("</CarrierNum>");
 			sb.append("<AllowedFeeSched>").append(AllowedFeeSched).append("</AllowedFeeSched>");
-			sb.append("<TrojanID>").append(Serializing.EscapeForXml(TrojanID)).append("</TrojanID>");
-			sb.append("<DivisionNo>").append(Serializing.EscapeForXml(DivisionNo)).append("</DivisionNo>");
+			sb.append("<TrojanID>").append(Serializing.escapeForXml(TrojanID)).append("</TrojanID>");
+			sb.append("<DivisionNo>").append(Serializing.escapeForXml(DivisionNo)).append("</DivisionNo>");
 			sb.append("<IsMedical>").append((IsMedical)?1:0).append("</IsMedical>");
 			sb.append("<FilingCode>").append(FilingCode).append("</FilingCode>");
 			sb.append("<DentaideCardSequence>").append(DentaideCardSequence).append("</DentaideCardSequence>");
@@ -122,10 +122,10 @@ public class InsPlan {
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<MonthRenew>").append(MonthRenew).append("</MonthRenew>");
 			sb.append("<FilingCodeSubtype>").append(FilingCodeSubtype).append("</FilingCodeSubtype>");
-			sb.append("<CanadianPlanFlag>").append(Serializing.EscapeForXml(CanadianPlanFlag)).append("</CanadianPlanFlag>");
-			sb.append("<CanadianDiagnosticCode>").append(Serializing.EscapeForXml(CanadianDiagnosticCode)).append("</CanadianDiagnosticCode>");
-			sb.append("<CanadianInstitutionCode>").append(Serializing.EscapeForXml(CanadianInstitutionCode)).append("</CanadianInstitutionCode>");
-			sb.append("<RxBIN>").append(Serializing.EscapeForXml(RxBIN)).append("</RxBIN>");
+			sb.append("<CanadianPlanFlag>").append(Serializing.escapeForXml(CanadianPlanFlag)).append("</CanadianPlanFlag>");
+			sb.append("<CanadianDiagnosticCode>").append(Serializing.escapeForXml(CanadianDiagnosticCode)).append("</CanadianDiagnosticCode>");
+			sb.append("<CanadianInstitutionCode>").append(Serializing.escapeForXml(CanadianInstitutionCode)).append("</CanadianInstitutionCode>");
+			sb.append("<RxBIN>").append(Serializing.escapeForXml(RxBIN)).append("</RxBIN>");
 			sb.append("<CobRule>").append(CobRule.ordinal()).append("</CobRule>");
 			sb.append("</InsPlan>");
 			return sb.toString();
@@ -134,91 +134,91 @@ public class InsPlan {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PlanNum")!=null) {
-					PlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PlanNum")!=null) {
+					PlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GroupName")!=null) {
-					GroupName=Serializing.GetXmlNodeValue(doc,"GroupName");
+				if(Serializing.getXmlNodeValue(doc,"GroupName")!=null) {
+					GroupName=Serializing.getXmlNodeValue(doc,"GroupName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GroupNum")!=null) {
-					GroupNum=Serializing.GetXmlNodeValue(doc,"GroupNum");
+				if(Serializing.getXmlNodeValue(doc,"GroupNum")!=null) {
+					GroupNum=Serializing.getXmlNodeValue(doc,"GroupNum");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlanNote")!=null) {
-					PlanNote=Serializing.GetXmlNodeValue(doc,"PlanNote");
+				if(Serializing.getXmlNodeValue(doc,"PlanNote")!=null) {
+					PlanNote=Serializing.getXmlNodeValue(doc,"PlanNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
-					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				if(Serializing.getXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSched"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlanType")!=null) {
-					PlanType=Serializing.GetXmlNodeValue(doc,"PlanType");
+				if(Serializing.getXmlNodeValue(doc,"PlanType")!=null) {
+					PlanType=Serializing.getXmlNodeValue(doc,"PlanType");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
-					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimFormNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UseAltCode")!=null) {
-					UseAltCode=(Serializing.GetXmlNodeValue(doc,"UseAltCode")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"UseAltCode")!=null) {
+					UseAltCode=(Serializing.getXmlNodeValue(doc,"UseAltCode")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimsUseUCR")!=null) {
-					ClaimsUseUCR=(Serializing.GetXmlNodeValue(doc,"ClaimsUseUCR")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ClaimsUseUCR")!=null) {
+					ClaimsUseUCR=(Serializing.getXmlNodeValue(doc,"ClaimsUseUCR")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CopayFeeSched")!=null) {
-					CopayFeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CopayFeeSched"));
+				if(Serializing.getXmlNodeValue(doc,"CopayFeeSched")!=null) {
+					CopayFeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CopayFeeSched"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployerNum")!=null) {
-					EmployerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployerNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployerNum")!=null) {
+					EmployerNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployerNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
-					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AllowedFeeSched")!=null) {
-					AllowedFeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllowedFeeSched"));
+				if(Serializing.getXmlNodeValue(doc,"AllowedFeeSched")!=null) {
+					AllowedFeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AllowedFeeSched"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TrojanID")!=null) {
-					TrojanID=Serializing.GetXmlNodeValue(doc,"TrojanID");
+				if(Serializing.getXmlNodeValue(doc,"TrojanID")!=null) {
+					TrojanID=Serializing.getXmlNodeValue(doc,"TrojanID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DivisionNo")!=null) {
-					DivisionNo=Serializing.GetXmlNodeValue(doc,"DivisionNo");
+				if(Serializing.getXmlNodeValue(doc,"DivisionNo")!=null) {
+					DivisionNo=Serializing.getXmlNodeValue(doc,"DivisionNo");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsMedical")!=null) {
-					IsMedical=(Serializing.GetXmlNodeValue(doc,"IsMedical")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsMedical")!=null) {
+					IsMedical=(Serializing.getXmlNodeValue(doc,"IsMedical")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FilingCode")!=null) {
-					FilingCode=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FilingCode"));
+				if(Serializing.getXmlNodeValue(doc,"FilingCode")!=null) {
+					FilingCode=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FilingCode"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DentaideCardSequence")!=null) {
-					DentaideCardSequence=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"DentaideCardSequence"));
+				if(Serializing.getXmlNodeValue(doc,"DentaideCardSequence")!=null) {
+					DentaideCardSequence=Byte.valueOf(Serializing.getXmlNodeValue(doc,"DentaideCardSequence"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ShowBaseUnits")!=null) {
-					ShowBaseUnits=(Serializing.GetXmlNodeValue(doc,"ShowBaseUnits")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ShowBaseUnits")!=null) {
+					ShowBaseUnits=(Serializing.getXmlNodeValue(doc,"ShowBaseUnits")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeSubstNone")!=null) {
-					CodeSubstNone=(Serializing.GetXmlNodeValue(doc,"CodeSubstNone")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"CodeSubstNone")!=null) {
+					CodeSubstNone=(Serializing.getXmlNodeValue(doc,"CodeSubstNone")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MonthRenew")!=null) {
-					MonthRenew=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"MonthRenew"));
+				if(Serializing.getXmlNodeValue(doc,"MonthRenew")!=null) {
+					MonthRenew=Byte.valueOf(Serializing.getXmlNodeValue(doc,"MonthRenew"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FilingCodeSubtype")!=null) {
-					FilingCodeSubtype=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FilingCodeSubtype"));
+				if(Serializing.getXmlNodeValue(doc,"FilingCodeSubtype")!=null) {
+					FilingCodeSubtype=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FilingCodeSubtype"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianPlanFlag")!=null) {
-					CanadianPlanFlag=Serializing.GetXmlNodeValue(doc,"CanadianPlanFlag");
+				if(Serializing.getXmlNodeValue(doc,"CanadianPlanFlag")!=null) {
+					CanadianPlanFlag=Serializing.getXmlNodeValue(doc,"CanadianPlanFlag");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianDiagnosticCode")!=null) {
-					CanadianDiagnosticCode=Serializing.GetXmlNodeValue(doc,"CanadianDiagnosticCode");
+				if(Serializing.getXmlNodeValue(doc,"CanadianDiagnosticCode")!=null) {
+					CanadianDiagnosticCode=Serializing.getXmlNodeValue(doc,"CanadianDiagnosticCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianInstitutionCode")!=null) {
-					CanadianInstitutionCode=Serializing.GetXmlNodeValue(doc,"CanadianInstitutionCode");
+				if(Serializing.getXmlNodeValue(doc,"CanadianInstitutionCode")!=null) {
+					CanadianInstitutionCode=Serializing.getXmlNodeValue(doc,"CanadianInstitutionCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxBIN")!=null) {
-					RxBIN=Serializing.GetXmlNodeValue(doc,"RxBIN");
+				if(Serializing.getXmlNodeValue(doc,"RxBIN")!=null) {
+					RxBIN=Serializing.getXmlNodeValue(doc,"RxBIN");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CobRule")!=null) {
-					CobRule=EnumCobRule.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CobRule"))];
+				if(Serializing.getXmlNodeValue(doc,"CobRule")!=null) {
+					CobRule=EnumCobRule.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CobRule"))];
 				}
 			}
 			catch(Exception e) {

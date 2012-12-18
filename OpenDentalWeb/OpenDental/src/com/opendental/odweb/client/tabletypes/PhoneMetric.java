@@ -18,7 +18,7 @@ public class PhoneMetric {
 		public int MinutesBehind;
 
 		/** Deep copy of object. */
-		public PhoneMetric Copy() {
+		public PhoneMetric deepCopy() {
 			PhoneMetric phonemetric=new PhoneMetric();
 			phonemetric.PhoneMetricNum=this.PhoneMetricNum;
 			phonemetric.DateTimeEntry=this.DateTimeEntry;
@@ -29,7 +29,7 @@ public class PhoneMetric {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PhoneMetric>");
 			sb.append("<PhoneMetricNum>").append(PhoneMetricNum).append("</PhoneMetricNum>");
@@ -44,22 +44,22 @@ public class PhoneMetric {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PhoneMetricNum")!=null) {
-					PhoneMetricNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneMetricNum"));
+				if(Serializing.getXmlNodeValue(doc,"PhoneMetricNum")!=null) {
+					PhoneMetricNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneMetricNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeEntry")!=null) {
-					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEntry"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeEntry")!=null) {
+					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEntry"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"VoiceMails")!=null) {
-					VoiceMails=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VoiceMails"));
+				if(Serializing.getXmlNodeValue(doc,"VoiceMails")!=null) {
+					VoiceMails=Integer.valueOf(Serializing.getXmlNodeValue(doc,"VoiceMails"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Triages")!=null) {
-					Triages=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Triages"));
+				if(Serializing.getXmlNodeValue(doc,"Triages")!=null) {
+					Triages=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Triages"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MinutesBehind")!=null) {
-					MinutesBehind=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MinutesBehind"));
+				if(Serializing.getXmlNodeValue(doc,"MinutesBehind")!=null) {
+					MinutesBehind=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MinutesBehind"));
 				}
 			}
 			catch(Exception e) {

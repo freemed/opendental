@@ -16,7 +16,7 @@ public class PerioExam {
 		public int ProvNum;
 
 		/** Deep copy of object. */
-		public PerioExam Copy() {
+		public PerioExam deepCopy() {
 			PerioExam perioexam=new PerioExam();
 			perioexam.PerioExamNum=this.PerioExamNum;
 			perioexam.PatNum=this.PatNum;
@@ -26,7 +26,7 @@ public class PerioExam {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PerioExam>");
 			sb.append("<PerioExamNum>").append(PerioExamNum).append("</PerioExamNum>");
@@ -40,19 +40,19 @@ public class PerioExam {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PerioExamNum")!=null) {
-					PerioExamNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PerioExamNum"));
+				if(Serializing.getXmlNodeValue(doc,"PerioExamNum")!=null) {
+					PerioExamNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PerioExamNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ExamDate")!=null) {
-					ExamDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"ExamDate"));
+				if(Serializing.getXmlNodeValue(doc,"ExamDate")!=null) {
+					ExamDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"ExamDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
 			}
 			catch(Exception e) {

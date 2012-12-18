@@ -14,7 +14,7 @@ public class EmailAttach {
 		public String ActualFileName;
 
 		/** Deep copy of object. */
-		public EmailAttach Copy() {
+		public EmailAttach deepCopy() {
 			EmailAttach emailattach=new EmailAttach();
 			emailattach.EmailAttachNum=this.EmailAttachNum;
 			emailattach.EmailMessageNum=this.EmailMessageNum;
@@ -24,13 +24,13 @@ public class EmailAttach {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EmailAttach>");
 			sb.append("<EmailAttachNum>").append(EmailAttachNum).append("</EmailAttachNum>");
 			sb.append("<EmailMessageNum>").append(EmailMessageNum).append("</EmailMessageNum>");
-			sb.append("<DisplayedFileName>").append(Serializing.EscapeForXml(DisplayedFileName)).append("</DisplayedFileName>");
-			sb.append("<ActualFileName>").append(Serializing.EscapeForXml(ActualFileName)).append("</ActualFileName>");
+			sb.append("<DisplayedFileName>").append(Serializing.escapeForXml(DisplayedFileName)).append("</DisplayedFileName>");
+			sb.append("<ActualFileName>").append(Serializing.escapeForXml(ActualFileName)).append("</ActualFileName>");
 			sb.append("</EmailAttach>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class EmailAttach {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EmailAttachNum")!=null) {
-					EmailAttachNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailAttachNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmailAttachNum")!=null) {
+					EmailAttachNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailAttachNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmailMessageNum")!=null) {
-					EmailMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailMessageNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmailMessageNum")!=null) {
+					EmailMessageNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailMessageNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DisplayedFileName")!=null) {
-					DisplayedFileName=Serializing.GetXmlNodeValue(doc,"DisplayedFileName");
+				if(Serializing.getXmlNodeValue(doc,"DisplayedFileName")!=null) {
+					DisplayedFileName=Serializing.getXmlNodeValue(doc,"DisplayedFileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ActualFileName")!=null) {
-					ActualFileName=Serializing.GetXmlNodeValue(doc,"ActualFileName");
+				if(Serializing.getXmlNodeValue(doc,"ActualFileName")!=null) {
+					ActualFileName=Serializing.getXmlNodeValue(doc,"ActualFileName");
 				}
 			}
 			catch(Exception e) {

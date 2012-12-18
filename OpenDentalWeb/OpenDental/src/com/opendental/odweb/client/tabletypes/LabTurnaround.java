@@ -16,7 +16,7 @@ public class LabTurnaround {
 		public int DaysActual;
 
 		/** Deep copy of object. */
-		public LabTurnaround Copy() {
+		public LabTurnaround deepCopy() {
 			LabTurnaround labturnaround=new LabTurnaround();
 			labturnaround.LabTurnaroundNum=this.LabTurnaroundNum;
 			labturnaround.LaboratoryNum=this.LaboratoryNum;
@@ -27,12 +27,12 @@ public class LabTurnaround {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LabTurnaround>");
 			sb.append("<LabTurnaroundNum>").append(LabTurnaroundNum).append("</LabTurnaroundNum>");
 			sb.append("<LaboratoryNum>").append(LaboratoryNum).append("</LaboratoryNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<DaysPublished>").append(DaysPublished).append("</DaysPublished>");
 			sb.append("<DaysActual>").append(DaysActual).append("</DaysActual>");
 			sb.append("</LabTurnaround>");
@@ -42,22 +42,22 @@ public class LabTurnaround {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LabTurnaroundNum")!=null) {
-					LabTurnaroundNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabTurnaroundNum"));
+				if(Serializing.getXmlNodeValue(doc,"LabTurnaroundNum")!=null) {
+					LabTurnaroundNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LabTurnaroundNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
-					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				if(Serializing.getXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LaboratoryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DaysPublished")!=null) {
-					DaysPublished=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DaysPublished"));
+				if(Serializing.getXmlNodeValue(doc,"DaysPublished")!=null) {
+					DaysPublished=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DaysPublished"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DaysActual")!=null) {
-					DaysActual=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DaysActual"));
+				if(Serializing.getXmlNodeValue(doc,"DaysActual")!=null) {
+					DaysActual=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DaysActual"));
 				}
 			}
 			catch(Exception e) {

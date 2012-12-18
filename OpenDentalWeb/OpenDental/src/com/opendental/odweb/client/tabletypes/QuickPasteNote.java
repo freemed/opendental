@@ -16,7 +16,7 @@ public class QuickPasteNote {
 		public String Abbreviation;
 
 		/** Deep copy of object. */
-		public QuickPasteNote Copy() {
+		public QuickPasteNote deepCopy() {
 			QuickPasteNote quickpastenote=new QuickPasteNote();
 			quickpastenote.QuickPasteNoteNum=this.QuickPasteNoteNum;
 			quickpastenote.QuickPasteCatNum=this.QuickPasteCatNum;
@@ -27,14 +27,14 @@ public class QuickPasteNote {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<QuickPasteNote>");
 			sb.append("<QuickPasteNoteNum>").append(QuickPasteNoteNum).append("</QuickPasteNoteNum>");
 			sb.append("<QuickPasteCatNum>").append(QuickPasteCatNum).append("</QuickPasteCatNum>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<Abbreviation>").append(Serializing.EscapeForXml(Abbreviation)).append("</Abbreviation>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<Abbreviation>").append(Serializing.escapeForXml(Abbreviation)).append("</Abbreviation>");
 			sb.append("</QuickPasteNote>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class QuickPasteNote {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"QuickPasteNoteNum")!=null) {
-					QuickPasteNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteNoteNum"));
+				if(Serializing.getXmlNodeValue(doc,"QuickPasteNoteNum")!=null) {
+					QuickPasteNoteNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuickPasteNoteNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
-					QuickPasteCatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuickPasteCatNum"));
+				if(Serializing.getXmlNodeValue(doc,"QuickPasteCatNum")!=null) {
+					QuickPasteCatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuickPasteCatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Abbreviation")!=null) {
-					Abbreviation=Serializing.GetXmlNodeValue(doc,"Abbreviation");
+				if(Serializing.getXmlNodeValue(doc,"Abbreviation")!=null) {
+					Abbreviation=Serializing.getXmlNodeValue(doc,"Abbreviation");
 				}
 			}
 			catch(Exception e) {

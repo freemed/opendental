@@ -38,7 +38,7 @@ public class Carrier {
 		public CanSupTransTypes CanadianSupportedTypes;
 
 		/** Deep copy of object. */
-		public Carrier Copy() {
+		public Carrier deepCopy() {
 			Carrier carrier=new Carrier();
 			carrier.CarrierNum=this.CarrierNum;
 			carrier.CarrierName=this.CarrierName;
@@ -60,21 +60,21 @@ public class Carrier {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Carrier>");
 			sb.append("<CarrierNum>").append(CarrierNum).append("</CarrierNum>");
-			sb.append("<CarrierName>").append(Serializing.EscapeForXml(CarrierName)).append("</CarrierName>");
-			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
-			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
-			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
-			sb.append("<Phone>").append(Serializing.EscapeForXml(Phone)).append("</Phone>");
-			sb.append("<ElectID>").append(Serializing.EscapeForXml(ElectID)).append("</ElectID>");
+			sb.append("<CarrierName>").append(Serializing.escapeForXml(CarrierName)).append("</CarrierName>");
+			sb.append("<Address>").append(Serializing.escapeForXml(Address)).append("</Address>");
+			sb.append("<Address2>").append(Serializing.escapeForXml(Address2)).append("</Address2>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<State>").append(Serializing.escapeForXml(State)).append("</State>");
+			sb.append("<Zip>").append(Serializing.escapeForXml(Zip)).append("</Zip>");
+			sb.append("<Phone>").append(Serializing.escapeForXml(Phone)).append("</Phone>");
+			sb.append("<ElectID>").append(Serializing.escapeForXml(ElectID)).append("</ElectID>");
 			sb.append("<NoSendElect>").append((NoSendElect)?1:0).append("</NoSendElect>");
 			sb.append("<IsCDA>").append((IsCDA)?1:0).append("</IsCDA>");
-			sb.append("<CDAnetVersion>").append(Serializing.EscapeForXml(CDAnetVersion)).append("</CDAnetVersion>");
+			sb.append("<CDAnetVersion>").append(Serializing.escapeForXml(CDAnetVersion)).append("</CDAnetVersion>");
 			sb.append("<CanadianNetworkNum>").append(CanadianNetworkNum).append("</CanadianNetworkNum>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<CanadianEncryptionMethod>").append(CanadianEncryptionMethod).append("</CanadianEncryptionMethod>");
@@ -86,55 +86,55 @@ public class Carrier {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CarrierNum")!=null) {
-					CarrierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CarrierNum"));
+				if(Serializing.getXmlNodeValue(doc,"CarrierNum")!=null) {
+					CarrierNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CarrierNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierName")!=null) {
-					CarrierName=Serializing.GetXmlNodeValue(doc,"CarrierName");
+				if(Serializing.getXmlNodeValue(doc,"CarrierName")!=null) {
+					CarrierName=Serializing.getXmlNodeValue(doc,"CarrierName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
-					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				if(Serializing.getXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.getXmlNodeValue(doc,"Address");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
-					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				if(Serializing.getXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.getXmlNodeValue(doc,"Address2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
-					State=Serializing.GetXmlNodeValue(doc,"State");
+				if(Serializing.getXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.getXmlNodeValue(doc,"State");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
-					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				if(Serializing.getXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.getXmlNodeValue(doc,"Zip");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
-					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				if(Serializing.getXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.getXmlNodeValue(doc,"Phone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ElectID")!=null) {
-					ElectID=Serializing.GetXmlNodeValue(doc,"ElectID");
+				if(Serializing.getXmlNodeValue(doc,"ElectID")!=null) {
+					ElectID=Serializing.getXmlNodeValue(doc,"ElectID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NoSendElect")!=null) {
-					NoSendElect=(Serializing.GetXmlNodeValue(doc,"NoSendElect")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NoSendElect")!=null) {
+					NoSendElect=(Serializing.getXmlNodeValue(doc,"NoSendElect")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsCDA")!=null) {
-					IsCDA=(Serializing.GetXmlNodeValue(doc,"IsCDA")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsCDA")!=null) {
+					IsCDA=(Serializing.getXmlNodeValue(doc,"IsCDA")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CDAnetVersion")!=null) {
-					CDAnetVersion=Serializing.GetXmlNodeValue(doc,"CDAnetVersion");
+				if(Serializing.getXmlNodeValue(doc,"CDAnetVersion")!=null) {
+					CDAnetVersion=Serializing.getXmlNodeValue(doc,"CDAnetVersion");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum")!=null) {
-					CanadianNetworkNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianNetworkNum"));
+				if(Serializing.getXmlNodeValue(doc,"CanadianNetworkNum")!=null) {
+					CanadianNetworkNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CanadianNetworkNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianEncryptionMethod")!=null) {
-					CanadianEncryptionMethod=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianEncryptionMethod"));
+				if(Serializing.getXmlNodeValue(doc,"CanadianEncryptionMethod")!=null) {
+					CanadianEncryptionMethod=Byte.valueOf(Serializing.getXmlNodeValue(doc,"CanadianEncryptionMethod"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianSupportedTypes")!=null) {
-					CanadianSupportedTypes=CanSupTransTypes.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianSupportedTypes"))];
+				if(Serializing.getXmlNodeValue(doc,"CanadianSupportedTypes")!=null) {
+					CanadianSupportedTypes=CanSupTransTypes.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CanadianSupportedTypes"))];
 				}
 			}
 			catch(Exception e) {

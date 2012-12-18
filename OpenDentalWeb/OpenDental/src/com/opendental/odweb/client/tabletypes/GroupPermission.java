@@ -18,7 +18,7 @@ public class GroupPermission {
 		public Permissions PermType;
 
 		/** Deep copy of object. */
-		public GroupPermission Copy() {
+		public GroupPermission deepCopy() {
 			GroupPermission grouppermission=new GroupPermission();
 			grouppermission.GroupPermNum=this.GroupPermNum;
 			grouppermission.NewerDate=this.NewerDate;
@@ -29,7 +29,7 @@ public class GroupPermission {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<GroupPermission>");
 			sb.append("<GroupPermNum>").append(GroupPermNum).append("</GroupPermNum>");
@@ -44,22 +44,22 @@ public class GroupPermission {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"GroupPermNum")!=null) {
-					GroupPermNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GroupPermNum"));
+				if(Serializing.getXmlNodeValue(doc,"GroupPermNum")!=null) {
+					GroupPermNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GroupPermNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NewerDate")!=null) {
-					NewerDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"NewerDate"));
+				if(Serializing.getXmlNodeValue(doc,"NewerDate")!=null) {
+					NewerDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"NewerDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NewerDays")!=null) {
-					NewerDays=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"NewerDays"));
+				if(Serializing.getXmlNodeValue(doc,"NewerDays")!=null) {
+					NewerDays=Integer.valueOf(Serializing.getXmlNodeValue(doc,"NewerDays"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
-					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserGroupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PermType")!=null) {
-					PermType=Permissions.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PermType"))];
+				if(Serializing.getXmlNodeValue(doc,"PermType")!=null) {
+					PermType=Permissions.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PermType"))];
 				}
 			}
 			catch(Exception e) {

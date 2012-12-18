@@ -153,6 +153,7 @@
     <Compile Include="Data Interface\EhrQuarterlyKeys.cs" />
     <Compile Include="Data Interface\EhrSummaryCcds.cs" />
     <Compile Include="Data Interface\ElectIDs.cs" />
+    <Compile Include="Data Interface\EmailAddresses.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\EmailMessages.cs" />
     <Compile Include="Data Interface\EmailTemplates.cs" />
@@ -302,6 +303,7 @@
     <Compile Include="Data Interface\VaccineDefs.cs" />
     <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
+    <Compile Include="Data Interface\WikiPages.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="Remoting\DataTransferObject.cs" />
     <Compile Include="Remoting\DtoMethods.cs" />
@@ -498,6 +500,7 @@
     <Compile Include="Serializing\ElectID.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serializing\EmailAddress.cs" />
     <Compile Include="Serializing\EmailAttach.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -943,6 +946,7 @@
     <Compile Include="Serializing\Vitalsign.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Serializing\WikiPage.cs" />
     <Compile Include="Serializing\ZipCode.cs">
       <SubType>Code</SubType>
     </Compile>

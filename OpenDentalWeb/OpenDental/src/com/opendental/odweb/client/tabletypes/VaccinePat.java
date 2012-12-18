@@ -28,7 +28,7 @@ public class VaccinePat {
 		public String Note;
 
 		/** Deep copy of object. */
-		public VaccinePat Copy() {
+		public VaccinePat deepCopy() {
 			VaccinePat vaccinepat=new VaccinePat();
 			vaccinepat.VaccinePatNum=this.VaccinePatNum;
 			vaccinepat.VaccineDefNum=this.VaccineDefNum;
@@ -44,7 +44,7 @@ public class VaccinePat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<VaccinePat>");
 			sb.append("<VaccinePatNum>").append(VaccinePatNum).append("</VaccinePatNum>");
@@ -53,10 +53,10 @@ public class VaccinePat {
 			sb.append("<DateTimeEnd>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEnd)).append("</DateTimeEnd>");
 			sb.append("<AdministeredAmt>").append(AdministeredAmt).append("</AdministeredAmt>");
 			sb.append("<DrugUnitNum>").append(DrugUnitNum).append("</DrugUnitNum>");
-			sb.append("<LotNumber>").append(Serializing.EscapeForXml(LotNumber)).append("</LotNumber>");
+			sb.append("<LotNumber>").append(Serializing.escapeForXml(LotNumber)).append("</LotNumber>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<NotGiven>").append((NotGiven)?1:0).append("</NotGiven>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</VaccinePat>");
 			return sb.toString();
 		}
@@ -64,37 +64,37 @@ public class VaccinePat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"VaccinePatNum")!=null) {
-					VaccinePatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VaccinePatNum"));
+				if(Serializing.getXmlNodeValue(doc,"VaccinePatNum")!=null) {
+					VaccinePatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"VaccinePatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"VaccineDefNum")!=null) {
-					VaccineDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VaccineDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"VaccineDefNum")!=null) {
+					VaccineDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"VaccineDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeStart")!=null) {
-					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeStart")!=null) {
+					DateTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeEnd")!=null) {
-					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEnd"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeEnd")!=null) {
+					DateTimeEnd=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEnd"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AdministeredAmt")!=null) {
-					AdministeredAmt=Float.valueOf(Serializing.GetXmlNodeValue(doc,"AdministeredAmt"));
+				if(Serializing.getXmlNodeValue(doc,"AdministeredAmt")!=null) {
+					AdministeredAmt=Float.valueOf(Serializing.getXmlNodeValue(doc,"AdministeredAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DrugUnitNum")!=null) {
-					DrugUnitNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DrugUnitNum"));
+				if(Serializing.getXmlNodeValue(doc,"DrugUnitNum")!=null) {
+					DrugUnitNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DrugUnitNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LotNumber")!=null) {
-					LotNumber=Serializing.GetXmlNodeValue(doc,"LotNumber");
+				if(Serializing.getXmlNodeValue(doc,"LotNumber")!=null) {
+					LotNumber=Serializing.getXmlNodeValue(doc,"LotNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NotGiven")!=null) {
-					NotGiven=(Serializing.GetXmlNodeValue(doc,"NotGiven")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NotGiven")!=null) {
+					NotGiven=(Serializing.getXmlNodeValue(doc,"NotGiven")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

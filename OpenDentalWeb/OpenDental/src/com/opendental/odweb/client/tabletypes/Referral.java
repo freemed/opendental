@@ -52,7 +52,7 @@ public class Referral {
 		public boolean IsDoctor;
 
 		/** Deep copy of object. */
-		public Referral Copy() {
+		public Referral deepCopy() {
 			Referral referral=new Referral();
 			referral.ReferralNum=this.ReferralNum;
 			referral.LName=this.LName;
@@ -81,30 +81,30 @@ public class Referral {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Referral>");
 			sb.append("<ReferralNum>").append(ReferralNum).append("</ReferralNum>");
-			sb.append("<LName>").append(Serializing.EscapeForXml(LName)).append("</LName>");
-			sb.append("<FName>").append(Serializing.EscapeForXml(FName)).append("</FName>");
-			sb.append("<MName>").append(Serializing.EscapeForXml(MName)).append("</MName>");
-			sb.append("<SSN>").append(Serializing.EscapeForXml(SSN)).append("</SSN>");
+			sb.append("<LName>").append(Serializing.escapeForXml(LName)).append("</LName>");
+			sb.append("<FName>").append(Serializing.escapeForXml(FName)).append("</FName>");
+			sb.append("<MName>").append(Serializing.escapeForXml(MName)).append("</MName>");
+			sb.append("<SSN>").append(Serializing.escapeForXml(SSN)).append("</SSN>");
 			sb.append("<UsingTIN>").append((UsingTIN)?1:0).append("</UsingTIN>");
 			sb.append("<Specialty>").append(Specialty.ordinal()).append("</Specialty>");
-			sb.append("<ST>").append(Serializing.EscapeForXml(ST)).append("</ST>");
-			sb.append("<Telephone>").append(Serializing.EscapeForXml(Telephone)).append("</Telephone>");
-			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
-			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<Phone2>").append(Serializing.EscapeForXml(Phone2)).append("</Phone2>");
+			sb.append("<ST>").append(Serializing.escapeForXml(ST)).append("</ST>");
+			sb.append("<Telephone>").append(Serializing.escapeForXml(Telephone)).append("</Telephone>");
+			sb.append("<Address>").append(Serializing.escapeForXml(Address)).append("</Address>");
+			sb.append("<Address2>").append(Serializing.escapeForXml(Address2)).append("</Address2>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<Zip>").append(Serializing.escapeForXml(Zip)).append("</Zip>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<Phone2>").append(Serializing.escapeForXml(Phone2)).append("</Phone2>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<NotPerson>").append((NotPerson)?1:0).append("</NotPerson>");
-			sb.append("<Title>").append(Serializing.EscapeForXml(Title)).append("</Title>");
-			sb.append("<EMail>").append(Serializing.EscapeForXml(EMail)).append("</EMail>");
+			sb.append("<Title>").append(Serializing.escapeForXml(Title)).append("</Title>");
+			sb.append("<EMail>").append(Serializing.escapeForXml(EMail)).append("</EMail>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<NationalProvID>").append(Serializing.EscapeForXml(NationalProvID)).append("</NationalProvID>");
+			sb.append("<NationalProvID>").append(Serializing.escapeForXml(NationalProvID)).append("</NationalProvID>");
 			sb.append("<Slip>").append(Slip).append("</Slip>");
 			sb.append("<IsDoctor>").append((IsDoctor)?1:0).append("</IsDoctor>");
 			sb.append("</Referral>");
@@ -114,76 +114,76 @@ public class Referral {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ReferralNum")!=null) {
-					ReferralNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReferralNum"));
+				if(Serializing.getXmlNodeValue(doc,"ReferralNum")!=null) {
+					ReferralNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReferralNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
-					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				if(Serializing.getXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.getXmlNodeValue(doc,"LName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
-					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				if(Serializing.getXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.getXmlNodeValue(doc,"FName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MName")!=null) {
-					MName=Serializing.GetXmlNodeValue(doc,"MName");
+				if(Serializing.getXmlNodeValue(doc,"MName")!=null) {
+					MName=Serializing.getXmlNodeValue(doc,"MName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SSN")!=null) {
-					SSN=Serializing.GetXmlNodeValue(doc,"SSN");
+				if(Serializing.getXmlNodeValue(doc,"SSN")!=null) {
+					SSN=Serializing.getXmlNodeValue(doc,"SSN");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UsingTIN")!=null) {
-					UsingTIN=(Serializing.GetXmlNodeValue(doc,"UsingTIN")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"UsingTIN")!=null) {
+					UsingTIN=(Serializing.getXmlNodeValue(doc,"UsingTIN")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Specialty")!=null) {
-					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Specialty"))];
+				if(Serializing.getXmlNodeValue(doc,"Specialty")!=null) {
+					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Specialty"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ST")!=null) {
-					ST=Serializing.GetXmlNodeValue(doc,"ST");
+				if(Serializing.getXmlNodeValue(doc,"ST")!=null) {
+					ST=Serializing.getXmlNodeValue(doc,"ST");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Telephone")!=null) {
-					Telephone=Serializing.GetXmlNodeValue(doc,"Telephone");
+				if(Serializing.getXmlNodeValue(doc,"Telephone")!=null) {
+					Telephone=Serializing.getXmlNodeValue(doc,"Telephone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
-					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				if(Serializing.getXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.getXmlNodeValue(doc,"Address");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
-					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				if(Serializing.getXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.getXmlNodeValue(doc,"Address2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
-					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				if(Serializing.getXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.getXmlNodeValue(doc,"Zip");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Phone2")!=null) {
-					Phone2=Serializing.GetXmlNodeValue(doc,"Phone2");
+				if(Serializing.getXmlNodeValue(doc,"Phone2")!=null) {
+					Phone2=Serializing.getXmlNodeValue(doc,"Phone2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NotPerson")!=null) {
-					NotPerson=(Serializing.GetXmlNodeValue(doc,"NotPerson")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NotPerson")!=null) {
+					NotPerson=(Serializing.getXmlNodeValue(doc,"NotPerson")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Title")!=null) {
-					Title=Serializing.GetXmlNodeValue(doc,"Title");
+				if(Serializing.getXmlNodeValue(doc,"Title")!=null) {
+					Title=Serializing.getXmlNodeValue(doc,"Title");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EMail")!=null) {
-					EMail=Serializing.GetXmlNodeValue(doc,"EMail");
+				if(Serializing.getXmlNodeValue(doc,"EMail")!=null) {
+					EMail=Serializing.getXmlNodeValue(doc,"EMail");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NationalProvID")!=null) {
-					NationalProvID=Serializing.GetXmlNodeValue(doc,"NationalProvID");
+				if(Serializing.getXmlNodeValue(doc,"NationalProvID")!=null) {
+					NationalProvID=Serializing.getXmlNodeValue(doc,"NationalProvID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Slip")!=null) {
-					Slip=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Slip"));
+				if(Serializing.getXmlNodeValue(doc,"Slip")!=null) {
+					Slip=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Slip"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsDoctor")!=null) {
-					IsDoctor=(Serializing.GetXmlNodeValue(doc,"IsDoctor")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsDoctor")!=null) {
+					IsDoctor=(Serializing.getXmlNodeValue(doc,"IsDoctor")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

@@ -20,7 +20,7 @@ public class DisplayField {
 		public int ChartViewNum;
 
 		/** Deep copy of object. */
-		public DisplayField Copy() {
+		public DisplayField deepCopy() {
 			DisplayField displayfield=new DisplayField();
 			displayfield.DisplayFieldNum=this.DisplayFieldNum;
 			displayfield.InternalName=this.InternalName;
@@ -33,13 +33,13 @@ public class DisplayField {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DisplayField>");
 			sb.append("<DisplayFieldNum>").append(DisplayFieldNum).append("</DisplayFieldNum>");
-			sb.append("<InternalName>").append(Serializing.EscapeForXml(InternalName)).append("</InternalName>");
+			sb.append("<InternalName>").append(Serializing.escapeForXml(InternalName)).append("</InternalName>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ColumnWidth>").append(ColumnWidth).append("</ColumnWidth>");
 			sb.append("<Category>").append(Category.ordinal()).append("</Category>");
 			sb.append("<ChartViewNum>").append(ChartViewNum).append("</ChartViewNum>");
@@ -50,28 +50,28 @@ public class DisplayField {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DisplayFieldNum")!=null) {
-					DisplayFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DisplayFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"DisplayFieldNum")!=null) {
+					DisplayFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DisplayFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InternalName")!=null) {
-					InternalName=Serializing.GetXmlNodeValue(doc,"InternalName");
+				if(Serializing.getXmlNodeValue(doc,"InternalName")!=null) {
+					InternalName=Serializing.getXmlNodeValue(doc,"InternalName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColumnWidth")!=null) {
-					ColumnWidth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColumnWidth"));
+				if(Serializing.getXmlNodeValue(doc,"ColumnWidth")!=null) {
+					ColumnWidth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColumnWidth"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
-					Category=DisplayFieldCategory.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"))];
+				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
+					Category=DisplayFieldCategory.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ChartViewNum")!=null) {
-					ChartViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ChartViewNum"));
+				if(Serializing.getXmlNodeValue(doc,"ChartViewNum")!=null) {
+					ChartViewNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ChartViewNum"));
 				}
 			}
 			catch(Exception e) {

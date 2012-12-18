@@ -12,7 +12,7 @@ public class SchoolCourse {
 		public String Descript;
 
 		/** Deep copy of object. */
-		public SchoolCourse Copy() {
+		public SchoolCourse deepCopy() {
 			SchoolCourse schoolcourse=new SchoolCourse();
 			schoolcourse.SchoolCourseNum=this.SchoolCourseNum;
 			schoolcourse.CourseID=this.CourseID;
@@ -21,12 +21,12 @@ public class SchoolCourse {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SchoolCourse>");
 			sb.append("<SchoolCourseNum>").append(SchoolCourseNum).append("</SchoolCourseNum>");
-			sb.append("<CourseID>").append(Serializing.EscapeForXml(CourseID)).append("</CourseID>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
+			sb.append("<CourseID>").append(Serializing.escapeForXml(CourseID)).append("</CourseID>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
 			sb.append("</SchoolCourse>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class SchoolCourse {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum")!=null) {
-					SchoolCourseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolCourseNum"));
+				if(Serializing.getXmlNodeValue(doc,"SchoolCourseNum")!=null) {
+					SchoolCourseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SchoolCourseNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CourseID")!=null) {
-					CourseID=Serializing.GetXmlNodeValue(doc,"CourseID");
+				if(Serializing.getXmlNodeValue(doc,"CourseID")!=null) {
+					CourseID=Serializing.getXmlNodeValue(doc,"CourseID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
 			}
 			catch(Exception e) {

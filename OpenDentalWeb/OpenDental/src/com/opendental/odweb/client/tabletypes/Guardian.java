@@ -14,7 +14,7 @@ public class Guardian {
 		public GuardianRelationship Relationship;
 
 		/** Deep copy of object. */
-		public Guardian Copy() {
+		public Guardian deepCopy() {
 			Guardian guardian=new Guardian();
 			guardian.GuardianNum=this.GuardianNum;
 			guardian.PatNumChild=this.PatNumChild;
@@ -24,7 +24,7 @@ public class Guardian {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Guardian>");
 			sb.append("<GuardianNum>").append(GuardianNum).append("</GuardianNum>");
@@ -38,19 +38,19 @@ public class Guardian {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"GuardianNum")!=null) {
-					GuardianNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GuardianNum"));
+				if(Serializing.getXmlNodeValue(doc,"GuardianNum")!=null) {
+					GuardianNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GuardianNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNumChild")!=null) {
-					PatNumChild=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumChild"));
+				if(Serializing.getXmlNodeValue(doc,"PatNumChild")!=null) {
+					PatNumChild=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNumChild"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNumGuardian")!=null) {
-					PatNumGuardian=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNumGuardian"));
+				if(Serializing.getXmlNodeValue(doc,"PatNumGuardian")!=null) {
+					PatNumGuardian=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNumGuardian"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Relationship")!=null) {
-					Relationship=GuardianRelationship.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Relationship"))];
+				if(Serializing.getXmlNodeValue(doc,"Relationship")!=null) {
+					Relationship=GuardianRelationship.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"))];
 				}
 			}
 			catch(Exception e) {

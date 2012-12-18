@@ -20,7 +20,7 @@ public class Reconcile {
 		public boolean IsLocked;
 
 		/** Deep copy of object. */
-		public Reconcile Copy() {
+		public Reconcile deepCopy() {
 			Reconcile reconcile=new Reconcile();
 			reconcile.ReconcileNum=this.ReconcileNum;
 			reconcile.AccountNum=this.AccountNum;
@@ -32,7 +32,7 @@ public class Reconcile {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Reconcile>");
 			sb.append("<ReconcileNum>").append(ReconcileNum).append("</ReconcileNum>");
@@ -48,25 +48,25 @@ public class Reconcile {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ReconcileNum")!=null) {
-					ReconcileNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReconcileNum"));
+				if(Serializing.getXmlNodeValue(doc,"ReconcileNum")!=null) {
+					ReconcileNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReconcileNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AccountNum")!=null) {
-					AccountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountNum"));
+				if(Serializing.getXmlNodeValue(doc,"AccountNum")!=null) {
+					AccountNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AccountNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StartingBal")!=null) {
-					StartingBal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"StartingBal"));
+				if(Serializing.getXmlNodeValue(doc,"StartingBal")!=null) {
+					StartingBal=Double.valueOf(Serializing.getXmlNodeValue(doc,"StartingBal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EndingBal")!=null) {
-					EndingBal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"EndingBal"));
+				if(Serializing.getXmlNodeValue(doc,"EndingBal")!=null) {
+					EndingBal=Double.valueOf(Serializing.getXmlNodeValue(doc,"EndingBal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateReconcile")!=null) {
-					DateReconcile=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateReconcile"));
+				if(Serializing.getXmlNodeValue(doc,"DateReconcile")!=null) {
+					DateReconcile=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateReconcile"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsLocked")!=null) {
-					IsLocked=(Serializing.GetXmlNodeValue(doc,"IsLocked")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsLocked")!=null) {
+					IsLocked=(Serializing.getXmlNodeValue(doc,"IsLocked")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

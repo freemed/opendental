@@ -26,7 +26,7 @@ public class ApptViewItem {
 		public int PatFieldDefNum;
 
 		/** Deep copy of object. */
-		public ApptViewItem Copy() {
+		public ApptViewItem deepCopy() {
 			ApptViewItem apptviewitem=new ApptViewItem();
 			apptviewitem.ApptViewItemNum=this.ApptViewItemNum;
 			apptviewitem.ApptViewNum=this.ApptViewNum;
@@ -42,14 +42,14 @@ public class ApptViewItem {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ApptViewItem>");
 			sb.append("<ApptViewItemNum>").append(ApptViewItemNum).append("</ApptViewItemNum>");
 			sb.append("<ApptViewNum>").append(ApptViewNum).append("</ApptViewNum>");
 			sb.append("<OpNum>").append(OpNum).append("</OpNum>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<ElementDesc>").append(Serializing.EscapeForXml(ElementDesc)).append("</ElementDesc>");
+			sb.append("<ElementDesc>").append(Serializing.escapeForXml(ElementDesc)).append("</ElementDesc>");
 			sb.append("<ElementOrder>").append(ElementOrder).append("</ElementOrder>");
 			sb.append("<ElementColor>").append(ElementColor).append("</ElementColor>");
 			sb.append("<ElementAlignment>").append(ElementAlignment.ordinal()).append("</ElementAlignment>");
@@ -62,37 +62,37 @@ public class ApptViewItem {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ApptViewItemNum")!=null) {
-					ApptViewItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"ApptViewItemNum")!=null) {
+					ApptViewItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptViewItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ApptViewNum")!=null) {
-					ApptViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptViewNum"));
+				if(Serializing.getXmlNodeValue(doc,"ApptViewNum")!=null) {
+					ApptViewNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptViewNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OpNum")!=null) {
-					OpNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OpNum"));
+				if(Serializing.getXmlNodeValue(doc,"OpNum")!=null) {
+					OpNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OpNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ElementDesc")!=null) {
-					ElementDesc=Serializing.GetXmlNodeValue(doc,"ElementDesc");
+				if(Serializing.getXmlNodeValue(doc,"ElementDesc")!=null) {
+					ElementDesc=Serializing.getXmlNodeValue(doc,"ElementDesc");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ElementOrder")!=null) {
-					ElementOrder=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ElementOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ElementOrder")!=null) {
+					ElementOrder=Byte.valueOf(Serializing.getXmlNodeValue(doc,"ElementOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ElementColor")!=null) {
-					ElementColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElementColor"));
+				if(Serializing.getXmlNodeValue(doc,"ElementColor")!=null) {
+					ElementColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ElementColor"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ElementAlignment")!=null) {
-					ElementAlignment=ApptViewAlignment.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElementAlignment"))];
+				if(Serializing.getXmlNodeValue(doc,"ElementAlignment")!=null) {
+					ElementAlignment=ApptViewAlignment.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ElementAlignment"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum")!=null) {
-					ApptFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptFieldDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"ApptFieldDefNum")!=null) {
+					ApptFieldDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptFieldDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum")!=null) {
-					PatFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatFieldDefNum")!=null) {
+					PatFieldDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatFieldDefNum"));
 				}
 			}
 			catch(Exception e) {

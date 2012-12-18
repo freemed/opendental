@@ -12,7 +12,7 @@ public class SchoolClass {
 		public String Descript;
 
 		/** Deep copy of object. */
-		public SchoolClass Copy() {
+		public SchoolClass deepCopy() {
 			SchoolClass schoolclass=new SchoolClass();
 			schoolclass.SchoolClassNum=this.SchoolClassNum;
 			schoolclass.GradYear=this.GradYear;
@@ -21,12 +21,12 @@ public class SchoolClass {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SchoolClass>");
 			sb.append("<SchoolClassNum>").append(SchoolClassNum).append("</SchoolClassNum>");
 			sb.append("<GradYear>").append(GradYear).append("</GradYear>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
 			sb.append("</SchoolClass>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class SchoolClass {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SchoolClassNum")!=null) {
-					SchoolClassNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SchoolClassNum"));
+				if(Serializing.getXmlNodeValue(doc,"SchoolClassNum")!=null) {
+					SchoolClassNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SchoolClassNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GradYear")!=null) {
-					GradYear=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GradYear"));
+				if(Serializing.getXmlNodeValue(doc,"GradYear")!=null) {
+					GradYear=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GradYear"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
 			}
 			catch(Exception e) {

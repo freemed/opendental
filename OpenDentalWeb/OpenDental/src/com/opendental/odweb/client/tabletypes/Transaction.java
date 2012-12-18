@@ -18,7 +18,7 @@ public class Transaction {
 		public int PayNum;
 
 		/** Deep copy of object. */
-		public Transaction Copy() {
+		public Transaction deepCopy() {
 			Transaction transaction=new Transaction();
 			transaction.TransactionNum=this.TransactionNum;
 			transaction.DateTimeEntry=this.DateTimeEntry;
@@ -29,7 +29,7 @@ public class Transaction {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Transaction>");
 			sb.append("<TransactionNum>").append(TransactionNum).append("</TransactionNum>");
@@ -44,22 +44,22 @@ public class Transaction {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TransactionNum")!=null) {
-					TransactionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TransactionNum"));
+				if(Serializing.getXmlNodeValue(doc,"TransactionNum")!=null) {
+					TransactionNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TransactionNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeEntry")!=null) {
-					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeEntry"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeEntry")!=null) {
+					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEntry"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
-					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				if(Serializing.getXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DepositNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayNum")!=null) {
-					PayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayNum"));
+				if(Serializing.getXmlNodeValue(doc,"PayNum")!=null) {
+					PayNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PayNum"));
 				}
 			}
 			catch(Exception e) {

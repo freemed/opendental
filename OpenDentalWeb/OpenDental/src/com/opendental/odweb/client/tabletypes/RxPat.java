@@ -38,7 +38,7 @@ public class RxPat {
 		public String DosageCode;
 
 		/** Deep copy of object. */
-		public RxPat Copy() {
+		public RxPat deepCopy() {
 			RxPat rxpat=new RxPat();
 			rxpat.RxNum=this.RxNum;
 			rxpat.PatNum=this.PatNum;
@@ -59,24 +59,24 @@ public class RxPat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RxPat>");
 			sb.append("<RxNum>").append(RxNum).append("</RxNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<RxDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(RxDate)).append("</RxDate>");
-			sb.append("<Drug>").append(Serializing.EscapeForXml(Drug)).append("</Drug>");
-			sb.append("<Sig>").append(Serializing.EscapeForXml(Sig)).append("</Sig>");
-			sb.append("<Disp>").append(Serializing.EscapeForXml(Disp)).append("</Disp>");
-			sb.append("<Refills>").append(Serializing.EscapeForXml(Refills)).append("</Refills>");
+			sb.append("<Drug>").append(Serializing.escapeForXml(Drug)).append("</Drug>");
+			sb.append("<Sig>").append(Serializing.escapeForXml(Sig)).append("</Sig>");
+			sb.append("<Disp>").append(Serializing.escapeForXml(Disp)).append("</Disp>");
+			sb.append("<Refills>").append(Serializing.escapeForXml(Refills)).append("</Refills>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("<PharmacyNum>").append(PharmacyNum).append("</PharmacyNum>");
 			sb.append("<IsControlled>").append((IsControlled)?1:0).append("</IsControlled>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<SendStatus>").append(SendStatus.ordinal()).append("</SendStatus>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
-			sb.append("<DosageCode>").append(Serializing.EscapeForXml(DosageCode)).append("</DosageCode>");
+			sb.append("<DosageCode>").append(Serializing.escapeForXml(DosageCode)).append("</DosageCode>");
 			sb.append("</RxPat>");
 			return sb.toString();
 		}
@@ -84,52 +84,52 @@ public class RxPat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RxNum")!=null) {
-					RxNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxNum"));
+				if(Serializing.getXmlNodeValue(doc,"RxNum")!=null) {
+					RxNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxDate")!=null) {
-					RxDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"RxDate"));
+				if(Serializing.getXmlNodeValue(doc,"RxDate")!=null) {
+					RxDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"RxDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Drug")!=null) {
-					Drug=Serializing.GetXmlNodeValue(doc,"Drug");
+				if(Serializing.getXmlNodeValue(doc,"Drug")!=null) {
+					Drug=Serializing.getXmlNodeValue(doc,"Drug");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Sig")!=null) {
-					Sig=Serializing.GetXmlNodeValue(doc,"Sig");
+				if(Serializing.getXmlNodeValue(doc,"Sig")!=null) {
+					Sig=Serializing.getXmlNodeValue(doc,"Sig");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Disp")!=null) {
-					Disp=Serializing.GetXmlNodeValue(doc,"Disp");
+				if(Serializing.getXmlNodeValue(doc,"Disp")!=null) {
+					Disp=Serializing.getXmlNodeValue(doc,"Disp");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Refills")!=null) {
-					Refills=Serializing.GetXmlNodeValue(doc,"Refills");
+				if(Serializing.getXmlNodeValue(doc,"Refills")!=null) {
+					Refills=Serializing.getXmlNodeValue(doc,"Refills");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PharmacyNum")!=null) {
-					PharmacyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PharmacyNum"));
+				if(Serializing.getXmlNodeValue(doc,"PharmacyNum")!=null) {
+					PharmacyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PharmacyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsControlled")!=null) {
-					IsControlled=(Serializing.GetXmlNodeValue(doc,"IsControlled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsControlled")!=null) {
+					IsControlled=(Serializing.getXmlNodeValue(doc,"IsControlled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SendStatus")!=null) {
-					SendStatus=RxSendStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SendStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"SendStatus")!=null) {
+					SendStatus=RxSendStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SendStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
-					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				if(Serializing.getXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxCui"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DosageCode")!=null) {
-					DosageCode=Serializing.GetXmlNodeValue(doc,"DosageCode");
+				if(Serializing.getXmlNodeValue(doc,"DosageCode")!=null) {
+					DosageCode=Serializing.getXmlNodeValue(doc,"DosageCode");
 				}
 			}
 			catch(Exception e) {

@@ -22,7 +22,7 @@ public class InstallmentPlan {
 		public String Note;
 
 		/** Deep copy of object. */
-		public InstallmentPlan Copy() {
+		public InstallmentPlan deepCopy() {
 			InstallmentPlan installmentplan=new InstallmentPlan();
 			installmentplan.InstallmentPlanNum=this.InstallmentPlanNum;
 			installmentplan.PatNum=this.PatNum;
@@ -35,7 +35,7 @@ public class InstallmentPlan {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<InstallmentPlan>");
 			sb.append("<InstallmentPlanNum>").append(InstallmentPlanNum).append("</InstallmentPlanNum>");
@@ -44,7 +44,7 @@ public class InstallmentPlan {
 			sb.append("<DateFirstPayment>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateFirstPayment)).append("</DateFirstPayment>");
 			sb.append("<MonthlyPayment>").append(MonthlyPayment).append("</MonthlyPayment>");
 			sb.append("<APR>").append(APR).append("</APR>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</InstallmentPlan>");
 			return sb.toString();
 		}
@@ -52,28 +52,28 @@ public class InstallmentPlan {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"InstallmentPlanNum")!=null) {
-					InstallmentPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InstallmentPlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"InstallmentPlanNum")!=null) {
+					InstallmentPlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InstallmentPlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateAgreement")!=null) {
-					DateAgreement=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateAgreement"));
+				if(Serializing.getXmlNodeValue(doc,"DateAgreement")!=null) {
+					DateAgreement=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateAgreement"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateFirstPayment")!=null) {
-					DateFirstPayment=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateFirstPayment"));
+				if(Serializing.getXmlNodeValue(doc,"DateFirstPayment")!=null) {
+					DateFirstPayment=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateFirstPayment"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MonthlyPayment")!=null) {
-					MonthlyPayment=Double.valueOf(Serializing.GetXmlNodeValue(doc,"MonthlyPayment"));
+				if(Serializing.getXmlNodeValue(doc,"MonthlyPayment")!=null) {
+					MonthlyPayment=Double.valueOf(Serializing.getXmlNodeValue(doc,"MonthlyPayment"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"APR")!=null) {
-					APR=Float.valueOf(Serializing.GetXmlNodeValue(doc,"APR"));
+				if(Serializing.getXmlNodeValue(doc,"APR")!=null) {
+					APR=Float.valueOf(Serializing.getXmlNodeValue(doc,"APR"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

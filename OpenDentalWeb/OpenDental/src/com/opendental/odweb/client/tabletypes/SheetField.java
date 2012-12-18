@@ -42,7 +42,7 @@ public class SheetField {
 		public String ReportableName;
 
 		/** Deep copy of object. */
-		public SheetField Copy() {
+		public SheetField deepCopy() {
 			SheetField sheetfield=new SheetField();
 			sheetfield.SheetFieldNum=this.SheetFieldNum;
 			sheetfield.SheetNum=this.SheetNum;
@@ -66,27 +66,27 @@ public class SheetField {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SheetField>");
 			sb.append("<SheetFieldNum>").append(SheetFieldNum).append("</SheetFieldNum>");
 			sb.append("<SheetNum>").append(SheetNum).append("</SheetNum>");
 			sb.append("<FieldType>").append(FieldType.ordinal()).append("</FieldType>");
-			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
-			sb.append("<FieldValue>").append(Serializing.EscapeForXml(FieldValue)).append("</FieldValue>");
+			sb.append("<FieldName>").append(Serializing.escapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FieldValue>").append(Serializing.escapeForXml(FieldValue)).append("</FieldValue>");
 			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
-			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
+			sb.append("<FontName>").append(Serializing.escapeForXml(FontName)).append("</FontName>");
 			sb.append("<FontIsBold>").append((FontIsBold)?1:0).append("</FontIsBold>");
 			sb.append("<XPos>").append(XPos).append("</XPos>");
 			sb.append("<YPos>").append(YPos).append("</YPos>");
 			sb.append("<Width>").append(Width).append("</Width>");
 			sb.append("<Height>").append(Height).append("</Height>");
 			sb.append("<GrowthBehavior>").append(GrowthBehavior.ordinal()).append("</GrowthBehavior>");
-			sb.append("<RadioButtonValue>").append(Serializing.EscapeForXml(RadioButtonValue)).append("</RadioButtonValue>");
-			sb.append("<RadioButtonGroup>").append(Serializing.EscapeForXml(RadioButtonGroup)).append("</RadioButtonGroup>");
+			sb.append("<RadioButtonValue>").append(Serializing.escapeForXml(RadioButtonValue)).append("</RadioButtonValue>");
+			sb.append("<RadioButtonGroup>").append(Serializing.escapeForXml(RadioButtonGroup)).append("</RadioButtonGroup>");
 			sb.append("<IsRequired>").append((IsRequired)?1:0).append("</IsRequired>");
 			sb.append("<TabOrder>").append(TabOrder).append("</TabOrder>");
-			sb.append("<ReportableName>").append(Serializing.EscapeForXml(ReportableName)).append("</ReportableName>");
+			sb.append("<ReportableName>").append(Serializing.escapeForXml(ReportableName)).append("</ReportableName>");
 			sb.append("</SheetField>");
 			return sb.toString();
 		}
@@ -94,61 +94,61 @@ public class SheetField {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SheetFieldNum")!=null) {
-					SheetFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetFieldNum")!=null) {
+					SheetFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetNum")!=null) {
-					SheetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetNum")!=null) {
+					SheetNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldType")!=null) {
-					FieldType=SheetFieldType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldType"))];
+				if(Serializing.getXmlNodeValue(doc,"FieldType")!=null) {
+					FieldType=SheetFieldType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
-					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldValue")!=null) {
-					FieldValue=Serializing.GetXmlNodeValue(doc,"FieldValue");
+				if(Serializing.getXmlNodeValue(doc,"FieldValue")!=null) {
+					FieldValue=Serializing.getXmlNodeValue(doc,"FieldValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
-					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				if(Serializing.getXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.getXmlNodeValue(doc,"FontSize"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
-					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				if(Serializing.getXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.getXmlNodeValue(doc,"FontName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontIsBold")!=null) {
-					FontIsBold=(Serializing.GetXmlNodeValue(doc,"FontIsBold")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"FontIsBold")!=null) {
+					FontIsBold=(Serializing.getXmlNodeValue(doc,"FontIsBold")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"XPos")!=null) {
-					XPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"XPos"));
+				if(Serializing.getXmlNodeValue(doc,"XPos")!=null) {
+					XPos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"XPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"YPos")!=null) {
-					YPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"YPos"));
+				if(Serializing.getXmlNodeValue(doc,"YPos")!=null) {
+					YPos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"YPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
-					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Width"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GrowthBehavior")!=null) {
-					GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GrowthBehavior"))];
+				if(Serializing.getXmlNodeValue(doc,"GrowthBehavior")!=null) {
+					GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GrowthBehavior"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RadioButtonValue")!=null) {
-					RadioButtonValue=Serializing.GetXmlNodeValue(doc,"RadioButtonValue");
+				if(Serializing.getXmlNodeValue(doc,"RadioButtonValue")!=null) {
+					RadioButtonValue=Serializing.getXmlNodeValue(doc,"RadioButtonValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RadioButtonGroup")!=null) {
-					RadioButtonGroup=Serializing.GetXmlNodeValue(doc,"RadioButtonGroup");
+				if(Serializing.getXmlNodeValue(doc,"RadioButtonGroup")!=null) {
+					RadioButtonGroup=Serializing.getXmlNodeValue(doc,"RadioButtonGroup");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsRequired")!=null) {
-					IsRequired=(Serializing.GetXmlNodeValue(doc,"IsRequired")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsRequired")!=null) {
+					IsRequired=(Serializing.getXmlNodeValue(doc,"IsRequired")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TabOrder")!=null) {
-					TabOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TabOrder"));
+				if(Serializing.getXmlNodeValue(doc,"TabOrder")!=null) {
+					TabOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TabOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ReportableName")!=null) {
-					ReportableName=Serializing.GetXmlNodeValue(doc,"ReportableName");
+				if(Serializing.getXmlNodeValue(doc,"ReportableName")!=null) {
+					ReportableName=Serializing.getXmlNodeValue(doc,"ReportableName");
 				}
 			}
 			catch(Exception e) {

@@ -20,7 +20,7 @@ public class HL7DefSegment {
 		public String Note;
 
 		/** Deep copy of object. */
-		public HL7DefSegment Copy() {
+		public HL7DefSegment deepCopy() {
 			HL7DefSegment hl7defsegment=new HL7DefSegment();
 			hl7defsegment.HL7DefSegmentNum=this.HL7DefSegmentNum;
 			hl7defsegment.HL7DefMessageNum=this.HL7DefMessageNum;
@@ -33,7 +33,7 @@ public class HL7DefSegment {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<HL7DefSegment>");
 			sb.append("<HL7DefSegmentNum>").append(HL7DefSegmentNum).append("</HL7DefSegmentNum>");
@@ -42,7 +42,7 @@ public class HL7DefSegment {
 			sb.append("<CanRepeat>").append((CanRepeat)?1:0).append("</CanRepeat>");
 			sb.append("<IsOptional>").append((IsOptional)?1:0).append("</IsOptional>");
 			sb.append("<SegmentName>").append(SegmentName.ordinal()).append("</SegmentName>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</HL7DefSegment>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class HL7DefSegment {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
-					HL7DefSegmentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefSegmentNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefSegmentNum")!=null) {
+					HL7DefSegmentNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefSegmentNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
-					HL7DefMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
+					HL7DefMessageNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefMessageNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanRepeat")!=null) {
-					CanRepeat=(Serializing.GetXmlNodeValue(doc,"CanRepeat")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"CanRepeat")!=null) {
+					CanRepeat=(Serializing.getXmlNodeValue(doc,"CanRepeat")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsOptional")!=null) {
-					IsOptional=(Serializing.GetXmlNodeValue(doc,"IsOptional")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsOptional")!=null) {
+					IsOptional=(Serializing.getXmlNodeValue(doc,"IsOptional")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SegmentName")!=null) {
-					SegmentName=SegmentNameHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SegmentName"))];
+				if(Serializing.getXmlNodeValue(doc,"SegmentName")!=null) {
+					SegmentName=SegmentNameHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SegmentName"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

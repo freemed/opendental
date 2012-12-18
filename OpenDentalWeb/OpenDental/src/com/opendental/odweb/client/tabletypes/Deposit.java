@@ -18,7 +18,7 @@ public class Deposit {
 		public String Memo;
 
 		/** Deep copy of object. */
-		public Deposit Copy() {
+		public Deposit deepCopy() {
 			Deposit deposit=new Deposit();
 			deposit.DepositNum=this.DepositNum;
 			deposit.DateDeposit=this.DateDeposit;
@@ -29,14 +29,14 @@ public class Deposit {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Deposit>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
 			sb.append("<DateDeposit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateDeposit)).append("</DateDeposit>");
-			sb.append("<BankAccountInfo>").append(Serializing.EscapeForXml(BankAccountInfo)).append("</BankAccountInfo>");
+			sb.append("<BankAccountInfo>").append(Serializing.escapeForXml(BankAccountInfo)).append("</BankAccountInfo>");
 			sb.append("<Amount>").append(Amount).append("</Amount>");
-			sb.append("<Memo>").append(Serializing.EscapeForXml(Memo)).append("</Memo>");
+			sb.append("<Memo>").append(Serializing.escapeForXml(Memo)).append("</Memo>");
 			sb.append("</Deposit>");
 			return sb.toString();
 		}
@@ -44,22 +44,22 @@ public class Deposit {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
-					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				if(Serializing.getXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DepositNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateDeposit")!=null) {
-					DateDeposit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDeposit"));
+				if(Serializing.getXmlNodeValue(doc,"DateDeposit")!=null) {
+					DateDeposit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateDeposit"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BankAccountInfo")!=null) {
-					BankAccountInfo=Serializing.GetXmlNodeValue(doc,"BankAccountInfo");
+				if(Serializing.getXmlNodeValue(doc,"BankAccountInfo")!=null) {
+					BankAccountInfo=Serializing.getXmlNodeValue(doc,"BankAccountInfo");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Amount")!=null) {
-					Amount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Amount"));
+				if(Serializing.getXmlNodeValue(doc,"Amount")!=null) {
+					Amount=Double.valueOf(Serializing.getXmlNodeValue(doc,"Amount"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Memo")!=null) {
-					Memo=Serializing.GetXmlNodeValue(doc,"Memo");
+				if(Serializing.getXmlNodeValue(doc,"Memo")!=null) {
+					Memo=Serializing.getXmlNodeValue(doc,"Memo");
 				}
 			}
 			catch(Exception e) {

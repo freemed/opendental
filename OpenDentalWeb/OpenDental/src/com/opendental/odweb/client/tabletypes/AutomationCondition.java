@@ -16,7 +16,7 @@ public class AutomationCondition {
 		public String CompareString;
 
 		/** Deep copy of object. */
-		public AutomationCondition Copy() {
+		public AutomationCondition deepCopy() {
 			AutomationCondition automationcondition=new AutomationCondition();
 			automationcondition.AutomationConditionNum=this.AutomationConditionNum;
 			automationcondition.AutomationNum=this.AutomationNum;
@@ -27,14 +27,14 @@ public class AutomationCondition {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<AutomationCondition>");
 			sb.append("<AutomationConditionNum>").append(AutomationConditionNum).append("</AutomationConditionNum>");
 			sb.append("<AutomationNum>").append(AutomationNum).append("</AutomationNum>");
 			sb.append("<CompareField>").append(CompareField.ordinal()).append("</CompareField>");
 			sb.append("<Comparison>").append(Comparison.ordinal()).append("</Comparison>");
-			sb.append("<CompareString>").append(Serializing.EscapeForXml(CompareString)).append("</CompareString>");
+			sb.append("<CompareString>").append(Serializing.escapeForXml(CompareString)).append("</CompareString>");
 			sb.append("</AutomationCondition>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class AutomationCondition {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AutomationConditionNum")!=null) {
-					AutomationConditionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationConditionNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutomationConditionNum")!=null) {
+					AutomationConditionNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutomationConditionNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AutomationNum")!=null) {
-					AutomationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutomationNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutomationNum")!=null) {
+					AutomationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutomationNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CompareField")!=null) {
-					CompareField=AutoCondField.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CompareField"))];
+				if(Serializing.getXmlNodeValue(doc,"CompareField")!=null) {
+					CompareField=AutoCondField.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CompareField"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Comparison")!=null) {
-					Comparison=AutoCondComparison.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Comparison"))];
+				if(Serializing.getXmlNodeValue(doc,"Comparison")!=null) {
+					Comparison=AutoCondComparison.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Comparison"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CompareString")!=null) {
-					CompareString=Serializing.GetXmlNodeValue(doc,"CompareString");
+				if(Serializing.getXmlNodeValue(doc,"CompareString")!=null) {
+					CompareString=Serializing.getXmlNodeValue(doc,"CompareString");
 				}
 			}
 			catch(Exception e) {

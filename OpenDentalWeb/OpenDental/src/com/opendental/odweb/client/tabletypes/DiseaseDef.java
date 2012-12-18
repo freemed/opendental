@@ -18,7 +18,7 @@ public class DiseaseDef {
 		public Date DateTStamp;
 
 		/** Deep copy of object. */
-		public DiseaseDef Copy() {
+		public DiseaseDef deepCopy() {
 			DiseaseDef diseasedef=new DiseaseDef();
 			diseasedef.DiseaseDefNum=this.DiseaseDefNum;
 			diseasedef.DiseaseName=this.DiseaseName;
@@ -29,11 +29,11 @@ public class DiseaseDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DiseaseDef>");
 			sb.append("<DiseaseDefNum>").append(DiseaseDefNum).append("</DiseaseDefNum>");
-			sb.append("<DiseaseName>").append(Serializing.EscapeForXml(DiseaseName)).append("</DiseaseName>");
+			sb.append("<DiseaseName>").append(Serializing.escapeForXml(DiseaseName)).append("</DiseaseName>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
@@ -44,22 +44,22 @@ public class DiseaseDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
-					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DiseaseDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DiseaseName")!=null) {
-					DiseaseName=Serializing.GetXmlNodeValue(doc,"DiseaseName");
+				if(Serializing.getXmlNodeValue(doc,"DiseaseName")!=null) {
+					DiseaseName=Serializing.getXmlNodeValue(doc,"DiseaseName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 			}
 			catch(Exception e) {

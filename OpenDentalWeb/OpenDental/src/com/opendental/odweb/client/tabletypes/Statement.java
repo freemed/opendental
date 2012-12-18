@@ -42,7 +42,7 @@ public class Statement {
 		public boolean IsInvoiceCopy;
 
 		/** Deep copy of object. */
-		public Statement Copy() {
+		public Statement deepCopy() {
 			Statement statement=new Statement();
 			statement.StatementNum=this.StatementNum;
 			statement.PatNum=this.PatNum;
@@ -65,7 +65,7 @@ public class Statement {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Statement>");
 			sb.append("<StatementNum>").append(StatementNum).append("</StatementNum>");
@@ -73,8 +73,8 @@ public class Statement {
 			sb.append("<DateSent>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateSent)).append("</DateSent>");
 			sb.append("<DateRangeFrom>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateRangeFrom)).append("</DateRangeFrom>");
 			sb.append("<DateRangeTo>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateRangeTo)).append("</DateRangeTo>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<NoteBold>").append(Serializing.EscapeForXml(NoteBold)).append("</NoteBold>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<NoteBold>").append(Serializing.escapeForXml(NoteBold)).append("</NoteBold>");
 			sb.append("<Mode_>").append(Mode_.ordinal()).append("</Mode_>");
 			sb.append("<HidePayment>").append((HidePayment)?1:0).append("</HidePayment>");
 			sb.append("<SinglePatient>").append((SinglePatient)?1:0).append("</SinglePatient>");
@@ -92,58 +92,58 @@ public class Statement {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"StatementNum")!=null) {
-					StatementNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StatementNum"));
+				if(Serializing.getXmlNodeValue(doc,"StatementNum")!=null) {
+					StatementNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"StatementNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateSent")!=null) {
-					DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateSent"));
+				if(Serializing.getXmlNodeValue(doc,"DateSent")!=null) {
+					DateSent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateSent"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateRangeFrom")!=null) {
-					DateRangeFrom=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateRangeFrom"));
+				if(Serializing.getXmlNodeValue(doc,"DateRangeFrom")!=null) {
+					DateRangeFrom=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateRangeFrom"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateRangeTo")!=null) {
-					DateRangeTo=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateRangeTo"));
+				if(Serializing.getXmlNodeValue(doc,"DateRangeTo")!=null) {
+					DateRangeTo=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateRangeTo"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NoteBold")!=null) {
-					NoteBold=Serializing.GetXmlNodeValue(doc,"NoteBold");
+				if(Serializing.getXmlNodeValue(doc,"NoteBold")!=null) {
+					NoteBold=Serializing.getXmlNodeValue(doc,"NoteBold");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Mode_")!=null) {
-					Mode_=StatementMode.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Mode_"))];
+				if(Serializing.getXmlNodeValue(doc,"Mode_")!=null) {
+					Mode_=StatementMode.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HidePayment")!=null) {
-					HidePayment=(Serializing.GetXmlNodeValue(doc,"HidePayment")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"HidePayment")!=null) {
+					HidePayment=(Serializing.getXmlNodeValue(doc,"HidePayment")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SinglePatient")!=null) {
-					SinglePatient=(Serializing.GetXmlNodeValue(doc,"SinglePatient")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"SinglePatient")!=null) {
+					SinglePatient=(Serializing.getXmlNodeValue(doc,"SinglePatient")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Intermingled")!=null) {
-					Intermingled=(Serializing.GetXmlNodeValue(doc,"Intermingled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"Intermingled")!=null) {
+					Intermingled=(Serializing.getXmlNodeValue(doc,"Intermingled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsSent")!=null) {
-					IsSent=(Serializing.GetXmlNodeValue(doc,"IsSent")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsSent")!=null) {
+					IsSent=(Serializing.getXmlNodeValue(doc,"IsSent")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DocNum")!=null) {
-					DocNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocNum"));
+				if(Serializing.getXmlNodeValue(doc,"DocNum")!=null) {
+					DocNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsReceipt")!=null) {
-					IsReceipt=(Serializing.GetXmlNodeValue(doc,"IsReceipt")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsReceipt")!=null) {
+					IsReceipt=(Serializing.getXmlNodeValue(doc,"IsReceipt")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsInvoice")!=null) {
-					IsInvoice=(Serializing.GetXmlNodeValue(doc,"IsInvoice")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsInvoice")!=null) {
+					IsInvoice=(Serializing.getXmlNodeValue(doc,"IsInvoice")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsInvoiceCopy")!=null) {
-					IsInvoiceCopy=(Serializing.GetXmlNodeValue(doc,"IsInvoiceCopy")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsInvoiceCopy")!=null) {
+					IsInvoiceCopy=(Serializing.getXmlNodeValue(doc,"IsInvoiceCopy")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

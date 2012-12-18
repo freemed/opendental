@@ -26,7 +26,7 @@ public class ChartView {
 		public ChartViewDates DatesShowing;
 
 		/** Deep copy of object. */
-		public ChartView Copy() {
+		public ChartView deepCopy() {
 			ChartView chartview=new ChartView();
 			chartview.ChartViewNum=this.ChartViewNum;
 			chartview.Description=this.Description;
@@ -42,11 +42,11 @@ public class ChartView {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ChartView>");
 			sb.append("<ChartViewNum>").append(ChartViewNum).append("</ChartViewNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<ProcStatuses>").append(ProcStatuses.ordinal()).append("</ProcStatuses>");
 			sb.append("<ObjectTypes>").append(ObjectTypes.ordinal()).append("</ObjectTypes>");
@@ -62,37 +62,37 @@ public class ChartView {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ChartViewNum")!=null) {
-					ChartViewNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ChartViewNum"));
+				if(Serializing.getXmlNodeValue(doc,"ChartViewNum")!=null) {
+					ChartViewNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ChartViewNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcStatuses")!=null) {
-					ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcStatuses"))];
+				if(Serializing.getXmlNodeValue(doc,"ProcStatuses")!=null) {
+					ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatuses"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObjectTypes")!=null) {
-					ObjectTypes=ChartViewObjs.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectTypes"))];
+				if(Serializing.getXmlNodeValue(doc,"ObjectTypes")!=null) {
+					ObjectTypes=ChartViewObjs.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectTypes"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ShowProcNotes")!=null) {
-					ShowProcNotes=(Serializing.GetXmlNodeValue(doc,"ShowProcNotes")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ShowProcNotes")!=null) {
+					ShowProcNotes=(Serializing.getXmlNodeValue(doc,"ShowProcNotes")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsAudit")!=null) {
-					IsAudit=(Serializing.GetXmlNodeValue(doc,"IsAudit")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsAudit")!=null) {
+					IsAudit=(Serializing.getXmlNodeValue(doc,"IsAudit")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SelectedTeethOnly")!=null) {
-					SelectedTeethOnly=(Serializing.GetXmlNodeValue(doc,"SelectedTeethOnly")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"SelectedTeethOnly")!=null) {
+					SelectedTeethOnly=(Serializing.getXmlNodeValue(doc,"SelectedTeethOnly")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OrionStatusFlags")!=null) {
-					OrionStatusFlags=OrionStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrionStatusFlags"))];
+				if(Serializing.getXmlNodeValue(doc,"OrionStatusFlags")!=null) {
+					OrionStatusFlags=OrionStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"OrionStatusFlags"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DatesShowing")!=null) {
-					DatesShowing=ChartViewDates.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DatesShowing"))];
+				if(Serializing.getXmlNodeValue(doc,"DatesShowing")!=null) {
+					DatesShowing=ChartViewDates.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DatesShowing"))];
 				}
 			}
 			catch(Exception e) {

@@ -32,7 +32,7 @@ public class Userod {
 		public boolean ClinicIsRestricted;
 
 		/** Deep copy of object. */
-		public Userod Copy() {
+		public Userod deepCopy() {
 			Userod userod=new Userod();
 			userod.UserNum=this.UserNum;
 			userod.UserName=this.UserName;
@@ -51,12 +51,12 @@ public class Userod {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Userod>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
-			sb.append("<UserName>").append(Serializing.EscapeForXml(UserName)).append("</UserName>");
-			sb.append("<Password>").append(Serializing.EscapeForXml(Password)).append("</Password>");
+			sb.append("<UserName>").append(Serializing.escapeForXml(UserName)).append("</UserName>");
+			sb.append("<Password>").append(Serializing.escapeForXml(Password)).append("</Password>");
 			sb.append("<UserGroupNum>").append(UserGroupNum).append("</UserGroupNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
@@ -74,46 +74,46 @@ public class Userod {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserName")!=null) {
-					UserName=Serializing.GetXmlNodeValue(doc,"UserName");
+				if(Serializing.getXmlNodeValue(doc,"UserName")!=null) {
+					UserName=Serializing.getXmlNodeValue(doc,"UserName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
-					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				if(Serializing.getXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.getXmlNodeValue(doc,"Password");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserGroupNum")!=null) {
-					UserGroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserGroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserGroupNum")!=null) {
+					UserGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserGroupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskListInBox")!=null) {
-					TaskListInBox=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListInBox"));
+				if(Serializing.getXmlNodeValue(doc,"TaskListInBox")!=null) {
+					TaskListInBox=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskListInBox"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AnesthProvType")!=null) {
-					AnesthProvType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AnesthProvType"));
+				if(Serializing.getXmlNodeValue(doc,"AnesthProvType")!=null) {
+					AnesthProvType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AnesthProvType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DefaultHidePopups")!=null) {
-					DefaultHidePopups=(Serializing.GetXmlNodeValue(doc,"DefaultHidePopups")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"DefaultHidePopups")!=null) {
+					DefaultHidePopups=(Serializing.getXmlNodeValue(doc,"DefaultHidePopups")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PasswordIsStrong")!=null) {
-					PasswordIsStrong=(Serializing.GetXmlNodeValue(doc,"PasswordIsStrong")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"PasswordIsStrong")!=null) {
+					PasswordIsStrong=(Serializing.getXmlNodeValue(doc,"PasswordIsStrong")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicIsRestricted")!=null) {
-					ClinicIsRestricted=(Serializing.GetXmlNodeValue(doc,"ClinicIsRestricted")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ClinicIsRestricted")!=null) {
+					ClinicIsRestricted=(Serializing.getXmlNodeValue(doc,"ClinicIsRestricted")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

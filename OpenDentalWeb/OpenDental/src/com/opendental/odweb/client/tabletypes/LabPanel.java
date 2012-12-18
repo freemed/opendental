@@ -28,7 +28,7 @@ public class LabPanel {
 		public int MedicalOrderNum;
 
 		/** Deep copy of object. */
-		public LabPanel Copy() {
+		public LabPanel deepCopy() {
 			LabPanel labpanel=new LabPanel();
 			labpanel.LabPanelNum=this.LabPanelNum;
 			labpanel.PatNum=this.PatNum;
@@ -44,18 +44,18 @@ public class LabPanel {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LabPanel>");
 			sb.append("<LabPanelNum>").append(LabPanelNum).append("</LabPanelNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<RawMessage>").append(Serializing.EscapeForXml(RawMessage)).append("</RawMessage>");
-			sb.append("<LabNameAddress>").append(Serializing.EscapeForXml(LabNameAddress)).append("</LabNameAddress>");
+			sb.append("<RawMessage>").append(Serializing.escapeForXml(RawMessage)).append("</RawMessage>");
+			sb.append("<LabNameAddress>").append(Serializing.escapeForXml(LabNameAddress)).append("</LabNameAddress>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
-			sb.append("<SpecimenCondition>").append(Serializing.EscapeForXml(SpecimenCondition)).append("</SpecimenCondition>");
-			sb.append("<SpecimenSource>").append(Serializing.EscapeForXml(SpecimenSource)).append("</SpecimenSource>");
-			sb.append("<ServiceId>").append(Serializing.EscapeForXml(ServiceId)).append("</ServiceId>");
-			sb.append("<ServiceName>").append(Serializing.EscapeForXml(ServiceName)).append("</ServiceName>");
+			sb.append("<SpecimenCondition>").append(Serializing.escapeForXml(SpecimenCondition)).append("</SpecimenCondition>");
+			sb.append("<SpecimenSource>").append(Serializing.escapeForXml(SpecimenSource)).append("</SpecimenSource>");
+			sb.append("<ServiceId>").append(Serializing.escapeForXml(ServiceId)).append("</ServiceId>");
+			sb.append("<ServiceName>").append(Serializing.escapeForXml(ServiceName)).append("</ServiceName>");
 			sb.append("<MedicalOrderNum>").append(MedicalOrderNum).append("</MedicalOrderNum>");
 			sb.append("</LabPanel>");
 			return sb.toString();
@@ -64,37 +64,37 @@ public class LabPanel {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LabPanelNum")!=null) {
-					LabPanelNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabPanelNum"));
+				if(Serializing.getXmlNodeValue(doc,"LabPanelNum")!=null) {
+					LabPanelNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LabPanelNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RawMessage")!=null) {
-					RawMessage=Serializing.GetXmlNodeValue(doc,"RawMessage");
+				if(Serializing.getXmlNodeValue(doc,"RawMessage")!=null) {
+					RawMessage=Serializing.getXmlNodeValue(doc,"RawMessage");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LabNameAddress")!=null) {
-					LabNameAddress=Serializing.GetXmlNodeValue(doc,"LabNameAddress");
+				if(Serializing.getXmlNodeValue(doc,"LabNameAddress")!=null) {
+					LabNameAddress=Serializing.getXmlNodeValue(doc,"LabNameAddress");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SpecimenCondition")!=null) {
-					SpecimenCondition=Serializing.GetXmlNodeValue(doc,"SpecimenCondition");
+				if(Serializing.getXmlNodeValue(doc,"SpecimenCondition")!=null) {
+					SpecimenCondition=Serializing.getXmlNodeValue(doc,"SpecimenCondition");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SpecimenSource")!=null) {
-					SpecimenSource=Serializing.GetXmlNodeValue(doc,"SpecimenSource");
+				if(Serializing.getXmlNodeValue(doc,"SpecimenSource")!=null) {
+					SpecimenSource=Serializing.getXmlNodeValue(doc,"SpecimenSource");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ServiceId")!=null) {
-					ServiceId=Serializing.GetXmlNodeValue(doc,"ServiceId");
+				if(Serializing.getXmlNodeValue(doc,"ServiceId")!=null) {
+					ServiceId=Serializing.getXmlNodeValue(doc,"ServiceId");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ServiceName")!=null) {
-					ServiceName=Serializing.GetXmlNodeValue(doc,"ServiceName");
+				if(Serializing.getXmlNodeValue(doc,"ServiceName")!=null) {
+					ServiceName=Serializing.getXmlNodeValue(doc,"ServiceName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum")!=null) {
-					MedicalOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicalOrderNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicalOrderNum")!=null) {
+					MedicalOrderNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicalOrderNum"));
 				}
 			}
 			catch(Exception e) {

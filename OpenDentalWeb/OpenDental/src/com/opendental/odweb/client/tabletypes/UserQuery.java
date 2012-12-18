@@ -14,7 +14,7 @@ public class UserQuery {
 		public String QueryText;
 
 		/** Deep copy of object. */
-		public UserQuery Copy() {
+		public UserQuery deepCopy() {
 			UserQuery userquery=new UserQuery();
 			userquery.QueryNum=this.QueryNum;
 			userquery.Description=this.Description;
@@ -24,13 +24,13 @@ public class UserQuery {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<UserQuery>");
 			sb.append("<QueryNum>").append(QueryNum).append("</QueryNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
-			sb.append("<QueryText>").append(Serializing.EscapeForXml(QueryText)).append("</QueryText>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<FileName>").append(Serializing.escapeForXml(FileName)).append("</FileName>");
+			sb.append("<QueryText>").append(Serializing.escapeForXml(QueryText)).append("</QueryText>");
 			sb.append("</UserQuery>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class UserQuery {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"QueryNum")!=null) {
-					QueryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QueryNum"));
+				if(Serializing.getXmlNodeValue(doc,"QueryNum")!=null) {
+					QueryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QueryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
-					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				if(Serializing.getXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"QueryText")!=null) {
-					QueryText=Serializing.GetXmlNodeValue(doc,"QueryText");
+				if(Serializing.getXmlNodeValue(doc,"QueryText")!=null) {
+					QueryText=Serializing.getXmlNodeValue(doc,"QueryText");
 				}
 			}
 			catch(Exception e) {

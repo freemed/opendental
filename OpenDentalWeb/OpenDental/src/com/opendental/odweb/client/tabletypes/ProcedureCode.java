@@ -64,7 +64,7 @@ public class ProcedureCode {
 		public int ProvNumDefault;
 
 		/** Deep copy of object. */
-		public ProcedureCode Copy() {
+		public ProcedureCode deepCopy() {
 			ProcedureCode procedurecode=new ProcedureCode();
 			procedurecode.CodeNum=this.CodeNum;
 			procedurecode.ProcCode=this.ProcCode;
@@ -98,36 +98,36 @@ public class ProcedureCode {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProcedureCode>");
 			sb.append("<CodeNum>").append(CodeNum).append("</CodeNum>");
-			sb.append("<ProcCode>").append(Serializing.EscapeForXml(ProcCode)).append("</ProcCode>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
-			sb.append("<AbbrDesc>").append(Serializing.EscapeForXml(AbbrDesc)).append("</AbbrDesc>");
-			sb.append("<ProcTime>").append(Serializing.EscapeForXml(ProcTime)).append("</ProcTime>");
+			sb.append("<ProcCode>").append(Serializing.escapeForXml(ProcCode)).append("</ProcCode>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
+			sb.append("<AbbrDesc>").append(Serializing.escapeForXml(AbbrDesc)).append("</AbbrDesc>");
+			sb.append("<ProcTime>").append(Serializing.escapeForXml(ProcTime)).append("</ProcTime>");
 			sb.append("<ProcCat>").append(ProcCat).append("</ProcCat>");
 			sb.append("<TreatArea>").append(TreatArea.ordinal()).append("</TreatArea>");
 			sb.append("<NoBillIns>").append((NoBillIns)?1:0).append("</NoBillIns>");
 			sb.append("<IsProsth>").append((IsProsth)?1:0).append("</IsProsth>");
-			sb.append("<DefaultNote>").append(Serializing.EscapeForXml(DefaultNote)).append("</DefaultNote>");
+			sb.append("<DefaultNote>").append(Serializing.escapeForXml(DefaultNote)).append("</DefaultNote>");
 			sb.append("<IsHygiene>").append((IsHygiene)?1:0).append("</IsHygiene>");
 			sb.append("<GTypeNum>").append(GTypeNum).append("</GTypeNum>");
-			sb.append("<AlternateCode1>").append(Serializing.EscapeForXml(AlternateCode1)).append("</AlternateCode1>");
-			sb.append("<MedicalCode>").append(Serializing.EscapeForXml(MedicalCode)).append("</MedicalCode>");
+			sb.append("<AlternateCode1>").append(Serializing.escapeForXml(AlternateCode1)).append("</AlternateCode1>");
+			sb.append("<MedicalCode>").append(Serializing.escapeForXml(MedicalCode)).append("</MedicalCode>");
 			sb.append("<IsTaxed>").append((IsTaxed)?1:0).append("</IsTaxed>");
 			sb.append("<PaintType>").append(PaintType.ordinal()).append("</PaintType>");
 			sb.append("<GraphicColor>").append(GraphicColor).append("</GraphicColor>");
-			sb.append("<LaymanTerm>").append(Serializing.EscapeForXml(LaymanTerm)).append("</LaymanTerm>");
+			sb.append("<LaymanTerm>").append(Serializing.escapeForXml(LaymanTerm)).append("</LaymanTerm>");
 			sb.append("<IsCanadianLab>").append((IsCanadianLab)?1:0).append("</IsCanadianLab>");
 			sb.append("<PreExisting>").append((PreExisting)?1:0).append("</PreExisting>");
 			sb.append("<BaseUnits>").append(BaseUnits).append("</BaseUnits>");
-			sb.append("<SubstitutionCode>").append(Serializing.EscapeForXml(SubstitutionCode)).append("</SubstitutionCode>");
+			sb.append("<SubstitutionCode>").append(Serializing.escapeForXml(SubstitutionCode)).append("</SubstitutionCode>");
 			sb.append("<SubstOnlyIf>").append(SubstOnlyIf.ordinal()).append("</SubstOnlyIf>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<IsMultiVisit>").append((IsMultiVisit)?1:0).append("</IsMultiVisit>");
-			sb.append("<DrugNDC>").append(Serializing.EscapeForXml(DrugNDC)).append("</DrugNDC>");
-			sb.append("<RevenueCodeDefault>").append(Serializing.EscapeForXml(RevenueCodeDefault)).append("</RevenueCodeDefault>");
+			sb.append("<DrugNDC>").append(Serializing.escapeForXml(DrugNDC)).append("</DrugNDC>");
+			sb.append("<RevenueCodeDefault>").append(Serializing.escapeForXml(RevenueCodeDefault)).append("</RevenueCodeDefault>");
 			sb.append("<ProvNumDefault>").append(ProvNumDefault).append("</ProvNumDefault>");
 			sb.append("</ProcedureCode>");
 			return sb.toString();
@@ -136,91 +136,91 @@ public class ProcedureCode {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcCode")!=null) {
-					ProcCode=Serializing.GetXmlNodeValue(doc,"ProcCode");
+				if(Serializing.getXmlNodeValue(doc,"ProcCode")!=null) {
+					ProcCode=Serializing.getXmlNodeValue(doc,"ProcCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AbbrDesc")!=null) {
-					AbbrDesc=Serializing.GetXmlNodeValue(doc,"AbbrDesc");
+				if(Serializing.getXmlNodeValue(doc,"AbbrDesc")!=null) {
+					AbbrDesc=Serializing.getXmlNodeValue(doc,"AbbrDesc");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcTime")!=null) {
-					ProcTime=Serializing.GetXmlNodeValue(doc,"ProcTime");
+				if(Serializing.getXmlNodeValue(doc,"ProcTime")!=null) {
+					ProcTime=Serializing.getXmlNodeValue(doc,"ProcTime");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcCat")!=null) {
-					ProcCat=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcCat"));
+				if(Serializing.getXmlNodeValue(doc,"ProcCat")!=null) {
+					ProcCat=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcCat"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TreatArea")!=null) {
-					TreatArea=TreatmentArea.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TreatArea"))];
+				if(Serializing.getXmlNodeValue(doc,"TreatArea")!=null) {
+					TreatArea=TreatmentArea.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TreatArea"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NoBillIns")!=null) {
-					NoBillIns=(Serializing.GetXmlNodeValue(doc,"NoBillIns")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NoBillIns")!=null) {
+					NoBillIns=(Serializing.getXmlNodeValue(doc,"NoBillIns")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsProsth")!=null) {
-					IsProsth=(Serializing.GetXmlNodeValue(doc,"IsProsth")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsProsth")!=null) {
+					IsProsth=(Serializing.getXmlNodeValue(doc,"IsProsth")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DefaultNote")!=null) {
-					DefaultNote=Serializing.GetXmlNodeValue(doc,"DefaultNote");
+				if(Serializing.getXmlNodeValue(doc,"DefaultNote")!=null) {
+					DefaultNote=Serializing.getXmlNodeValue(doc,"DefaultNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHygiene")!=null) {
-					IsHygiene=(Serializing.GetXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHygiene")!=null) {
+					IsHygiene=(Serializing.getXmlNodeValue(doc,"IsHygiene")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GTypeNum")!=null) {
-					GTypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GTypeNum"));
+				if(Serializing.getXmlNodeValue(doc,"GTypeNum")!=null) {
+					GTypeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GTypeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AlternateCode1")!=null) {
-					AlternateCode1=Serializing.GetXmlNodeValue(doc,"AlternateCode1");
+				if(Serializing.getXmlNodeValue(doc,"AlternateCode1")!=null) {
+					AlternateCode1=Serializing.getXmlNodeValue(doc,"AlternateCode1");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicalCode")!=null) {
-					MedicalCode=Serializing.GetXmlNodeValue(doc,"MedicalCode");
+				if(Serializing.getXmlNodeValue(doc,"MedicalCode")!=null) {
+					MedicalCode=Serializing.getXmlNodeValue(doc,"MedicalCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsTaxed")!=null) {
-					IsTaxed=(Serializing.GetXmlNodeValue(doc,"IsTaxed")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsTaxed")!=null) {
+					IsTaxed=(Serializing.getXmlNodeValue(doc,"IsTaxed")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PaintType")!=null) {
-					PaintType=ToothPaintingType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PaintType"))];
+				if(Serializing.getXmlNodeValue(doc,"PaintType")!=null) {
+					PaintType=ToothPaintingType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PaintType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GraphicColor")!=null) {
-					GraphicColor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GraphicColor"));
+				if(Serializing.getXmlNodeValue(doc,"GraphicColor")!=null) {
+					GraphicColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GraphicColor"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LaymanTerm")!=null) {
-					LaymanTerm=Serializing.GetXmlNodeValue(doc,"LaymanTerm");
+				if(Serializing.getXmlNodeValue(doc,"LaymanTerm")!=null) {
+					LaymanTerm=Serializing.getXmlNodeValue(doc,"LaymanTerm");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsCanadianLab")!=null) {
-					IsCanadianLab=(Serializing.GetXmlNodeValue(doc,"IsCanadianLab")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsCanadianLab")!=null) {
+					IsCanadianLab=(Serializing.getXmlNodeValue(doc,"IsCanadianLab")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PreExisting")!=null) {
-					PreExisting=(Serializing.GetXmlNodeValue(doc,"PreExisting")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"PreExisting")!=null) {
+					PreExisting=(Serializing.getXmlNodeValue(doc,"PreExisting")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BaseUnits")!=null) {
-					BaseUnits=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BaseUnits"));
+				if(Serializing.getXmlNodeValue(doc,"BaseUnits")!=null) {
+					BaseUnits=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BaseUnits"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SubstitutionCode")!=null) {
-					SubstitutionCode=Serializing.GetXmlNodeValue(doc,"SubstitutionCode");
+				if(Serializing.getXmlNodeValue(doc,"SubstitutionCode")!=null) {
+					SubstitutionCode=Serializing.getXmlNodeValue(doc,"SubstitutionCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SubstOnlyIf")!=null) {
-					SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SubstOnlyIf"))];
+				if(Serializing.getXmlNodeValue(doc,"SubstOnlyIf")!=null) {
+					SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SubstOnlyIf"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsMultiVisit")!=null) {
-					IsMultiVisit=(Serializing.GetXmlNodeValue(doc,"IsMultiVisit")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsMultiVisit")!=null) {
+					IsMultiVisit=(Serializing.getXmlNodeValue(doc,"IsMultiVisit")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DrugNDC")!=null) {
-					DrugNDC=Serializing.GetXmlNodeValue(doc,"DrugNDC");
+				if(Serializing.getXmlNodeValue(doc,"DrugNDC")!=null) {
+					DrugNDC=Serializing.getXmlNodeValue(doc,"DrugNDC");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RevenueCodeDefault")!=null) {
-					RevenueCodeDefault=Serializing.GetXmlNodeValue(doc,"RevenueCodeDefault");
+				if(Serializing.getXmlNodeValue(doc,"RevenueCodeDefault")!=null) {
+					RevenueCodeDefault=Serializing.getXmlNodeValue(doc,"RevenueCodeDefault");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNumDefault")!=null) {
-					ProvNumDefault=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNumDefault"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNumDefault")!=null) {
+					ProvNumDefault=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNumDefault"));
 				}
 			}
 			catch(Exception e) {

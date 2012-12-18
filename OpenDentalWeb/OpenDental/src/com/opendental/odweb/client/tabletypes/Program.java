@@ -22,7 +22,7 @@ public class Program {
 		public String PluginDllName;
 
 		/** Deep copy of object. */
-		public Program Copy() {
+		public Program deepCopy() {
 			Program program=new Program();
 			program.ProgramNum=this.ProgramNum;
 			program.ProgName=this.ProgName;
@@ -36,17 +36,17 @@ public class Program {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Program>");
 			sb.append("<ProgramNum>").append(ProgramNum).append("</ProgramNum>");
-			sb.append("<ProgName>").append(Serializing.EscapeForXml(ProgName)).append("</ProgName>");
-			sb.append("<ProgDesc>").append(Serializing.EscapeForXml(ProgDesc)).append("</ProgDesc>");
+			sb.append("<ProgName>").append(Serializing.escapeForXml(ProgName)).append("</ProgName>");
+			sb.append("<ProgDesc>").append(Serializing.escapeForXml(ProgDesc)).append("</ProgDesc>");
 			sb.append("<Enabled>").append((Enabled)?1:0).append("</Enabled>");
-			sb.append("<Path>").append(Serializing.EscapeForXml(Path)).append("</Path>");
-			sb.append("<CommandLine>").append(Serializing.EscapeForXml(CommandLine)).append("</CommandLine>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<PluginDllName>").append(Serializing.EscapeForXml(PluginDllName)).append("</PluginDllName>");
+			sb.append("<Path>").append(Serializing.escapeForXml(Path)).append("</Path>");
+			sb.append("<CommandLine>").append(Serializing.escapeForXml(CommandLine)).append("</CommandLine>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<PluginDllName>").append(Serializing.escapeForXml(PluginDllName)).append("</PluginDllName>");
 			sb.append("</Program>");
 			return sb.toString();
 		}
@@ -54,31 +54,31 @@ public class Program {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProgramNum")!=null) {
-					ProgramNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProgramNum")!=null) {
+					ProgramNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProgramNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProgName")!=null) {
-					ProgName=Serializing.GetXmlNodeValue(doc,"ProgName");
+				if(Serializing.getXmlNodeValue(doc,"ProgName")!=null) {
+					ProgName=Serializing.getXmlNodeValue(doc,"ProgName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProgDesc")!=null) {
-					ProgDesc=Serializing.GetXmlNodeValue(doc,"ProgDesc");
+				if(Serializing.getXmlNodeValue(doc,"ProgDesc")!=null) {
+					ProgDesc=Serializing.getXmlNodeValue(doc,"ProgDesc");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Enabled")!=null) {
-					Enabled=(Serializing.GetXmlNodeValue(doc,"Enabled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"Enabled")!=null) {
+					Enabled=(Serializing.getXmlNodeValue(doc,"Enabled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Path")!=null) {
-					Path=Serializing.GetXmlNodeValue(doc,"Path");
+				if(Serializing.getXmlNodeValue(doc,"Path")!=null) {
+					Path=Serializing.getXmlNodeValue(doc,"Path");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CommandLine")!=null) {
-					CommandLine=Serializing.GetXmlNodeValue(doc,"CommandLine");
+				if(Serializing.getXmlNodeValue(doc,"CommandLine")!=null) {
+					CommandLine=Serializing.getXmlNodeValue(doc,"CommandLine");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PluginDllName")!=null) {
-					PluginDllName=Serializing.GetXmlNodeValue(doc,"PluginDllName");
+				if(Serializing.getXmlNodeValue(doc,"PluginDllName")!=null) {
+					PluginDllName=Serializing.getXmlNodeValue(doc,"PluginDllName");
 				}
 			}
 			catch(Exception e) {

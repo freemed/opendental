@@ -20,7 +20,7 @@ public class PatPlan {
 		public int InsSubNum;
 
 		/** Deep copy of object. */
-		public PatPlan Copy() {
+		public PatPlan deepCopy() {
 			PatPlan patplan=new PatPlan();
 			patplan.PatPlanNum=this.PatPlanNum;
 			patplan.PatNum=this.PatNum;
@@ -33,7 +33,7 @@ public class PatPlan {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PatPlan>");
 			sb.append("<PatPlanNum>").append(PatPlanNum).append("</PatPlanNum>");
@@ -41,7 +41,7 @@ public class PatPlan {
 			sb.append("<Ordinal>").append(Ordinal).append("</Ordinal>");
 			sb.append("<IsPending>").append((IsPending)?1:0).append("</IsPending>");
 			sb.append("<Relationship>").append(Relationship.ordinal()).append("</Relationship>");
-			sb.append("<PatID>").append(Serializing.EscapeForXml(PatID)).append("</PatID>");
+			sb.append("<PatID>").append(Serializing.escapeForXml(PatID)).append("</PatID>");
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
 			sb.append("</PatPlan>");
 			return sb.toString();
@@ -50,28 +50,28 @@ public class PatPlan {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PatPlanNum")!=null) {
-					PatPlanNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatPlanNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatPlanNum")!=null) {
+					PatPlanNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatPlanNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Ordinal")!=null) {
-					Ordinal=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"Ordinal"));
+				if(Serializing.getXmlNodeValue(doc,"Ordinal")!=null) {
+					Ordinal=Byte.valueOf(Serializing.getXmlNodeValue(doc,"Ordinal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsPending")!=null) {
-					IsPending=(Serializing.GetXmlNodeValue(doc,"IsPending")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsPending")!=null) {
+					IsPending=(Serializing.getXmlNodeValue(doc,"IsPending")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Relationship")!=null) {
-					Relationship=Relat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Relationship"))];
+				if(Serializing.getXmlNodeValue(doc,"Relationship")!=null) {
+					Relationship=Relat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatID")!=null) {
-					PatID=Serializing.GetXmlNodeValue(doc,"PatID");
+				if(Serializing.getXmlNodeValue(doc,"PatID")!=null) {
+					PatID=Serializing.getXmlNodeValue(doc,"PatID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsSubNum")!=null) {
-					InsSubNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsSubNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsSubNum")!=null) {
+					InsSubNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsSubNum"));
 				}
 			}
 			catch(Exception e) {

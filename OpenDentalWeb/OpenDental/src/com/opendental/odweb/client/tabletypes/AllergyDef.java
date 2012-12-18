@@ -20,7 +20,7 @@ public class AllergyDef {
 		public int MedicationNum;
 
 		/** Deep copy of object. */
-		public AllergyDef Copy() {
+		public AllergyDef deepCopy() {
 			AllergyDef allergydef=new AllergyDef();
 			allergydef.AllergyDefNum=this.AllergyDefNum;
 			allergydef.Description=this.Description;
@@ -32,11 +32,11 @@ public class AllergyDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<AllergyDef>");
 			sb.append("<AllergyDefNum>").append(AllergyDefNum).append("</AllergyDefNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<IsHidden>").append((IsHidden)?1:0).append("</IsHidden>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<Snomed>").append(Snomed.ordinal()).append("</Snomed>");
@@ -48,25 +48,25 @@ public class AllergyDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AllergyDefNum")!=null) {
-					AllergyDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"AllergyDefNum")!=null) {
+					AllergyDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AllergyDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsHidden")!=null) {
-					IsHidden=(Serializing.GetXmlNodeValue(doc,"IsHidden")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsHidden")!=null) {
+					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Snomed")!=null) {
-					Snomed=SnomedAllergy.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Snomed"))];
+				if(Serializing.getXmlNodeValue(doc,"Snomed")!=null) {
+					Snomed=SnomedAllergy.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Snomed"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
-					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));
 				}
 			}
 			catch(Exception e) {

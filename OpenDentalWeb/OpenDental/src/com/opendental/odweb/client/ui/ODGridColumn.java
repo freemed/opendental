@@ -6,29 +6,29 @@ public class ODGridColumn {
 	
 	/** Creates a new ODGridColumn with a default column width of 80. */
 	public ODGridColumn() {
-		SetHeading("");//So that Heading will not be null.
-		SetColWidth(80);
+		setHeading("");//So that Heading will not be null.
+		setColWidth(80);
 	}
 	
 	/** Creates a new ODGridColumn and sets the heading and column width to the passed in values. */
 	public ODGridColumn(String heading,int colWidth) {
-		SetHeading(heading);
-		SetColWidth(colWidth);
+		setHeading(heading);
+		setColWidth(colWidth);
 	}
 
-	public String GetHeading() {
+	public String getHeading() {
 		return Heading;
 	}
 
-	public void SetHeading(String heading) {
+	public void setHeading(String heading) {
 		Heading = heading;
 	}
 
-	public int GetColWidth() {
+	public int getColWidth() {
 		return ColWidth;
 	}
 
-	public void SetColWidth(int colWidth) {
+	public void setColWidth(int colWidth) {
 		ColWidth = colWidth;
 	}
 }

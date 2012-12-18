@@ -22,7 +22,7 @@ public class Supplier {
 		public String Note;
 
 		/** Deep copy of object. */
-		public Supplier Copy() {
+		public Supplier deepCopy() {
 			Supplier supplier=new Supplier();
 			supplier.SupplierNum=this.SupplierNum;
 			supplier.Name=this.Name;
@@ -36,17 +36,17 @@ public class Supplier {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Supplier>");
 			sb.append("<SupplierNum>").append(SupplierNum).append("</SupplierNum>");
-			sb.append("<Name>").append(Serializing.EscapeForXml(Name)).append("</Name>");
-			sb.append("<Phone>").append(Serializing.EscapeForXml(Phone)).append("</Phone>");
-			sb.append("<CustomerId>").append(Serializing.EscapeForXml(CustomerId)).append("</CustomerId>");
-			sb.append("<Website>").append(Serializing.EscapeForXml(Website)).append("</Website>");
-			sb.append("<UserName>").append(Serializing.EscapeForXml(UserName)).append("</UserName>");
-			sb.append("<Password>").append(Serializing.EscapeForXml(Password)).append("</Password>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Name>").append(Serializing.escapeForXml(Name)).append("</Name>");
+			sb.append("<Phone>").append(Serializing.escapeForXml(Phone)).append("</Phone>");
+			sb.append("<CustomerId>").append(Serializing.escapeForXml(CustomerId)).append("</CustomerId>");
+			sb.append("<Website>").append(Serializing.escapeForXml(Website)).append("</Website>");
+			sb.append("<UserName>").append(Serializing.escapeForXml(UserName)).append("</UserName>");
+			sb.append("<Password>").append(Serializing.escapeForXml(Password)).append("</Password>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</Supplier>");
 			return sb.toString();
 		}
@@ -54,31 +54,31 @@ public class Supplier {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SupplierNum")!=null) {
-					SupplierNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplierNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplierNum")!=null) {
+					SupplierNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplierNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Name")!=null) {
-					Name=Serializing.GetXmlNodeValue(doc,"Name");
+				if(Serializing.getXmlNodeValue(doc,"Name")!=null) {
+					Name=Serializing.getXmlNodeValue(doc,"Name");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
-					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				if(Serializing.getXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.getXmlNodeValue(doc,"Phone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CustomerId")!=null) {
-					CustomerId=Serializing.GetXmlNodeValue(doc,"CustomerId");
+				if(Serializing.getXmlNodeValue(doc,"CustomerId")!=null) {
+					CustomerId=Serializing.getXmlNodeValue(doc,"CustomerId");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Website")!=null) {
-					Website=Serializing.GetXmlNodeValue(doc,"Website");
+				if(Serializing.getXmlNodeValue(doc,"Website")!=null) {
+					Website=Serializing.getXmlNodeValue(doc,"Website");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserName")!=null) {
-					UserName=Serializing.GetXmlNodeValue(doc,"UserName");
+				if(Serializing.getXmlNodeValue(doc,"UserName")!=null) {
+					UserName=Serializing.getXmlNodeValue(doc,"UserName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Password")!=null) {
-					Password=Serializing.GetXmlNodeValue(doc,"Password");
+				if(Serializing.getXmlNodeValue(doc,"Password")!=null) {
+					Password=Serializing.getXmlNodeValue(doc,"Password");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

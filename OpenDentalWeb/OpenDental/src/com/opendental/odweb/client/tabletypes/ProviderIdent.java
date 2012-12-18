@@ -16,7 +16,7 @@ public class ProviderIdent {
 		public String IDNumber;
 
 		/** Deep copy of object. */
-		public ProviderIdent Copy() {
+		public ProviderIdent deepCopy() {
 			ProviderIdent providerident=new ProviderIdent();
 			providerident.ProviderIdentNum=this.ProviderIdentNum;
 			providerident.ProvNum=this.ProvNum;
@@ -27,14 +27,14 @@ public class ProviderIdent {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProviderIdent>");
 			sb.append("<ProviderIdentNum>").append(ProviderIdentNum).append("</ProviderIdentNum>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<PayorID>").append(Serializing.EscapeForXml(PayorID)).append("</PayorID>");
+			sb.append("<PayorID>").append(Serializing.escapeForXml(PayorID)).append("</PayorID>");
 			sb.append("<SuppIDType>").append(SuppIDType.ordinal()).append("</SuppIDType>");
-			sb.append("<IDNumber>").append(Serializing.EscapeForXml(IDNumber)).append("</IDNumber>");
+			sb.append("<IDNumber>").append(Serializing.escapeForXml(IDNumber)).append("</IDNumber>");
 			sb.append("</ProviderIdent>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class ProviderIdent {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProviderIdentNum")!=null) {
-					ProviderIdentNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProviderIdentNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProviderIdentNum")!=null) {
+					ProviderIdentNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProviderIdentNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayorID")!=null) {
-					PayorID=Serializing.GetXmlNodeValue(doc,"PayorID");
+				if(Serializing.getXmlNodeValue(doc,"PayorID")!=null) {
+					PayorID=Serializing.getXmlNodeValue(doc,"PayorID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SuppIDType")!=null) {
-					SuppIDType=ProviderSupplementalID.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SuppIDType"))];
+				if(Serializing.getXmlNodeValue(doc,"SuppIDType")!=null) {
+					SuppIDType=ProviderSupplementalID.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SuppIDType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IDNumber")!=null) {
-					IDNumber=Serializing.GetXmlNodeValue(doc,"IDNumber");
+				if(Serializing.getXmlNodeValue(doc,"IDNumber")!=null) {
+					IDNumber=Serializing.getXmlNodeValue(doc,"IDNumber");
 				}
 			}
 			catch(Exception e) {

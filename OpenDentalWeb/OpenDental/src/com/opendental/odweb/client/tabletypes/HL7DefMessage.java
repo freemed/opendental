@@ -20,7 +20,7 @@ public class HL7DefMessage {
 		public String Note;
 
 		/** Deep copy of object. */
-		public HL7DefMessage Copy() {
+		public HL7DefMessage deepCopy() {
 			HL7DefMessage hl7defmessage=new HL7DefMessage();
 			hl7defmessage.HL7DefMessageNum=this.HL7DefMessageNum;
 			hl7defmessage.HL7DefNum=this.HL7DefNum;
@@ -33,7 +33,7 @@ public class HL7DefMessage {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<HL7DefMessage>");
 			sb.append("<HL7DefMessageNum>").append(HL7DefMessageNum).append("</HL7DefMessageNum>");
@@ -42,7 +42,7 @@ public class HL7DefMessage {
 			sb.append("<EventType>").append(EventType.ordinal()).append("</EventType>");
 			sb.append("<InOrOut>").append(InOrOut.ordinal()).append("</InOrOut>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</HL7DefMessage>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class HL7DefMessage {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
-					HL7DefMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefMessageNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefMessageNum")!=null) {
+					HL7DefMessageNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefMessageNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HL7DefNum")!=null) {
-					HL7DefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"HL7DefNum"));
+				if(Serializing.getXmlNodeValue(doc,"HL7DefNum")!=null) {
+					HL7DefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MessageType")!=null) {
-					MessageType=MessageTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MessageType"))];
+				if(Serializing.getXmlNodeValue(doc,"MessageType")!=null) {
+					MessageType=MessageTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MessageType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EventType")!=null) {
-					EventType=EventTypeHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EventType"))];
+				if(Serializing.getXmlNodeValue(doc,"EventType")!=null) {
+					EventType=EventTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EventType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InOrOut")!=null) {
-					InOrOut=InOutHL7.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InOrOut"))];
+				if(Serializing.getXmlNodeValue(doc,"InOrOut")!=null) {
+					InOrOut=InOutHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"InOrOut"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

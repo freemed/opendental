@@ -22,7 +22,7 @@ public class RepeatCharge {
 		public String Note;
 
 		/** Deep copy of object. */
-		public RepeatCharge Copy() {
+		public RepeatCharge deepCopy() {
 			RepeatCharge repeatcharge=new RepeatCharge();
 			repeatcharge.RepeatChargeNum=this.RepeatChargeNum;
 			repeatcharge.PatNum=this.PatNum;
@@ -35,16 +35,16 @@ public class RepeatCharge {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RepeatCharge>");
 			sb.append("<RepeatChargeNum>").append(RepeatChargeNum).append("</RepeatChargeNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ProcCode>").append(Serializing.EscapeForXml(ProcCode)).append("</ProcCode>");
+			sb.append("<ProcCode>").append(Serializing.escapeForXml(ProcCode)).append("</ProcCode>");
 			sb.append("<ChargeAmt>").append(ChargeAmt).append("</ChargeAmt>");
 			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
 			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</RepeatCharge>");
 			return sb.toString();
 		}
@@ -52,28 +52,28 @@ public class RepeatCharge {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RepeatChargeNum")!=null) {
-					RepeatChargeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RepeatChargeNum"));
+				if(Serializing.getXmlNodeValue(doc,"RepeatChargeNum")!=null) {
+					RepeatChargeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RepeatChargeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcCode")!=null) {
-					ProcCode=Serializing.GetXmlNodeValue(doc,"ProcCode");
+				if(Serializing.getXmlNodeValue(doc,"ProcCode")!=null) {
+					ProcCode=Serializing.getXmlNodeValue(doc,"ProcCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ChargeAmt")!=null) {
-					ChargeAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ChargeAmt"));
+				if(Serializing.getXmlNodeValue(doc,"ChargeAmt")!=null) {
+					ChargeAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"ChargeAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
-					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
-					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				if(Serializing.getXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStop"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

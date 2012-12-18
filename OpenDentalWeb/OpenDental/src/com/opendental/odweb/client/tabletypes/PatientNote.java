@@ -20,7 +20,7 @@ public class PatientNote {
 		public String Treatment;
 
 		/** Deep copy of object. */
-		public PatientNote Copy() {
+		public PatientNote deepCopy() {
 			PatientNote patientnote=new PatientNote();
 			patientnote.PatNum=this.PatNum;
 			patientnote.FamFinancial=this.FamFinancial;
@@ -33,16 +33,16 @@ public class PatientNote {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PatientNote>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<FamFinancial>").append(Serializing.EscapeForXml(FamFinancial)).append("</FamFinancial>");
-			sb.append("<ApptPhone>").append(Serializing.EscapeForXml(ApptPhone)).append("</ApptPhone>");
-			sb.append("<Medical>").append(Serializing.EscapeForXml(Medical)).append("</Medical>");
-			sb.append("<Service>").append(Serializing.EscapeForXml(Service)).append("</Service>");
-			sb.append("<MedicalComp>").append(Serializing.EscapeForXml(MedicalComp)).append("</MedicalComp>");
-			sb.append("<Treatment>").append(Serializing.EscapeForXml(Treatment)).append("</Treatment>");
+			sb.append("<FamFinancial>").append(Serializing.escapeForXml(FamFinancial)).append("</FamFinancial>");
+			sb.append("<ApptPhone>").append(Serializing.escapeForXml(ApptPhone)).append("</ApptPhone>");
+			sb.append("<Medical>").append(Serializing.escapeForXml(Medical)).append("</Medical>");
+			sb.append("<Service>").append(Serializing.escapeForXml(Service)).append("</Service>");
+			sb.append("<MedicalComp>").append(Serializing.escapeForXml(MedicalComp)).append("</MedicalComp>");
+			sb.append("<Treatment>").append(Serializing.escapeForXml(Treatment)).append("</Treatment>");
 			sb.append("</PatientNote>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class PatientNote {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FamFinancial")!=null) {
-					FamFinancial=Serializing.GetXmlNodeValue(doc,"FamFinancial");
+				if(Serializing.getXmlNodeValue(doc,"FamFinancial")!=null) {
+					FamFinancial=Serializing.getXmlNodeValue(doc,"FamFinancial");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ApptPhone")!=null) {
-					ApptPhone=Serializing.GetXmlNodeValue(doc,"ApptPhone");
+				if(Serializing.getXmlNodeValue(doc,"ApptPhone")!=null) {
+					ApptPhone=Serializing.getXmlNodeValue(doc,"ApptPhone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Medical")!=null) {
-					Medical=Serializing.GetXmlNodeValue(doc,"Medical");
+				if(Serializing.getXmlNodeValue(doc,"Medical")!=null) {
+					Medical=Serializing.getXmlNodeValue(doc,"Medical");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Service")!=null) {
-					Service=Serializing.GetXmlNodeValue(doc,"Service");
+				if(Serializing.getXmlNodeValue(doc,"Service")!=null) {
+					Service=Serializing.getXmlNodeValue(doc,"Service");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicalComp")!=null) {
-					MedicalComp=Serializing.GetXmlNodeValue(doc,"MedicalComp");
+				if(Serializing.getXmlNodeValue(doc,"MedicalComp")!=null) {
+					MedicalComp=Serializing.getXmlNodeValue(doc,"MedicalComp");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Treatment")!=null) {
-					Treatment=Serializing.GetXmlNodeValue(doc,"Treatment");
+				if(Serializing.getXmlNodeValue(doc,"Treatment")!=null) {
+					Treatment=Serializing.getXmlNodeValue(doc,"Treatment");
 				}
 			}
 			catch(Exception e) {

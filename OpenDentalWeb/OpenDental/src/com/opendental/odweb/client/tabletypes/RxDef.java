@@ -22,7 +22,7 @@ public class RxDef {
 		public int RxCui;
 
 		/** Deep copy of object. */
-		public RxDef Copy() {
+		public RxDef deepCopy() {
 			RxDef rxdef=new RxDef();
 			rxdef.RxDefNum=this.RxDefNum;
 			rxdef.Drug=this.Drug;
@@ -36,15 +36,15 @@ public class RxDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RxDef>");
 			sb.append("<RxDefNum>").append(RxDefNum).append("</RxDefNum>");
-			sb.append("<Drug>").append(Serializing.EscapeForXml(Drug)).append("</Drug>");
-			sb.append("<Sig>").append(Serializing.EscapeForXml(Sig)).append("</Sig>");
-			sb.append("<Disp>").append(Serializing.EscapeForXml(Disp)).append("</Disp>");
-			sb.append("<Refills>").append(Serializing.EscapeForXml(Refills)).append("</Refills>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Drug>").append(Serializing.escapeForXml(Drug)).append("</Drug>");
+			sb.append("<Sig>").append(Serializing.escapeForXml(Sig)).append("</Sig>");
+			sb.append("<Disp>").append(Serializing.escapeForXml(Disp)).append("</Disp>");
+			sb.append("<Refills>").append(Serializing.escapeForXml(Refills)).append("</Refills>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("<IsControlled>").append((IsControlled)?1:0).append("</IsControlled>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("</RxDef>");
@@ -54,31 +54,31 @@ public class RxDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RxDefNum")!=null) {
-					RxDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"RxDefNum")!=null) {
+					RxDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Drug")!=null) {
-					Drug=Serializing.GetXmlNodeValue(doc,"Drug");
+				if(Serializing.getXmlNodeValue(doc,"Drug")!=null) {
+					Drug=Serializing.getXmlNodeValue(doc,"Drug");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Sig")!=null) {
-					Sig=Serializing.GetXmlNodeValue(doc,"Sig");
+				if(Serializing.getXmlNodeValue(doc,"Sig")!=null) {
+					Sig=Serializing.getXmlNodeValue(doc,"Sig");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Disp")!=null) {
-					Disp=Serializing.GetXmlNodeValue(doc,"Disp");
+				if(Serializing.getXmlNodeValue(doc,"Disp")!=null) {
+					Disp=Serializing.getXmlNodeValue(doc,"Disp");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Refills")!=null) {
-					Refills=Serializing.GetXmlNodeValue(doc,"Refills");
+				if(Serializing.getXmlNodeValue(doc,"Refills")!=null) {
+					Refills=Serializing.getXmlNodeValue(doc,"Refills");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsControlled")!=null) {
-					IsControlled=(Serializing.GetXmlNodeValue(doc,"IsControlled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsControlled")!=null) {
+					IsControlled=(Serializing.getXmlNodeValue(doc,"IsControlled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
-					RxCui=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxCui"));
+				if(Serializing.getXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxCui"));
 				}
 			}
 			catch(Exception e) {

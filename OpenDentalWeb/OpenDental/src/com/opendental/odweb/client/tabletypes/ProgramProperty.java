@@ -16,7 +16,7 @@ public class ProgramProperty {
 		public String ComputerName;
 
 		/** Deep copy of object. */
-		public ProgramProperty Copy() {
+		public ProgramProperty deepCopy() {
 			ProgramProperty programproperty=new ProgramProperty();
 			programproperty.ProgramPropertyNum=this.ProgramPropertyNum;
 			programproperty.ProgramNum=this.ProgramNum;
@@ -27,14 +27,14 @@ public class ProgramProperty {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProgramProperty>");
 			sb.append("<ProgramPropertyNum>").append(ProgramPropertyNum).append("</ProgramPropertyNum>");
 			sb.append("<ProgramNum>").append(ProgramNum).append("</ProgramNum>");
-			sb.append("<PropertyDesc>").append(Serializing.EscapeForXml(PropertyDesc)).append("</PropertyDesc>");
-			sb.append("<PropertyValue>").append(Serializing.EscapeForXml(PropertyValue)).append("</PropertyValue>");
-			sb.append("<ComputerName>").append(Serializing.EscapeForXml(ComputerName)).append("</ComputerName>");
+			sb.append("<PropertyDesc>").append(Serializing.escapeForXml(PropertyDesc)).append("</PropertyDesc>");
+			sb.append("<PropertyValue>").append(Serializing.escapeForXml(PropertyValue)).append("</PropertyValue>");
+			sb.append("<ComputerName>").append(Serializing.escapeForXml(ComputerName)).append("</ComputerName>");
 			sb.append("</ProgramProperty>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class ProgramProperty {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProgramPropertyNum")!=null) {
-					ProgramPropertyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramPropertyNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProgramPropertyNum")!=null) {
+					ProgramPropertyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProgramPropertyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProgramNum")!=null) {
-					ProgramNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProgramNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProgramNum")!=null) {
+					ProgramNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProgramNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PropertyDesc")!=null) {
-					PropertyDesc=Serializing.GetXmlNodeValue(doc,"PropertyDesc");
+				if(Serializing.getXmlNodeValue(doc,"PropertyDesc")!=null) {
+					PropertyDesc=Serializing.getXmlNodeValue(doc,"PropertyDesc");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PropertyValue")!=null) {
-					PropertyValue=Serializing.GetXmlNodeValue(doc,"PropertyValue");
+				if(Serializing.getXmlNodeValue(doc,"PropertyValue")!=null) {
+					PropertyValue=Serializing.getXmlNodeValue(doc,"PropertyValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
-					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				if(Serializing.getXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
 			}
 			catch(Exception e) {

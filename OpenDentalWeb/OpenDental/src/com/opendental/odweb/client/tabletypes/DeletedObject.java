@@ -16,7 +16,7 @@ public class DeletedObject {
 		public Date DateTStamp;
 
 		/** Deep copy of object. */
-		public DeletedObject Copy() {
+		public DeletedObject deepCopy() {
 			DeletedObject deletedobject=new DeletedObject();
 			deletedobject.DeletedObjectNum=this.DeletedObjectNum;
 			deletedobject.ObjectNum=this.ObjectNum;
@@ -26,7 +26,7 @@ public class DeletedObject {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DeletedObject>");
 			sb.append("<DeletedObjectNum>").append(DeletedObjectNum).append("</DeletedObjectNum>");
@@ -40,19 +40,19 @@ public class DeletedObject {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DeletedObjectNum")!=null) {
-					DeletedObjectNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DeletedObjectNum"));
+				if(Serializing.getXmlNodeValue(doc,"DeletedObjectNum")!=null) {
+					DeletedObjectNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DeletedObjectNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObjectNum")!=null) {
-					ObjectNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectNum"));
+				if(Serializing.getXmlNodeValue(doc,"ObjectNum")!=null) {
+					ObjectNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObjectType")!=null) {
-					ObjectType=DeletedObjectType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ObjectType"))];
+				if(Serializing.getXmlNodeValue(doc,"ObjectType")!=null) {
+					ObjectType=DeletedObjectType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 			}
 			catch(Exception e) {

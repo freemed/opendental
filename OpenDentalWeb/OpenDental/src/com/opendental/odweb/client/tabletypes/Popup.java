@@ -16,7 +16,7 @@ public class Popup {
 		public EnumPopupLevel PopupLevel;
 
 		/** Deep copy of object. */
-		public Popup Copy() {
+		public Popup deepCopy() {
 			Popup popup=new Popup();
 			popup.PopupNum=this.PopupNum;
 			popup.PatNum=this.PatNum;
@@ -27,12 +27,12 @@ public class Popup {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Popup>");
 			sb.append("<PopupNum>").append(PopupNum).append("</PopupNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<IsDisabled>").append((IsDisabled)?1:0).append("</IsDisabled>");
 			sb.append("<PopupLevel>").append(PopupLevel.ordinal()).append("</PopupLevel>");
 			sb.append("</Popup>");
@@ -42,22 +42,22 @@ public class Popup {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PopupNum")!=null) {
-					PopupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PopupNum"));
+				if(Serializing.getXmlNodeValue(doc,"PopupNum")!=null) {
+					PopupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PopupNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsDisabled")!=null) {
-					IsDisabled=(Serializing.GetXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsDisabled")!=null) {
+					IsDisabled=(Serializing.getXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PopupLevel")!=null) {
-					PopupLevel=EnumPopupLevel.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PopupLevel"))];
+				if(Serializing.getXmlNodeValue(doc,"PopupLevel")!=null) {
+					PopupLevel=EnumPopupLevel.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PopupLevel"))];
 				}
 			}
 			catch(Exception e) {

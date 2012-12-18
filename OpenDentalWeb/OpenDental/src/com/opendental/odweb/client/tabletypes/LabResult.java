@@ -28,7 +28,7 @@ public class LabResult {
 		public LabAbnormalFlag AbnormalFlag;
 
 		/** Deep copy of object. */
-		public LabResult Copy() {
+		public LabResult deepCopy() {
 			LabResult labresult=new LabResult();
 			labresult.LabResultNum=this.LabResultNum;
 			labresult.LabPanelNum=this.LabPanelNum;
@@ -44,18 +44,18 @@ public class LabResult {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LabResult>");
 			sb.append("<LabResultNum>").append(LabResultNum).append("</LabResultNum>");
 			sb.append("<LabPanelNum>").append(LabPanelNum).append("</LabPanelNum>");
 			sb.append("<DateTimeTest>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeTest)).append("</DateTimeTest>");
-			sb.append("<TestName>").append(Serializing.EscapeForXml(TestName)).append("</TestName>");
+			sb.append("<TestName>").append(Serializing.escapeForXml(TestName)).append("</TestName>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
-			sb.append("<TestID>").append(Serializing.EscapeForXml(TestID)).append("</TestID>");
-			sb.append("<ObsValue>").append(Serializing.EscapeForXml(ObsValue)).append("</ObsValue>");
-			sb.append("<ObsUnits>").append(Serializing.EscapeForXml(ObsUnits)).append("</ObsUnits>");
-			sb.append("<ObsRange>").append(Serializing.EscapeForXml(ObsRange)).append("</ObsRange>");
+			sb.append("<TestID>").append(Serializing.escapeForXml(TestID)).append("</TestID>");
+			sb.append("<ObsValue>").append(Serializing.escapeForXml(ObsValue)).append("</ObsValue>");
+			sb.append("<ObsUnits>").append(Serializing.escapeForXml(ObsUnits)).append("</ObsUnits>");
+			sb.append("<ObsRange>").append(Serializing.escapeForXml(ObsRange)).append("</ObsRange>");
 			sb.append("<AbnormalFlag>").append(AbnormalFlag.ordinal()).append("</AbnormalFlag>");
 			sb.append("</LabResult>");
 			return sb.toString();
@@ -64,37 +64,37 @@ public class LabResult {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LabResultNum")!=null) {
-					LabResultNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabResultNum"));
+				if(Serializing.getXmlNodeValue(doc,"LabResultNum")!=null) {
+					LabResultNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LabResultNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LabPanelNum")!=null) {
-					LabPanelNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LabPanelNum"));
+				if(Serializing.getXmlNodeValue(doc,"LabPanelNum")!=null) {
+					LabPanelNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LabPanelNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeTest")!=null) {
-					DateTimeTest=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeTest"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeTest")!=null) {
+					DateTimeTest=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeTest"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TestName")!=null) {
-					TestName=Serializing.GetXmlNodeValue(doc,"TestName");
+				if(Serializing.getXmlNodeValue(doc,"TestName")!=null) {
+					TestName=Serializing.getXmlNodeValue(doc,"TestName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TestID")!=null) {
-					TestID=Serializing.GetXmlNodeValue(doc,"TestID");
+				if(Serializing.getXmlNodeValue(doc,"TestID")!=null) {
+					TestID=Serializing.getXmlNodeValue(doc,"TestID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObsValue")!=null) {
-					ObsValue=Serializing.GetXmlNodeValue(doc,"ObsValue");
+				if(Serializing.getXmlNodeValue(doc,"ObsValue")!=null) {
+					ObsValue=Serializing.getXmlNodeValue(doc,"ObsValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObsUnits")!=null) {
-					ObsUnits=Serializing.GetXmlNodeValue(doc,"ObsUnits");
+				if(Serializing.getXmlNodeValue(doc,"ObsUnits")!=null) {
+					ObsUnits=Serializing.getXmlNodeValue(doc,"ObsUnits");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ObsRange")!=null) {
-					ObsRange=Serializing.GetXmlNodeValue(doc,"ObsRange");
+				if(Serializing.getXmlNodeValue(doc,"ObsRange")!=null) {
+					ObsRange=Serializing.getXmlNodeValue(doc,"ObsRange");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AbnormalFlag")!=null) {
-					AbnormalFlag=LabAbnormalFlag.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AbnormalFlag"))];
+				if(Serializing.getXmlNodeValue(doc,"AbnormalFlag")!=null) {
+					AbnormalFlag=LabAbnormalFlag.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AbnormalFlag"))];
 				}
 			}
 			catch(Exception e) {

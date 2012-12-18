@@ -18,7 +18,7 @@ public class TimeCardRule {
 		public double AmtDiff;
 
 		/** Deep copy of object. */
-		public TimeCardRule Copy() {
+		public TimeCardRule deepCopy() {
 			TimeCardRule timecardrule=new TimeCardRule();
 			timecardrule.TimeCardRuleNum=this.TimeCardRuleNum;
 			timecardrule.EmployeeNum=this.EmployeeNum;
@@ -30,14 +30,14 @@ public class TimeCardRule {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TimeCardRule>");
 			sb.append("<TimeCardRuleNum>").append(TimeCardRuleNum).append("</TimeCardRuleNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
-			sb.append("<OverHoursPerDay>").append(Serializing.EscapeForXml(OverHoursPerDay)).append("</OverHoursPerDay>");
-			sb.append("<AfterTimeOfDay>").append(Serializing.EscapeForXml(AfterTimeOfDay)).append("</AfterTimeOfDay>");
-			sb.append("<BeforeTimeOfDay>").append(Serializing.EscapeForXml(BeforeTimeOfDay)).append("</BeforeTimeOfDay>");
+			sb.append("<OverHoursPerDay>").append(Serializing.escapeForXml(OverHoursPerDay)).append("</OverHoursPerDay>");
+			sb.append("<AfterTimeOfDay>").append(Serializing.escapeForXml(AfterTimeOfDay)).append("</AfterTimeOfDay>");
+			sb.append("<BeforeTimeOfDay>").append(Serializing.escapeForXml(BeforeTimeOfDay)).append("</BeforeTimeOfDay>");
 			sb.append("<AmtDiff>").append(AmtDiff).append("</AmtDiff>");
 			sb.append("</TimeCardRule>");
 			return sb.toString();
@@ -46,25 +46,25 @@ public class TimeCardRule {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TimeCardRuleNum")!=null) {
-					TimeCardRuleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimeCardRuleNum"));
+				if(Serializing.getXmlNodeValue(doc,"TimeCardRuleNum")!=null) {
+					TimeCardRuleNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TimeCardRuleNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OverHoursPerDay")!=null) {
-					OverHoursPerDay=Serializing.GetXmlNodeValue(doc,"OverHoursPerDay");
+				if(Serializing.getXmlNodeValue(doc,"OverHoursPerDay")!=null) {
+					OverHoursPerDay=Serializing.getXmlNodeValue(doc,"OverHoursPerDay");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AfterTimeOfDay")!=null) {
-					AfterTimeOfDay=Serializing.GetXmlNodeValue(doc,"AfterTimeOfDay");
+				if(Serializing.getXmlNodeValue(doc,"AfterTimeOfDay")!=null) {
+					AfterTimeOfDay=Serializing.getXmlNodeValue(doc,"AfterTimeOfDay");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BeforeTimeOfDay")!=null) {
-					BeforeTimeOfDay=Serializing.GetXmlNodeValue(doc,"BeforeTimeOfDay");
+				if(Serializing.getXmlNodeValue(doc,"BeforeTimeOfDay")!=null) {
+					BeforeTimeOfDay=Serializing.getXmlNodeValue(doc,"BeforeTimeOfDay");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AmtDiff")!=null) {
-					AmtDiff=Double.valueOf(Serializing.GetXmlNodeValue(doc,"AmtDiff"));
+				if(Serializing.getXmlNodeValue(doc,"AmtDiff")!=null) {
+					AmtDiff=Double.valueOf(Serializing.getXmlNodeValue(doc,"AmtDiff"));
 				}
 			}
 			catch(Exception e) {

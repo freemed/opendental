@@ -14,7 +14,7 @@ public class PatFieldDef {
 		public String PickList;
 
 		/** Deep copy of object. */
-		public PatFieldDef Copy() {
+		public PatFieldDef deepCopy() {
 			PatFieldDef patfielddef=new PatFieldDef();
 			patfielddef.PatFieldDefNum=this.PatFieldDefNum;
 			patfielddef.FieldName=this.FieldName;
@@ -24,13 +24,13 @@ public class PatFieldDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PatFieldDef>");
 			sb.append("<PatFieldDefNum>").append(PatFieldDefNum).append("</PatFieldDefNum>");
-			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FieldName>").append(Serializing.escapeForXml(FieldName)).append("</FieldName>");
 			sb.append("<FieldType>").append(FieldType.ordinal()).append("</FieldType>");
-			sb.append("<PickList>").append(Serializing.EscapeForXml(PickList)).append("</PickList>");
+			sb.append("<PickList>").append(Serializing.escapeForXml(PickList)).append("</PickList>");
 			sb.append("</PatFieldDef>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class PatFieldDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum")!=null) {
-					PatFieldDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatFieldDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatFieldDefNum")!=null) {
+					PatFieldDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatFieldDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
-					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldType")!=null) {
-					FieldType=PatFieldType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FieldType"))];
+				if(Serializing.getXmlNodeValue(doc,"FieldType")!=null) {
+					FieldType=PatFieldType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PickList")!=null) {
-					PickList=Serializing.GetXmlNodeValue(doc,"PickList");
+				if(Serializing.getXmlNodeValue(doc,"PickList")!=null) {
+					PickList=Serializing.getXmlNodeValue(doc,"PickList");
 				}
 			}
 			catch(Exception e) {

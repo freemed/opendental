@@ -158,7 +158,7 @@ public class Patient {
 		public YN TxtMsgOk;
 
 		/** Deep copy of object. */
-		public Patient Copy() {
+		public Patient deepCopy() {
 			Patient patient=new Patient();
 			patient.PatNum=this.PatNum;
 			patient.LName=this.LName;
@@ -239,45 +239,45 @@ public class Patient {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Patient>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<LName>").append(Serializing.EscapeForXml(LName)).append("</LName>");
-			sb.append("<FName>").append(Serializing.EscapeForXml(FName)).append("</FName>");
-			sb.append("<MiddleI>").append(Serializing.EscapeForXml(MiddleI)).append("</MiddleI>");
-			sb.append("<Preferred>").append(Serializing.EscapeForXml(Preferred)).append("</Preferred>");
+			sb.append("<LName>").append(Serializing.escapeForXml(LName)).append("</LName>");
+			sb.append("<FName>").append(Serializing.escapeForXml(FName)).append("</FName>");
+			sb.append("<MiddleI>").append(Serializing.escapeForXml(MiddleI)).append("</MiddleI>");
+			sb.append("<Preferred>").append(Serializing.escapeForXml(Preferred)).append("</Preferred>");
 			sb.append("<PatStatus>").append(PatStatus.ordinal()).append("</PatStatus>");
 			sb.append("<Gender>").append(Gender.ordinal()).append("</Gender>");
 			sb.append("<Position>").append(Position.ordinal()).append("</Position>");
 			sb.append("<Birthdate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(Birthdate)).append("</Birthdate>");
-			sb.append("<SSN>").append(Serializing.EscapeForXml(SSN)).append("</SSN>");
-			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
-			sb.append("<Address2>").append(Serializing.EscapeForXml(Address2)).append("</Address2>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
-			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
-			sb.append("<HmPhone>").append(Serializing.EscapeForXml(HmPhone)).append("</HmPhone>");
-			sb.append("<WkPhone>").append(Serializing.EscapeForXml(WkPhone)).append("</WkPhone>");
-			sb.append("<WirelessPhone>").append(Serializing.EscapeForXml(WirelessPhone)).append("</WirelessPhone>");
+			sb.append("<SSN>").append(Serializing.escapeForXml(SSN)).append("</SSN>");
+			sb.append("<Address>").append(Serializing.escapeForXml(Address)).append("</Address>");
+			sb.append("<Address2>").append(Serializing.escapeForXml(Address2)).append("</Address2>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<State>").append(Serializing.escapeForXml(State)).append("</State>");
+			sb.append("<Zip>").append(Serializing.escapeForXml(Zip)).append("</Zip>");
+			sb.append("<HmPhone>").append(Serializing.escapeForXml(HmPhone)).append("</HmPhone>");
+			sb.append("<WkPhone>").append(Serializing.escapeForXml(WkPhone)).append("</WkPhone>");
+			sb.append("<WirelessPhone>").append(Serializing.escapeForXml(WirelessPhone)).append("</WirelessPhone>");
 			sb.append("<Guarantor>").append(Guarantor).append("</Guarantor>");
-			sb.append("<CreditType>").append(Serializing.EscapeForXml(CreditType)).append("</CreditType>");
-			sb.append("<Email>").append(Serializing.EscapeForXml(Email)).append("</Email>");
-			sb.append("<Salutation>").append(Serializing.EscapeForXml(Salutation)).append("</Salutation>");
+			sb.append("<CreditType>").append(Serializing.escapeForXml(CreditType)).append("</CreditType>");
+			sb.append("<Email>").append(Serializing.escapeForXml(Email)).append("</Email>");
+			sb.append("<Salutation>").append(Serializing.escapeForXml(Salutation)).append("</Salutation>");
 			sb.append("<EstBalance>").append(EstBalance).append("</EstBalance>");
 			sb.append("<PriProv>").append(PriProv).append("</PriProv>");
 			sb.append("<SecProv>").append(SecProv).append("</SecProv>");
 			sb.append("<FeeSched>").append(FeeSched).append("</FeeSched>");
 			sb.append("<BillingType>").append(BillingType).append("</BillingType>");
-			sb.append("<ImageFolder>").append(Serializing.EscapeForXml(ImageFolder)).append("</ImageFolder>");
-			sb.append("<AddrNote>").append(Serializing.EscapeForXml(AddrNote)).append("</AddrNote>");
-			sb.append("<FamFinUrgNote>").append(Serializing.EscapeForXml(FamFinUrgNote)).append("</FamFinUrgNote>");
-			sb.append("<MedUrgNote>").append(Serializing.EscapeForXml(MedUrgNote)).append("</MedUrgNote>");
-			sb.append("<ApptModNote>").append(Serializing.EscapeForXml(ApptModNote)).append("</ApptModNote>");
-			sb.append("<StudentStatus>").append(Serializing.EscapeForXml(StudentStatus)).append("</StudentStatus>");
-			sb.append("<SchoolName>").append(Serializing.EscapeForXml(SchoolName)).append("</SchoolName>");
-			sb.append("<ChartNumber>").append(Serializing.EscapeForXml(ChartNumber)).append("</ChartNumber>");
-			sb.append("<MedicaidID>").append(Serializing.EscapeForXml(MedicaidID)).append("</MedicaidID>");
+			sb.append("<ImageFolder>").append(Serializing.escapeForXml(ImageFolder)).append("</ImageFolder>");
+			sb.append("<AddrNote>").append(Serializing.escapeForXml(AddrNote)).append("</AddrNote>");
+			sb.append("<FamFinUrgNote>").append(Serializing.escapeForXml(FamFinUrgNote)).append("</FamFinUrgNote>");
+			sb.append("<MedUrgNote>").append(Serializing.escapeForXml(MedUrgNote)).append("</MedUrgNote>");
+			sb.append("<ApptModNote>").append(Serializing.escapeForXml(ApptModNote)).append("</ApptModNote>");
+			sb.append("<StudentStatus>").append(Serializing.escapeForXml(StudentStatus)).append("</StudentStatus>");
+			sb.append("<SchoolName>").append(Serializing.escapeForXml(SchoolName)).append("</SchoolName>");
+			sb.append("<ChartNumber>").append(Serializing.escapeForXml(ChartNumber)).append("</ChartNumber>");
+			sb.append("<MedicaidID>").append(Serializing.escapeForXml(MedicaidID)).append("</MedicaidID>");
 			sb.append("<Bal_0_30>").append(Bal_0_30).append("</Bal_0_30>");
 			sb.append("<Bal_31_60>").append(Bal_31_60).append("</Bal_31_60>");
 			sb.append("<Bal_61_90>").append(Bal_61_90).append("</Bal_61_90>");
@@ -285,34 +285,34 @@ public class Patient {
 			sb.append("<InsEst>").append(InsEst).append("</InsEst>");
 			sb.append("<BalTotal>").append(BalTotal).append("</BalTotal>");
 			sb.append("<EmployerNum>").append(EmployerNum).append("</EmployerNum>");
-			sb.append("<EmploymentNote>").append(Serializing.EscapeForXml(EmploymentNote)).append("</EmploymentNote>");
+			sb.append("<EmploymentNote>").append(Serializing.escapeForXml(EmploymentNote)).append("</EmploymentNote>");
 			sb.append("<Race>").append(Race.ordinal()).append("</Race>");
-			sb.append("<County>").append(Serializing.EscapeForXml(County)).append("</County>");
+			sb.append("<County>").append(Serializing.escapeForXml(County)).append("</County>");
 			sb.append("<GradeLevel>").append(GradeLevel.ordinal()).append("</GradeLevel>");
 			sb.append("<Urgency>").append(Urgency.ordinal()).append("</Urgency>");
 			sb.append("<DateFirstVisit>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateFirstVisit)).append("</DateFirstVisit>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
-			sb.append("<HasIns>").append(Serializing.EscapeForXml(HasIns)).append("</HasIns>");
-			sb.append("<TrophyFolder>").append(Serializing.EscapeForXml(TrophyFolder)).append("</TrophyFolder>");
+			sb.append("<HasIns>").append(Serializing.escapeForXml(HasIns)).append("</HasIns>");
+			sb.append("<TrophyFolder>").append(Serializing.escapeForXml(TrophyFolder)).append("</TrophyFolder>");
 			sb.append("<PlannedIsDone>").append((PlannedIsDone)?1:0).append("</PlannedIsDone>");
 			sb.append("<Premed>").append((Premed)?1:0).append("</Premed>");
-			sb.append("<Ward>").append(Serializing.EscapeForXml(Ward)).append("</Ward>");
+			sb.append("<Ward>").append(Serializing.escapeForXml(Ward)).append("</Ward>");
 			sb.append("<PreferConfirmMethod>").append(PreferConfirmMethod.ordinal()).append("</PreferConfirmMethod>");
 			sb.append("<PreferContactMethod>").append(PreferContactMethod.ordinal()).append("</PreferContactMethod>");
 			sb.append("<PreferRecallMethod>").append(PreferRecallMethod.ordinal()).append("</PreferRecallMethod>");
-			sb.append("<SchedBeforeTime>").append(Serializing.EscapeForXml(SchedBeforeTime)).append("</SchedBeforeTime>");
-			sb.append("<SchedAfterTime>").append(Serializing.EscapeForXml(SchedAfterTime)).append("</SchedAfterTime>");
+			sb.append("<SchedBeforeTime>").append(Serializing.escapeForXml(SchedBeforeTime)).append("</SchedBeforeTime>");
+			sb.append("<SchedAfterTime>").append(Serializing.escapeForXml(SchedAfterTime)).append("</SchedAfterTime>");
 			sb.append("<SchedDayOfWeek>").append(SchedDayOfWeek).append("</SchedDayOfWeek>");
-			sb.append("<Language>").append(Serializing.EscapeForXml(Language)).append("</Language>");
+			sb.append("<Language>").append(Serializing.escapeForXml(Language)).append("</Language>");
 			sb.append("<AdmitDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(AdmitDate)).append("</AdmitDate>");
-			sb.append("<Title>").append(Serializing.EscapeForXml(Title)).append("</Title>");
+			sb.append("<Title>").append(Serializing.escapeForXml(Title)).append("</Title>");
 			sb.append("<PayPlanDue>").append(PayPlanDue).append("</PayPlanDue>");
 			sb.append("<SiteNum>").append(SiteNum).append("</SiteNum>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<ResponsParty>").append(ResponsParty).append("</ResponsParty>");
 			sb.append("<CanadianEligibilityCode>").append(CanadianEligibilityCode).append("</CanadianEligibilityCode>");
 			sb.append("<AskToArriveEarly>").append(AskToArriveEarly).append("</AskToArriveEarly>");
-			sb.append("<OnlinePassword>").append(Serializing.EscapeForXml(OnlinePassword)).append("</OnlinePassword>");
+			sb.append("<OnlinePassword>").append(Serializing.escapeForXml(OnlinePassword)).append("</OnlinePassword>");
 			sb.append("<SmokeStatus>").append(SmokeStatus.ordinal()).append("</SmokeStatus>");
 			sb.append("<PreferContactConfidential>").append(PreferContactConfidential.ordinal()).append("</PreferContactConfidential>");
 			sb.append("<SuperFamily>").append(SuperFamily).append("</SuperFamily>");
@@ -324,232 +324,232 @@ public class Patient {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
-					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				if(Serializing.getXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.getXmlNodeValue(doc,"LName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
-					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				if(Serializing.getXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.getXmlNodeValue(doc,"FName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MiddleI")!=null) {
-					MiddleI=Serializing.GetXmlNodeValue(doc,"MiddleI");
+				if(Serializing.getXmlNodeValue(doc,"MiddleI")!=null) {
+					MiddleI=Serializing.getXmlNodeValue(doc,"MiddleI");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Preferred")!=null) {
-					Preferred=Serializing.GetXmlNodeValue(doc,"Preferred");
+				if(Serializing.getXmlNodeValue(doc,"Preferred")!=null) {
+					Preferred=Serializing.getXmlNodeValue(doc,"Preferred");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatStatus")!=null) {
-					PatStatus=PatientStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"PatStatus")!=null) {
+					PatStatus=PatientStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Gender")!=null) {
-					Gender=PatientGender.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Gender"))];
+				if(Serializing.getXmlNodeValue(doc,"Gender")!=null) {
+					Gender=PatientGender.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Gender"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Position")!=null) {
-					Position=PatientPosition.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Position"))];
+				if(Serializing.getXmlNodeValue(doc,"Position")!=null) {
+					Position=PatientPosition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Position"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Birthdate")!=null) {
-					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"Birthdate"));
+				if(Serializing.getXmlNodeValue(doc,"Birthdate")!=null) {
+					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"Birthdate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SSN")!=null) {
-					SSN=Serializing.GetXmlNodeValue(doc,"SSN");
+				if(Serializing.getXmlNodeValue(doc,"SSN")!=null) {
+					SSN=Serializing.getXmlNodeValue(doc,"SSN");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
-					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				if(Serializing.getXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.getXmlNodeValue(doc,"Address");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address2")!=null) {
-					Address2=Serializing.GetXmlNodeValue(doc,"Address2");
+				if(Serializing.getXmlNodeValue(doc,"Address2")!=null) {
+					Address2=Serializing.getXmlNodeValue(doc,"Address2");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
-					State=Serializing.GetXmlNodeValue(doc,"State");
+				if(Serializing.getXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.getXmlNodeValue(doc,"State");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
-					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				if(Serializing.getXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.getXmlNodeValue(doc,"Zip");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HmPhone")!=null) {
-					HmPhone=Serializing.GetXmlNodeValue(doc,"HmPhone");
+				if(Serializing.getXmlNodeValue(doc,"HmPhone")!=null) {
+					HmPhone=Serializing.getXmlNodeValue(doc,"HmPhone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WkPhone")!=null) {
-					WkPhone=Serializing.GetXmlNodeValue(doc,"WkPhone");
+				if(Serializing.getXmlNodeValue(doc,"WkPhone")!=null) {
+					WkPhone=Serializing.getXmlNodeValue(doc,"WkPhone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WirelessPhone")!=null) {
-					WirelessPhone=Serializing.GetXmlNodeValue(doc,"WirelessPhone");
+				if(Serializing.getXmlNodeValue(doc,"WirelessPhone")!=null) {
+					WirelessPhone=Serializing.getXmlNodeValue(doc,"WirelessPhone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Guarantor")!=null) {
-					Guarantor=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Guarantor"));
+				if(Serializing.getXmlNodeValue(doc,"Guarantor")!=null) {
+					Guarantor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Guarantor"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CreditType")!=null) {
-					CreditType=Serializing.GetXmlNodeValue(doc,"CreditType");
+				if(Serializing.getXmlNodeValue(doc,"CreditType")!=null) {
+					CreditType=Serializing.getXmlNodeValue(doc,"CreditType");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Email")!=null) {
-					Email=Serializing.GetXmlNodeValue(doc,"Email");
+				if(Serializing.getXmlNodeValue(doc,"Email")!=null) {
+					Email=Serializing.getXmlNodeValue(doc,"Email");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Salutation")!=null) {
-					Salutation=Serializing.GetXmlNodeValue(doc,"Salutation");
+				if(Serializing.getXmlNodeValue(doc,"Salutation")!=null) {
+					Salutation=Serializing.getXmlNodeValue(doc,"Salutation");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EstBalance")!=null) {
-					EstBalance=Double.valueOf(Serializing.GetXmlNodeValue(doc,"EstBalance"));
+				if(Serializing.getXmlNodeValue(doc,"EstBalance")!=null) {
+					EstBalance=Double.valueOf(Serializing.getXmlNodeValue(doc,"EstBalance"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PriProv")!=null) {
-					PriProv=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PriProv"));
+				if(Serializing.getXmlNodeValue(doc,"PriProv")!=null) {
+					PriProv=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PriProv"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SecProv")!=null) {
-					SecProv=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SecProv"));
+				if(Serializing.getXmlNodeValue(doc,"SecProv")!=null) {
+					SecProv=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SecProv"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FeeSched")!=null) {
-					FeeSched=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FeeSched"));
+				if(Serializing.getXmlNodeValue(doc,"FeeSched")!=null) {
+					FeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSched"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BillingType")!=null) {
-					BillingType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BillingType"));
+				if(Serializing.getXmlNodeValue(doc,"BillingType")!=null) {
+					BillingType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BillingType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ImageFolder")!=null) {
-					ImageFolder=Serializing.GetXmlNodeValue(doc,"ImageFolder");
+				if(Serializing.getXmlNodeValue(doc,"ImageFolder")!=null) {
+					ImageFolder=Serializing.getXmlNodeValue(doc,"ImageFolder");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AddrNote")!=null) {
-					AddrNote=Serializing.GetXmlNodeValue(doc,"AddrNote");
+				if(Serializing.getXmlNodeValue(doc,"AddrNote")!=null) {
+					AddrNote=Serializing.getXmlNodeValue(doc,"AddrNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FamFinUrgNote")!=null) {
-					FamFinUrgNote=Serializing.GetXmlNodeValue(doc,"FamFinUrgNote");
+				if(Serializing.getXmlNodeValue(doc,"FamFinUrgNote")!=null) {
+					FamFinUrgNote=Serializing.getXmlNodeValue(doc,"FamFinUrgNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedUrgNote")!=null) {
-					MedUrgNote=Serializing.GetXmlNodeValue(doc,"MedUrgNote");
+				if(Serializing.getXmlNodeValue(doc,"MedUrgNote")!=null) {
+					MedUrgNote=Serializing.getXmlNodeValue(doc,"MedUrgNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ApptModNote")!=null) {
-					ApptModNote=Serializing.GetXmlNodeValue(doc,"ApptModNote");
+				if(Serializing.getXmlNodeValue(doc,"ApptModNote")!=null) {
+					ApptModNote=Serializing.getXmlNodeValue(doc,"ApptModNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StudentStatus")!=null) {
-					StudentStatus=Serializing.GetXmlNodeValue(doc,"StudentStatus");
+				if(Serializing.getXmlNodeValue(doc,"StudentStatus")!=null) {
+					StudentStatus=Serializing.getXmlNodeValue(doc,"StudentStatus");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SchoolName")!=null) {
-					SchoolName=Serializing.GetXmlNodeValue(doc,"SchoolName");
+				if(Serializing.getXmlNodeValue(doc,"SchoolName")!=null) {
+					SchoolName=Serializing.getXmlNodeValue(doc,"SchoolName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ChartNumber")!=null) {
-					ChartNumber=Serializing.GetXmlNodeValue(doc,"ChartNumber");
+				if(Serializing.getXmlNodeValue(doc,"ChartNumber")!=null) {
+					ChartNumber=Serializing.getXmlNodeValue(doc,"ChartNumber");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicaidID")!=null) {
-					MedicaidID=Serializing.GetXmlNodeValue(doc,"MedicaidID");
+				if(Serializing.getXmlNodeValue(doc,"MedicaidID")!=null) {
+					MedicaidID=Serializing.getXmlNodeValue(doc,"MedicaidID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Bal_0_30")!=null) {
-					Bal_0_30=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Bal_0_30"));
+				if(Serializing.getXmlNodeValue(doc,"Bal_0_30")!=null) {
+					Bal_0_30=Double.valueOf(Serializing.getXmlNodeValue(doc,"Bal_0_30"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Bal_31_60")!=null) {
-					Bal_31_60=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Bal_31_60"));
+				if(Serializing.getXmlNodeValue(doc,"Bal_31_60")!=null) {
+					Bal_31_60=Double.valueOf(Serializing.getXmlNodeValue(doc,"Bal_31_60"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Bal_61_90")!=null) {
-					Bal_61_90=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Bal_61_90"));
+				if(Serializing.getXmlNodeValue(doc,"Bal_61_90")!=null) {
+					Bal_61_90=Double.valueOf(Serializing.getXmlNodeValue(doc,"Bal_61_90"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BalOver90")!=null) {
-					BalOver90=Double.valueOf(Serializing.GetXmlNodeValue(doc,"BalOver90"));
+				if(Serializing.getXmlNodeValue(doc,"BalOver90")!=null) {
+					BalOver90=Double.valueOf(Serializing.getXmlNodeValue(doc,"BalOver90"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsEst")!=null) {
-					InsEst=Double.valueOf(Serializing.GetXmlNodeValue(doc,"InsEst"));
+				if(Serializing.getXmlNodeValue(doc,"InsEst")!=null) {
+					InsEst=Double.valueOf(Serializing.getXmlNodeValue(doc,"InsEst"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BalTotal")!=null) {
-					BalTotal=Double.valueOf(Serializing.GetXmlNodeValue(doc,"BalTotal"));
+				if(Serializing.getXmlNodeValue(doc,"BalTotal")!=null) {
+					BalTotal=Double.valueOf(Serializing.getXmlNodeValue(doc,"BalTotal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployerNum")!=null) {
-					EmployerNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployerNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployerNum")!=null) {
+					EmployerNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployerNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmploymentNote")!=null) {
-					EmploymentNote=Serializing.GetXmlNodeValue(doc,"EmploymentNote");
+				if(Serializing.getXmlNodeValue(doc,"EmploymentNote")!=null) {
+					EmploymentNote=Serializing.getXmlNodeValue(doc,"EmploymentNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Race")!=null) {
-					Race=PatientRace.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Race"))];
+				if(Serializing.getXmlNodeValue(doc,"Race")!=null) {
+					Race=PatientRace.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Race"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"County")!=null) {
-					County=Serializing.GetXmlNodeValue(doc,"County");
+				if(Serializing.getXmlNodeValue(doc,"County")!=null) {
+					County=Serializing.getXmlNodeValue(doc,"County");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GradeLevel")!=null) {
-					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GradeLevel"))];
+				if(Serializing.getXmlNodeValue(doc,"GradeLevel")!=null) {
+					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Urgency")!=null) {
-					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Urgency"))];
+				if(Serializing.getXmlNodeValue(doc,"Urgency")!=null) {
+					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateFirstVisit")!=null) {
-					DateFirstVisit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateFirstVisit"));
+				if(Serializing.getXmlNodeValue(doc,"DateFirstVisit")!=null) {
+					DateFirstVisit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateFirstVisit"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HasIns")!=null) {
-					HasIns=Serializing.GetXmlNodeValue(doc,"HasIns");
+				if(Serializing.getXmlNodeValue(doc,"HasIns")!=null) {
+					HasIns=Serializing.getXmlNodeValue(doc,"HasIns");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TrophyFolder")!=null) {
-					TrophyFolder=Serializing.GetXmlNodeValue(doc,"TrophyFolder");
+				if(Serializing.getXmlNodeValue(doc,"TrophyFolder")!=null) {
+					TrophyFolder=Serializing.getXmlNodeValue(doc,"TrophyFolder");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PlannedIsDone")!=null) {
-					PlannedIsDone=(Serializing.GetXmlNodeValue(doc,"PlannedIsDone")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"PlannedIsDone")!=null) {
+					PlannedIsDone=(Serializing.getXmlNodeValue(doc,"PlannedIsDone")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Premed")!=null) {
-					Premed=(Serializing.GetXmlNodeValue(doc,"Premed")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"Premed")!=null) {
+					Premed=(Serializing.getXmlNodeValue(doc,"Premed")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Ward")!=null) {
-					Ward=Serializing.GetXmlNodeValue(doc,"Ward");
+				if(Serializing.getXmlNodeValue(doc,"Ward")!=null) {
+					Ward=Serializing.getXmlNodeValue(doc,"Ward");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PreferConfirmMethod")!=null) {
-					PreferConfirmMethod=ContactMethod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PreferConfirmMethod"))];
+				if(Serializing.getXmlNodeValue(doc,"PreferConfirmMethod")!=null) {
+					PreferConfirmMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferConfirmMethod"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PreferContactMethod")!=null) {
-					PreferContactMethod=ContactMethod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PreferContactMethod"))];
+				if(Serializing.getXmlNodeValue(doc,"PreferContactMethod")!=null) {
+					PreferContactMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactMethod"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PreferRecallMethod")!=null) {
-					PreferRecallMethod=ContactMethod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PreferRecallMethod"))];
+				if(Serializing.getXmlNodeValue(doc,"PreferRecallMethod")!=null) {
+					PreferRecallMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferRecallMethod"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SchedBeforeTime")!=null) {
-					SchedBeforeTime=Serializing.GetXmlNodeValue(doc,"SchedBeforeTime");
+				if(Serializing.getXmlNodeValue(doc,"SchedBeforeTime")!=null) {
+					SchedBeforeTime=Serializing.getXmlNodeValue(doc,"SchedBeforeTime");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SchedAfterTime")!=null) {
-					SchedAfterTime=Serializing.GetXmlNodeValue(doc,"SchedAfterTime");
+				if(Serializing.getXmlNodeValue(doc,"SchedAfterTime")!=null) {
+					SchedAfterTime=Serializing.getXmlNodeValue(doc,"SchedAfterTime");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SchedDayOfWeek")!=null) {
-					SchedDayOfWeek=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"SchedDayOfWeek"));
+				if(Serializing.getXmlNodeValue(doc,"SchedDayOfWeek")!=null) {
+					SchedDayOfWeek=Byte.valueOf(Serializing.getXmlNodeValue(doc,"SchedDayOfWeek"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Language")!=null) {
-					Language=Serializing.GetXmlNodeValue(doc,"Language");
+				if(Serializing.getXmlNodeValue(doc,"Language")!=null) {
+					Language=Serializing.getXmlNodeValue(doc,"Language");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AdmitDate")!=null) {
-					AdmitDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"AdmitDate"));
+				if(Serializing.getXmlNodeValue(doc,"AdmitDate")!=null) {
+					AdmitDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"AdmitDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Title")!=null) {
-					Title=Serializing.GetXmlNodeValue(doc,"Title");
+				if(Serializing.getXmlNodeValue(doc,"Title")!=null) {
+					Title=Serializing.getXmlNodeValue(doc,"Title");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayPlanDue")!=null) {
-					PayPlanDue=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PayPlanDue"));
+				if(Serializing.getXmlNodeValue(doc,"PayPlanDue")!=null) {
+					PayPlanDue=Double.valueOf(Serializing.getXmlNodeValue(doc,"PayPlanDue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SiteNum")!=null) {
-					SiteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SiteNum"));
+				if(Serializing.getXmlNodeValue(doc,"SiteNum")!=null) {
+					SiteNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SiteNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ResponsParty")!=null) {
-					ResponsParty=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ResponsParty"));
+				if(Serializing.getXmlNodeValue(doc,"ResponsParty")!=null) {
+					ResponsParty=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ResponsParty"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CanadianEligibilityCode")!=null) {
-					CanadianEligibilityCode=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"CanadianEligibilityCode"));
+				if(Serializing.getXmlNodeValue(doc,"CanadianEligibilityCode")!=null) {
+					CanadianEligibilityCode=Byte.valueOf(Serializing.getXmlNodeValue(doc,"CanadianEligibilityCode"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AskToArriveEarly")!=null) {
-					AskToArriveEarly=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AskToArriveEarly"));
+				if(Serializing.getXmlNodeValue(doc,"AskToArriveEarly")!=null) {
+					AskToArriveEarly=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AskToArriveEarly"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OnlinePassword")!=null) {
-					OnlinePassword=Serializing.GetXmlNodeValue(doc,"OnlinePassword");
+				if(Serializing.getXmlNodeValue(doc,"OnlinePassword")!=null) {
+					OnlinePassword=Serializing.getXmlNodeValue(doc,"OnlinePassword");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SmokeStatus")!=null) {
-					SmokeStatus=SmokingStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SmokeStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"SmokeStatus")!=null) {
+					SmokeStatus=SmokingStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SmokeStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PreferContactConfidential")!=null) {
-					PreferContactConfidential=ContactMethod.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PreferContactConfidential"))];
+				if(Serializing.getXmlNodeValue(doc,"PreferContactConfidential")!=null) {
+					PreferContactConfidential=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactConfidential"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SuperFamily")!=null) {
-					SuperFamily=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SuperFamily"));
+				if(Serializing.getXmlNodeValue(doc,"SuperFamily")!=null) {
+					SuperFamily=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SuperFamily"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TxtMsgOk")!=null) {
-					TxtMsgOk=YN.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TxtMsgOk"))];
+				if(Serializing.getXmlNodeValue(doc,"TxtMsgOk")!=null) {
+					TxtMsgOk=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TxtMsgOk"))];
 				}
 			}
 			catch(Exception e) {

@@ -14,7 +14,7 @@ public class ApptField {
 		public String FieldValue;
 
 		/** Deep copy of object. */
-		public ApptField Copy() {
+		public ApptField deepCopy() {
 			ApptField apptfield=new ApptField();
 			apptfield.ApptFieldNum=this.ApptFieldNum;
 			apptfield.AptNum=this.AptNum;
@@ -24,13 +24,13 @@ public class ApptField {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ApptField>");
 			sb.append("<ApptFieldNum>").append(ApptFieldNum).append("</ApptFieldNum>");
 			sb.append("<AptNum>").append(AptNum).append("</AptNum>");
-			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
-			sb.append("<FieldValue>").append(Serializing.EscapeForXml(FieldValue)).append("</FieldValue>");
+			sb.append("<FieldName>").append(Serializing.escapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FieldValue>").append(Serializing.escapeForXml(FieldValue)).append("</FieldValue>");
 			sb.append("</ApptField>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class ApptField {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ApptFieldNum")!=null) {
-					ApptFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ApptFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"ApptFieldNum")!=null) {
+					ApptFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AptNum")!=null) {
-					AptNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AptNum"));
+				if(Serializing.getXmlNodeValue(doc,"AptNum")!=null) {
+					AptNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AptNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
-					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldValue")!=null) {
-					FieldValue=Serializing.GetXmlNodeValue(doc,"FieldValue");
+				if(Serializing.getXmlNodeValue(doc,"FieldValue")!=null) {
+					FieldValue=Serializing.getXmlNodeValue(doc,"FieldValue");
 				}
 			}
 			catch(Exception e) {

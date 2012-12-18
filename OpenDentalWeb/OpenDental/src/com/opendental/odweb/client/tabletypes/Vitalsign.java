@@ -32,7 +32,7 @@ public class Vitalsign {
 		public boolean ChildGotPhysCouns;
 
 		/** Deep copy of object. */
-		public Vitalsign Copy() {
+		public Vitalsign deepCopy() {
 			Vitalsign vitalsign=new Vitalsign();
 			vitalsign.VitalsignNum=this.VitalsignNum;
 			vitalsign.PatNum=this.PatNum;
@@ -50,7 +50,7 @@ public class Vitalsign {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Vitalsign>");
 			sb.append("<VitalsignNum>").append(VitalsignNum).append("</VitalsignNum>");
@@ -62,7 +62,7 @@ public class Vitalsign {
 			sb.append("<DateTaken>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTaken)).append("</DateTaken>");
 			sb.append("<HasFollowupPlan>").append((HasFollowupPlan)?1:0).append("</HasFollowupPlan>");
 			sb.append("<IsIneligible>").append((IsIneligible)?1:0).append("</IsIneligible>");
-			sb.append("<Documentation>").append(Serializing.EscapeForXml(Documentation)).append("</Documentation>");
+			sb.append("<Documentation>").append(Serializing.escapeForXml(Documentation)).append("</Documentation>");
 			sb.append("<ChildGotNutrition>").append((ChildGotNutrition)?1:0).append("</ChildGotNutrition>");
 			sb.append("<ChildGotPhysCouns>").append((ChildGotPhysCouns)?1:0).append("</ChildGotPhysCouns>");
 			sb.append("</Vitalsign>");
@@ -72,43 +72,43 @@ public class Vitalsign {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"VitalsignNum")!=null) {
-					VitalsignNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"VitalsignNum"));
+				if(Serializing.getXmlNodeValue(doc,"VitalsignNum")!=null) {
+					VitalsignNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"VitalsignNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Float.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Weight")!=null) {
-					Weight=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Weight"));
+				if(Serializing.getXmlNodeValue(doc,"Weight")!=null) {
+					Weight=Float.valueOf(Serializing.getXmlNodeValue(doc,"Weight"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BpSystolic")!=null) {
-					BpSystolic=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BpSystolic"));
+				if(Serializing.getXmlNodeValue(doc,"BpSystolic")!=null) {
+					BpSystolic=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BpSystolic"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BpDiastolic")!=null) {
-					BpDiastolic=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"BpDiastolic"));
+				if(Serializing.getXmlNodeValue(doc,"BpDiastolic")!=null) {
+					BpDiastolic=Integer.valueOf(Serializing.getXmlNodeValue(doc,"BpDiastolic"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTaken")!=null) {
-					DateTaken=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTaken"));
+				if(Serializing.getXmlNodeValue(doc,"DateTaken")!=null) {
+					DateTaken=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTaken"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"HasFollowupPlan")!=null) {
-					HasFollowupPlan=(Serializing.GetXmlNodeValue(doc,"HasFollowupPlan")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"HasFollowupPlan")!=null) {
+					HasFollowupPlan=(Serializing.getXmlNodeValue(doc,"HasFollowupPlan")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsIneligible")!=null) {
-					IsIneligible=(Serializing.GetXmlNodeValue(doc,"IsIneligible")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsIneligible")!=null) {
+					IsIneligible=(Serializing.getXmlNodeValue(doc,"IsIneligible")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Documentation")!=null) {
-					Documentation=Serializing.GetXmlNodeValue(doc,"Documentation");
+				if(Serializing.getXmlNodeValue(doc,"Documentation")!=null) {
+					Documentation=Serializing.getXmlNodeValue(doc,"Documentation");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ChildGotNutrition")!=null) {
-					ChildGotNutrition=(Serializing.GetXmlNodeValue(doc,"ChildGotNutrition")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ChildGotNutrition")!=null) {
+					ChildGotNutrition=(Serializing.getXmlNodeValue(doc,"ChildGotNutrition")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ChildGotPhysCouns")!=null) {
-					ChildGotPhysCouns=(Serializing.GetXmlNodeValue(doc,"ChildGotPhysCouns")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ChildGotPhysCouns")!=null) {
+					ChildGotPhysCouns=(Serializing.getXmlNodeValue(doc,"ChildGotPhysCouns")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

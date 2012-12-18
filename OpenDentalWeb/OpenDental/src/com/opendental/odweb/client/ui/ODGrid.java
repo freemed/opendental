@@ -105,7 +105,7 @@ public class ODGrid extends Composite implements ClickHandler {
 	}
 	
 	/** Adds a column to the table with a header of the passed in text. */
-	public void AddColumn(String header) {
+	public void addColumn(String header) {
 		//Add the column.
 //		Body.AddColumn();
 		//Now add the column header.
@@ -113,7 +113,7 @@ public class ODGrid extends Composite implements ClickHandler {
 	}
 
 	/** Adds a column to the table with a header of the passed in text. */
-	public void AddRow() {
+	public void addRow() {
 		//Add the row.
 //		Body.AddRow();
 	}
@@ -132,23 +132,23 @@ public class ODGrid extends Composite implements ClickHandler {
 	//Computations---------------------------------------------------------------------------------------------------------------
 	
 	/** Computes the position of each column and the overall width.  Called from endUpdate. */
-	private void ComputeColumns() {
+	private void computeColumns() {
 		// TODO Enhance ODGrid to have a horizontal scrollbar.
 		//Layout the horizontal scrollbar here.
 		ColPos=new int[Columns.size()];
 		for(int i=0;i<ColPos.length;i++) {
 			ColPos[i]=0;
 			if(i>0) {
-				ColPos[i]=ColPos[i-1]+Columns.get(i-1).GetColWidth();
+				ColPos[i]=ColPos[i-1]+Columns.get(i-1).getColWidth();
 			}
 		}
 		if(Columns.size()>0) {
-			GridW=ColPos[ColPos.length-1]+Columns.get(Columns.size()-1).GetColWidth();
+			GridW=ColPos[ColPos.length-1]+Columns.get(Columns.size()-1).getColWidth();
 		}
 	}
 	
 	/** After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and if column images are used, rows will be enlarged to make space for the images. */
-	private void ComputeRows() {
+	private void computeRows() {
 		RowHeights=new int[Rows.size()];
 		RowLocs=new int[Rows.size()];
 		GridH=0;
@@ -158,7 +158,7 @@ public class ODGrid extends Composite implements ClickHandler {
 			RowLocs[i]=0;
 			//Find the tallest column.
 			for(int j=0;j<Rows.get(i).Cells.size();j++) {
-				int rowHeight=Rows.get(i).GetHeight();
+				int rowHeight=Rows.get(i).getHeight();
 				if(rowHeight>0) {
 					cellH=rowHeight;
 				}
@@ -179,16 +179,16 @@ public class ODGrid extends Composite implements ClickHandler {
 	//Painting-------------------------------------------------------------------------------------------------------------------
 	
 	/** Resets the title and column headers in case the table's size has changed. */
-	private void OnPaint() {
+	private void onPaint() {
 		if(IsUpdating) {
 			return;
 		}
-		DrawColumnHeaders();
-		DrawRows();
+		drawColumnHeaders();
+		drawRows();
 	}
 	
 	/** Must be called after computing the columns and rows so that the dimensions of the table are known. */
-	private void DrawColumnHeaders() {
+	private void drawColumnHeaders() {
 		//Manipulate the table column headers.
 		tableColumnHeaders.clear();
 		tableColumnHeaders.resize(1, Columns.size());
@@ -199,26 +199,26 @@ public class ODGrid extends Composite implements ClickHandler {
 			}
 			else {//Not the last column in the list.
 				//Set the width of the cell.
-				tableColumnHeaders.setWidth(Columns.get(i).GetColWidth()+"px");
+				tableColumnHeaders.setWidth(Columns.get(i).getColWidth()+"px");
 				//Set the cell style.
 				tableColumnHeaders.getCellFormatter().setStyleName(0, i, "style.tableColumnHeaders_Cell");
 			}
-			tableColumnHeaders.setText(0,i,Columns.get(i).GetHeading());
+			tableColumnHeaders.setText(0,i,Columns.get(i).getHeading());
 		}
 	}
 	
 	/**  */
-	private void DrawRows() {
+	private void drawRows() {
 		tableMain.clear();
 		tableMain.resize(Rows.size(), Columns.size());		
 		for(int i=0;i<Rows.size();i++) {
 			// TODO Figure out if the row is visible here.
-			DrawRow(i);//The row is visible so draw it.
+			drawRow(i);//The row is visible so draw it.
 		}
 	}
 	
 	/**  */
-	private void DrawRow(int row) {
+	private void drawRow(int row) {
 		// TODO Figure out if the row is selected here.
 		//Draw all of the columns.
 		for(int column=0;column<Columns.size();column++) {
@@ -235,7 +235,7 @@ public class ODGrid extends Composite implements ClickHandler {
 					tableMain.getCellFormatter().setStyleName(row, column, "style.tableMain_OddCell");
 				}
 				//Set the width of the cell.
-				tableMain.setWidth(Columns.get(column).GetColWidth()+"px");
+				tableMain.setWidth(Columns.get(column).getColWidth()+"px");
 			}
 			//Always set the text of the column regardless.
 			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
@@ -253,19 +253,19 @@ public class ODGrid extends Composite implements ClickHandler {
 	//BeginEndUpdate-------------------------------------------------------------------------------------------------------------
 	
 	/** Call this before adding any rows.  You would typically call Rows.clear() after this. */
-	public void BeginUpdate() {
+	public void beginUpdate() {
 		IsUpdating=true;
 	}
 	
 	/** Must be called after adding rows.  This computes the columns, computes the rows, lays out the scrollbars, clears SelectedIndices, etc. */
-	public void EndUpdate() {
-		ComputeColumns();
-		ComputeRows();
+	public void endUpdate() {
+		computeColumns();
+		computeRows();
 		// TODO Enhance ODGrid to have a scrollbar.
 		//Layout the scrollbar and set the values here.
 		IsUpdating=false;
 		//Fill the data grid and refresh it so that it displays correctly.
-		OnPaint();
+		onPaint();
 	}
 
 

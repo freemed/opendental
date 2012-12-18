@@ -18,7 +18,7 @@ public class ClaimValCodeLog {
 		public int Ordinal;
 
 		/** Deep copy of object. */
-		public ClaimValCodeLog Copy() {
+		public ClaimValCodeLog deepCopy() {
 			ClaimValCodeLog claimvalcodelog=new ClaimValCodeLog();
 			claimvalcodelog.ClaimValCodeLogNum=this.ClaimValCodeLogNum;
 			claimvalcodelog.ClaimNum=this.ClaimNum;
@@ -30,13 +30,13 @@ public class ClaimValCodeLog {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimValCodeLog>");
 			sb.append("<ClaimValCodeLogNum>").append(ClaimValCodeLogNum).append("</ClaimValCodeLogNum>");
 			sb.append("<ClaimNum>").append(ClaimNum).append("</ClaimNum>");
-			sb.append("<ClaimField>").append(Serializing.EscapeForXml(ClaimField)).append("</ClaimField>");
-			sb.append("<ValCode>").append(Serializing.EscapeForXml(ValCode)).append("</ValCode>");
+			sb.append("<ClaimField>").append(Serializing.escapeForXml(ClaimField)).append("</ClaimField>");
+			sb.append("<ValCode>").append(Serializing.escapeForXml(ValCode)).append("</ValCode>");
 			sb.append("<ValAmount>").append(ValAmount).append("</ValAmount>");
 			sb.append("<Ordinal>").append(Ordinal).append("</Ordinal>");
 			sb.append("</ClaimValCodeLog>");
@@ -46,25 +46,25 @@ public class ClaimValCodeLog {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClaimValCodeLogNum")!=null) {
-					ClaimValCodeLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimValCodeLogNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimValCodeLogNum")!=null) {
+					ClaimValCodeLogNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimValCodeLogNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimNum")!=null) {
-					ClaimNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimNum")!=null) {
+					ClaimNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimField")!=null) {
-					ClaimField=Serializing.GetXmlNodeValue(doc,"ClaimField");
+				if(Serializing.getXmlNodeValue(doc,"ClaimField")!=null) {
+					ClaimField=Serializing.getXmlNodeValue(doc,"ClaimField");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ValCode")!=null) {
-					ValCode=Serializing.GetXmlNodeValue(doc,"ValCode");
+				if(Serializing.getXmlNodeValue(doc,"ValCode")!=null) {
+					ValCode=Serializing.getXmlNodeValue(doc,"ValCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ValAmount")!=null) {
-					ValAmount=Double.valueOf(Serializing.GetXmlNodeValue(doc,"ValAmount"));
+				if(Serializing.getXmlNodeValue(doc,"ValAmount")!=null) {
+					ValAmount=Double.valueOf(Serializing.getXmlNodeValue(doc,"ValAmount"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Ordinal")!=null) {
-					Ordinal=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Ordinal"));
+				if(Serializing.getXmlNodeValue(doc,"Ordinal")!=null) {
+					Ordinal=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Ordinal"));
 				}
 			}
 			catch(Exception e) {

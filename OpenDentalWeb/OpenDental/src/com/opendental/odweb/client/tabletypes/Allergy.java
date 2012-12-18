@@ -22,7 +22,7 @@ public class Allergy {
 		public Date DateAdverseReaction;
 
 		/** Deep copy of object. */
-		public Allergy Copy() {
+		public Allergy deepCopy() {
 			Allergy allergy=new Allergy();
 			allergy.AllergyNum=this.AllergyNum;
 			allergy.AllergyDefNum=this.AllergyDefNum;
@@ -35,13 +35,13 @@ public class Allergy {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Allergy>");
 			sb.append("<AllergyNum>").append(AllergyNum).append("</AllergyNum>");
 			sb.append("<AllergyDefNum>").append(AllergyDefNum).append("</AllergyDefNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<Reaction>").append(Serializing.EscapeForXml(Reaction)).append("</Reaction>");
+			sb.append("<Reaction>").append(Serializing.escapeForXml(Reaction)).append("</Reaction>");
 			sb.append("<StatusIsActive>").append((StatusIsActive)?1:0).append("</StatusIsActive>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<DateAdverseReaction>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateAdverseReaction)).append("</DateAdverseReaction>");
@@ -52,28 +52,28 @@ public class Allergy {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AllergyNum")!=null) {
-					AllergyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyNum"));
+				if(Serializing.getXmlNodeValue(doc,"AllergyNum")!=null) {
+					AllergyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AllergyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"AllergyDefNum")!=null) {
-					AllergyDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AllergyDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"AllergyDefNum")!=null) {
+					AllergyDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AllergyDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Reaction")!=null) {
-					Reaction=Serializing.GetXmlNodeValue(doc,"Reaction");
+				if(Serializing.getXmlNodeValue(doc,"Reaction")!=null) {
+					Reaction=Serializing.getXmlNodeValue(doc,"Reaction");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StatusIsActive")!=null) {
-					StatusIsActive=(Serializing.GetXmlNodeValue(doc,"StatusIsActive")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"StatusIsActive")!=null) {
+					StatusIsActive=(Serializing.getXmlNodeValue(doc,"StatusIsActive")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateAdverseReaction")!=null) {
-					DateAdverseReaction=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateAdverseReaction"));
+				if(Serializing.getXmlNodeValue(doc,"DateAdverseReaction")!=null) {
+					DateAdverseReaction=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateAdverseReaction"));
 				}
 			}
 			catch(Exception e) {

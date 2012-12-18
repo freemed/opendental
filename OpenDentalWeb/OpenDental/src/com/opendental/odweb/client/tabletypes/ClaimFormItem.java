@@ -24,7 +24,7 @@ public class ClaimFormItem {
 		public float Height;
 
 		/** Deep copy of object. */
-		public ClaimFormItem Copy() {
+		public ClaimFormItem deepCopy() {
 			ClaimFormItem claimformitem=new ClaimFormItem();
 			claimformitem.ClaimFormItemNum=this.ClaimFormItemNum;
 			claimformitem.ClaimFormNum=this.ClaimFormNum;
@@ -39,14 +39,14 @@ public class ClaimFormItem {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ClaimFormItem>");
 			sb.append("<ClaimFormItemNum>").append(ClaimFormItemNum).append("</ClaimFormItemNum>");
 			sb.append("<ClaimFormNum>").append(ClaimFormNum).append("</ClaimFormNum>");
-			sb.append("<ImageFileName>").append(Serializing.EscapeForXml(ImageFileName)).append("</ImageFileName>");
-			sb.append("<FieldName>").append(Serializing.EscapeForXml(FieldName)).append("</FieldName>");
-			sb.append("<FormatString>").append(Serializing.EscapeForXml(FormatString)).append("</FormatString>");
+			sb.append("<ImageFileName>").append(Serializing.escapeForXml(ImageFileName)).append("</ImageFileName>");
+			sb.append("<FieldName>").append(Serializing.escapeForXml(FieldName)).append("</FieldName>");
+			sb.append("<FormatString>").append(Serializing.escapeForXml(FormatString)).append("</FormatString>");
 			sb.append("<XPos>").append(XPos).append("</XPos>");
 			sb.append("<YPos>").append(YPos).append("</YPos>");
 			sb.append("<Width>").append(Width).append("</Width>");
@@ -58,34 +58,34 @@ public class ClaimFormItem {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ClaimFormItemNum")!=null) {
-					ClaimFormItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimFormItemNum")!=null) {
+					ClaimFormItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimFormItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClaimFormNum")!=null) {
-					ClaimFormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClaimFormNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClaimFormNum")!=null) {
+					ClaimFormNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimFormNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ImageFileName")!=null) {
-					ImageFileName=Serializing.GetXmlNodeValue(doc,"ImageFileName");
+				if(Serializing.getXmlNodeValue(doc,"ImageFileName")!=null) {
+					ImageFileName=Serializing.getXmlNodeValue(doc,"ImageFileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FieldName")!=null) {
-					FieldName=Serializing.GetXmlNodeValue(doc,"FieldName");
+				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
+					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FormatString")!=null) {
-					FormatString=Serializing.GetXmlNodeValue(doc,"FormatString");
+				if(Serializing.getXmlNodeValue(doc,"FormatString")!=null) {
+					FormatString=Serializing.getXmlNodeValue(doc,"FormatString");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"XPos")!=null) {
-					XPos=Float.valueOf(Serializing.GetXmlNodeValue(doc,"XPos"));
+				if(Serializing.getXmlNodeValue(doc,"XPos")!=null) {
+					XPos=Float.valueOf(Serializing.getXmlNodeValue(doc,"XPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"YPos")!=null) {
-					YPos=Float.valueOf(Serializing.GetXmlNodeValue(doc,"YPos"));
+				if(Serializing.getXmlNodeValue(doc,"YPos")!=null) {
+					YPos=Float.valueOf(Serializing.getXmlNodeValue(doc,"YPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
-					Width=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
+					Width=Float.valueOf(Serializing.getXmlNodeValue(doc,"Width"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Float.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Float.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
 			}
 			catch(Exception e) {

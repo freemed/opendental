@@ -20,7 +20,7 @@ public class Contact {
 		public String Notes;
 
 		/** Deep copy of object. */
-		public Contact Copy() {
+		public Contact deepCopy() {
 			Contact contact=new Contact();
 			contact.ContactNum=this.ContactNum;
 			contact.LName=this.LName;
@@ -33,16 +33,16 @@ public class Contact {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Contact>");
 			sb.append("<ContactNum>").append(ContactNum).append("</ContactNum>");
-			sb.append("<LName>").append(Serializing.EscapeForXml(LName)).append("</LName>");
-			sb.append("<FName>").append(Serializing.EscapeForXml(FName)).append("</FName>");
-			sb.append("<WkPhone>").append(Serializing.EscapeForXml(WkPhone)).append("</WkPhone>");
-			sb.append("<Fax>").append(Serializing.EscapeForXml(Fax)).append("</Fax>");
+			sb.append("<LName>").append(Serializing.escapeForXml(LName)).append("</LName>");
+			sb.append("<FName>").append(Serializing.escapeForXml(FName)).append("</FName>");
+			sb.append("<WkPhone>").append(Serializing.escapeForXml(WkPhone)).append("</WkPhone>");
+			sb.append("<Fax>").append(Serializing.escapeForXml(Fax)).append("</Fax>");
 			sb.append("<Category>").append(Category).append("</Category>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("</Contact>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class Contact {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ContactNum")!=null) {
-					ContactNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ContactNum"));
+				if(Serializing.getXmlNodeValue(doc,"ContactNum")!=null) {
+					ContactNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ContactNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LName")!=null) {
-					LName=Serializing.GetXmlNodeValue(doc,"LName");
+				if(Serializing.getXmlNodeValue(doc,"LName")!=null) {
+					LName=Serializing.getXmlNodeValue(doc,"LName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FName")!=null) {
-					FName=Serializing.GetXmlNodeValue(doc,"FName");
+				if(Serializing.getXmlNodeValue(doc,"FName")!=null) {
+					FName=Serializing.getXmlNodeValue(doc,"FName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WkPhone")!=null) {
-					WkPhone=Serializing.GetXmlNodeValue(doc,"WkPhone");
+				if(Serializing.getXmlNodeValue(doc,"WkPhone")!=null) {
+					WkPhone=Serializing.getXmlNodeValue(doc,"WkPhone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Fax")!=null) {
-					Fax=Serializing.GetXmlNodeValue(doc,"Fax");
+				if(Serializing.getXmlNodeValue(doc,"Fax")!=null) {
+					Fax=Serializing.getXmlNodeValue(doc,"Fax");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
-					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
 			}
 			catch(Exception e) {

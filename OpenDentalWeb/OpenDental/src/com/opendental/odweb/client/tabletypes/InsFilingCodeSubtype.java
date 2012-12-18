@@ -12,7 +12,7 @@ public class InsFilingCodeSubtype {
 		public String Descript;
 
 		/** Deep copy of object. */
-		public InsFilingCodeSubtype Copy() {
+		public InsFilingCodeSubtype deepCopy() {
 			InsFilingCodeSubtype insfilingcodesubtype=new InsFilingCodeSubtype();
 			insfilingcodesubtype.InsFilingCodeSubtypeNum=this.InsFilingCodeSubtypeNum;
 			insfilingcodesubtype.InsFilingCodeNum=this.InsFilingCodeNum;
@@ -21,12 +21,12 @@ public class InsFilingCodeSubtype {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<InsFilingCodeSubtype>");
 			sb.append("<InsFilingCodeSubtypeNum>").append(InsFilingCodeSubtypeNum).append("</InsFilingCodeSubtypeNum>");
 			sb.append("<InsFilingCodeNum>").append(InsFilingCodeNum).append("</InsFilingCodeNum>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
 			sb.append("</InsFilingCodeSubtype>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class InsFilingCodeSubtype {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeSubtypeNum")!=null) {
-					InsFilingCodeSubtypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeSubtypeNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsFilingCodeSubtypeNum")!=null) {
+					InsFilingCodeSubtypeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsFilingCodeSubtypeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
-					InsFilingCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
+					InsFilingCodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsFilingCodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
 			}
 			catch(Exception e) {

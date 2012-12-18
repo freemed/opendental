@@ -16,7 +16,7 @@ public class PayPeriod {
 		public Date DatePaycheck;
 
 		/** Deep copy of object. */
-		public PayPeriod Copy() {
+		public PayPeriod deepCopy() {
 			PayPeriod payperiod=new PayPeriod();
 			payperiod.PayPeriodNum=this.PayPeriodNum;
 			payperiod.DateStart=this.DateStart;
@@ -26,7 +26,7 @@ public class PayPeriod {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PayPeriod>");
 			sb.append("<PayPeriodNum>").append(PayPeriodNum).append("</PayPeriodNum>");
@@ -40,19 +40,19 @@ public class PayPeriod {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PayPeriodNum")!=null) {
-					PayPeriodNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayPeriodNum"));
+				if(Serializing.getXmlNodeValue(doc,"PayPeriodNum")!=null) {
+					PayPeriodNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PayPeriodNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
-					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
-					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				if(Serializing.getXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStop"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DatePaycheck")!=null) {
-					DatePaycheck=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePaycheck"));
+				if(Serializing.getXmlNodeValue(doc,"DatePaycheck")!=null) {
+					DatePaycheck=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DatePaycheck"));
 				}
 			}
 			catch(Exception e) {

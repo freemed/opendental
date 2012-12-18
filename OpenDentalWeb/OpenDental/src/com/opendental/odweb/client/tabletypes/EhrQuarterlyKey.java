@@ -20,7 +20,7 @@ public class EhrQuarterlyKey {
 		public String Notes;
 
 		/** Deep copy of object. */
-		public EhrQuarterlyKey Copy() {
+		public EhrQuarterlyKey deepCopy() {
 			EhrQuarterlyKey ehrquarterlykey=new EhrQuarterlyKey();
 			ehrquarterlykey.EhrQuarterlyKeyNum=this.EhrQuarterlyKeyNum;
 			ehrquarterlykey.YearValue=this.YearValue;
@@ -33,16 +33,16 @@ public class EhrQuarterlyKey {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrQuarterlyKey>");
 			sb.append("<EhrQuarterlyKeyNum>").append(EhrQuarterlyKeyNum).append("</EhrQuarterlyKeyNum>");
 			sb.append("<YearValue>").append(YearValue).append("</YearValue>");
 			sb.append("<QuarterValue>").append(QuarterValue).append("</QuarterValue>");
-			sb.append("<PracticeName>").append(Serializing.EscapeForXml(PracticeName)).append("</PracticeName>");
-			sb.append("<KeyValue>").append(Serializing.EscapeForXml(KeyValue)).append("</KeyValue>");
+			sb.append("<PracticeName>").append(Serializing.escapeForXml(PracticeName)).append("</PracticeName>");
+			sb.append("<KeyValue>").append(Serializing.escapeForXml(KeyValue)).append("</KeyValue>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("</EhrQuarterlyKey>");
 			return sb.toString();
 		}
@@ -50,28 +50,28 @@ public class EhrQuarterlyKey {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EhrQuarterlyKeyNum")!=null) {
-					EhrQuarterlyKeyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrQuarterlyKeyNum"));
+				if(Serializing.getXmlNodeValue(doc,"EhrQuarterlyKeyNum")!=null) {
+					EhrQuarterlyKeyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrQuarterlyKeyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"YearValue")!=null) {
-					YearValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"YearValue"));
+				if(Serializing.getXmlNodeValue(doc,"YearValue")!=null) {
+					YearValue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"YearValue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"QuarterValue")!=null) {
-					QuarterValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuarterValue"));
+				if(Serializing.getXmlNodeValue(doc,"QuarterValue")!=null) {
+					QuarterValue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuarterValue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PracticeName")!=null) {
-					PracticeName=Serializing.GetXmlNodeValue(doc,"PracticeName");
+				if(Serializing.getXmlNodeValue(doc,"PracticeName")!=null) {
+					PracticeName=Serializing.getXmlNodeValue(doc,"PracticeName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"KeyValue")!=null) {
-					KeyValue=Serializing.GetXmlNodeValue(doc,"KeyValue");
+				if(Serializing.getXmlNodeValue(doc,"KeyValue")!=null) {
+					KeyValue=Serializing.getXmlNodeValue(doc,"KeyValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
 			}
 			catch(Exception e) {

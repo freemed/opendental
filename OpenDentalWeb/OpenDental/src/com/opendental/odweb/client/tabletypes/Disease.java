@@ -26,7 +26,7 @@ public class Disease {
 		public Date DateStop;
 
 		/** Deep copy of object. */
-		public Disease Copy() {
+		public Disease deepCopy() {
 			Disease disease=new Disease();
 			disease.DiseaseNum=this.DiseaseNum;
 			disease.PatNum=this.PatNum;
@@ -41,13 +41,13 @@ public class Disease {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Disease>");
 			sb.append("<DiseaseNum>").append(DiseaseNum).append("</DiseaseNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DiseaseDefNum>").append(DiseaseDefNum).append("</DiseaseDefNum>");
-			sb.append("<PatNote>").append(Serializing.EscapeForXml(PatNote)).append("</PatNote>");
+			sb.append("<PatNote>").append(Serializing.escapeForXml(PatNote)).append("</PatNote>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<ICD9Num>").append(ICD9Num).append("</ICD9Num>");
 			sb.append("<ProbStatus>").append(ProbStatus.ordinal()).append("</ProbStatus>");
@@ -60,34 +60,34 @@ public class Disease {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DiseaseNum")!=null) {
-					DiseaseNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseNum"));
+				if(Serializing.getXmlNodeValue(doc,"DiseaseNum")!=null) {
+					DiseaseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DiseaseNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum")!=null) {
-					DiseaseDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DiseaseDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"DiseaseDefNum")!=null) {
+					DiseaseDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DiseaseDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNote")!=null) {
-					PatNote=Serializing.GetXmlNodeValue(doc,"PatNote");
+				if(Serializing.getXmlNodeValue(doc,"PatNote")!=null) {
+					PatNote=Serializing.getXmlNodeValue(doc,"PatNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ICD9Num")!=null) {
-					ICD9Num=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ICD9Num"));
+				if(Serializing.getXmlNodeValue(doc,"ICD9Num")!=null) {
+					ICD9Num=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ICD9Num"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProbStatus")!=null) {
-					ProbStatus=ProblemStatus.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProbStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"ProbStatus")!=null) {
+					ProbStatus=ProblemStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProbStatus"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
-					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
-					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				if(Serializing.getXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStop"));
 				}
 			}
 			catch(Exception e) {

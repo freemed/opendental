@@ -12,7 +12,7 @@ public class EmailTemplate {
 		public String BodyText;
 
 		/** Deep copy of object. */
-		public EmailTemplate Copy() {
+		public EmailTemplate deepCopy() {
 			EmailTemplate emailtemplate=new EmailTemplate();
 			emailtemplate.EmailTemplateNum=this.EmailTemplateNum;
 			emailtemplate.Subject=this.Subject;
@@ -21,12 +21,12 @@ public class EmailTemplate {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EmailTemplate>");
 			sb.append("<EmailTemplateNum>").append(EmailTemplateNum).append("</EmailTemplateNum>");
-			sb.append("<Subject>").append(Serializing.EscapeForXml(Subject)).append("</Subject>");
-			sb.append("<BodyText>").append(Serializing.EscapeForXml(BodyText)).append("</BodyText>");
+			sb.append("<Subject>").append(Serializing.escapeForXml(Subject)).append("</Subject>");
+			sb.append("<BodyText>").append(Serializing.escapeForXml(BodyText)).append("</BodyText>");
 			sb.append("</EmailTemplate>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class EmailTemplate {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EmailTemplateNum")!=null) {
-					EmailTemplateNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailTemplateNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmailTemplateNum")!=null) {
+					EmailTemplateNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailTemplateNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Subject")!=null) {
-					Subject=Serializing.GetXmlNodeValue(doc,"Subject");
+				if(Serializing.getXmlNodeValue(doc,"Subject")!=null) {
+					Subject=Serializing.getXmlNodeValue(doc,"Subject");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BodyText")!=null) {
-					BodyText=Serializing.GetXmlNodeValue(doc,"BodyText");
+				if(Serializing.getXmlNodeValue(doc,"BodyText")!=null) {
+					BodyText=Serializing.getXmlNodeValue(doc,"BodyText");
 				}
 			}
 			catch(Exception e) {

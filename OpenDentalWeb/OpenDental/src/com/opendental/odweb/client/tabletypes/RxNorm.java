@@ -14,7 +14,7 @@ public class RxNorm {
 		public String Description;
 
 		/** Deep copy of object. */
-		public RxNorm Copy() {
+		public RxNorm deepCopy() {
 			RxNorm rxnorm=new RxNorm();
 			rxnorm.RxNormNum=this.RxNormNum;
 			rxnorm.RxCui=this.RxCui;
@@ -24,13 +24,13 @@ public class RxNorm {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<RxNorm>");
 			sb.append("<RxNormNum>").append(RxNormNum).append("</RxNormNum>");
-			sb.append("<RxCui>").append(Serializing.EscapeForXml(RxCui)).append("</RxCui>");
-			sb.append("<MmslCode>").append(Serializing.EscapeForXml(MmslCode)).append("</MmslCode>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<RxCui>").append(Serializing.escapeForXml(RxCui)).append("</RxCui>");
+			sb.append("<MmslCode>").append(Serializing.escapeForXml(MmslCode)).append("</MmslCode>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("</RxNorm>");
 			return sb.toString();
 		}
@@ -38,19 +38,19 @@ public class RxNorm {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RxNormNum")!=null) {
-					RxNormNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RxNormNum"));
+				if(Serializing.getXmlNodeValue(doc,"RxNormNum")!=null) {
+					RxNormNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxNormNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RxCui")!=null) {
-					RxCui=Serializing.GetXmlNodeValue(doc,"RxCui");
+				if(Serializing.getXmlNodeValue(doc,"RxCui")!=null) {
+					RxCui=Serializing.getXmlNodeValue(doc,"RxCui");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MmslCode")!=null) {
-					MmslCode=Serializing.GetXmlNodeValue(doc,"MmslCode");
+				if(Serializing.getXmlNodeValue(doc,"MmslCode")!=null) {
+					MmslCode=Serializing.getXmlNodeValue(doc,"MmslCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 			}
 			catch(Exception e) {

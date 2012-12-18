@@ -28,7 +28,7 @@ public class PhoneEmpDefault {
 		public boolean IsTriageOperator;
 
 		/** Deep copy of object. */
-		public PhoneEmpDefault Copy() {
+		public PhoneEmpDefault deepCopy() {
 			PhoneEmpDefault phoneempdefault=new PhoneEmpDefault();
 			phoneempdefault.EmployeeNum=this.EmployeeNum;
 			phoneempdefault.NoGraph=this.NoGraph;
@@ -45,18 +45,18 @@ public class PhoneEmpDefault {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PhoneEmpDefault>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
 			sb.append("<NoGraph>").append((NoGraph)?1:0).append("</NoGraph>");
 			sb.append("<NoColor>").append((NoColor)?1:0).append("</NoColor>");
 			sb.append("<RingGroups>").append(RingGroups.ordinal()).append("</RingGroups>");
-			sb.append("<EmpName>").append(Serializing.EscapeForXml(EmpName)).append("</EmpName>");
+			sb.append("<EmpName>").append(Serializing.escapeForXml(EmpName)).append("</EmpName>");
 			sb.append("<PhoneExt>").append(PhoneExt).append("</PhoneExt>");
 			sb.append("<StatusOverride>").append(StatusOverride.ordinal()).append("</StatusOverride>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
-			sb.append("<ComputerName>").append(Serializing.EscapeForXml(ComputerName)).append("</ComputerName>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
+			sb.append("<ComputerName>").append(Serializing.escapeForXml(ComputerName)).append("</ComputerName>");
 			sb.append("<IsPrivateScreen>").append((IsPrivateScreen)?1:0).append("</IsPrivateScreen>");
 			sb.append("<IsTriageOperator>").append((IsTriageOperator)?1:0).append("</IsTriageOperator>");
 			sb.append("</PhoneEmpDefault>");
@@ -66,40 +66,40 @@ public class PhoneEmpDefault {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NoGraph")!=null) {
-					NoGraph=(Serializing.GetXmlNodeValue(doc,"NoGraph")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NoGraph")!=null) {
+					NoGraph=(Serializing.getXmlNodeValue(doc,"NoGraph")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NoColor")!=null) {
-					NoColor=(Serializing.GetXmlNodeValue(doc,"NoColor")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"NoColor")!=null) {
+					NoColor=(Serializing.getXmlNodeValue(doc,"NoColor")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RingGroups")!=null) {
-					RingGroups=AsteriskRingGroups.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RingGroups"))];
+				if(Serializing.getXmlNodeValue(doc,"RingGroups")!=null) {
+					RingGroups=AsteriskRingGroups.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"RingGroups"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmpName")!=null) {
-					EmpName=Serializing.GetXmlNodeValue(doc,"EmpName");
+				if(Serializing.getXmlNodeValue(doc,"EmpName")!=null) {
+					EmpName=Serializing.getXmlNodeValue(doc,"EmpName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PhoneExt")!=null) {
-					PhoneExt=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PhoneExt"));
+				if(Serializing.getXmlNodeValue(doc,"PhoneExt")!=null) {
+					PhoneExt=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneExt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"StatusOverride")!=null) {
-					StatusOverride=PhoneEmpStatusOverride.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"StatusOverride"))];
+				if(Serializing.getXmlNodeValue(doc,"StatusOverride")!=null) {
+					StatusOverride=PhoneEmpStatusOverride.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StatusOverride"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ComputerName")!=null) {
-					ComputerName=Serializing.GetXmlNodeValue(doc,"ComputerName");
+				if(Serializing.getXmlNodeValue(doc,"ComputerName")!=null) {
+					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsPrivateScreen")!=null) {
-					IsPrivateScreen=(Serializing.GetXmlNodeValue(doc,"IsPrivateScreen")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsPrivateScreen")!=null) {
+					IsPrivateScreen=(Serializing.getXmlNodeValue(doc,"IsPrivateScreen")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsTriageOperator")!=null) {
-					IsTriageOperator=(Serializing.GetXmlNodeValue(doc,"IsTriageOperator")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsTriageOperator")!=null) {
+					IsTriageOperator=(Serializing.getXmlNodeValue(doc,"IsTriageOperator")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

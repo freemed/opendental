@@ -20,7 +20,7 @@ public class MountItem {
 		public int Height;
 
 		/** Deep copy of object. */
-		public MountItem Copy() {
+		public MountItem deepCopy() {
 			MountItem mountitem=new MountItem();
 			mountitem.MountItemNum=this.MountItemNum;
 			mountitem.MountNum=this.MountNum;
@@ -33,7 +33,7 @@ public class MountItem {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<MountItem>");
 			sb.append("<MountItemNum>").append(MountItemNum).append("</MountItemNum>");
@@ -50,28 +50,28 @@ public class MountItem {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"MountItemNum")!=null) {
-					MountItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"MountItemNum")!=null) {
+					MountItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MountItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MountNum")!=null) {
-					MountNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MountNum"));
+				if(Serializing.getXmlNodeValue(doc,"MountNum")!=null) {
+					MountNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MountNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Xpos")!=null) {
-					Xpos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Xpos"));
+				if(Serializing.getXmlNodeValue(doc,"Xpos")!=null) {
+					Xpos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Xpos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Ypos")!=null) {
-					Ypos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Ypos"));
+				if(Serializing.getXmlNodeValue(doc,"Ypos")!=null) {
+					Ypos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Ypos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OrdinalPos")!=null) {
-					OrdinalPos=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"OrdinalPos"));
+				if(Serializing.getXmlNodeValue(doc,"OrdinalPos")!=null) {
+					OrdinalPos=Integer.valueOf(Serializing.getXmlNodeValue(doc,"OrdinalPos"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
-					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Width"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
 			}
 			catch(Exception e) {

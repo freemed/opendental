@@ -16,7 +16,7 @@ public class LetterMerge {
 		public int Category;
 
 		/** Deep copy of object. */
-		public LetterMerge Copy() {
+		public LetterMerge deepCopy() {
 			LetterMerge lettermerge=new LetterMerge();
 			lettermerge.LetterMergeNum=this.LetterMergeNum;
 			lettermerge.Description=this.Description;
@@ -27,13 +27,13 @@ public class LetterMerge {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<LetterMerge>");
 			sb.append("<LetterMergeNum>").append(LetterMergeNum).append("</LetterMergeNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<TemplateName>").append(Serializing.EscapeForXml(TemplateName)).append("</TemplateName>");
-			sb.append("<DataFileName>").append(Serializing.EscapeForXml(DataFileName)).append("</DataFileName>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<TemplateName>").append(Serializing.escapeForXml(TemplateName)).append("</TemplateName>");
+			sb.append("<DataFileName>").append(Serializing.escapeForXml(DataFileName)).append("</DataFileName>");
 			sb.append("<Category>").append(Category).append("</Category>");
 			sb.append("</LetterMerge>");
 			return sb.toString();
@@ -42,22 +42,22 @@ public class LetterMerge {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LetterMergeNum")!=null) {
-					LetterMergeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LetterMergeNum"));
+				if(Serializing.getXmlNodeValue(doc,"LetterMergeNum")!=null) {
+					LetterMergeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LetterMergeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TemplateName")!=null) {
-					TemplateName=Serializing.GetXmlNodeValue(doc,"TemplateName");
+				if(Serializing.getXmlNodeValue(doc,"TemplateName")!=null) {
+					TemplateName=Serializing.getXmlNodeValue(doc,"TemplateName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DataFileName")!=null) {
-					DataFileName=Serializing.GetXmlNodeValue(doc,"DataFileName");
+				if(Serializing.getXmlNodeValue(doc,"DataFileName")!=null) {
+					DataFileName=Serializing.getXmlNodeValue(doc,"DataFileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Category")!=null) {
-					Category=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Category"));
+				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
+					Category=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
 				}
 			}
 			catch(Exception e) {

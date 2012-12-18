@@ -16,7 +16,7 @@ public class AutoNoteControl {
 		public String ControlOptions;
 
 		/** Deep copy of object. */
-		public AutoNoteControl Copy() {
+		public AutoNoteControl deepCopy() {
 			AutoNoteControl autonotecontrol=new AutoNoteControl();
 			autonotecontrol.AutoNoteControlNum=this.AutoNoteControlNum;
 			autonotecontrol.Descript=this.Descript;
@@ -27,14 +27,14 @@ public class AutoNoteControl {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<AutoNoteControl>");
 			sb.append("<AutoNoteControlNum>").append(AutoNoteControlNum).append("</AutoNoteControlNum>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
-			sb.append("<ControlType>").append(Serializing.EscapeForXml(ControlType)).append("</ControlType>");
-			sb.append("<ControlLabel>").append(Serializing.EscapeForXml(ControlLabel)).append("</ControlLabel>");
-			sb.append("<ControlOptions>").append(Serializing.EscapeForXml(ControlOptions)).append("</ControlOptions>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
+			sb.append("<ControlType>").append(Serializing.escapeForXml(ControlType)).append("</ControlType>");
+			sb.append("<ControlLabel>").append(Serializing.escapeForXml(ControlLabel)).append("</ControlLabel>");
+			sb.append("<ControlOptions>").append(Serializing.escapeForXml(ControlOptions)).append("</ControlOptions>");
 			sb.append("</AutoNoteControl>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class AutoNoteControl {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AutoNoteControlNum")!=null) {
-					AutoNoteControlNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AutoNoteControlNum"));
+				if(Serializing.getXmlNodeValue(doc,"AutoNoteControlNum")!=null) {
+					AutoNoteControlNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoNoteControlNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ControlType")!=null) {
-					ControlType=Serializing.GetXmlNodeValue(doc,"ControlType");
+				if(Serializing.getXmlNodeValue(doc,"ControlType")!=null) {
+					ControlType=Serializing.getXmlNodeValue(doc,"ControlType");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ControlLabel")!=null) {
-					ControlLabel=Serializing.GetXmlNodeValue(doc,"ControlLabel");
+				if(Serializing.getXmlNodeValue(doc,"ControlLabel")!=null) {
+					ControlLabel=Serializing.getXmlNodeValue(doc,"ControlLabel");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ControlOptions")!=null) {
-					ControlOptions=Serializing.GetXmlNodeValue(doc,"ControlOptions");
+				if(Serializing.getXmlNodeValue(doc,"ControlOptions")!=null) {
+					ControlOptions=Serializing.getXmlNodeValue(doc,"ControlOptions");
 				}
 			}
 			catch(Exception e) {

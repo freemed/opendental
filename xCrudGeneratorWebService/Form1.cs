@@ -127,15 +127,15 @@ namespace xCrudGeneratorWebService {
 					+t3+"}"+rn);
 				#endregion
 				WriteMethodCalls(strbMethodCalls,TableTypes[i]);
-				#region GetSerialized
+				#region GetJavaSerialized
 				strbJavaGetSerialized.Append(t2+"if(qualifiedName.equals(\"com.opendental.odweb.client.tabletypes."+className+docForjava+"\")) {"+rn
-					+t3+"return (("+className+docForjava+")obj).SerializeToXml();"+rn
+					+t3+"return (("+className+docForjava+")obj).serialize();"+rn
 					+t2+"}"+rn);
 				#endregion
-				#region GetDeserialized
+				#region GetJavaDeserialized
 				strbJavaGetDeserialized.Append(t2+"if(type.equals(\""+className+docForjava+"\")) {"+rn
 					+t3+className+docForjava+" "+className.ToLower()+docForjava+"=new "+className+docForjava+"();"+rn
-					+t3+className.ToLower()+docForjava+".DeserializeFromXml(doc);"+rn
+					+t3+className.ToLower()+docForjava+".deserialize(doc);"+rn
 					+t3+"return "+className.ToLower()+docForjava+";"+rn
 					+t2+"}"+rn);
 				#endregion
@@ -256,7 +256,7 @@ namespace xCrudGeneratorWebService {
 			#endregion
 			#region EscapeForXml
 			strb.Append(t+"/** Escapes common characters used in XML. */"+rn
-				+t+"public static String EscapeForXml(String myString) {"+rn
+				+t+"public static String escapeForXml(String myString) {"+rn
 				+t2+"StringBuilder strBuild=new StringBuilder();"+rn
 				+t2+"int length=myString.length();"+rn
 				+t2+"for(int i=0;i<length;i++) {"+rn
@@ -290,7 +290,7 @@ namespace xCrudGeneratorWebService {
 			strb.Append(t+"/** Loops through all the known objects and calls the corresponding classes serialize method."+rn
 				+t+" * @param obj Can be any type of object.  Error will occur if the type hasn't been implemented yet. "+rn
 				+t+" * @throws Exception Throws exception if type is not yet supported. */"+rn
-				+t+"public static String GetSerializedObject(Object obj) throws Exception {"+rn
+				+t+"public static String getSerializedObject(Object obj) throws Exception {"+rn
 				+t2+"String result;"+rn
 				+t2+"//Figure out what type of object we're dealing with and return the serialized form."+rn
 				+t2+"String qualifiedName=obj.getClass().getName();//Ex: ArrayList = \"java.util.ArrayList\""+rn
@@ -335,7 +335,7 @@ namespace xCrudGeneratorWebService {
 		///<summary></summary>
 		private void MiddleJavaSerial(StringBuilder strb) {
 			#region GetSerializedObject footer
-			strb.Append(t2+"throw new Exception(\"GetSerializedObject, unsupported type: \"+qualifiedName);"+rn
+			strb.Append(t2+"throw new Exception(\"getSerializedObject, unsupported type: \"+qualifiedName);"+rn
 				+t+"}"+rn+rn);
 			#endregion
 			#region GetDeserializedObject
@@ -343,12 +343,12 @@ namespace xCrudGeneratorWebService {
 				+t+"/** Loops through all the known objects and calls the corresponding classes deserialize method."+rn
 				+t+" * @param xml The serialized response from the server.  Handles DtoExceptions."+rn
 				+t+" * @throws Exception Throws exception if type is not yet supported or if a DtoException was returned. */"+rn
-				+t+"public static Object GetDeserializedObject(String xml) throws Exception {"+rn
+				+t+"public static Object getDeserializedObject(String xml) throws Exception {"+rn
 				+t2+"Document doc=XMLParser.parse(xml);"+rn
 				+t2+"XMLParser.removeWhitespace(doc);"+rn
 				+t2+"Element element=doc.getDocumentElement();"+rn
 				+t2+"if(element==null) {"+rn
-				+t3+"throw new Exception(\"GetDeserializedObject, the response from server was not valid XML.\");"+rn
+				+t3+"throw new Exception(\"getDeserializedObject, the response from server was not valid XML.\");"+rn
 				+t2+"}"+rn
 				+t2+"//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>"+rn
 				+t2+"String type=element.getNodeName();"+rn
@@ -385,22 +385,22 @@ namespace xCrudGeneratorWebService {
 				+t3+"return element.getFirstChild().getNodeValue();"+rn
 				+t2+"}"+rn
 				+t2+"if(type.equals(\"DataTable\")) {"+rn
-				+t3+"return DeserializeDataTable(element,new DataTable());"+rn
+				+t3+"return deserializeDataTable(element,new DataTable());"+rn
 				+t2+"}"+rn
 				+t2+"if(type.startsWith(\"List&lt;\")) {"+rn
-				+t3+"return DeserializeList(doc);"+rn
+				+t3+"return deserializeList(doc);"+rn
 				+t2+"}"+rn
 				+t2+"//Open Dental object-------------------------------------------------------------------------------------------------"+rn
-				+t2+"Object result=DeserializeOpenDentalObject(type,doc);"+rn
+				+t2+"Object result=deserializeOpenDentalObject(type,doc);"+rn
 				+t2+"if(result!=null) {"+rn
 				+t3+"return result;"+rn
 				+t2+"}"+rn
-				+t2+"throw new Exception(\"GetDeserializedObject, unsupported type: \"+type);"+rn
+				+t2+"throw new Exception(\"getDeserializedObject, unsupported type: \"+type);"+rn
 				+t+"}"+rn+rn);
 			#endregion
 			#region DeserializeOpenDentalObject header
 			strb.Append(t+"/** Pass in the type and just the xml for that object.  Returns null if no match found. */"+rn
-				+t+"private static Object DeserializeOpenDentalObject(String type,Document doc) throws Exception {"+rn);
+				+t+"private static Object deserializeOpenDentalObject(String type,Document doc) throws Exception {"+rn);
 			#endregion
 		}
 
@@ -414,22 +414,22 @@ namespace xCrudGeneratorWebService {
 			strb.Append("/** Do not make changes to this file.  This class is automatically generated by the CRUD, any changes will be overwritten.  To make changes, go to xCrudGeneratorWebService.Form1.cs and make the changes within StartJavaSerial(), MiddleJavaSerial(), and EndJavaSerial() */"+rn+rn
 				+t+"/** Pass in the entire xml response and this method will return a deserialized ArrayList."+rn
 				+t+" * @throws Exception Throws exception if the list cannot be deserialized. */"+rn
-				+t+"private static Object DeserializeList(Document doc) throws Exception {"+rn
+				+t+"private static Object deserializeList(Document doc) throws Exception {"+rn
 				+t2+"// TODO Figure out how to deserialize list objects without reflection here."+rn
-				+t2+"throw new Exception(\"DeserializeList, error deserializing list.\");"+rn
+				+t2+"throw new Exception(\"deserializeList, error deserializing list.\");"+rn
 				+t+"}"+rn+rn);
 			#endregion
 			#region DeserializeDataTable
 			strb.Append(t+"/** Pass in a node from the response and this method will use recursion to digest the entire XML and return a deserialized DataTable. */"+rn
-				+t+"private static DataTable DeserializeDataTable(Node node,DataTable table) {"+rn
+				+t+"private static DataTable deserializeDataTable(Node node,DataTable table) {"+rn
 				+t2+"String nodeName=node.getNodeName();"+rn
 				+t2+"if(node.getNodeType()!=Node.TEXT_NODE) {"+rn
 					+t3+"if(nodeName.equals(\"Name\")) {"+rn
 						+t4+"if(node.getChildNodes().getLength()>0) {"+rn
-						+t5+"table.SetTableName(node.getChildNodes().item(0).getNodeValue());"+rn
+						+t5+"table.setTableName(node.getChildNodes().item(0).getNodeValue());"+rn
 						+t4+"}"+rn
 						+t4+"else {//Set the table name to an empty string."+rn
-						+t5+"table.SetTableName(\"\");"+rn
+						+t5+"table.setTableName(\"\");"+rn
 						+t4+"}"+rn
 					+t3+"}"+rn
 					+t3+"else if(nodeName.equals(\"Col\")) {//Add a new column."+rn
@@ -443,17 +443,17 @@ namespace xCrudGeneratorWebService {
 					+t3+"else if(nodeName.equals(\"x\")) {//Add information to the next column in the last row."+rn
 						+t4+"DataRow row=table.Rows.get(table.Rows.size()-1);"+rn
 						+t4+"if(node.getChildNodes().getLength()>0) {"+rn
-						+t5+"row.AddCell(node.getChildNodes().item(0).getNodeValue());"+rn
+						+t5+"row.addCell(node.getChildNodes().item(0).getNodeValue());"+rn
 						+t4+"}"+rn
 						+t4+"else {//Add an empty cell."+rn
-						+t5+"row.AddCell(\"\");"+rn
+						+t5+"row.addCell(\"\");"+rn
 						+t4+"}"+rn
 					+t3+"}"+rn
 					+t3+"//Recursively iterate through child nodes."+rn
 					+t3+"NodeList children=node.getChildNodes();"+rn
 					+t3+"for(int i=0;i<children.getLength();i++) {"+rn
 						+t4+"Node childNode=children.item(i);"+rn
-						+t4+"table=DeserializeDataTable(childNode,table);"+rn
+						+t4+"table=deserializeDataTable(childNode,table);"+rn
 					+t3+"}"+rn
 				+t2+"}"+rn
 				+t2+"return table;"+rn
@@ -462,7 +462,7 @@ namespace xCrudGeneratorWebService {
 			#region GetXmlNodeValue
 			strb.Append(t+"/** Pass in the xml string parsed into a Document and the desired tagname to attempt to get the value."+rn
 				+t+" * Returns the node value or null if node is not included in the Document. */"+rn
-				+t+"public static String GetXmlNodeValue(Document doc,String tagname) {"+rn
+				+t+"public static String getXmlNodeValue(Document doc,String tagname) {"+rn
 				+t2+"NodeList list=doc.getElementsByTagName(tagname);"+rn
 				+t2+"if(list!=null && list.getLength()>0) {"+rn
 				+t3+"Node node=list.item(0).getFirstChild();"+rn
@@ -572,7 +572,7 @@ namespace xCrudGeneratorWebService {
 			#endregion
 			#region copy()
 			strb.Append(rn+t2+"/** Deep copy of object. */"+rn
-				+t2+"public "+className+docForjava+" Copy() {"+rn
+				+t2+"public "+className+docForjava+" deepCopy() {"+rn
 				+t3+className+docForjava+" "+className.ToLower()+docForjava+"=new "+className+docForjava+"();"+rn
 				+strbCopy.ToString()
 				+t3+"return "+className.ToLower()+docForjava+";"+rn
@@ -580,7 +580,7 @@ namespace xCrudGeneratorWebService {
 			#endregion
 			#region serialize
 			strb.Append(rn+t2+"/** Serialize the object into XML. */"+rn
-				+t2+"public String SerializeToXml() {"+rn
+				+t2+"public String serialize() {"+rn
 				+t3+"StringBuilder sb=new StringBuilder();"+rn
 				+t3+"sb.append(\"<"+className+docForjava+">\");"+rn);
 			GetSerializeForjava(strb,fields);
@@ -592,7 +592,7 @@ namespace xCrudGeneratorWebService {
 			strb.Append(rn+t2+"/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values."+rn
 				+t2+" * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object."+rn
 				+t2+" * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */"+rn
-				+t2+"public void DeserializeFromXml(Document doc) throws Exception {"+rn
+				+t2+"public void deserialize(Document doc) throws Exception {"+rn
 				+t3+"try {"+rn);
 			GetDeserializeForjava(strb,fields);
 			strb.Append(t3+"}"+rn
@@ -817,7 +817,7 @@ namespace xCrudGeneratorWebService {
 						break;
 					case "String":
 					case "TimeSpan":
-						strb.Append("Serializing.EscapeForXml("+field.Name+")");
+						strb.Append("Serializing.escapeForXml("+field.Name+")");
 						break;
 					default:
 						strb.Append(field.Name);
@@ -833,7 +833,7 @@ namespace xCrudGeneratorWebService {
 				if(IsNotDbColumn(field)) {//if not a db column, skip
 					continue;
 				}
-				string ser="Serializing.GetXmlNodeValue(doc,\""+field.Name+"\")";
+				string ser="Serializing.getXmlNodeValue(doc,\""+field.Name+"\")";
 				strb.Append(t4+"if("+ser+"!=null) {"+rn
 					+t5+field.Name+"=");
 				if(field.FieldType.BaseType.Name=="Enum") {

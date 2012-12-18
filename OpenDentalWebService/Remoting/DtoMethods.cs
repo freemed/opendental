@@ -230,6 +230,9 @@ namespace OpenDentalWebService {
 			if(objectType=="OpenDentBusiness.ElectID") {
 				return ElectID.Serialize((OpenDentBusiness.ElectID)obj);
 			}
+			if(objectType=="OpenDentBusiness.EmailAddress") {
+				return EmailAddress.Serialize((OpenDentBusiness.EmailAddress)obj);
+			}
 			if(objectType=="OpenDentBusiness.EmailAttach") {
 				return EmailAttach.Serialize((OpenDentBusiness.EmailAttach)obj);
 			}
@@ -677,6 +680,9 @@ namespace OpenDentalWebService {
 			if(objectType=="OpenDentBusiness.Vitalsign") {
 				return Vitalsign.Serialize((OpenDentBusiness.Vitalsign)obj);
 			}
+			if(objectType=="OpenDentBusiness.WikiPage") {
+				return WikiPage.Serialize((OpenDentBusiness.WikiPage)obj);
+			}
 			if(objectType=="OpenDentBusiness.ZipCode") {
 				return ZipCode.Serialize((OpenDentBusiness.ZipCode)obj);
 			}
@@ -896,6 +902,9 @@ namespace OpenDentalWebService {
 			}
 			if(typeName=="ElectID") {
 				return ElectID.Deserialize(xml);
+			}
+			if(typeName=="EmailAddress") {
+				return EmailAddress.Deserialize(xml);
 			}
 			if(typeName=="EmailAttach") {
 				return EmailAttach.Deserialize(xml);
@@ -1344,6 +1353,9 @@ namespace OpenDentalWebService {
 			if(typeName=="Vitalsign") {
 				return Vitalsign.Deserialize(xml);
 			}
+			if(typeName=="WikiPage") {
+				return WikiPage.Deserialize(xml);
+			}
 			if(typeName=="ZipCode") {
 				return ZipCode.Deserialize(xml);
 			}
@@ -1547,6 +1559,9 @@ namespace OpenDentalWebService {
 			}
 			if(className=="ElectIDs") {
 				return MethodElectIDs(methodName,parameters);
+			}
+			if(className=="EmailAddresses") {
+				return MethodEmailAddresses(methodName,parameters);
 			}
 			if(className=="EmailAttaches") {
 				return MethodEmailAttaches(methodName,parameters);
@@ -1995,6 +2010,9 @@ namespace OpenDentalWebService {
 			if(className=="Vitalsigns") {
 				return MethodVitalsigns(methodName,parameters);
 			}
+			if(className=="WikiPages") {
+				return MethodWikiPages(methodName,parameters);
+			}
 			if(className=="ZipCodes") {
 				return MethodZipCodes(methodName,parameters);
 			}
@@ -2391,6 +2409,12 @@ namespace OpenDentalWebService {
 
 		///<summary></summary>
 		private static object MethodElectIDs(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodEmailAddresses(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}
@@ -3288,6 +3312,12 @@ namespace OpenDentalWebService {
 
 		///<summary></summary>
 		private static object MethodVitalsigns(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodWikiPages(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}

@@ -18,7 +18,7 @@ public class ElectID {
 		public String Comments;
 
 		/** Deep copy of object. */
-		public ElectID Copy() {
+		public ElectID deepCopy() {
 			ElectID electid=new ElectID();
 			electid.ElectIDNum=this.ElectIDNum;
 			electid.PayorID=this.PayorID;
@@ -30,15 +30,15 @@ public class ElectID {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ElectID>");
 			sb.append("<ElectIDNum>").append(ElectIDNum).append("</ElectIDNum>");
-			sb.append("<PayorID>").append(Serializing.EscapeForXml(PayorID)).append("</PayorID>");
-			sb.append("<CarrierName>").append(Serializing.EscapeForXml(CarrierName)).append("</CarrierName>");
+			sb.append("<PayorID>").append(Serializing.escapeForXml(PayorID)).append("</PayorID>");
+			sb.append("<CarrierName>").append(Serializing.escapeForXml(CarrierName)).append("</CarrierName>");
 			sb.append("<IsMedicaid>").append((IsMedicaid)?1:0).append("</IsMedicaid>");
-			sb.append("<ProviderTypes>").append(Serializing.EscapeForXml(ProviderTypes)).append("</ProviderTypes>");
-			sb.append("<Comments>").append(Serializing.EscapeForXml(Comments)).append("</Comments>");
+			sb.append("<ProviderTypes>").append(Serializing.escapeForXml(ProviderTypes)).append("</ProviderTypes>");
+			sb.append("<Comments>").append(Serializing.escapeForXml(Comments)).append("</Comments>");
 			sb.append("</ElectID>");
 			return sb.toString();
 		}
@@ -46,25 +46,25 @@ public class ElectID {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ElectIDNum")!=null) {
-					ElectIDNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ElectIDNum"));
+				if(Serializing.getXmlNodeValue(doc,"ElectIDNum")!=null) {
+					ElectIDNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ElectIDNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayorID")!=null) {
-					PayorID=Serializing.GetXmlNodeValue(doc,"PayorID");
+				if(Serializing.getXmlNodeValue(doc,"PayorID")!=null) {
+					PayorID=Serializing.getXmlNodeValue(doc,"PayorID");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CarrierName")!=null) {
-					CarrierName=Serializing.GetXmlNodeValue(doc,"CarrierName");
+				if(Serializing.getXmlNodeValue(doc,"CarrierName")!=null) {
+					CarrierName=Serializing.getXmlNodeValue(doc,"CarrierName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsMedicaid")!=null) {
-					IsMedicaid=(Serializing.GetXmlNodeValue(doc,"IsMedicaid")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsMedicaid")!=null) {
+					IsMedicaid=(Serializing.getXmlNodeValue(doc,"IsMedicaid")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProviderTypes")!=null) {
-					ProviderTypes=Serializing.GetXmlNodeValue(doc,"ProviderTypes");
+				if(Serializing.getXmlNodeValue(doc,"ProviderTypes")!=null) {
+					ProviderTypes=Serializing.getXmlNodeValue(doc,"ProviderTypes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Comments")!=null) {
-					Comments=Serializing.GetXmlNodeValue(doc,"Comments");
+				if(Serializing.getXmlNodeValue(doc,"Comments")!=null) {
+					Comments=Serializing.getXmlNodeValue(doc,"Comments");
 				}
 			}
 			catch(Exception e) {

@@ -36,7 +36,7 @@ public class Payment {
 		public boolean IsRecurringCC;
 
 		/** Deep copy of object. */
-		public Payment Copy() {
+		public Payment deepCopy() {
 			Payment payment=new Payment();
 			payment.PayNum=this.PayNum;
 			payment.PayType=this.PayType;
@@ -56,22 +56,22 @@ public class Payment {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Payment>");
 			sb.append("<PayNum>").append(PayNum).append("</PayNum>");
 			sb.append("<PayType>").append(PayType).append("</PayType>");
 			sb.append("<PayDate>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(PayDate)).append("</PayDate>");
 			sb.append("<PayAmt>").append(PayAmt).append("</PayAmt>");
-			sb.append("<CheckNum>").append(Serializing.EscapeForXml(CheckNum)).append("</CheckNum>");
-			sb.append("<BankBranch>").append(Serializing.EscapeForXml(BankBranch)).append("</BankBranch>");
-			sb.append("<PayNote>").append(Serializing.EscapeForXml(PayNote)).append("</PayNote>");
+			sb.append("<CheckNum>").append(Serializing.escapeForXml(CheckNum)).append("</CheckNum>");
+			sb.append("<BankBranch>").append(Serializing.escapeForXml(BankBranch)).append("</BankBranch>");
+			sb.append("<PayNote>").append(Serializing.escapeForXml(PayNote)).append("</PayNote>");
 			sb.append("<IsSplit>").append((IsSplit)?1:0).append("</IsSplit>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<DateEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateEntry)).append("</DateEntry>");
 			sb.append("<DepositNum>").append(DepositNum).append("</DepositNum>");
-			sb.append("<Receipt>").append(Serializing.EscapeForXml(Receipt)).append("</Receipt>");
+			sb.append("<Receipt>").append(Serializing.escapeForXml(Receipt)).append("</Receipt>");
 			sb.append("<IsRecurringCC>").append((IsRecurringCC)?1:0).append("</IsRecurringCC>");
 			sb.append("</Payment>");
 			return sb.toString();
@@ -80,49 +80,49 @@ public class Payment {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PayNum")!=null) {
-					PayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayNum"));
+				if(Serializing.getXmlNodeValue(doc,"PayNum")!=null) {
+					PayNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PayNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayType")!=null) {
-					PayType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayType"));
+				if(Serializing.getXmlNodeValue(doc,"PayType")!=null) {
+					PayType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PayType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayDate")!=null) {
-					PayDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"PayDate"));
+				if(Serializing.getXmlNodeValue(doc,"PayDate")!=null) {
+					PayDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"PayDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayAmt")!=null) {
-					PayAmt=Double.valueOf(Serializing.GetXmlNodeValue(doc,"PayAmt"));
+				if(Serializing.getXmlNodeValue(doc,"PayAmt")!=null) {
+					PayAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"PayAmt"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CheckNum")!=null) {
-					CheckNum=Serializing.GetXmlNodeValue(doc,"CheckNum");
+				if(Serializing.getXmlNodeValue(doc,"CheckNum")!=null) {
+					CheckNum=Serializing.getXmlNodeValue(doc,"CheckNum");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BankBranch")!=null) {
-					BankBranch=Serializing.GetXmlNodeValue(doc,"BankBranch");
+				if(Serializing.getXmlNodeValue(doc,"BankBranch")!=null) {
+					BankBranch=Serializing.getXmlNodeValue(doc,"BankBranch");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayNote")!=null) {
-					PayNote=Serializing.GetXmlNodeValue(doc,"PayNote");
+				if(Serializing.getXmlNodeValue(doc,"PayNote")!=null) {
+					PayNote=Serializing.getXmlNodeValue(doc,"PayNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsSplit")!=null) {
-					IsSplit=(Serializing.GetXmlNodeValue(doc,"IsSplit")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsSplit")!=null) {
+					IsSplit=(Serializing.getXmlNodeValue(doc,"IsSplit")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ClinicNum")!=null) {
-					ClinicNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ClinicNum"));
+				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
+					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateEntry")!=null) {
-					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateEntry"));
+				if(Serializing.getXmlNodeValue(doc,"DateEntry")!=null) {
+					DateEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateEntry"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DepositNum")!=null) {
-					DepositNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DepositNum"));
+				if(Serializing.getXmlNodeValue(doc,"DepositNum")!=null) {
+					DepositNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DepositNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Receipt")!=null) {
-					Receipt=Serializing.GetXmlNodeValue(doc,"Receipt");
+				if(Serializing.getXmlNodeValue(doc,"Receipt")!=null) {
+					Receipt=Serializing.getXmlNodeValue(doc,"Receipt");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsRecurringCC")!=null) {
-					IsRecurringCC=(Serializing.GetXmlNodeValue(doc,"IsRecurringCC")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsRecurringCC")!=null) {
+					IsRecurringCC=(Serializing.getXmlNodeValue(doc,"IsRecurringCC")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

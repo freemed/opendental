@@ -22,7 +22,7 @@ public class ToothGridCol {
 		public ProcStat ProcStatus;
 
 		/** Deep copy of object. */
-		public ToothGridCol Copy() {
+		public ToothGridCol deepCopy() {
 			ToothGridCol toothgridcol=new ToothGridCol();
 			toothgridcol.ToothGridColNum=this.ToothGridColNum;
 			toothgridcol.SheetFieldNum=this.SheetFieldNum;
@@ -36,12 +36,12 @@ public class ToothGridCol {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ToothGridCol>");
 			sb.append("<ToothGridColNum>").append(ToothGridColNum).append("</ToothGridColNum>");
 			sb.append("<SheetFieldNum>").append(SheetFieldNum).append("</SheetFieldNum>");
-			sb.append("<NameItem>").append(Serializing.EscapeForXml(NameItem)).append("</NameItem>");
+			sb.append("<NameItem>").append(Serializing.escapeForXml(NameItem)).append("</NameItem>");
 			sb.append("<CellType>").append(CellType.ordinal()).append("</CellType>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<ColumnWidth>").append(ColumnWidth).append("</ColumnWidth>");
@@ -54,31 +54,31 @@ public class ToothGridCol {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ToothGridColNum")!=null) {
-					ToothGridColNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridColNum"));
+				if(Serializing.getXmlNodeValue(doc,"ToothGridColNum")!=null) {
+					ToothGridColNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothGridColNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetFieldNum")!=null) {
-					SheetFieldNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetFieldNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetFieldNum")!=null) {
+					SheetFieldNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetFieldNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NameItem")!=null) {
-					NameItem=Serializing.GetXmlNodeValue(doc,"NameItem");
+				if(Serializing.getXmlNodeValue(doc,"NameItem")!=null) {
+					NameItem=Serializing.getXmlNodeValue(doc,"NameItem");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CellType")!=null) {
-					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CellType"))];
+				if(Serializing.getXmlNodeValue(doc,"CellType")!=null) {
+					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CellType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColumnWidth")!=null) {
-					ColumnWidth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColumnWidth"));
+				if(Serializing.getXmlNodeValue(doc,"ColumnWidth")!=null) {
+					ColumnWidth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColumnWidth"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcStatus")!=null) {
-					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"ProcStatus")!=null) {
+					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"))];
 				}
 			}
 			catch(Exception e) {

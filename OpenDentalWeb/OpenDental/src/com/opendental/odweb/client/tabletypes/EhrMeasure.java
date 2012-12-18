@@ -14,7 +14,7 @@ public class EhrMeasure {
 		public int Denominator;
 
 		/** Deep copy of object. */
-		public EhrMeasure Copy() {
+		public EhrMeasure deepCopy() {
 			EhrMeasure ehrmeasure=new EhrMeasure();
 			ehrmeasure.EhrMeasureNum=this.EhrMeasureNum;
 			ehrmeasure.MeasureType=this.MeasureType;
@@ -24,7 +24,7 @@ public class EhrMeasure {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EhrMeasure>");
 			sb.append("<EhrMeasureNum>").append(EhrMeasureNum).append("</EhrMeasureNum>");
@@ -38,19 +38,19 @@ public class EhrMeasure {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EhrMeasureNum")!=null) {
-					EhrMeasureNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EhrMeasureNum"));
+				if(Serializing.getXmlNodeValue(doc,"EhrMeasureNum")!=null) {
+					EhrMeasureNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrMeasureNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MeasureType")!=null) {
-					MeasureType=EhrMeasureType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MeasureType"))];
+				if(Serializing.getXmlNodeValue(doc,"MeasureType")!=null) {
+					MeasureType=EhrMeasureType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MeasureType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Numerator")!=null) {
-					Numerator=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Numerator"));
+				if(Serializing.getXmlNodeValue(doc,"Numerator")!=null) {
+					Numerator=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Numerator"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Denominator")!=null) {
-					Denominator=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Denominator"));
+				if(Serializing.getXmlNodeValue(doc,"Denominator")!=null) {
+					Denominator=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Denominator"));
 				}
 			}
 			catch(Exception e) {

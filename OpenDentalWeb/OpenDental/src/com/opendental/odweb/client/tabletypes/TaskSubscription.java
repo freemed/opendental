@@ -12,7 +12,7 @@ public class TaskSubscription {
 		public int TaskListNum;
 
 		/** Deep copy of object. */
-		public TaskSubscription Copy() {
+		public TaskSubscription deepCopy() {
 			TaskSubscription tasksubscription=new TaskSubscription();
 			tasksubscription.TaskSubscriptionNum=this.TaskSubscriptionNum;
 			tasksubscription.UserNum=this.UserNum;
@@ -21,7 +21,7 @@ public class TaskSubscription {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TaskSubscription>");
 			sb.append("<TaskSubscriptionNum>").append(TaskSubscriptionNum).append("</TaskSubscriptionNum>");
@@ -34,16 +34,16 @@ public class TaskSubscription {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TaskSubscriptionNum")!=null) {
-					TaskSubscriptionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskSubscriptionNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskSubscriptionNum")!=null) {
+					TaskSubscriptionNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskSubscriptionNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskListNum")!=null) {
-					TaskListNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskListNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskListNum")!=null) {
+					TaskListNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskListNum"));
 				}
 			}
 			catch(Exception e) {

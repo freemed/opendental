@@ -28,7 +28,7 @@ public class Laboratory {
 		public String WirelessPhone;
 
 		/** Deep copy of object. */
-		public Laboratory Copy() {
+		public Laboratory deepCopy() {
 			Laboratory laboratory=new Laboratory();
 			laboratory.LaboratoryNum=this.LaboratoryNum;
 			laboratory.Description=this.Description;
@@ -45,20 +45,20 @@ public class Laboratory {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Laboratory>");
 			sb.append("<LaboratoryNum>").append(LaboratoryNum).append("</LaboratoryNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
-			sb.append("<Phone>").append(Serializing.EscapeForXml(Phone)).append("</Phone>");
-			sb.append("<Notes>").append(Serializing.EscapeForXml(Notes)).append("</Notes>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
+			sb.append("<Phone>").append(Serializing.escapeForXml(Phone)).append("</Phone>");
+			sb.append("<Notes>").append(Serializing.escapeForXml(Notes)).append("</Notes>");
 			sb.append("<Slip>").append(Slip).append("</Slip>");
-			sb.append("<Address>").append(Serializing.EscapeForXml(Address)).append("</Address>");
-			sb.append("<City>").append(Serializing.EscapeForXml(City)).append("</City>");
-			sb.append("<State>").append(Serializing.EscapeForXml(State)).append("</State>");
-			sb.append("<Zip>").append(Serializing.EscapeForXml(Zip)).append("</Zip>");
-			sb.append("<Email>").append(Serializing.EscapeForXml(Email)).append("</Email>");
-			sb.append("<WirelessPhone>").append(Serializing.EscapeForXml(WirelessPhone)).append("</WirelessPhone>");
+			sb.append("<Address>").append(Serializing.escapeForXml(Address)).append("</Address>");
+			sb.append("<City>").append(Serializing.escapeForXml(City)).append("</City>");
+			sb.append("<State>").append(Serializing.escapeForXml(State)).append("</State>");
+			sb.append("<Zip>").append(Serializing.escapeForXml(Zip)).append("</Zip>");
+			sb.append("<Email>").append(Serializing.escapeForXml(Email)).append("</Email>");
+			sb.append("<WirelessPhone>").append(Serializing.escapeForXml(WirelessPhone)).append("</WirelessPhone>");
 			sb.append("</Laboratory>");
 			return sb.toString();
 		}
@@ -66,40 +66,40 @@ public class Laboratory {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"LaboratoryNum")!=null) {
-					LaboratoryNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"LaboratoryNum"));
+				if(Serializing.getXmlNodeValue(doc,"LaboratoryNum")!=null) {
+					LaboratoryNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LaboratoryNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Phone")!=null) {
-					Phone=Serializing.GetXmlNodeValue(doc,"Phone");
+				if(Serializing.getXmlNodeValue(doc,"Phone")!=null) {
+					Phone=Serializing.getXmlNodeValue(doc,"Phone");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Notes")!=null) {
-					Notes=Serializing.GetXmlNodeValue(doc,"Notes");
+				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
+					Notes=Serializing.getXmlNodeValue(doc,"Notes");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Slip")!=null) {
-					Slip=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Slip"));
+				if(Serializing.getXmlNodeValue(doc,"Slip")!=null) {
+					Slip=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Slip"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Address")!=null) {
-					Address=Serializing.GetXmlNodeValue(doc,"Address");
+				if(Serializing.getXmlNodeValue(doc,"Address")!=null) {
+					Address=Serializing.getXmlNodeValue(doc,"Address");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"City")!=null) {
-					City=Serializing.GetXmlNodeValue(doc,"City");
+				if(Serializing.getXmlNodeValue(doc,"City")!=null) {
+					City=Serializing.getXmlNodeValue(doc,"City");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"State")!=null) {
-					State=Serializing.GetXmlNodeValue(doc,"State");
+				if(Serializing.getXmlNodeValue(doc,"State")!=null) {
+					State=Serializing.getXmlNodeValue(doc,"State");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Zip")!=null) {
-					Zip=Serializing.GetXmlNodeValue(doc,"Zip");
+				if(Serializing.getXmlNodeValue(doc,"Zip")!=null) {
+					Zip=Serializing.getXmlNodeValue(doc,"Zip");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Email")!=null) {
-					Email=Serializing.GetXmlNodeValue(doc,"Email");
+				if(Serializing.getXmlNodeValue(doc,"Email")!=null) {
+					Email=Serializing.getXmlNodeValue(doc,"Email");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WirelessPhone")!=null) {
-					WirelessPhone=Serializing.GetXmlNodeValue(doc,"WirelessPhone");
+				if(Serializing.getXmlNodeValue(doc,"WirelessPhone")!=null) {
+					WirelessPhone=Serializing.getXmlNodeValue(doc,"WirelessPhone");
 				}
 			}
 			catch(Exception e) {

@@ -16,7 +16,7 @@ public class SupplyOrderItem {
 		public double Price;
 
 		/** Deep copy of object. */
-		public SupplyOrderItem Copy() {
+		public SupplyOrderItem deepCopy() {
 			SupplyOrderItem supplyorderitem=new SupplyOrderItem();
 			supplyorderitem.SupplyOrderItemNum=this.SupplyOrderItemNum;
 			supplyorderitem.SupplyOrderNum=this.SupplyOrderNum;
@@ -27,7 +27,7 @@ public class SupplyOrderItem {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SupplyOrderItem>");
 			sb.append("<SupplyOrderItemNum>").append(SupplyOrderItemNum).append("</SupplyOrderItemNum>");
@@ -42,22 +42,22 @@ public class SupplyOrderItem {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SupplyOrderItemNum")!=null) {
-					SupplyOrderItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyOrderItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplyOrderItemNum")!=null) {
+					SupplyOrderItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplyOrderItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum")!=null) {
-					SupplyOrderNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyOrderNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplyOrderNum")!=null) {
+					SupplyOrderNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplyOrderNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SupplyNum")!=null) {
-					SupplyNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SupplyNum"));
+				if(Serializing.getXmlNodeValue(doc,"SupplyNum")!=null) {
+					SupplyNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SupplyNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Qty")!=null) {
-					Qty=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Qty"));
+				if(Serializing.getXmlNodeValue(doc,"Qty")!=null) {
+					Qty=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Qty"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Price")!=null) {
-					Price=Double.valueOf(Serializing.GetXmlNodeValue(doc,"Price"));
+				if(Serializing.getXmlNodeValue(doc,"Price")!=null) {
+					Price=Double.valueOf(Serializing.getXmlNodeValue(doc,"Price"));
 				}
 			}
 			catch(Exception e) {

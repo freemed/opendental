@@ -24,7 +24,7 @@ public class EmailMessage {
 		public CommSentOrReceived SentOrReceived;
 
 		/** Deep copy of object. */
-		public EmailMessage Copy() {
+		public EmailMessage deepCopy() {
 			EmailMessage emailmessage=new EmailMessage();
 			emailmessage.EmailMessageNum=this.EmailMessageNum;
 			emailmessage.PatNum=this.PatNum;
@@ -38,15 +38,15 @@ public class EmailMessage {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EmailMessage>");
 			sb.append("<EmailMessageNum>").append(EmailMessageNum).append("</EmailMessageNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<ToAddress>").append(Serializing.EscapeForXml(ToAddress)).append("</ToAddress>");
-			sb.append("<FromAddress>").append(Serializing.EscapeForXml(FromAddress)).append("</FromAddress>");
-			sb.append("<Subject>").append(Serializing.EscapeForXml(Subject)).append("</Subject>");
-			sb.append("<BodyText>").append(Serializing.EscapeForXml(BodyText)).append("</BodyText>");
+			sb.append("<ToAddress>").append(Serializing.escapeForXml(ToAddress)).append("</ToAddress>");
+			sb.append("<FromAddress>").append(Serializing.escapeForXml(FromAddress)).append("</FromAddress>");
+			sb.append("<Subject>").append(Serializing.escapeForXml(Subject)).append("</Subject>");
+			sb.append("<BodyText>").append(Serializing.escapeForXml(BodyText)).append("</BodyText>");
 			sb.append("<MsgDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(MsgDateTime)).append("</MsgDateTime>");
 			sb.append("<SentOrReceived>").append(SentOrReceived.ordinal()).append("</SentOrReceived>");
 			sb.append("</EmailMessage>");
@@ -56,31 +56,31 @@ public class EmailMessage {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EmailMessageNum")!=null) {
-					EmailMessageNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmailMessageNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmailMessageNum")!=null) {
+					EmailMessageNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailMessageNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToAddress")!=null) {
-					ToAddress=Serializing.GetXmlNodeValue(doc,"ToAddress");
+				if(Serializing.getXmlNodeValue(doc,"ToAddress")!=null) {
+					ToAddress=Serializing.getXmlNodeValue(doc,"ToAddress");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FromAddress")!=null) {
-					FromAddress=Serializing.GetXmlNodeValue(doc,"FromAddress");
+				if(Serializing.getXmlNodeValue(doc,"FromAddress")!=null) {
+					FromAddress=Serializing.getXmlNodeValue(doc,"FromAddress");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Subject")!=null) {
-					Subject=Serializing.GetXmlNodeValue(doc,"Subject");
+				if(Serializing.getXmlNodeValue(doc,"Subject")!=null) {
+					Subject=Serializing.getXmlNodeValue(doc,"Subject");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"BodyText")!=null) {
-					BodyText=Serializing.GetXmlNodeValue(doc,"BodyText");
+				if(Serializing.getXmlNodeValue(doc,"BodyText")!=null) {
+					BodyText=Serializing.getXmlNodeValue(doc,"BodyText");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MsgDateTime")!=null) {
-					MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"MsgDateTime"));
+				if(Serializing.getXmlNodeValue(doc,"MsgDateTime")!=null) {
+					MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"MsgDateTime"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SentOrReceived")!=null) {
-					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SentOrReceived"))];
+				if(Serializing.getXmlNodeValue(doc,"SentOrReceived")!=null) {
+					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"))];
 				}
 			}
 			catch(Exception e) {

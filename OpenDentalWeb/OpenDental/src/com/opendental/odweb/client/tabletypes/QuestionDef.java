@@ -14,7 +14,7 @@ public class QuestionDef {
 		public QuestionType QuestType;
 
 		/** Deep copy of object. */
-		public QuestionDef Copy() {
+		public QuestionDef deepCopy() {
 			QuestionDef questiondef=new QuestionDef();
 			questiondef.QuestionDefNum=this.QuestionDefNum;
 			questiondef.Description=this.Description;
@@ -24,11 +24,11 @@ public class QuestionDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<QuestionDef>");
 			sb.append("<QuestionDefNum>").append(QuestionDefNum).append("</QuestionDefNum>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<QuestType>").append(QuestType.ordinal()).append("</QuestType>");
 			sb.append("</QuestionDef>");
@@ -38,19 +38,19 @@ public class QuestionDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"QuestionDefNum")!=null) {
-					QuestionDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuestionDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"QuestionDefNum")!=null) {
+					QuestionDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuestionDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"QuestType")!=null) {
-					QuestType=QuestionType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"QuestType"))];
+				if(Serializing.getXmlNodeValue(doc,"QuestType")!=null) {
+					QuestType=QuestionType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuestType"))];
 				}
 			}
 			catch(Exception e) {

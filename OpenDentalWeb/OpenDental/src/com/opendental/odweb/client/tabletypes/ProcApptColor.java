@@ -14,7 +14,7 @@ public class ProcApptColor {
 		public int ColorText;
 
 		/** Deep copy of object. */
-		public ProcApptColor Copy() {
+		public ProcApptColor deepCopy() {
 			ProcApptColor procapptcolor=new ProcApptColor();
 			procapptcolor.ProcApptColorNum=this.ProcApptColorNum;
 			procapptcolor.CodeRange=this.CodeRange;
@@ -24,11 +24,11 @@ public class ProcApptColor {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProcApptColor>");
 			sb.append("<ProcApptColorNum>").append(ProcApptColorNum).append("</ProcApptColorNum>");
-			sb.append("<CodeRange>").append(Serializing.EscapeForXml(CodeRange)).append("</CodeRange>");
+			sb.append("<CodeRange>").append(Serializing.escapeForXml(CodeRange)).append("</CodeRange>");
 			sb.append("<ShowPreviousDate>").append((ShowPreviousDate)?1:0).append("</ShowPreviousDate>");
 			sb.append("<ColorText>").append(ColorText).append("</ColorText>");
 			sb.append("</ProcApptColor>");
@@ -38,19 +38,19 @@ public class ProcApptColor {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProcApptColorNum")!=null) {
-					ProcApptColorNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcApptColorNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcApptColorNum")!=null) {
+					ProcApptColorNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcApptColorNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeRange")!=null) {
-					CodeRange=Serializing.GetXmlNodeValue(doc,"CodeRange");
+				if(Serializing.getXmlNodeValue(doc,"CodeRange")!=null) {
+					CodeRange=Serializing.getXmlNodeValue(doc,"CodeRange");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ShowPreviousDate")!=null) {
-					ShowPreviousDate=(Serializing.GetXmlNodeValue(doc,"ShowPreviousDate")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"ShowPreviousDate")!=null) {
+					ShowPreviousDate=(Serializing.getXmlNodeValue(doc,"ShowPreviousDate")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColorText")!=null) {
-					ColorText=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColorText"));
+				if(Serializing.getXmlNodeValue(doc,"ColorText")!=null) {
+					ColorText=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColorText"));
 				}
 			}
 			catch(Exception e) {

@@ -14,7 +14,7 @@ public class FormPat {
 		public Date FormDateTime;
 
 		/** Deep copy of object. */
-		public FormPat Copy() {
+		public FormPat deepCopy() {
 			FormPat formpat=new FormPat();
 			formpat.FormPatNum=this.FormPatNum;
 			formpat.PatNum=this.PatNum;
@@ -23,7 +23,7 @@ public class FormPat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<FormPat>");
 			sb.append("<FormPatNum>").append(FormPatNum).append("</FormPatNum>");
@@ -36,16 +36,16 @@ public class FormPat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"FormPatNum")!=null) {
-					FormPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FormPatNum"));
+				if(Serializing.getXmlNodeValue(doc,"FormPatNum")!=null) {
+					FormPatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FormPatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FormDateTime")!=null) {
-					FormDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"FormDateTime"));
+				if(Serializing.getXmlNodeValue(doc,"FormDateTime")!=null) {
+					FormDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"FormDateTime"));
 				}
 			}
 			catch(Exception e) {

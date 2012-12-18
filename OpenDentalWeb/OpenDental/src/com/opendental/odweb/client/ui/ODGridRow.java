@@ -20,43 +20,43 @@ public class ODGridRow {
 	/** Creates a new ODGridRow. */
 	public ODGridRow() {
 		Cells=new ODGridCellList();
-		SetBold(false);
-		SetTag(null);
-		SetNote("");
-		SetHeight(0);
+		setBold(false);
+		setTag(null);
+		setNote("");
+		setHeight(0);
 	}
 
-	public int GetHeight() {
+	public int getHeight() {
 		return Height;
 	}
 
 	/** If not set (0), then the row height is computed automatically. */
-	public void SetHeight(int height) {
+	public void setHeight(int height) {
 		Height = height;
 	}
 
-	public String GetNote() {
+	public String getNote() {
 		return Note;
 	}
 
-	public void SetNote(String note) {
+	public void setNote(String note) {
 		Note = note;
 	}
 
-	public Object GetTag() {
+	public Object getTag() {
 		return Tag;
 	}
 
 	/** Used to store any kind of object that is associated with the row. */
-	public void SetTag(Object tag) {
+	public void setTag(Object tag) {
 		Tag = tag;
 	}
 
-	public boolean IsBold() {
+	public boolean isBold() {
 		return Bold;
 	}
 
-	public void SetBold(boolean bold) {
+	public void setBold(boolean bold) {
 		Bold = bold;
 	}
 	

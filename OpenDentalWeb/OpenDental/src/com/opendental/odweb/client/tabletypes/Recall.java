@@ -36,7 +36,7 @@ public class Recall {
 		public Date DateScheduled;
 
 		/** Deep copy of object. */
-		public Recall Copy() {
+		public Recall deepCopy() {
 			Recall recall=new Recall();
 			recall.RecallNum=this.RecallNum;
 			recall.PatNum=this.PatNum;
@@ -56,7 +56,7 @@ public class Recall {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Recall>");
 			sb.append("<RecallNum>").append(RecallNum).append("</RecallNum>");
@@ -66,7 +66,7 @@ public class Recall {
 			sb.append("<DatePrevious>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DatePrevious)).append("</DatePrevious>");
 			sb.append("<RecallInterval>").append(RecallInterval).append("</RecallInterval>");
 			sb.append("<RecallStatus>").append(RecallStatus).append("</RecallStatus>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<IsDisabled>").append((IsDisabled)?1:0).append("</IsDisabled>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<RecallTypeNum>").append(RecallTypeNum).append("</RecallTypeNum>");
@@ -80,49 +80,49 @@ public class Recall {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"RecallNum")!=null) {
-					RecallNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallNum"));
+				if(Serializing.getXmlNodeValue(doc,"RecallNum")!=null) {
+					RecallNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RecallNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateDueCalc")!=null) {
-					DateDueCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDueCalc"));
+				if(Serializing.getXmlNodeValue(doc,"DateDueCalc")!=null) {
+					DateDueCalc=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateDueCalc"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateDue")!=null) {
-					DateDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateDue"));
+				if(Serializing.getXmlNodeValue(doc,"DateDue")!=null) {
+					DateDue=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateDue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DatePrevious")!=null) {
-					DatePrevious=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DatePrevious"));
+				if(Serializing.getXmlNodeValue(doc,"DatePrevious")!=null) {
+					DatePrevious=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DatePrevious"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RecallInterval")!=null) {
-					RecallInterval=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallInterval"));
+				if(Serializing.getXmlNodeValue(doc,"RecallInterval")!=null) {
+					RecallInterval=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RecallInterval"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RecallStatus")!=null) {
-					RecallStatus=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallStatus"));
+				if(Serializing.getXmlNodeValue(doc,"RecallStatus")!=null) {
+					RecallStatus=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RecallStatus"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsDisabled")!=null) {
-					IsDisabled=(Serializing.GetXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsDisabled")!=null) {
+					IsDisabled=(Serializing.getXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RecallTypeNum")!=null) {
-					RecallTypeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"RecallTypeNum"));
+				if(Serializing.getXmlNodeValue(doc,"RecallTypeNum")!=null) {
+					RecallTypeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RecallTypeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DisableUntilBalance")!=null) {
-					DisableUntilBalance=Double.valueOf(Serializing.GetXmlNodeValue(doc,"DisableUntilBalance"));
+				if(Serializing.getXmlNodeValue(doc,"DisableUntilBalance")!=null) {
+					DisableUntilBalance=Double.valueOf(Serializing.getXmlNodeValue(doc,"DisableUntilBalance"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DisableUntilDate")!=null) {
-					DisableUntilDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DisableUntilDate"));
+				if(Serializing.getXmlNodeValue(doc,"DisableUntilDate")!=null) {
+					DisableUntilDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DisableUntilDate"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateScheduled")!=null) {
-					DateScheduled=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateScheduled"));
+				if(Serializing.getXmlNodeValue(doc,"DateScheduled")!=null) {
+					DateScheduled=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateScheduled"));
 				}
 			}
 			catch(Exception e) {

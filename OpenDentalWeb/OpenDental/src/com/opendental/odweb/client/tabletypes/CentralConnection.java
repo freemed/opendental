@@ -28,7 +28,7 @@ public class CentralConnection {
 		public boolean WebServiceIsEcw;
 
 		/** Deep copy of object. */
-		public CentralConnection Copy() {
+		public CentralConnection deepCopy() {
 			CentralConnection centralconnection=new CentralConnection();
 			centralconnection.CentralConnectionNum=this.CentralConnectionNum;
 			centralconnection.ServerName=this.ServerName;
@@ -45,18 +45,18 @@ public class CentralConnection {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<CentralConnection>");
 			sb.append("<CentralConnectionNum>").append(CentralConnectionNum).append("</CentralConnectionNum>");
-			sb.append("<ServerName>").append(Serializing.EscapeForXml(ServerName)).append("</ServerName>");
-			sb.append("<DatabaseName>").append(Serializing.EscapeForXml(DatabaseName)).append("</DatabaseName>");
-			sb.append("<MySqlUser>").append(Serializing.EscapeForXml(MySqlUser)).append("</MySqlUser>");
-			sb.append("<MySqlPassword>").append(Serializing.EscapeForXml(MySqlPassword)).append("</MySqlPassword>");
-			sb.append("<ServiceURI>").append(Serializing.EscapeForXml(ServiceURI)).append("</ServiceURI>");
-			sb.append("<OdUser>").append(Serializing.EscapeForXml(OdUser)).append("</OdUser>");
-			sb.append("<OdPassword>").append(Serializing.EscapeForXml(OdPassword)).append("</OdPassword>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<ServerName>").append(Serializing.escapeForXml(ServerName)).append("</ServerName>");
+			sb.append("<DatabaseName>").append(Serializing.escapeForXml(DatabaseName)).append("</DatabaseName>");
+			sb.append("<MySqlUser>").append(Serializing.escapeForXml(MySqlUser)).append("</MySqlUser>");
+			sb.append("<MySqlPassword>").append(Serializing.escapeForXml(MySqlPassword)).append("</MySqlPassword>");
+			sb.append("<ServiceURI>").append(Serializing.escapeForXml(ServiceURI)).append("</ServiceURI>");
+			sb.append("<OdUser>").append(Serializing.escapeForXml(OdUser)).append("</OdUser>");
+			sb.append("<OdPassword>").append(Serializing.escapeForXml(OdPassword)).append("</OdPassword>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<WebServiceIsEcw>").append((WebServiceIsEcw)?1:0).append("</WebServiceIsEcw>");
 			sb.append("</CentralConnection>");
@@ -66,40 +66,40 @@ public class CentralConnection {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"CentralConnectionNum")!=null) {
-					CentralConnectionNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CentralConnectionNum"));
+				if(Serializing.getXmlNodeValue(doc,"CentralConnectionNum")!=null) {
+					CentralConnectionNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CentralConnectionNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ServerName")!=null) {
-					ServerName=Serializing.GetXmlNodeValue(doc,"ServerName");
+				if(Serializing.getXmlNodeValue(doc,"ServerName")!=null) {
+					ServerName=Serializing.getXmlNodeValue(doc,"ServerName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DatabaseName")!=null) {
-					DatabaseName=Serializing.GetXmlNodeValue(doc,"DatabaseName");
+				if(Serializing.getXmlNodeValue(doc,"DatabaseName")!=null) {
+					DatabaseName=Serializing.getXmlNodeValue(doc,"DatabaseName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MySqlUser")!=null) {
-					MySqlUser=Serializing.GetXmlNodeValue(doc,"MySqlUser");
+				if(Serializing.getXmlNodeValue(doc,"MySqlUser")!=null) {
+					MySqlUser=Serializing.getXmlNodeValue(doc,"MySqlUser");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MySqlPassword")!=null) {
-					MySqlPassword=Serializing.GetXmlNodeValue(doc,"MySqlPassword");
+				if(Serializing.getXmlNodeValue(doc,"MySqlPassword")!=null) {
+					MySqlPassword=Serializing.getXmlNodeValue(doc,"MySqlPassword");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ServiceURI")!=null) {
-					ServiceURI=Serializing.GetXmlNodeValue(doc,"ServiceURI");
+				if(Serializing.getXmlNodeValue(doc,"ServiceURI")!=null) {
+					ServiceURI=Serializing.getXmlNodeValue(doc,"ServiceURI");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OdUser")!=null) {
-					OdUser=Serializing.GetXmlNodeValue(doc,"OdUser");
+				if(Serializing.getXmlNodeValue(doc,"OdUser")!=null) {
+					OdUser=Serializing.getXmlNodeValue(doc,"OdUser");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OdPassword")!=null) {
-					OdPassword=Serializing.GetXmlNodeValue(doc,"OdPassword");
+				if(Serializing.getXmlNodeValue(doc,"OdPassword")!=null) {
+					OdPassword=Serializing.getXmlNodeValue(doc,"OdPassword");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"WebServiceIsEcw")!=null) {
-					WebServiceIsEcw=(Serializing.GetXmlNodeValue(doc,"WebServiceIsEcw")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"WebServiceIsEcw")!=null) {
+					WebServiceIsEcw=(Serializing.getXmlNodeValue(doc,"WebServiceIsEcw")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

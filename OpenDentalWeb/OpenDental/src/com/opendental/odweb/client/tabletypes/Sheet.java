@@ -34,7 +34,7 @@ public class Sheet {
 		public boolean IsWebForm;
 
 		/** Deep copy of object. */
-		public Sheet Copy() {
+		public Sheet deepCopy() {
 			Sheet sheet=new Sheet();
 			sheet.SheetNum=this.SheetNum;
 			sheet.SheetType=this.SheetType;
@@ -53,7 +53,7 @@ public class Sheet {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<Sheet>");
 			sb.append("<SheetNum>").append(SheetNum).append("</SheetNum>");
@@ -61,12 +61,12 @@ public class Sheet {
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<DateTimeSheet>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeSheet)).append("</DateTimeSheet>");
 			sb.append("<FontSize>").append(FontSize).append("</FontSize>");
-			sb.append("<FontName>").append(Serializing.EscapeForXml(FontName)).append("</FontName>");
+			sb.append("<FontName>").append(Serializing.escapeForXml(FontName)).append("</FontName>");
 			sb.append("<Width>").append(Width).append("</Width>");
 			sb.append("<Height>").append(Height).append("</Height>");
 			sb.append("<IsLandscape>").append((IsLandscape)?1:0).append("</IsLandscape>");
-			sb.append("<InternalNote>").append(Serializing.EscapeForXml(InternalNote)).append("</InternalNote>");
-			sb.append("<Description>").append(Serializing.EscapeForXml(Description)).append("</Description>");
+			sb.append("<InternalNote>").append(Serializing.escapeForXml(InternalNote)).append("</InternalNote>");
+			sb.append("<Description>").append(Serializing.escapeForXml(Description)).append("</Description>");
 			sb.append("<ShowInTerminal>").append(ShowInTerminal).append("</ShowInTerminal>");
 			sb.append("<IsWebForm>").append((IsWebForm)?1:0).append("</IsWebForm>");
 			sb.append("</Sheet>");
@@ -76,46 +76,46 @@ public class Sheet {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SheetNum")!=null) {
-					SheetNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetNum"));
+				if(Serializing.getXmlNodeValue(doc,"SheetNum")!=null) {
+					SheetNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SheetType")!=null) {
-					SheetType=SheetTypeEnum.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SheetType"))];
+				if(Serializing.getXmlNodeValue(doc,"SheetType")!=null) {
+					SheetType=SheetTypeEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeSheet")!=null) {
-					DateTimeSheet=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeSheet"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeSheet")!=null) {
+					DateTimeSheet=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeSheet"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontSize")!=null) {
-					FontSize=Float.valueOf(Serializing.GetXmlNodeValue(doc,"FontSize"));
+				if(Serializing.getXmlNodeValue(doc,"FontSize")!=null) {
+					FontSize=Float.valueOf(Serializing.getXmlNodeValue(doc,"FontSize"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FontName")!=null) {
-					FontName=Serializing.GetXmlNodeValue(doc,"FontName");
+				if(Serializing.getXmlNodeValue(doc,"FontName")!=null) {
+					FontName=Serializing.getXmlNodeValue(doc,"FontName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Width")!=null) {
-					Width=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Width"));
+				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
+					Width=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Width"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Height")!=null) {
-					Height=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Height"));
+				if(Serializing.getXmlNodeValue(doc,"Height")!=null) {
+					Height=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsLandscape")!=null) {
-					IsLandscape=(Serializing.GetXmlNodeValue(doc,"IsLandscape")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsLandscape")!=null) {
+					IsLandscape=(Serializing.getXmlNodeValue(doc,"IsLandscape")=="0")?false:true;
 				}
-				if(Serializing.GetXmlNodeValue(doc,"InternalNote")!=null) {
-					InternalNote=Serializing.GetXmlNodeValue(doc,"InternalNote");
+				if(Serializing.getXmlNodeValue(doc,"InternalNote")!=null) {
+					InternalNote=Serializing.getXmlNodeValue(doc,"InternalNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Description")!=null) {
-					Description=Serializing.GetXmlNodeValue(doc,"Description");
+				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
+					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ShowInTerminal")!=null) {
-					ShowInTerminal=Byte.valueOf(Serializing.GetXmlNodeValue(doc,"ShowInTerminal"));
+				if(Serializing.getXmlNodeValue(doc,"ShowInTerminal")!=null) {
+					ShowInTerminal=Byte.valueOf(Serializing.getXmlNodeValue(doc,"ShowInTerminal"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsWebForm")!=null) {
-					IsWebForm=(Serializing.GetXmlNodeValue(doc,"IsWebForm")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsWebForm")!=null) {
+					IsWebForm=(Serializing.getXmlNodeValue(doc,"IsWebForm")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

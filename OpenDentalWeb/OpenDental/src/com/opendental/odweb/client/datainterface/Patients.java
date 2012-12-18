@@ -7,15 +7,15 @@ import com.opendental.odweb.client.ui.MsgBox;
 public class Patients {
 
 	/** Returns a serialized DtoGetTable.  Only used for the Select Patient dialog. */
-	public static String GetPtDataTable() {
+	public static String GetPtDataTableTest(int guarNum,int excludePayNum) {
 		DtoGetTable dto=null;
-		String[] paramTypes=new String[0];//{ "long","AccountType" };//The parameter types in the C# method that we will be calling.
+		String[] paramTypes=new String[] { "long","long" };//The parameter types in the C# method that we will be calling.
 		try {
-			dto=Meth.GetTable("Patients.GetPtDataTableTest",paramTypes);
+			dto=Meth.getTable("Patients.GetPtDataTableTest",paramTypes,guarNum,excludePayNum);
 		} catch (Exception e) {
-			MsgBox.Show("Error:\r\n"+e.getMessage());
+			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		return dto.Serialize();
+		return dto.serialize();
 	}
 
 }

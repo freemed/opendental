@@ -18,7 +18,7 @@ public class DocumentMisc {
 		public String RawBase64;
 
 		/** Deep copy of object. */
-		public DocumentMisc Copy() {
+		public DocumentMisc deepCopy() {
 			DocumentMisc documentmisc=new DocumentMisc();
 			documentmisc.DocMiscNum=this.DocMiscNum;
 			documentmisc.DateCreated=this.DateCreated;
@@ -29,14 +29,14 @@ public class DocumentMisc {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<DocumentMisc>");
 			sb.append("<DocMiscNum>").append(DocMiscNum).append("</DocMiscNum>");
 			sb.append("<DateCreated>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateCreated)).append("</DateCreated>");
-			sb.append("<FileName>").append(Serializing.EscapeForXml(FileName)).append("</FileName>");
+			sb.append("<FileName>").append(Serializing.escapeForXml(FileName)).append("</FileName>");
 			sb.append("<DocMiscType>").append(DocMiscType.ordinal()).append("</DocMiscType>");
-			sb.append("<RawBase64>").append(Serializing.EscapeForXml(RawBase64)).append("</RawBase64>");
+			sb.append("<RawBase64>").append(Serializing.escapeForXml(RawBase64)).append("</RawBase64>");
 			sb.append("</DocumentMisc>");
 			return sb.toString();
 		}
@@ -44,22 +44,22 @@ public class DocumentMisc {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"DocMiscNum")!=null) {
-					DocMiscNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocMiscNum"));
+				if(Serializing.getXmlNodeValue(doc,"DocMiscNum")!=null) {
+					DocMiscNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocMiscNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateCreated")!=null) {
-					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateCreated"));
+				if(Serializing.getXmlNodeValue(doc,"DateCreated")!=null) {
+					DateCreated=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateCreated"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FileName")!=null) {
-					FileName=Serializing.GetXmlNodeValue(doc,"FileName");
+				if(Serializing.getXmlNodeValue(doc,"FileName")!=null) {
+					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DocMiscType")!=null) {
-					DocMiscType=DocumentMiscType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DocMiscType"))];
+				if(Serializing.getXmlNodeValue(doc,"DocMiscType")!=null) {
+					DocMiscType=DocumentMiscType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocMiscType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RawBase64")!=null) {
-					RawBase64=Serializing.GetXmlNodeValue(doc,"RawBase64");
+				if(Serializing.getXmlNodeValue(doc,"RawBase64")!=null) {
+					RawBase64=Serializing.getXmlNodeValue(doc,"RawBase64");
 				}
 			}
 			catch(Exception e) {

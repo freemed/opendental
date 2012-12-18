@@ -11,14 +11,14 @@ public class DataCell {
 	
 	/** Creates a new DataCell and sets the Text to the passed in string. */
 	public DataCell(String text) {
-		SetText(text);
+		setText(text);
 	}
 
-	public String GetText() {
+	public String getText() {
 		return Text;
 	}
 
-	public void SetText(String text) {
+	public void setText(String text) {
 		Text=text;
 	}
 }

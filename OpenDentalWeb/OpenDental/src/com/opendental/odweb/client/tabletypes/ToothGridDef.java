@@ -6,6 +6,8 @@ import com.opendental.odweb.client.remoting.Serializing;
 public class ToothGridDef {
 		/** Primary key. */
 		public int ToothGridDefNum;
+		/**  */
+		public int SheetFieldDefNum;
 		/** This is the internal name that OD uses to identify the column.  Blank if this is a user-defined column.  We will keep a hard-coded list of available NameInternals in the code to pick from. */
 		public String NameInternal;
 		/** The user may override the internal name for display purposes.  If this is a user-defined column, this is the only name, since there is no NameInternal. */
@@ -22,9 +24,10 @@ public class ToothGridDef {
 		public ProcStat ProcStatus;
 
 		/** Deep copy of object. */
-		public ToothGridDef Copy() {
+		public ToothGridDef deepCopy() {
 			ToothGridDef toothgriddef=new ToothGridDef();
 			toothgriddef.ToothGridDefNum=this.ToothGridDefNum;
+			toothgriddef.SheetFieldDefNum=this.SheetFieldDefNum;
 			toothgriddef.NameInternal=this.NameInternal;
 			toothgriddef.NameShowing=this.NameShowing;
 			toothgriddef.CellType=this.CellType;
@@ -36,12 +39,13 @@ public class ToothGridDef {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ToothGridDef>");
 			sb.append("<ToothGridDefNum>").append(ToothGridDefNum).append("</ToothGridDefNum>");
-			sb.append("<NameInternal>").append(Serializing.EscapeForXml(NameInternal)).append("</NameInternal>");
-			sb.append("<NameShowing>").append(Serializing.EscapeForXml(NameShowing)).append("</NameShowing>");
+			sb.append("<SheetFieldDefNum>").append(SheetFieldDefNum).append("</SheetFieldDefNum>");
+			sb.append("<NameInternal>").append(Serializing.escapeForXml(NameInternal)).append("</NameInternal>");
+			sb.append("<NameShowing>").append(Serializing.escapeForXml(NameShowing)).append("</NameShowing>");
 			sb.append("<CellType>").append(CellType.ordinal()).append("</CellType>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("<ColumnWidth>").append(ColumnWidth).append("</ColumnWidth>");
@@ -54,31 +58,34 @@ public class ToothGridDef {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ToothGridDefNum")!=null) {
-					ToothGridDefNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothGridDefNum"));
+				if(Serializing.getXmlNodeValue(doc,"ToothGridDefNum")!=null) {
+					ToothGridDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothGridDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NameInternal")!=null) {
-					NameInternal=Serializing.GetXmlNodeValue(doc,"NameInternal");
+				if(Serializing.getXmlNodeValue(doc,"SheetFieldDefNum")!=null) {
+					SheetFieldDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetFieldDefNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"NameShowing")!=null) {
-					NameShowing=Serializing.GetXmlNodeValue(doc,"NameShowing");
+				if(Serializing.getXmlNodeValue(doc,"NameInternal")!=null) {
+					NameInternal=Serializing.getXmlNodeValue(doc,"NameInternal");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CellType")!=null) {
-					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CellType"))];
+				if(Serializing.getXmlNodeValue(doc,"NameShowing")!=null) {
+					NameShowing=Serializing.getXmlNodeValue(doc,"NameShowing");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"CellType")!=null) {
+					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CellType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ColumnWidth")!=null) {
-					ColumnWidth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ColumnWidth"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"ColumnWidth")!=null) {
+					ColumnWidth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColumnWidth"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcStatus")!=null) {
-					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcStatus"))];
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"ProcStatus")!=null) {
+					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"))];
 				}
 			}
 			catch(Exception e) {

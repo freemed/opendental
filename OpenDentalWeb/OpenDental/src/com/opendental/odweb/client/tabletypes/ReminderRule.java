@@ -16,7 +16,7 @@ public class ReminderRule {
 		public String Message;
 
 		/** Deep copy of object. */
-		public ReminderRule Copy() {
+		public ReminderRule deepCopy() {
 			ReminderRule reminderrule=new ReminderRule();
 			reminderrule.ReminderRuleNum=this.ReminderRuleNum;
 			reminderrule.ReminderCriterion=this.ReminderCriterion;
@@ -27,14 +27,14 @@ public class ReminderRule {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ReminderRule>");
 			sb.append("<ReminderRuleNum>").append(ReminderRuleNum).append("</ReminderRuleNum>");
 			sb.append("<ReminderCriterion>").append(ReminderCriterion.ordinal()).append("</ReminderCriterion>");
 			sb.append("<CriterionFK>").append(CriterionFK).append("</CriterionFK>");
-			sb.append("<CriterionValue>").append(Serializing.EscapeForXml(CriterionValue)).append("</CriterionValue>");
-			sb.append("<Message>").append(Serializing.EscapeForXml(Message)).append("</Message>");
+			sb.append("<CriterionValue>").append(Serializing.escapeForXml(CriterionValue)).append("</CriterionValue>");
+			sb.append("<Message>").append(Serializing.escapeForXml(Message)).append("</Message>");
 			sb.append("</ReminderRule>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class ReminderRule {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ReminderRuleNum")!=null) {
-					ReminderRuleNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReminderRuleNum"));
+				if(Serializing.getXmlNodeValue(doc,"ReminderRuleNum")!=null) {
+					ReminderRuleNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReminderRuleNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ReminderCriterion")!=null) {
-					ReminderCriterion=EhrCriterion.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ReminderCriterion"))];
+				if(Serializing.getXmlNodeValue(doc,"ReminderCriterion")!=null) {
+					ReminderCriterion=EhrCriterion.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReminderCriterion"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CriterionFK")!=null) {
-					CriterionFK=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CriterionFK"));
+				if(Serializing.getXmlNodeValue(doc,"CriterionFK")!=null) {
+					CriterionFK=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CriterionFK"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CriterionValue")!=null) {
-					CriterionValue=Serializing.GetXmlNodeValue(doc,"CriterionValue");
+				if(Serializing.getXmlNodeValue(doc,"CriterionValue")!=null) {
+					CriterionValue=Serializing.getXmlNodeValue(doc,"CriterionValue");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Message")!=null) {
-					Message=Serializing.GetXmlNodeValue(doc,"Message");
+				if(Serializing.getXmlNodeValue(doc,"Message")!=null) {
+					Message=Serializing.getXmlNodeValue(doc,"Message");
 				}
 			}
 			catch(Exception e) {

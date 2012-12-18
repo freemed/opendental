@@ -28,7 +28,7 @@ public class PerioMeasure {
 		public int DLvalue;
 
 		/** Deep copy of object. */
-		public PerioMeasure Copy() {
+		public PerioMeasure deepCopy() {
 			PerioMeasure periomeasure=new PerioMeasure();
 			periomeasure.PerioMeasureNum=this.PerioMeasureNum;
 			periomeasure.PerioExamNum=this.PerioExamNum;
@@ -45,7 +45,7 @@ public class PerioMeasure {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<PerioMeasure>");
 			sb.append("<PerioMeasureNum>").append(PerioMeasureNum).append("</PerioMeasureNum>");
@@ -66,40 +66,40 @@ public class PerioMeasure {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"PerioMeasureNum")!=null) {
-					PerioMeasureNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PerioMeasureNum"));
+				if(Serializing.getXmlNodeValue(doc,"PerioMeasureNum")!=null) {
+					PerioMeasureNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PerioMeasureNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PerioExamNum")!=null) {
-					PerioExamNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PerioExamNum"));
+				if(Serializing.getXmlNodeValue(doc,"PerioExamNum")!=null) {
+					PerioExamNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PerioExamNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"SequenceType")!=null) {
-					SequenceType=PerioSequenceType.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SequenceType"))];
+				if(Serializing.getXmlNodeValue(doc,"SequenceType")!=null) {
+					SequenceType=PerioSequenceType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SequenceType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IntTooth")!=null) {
-					IntTooth=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"IntTooth"));
+				if(Serializing.getXmlNodeValue(doc,"IntTooth")!=null) {
+					IntTooth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"IntTooth"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ToothValue")!=null) {
-					ToothValue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ToothValue"));
+				if(Serializing.getXmlNodeValue(doc,"ToothValue")!=null) {
+					ToothValue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToothValue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MBvalue")!=null) {
-					MBvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MBvalue"));
+				if(Serializing.getXmlNodeValue(doc,"MBvalue")!=null) {
+					MBvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MBvalue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Bvalue")!=null) {
-					Bvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Bvalue"));
+				if(Serializing.getXmlNodeValue(doc,"Bvalue")!=null) {
+					Bvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Bvalue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DBvalue")!=null) {
-					DBvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DBvalue"));
+				if(Serializing.getXmlNodeValue(doc,"DBvalue")!=null) {
+					DBvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DBvalue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MLvalue")!=null) {
-					MLvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MLvalue"));
+				if(Serializing.getXmlNodeValue(doc,"MLvalue")!=null) {
+					MLvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MLvalue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Lvalue")!=null) {
-					Lvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"Lvalue"));
+				if(Serializing.getXmlNodeValue(doc,"Lvalue")!=null) {
+					Lvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Lvalue"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DLvalue")!=null) {
-					DLvalue=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"DLvalue"));
+				if(Serializing.getXmlNodeValue(doc,"DLvalue")!=null) {
+					DLvalue=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DLvalue"));
 				}
 			}
 			catch(Exception e) {

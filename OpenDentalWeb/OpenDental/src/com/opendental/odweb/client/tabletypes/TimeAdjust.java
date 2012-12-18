@@ -22,7 +22,7 @@ public class TimeAdjust {
 		public boolean IsAuto;
 
 		/** Deep copy of object. */
-		public TimeAdjust Copy() {
+		public TimeAdjust deepCopy() {
 			TimeAdjust timeadjust=new TimeAdjust();
 			timeadjust.TimeAdjustNum=this.TimeAdjustNum;
 			timeadjust.EmployeeNum=this.EmployeeNum;
@@ -35,15 +35,15 @@ public class TimeAdjust {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TimeAdjust>");
 			sb.append("<TimeAdjustNum>").append(TimeAdjustNum).append("</TimeAdjustNum>");
 			sb.append("<EmployeeNum>").append(EmployeeNum).append("</EmployeeNum>");
 			sb.append("<TimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(TimeEntry)).append("</TimeEntry>");
-			sb.append("<RegHours>").append(Serializing.EscapeForXml(RegHours)).append("</RegHours>");
-			sb.append("<OTimeHours>").append(Serializing.EscapeForXml(OTimeHours)).append("</OTimeHours>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<RegHours>").append(Serializing.escapeForXml(RegHours)).append("</RegHours>");
+			sb.append("<OTimeHours>").append(Serializing.escapeForXml(OTimeHours)).append("</OTimeHours>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("<IsAuto>").append((IsAuto)?1:0).append("</IsAuto>");
 			sb.append("</TimeAdjust>");
 			return sb.toString();
@@ -52,28 +52,28 @@ public class TimeAdjust {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TimeAdjustNum")!=null) {
-					TimeAdjustNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TimeAdjustNum"));
+				if(Serializing.getXmlNodeValue(doc,"TimeAdjustNum")!=null) {
+					TimeAdjustNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TimeAdjustNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EmployeeNum")!=null) {
-					EmployeeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EmployeeNum"));
+				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
+					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TimeEntry")!=null) {
-					TimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"TimeEntry"));
+				if(Serializing.getXmlNodeValue(doc,"TimeEntry")!=null) {
+					TimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeEntry"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"RegHours")!=null) {
-					RegHours=Serializing.GetXmlNodeValue(doc,"RegHours");
+				if(Serializing.getXmlNodeValue(doc,"RegHours")!=null) {
+					RegHours=Serializing.getXmlNodeValue(doc,"RegHours");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"OTimeHours")!=null) {
-					OTimeHours=Serializing.GetXmlNodeValue(doc,"OTimeHours");
+				if(Serializing.getXmlNodeValue(doc,"OTimeHours")!=null) {
+					OTimeHours=Serializing.getXmlNodeValue(doc,"OTimeHours");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"IsAuto")!=null) {
-					IsAuto=(Serializing.GetXmlNodeValue(doc,"IsAuto")=="0")?false:true;
+				if(Serializing.getXmlNodeValue(doc,"IsAuto")!=null) {
+					IsAuto=(Serializing.getXmlNodeValue(doc,"IsAuto")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

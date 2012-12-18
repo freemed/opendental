@@ -22,30 +22,30 @@ public class DataTransferObject {
 	}
 
 	/**  */
-	public String Serialize() {
+	public String serialize() {
 		StringBuilder xml=new StringBuilder();
 		//Header-------------------------------------------------------------------------------
 		xml.append("<?xml version=\"1.0\" encoding=\"utf-16\"?><"
-				+Serializing.EscapeForXml(Type)+" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+				+Serializing.escapeForXml(Type)+" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
 		//Credentials -------------------------------------------------------------------------
 		xml.append("<Credentials><Username>"
-				+Serializing.EscapeForXml(Credentials.Username)+"</Username><Password>"
-				+Serializing.EscapeForXml(Credentials.Password)+"</Password></Credentials>");
+				+Serializing.escapeForXml(Credentials.Username)+"</Username><Password>"
+				+Serializing.escapeForXml(Credentials.Password)+"</Password></Credentials>");
 		//MethodName---------------------------------------------------------------------------
 		xml.append("<MethodName>"
-				+Serializing.EscapeForXml(MethodName)+"</MethodName>");
+				+Serializing.escapeForXml(MethodName)+"</MethodName>");
 		//Parameters---------------------------------------------------------------------------
 		xml.append("<Params>");
 		for(int i=0;i<Params.length;i++) {//Loop through all the dto objects.
 			xml.append("<DtoObject>");
-			xml.append("<TypeName>"+Serializing.EscapeForXml(Params[i].TypeName)+"</TypeName>");
+			xml.append("<TypeName>"+Serializing.escapeForXml(Params[i].TypeName)+"</TypeName>");
 			xml.append("<Obj>");
 			xml.append(Params[i].ObjSerialized);//Already valid XML that does not need escaping.
 			xml.append("</Obj>");
 			xml.append("</DtoObject>");
 		}
 		xml.append("</Params>");
-		xml.append("</"+Serializing.EscapeForXml(Type)+">");//End of dto object.
+		xml.append("</"+Serializing.escapeForXml(Type)+">");//End of dto object.
 		return xml.toString();
 	}
 	

@@ -16,7 +16,7 @@ public class ProcCodeNote {
 		public String ProcTime;
 
 		/** Deep copy of object. */
-		public ProcCodeNote Copy() {
+		public ProcCodeNote deepCopy() {
 			ProcCodeNote proccodenote=new ProcCodeNote();
 			proccodenote.ProcCodeNoteNum=this.ProcCodeNoteNum;
 			proccodenote.CodeNum=this.CodeNum;
@@ -27,14 +27,14 @@ public class ProcCodeNote {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProcCodeNote>");
 			sb.append("<ProcCodeNoteNum>").append(ProcCodeNoteNum).append("</ProcCodeNoteNum>");
 			sb.append("<CodeNum>").append(CodeNum).append("</CodeNum>");
 			sb.append("<ProvNum>").append(ProvNum).append("</ProvNum>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
-			sb.append("<ProcTime>").append(Serializing.EscapeForXml(ProcTime)).append("</ProcTime>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<ProcTime>").append(Serializing.escapeForXml(ProcTime)).append("</ProcTime>");
 			sb.append("</ProcCodeNote>");
 			return sb.toString();
 		}
@@ -42,22 +42,22 @@ public class ProcCodeNote {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProcCodeNoteNum")!=null) {
-					ProcCodeNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcCodeNoteNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcCodeNoteNum")!=null) {
+					ProcCodeNoteNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcCodeNoteNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CodeNum")!=null) {
-					CodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"CodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"CodeNum")!=null) {
+					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcTime")!=null) {
-					ProcTime=Serializing.GetXmlNodeValue(doc,"ProcTime");
+				if(Serializing.getXmlNodeValue(doc,"ProcTime")!=null) {
+					ProcTime=Serializing.getXmlNodeValue(doc,"ProcTime");
 				}
 			}
 			catch(Exception e) {

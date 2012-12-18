@@ -24,7 +24,7 @@ public class SecurityLog {
 		public int FKey;
 
 		/** Deep copy of object. */
-		public SecurityLog Copy() {
+		public SecurityLog deepCopy() {
 			SecurityLog securitylog=new SecurityLog();
 			securitylog.SecurityLogNum=this.SecurityLogNum;
 			securitylog.PermType=this.PermType;
@@ -38,16 +38,16 @@ public class SecurityLog {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<SecurityLog>");
 			sb.append("<SecurityLogNum>").append(SecurityLogNum).append("</SecurityLogNum>");
 			sb.append("<PermType>").append(PermType.ordinal()).append("</PermType>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<LogDateTime>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(LogDateTime)).append("</LogDateTime>");
-			sb.append("<LogText>").append(Serializing.EscapeForXml(LogText)).append("</LogText>");
+			sb.append("<LogText>").append(Serializing.escapeForXml(LogText)).append("</LogText>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
-			sb.append("<CompName>").append(Serializing.EscapeForXml(CompName)).append("</CompName>");
+			sb.append("<CompName>").append(Serializing.escapeForXml(CompName)).append("</CompName>");
 			sb.append("<FKey>").append(FKey).append("</FKey>");
 			sb.append("</SecurityLog>");
 			return sb.toString();
@@ -56,31 +56,31 @@ public class SecurityLog {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"SecurityLogNum")!=null) {
-					SecurityLogNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"SecurityLogNum"));
+				if(Serializing.getXmlNodeValue(doc,"SecurityLogNum")!=null) {
+					SecurityLogNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SecurityLogNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PermType")!=null) {
-					PermType=Permissions.values()[Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PermType"))];
+				if(Serializing.getXmlNodeValue(doc,"PermType")!=null) {
+					PermType=Permissions.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PermType"))];
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LogDateTime")!=null) {
-					LogDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"LogDateTime"));
+				if(Serializing.getXmlNodeValue(doc,"LogDateTime")!=null) {
+					LogDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"LogDateTime"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"LogText")!=null) {
-					LogText=Serializing.GetXmlNodeValue(doc,"LogText");
+				if(Serializing.getXmlNodeValue(doc,"LogText")!=null) {
+					LogText=Serializing.getXmlNodeValue(doc,"LogText");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"CompName")!=null) {
-					CompName=Serializing.GetXmlNodeValue(doc,"CompName");
+				if(Serializing.getXmlNodeValue(doc,"CompName")!=null) {
+					CompName=Serializing.getXmlNodeValue(doc,"CompName");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"FKey")!=null) {
-					FKey=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"FKey"));
+				if(Serializing.getXmlNodeValue(doc,"FKey")!=null) {
+					FKey=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FKey"));
 				}
 			}
 			catch(Exception e) {

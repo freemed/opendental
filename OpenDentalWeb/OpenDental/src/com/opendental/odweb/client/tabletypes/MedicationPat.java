@@ -24,7 +24,7 @@ public class MedicationPat {
 		public int ProvNum;
 
 		/** Deep copy of object. */
-		public MedicationPat Copy() {
+		public MedicationPat deepCopy() {
 			MedicationPat medicationpat=new MedicationPat();
 			medicationpat.MedicationPatNum=this.MedicationPatNum;
 			medicationpat.PatNum=this.PatNum;
@@ -38,13 +38,13 @@ public class MedicationPat {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<MedicationPat>");
 			sb.append("<MedicationPatNum>").append(MedicationPatNum).append("</MedicationPatNum>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<MedicationNum>").append(MedicationNum).append("</MedicationNum>");
-			sb.append("<PatNote>").append(Serializing.EscapeForXml(PatNote)).append("</PatNote>");
+			sb.append("<PatNote>").append(Serializing.escapeForXml(PatNote)).append("</PatNote>");
 			sb.append("<DateTStamp>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTStamp)).append("</DateTStamp>");
 			sb.append("<DateStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStart)).append("</DateStart>");
 			sb.append("<DateStop>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateStop)).append("</DateStop>");
@@ -56,31 +56,31 @@ public class MedicationPat {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"MedicationPatNum")!=null) {
-					MedicationPatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationPatNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicationPatNum")!=null) {
+					MedicationPatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationPatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNum")!=null) {
-					PatNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PatNum"));
+				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
+					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MedicationNum")!=null) {
-					MedicationNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"MedicationNum"));
+				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
+					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PatNote")!=null) {
-					PatNote=Serializing.GetXmlNodeValue(doc,"PatNote");
+				if(Serializing.getXmlNodeValue(doc,"PatNote")!=null) {
+					PatNote=Serializing.getXmlNodeValue(doc,"PatNote");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTStamp")!=null) {
-					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTStamp"));
+				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
+					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStart")!=null) {
-					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStart"));
+				if(Serializing.getXmlNodeValue(doc,"DateStart")!=null) {
+					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStart"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateStop")!=null) {
-					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateStop"));
+				if(Serializing.getXmlNodeValue(doc,"DateStop")!=null) {
+					DateStop=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStop"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProvNum")!=null) {
-					ProvNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProvNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
+					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
 			}
 			catch(Exception e) {

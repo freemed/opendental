@@ -18,7 +18,7 @@ public class TaskNote {
 		public String Note;
 
 		/** Deep copy of object. */
-		public TaskNote Copy() {
+		public TaskNote deepCopy() {
 			TaskNote tasknote=new TaskNote();
 			tasknote.TaskNoteNum=this.TaskNoteNum;
 			tasknote.TaskNum=this.TaskNum;
@@ -29,14 +29,14 @@ public class TaskNote {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<TaskNote>");
 			sb.append("<TaskNoteNum>").append(TaskNoteNum).append("</TaskNoteNum>");
 			sb.append("<TaskNum>").append(TaskNum).append("</TaskNum>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<DateTimeNote>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeNote)).append("</DateTimeNote>");
-			sb.append("<Note>").append(Serializing.EscapeForXml(Note)).append("</Note>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
 			sb.append("</TaskNote>");
 			return sb.toString();
 		}
@@ -44,22 +44,22 @@ public class TaskNote {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"TaskNoteNum")!=null) {
-					TaskNoteNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNoteNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskNoteNum")!=null) {
+					TaskNoteNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskNoteNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"TaskNum")!=null) {
-					TaskNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"TaskNum"));
+				if(Serializing.getXmlNodeValue(doc,"TaskNum")!=null) {
+					TaskNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"UserNum")!=null) {
-					UserNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"UserNum"));
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"DateTimeNote")!=null) {
-					DateTimeNote=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.GetXmlNodeValue(doc,"DateTimeNote"));
+				if(Serializing.getXmlNodeValue(doc,"DateTimeNote")!=null) {
+					DateTimeNote=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeNote"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Note")!=null) {
-					Note=Serializing.GetXmlNodeValue(doc,"Note");
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {

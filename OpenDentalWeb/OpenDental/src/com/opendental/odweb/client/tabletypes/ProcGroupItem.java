@@ -12,7 +12,7 @@ public class ProcGroupItem {
 		public int GroupNum;
 
 		/** Deep copy of object. */
-		public ProcGroupItem Copy() {
+		public ProcGroupItem deepCopy() {
 			ProcGroupItem procgroupitem=new ProcGroupItem();
 			procgroupitem.ProcGroupItemNum=this.ProcGroupItemNum;
 			procgroupitem.ProcNum=this.ProcNum;
@@ -21,7 +21,7 @@ public class ProcGroupItem {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<ProcGroupItem>");
 			sb.append("<ProcGroupItemNum>").append(ProcGroupItemNum).append("</ProcGroupItemNum>");
@@ -34,16 +34,16 @@ public class ProcGroupItem {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"ProcGroupItemNum")!=null) {
-					ProcGroupItemNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcGroupItemNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcGroupItemNum")!=null) {
+					ProcGroupItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcGroupItemNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ProcNum")!=null) {
-					ProcNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ProcNum"));
+				if(Serializing.getXmlNodeValue(doc,"ProcNum")!=null) {
+					ProcNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"GroupNum")!=null) {
-					GroupNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"GroupNum"));
+				if(Serializing.getXmlNodeValue(doc,"GroupNum")!=null) {
+					GroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GroupNum"));
 				}
 			}
 			catch(Exception e) {

@@ -12,7 +12,7 @@ public class AccountingAutoPay {
 		public String PickList;
 
 		/** Deep copy of object. */
-		public AccountingAutoPay Copy() {
+		public AccountingAutoPay deepCopy() {
 			AccountingAutoPay accountingautopay=new AccountingAutoPay();
 			accountingautopay.AccountingAutoPayNum=this.AccountingAutoPayNum;
 			accountingautopay.PayType=this.PayType;
@@ -21,12 +21,12 @@ public class AccountingAutoPay {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<AccountingAutoPay>");
 			sb.append("<AccountingAutoPayNum>").append(AccountingAutoPayNum).append("</AccountingAutoPayNum>");
 			sb.append("<PayType>").append(PayType).append("</PayType>");
-			sb.append("<PickList>").append(Serializing.EscapeForXml(PickList)).append("</PickList>");
+			sb.append("<PickList>").append(Serializing.escapeForXml(PickList)).append("</PickList>");
 			sb.append("</AccountingAutoPay>");
 			return sb.toString();
 		}
@@ -34,16 +34,16 @@ public class AccountingAutoPay {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"AccountingAutoPayNum")!=null) {
-					AccountingAutoPayNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"AccountingAutoPayNum"));
+				if(Serializing.getXmlNodeValue(doc,"AccountingAutoPayNum")!=null) {
+					AccountingAutoPayNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AccountingAutoPayNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PayType")!=null) {
-					PayType=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"PayType"));
+				if(Serializing.getXmlNodeValue(doc,"PayType")!=null) {
+					PayType=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PayType"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"PickList")!=null) {
-					PickList=Serializing.GetXmlNodeValue(doc,"PickList");
+				if(Serializing.getXmlNodeValue(doc,"PickList")!=null) {
+					PickList=Serializing.getXmlNodeValue(doc,"PickList");
 				}
 			}
 			catch(Exception e) {

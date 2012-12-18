@@ -10,7 +10,7 @@ public class EtransMessageText {
 		public String MessageText;
 
 		/** Deep copy of object. */
-		public EtransMessageText Copy() {
+		public EtransMessageText deepCopy() {
 			EtransMessageText etransmessagetext=new EtransMessageText();
 			etransmessagetext.EtransMessageTextNum=this.EtransMessageTextNum;
 			etransmessagetext.MessageText=this.MessageText;
@@ -18,11 +18,11 @@ public class EtransMessageText {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EtransMessageText>");
 			sb.append("<EtransMessageTextNum>").append(EtransMessageTextNum).append("</EtransMessageTextNum>");
-			sb.append("<MessageText>").append(Serializing.EscapeForXml(MessageText)).append("</MessageText>");
+			sb.append("<MessageText>").append(Serializing.escapeForXml(MessageText)).append("</MessageText>");
 			sb.append("</EtransMessageText>");
 			return sb.toString();
 		}
@@ -30,13 +30,13 @@ public class EtransMessageText {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
-					EtransMessageTextNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"EtransMessageTextNum"));
+				if(Serializing.getXmlNodeValue(doc,"EtransMessageTextNum")!=null) {
+					EtransMessageTextNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EtransMessageTextNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"MessageText")!=null) {
-					MessageText=Serializing.GetXmlNodeValue(doc,"MessageText");
+				if(Serializing.getXmlNodeValue(doc,"MessageText")!=null) {
+					MessageText=Serializing.getXmlNodeValue(doc,"MessageText");
 				}
 			}
 			catch(Exception e) {

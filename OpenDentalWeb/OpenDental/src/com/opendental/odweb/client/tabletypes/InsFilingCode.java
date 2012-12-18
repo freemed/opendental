@@ -14,7 +14,7 @@ public class InsFilingCode {
 		public int ItemOrder;
 
 		/** Deep copy of object. */
-		public InsFilingCode Copy() {
+		public InsFilingCode deepCopy() {
 			InsFilingCode insfilingcode=new InsFilingCode();
 			insfilingcode.InsFilingCodeNum=this.InsFilingCodeNum;
 			insfilingcode.Descript=this.Descript;
@@ -24,12 +24,12 @@ public class InsFilingCode {
 		}
 
 		/** Serialize the object into XML. */
-		public String SerializeToXml() {
+		public String serialize() {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<InsFilingCode>");
 			sb.append("<InsFilingCodeNum>").append(InsFilingCodeNum).append("</InsFilingCodeNum>");
-			sb.append("<Descript>").append(Serializing.EscapeForXml(Descript)).append("</Descript>");
-			sb.append("<EclaimCode>").append(Serializing.EscapeForXml(EclaimCode)).append("</EclaimCode>");
+			sb.append("<Descript>").append(Serializing.escapeForXml(Descript)).append("</Descript>");
+			sb.append("<EclaimCode>").append(Serializing.escapeForXml(EclaimCode)).append("</EclaimCode>");
 			sb.append("<ItemOrder>").append(ItemOrder).append("</ItemOrder>");
 			sb.append("</InsFilingCode>");
 			return sb.toString();
@@ -38,19 +38,19 @@ public class InsFilingCode {
 		/** Sets all the variables on this object based on the values in the XML document.  Variables that are not in the XML document will be null or their default values.
 		 * @param doc A parsed XML document.  Must be valid XML.  Does not need to contain a node for every variable on this object.
 		 * @throws Exception DeserializeFromXml is entirely encased in a try catch and will throw exceptions if anything goes wrong. */
-		public void DeserializeFromXml(Document doc) throws Exception {
+		public void deserialize(Document doc) throws Exception {
 			try {
-				if(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
-					InsFilingCodeNum=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"InsFilingCodeNum"));
+				if(Serializing.getXmlNodeValue(doc,"InsFilingCodeNum")!=null) {
+					InsFilingCodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsFilingCodeNum"));
 				}
-				if(Serializing.GetXmlNodeValue(doc,"Descript")!=null) {
-					Descript=Serializing.GetXmlNodeValue(doc,"Descript");
+				if(Serializing.getXmlNodeValue(doc,"Descript")!=null) {
+					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"EclaimCode")!=null) {
-					EclaimCode=Serializing.GetXmlNodeValue(doc,"EclaimCode");
+				if(Serializing.getXmlNodeValue(doc,"EclaimCode")!=null) {
+					EclaimCode=Serializing.getXmlNodeValue(doc,"EclaimCode");
 				}
-				if(Serializing.GetXmlNodeValue(doc,"ItemOrder")!=null) {
-					ItemOrder=Integer.valueOf(Serializing.GetXmlNodeValue(doc,"ItemOrder"));
+				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
+					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
 			}
 			catch(Exception e) {

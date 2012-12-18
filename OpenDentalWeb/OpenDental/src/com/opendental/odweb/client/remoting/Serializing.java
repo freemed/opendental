@@ -12,7 +12,7 @@ import com.opendental.odweb.client.tabletypes.*;
 public class Serializing {
 
 	/** Escapes common characters used in XML. */
-	public static String EscapeForXml(String myString) {
+	public static String escapeForXml(String myString) {
 		StringBuilder strBuild=new StringBuilder();
 		int length=myString.length();
 		for(int i=0;i<length;i++) {
@@ -45,7 +45,7 @@ public class Serializing {
 	/** Loops through all the known objects and calls the corresponding classes serialize method.
 	 * @param obj Can be any type of object.  Error will occur if the type hasn't been implemented yet. 
 	 * @throws Exception Throws exception if type is not yet supported. */
-	public static String GetSerializedObject(Object obj) throws Exception {
+	public static String getSerializedObject(Object obj) throws Exception {
 		String result;
 		//Figure out what type of object we're dealing with and return the serialized form.
 		String qualifiedName=obj.getClass().getName();//Ex: ArrayList = "java.util.ArrayList"
@@ -85,648 +85,654 @@ public class Serializing {
 		//String[]  "[Ljava.lang.String;"
 		//Open Dental Objects-----------------------------------------------------------------------------------------------
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Account")) {
-			return ((Account)obj).SerializeToXml();
+			return ((Account)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AccountingAutoPay")) {
-			return ((AccountingAutoPay)obj).SerializeToXml();
+			return ((AccountingAutoPay)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Adjustment")) {
-			return ((Adjustment)obj).SerializeToXml();
+			return ((Adjustment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Allergy")) {
-			return ((Allergy)obj).SerializeToXml();
+			return ((Allergy)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AllergyDef")) {
-			return ((AllergyDef)obj).SerializeToXml();
+			return ((AllergyDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Appointment")) {
-			return ((Appointment)obj).SerializeToXml();
+			return ((Appointment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AppointmentRule")) {
-			return ((AppointmentRule)obj).SerializeToXml();
+			return ((AppointmentRule)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ApptField")) {
-			return ((ApptField)obj).SerializeToXml();
+			return ((ApptField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ApptFieldDef")) {
-			return ((ApptFieldDef)obj).SerializeToXml();
+			return ((ApptFieldDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ApptView")) {
-			return ((ApptView)obj).SerializeToXml();
+			return ((ApptView)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ApptViewItem")) {
-			return ((ApptViewItem)obj).SerializeToXml();
+			return ((ApptViewItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutoCode")) {
-			return ((AutoCode)obj).SerializeToXml();
+			return ((AutoCode)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutoCodeCond")) {
-			return ((AutoCodeCond)obj).SerializeToXml();
+			return ((AutoCodeCond)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutoCodeItem")) {
-			return ((AutoCodeItem)obj).SerializeToXml();
+			return ((AutoCodeItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Automation")) {
-			return ((Automation)obj).SerializeToXml();
+			return ((Automation)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutomationCondition")) {
-			return ((AutomationCondition)obj).SerializeToXml();
+			return ((AutomationCondition)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutoNote")) {
-			return ((AutoNote)obj).SerializeToXml();
+			return ((AutoNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.AutoNoteControl")) {
-			return ((AutoNoteControl)obj).SerializeToXml();
+			return ((AutoNoteControl)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Benefit")) {
-			return ((Benefit)obj).SerializeToXml();
+			return ((Benefit)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CanadianNetwork")) {
-			return ((CanadianNetwork)obj).SerializeToXml();
+			return ((CanadianNetwork)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Carrier")) {
-			return ((Carrier)obj).SerializeToXml();
+			return ((Carrier)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CentralConnection")) {
-			return ((CentralConnection)obj).SerializeToXml();
+			return ((CentralConnection)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ChartView")) {
-			return ((ChartView)obj).SerializeToXml();
+			return ((ChartView)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Claim")) {
-			return ((Claim)obj).SerializeToXml();
+			return ((Claim)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimAttach")) {
-			return ((ClaimAttach)obj).SerializeToXml();
+			return ((ClaimAttach)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimCondCodeLog")) {
-			return ((ClaimCondCodeLog)obj).SerializeToXml();
+			return ((ClaimCondCodeLog)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimForm")) {
-			return ((ClaimForm)obj).SerializeToXml();
+			return ((ClaimForm)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimFormItem")) {
-			return ((ClaimFormItem)obj).SerializeToXml();
+			return ((ClaimFormItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimPayment")) {
-			return ((ClaimPayment)obj).SerializeToXml();
+			return ((ClaimPayment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimProc")) {
-			return ((ClaimProc)obj).SerializeToXml();
+			return ((ClaimProc)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClaimValCodeLog")) {
-			return ((ClaimValCodeLog)obj).SerializeToXml();
+			return ((ClaimValCodeLog)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Clearinghouse")) {
-			return ((Clearinghouse)obj).SerializeToXml();
+			return ((Clearinghouse)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Clinic")) {
-			return ((Clinic)obj).SerializeToXml();
+			return ((Clinic)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ClockEvent")) {
-			return ((ClockEvent)obj).SerializeToXml();
+			return ((ClockEvent)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Commlog")) {
-			return ((Commlog)obj).SerializeToXml();
+			return ((Commlog)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Computer")) {
-			return ((Computer)obj).SerializeToXml();
+			return ((Computer)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ComputerPref")) {
-			return ((ComputerPref)obj).SerializeToXml();
+			return ((ComputerPref)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Contact")) {
-			return ((Contact)obj).SerializeToXml();
+			return ((Contact)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.County")) {
-			return ((County)obj).SerializeToXml();
+			return ((County)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CovCat")) {
-			return ((CovCat)obj).SerializeToXml();
+			return ((CovCat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CovSpan")) {
-			return ((CovSpan)obj).SerializeToXml();
+			return ((CovSpan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CreditCard")) {
-			return ((CreditCard)obj).SerializeToXml();
+			return ((CreditCard)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CustRefEntry")) {
-			return ((CustRefEntry)obj).SerializeToXml();
+			return ((CustRefEntry)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.CustReference")) {
-			return ((CustReference)obj).SerializeToXml();
+			return ((CustReference)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DashboardAR")) {
-			return ((DashboardAR)obj).SerializeToXml();
+			return ((DashboardAR)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Def")) {
-			return ((Def)obj).SerializeToXml();
+			return ((Def)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DeletedObject")) {
-			return ((DeletedObject)obj).SerializeToXml();
+			return ((DeletedObject)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Deposit")) {
-			return ((Deposit)obj).SerializeToXml();
+			return ((Deposit)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DictCustom")) {
-			return ((DictCustom)obj).SerializeToXml();
+			return ((DictCustom)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Disease")) {
-			return ((Disease)obj).SerializeToXml();
+			return ((Disease)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DiseaseDef")) {
-			return ((DiseaseDef)obj).SerializeToXml();
+			return ((DiseaseDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DisplayField")) {
-			return ((DisplayField)obj).SerializeToXml();
+			return ((DisplayField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Documentod")) {
-			return ((Documentod)obj).SerializeToXml();
+			return ((Documentod)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DocumentMisc")) {
-			return ((DocumentMisc)obj).SerializeToXml();
+			return ((DocumentMisc)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DrugManufacturer")) {
-			return ((DrugManufacturer)obj).SerializeToXml();
+			return ((DrugManufacturer)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.DrugUnit")) {
-			return ((DrugUnit)obj).SerializeToXml();
+			return ((DrugUnit)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Dunning")) {
-			return ((Dunning)obj).SerializeToXml();
+			return ((Dunning)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EduResource")) {
-			return ((EduResource)obj).SerializeToXml();
+			return ((EduResource)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EhrMeasure")) {
-			return ((EhrMeasure)obj).SerializeToXml();
+			return ((EhrMeasure)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EhrMeasureEvent")) {
-			return ((EhrMeasureEvent)obj).SerializeToXml();
+			return ((EhrMeasureEvent)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EhrProvKey")) {
-			return ((EhrProvKey)obj).SerializeToXml();
+			return ((EhrProvKey)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EhrQuarterlyKey")) {
-			return ((EhrQuarterlyKey)obj).SerializeToXml();
+			return ((EhrQuarterlyKey)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EhrSummaryCcd")) {
-			return ((EhrSummaryCcd)obj).SerializeToXml();
+			return ((EhrSummaryCcd)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ElectID")) {
-			return ((ElectID)obj).SerializeToXml();
+			return ((ElectID)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EmailAddress")) {
+			return ((EmailAddress)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EmailAttach")) {
-			return ((EmailAttach)obj).SerializeToXml();
+			return ((EmailAttach)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EmailMessage")) {
-			return ((EmailMessage)obj).SerializeToXml();
+			return ((EmailMessage)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EmailTemplate")) {
-			return ((EmailTemplate)obj).SerializeToXml();
+			return ((EmailTemplate)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Employee")) {
-			return ((Employee)obj).SerializeToXml();
+			return ((Employee)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Employer")) {
-			return ((Employer)obj).SerializeToXml();
+			return ((Employer)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EobAttach")) {
-			return ((EobAttach)obj).SerializeToXml();
+			return ((EobAttach)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Equipment")) {
-			return ((Equipment)obj).SerializeToXml();
+			return ((Equipment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ErxLog")) {
-			return ((ErxLog)obj).SerializeToXml();
+			return ((ErxLog)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Etrans")) {
-			return ((Etrans)obj).SerializeToXml();
+			return ((Etrans)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.EtransMessageText")) {
-			return ((EtransMessageText)obj).SerializeToXml();
+			return ((EtransMessageText)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Fee")) {
-			return ((Fee)obj).SerializeToXml();
+			return ((Fee)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.FeeSched")) {
-			return ((FeeSched)obj).SerializeToXml();
+			return ((FeeSched)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.FormPat")) {
-			return ((FormPat)obj).SerializeToXml();
+			return ((FormPat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Formulary")) {
-			return ((Formulary)obj).SerializeToXml();
+			return ((Formulary)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.FormularyMed")) {
-			return ((FormularyMed)obj).SerializeToXml();
+			return ((FormularyMed)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.GroupPermission")) {
-			return ((GroupPermission)obj).SerializeToXml();
+			return ((GroupPermission)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Guardian")) {
-			return ((Guardian)obj).SerializeToXml();
+			return ((Guardian)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.HL7Def")) {
-			return ((HL7Def)obj).SerializeToXml();
+			return ((HL7Def)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.HL7DefField")) {
-			return ((HL7DefField)obj).SerializeToXml();
+			return ((HL7DefField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.HL7DefMessage")) {
-			return ((HL7DefMessage)obj).SerializeToXml();
+			return ((HL7DefMessage)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.HL7DefSegment")) {
-			return ((HL7DefSegment)obj).SerializeToXml();
+			return ((HL7DefSegment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.HL7Msg")) {
-			return ((HL7Msg)obj).SerializeToXml();
+			return ((HL7Msg)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ICD9")) {
-			return ((ICD9)obj).SerializeToXml();
+			return ((ICD9)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.InsFilingCode")) {
-			return ((InsFilingCode)obj).SerializeToXml();
+			return ((InsFilingCode)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.InsFilingCodeSubtype")) {
-			return ((InsFilingCodeSubtype)obj).SerializeToXml();
+			return ((InsFilingCodeSubtype)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.InsPlan")) {
-			return ((InsPlan)obj).SerializeToXml();
+			return ((InsPlan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.InsSub")) {
-			return ((InsSub)obj).SerializeToXml();
+			return ((InsSub)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.InstallmentPlan")) {
-			return ((InstallmentPlan)obj).SerializeToXml();
+			return ((InstallmentPlan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.JournalEntry")) {
-			return ((JournalEntry)obj).SerializeToXml();
+			return ((JournalEntry)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LabCase")) {
-			return ((LabCase)obj).SerializeToXml();
+			return ((LabCase)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Laboratory")) {
-			return ((Laboratory)obj).SerializeToXml();
+			return ((Laboratory)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LabPanel")) {
-			return ((LabPanel)obj).SerializeToXml();
+			return ((LabPanel)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LabResult")) {
-			return ((LabResult)obj).SerializeToXml();
+			return ((LabResult)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LabTurnaround")) {
-			return ((LabTurnaround)obj).SerializeToXml();
+			return ((LabTurnaround)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Language")) {
-			return ((Language)obj).SerializeToXml();
+			return ((Language)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LanguageForeign")) {
-			return ((LanguageForeign)obj).SerializeToXml();
+			return ((LanguageForeign)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Letter")) {
-			return ((Letter)obj).SerializeToXml();
+			return ((Letter)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LetterMerge")) {
-			return ((LetterMerge)obj).SerializeToXml();
+			return ((LetterMerge)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LetterMergeField")) {
-			return ((LetterMergeField)obj).SerializeToXml();
+			return ((LetterMergeField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.MedicalOrder")) {
-			return ((MedicalOrder)obj).SerializeToXml();
+			return ((MedicalOrder)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Medication")) {
-			return ((Medication)obj).SerializeToXml();
+			return ((Medication)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.MedicationPat")) {
-			return ((MedicationPat)obj).SerializeToXml();
+			return ((MedicationPat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Mount")) {
-			return ((Mount)obj).SerializeToXml();
+			return ((Mount)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.MountDef")) {
-			return ((MountDef)obj).SerializeToXml();
+			return ((MountDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.MountItem")) {
-			return ((MountItem)obj).SerializeToXml();
+			return ((MountItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.MountItemDef")) {
-			return ((MountItemDef)obj).SerializeToXml();
+			return ((MountItemDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Operatory")) {
-			return ((Operatory)obj).SerializeToXml();
+			return ((Operatory)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.OrionProc")) {
-			return ((OrionProc)obj).SerializeToXml();
+			return ((OrionProc)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.OrthoChart")) {
-			return ((OrthoChart)obj).SerializeToXml();
+			return ((OrthoChart)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PatField")) {
-			return ((PatField)obj).SerializeToXml();
+			return ((PatField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PatFieldDef")) {
-			return ((PatFieldDef)obj).SerializeToXml();
+			return ((PatFieldDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Patient")) {
-			return ((Patient)obj).SerializeToXml();
+			return ((Patient)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PatientNote")) {
-			return ((PatientNote)obj).SerializeToXml();
+			return ((PatientNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PatPlan")) {
-			return ((PatPlan)obj).SerializeToXml();
+			return ((PatPlan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Payment")) {
-			return ((Payment)obj).SerializeToXml();
+			return ((Payment)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PayPeriod")) {
-			return ((PayPeriod)obj).SerializeToXml();
+			return ((PayPeriod)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PayPlan")) {
-			return ((PayPlan)obj).SerializeToXml();
+			return ((PayPlan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PayPlanCharge")) {
-			return ((PayPlanCharge)obj).SerializeToXml();
+			return ((PayPlanCharge)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PaySplit")) {
-			return ((PaySplit)obj).SerializeToXml();
+			return ((PaySplit)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PerioExam")) {
-			return ((PerioExam)obj).SerializeToXml();
+			return ((PerioExam)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PerioMeasure")) {
-			return ((PerioMeasure)obj).SerializeToXml();
+			return ((PerioMeasure)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Pharmacy")) {
-			return ((Pharmacy)obj).SerializeToXml();
+			return ((Pharmacy)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Phone")) {
-			return ((Phone)obj).SerializeToXml();
+			return ((Phone)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PhoneEmpDefault")) {
-			return ((PhoneEmpDefault)obj).SerializeToXml();
+			return ((PhoneEmpDefault)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PhoneMetric")) {
-			return ((PhoneMetric)obj).SerializeToXml();
+			return ((PhoneMetric)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PhoneNumber")) {
-			return ((PhoneNumber)obj).SerializeToXml();
+			return ((PhoneNumber)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.PlannedAppt")) {
-			return ((PlannedAppt)obj).SerializeToXml();
+			return ((PlannedAppt)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Popup")) {
-			return ((Popup)obj).SerializeToXml();
+			return ((Popup)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Pref")) {
-			return ((Pref)obj).SerializeToXml();
+			return ((Pref)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Printer")) {
-			return ((Printer)obj).SerializeToXml();
+			return ((Printer)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcApptColor")) {
-			return ((ProcApptColor)obj).SerializeToXml();
+			return ((ProcApptColor)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcButton")) {
-			return ((ProcButton)obj).SerializeToXml();
+			return ((ProcButton)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcButtonItem")) {
-			return ((ProcButtonItem)obj).SerializeToXml();
+			return ((ProcButtonItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcCodeNote")) {
-			return ((ProcCodeNote)obj).SerializeToXml();
+			return ((ProcCodeNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Procedure")) {
-			return ((Procedure)obj).SerializeToXml();
+			return ((Procedure)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcedureCode")) {
-			return ((ProcedureCode)obj).SerializeToXml();
+			return ((ProcedureCode)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcGroupItem")) {
-			return ((ProcGroupItem)obj).SerializeToXml();
+			return ((ProcGroupItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcNote")) {
-			return ((ProcNote)obj).SerializeToXml();
+			return ((ProcNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProcTP")) {
-			return ((ProcTP)obj).SerializeToXml();
+			return ((ProcTP)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Program")) {
-			return ((Program)obj).SerializeToXml();
+			return ((Program)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProgramProperty")) {
-			return ((ProgramProperty)obj).SerializeToXml();
+			return ((ProgramProperty)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Provider")) {
-			return ((Provider)obj).SerializeToXml();
+			return ((Provider)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ProviderIdent")) {
-			return ((ProviderIdent)obj).SerializeToXml();
+			return ((ProviderIdent)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Question")) {
-			return ((Question)obj).SerializeToXml();
+			return ((Question)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.QuestionDef")) {
-			return ((QuestionDef)obj).SerializeToXml();
+			return ((QuestionDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.QuickPasteCat")) {
-			return ((QuickPasteCat)obj).SerializeToXml();
+			return ((QuickPasteCat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.QuickPasteNote")) {
-			return ((QuickPasteNote)obj).SerializeToXml();
+			return ((QuickPasteNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Recall")) {
-			return ((Recall)obj).SerializeToXml();
+			return ((Recall)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RecallTrigger")) {
-			return ((RecallTrigger)obj).SerializeToXml();
+			return ((RecallTrigger)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RecallType")) {
-			return ((RecallType)obj).SerializeToXml();
+			return ((RecallType)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Reconcile")) {
-			return ((Reconcile)obj).SerializeToXml();
+			return ((Reconcile)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RefAttach")) {
-			return ((RefAttach)obj).SerializeToXml();
+			return ((RefAttach)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Referral")) {
-			return ((Referral)obj).SerializeToXml();
+			return ((Referral)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RegistrationKey")) {
-			return ((RegistrationKey)obj).SerializeToXml();
+			return ((RegistrationKey)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ReminderRule")) {
-			return ((ReminderRule)obj).SerializeToXml();
+			return ((ReminderRule)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RepeatCharge")) {
-			return ((RepeatCharge)obj).SerializeToXml();
+			return ((RepeatCharge)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ReplicationServer")) {
-			return ((ReplicationServer)obj).SerializeToXml();
+			return ((ReplicationServer)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ReqNeeded")) {
-			return ((ReqNeeded)obj).SerializeToXml();
+			return ((ReqNeeded)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ReqStudent")) {
-			return ((ReqStudent)obj).SerializeToXml();
+			return ((ReqStudent)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RxAlert")) {
-			return ((RxAlert)obj).SerializeToXml();
+			return ((RxAlert)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RxDef")) {
-			return ((RxDef)obj).SerializeToXml();
+			return ((RxDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RxNorm")) {
-			return ((RxNorm)obj).SerializeToXml();
+			return ((RxNorm)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.RxPat")) {
-			return ((RxPat)obj).SerializeToXml();
+			return ((RxPat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Schedule")) {
-			return ((Schedule)obj).SerializeToXml();
+			return ((Schedule)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ScheduleOp")) {
-			return ((ScheduleOp)obj).SerializeToXml();
+			return ((ScheduleOp)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SchoolClass")) {
-			return ((SchoolClass)obj).SerializeToXml();
+			return ((SchoolClass)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SchoolCourse")) {
-			return ((SchoolCourse)obj).SerializeToXml();
+			return ((SchoolCourse)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Screen")) {
-			return ((Screen)obj).SerializeToXml();
+			return ((Screen)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ScreenGroup")) {
-			return ((ScreenGroup)obj).SerializeToXml();
+			return ((ScreenGroup)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ScreenPat")) {
-			return ((ScreenPat)obj).SerializeToXml();
+			return ((ScreenPat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SecurityLog")) {
-			return ((SecurityLog)obj).SerializeToXml();
+			return ((SecurityLog)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Sheet")) {
-			return ((Sheet)obj).SerializeToXml();
+			return ((Sheet)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SheetDef")) {
-			return ((SheetDef)obj).SerializeToXml();
+			return ((SheetDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SheetField")) {
-			return ((SheetField)obj).SerializeToXml();
+			return ((SheetField)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SheetFieldDef")) {
-			return ((SheetFieldDef)obj).SerializeToXml();
+			return ((SheetFieldDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SigButDef")) {
-			return ((SigButDef)obj).SerializeToXml();
+			return ((SigButDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SigButDefElement")) {
-			return ((SigButDefElement)obj).SerializeToXml();
+			return ((SigButDefElement)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SigElement")) {
-			return ((SigElement)obj).SerializeToXml();
+			return ((SigElement)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SigElementDef")) {
-			return ((SigElementDef)obj).SerializeToXml();
+			return ((SigElementDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Signalod")) {
-			return ((Signalod)obj).SerializeToXml();
+			return ((Signalod)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Site")) {
-			return ((Site)obj).SerializeToXml();
+			return ((Site)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Statement")) {
-			return ((Statement)obj).SerializeToXml();
+			return ((Statement)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Supplier")) {
-			return ((Supplier)obj).SerializeToXml();
+			return ((Supplier)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Supply")) {
-			return ((Supply)obj).SerializeToXml();
+			return ((Supply)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SupplyNeeded")) {
-			return ((SupplyNeeded)obj).SerializeToXml();
+			return ((SupplyNeeded)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SupplyOrder")) {
-			return ((SupplyOrder)obj).SerializeToXml();
+			return ((SupplyOrder)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.SupplyOrderItem")) {
-			return ((SupplyOrderItem)obj).SerializeToXml();
+			return ((SupplyOrderItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Task")) {
-			return ((Task)obj).SerializeToXml();
+			return ((Task)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TaskAncestor")) {
-			return ((TaskAncestor)obj).SerializeToXml();
+			return ((TaskAncestor)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TaskList")) {
-			return ((TaskList)obj).SerializeToXml();
+			return ((TaskList)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TaskNote")) {
-			return ((TaskNote)obj).SerializeToXml();
+			return ((TaskNote)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TaskSubscription")) {
-			return ((TaskSubscription)obj).SerializeToXml();
+			return ((TaskSubscription)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TaskUnread")) {
-			return ((TaskUnread)obj).SerializeToXml();
+			return ((TaskUnread)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TerminalActive")) {
-			return ((TerminalActive)obj).SerializeToXml();
+			return ((TerminalActive)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TimeAdjust")) {
-			return ((TimeAdjust)obj).SerializeToXml();
+			return ((TimeAdjust)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TimeCardRule")) {
-			return ((TimeCardRule)obj).SerializeToXml();
+			return ((TimeCardRule)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ToolButItem")) {
-			return ((ToolButItem)obj).SerializeToXml();
+			return ((ToolButItem)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ToothGridCell")) {
-			return ((ToothGridCell)obj).SerializeToXml();
+			return ((ToothGridCell)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ToothGridCol")) {
-			return ((ToothGridCol)obj).SerializeToXml();
+			return ((ToothGridCol)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ToothGridDef")) {
-			return ((ToothGridDef)obj).SerializeToXml();
+			return ((ToothGridDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ToothInitial")) {
-			return ((ToothInitial)obj).SerializeToXml();
+			return ((ToothInitial)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Transaction")) {
-			return ((Transaction)obj).SerializeToXml();
+			return ((Transaction)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.TreatPlan")) {
-			return ((TreatPlan)obj).SerializeToXml();
+			return ((TreatPlan)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.UserGroup")) {
-			return ((UserGroup)obj).SerializeToXml();
+			return ((UserGroup)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Userod")) {
-			return ((Userod)obj).SerializeToXml();
+			return ((Userod)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.UserQuery")) {
-			return ((UserQuery)obj).SerializeToXml();
+			return ((UserQuery)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.VaccineDef")) {
-			return ((VaccineDef)obj).SerializeToXml();
+			return ((VaccineDef)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.VaccinePat")) {
-			return ((VaccinePat)obj).SerializeToXml();
+			return ((VaccinePat)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Vitalsign")) {
-			return ((Vitalsign)obj).SerializeToXml();
+			return ((Vitalsign)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.WikiPage")) {
+			return ((WikiPage)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ZipCode")) {
-			return ((ZipCode)obj).SerializeToXml();
+			return ((ZipCode)obj).serialize();
 		}
-		throw new Exception("GetSerializedObject, unsupported type: "+qualifiedName);
+		throw new Exception("getSerializedObject, unsupported type: "+qualifiedName);
 	}
 
 /** Do not make changes to this file.  This class is automatically generated by the CRUD, any changes will be overwritten.  To make changes, go to xCrudGeneratorWebService.Form1.cs and make the changes within StartJavaSerial(), MiddleJavaSerial(), and EndJavaSerial() */
@@ -734,12 +740,12 @@ public class Serializing {
 	/** Loops through all the known objects and calls the corresponding classes deserialize method.
 	 * @param xml The serialized response from the server.  Handles DtoExceptions.
 	 * @throws Exception Throws exception if type is not yet supported or if a DtoException was returned. */
-	public static Object GetDeserializedObject(String xml) throws Exception {
+	public static Object getDeserializedObject(String xml) throws Exception {
 		Document doc=XMLParser.parse(xml);
 		XMLParser.removeWhitespace(doc);
 		Element element=doc.getDocumentElement();
 		if(element==null) {
-			throw new Exception("GetDeserializedObject, the response from server was not valid XML.");
+			throw new Exception("getDeserializedObject, the response from server was not valid XML.");
 		}
 		//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>
 		String type=element.getNodeName();
@@ -776,1089 +782,1099 @@ public class Serializing {
 			return element.getFirstChild().getNodeValue();
 		}
 		if(type.equals("DataTable")) {
-			return DeserializeDataTable(element,new DataTable());
+			return deserializeDataTable(element,new DataTable());
 		}
 		if(type.startsWith("List&lt;")) {
-			return DeserializeList(doc);
+			return deserializeList(doc);
 		}
 		//Open Dental object-------------------------------------------------------------------------------------------------
-		Object result=DeserializeOpenDentalObject(type,doc);
+		Object result=deserializeOpenDentalObject(type,doc);
 		if(result!=null) {
 			return result;
 		}
-		throw new Exception("GetDeserializedObject, unsupported type: "+type);
+		throw new Exception("getDeserializedObject, unsupported type: "+type);
 	}
 
 	/** Pass in the type and just the xml for that object.  Returns null if no match found. */
-	private static Object DeserializeOpenDentalObject(String type,Document doc) throws Exception {
+	private static Object deserializeOpenDentalObject(String type,Document doc) throws Exception {
 		if(type.equals("Account")) {
 			Account account=new Account();
-			account.DeserializeFromXml(doc);
+			account.deserialize(doc);
 			return account;
 		}
 		if(type.equals("AccountingAutoPay")) {
 			AccountingAutoPay accountingautopay=new AccountingAutoPay();
-			accountingautopay.DeserializeFromXml(doc);
+			accountingautopay.deserialize(doc);
 			return accountingautopay;
 		}
 		if(type.equals("Adjustment")) {
 			Adjustment adjustment=new Adjustment();
-			adjustment.DeserializeFromXml(doc);
+			adjustment.deserialize(doc);
 			return adjustment;
 		}
 		if(type.equals("Allergy")) {
 			Allergy allergy=new Allergy();
-			allergy.DeserializeFromXml(doc);
+			allergy.deserialize(doc);
 			return allergy;
 		}
 		if(type.equals("AllergyDef")) {
 			AllergyDef allergydef=new AllergyDef();
-			allergydef.DeserializeFromXml(doc);
+			allergydef.deserialize(doc);
 			return allergydef;
 		}
 		if(type.equals("Appointment")) {
 			Appointment appointment=new Appointment();
-			appointment.DeserializeFromXml(doc);
+			appointment.deserialize(doc);
 			return appointment;
 		}
 		if(type.equals("AppointmentRule")) {
 			AppointmentRule appointmentrule=new AppointmentRule();
-			appointmentrule.DeserializeFromXml(doc);
+			appointmentrule.deserialize(doc);
 			return appointmentrule;
 		}
 		if(type.equals("ApptField")) {
 			ApptField apptfield=new ApptField();
-			apptfield.DeserializeFromXml(doc);
+			apptfield.deserialize(doc);
 			return apptfield;
 		}
 		if(type.equals("ApptFieldDef")) {
 			ApptFieldDef apptfielddef=new ApptFieldDef();
-			apptfielddef.DeserializeFromXml(doc);
+			apptfielddef.deserialize(doc);
 			return apptfielddef;
 		}
 		if(type.equals("ApptView")) {
 			ApptView apptview=new ApptView();
-			apptview.DeserializeFromXml(doc);
+			apptview.deserialize(doc);
 			return apptview;
 		}
 		if(type.equals("ApptViewItem")) {
 			ApptViewItem apptviewitem=new ApptViewItem();
-			apptviewitem.DeserializeFromXml(doc);
+			apptviewitem.deserialize(doc);
 			return apptviewitem;
 		}
 		if(type.equals("AutoCode")) {
 			AutoCode autocode=new AutoCode();
-			autocode.DeserializeFromXml(doc);
+			autocode.deserialize(doc);
 			return autocode;
 		}
 		if(type.equals("AutoCodeCond")) {
 			AutoCodeCond autocodecond=new AutoCodeCond();
-			autocodecond.DeserializeFromXml(doc);
+			autocodecond.deserialize(doc);
 			return autocodecond;
 		}
 		if(type.equals("AutoCodeItem")) {
 			AutoCodeItem autocodeitem=new AutoCodeItem();
-			autocodeitem.DeserializeFromXml(doc);
+			autocodeitem.deserialize(doc);
 			return autocodeitem;
 		}
 		if(type.equals("Automation")) {
 			Automation automation=new Automation();
-			automation.DeserializeFromXml(doc);
+			automation.deserialize(doc);
 			return automation;
 		}
 		if(type.equals("AutomationCondition")) {
 			AutomationCondition automationcondition=new AutomationCondition();
-			automationcondition.DeserializeFromXml(doc);
+			automationcondition.deserialize(doc);
 			return automationcondition;
 		}
 		if(type.equals("AutoNote")) {
 			AutoNote autonote=new AutoNote();
-			autonote.DeserializeFromXml(doc);
+			autonote.deserialize(doc);
 			return autonote;
 		}
 		if(type.equals("AutoNoteControl")) {
 			AutoNoteControl autonotecontrol=new AutoNoteControl();
-			autonotecontrol.DeserializeFromXml(doc);
+			autonotecontrol.deserialize(doc);
 			return autonotecontrol;
 		}
 		if(type.equals("Benefit")) {
 			Benefit benefit=new Benefit();
-			benefit.DeserializeFromXml(doc);
+			benefit.deserialize(doc);
 			return benefit;
 		}
 		if(type.equals("CanadianNetwork")) {
 			CanadianNetwork canadiannetwork=new CanadianNetwork();
-			canadiannetwork.DeserializeFromXml(doc);
+			canadiannetwork.deserialize(doc);
 			return canadiannetwork;
 		}
 		if(type.equals("Carrier")) {
 			Carrier carrier=new Carrier();
-			carrier.DeserializeFromXml(doc);
+			carrier.deserialize(doc);
 			return carrier;
 		}
 		if(type.equals("CentralConnection")) {
 			CentralConnection centralconnection=new CentralConnection();
-			centralconnection.DeserializeFromXml(doc);
+			centralconnection.deserialize(doc);
 			return centralconnection;
 		}
 		if(type.equals("ChartView")) {
 			ChartView chartview=new ChartView();
-			chartview.DeserializeFromXml(doc);
+			chartview.deserialize(doc);
 			return chartview;
 		}
 		if(type.equals("Claim")) {
 			Claim claim=new Claim();
-			claim.DeserializeFromXml(doc);
+			claim.deserialize(doc);
 			return claim;
 		}
 		if(type.equals("ClaimAttach")) {
 			ClaimAttach claimattach=new ClaimAttach();
-			claimattach.DeserializeFromXml(doc);
+			claimattach.deserialize(doc);
 			return claimattach;
 		}
 		if(type.equals("ClaimCondCodeLog")) {
 			ClaimCondCodeLog claimcondcodelog=new ClaimCondCodeLog();
-			claimcondcodelog.DeserializeFromXml(doc);
+			claimcondcodelog.deserialize(doc);
 			return claimcondcodelog;
 		}
 		if(type.equals("ClaimForm")) {
 			ClaimForm claimform=new ClaimForm();
-			claimform.DeserializeFromXml(doc);
+			claimform.deserialize(doc);
 			return claimform;
 		}
 		if(type.equals("ClaimFormItem")) {
 			ClaimFormItem claimformitem=new ClaimFormItem();
-			claimformitem.DeserializeFromXml(doc);
+			claimformitem.deserialize(doc);
 			return claimformitem;
 		}
 		if(type.equals("ClaimPayment")) {
 			ClaimPayment claimpayment=new ClaimPayment();
-			claimpayment.DeserializeFromXml(doc);
+			claimpayment.deserialize(doc);
 			return claimpayment;
 		}
 		if(type.equals("ClaimProc")) {
 			ClaimProc claimproc=new ClaimProc();
-			claimproc.DeserializeFromXml(doc);
+			claimproc.deserialize(doc);
 			return claimproc;
 		}
 		if(type.equals("ClaimValCodeLog")) {
 			ClaimValCodeLog claimvalcodelog=new ClaimValCodeLog();
-			claimvalcodelog.DeserializeFromXml(doc);
+			claimvalcodelog.deserialize(doc);
 			return claimvalcodelog;
 		}
 		if(type.equals("Clearinghouse")) {
 			Clearinghouse clearinghouse=new Clearinghouse();
-			clearinghouse.DeserializeFromXml(doc);
+			clearinghouse.deserialize(doc);
 			return clearinghouse;
 		}
 		if(type.equals("Clinic")) {
 			Clinic clinic=new Clinic();
-			clinic.DeserializeFromXml(doc);
+			clinic.deserialize(doc);
 			return clinic;
 		}
 		if(type.equals("ClockEvent")) {
 			ClockEvent clockevent=new ClockEvent();
-			clockevent.DeserializeFromXml(doc);
+			clockevent.deserialize(doc);
 			return clockevent;
 		}
 		if(type.equals("Commlog")) {
 			Commlog commlog=new Commlog();
-			commlog.DeserializeFromXml(doc);
+			commlog.deserialize(doc);
 			return commlog;
 		}
 		if(type.equals("Computer")) {
 			Computer computer=new Computer();
-			computer.DeserializeFromXml(doc);
+			computer.deserialize(doc);
 			return computer;
 		}
 		if(type.equals("ComputerPref")) {
 			ComputerPref computerpref=new ComputerPref();
-			computerpref.DeserializeFromXml(doc);
+			computerpref.deserialize(doc);
 			return computerpref;
 		}
 		if(type.equals("Contact")) {
 			Contact contact=new Contact();
-			contact.DeserializeFromXml(doc);
+			contact.deserialize(doc);
 			return contact;
 		}
 		if(type.equals("County")) {
 			County county=new County();
-			county.DeserializeFromXml(doc);
+			county.deserialize(doc);
 			return county;
 		}
 		if(type.equals("CovCat")) {
 			CovCat covcat=new CovCat();
-			covcat.DeserializeFromXml(doc);
+			covcat.deserialize(doc);
 			return covcat;
 		}
 		if(type.equals("CovSpan")) {
 			CovSpan covspan=new CovSpan();
-			covspan.DeserializeFromXml(doc);
+			covspan.deserialize(doc);
 			return covspan;
 		}
 		if(type.equals("CreditCard")) {
 			CreditCard creditcard=new CreditCard();
-			creditcard.DeserializeFromXml(doc);
+			creditcard.deserialize(doc);
 			return creditcard;
 		}
 		if(type.equals("CustRefEntry")) {
 			CustRefEntry custrefentry=new CustRefEntry();
-			custrefentry.DeserializeFromXml(doc);
+			custrefentry.deserialize(doc);
 			return custrefentry;
 		}
 		if(type.equals("CustReference")) {
 			CustReference custreference=new CustReference();
-			custreference.DeserializeFromXml(doc);
+			custreference.deserialize(doc);
 			return custreference;
 		}
 		if(type.equals("DashboardAR")) {
 			DashboardAR dashboardar=new DashboardAR();
-			dashboardar.DeserializeFromXml(doc);
+			dashboardar.deserialize(doc);
 			return dashboardar;
 		}
 		if(type.equals("Def")) {
 			Def def=new Def();
-			def.DeserializeFromXml(doc);
+			def.deserialize(doc);
 			return def;
 		}
 		if(type.equals("DeletedObject")) {
 			DeletedObject deletedobject=new DeletedObject();
-			deletedobject.DeserializeFromXml(doc);
+			deletedobject.deserialize(doc);
 			return deletedobject;
 		}
 		if(type.equals("Deposit")) {
 			Deposit deposit=new Deposit();
-			deposit.DeserializeFromXml(doc);
+			deposit.deserialize(doc);
 			return deposit;
 		}
 		if(type.equals("DictCustom")) {
 			DictCustom dictcustom=new DictCustom();
-			dictcustom.DeserializeFromXml(doc);
+			dictcustom.deserialize(doc);
 			return dictcustom;
 		}
 		if(type.equals("Disease")) {
 			Disease disease=new Disease();
-			disease.DeserializeFromXml(doc);
+			disease.deserialize(doc);
 			return disease;
 		}
 		if(type.equals("DiseaseDef")) {
 			DiseaseDef diseasedef=new DiseaseDef();
-			diseasedef.DeserializeFromXml(doc);
+			diseasedef.deserialize(doc);
 			return diseasedef;
 		}
 		if(type.equals("DisplayField")) {
 			DisplayField displayfield=new DisplayField();
-			displayfield.DeserializeFromXml(doc);
+			displayfield.deserialize(doc);
 			return displayfield;
 		}
 		if(type.equals("Documentod")) {
 			Documentod documentod=new Documentod();
-			documentod.DeserializeFromXml(doc);
+			documentod.deserialize(doc);
 			return documentod;
 		}
 		if(type.equals("DocumentMisc")) {
 			DocumentMisc documentmisc=new DocumentMisc();
-			documentmisc.DeserializeFromXml(doc);
+			documentmisc.deserialize(doc);
 			return documentmisc;
 		}
 		if(type.equals("DrugManufacturer")) {
 			DrugManufacturer drugmanufacturer=new DrugManufacturer();
-			drugmanufacturer.DeserializeFromXml(doc);
+			drugmanufacturer.deserialize(doc);
 			return drugmanufacturer;
 		}
 		if(type.equals("DrugUnit")) {
 			DrugUnit drugunit=new DrugUnit();
-			drugunit.DeserializeFromXml(doc);
+			drugunit.deserialize(doc);
 			return drugunit;
 		}
 		if(type.equals("Dunning")) {
 			Dunning dunning=new Dunning();
-			dunning.DeserializeFromXml(doc);
+			dunning.deserialize(doc);
 			return dunning;
 		}
 		if(type.equals("EduResource")) {
 			EduResource eduresource=new EduResource();
-			eduresource.DeserializeFromXml(doc);
+			eduresource.deserialize(doc);
 			return eduresource;
 		}
 		if(type.equals("EhrMeasure")) {
 			EhrMeasure ehrmeasure=new EhrMeasure();
-			ehrmeasure.DeserializeFromXml(doc);
+			ehrmeasure.deserialize(doc);
 			return ehrmeasure;
 		}
 		if(type.equals("EhrMeasureEvent")) {
 			EhrMeasureEvent ehrmeasureevent=new EhrMeasureEvent();
-			ehrmeasureevent.DeserializeFromXml(doc);
+			ehrmeasureevent.deserialize(doc);
 			return ehrmeasureevent;
 		}
 		if(type.equals("EhrProvKey")) {
 			EhrProvKey ehrprovkey=new EhrProvKey();
-			ehrprovkey.DeserializeFromXml(doc);
+			ehrprovkey.deserialize(doc);
 			return ehrprovkey;
 		}
 		if(type.equals("EhrQuarterlyKey")) {
 			EhrQuarterlyKey ehrquarterlykey=new EhrQuarterlyKey();
-			ehrquarterlykey.DeserializeFromXml(doc);
+			ehrquarterlykey.deserialize(doc);
 			return ehrquarterlykey;
 		}
 		if(type.equals("EhrSummaryCcd")) {
 			EhrSummaryCcd ehrsummaryccd=new EhrSummaryCcd();
-			ehrsummaryccd.DeserializeFromXml(doc);
+			ehrsummaryccd.deserialize(doc);
 			return ehrsummaryccd;
 		}
 		if(type.equals("ElectID")) {
 			ElectID electid=new ElectID();
-			electid.DeserializeFromXml(doc);
+			electid.deserialize(doc);
 			return electid;
+		}
+		if(type.equals("EmailAddress")) {
+			EmailAddress emailaddress=new EmailAddress();
+			emailaddress.deserialize(doc);
+			return emailaddress;
 		}
 		if(type.equals("EmailAttach")) {
 			EmailAttach emailattach=new EmailAttach();
-			emailattach.DeserializeFromXml(doc);
+			emailattach.deserialize(doc);
 			return emailattach;
 		}
 		if(type.equals("EmailMessage")) {
 			EmailMessage emailmessage=new EmailMessage();
-			emailmessage.DeserializeFromXml(doc);
+			emailmessage.deserialize(doc);
 			return emailmessage;
 		}
 		if(type.equals("EmailTemplate")) {
 			EmailTemplate emailtemplate=new EmailTemplate();
-			emailtemplate.DeserializeFromXml(doc);
+			emailtemplate.deserialize(doc);
 			return emailtemplate;
 		}
 		if(type.equals("Employee")) {
 			Employee employee=new Employee();
-			employee.DeserializeFromXml(doc);
+			employee.deserialize(doc);
 			return employee;
 		}
 		if(type.equals("Employer")) {
 			Employer employer=new Employer();
-			employer.DeserializeFromXml(doc);
+			employer.deserialize(doc);
 			return employer;
 		}
 		if(type.equals("EobAttach")) {
 			EobAttach eobattach=new EobAttach();
-			eobattach.DeserializeFromXml(doc);
+			eobattach.deserialize(doc);
 			return eobattach;
 		}
 		if(type.equals("Equipment")) {
 			Equipment equipment=new Equipment();
-			equipment.DeserializeFromXml(doc);
+			equipment.deserialize(doc);
 			return equipment;
 		}
 		if(type.equals("ErxLog")) {
 			ErxLog erxlog=new ErxLog();
-			erxlog.DeserializeFromXml(doc);
+			erxlog.deserialize(doc);
 			return erxlog;
 		}
 		if(type.equals("Etrans")) {
 			Etrans etrans=new Etrans();
-			etrans.DeserializeFromXml(doc);
+			etrans.deserialize(doc);
 			return etrans;
 		}
 		if(type.equals("EtransMessageText")) {
 			EtransMessageText etransmessagetext=new EtransMessageText();
-			etransmessagetext.DeserializeFromXml(doc);
+			etransmessagetext.deserialize(doc);
 			return etransmessagetext;
 		}
 		if(type.equals("Fee")) {
 			Fee fee=new Fee();
-			fee.DeserializeFromXml(doc);
+			fee.deserialize(doc);
 			return fee;
 		}
 		if(type.equals("FeeSched")) {
 			FeeSched feesched=new FeeSched();
-			feesched.DeserializeFromXml(doc);
+			feesched.deserialize(doc);
 			return feesched;
 		}
 		if(type.equals("FormPat")) {
 			FormPat formpat=new FormPat();
-			formpat.DeserializeFromXml(doc);
+			formpat.deserialize(doc);
 			return formpat;
 		}
 		if(type.equals("Formulary")) {
 			Formulary formulary=new Formulary();
-			formulary.DeserializeFromXml(doc);
+			formulary.deserialize(doc);
 			return formulary;
 		}
 		if(type.equals("FormularyMed")) {
 			FormularyMed formularymed=new FormularyMed();
-			formularymed.DeserializeFromXml(doc);
+			formularymed.deserialize(doc);
 			return formularymed;
 		}
 		if(type.equals("GroupPermission")) {
 			GroupPermission grouppermission=new GroupPermission();
-			grouppermission.DeserializeFromXml(doc);
+			grouppermission.deserialize(doc);
 			return grouppermission;
 		}
 		if(type.equals("Guardian")) {
 			Guardian guardian=new Guardian();
-			guardian.DeserializeFromXml(doc);
+			guardian.deserialize(doc);
 			return guardian;
 		}
 		if(type.equals("HL7Def")) {
 			HL7Def hl7def=new HL7Def();
-			hl7def.DeserializeFromXml(doc);
+			hl7def.deserialize(doc);
 			return hl7def;
 		}
 		if(type.equals("HL7DefField")) {
 			HL7DefField hl7deffield=new HL7DefField();
-			hl7deffield.DeserializeFromXml(doc);
+			hl7deffield.deserialize(doc);
 			return hl7deffield;
 		}
 		if(type.equals("HL7DefMessage")) {
 			HL7DefMessage hl7defmessage=new HL7DefMessage();
-			hl7defmessage.DeserializeFromXml(doc);
+			hl7defmessage.deserialize(doc);
 			return hl7defmessage;
 		}
 		if(type.equals("HL7DefSegment")) {
 			HL7DefSegment hl7defsegment=new HL7DefSegment();
-			hl7defsegment.DeserializeFromXml(doc);
+			hl7defsegment.deserialize(doc);
 			return hl7defsegment;
 		}
 		if(type.equals("HL7Msg")) {
 			HL7Msg hl7msg=new HL7Msg();
-			hl7msg.DeserializeFromXml(doc);
+			hl7msg.deserialize(doc);
 			return hl7msg;
 		}
 		if(type.equals("ICD9")) {
 			ICD9 icd9=new ICD9();
-			icd9.DeserializeFromXml(doc);
+			icd9.deserialize(doc);
 			return icd9;
 		}
 		if(type.equals("InsFilingCode")) {
 			InsFilingCode insfilingcode=new InsFilingCode();
-			insfilingcode.DeserializeFromXml(doc);
+			insfilingcode.deserialize(doc);
 			return insfilingcode;
 		}
 		if(type.equals("InsFilingCodeSubtype")) {
 			InsFilingCodeSubtype insfilingcodesubtype=new InsFilingCodeSubtype();
-			insfilingcodesubtype.DeserializeFromXml(doc);
+			insfilingcodesubtype.deserialize(doc);
 			return insfilingcodesubtype;
 		}
 		if(type.equals("InsPlan")) {
 			InsPlan insplan=new InsPlan();
-			insplan.DeserializeFromXml(doc);
+			insplan.deserialize(doc);
 			return insplan;
 		}
 		if(type.equals("InsSub")) {
 			InsSub inssub=new InsSub();
-			inssub.DeserializeFromXml(doc);
+			inssub.deserialize(doc);
 			return inssub;
 		}
 		if(type.equals("InstallmentPlan")) {
 			InstallmentPlan installmentplan=new InstallmentPlan();
-			installmentplan.DeserializeFromXml(doc);
+			installmentplan.deserialize(doc);
 			return installmentplan;
 		}
 		if(type.equals("JournalEntry")) {
 			JournalEntry journalentry=new JournalEntry();
-			journalentry.DeserializeFromXml(doc);
+			journalentry.deserialize(doc);
 			return journalentry;
 		}
 		if(type.equals("LabCase")) {
 			LabCase labcase=new LabCase();
-			labcase.DeserializeFromXml(doc);
+			labcase.deserialize(doc);
 			return labcase;
 		}
 		if(type.equals("Laboratory")) {
 			Laboratory laboratory=new Laboratory();
-			laboratory.DeserializeFromXml(doc);
+			laboratory.deserialize(doc);
 			return laboratory;
 		}
 		if(type.equals("LabPanel")) {
 			LabPanel labpanel=new LabPanel();
-			labpanel.DeserializeFromXml(doc);
+			labpanel.deserialize(doc);
 			return labpanel;
 		}
 		if(type.equals("LabResult")) {
 			LabResult labresult=new LabResult();
-			labresult.DeserializeFromXml(doc);
+			labresult.deserialize(doc);
 			return labresult;
 		}
 		if(type.equals("LabTurnaround")) {
 			LabTurnaround labturnaround=new LabTurnaround();
-			labturnaround.DeserializeFromXml(doc);
+			labturnaround.deserialize(doc);
 			return labturnaround;
 		}
 		if(type.equals("Language")) {
 			Language language=new Language();
-			language.DeserializeFromXml(doc);
+			language.deserialize(doc);
 			return language;
 		}
 		if(type.equals("LanguageForeign")) {
 			LanguageForeign languageforeign=new LanguageForeign();
-			languageforeign.DeserializeFromXml(doc);
+			languageforeign.deserialize(doc);
 			return languageforeign;
 		}
 		if(type.equals("Letter")) {
 			Letter letter=new Letter();
-			letter.DeserializeFromXml(doc);
+			letter.deserialize(doc);
 			return letter;
 		}
 		if(type.equals("LetterMerge")) {
 			LetterMerge lettermerge=new LetterMerge();
-			lettermerge.DeserializeFromXml(doc);
+			lettermerge.deserialize(doc);
 			return lettermerge;
 		}
 		if(type.equals("LetterMergeField")) {
 			LetterMergeField lettermergefield=new LetterMergeField();
-			lettermergefield.DeserializeFromXml(doc);
+			lettermergefield.deserialize(doc);
 			return lettermergefield;
 		}
 		if(type.equals("MedicalOrder")) {
 			MedicalOrder medicalorder=new MedicalOrder();
-			medicalorder.DeserializeFromXml(doc);
+			medicalorder.deserialize(doc);
 			return medicalorder;
 		}
 		if(type.equals("Medication")) {
 			Medication medication=new Medication();
-			medication.DeserializeFromXml(doc);
+			medication.deserialize(doc);
 			return medication;
 		}
 		if(type.equals("MedicationPat")) {
 			MedicationPat medicationpat=new MedicationPat();
-			medicationpat.DeserializeFromXml(doc);
+			medicationpat.deserialize(doc);
 			return medicationpat;
 		}
 		if(type.equals("Mount")) {
 			Mount mount=new Mount();
-			mount.DeserializeFromXml(doc);
+			mount.deserialize(doc);
 			return mount;
 		}
 		if(type.equals("MountDef")) {
 			MountDef mountdef=new MountDef();
-			mountdef.DeserializeFromXml(doc);
+			mountdef.deserialize(doc);
 			return mountdef;
 		}
 		if(type.equals("MountItem")) {
 			MountItem mountitem=new MountItem();
-			mountitem.DeserializeFromXml(doc);
+			mountitem.deserialize(doc);
 			return mountitem;
 		}
 		if(type.equals("MountItemDef")) {
 			MountItemDef mountitemdef=new MountItemDef();
-			mountitemdef.DeserializeFromXml(doc);
+			mountitemdef.deserialize(doc);
 			return mountitemdef;
 		}
 		if(type.equals("Operatory")) {
 			Operatory operatory=new Operatory();
-			operatory.DeserializeFromXml(doc);
+			operatory.deserialize(doc);
 			return operatory;
 		}
 		if(type.equals("OrionProc")) {
 			OrionProc orionproc=new OrionProc();
-			orionproc.DeserializeFromXml(doc);
+			orionproc.deserialize(doc);
 			return orionproc;
 		}
 		if(type.equals("OrthoChart")) {
 			OrthoChart orthochart=new OrthoChart();
-			orthochart.DeserializeFromXml(doc);
+			orthochart.deserialize(doc);
 			return orthochart;
 		}
 		if(type.equals("PatField")) {
 			PatField patfield=new PatField();
-			patfield.DeserializeFromXml(doc);
+			patfield.deserialize(doc);
 			return patfield;
 		}
 		if(type.equals("PatFieldDef")) {
 			PatFieldDef patfielddef=new PatFieldDef();
-			patfielddef.DeserializeFromXml(doc);
+			patfielddef.deserialize(doc);
 			return patfielddef;
 		}
 		if(type.equals("Patient")) {
 			Patient patient=new Patient();
-			patient.DeserializeFromXml(doc);
+			patient.deserialize(doc);
 			return patient;
 		}
 		if(type.equals("PatientNote")) {
 			PatientNote patientnote=new PatientNote();
-			patientnote.DeserializeFromXml(doc);
+			patientnote.deserialize(doc);
 			return patientnote;
 		}
 		if(type.equals("PatPlan")) {
 			PatPlan patplan=new PatPlan();
-			patplan.DeserializeFromXml(doc);
+			patplan.deserialize(doc);
 			return patplan;
 		}
 		if(type.equals("Payment")) {
 			Payment payment=new Payment();
-			payment.DeserializeFromXml(doc);
+			payment.deserialize(doc);
 			return payment;
 		}
 		if(type.equals("PayPeriod")) {
 			PayPeriod payperiod=new PayPeriod();
-			payperiod.DeserializeFromXml(doc);
+			payperiod.deserialize(doc);
 			return payperiod;
 		}
 		if(type.equals("PayPlan")) {
 			PayPlan payplan=new PayPlan();
-			payplan.DeserializeFromXml(doc);
+			payplan.deserialize(doc);
 			return payplan;
 		}
 		if(type.equals("PayPlanCharge")) {
 			PayPlanCharge payplancharge=new PayPlanCharge();
-			payplancharge.DeserializeFromXml(doc);
+			payplancharge.deserialize(doc);
 			return payplancharge;
 		}
 		if(type.equals("PaySplit")) {
 			PaySplit paysplit=new PaySplit();
-			paysplit.DeserializeFromXml(doc);
+			paysplit.deserialize(doc);
 			return paysplit;
 		}
 		if(type.equals("PerioExam")) {
 			PerioExam perioexam=new PerioExam();
-			perioexam.DeserializeFromXml(doc);
+			perioexam.deserialize(doc);
 			return perioexam;
 		}
 		if(type.equals("PerioMeasure")) {
 			PerioMeasure periomeasure=new PerioMeasure();
-			periomeasure.DeserializeFromXml(doc);
+			periomeasure.deserialize(doc);
 			return periomeasure;
 		}
 		if(type.equals("Pharmacy")) {
 			Pharmacy pharmacy=new Pharmacy();
-			pharmacy.DeserializeFromXml(doc);
+			pharmacy.deserialize(doc);
 			return pharmacy;
 		}
 		if(type.equals("Phone")) {
 			Phone phone=new Phone();
-			phone.DeserializeFromXml(doc);
+			phone.deserialize(doc);
 			return phone;
 		}
 		if(type.equals("PhoneEmpDefault")) {
 			PhoneEmpDefault phoneempdefault=new PhoneEmpDefault();
-			phoneempdefault.DeserializeFromXml(doc);
+			phoneempdefault.deserialize(doc);
 			return phoneempdefault;
 		}
 		if(type.equals("PhoneMetric")) {
 			PhoneMetric phonemetric=new PhoneMetric();
-			phonemetric.DeserializeFromXml(doc);
+			phonemetric.deserialize(doc);
 			return phonemetric;
 		}
 		if(type.equals("PhoneNumber")) {
 			PhoneNumber phonenumber=new PhoneNumber();
-			phonenumber.DeserializeFromXml(doc);
+			phonenumber.deserialize(doc);
 			return phonenumber;
 		}
 		if(type.equals("PlannedAppt")) {
 			PlannedAppt plannedappt=new PlannedAppt();
-			plannedappt.DeserializeFromXml(doc);
+			plannedappt.deserialize(doc);
 			return plannedappt;
 		}
 		if(type.equals("Popup")) {
 			Popup popup=new Popup();
-			popup.DeserializeFromXml(doc);
+			popup.deserialize(doc);
 			return popup;
 		}
 		if(type.equals("Pref")) {
 			Pref pref=new Pref();
-			pref.DeserializeFromXml(doc);
+			pref.deserialize(doc);
 			return pref;
 		}
 		if(type.equals("Printer")) {
 			Printer printer=new Printer();
-			printer.DeserializeFromXml(doc);
+			printer.deserialize(doc);
 			return printer;
 		}
 		if(type.equals("ProcApptColor")) {
 			ProcApptColor procapptcolor=new ProcApptColor();
-			procapptcolor.DeserializeFromXml(doc);
+			procapptcolor.deserialize(doc);
 			return procapptcolor;
 		}
 		if(type.equals("ProcButton")) {
 			ProcButton procbutton=new ProcButton();
-			procbutton.DeserializeFromXml(doc);
+			procbutton.deserialize(doc);
 			return procbutton;
 		}
 		if(type.equals("ProcButtonItem")) {
 			ProcButtonItem procbuttonitem=new ProcButtonItem();
-			procbuttonitem.DeserializeFromXml(doc);
+			procbuttonitem.deserialize(doc);
 			return procbuttonitem;
 		}
 		if(type.equals("ProcCodeNote")) {
 			ProcCodeNote proccodenote=new ProcCodeNote();
-			proccodenote.DeserializeFromXml(doc);
+			proccodenote.deserialize(doc);
 			return proccodenote;
 		}
 		if(type.equals("Procedure")) {
 			Procedure procedure=new Procedure();
-			procedure.DeserializeFromXml(doc);
+			procedure.deserialize(doc);
 			return procedure;
 		}
 		if(type.equals("ProcedureCode")) {
 			ProcedureCode procedurecode=new ProcedureCode();
-			procedurecode.DeserializeFromXml(doc);
+			procedurecode.deserialize(doc);
 			return procedurecode;
 		}
 		if(type.equals("ProcGroupItem")) {
 			ProcGroupItem procgroupitem=new ProcGroupItem();
-			procgroupitem.DeserializeFromXml(doc);
+			procgroupitem.deserialize(doc);
 			return procgroupitem;
 		}
 		if(type.equals("ProcNote")) {
 			ProcNote procnote=new ProcNote();
-			procnote.DeserializeFromXml(doc);
+			procnote.deserialize(doc);
 			return procnote;
 		}
 		if(type.equals("ProcTP")) {
 			ProcTP proctp=new ProcTP();
-			proctp.DeserializeFromXml(doc);
+			proctp.deserialize(doc);
 			return proctp;
 		}
 		if(type.equals("Program")) {
 			Program program=new Program();
-			program.DeserializeFromXml(doc);
+			program.deserialize(doc);
 			return program;
 		}
 		if(type.equals("ProgramProperty")) {
 			ProgramProperty programproperty=new ProgramProperty();
-			programproperty.DeserializeFromXml(doc);
+			programproperty.deserialize(doc);
 			return programproperty;
 		}
 		if(type.equals("Provider")) {
 			Provider provider=new Provider();
-			provider.DeserializeFromXml(doc);
+			provider.deserialize(doc);
 			return provider;
 		}
 		if(type.equals("ProviderIdent")) {
 			ProviderIdent providerident=new ProviderIdent();
-			providerident.DeserializeFromXml(doc);
+			providerident.deserialize(doc);
 			return providerident;
 		}
 		if(type.equals("Question")) {
 			Question question=new Question();
-			question.DeserializeFromXml(doc);
+			question.deserialize(doc);
 			return question;
 		}
 		if(type.equals("QuestionDef")) {
 			QuestionDef questiondef=new QuestionDef();
-			questiondef.DeserializeFromXml(doc);
+			questiondef.deserialize(doc);
 			return questiondef;
 		}
 		if(type.equals("QuickPasteCat")) {
 			QuickPasteCat quickpastecat=new QuickPasteCat();
-			quickpastecat.DeserializeFromXml(doc);
+			quickpastecat.deserialize(doc);
 			return quickpastecat;
 		}
 		if(type.equals("QuickPasteNote")) {
 			QuickPasteNote quickpastenote=new QuickPasteNote();
-			quickpastenote.DeserializeFromXml(doc);
+			quickpastenote.deserialize(doc);
 			return quickpastenote;
 		}
 		if(type.equals("Recall")) {
 			Recall recall=new Recall();
-			recall.DeserializeFromXml(doc);
+			recall.deserialize(doc);
 			return recall;
 		}
 		if(type.equals("RecallTrigger")) {
 			RecallTrigger recalltrigger=new RecallTrigger();
-			recalltrigger.DeserializeFromXml(doc);
+			recalltrigger.deserialize(doc);
 			return recalltrigger;
 		}
 		if(type.equals("RecallType")) {
 			RecallType recalltype=new RecallType();
-			recalltype.DeserializeFromXml(doc);
+			recalltype.deserialize(doc);
 			return recalltype;
 		}
 		if(type.equals("Reconcile")) {
 			Reconcile reconcile=new Reconcile();
-			reconcile.DeserializeFromXml(doc);
+			reconcile.deserialize(doc);
 			return reconcile;
 		}
 		if(type.equals("RefAttach")) {
 			RefAttach refattach=new RefAttach();
-			refattach.DeserializeFromXml(doc);
+			refattach.deserialize(doc);
 			return refattach;
 		}
 		if(type.equals("Referral")) {
 			Referral referral=new Referral();
-			referral.DeserializeFromXml(doc);
+			referral.deserialize(doc);
 			return referral;
 		}
 		if(type.equals("RegistrationKey")) {
 			RegistrationKey registrationkey=new RegistrationKey();
-			registrationkey.DeserializeFromXml(doc);
+			registrationkey.deserialize(doc);
 			return registrationkey;
 		}
 		if(type.equals("ReminderRule")) {
 			ReminderRule reminderrule=new ReminderRule();
-			reminderrule.DeserializeFromXml(doc);
+			reminderrule.deserialize(doc);
 			return reminderrule;
 		}
 		if(type.equals("RepeatCharge")) {
 			RepeatCharge repeatcharge=new RepeatCharge();
-			repeatcharge.DeserializeFromXml(doc);
+			repeatcharge.deserialize(doc);
 			return repeatcharge;
 		}
 		if(type.equals("ReplicationServer")) {
 			ReplicationServer replicationserver=new ReplicationServer();
-			replicationserver.DeserializeFromXml(doc);
+			replicationserver.deserialize(doc);
 			return replicationserver;
 		}
 		if(type.equals("ReqNeeded")) {
 			ReqNeeded reqneeded=new ReqNeeded();
-			reqneeded.DeserializeFromXml(doc);
+			reqneeded.deserialize(doc);
 			return reqneeded;
 		}
 		if(type.equals("ReqStudent")) {
 			ReqStudent reqstudent=new ReqStudent();
-			reqstudent.DeserializeFromXml(doc);
+			reqstudent.deserialize(doc);
 			return reqstudent;
 		}
 		if(type.equals("RxAlert")) {
 			RxAlert rxalert=new RxAlert();
-			rxalert.DeserializeFromXml(doc);
+			rxalert.deserialize(doc);
 			return rxalert;
 		}
 		if(type.equals("RxDef")) {
 			RxDef rxdef=new RxDef();
-			rxdef.DeserializeFromXml(doc);
+			rxdef.deserialize(doc);
 			return rxdef;
 		}
 		if(type.equals("RxNorm")) {
 			RxNorm rxnorm=new RxNorm();
-			rxnorm.DeserializeFromXml(doc);
+			rxnorm.deserialize(doc);
 			return rxnorm;
 		}
 		if(type.equals("RxPat")) {
 			RxPat rxpat=new RxPat();
-			rxpat.DeserializeFromXml(doc);
+			rxpat.deserialize(doc);
 			return rxpat;
 		}
 		if(type.equals("Schedule")) {
 			Schedule schedule=new Schedule();
-			schedule.DeserializeFromXml(doc);
+			schedule.deserialize(doc);
 			return schedule;
 		}
 		if(type.equals("ScheduleOp")) {
 			ScheduleOp scheduleop=new ScheduleOp();
-			scheduleop.DeserializeFromXml(doc);
+			scheduleop.deserialize(doc);
 			return scheduleop;
 		}
 		if(type.equals("SchoolClass")) {
 			SchoolClass schoolclass=new SchoolClass();
-			schoolclass.DeserializeFromXml(doc);
+			schoolclass.deserialize(doc);
 			return schoolclass;
 		}
 		if(type.equals("SchoolCourse")) {
 			SchoolCourse schoolcourse=new SchoolCourse();
-			schoolcourse.DeserializeFromXml(doc);
+			schoolcourse.deserialize(doc);
 			return schoolcourse;
 		}
 		if(type.equals("Screen")) {
 			Screen screen=new Screen();
-			screen.DeserializeFromXml(doc);
+			screen.deserialize(doc);
 			return screen;
 		}
 		if(type.equals("ScreenGroup")) {
 			ScreenGroup screengroup=new ScreenGroup();
-			screengroup.DeserializeFromXml(doc);
+			screengroup.deserialize(doc);
 			return screengroup;
 		}
 		if(type.equals("ScreenPat")) {
 			ScreenPat screenpat=new ScreenPat();
-			screenpat.DeserializeFromXml(doc);
+			screenpat.deserialize(doc);
 			return screenpat;
 		}
 		if(type.equals("SecurityLog")) {
 			SecurityLog securitylog=new SecurityLog();
-			securitylog.DeserializeFromXml(doc);
+			securitylog.deserialize(doc);
 			return securitylog;
 		}
 		if(type.equals("Sheet")) {
 			Sheet sheet=new Sheet();
-			sheet.DeserializeFromXml(doc);
+			sheet.deserialize(doc);
 			return sheet;
 		}
 		if(type.equals("SheetDef")) {
 			SheetDef sheetdef=new SheetDef();
-			sheetdef.DeserializeFromXml(doc);
+			sheetdef.deserialize(doc);
 			return sheetdef;
 		}
 		if(type.equals("SheetField")) {
 			SheetField sheetfield=new SheetField();
-			sheetfield.DeserializeFromXml(doc);
+			sheetfield.deserialize(doc);
 			return sheetfield;
 		}
 		if(type.equals("SheetFieldDef")) {
 			SheetFieldDef sheetfielddef=new SheetFieldDef();
-			sheetfielddef.DeserializeFromXml(doc);
+			sheetfielddef.deserialize(doc);
 			return sheetfielddef;
 		}
 		if(type.equals("SigButDef")) {
 			SigButDef sigbutdef=new SigButDef();
-			sigbutdef.DeserializeFromXml(doc);
+			sigbutdef.deserialize(doc);
 			return sigbutdef;
 		}
 		if(type.equals("SigButDefElement")) {
 			SigButDefElement sigbutdefelement=new SigButDefElement();
-			sigbutdefelement.DeserializeFromXml(doc);
+			sigbutdefelement.deserialize(doc);
 			return sigbutdefelement;
 		}
 		if(type.equals("SigElement")) {
 			SigElement sigelement=new SigElement();
-			sigelement.DeserializeFromXml(doc);
+			sigelement.deserialize(doc);
 			return sigelement;
 		}
 		if(type.equals("SigElementDef")) {
 			SigElementDef sigelementdef=new SigElementDef();
-			sigelementdef.DeserializeFromXml(doc);
+			sigelementdef.deserialize(doc);
 			return sigelementdef;
 		}
 		if(type.equals("Signalod")) {
 			Signalod signalod=new Signalod();
-			signalod.DeserializeFromXml(doc);
+			signalod.deserialize(doc);
 			return signalod;
 		}
 		if(type.equals("Site")) {
 			Site site=new Site();
-			site.DeserializeFromXml(doc);
+			site.deserialize(doc);
 			return site;
 		}
 		if(type.equals("Statement")) {
 			Statement statement=new Statement();
-			statement.DeserializeFromXml(doc);
+			statement.deserialize(doc);
 			return statement;
 		}
 		if(type.equals("Supplier")) {
 			Supplier supplier=new Supplier();
-			supplier.DeserializeFromXml(doc);
+			supplier.deserialize(doc);
 			return supplier;
 		}
 		if(type.equals("Supply")) {
 			Supply supply=new Supply();
-			supply.DeserializeFromXml(doc);
+			supply.deserialize(doc);
 			return supply;
 		}
 		if(type.equals("SupplyNeeded")) {
 			SupplyNeeded supplyneeded=new SupplyNeeded();
-			supplyneeded.DeserializeFromXml(doc);
+			supplyneeded.deserialize(doc);
 			return supplyneeded;
 		}
 		if(type.equals("SupplyOrder")) {
 			SupplyOrder supplyorder=new SupplyOrder();
-			supplyorder.DeserializeFromXml(doc);
+			supplyorder.deserialize(doc);
 			return supplyorder;
 		}
 		if(type.equals("SupplyOrderItem")) {
 			SupplyOrderItem supplyorderitem=new SupplyOrderItem();
-			supplyorderitem.DeserializeFromXml(doc);
+			supplyorderitem.deserialize(doc);
 			return supplyorderitem;
 		}
 		if(type.equals("Task")) {
 			Task task=new Task();
-			task.DeserializeFromXml(doc);
+			task.deserialize(doc);
 			return task;
 		}
 		if(type.equals("TaskAncestor")) {
 			TaskAncestor taskancestor=new TaskAncestor();
-			taskancestor.DeserializeFromXml(doc);
+			taskancestor.deserialize(doc);
 			return taskancestor;
 		}
 		if(type.equals("TaskList")) {
 			TaskList tasklist=new TaskList();
-			tasklist.DeserializeFromXml(doc);
+			tasklist.deserialize(doc);
 			return tasklist;
 		}
 		if(type.equals("TaskNote")) {
 			TaskNote tasknote=new TaskNote();
-			tasknote.DeserializeFromXml(doc);
+			tasknote.deserialize(doc);
 			return tasknote;
 		}
 		if(type.equals("TaskSubscription")) {
 			TaskSubscription tasksubscription=new TaskSubscription();
-			tasksubscription.DeserializeFromXml(doc);
+			tasksubscription.deserialize(doc);
 			return tasksubscription;
 		}
 		if(type.equals("TaskUnread")) {
 			TaskUnread taskunread=new TaskUnread();
-			taskunread.DeserializeFromXml(doc);
+			taskunread.deserialize(doc);
 			return taskunread;
 		}
 		if(type.equals("TerminalActive")) {
 			TerminalActive terminalactive=new TerminalActive();
-			terminalactive.DeserializeFromXml(doc);
+			terminalactive.deserialize(doc);
 			return terminalactive;
 		}
 		if(type.equals("TimeAdjust")) {
 			TimeAdjust timeadjust=new TimeAdjust();
-			timeadjust.DeserializeFromXml(doc);
+			timeadjust.deserialize(doc);
 			return timeadjust;
 		}
 		if(type.equals("TimeCardRule")) {
 			TimeCardRule timecardrule=new TimeCardRule();
-			timecardrule.DeserializeFromXml(doc);
+			timecardrule.deserialize(doc);
 			return timecardrule;
 		}
 		if(type.equals("ToolButItem")) {
 			ToolButItem toolbutitem=new ToolButItem();
-			toolbutitem.DeserializeFromXml(doc);
+			toolbutitem.deserialize(doc);
 			return toolbutitem;
 		}
 		if(type.equals("ToothGridCell")) {
 			ToothGridCell toothgridcell=new ToothGridCell();
-			toothgridcell.DeserializeFromXml(doc);
+			toothgridcell.deserialize(doc);
 			return toothgridcell;
 		}
 		if(type.equals("ToothGridCol")) {
 			ToothGridCol toothgridcol=new ToothGridCol();
-			toothgridcol.DeserializeFromXml(doc);
+			toothgridcol.deserialize(doc);
 			return toothgridcol;
 		}
 		if(type.equals("ToothGridDef")) {
 			ToothGridDef toothgriddef=new ToothGridDef();
-			toothgriddef.DeserializeFromXml(doc);
+			toothgriddef.deserialize(doc);
 			return toothgriddef;
 		}
 		if(type.equals("ToothInitial")) {
 			ToothInitial toothinitial=new ToothInitial();
-			toothinitial.DeserializeFromXml(doc);
+			toothinitial.deserialize(doc);
 			return toothinitial;
 		}
 		if(type.equals("Transaction")) {
 			Transaction transaction=new Transaction();
-			transaction.DeserializeFromXml(doc);
+			transaction.deserialize(doc);
 			return transaction;
 		}
 		if(type.equals("TreatPlan")) {
 			TreatPlan treatplan=new TreatPlan();
-			treatplan.DeserializeFromXml(doc);
+			treatplan.deserialize(doc);
 			return treatplan;
 		}
 		if(type.equals("UserGroup")) {
 			UserGroup usergroup=new UserGroup();
-			usergroup.DeserializeFromXml(doc);
+			usergroup.deserialize(doc);
 			return usergroup;
 		}
 		if(type.equals("Userod")) {
 			Userod userod=new Userod();
-			userod.DeserializeFromXml(doc);
+			userod.deserialize(doc);
 			return userod;
 		}
 		if(type.equals("UserQuery")) {
 			UserQuery userquery=new UserQuery();
-			userquery.DeserializeFromXml(doc);
+			userquery.deserialize(doc);
 			return userquery;
 		}
 		if(type.equals("VaccineDef")) {
 			VaccineDef vaccinedef=new VaccineDef();
-			vaccinedef.DeserializeFromXml(doc);
+			vaccinedef.deserialize(doc);
 			return vaccinedef;
 		}
 		if(type.equals("VaccinePat")) {
 			VaccinePat vaccinepat=new VaccinePat();
-			vaccinepat.DeserializeFromXml(doc);
+			vaccinepat.deserialize(doc);
 			return vaccinepat;
 		}
 		if(type.equals("Vitalsign")) {
 			Vitalsign vitalsign=new Vitalsign();
-			vitalsign.DeserializeFromXml(doc);
+			vitalsign.deserialize(doc);
 			return vitalsign;
+		}
+		if(type.equals("WikiPage")) {
+			WikiPage wikipage=new WikiPage();
+			wikipage.deserialize(doc);
+			return wikipage;
 		}
 		if(type.equals("ZipCode")) {
 			ZipCode zipcode=new ZipCode();
-			zipcode.DeserializeFromXml(doc);
+			zipcode.deserialize(doc);
 			return zipcode;
 		}
 		return null;
@@ -1868,21 +1884,21 @@ public class Serializing {
 
 	/** Pass in the entire xml response and this method will return a deserialized ArrayList.
 	 * @throws Exception Throws exception if the list cannot be deserialized. */
-	private static Object DeserializeList(Document doc) throws Exception {
+	private static Object deserializeList(Document doc) throws Exception {
 		// TODO Figure out how to deserialize list objects without reflection here.
-		throw new Exception("DeserializeList, error deserializing list.");
+		throw new Exception("deserializeList, error deserializing list.");
 	}
 
 	/** Pass in a node from the response and this method will use recursion to digest the entire XML and return a deserialized DataTable. */
-	private static DataTable DeserializeDataTable(Node node,DataTable table) {
+	private static DataTable deserializeDataTable(Node node,DataTable table) {
 		String nodeName=node.getNodeName();
 		if(node.getNodeType()!=Node.TEXT_NODE) {
 			if(nodeName.equals("Name")) {
 				if(node.getChildNodes().getLength()>0) {
-					table.SetTableName(node.getChildNodes().item(0).getNodeValue());
+					table.setTableName(node.getChildNodes().item(0).getNodeValue());
 				}
 				else {//Set the table name to an empty string.
-					table.SetTableName("");
+					table.setTableName("");
 				}
 			}
 			else if(nodeName.equals("Col")) {//Add a new column.
@@ -1896,17 +1912,17 @@ public class Serializing {
 			else if(nodeName.equals("x")) {//Add information to the next column in the last row.
 				DataRow row=table.Rows.get(table.Rows.size()-1);
 				if(node.getChildNodes().getLength()>0) {
-					row.AddCell(node.getChildNodes().item(0).getNodeValue());
+					row.addCell(node.getChildNodes().item(0).getNodeValue());
 				}
 				else {//Add an empty cell.
-					row.AddCell("");
+					row.addCell("");
 				}
 			}
 			//Recursively iterate through child nodes.
 			NodeList children=node.getChildNodes();
 			for(int i=0;i<children.getLength();i++) {
 				Node childNode=children.item(i);
-				table=DeserializeDataTable(childNode,table);
+				table=deserializeDataTable(childNode,table);
 			}
 		}
 		return table;
@@ -1914,7 +1930,7 @@ public class Serializing {
 
 	/** Pass in the xml string parsed into a Document and the desired tagname to attempt to get the value.
 	 * Returns the node value or null if node is not included in the Document. */
-	public static String GetXmlNodeValue(Document doc,String tagname) {
+	public static String getXmlNodeValue(Document doc,String tagname) {
 		NodeList list=doc.getElementsByTagName(tagname);
 		if(list!=null && list.getLength()>0) {
 			Node node=list.item(0).getFirstChild();
