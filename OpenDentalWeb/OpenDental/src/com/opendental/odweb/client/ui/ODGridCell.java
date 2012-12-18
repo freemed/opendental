@@ -13,7 +13,8 @@ public class ODGridCell {
 		SetText(text);
 	}
 
-	public String GetText() {
+	/** Gets the text for the current cell. */
+	public String getText() {
 		return text;
 	}
 

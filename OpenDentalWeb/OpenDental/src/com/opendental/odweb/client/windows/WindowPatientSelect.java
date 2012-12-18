@@ -11,7 +11,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.data.DataTable;
 import com.opendental.odweb.client.datainterface.Patients;
@@ -20,11 +20,11 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.opendental.odweb.client.ui.*;
 
 public class WindowPatientSelect extends ODWindow {
-	private DataTable PatientTable;
-	private ODGrid GridMain;
-	@UiField HTMLPanel panelContainer;
+	private DataTable PatientTable=new DataTable();
+	@UiField(provided=true) ODGrid GridMain;
+	@UiField DockPanel panelContainer;
 	@UiField Button butSearch;
-	@UiField Button butClose;
+	@UiField Button butCancel;
 	
 	//These lines need to be in every class that uses UiBinder.  This is what makes this class point to it's respective ui.xml file. 
 	private static WindowPatientSelectUiBinder uiBinder = GWT.create(WindowPatientSelectUiBinder.class);
@@ -34,20 +34,16 @@ public class WindowPatientSelect extends ODWindow {
 	public WindowPatientSelect() {
 		super("Patient Select");
 		//Fills the @UiField objects.
-		uiBinder.createAndBindUi(this);
 		//Fill the container panel that will hold everything on this window.
-		GridMain=new ODGrid("Patient Data Table Title");
-		panelContainer.add(GridMain);
-		panelContainer.add(butSearch);
-		panelContainer.add(butClose);
+		GridMain=new ODGrid("Select Patient");
+		GridMain.setHeightAndWidth(500,500);
+		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
+		FillGrid();
 	}
 	
 	/** Refreshes the patient grid with the information in the PatientTable.  Does nothing if PatientTable is null. */
 	private void FillGrid() {
-		if(PatientTable==null) {
-			return;
-		}
 		GridMain.BeginUpdate();
 		GridMain.Columns.clear();
 		ODGridColumn col=new ODGridColumn("PatNum",80);
@@ -101,8 +97,13 @@ public class WindowPatientSelect extends ODWindow {
 		}
 	}
 	
-	@UiHandler("butClose")
-	void butClose_Click(ClickEvent event) {
+	@UiHandler("butOK")
+	void butOK_Click(ClickEvent event) {
+		this.hide();
+	}
+	
+	@UiHandler("butCancel")
+	void butCancel_Click(ClickEvent event) {
 		this.hide();
 	}
 

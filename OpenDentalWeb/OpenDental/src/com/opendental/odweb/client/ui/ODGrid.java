@@ -1,24 +1,36 @@
 package com.opendental.odweb.client.ui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /** A custom data grid.  This class contains panels, grids, labels, and other "widgets" that compose our data grid for the UI. Treat ODGrid like a Panel. */
 public class ODGrid extends Composite implements ClickHandler {
+	private static ODGridUiBinder uiBinder = GWT.create(ODGridUiBinder.class);
+	interface ODGridUiBinder extends UiBinder<Widget, ODGrid> {
+	}
+	
 	/** A simple panel that will contain all the widgets that compose the ODGrid. */
-	private AbsolutePanel Container;
+	@UiField DockPanel containerPanel;
 	/** The title of the table. */
 	private String TableTitle;
 	/** The bar that contains the title of the table. */
-	private Label LabelTitle;
-	/** The body portion of the table.  The columns, rows, and cells. */
-	private TableBody Body;
-	/** The column headers for the table. */
-	private TableColumnHeaders ColumnHeaders;
+	@UiField Label labelTitle;
+	/** This table will strictly be for holding the column headers.  It's in it's own table so that the body of tableMain can be contained in a scrollable panel. */
+	@UiField Grid tableColumnHeaders;
+	/** The main table portion of the ODGrid.  The columns, rows, and cells.  This will be a simple HTMLTable to start with. */
+	@UiField Grid tableMain;
+	/**  */
+	@UiField ScrollPanel scrollPanel;
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
 	private boolean IsUpdating;
 	/** The total height of the grid. */
@@ -27,14 +39,18 @@ public class ODGrid extends Composite implements ClickHandler {
 	private int GridW;
 	/** Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns position for that column. */
 	private int[] ColPos;
-	/**  */
+	/** Array of the heights of each row. */
 	private int[] RowHeights;
-	/**  */
+	/** Array of each row location. */
 	private int[] RowLocs;
 	/** The collection of ODGridColumns assigned to ODGrid. */
 	public ODGridColumnCollection Columns;
 	/** The collection of ODGridRows assigned to ODGrid. */
 	public ODGridRowCollection Rows;
+	/** The height of the entire control.  Mainly for dictating how to draw the grid to the parent control. */
+	public int Height;
+	/** The width of the entire control.  Mainly for dictating how to draw the grid to the parent control. */
+	public int Width;
 	
 	/** Creates a new ODGrid. */
 	public ODGrid() {
@@ -43,38 +59,67 @@ public class ODGrid extends Composite implements ClickHandler {
 	
 	/** Creates a new ODGrid and sets the title to the passed in value. */
 	public ODGrid(String title) {
-		SetTableTitle(title);//So that TableTitle is not null.
+		//Fills the @UiField objects.
+		uiBinder.createAndBindUi(this);
 		Columns=new ODGridColumnCollection();
 		Rows=new ODGridRowCollection();
-		Container=new AbsolutePanel();
-		LabelTitle=new Label(title);
-		ColumnHeaders=new TableColumnHeaders();
-		Body=new TableBody();		
-		Container.add(LabelTitle);
-		Container.add(ColumnHeaders);
-		Container.add(Body);
+		labelTitle.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		setTableTitle(title);
+		containerPanel.setCellHeight(scrollPanel, "100%");//This is so that tableMain takes up the most space.
 		//We have to call initWidget in the constructor because this class extends Composite. 
-		initWidget(Container);
+		initWidget(containerPanel);
 	}
 	
 	//Properties-----------------------------------------------------------------------------------------------------------------
 	
+	public int getHeight() {
+		return Height;
+	}
+
+	public void setHeight(int height) {
+		Height=height;
+	}
+
+	public int getWidth() {
+		return Width;
+	}
+
+	public void setWidth(int width) {
+		Width=width;
+	}
+	
+	/** Sets the height and width and updates the container's size.  This should be called right after instantiating ODGrid so that the window knows how big to draw a possibly empty grid. */
+	public void setHeightAndWidth(int width,int height) {
+		setHeight(height);
+		setWidth(width);
+		containerPanel.setSize(width+"px", height+"px");
+	}
+
+	public String getTableTitle() {
+		return TableTitle;
+	}
+
+	public void setTableTitle(String tableTitle) {
+		TableTitle=tableTitle;
+		labelTitle.setText(TableTitle);
+	}
+	
 	/** Adds a column to the table with a header of the passed in text. */
 	public void AddColumn(String header) {
 		//Add the column.
-		Body.AddColumn();
+//		Body.AddColumn();
 		//Now add the column header.
-		ColumnHeaders.AddColumn(header);
+//		ColumnHeaders.AddColumn(header);
 	}
 
 	/** Adds a column to the table with a header of the passed in text. */
 	public void AddRow() {
 		//Add the row.
-		Body.AddRow();
+//		Body.AddRow();
 	}
 	
 	/**  */
-	public String GetColumnText(int rowIndex,int columnIndex) {
+	public String getColumnText(int rowIndex,int columnIndex) {
 		return "";
 	}
 	
@@ -82,14 +127,7 @@ public class ODGrid extends Composite implements ClickHandler {
 	public void setColumnHeader(int columnIndex,String text) {
 		
 	}
-	
-	public String GetTableTitle() {
-		return TableTitle;
-	}
 
-	public void SetTableTitle(String tableTitle) {
-		TableTitle = tableTitle;
-	}
 	
 	//Computations---------------------------------------------------------------------------------------------------------------
 	
@@ -145,19 +183,34 @@ public class ODGrid extends Composite implements ClickHandler {
 		if(IsUpdating) {
 			return;
 		}
-		DrawBackG();
+		DrawColumnHeaders();
 		DrawRows();
-		DrawTitleAndHeaders();
-		DrawOutline();
 	}
 	
-	/**  */
-	private void DrawBackG() {
-		//Not worried about a background yet.
+	/** Must be called after computing the columns and rows so that the dimensions of the table are known. */
+	private void DrawColumnHeaders() {
+		//Manipulate the table column headers.
+		tableColumnHeaders.clear();
+		tableColumnHeaders.resize(1, Columns.size());
+		//Loop through all the columns and set the cells text to the column header.
+		for(int i=0;i<Columns.size();i++) {
+			if(i==Columns.size()-1) {//If this is the last column in the list, make it span the rest of the grid.
+				tableColumnHeaders.setWidth("100%");//Make this column span to the end of the grid.
+			}
+			else {//Not the last column in the list.
+				//Set the width of the cell.
+				tableColumnHeaders.setWidth(Columns.get(i).GetColWidth()+"px");
+				//Set the cell style.
+				tableColumnHeaders.getCellFormatter().setStyleName(0, i, "style.tableColumnHeaders_Cell");
+			}
+			tableColumnHeaders.setText(0,i,Columns.get(i).GetHeading());
+		}
 	}
 	
 	/**  */
 	private void DrawRows() {
+		tableMain.clear();
+		tableMain.resize(Rows.size(), Columns.size());		
 		for(int i=0;i<Rows.size();i++) {
 			// TODO Figure out if the row is visible here.
 			DrawRow(i);//The row is visible so draw it.
@@ -165,21 +218,28 @@ public class ODGrid extends Composite implements ClickHandler {
 	}
 	
 	/**  */
-	private void DrawRow(int rowI) {
+	private void DrawRow(int row) {
 		// TODO Figure out if the row is selected here.
 		//Draw all of the columns.
-		for(int i=0;i<Columns.size();i++) {
+		for(int column=0;column<Columns.size();column++) {
+			//If this is the last column in the list, make it span the rest of the grid.
+			if(column==Columns.size()-1) {
+				tableMain.setWidth("100%");//Make this column span to the end of the grid.
+			}
+			else {//Not the last column in the list.
+				//Set the style for the cell.
+				if((column%2)==0) {//Even cells.
+					tableMain.getCellFormatter().setStyleName(row, column, "style.tableMain_EvenCell");
+				}
+				else {//Odd cells.
+					tableMain.getCellFormatter().setStyleName(row, column, "style.tableMain_OddCell");
+				}
+				//Set the width of the cell.
+				tableMain.setWidth(Columns.get(column).GetColWidth()+"px");
+			}
+			//Always set the text of the column regardless.
+			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
 		}
-	}
-	
-	/** Must be called after computing the columns and rows so that the dimensions of the table are known. */
-	private void DrawTitleAndHeaders() {
-		// TODO Make the necessary method calls to set up the title and headers for the columns. 
-	}
-	
-	/**  */
-	private void DrawOutline() {
-		//Not worried about outline yet.
 	}
 	
 	//Clicking-------------------------------------------------------------------------------------------------------------------
@@ -207,59 +267,9 @@ public class ODGrid extends Composite implements ClickHandler {
 		//Fill the data grid and refresh it so that it displays correctly.
 		OnPaint();
 	}
-	
-	//Column Headers-------------------------------------------------------------------------------------------------------------
 
-	/** This class holds the information regarding the column headers.  This is just so users can scroll through the rows and the headers will stay.
-	 *  Using a Grid for now that way the columns will definitely line up with the TableBody columns without having to do much extra logic. */
-	private static class TableColumnHeaders extends Grid {
-		private int ColumnCount;
-		
-		/** Empty constructor for now. */
-		public TableColumnHeaders() {
-			
-		}
-		
-		private void AddColumn(String header) {
-			ColumnCount++;
-			this.resize(1, ColumnCount);
-		}
-		
-	}
-	
-	//Table Body-----------------------------------------------------------------------------------------------------------------
-	
-	/** This class holds the information regarding the body of the table.  The columns, rows, and cells.  Extends Grid which is just an HTMLTable. */
-	private static class TableBody extends Grid {
-		private int ColumnCount;
-		private int RowCount;
-		
-		/** Empty constructor for now. */
-		public TableBody() {
-			
-		}
-		
-		private void AddColumn() {
-			ColumnCount++;
-			this.resize(RowCount,ColumnCount);
-		}
-		
-		private void AddRow() {
-			RowCount++;
-			this.resize(RowCount,ColumnCount);
-		}
-		
-		/** Sets the width for the table body. Pass in an integer and it converts it to a CSS unit.  Ex: 5 turns into "5px". */
-		private void SetGridWidth(int width) {
-			super.setWidth(width+"px");
-		}
-		
-		/** Sets the height for the table body. Pass in an integer and it converts it to a CSS unit.  Ex: 5 turns into "5px". */
-		private void SetGridHeight(int height) {
-			super.setHeight(height+"px");
-		}
-	}
 
+	
 	
 	
 	

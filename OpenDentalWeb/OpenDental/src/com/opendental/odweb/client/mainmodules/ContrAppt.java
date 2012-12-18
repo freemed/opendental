@@ -4,7 +4,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.ui.ModuleWidget;
 
@@ -26,8 +25,7 @@ public class ContrAppt extends ModuleWidget {
 		// TODO Create a panel, add widgets to the panel to compose the appointment module and return the panel.
 		AbsolutePanel absolutePanel=new AbsolutePanel();
     absolutePanel.setSize("250px", "250px");
-    HTML text = new HTML("This is the Appointment Module!!!");
-    absolutePanel.add(text, 10, 20);
+    //Add more widgets to the absolutePanel to comprise the Appts module.
 //    //Event handler for listView.
 //    listView.addChangeHandler(new ChangeHandler() {
 //      public void onChange(ChangeEvent event) {

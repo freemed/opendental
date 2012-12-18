@@ -52,17 +52,14 @@ public class WindowOpenDental extends ResizeComposite {
   /** The handler used to handle the user changing appointment views. */
   private HandlerRegistration apptViewSourceHandler;
   /** The panel that holds the content. */
-  @UiField
-  SimpleLayoutPanel contentPanel;
-	/** The outlook bar on the left used to navigate to different modules. */
-  @UiField(provided=true)
-  OutlookBar outlookBar;
+  @UiField SimpleLayoutPanel contentPanel;
+	/** The outlook bar on the left used to navigate to different modules.  (provided=true) Means we will instantiate the object ourselves.  
+	 *  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
+  @UiField(provided=true) OutlookBar outlookBar;
   /** The main menu.  Holds options like Log Off, File, Setup, etc. */
-  @UiField
-  MenuBarMain mainMenu;
+  @UiField MenuBarMain mainMenu;
   /** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
-  @UiField
-  MenuBarMainPatient mainToolBar;
+  @UiField MenuBarMainPatient mainToolBar;
   
 	public WindowOpenDental() {
 		final SingleSelectionModel<OutlookButton> selectionModel=new SingleSelectionModel<OutlookButton>();

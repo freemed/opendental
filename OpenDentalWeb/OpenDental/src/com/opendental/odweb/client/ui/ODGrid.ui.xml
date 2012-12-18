@@ -1,0 +1,65 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui" >
+  
+  <ui:style>
+  
+  	.containerPanel {
+		background-color: #e9e9ef;
+		border-bottom-color: #66667a;
+		border-right-color: #66667a;
+		border-top-color: #66667a;
+		border-left-color: #66667a;
+		border-style: solid;
+		border-width: 1px;=
+	}
+	
+  	.labelTitle {
+		font-weight: bold;
+		background-color: #d9d9e4;
+		border-bottom: 1px solid #66667a;
+	}
+	
+	.tableColumnHeaders {
+		font-weight: bold;
+		background-color: #d2d2d2;
+		border-bottom: 1px solid #66667a;
+	}
+	
+	.tableColumnHeaders_Cell {
+		border-right: 1px solid #787878;
+	}
+	
+	.tableMain {
+		background-color: #ffffff;
+	}
+	
+	.tableMain_EvenCell {
+		border-right: 1px solid #b4b4b4;
+		border-bottom: 1px solid #b4b4b4;
+	}
+	
+	.tableMain_OddCell {
+		background: #cadad9;
+		border-right: 1px solid #b4b4b4;
+		border-bottom: 1px solid #b4b4b4;		
+	}
+	
+  </ui:style>
+  
+	  <g:DockPanel ui:field="containerPanel" styleName="{style.containerPanel}">
+		  <g:Dock direction="NORTH">
+		  	<g:Label ui:field="labelTitle" styleName="{style.labelTitle}"></g:Label>
+		  </g:Dock>
+		  <g:Dock direction="CENTER">
+		  	<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}"/>
+		  </g:Dock>
+		  <g:Dock direction="SOUTH">
+		  	<g:ScrollPanel ui:field="scrollPanel">
+		  		<g:Grid ui:field="tableMain" styleName="{style.tableMain}"/>
+		  	</g:ScrollPanel>
+		  </g:Dock>
+	  </g:DockPanel>
+  
+</ui:UiBinder>

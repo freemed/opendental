@@ -17,13 +17,9 @@ public class ModuleWidgetView extends ResizeComposite {
   }
 	private static ModuleWidgetViewUiBinder uiBinder=GWT.create(ModuleWidgetViewUiBinder.class);
 
-  @UiField(provided = true)
-  SimplePanel modulePanel;
-
-  @UiField
-  Element nameElem;
-
   private final boolean hasMargins;
+  @UiField(provided = true) SimplePanel modulePanel;
+  @UiField Element nameElem;
 
   public ModuleWidgetView(boolean hasMargins,boolean scrollable) {
     this.hasMargins=hasMargins;
