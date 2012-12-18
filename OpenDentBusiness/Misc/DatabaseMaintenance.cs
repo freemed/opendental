@@ -3136,6 +3136,30 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ProviderWithInvalidFeeSched(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command=@"SELECT COUNT(*) FROM provider WHERE FeeSched NOT IN (SELECT FeeSchedNum FROM feesched)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Providers found with invalid FeeSched: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command=@"UPDATE provider SET FeeSched="+POut.Long(FeeSchedC.ListShort[0].FeeSchedNum)+" "
+					+"WHERE FeeSched NOT IN (SELECT FeeSchedNum FROM feesched)";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Providers whose FeeSched has been changed: ")
+				  +numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string RecallDuplicatesWarn(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -3778,6 +3802,7 @@ HAVING cnt>1";
 			}
 			return true;
 		}
+
 
 
 

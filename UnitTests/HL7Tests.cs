@@ -52,6 +52,7 @@ namespace UnitTests {
 			retval+=Test12(hl7TestInterfaceEnum);
 			retval+=Test13(hl7TestInterfaceEnum);
 			retval+=Test14(hl7TestInterfaceEnum);
+			retval+=Test15(hl7TestInterfaceEnum);
 			return retval;
 		}
 
@@ -798,6 +799,9 @@ namespace UnitTests {
 			proc.ProcDate=new DateTime(2012,09,06);
 			proc.CodeNum=ProcedureCodes.GetCodeNum("D0150");
 			proc.ProcStatus=ProcStat.C;
+			if(Providers.GetProvByEcwID("DOC1")==null) {
+				return "Test 11: Couldn't locate provider.\r\n";
+			}
 			proc.ProvNum=Providers.GetProvByEcwID("DOC1").ProvNum;
 			proc.ProcFee=75.00;
 			Procedures.Insert(proc);
@@ -1147,6 +1151,42 @@ namespace UnitTests {
 			//}
 			//return "Test 14: Passed.\r\n";
 			return "";
+		}
+
+		///<summary>Test 15: EcwOldTight,EcwOldFull,EcwTight,HL7DefEcwFull: Optional AIG segment is included, so use that segment to insert a new provider.  Make sure this new provider has the correct fee schedule associated, based on the non-hidden fee schedule with the lowest item order.  No need to test PV1 segment for the same fee schedule issue since the code to process the provider information is the same as for the AIG segment.  EcwOldStandalone,HL7DefEcwStandalone: SIU messages are not processed in Standalone mode.</summary>
+		public static string Test15(HL7TestInterfaceEnum hl7TestInterfaceEnum) {
+			string msgtext=@"MSH|^~\&|||||20121213100000||SIU^S12||P|2.3"+"\r\n"
+				+"SCH|1500|1500|||||Checkup and Fillings||||^^2400^20121214100000^20121214104000||||||||||||||\r\n"
+				+"PID|1|30||A300|Smith2^Jane2^N||19760205|Female||White|421 Main St^Apt 17^Dallas^OR^97338||5035554045|5035554234||Married|||222334444|||Standard\r\n"
+				+"AIG|1||DOC3^Jones, Tina W||||";
+			MessageHL7 msg=new MessageHL7(msgtext);
+			try {
+				switch(hl7TestInterfaceEnum) {
+					case HL7TestInterfaceEnum.EcwOldFull:
+					case HL7TestInterfaceEnum.EcwOldTight:
+						EcwSIU.ProcessMessage(msg,false);
+						break;
+					case HL7TestInterfaceEnum.EcwOldStandalone:
+						return "Test 15: Passed.\r\n";
+					default:
+						MessageParser.Process(msg,false);
+						break;
+				}
+			}
+			catch(Exception ex) {
+				return "Test 15: Message processing error: "+ex+"\r\n";
+			}
+			if(hl7TestInterfaceEnum==HL7TestInterfaceEnum.HL7DefEcwStandalone) {
+				return "Test 15: Passed.\r\n";
+			}
+			Provider prov=Providers.GetProvByEcwID("DOC3");
+			if(prov==null) {
+				return "Test 15: Couldn't locate provider.\r\n";
+			}
+			if(prov.FeeSched!=FeeSchedC.ListShort[0].FeeSchedNum) {
+				return "Test 15: Provider fee schedule is not set to "+FeeSchedC.ListShort[0].Description+".\r\n";
+			}
+			return "Test 15: Passed.\r\n";
 		}
 
 		///<summary>Compares the pat and guar to correctPat and correctGuar to make sure every field matches.</summary>

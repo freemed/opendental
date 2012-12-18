@@ -223,6 +223,7 @@ namespace OpenDentBusiness.HL7 {
 				prov=new Provider();
 				prov.Abbr=eID;//They can manually change this later.
 				prov.EcwID=eID;
+				prov.FeeSched=FeeSchedC.ListShort[0].FeeSchedNum;
 			}
 			if(prov.LName!=field.GetComponentVal(1)) {
 				provChanged=true;

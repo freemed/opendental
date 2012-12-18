@@ -600,6 +600,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ProviderHiddenWithClaimPayments(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.ProviderWithInvalidFeeSched(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.RecallDuplicatesWarn(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.RecallTriggerDeleteBadCodeNum(verbose,isCheck);
