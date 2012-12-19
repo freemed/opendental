@@ -34,8 +34,10 @@ public class ODGrid extends Composite implements ClickHandler {
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
 	private boolean IsUpdating;
 	/** The total height of the grid. */
+	@SuppressWarnings("unused")
 	private int GridH;
 	/** The total width of the grid. */
+	@SuppressWarnings("unused")
 	private int GridW;
 	/** Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns position for that column. */
 	private int[] ColPos;
@@ -104,28 +106,9 @@ public class ODGrid extends Composite implements ClickHandler {
 		labelTitle.setText(TableTitle);
 	}
 	
-	/** Adds a column to the table with a header of the passed in text. */
-	public void addColumn(String header) {
-		//Add the column.
-//		Body.AddColumn();
-		//Now add the column header.
-//		ColumnHeaders.AddColumn(header);
-	}
-
-	/** Adds a column to the table with a header of the passed in text. */
-	public void addRow() {
-		//Add the row.
-//		Body.AddRow();
-	}
-	
 	/**  */
 	public String getColumnText(int rowIndex,int columnIndex) {
 		return "";
-	}
-	
-	/**  */
-	public void setColumnHeader(int columnIndex,String text) {
-		
 	}
 
 	
@@ -195,13 +178,13 @@ public class ODGrid extends Composite implements ClickHandler {
 		//Loop through all the columns and set the cells text to the column header.
 		for(int i=0;i<Columns.size();i++) {
 			if(i==Columns.size()-1) {//If this is the last column in the list, make it span the rest of the grid.
-				tableColumnHeaders.setWidth("100%");//Make this column span to the end of the grid.
+				tableColumnHeaders.getCellFormatter().setWidth(0,i,Width-ColPos[ColPos.length-1]+"px");//Make this column span to the end of the grid.
 			}
 			else {//Not the last column in the list.
 				//Set the width of the cell.
-				tableColumnHeaders.setWidth(Columns.get(i).getColWidth()+"px");
+				tableColumnHeaders.getCellFormatter().setWidth(0,i,Columns.get(i).getColWidth()+"px");
 				//Set the cell style.
-				tableColumnHeaders.getCellFormatter().setStyleName(0, i, "style.tableColumnHeaders_Cell");
+				tableColumnHeaders.getCellFormatter().setStyleName(0,i,"ODGrid_tableColumnHeaders_Cells");
 			}
 			tableColumnHeaders.setText(0,i,Columns.get(i).getHeading());
 		}
@@ -222,23 +205,22 @@ public class ODGrid extends Composite implements ClickHandler {
 		// TODO Figure out if the row is selected here.
 		//Draw all of the columns.
 		for(int column=0;column<Columns.size();column++) {
+			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
 			//If this is the last column in the list, make it span the rest of the grid.
 			if(column==Columns.size()-1) {
-				tableMain.setWidth("100%");//Make this column span to the end of the grid.
+				tableMain.getCellFormatter().setWidth(row,column,Width-ColPos[ColPos.length-1]+"px");//Make this column span to the end of the grid.
 			}
 			else {//Not the last column in the list.
+				//Set the width of the cell.
+				tableMain.getCellFormatter().setWidth(row,column,Columns.get(column).getColWidth()+"px");
 				//Set the style for the cell.
-				if((column%2)==0) {//Even cells.
-					tableMain.getCellFormatter().setStyleName(row, column, "style.tableMain_EvenCell");
+				if((column % 2)==0) {//Even cells.
+					tableMain.getCellFormatter().setStyleName(row,column,"ODGrid_tableMain_EvenCells");
 				}
 				else {//Odd cells.
-					tableMain.getCellFormatter().setStyleName(row, column, "style.tableMain_OddCell");
+					tableMain.getCellFormatter().setStyleName(row,column,"ODGrid_tableMain_OddCells");
 				}
-				//Set the width of the cell.
-				tableMain.setWidth(Columns.get(column).getColWidth()+"px");
 			}
-			//Always set the text of the column regardless.
-			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
 		}
 	}
 	

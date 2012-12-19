@@ -12,7 +12,7 @@
 		border-top-color: #66667a;
 		border-left-color: #66667a;
 		border-style: solid;
-		border-width: 1px;=
+		border-width: 1px;
 	}
 	
   	.labelTitle {
@@ -27,33 +27,18 @@
 		border-bottom: 1px solid #66667a;
 	}
 	
-	.tableColumnHeaders_Cell {
-		border-right: 1px solid #787878;
-	}
-	
 	.tableMain {
 		background-color: #ffffff;
-	}
-	
-	.tableMain_EvenCell {
-		border-right: 1px solid #b4b4b4;
-		border-bottom: 1px solid #b4b4b4;
-	}
-	
-	.tableMain_OddCell {
-		background: #cadad9;
-		border-right: 1px solid #b4b4b4;
-		border-bottom: 1px solid #b4b4b4;		
 	}
 	
   </ui:style>
   
 	  <g:DockPanel ui:field="containerPanel" styleName="{style.containerPanel}">
 		  <g:Dock direction="NORTH">
-		  	<g:Label ui:field="labelTitle" styleName="{style.labelTitle}"></g:Label>
+		  	<g:Label ui:field="labelTitle" styleName="{style.labelTitle}" />
 		  </g:Dock>
 		  <g:Dock direction="CENTER">
-		  	<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}"/>
+		  	<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}" />
 		  </g:Dock>
 		  <g:Dock direction="SOUTH">
 		  	<g:ScrollPanel ui:field="scrollPanel">

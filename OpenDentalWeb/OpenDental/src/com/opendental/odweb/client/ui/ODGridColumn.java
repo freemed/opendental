@@ -21,7 +21,7 @@ public class ODGridColumn {
 	}
 
 	public void setHeading(String heading) {
-		Heading = heading;
+		Heading=heading;
 	}
 
 	public int getColWidth() {
@@ -29,6 +29,6 @@ public class ODGridColumn {
 	}
 
 	public void setColWidth(int colWidth) {
-		ColWidth = colWidth;
+		ColWidth=colWidth;
 	}
 }

@@ -4,20 +4,120 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:od="urn:import:com.opendental.odweb.client.ui">
 
-	  <g:DockPanel ui:field="panelContainer">
-	    <g:Dock direction="CENTER">
-	  		<od:ODGrid ui:field="gridMain"/>
-		</g:Dock>
-		<g:Dock direction="EAST">
-		  <g:VerticalPanel>
-		    <g:Label>Search by fields go here:</g:Label>
-		    <g:Button ui:field="butSearch" text="Search" />
+	<g:DockPanel ui:field="panelContainer">
+   	<g:Dock direction="CENTER">
+ 		<od:ODGrid ui:field="gridMain"/>
+	</g:Dock>
+	<g:Dock direction="EAST">
+	 	<g:VerticalPanel>
+		  	<!-- Search fields -->
+		  	<g:DecoratorPanel>
+		  		<g:VerticalPanel>
+		  			<g:Label>Search by:</g:Label>
+		  			<g:Label>Hint: enter values in multiple boxes.</g:Label>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Last Name</g:Label>
+		  				<g:TextBox ui:field="textLName" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>First Name</g:Label>
+		  				<g:TextBox ui:field="textFName" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Phone (any)</g:Label>
+		  				<g:TextBox ui:field="textHmPhone" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Address</g:Label>
+		  				<g:TextBox ui:field="textAddress" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>City</g:Label>
+		  				<g:TextBox ui:field="textCity" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>State</g:Label>
+		  				<g:TextBox ui:field="textState" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>SSN</g:Label>
+		  				<g:TextBox ui:field="textSSN" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Patient Number</g:Label>
+		  				<g:TextBox ui:field="textPatNum" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Chart Number</g:Label>
+		  				<g:TextBox ui:field="textChartNumber" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Birthdate</g:Label>
+		  				<g:TextBox ui:field="textBirthdate"/>
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Subscriber ID</g:Label>
+		  				<g:TextBox ui:field="textSubscriberID" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>E-mail</g:Label>
+		  				<g:TextBox ui:field="textEmail" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Billing Type</g:Label>
+		  				<g:ListBox ui:field="comboBillingType" />
+		  			</g:HorizontalPanel>
+		  			<g:HorizontalPanel>
+		  				<g:Label>Site</g:Label>
+		  				<g:ListBox ui:field="comboSite" />
+		  			</g:HorizontalPanel>
+		  			<g:CheckBox ui:field="checkGuarantors">Guarantors Only</g:CheckBox>
+		  			<g:CheckBox ui:field="checkHideInactive">Hide Inactive Patients</g:CheckBox>
+		  				<g:CheckBox ui:field="checkShowArchived">Show Archived/Deceased</g:CheckBox>
+		  		</g:VerticalPanel>
+		  	</g:DecoratorPanel>
+		  	<g:DecoratorPanel>
+		  		<g:VerticalPanel>
+		  			<g:Label>Search</g:Label>
+			  		<g:HorizontalPanel>
+			  			<g:Button ui:field="butSearch" text="Search" />
+			  			<g:Button ui:field="butGetAll" text="Get All" />
+			  		</g:HorizontalPanel>
+		 			<g:CheckBox ui:field="checkRefresh">Refresh while typing</g:CheckBox>
+		  		</g:VerticalPanel>
+		  	</g:DecoratorPanel>
+		    <g:DecoratorPanel>
+		    	<g:VerticalPanel>
+			    	<g:Label>Add New Family:</g:Label>
+			    	<g:HorizontalPanel>
+			  			<g:Button ui:field="butAddPt" text="Add Pt" />
+			  			<g:Button ui:field="butAddAll" text="Add Many" />
+			    	</g:HorizontalPanel>
+		    	</g:VerticalPanel>
+		    </g:DecoratorPanel>
 			<g:HorizontalPanel>
 				<g:Button ui:field="butOK" text="OK" />
 				<g:Button ui:field="butCancel" text="Cancel" />
 			</g:HorizontalPanel>
-		  </g:VerticalPanel>
-		</g:Dock>
-	  </g:DockPanel>
-<!-- 	</g:HTMLPanel> -->
+	  </g:VerticalPanel>
+	</g:Dock>
+	</g:DockPanel>
 </ui:UiBinder>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
