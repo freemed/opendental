@@ -1,6 +1,8 @@
 package com.opendental.odweb.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -34,10 +36,8 @@ public class ODGrid extends Composite implements ClickHandler {
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
 	private boolean IsUpdating;
 	/** The total height of the grid. */
-	@SuppressWarnings("unused")
 	private int GridH;
 	/** The total width of the grid. */
-	@SuppressWarnings("unused")
 	private int GridW;
 	/** Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns position for that column. */
 	private int[] ColPos;
@@ -91,10 +91,22 @@ public class ODGrid extends Composite implements ClickHandler {
 	}
 	
 	/** Sets the height and width and updates the container's size.  This should be called right after instantiating ODGrid so that the window knows how big to draw a possibly empty grid. */
-	public void setHeightAndWidth(int width,int height) {
+	public void setHeightAndWidth(final int width,final int height) {
 		setHeight(height);
 		setWidth(width);
 		containerPanel.setSize(width+"px", height+"px");
+		scrollPanel.setSize(width+"px", height+"px");//Scroll panel height will get set correctly with the deferred scheduler.  This is so the window centers itself correctly in the browser.
+		//We have to use a deferred scheduler to set the height of the scroll panel because the widgets have yet to be drawn.
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				int scrollHeight=height-labelTitle.getElement().getClientHeight();
+				if(scrollHeight<10) {
+					scrollHeight=10;//Just in case.
+				}
+				scrollPanel.setSize(width+"px", (scrollHeight)+"px");
+			}
+		});
 	}
 
 	public String getTableTitle() {
@@ -175,9 +187,11 @@ public class ODGrid extends Composite implements ClickHandler {
 		//Manipulate the table column headers.
 		tableColumnHeaders.clear();
 		tableColumnHeaders.resize(1, Columns.size());
+		tableColumnHeaders.setSize(GridW+"px", "100%");
 		//Loop through all the columns and set the cells text to the column header.
 		for(int i=0;i<Columns.size();i++) {
 			if(i==Columns.size()-1) {//If this is the last column in the list, make it span the rest of the grid.
+				//Check if the grid is wide enough to contain all the columns
 				tableColumnHeaders.getCellFormatter().setWidth(0,i,Width-ColPos[ColPos.length-1]+"px");//Make this column span to the end of the grid.
 			}
 			else {//Not the last column in the list.
@@ -193,7 +207,8 @@ public class ODGrid extends Composite implements ClickHandler {
 	/**  */
 	private void drawRows() {
 		tableMain.clear();
-		tableMain.resize(Rows.size(), Columns.size());		
+		tableMain.resize(Rows.size(), Columns.size());
+		tableMain.setSize("0px", GridH+"px");//Set the width to 0 so that a white anomaly doesn't show up for empty grids.  Widths will get set when the rows are drawn.
 		for(int i=0;i<Rows.size();i++) {
 			// TODO Figure out if the row is visible here.
 			drawRow(i);//The row is visible so draw it.

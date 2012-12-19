@@ -38,13 +38,15 @@
 		  	<g:Label ui:field="labelTitle" styleName="{style.labelTitle}" />
 		  </g:Dock>
 		  <g:Dock direction="CENTER">
-		  	<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}" />
-		  </g:Dock>
-		  <g:Dock direction="SOUTH">
 		  	<g:ScrollPanel ui:field="scrollPanel">
-		  		<g:Grid ui:field="tableMain" styleName="{style.tableMain}"/>
+		  		<g:VerticalPanel>
+		  			<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}" />
+		  			<g:Grid ui:field="tableMain" styleName="{style.tableMain}" />
+		  		</g:VerticalPanel>
 		  	</g:ScrollPanel>
 		  </g:Dock>
+<!-- 		  <g:Dock direction="SOUTH"> -->
+<!-- 		  </g:Dock> -->
 	  </g:DockPanel>
   
 </ui:UiBinder>
