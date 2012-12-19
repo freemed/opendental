@@ -27,7 +27,7 @@ namespace OpenDentalWebService {
 				case "System.Single":
 				case "System.Byte":
 				case "System.Double":
-				case "DataT":
+				case "DataTable":
 					return aaGeneralTypes.Serialize(objectType,obj);
 			}
 			if(objectType.StartsWith("List<")) {//Lists.
@@ -703,6 +703,7 @@ namespace OpenDentalWebService {
 				case "float":
 				case "byte":
 				case "double":
+				case "DateTime":
 				case "List&lt;":
 					return aaGeneralTypes.Deserialize(typeName,xml);
 			}
@@ -2728,8 +2729,8 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		private static object MethodPatients(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			if(methodName=="GetPtDataTableTest") {
-				return Patients.GetPtDataTableTest(Convert.ToInt64(parameters[0]),Convert.ToInt64(parameters[1]));
+			if(methodName=="GetPtDataTable") {
+				return Patients.GetPtDataTable(Convert.ToBoolean(parameters[0]),Convert.ToString(parameters[1]),Convert.ToString(parameters[2]),Convert.ToString(parameters[3]),Convert.ToString(parameters[4]),Convert.ToBoolean(parameters[5]),Convert.ToString(parameters[6]),Convert.ToString(parameters[7]),Convert.ToString(parameters[8]),Convert.ToString(parameters[9]),Convert.ToString(parameters[10]),Convert.ToInt64(parameters[11]),Convert.ToBoolean(parameters[12]),Convert.ToBoolean(parameters[13]),Convert.ToInt64(parameters[14]),(System.DateTime)parameters[15],Convert.ToInt64(parameters[16]),Convert.ToString(parameters[17]),Convert.ToString(parameters[18]));
 			}
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}

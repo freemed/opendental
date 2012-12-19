@@ -31,7 +31,7 @@ public class ODGrid extends Composite implements ClickHandler {
 	@UiField Grid tableColumnHeaders;
 	/** The main table portion of the ODGrid.  The columns, rows, and cells.  This will be a simple HTMLTable to start with. */
 	@UiField Grid tableMain;
-	/**  */
+	/** The scroll panel that will contain the column header and main grids.  It will automatically create horizontal and vertical scroll bars as needed. */
 	@UiField ScrollPanel scrollPanel;
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
 	private boolean IsUpdating;

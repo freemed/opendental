@@ -78,6 +78,10 @@ public class Serializing {
 		if(qualifiedName.equals("java.lang.String")) {//String  "java.lang.String"
 			return "<string>"+(String)obj+"</string>";
 		}
+		if(qualifiedName.equals("java.util.Date")) {//Date  "java.util.Date"
+			// TODO Enhance serializer to handle Date objects.
+			return "<DateTime>0001-01-01</DateTime>";
+		}
 		//Arrays------------------------------------------------------------------------------------------------------------
 		//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L...
 		//Object[]  "[Lcom.opendental.odweb.client.tabletypes.Account;" from Account[]

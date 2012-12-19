@@ -1,5 +1,7 @@
 package com.opendental.odweb.client.windows;
 
+import java.util.Date;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.http.client.Request;
@@ -70,19 +72,68 @@ public class WindowPatientSelect extends ODWindow {
 	private void fillGrid() {
 		gridMain.beginUpdate();
 		gridMain.Columns.clear();
-		ODGridColumn col=new ODGridColumn("PatNum",80);
+		ODGridColumn col=new ODGridColumn("LName",80);
 		gridMain.Columns.add(col);
-		col=new ODGridColumn("Test",80);
+		col=new ODGridColumn("FName",80);
 		gridMain.Columns.add(col);
-		col=new ODGridColumn("Test2",80);
+		col=new ODGridColumn("MI",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Pref Name",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Age",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("SSN",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Hm Phone",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("WkPhone",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("PatNum",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("ChartNum",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Address",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Status",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Bill Type",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("City",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("State",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Pri Prov",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Birthdate",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Site",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("Email",80);
+		gridMain.Columns.add(col);
+		col=new ODGridColumn("OtherPhone",80);
 		gridMain.Columns.add(col);
 		gridMain.Rows.clear();
 		ODGridRow row;
 		for(int i=0;i<PatientTable.Rows.size();i++) {
 			row=new ODGridRow();
-			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(0).getText());
-			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(1).getText());
-			row.Cells.Add(PatientTable.Rows.get(i).getCells().get(2).getText());
+			row.Cells.Add(PatientTable.getCellText(i,"LName"));
+			row.Cells.Add(PatientTable.getCellText(i,"FName"));
+			row.Cells.Add(PatientTable.getCellText(i,"MiddleI"));
+			row.Cells.Add(PatientTable.getCellText(i,"Preferred"));
+			row.Cells.Add(PatientTable.getCellText(i,"age"));
+			row.Cells.Add(PatientTable.getCellText(i,"SSN"));
+			row.Cells.Add(PatientTable.getCellText(i,"HmPhone"));
+			row.Cells.Add(PatientTable.getCellText(i,"WkPhone"));
+			row.Cells.Add(PatientTable.getCellText(i,"ChartNumber"));
+			row.Cells.Add(PatientTable.getCellText(i,"Address"));
+			row.Cells.Add(PatientTable.getCellText(i,"Status"));
+			row.Cells.Add(PatientTable.getCellText(i,"BillingType"));
+			row.Cells.Add(PatientTable.getCellText(i,"City"));
+			row.Cells.Add(PatientTable.getCellText(i,"State"));
+			row.Cells.Add(PatientTable.getCellText(i,"PriProv"));
+			row.Cells.Add(PatientTable.getCellText(i,"Birthdate"));
+			row.Cells.Add(PatientTable.getCellText(i,"site"));
+			row.Cells.Add(PatientTable.getCellText(i,"Email"));
 			gridMain.Rows.add(row);
 		}
 		gridMain.endUpdate();
@@ -91,7 +142,24 @@ public class WindowPatientSelect extends ODWindow {
 	/** Makes a request to the server for the patient data table based on the text boxes filled in. 
 	 *  @param limit Adds a LIMIT restriction to the SQL query so that the query doesn't take as long. */
 	private void request_GetPtDataTable(boolean limit) {
-		RequestBuilder builder=RemotingClient.GetRequestBuilder(Patients.GetPtDataTableTest(2839,8321));
+		int billingType=0;
+//				if(comboBillingType.SelectedIndex!=0){
+//					billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
+//				}
+		int siteNum=0;
+//				if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+//					siteNum=SiteC.List[comboSite.SelectedIndex-1].SiteNum;
+//				}
+		Date birthdate=new Date();//PIn.Date(textBirthdate.Text);//this will frequently be 0001-01-01.
+		int clinicNum=0;//all clinics
+//				if(Security.CurUser.ClinicNum!=0 && Security.CurUser.ClinicIsRestricted){
+//					clinicNum=Security.CurUser.ClinicNum;
+//				}
+		RequestBuilder builder=RemotingClient.GetRequestBuilder(
+				Patients.getPtDataTable(limit, textLName.getText(), textFName.getText(), textHmPhone.getText(),
+						textAddress.getText(), checkHideInactive.getValue(), textCity.getText(), textState.getText(),
+						textSSN.getText(), textPatNum.getText(), textChartNumber.getText(), billingType,
+						checkGuarantors.getValue(), checkShowArchived.getValue(), clinicNum, birthdate, siteNum, textSubscriberID.getText(), textEmail.getText()));
 		try {//Try catch is required around http request.
 			builder.sendRequest(null, new butSearch_RequestCallback());
 		}

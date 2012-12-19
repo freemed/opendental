@@ -78,6 +78,8 @@ namespace OpenDentalWebService {
 								return OpenDentBusiness.PIn.Byte(reader.ReadString());
 							case "double":
 								return OpenDentBusiness.PIn.Double(reader.ReadString());
+							case "DateTime":
+								return OpenDentBusiness.PIn.DateT(reader.ReadString());
 						}
 						//List<?>-----------------------------------------------------------------------
 						if(typeName.StartsWith("List&lt;")) {

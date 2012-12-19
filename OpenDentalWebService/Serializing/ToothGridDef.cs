@@ -13,6 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<ToothGridDef>");
 			sb.Append("<ToothGridDefNum>").Append(toothgriddef.ToothGridDefNum).Append("</ToothGridDefNum>");
+			sb.Append("<SheetFieldDefNum>").Append(toothgriddef.SheetFieldDefNum).Append("</SheetFieldDefNum>");
 			sb.Append("<NameInternal>").Append(SerializeStringEscapes.EscapeForXml(toothgriddef.NameInternal)).Append("</NameInternal>");
 			sb.Append("<NameShowing>").Append(SerializeStringEscapes.EscapeForXml(toothgriddef.NameShowing)).Append("</NameShowing>");
 			sb.Append("<CellType>").Append((int)toothgriddef.CellType).Append("</CellType>");
@@ -37,6 +38,9 @@ namespace OpenDentalWebService {
 					switch(reader.Name) {
 						case "ToothGridDefNum":
 							toothgriddef.ToothGridDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
+							break;
+						case "SheetFieldDefNum":
+							toothgriddef.SheetFieldDefNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 						case "NameInternal":
 							toothgriddef.NameInternal=reader.ReadContentAsString();

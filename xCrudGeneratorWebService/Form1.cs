@@ -323,6 +323,10 @@ namespace xCrudGeneratorWebService {
 				+t2+"if(qualifiedName.equals(\"java.lang.String\")) {//String  \"java.lang.String\""+rn
 				+t3+"return \"<string>\"+(String)obj+\"</string>\";"+rn
 				+t2+"}"+rn
+				+t2+"if(qualifiedName.equals(\"java.util.Date\")) {//Date  \"java.util.Date\""+rn
+				+t3+"// TODO Enhance serializer to handle Date objects."+rn
+				+t3+"return \"<DateTime>0001-01-01</DateTime>\";"+rn
+				+t2+"}"+rn
 				+t2+"//Arrays------------------------------------------------------------------------------------------------------------"+rn
 				+t2+"//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L..."+rn
 				+t2+"//Object[]  \"[Lcom.opendental.odweb.client.tabletypes.Account;\" from Account[]"+rn
@@ -933,7 +937,7 @@ namespace xCrudGeneratorWebService {
 				+t4+@"case ""System.Single"":"+rn    //float
 				+t4+@"case ""System.Byte"":"+rn
 				+t4+@"case ""System.Double"":"+rn
-				+t4+@"case ""DataT"":"+rn
+				+t4+@"case ""DataTable"":"+rn
 				+t5+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
 				+t3+"}"+rn);
 			//Lists.
@@ -957,6 +961,7 @@ namespace xCrudGeneratorWebService {
 				+t4+@"case ""float"":"+rn
 				+t4+@"case ""byte"":"+rn
 				+t4+@"case ""double"":"+rn
+				+t4+@"case ""DateTime"":"+rn
 				+t4+@"case ""List&lt;"":"+rn
 				+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
 				+t3+"}"+rn);

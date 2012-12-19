@@ -39,10 +39,10 @@ public class MsgBox extends PopupPanel {
 		buttonPanel.setSpacing(3);
 		buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		//Escape characters that won't display in html:
-		msg=msg.replace("&", "&amp;");
-		msg=msg.replace("<", "&lt;");
-		msg=msg.replace(">", "&gt;");
-		msg=msg.replace("\r\n", "<br>");
+//		msg=msg.replace("&", "&amp;");
+//		msg=msg.replace("<", "&lt;");
+//		msg=msg.replace(">", "&gt;");
+//		msg=msg.replace("\r\n", "<br>");
 		text.setText(msg);
 		//Now set the contents of the widget.
 		setWidget(contentPanel);
