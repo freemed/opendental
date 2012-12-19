@@ -76,7 +76,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Also deletes any claimProcs and adjustments. Must test to make sure claimProcs are not part of a payment first.  This does not actually delete the procedure, but just changes the status to deleted.  If not allowed to delete, then it throws an exception.</summary>
+		///<summary>If not allowed to delete, then it throws an exception, so surround it with a try catch.  Also deletes any claimProcs and adjustments.  This does not actually delete the procedure, but just changes the status to deleted.</summary>
 		public static void Delete(long procNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum);
@@ -86,7 +86,7 @@ namespace OpenDentBusiness {
 			string command="SELECT COUNT(*) FROM claimproc WHERE ProcNum="+POut.Long(procNum)
 				+" AND InsPayAmt > 0 AND Status != "+POut.Long((int)ClaimProcStatus.Preauth);
 			if(Db.GetCount(command)!="0") {
-				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure that is attached to a payment."));
+				throw new Exception(Lans.g("Procedures","Not allowed to delete a procedure that is attached to an insurance payment."));
 			}
 			//Test to see if any referrals exist for this proc
 			command="SELECT COUNT(*) FROM refattach WHERE ProcNum="+POut.Long(procNum);
@@ -668,7 +668,7 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
-		///<summary>Only called from FormProcEdit to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
+		///<summary>Called from FormProcEdit to signal when to disable much of the editing in that form. If the procedure is 'AttachedToClaim' then user should not change it very much.  Also prevents user from Invalidating a locked procedure if attached to a claim.  The claimProcList can be all claimProcs for the patient or only those attached to this proc.</summary>
 		public static bool IsAttachedToClaim(Procedure proc,List<ClaimProc> claimProcList) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<claimProcList.Count;i++) {
