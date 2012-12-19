@@ -1359,6 +1359,9 @@ namespace OpenDentBusiness
 			//I don't think there would be additional id's if Medicaid, but just in case, no return.
 			ProviderIdent[] provIdents=ProviderIdents.GetForPayor(prov.ProvNum,payorID);
 			for(int i=0;i<provIdents.Length;i++) {
+				if(provIdents[i].IDNumber.Trim().Length<2) {//ensure's it's not blank
+					continue;
+				}
 				retVal++;
 				sw.WriteLine("REF*"
 					//REF01: ID qualifier, a 2 letter code representing type
