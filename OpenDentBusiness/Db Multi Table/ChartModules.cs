@@ -54,6 +54,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("FormPatNum");
 			table.Columns.Add("HideGraphics");
+			table.Columns.Add("IsLocked");
 			table.Columns.Add("length");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
@@ -105,7 +106,7 @@ namespace OpenDentBusiness {
 				#region Procedures
 				command="SELECT provider.Abbr,procedurecode.AbbrDesc,appointment.AptDateTime,procedurelog.BaseUnits,procedurelog.ClinicNum,"
 				+"procedurelog.CodeNum,procedurelog.DateEntryC,orionproc.DateScheduleBy,orionproc.DateStopClock,procedurelog.DateTP,"
-				+"procedurecode.Descript,orionproc.DPC,orionproc.DPCpost,Dx,HideGraphics,orionproc.IsEffectiveComm,orionproc.IsOnCall,"
+				+"procedurecode.Descript,orionproc.DPC,orionproc.DPCpost,Dx,HideGraphics,orionproc.IsEffectiveComm,IsLocked,orionproc.IsOnCall,"
 				+"LaymanTerm,Priority,procedurecode.ProcCode,ProcDate,ProcFee,procedurelog.ProcNum,ProcNumLab,procedurelog.ProcTime,"
 				+"procedurelog.ProcTimeEnd,procedurelog.Prognosis,ProcStatus,orionproc.Status2,Surf,ToothNum,ToothRange,UnitQty "
 				+"FROM procedurelog "
@@ -118,8 +119,9 @@ namespace OpenDentBusiness {
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.Broken)
 				+" OR appointment.AptStatus="+POut.Long((int)ApptStatus.Complete)
 				+") WHERE procedurelog.PatNum="+POut.Long(patNum);
-				if(!isAuditMode) {
-					command+=" AND ProcStatus !=6";//don't include deleted
+				if(!isAuditMode) {//regular mode
+					command+=" AND (ProcStatus !=6"//not deleted
+						+" OR IsLocked=1)";//Any locked proc should show.  This forces invalidated (deleted locked) procs to show.
 				}
 				command+=" ORDER BY ProcDate";//we'll just have to reorder it anyway
 				DataTable rawProcs=dcon.GetTable(command);
@@ -191,6 +193,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
+					row["IsLocked"]=rawProcs.Rows[i]["IsLocked"].ToString();
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["signature"]="";
@@ -400,6 +403,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					if(PIn.DateT(rawComm.Rows[i]["DateTimeEnd"].ToString()).Year>1880) {
@@ -478,6 +482,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"] = 0;
 					row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"] = 0;
 					row["length"]="";
 					row["note"] = "";
@@ -571,6 +576,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]=rawRx.Rows[i]["Notes"].ToString();
@@ -656,6 +662,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 					row["length"]="";
 					row["note"]=rawLab.Rows[i]["Instructions"].ToString();
@@ -752,6 +759,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					txt="";
@@ -899,6 +907,7 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
+				row["IsLocked"]="";
 				row["LabCaseNum"]=0;
 				row["length"]="";
 				if(rawApt.Rows[i]["Pattern"].ToString()!="") {
@@ -976,6 +985,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=rawEmail.Rows[i]["EmailMessageNum"].ToString();
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
@@ -1060,6 +1070,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
+					row["IsLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]="";

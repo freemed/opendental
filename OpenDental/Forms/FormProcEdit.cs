@@ -2421,8 +2421,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcInfo_Load(object sender,System.EventArgs e) {
+//todo: If proc is invalid, show that in the dropdown and hide the Invalidate button.
+//todo: check to see how group notes behave.
 //todo: maybe add a locked column to chart
-//todo: Show invalidated procs in chart module along with all other C procs.
 			//richTextBox1.Text="This is a test of the functions of a rich text box.";
 			//webBrowser1.
 			//richTextBox1.Select(10,4);

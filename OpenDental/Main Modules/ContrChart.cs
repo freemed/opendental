@@ -4986,7 +4986,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>The supplied procedure row must include these columns: ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
+		///<summary>The supplied procedure row must include these columns: IsLocked,ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			/*
@@ -5059,7 +5059,7 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(!ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()))){
+			if(!ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()),PIn.Bool(row["IsLocked"].ToString()))) {
 				return false;
 			}
 			if(Programs.UsingOrion) {
@@ -5073,7 +5073,7 @@ namespace OpenDental{
 		}
 
 		/// <summary> Checks ProcStat passed to see if one of the check boxes on the form contains a check for the ps passed. For example if ps is TP and the checkShowTP.Checked is true it will return true.</summary>
-		private bool ProcStatDesired(ProcStat ps) {
+		private bool ProcStatDesired(ProcStat ps,bool isLocked) {
 			switch(ps) {
 				case ProcStat.TP:
 					if(checkShowTP.Checked) {
@@ -5101,7 +5101,7 @@ namespace OpenDental{
 					}
 					break;
 				case ProcStat.D:
-					if(checkAudit.Checked) {
+					if(checkAudit.Checked || (checkShowC.Checked && isLocked)) {
 						return true;
 					}
 					break;
