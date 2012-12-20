@@ -23,19 +23,53 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.SuspendLayout();
+			// 
+			// ToolBarMain
+			// 
+			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
+			this.ToolBarMain.ImageList = null;
+			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
+			this.ToolBarMain.Name = "ToolBarMain";
+			this.ToolBarMain.Size = new System.Drawing.Size(725, 25);
+			this.ToolBarMain.TabIndex = 72;
+			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
+			// webBrowserWiki
+			// 
+			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.webBrowserWiki.Location = new System.Drawing.Point(0, 31);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowserWiki.Name = "webBrowserWiki";
+			this.webBrowserWiki.Size = new System.Drawing.Size(725, 435);
+			this.webBrowserWiki.TabIndex = 0;
+			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
+			this.webBrowserWiki.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowserWiki_Navigating);
+			this.webBrowserWiki.ProgressChanged += new System.Windows.Forms.WebBrowserProgressChangedEventHandler(this.webBrowserWiki_ProgressChanged);
 			// 
 			// FormWiki
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725, 534);
+			this.ClientSize = new System.Drawing.Size(725, 465);
+			this.Controls.Add(this.ToolBarMain);
+			this.Controls.Add(this.webBrowserWiki);
 			this.Name = "FormWiki";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "Wiki";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.Load += new System.EventHandler(this.FormWiki_Load);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
+
+		private System.Windows.Forms.WebBrowser webBrowserWiki;
+		private UI.ODToolBar ToolBarMain;
 
 	}
 }

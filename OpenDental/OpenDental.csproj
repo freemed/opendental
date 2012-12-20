@@ -365,6 +365,30 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiAllPages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiAllPages.designer.cs">
+      <DependentUpon>FormWikiAllPages.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiSearch.designer.cs">
+      <DependentUpon>FormWikiSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiRename.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiRename.designer.cs">
+      <DependentUpon>FormWikiRename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiSetup.designer.cs">
+      <DependentUpon>FormWikiSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEmailAddresses.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2624,6 +2648,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiAllPages.resx">
+      <DependentUpon>FormWikiAllPages.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiSearch.resx">
+      <DependentUpon>FormWikiSearch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiRename.resx">
+      <DependentUpon>FormWikiRename.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiSetup.resx">
+      <DependentUpon>FormWikiSetup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEmailAddresses.resx">
       <DependentUpon>FormEmailAddresses.cs</DependentUpon>

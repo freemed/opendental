@@ -18,12 +18,39 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
+		public static WikiPage GetStyle() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='Style');";
+			return Crud.WikiPageCrud.SelectOne(command);
+		}
+
 		public static WikiPage GetByName(string PageName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageName);
 			}
 			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageName+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+PageName+"');";
 			return Crud.WikiPageCrud.SelectOne(command);
+		}
+
+		///<summary></summary>
+		public static long Insert(WikiPage wikiPage){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
+				return wikiPage.WikiPageNum;
+			}
+			return Crud.WikiPageCrud.Insert(wikiPage);
+		}
+
+		///<summary>Currently calls WikiPages.Insert() and does not actually update record. Update will be implemented when versioning is improved.</summary>
+		public static void Update(WikiPage wikiPage){
+			Insert(wikiPage);
+			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+			//  Meth.GetVoid(MethodBase.GetCurrentMethod(),wikiPage);
+			//  return;
+			//}
+			//Crud.WikiPageCrud.Update(wikiPage);
 		}
 
 		public static string TranslateToXhtml(string wikiContent) {
@@ -66,24 +93,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),wikiPageNum);
 			}
 			return Crud.WikiPageCrud.SelectOne(wikiPageNum);
-		}
-
-		///<summary></summary>
-		public static long Insert(WikiPage wikiPage){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
-				return wikiPage.WikiPageNum;
-			}
-			return Crud.WikiPageCrud.Insert(wikiPage);
-		}
-
-		///<summary></summary>
-		public static void Update(WikiPage wikiPage){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),wikiPage);
-				return;
-			}
-			Crud.WikiPageCrud.Update(wikiPage);
 		}
 
 		///<summary></summary>
