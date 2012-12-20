@@ -880,10 +880,13 @@ namespace OpenDental{
 					if(table.Rows[i]["confirmed"].ToString()==DefC.GetName(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ConfirmStatusEmailed))) {//Already confirmed by email
 						continue;
 					}
+					if(table.Rows[i]["email"].ToString()=="") {
+						continue;
+					}
 					grid.SetSelected(i,true);
 				}
 				if(grid.SelectedIndices.Length==0) {
-					MsgBox.Show(this,"All patients of email type have been sent confirmations.");
+					MsgBox.Show(this,"Confirmations have been sent to all patients of email type who also have an email address entered.");
 					return;
 				}
 			}
@@ -909,13 +912,15 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			EmailMessage message;
 			string str="";
-			//Appointment apt;
+			List<long> patNumsSelected=new List<long>();
+			List<long> patNumsFailed=new List<long>();
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=table.Rows[grid.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
 				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
 				message.Subject=PrefC.GetString(PrefName.ConfirmEmailSubject);
+				patNumsSelected.Add(message.PatNum);
 				str=PrefC.GetString(PrefName.ConfirmEmailMessage);
 				str=str.Replace("[NameF]",table.Rows[grid.SelectedIndices[i]]["nameF"].ToString());
 				str=str.Replace("[NameFL]",table.Rows[grid.SelectedIndices[i]]["nameFL"].ToString());
@@ -925,18 +930,42 @@ namespace OpenDental{
 				try {
 					FormEmailMessageEdit.SendEmail(message);
 				}
-				catch(Exception ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(ex.Message+"\r\nPatient:"+table.Rows[grid.SelectedIndices[i]]["nameFL"].ToString());
-					break;
+				catch {
+					patNumsFailed.Add(message.PatNum);
+					continue;
 				}
 				message.MsgDateTime=DateTime.Now;
 				message.SentOrReceived=CommSentOrReceived.Sent;
 				EmailMessages.Insert(message);
 				Appointments.SetConfirmed(PIn.Long(table.Rows[grid.SelectedIndices[i]]["AptNum"].ToString()),PrefC.GetLong(PrefName.ConfirmStatusEmailed));
 			}
-			FillMain();
 			Cursor=Cursors.Default;
+			if(patNumsFailed.Count==grid.SelectedIndices.Length){ //all failed
+				//no need to refresh
+				MsgBox.Show(this,"All emails failed. Possibly due to invalid email addresses, a loss of connectivity, or a firewall blocking communication.");//msg: all failed
+				return;
+			}
+			else if(patNumsFailed.Count>0){//if some failed
+				FillMain();
+				//reselect only the failed ones
+				for(int i=0;i<table.Rows.Count;i++) { //table.Rows.Count=grid.Rows.Count
+					long patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					if(patNumsFailed.Contains(patNum)) {
+						grid.SetSelected(i,true);
+					}
+				}
+				MsgBox.Show(this,"Some emails failed to send.");
+				return;
+			}
+			//none failed
+			FillMain();
+			//reselect the original list 
+			for(int i=0;i<table.Rows.Count;i++) {
+				long patNum=PIn.Long(table.Rows[i]["PatNum"].ToString());
+				if(patNumsSelected.Contains(patNum)) {
+					grid.SetSelected(i,true);
+				}
+			}
 		}
 
 		private void butText_Click(object sender,EventArgs e) {
