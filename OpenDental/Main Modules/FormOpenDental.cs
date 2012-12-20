@@ -248,7 +248,7 @@ namespace OpenDental{
 		private Thread ThreadVM;
 		///<summary>Holds the time for the oldest triage task.</summary>
 		private DateTime triageTime;
-		private MenuItem menuItemSpelling;
+		private MenuItem menuItemCustomDict;
 		private MenuItem menuItemWiki;
 		private MenuItem menuItemHL7;
 
@@ -416,6 +416,7 @@ namespace OpenDental{
 			this.menuItemClinics = new System.Windows.Forms.MenuItem();
 			this.menuItemContacts = new System.Windows.Forms.MenuItem();
 			this.menuItemCounties = new System.Windows.Forms.MenuItem();
+			this.menuItemCustomDict = new System.Windows.Forms.MenuItem();
 			this.menuItemSchoolClass = new System.Windows.Forms.MenuItem();
 			this.menuItemSchoolCourses = new System.Windows.Forms.MenuItem();
 			this.menuItemEmployees = new System.Windows.Forms.MenuItem();
@@ -429,7 +430,6 @@ namespace OpenDental{
 			this.menuItemPrescriptions = new System.Windows.Forms.MenuItem();
 			this.menuItemReferrals = new System.Windows.Forms.MenuItem();
 			this.menuItemSchools = new System.Windows.Forms.MenuItem();
-			this.menuItemSpelling = new System.Windows.Forms.MenuItem();
 			this.menuItemZipCodes = new System.Windows.Forms.MenuItem();
 			this.menuItemReports = new System.Windows.Forms.MenuItem();
 			this.menuItemCustomReports = new System.Windows.Forms.MenuItem();
@@ -887,6 +887,7 @@ namespace OpenDental{
             this.menuItemClinics,
             this.menuItemContacts,
             this.menuItemCounties,
+            this.menuItemCustomDict,
             this.menuItemSchoolClass,
             this.menuItemSchoolCourses,
             this.menuItemEmployees,
@@ -900,7 +901,6 @@ namespace OpenDental{
             this.menuItemPrescriptions,
             this.menuItemReferrals,
             this.menuItemSchools,
-            this.menuItemSpelling,
             this.menuItemZipCodes});
 			this.menuItemLists.Shortcut = System.Windows.Forms.Shortcut.CtrlI;
 			this.menuItemLists.Text = "&Lists";
@@ -936,89 +936,89 @@ namespace OpenDental{
 			this.menuItemCounties.Text = "Counties";
 			this.menuItemCounties.Click += new System.EventHandler(this.menuItemCounties_Click);
 			// 
+			// menuItemCustomDict
+			// 
+			this.menuItemCustomDict.Index = 5;
+			this.menuItemCustomDict.Text = "Custom Dictionary";
+			this.menuItemCustomDict.Click += new System.EventHandler(this.menuItemCustomDict_Click);
+			// 
 			// menuItemSchoolClass
 			// 
-			this.menuItemSchoolClass.Index = 5;
+			this.menuItemSchoolClass.Index = 6;
 			this.menuItemSchoolClass.Text = "Dental School Classes";
 			this.menuItemSchoolClass.Click += new System.EventHandler(this.menuItemSchoolClass_Click);
 			// 
 			// menuItemSchoolCourses
 			// 
-			this.menuItemSchoolCourses.Index = 6;
+			this.menuItemSchoolCourses.Index = 7;
 			this.menuItemSchoolCourses.Text = "Dental School Courses";
 			this.menuItemSchoolCourses.Click += new System.EventHandler(this.menuItemSchoolCourses_Click);
 			// 
 			// menuItemEmployees
 			// 
-			this.menuItemEmployees.Index = 7;
+			this.menuItemEmployees.Index = 8;
 			this.menuItemEmployees.Text = "&Employees";
 			this.menuItemEmployees.Click += new System.EventHandler(this.menuItemEmployees_Click);
 			// 
 			// menuItemEmployers
 			// 
-			this.menuItemEmployers.Index = 8;
+			this.menuItemEmployers.Index = 9;
 			this.menuItemEmployers.Text = "Employers";
 			this.menuItemEmployers.Click += new System.EventHandler(this.menuItemEmployers_Click);
 			// 
 			// menuItemCarriers
 			// 
-			this.menuItemCarriers.Index = 9;
+			this.menuItemCarriers.Index = 10;
 			this.menuItemCarriers.Text = "Insurance Carriers";
 			this.menuItemCarriers.Click += new System.EventHandler(this.menuItemCarriers_Click);
 			// 
 			// menuItemInsPlans
 			// 
-			this.menuItemInsPlans.Index = 10;
+			this.menuItemInsPlans.Index = 11;
 			this.menuItemInsPlans.Text = "&Insurance Plans";
 			this.menuItemInsPlans.Click += new System.EventHandler(this.menuItemInsPlans_Click);
 			// 
 			// menuItemLabCases
 			// 
-			this.menuItemLabCases.Index = 11;
+			this.menuItemLabCases.Index = 12;
 			this.menuItemLabCases.Text = "Lab Cases";
 			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// menuItemMedications
 			// 
-			this.menuItemMedications.Index = 12;
+			this.menuItemMedications.Index = 13;
 			this.menuItemMedications.Text = "&Medications";
 			this.menuItemMedications.Click += new System.EventHandler(this.menuItemMedications_Click);
 			// 
 			// menuItemPharmacies
 			// 
-			this.menuItemPharmacies.Index = 13;
+			this.menuItemPharmacies.Index = 14;
 			this.menuItemPharmacies.Text = "Pharmacies";
 			this.menuItemPharmacies.Click += new System.EventHandler(this.menuItemPharmacies_Click);
 			// 
 			// menuItemProviders
 			// 
-			this.menuItemProviders.Index = 14;
+			this.menuItemProviders.Index = 15;
 			this.menuItemProviders.Text = "Providers";
 			this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
 			// 
 			// menuItemPrescriptions
 			// 
-			this.menuItemPrescriptions.Index = 15;
+			this.menuItemPrescriptions.Index = 16;
 			this.menuItemPrescriptions.Text = "Pre&scriptions";
 			this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
 			// 
 			// menuItemReferrals
 			// 
-			this.menuItemReferrals.Index = 16;
+			this.menuItemReferrals.Index = 17;
 			this.menuItemReferrals.Text = "&Referrals";
 			this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
 			// 
 			// menuItemSchools
 			// 
-			this.menuItemSchools.Index = 17;
+			this.menuItemSchools.Index = 18;
 			this.menuItemSchools.Text = "Sites";
 			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSites_Click);
-			// 
-			// menuItemSpelling
-			// 
-			this.menuItemSpelling.Index = 18;
-			this.menuItemSpelling.Text = "Spelling";
-			this.menuItemSpelling.Click += new System.EventHandler(this.menuItemSpelling_Click);
 			// 
 			// menuItemZipCodes
 			// 
@@ -4439,7 +4439,7 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sites");
 		}
 
-		private void menuItemSpelling_Click(object sender,EventArgs e) {
+		private void menuItemCustomDict_Click(object sender,EventArgs e) {
 			FormDictCustoms FormD=new FormDictCustoms();
 			FormD.ShowDialog();
 		}
