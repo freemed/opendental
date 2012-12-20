@@ -1,6 +1,8 @@
 package com.opendental.odweb.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -8,7 +10,6 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -26,6 +27,8 @@ public class MsgBox extends PopupPanel {
 	@UiField HTML text;
 	@UiField Button butOK;
 	@UiField Button butClose;
+	/** The maximum width we want pop ups to be. */
+	private final int MAX_WIDTH=600;
 	
 	public MsgBox(String msg){
 		//PopupPanel's constructor takes 'auto-hide'.
@@ -37,13 +40,22 @@ public class MsgBox extends PopupPanel {
 		uiBinder.createAndBindUi(this);
 		messagePanel.setSpacing(5);
 		buttonPanel.setSpacing(3);
-		buttonPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-		//Escape characters that won't display in html:
-//		msg=msg.replace("&", "&amp;");
-//		msg=msg.replace("<", "&lt;");
-//		msg=msg.replace(">", "&gt;");
-//		msg=msg.replace("\r\n", "<br>");
 		text.setText(msg);
+		setVisible(false);//Hide until we resize the message box.
+		//We have to use a deferred scheduler to set the width because the widgets have yet to be drawn.
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			@Override
+			public void execute() {
+				//Check if the content panel is wider than the max width.
+				if(contentPanel.getOffsetWidth()>MAX_WIDTH) {
+					contentPanel.setWidth(MAX_WIDTH+"px");
+				}
+				//Center the popup panel.
+				center();
+				//This is so the user can't see the resizing take place.
+				setVisible(true);
+			}
+		});
 		//Now set the contents of the widget.
 		setWidget(contentPanel);
 	}
