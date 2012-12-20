@@ -425,10 +425,10 @@ namespace OpenDental{
 				report.TableQ.Rows.Add(row);
 			}
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-				report.ColTotal[7]=(double)total;
+				report.ColTotal[7]=total;
 			}
 			else {
-				report.ColTotal[6]=(double)total;
+				report.ColTotal[6]=total;
 			}
 			FormQuery2.ResetGrid();			
 			report.Title="Daily Procedures";

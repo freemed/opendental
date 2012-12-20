@@ -214,7 +214,7 @@ namespace OpenDental{
 				row[3]=tempT.Rows[i][4];//Patient name
 				row[4]=tempT.Rows[i][5];//Ins Carrier
 				row[5]=PIn.Double(tempT.Rows[i][6].ToString()).ToString("F");//claim fee
-				report.ColTotal[5]+=PIn.Double(tempT.Rows[i][6].ToString());
+				report.ColTotal[5]+=PIn.Decimal(tempT.Rows[i][6].ToString());
 				report.TableQ.Rows.Add(row);
       }
 			FormQuery2.ResetGrid();//this is a method in FormQuery2;	

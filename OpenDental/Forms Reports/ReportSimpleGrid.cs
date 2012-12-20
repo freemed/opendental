@@ -24,7 +24,7 @@ namespace OpenDental{
 		///<summary></summary>
 		private HorizontalAlignment[] colAlign;
 		///<summary></summary>
-		public double[] ColTotal;
+		public decimal[] ColTotal;
 		///<summary></summary>
 		private int[] colWidth;
 		///<summary></summary>
@@ -77,7 +77,7 @@ namespace OpenDental{
 			colPos[0]=0;
 			colCaption=new string[TableQ.Columns.Count];
 			colAlign=new HorizontalAlignment[TableQ.Columns.Count];
-			ColTotal=new double[TableQ.Columns.Count];
+			ColTotal=new decimal[TableQ.Columns.Count];
 		}
 
 		/*

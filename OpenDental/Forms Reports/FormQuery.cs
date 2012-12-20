@@ -1061,7 +1061,7 @@ namespace OpenDental{
 			}//end for j cols
 			if(reportIn!=null){
 				for(int k=0;k<colTotals.Length;k++){
-					reportIn.ColTotal[k]=PIn.Double(colTotals[k].ToString("n"));
+					reportIn.ColTotal[k]=PIn.Decimal(colTotals[k].ToString("n"));
 				}
 			}
 			return tableOut;

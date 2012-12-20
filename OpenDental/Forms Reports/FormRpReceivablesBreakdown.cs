@@ -557,13 +557,13 @@ namespace OpenDental {
 						rcvProd = 0;
 						rcvWriteoff = 0;
 					}
-					report.ColTotal[1]=PIn.Double(ColTotal[1].ToString("n"));
-					report.ColTotal[2]=PIn.Double(ColTotal[2].ToString("n"));
-					report.ColTotal[3]=PIn.Double(ColTotal[3].ToString("n"));
-					report.ColTotal[4]=PIn.Double(ColTotal[4].ToString("n"));
-					report.ColTotal[5]=PIn.Double(ColTotal[5].ToString("n"));
-					report.ColTotal[6]=PIn.Double(ColTotal[6].ToString("n"));
-					report.ColTotal[7]=PIn.Double(ColTotal[7].ToString("n"));
+					report.ColTotal[1]=PIn.Decimal(ColTotal[1].ToString("n"));
+					report.ColTotal[2]=PIn.Decimal(ColTotal[2].ToString("n"));
+					report.ColTotal[3]=PIn.Decimal(ColTotal[3].ToString("n"));
+					report.ColTotal[4]=PIn.Decimal(ColTotal[4].ToString("n"));
+					report.ColTotal[5]=PIn.Decimal(ColTotal[5].ToString("n"));
+					report.ColTotal[6]=PIn.Decimal(ColTotal[6].ToString("n"));
+					report.ColTotal[7]=PIn.Decimal(ColTotal[7].ToString("n"));
 					FormQuery2 = new FormQuery(report);
 					FormQuery2.IsReport = true;
 					FormQuery2.ResetGrid();

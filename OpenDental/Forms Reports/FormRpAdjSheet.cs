@@ -374,7 +374,7 @@ namespace OpenDental{
 			}
 			report.InitializeColumns();
 			DataRow row;
-			double dbl;
+			decimal dec;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row = report.TableQ.NewRow();//create new row called 'row' based on structure of TableQ
 				row[0]=PIn.Date(table.Rows[i][0].ToString()).ToShortDateString();
@@ -389,9 +389,9 @@ namespace OpenDental{
 				colI++;
 				row[colI]=table.Rows[i][5].ToString();//Note
 				colI++;
-				dbl=PIn.Double(table.Rows[i][6].ToString());//Amount
-				row[colI]=dbl.ToString("n");
-				report.ColTotal[colI]+=dbl;
+				dec=PIn.Decimal(table.Rows[i][6].ToString());//Amount
+				row[colI]=dec.ToString("n");
+				report.ColTotal[colI]+=dec;
 				report.TableQ.Rows.Add(row);
 			}
 			FormQuery2.ResetGrid();		

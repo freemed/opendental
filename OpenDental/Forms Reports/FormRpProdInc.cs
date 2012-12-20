@@ -990,7 +990,7 @@ namespace OpenDental{
 				report.TableQ.Rows.Add(row);
 			}
 			for(int i=0;i<colTotals.Length;i++){
-				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
+				report.ColTotal[i]=PIn.Decimal(colTotals[i].ToString("n"));
 			}
 			FormQuery2.ResetGrid();
 			//FormQuery2.SubmitReportQuery();
@@ -1563,7 +1563,7 @@ ORDER BY adjdate DESC
 				report.TableQ.Rows.Add(row);  //adds row to table Q
       }
 			for(int i=0;i<colTotals.Length;i++){
-				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
+				report.ColTotal[i]=PIn.Decimal(colTotals[i].ToString("n"));
 			}
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
@@ -1985,7 +1985,7 @@ ORDER BY adjdate DESC
 				report.TableQ.Rows.Add(row);  //adds row to table Q
       }
 			for(int i=0;i<colTotals.Length;i++){
-				report.ColTotal[i]=PIn.Double(colTotals[i].ToString("n"));
+				report.ColTotal[i]=PIn.Decimal(colTotals[i].ToString("n"));
 			}
 			FormQuery2=new FormQuery(report);
 			FormQuery2.IsReport=true;
