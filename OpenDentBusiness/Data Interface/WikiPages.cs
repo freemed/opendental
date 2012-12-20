@@ -3,48 +3,51 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class WikiPages{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all WikiPages.</summary>
-		private static List<WikiPage> listt;
-
-		///<summary>A list of all WikiPages.</summary>
-		public static List<WikiPage> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
+		///<summary>Gets one WikiPage from the db.</summary>
+		public static WikiPage GetMaster() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod());
 			}
-			set {
-				listt=value;
+			string command="SELECT * FROM wikipage WHERE PageTitle='_Master' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='_Master');";
+			return Crud.WikiPageCrud.SelectOne(command);
+		}
+
+		public static WikiPage GetByName(string PageName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageName);
 			}
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageName+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+PageName+"');";
+			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM wikipage ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="WikiPage";
-			FillCache(table);
-			return table;
+		public static string TranslateToXhtml(string wikiContent) {
+			StringBuilder retVal = new StringBuilder();
+			string baseLocalURL="wiki:";
+			retVal.Append(wikiContent);
+			retVal.Replace("&<","&lt;");
+			retVal.Replace("&>","&gt;");
+			retVal.Replace("<body>","<body><p>");
+			retVal.Replace("</body>","</p></body>");
+			//Replace internal Links
+			MatchCollection matches = Regex.Matches(retVal.ToString(),"\\[\\[.{0,255}\\]\\]");
+			foreach(Match link in matches) {
+				retVal.Replace(link.Value,"<a href=\""+baseLocalURL+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+			}
+			retVal.Replace("\r\n\r\n","</p>\r\n<p>");
+			retVal.Replace("<p></p>","<p>&nbsp;</p>");
+			retVal.Replace("\r\n","<br />");
+			retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			retVal.Replace("  ","&nbsp;&nbsp;");
+			//TODO: Color tags
+			//Imagae Tags
+			return retVal.ToString();
 		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.WikiPageCrud.TableToList(table);
-		}
-		#endregion
-
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -93,6 +96,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 		*/
+
 
 
 

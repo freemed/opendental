@@ -11380,9 +11380,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE wikipage (
 						WikiPageNum bigint NOT NULL auto_increment PRIMARY KEY,
 						UserNum bigint NOT NULL,
-						DateTimeSaved date NOT NULL DEFAULT '0001-01-01',
+						DateTimeSaved datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						PageTitle varchar(255) NOT NULL,
-						PageContent MEDIUMTEXT,
+						PageContent MEDIUMTEXT NOT NULL,
 						INDEX(UserNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -11443,7 +11443,6 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
 
 
 

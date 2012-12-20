@@ -446,6 +446,18 @@
     <Compile Include="Forms\FormInnoDb.designer.cs">
       <DependentUpon>FormInnoDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWiki.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWiki.designer.cs">
+      <DependentUpon>FormWiki.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiEdit.designer.cs">
+      <DependentUpon>FormWikiEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormXchargeTokenTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2662,6 +2674,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormInnoDb.resx">
       <DependentUpon>FormInnoDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWiki.resx">
+      <DependentUpon>FormWiki.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiEdit.resx">
+      <DependentUpon>FormWikiEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormXchargeTokenTool.resx">
       <DependentUpon>FormXchargeTokenTool.cs</DependentUpon>

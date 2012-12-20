@@ -50,7 +50,7 @@ namespace OpenDentBusiness.Crud{
 				wikiPage.UserNum      = PIn.Long  (table.Rows[i]["UserNum"].ToString());
 				wikiPage.PageTitle    = PIn.String(table.Rows[i]["PageTitle"].ToString());
 				wikiPage.PageContent  = PIn.String(table.Rows[i]["PageContent"].ToString());
-				wikiPage.DateTimeSaved= PIn.Date  (table.Rows[i]["DateTimeSaved"].ToString());
+				wikiPage.DateTimeSaved= PIn.DateT (table.Rows[i]["DateTimeSaved"].ToString());
 				retVal.Add(wikiPage);
 			}
 			return retVal;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (wikiPage.UserNum)+","
 				+"'"+POut.String(wikiPage.PageTitle)+"',"
 				+"'"+POut.String(wikiPage.PageContent)+"',"
-				+    POut.Date  (wikiPage.DateTimeSaved)+")";
+				+    DbHelper.Now()+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum      =  "+POut.Long  (wikiPage.UserNum)+", "
 				+"PageTitle    = '"+POut.String(wikiPage.PageTitle)+"', "
 				+"PageContent  = '"+POut.String(wikiPage.PageContent)+"', "
-				+"DateTimeSaved=  "+POut.Date  (wikiPage.DateTimeSaved)+" "
+				//DateTimeSaved not allowed to change
 				+"WHERE WikiPageNum = "+POut.Long(wikiPage.WikiPageNum);
 			Db.NonQ(command);
 		}
@@ -135,10 +135,7 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="PageContent = '"+POut.String(wikiPage.PageContent)+"'";
 			}
-			if(wikiPage.DateTimeSaved != oldWikiPage.DateTimeSaved) {
-				if(command!=""){ command+=",";}
-				command+="DateTimeSaved = "+POut.Date(wikiPage.DateTimeSaved)+"";
-			}
+			//DateTimeSaved not allowed to change
 			if(command==""){
 				return;
 			}
