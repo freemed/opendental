@@ -157,7 +157,7 @@ namespace CentralManager {
 				}
 			}
 			else {
-				MessageBox.Show("Either a database or a web service URI must be specified in the connection.");
+				MessageBox.Show("Either a database or a Middle Tier URI must be specified in the connection.");
 				return;
 			}
 			//od username and password always allowed
