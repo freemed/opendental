@@ -3,7 +3,7 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui" >
   
-  <ui:style>
+  <ui:style type="com.opendental.odweb.client.ui.ODGrid.RowStyle">
   
   	.containerPanel {
 		background-color: #e9e9ef;
@@ -23,6 +23,7 @@
 	
 	.tablesODGrid {
 		table-layout: fixed;
+		border-collapse: collapse;
 	}
 	
 	.tableColumnHeaders {
@@ -31,8 +32,21 @@
 		border-bottom: 1px solid #66667a;
 	}
 	
+	.tableColumnHeaders td {
+		border-right: 1px solid #000;
+	}
+	
 	.tableMain {
 		background-color: #ffffff;
+		border-bottom: 1px solid #000;
+	}
+	
+	.tableMain td {
+		border-right: 1px solid #000;
+	}
+  
+  	.tableMainRowFormatter {
+		background-color: #ededed;
 	}
 	
   </ui:style>

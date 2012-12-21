@@ -5,6 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -20,6 +21,14 @@ public class ODGrid extends Composite implements ClickHandler {
 	private static ODGridUiBinder uiBinder = GWT.create(ODGridUiBinder.class);
 	interface ODGridUiBinder extends UiBinder<Widget, ODGrid> {
 	}
+	
+	/** This is going to allow me to have programmatic access to specified UiBinder styles. */
+	interface RowStyle extends CssResource {
+		/** This row formatter is used to color every odd row in the main grid. */
+		String tableMainRowFormatter();
+	}
+	/** RowStyle is strictly used to refer to the CSS portion of the UiBinder file programmatically. */
+	@UiField RowStyle style;
 	
 	/** A simple panel that will contain all the widgets that compose the ODGrid. */
 	@UiField DockPanel containerPanel;
@@ -99,7 +108,7 @@ public class ODGrid extends Composite implements ClickHandler {
 		setWidth(width);
 		containerPanel.setSize(width+"px", height+"px");
 		scrollPanel.setSize(width+"px", height+"px");//Scroll panel height will get set correctly with the deferred scheduler.  This is just so the window centers itself correctly in the browser.
-		//We have to use a deferred scheduler to set the height of the scroll panel because the widgets have yet to be drawn.
+		//We have to use a deferred scheduler to set the height of the scroll panel because the widgets have yet to be drawn therefore their dimensions are 0.
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
 			public void execute() {
@@ -199,7 +208,7 @@ public class ODGrid extends Composite implements ClickHandler {
 			tableColumnHeaders.getCellFormatter().setWidth(0,i,columnWidth+"px");
 			if(i==Columns.size()-1) {//This is the last column in the list, make it span the rest of the grid if there is no horizontal scroll bar.
 				if(Width>GridW) {//The grid is wide enough to contain all the columns.
-					int columnSpacing=(6*Columns.size())-(2*(Columns.size()-1));//Every cell has spacing before and after it.  This accommodates for that space.
+					int columnSpacing=(5*Columns.size())-(2*(Columns.size()));//Every cell has spacing before and after it.  This accommodates for that space.
 					columnWidth=Width-ColPos[ColPos.length-1]-columnSpacing;//Take the entire width of the container minus the set widths, minus the spacing.
 					tableColumnHeaders.getCellFormatter().setWidth(0,i,(columnWidth)+"px");//Make this column span to the end of the grid.
 				}
@@ -231,6 +240,9 @@ public class ODGrid extends Composite implements ClickHandler {
 			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
 			//Set the width of the cell.
 			tableMain.getCellFormatter().setWidth(row,column,ColWidths[column]+"px");
+		}
+		if(!(row % 2==0)) {//Format odd rows so they look different.
+			tableMain.getRowFormatter().addStyleName(row, style.tableMainRowFormatter());
 		}
 	}
 	
