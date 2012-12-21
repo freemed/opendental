@@ -114,10 +114,14 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		public static void UpdateHeartBeat(string computerName) {
+		/// <summary>When starting up, in an attempt to be fast, it will not add a new computer to the list.</summary>
+		public static void UpdateHeartBeat(string computerName,bool isStartup) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),computerName,isStartup);
 				return;
+			}
+			if(!isStartup && list==null) {
+				RefreshCache();//adds new computer to list
 			}
 			string command= "UPDATE computer SET LastHeartBeat="+DbHelper.Now()+" WHERE CompName = '"+POut.String(computerName)+"'";
 			Db.NonQ(command);

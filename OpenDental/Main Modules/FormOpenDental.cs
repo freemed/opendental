@@ -1775,7 +1775,7 @@ namespace OpenDental{
 			ProcessCommandLine(CommandLineArgs);
 			//}
 			try {
-				Computers.UpdateHeartBeat(Environment.MachineName);
+				Computers.UpdateHeartBeat(Environment.MachineName,true);
 			}
 			catch { }
 			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
@@ -3538,7 +3538,7 @@ namespace OpenDental{
 		private void timerHeartBeat_Tick(object sender,EventArgs e) {
 			//every 3 minutes:
 			try {
-				Computers.UpdateHeartBeat(Environment.MachineName);
+				Computers.UpdateHeartBeat(Environment.MachineName,false);
 			}
 			catch { }
 		}
