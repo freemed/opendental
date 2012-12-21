@@ -21,6 +21,10 @@
 		border-bottom: 1px solid #66667a;
 	}
 	
+	.tablesODGrid {
+		table-layout: fixed;
+	}
+	
 	.tableColumnHeaders {
 		font-weight: bold;
 		background-color: #d2d2d2;
@@ -40,8 +44,8 @@
 		  <g:Dock direction="CENTER">
 		  	<g:ScrollPanel ui:field="scrollPanel">
 		  		<g:VerticalPanel>
-		  			<g:Grid ui:field="tableColumnHeaders" styleName="{style.tableColumnHeaders}" />
-		  			<g:Grid ui:field="tableMain" styleName="{style.tableMain}" />
+		  			<g:Grid ui:field="tableColumnHeaders" addStyleNames="{style.tableColumnHeaders} {style.tablesODGrid}" />
+		  			<g:Grid ui:field="tableMain" addStyleNames="{style.tableMain} {style.tablesODGrid}" />
 		  		</g:VerticalPanel>
 		  	</g:ScrollPanel>
 		  </g:Dock>

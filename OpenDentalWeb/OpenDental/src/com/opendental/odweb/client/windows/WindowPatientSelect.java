@@ -110,8 +110,6 @@ public class WindowPatientSelect extends ODWindow {
 		gridMain.Columns.add(col);
 		col=new ODGridColumn("Email",80);
 		gridMain.Columns.add(col);
-		col=new ODGridColumn("OtherPhone",80);
-		gridMain.Columns.add(col);
 		gridMain.Rows.clear();
 		ODGridRow row;
 		for(int i=0;i<PatientTable.Rows.size();i++) {
@@ -126,7 +124,7 @@ public class WindowPatientSelect extends ODWindow {
 			row.Cells.Add(PatientTable.getCellText(i,"WkPhone"));
 			row.Cells.Add(PatientTable.getCellText(i,"ChartNumber"));
 			row.Cells.Add(PatientTable.getCellText(i,"Address"));
-			row.Cells.Add(PatientTable.getCellText(i,"Status"));
+			row.Cells.Add(PatientTable.getCellText(i,"PatStatus"));
 			row.Cells.Add(PatientTable.getCellText(i,"BillingType"));
 			row.Cells.Add(PatientTable.getCellText(i,"City"));
 			row.Cells.Add(PatientTable.getCellText(i,"State"));
@@ -191,6 +189,7 @@ public class WindowPatientSelect extends ODWindow {
 	}
 	
 	/** If refresh while typing is checked, this will make a call to the database on each key stroke in any search by field. */
+	@SuppressWarnings("unused")
 	private void onDataEntered() {
 		if(checkRefresh.getValue()) {
 			request_GetPtDataTable(true);

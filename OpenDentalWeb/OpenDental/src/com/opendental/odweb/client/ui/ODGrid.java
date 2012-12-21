@@ -36,11 +36,14 @@ public class ODGrid extends Composite implements ClickHandler {
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
 	private boolean IsUpdating;
 	/** The total height of the grid. */
+	@SuppressWarnings("unused")
 	private int GridH;
 	/** The total width of the grid. */
 	private int GridW;
 	/** Uses the ColWidth of each column to set up this array with one element for each column.  Contains the columns position for that column. */
 	private int[] ColPos;
+	/** Holds the width of every column.  Mainly used because figuring out the last column width is tricky. */
+	private int[] ColWidths;
 	/** Array of the heights of each row. */
 	private int[] RowHeights;
 	/** Array of each row location. */
@@ -95,7 +98,7 @@ public class ODGrid extends Composite implements ClickHandler {
 		setHeight(height);
 		setWidth(width);
 		containerPanel.setSize(width+"px", height+"px");
-		scrollPanel.setSize(width+"px", height+"px");//Scroll panel height will get set correctly with the deferred scheduler.  This is so the window centers itself correctly in the browser.
+		scrollPanel.setSize(width+"px", height+"px");//Scroll panel height will get set correctly with the deferred scheduler.  This is just so the window centers itself correctly in the browser.
 		//We have to use a deferred scheduler to set the height of the scroll panel because the widgets have yet to be drawn.
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
 			@Override
@@ -128,7 +131,6 @@ public class ODGrid extends Composite implements ClickHandler {
 	
 	/** Computes the position of each column and the overall width.  Called from endUpdate. */
 	private void computeColumns() {
-		// TODO Enhance ODGrid to have a horizontal scrollbar.
 		//Layout the horizontal scrollbar here.
 		ColPos=new int[Columns.size()];
 		for(int i=0;i<ColPos.length;i++) {
@@ -184,58 +186,51 @@ public class ODGrid extends Composite implements ClickHandler {
 	
 	/** Must be called after computing the columns and rows so that the dimensions of the table are known. */
 	private void drawColumnHeaders() {
+		ColWidths=new int[Columns.size()];
 		//Manipulate the table column headers.
 		tableColumnHeaders.clear();
 		tableColumnHeaders.resize(1, Columns.size());
-		tableColumnHeaders.setSize(GridW+"px", "100%");
+		tableColumnHeaders.setSize("100%", "100%");
 		//Loop through all the columns and set the cells text to the column header.
 		for(int i=0;i<Columns.size();i++) {
-			if(i==Columns.size()-1) {//If this is the last column in the list, make it span the rest of the grid.
-				//Check if the grid is wide enough to contain all the columns
-				tableColumnHeaders.getCellFormatter().setWidth(0,i,Width-ColPos[ColPos.length-1]+"px");//Make this column span to the end of the grid.
-			}
-			else {//Not the last column in the list.
-				//Set the width of the cell.
-				tableColumnHeaders.getCellFormatter().setWidth(0,i,Columns.get(i).getColWidth()+"px");
-				//Set the cell style.
-				tableColumnHeaders.getCellFormatter().setStyleName(0,i,"ODGrid_tableColumnHeaders_Cells");
-			}
 			tableColumnHeaders.setText(0,i,Columns.get(i).getHeading());
+			int columnWidth=Columns.get(i).getColWidth();
+			//Set the width of the cell.
+			tableColumnHeaders.getCellFormatter().setWidth(0,i,columnWidth+"px");
+			if(i==Columns.size()-1) {//This is the last column in the list, make it span the rest of the grid if there is no horizontal scroll bar.
+				if(Width>GridW) {//The grid is wide enough to contain all the columns.
+					int columnSpacing=(6*Columns.size())-(2*(Columns.size()-1));//Every cell has spacing before and after it.  This accommodates for that space.
+					columnWidth=Width-ColPos[ColPos.length-1]-columnSpacing;//Take the entire width of the container minus the set widths, minus the spacing.
+					tableColumnHeaders.getCellFormatter().setWidth(0,i,(columnWidth)+"px");//Make this column span to the end of the grid.
+				}
+			}
+			ColWidths[i]=columnWidth;
 		}
 	}
 	
 	/**  */
 	private void drawRows() {
 		tableMain.clear();
+		tableMain.setVisible(false);
 		tableMain.resize(Rows.size(), Columns.size());
-		tableMain.setSize("0px", GridH+"px");//Set the width to 0 so that a white anomaly doesn't show up for empty grids.  Widths will get set when the rows are drawn.
+		tableMain.setSize("100%", "100%");
 		for(int i=0;i<Rows.size();i++) {
-			// TODO Figure out if the row is visible here.
-			drawRow(i);//The row is visible so draw it.
+			if(i==0) {
+				//Only show the main table if there are rows to show.  Otherwise a white anomaly will show.
+				tableMain.setVisible(true);
+			}
+			drawRow(i);
 		}
 	}
 	
-	/**  */
+	/** Must be called after the column headers are drawn.  That is where ColWidths gets filled. */
 	private void drawRow(int row) {
 		// TODO Figure out if the row is selected here.
 		//Draw all of the columns.
 		for(int column=0;column<Columns.size();column++) {
 			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
-			//If this is the last column in the list, make it span the rest of the grid.
-			if(column==Columns.size()-1) {
-				tableMain.getCellFormatter().setWidth(row,column,Width-ColPos[ColPos.length-1]+"px");//Make this column span to the end of the grid.
-			}
-			else {//Not the last column in the list.
-				//Set the width of the cell.
-				tableMain.getCellFormatter().setWidth(row,column,Columns.get(column).getColWidth()+"px");
-				//Set the style for the cell.
-				if((column % 2)==0) {//Even cells.
-					tableMain.getCellFormatter().setStyleName(row,column,"ODGrid_tableMain_EvenCells");
-				}
-				else {//Odd cells.
-					tableMain.getCellFormatter().setStyleName(row,column,"ODGrid_tableMain_OddCells");
-				}
-			}
+			//Set the width of the cell.
+			tableMain.getCellFormatter().setWidth(row,column,ColWidths[column]+"px");
 		}
 	}
 	
