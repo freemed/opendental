@@ -41,7 +41,6 @@ namespace OpenDental{
 			this.textContent.Name = "textContent";
 			this.textContent.Size = new System.Drawing.Size(1070, 647);
 			this.textContent.TabIndex = 2;
-			this.textContent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textContent_KeyDown);
 			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
 			// 
 			// textKeyWords
