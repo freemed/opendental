@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
+using CodeBase;
 
 namespace OpenDental {
 	public partial class FormProcNoteAppend:Form {
@@ -34,7 +35,25 @@ namespace OpenDental {
 		}
 
 		private string GetSignatureKey() {
-			return ProcCur.Note+ProcCur.UserNum.ToString();
+			//ProcCur.Note was already assembled as it will appear in proc edit window.  We want to key on that.
+			//Procs and proc groups are keyed differently
+			string keyData;
+			if(ProcedureCodes.GetStringProcCode(ProcCur.CodeNum)==ProcedureCodes.GroupProcCode) {
+				keyData=ProcCur.ProcDate.ToShortDateString();
+				keyData+=ProcCur.DateEntryC.ToShortDateString();
+				keyData+=ProcCur.UserNum.ToString();//Security.CurUser.UserName;
+				keyData+=ProcCur.Note;
+				List<ProcGroupItem> groupItemList=ProcGroupItems.GetForGroup(ProcCur.ProcNum);//Orders the list to ensure same key in all cases.
+				for(int i=0;i<groupItemList.Count;i++) {
+					keyData+=groupItemList[i].ProcGroupItemNum.ToString();
+				}
+			}
+			else {//regular proc
+				keyData=ProcCur.Note+ProcCur.UserNum.ToString();
+			}
+			//MsgBoxCopyPaste msgb=new MsgBoxCopyPaste(keyData);
+			//msgb.ShowDialog();
+			return keyData;
 		}
 
 		private void SaveSignature() {

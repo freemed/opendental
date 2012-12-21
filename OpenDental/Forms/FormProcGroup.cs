@@ -52,6 +52,7 @@ namespace OpenDental{
 		private PatField[] PatFieldList;
 		private Patient PatCur;
 		private Family FamCur;
+		/// <summary>Used when making an Rx.</summary>
 		public static bool IsOpen;
 		public static long RxNum;
 		private ODGrid gridPat;
@@ -74,6 +75,11 @@ namespace OpenDental{
 		private Panel panelPlanned;
 		private Label labelDPCpost;
 		private ComboBox comboDPCpost;
+		private UI.Button butLock;
+		private UI.Button butInvalidate;
+		private UI.Button butAppend;
+		private Label labelLocked;
+		private Label labelInvalid;
 		private DataTable TablePlanned;
 
 		public FormProcGroup() {
@@ -132,6 +138,11 @@ namespace OpenDental{
 			this.panelPlanned = new System.Windows.Forms.Panel();
 			this.labelDPCpost = new System.Windows.Forms.Label();
 			this.comboDPCpost = new System.Windows.Forms.ComboBox();
+			this.butLock = new OpenDental.UI.Button();
+			this.butInvalidate = new OpenDental.UI.Button();
+			this.butAppend = new OpenDental.UI.Button();
+			this.labelLocked = new System.Windows.Forms.Label();
+			this.labelInvalid = new System.Windows.Forms.Label();
 			this.panelPlanned.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -181,7 +192,7 @@ namespace OpenDental{
 			// 
 			// label26
 			// 
-			this.label26.Location = new System.Drawing.Point(178,34);
+			this.label26.Location = new System.Drawing.Point(177,32);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(83,18);
 			this.label26.TabIndex = 97;
@@ -245,9 +256,9 @@ namespace OpenDental{
 			this.buttonUseAutoNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.buttonUseAutoNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.buttonUseAutoNote.CornerRadius = 4F;
-			this.buttonUseAutoNote.Location = new System.Drawing.Point(382,46);
+			this.buttonUseAutoNote.Location = new System.Drawing.Point(220,51);
 			this.buttonUseAutoNote.Name = "buttonUseAutoNote";
-			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,24);
+			this.buttonUseAutoNote.Size = new System.Drawing.Size(80,22);
 			this.buttonUseAutoNote.TabIndex = 106;
 			this.buttonUseAutoNote.Text = "Auto Note";
 			this.buttonUseAutoNote.Click += new System.EventHandler(this.buttonUseAutoNote_Click);
@@ -256,12 +267,12 @@ namespace OpenDental{
 			// 
 			this.textNotes.AcceptsTab = true;
 			this.textNotes.Location = new System.Drawing.Point(98,72);
-			this.textNotes.Multiline = true;
 			this.textNotes.Name = "textNotes";
 			this.textNotes.QuickPasteType = OpenDentBusiness.QuickPasteType.Procedure;
 			this.textNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textNotes.Size = new System.Drawing.Size(364,200);
 			this.textNotes.TabIndex = 1;
+			this.textNotes.Text = "";
 			this.textNotes.TextChanged += new System.EventHandler(this.textNotes_TextChanged);
 			// 
 			// butDelete
@@ -572,10 +583,84 @@ namespace OpenDental{
 			this.comboDPCpost.Visible = false;
 			this.comboDPCpost.SelectionChangeCommitted += new System.EventHandler(this.comboDPCpost_SelectionChangeCommitted);
 			// 
+			// butLock
+			// 
+			this.butLock.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butLock.Autosize = true;
+			this.butLock.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butLock.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLock.CornerRadius = 4F;
+			this.butLock.Location = new System.Drawing.Point(382,5);
+			this.butLock.Name = "butLock";
+			this.butLock.Size = new System.Drawing.Size(80,22);
+			this.butLock.TabIndex = 204;
+			this.butLock.Text = "Lock";
+			this.butLock.Click += new System.EventHandler(this.butLock_Click);
+			// 
+			// butInvalidate
+			// 
+			this.butInvalidate.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butInvalidate.Autosize = true;
+			this.butInvalidate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butInvalidate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInvalidate.CornerRadius = 4F;
+			this.butInvalidate.Location = new System.Drawing.Point(387,-9);
+			this.butInvalidate.Name = "butInvalidate";
+			this.butInvalidate.Size = new System.Drawing.Size(80,22);
+			this.butInvalidate.TabIndex = 205;
+			this.butInvalidate.Text = "Invalidate";
+			this.butInvalidate.Visible = false;
+			this.butInvalidate.Click += new System.EventHandler(this.butInvalidate_Click);
+			// 
+			// butAppend
+			// 
+			this.butAppend.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAppend.Autosize = true;
+			this.butAppend.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAppend.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAppend.CornerRadius = 4F;
+			this.butAppend.Location = new System.Drawing.Point(382,50);
+			this.butAppend.Name = "butAppend";
+			this.butAppend.Size = new System.Drawing.Size(80,22);
+			this.butAppend.TabIndex = 203;
+			this.butAppend.Text = "Append";
+			this.butAppend.Visible = false;
+			this.butAppend.Click += new System.EventHandler(this.butAppend_Click);
+			// 
+			// labelLocked
+			// 
+			this.labelLocked.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelLocked.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelLocked.Location = new System.Drawing.Point(342,29);
+			this.labelLocked.Name = "labelLocked";
+			this.labelLocked.Size = new System.Drawing.Size(123,18);
+			this.labelLocked.TabIndex = 202;
+			this.labelLocked.Text = "Locked";
+			this.labelLocked.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.labelLocked.Visible = false;
+			// 
+			// labelInvalid
+			// 
+			this.labelInvalid.Font = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelInvalid.ForeColor = System.Drawing.Color.DarkRed;
+			this.labelInvalid.Location = new System.Drawing.Point(274,7);
+			this.labelInvalid.Name = "labelInvalid";
+			this.labelInvalid.Size = new System.Drawing.Size(102,18);
+			this.labelInvalid.TabIndex = 206;
+			this.labelInvalid.Text = "Invalid";
+			this.labelInvalid.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.labelInvalid.Visible = false;
+			// 
 			// FormProcGroup
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(880,645);
+			this.Controls.Add(this.labelInvalid);
+			this.Controls.Add(this.butLock);
+			this.Controls.Add(this.butInvalidate);
+			this.Controls.Add(this.butAppend);
+			this.Controls.Add(this.labelLocked);
+			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.labelDPCpost);
 			this.Controls.Add(this.comboDPCpost);
 			this.Controls.Add(this.panelPlanned);
@@ -597,7 +682,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textDateEntry);
 			this.Controls.Add(this.butRx);
 			this.Controls.Add(this.butExamSheets);
-			this.Controls.Add(this.buttonUseAutoNote);
 			this.Controls.Add(this.label12);
 			this.Controls.Add(this.textUser);
 			this.Controls.Add(this.textNotes);
@@ -639,6 +723,38 @@ namespace OpenDental{
 			textDateEntry.Text=GroupCur.DateEntryC.ToShortDateString();
 			textUser.Text=Userods.GetName(GroupCur.UserNum);//might be blank. Will change automatically if user changes note or alters sig.
 			textNotes.Text=GroupCur.Note;
+			if(GroupCur.ProcStatus==ProcStat.EC && PrefC.GetBool(PrefName.ProcLockingIsAllowed) && !GroupCur.IsLocked) {
+				butLock.Visible=true;
+			}
+			else {
+				butLock.Visible=false;
+			}
+			if(GroupCur.IsLocked) {//Whether locking is currently allowed, this proc group may have been locked previously.
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+				labelLocked.Visible=true;
+				butAppend.Visible=true;
+				textNotes.ReadOnly=true;//just for visual cue.  No way to save changes, anyway.
+				textNotes.BackColor=SystemColors.Control;
+				butInvalidate.Visible=true;
+				butInvalidate.Location=butLock.Location;
+			}
+			else {
+				butInvalidate.Visible=false;
+				//because islocked overrides security:
+				if(!Security.IsAuthorized(Permissions.ProcComplEdit,GroupCur.DateEntryC)) {
+					butOK.Enabled=false;
+					butDelete.Enabled=false;
+				}
+			}
+			if(GroupCur.ProcStatus==ProcStat.D) {//an invalidated proc
+				labelInvalid.Visible=true;
+				butInvalidate.Visible=false;
+				labelLocked.Visible=false;
+				butAppend.Visible=false;
+				butOK.Enabled=false;
+				butDelete.Enabled=false;
+			}
 			FillProcedures();
 			textNotes.Select();
 			string keyData=GetSignatureKey();
@@ -648,6 +764,9 @@ namespace OpenDental{
 			FillPlanned();
 			textNotes.Select(textNotes.Text.Length,0);
 			IsStartingUp=false;
+			//string retVal=GroupCur.Note+GroupCur.UserNum.ToString();
+			//MsgBoxCopyPaste msgb=new MsgBoxCopyPaste(retVal);
+			//msgb.ShowDialog();
 		}
 
 		private void FillPatientData(){
@@ -1195,60 +1314,42 @@ namespace OpenDental{
 			FillProcedures();
 		}
 
-		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Delete this group note?")){
+		///<summary>This button is only visible if 1. Pref ProcLockingIsAllowed is true, 2. Proc isn't already locked, 3. Proc status is C.</summary>
+		private void butLock_Click(object sender,EventArgs e) {
+			if(!EntriesAreValid()) {
 				return;
 			}
-			Procedures.Delete(GroupCur.ProcNum);
-			for(int i=0;i<GroupItemList.Count;i++){
-				ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
-			}
-			DialogResult=DialogResult.OK;
-			IsOpen=false;
-		}		
+			GroupCur.IsLocked=true;
+			SaveAndClose();//saves all the other various changes that the user made
+		}
 
-		private void butOK_Click(object sender,System.EventArgs e) {
-			if(textProcDate.errorProvider1.GetError(textProcDate)!=""){
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			GroupCur.Note=textNotes.Text;
-			GroupCur.ProcDate=PIn.Date(this.textProcDate.Text);
-			for(int i=0;i<ProcList.Count;i++){
-				ProcList[i].ProcDate=GroupCur.ProcDate;
-			}
-			if(!signatureBoxWrapper.IsValid){
-				MsgBox.Show(this,"Your signature is invalid. Please sign and click OK again.");
+		///<summary>This button is only visible when proc IsLocked.</summary>
+		private void butInvalidate_Click(object sender,EventArgs e) {
+			//What this will really do is "delete" the procedure.
+			if(!Security.IsAuthorized(Permissions.ProcDelete,GroupCur.DateEntryC)) {
 				return;
 			}
 			try {
-				SaveSignature();
+				Procedures.Delete(GroupCur.ProcNum);//also deletes any claimprocs (other than ins payments of course).
 			}
-			catch(Exception ex){
-				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
+			catch(Exception ex) {
+				MessageBox.Show(ex.Message);
+				return;
 			}
-			Procedures.Update(GroupCur,GroupOld);
-			for(int i=0;i<ProcList.Count;i++){
-				Procedures.Update(ProcList[i],ProcListOld[i]);
-			}
-			if(Programs.UsingOrion){
-				for(int i=0;i<OrionProcList.Count;i++){
-					OrionProcs.Update(OrionProcList[i]);
-				}
-			}
+			SecurityLogs.MakeLogEntry(Permissions.ProcDelete,PatCur.PatNum,Lan.g(this,"Invalidated: ")+
+				ProcedureCodes.GetStringProcCode(GroupCur.CodeNum).ToString()+", "+GroupCur.ProcDate.ToShortDateString());
 			DialogResult=DialogResult.OK;
-			IsOpen=false;
 		}
 
-		private void butCancel_Click(object sender,System.EventArgs e) {
-			if(GroupCur.IsNew){
-				Procedures.Delete(GroupCur.ProcNum);
-				for(int i=0;i<GroupItemList.Count;i++){
-					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
-				}
+		///<summary>This button is only visible when proc IsLocked.</summary>
+		private void butAppend_Click(object sender,EventArgs e) {
+			FormProcNoteAppend formPNA=new FormProcNoteAppend();
+			formPNA.ProcCur=GroupCur;
+			formPNA.ShowDialog();
+			if(formPNA.DialogResult!=DialogResult.OK) {
+				return;
 			}
-			DialogResult=DialogResult.Cancel;
-			IsOpen=false;
+			DialogResult=DialogResult.OK;//exit out of this window.  Change already saved, and OK button is disabled in this window, anyway.
 		}
 
 		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -1281,7 +1382,7 @@ namespace OpenDental{
 					FormPF.ShowDialog();
 				}
 			}
-			else{
+			else {
 				if(PatFieldDefs.List[index].FieldType==PatFieldType.Text) {
 					FormPatFieldEdit FormPF=new FormPatFieldEdit(field);
 					FormPF.ShowDialog();
@@ -1301,6 +1402,75 @@ namespace OpenDental{
 			}
 			FillPatientData();
 		}
+
+		private bool EntriesAreValid() {
+			if(textProcDate.errorProvider1.GetError(textProcDate)!="") {
+				MsgBox.Show(this,"Please fix data entry errors first.");
+				return false;
+			}
+			if(!signatureBoxWrapper.IsValid) {
+				MsgBox.Show(this,"Your signature is invalid. Please sign and click OK again.");
+				return false;
+			}
+			return true;
+		}
+
+		private void SaveAndClose() {
+			GroupCur.Note=textNotes.Text;
+			GroupCur.ProcDate=PIn.Date(this.textProcDate.Text);
+			for(int i=0;i<ProcList.Count;i++){
+				ProcList[i].ProcDate=GroupCur.ProcDate;
+			}
+			try {
+				SaveSignature();
+			}
+			catch(Exception ex){
+				MessageBox.Show(Lan.g(this,"Error saving signature.")+"\r\n"+ex.Message);
+			}
+			Procedures.Update(GroupCur,GroupOld);
+			for(int i=0;i<ProcList.Count;i++){
+				Procedures.Update(ProcList[i],ProcListOld[i]);
+			}
+			if(Programs.UsingOrion){
+				for(int i=0;i<OrionProcList.Count;i++){
+					OrionProcs.Update(OrionProcList[i]);
+				}
+			}
+			DialogResult=DialogResult.OK;
+			IsOpen=false;
+		}
+
+		private void butDelete_Click(object sender, System.EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Delete this group note?")){
+				return;
+			}
+			Procedures.Delete(GroupCur.ProcNum);
+			for(int i=0;i<GroupItemList.Count;i++){
+				ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
+			}
+			DialogResult=DialogResult.OK;
+			IsOpen=false;
+		}		
+
+		private void butOK_Click(object sender,System.EventArgs e) {
+			if(!EntriesAreValid()){
+				return;
+			}
+			SaveAndClose();
+		}
+
+		private void butCancel_Click(object sender,System.EventArgs e) {
+			if(GroupCur.IsNew){
+				Procedures.Delete(GroupCur.ProcNum);
+				for(int i=0;i<GroupItemList.Count;i++){
+					ProcGroupItems.Delete(GroupItemList[i].ProcGroupItemNum);
+				}
+			}
+			DialogResult=DialogResult.Cancel;
+			IsOpen=false;
+		}
+
+		
 
 
 

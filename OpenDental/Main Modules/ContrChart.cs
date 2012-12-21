@@ -4986,7 +4986,7 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>The supplied procedure row must include these columns: IsLocked,ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
+		///<summary>The supplied procedure row must include these columns: isLocked,ProcDate,ProcStatus,ProcCode,Surf,ToothNum, and ToothRange, all in raw database format.</summary>
 		private bool ShouldDisplayProc(DataRow row){
 			//if printing for hospital
 			/*
@@ -5059,7 +5059,8 @@ namespace OpenDental{
 					return false;
 				}
 			}
-			if(!ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()),PIn.Bool(row["IsLocked"].ToString()))) {
+			bool isLocked=(row["isLocked"].ToString()=="X");
+			if(!ProcStatDesired((ProcStat)PIn.Long(row["ProcStatus"].ToString()),isLocked)) {
 				return false;
 			}
 			if(Programs.UsingOrion) {
@@ -5328,7 +5329,8 @@ namespace OpenDental{
 				}
 				if(fields[i].InternalName=="ADA Code"
 					|| fields[i].InternalName=="User"
-					|| fields[i].InternalName=="Signed")
+					|| fields[i].InternalName=="Signed"
+					|| fields[i].InternalName=="Locked")
 				{
 					col.TextAlign=HorizontalAlignment.Center;
 				}
@@ -5539,6 +5541,9 @@ namespace OpenDental{
 							break;
 						case "Abbr":
 							row.Cells.Add(table.Rows[i]["AbbrDesc"].ToString());
+							break;
+						case "Locked":
+							row.Cells.Add(table.Rows[i]["isLocked"].ToString());
 							break;
 						default:
 							row.Cells.Add("");
@@ -6841,7 +6846,9 @@ namespace OpenDental{
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
 				if(row["ProcNum"].ToString()!="0"){
-					if(PIn.Long(row["ProcStatus"].ToString())==(int)ProcStat.C){
+					if(PIn.Long(row["ProcStatus"].ToString())==(int)ProcStat.C
+						|| PIn.Bool(row["IsLocked"].ToString()))//takes care of locked group notes and invalidated (deleted and locked) procs
+					{
 						skippedC++;
 					}
 					else{
@@ -8809,7 +8816,11 @@ namespace OpenDental{
 			long provNum=proclist[0].ProvNum;
 			for(int i=0;i<proclist.Count;i++){//starts at 0 to check procStatus
 				if(ProcedureCodes.GetStringProcCode(proclist[i].CodeNum)==ProcedureCodes.GroupProcCode){
-					MsgBox.Show(this,"You may only attach a group note to procedures.");
+					MsgBox.Show(this,"You cannot attach a group note to another group note.");
+					return;
+				}
+				if(proclist[i].IsLocked) {
+					MsgBox.Show(this,"Procedures cannot be locked.");
 					return;
 				}
 				if(proclist[i].ProcDate!=procDate){

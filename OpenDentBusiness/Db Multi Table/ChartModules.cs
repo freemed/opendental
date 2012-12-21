@@ -54,7 +54,7 @@ namespace OpenDentBusiness {
 			table.Columns.Add("EmailMessageNum");
 			table.Columns.Add("FormPatNum");
 			table.Columns.Add("HideGraphics");
-			table.Columns.Add("IsLocked");
+			table.Columns.Add("isLocked");
 			table.Columns.Add("length");
 			table.Columns.Add("LabCaseNum");
 			table.Columns.Add("note");
@@ -193,7 +193,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]=rawProcs.Rows[i]["HideGraphics"].ToString();
-					row["IsLocked"]=rawProcs.Rows[i]["IsLocked"].ToString();
+					row["isLocked"]=PIn.Bool(rawProcs.Rows[i]["isLocked"].ToString())?"X":"";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["signature"]="";
@@ -306,6 +306,12 @@ namespace OpenDentBusiness {
 					row["ProcNum"]=rawProcs.Rows[i]["ProcNum"].ToString();
 					row["ProcNumLab"]=rawProcs.Rows[i]["ProcNumLab"].ToString();
 					row["procStatus"]=Lans.g("enumProcStat",((ProcStat)PIn.Long(rawProcs.Rows[i]["ProcStatus"].ToString())).ToString());
+					if(row["procStatus"].ToString()=="D") {
+						if(row["isLocked"].ToString()=="X") {
+							row["procStatus"]="I";
+							row["description"]=Lans.g("ChartModule","-invalid-")+" "+row["description"].ToString();
+						}
+					}
 					row["ProcStatus"]=rawProcs.Rows[i]["ProcStatus"].ToString();
 					row["procTime"]="";
 					dateT=PIn.DateT(rawProcs.Rows[i]["ProcTime"].ToString());
@@ -403,7 +409,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					if(PIn.DateT(rawComm.Rows[i]["DateTimeEnd"].ToString()).Year>1880) {
@@ -482,7 +488,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"] = 0;
 					row["FormPatNum"] = rawForm.Rows[i]["FormPatNum"].ToString();
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"] = 0;
 					row["length"]="";
 					row["note"] = "";
@@ -576,7 +582,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]=rawRx.Rows[i]["Notes"].ToString();
@@ -662,7 +668,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=rawLab.Rows[i]["LabCaseNum"].ToString();
 					row["length"]="";
 					row["note"]=rawLab.Rows[i]["Instructions"].ToString();
@@ -759,7 +765,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					txt="";
@@ -907,7 +913,7 @@ namespace OpenDentBusiness {
 				row["EmailMessageNum"]=0;
 				row["FormPatNum"]=0;
 				row["HideGraphics"]="";
-				row["IsLocked"]="";
+				row["isLocked"]="";
 				row["LabCaseNum"]=0;
 				row["length"]="";
 				if(rawApt.Rows[i]["Pattern"].ToString()!="") {
@@ -985,7 +991,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=rawEmail.Rows[i]["EmailMessageNum"].ToString();
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]=rawEmail.Rows[i]["BodyText"].ToString();
@@ -1070,7 +1076,7 @@ namespace OpenDentBusiness {
 					row["EmailMessageNum"]=0;
 					row["FormPatNum"]=0;
 					row["HideGraphics"]="";
-					row["IsLocked"]="";
+					row["isLocked"]="";
 					row["LabCaseNum"]=0;
 					row["length"]="";
 					row["note"]="";
