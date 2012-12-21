@@ -309,7 +309,7 @@ namespace OpenDental.Bridges {
 				"Function=Auth"//CONSTANT; signifies that this is an authentication request
 				+"&Source=STM"//CONSTANT; file format
 				+"&UploaderName=OpenDental"//CONSTANT
-				+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString()//eg 3.4
+				+"&UploaderVersion="+myVersion.Major.ToString()+"."+myVersion.Minor.ToString()+"."+myVersion.Build.ToString()//eg 12.3.24
 				+"&Username="+PrefC.GetString(PrefName.BillingElectUserName)
 				+"&Password="+PrefC.GetString(PrefName.BillingElectPassword);
 			webReq.KeepAlive=false;
