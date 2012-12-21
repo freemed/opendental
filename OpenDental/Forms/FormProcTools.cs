@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -227,7 +228,21 @@ namespace OpenDental{
 				checkApptProcsQuickAdd.Enabled=false;
 				checkRecallTypes.Enabled=false;
 			#endif
-			codeList=CDT.Class1.GetADAcodes();
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				//Tcodes remain enabled
+				//Ncodes remain enabled
+				checkDcodes.Enabled=false;//todo: enable this when ready
+				checkDcodes.Text="CDA codes - Add any missing 2012 CDA codes.  This option does not work in the trial version or compiled version.";
+				checkAutocodes.Enabled=false;
+				checkProcButtons.Enabled=false;
+				checkApptProcsQuickAdd.Enabled=false;
+				checkRecallTypes.Enabled=false;
+				checkRecallTypes.Text="Recall Types - Resets the recall types and triggers to default.  Replaces any T codes with CDA codes.";
+				codeList=new List<ProcedureCode>();//TODO: This will be baked into our source code.  Waiting on a disk from BCDA.
+			}
+			else { //USA
+				codeList=CDT.Class1.GetADAcodes();
+			}
 			if(codeList.Count==0){
 				checkDcodes.Checked=false;
 				checkDcodes.Enabled=false;
