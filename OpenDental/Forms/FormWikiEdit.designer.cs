@@ -31,6 +31,7 @@ namespace OpenDental{
 			// 
 			// textContent
 			// 
+			this.textContent.AcceptsTab = true;
 			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -38,8 +39,10 @@ namespace OpenDental{
 			this.textContent.Location = new System.Drawing.Point(0, 48);
 			this.textContent.Multiline = true;
 			this.textContent.Name = "textContent";
-			this.textContent.Size = new System.Drawing.Size(784, 539);
+			this.textContent.Size = new System.Drawing.Size(1070, 647);
 			this.textContent.TabIndex = 2;
+			this.textContent.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textContent_KeyDown);
+			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
 			// 
 			// textKeyWords
 			// 
@@ -47,9 +50,9 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textKeyWords.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textKeyWords.Location = new System.Drawing.Point(149, 26);
-			this.textKeyWords.Multiline = true;
+			this.textKeyWords.MaxLength = 255;
 			this.textKeyWords.Name = "textKeyWords";
-			this.textKeyWords.Size = new System.Drawing.Size(635, 20);
+			this.textKeyWords.Size = new System.Drawing.Size(921, 20);
 			this.textKeyWords.TabIndex = 1;
 			// 
 			// label2
@@ -67,14 +70,14 @@ namespace OpenDental{
 			this.ToolBarMain.ImageList = null;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(784, 25);
+			this.ToolBarMain.Size = new System.Drawing.Size(1070, 25);
 			this.ToolBarMain.TabIndex = 3;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(784, 587);
+			this.ClientSize = new System.Drawing.Size(1070, 695);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textKeyWords);
 			this.Controls.Add(this.textContent);
@@ -82,6 +85,8 @@ namespace OpenDental{
 			this.Name = "FormWikiEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Wiki Edit";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormWikiEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormWikiEdit_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

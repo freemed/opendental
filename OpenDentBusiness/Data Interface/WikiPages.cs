@@ -22,10 +22,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod());
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='Style');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='_Style');";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
+		///<summary>Returns null if page does not exist.</summary>
 		public static WikiPage GetByName(string PageName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageName);
@@ -43,7 +44,8 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
 
-		///<summary>Currently calls WikiPages.Insert() and does not actually update record. Update will be implemented when versioning is improved.</summary>
+		/*
+		///<summary>Update may be implemented when versioning is improved.</summary>
 		public static void Update(WikiPage wikiPage){
 			Insert(wikiPage);
 			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -51,29 +53,30 @@ namespace OpenDentBusiness{
 			//  return;
 			//}
 			//Crud.WikiPageCrud.Update(wikiPage);
-		}
+		}*/
 
 		public static string TranslateToXhtml(string wikiContent) {
-			StringBuilder retVal = new StringBuilder();
-			string baseLocalURL="wiki:";
-			retVal.Append(wikiContent);
-			retVal.Replace("&<","&lt;");
-			retVal.Replace("&>","&gt;");
-			retVal.Replace("<body>","<body><p>");
-			retVal.Replace("</body>","</p></body>");
+			string retVal="";
+			retVal+=wikiContent;
+			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;").Replace("<body>","<body><p>").Replace("</body>","</p></body>");
+			//retVal.Replace("&<","&lt;");
+			//retVal.Replace("&>","&gt;");
+			//retVal.Replace("<body>","<body><p>");
+			//retVal.Replace("</body>","</p></body>");
 			//Replace internal Links
-			MatchCollection matches = Regex.Matches(retVal.ToString(),"\\[\\[.{0,255}\\]\\]");
+			MatchCollection matches = Regex.Matches(retVal,"\\[\\[.{0,255}\\]\\]");
 			foreach(Match link in matches) {
-				retVal.Replace(link.Value,"<a href=\""+baseLocalURL+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+				retVal=retVal.Replace(link.Value,"<a href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
 			}
-			retVal.Replace("\r\n\r\n","</p>\r\n<p>");
-			retVal.Replace("<p></p>","<p>&nbsp;</p>");
-			retVal.Replace("\r\n","<br />");
-			retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			retVal.Replace("  ","&nbsp;&nbsp;");
+			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>").Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
+			//retVal.Replace("\r\n\r\n","</p>\r\n<p>");
+			//retVal.Replace("<p></p>","<p>&nbsp;</p>");
+			//retVal.Replace("\r\n","<br />");
+			//retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			//retVal.Replace("  ","&nbsp;&nbsp;");
 			//TODO: Color tags
 			//Imagae Tags
-			return retVal.ToString();
+			return retVal;
 		}
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

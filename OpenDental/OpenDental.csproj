@@ -365,6 +365,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiHistory.designer.cs">
+      <DependentUpon>FormWikiHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWikiAllPages.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2648,6 +2654,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiHistory.resx">
+      <DependentUpon>FormWikiHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWikiAllPages.resx">
       <DependentUpon>FormWikiAllPages.cs</DependentUpon>

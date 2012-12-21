@@ -10,14 +10,10 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWiki:Form {
-		public WikiPage PageCur;
+		public WikiPage WikiPageCur;
 		public WikiPage PageMaster;
 		public WikiPage PageStyle;
-		private string targetPage;
-		private string pageAggregate;
-		private string wikiLocation;
-		private int pageCount;
-		private bool loading;
+		private string AggregateContent;
 
 		public FormWiki() {
 			InitializeComponent();
@@ -25,15 +21,50 @@ namespace OpenDental {
 		}
 
 		private void FormWiki_Load(object sender,EventArgs e) {
+			//WindowState=FormWindowState.Maximized;
+			Rectangle tempWorkAreaRect=System.Windows.Forms.Screen.GetWorkingArea(this);
+			Top=0;
+			Left=Math.Max(0,(tempWorkAreaRect.Width-960)/2);
+			Width=Math.Min(tempWorkAreaRect.Width,960);
+			Height=tempWorkAreaRect.Height;
+			//Height=SystemInformation.PrimaryMonitorSize.Height;
 			LayoutToolBar();
-			LoadLayoutPages();
-			WritePage("Home");
-			webBrowserWiki.Url=new Uri(wikiLocation+"Home.html");
+			PageMaster=WikiPages.GetMaster();
+			PageStyle=WikiPages.GetStyle();
+			LoadWikiPage("Home");
+		}
+
+		private void LoadWikiPage(string PageTitle) {
+			if(WikiPages.GetByName(PageTitle)==null) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page does not exist. Would you like to create it?")) {
+					return;
+				}
+				FormWikiEdit FormWE=new FormWikiEdit();
+				FormWE.WikiPageCur=new WikiPage();
+				FormWE.WikiPageCur.IsNew=true;
+				FormWE.WikiPageCur.PageTitle=PageTitle;
+				FormWE.ShowDialog();
+				if(FormWE.DialogResult!=DialogResult.OK) {
+					return;
+				}
+			}
+			WikiPageCur=WikiPages.GetByName(PageTitle);
+			//WikiPageCur=WikiPages.GetByName(PageTitle);
+			//webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(PageMaster.PageContent
+			//.Replace("@@@Title@@@",WikiPageCur.PageTitle).Replace("@@@Style@@@",PageStyle.PageContent).Replace("@@@Content@@@",WikiPageCur.PageContent));
+			//WikiPageCur=WikiPages.GetByName(PageTitle);
+			AggregateContent=PageMaster.PageContent;
+			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
+			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
+			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent.Clone().ToString());
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);//WikiPageCur is mysteriously set to null after this line.
+			//WikiPageCur=WikiPages.GetByName(PageTitle);
+			Text="OD Wiki - "+WikiPageCur.PageTitle;
 		}
 
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,Lan.g(this,"Setup wiki styles and behavior."),"Setup"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,Lan.g(this,"Setup master page and styles."),"Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),-1,"","Edit"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),-1,"","Rename"));
@@ -84,121 +115,74 @@ namespace OpenDental {
 		}
 
 		private void Edit_Click() {
+			if(WikiPageCur==null) {
+				return;
+			}
 			FormWikiEdit FormWE=new FormWikiEdit();
-			FormWE.WikiPageCur=PageCur;
-			FormWE.ShowDialog();//do we want this to be modal??
+			FormWE.WikiPageCur=WikiPageCur;
+			FormWE.ShowDialog();
+			if(FormWE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 			//ReloadPage.
 		}
 
 		private void Rename_Click() {
-			throw new NotImplementedException();
+			FormWikiRename FormWR=new FormWikiRename();
+			FormWR.ShowDialog();
 		}
 
 		private void Delete_Click() {
-			throw new NotImplementedException();
+			//Rename page to "_deleted_<pageTitle>"?
+			//Or do we want to have a new column IsDeleted?
+			//throw new NotImplementedException();
 		}
 
 		private void History_Click() {
-			throw new NotImplementedException();
+			//FormWikiHistory
+			//throw new NotImplementedException();
 		}
 
 		private void Inc_Link_Click() {
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
 		}
 
 		private void Add_Click() {
+			FormWikiRename FormWR=new FormWikiRename();
+			FormWR.ShowDialog();
+			if(FormWR.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			FormWikiEdit FormWE=new FormWikiEdit();
 			FormWE.WikiPageCur=new WikiPage();
 			FormWE.WikiPageCur.IsNew=true;
-			FormWE.ShowDialog();//do we want this to be modal??  Yes.
+			FormWE.WikiPageCur.PageTitle=FormWR.PageName;
+			FormWE.ShowDialog();
+			//if dialog OK:
 			//ReloadPage.
 		}
 
 		private void All_Pages_Click() {
-			throw new NotImplementedException();
+			FormWikiAllPages FormWAP=new FormWikiAllPages();
+			FormWAP.ShowDialog();
 		}
 
 		private void Search_Click() {
-			throw new NotImplementedException();
+			FormWikiSearch FormWS=new FormWikiSearch();
+			FormWS.ShowDialog();
 		}
 
-		private void LoadLayoutPages() {
-			PageMaster=WikiPages.GetMaster();
-			PageStyle=WikiPages.GetByName("_Style");
-			if(PageStyle.PageContent.StartsWith("<style>") && PageStyle.PageContent.EndsWith("</style")) {
-				//properly formed
+		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {
+			if(e.Url.ToString().Contains("wiki:")) {
+				LoadWikiPage(e.Url.ToString().Substring(5));
+				e.Cancel=true;//comment out if it doesn't work.
 			}
-			else {
-				PageStyle.PageContent="<style>"+PageStyle.PageContent+"</style>";
+			else if(e.Url.ToString().Contains("http://")){//navigating outside of wiki.
+				WikiPageCur=null;
+				Text = "OD Wiki - WWW";
 			}
-			wikiLocation=Environment.GetCommandLineArgs()[0].Substring(0,Environment.GetCommandLineArgs()[0].Length-21)+"Wiki\\";
-			if(!System.IO.Directory.Exists(wikiLocation)) {
-				System.IO.Directory.CreateDirectory(wikiLocation);
-			}
-			pageCount=0;
-		}
-
-		private void LoadPage(string PageName) {
-			PageCur=WikiPages.GetByName(PageName);
-			pageAggregate=WikiPages.TranslateToXhtml(PageCur.PageContent);
-			pageAggregate=PageMaster.PageContent.Replace("@@@Content@@@",pageAggregate);
-			pageAggregate=pageAggregate.Replace("@@@PageTitle@@@",PageCur.PageTitle);
-			pageAggregate=pageAggregate.Replace("@@@PageStyle@@@",PageStyle.PageContent);
-			this.Text="Wiki - "+PageCur.PageTitle;
-			webBrowserWiki.DocumentText=pageAggregate;
-		}
-
-		private void WritePage(string PageName) {
-			PageCur=WikiPages.GetByName(PageName);
-			pageAggregate=WikiPages.TranslateToXhtml(PageCur.PageContent);
-			pageAggregate=PageMaster.PageContent.Replace("@@@Content@@@",pageAggregate);
-			pageAggregate=pageAggregate.Replace("@@@PageTitle@@@",PageCur.PageTitle);
-			pageAggregate=pageAggregate.Replace("@@@PageStyle@@@",PageStyle.PageContent);
-			//if(System.IO.File.Exists(wikiLocation+PageName+".html")) {
-			//  pageCount++;
-			//  PageName=PageName+"_"+pageCount;
-			//  targetPage=PageName;
-			//}
-			targetPage=PageName;
-			System.IO.File.WriteAllText(wikiLocation+PageName+".html",pageAggregate);
-		}
-
-		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {//not reliable enough
-			System.IO.File.AppendAllText(wikiLocation+"log2.txt","webBrowserWiki_ProgressChanged\r\n");
-			if(((webBrowserWiki.Url!=null && webBrowserWiki.Url.AbsoluteUri.Contains("wiki:"))||webBrowserWiki.StatusText.Contains("wiki:")) && !loading) {
-				System.IO.File.AppendAllText(wikiLocation+"log.txt",
-					"****************************webBrowserWiki_Navigating*******************************************************"+
-					"\r\nDocument      "+webBrowserWiki.Document+
-					//"\r\nText:         "+webBrowserWiki.DocumentText+
-					"\r\nDocumentTitle:"+webBrowserWiki.DocumentTitle+
-					"\r\nIsBusy:       "+webBrowserWiki.IsBusy.ToString()+
-					"\r\nReadyState:   "+webBrowserWiki.ReadyState.ToString()+
-					"\r\nSite:         "+webBrowserWiki.Site+
-					"\r\nStatusText:   "+webBrowserWiki.StatusText+
-					"\r\nUrl:          "+webBrowserWiki.Url+"\r\n\r\n"
-					);
-				this.Text="Wiki - "+PageCur.PageTitle;
-				targetPage=webBrowserWiki.StatusText.Substring(5);
-				WritePage(targetPage);
-				webBrowserWiki.Url=new Uri(wikiLocation+targetPage+".html");
-				loading = true;
-			}
-		}
-
-		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
-			loading=false;
-			System.IO.File.AppendAllText(wikiLocation+"log2.txt","webBrowserWiki_Navigated\r\n");
-			System.IO.File.AppendAllText(wikiLocation+"log.txt",
-				"******************************webBrowserWiki_Navigated*****************************************************"+
-					"\r\nDocument      "+webBrowserWiki.Document+
-					//"\r\nText:         "+webBrowserWiki.DocumentText+
-					"\r\nDocumentTitle:"+webBrowserWiki.DocumentTitle+
-					"\r\nIsBusy:       "+webBrowserWiki.IsBusy.ToString()+
-					"\r\nReadyState:   "+webBrowserWiki.ReadyState.ToString()+
-					"\r\nSite:         "+webBrowserWiki.Site+
-					"\r\nStatusText:   "+webBrowserWiki.StatusText+
-					"\r\nUrl:          "+webBrowserWiki.Url+"\r\n\r\n"
-				);
+			//WikiPageCur=null;
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
@@ -206,8 +190,11 @@ namespace OpenDental {
 		}
 
 		private void menuItemEdit_Click(object sender,EventArgs e) {
+			if(WikiPageCur==null) {//outside webpage i.e. http://www.opendental.com
+				return;
+			}
 			FormWikiEdit FormWE = new FormWikiEdit();
-			FormWE.WikiPageCur=PageCur;
+			FormWE.WikiPageCur=WikiPageCur;
 			FormWE.Show();
 		}
 
@@ -217,39 +204,6 @@ namespace OpenDental {
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void webBrowserWiki_ProgressChanged(object sender,WebBrowserProgressChangedEventArgs e) {
-			System.IO.File.AppendAllText(wikiLocation+"log2.txt","webBrowserWiki_ProgressChanged:"+webBrowserWiki.Url+"\r\n");
-				//+e.CurrentProgress.ToString().PadLeft(5)+"/"+e.MaximumProgress.ToString().PadLeft(5)+"\r\n");
-			System.IO.File.AppendAllText(wikiLocation+"log.txt",
-				"******************************webBrowserWiki_ProgressChanged_Before*****************************************************"+
-					"\r\nDocument      "+webBrowserWiki.Document+
-					//"\r\nText:         "+webBrowserWiki.DocumentText+
-					"\r\nDocumentTitle:"+webBrowserWiki.DocumentTitle+
-					"\r\nIsBusy:       "+webBrowserWiki.IsBusy.ToString()+
-					"\r\nReadyState:   "+webBrowserWiki.ReadyState.ToString()+
-					"\r\nSite:         "+webBrowserWiki.Site+
-					"\r\nStatusText:   "+webBrowserWiki.StatusText+
-					"\r\nUrl:          "+webBrowserWiki.Url+"\r\n\r\n"
-				);
-			if(webBrowserWiki.StatusText.StartsWith("wiki:") && !webBrowserWiki.IsBusy) {
-				this.Text="Wiki - "+PageCur.PageTitle;
-				targetPage=webBrowserWiki.StatusText.Substring(5);
-				WritePage(targetPage);
-				webBrowserWiki.Url=new Uri(wikiLocation+targetPage+".html");
-			}
-			System.IO.File.AppendAllText(wikiLocation+"log.txt",
-				"******************************webBrowserWiki_ProgressChanged_Before*****************************************************"+
-					"\r\nDocument      "+webBrowserWiki.Document+
-					//"\r\nText:         "+webBrowserWiki.DocumentText+
-					"\r\nDocumentTitle:"+webBrowserWiki.DocumentTitle+
-					"\r\nIsBusy:       "+webBrowserWiki.IsBusy.ToString()+
-					"\r\nReadyState:   "+webBrowserWiki.ReadyState.ToString()+
-					"\r\nSite:         "+webBrowserWiki.Site+
-					"\r\nStatusText:   "+webBrowserWiki.StatusText+
-					"\r\nUrl:          "+webBrowserWiki.Url+"\r\n\r\n"
-				);
 		}
 
 	}

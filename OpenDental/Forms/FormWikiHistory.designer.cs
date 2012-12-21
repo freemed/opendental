@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormWikiRename {
+	partial class FormWikiHistory {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -25,8 +25,6 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.textPageName = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -37,7 +35,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(411, 86);
+			this.butOK.Location = new System.Drawing.Point(625, 442);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -52,47 +50,23 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(492, 86);
+			this.butCancel.Location = new System.Drawing.Point(625, 483);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textPageName
-			// 
-			this.textPageName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textPageName.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textPageName.Location = new System.Drawing.Point(145, 12);
-			this.textPageName.MaxLength = 255;
-			this.textPageName.Name = "textPageName";
-			this.textPageName.Size = new System.Drawing.Size(422, 20);
-			this.textPageName.TabIndex = 4;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(12, 12);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(131, 20);
-			this.label2.TabIndex = 77;
-			this.label2.Text = "New Page Name";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FormWikiRename
+			// FormWikiHistory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(579, 122);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textPageName);
+			this.ClientSize = new System.Drawing.Size(725, 534);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
-			this.Name = "FormWikiRename";
+			this.Name = "FormWikiHistory";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Rename Wiki Page";
-			this.Load += new System.EventHandler(this.FormWikiRename_Load);
+			this.Text = "Wiki History";
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -100,7 +74,5 @@ namespace OpenDental{
 
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.TextBox textPageName;
-		private System.Windows.Forms.Label label2;
 	}
 }
