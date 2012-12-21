@@ -24,61 +24,67 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.textContent = new System.Windows.Forms.TextBox();
-			this.textKeyWords = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
+			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
+			this.butRefresh = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.SuspendLayout();
 			// 
 			// textContent
 			// 
 			this.textContent.AcceptsTab = true;
-			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.textContent.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textContent.Location = new System.Drawing.Point(0, 48);
+			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.textContent.Font = new System.Drawing.Font("Courier New", 9.5F);
+			this.textContent.Location = new System.Drawing.Point(0, 31);
 			this.textContent.Multiline = true;
 			this.textContent.Name = "textContent";
-			this.textContent.Size = new System.Drawing.Size(1070, 647);
+			this.textContent.Size = new System.Drawing.Size(470, 542);
 			this.textContent.TabIndex = 2;
 			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
 			// 
-			// textKeyWords
+			// webBrowserWiki
 			// 
-			this.textKeyWords.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+			this.webBrowserWiki.AllowWebBrowserDrop = false;
+			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textKeyWords.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textKeyWords.Location = new System.Drawing.Point(149, 26);
-			this.textKeyWords.MaxLength = 255;
-			this.textKeyWords.Name = "textKeyWords";
-			this.textKeyWords.Size = new System.Drawing.Size(921, 20);
-			this.textKeyWords.TabIndex = 1;
+			this.webBrowserWiki.Location = new System.Drawing.Point(474, 31);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowserWiki.Name = "webBrowserWiki";
+			this.webBrowserWiki.Size = new System.Drawing.Size(470, 542);
+			this.webBrowserWiki.TabIndex = 78;
+			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
+			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
 			// 
-			// label2
+			// butRefresh
 			// 
-			this.label2.Location = new System.Drawing.Point(12, 26);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(131, 20);
-			this.label2.TabIndex = 76;
-			this.label2.Text = "Key Words";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRefresh.Autosize = true;
+			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.CornerRadius = 4F;
+			this.butRefresh.Location = new System.Drawing.Point(474, 1);
+			this.butRefresh.Name = "butRefresh";
+			this.butRefresh.Size = new System.Drawing.Size(75, 24);
+			this.butRefresh.TabIndex = 77;
+			this.butRefresh.Text = "Refresh";
+			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// ToolBarMain
 			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = null;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(1070, 25);
+			this.ToolBarMain.Size = new System.Drawing.Size(470, 25);
 			this.ToolBarMain.TabIndex = 3;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(1070, 695);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.textKeyWords);
+			this.ClientSize = new System.Drawing.Size(944, 573);
+			this.Controls.Add(this.webBrowserWiki);
+			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textContent);
 			this.Controls.Add(this.ToolBarMain);
 			this.Name = "FormWikiEdit";
@@ -87,6 +93,7 @@ namespace OpenDental{
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormWikiEdit_FormClosing);
 			this.Load += new System.EventHandler(this.FormWikiEdit_Load);
+			this.SizeChanged += new System.EventHandler(this.FormWikiEdit_SizeChanged);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -96,8 +103,8 @@ namespace OpenDental{
 
 		private UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.TextBox textContent;
-		private System.Windows.Forms.TextBox textKeyWords;
-		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.WebBrowser webBrowserWiki;
+		private UI.Button butRefresh;
 
 	}
 }

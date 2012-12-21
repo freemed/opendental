@@ -27,12 +27,21 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Returns null if page does not exist.</summary>
-		public static WikiPage GetByName(string PageName) {
+		public static WikiPage GetByTitle(string PageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageName);
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageName+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+PageName+"');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+PageTitle+"');";
 			return Crud.WikiPageCrud.SelectOne(command);
+		}
+
+		///<summary>Returns a list of all historical version of "PageName"</summary>
+		public static List<WikiPage> GetHistoryByTitle(string PageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
+			}
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' ORDER BY DateTimeSaved DESC;";
+			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
@@ -58,24 +67,32 @@ namespace OpenDentBusiness{
 		public static string TranslateToXhtml(string wikiContent) {
 			string retVal="";
 			retVal+=wikiContent;
-			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;").Replace("<body>","<body><p>").Replace("</body>","</p></body>");
-			//retVal.Replace("&<","&lt;");
-			//retVal.Replace("&>","&gt;");
-			//retVal.Replace("<body>","<body><p>");
-			//retVal.Replace("</body>","</p></body>");
+			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;");
+			retVal=retVal.Replace("<body>","<body><p>").Replace("</body>","</p></body>");
 			//Replace internal Links
-			MatchCollection matches = Regex.Matches(retVal,"\\[\\[.{0,255}\\]\\]");
+			MatchCollection matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
 				retVal=retVal.Replace(link.Value,"<a href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
 			}
-			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>").Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
-			//retVal.Replace("\r\n\r\n","</p>\r\n<p>");
-			//retVal.Replace("<p></p>","<p>&nbsp;</p>");
+			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
+			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
 			//retVal.Replace("\r\n","<br />");
-			//retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-			//retVal.Replace("  ","&nbsp;&nbsp;");
-			//TODO: Color tags
-			//Imagae Tags
+			matches = Regex.Matches(retVal,"\\{\\{color|.*?}}");//.*? matches as few as possible.
+			foreach(Match colorSegment in matches) {
+				string[] tokens = colorSegment.Value.Split('|');
+				string tempText="";//text to be colored
+				for(int i=0;i<tokens.Length;i++){
+					if(i<2){//ignore the color and "#00FF00" values
+						continue;
+					}
+					if(i==tokens.Length-1) {//last token
+						tempText+=(i>3?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
+					}
+					tempText+=(i>3?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
+				}
+				retVal=retVal.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+"\">"+tempText+"</span>");//"+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+			}
+			//TODO: Image Tags
 			return retVal;
 		}
 		/*

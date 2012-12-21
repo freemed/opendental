@@ -35,7 +35,7 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage(string PageTitle) {
-			if(WikiPages.GetByName(PageTitle)==null) {
+			if(WikiPages.GetByTitle(PageTitle)==null) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page does not exist. Would you like to create it?")) {
 					return;
 				}
@@ -48,17 +48,12 @@ namespace OpenDental {
 					return;
 				}
 			}
-			WikiPageCur=WikiPages.GetByName(PageTitle);
-			//WikiPageCur=WikiPages.GetByName(PageTitle);
-			//webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(PageMaster.PageContent
-			//.Replace("@@@Title@@@",WikiPageCur.PageTitle).Replace("@@@Style@@@",PageStyle.PageContent).Replace("@@@Content@@@",WikiPageCur.PageContent));
-			//WikiPageCur=WikiPages.GetByName(PageTitle);
+			WikiPageCur=WikiPages.GetByTitle(PageTitle);
 			AggregateContent=PageMaster.PageContent;
 			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
 			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
-			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent.Clone().ToString());
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);//WikiPageCur is mysteriously set to null after this line.
-			//WikiPageCur=WikiPages.GetByName(PageTitle);
+			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
 			Text="OD Wiki - "+WikiPageCur.PageTitle;
 		}
 
@@ -125,10 +120,12 @@ namespace OpenDental {
 				return;
 			}
 			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
-			//ReloadPage.
 		}
 
 		private void Rename_Click() {
+			if(WikiPageCur==null) {
+				return;
+			}
 			FormWikiRename FormWR=new FormWikiRename();
 			FormWR.ShowDialog();
 		}
@@ -140,8 +137,16 @@ namespace OpenDental {
 		}
 
 		private void History_Click() {
-			//FormWikiHistory
-			//throw new NotImplementedException();
+			if(WikiPageCur==null) {
+				return;
+			}
+			FormWikiHistory FormWH = new FormWikiHistory();
+			FormWH.PageTitleCur=WikiPageCur.PageTitle;
+			FormWH.ShowDialog();
+			if(FormWH.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			//TODO: AFter return from history;
 		}
 
 		private void Inc_Link_Click() {
@@ -159,8 +164,10 @@ namespace OpenDental {
 			FormWE.WikiPageCur.IsNew=true;
 			FormWE.WikiPageCur.PageTitle=FormWR.PageName;
 			FormWE.ShowDialog();
-			//if dialog OK:
-			//ReloadPage.
+			if(FormWE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 		}
 
 		private void All_Pages_Click() {
@@ -174,7 +181,7 @@ namespace OpenDental {
 		}
 
 		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {
-			if(e.Url.ToString().Contains("wiki:")) {
+			if(e.Url.ToString().StartsWith("wiki:")) {
 				LoadWikiPage(e.Url.ToString().Substring(5));
 				e.Cancel=true;//comment out if it doesn't work.
 			}

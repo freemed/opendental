@@ -37,7 +37,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(411, 86);
+			this.butOK.Location = new System.Drawing.Point(236, 78);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -52,7 +52,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(492, 86);
+			this.butCancel.Location = new System.Drawing.Point(317, 78);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
@@ -64,15 +64,15 @@ namespace OpenDental{
 			this.textPageName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textPageName.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textPageName.Location = new System.Drawing.Point(145, 12);
+			this.textPageName.Location = new System.Drawing.Point(149, 30);
 			this.textPageName.MaxLength = 255;
 			this.textPageName.Name = "textPageName";
-			this.textPageName.Size = new System.Drawing.Size(422, 20);
+			this.textPageName.Size = new System.Drawing.Size(243, 20);
 			this.textPageName.TabIndex = 4;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(12, 12);
+			this.label2.Location = new System.Drawing.Point(14, 30);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(131, 20);
 			this.label2.TabIndex = 77;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			// FormWikiRename
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(579, 122);
+			this.ClientSize = new System.Drawing.Size(404, 114);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textPageName);
 			this.Controls.Add(this.butOK);

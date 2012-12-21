@@ -11,6 +11,9 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormWikiEdit:Form {
 		public WikiPage WikiPageCur;
+		public WikiPage PageMaster;
+		public WikiPage PageStyle;
+		private string AggregateContent;
 
 		public FormWikiEdit() {
 			InitializeComponent();
@@ -18,18 +21,57 @@ namespace OpenDental {
 		}
 
 		private void FormWikiEdit_Load(object sender,EventArgs e) {
-			/*if(WikiPageCur.IsNew) {
-				FormWikiRename FormWR=new FormWikiRename();
-				FormWR.ShowDialog();
-				if(FormWR.DialogResult!=DialogResult.OK) {
-					Close();
-				}
-				WikiPageCur.PageTitle=FormWR.PageName;
-			}*/
-			Text = "Wiki Edit - "+WikiPageCur.PageTitle;
+			ResizeControls();
 			LayoutToolBar();
-			//textKeyWords.Text=WikiPageCur.KeyWords;
+			PageMaster=WikiPages.GetMaster();
+			PageStyle=WikiPages.GetStyle();
+			LayoutToolBar();
+			Text = "Wiki Edit - "+WikiPageCur.PageTitle;
 			textContent.Text=WikiPageCur.PageContent;
+			textContent.SelectionStart=textContent.TextLength;
+			textContent.SelectionLength=0;
+			LoadWikiPage();
+		}
+
+		private void LoadWikiPage() {
+			AggregateContent=PageMaster.PageContent;
+			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
+			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
+			AggregateContent=AggregateContent.Replace("@@@Content@@@",textContent.Text);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
+		}
+
+		private void ResizeControls() {
+			//text resize
+			textContent.Top=48;
+			textContent.Height=ClientSize.Height-48;
+			textContent.Left=0;
+			textContent.Width=ClientSize.Width/2-2;
+			//Browser resize
+			webBrowserWiki.Top=48;
+			webBrowserWiki.Height=ClientSize.Height-48;
+			webBrowserWiki.Left=ClientSize.Width/2+2;
+			webBrowserWiki.Width=ClientSize.Width/2-2;
+			//Toolbar resize
+			ToolBarMain.Width=ClientSize.Width/2-2;
+			//Button move
+			butRefresh.Left=ClientSize.Width/2+2;
+		}
+
+		private void FormWikiEdit_SizeChanged(object sender,EventArgs e) {
+			ResizeControls();
+		}
+
+		private void butRefresh_Click(object sender,EventArgs e) {
+			if(!ValidateWikiPage()) {
+				return;
+			}
+				webBrowserWiki.AllowNavigation=true;
+			LoadWikiPage();
+		}
+
+		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
+			webBrowserWiki.AllowNavigation=false;
 		}
 
 		private void LayoutToolBar() {
@@ -51,16 +93,8 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"I"),-1,"","Italic"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),-1,"","Color"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Tab"),-1,"","Tab"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),-1,"","Table"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"List"),1,"","ListOrdered"));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"List"),1,"","ListUnordered"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),1,"","Image"));
-			/*
-			button.Style=ODToolBarButtonStyle.Label;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,"Go Forward One Page","Fwd"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));*/
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -104,14 +138,8 @@ namespace OpenDental {
 				case "Color": 
 					Color_Click(); 
 					break;
-				case "Tab": 
-					Tab_Click(); 
-					break;
 				case "Table": 
 					Table_Click(); 
-					break;
-				case "List": 
-					List_Click();
 					break;
 				case "Image":
 					Image_Click();
@@ -150,74 +178,107 @@ namespace OpenDental {
 		}
 
 		private void Int_Link_Click() {
-			//throw new NotImplementedException();
+			int tempStart=textContent.SelectionStart;
+			//TODO: Internal picklist.
+			textContent.Paste("[[]]");
+			textContent.Focus();
+			textContent.SelectionStart=tempStart+2;
+			textContent.SelectionLength=0;
+
 		}
 
 		private void Ext_Link_Click() {
-			//throw new NotImplementedException();
+			textContent.Paste("<a href=\"http://url.com\">url</a>");
+			textContent.Focus();
 		}
 
 		private void H1_Click() {
 			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength+9;
+			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<h1>"+textContent.SelectedText+"</h1>");
 			textContent.Focus();
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+4;
+			}
+			else {
 			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength;
+			textContent.SelectionLength=tempLength+9;
+			}
 		}
 
 		private void H2_Click() {
 			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength+9;
+			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<h2>"+textContent.SelectedText+"</h2>");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength;
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+4;
+			}
+			else {
+				textContent.SelectionStart=tempStart;
+				textContent.SelectionLength=tempLength+9;
+			}
 		}
 
 		private void H3_Click() {
 			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength+9;
+			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<h3>"+textContent.SelectedText+"</h3>");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength;
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+4;
+			}
+			else {
+				textContent.SelectionStart=tempStart;
+				textContent.SelectionLength=tempLength+9;
+			}
 		}
 
 		private void Bold_Click() {
 			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength+7;
+			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<b>"+textContent.SelectedText+"</b>");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength;
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+3;
+			}
+			else {
+				textContent.SelectionStart=tempStart;
+				textContent.SelectionLength=tempLength+7;
+			}
 		}
 
 		private void Italic_Click() {
 			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength+7;
+			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<i>"+textContent.SelectedText+"</i>");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength;
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+3;
+			}
+			else {
+				textContent.SelectionStart=tempStart;
+				textContent.SelectionLength=tempLength+7;
+			}
 		}
 
 		private void Color_Click() {
-			//throw new NotImplementedException();
+			int tempStart=textContent.SelectionStart;
+			int tempLength=textContent.SelectionLength;
+			textContent.Paste("{{color|red|"+(tempLength>0?textContent.SelectedText:"ReplaceThisText")+"}}");
 			textContent.Focus();
-		}
-
-		private void Tab_Click() {
-			Tab();
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+12;
+				textContent.SelectionLength=tempLength+15;
+			}
+			else {
+				textContent.SelectionStart=tempStart+tempLength-3;
+				textContent.SelectionLength=0;
+			}
 			textContent.Focus();
-			//throw new NotImplementedException();
 		}
 
 		private void Table_Click() {
-			//throw new NotImplementedException();
-		}
-
-		private void List_Click() {
 			//throw new NotImplementedException();
 		}
 
@@ -228,14 +289,11 @@ namespace OpenDental {
 		private void textContent_KeyPress(object sender,KeyPressEventArgs e) {
 			switch(e.KeyChar) {
 				case (char)Keys.Tab:
-					Tab();
+					textContent.Paste("     ");
+					//Tab();
 					e.Handled=true;
 					break;
 			}
-		}
-
-		private void Tab() {
-			textContent.Paste("     ");
 		}
 
 		///<summary>Validates content, and keywords. Will return false if PageContent is not XHTML 4.1 compliant.</summary>
@@ -250,7 +308,7 @@ namespace OpenDental {
 				return;
 			}
 			if(textContent.Text!=WikiPageCur.PageContent){
-				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Unsaved changes will be lost. Would you like to continue?")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Unsaved changes will be lost. Would you like to continue?")) {
 					e.Cancel=true;
 				}
 			}
