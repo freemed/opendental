@@ -2373,6 +2373,14 @@ namespace OpenDental {
 			//We no longer ask user this question.  It just slows things down: "Move Appointment?"
 			//convert loc to new time
 			Appointment aptCur=Appointments.GetOneApt(PIn.Long(pinBoard.SelectedAppt.DataRoww["AptNum"].ToString()));
+			if(aptCur==null) {
+				MsgBox.Show(this,"This appointment has been deleted since it was moved to the pinboard. It will now be cleared from the pinboard.");
+				mouseIsDown = false;
+				boolAptMoved=false;
+				TempApptSingle.Dispose();
+				pinBoard.ClearSelected();
+				return;
+			}
 			Appointment aptOld=aptCur.Clone();
 			RefreshModuleDataPatient(PIn.Long(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));//redundant?
 			//Patient pat=Patients.GetPat(PIn.PInt(pinBoard.SelectedAppt.DataRoww["PatNum"].ToString()));
@@ -4195,7 +4203,13 @@ namespace OpenDental {
 			ContrApptSingle.SelectedAptNum=-1;
 			if(row["AptStatus"].ToString()==((int)ApptStatus.UnschedList).ToString()) {//unscheduled status
 				if(PIn.DateT(row["AptDateTime"].ToString()).Year<1880) {//Indicates that this was a brand new appt
-					Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
+					Appointment aptCur=Appointments.GetOneApt(PIn.Long(row["AptNum"].ToString()));
+					if(aptCur.AptDateTime.Year>1880){//if date is now present
+						//don't do anything to db.  Appt removed from pinboard above, and Refresh will happen below.
+					}
+					else{
+						Appointments.Delete(PIn.Long(row["AptNum"].ToString()));
+					}
 				}
 				else {//was actually on the unscheduled list
 					//do nothing to database

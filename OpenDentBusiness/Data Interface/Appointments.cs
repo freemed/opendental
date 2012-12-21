@@ -159,7 +159,8 @@ namespace OpenDentBusiness{
 			}
 			string command=
 				"SELECT * FROM appointment "
-				+"WHERE patnum = '"+patNum.ToString()+"' "
+				+"WHERE PatNum = '"+POut.Long(patNum)+"' "
+				+"AND NOT (AptDateTime < "+POut.Date(new DateTime(1880,1,1))+" AND AptStatus="+POut.Int((int)ApptStatus.UnschedList)+") "//AND NOT (on the pinboard)
 				+"ORDER BY AptDateTime";
 			return Crud.AppointmentCrud.SelectMany(command).ToArray();
 		}
