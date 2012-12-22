@@ -9,7 +9,7 @@ using CodeBase;
 namespace ODR{
 ///<summary></summary>
 	public class ValidDouble:System.Windows.Forms.TextBox {
-		public ODErrorProvider errorProvider1=new ODErrorProvider();
+		public ErrorProvider errorProvider1=new ErrorProvider();
 		///<summary></summary>
 		public Double MaxVal=100000000;
 		///<summary></summary>

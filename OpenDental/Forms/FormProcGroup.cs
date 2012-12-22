@@ -26,7 +26,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butDelete;
-		private ODErrorProvider errorProvider2=new ODErrorProvider();
+		private ErrorProvider errorProvider2=new ErrorProvider();
 		private OpenDental.ODtextBox textNotes;
 		private Label label15;
 		private Label label16;

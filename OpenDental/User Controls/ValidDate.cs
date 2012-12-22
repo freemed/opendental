@@ -10,12 +10,13 @@ using CodeBase;
 namespace OpenDental{
 ///<summary></summary>
 	public class ValidDate:System.Windows.Forms.TextBox {
-		public ODErrorProvider errorProvider1=new ODErrorProvider();
+		public ErrorProvider errorProvider1=new ErrorProvider();
 		private System.ComponentModel.Container components = null;
 
 		///<summary></summary>
 		public ValidDate(){
 			InitializeComponent();
+			errorProvider1.BlinkStyle=ErrorBlinkStyle.NeverBlink;
 		}
 
 		///<summary></summary>
@@ -66,9 +67,12 @@ namespace OpenDental{
 						}
 					}
 				}
-				if(DateTime.Parse(Text).Year<1870 || DateTime.Parse(Text).Year>2070)
-					throw new Exception("Valid dates between 1870 and 2070");
-				else Text=DateTime.Parse(this.Text).ToString("d");//will throw exception if invalid
+				if(DateTime.Parse(Text).Year<1880 || DateTime.Parse(Text).Year>2100) {
+					throw new Exception("Valid dates between 1880 and 2100");
+				}
+				else {
+					Text=DateTime.Parse(this.Text).ToString("d");//will throw exception if invalid
+				}
 				errorProvider1.SetError(this,"");
 			}
 			catch(Exception ex){

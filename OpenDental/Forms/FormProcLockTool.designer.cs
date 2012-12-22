@@ -26,8 +26,10 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.textAdjDate = new OpenDental.ValidDate();
+			this.textDate1 = new OpenDental.ValidDate();
 			this.label1 = new System.Windows.Forms.Label();
+			this.textDate2 = new OpenDental.ValidDate();
+			this.label2 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -38,7 +40,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(625,442);
+			this.butOK.Location = new System.Drawing.Point(156,134);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -53,40 +55,58 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(625,483);
+			this.butCancel.Location = new System.Drawing.Point(247,134);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textAdjDate
+			// textDate1
 			// 
-			this.textAdjDate.Location = new System.Drawing.Point(230,61);
-			this.textAdjDate.Name = "textAdjDate";
-			this.textAdjDate.Size = new System.Drawing.Size(80,20);
-			this.textAdjDate.TabIndex = 5;
+			this.textDate1.Location = new System.Drawing.Point(25,72);
+			this.textDate1.Name = "textDate1";
+			this.textDate1.Size = new System.Drawing.Size(80,20);
+			this.textDate1.TabIndex = 5;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(125,63);
+			this.label1.Location = new System.Drawing.Point(22,19);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(104,16);
+			this.label1.Size = new System.Drawing.Size(154,32);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "Adjustment Date";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			this.label1.Text = "Lock all procedures completed between these two dates";
+			// 
+			// textDate2
+			// 
+			this.textDate2.Location = new System.Drawing.Point(174,72);
+			this.textDate2.Name = "textDate2";
+			this.textDate2.Size = new System.Drawing.Size(80,20);
+			this.textDate2.TabIndex = 7;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(106,72);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(69,19);
+			this.label2.TabIndex = 6;
+			this.label2.Text = "through";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// FormProcLockTool
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(725,534);
-			this.Controls.Add(this.textAdjDate);
+			this.ClientSize = new System.Drawing.Size(334,170);
+			this.Controls.Add(this.textDate2);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.textDate1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormProcLockTool";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Procedure Lock Tool";
+			this.Load += new System.EventHandler(this.FormProcLockTool_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -97,7 +117,9 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
-		private ValidDate textAdjDate;
+		private ValidDate textDate1;
 		private System.Windows.Forms.Label label1;
+		private ValidDate textDate2;
+		private System.Windows.Forms.Label label2;
 	}
 }

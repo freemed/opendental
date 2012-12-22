@@ -61,7 +61,7 @@ namespace OpenDental{
 		private SigElementDef[] sigElementDefExtras;
 		private Label labelSending;
 		private Timer timerSending;
-		private ODErrorProvider errorProvider1=new ODErrorProvider();
+		private ErrorProvider errorProvider1=new ErrorProvider();
 		private OpenDental.UI.Button butAck;
 		private SigElementDef[] sigElementDefMessages;
 		private OpenDental.UI.Button butSupply;

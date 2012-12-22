@@ -20,7 +20,7 @@ namespace OpenDental
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		//private int pagesPrinted;
-		private ODErrorProvider errorProvider1=new ODErrorProvider();
+		private ErrorProvider errorProvider1=new ErrorProvider();
 		//private DataTable BirthdayTable;
 		//private int patientsPrinted;
 		//private PrintDocument pd;

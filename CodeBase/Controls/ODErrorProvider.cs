@@ -1,4 +1,5 @@
-using System;
+//No longer used.  We used this for a few years to make it compatible with Linux.  But the MS way is better. 
+/*using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Text;
@@ -69,4 +70,4 @@ namespace CodeBase {
 		}
 
 	}
-}
+}*/

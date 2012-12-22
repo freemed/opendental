@@ -11,7 +11,7 @@ namespace OpenDental{
 ///</summary>
 	public class ValidNumber : System.Windows.Forms.TextBox{
 		private System.ComponentModel.Container components = null;
-		public ODErrorProvider errorProvider1=new ODErrorProvider();
+		public ErrorProvider errorProvider1=new ErrorProvider();
 		///<summary></summary>
 		private int maxVal=255;
 		///<summary></summary>
@@ -20,6 +20,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public ValidNumber(){
 			InitializeComponent();
+			errorProvider1.BlinkStyle=ErrorBlinkStyle.NeverBlink;
 		}
 
 		///<summary></summary>

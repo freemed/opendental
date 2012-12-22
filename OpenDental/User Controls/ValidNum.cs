@@ -10,7 +10,7 @@ namespace OpenDental{
 ///<summary>this differs slightly from ValidNumber.  Use this when default is 0 instead of blank.</summary>
 	public class ValidNum : System.Windows.Forms.TextBox{
 		private System.ComponentModel.Container components = null;
-		public ODErrorProvider errorProvider1=new ODErrorProvider();
+		public ErrorProvider errorProvider1=new ErrorProvider();
 		///<summary></summary>
 		private int maxVal=255;
 		///<summary></summary>
@@ -19,6 +19,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public ValidNum(){
 			InitializeComponent();
+			errorProvider1.BlinkStyle=ErrorBlinkStyle.NeverBlink;
   	}
 
 		///<summary></summary>

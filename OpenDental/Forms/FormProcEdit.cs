@@ -63,7 +63,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ListBox listBoxTeeth2;
 		private OpenDental.UI.Button butChange;
 		//private ProcStat OriginalStatus;
-		private ODErrorProvider errorProvider2=new ODErrorProvider();
+		private ErrorProvider errorProvider2=new ErrorProvider();
 		private System.Windows.Forms.TextBox textTooth;
 		private OpenDental.UI.Button butEditAnyway;
 		private System.Windows.Forms.Label labelDx;
