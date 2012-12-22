@@ -61,6 +61,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Clear();
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,Lan.g(this,"Setup master page and styles."),"Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),-1,"","Home"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),-1,"","Edit"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),-1,"","Rename"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),-1,"","Delete"));
@@ -76,6 +77,9 @@ namespace OpenDental {
 			switch(e.Button.Tag.ToString()) {
 				case "Setup":
 					Setup_Click();
+					break;
+				case "Home":
+					Home_Click();
 					break;
 				case "Edit":
 					Edit_Click();
@@ -107,6 +111,10 @@ namespace OpenDental {
 		private void Setup_Click() {
 			FormWikiSetup FormWS=new FormWikiSetup();
 			FormWS.ShowDialog();
+		}
+
+		private void Home_Click() {
+			LoadWikiPage("Home");
 		}
 
 		private void Edit_Click() {

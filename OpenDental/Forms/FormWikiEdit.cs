@@ -265,16 +265,18 @@ namespace OpenDental {
 		private void Color_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("{{color|red|"+(tempLength>0?textContent.SelectedText:"ReplaceThisText")+"}}");
+			textContent.Paste("{{color|red|"+textContent.SelectedText+"}}");//(tempLength>0?textContent.SelectedText:"")+"}}");
 			textContent.Focus();
-			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+12;
-				textContent.SelectionLength=tempLength+15;
-			}
-			else {
-				textContent.SelectionStart=tempStart+tempLength-3;
-				textContent.SelectionLength=0;
-			}
+			textContent.SelectionStart=tempStart+tempLength+12;
+			textContent.SelectionLength=0;
+			//if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+			//  textContent.SelectionStart=tempStart+12;
+			//  textContent.SelectionLength=0;
+			//}
+			//else {
+			//  textContent.SelectionStart=tempStart+tempLength-3;
+			//  textContent.SelectionLength=0;
+			//}
 			textContent.Focus();
 		}
 

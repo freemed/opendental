@@ -77,20 +77,24 @@ namespace OpenDentBusiness{
 			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
 			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
 			//retVal.Replace("\r\n","<br />");
-			matches = Regex.Matches(retVal,"\\{\\{color|.*?}}");//.*? matches as few as possible.
+			matches = Regex.Matches(retVal,"{{(color)(.*?)}}");//.*? matches as few as possible.
 			foreach(Match colorSegment in matches) {
 				string[] tokens = colorSegment.Value.Split('|');
+				if(tokens.Length<3) {//not enough tokens
+					continue;
+				}
 				string tempText="";//text to be colored
 				for(int i=0;i<tokens.Length;i++){
 					if(i<2){//ignore the color and "#00FF00" values
 						continue;
 					}
 					if(i==tokens.Length-1) {//last token
-						tempText+=(i>3?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
+						tempText+=(i>2?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
+						continue;
 					}
-					tempText+=(i>3?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
+					tempText+=(i>2?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
 				}
-				retVal=retVal.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+"\">"+tempText+"</span>");//"+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+				retVal=retVal.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
 			}
 			//TODO: Image Tags
 			return retVal;
