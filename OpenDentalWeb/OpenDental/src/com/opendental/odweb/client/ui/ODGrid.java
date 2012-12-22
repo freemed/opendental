@@ -265,8 +265,6 @@ public class ODGrid extends Composite implements ClickHandler {
 	public void endUpdate() {
 		computeColumns();
 		computeRows();
-		// TODO Enhance ODGrid to have a scrollbar.
-		//Layout the scrollbar and set the values here.
 		IsUpdating=false;
 		//Fill the data grid and refresh it so that it displays correctly.
 		onPaint();

@@ -1,5 +1,7 @@
 package com.opendental.odweb.client.remoting;
 
+import java.util.ArrayList;
+
 import com.google.gwt.xml.client.Document;
 import com.google.gwt.xml.client.Element;
 import com.google.gwt.xml.client.Node;
@@ -746,7 +748,7 @@ public class Serializing {
 	 * @throws Exception Throws exception if type is not yet supported or if a DtoException was returned. */
 	public static Object getDeserializedObject(String xml) throws Exception {
 		Document doc=XMLParser.parse(xml);
-		XMLParser.removeWhitespace(doc);
+		//XMLParser.removeWhitespace(doc);
 		Element element=doc.getDocumentElement();
 		if(element==null) {
 			throw new Exception("getDeserializedObject, the response from server was not valid XML.");
@@ -786,7 +788,7 @@ public class Serializing {
 			return element.getFirstChild().getNodeValue();
 		}
 		if(type.equals("DataTable")) {
-			return deserializeDataTable(element,new DataTable());
+			return deserializeDataTable(element);
 		}
 		if(type.startsWith("List&lt;")) {
 			return deserializeList(doc);
@@ -1894,42 +1896,62 @@ public class Serializing {
 	}
 
 	/** Pass in a node from the response and this method will use recursion to digest the entire XML and return a deserialized DataTable. */
-	private static DataTable deserializeDataTable(Node node,DataTable table) {
-		String nodeName=node.getNodeName();
-		if(node.getNodeType()!=Node.TEXT_NODE) {
-			if(nodeName.equals("Name")) {
-				if(node.getChildNodes().getLength()>0) {
-					table.setTableName(node.getChildNodes().item(0).getNodeValue());
+	private static DataTable deserializeDataTable(Node node) {
+		ArrayList<Node> nodeListAll=getChildNodesFiltered(node);
+		Node nodeName=nodeListAll.get(0);//always exists.
+		String tableName="";
+		if(nodeName.getChildNodes().getLength()>0) {
+			tableName=nodeName.getChildNodes().item(0).getNodeValue();
+		}
+		Node nodeCols=nodeListAll.get(1);//always exists.
+		ArrayList<Node> nodeListCols=getChildNodesFiltered(nodeCols);
+		if(nodeListCols==null) {
+			return new DataTable();//Should not happen. This could only happen if an empty data table is passed back (no columns).
+		}
+		ArrayList <DataColumn> columns=new ArrayList<DataColumn>();
+		for(int i=0;i<nodeListCols.size();i++) {
+			Node nodeCol=nodeListCols.get(i);//At this point, always exists.
+			String nodeColVal=nodeCol.getChildNodes().item(0).getNodeValue();//Should never be null or empty string.
+			columns.add(new DataColumn(nodeColVal));
+		}
+		Node nodeRows=nodeListAll.get(2);//always exists.
+		ArrayList<Node> nodeListRows=getChildNodesFiltered(nodeRows);
+		if(nodeListRows==null) {//This happens if the query contains no results.
+			return new DataTable(tableName,0,columns);
+		}
+		DataTable table=new DataTable(tableName,nodeListRows.size(),columns);
+		for(int i=0;i<table.getNumRows();i++) {
+			Node nodeRow=nodeListRows.get(i);//At this point, always exists.
+			ArrayList<Node> nodeListCells=getChildNodesFiltered(nodeRow);//Should never be null.
+			for(int j=0;j<nodeListCells.size();j++) {
+				Node nodeCell=nodeListCells.get(j);//At this point, always exists.
+				String cellVal="";
+				if(nodeCell.getChildNodes().getLength()>0) {
+					cellVal=nodeCell.getChildNodes().item(0).getNodeValue();
 				}
-				else {//Set the table name to an empty string.
-					table.setTableName("");
-				}
-			}
-			else if(nodeName.equals("Col")) {//Add a new column.
-				if(node.getChildNodes().getLength()>0) {
-					table.Columns.add(new DataColumn(node.getChildNodes().item(0).getNodeValue()));
-				}
-			}
-			else if(nodeName.equals("y")) {//Add a new Row.
-				table.Rows.add(new DataRow());
-			}
-			else if(nodeName.equals("x")) {//Add information to the next column in the last row.
-				DataRow row=table.Rows.get(table.Rows.size()-1);
-				if(node.getChildNodes().getLength()>0) {
-					row.addCell(node.getChildNodes().item(0).getNodeValue());
-				}
-				else {//Add an empty cell.
-					row.addCell("");
-				}
-			}
-			//Recursively iterate through child nodes.
-			NodeList children=node.getChildNodes();
-			for(int i=0;i<children.getLength();i++) {
-				Node childNode=children.item(i);
-				table=deserializeDataTable(childNode,table);
+				table.SetCell(i,j,cellVal);
 			}
 		}
 		return table;
+	}
+	
+	/** Children of the given node minus nodes which are text nodes.  Such as tabs or new lines. */
+	private static ArrayList<Node> getChildNodesFiltered(Node node) {
+		//Create an empty node list to fill.
+		ArrayList<Node> result=new ArrayList<Node>();
+		NodeList childNodes=node.getChildNodes();
+		if(childNodes==null) {
+			return result;
+		}
+		for(int i=0;i<childNodes.getLength();i++) {
+			Node childNode=childNodes.item(i);
+			if(childNode.getNodeType()==Node.TEXT_NODE) {
+				continue;
+			}
+			//Add the node to the node list.
+			result.add(childNode);
+		}
+		return result;//Return the filtered node list.
 	}
 
 	/** Pass in the xml string parsed into a Document and the desired tagname to attempt to get the value.

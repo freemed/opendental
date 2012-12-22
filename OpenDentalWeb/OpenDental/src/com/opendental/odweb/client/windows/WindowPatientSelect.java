@@ -58,8 +58,8 @@ public class WindowPatientSelect extends ODWindow {
 	interface WindowPatientSelectUiBinder extends UiBinder<Widget, WindowPatientSelect> {
 	}
 	
-	public WindowPatientSelect() {
-		super("Patient Select");
+	public WindowPatientSelect() {		
+		super("Patient Select");		
 		gridMain=new ODGrid("Select Patient");
 		gridMain.setHeightAndWidth(500,625);
 		//Fills the @UiField objects.
@@ -72,7 +72,7 @@ public class WindowPatientSelect extends ODWindow {
 	private void fillGrid() {
 		gridMain.beginUpdate();
 		gridMain.Columns.clear();
-		ODGridColumn col=new ODGridColumn("LName",80);
+		ODGridColumn col=new ODGridColumn("LName",100);
 		gridMain.Columns.add(col);
 		col=new ODGridColumn("FName",80);
 		gridMain.Columns.add(col);
@@ -112,7 +112,7 @@ public class WindowPatientSelect extends ODWindow {
 		gridMain.Columns.add(col);
 		gridMain.Rows.clear();
 		ODGridRow row;
-		for(int i=0;i<PatientTable.Rows.size();i++) {
+		for(int i=0;i<PatientTable.getNumRows();i++) {
 			row=new ODGridRow();
 			row.Cells.Add(PatientTable.getCellText(i,"LName"));
 			row.Cells.Add(PatientTable.getCellText(i,"FName"));
@@ -122,6 +122,7 @@ public class WindowPatientSelect extends ODWindow {
 			row.Cells.Add(PatientTable.getCellText(i,"SSN"));
 			row.Cells.Add(PatientTable.getCellText(i,"HmPhone"));
 			row.Cells.Add(PatientTable.getCellText(i,"WkPhone"));
+			row.Cells.Add(PatientTable.getCellText(i,"PatNum"));
 			row.Cells.Add(PatientTable.getCellText(i,"ChartNumber"));
 			row.Cells.Add(PatientTable.getCellText(i,"Address"));
 			row.Cells.Add(PatientTable.getCellText(i,"PatStatus"));

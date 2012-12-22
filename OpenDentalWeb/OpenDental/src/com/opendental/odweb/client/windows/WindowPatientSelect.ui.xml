@@ -4,6 +4,15 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:od="urn:import:com.opendental.odweb.client.ui">
 
+	<ui:style>
+	
+		.labelHint {
+			font-size: 8pt;
+			font-style: italic;
+		}
+	
+	</ui:style>
+
 	<g:DockPanel ui:field="panelContainer">
    	<g:Dock direction="CENTER">
  		<od:ODGrid ui:field="gridMain"/>
@@ -12,93 +21,129 @@
 	 	<g:VerticalPanel>
 		  	<!-- Search fields -->
 		  	<g:DecoratorPanel>
-		  		<g:VerticalPanel>
-		  			<g:Label>Search by:</g:Label>
-		  			<g:Label>Hint: enter values in multiple boxes.</g:Label>
+		  		<g:VerticalPanel horizontalAlignment="ALIGN_RIGHT">
+		  			<g:Label horizontalAlignment="ALIGN_LEFT">Search by:</g:Label>
+		  			<g:Label horizontalAlignment="ALIGN_LEFT" styleName="{style.labelHint}">Hint: enter values in multiple boxes.</g:Label>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Last Name</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Last Name</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textLName" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>First Name</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>First Name</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textFName" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Phone (any)</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Phone (any)</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textHmPhone" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Address</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Address</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textAddress" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>City</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>City</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textCity" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>State</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>State</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textState" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>SSN</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>SSN</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textSSN" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Patient Number</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Patient Number</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textPatNum" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Chart Number</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Chart Number</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textChartNumber" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Birthdate</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Birthdate</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textBirthdate"/>
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Subscriber ID</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Subscriber ID</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textSubscriberID" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>E-mail</g:Label>
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>E-mail</g:Label>
+		  				</g:cell>
 		  				<g:TextBox ui:field="textEmail" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Billing Type</g:Label>
-		  				<g:ListBox ui:field="comboBillingType" />
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Billing Type</g:Label>
+		  				</g:cell>
+		  				<g:ListBox ui:field="comboBillingType" width="159px" />
 		  			</g:HorizontalPanel>
 		  			<g:HorizontalPanel>
-		  				<g:Label>Site</g:Label>
-		  				<g:ListBox ui:field="comboSite" />
+		  				<g:cell verticalAlignment="ALIGN_MIDDLE">
+		  					<g:Label>Site</g:Label>
+		  				</g:cell>
+		  				<g:ListBox ui:field="comboSite" width="159px" />
 		  			</g:HorizontalPanel>
-		  			<g:CheckBox ui:field="checkGuarantors">Guarantors Only</g:CheckBox>
-		  			<g:CheckBox ui:field="checkHideInactive">Hide Inactive Patients</g:CheckBox>
-		  				<g:CheckBox ui:field="checkShowArchived">Show Archived/Deceased</g:CheckBox>
+		  			<g:cell horizontalAlignment="ALIGN_LEFT">
+			  			<g:VerticalPanel horizontalAlignment="ALIGN_LEFT">
+				  			<g:CheckBox ui:field="checkGuarantors">Guarantors Only</g:CheckBox>
+				  			<g:CheckBox ui:field="checkHideInactive">Hide Inactive Patients</g:CheckBox>
+			  				<g:CheckBox ui:field="checkShowArchived">Show Archived/Deceased</g:CheckBox>
+		  				</g:VerticalPanel>
+	  				</g:cell>
 		  		</g:VerticalPanel>
 		  	</g:DecoratorPanel>
-		  	<g:DecoratorPanel>
-		  		<g:VerticalPanel>
-		  			<g:Label>Search</g:Label>
-			  		<g:HorizontalPanel>
-			  			<g:Button ui:field="butSearch" text="Search" />
-			  			<g:Button ui:field="butGetAll" text="Get All" />
-			  		</g:HorizontalPanel>
+		  	<g:DecoratorPanel width="100%">
+		  		<g:VerticalPanel horizontalAlignment="ALIGN_LEFT" width="100%">
+		  			<g:Label>Search:</g:Label>
+		  			<g:cell horizontalAlignment="ALIGN_CENTER">
+				  		<g:HorizontalPanel width="100%" horizontalAlignment="ALIGN_CENTER">
+			  				<g:Button ui:field="butSearch" text="Search" />
+			  				<g:Button ui:field="butGetAll" text="Get All" />
+				  		</g:HorizontalPanel>
+			  		</g:cell>
 		 			<g:CheckBox ui:field="checkRefresh">Refresh while typing</g:CheckBox>
 		  		</g:VerticalPanel>
 		  	</g:DecoratorPanel>
-		    <g:DecoratorPanel>
-		    	<g:VerticalPanel>
+		    <g:DecoratorPanel width="100%">
+		    	<g:VerticalPanel horizontalAlignment="ALIGN_LEFT" width="100%">
 			    	<g:Label>Add New Family:</g:Label>
-			    	<g:HorizontalPanel>
+			    	<g:HorizontalPanel width="100%" horizontalAlignment="ALIGN_CENTER">
 			  			<g:Button ui:field="butAddPt" text="Add Pt" />
 			  			<g:Button ui:field="butAddAll" text="Add Many" />
 			    	</g:HorizontalPanel>
 		    	</g:VerticalPanel>
 		    </g:DecoratorPanel>
-			<g:HorizontalPanel>
-				<g:Button ui:field="butOK" text="OK" />
-				<g:Button ui:field="butCancel" text="Cancel" />
-			</g:HorizontalPanel>
+		    <g:cell horizontalAlignment="ALIGN_RIGHT" width="100%">
+				<g:HorizontalPanel>
+					<g:Button ui:field="butOK" text="OK" />
+					<g:Button ui:field="butCancel" text="Cancel" />
+				</g:HorizontalPanel>
+			</g:cell>
 	  </g:VerticalPanel>
 	</g:Dock>
 	</g:DockPanel>
