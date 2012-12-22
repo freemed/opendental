@@ -20,6 +20,9 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {
+				return;
+			}
 			if(textDate1.errorProvider1.GetError(textDate1)!=""
 				|| textDate2.errorProvider1.GetError(textDate2)!="")
 			{
@@ -28,8 +31,23 @@ namespace OpenDental {
 			}
 			DateTime date1=PIn.Date(textDate1.Text);
 			DateTime date2=PIn.Date(textDate2.Text);
-
-
+			if(date1>date2) {
+				MsgBox.Show(this,"Date 1 cannot be greater than Date 2.");
+				return;
+			}
+			if(date1.AddDays(7) < date2) {
+				if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+					MsgBox.Show(this,"Admin permission is required for date spans greater than 7 days.");
+					return;
+				}
+			}
+			Procedures.Lock(date1,date2);
+			if(date1.AddDays(7) < date2) {
+				SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
+			}
+			else {
+				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Proc Lock Tool "+date1.ToShortDateString()+" - "+date2.ToShortDateString());
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -2422,7 +2422,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcInfo_Load(object sender,System.EventArgs e) {
-//todo: tool to lock all completed procs in date range.  If more than 7 days in range, then require admin priv.
 			//richTextBox1.Text="This is a test of the functions of a rich text box.";
 			//webBrowser1.
 			//richTextBox1.Select(10,4);

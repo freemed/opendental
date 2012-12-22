@@ -1541,6 +1541,20 @@ namespace OpenDentBusiness {
 			return Db.GetTable(command);
 		}
 
+		///<summary></summary>
+		public static void Lock(DateTime date1, DateTime date2) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),date1,date2);
+				return;
+			}
+			string command="UPDATE procedurelog SET IsLocked=1 "
+				+"WHERE (ProcStatus="+POut.Int((int)ProcStat.C)+" "//completed
+				+"OR CodeNum="+POut.Long(ProcedureCodes.GetCodeNum(ProcedureCodes.GroupProcCode))+") "//or group note
+				+"AND ProcDate >= "+POut.Date(date1)+" "
+				+"AND ProcDate <= "+POut.Date(date2);
+			Db.NonQ(command);
+		}
+
 	}
 
 	/*================================================================================================================
