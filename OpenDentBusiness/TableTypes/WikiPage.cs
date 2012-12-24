@@ -16,6 +16,9 @@ namespace OpenDentBusiness {
 		///<summary>The DateTime that the page was saved to the DB.  User can't edit.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeSaved;
+		///<summary>.</summary>
+		public bool IsDeleted;
+
 		//<summary>Keywords used for searching, does not have to be comma delimited.</summary>
 		//public string KeyWords;
 

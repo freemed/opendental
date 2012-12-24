@@ -45,12 +45,47 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long Insert(WikiPage wikiPage){
+		public static long Insert(WikiPage WikiPage){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
-				return wikiPage.WikiPageNum;
+				WikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),WikiPage);
+				return WikiPage.WikiPageNum;
 			}
-			return Crud.WikiPageCrud.Insert(wikiPage);
+			return Crud.WikiPageCrud.Insert(WikiPage);
+		}
+
+		///<summary></summary>
+		public static void Rename(string OriginalPageTitle, string NewPageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),OriginalPageTitle,NewPageTitle);
+				return;
+			}
+			//Create new entry to track changes by user.
+			WikiPage tempWP = GetByTitle(OriginalPageTitle);
+			tempWP.UserNum=Security.CurUser.UserNum;
+			Insert(tempWP);
+			//Actually rename pages and all previous versions.
+			string command="UPDATE wikipage SET PageTitle='"+NewPageTitle+"'WHERE PageTitle='"+OriginalPageTitle+"';";
+			Db.NonQ(command);
+			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
+			command=@"INSERT INTO wikipage (UserNum, DateTimeSaved, PageTitle, PageContent)  
+							(SELECT "+Security.CurUser.UserNum+@",NOW(),t.PageTitle, REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')
+							FROM(
+								SELECT PageTitle, PageContent FROM wikipage 
+								WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%' 
+								AND DateTimeSaved=(
+									SELECT MAX(DateTimeSaved) 
+									FROM wikipage 
+									WHERE PageTitle IN (
+										SELECT PageTitle 
+										FROM wikipage 
+										WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%'
+									)))t
+							);";
+			Db.NonQ(command);
+			//Alternate simple fix links query
+			//command="UPDATE wikipage SET PageContent=REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
+			//Db.NonQ(command);
+			return;
 		}
 
 		/*

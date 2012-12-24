@@ -66,7 +66,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),-1,"","Rename"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),-1,"","Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"History"),-1,"","History"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Inc Links"),-1,"","Inc Links"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),-1,"","Inc Links"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),-1,"","Add"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),-1,"","All Pages"));
@@ -135,7 +135,13 @@ namespace OpenDental {
 				return;
 			}
 			FormWikiRename FormWR=new FormWikiRename();
+			FormWR.PageTitle=WikiPageCur.PageTitle;
 			FormWR.ShowDialog();
+			if(FormWR.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			WikiPages.Rename(WikiPageCur.PageTitle,FormWR.PageTitle);
+			LoadWikiPage(FormWR.PageTitle);
 		}
 
 		private void Delete_Click() {
@@ -170,7 +176,7 @@ namespace OpenDental {
 			FormWikiEdit FormWE=new FormWikiEdit();
 			FormWE.WikiPageCur=new WikiPage();
 			FormWE.WikiPageCur.IsNew=true;
-			FormWE.WikiPageCur.PageTitle=FormWR.PageName;
+			FormWE.WikiPageCur.PageTitle=FormWR.PageTitle;
 			FormWE.ShowDialog();
 			if(FormWE.DialogResult!=DialogResult.OK) {
 				return;
@@ -191,7 +197,7 @@ namespace OpenDental {
 		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {
 			if(e.Url.ToString().StartsWith("wiki:")) {
 				LoadWikiPage(e.Url.ToString().Substring(5));
-				e.Cancel=true;//comment out if it doesn't work.
+				e.Cancel=true;
 			}
 			else if(e.Url.ToString().Contains("http://")){//navigating outside of wiki.
 				WikiPageCur=null;

@@ -11430,6 +11430,18 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						CONSTRAINT emailaddress_EmailAddressNum PRIMARY KEY (EmailAddressNum)
 						)";
 					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE wikipage ADD IsDeleted tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE wikipage ADD IsDeleted number(3)";
+					Db.NonQ(command);
+					command="UPDATE wikipage SET IsDeleted = 0 WHERE IsDeleted IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE wikipage MODIFY IsDeleted NOT NULL";
+					Db.NonQ(command);
 				}
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -11443,6 +11455,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
+
+
+
 
 
 
