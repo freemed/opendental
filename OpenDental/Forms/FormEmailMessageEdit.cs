@@ -599,7 +599,7 @@ namespace OpenDental{
 			try{
 				for(int i=0;i<dlg.FileNames.Length;i++){
 					//copy the file
-					newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString();
+					newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+Path.GetExtension(dlg.FileNames[i]);
 					File.Copy(dlg.FileNames[i],ODFileUtils.CombinePaths(attachPath,newName));
 					//create the attachment
 					attach=new EmailAttach();
@@ -770,37 +770,65 @@ namespace OpenDental{
 			DialogResult=DialogResult.OK;
 		}
 
+		/// <summary>This is used from wherever email needs to be sent throughout the program.</summary>
 		public static void SendEmail(EmailMessage emailMessage){
-			SmtpClient client=new SmtpClient(PrefC.GetString(PrefName.EmailSMTPserver),PrefC.GetInt(PrefName.EmailPort));
-			//The default credentials are not used by default, according to: 
-			//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
-			client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
-			client.DeliveryMethod=SmtpDeliveryMethod.Network;
-			client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
-			client.Timeout=180000;//Timeout of 3 minutes (in milliseconds).
-			MailMessage message=new MailMessage();
-			Attachment attach;
-			//try{
-			message.From=new MailAddress(emailMessage.FromAddress);
-			message.To.Add(emailMessage.ToAddress);
-			message.Subject=emailMessage.Subject;
-			message.Body=emailMessage.BodyText;
-			message.IsBodyHtml=false;
-			string attachPath=GetAttachPath();
-			for(int i=0;i<emailMessage.Attachments.Count;i++){
-				attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
-						//@"C:\OpenDentalData\EmailAttachments\1");
-				attach.Name=emailMessage.Attachments[i].DisplayedFileName;
-					//"canadian.gif";
-				message.Attachments.Add(attach);
+			if(PrefC.GetInt(PrefName.EmailPort)==465) {//implicit
+				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
+				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",PrefC.GetString(PrefName.EmailSMTPserver));
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate","1");//0=anonymous,1=clear text auth,2=context
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",PrefC.GetString(PrefName.EmailUsername));
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",PrefC.GetString(PrefName.EmailPassword));
+				//if(PrefC.GetBool(PrefName.EmailUseSSL)) {
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work
+				message.From=emailMessage.FromAddress;
+				message.To=emailMessage.ToAddress;
+				message.Subject=emailMessage.Subject;
+				message.Body=emailMessage.BodyText;
+				//message.Cc=;
+				//message.Bcc=;
+				//message.UrlContentBase=;
+				//message.UrlContentLocation=;
+				message.BodyEncoding=System.Text.Encoding.UTF8;
+				message.BodyFormat=System.Web.Mail.MailFormat.Text;//or .Html
+				string attachPath=GetAttachPath();
+				System.Web.Mail.MailAttachment attach;
+				//foreach (string sSubstr in sAttach.Split(delim)){
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					attach=new System.Web.Mail.MailAttachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+					//no way to set displayed filename
+					message.Attachments.Add(attach);
+				}
+				System.Web.Mail.SmtpMail.SmtpServer=PrefC.GetString(PrefName.EmailSMTPserver)+":465";//"smtp.gmail.com:465";
+				System.Web.Mail.SmtpMail.Send(message);
 			}
-			client.Send(message);
-			//}
-			//catch(System.Exception ex){
-			//	Cursor=Cursors.Default;
-			//	MessageBox.Show(ex.Message);
-			//	return;
-			//}
+			else {//explicit default port 587 
+				SmtpClient client=new SmtpClient(PrefC.GetString(PrefName.EmailSMTPserver),PrefC.GetInt(PrefName.EmailPort));
+				//The default credentials are not used by default, according to: 
+				//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
+				client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
+				client.DeliveryMethod=SmtpDeliveryMethod.Network;
+				client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
+				client.Timeout=10000;//10 seconds//180000;//Timeout of 3 minutes (in milliseconds).
+				MailMessage message=new MailMessage();
+				Attachment attach;
+				message.From=new MailAddress(emailMessage.FromAddress);
+				message.To.Add(emailMessage.ToAddress);
+				message.Subject=emailMessage.Subject;
+				message.Body=emailMessage.BodyText;
+				message.IsBodyHtml=false;
+				string attachPath=GetAttachPath();
+				for(int i=0;i<emailMessage.Attachments.Count;i++) {
+					attach=new Attachment(ODFileUtils.CombinePaths(attachPath,emailMessage.Attachments[i].ActualFileName));
+					//@"C:\OpenDentalData\EmailAttachments\1");
+					attach.Name=emailMessage.Attachments[i].DisplayedFileName;
+					//"canadian.gif";
+					message.Attachments.Add(attach);
+				}
+				client.Send(message);
+			}
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
