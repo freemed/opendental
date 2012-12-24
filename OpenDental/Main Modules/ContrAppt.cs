@@ -3490,6 +3490,12 @@ namespace OpenDental {
 			if(ContrApptSingle.ClickedAptNum!=0) {//on appt
 				long patnum=PIn.Long(TempApptSingle.DataRoww["PatNum"].ToString());
 				TempApptSingle.Dispose();
+				if(Appointments.GetOneApt(ContrApptSingle.ClickedAptNum)==null) {
+					MsgBox.Show(this,"Selected appointment no longer exists.");
+					RefreshModuleDataPeriod();
+					RefreshModuleScreenPeriod();
+					return;
+				}
 				//security handled inside the form
 				FormApptEdit FormAE=new FormApptEdit(ContrApptSingle.ClickedAptNum);
 				FormAE.ShowDialog();
@@ -3632,10 +3638,12 @@ namespace OpenDental {
 						FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
 						FormAO.InitialClick=true;
 						FormAO.MakeAppointment();
-						if(FormAO.OResult==OtherResult.Cancel) {
-							return;
+						//if(FormAO.OResult==OtherResult.Cancel) {//this wasn't catching user hitting cancel from within appt edit window
+						//	return;
+						//}
+						if(FormAO.AptNumsSelected.Count>0) {
+							ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 						}
-						ContrApptSingle.SelectedAptNum=FormAO.AptNumsSelected[0];
 						//RefreshModuleDataPatient(FormAO.SelectedPatNum);//patient won't have changed
 						//OnPatientSelected(PatCur.PatNum,PatCur.GetNameLF(),PatCur.Email!="",PatCur.ChartNumber);
 						apt=Appointments.GetOneApt(ContrApptSingle.SelectedAptNum);
