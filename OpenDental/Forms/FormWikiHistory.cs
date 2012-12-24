@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using CodeBase;
 
 namespace OpenDental {
 	public partial class FormWikiHistory:Form {
@@ -33,7 +34,7 @@ namespace OpenDental {
 			AggregateContent=PageMaster.PageContent;
 			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
 			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
-			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent.Clone().ToString());
+			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent);
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
 		}
 
@@ -65,14 +66,16 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			FormWikiEdit FormWE = new FormWikiEdit();
-			FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
-			FormWE.ShowDialog();
-			if(FormWE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			FillGrid();
-			LoadWikiPage(listWikiPages[0]);
+			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[gridMain.SelectedIndices[0]].PageContent);
+			mbox.ShowDialog();
+			//FormWikiEdit FormWE = new FormWikiEdit();
+			//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
+			//FormWE.ShowDialog();
+			//if(FormWE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			//FillGrid();
+			//LoadWikiPage(listWikiPages[0]);
 		}
 
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {

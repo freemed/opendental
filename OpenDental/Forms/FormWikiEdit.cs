@@ -188,8 +188,11 @@ namespace OpenDental {
 		}
 
 		private void Ext_Link_Click() {
-			textContent.Paste("<a href=\"http://url.com\">url</a>");
+			int tempStart=textContent.SelectionStart;
+			textContent.Paste("<a href=\"\"></a>");
 			textContent.Focus();
+			textContent.SelectionStart=tempStart+11;
+			textContent.SelectionLength=0;
 		}
 
 		private void H1_Click() {
@@ -280,8 +283,32 @@ namespace OpenDental {
 			textContent.Focus();
 		}
 
+		///<summary>Insert table boilderplate. Pastes selected text into the first cell.</summary>
 		private void Table_Click() {
-			//throw new NotImplementedException();
+			int tempStart=textContent.SelectionStart;
+			int tempLength=textContent.SelectionLength;
+			textContent.Paste(
+@"<table>
+<tr>
+<th>Header1</th>
+<th>Header2</th>
+</tr>
+<tr>
+<td>"+textContent.SelectedText+@"  </td>
+<td>  </td>
+</tr>
+<tr>
+<td>  </td>
+<td>  </td>
+</tr>
+<tr>
+<td>  </td>
+<td>  </td>
+</tr>
+</table>");
+			textContent.SelectionStart=tempStart+68;
+			textContent.SelectionLength=tempLength;
+			textContent.Focus();
 		}
 
 		private void Image_Click() {

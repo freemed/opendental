@@ -44,6 +44,24 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
+		///<summary>Returns a list of all historical version of "PageName"</summary>
+		public static List<WikiPage> GetIncomingLinks(string PageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
+			}
+			List<WikiPage> retVal=new List<WikiPage>();
+			string command="SELECT PageTitle FROM wikipage WHERE PageContent LIKE '%[["+PageTitle+"]]%' GROUP BY PageTitle;";
+			Db.GetTable(command);
+			//historical versions may contain a link when the current version does not. Filter those results out.
+			foreach(DataRow pageTitleRow in Db.GetTable(command).Rows){
+				WikiPage tempPage=GetByTitle(pageTitleRow[0].ToString());
+				if(tempPage.PageContent.Contains("[["+PageTitle+"]]")){
+					retVal.Add(tempPage);
+				}
+			}
+			return retVal;
+		}
+
 		///<summary></summary>
 		public static long Insert(WikiPage WikiPage){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -67,24 +85,24 @@ namespace OpenDentBusiness{
 			string command="UPDATE wikipage SET PageTitle='"+NewPageTitle+"'WHERE PageTitle='"+OriginalPageTitle+"';";
 			Db.NonQ(command);
 			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
-			command=@"INSERT INTO wikipage (UserNum, DateTimeSaved, PageTitle, PageContent)  
-							(SELECT "+Security.CurUser.UserNum+@",NOW(),t.PageTitle, REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')
-							FROM(
-								SELECT PageTitle, PageContent FROM wikipage 
-								WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%' 
-								AND DateTimeSaved=(
-									SELECT MAX(DateTimeSaved) 
-									FROM wikipage 
-									WHERE PageTitle IN (
-										SELECT PageTitle 
-										FROM wikipage 
-										WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%'
-									)))t
-							);";
+//      command=@"INSERT INTO wikipage (UserNum, DateTimeSaved, PageTitle, PageContent)  
+//							(SELECT "+Security.CurUser.UserNum+@",NOW(),t.PageTitle, REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')
+//							FROM(
+//								SELECT PageTitle, PageContent FROM wikipage 
+//								WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%' 
+//								AND DateTimeSaved=(
+//									SELECT MAX(DateTimeSaved) 
+//									FROM wikipage 
+//									WHERE PageTitle IN (
+//										SELECT PageTitle 
+//										FROM wikipage 
+//										WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%'
+//									)))t
+//							);";
+//      Db.NonQ(command);
+			//Alternate, simple fix-links query
+			command="UPDATE wikipage SET PageContent=REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
 			Db.NonQ(command);
-			//Alternate simple fix links query
-			//command="UPDATE wikipage SET PageContent=REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
-			//Db.NonQ(command);
 			return;
 		}
 
@@ -107,8 +125,16 @@ namespace OpenDentBusiness{
 			//Replace internal Links
 			MatchCollection matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
-				retVal=retVal.Replace(link.Value,"<a href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+				string tmpStyle="";
+				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null || 
+					GetByTitle(link.Value.Trim("[]".ToCharArray())).IsDeleted) 
+				{
+					tmpStyle="class='PageNotExists '";
+				}
+				retVal=retVal.Replace(link.Value,"<a "+tmpStyle+"href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
 			}
+
+
 			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
 			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
 			//retVal.Replace("\r\n","<br />");

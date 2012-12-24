@@ -11,8 +11,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormWiki:Form {
 		public WikiPage WikiPageCur;
-		public WikiPage PageMaster;
-		public WikiPage PageStyle;
+		public WikiPage MasterPage;
+		public WikiPage StyleSheet;
 		private string AggregateContent;
 
 		public FormWiki() {
@@ -29,9 +29,9 @@ namespace OpenDental {
 			Height=tempWorkAreaRect.Height;
 			//Height=SystemInformation.PrimaryMonitorSize.Height;
 			LayoutToolBar();
-			PageMaster=WikiPages.GetMaster();
-			PageStyle=WikiPages.GetStyle();
-			LoadWikiPage("Home");
+			MasterPage=WikiPages.GetMaster();
+			StyleSheet=WikiPages.GetStyle();
+			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
 		private void LoadWikiPage(string PageTitle) {
@@ -48,10 +48,19 @@ namespace OpenDental {
 					return;
 				}
 			}
+			else if(WikiPages.GetByTitle(PageTitle).IsDeleted) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page has been deleted. Would you like to un-delete it?")) {
+					return;
+				}
+				WikiPage tmpWP = WikiPages.GetByTitle(PageTitle);
+				tmpWP.UserNum=Security.CurUser.UserNum;
+				tmpWP.IsDeleted=false;
+				WikiPages.Insert(tmpWP);
+			}
 			WikiPageCur=WikiPages.GetByTitle(PageTitle);
-			AggregateContent=PageMaster.PageContent;
+			AggregateContent=MasterPage.PageContent;
 			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
-			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
+			AggregateContent=AggregateContent.Replace("@@@Style@@@",StyleSheet.PageContent);
 			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent);
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
 			Text="OD Wiki - "+WikiPageCur.PageTitle;
@@ -111,10 +120,24 @@ namespace OpenDental {
 		private void Setup_Click() {
 			FormWikiSetup FormWS=new FormWikiSetup();
 			FormWS.ShowDialog();
+			if(FormWS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(FormWS.MasterPage.PageContent!=MasterPage.PageContent) {
+				WikiPages.Insert(FormWS.MasterPage);
+				MasterPage=WikiPages.GetMaster();
+			}
+			if(FormWS.StyleSheet.PageContent!=StyleSheet.PageContent) {
+				WikiPages.Insert(FormWS.StyleSheet);
+				StyleSheet=WikiPages.GetStyle();
+			}
+			LoadWikiPage(WikiPageCur.PageTitle);
 		}
 
 		private void Home_Click() {
-			LoadWikiPage("Home");
+			MasterPage=WikiPages.GetMaster();
+			StyleSheet=WikiPages.GetStyle();
+			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
 		private void Edit_Click() {
@@ -145,9 +168,14 @@ namespace OpenDental {
 		}
 
 		private void Delete_Click() {
-			//Rename page to "_deleted_<pageTitle>"?
-			//Or do we want to have a new column IsDeleted?
-			//throw new NotImplementedException();
+			if(WikiPageCur.PageTitle=="Home") {//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
+				MsgBox.Show(this,"Cannot rename homepage."); 
+					return;
+			}
+			WikiPageCur.IsDeleted=true;
+			WikiPageCur.UserNum=Security.CurUser.UserNum;
+			WikiPages.Insert(WikiPageCur);
+			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
 		private void History_Click() {
@@ -160,11 +188,17 @@ namespace OpenDental {
 			if(FormWH.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			//TODO: AFter return from history;
+			//Nothing to do here.
 		}
 
 		private void Inc_Link_Click() {
-			//throw new NotImplementedException();
+			FormWikiIncomingLinks FormWIC = new FormWikiIncomingLinks();
+			FormWIC.PageTitleCur=WikiPageCur.PageTitle;
+			FormWIC.ShowDialog();
+			if(FormWIC.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			LoadWikiPage(FormWIC.selectedWikiPage.PageTitle);
 		}
 
 		private void Add_Click() {
@@ -206,18 +240,14 @@ namespace OpenDental {
 			//WikiPageCur=null;
 		}
 
-		private void menuItemSetup_Click(object sender,EventArgs e) {
-
-		}
-
-		private void menuItemEdit_Click(object sender,EventArgs e) {
-			if(WikiPageCur==null) {//outside webpage i.e. http://www.opendental.com
-				return;
-			}
-			FormWikiEdit FormWE = new FormWikiEdit();
-			FormWE.WikiPageCur=WikiPageCur;
-			FormWE.Show();
-		}
+		//private void menuItemEdit_Click(object sender,EventArgs e) {
+		//  if(WikiPageCur==null) {//outside webpage i.e. http://www.opendental.com
+		//    return;
+		//  }
+		//  FormWikiEdit FormWE = new FormWikiEdit();
+		//  FormWE.WikiPageCur=WikiPageCur;
+		//  FormWE.Show();
+		//}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;

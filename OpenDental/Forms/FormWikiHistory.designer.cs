@@ -25,7 +25,6 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
-			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
@@ -40,7 +39,7 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(248, 575);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Page History";
-			this.gridMain.TranslationName = "TableWebforms";
+			this.gridMain.TranslationName = "TableWikiHistory";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			this.gridMain.Click += new System.EventHandler(this.gridMain_Click);
 			// 
@@ -59,21 +58,6 @@ namespace OpenDental{
 			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
 			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
 			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(904, 533);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -86,7 +70,7 @@ namespace OpenDental{
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
+			this.butCancel.Text = "Close";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormWikiHistory
@@ -95,7 +79,6 @@ namespace OpenDental{
 			this.ClientSize = new System.Drawing.Size(991, 599);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormWikiHistory";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -107,7 +90,6 @@ namespace OpenDental{
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.WebBrowser webBrowserWiki;

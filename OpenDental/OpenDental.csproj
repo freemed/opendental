@@ -365,6 +365,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiIncomingLinks.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiIncomingLinks.designer.cs">
+      <DependentUpon>FormWikiIncomingLinks.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormProcLockTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2660,6 +2666,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiIncomingLinks.resx">
+      <DependentUpon>FormWikiIncomingLinks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProcLockTool.resx">
       <DependentUpon>FormProcLockTool.cs</DependentUpon>
