@@ -59,14 +59,14 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// textPageName
+			// textPageTitle
 			// 
 			this.textPageTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.textPageTitle.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.textPageTitle.Location = new System.Drawing.Point(149, 30);
 			this.textPageTitle.MaxLength = 255;
-			this.textPageTitle.Name = "textPageName";
+			this.textPageTitle.Name = "textPageTitle";
 			this.textPageTitle.Size = new System.Drawing.Size(243, 20);
 			this.textPageTitle.TabIndex = 4;
 			// 
@@ -89,7 +89,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormWikiRename";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Wiki Page Title";
+			this.Text = "Page Title";
 			this.Load += new System.EventHandler(this.FormWikiRename_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

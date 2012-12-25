@@ -221,6 +221,10 @@ namespace OpenDental {
 		private void All_Pages_Click() {
 			FormWikiAllPages FormWAP=new FormWikiAllPages();
 			FormWAP.ShowDialog();
+			if(FormWAP.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			LoadWikiPage(FormWAP.selectedWikiPage.PageTitle);
 		}
 
 		private void Search_Click() {

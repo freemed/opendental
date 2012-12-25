@@ -22,11 +22,6 @@ namespace OpenDental {
 				Text="Page Title - "+PageTitle;
 				textPageTitle.Text=PageTitle;
 			}
-			else {
-				Text="Page Title";
-				textPageTitle.Text="New Page Title";
-				textPageTitle.SelectAll();
-			}
 			if(textPageTitle.Text=="Home") {//TODO:replace this with a dynamic "Home" pagename lookup like: PrefC.GetString(PrefName.WikiHomePage);
 				MsgBox.Show(this,"Cannot rename the default homepage.");
 				butOK.Enabled=false;

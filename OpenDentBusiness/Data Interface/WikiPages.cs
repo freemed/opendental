@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
-		///<summary>Returns a list of all historical version of "PageName"</summary>
+		///<summary>Returns a list of all historical version of "PageTitle"</summary>
 		public static List<WikiPage> GetHistoryByTitle(string PageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
@@ -44,14 +44,14 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
-		///<summary>Returns a list of all historical version of "PageName"</summary>
+		///<summary>Returns a list of all pages that reference "PageTitle"</summary>
 		public static List<WikiPage> GetIncomingLinks(string PageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
 			List<WikiPage> retVal=new List<WikiPage>();
 			string command="SELECT PageTitle FROM wikipage WHERE PageContent LIKE '%[["+PageTitle+"]]%' GROUP BY PageTitle;";
-			Db.GetTable(command);
+			//Db.GetTable(command);
 			//historical versions may contain a link when the current version does not. Filter those results out.
 			foreach(DataRow pageTitleRow in Db.GetTable(command).Rows){
 				WikiPage tempPage=GetByTitle(pageTitleRow[0].ToString());
@@ -59,6 +59,31 @@ namespace OpenDentBusiness{
 					retVal.Add(tempPage);
 				}
 			}
+			return retVal;
+		}
+
+		///<summary>Returns a list of all current versions of all pages.</summary>
+		public static List<WikiPage> GetAllCurrent() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
+			}
+			List<WikiPage> retVal=new List<WikiPage>();
+			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' ORDER BY DateTimeSaved DESC;";
+			List<WikiPage> listAllWikiPages=Crud.WikiPageCrud.SelectMany(command);
+			//Return only the newest version of each page. Since they are odered by date, the newest versions will be the first added and all subsequent editions will be idgnored.
+			foreach(WikiPage wikiPage in listAllWikiPages) {
+				bool found=true;
+				foreach(WikiPage foundPage in retVal) {
+					if(wikiPage.PageTitle==foundPage.PageTitle) {
+						found=false;
+						break;
+					}
+				}
+				if(found) {
+					retVal.Add(wikiPage);
+				}
+			}
+			retVal.Sort(SortWikiPagesByName);
 			return retVal;
 		}
 
@@ -101,7 +126,7 @@ namespace OpenDentBusiness{
 //							);";
 //      Db.NonQ(command);
 			//Alternate, simple fix-links query
-			command="UPDATE wikipage SET PageContent=REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
+			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
 			Db.NonQ(command);
 			return;
 		}
@@ -122,8 +147,20 @@ namespace OpenDentBusiness{
 			retVal+=wikiContent;
 			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;");
 			retVal=retVal.Replace("<body>","<body><p>").Replace("</body>","</p></body>");
+			//replace image tags [[img:myimage.gif]]
+			MatchCollection matches = Regex.Matches(retVal,"\\[\\[(img:).*?\\]\\]");//^(\\s|\\d) because color codes are being replaced.
+			foreach(Match imageMatch in matches) {
+				string imgName = imageMatch.Value.Substring(imageMatch.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
+				//retVal=retVal.Replace(imageMatch.Value,"<img src=\"file://///server/OpenDentImages/wiki/"+imgName+"\" />");
+				retVal=retVal.Replace(imageMatch.Value,"<img src=\"file://///serverfiles/Storage/My/Ryan/images/"+imgName+"\" />");
+			}
+			//replace image tags [[img:myimage.gif]]
+			matches = Regex.Matches(retVal,"\\[\\[(keywords:).*?\\]\\]");//^(\\s|\\d) because color codes are being replaced.
+			foreach(Match keywords in matches) {//should be only one
+				retVal=retVal.Replace(keywords.Value,"<span class=\"keywords\">keywords:"+keywords.Value.Substring(11).TrimEnd("]".ToCharArray()));
+			}
 			//Replace internal Links
-			MatchCollection matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
+			matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
 				string tmpStyle="";
 				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null || 
@@ -133,11 +170,38 @@ namespace OpenDentBusiness{
 				}
 				retVal=retVal.Replace(link.Value,"<a "+tmpStyle+"href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
 			}
-
-
+			//construct unordered lists.
+			matches = Regex.Matches(retVal,"\\*[\\S](.|[\\r\\n][^(\\r\\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
+			foreach(Match unorderedList in matches) {
+				string[] tokens = unorderedList.Value.Split('*');
+				StringBuilder listBuilder = new StringBuilder();
+				listBuilder.Append("<ul>\r\n");
+				foreach(string listItem in tokens) {
+					if(listItem!="") {
+						listBuilder.Append("<li>"+listItem+"</li>\r\n");
+					}
+				}
+				listBuilder.Append("</ul>\r\n");
+				retVal=retVal.Replace(unorderedList.Value,listBuilder.ToString());
+			}
+			//construct ordered lists.
+			matches = Regex.Matches(retVal,"#[^(\\s|\\d)](.|[\\r\\n][^(\\r\\n)])+");//^(\\s|\\d) because color codes are being replaced.
+			foreach(Match unorderedList in matches) {
+				string[] tokens = unorderedList.Value.Split('#');
+				StringBuilder listBuilder = new StringBuilder();
+				listBuilder.Append("<ol>\r\n");
+				foreach(string listItem in tokens) {
+					if(listItem!="") {
+						listBuilder.Append("<li>"+listItem+"</li>\r\n");
+					}
+				}
+				listBuilder.Append("</ol>\r\n");
+				retVal=retVal.Replace(unorderedList.Value,listBuilder.ToString());
+			}
 			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
 			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
 			//retVal.Replace("\r\n","<br />");
+			//Color tags
 			matches = Regex.Matches(retVal,"{{(color)(.*?)}}");//.*? matches as few as possible.
 			foreach(Match colorSegment in matches) {
 				string[] tokens = colorSegment.Value.Split('|');
@@ -157,9 +221,9 @@ namespace OpenDentBusiness{
 				}
 				retVal=retVal.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
 			}
-			//TODO: Image Tags
 			return retVal;
 		}
+
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
 
@@ -191,6 +255,9 @@ namespace OpenDentBusiness{
 		}
 		*/
 
+		private static int SortWikiPagesByName(WikiPage wp1,WikiPage wp2) {
+			return wp1.PageTitle.CompareTo(wp2.PageTitle);
+		}
 
 
 

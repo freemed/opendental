@@ -179,10 +179,15 @@ namespace OpenDental {
 
 		private void Int_Link_Click() {
 			int tempStart=textContent.SelectionStart;
-			//TODO: Internal picklist.
-			textContent.Paste("[[]]");
+			FormWikiAllPages FormWAPSelect = new FormWikiAllPages();
+			FormWAPSelect.IsSelectMode=true;
+			FormWAPSelect.ShowDialog();
+			if(FormWAPSelect.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textContent.Paste("[["+FormWAPSelect.selectedWikiPage.PageTitle+"]]");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+2;
+			textContent.SelectionStart=tempStart+FormWAPSelect.selectedWikiPage.PageTitle.Length+2;
 			textContent.SelectionLength=0;
 
 		}
