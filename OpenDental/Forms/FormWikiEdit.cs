@@ -7,6 +7,8 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormWikiEdit:Form {
@@ -328,6 +330,26 @@ namespace OpenDental {
 
 		///<summary>Validates content, and keywords.</summary>
 		private bool ValidateWikiPage() {
+			return true;
+			string valText=textContent.Text;
+			valText=valText.Replace("&<","&lt;").Replace("&>","&gt;");
+			//TODO:XML Validator...
+			//Allowed Tags: a, i, b, h1, h2, h3
+			//common dissalowed tags: div, span, p, body, h4, h5, etc...
+			string rootImagePath = "\\Ryan\\storage\\images\\";
+			MatchCollection matches = Regex.Matches(valText,"\\[\\[(img:).*?\\]\\]");
+			for(int i=0;i<matches.Count;i++) {
+				if(!System.IO.File.Exists(rootImagePath+matches[i].Value.Substring(6).Trim(']'))) {
+					//file doesn't exist. Throw error?
+					return false;
+				}
+			}
+			//foreach(Match imgTag in matches) {
+			//  if(!System.IO.File.Exists(rootImagePath+imgTag.Value.Substring(6).Trim(']'))){
+			//    //file doesn't exist. Throw error?
+			//    return false;
+			//  }
+			//}
 			return true;
 			//todo
 			//strategy:

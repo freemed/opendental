@@ -75,19 +75,22 @@ namespace OpenDental {
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			else {//Non select mode.
-				//do nothing
-				//MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[gridMain.SelectedIndices[0]].PageContent);
-				//mbox.ShowDialog();
-				//FormWikiEdit FormWE = new FormWikiEdit();
-				//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
-				//FormWE.ShowDialog();
-				//if(FormWE.DialogResult!=DialogResult.OK) {
-				//  return;
-				//}
-				//FillGrid();
-				//LoadWikiPage(listWikiPages[0]);
-			}
+			SelectedWikiPage=listWikiPages[e.Row];
+			DialogResult=DialogResult.OK;
+			return;
+			//else {//Non select mode.
+			//  //do nothing
+			//  //MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[gridMain.SelectedIndices[0]].PageContent);
+			//  //mbox.ShowDialog();
+			//  //FormWikiEdit FormWE = new FormWikiEdit();
+			//  //FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
+			//  //FormWE.ShowDialog();
+			//  //if(FormWE.DialogResult!=DialogResult.OK) {
+			//  //  return;
+			//  //}
+			//  //FillGrid();
+			//  //LoadWikiPage(listWikiPages[0]);
+			//}
 		}
 
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {

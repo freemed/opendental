@@ -49,17 +49,18 @@ namespace OpenDental {
 				}
 				wpage=WikiPages.GetByTitle(pageTitle);
 			}
-			/* This makes no sense once we have wikipagehist.  Deleted page history will be totally ignored,and will not prevent adding that page again later.
-			if(wpage.IsDeleted) {
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page has been deleted. Would you like to un-delete it?")) {
-					return;
-				}
-				wpage.UserNum=Security.CurUser.UserNum;
-				wpage.IsDeleted=false;
-				WikiPages.Insert(wpage);
-			}*/
+/* This makes no sense once we have wikipagehist.  Deleted page history will be totally ignored,and will not prevent adding that page again later.
+//If trying to navigate to a page that has been deleted, insert a copy of the page into the DB and unflag it as deleted.
+if(wpage.IsDeleted) {
+	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page has been deleted. Would you like to un-delete it?")) {
+		return;
+	}
+	wpage.UserNum=Security.CurUser.UserNum;
+	wpage.IsDeleted=false;
+	WikiPages.Insert(wpage);
+}*/
 			WikiPageCur=wpage;
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);//does not insert page title.
 			Text="Wiki - "+WikiPageCur.PageTitle;
 			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!=pageTitle) {
 				historyNav.Add(pageTitle);

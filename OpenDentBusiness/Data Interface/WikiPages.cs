@@ -17,7 +17,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+PageTitle+"');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"');";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' ORDER BY DateTimeSaved;";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"' ORDER BY DateTimeSaved;";
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDentBusiness{
 			tempWP.UserNum=Security.CurUser.UserNum;
 			Insert(tempWP);
 			//Actually rename pages and all previous versions.
-			string command="UPDATE wikipage SET PageTitle='"+NewPageTitle+"'WHERE PageTitle='"+OriginalPageTitle+"';";
+			string command="UPDATE wikipage SET PageTitle='"+POut.String(NewPageTitle)+"'WHERE PageTitle='"+POut.String(OriginalPageTitle)+"';";
 			Db.NonQ(command);
 			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
 			//js- We can NOT do it this way.  It breaks our pattern of inserts.  In particular, it would break replication and Oracle.
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 //							);";
 //      Db.NonQ(command);
 			//For now, we will simply fix existing links in history
-			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
+			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(OriginalPageTitle)+@"]]', '[["+POut.String(NewPageTitle)+@"]]')";
 			Db.NonQ(command);
 			return;
 		}
@@ -132,6 +132,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
+			//No call to db.
 			string retVal="";
 			retVal+=wikiContent;
 			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;");

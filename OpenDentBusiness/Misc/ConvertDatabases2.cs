@@ -11380,9 +11380,9 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE wikipage (
 						WikiPageNum bigint NOT NULL auto_increment PRIMARY KEY,
 						UserNum bigint NOT NULL,
-						DateTimeSaved datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						PageTitle varchar(255) NOT NULL,
 						PageContent MEDIUMTEXT NOT NULL,
+						DateTimeSaved datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						INDEX(UserNum)
 						) DEFAULT CHARSET=utf8";
 					Db.NonQ(command);
@@ -11393,13 +11393,43 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command=@"CREATE TABLE wikipage (
 						WikiPageNum number(20) NOT NULL,
 						UserNum number(20) NOT NULL,
-						DateTimeSaved date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						PageTitle varchar2(255),
 						PageContent clob,
+						DateTimeSaved date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT wikipage_WikiPageNum PRIMARY KEY (WikiPageNum)
 						)";
 					Db.NonQ(command);
 					command=@"CREATE INDEX wikipage_UserNum ON wikipage (UserNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS wikipagehist";
+					Db.NonQ(command);
+					command=@"CREATE TABLE wikipagehist (
+						WikiPageNum bigint NOT NULL auto_increment PRIMARY KEY,
+						UserNum bigint NOT NULL,
+						PageTitle varchar(255) NOT NULL,
+						PageContent MEDIUMTEXT NOT NULL,
+						DateTimeSaved datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						IsDeleted tinyint NOT NULL,
+						INDEX(UserNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE wikipagehist'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE wikipagehist (
+						WikiPageNum number(20) NOT NULL,
+						UserNum number(20) NOT NULL,
+						PageTitle varchar2(255),
+						PageContent clob,
+						DateTimeSaved date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						IsDeleted number(3) NOT NULL,
+						CONSTRAINT wikipagehist_WikiPageNum PRIMARY KEY (WikiPageNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX wikipagehist_UserNum ON wikipagehist (UserNum)";
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -11487,7 +11517,21 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
 					+"0,"
 					+"'_Style',"	
-					+"'',";
+					+@"'<style type=""text/css"">
+h1{
+font-size:16pt;
+}
+h2{
+font-size:14pt;
+}
+h3{
+font-size:12pt;
+}
+.PageNotExists, a.PageNotExists:hover {
+}
+.keywords, a.keywords:hover {
+}
+</style>',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command+="SYSDATE,";
 				}
@@ -11511,12 +11555,4 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 	}
 }
-
-
-
-
-
-
-
-
 
