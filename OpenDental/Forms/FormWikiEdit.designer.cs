@@ -31,13 +31,16 @@ namespace OpenDental{
 			// 
 			// textContent
 			// 
+			this.textContent.AcceptsReturn = true;
 			this.textContent.AcceptsTab = true;
+			this.textContent.AllowDrop = true;
 			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.textContent.Font = new System.Drawing.Font("Courier New", 9.5F);
 			this.textContent.Location = new System.Drawing.Point(0, 31);
 			this.textContent.Multiline = true;
 			this.textContent.Name = "textContent";
+			this.textContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textContent.Size = new System.Drawing.Size(470, 542);
 			this.textContent.TabIndex = 2;
 			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);

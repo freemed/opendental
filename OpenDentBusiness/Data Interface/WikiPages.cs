@@ -13,20 +13,20 @@ namespace OpenDentBusiness{
 		public static WikiPage StyleSheet;
 
 		///<summary>Returns null if page does not exist.</summary>
-		public static WikiPage GetByTitle(string PageTitle) {
+		public static WikiPage GetByTitle(string pageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),PageTitle);
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
 		///<summary>Returns a list of all historical version of "PageTitle"</summary>
-		public static List<WikiPage> GetHistoryByTitle(string PageTitle) {
+		public static List<WikiPage> GetHistoryByTitle(string pageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(PageTitle)+"' ORDER BY DateTimeSaved;";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' ORDER BY DateTimeSaved;";
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
@@ -75,26 +75,26 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static long Insert(WikiPage WikiPage){
+		public static long Insert(WikiPage wikiPage){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				WikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),WikiPage);
-				return WikiPage.WikiPageNum;
+				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
+				return wikiPage.WikiPageNum;
 			}
-			return Crud.WikiPageCrud.Insert(WikiPage);
+			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
 
 		///<summary></summary>
-		public static void Rename(string OriginalPageTitle, string NewPageTitle) {
+		public static void Rename(string originalPageTitle, string newPageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),OriginalPageTitle,NewPageTitle);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),originalPageTitle,newPageTitle);
 				return;
 			}
 			//Create new entry to track changes by user.
-			WikiPage tempWP = GetByTitle(OriginalPageTitle);
+			WikiPage tempWP = GetByTitle(originalPageTitle);
 			tempWP.UserNum=Security.CurUser.UserNum;
 			Insert(tempWP);
 			//Actually rename pages and all previous versions.
-			string command="UPDATE wikipage SET PageTitle='"+POut.String(NewPageTitle)+"'WHERE PageTitle='"+POut.String(OriginalPageTitle)+"';";
+			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(originalPageTitle)+"';";
 			Db.NonQ(command);
 			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
 			//js- We can NOT do it this way.  It breaks our pattern of inserts.  In particular, it would break replication and Oracle.
@@ -114,7 +114,7 @@ namespace OpenDentBusiness{
 //							);";
 //      Db.NonQ(command);
 			//For now, we will simply fix existing links in history
-			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(OriginalPageTitle)+@"]]', '[["+POut.String(NewPageTitle)+@"]]')";
+			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(originalPageTitle)+@"]]', '[["+POut.String(newPageTitle)+@"]]')";
 			Db.NonQ(command);
 			return;
 		}
@@ -135,21 +135,29 @@ namespace OpenDentBusiness{
 			//No call to db.
 			string retVal="";
 			retVal+=wikiContent;
+			//
+			//"<" and ">"
+			//
 			retVal=retVal.Replace("&<","&lt;").Replace("&>","&gt;");
-			retVal=retVal.Replace("<body>","<body><p>").Replace("</body>","</p></body>");
-			//replace image tags [[img:myimage.gif]]
-			MatchCollection matches = Regex.Matches(retVal,"\\[\\[(img:).*?\\]\\]");//^(\\s|\\d) because color codes are being replaced.
+			//
+			//[[img:myimage.gif]]
+			//
+			MatchCollection matches = Regex.Matches(retVal,"\\[\\[(img:).*?\\]\\]");
 			foreach(Match imageMatch in matches) {
 				string imgName = imageMatch.Value.Substring(imageMatch.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
 				//retVal=retVal.Replace(imageMatch.Value,"<img src=\"file://///server/OpenDentImages/wiki/"+imgName+"\" />");
 				retVal=retVal.Replace(imageMatch.Value,"<img src=\"file://///serverfiles/Storage/My/Ryan/images/"+imgName+"\" />");
 			}
-			//replace image tags [[img:myimage.gif]]
+			//
+			//[[img:myimage.gif]]
+			//
 			matches = Regex.Matches(retVal,"\\[\\[(keywords:).*?\\]\\]");//^(\\s|\\d) because color codes are being replaced.
 			foreach(Match keywords in matches) {//should be only one
-				retVal=retVal.Replace(keywords.Value,"<span class=\"keywords\">keywords:"+keywords.Value.Substring(11).TrimEnd("]".ToCharArray()));
+				retVal=retVal.Replace(keywords.Value,"<span class=\"keywords\">keywords:"+keywords.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
 			}
-			//Replace internal Links
+			//
+			//[[InternalLink]]
+			//
 			matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
 				string tmpStyle="";
@@ -159,7 +167,9 @@ namespace OpenDentBusiness{
 				}
 				retVal=retVal.Replace(link.Value,"<a "+tmpStyle+"href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
 			}
-			//construct unordered lists.
+			//
+			//<ul>
+			//
 			matches = Regex.Matches(retVal,"\\*[\\S](.|[\\r\\n][^(\\r\\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
 			foreach(Match unorderedList in matches) {
 				string[] tokens = unorderedList.Value.Split('*');
@@ -173,7 +183,9 @@ namespace OpenDentBusiness{
 				listBuilder.Append("</ul>\r\n");
 				retVal=retVal.Replace(unorderedList.Value,listBuilder.ToString());
 			}
-			//construct ordered lists.
+			//
+			//<ol>
+			//
 			matches = Regex.Matches(retVal,"#[^(\\s|\\d)](.|[\\r\\n][^(\\r\\n)])+");//^(\\s|\\d) because color codes are being replaced.
 			foreach(Match unorderedList in matches) {
 				string[] tokens = unorderedList.Value.Split('#');
@@ -187,10 +199,17 @@ namespace OpenDentBusiness{
 				listBuilder.Append("</ol>\r\n");
 				retVal=retVal.Replace(unorderedList.Value,listBuilder.ToString());
 			}
+			//
+			//<p>
+			//
 			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
+			//
+			//"     "(tabs) and double spaces.
+			//
 			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
-			//retVal.Replace("\r\n","<br />");
-			//Color tags
+			//
+			//{{color|red|text}}
+			//
 			matches = Regex.Matches(retVal,"{{(color)(.*?)}}");//.*? matches as few as possible.
 			foreach(Match colorSegment in matches) {
 				string[] tokens = colorSegment.Value.Split('|');
@@ -217,7 +236,7 @@ namespace OpenDentBusiness{
 			if(StyleSheet==null){
 				StyleSheet=GetByTitle("_Style");
 			}
-			retVal=MasterPage.PageContent.Replace("@@@Content@@@",retVal);
+			retVal=MasterPage.PageContent.Replace("@@@Content@@@","<p>"+retVal+"</p>");
 			retVal=retVal.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return retVal;
 		}

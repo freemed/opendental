@@ -1452,6 +1452,11 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ClaimProcWithInvalidInsSubNum(bool verbose,bool isCheck) {
+			//todo, maybe.
+			return "";
+		}
+
 		public static string ClaimProcWriteOffNegative(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -1924,7 +1929,13 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched claim InsSubNum2/PlanNum2 fixed: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
-				//claimproc---------------------------------------------------------------------------------------------------
+				//claimproc (1/2) If planNum is valid but InsSubNum does not exist, then add a dummy inssub----------------------------------------
+
+
+
+
+
+				//claimproc (2/2) Mismatch, but InsSubNum is valid
 				command="UPDATE claimproc SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum) "
 					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum)";
 				numFixed=Db.NonQ(command);
