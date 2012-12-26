@@ -13,9 +13,6 @@ namespace OpenDental {
 	public partial class FormWikiHistory:Form {
 		public string PageTitleCur;
 		private List<WikiPage> listWikiPages;
-		public WikiPage PageMaster;
-		public WikiPage PageStyle;
-		private string AggregateContent;
 
 		public FormWikiHistory() {
 			InitializeComponent();
@@ -23,23 +20,18 @@ namespace OpenDental {
 		}
 
 		private void FormWikiHistory_Load(object sender,EventArgs e) {
-			PageMaster=WikiPages.GetMaster();
-			PageStyle=WikiPages.GetStyle();
 			FillGrid();
-			LoadWikiPage(listWikiPages[0]);
+			//LoadWikiPage(listWikiPages[0]);
 			Text="Wiki History - "+PageTitleCur;
 		}
 
 		private void LoadWikiPage(WikiPage WikiPageCur) {
-			AggregateContent=PageMaster.PageContent;
-			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
-			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
-			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent);
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
 		}
 
 		/// <summary></summary>
 		private void FillGrid() {
+			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"User"),70);
 			gridMain.Columns.Add(col);
@@ -47,10 +39,10 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			listWikiPages=WikiPages.GetHistoryByTitle(PageTitleCur);
-			foreach(WikiPage page in listWikiPages){
+			for(int i=0;i<listWikiPages.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(Userods.GetUser(page.UserNum).UserName);
-				row.Cells.Add(page.DateTimeSaved.ToString());
+				row.Cells.Add(Userods.GetName(listWikiPages[i].UserNum));
+				row.Cells.Add(listWikiPages[i].DateTimeSaved.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -66,7 +58,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[gridMain.SelectedIndices[0]].PageContent);
+			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[e.Row].PageContent);
 			mbox.ShowDialog();
 			//FormWikiEdit FormWE = new FormWikiEdit();
 			//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
@@ -80,10 +72,6 @@ namespace OpenDental {
 
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
 			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
-		}
-
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

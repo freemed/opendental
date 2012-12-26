@@ -11,8 +11,6 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormWikiEdit:Form {
 		public WikiPage WikiPageCur;
-		public WikiPage PageMaster;
-		public WikiPage PageStyle;
 		private string AggregateContent;
 
 		public FormWikiEdit() {
@@ -23,8 +21,6 @@ namespace OpenDental {
 		private void FormWikiEdit_Load(object sender,EventArgs e) {
 			ResizeControls();
 			LayoutToolBar();
-			PageMaster=WikiPages.GetMaster();
-			PageStyle=WikiPages.GetStyle();
 			LayoutToolBar();
 			Text = "Wiki Edit - "+WikiPageCur.PageTitle;
 			textContent.Text=WikiPageCur.PageContent;
@@ -34,22 +30,19 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage() {
-			AggregateContent=PageMaster.PageContent;
-			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
-			AggregateContent=AggregateContent.Replace("@@@Style@@@",PageStyle.PageContent);
-			AggregateContent=AggregateContent.Replace("@@@Content@@@",textContent.Text);
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(textContent.Text);
 		}
 
 		private void ResizeControls() {
+			int topborder=30;
 			//text resize
-			textContent.Top=48;
-			textContent.Height=ClientSize.Height-48;
+			textContent.Top=topborder;
+			textContent.Height=ClientSize.Height-topborder;
 			textContent.Left=0;
 			textContent.Width=ClientSize.Width/2-2;
 			//Browser resize
-			webBrowserWiki.Top=48;
-			webBrowserWiki.Height=ClientSize.Height-48;
+			webBrowserWiki.Top=topborder;
+			webBrowserWiki.Height=ClientSize.Height-topborder;
 			webBrowserWiki.Left=ClientSize.Width/2+2;
 			webBrowserWiki.Width=ClientSize.Width/2-2;
 			//Toolbar resize
@@ -182,12 +175,15 @@ namespace OpenDental {
 			FormWikiAllPages FormWAPSelect = new FormWikiAllPages();
 			FormWAPSelect.IsSelectMode=true;
 			FormWAPSelect.ShowDialog();
-			if(FormWAPSelect.DialogResult!=DialogResult.OK) {
-				return;
+			if(FormWAPSelect.DialogResult==DialogResult.OK) {
+				textContent.Paste("[["+FormWAPSelect.SelectedWikiPage.PageTitle+"]]");
+				textContent.SelectionStart=tempStart+FormWAPSelect.SelectedWikiPage.PageTitle.Length+4;
 			}
-			textContent.Paste("[["+FormWAPSelect.selectedWikiPage.PageTitle+"]]");
+			else {
+				textContent.Paste("[[]]");
+				textContent.SelectionStart=tempStart+2;
+			}
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+FormWAPSelect.selectedWikiPage.PageTitle.Length+2;
 			textContent.SelectionLength=0;
 
 		}
@@ -294,30 +290,30 @@ namespace OpenDental {
 			int tempLength=textContent.SelectionLength;
 			textContent.Paste(
 @"<table>
-<tr>
-<th>Header1</th>
-<th>Header2</th>
-</tr>
-<tr>
-<td>"+textContent.SelectedText+@"  </td>
-<td>  </td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-</tr>
-<tr>
-<td>  </td>
-<td>  </td>
-</tr>
+  <tr>
+    <th>Header1</th>
+    <th>Header2</th>
+  </tr>
+  <tr>
+    <td>"+textContent.SelectedText+@"</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
 </table>");
-			textContent.SelectionStart=tempStart+68;
+			textContent.SelectionStart=tempStart+86;
 			textContent.SelectionLength=tempLength;
 			textContent.Focus();
 		}
 
 		private void Image_Click() {
-			//throw new NotImplementedException();
+			//todo
 		}
 
 		private void textContent_KeyPress(object sender,KeyPressEventArgs e) {
@@ -330,10 +326,21 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>Validates content, and keywords. Will return false if PageContent is not XHTML 4.1 compliant.</summary>
+		///<summary>Validates content, and keywords.</summary>
 		private bool ValidateWikiPage() {
 			return true;
-			//throw new NotImplementedException();
+			//todo
+			//strategy:
+			//validate xml portions
+			//   convert &< and &> to &lt; and &gt;  (this change won't be stored in db, but is just for this loop)
+			//   Run result through a C# XML validator. 
+			//   Make a list of allowed tags here.  No tags allowed unless they are on this list.
+			//   Check for disallowed attributes on each tag.
+			//   Do not allow "wiki:" inside of an <a> tag
+			//other validation
+			//   Do not allow pipes inside internal links. This validation will be necessary during our conversion from our old wiki.
+			//   Each image that is referred to must exist before page can close
+			//   
 		}
 
 		private void FormWikiEdit_FormClosing(object sender,FormClosingEventArgs e) {

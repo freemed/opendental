@@ -10,10 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWiki:Form {
-		public WikiPage WikiPageCur;
-		public WikiPage MasterPage;
-		public WikiPage StyleSheet;
-		private string AggregateContent;
+		public WikiPage WikiPageCur;		
+		private List<string> historyNav;
 
 		public FormWiki() {
 			InitializeComponent();
@@ -29,45 +27,48 @@ namespace OpenDental {
 			Height=tempWorkAreaRect.Height;
 			//Height=SystemInformation.PrimaryMonitorSize.Height;
 			LayoutToolBar();
-			MasterPage=WikiPages.GetMaster();
-			StyleSheet=WikiPages.GetStyle();
+			historyNav=new List<string>();
 			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
-		private void LoadWikiPage(string PageTitle) {
-			if(WikiPages.GetByTitle(PageTitle)==null) {
+		private void LoadWikiPage(string pageTitle) {
+			WikiPage wpage=WikiPages.GetByTitle(pageTitle);
+			if(wpage==null) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page does not exist. Would you like to create it?")) {
 					return;
 				}
 				FormWikiEdit FormWE=new FormWikiEdit();
 				FormWE.WikiPageCur=new WikiPage();
 				FormWE.WikiPageCur.IsNew=true;
-				FormWE.WikiPageCur.PageTitle=PageTitle;
+				FormWE.WikiPageCur.PageTitle=pageTitle;
+				FormWE.WikiPageCur.PageContent="[["+WikiPageCur.PageTitle+"]]\r\n"//link back
+					+"<h1>"+pageTitle+"</h1>\r\n";//page title
 				FormWE.ShowDialog();
 				if(FormWE.DialogResult!=DialogResult.OK) {
 					return;
 				}
+				wpage=WikiPages.GetByTitle(pageTitle);
 			}
-			else if(WikiPages.GetByTitle(PageTitle).IsDeleted) {
+			/* This makes no sense once we have wikipagehist.  Deleted page history will be totally ignored,and will not prevent adding that page again later.
+			if(wpage.IsDeleted) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page has been deleted. Would you like to un-delete it?")) {
 					return;
 				}
-				WikiPage tmpWP = WikiPages.GetByTitle(PageTitle);
-				tmpWP.UserNum=Security.CurUser.UserNum;
-				tmpWP.IsDeleted=false;
-				WikiPages.Insert(tmpWP);
+				wpage.UserNum=Security.CurUser.UserNum;
+				wpage.IsDeleted=false;
+				WikiPages.Insert(wpage);
+			}*/
+			WikiPageCur=wpage;
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
+			Text="Wiki - "+WikiPageCur.PageTitle;
+			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!=pageTitle) {
+				historyNav.Add(pageTitle);
 			}
-			WikiPageCur=WikiPages.GetByTitle(PageTitle);
-			AggregateContent=MasterPage.PageContent;
-			AggregateContent=AggregateContent.Replace("@@@Title@@@",WikiPageCur.PageTitle);
-			AggregateContent=AggregateContent.Replace("@@@Style@@@",StyleSheet.PageContent);
-			AggregateContent=AggregateContent.Replace("@@@Content@@@",WikiPageCur.PageContent);
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(AggregateContent);
-			Text="OD Wiki - "+WikiPageCur.PageTitle;
 		}
 
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"),-1,"","Back"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,Lan.g(this,"Setup master page and styles."),"Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),-1,"","Home"));
@@ -84,6 +85,9 @@ namespace OpenDental {
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			switch(e.Button.Tag.ToString()) {
+				case "Back":
+					Back_Click();
+					break;
 				case "Setup":
 					Setup_Click();
 					break;
@@ -117,27 +121,26 @@ namespace OpenDental {
 			}
 		}
 
+		private void Back_Click() {
+			if(historyNav.Count<2) {//should always be 1 or greater
+				MsgBox.Show(this,"No more history");
+				return;
+			}
+			historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
+			LoadWikiPage(historyNav[historyNav.Count-1]);
+		}
+
 		private void Setup_Click() {
 			FormWikiSetup FormWS=new FormWikiSetup();
 			FormWS.ShowDialog();
 			if(FormWS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			if(FormWS.MasterPage.PageContent!=MasterPage.PageContent) {
-				WikiPages.Insert(FormWS.MasterPage);
-				MasterPage=WikiPages.GetMaster();
-			}
-			if(FormWS.StyleSheet.PageContent!=StyleSheet.PageContent) {
-				WikiPages.Insert(FormWS.StyleSheet);
-				StyleSheet=WikiPages.GetStyle();
-			}
 			LoadWikiPage(WikiPageCur.PageTitle);
 		}
 
 		private void Home_Click() {
-			MasterPage=WikiPages.GetMaster();
-			StyleSheet=WikiPages.GetStyle();
-			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
+			LoadWikiPage("Home");//TODO later:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
 		private void Edit_Click() {
@@ -168,6 +171,9 @@ namespace OpenDental {
 		}
 
 		private void Delete_Click() {
+			MessageBox.Show("not yet functional");
+			//fix this after wikipagehist is added.
+			/*
 			if(WikiPageCur.PageTitle=="Home") {//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 				MsgBox.Show(this,"Cannot rename homepage."); 
 					return;
@@ -175,7 +181,7 @@ namespace OpenDental {
 			WikiPageCur.IsDeleted=true;
 			WikiPageCur.UserNum=Security.CurUser.UserNum;
 			WikiPages.Insert(WikiPageCur);
-			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
+			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)*/
 		}
 
 		private void History_Click() {
@@ -185,9 +191,9 @@ namespace OpenDental {
 			FormWikiHistory FormWH = new FormWikiHistory();
 			FormWH.PageTitleCur=WikiPageCur.PageTitle;
 			FormWH.ShowDialog();
-			if(FormWH.DialogResult!=DialogResult.OK) {
-				return;
-			}
+			//if(FormWH.DialogResult!=DialogResult.OK) {
+			//	return;
+			//}
 			//Nothing to do here.
 		}
 
@@ -198,7 +204,7 @@ namespace OpenDental {
 			if(FormWIC.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			LoadWikiPage(FormWIC.selectedWikiPage.PageTitle);
+			LoadWikiPage(FormWIC.JumpToPage.PageTitle);
 		}
 
 		private void Add_Click() {
@@ -224,7 +230,7 @@ namespace OpenDental {
 			if(FormWAP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			LoadWikiPage(FormWAP.selectedWikiPage.PageTitle);
+			LoadWikiPage(FormWAP.SelectedWikiPage.PageTitle);
 		}
 
 		private void Search_Click() {

@@ -8,23 +8,9 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class WikiPages{
-
-		///<summary>Gets one WikiPage from the db.</summary>
-		public static WikiPage GetMaster() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='_Master' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='_Master');";
-			return Crud.WikiPageCrud.SelectOne(command);
-		}
-
-		public static WikiPage GetStyle() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='_Style');";
-			return Crud.WikiPageCrud.SelectOne(command);
-		}
+		///<summary>Improvements can be made later for caching these properly.</summary>
+		public static WikiPage MasterPage;
+		public static WikiPage StyleSheet;
 
 		///<summary>Returns null if page does not exist.</summary>
 		public static WikiPage GetByTitle(string PageTitle) {
@@ -40,51 +26,52 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' ORDER BY DateTimeSaved DESC;";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+PageTitle+"' ORDER BY DateTimeSaved;";
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
-		///<summary>Returns a list of all pages that reference "PageTitle"</summary>
+		///<summary>Returns a list of all pages that reference "PageTitle".  No historical pages.  This is broken, but don't bother to fix it because we will add the new table to fix the problem.</summary>
 		public static List<WikiPage> GetIncomingLinks(string PageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
 			}
 			List<WikiPage> retVal=new List<WikiPage>();
-			string command="SELECT PageTitle FROM wikipage WHERE PageContent LIKE '%[["+PageTitle+"]]%' GROUP BY PageTitle;";
-			//Db.GetTable(command);
-			//historical versions may contain a link when the current version does not. Filter those results out.
-			foreach(DataRow pageTitleRow in Db.GetTable(command).Rows){
-				WikiPage tempPage=GetByTitle(pageTitleRow[0].ToString());
-				if(tempPage.PageContent.Contains("[["+PageTitle+"]]")){
-					retVal.Add(tempPage);
-				}
-			}
-			return retVal;
+			string command="SELECT * FROM wikipage WHERE PageContent LIKE '%[["+POut.String(PageTitle)+"]]%' "
+				+"AND IsDeleted = 0 "
+				+"GROUP BY PageTitle;";
+			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
-		///<summary>Returns a list of all current versions of all pages.</summary>
-		public static List<WikiPage> GetAllCurrent() {
+		///<summary>Returns a list current versions of pages.</summary>
+		public static List<WikiPage> GetCurrent(string searchText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
 			}
 			List<WikiPage> retVal=new List<WikiPage>();
-			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' ORDER BY DateTimeSaved DESC;";
+			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
+				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY DateTimeSaved DESC;";
 			List<WikiPage> listAllWikiPages=Crud.WikiPageCrud.SelectMany(command);
-			//Return only the newest version of each page. Since they are odered by date, the newest versions will be the first added and all subsequent editions will be idgnored.
-			foreach(WikiPage wikiPage in listAllWikiPages) {
-				bool found=true;
-				foreach(WikiPage foundPage in retVal) {
-					if(wikiPage.PageTitle==foundPage.PageTitle) {
-						found=false;
+			//Return only the newest version of each page. Since they are ordered by date, the newest versions will be the first added and all subsequent editions will be idgnored.
+			for(int i=0;i<listAllWikiPages.Count;i++) {
+				bool found=false;
+				for(int r=0;r<retVal.Count;r++) {
+					if(retVal[r].PageTitle==listAllWikiPages[i].PageTitle) {
+						found=true;
 						break;
 					}
 				}
 				if(found) {
-					retVal.Add(wikiPage);
+					continue;
 				}
+				retVal.Add(listAllWikiPages[i]);
 			}
+			//This is still clumsy.  Solution is a second db table.
 			retVal.Sort(SortWikiPagesByName);
 			return retVal;
+		}
+
+		private static int SortWikiPagesByName(WikiPage wp1,WikiPage wp2) {
+			return wp1.PageTitle.CompareTo(wp2.PageTitle);
 		}
 
 		///<summary></summary>
@@ -110,6 +97,7 @@ namespace OpenDentBusiness{
 			string command="UPDATE wikipage SET PageTitle='"+NewPageTitle+"'WHERE PageTitle='"+OriginalPageTitle+"';";
 			Db.NonQ(command);
 			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
+			//js- We can NOT do it this way.  It breaks our pattern of inserts.  In particular, it would break replication and Oracle.
 //      command=@"INSERT INTO wikipage (UserNum, DateTimeSaved, PageTitle, PageContent)  
 //							(SELECT "+Security.CurUser.UserNum+@",NOW(),t.PageTitle, REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')
 //							FROM(
@@ -125,7 +113,7 @@ namespace OpenDentBusiness{
 //									)))t
 //							);";
 //      Db.NonQ(command);
-			//Alternate, simple fix-links query
+			//For now, we will simply fix existing links in history
 			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')";
 			Db.NonQ(command);
 			return;
@@ -142,6 +130,7 @@ namespace OpenDentBusiness{
 			//Crud.WikiPageCrud.Update(wikiPage);
 		}*/
 
+		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
 			string retVal="";
 			retVal+=wikiContent;
@@ -163,8 +152,7 @@ namespace OpenDentBusiness{
 			matches = Regex.Matches(retVal,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
 				string tmpStyle="";
-				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null || 
-					GetByTitle(link.Value.Trim("[]".ToCharArray())).IsDeleted) 
+				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null)//instead of GetByTitle, we should just use a bool method. 
 				{
 					tmpStyle="class='PageNotExists '";
 				}
@@ -221,6 +209,15 @@ namespace OpenDentBusiness{
 				}
 				retVal=retVal.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
 			}
+			//aggregate with master
+			if(MasterPage==null){
+				MasterPage=GetByTitle("_Master");
+			}
+			if(StyleSheet==null){
+				StyleSheet=GetByTitle("_Style");
+			}
+			retVal=MasterPage.PageContent.Replace("@@@Content@@@",retVal);
+			retVal=retVal.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return retVal;
 		}
 
@@ -255,9 +252,7 @@ namespace OpenDentBusiness{
 		}
 		*/
 
-		private static int SortWikiPagesByName(WikiPage wp1,WikiPage wp2) {
-			return wp1.PageTitle.CompareTo(wp2.PageTitle);
-		}
+	
 
 
 

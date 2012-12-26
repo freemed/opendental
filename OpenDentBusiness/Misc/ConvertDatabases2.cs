@@ -11431,6 +11431,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				} 
+				//todo: move this up to the wikipage table def
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE wikipage ADD IsDeleted tinyint NOT NULL";
 					Db.NonQ(command);
@@ -11443,6 +11444,61 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					command="ALTER TABLE wikipage MODIFY IsDeleted NOT NULL";
 					Db.NonQ(command);
 				}
+				//todo: edit these 3 starting wikipages
+				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
+					+"0,"//no usernum set for the first 3 pages
+					+"'_Master',"	
+					+"'"+POut.String(@"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
+<html xmlns=""http://www.w3.org/1999/xhtml"">
+<head>
+<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
+<style type=""text/css"">
+<!--
+@@@Style@@@
+-->
+</style>
+</head>
+<body>
+@@@Content@@@
+</body>
+</html>")+"',";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command+="SYSDATE,";
+				}
+				else{
+					command+="NOW(),";
+				}
+				command+="0)";
+				Db.NonQ(command);
+				//blank home page
+				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
+					+"0,"
+					+"'Home',"	
+					+"'Home',";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command+="SYSDATE,";
+				}
+				else {
+					command+="NOW(),";
+				}
+				command+="0)";
+				Db.NonQ(command);
+				//blank syle sheet stub
+				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
+					+"0,"
+					+"'_Style',"	
+					+"'',";
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					command+="SYSDATE,";
+				}
+				else {
+					command+="NOW(),";
+				}
+				command+="0)";
+				Db.NonQ(command);
+
+
+
 
 				command="UPDATE preference SET ValueString = '12.5.0.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);

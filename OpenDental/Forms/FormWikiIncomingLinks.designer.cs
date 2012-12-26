@@ -25,6 +25,7 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -32,10 +33,10 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
+			this.gridMain.Location = new System.Drawing.Point(12,12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(248, 680);
+			this.gridMain.Size = new System.Drawing.Size(248,621);
 			this.gridMain.TabIndex = 6;
 			this.gridMain.Title = "Incoming Links";
 			this.gridMain.TranslationName = "TableIncomingLinks";
@@ -49,17 +50,33 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.webBrowserWiki.IsWebBrowserContextMenuEnabled = false;
-			this.webBrowserWiki.Location = new System.Drawing.Point(266, 12);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowserWiki.Location = new System.Drawing.Point(266,12);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20,20);
 			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(678, 693);
+			this.webBrowserWiki.Size = new System.Drawing.Size(592,621);
 			this.webBrowserWiki.TabIndex = 0;
 			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(864,609);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,24);
+			this.butClose.TabIndex = 7;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// FormWikiIncomingLinks
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(944, 704);
+			this.ClientSize = new System.Drawing.Size(951,645);
+			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Name = "FormWikiIncomingLinks";
@@ -74,6 +91,7 @@ namespace OpenDental{
 
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
 		private UI.ODGrid gridMain;
+		private UI.Button butClose;
 
 	}
 }

@@ -9,18 +9,15 @@ namespace OpenDentBusiness {
 		public long WikiPageNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
-		///<summary>must be unique (except for revisions)</summary>
+		///<summary>Must be unique (except for revisions).  The only allowed characters are letters, numbers, and spaces.  When spaces are used, they are replaced with underscores during the translation to html.</summary>
 		public string PageTitle;
 		///<summary>Content of page stored in "wiki markup language".  This should never be updated.  Medtext (16M)</summary>
 		public string PageContent;
 		///<summary>The DateTime that the page was saved to the DB.  User can't edit.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeSaved;
-		///<summary>.</summary>
+		///<summary>Deprecated.  Remove this.  When used in wikipagehist, this flag will only be set for the revision where the user marked it deleted (the last one).</summary>
 		public bool IsDeleted;
-
-		//<summary>Keywords used for searching, does not have to be comma delimited.</summary>
-		//public string KeyWords;
 
 		///<summary></summary>
 		public WikiPage Copy() {
