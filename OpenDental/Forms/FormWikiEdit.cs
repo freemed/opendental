@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using CodeBase;
 using System.Xml;
 using System.Text.RegularExpressions;
 
@@ -330,39 +332,100 @@ namespace OpenDental {
 
 		///<summary>Validates content, and keywords.</summary>
 		private bool ValidateWikiPage() {
-			return true;
-			string valText=textContent.Text;
-			valText=valText.Replace("&<","&lt;").Replace("&>","&gt;");
-			//TODO:XML Validator...
-			//Allowed Tags: a, i, b, h1, h2, h3
-			//common dissalowed tags: div, span, p, body, h4, h5, etc...
-			string rootImagePath = "\\Ryan\\storage\\images\\";
-			MatchCollection matches = Regex.Matches(valText,"\\[\\[(img:).*?\\]\\]");
+			//xml validation----------------------------------------------------------------------------------------------------
+			string s=textContent.Text;
+			s=s.Replace("&<","&lt;");
+			s=s.Replace("&>","&gt;");
+			s="<body>"+s+"</body>";
+			XmlDocument doc=new XmlDocument();
+			StringReader reader=new StringReader(s);
+			try {
+				doc.Load(reader);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+				return false;
+			}
+			try{
+				//we do it this way to skip checking the main node itself since it's a dummy node.
+				ValidateNodes(doc.DocumentElement.ChildNodes);
+			}
+			catch(Exception ex){
+				MessageBox.Show(ex.Message);
+				return false;
+			}
+			//image validation-----------------------------------------------------------------------------------------------------
+			string wikiImagePath=GetWikiPath();//this also creates folder if it's missing.
+			MatchCollection matches=Regex.Matches(textContent.Text,@"\[\[(img:).*?\]\]");// [[img:myimage.jpg]]
+			if(matches.Count>0 && !PrefC.AtoZfolderUsed) {
+				MsgBox.Show(this,"Cannot use images in wiki if storing images in database.");
+				return false;
+			}
 			for(int i=0;i<matches.Count;i++) {
-				if(!System.IO.File.Exists(rootImagePath+matches[i].Value.Substring(6).Trim(']'))) {
-					//file doesn't exist. Throw error?
+				string imgPath=ODFileUtils.CombinePaths(wikiImagePath,matches[i].Value.Substring(6).Trim(']'));
+				if(!System.IO.File.Exists(imgPath)) {
+					MessageBox.Show("Not allowed to save because file does not exist: "+imgPath);
 					return false;
 				}
 			}
-			//foreach(Match imgTag in matches) {
-			//  if(!System.IO.File.Exists(rootImagePath+imgTag.Value.Substring(6).Trim(']'))){
-			//    //file doesn't exist. Throw error?
-			//    return false;
-			//  }
-			//}
-			return true;
-			//todo
-			//strategy:
-			//validate xml portions
-			//   convert &< and &> to &lt; and &gt;  (this change won't be stored in db, but is just for this loop)
-			//   Run result through a C# XML validator. 
-			//   Make a list of allowed tags here.  No tags allowed unless they are on this list.
-			//   Check for disallowed attributes on each tag.
-			//   Do not allow "wiki:" inside of an <a> tag
-			//other validation
-			//   Do not allow pipes inside internal links. This validation will be necessary during our conversion from our old wiki.
-			//   Each image that is referred to must exist before page can close
-			//   
+			//No pipes inside internal links.  This validation will be necessary during our conversion from our old wiki.--------------------------------
+//todo
+			return true;  
+		}
+
+		///<summary>Recursive.</summary>
+		private void ValidateNodes(XmlNodeList nodes) {
+			foreach(XmlNode node in nodes) {
+				if(node.NodeType!=XmlNodeType.Element){
+					continue;
+				}
+				List<string> allowedTags=new List<string>();
+				allowedTags.Add("a");
+				allowedTags.Add("i");
+				allowedTags.Add("b");
+				allowedTags.Add("h1");
+				allowedTags.Add("h1");
+				allowedTags.Add("h3");
+				switch(node.Name) {
+					case "i":
+					case "b":
+					case "h1":
+					case "h2":
+					case "h3":
+						//no attributes at all allowed on these tags
+						if(node.Attributes.Count!=0) {
+							throw new ApplicationException("'"+node.Attributes[0].Name+"' attribute is not allowed on <"+node.Name+"> tag.");
+						}
+						break;
+					case "a":
+						//only allowed attribute is href
+						for(int i=0;i<node.Attributes.Count;i++) {
+							if(node.Attributes[i].Name!="href") {
+								throw new ApplicationException(node.Attributes[i].Name+" attribute is not allowed on <a> tag.");
+							}
+							if(node.Attributes[i].InnerText.StartsWith("wiki:")) {
+								throw new ApplicationException("wiki: is not allowed in an <a> tag.  Use [[ ]] instead of <a>.");
+							}
+						}
+						break;
+					default:
+						throw new ApplicationException("<"+node.Name+"> is not one of the allowed tags.");
+				}
+				ValidateNodes(node.ChildNodes);
+			}
+		}
+
+		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\Wiki</summary>
+		public static string GetWikiPath() {
+			string wikiPath;
+			if(!PrefC.AtoZfolderUsed) {
+				throw new ApplicationException("Must be using AtoZ folders.");
+			}
+			wikiPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Wiki");
+			if(!Directory.Exists(wikiPath)) {
+				Directory.CreateDirectory(wikiPath);
+			}
+			return wikiPath;
 		}
 
 		private void FormWikiEdit_FormClosing(object sender,FormClosingEventArgs e) {

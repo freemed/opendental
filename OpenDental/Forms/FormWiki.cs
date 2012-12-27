@@ -246,7 +246,7 @@ if(wpage.IsDeleted) {
 			}
 			else if(e.Url.ToString().Contains("http://")){//navigating outside of wiki.
 				WikiPageCur=null;
-				Text = "OD Wiki - WWW";
+				Text = "Wiki - WWW";
 			}
 			//WikiPageCur=null;
 		}
