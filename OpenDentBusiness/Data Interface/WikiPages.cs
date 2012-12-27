@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -132,6 +134,15 @@ namespace OpenDentBusiness{
 
 		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
+			//add surrounding tag, such as body
+			//convert &<
+			XmlDocument doc=new XmlDocument();
+			//StringBuilder strb=new StringBuilder(wikiContent);
+			StringReader reader=new StringReader(wikiContent);
+			//XmlTextReader reader=new XmlTextReader(
+			doc.Load(reader);
+			
+
 			//No call to db.
 			string retVal="";
 			retVal+=wikiContent;
@@ -202,11 +213,19 @@ namespace OpenDentBusiness{
 			//
 			//<p>
 			//
-			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>").Replace("<p></p>","<p>&nbsp;</p>");
+			//double carriage returns have already been stripped out for lists.
+			retVal=retVal.Replace("\r\n\r\n","</p>\r\n<p>");
+			retVal=retVal.Replace("<p></p>","<p>&nbsp;</p>");//so that empty paragraphs will show up.
 			//
 			//"     "(tabs) and double spaces.
 			//
-			retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
+			retVal=retVal.Replace("  ","&nbsp;&nbsp;");//because single space should always show in html.
+			//retVal=retVal.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
+			//
+			//<br />
+			//
+			//use a regex match to only affect within paragraphs.
+			retVal=retVal.Replace("\r\n","<br />");
 			//
 			//{{color|red|text}}
 			//
