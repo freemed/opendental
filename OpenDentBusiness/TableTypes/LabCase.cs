@@ -12,7 +12,7 @@ namespace OpenDentBusiness{
 		public long LabCaseNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
-		///<summary>FK to laboratory.LaboratoryNum. The lab that the case gets sent to.</summary>
+		///<summary>FK to laboratory.LaboratoryNum. The lab that the case gets sent to.  Required.</summary>
 		public long LaboratoryNum;
 		///<summary>FK to appointment.AptNum.  This is how a lab case is attached to a scheduled appointment. 1:1 relationship for now.  Only one labcase per appointment, and (obviously) only one appointment per labcase.  Labcase can exist without being attached to any appointments at all, making this zero.</summary>
 		public long AptNum;

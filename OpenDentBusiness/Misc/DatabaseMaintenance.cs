@@ -1452,11 +1452,6 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimProcWithInvalidInsSubNum(bool verbose,bool isCheck) {
-			//todo, maybe.
-			return "";
-		}
-
 		public static string ClaimProcWriteOffNegative(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
@@ -1930,11 +1925,24 @@ namespace OpenDentBusiness {
 				}
 				numFixed=0;
 				//claimproc (1/2) If planNum is valid but InsSubNum does not exist, then add a dummy inssub----------------------------------------
-
-
-
-
-
+				command="SELECT PatNum,PlanNum,InsSubNum FROM claimproc "
+					+"WHERE PlanNum IN (SELECT insplan.PlanNum FROM insplan) "
+					+"AND InsSubNum NOT IN (SELECT inssub.InsSubNum FROM inssub) GROUP BY InsSubNum";
+				table=Db.GetTable(command);
+				//Create a dummy inssub and link it to the valid plan.
+				for(int i=0;i<table.Rows.Count;i++) {
+					InsSub sub=new InsSub();
+					sub.InsSubNum=PIn.Long(table.Rows[i]["InsSubNum"].ToString());
+					sub.PlanNum=PIn.Long(table.Rows[i]["PlanNum"].ToString());
+					sub.Subscriber=PIn.Long(table.Rows[i]["PatNum"].ToString());
+					sub.SubscriberID="unknown";
+					InsSubs.Insert(sub,true);
+				}
+				numFixed=table.Rows.Count;
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Claims with valid PlanNums and invalid InsSubNums fixed: ")+numFixed.ToString()+"\r\n";
+				}
+				numFixed=0;
 				//claimproc (2/2) Mismatch, but InsSubNum is valid
 				command="UPDATE claimproc SET PlanNum = (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum) "
 					+"WHERE PlanNum != (SELECT inssub.PlanNum FROM inssub WHERE inssub.InsSubNum=claimproc.InsSubNum)";
@@ -1968,6 +1976,36 @@ namespace OpenDentBusiness {
 					log+=Lans.g("FormDatabaseMaintenance","Mismatched payplan InsSubNum/PlanNum fixed: ")+numFixed.ToString()+"\r\n";
 				}
 				numFixed=0;
+			}
+			return log;
+		}
+
+		public static string LabCaseWithInvalidLaboratory(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Lab cases found with invalid laboratories")+": "+numFound+"\r\n";
+				}
+			}
+			else {
+				command="SELECT COUNT(*) FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory)";
+				long numberFixed=long.Parse(Db.GetCount(command));
+				command="SELECT LaboratoryNum FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory) GROUP BY LaboratoryNum";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					Laboratory lab=new Laboratory();
+					lab.LaboratoryNum=PIn.Long(table.Rows[i]["LaboratoryNum"].ToString());
+					lab.Description="Laboratory "+table.Rows[i]["LaboratoryNum"].ToString();
+					Crud.LaboratoryCrud.Insert(lab,true);//use crud to define PK.
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Lab cases fixed with invalid laboratories")+": "+numberFixed.ToString()+"\r\n";
+				}
 			}
 			return log;
 		}
