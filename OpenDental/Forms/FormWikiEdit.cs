@@ -355,7 +355,7 @@ namespace OpenDental {
 				return false;
 			}
 			//image validation-----------------------------------------------------------------------------------------------------
-			string wikiImagePath=GetWikiPath();//this also creates folder if it's missing.
+			string wikiImagePath=WikiPages.GetWikiPath();//this also creates folder if it's missing.
 			MatchCollection matches=Regex.Matches(textContent.Text,@"\[\[(img:).*?\]\]");// [[img:myimage.jpg]]
 			if(matches.Count>0 && !PrefC.AtoZfolderUsed) {
 				MsgBox.Show(this,"Cannot use images in wiki if storing images in database.");
@@ -379,19 +379,16 @@ namespace OpenDental {
 				if(node.NodeType!=XmlNodeType.Element){
 					continue;
 				}
-				List<string> allowedTags=new List<string>();
-				allowedTags.Add("a");
-				allowedTags.Add("i");
-				allowedTags.Add("b");
-				allowedTags.Add("h1");
-				allowedTags.Add("h1");
-				allowedTags.Add("h3");
 				switch(node.Name) {
 					case "i":
 					case "b":
 					case "h1":
 					case "h2":
 					case "h3":
+					case "table":
+					case "tr":
+					case "td":
+					case "th":
 						//no attributes at all allowed on these tags
 						if(node.Attributes.Count!=0) {
 							throw new ApplicationException("'"+node.Attributes[0].Name+"' attribute is not allowed on <"+node.Name+"> tag.");
@@ -415,18 +412,7 @@ namespace OpenDental {
 			}
 		}
 
-		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\Wiki</summary>
-		public static string GetWikiPath() {
-			string wikiPath;
-			if(!PrefC.AtoZfolderUsed) {
-				throw new ApplicationException("Must be using AtoZ folders.");
-			}
-			wikiPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Wiki");
-			if(!Directory.Exists(wikiPath)) {
-				Directory.CreateDirectory(wikiPath);
-			}
-			return wikiPath;
-		}
+		
 
 		private void FormWikiEdit_FormClosing(object sender,FormClosingEventArgs e) {
 			//handles both the Cancel button and the user clicking on the x

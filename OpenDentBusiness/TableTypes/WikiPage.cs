@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		public long WikiPageNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
-		///<summary>Must be unique (except for revisions).  The only allowed characters are letters, numbers, and spaces.  When spaces are used, they are replaced with underscores during the translation to html.</summary>
+		///<summary>Must be unique.  The only allowed characters are letters, numbers, and spaces.  When spaces are used, they are replaced with underscores during the translation to html.</summary>
 		public string PageTitle;
 		///<summary>Content of page stored in "wiki markup language".  This should never be updated.  Medtext (16M)</summary>
 		public string PageContent;

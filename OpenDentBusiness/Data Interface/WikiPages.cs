@@ -132,6 +132,19 @@ namespace OpenDentBusiness{
 			//Crud.WikiPageCrud.Update(wikiPage);
 		}*/
 
+		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\Wiki</summary>
+		public static string GetWikiPath() {
+			string wikiPath;
+			if(!PrefC.AtoZfolderUsed) {
+				throw new ApplicationException("Must be using AtoZ folders.");
+			}
+			wikiPath=Path.Combine(ImageStore.GetPreferredAtoZpath(),"Wiki");
+			if(!Directory.Exists(wikiPath)) {
+				Directory.CreateDirectory(wikiPath);
+			}
+			return wikiPath;
+		}
+
 		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
 			string s=wikiContent;
@@ -140,63 +153,86 @@ namespace OpenDentBusiness{
 			s=s.Replace("&>","&gt;");
 			s="<body>"+s+"</body>";
 			XmlDocument doc=new XmlDocument();
-			StringReader reader=new StringReader(s);
-			try {
-				doc.Load(reader);
-			}
-			catch(Exception ex) {
-				return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
-			}
-			XmlNode node=doc.DocumentElement;
-			//node.ChildNodes
-			//Ryan, in the rest of this method, please do:
-			//1. Simplify the regular expressions by using @
-			//2. Change your 3 line comments to 1 line comments followed by hyphens to create a horizontal line.  That is the required style.
-			//But please do not do any sort of overhaul.  Also, do not bother to build a rigorous before/after document as I had suggested.
-			//I have a very good strategy to make this work, but ran out of time.
-			//My basic assumption will be that <h> tags are external to paragraphs, ie they are siblings.
-			//On the other hand, <b>, <i>, and <a> tags are clearly always internal to paragraphs.
-			//I will address tables, lists, etc. later.
- 
-
-
-
-
-			
-			//
-			//[[img:myimage.gif]]
-			//
-			MatchCollection matches = Regex.Matches(s,@"\[\[(img:).*?\]\]");
-			foreach(Match imageMatch in matches) {
-				string imgName = imageMatch.Value.Substring(imageMatch.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
-				//s=s.Replace(imageMatch.Value,"<img src=\"file://///server/OpenDentImages/wiki/"+imgName+"\" />");
-				s=s.Replace(imageMatch.Value,"<img src=\"file://///serverfiles/Storage/My/Ryan/images/"+imgName+"\" />");
-			}
-			//
-			//[[img:myimage.gif]]
-			//
-			matches = Regex.Matches(s,@"\[\[(keywords:).*?\]\]");//^(\\s|\\d) because color codes are being replaced.
-			foreach(Match keywords in matches) {//should be only one
-				s=s.Replace(keywords.Value,"<span class=\"keywords\">keywords:"+keywords.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
-			}
-			//
-			//[[InternalLink]]
-			//
-			matches = Regex.Matches(s,@"\[\[.*?\]\]");//.*? matches as few as possible.
-			foreach(Match link in matches) {
-				string tmpStyle="";
-				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null)//instead of GetByTitle, we should just use a bool method. 
-				{
-					tmpStyle="class='PageNotExists '";
+			using(StringReader reader=new StringReader(s)) {
+				try {
+					doc.Load(reader);
 				}
-				s=s.Replace(link.Value,"<a "+tmpStyle+"href=\""+"wiki:"+link.Value.Trim("[]".ToCharArray())+"\">"+link.Value.Trim("[]".ToCharArray())+"</a>");
+				catch(Exception ex) {
+					return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
+				}
 			}
-			//
-			//<ul>
-			//
+			//Ryan, feel free to do minor debugging.  I didn't test any of this.
+			
+			//(foreach is ok for Matches, as you used them below.  That's one of the exceptions.)
+
+			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
+			MatchCollection matches;
+			matches=Regex.Matches(s,@"\[\[(img:).*?\]\]");
+			foreach(Match match in matches) {
+				string imgName = match.Value.Substring(match.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
+				string fullPath=CodeBase.ODFileUtils.CombinePaths(GetWikiPath(),imgName);
+				s=s.Replace(match.Value,"<img src=\"file:///\""+fullPath.Replace("\\","/")+" />");
+			}
+			//[[keywords: key1, key2, etc.]]------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");//^(\\s|\\d) because color codes are being replaced.
+			foreach(Match match in matches) {//should be only one
+				s=s.Replace(match.Value,"<span class=\"keywords\">keywords:"+match.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
+			}
+			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\[\[.*?\]\]");//.*? matches as few as possible.
+			foreach(Match match in matches) {
+				string tmpStyle="";
+				if(GetByTitle(match.Value.Trim('[',']'))==null){//Later, instead of GetByTitle, we should just use a bool method. 
+					tmpStyle="class='PageNotExists' ";
+				}
+				s=s.Replace(match.Value,"<a "+tmpStyle+"href=\""+"wiki:"+match.Value.Trim('[',']').Replace(" ","_")+"\">"+match.Value.Trim('[',']')+"</a>");
+			}
+			//Unordered List----------------------------------------------------------------------------------------------------------------
+			//Instead of using a regex, this will hunt through the rows in sequence.
+			//This is going to be critical as this section gets more complex with nesting and mixing.
+			string[] lines=s.Split(new string[]{"\r\n"},StringSplitOptions.None);//includes empty elements
+			string blockOriginal=null;//once a list is found, this string will be filled with the original text.
+			StringBuilder strb=null;//this will contain the final output enclosed in <ul> tags.
+			for(int i=0;i<lines.Length;i++) {
+				if(blockOriginal==null) {//we are still hunting for the first line of an UL.
+					if(lines[i].Trim().StartsWith("*")) {//we found the first line of an UL.
+						blockOriginal=lines[i]+"\r\n";
+						strb=new StringBuilder();
+						strb.Append("<ul>\r\n");
+						strb.Append("<li>");
+						//handle leading spaces later (not very important)
+						string curline=lines[i];
+						curline=curline.Remove(lines[i].IndexOf("*"),1);//for now, we will just remove the first * that we find.
+						curline=curline.Replace("  ","&nbsp;&nbsp;");//handle extra spaces.  This is the only place we will do this for <ul>.  We will improve it later.
+						strb.Append(curline);
+						strb.Append("</li>\r\n");
+					}
+					else {//no list
+						//nothing to do
+					}
+				}
+				else {//we are already building our list
+					if(lines[i].Trim().StartsWith("*")) {//we found another line of an UL.  Could be a middle line or the last line.
+						blockOriginal+=lines[i]+"\r\n";
+						strb.Append("<li>");
+						//handle leading spaces later (not very important)
+						string curline=lines[i];
+						curline=curline.Remove(lines[i].IndexOf("*"),1);//for now, we will just remove the first * that we find.
+						curline=curline.Replace("  ","&nbsp;&nbsp;");//handle extra spaces.  This is the only place we will do this for <ul>.  We will improve it later.
+						strb.Append(curline);
+						strb.Append("</li>\r\n");
+					}
+					else {//end of list.  The previous line was the last line.
+						strb.Append("</ul>\r\n");
+						s=s.Replace(blockOriginal,strb.ToString());
+						blockOriginal=null;
+					}
+				}
+			}
+			/*
 			matches = Regex.Matches(s,@"\*[\S](.|[\r\n][^(\r\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
-			foreach(Match unorderedList in matches) {
-				string[] tokens = unorderedList.Value.Split('*');
+			foreach(Match match in matches) {
+				string[] tokens = match.Value.Split('*');
 				StringBuilder listBuilder = new StringBuilder();
 				listBuilder.Append("<ul>\r\n");
 				foreach(string listItem in tokens) {
@@ -205,14 +241,14 @@ namespace OpenDentBusiness{
 					}
 				}
 				listBuilder.Append("</ul>\r\n");
-				s=s.Replace(unorderedList.Value,listBuilder.ToString());
-			}
-			//
-			//<ol>
-			//
+				s=s.Replace(match.Value,listBuilder.ToString());
+			}*/
+			//numbered list----------------------------------------------------------------------------------------------------------------
+			//todo: similar to above.
+			/*
 			matches = Regex.Matches(s,@"#[^(\s|\d)](.|[\r\n][^(\r\n)])+");//^(\\s|\\d) because color codes are being replaced.
-			foreach(Match unorderedList in matches) {
-				string[] tokens = unorderedList.Value.Split('#');
+			foreach(Match match in matches) {
+				string[] tokens = match.Value.Split('#');
 				StringBuilder listBuilder = new StringBuilder();
 				listBuilder.Append("<ol>\r\n");
 				foreach(string listItem in tokens) {
@@ -221,30 +257,45 @@ namespace OpenDentBusiness{
 					}
 				}
 				listBuilder.Append("</ol>\r\n");
-				s=s.Replace(unorderedList.Value,listBuilder.ToString());
+				s=s.Replace(match.Value,listBuilder.ToString());
+			}*/
+			//now, we switch to working in xml
+			doc=new XmlDocument();
+			using(StringReader reader=new StringReader(s)) {
+				try {
+					doc.Load(reader);
+				}
+				catch(Exception ex) {
+					return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
+				}
 			}
-			//
+			XmlNode node=doc.DocumentElement;
+			//It's now time to look for paragraphs.
+			//My basic assumption will be that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
+			//i.e. they are siblings.  They will never be surrounded with <p> tags.
+			//On the other hand, <b>, <i>, <a>, and <span> tags are always internal to others, including <p>, <h123>, <table>, <ol>, and <ul>.
+			//<br> tags will only be found within <p> (and <table>?)
+			for(int i=0;i<node.ChildNodes.Count;i++) {
+
+			}
+			
+
+
+			/*
 			//<p>
-			//
 			//double carriage returns have already been stripped out for lists.
 			s=s.Replace("\r\n\r\n","</p>\r\n<p>");
 			s=s.Replace("<p></p>","<p>&nbsp;</p>");//so that empty paragraphs will show up.
-			//
 			//"     "(tabs) and double spaces.
-			//
 			s=s.Replace("  ","&nbsp;&nbsp;");//because single space should always show in html.
 			//s=s.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
-			//
 			//<br />
-			//
 			//use a regex match to only affect within paragraphs.
 			s=s.Replace("\r\n","<br />");
-			//
 			//{{color|red|text}}
-			//
 			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
-			foreach(Match colorSegment in matches) {
-				string[] tokens = colorSegment.Value.Split('|');
+			foreach(Match match in matches) {
+				string[] tokens = match.Value.Split('|');
 				if(tokens.Length<3) {//not enough tokens
 					continue;
 				}
@@ -259,8 +310,8 @@ namespace OpenDentBusiness{
 					}
 					tempText+=(i>2?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
 				}
-				s=s.Replace(colorSegment.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
-			}
+				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
+			}*/
 			//aggregate with master
 			if(MasterPage==null){
 				MasterPage=GetByTitle("_Master");
