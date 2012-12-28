@@ -166,7 +166,7 @@ namespace OpenDentBusiness{
 			//
 			//[[img:myimage.gif]]
 			//
-			MatchCollection matches = Regex.Matches(s,"\\[\\[(img:).*?\\]\\]");
+			MatchCollection matches = Regex.Matches(s,@"\[\[(img:).*?\]\]");
 			foreach(Match imageMatch in matches) {
 				string imgName = imageMatch.Value.Substring(imageMatch.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
 				//s=s.Replace(imageMatch.Value,"<img src=\"file://///server/OpenDentImages/wiki/"+imgName+"\" />");
@@ -175,14 +175,14 @@ namespace OpenDentBusiness{
 			//
 			//[[img:myimage.gif]]
 			//
-			matches = Regex.Matches(s,"\\[\\[(keywords:).*?\\]\\]");//^(\\s|\\d) because color codes are being replaced.
+			matches = Regex.Matches(s,@"\[\[(keywords:).*?\]\]");//^(\\s|\\d) because color codes are being replaced.
 			foreach(Match keywords in matches) {//should be only one
 				s=s.Replace(keywords.Value,"<span class=\"keywords\">keywords:"+keywords.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
 			}
 			//
 			//[[InternalLink]]
 			//
-			matches = Regex.Matches(s,"\\[\\[.*?\\]\\]");//.*? matches as few as possible.
+			matches = Regex.Matches(s,@"\[\[.*?\]\]");//.*? matches as few as possible.
 			foreach(Match link in matches) {
 				string tmpStyle="";
 				if(GetByTitle(link.Value.Trim("[]".ToCharArray()))==null)//instead of GetByTitle, we should just use a bool method. 
@@ -194,7 +194,7 @@ namespace OpenDentBusiness{
 			//
 			//<ul>
 			//
-			matches = Regex.Matches(s,"\\*[\\S](.|[\\r\\n][^(\\r\\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
+			matches = Regex.Matches(s,@"\*[\S](.|[\r\n][^(\r\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
 			foreach(Match unorderedList in matches) {
 				string[] tokens = unorderedList.Value.Split('*');
 				StringBuilder listBuilder = new StringBuilder();
@@ -210,7 +210,7 @@ namespace OpenDentBusiness{
 			//
 			//<ol>
 			//
-			matches = Regex.Matches(s,"#[^(\\s|\\d)](.|[\\r\\n][^(\\r\\n)])+");//^(\\s|\\d) because color codes are being replaced.
+			matches = Regex.Matches(s,@"#[^(\s|\d)](.|[\r\n][^(\r\n)])+");//^(\\s|\\d) because color codes are being replaced.
 			foreach(Match unorderedList in matches) {
 				string[] tokens = unorderedList.Value.Split('#');
 				StringBuilder listBuilder = new StringBuilder();
