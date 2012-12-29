@@ -45,24 +45,13 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
 		///<summary></summary>
-		public static List<WikiPageHist> Refresh(long patNum){
+		public static List<WikiPageHist> GetByTitle(string pageTitle){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPageHist>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetObject<List<WikiPageHist>>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			string command="SELECT * FROM wikipagehist WHERE PatNum = "+POut.Long(patNum);
+			string command="SELECT * FROM wikipagehist WHERE PageTitle = '"+POut.String(pageTitle)+"' ORDER BY DateTimeSaved;";
 			return Crud.WikiPageHistCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one WikiPageHist from the db.</summary>
-		public static WikiPageHist GetOne(long wikiPageNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<WikiPageHist>(MethodBase.GetCurrentMethod(),wikiPageNum);
-			}
-			return Crud.WikiPageHistCrud.SelectOne(wikiPageNum);
 		}
 
 		///<summary></summary>
@@ -72,6 +61,19 @@ namespace OpenDentBusiness{
 				return wikiPageHist.WikiPageNum;
 			}
 			return Crud.WikiPageHistCrud.Insert(wikiPageHist);
+		}
+
+
+
+		/*
+		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+
+		///<summary>Gets one WikiPageHist from the db.</summary>
+		public static WikiPageHist GetOne(long wikiPageNum){
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+				return Meth.GetObject<WikiPageHist>(MethodBase.GetCurrentMethod(),wikiPageNum);
+			}
+			return Crud.WikiPageHistCrud.SelectOne(wikiPageNum);
 		}
 
 		///<summary></summary>

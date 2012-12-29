@@ -172,16 +172,15 @@ if(wpage.IsDeleted) {
 		}
 
 		private void Delete_Click() {
-			MessageBox.Show("not yet functional");
-			//fix this after wikipagehist is added.
-			/*
+			//MessageBox.Show("not yet functional");
+			if(WikiPageCur==null) {
+				return;
+			}
 			if(WikiPageCur.PageTitle=="Home") {//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
-				MsgBox.Show(this,"Cannot rename homepage."); 
+				MsgBox.Show(this,"Cannot delete homepage."); 
 					return;
 			}
-			WikiPageCur.IsDeleted=true;
-			WikiPageCur.UserNum=Security.CurUser.UserNum;
-			WikiPages.Insert(WikiPageCur);
+			WikiPages.Delete(WikiPageCur.PageTitle);
 			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)*/
 		}
 
@@ -199,6 +198,9 @@ if(wpage.IsDeleted) {
 		}
 
 		private void Inc_Link_Click() {
+			if(WikiPageCur==null) {
+				return;
+			}
 			FormWikiIncomingLinks FormWIC = new FormWikiIncomingLinks();
 			FormWIC.PageTitleCur=WikiPageCur.PageTitle;
 			FormWIC.ShowDialog();

@@ -151,7 +151,7 @@ namespace OpenDental {
 			//WikiPageCur.KeyWords=textKeyWords.Text;
 			WikiPageCur.PageContent=textContent.Text;
 			WikiPageCur.UserNum=Security.CurUser.UserNum;
-			WikiPages.Insert(WikiPageCur);
+			WikiPages.InsertOrUpdate(WikiPageCur);
 			DialogResult=DialogResult.OK;
 		}
 

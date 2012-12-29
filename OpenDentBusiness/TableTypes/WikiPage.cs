@@ -24,5 +24,16 @@ namespace OpenDentBusiness {
 			return (WikiPage)MemberwiseClone();
 		}
 
+		public WikiPageHist ToWikiPageHist() {
+			WikiPageHist retVal=new WikiPageHist();
+			retVal.WikiPageNum=-1;//todo:handle this -1, shouldn't be a problem since we always get pages by Title.
+			retVal.UserNum=UserNum;
+			retVal.PageTitle=PageTitle;
+			retVal.PageContent=PageContent;
+			retVal.DateTimeSaved=DateTimeSaved;
+			retVal.IsDeleted=false;//we know this becuase wikipages do not exists unless they are not deleted.
+			return retVal;
+		}
+
 	}
 }

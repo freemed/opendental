@@ -12,7 +12,7 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormWikiHistory:Form {
 		public string PageTitleCur;
-		private List<WikiPage> listWikiPages;
+		private List<WikiPageHist> listWikiPageHists;
 
 		public FormWikiHistory() {
 			InitializeComponent();
@@ -20,12 +20,18 @@ namespace OpenDental {
 		}
 
 		private void FormWikiHistory_Load(object sender,EventArgs e) {
+			Rectangle tempWorkAreaRect=System.Windows.Forms.Screen.GetWorkingArea(this);
+			Top=0;
+			Left=Math.Max(0,(tempWorkAreaRect.Width-1200)/2);
+			Width=Math.Min(tempWorkAreaRect.Width,1200);
+			Height=tempWorkAreaRect.Height;
 			FillGrid();
-			//LoadWikiPage(listWikiPages[0]);
+			gridMain.SetSelected(gridMain.Rows.Count-1,true);
+			LoadWikiPage(listWikiPageHists[gridMain.SelectedIndices[0]]);//should never be null.
 			Text="Wiki History - "+PageTitleCur;
 		}
 
-		private void LoadWikiPage(WikiPage WikiPageCur) {
+		private void LoadWikiPage(WikiPageHist WikiPageCur) {
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
 		}
 
@@ -35,14 +41,18 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"User"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Saved"),42);
+			col=new ODGridColumn(Lan.g(this,"Del"),25);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Saved"),80);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			listWikiPages=WikiPages.GetHistoryByTitle(PageTitleCur);
-			for(int i=0;i<listWikiPages.Count;i++) {
+			listWikiPageHists=WikiPageHists.GetByTitle(PageTitleCur);
+			listWikiPageHists.Add(WikiPages.GetByTitle(PageTitleCur).ToWikiPageHist());
+			for(int i=0;i<listWikiPageHists.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(Userods.GetName(listWikiPages[i].UserNum));
-				row.Cells.Add(listWikiPages[i].DateTimeSaved.ToString());
+				row.Cells.Add(Userods.GetName(listWikiPageHists[i].UserNum));
+				row.Cells.Add((listWikiPageHists[i].IsDeleted?"X":""));
+				row.Cells.Add(listWikiPageHists[i].DateTimeSaved.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -53,12 +63,12 @@ namespace OpenDental {
 				return;
 			}
 			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage(listWikiPages[gridMain.SelectedIndices[0]]);
+			LoadWikiPage(listWikiPageHists[gridMain.SelectedIndices[0]]);
 			gridMain.Focus();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[e.Row].PageContent);
+			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPageHists[e.Row].PageContent);
 			mbox.ShowDialog();
 			//FormWikiEdit FormWE = new FormWikiEdit();
 			//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];

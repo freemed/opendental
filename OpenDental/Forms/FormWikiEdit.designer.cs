@@ -23,10 +23,12 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.textContent = new System.Windows.Forms.TextBox();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.butRefresh = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
+			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.SuspendLayout();
 			// 
 			// textContent
@@ -82,6 +84,12 @@ namespace OpenDental{
 			this.ToolBarMain.TabIndex = 3;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
+			// imageListMain
+			// 
+			this.imageListMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+			this.imageListMain.ImageSize = new System.Drawing.Size(22, 22);
+			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
+			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -108,6 +116,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textContent;
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
 		private UI.Button butRefresh;
+		private System.Windows.Forms.ImageList imageListMain;
 
 	}
 }

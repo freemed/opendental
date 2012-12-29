@@ -24,5 +24,15 @@ namespace OpenDentBusiness {
 			return (WikiPage)MemberwiseClone();
 		}
 
+		public WikiPage ToWikiPage() {
+			WikiPage retVal=new WikiPage();
+			retVal.WikiPageNum=-1;//todo:handle this -1, shouldn't be a problem since we always get pages by Title.
+			retVal.UserNum=UserNum;
+			retVal.PageTitle=PageTitle;
+			retVal.PageContent=PageContent;
+			retVal.DateTimeSaved=DateTimeSaved;
+			return retVal;
+		}
+
 	}
 }

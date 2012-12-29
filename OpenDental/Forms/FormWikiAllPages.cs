@@ -51,7 +51,7 @@ namespace OpenDental {
 			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			listWikiPages=WikiPages.GetCurrent(textSearch.Text);
+			listWikiPages=WikiPages.GetByTitleContains(textSearch.Text);
 			for(int i=0;i<listWikiPages.Count;i++) {
 				ODGridRow row=new ODGridRow();
 				//if(listWikiPages[i].IsDeleted) {//color is not a good way to indicate deleted because it is not self explanatory.  Need another column for Deleted X.

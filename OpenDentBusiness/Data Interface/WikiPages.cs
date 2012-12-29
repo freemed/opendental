@@ -14,73 +14,101 @@ namespace OpenDentBusiness{
 		public static WikiPage MasterPage;
 		public static WikiPage StyleSheet;
 
+		///<summary></summary>
+		public static List<WikiPage> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
+			}
+			string command="";
+			if(searchText=="") {//otherwise the search below is meaning less.
+				command="SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+					+"WHERE PageTitle NOT LIKE '\\_%' "
+					+(searchDeleted?"AND IsDeleted=1;":";");
+				return Crud.WikiPageCrud.SelectMany(command);
+			}
+			List<WikiPage> retVal=new List<WikiPage>();
+			List<WikiPage> listWikiPageTemp=new List<WikiPage>();
+			//Match keywords first
+			command=
+			"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+			+"WHERE PageContent LIKE '%[[keywords:%"+searchText+"%]]' "//This part needs work.
+			+"AND PageTitle NOT LIKE '\\_%' "
+			+(searchDeleted?"AND IsDeleted=1 ":"")
+			+"ORDER BY PageTitle;";
+			retVal=Crud.WikiPageCrud.SelectMany(command);
+		//Match PageTitle Second
+			command=
+			"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+			+"WHERE PageTitle LIKE '%"+searchText+"%' "
+			+"AND PageTitle NOT LIKE '\\_%' "
+			+(searchDeleted?"AND IsDeleted=1 ":"")
+			+"ORDER BY PageTitle;";
+			listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
+			foreach(WikiPage wikiPage in listWikiPageTemp) {
+				if(retVal.Contains(wikiPage)) {
+					continue;
+				}
+				retVal.Add(wikiPage);
+			}
+		//Match Content third
+			if(!ignoreContent) {
+				command=
+				"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+				+"WHERE PageContent LIKE '%"+searchText+"%' "
+				+"AND PageTitle NOT LIKE '\\_%' "
+				+(searchDeleted?"AND IsDeleted=1 ":"")
+				+"ORDER BY PageTitle;";
+				listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
+				foreach(WikiPage wikiPage in listWikiPageTemp) {
+					if(retVal.Contains(wikiPage)) {
+						continue;
+					}
+					retVal.Add(wikiPage);
+				}
+			}//end !ignoreContent
+			return retVal;
+		}
+
+		///<summary>Returns a list of all pages that reference "PageTitle".  No historical pages.</summary>
+		public static List<WikiPage> GetIncomingLinks(string pageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),pageTitle);
+			}
+			List<WikiPage> retVal=new List<WikiPage>();
+			string command="SELECT * FROM wikipage WHERE PageContent LIKE '%[["+POut.String(pageTitle)+"]]%' ORDER BY PageTitle";
+			return Crud.WikiPageCrud.SelectMany(command);
+		}
+
 		///<summary>Returns null if page does not exist.</summary>
 		public static WikiPage GetByTitle(string pageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
+			//string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"';";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
-		///<summary>Returns a list of all historical version of "PageTitle"</summary>
-		public static List<WikiPage> GetHistoryByTitle(string pageTitle) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),pageTitle);
-			}
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' ORDER BY DateTimeSaved;";
-			return Crud.WikiPageCrud.SelectMany(command);
-		}
-
-		///<summary>Returns a list of all pages that reference "PageTitle".  No historical pages.  This is broken, but don't bother to fix it because we will add the new table to fix the problem.</summary>
-		public static List<WikiPage> GetIncomingLinks(string PageTitle) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),PageTitle);
-			}
-			List<WikiPage> retVal=new List<WikiPage>();
-			string command="SELECT * FROM wikipage WHERE PageContent LIKE '%[["+POut.String(PageTitle)+"]]%' "
-				+"AND IsDeleted = 0 "
-				+"GROUP BY PageTitle;";
-			return Crud.WikiPageCrud.SelectMany(command);
-		}
-
-		///<summary>Returns a list current versions of pages.</summary>
-		public static List<WikiPage> GetCurrent(string searchText) {
+		///<summary>Returns a list of pages with PageTitle LIKE '%searchText%'.</summary>
+		public static List<WikiPage> GetByTitleContains(string searchText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
 			}
-			List<WikiPage> retVal=new List<WikiPage>();
 			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
-				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY DateTimeSaved DESC;";
-			List<WikiPage> listAllWikiPages=Crud.WikiPageCrud.SelectMany(command);
-			//Return only the newest version of each page. Since they are ordered by date, the newest versions will be the first added and all subsequent editions will be idgnored.
-			for(int i=0;i<listAllWikiPages.Count;i++) {
-				bool found=false;
-				for(int r=0;r<retVal.Count;r++) {
-					if(retVal[r].PageTitle==listAllWikiPages[i].PageTitle) {
-						found=true;
-						break;
-					}
-				}
-				if(found) {
-					continue;
-				}
-				retVal.Add(listAllWikiPages[i]);
-			}
-			//This is still clumsy.  Solution is a second db table.
-			retVal.Sort(SortWikiPagesByName);
-			return retVal;
+				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle;";
+			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
-		private static int SortWikiPagesByName(WikiPage wp1,WikiPage wp2) {
-			return wp1.PageTitle.CompareTo(wp2.PageTitle);
-		}
-
-		///<summary></summary>
-		public static long Insert(WikiPage wikiPage){
+		///<summary>If new, insert. Otherwise, copy old version to wikiPageHist, delete it from wikipage, and then insert.</summary>
+		public static long InsertOrUpdate(WikiPage wikiPage){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
 				return wikiPage.WikiPageNum;
+			}
+			if(GetByTitle(wikiPage.PageTitle)!=null) {
+				WikiPageHists.Insert(GetByTitle(wikiPage.PageTitle).ToWikiPageHist());
+				string command= "DELETE FROM wikipage WHERE PageTitle = '"+POut.String(wikiPage.PageTitle)+"'";
+				Db.NonQ(command);
 			}
 			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
@@ -91,38 +119,25 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),originalPageTitle,newPageTitle);
 				return;
 			}
-			//Create new entry to track changes by user.
+			//Track history.
 			WikiPage tempWP = GetByTitle(originalPageTitle);
+			WikiPageHists.Insert(tempWP.ToWikiPageHist());
 			tempWP.UserNum=Security.CurUser.UserNum;
-			Insert(tempWP);
-			//Actually rename pages and all previous versions.
+			InsertOrUpdate(tempWP);//will create a new DateTimeSaved value and new PK.
+			//Rename pages in both tables, wikiPage and wikiPageHist.
 			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(originalPageTitle)+"';";
 			Db.NonQ(command);
-			//Fix all broken internal links by inserting a new copy of each page if teh newest revision of that page has a link to the renamed page.
-			//js- We can NOT do it this way.  It breaks our pattern of inserts.  In particular, it would break replication and Oracle.
-//      command=@"INSERT INTO wikipage (UserNum, DateTimeSaved, PageTitle, PageContent)  
-//							(SELECT "+Security.CurUser.UserNum+@",NOW(),t.PageTitle, REPLACE(t.PageContent,'[["+OriginalPageTitle+@"]]', '[["+NewPageTitle+@"]]')
-//							FROM(
-//								SELECT PageTitle, PageContent FROM wikipage 
-//								WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%' 
-//								AND DateTimeSaved=(
-//									SELECT MAX(DateTimeSaved) 
-//									FROM wikipage 
-//									WHERE PageTitle IN (
-//										SELECT PageTitle 
-//										FROM wikipage 
-//										WHERE PageContent LIKE '%[["+OriginalPageTitle+@"]]%'
-//									)))t
-//							);";
-//      Db.NonQ(command);
+			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(originalPageTitle)+"';";
+			Db.NonQ(command);
 			//For now, we will simply fix existing links in history
 			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(originalPageTitle)+@"]]', '[["+POut.String(newPageTitle)+@"]]')";
+			Db.NonQ(command);
+			command="UPDATE wikipagehist SET PageContent=REPLACE(PageContent,'[["+POut.String(originalPageTitle)+@"]]', '[["+POut.String(newPageTitle)+@"]]')";
 			Db.NonQ(command);
 			return;
 		}
 
-		/*
-		///<summary>Update may be implemented when versioning is improved.</summary>
+		/*///<summary>Update may be implemented when versioning is improved.</summary>
 		public static void Update(WikiPage wikiPage){
 			Insert(wikiPage);
 			//if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -167,11 +182,11 @@ namespace OpenDentBusiness{
 
 			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
 			MatchCollection matches;
-			matches=Regex.Matches(s,@"\[\[(img:).*?\]\]");
+			matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
 			foreach(Match match in matches) {
 				string imgName = match.Value.Substring(match.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
 				string fullPath=CodeBase.ODFileUtils.CombinePaths(GetWikiPath(),imgName);
-				s=s.Replace(match.Value,"<img src=\"file:///\""+fullPath.Replace("\\","/")+" />");
+				s=s.Replace(match.Value,"<img src=\"file:///"+fullPath.Replace("\\","/")+"\" />");
 			}
 			//[[keywords: key1, key2, etc.]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");//^(\\s|\\d) because color codes are being replaced.
@@ -179,13 +194,13 @@ namespace OpenDentBusiness{
 				s=s.Replace(match.Value,"<span class=\"keywords\">keywords:"+match.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
 			}
 			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\[\[.*?\]\]");//.*? matches as few as possible.
+			matches=Regex.Matches(s,@"\[\[.+?\]\]");//.*? matches as few as possible.
 			foreach(Match match in matches) {
 				string tmpStyle="";
 				if(GetByTitle(match.Value.Trim('[',']'))==null){//Later, instead of GetByTitle, we should just use a bool method. 
 					tmpStyle="class='PageNotExists' ";
 				}
-				s=s.Replace(match.Value,"<a "+tmpStyle+"href=\""+"wiki:"+match.Value.Trim('[',']').Replace(" ","_")+"\">"+match.Value.Trim('[',']')+"</a>");
+				s=s.Replace(match.Value,"<a "+tmpStyle+"href=\""+"wiki:"+match.Value.Trim('[',']')/*.Replace(" ","_")*/+"\">"+match.Value.Trim('[',']')+"</a>");
 			}
 			//Unordered List----------------------------------------------------------------------------------------------------------------
 			//Instead of using a regex, this will hunt through the rows in sequence.
@@ -229,6 +244,28 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
+			//numbered list---------------------------------------------------------------------------------------------------------------------
+			//todo: similar to above.
+			//{{color|red|text}}----------------------------------------------------------------------------------------------------------------
+			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
+			foreach(Match match in matches) {
+				string[] tokens = match.Value.Split('|');
+				if(tokens.Length<3) {//not enough tokens
+					continue;
+				}
+				string tempText="";//text to be colored
+				for(int i=0;i<tokens.Length;i++){
+					if(i<2){//ignore the color and "#00FF00" values
+						continue;
+					}
+					if(i==tokens.Length-1) {//last token
+						tempText+=(i>2?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
+						continue;
+					}
+					tempText+=(i>2?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
+				}
+				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
+			}
 			/*
 			matches = Regex.Matches(s,@"\*[\S](.|[\r\n][^(\r\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
 			foreach(Match match in matches) {
@@ -260,24 +297,24 @@ namespace OpenDentBusiness{
 				s=s.Replace(match.Value,listBuilder.ToString());
 			}*/
 			//now, we switch to working in xml
-			doc=new XmlDocument();
-			using(StringReader reader=new StringReader(s)) {
-				try {
-					doc.Load(reader);
-				}
-				catch(Exception ex) {
-					return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
-				}
-			}
-			XmlNode node=doc.DocumentElement;
+			//////doc=new XmlDocument();
+			//////using(StringReader reader=new StringReader(s)) {
+			//////  try {
+			//////    doc.Load(reader);
+			//////  }
+			//////  catch(Exception ex) {
+			//////    return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
+			//////  }
+			//////}
+			//////XmlNode node=doc.DocumentElement;
 			//It's now time to look for paragraphs.
 			//My basic assumption will be that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
 			//i.e. they are siblings.  They will never be surrounded with <p> tags.
 			//On the other hand, <b>, <i>, <a>, and <span> tags are always internal to others, including <p>, <h123>, <table>, <ol>, and <ul>.
 			//<br> tags will only be found within <p> (and <table>?)
-			for(int i=0;i<node.ChildNodes.Count;i++) {
+			//for(int i=0;i<node.ChildNodes.Count;i++) {
 
-			}
+			//}
 			
 
 
@@ -291,27 +328,7 @@ namespace OpenDentBusiness{
 			//s=s.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
 			//<br />
 			//use a regex match to only affect within paragraphs.
-			s=s.Replace("\r\n","<br />");
-			//{{color|red|text}}
-			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
-			foreach(Match match in matches) {
-				string[] tokens = match.Value.Split('|');
-				if(tokens.Length<3) {//not enough tokens
-					continue;
-				}
-				string tempText="";//text to be colored
-				for(int i=0;i<tokens.Length;i++){
-					if(i<2){//ignore the color and "#00FF00" values
-						continue;
-					}
-					if(i==tokens.Length-1) {//last token
-						tempText+=(i>2?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
-						continue;
-					}
-					tempText+=(i>2?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
-				}
-				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
-			}*/
+			s=s.Replace("\r\n","<br />");*/
 			//aggregate with master
 			if(MasterPage==null){
 				MasterPage=GetByTitle("_Master");
@@ -322,6 +339,23 @@ namespace OpenDentBusiness{
 			s=MasterPage.PageContent.Replace("@@@Content@@@",s);
 			s=s.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return s;
+		}
+
+		///<summary>Creates historical entries into wikiPageHist.</summary>
+		public static void Delete(string pageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),pageTitle);
+				return;
+			}
+			WikiPageHist wikiPageHist=GetByTitle(pageTitle).ToWikiPageHist();
+			//preserve the existing page with user credentials
+			WikiPageHists.Insert(wikiPageHist);
+			//make entry to show who deleted the page
+			wikiPageHist.IsDeleted=true;
+			wikiPageHist.UserNum=Security.CurUser.UserNum;
+			WikiPageHists.Insert(wikiPageHist);
+			string command= "DELETE FROM wikipage WHERE PageTitle = '"+POut.String(pageTitle)+"'";
+			Db.NonQ(command);
 		}
 
 		/*
@@ -342,16 +376,6 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),wikiPageNum);
 			}
 			return Crud.WikiPageCrud.SelectOne(wikiPageNum);
-		}
-
-		///<summary></summary>
-		public static void Delete(long wikiPageNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),wikiPageNum);
-				return;
-			}
-			string command= "DELETE FROM wikipage WHERE WikiPageNum = "+POut.Long(wikiPageNum);
-			Db.NonQ(command);
 		}
 		*/
 
