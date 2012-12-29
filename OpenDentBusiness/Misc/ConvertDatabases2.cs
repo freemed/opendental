@@ -11245,6 +11245,132 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.22.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_4_28();
+		}
+
+		private static void To12_4_28() {
+			if(FromVersion<new Version("12.4.28.0")) {
+				string command;
+				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+					long codeNum=0;
+					string procCode="D1208";//This code is needed for important automation.
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='"+POut.String(procCode)+"'";
+					DataTable dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count==0) {//The procedure code does not exist
+						//Make sure the procedure code category exists before inserting the procedure code
+						string procCatDescript="Cleanings";
+						long defNum=0;
+						command="SELECT DefNum FROM definition WHERE Category="+POut.Long((long)DefCat.ProcCodeCats)+" AND ItemName='"+POut.String(procCatDescript)+"'";
+						DataTable dtDef=Db.GetTable(command);
+						if(dtDef.Rows.Count==0) { //The procedure code category does not exist, add it
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO definition (Category,ItemName,ItemOrder) "
+									+"VALUES ("+POut.Long((long)DefCat.ProcCodeCats)+",'"+POut.String(procCatDescript)+"',"+POut.Long(DefC.Long[(int)DefCat.ProcCodeCats].Length)+")";
+							}
+							else {//oracle
+								command="INSERT INTO definition (DefNum,Category,ItemName,ItemOrder) "
+									+"VALUES ((SELECT MAX(DefNum)+1 FROM definition),"+POut.Long((long)DefCat.ProcCodeCats)+",'"+POut.String(procCatDescript)+"',"+POut.Long(DefC.Long[(int)DefCat.ProcCodeCats].Length)+")";
+							}
+							defNum=Db.NonQ(command,true);
+						}
+						else { //The procedure code category already exists, get the existing defnum
+							defNum=PIn.Long(dtDef.Rows[0][0].ToString());
+						}
+						//The following variables might be useful if we need to copy this pattern later for adding more codes.
+						string procDescript="topical application of fluoride";
+						string procAbbrDesc="Flo";
+						string procTime="/";
+						long procTreatArea=3;
+						int procNoBillIns=0;
+						int procIsProsth=0;
+						int procIsHygiene=1;
+						int procPaintType=0;//none
+						if(DataConnection.DBtype==DatabaseType.MySql) {
+							command=@"INSERT INTO procedurecode(ProcCode,Descript,AbbrDesc,
+									ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,IsHygiene,PaintType,DefaultNote,SubstitutionCode) 
+								VALUES ('"+POut.String(procCode)+"','"+POut.String(procDescript)+"','"+POut.String(procAbbrDesc)+"',"
+									+"'"+POut.String(procTime)+"','"+POut.Long(defNum)+"',"+POut.Long(procTreatArea)+","+POut.Int(procNoBillIns)+","+POut.Int(procIsProsth)+","
+									+POut.Int(procIsHygiene)+","+POut.Int(procPaintType)+",'','')";
+							codeNum=Db.NonQ(command,true);
+						}
+						else {//oracle
+							command=@"INSERT INTO procedurecode(CodeNum,ProcCode,Descript,AbbrDesc,
+									ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,IsHygiene,PaintType,DefaultNote,SubstitutionCode) 
+								VALUES ((SELECT MAX(CodeNum)+1 FROM procedurecode),'"+POut.String(procCode)+"','"+POut.String(procDescript)+"','"+POut.String(procAbbrDesc)+"',"
+									+"'"+POut.String(procTime)+"','"+POut.Long(defNum)+"',"+POut.Long(procTreatArea)+","+POut.Int(procNoBillIns)+","+POut.Int(procIsProsth)+","
+									+POut.Int(procIsHygiene)+","+POut.Int(procPaintType)+",'','')";
+							codeNum=Db.NonQ(command,true);
+						}
+					}//end D1208 insert
+					else {//D1208 already exists.
+						codeNum=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					//Various references to the old D1203 and D1204 need to be changed to the new D1208.
+					long codeNumD1203=0;
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1203'";
+					dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count>0) {
+						codeNumD1203=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					long codeNumD1204=0;
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1204'";
+					dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count>0) {
+						codeNumD1204=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					//Update benefits to remove the old codes and replace with the new code. We ignore CodeNum=0 in case D1203 or D1204 is not in the database.
+					command="UPDATE benefit SET CodeNum="+POut.Long(codeNum)+" WHERE CodeNum<>0 AND (CodeNum="+POut.Long(codeNumD1203)+" OR CodeNum="+POut.Long(codeNumD1204)+")";
+					Db.NonQ(command);
+					//Clean up insurance plans with obvious duplicate fluoride benefits (plans that used to have benefits for both D1203 and D1204).
+					command="SELECT DISTINCT PlanNum,CovCatNum,TimePeriod,Quantity,CoverageLevel "
+						+"FROM benefit "
+						+"WHERE BenefitType="+POut.Long((long)InsBenefitType.Limitations)+" AND MonetaryAmt=-1 AND PatPlanNum=0 AND Percent=-1 "
+						+"AND QuantityQualifier="+POut.Long((long)BenefitQuantity.AgeLimit)+" AND CodeNum="+POut.Long(codeNum);
+					DataTable dtBenFlo=Db.GetTable(command);
+					command="DELETE FROM benefit "
+						+"WHERE BenefitType="+POut.Long((long)InsBenefitType.Limitations)+" AND MonetaryAmt=-1 AND PatPlanNum=0 AND Percent=-1 "
+						+"AND QuantityQualifier="+POut.Long((long)BenefitQuantity.AgeLimit)+" AND CodeNum="+POut.Long(codeNum);
+					Db.NonQ(command);
+					for(int i=0;i<dtBenFlo.Rows.Count;i++) {
+						long planNum=PIn.Long(dtBenFlo.Rows[i]["PlanNum"].ToString());
+						long covCatNum=PIn.Long(dtBenFlo.Rows[i]["CovCatNum"].ToString());
+						long timePeriod=PIn.Long(dtBenFlo.Rows[i]["TimePeriod"].ToString());
+						long quantity=PIn.Long(dtBenFlo.Rows[i]["Quantity"].ToString());
+						long coverageLevel=PIn.Long(dtBenFlo.Rows[i]["CoverageLevel"].ToString());
+						if(DataConnection.DBtype==DatabaseType.MySql) {
+							command="INSERT INTO benefit (PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod,"
+								+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) "
+								+"VALUES ("+POut.Long(planNum)+",0,"+POut.Long(covCatNum)+","+POut.Long((long)InsBenefitType.Limitations)+",-1,-1,"+POut.Long(timePeriod)
+								+","+POut.Long((long)BenefitQuantity.AgeLimit)+","+POut.Long(quantity)+","+POut.Long(codeNum)+","+POut.Long(coverageLevel)+")";
+							Db.NonQ(command);
+						}
+						else {//oracle
+							command="INSERT INTO benefit (BenefitNum,PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod,"
+								+"QuantityQualifier,Quantity,CodeNum,CoverageLevel) "
+								+"VALUES ((SELECT MAX(BenefitNum)+1 FROM benefit),"+POut.Long(planNum)+",0,"+POut.Long(covCatNum)+","+POut.Long((long)InsBenefitType.Limitations)+",-1,-1,"+POut.Long(timePeriod)
+								+","+POut.Long((long)BenefitQuantity.AgeLimit)+","+POut.Long(quantity)+","+POut.Long(codeNum)+","+POut.Long(coverageLevel)+")";
+							Db.NonQ(command);
+						}
+					}//end benefit inserts
+					//Update recall triggers with new fluoride code.
+					command="UPDATE recalltrigger SET CodeNum="+POut.Long(codeNum)+" WHERE CodeNum<>0 AND (CodeNum="+POut.Long(codeNumD1203)+" OR CodeNum="+POut.Long(codeNumD1204)+")";
+					Db.NonQ(command);
+					//Update the fluoride procedures on the recall triggers.
+					command="SELECT * FROM recalltype";//Should only be a handful of results.
+					DataTable dtRecallType=Db.GetTable(command);
+					for(int i=0;i<dtRecallType.Rows.Count;i++) {
+						string procs=PIn.String(dtRecallType.Rows[i]["Procedures"].ToString());
+						string procsNew=procs.Replace("D1203","D1208").Replace("D1204","D1208");
+						if(procs!=procsNew) {
+							long recallTypeNum=PIn.Long(dtRecallType.Rows[i]["RecallTypeNum"].ToString());
+							command="UPDATE recalltype SET Procedures='"+POut.String(procsNew)+"' WHERE RecallTypeNum="+POut.Long(recallTypeNum);
+							Db.NonQ(command);
+						}
+					}
+				}//end United States update
+				command="UPDATE preference SET ValueString = '12.4.28.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_5_0();
 		}
 

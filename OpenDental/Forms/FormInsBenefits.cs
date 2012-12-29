@@ -1251,7 +1251,7 @@ namespace OpenDental{
 					textDeductibleFam.Text=ben.MonetaryAmt.ToString("n");
 				}
 				//Flo
-				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D1203"
+				else if(ProcedureCodes.GetStringProcCode(ben.CodeNum)=="D1208"
 					&& ben.BenefitType==InsBenefitType.Limitations
 					//&& ben.CovCatNum==CovCats.GetForEbenCat(EbenefitCategory.Db).CovCatNum//ignored
 					&& ben.MonetaryAmt==-1
@@ -1912,7 +1912,7 @@ namespace OpenDental{
 			//Flo
 			if(textFlo.Text !=""){
 				ben=new Benefit();
-				ben.CodeNum=ProcedureCodes.GetCodeNum("D1203");
+				ben.CodeNum=ProcedureCodes.GetCodeNum("D1208");
 				ben.BenefitType=InsBenefitType.Limitations;
 				ben.CovCatNum=0;
 				ben.PlanNum=PlanNum;

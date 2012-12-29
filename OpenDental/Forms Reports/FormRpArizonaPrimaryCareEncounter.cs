@@ -64,7 +64,7 @@ namespace OpenDental {
 			string patientsIdNumberStr="SPID#";
 			//Only certain procedures can be billed to the Arizona Primary Care program.
 			//Since the code list doesn't change often, it is simply hard coded here.
-			string billableProcedures="'D0120','D0140','D0150','D0160','D1110','D1120','D1201','D1203','D1204','D1205',"+
+			string billableProcedures="'D0120','D0140','D0150','D0160','D1110','D1120','D1201','D1203','D1204','D1205','D1208',"+
 				"'D1351','D1510','D1515','D1520','D1525','D1550','D4341','D4355','D4910','D2140','D2150','D2160','D2161',"+
 				"'D2330','D2331','D2332','D2335','D2390','D2391','D2392','D2393','D2394','D2910','D2920','D2930','D2931',"+
 				"'D2932','D2940','D2950','D2970','D3110','D3120','D3220','D3221','D3230','D3240','D7140','D7210','D7220',"+

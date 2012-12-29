@@ -231,7 +231,7 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (1,'Prophy',393217,'/XXXX/','D0120,D1110')";
 			Db.NonQ(command);
-			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (2,'Child Prophy',0,'XXX','D0120,D1120,D1203')";
+			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (2,'Child Prophy',0,'XXX','D0120,D1120,D1208')";
 			Db.NonQ(command);
 			command="INSERT INTO recalltype (RecallTypeNum,Description,DefaultInterval,TimePattern,Procedures) VALUES (3,'Perio',262144,'/XXXX/','D4910')";
 			Db.NonQ(command);
