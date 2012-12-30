@@ -27,12 +27,11 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			MasterPage.PageContent=textMaster.Text;
 			MasterPage.UserNum=Security.CurUser.UserNum;
-			WikiPages.InsertOrUpdate(MasterPage);
-			WikiPages.MasterPage=MasterPage;//This is temporary until we build better caching
+			WikiPages.InsertAndArchive(MasterPage);
 			StyleSheet.PageContent=textStyle.Text;
 			StyleSheet.UserNum=Security.CurUser.UserNum;
-			WikiPages.InsertOrUpdate(StyleSheet);
-			WikiPages.StyleSheet=StyleSheet;//Temporary			
+			WikiPages.InsertAndArchive(StyleSheet);
+			DataValid.SetInvalid(InvalidType.WikiMaster);
 			DialogResult=DialogResult.OK;
 		}
 

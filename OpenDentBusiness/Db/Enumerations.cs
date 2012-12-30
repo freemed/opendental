@@ -284,7 +284,9 @@ namespace OpenDentBusiness{
 		///<summary>53. Includes all 4 HL7Def tables.</summary>
 		HL7Defs,
 		///<summary>54</summary>
-		DictCustoms
+		DictCustoms,
+		///<summary>55</summary>
+		WikiMaster
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

@@ -31,30 +31,30 @@ namespace OpenDental{
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(236, 78);
+			this.butOK.Location = new System.Drawing.Point(236,78);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(317, 78);
+			this.butCancel.Location = new System.Drawing.Point(317,78);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
@@ -63,18 +63,18 @@ namespace OpenDental{
 			// 
 			this.textPageTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textPageTitle.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textPageTitle.Location = new System.Drawing.Point(149, 30);
+			this.textPageTitle.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textPageTitle.Location = new System.Drawing.Point(109,33);
 			this.textPageTitle.MaxLength = 255;
 			this.textPageTitle.Name = "textPageTitle";
-			this.textPageTitle.Size = new System.Drawing.Size(243, 20);
+			this.textPageTitle.Size = new System.Drawing.Size(243,20);
 			this.textPageTitle.TabIndex = 4;
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(14, 30);
+			this.label2.Location = new System.Drawing.Point(4,33);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(131, 20);
+			this.label2.Size = new System.Drawing.Size(101,20);
 			this.label2.TabIndex = 77;
 			this.label2.Text = "Page Title";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -82,7 +82,7 @@ namespace OpenDental{
 			// FormWikiRename
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(404, 114);
+			this.ClientSize = new System.Drawing.Size(404,114);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textPageTitle);
 			this.Controls.Add(this.butOK);

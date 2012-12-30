@@ -24,6 +24,7 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiEdit));
 			this.textContent = new System.Windows.Forms.TextBox();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.butRefresh = new OpenDental.UI.Button();
@@ -38,12 +39,12 @@ namespace OpenDental{
 			this.textContent.AllowDrop = true;
 			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.textContent.Font = new System.Drawing.Font("Courier New", 9.5F);
-			this.textContent.Location = new System.Drawing.Point(0, 31);
+			this.textContent.Font = new System.Drawing.Font("Courier New",9.5F);
+			this.textContent.Location = new System.Drawing.Point(0,31);
 			this.textContent.Multiline = true;
 			this.textContent.Name = "textContent";
 			this.textContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textContent.Size = new System.Drawing.Size(470, 542);
+			this.textContent.Size = new System.Drawing.Size(470,542);
 			this.textContent.TabIndex = 2;
 			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
 			// 
@@ -53,47 +54,62 @@ namespace OpenDental{
 			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.webBrowserWiki.Location = new System.Drawing.Point(474, 31);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowserWiki.Location = new System.Drawing.Point(474,31);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20,20);
 			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(470, 542);
+			this.webBrowserWiki.Size = new System.Drawing.Size(470,542);
 			this.webBrowserWiki.TabIndex = 78;
 			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
 			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
 			// 
 			// butRefresh
 			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRefresh.Autosize = true;
 			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(474, 1);
+			this.butRefresh.Location = new System.Drawing.Point(869,1);
 			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75, 24);
+			this.butRefresh.Size = new System.Drawing.Size(75,24);
 			this.butRefresh.TabIndex = 77;
 			this.butRefresh.Text = "Refresh";
 			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
 			// 
 			// ToolBarMain
 			// 
-			this.ToolBarMain.ImageList = null;
-			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
+			this.ToolBarMain.ImageList = this.imageListMain;
+			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(470, 25);
+			this.ToolBarMain.Size = new System.Drawing.Size(863,25);
 			this.ToolBarMain.TabIndex = 3;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// imageListMain
 			// 
-			this.imageListMain.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-			this.imageListMain.ImageSize = new System.Drawing.Size(22, 22);
+			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
+			this.imageListMain.Images.SetKeyName(0,"save.gif");
+			this.imageListMain.Images.SetKeyName(1,"cancel.gif");
+			this.imageListMain.Images.SetKeyName(2,"cut.gif");
+			this.imageListMain.Images.SetKeyName(3,"copy.gif");
+			this.imageListMain.Images.SetKeyName(4,"paste.gif");
+			this.imageListMain.Images.SetKeyName(5,"link.gif");
+			this.imageListMain.Images.SetKeyName(6,"linkExternal.gif");
+			this.imageListMain.Images.SetKeyName(7,"h1.gif");
+			this.imageListMain.Images.SetKeyName(8,"h2.gif");
+			this.imageListMain.Images.SetKeyName(9,"h3.gif");
+			this.imageListMain.Images.SetKeyName(10,"bold.gif");
+			this.imageListMain.Images.SetKeyName(11,"italic.gif");
+			this.imageListMain.Images.SetKeyName(12,"color.gif");
+			this.imageListMain.Images.SetKeyName(13,"table.gif");
+			this.imageListMain.Images.SetKeyName(14,"image.gif");
 			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(944, 573);
+			this.ClientSize = new System.Drawing.Size(944,573);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.textContent);

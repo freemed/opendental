@@ -10,9 +10,102 @@ using System.Xml;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class WikiPages{
-		///<summary>Improvements can be made later for caching these properly.</summary>
-		public static WikiPage MasterPage;
-		public static WikiPage StyleSheet;
+		#region CachePattern
+		//This region can be eliminated if this is not a table type with cached data.
+		//If leaving this region in place, be sure to add RefreshCache and FillCache 
+		//to the Cache.cs file with all the other Cache types.
+
+		///<summary></summary>
+		private static WikiPage masterPage;
+		///<summary></summary>
+		private static WikiPage styleSheet;
+
+		///<summary></summary>
+		public static WikiPage MasterPage {
+			get {
+				if(masterPage==null) {
+					RefreshCache();
+				}
+				return masterPage;
+			}
+			set {
+				masterPage=value;
+			}
+		}
+
+		///<summary></summary>
+		public static WikiPage StyleSheet {
+			get {
+				if(styleSheet==null) {
+					RefreshCache();
+				}
+				return styleSheet;
+			}
+			set {
+				styleSheet=value;
+			}
+		}
+
+		///<summary></summary>
+		public static DataTable RefreshCache() {
+			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
+			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' OR PageTitle='_Master'";
+			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
+			table.TableName="WikiPage";
+			FillCache(table);
+			return table;
+		}
+
+		///<summary></summary>
+		public static void FillCache(DataTable table) {
+			//No need to check RemotingRole; no call to db.
+			List<WikiPage> listPages=Crud.WikiPageCrud.TableToList(table);
+			for(int i=0;i<listPages.Count;i++) {
+				if(listPages[i].PageTitle=="_Master") {
+					masterPage=listPages[i];
+				}
+				if(listPages[i].PageTitle=="_Style") {
+					styleSheet=listPages[i];
+				}
+			}
+		}
+		#endregion CachePattern
+
+		///<summary>Returns null if page does not exist.</summary>
+		public static WikiPage GetByTitle(string pageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
+			}
+			//string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"';";
+			return Crud.WikiPageCrud.SelectOne(command);
+		}
+
+		///<summary>Returns a list of pages with PageTitle LIKE '%searchText%'.</summary>
+		public static List<WikiPage> GetByTitleContains(string searchText) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
+			}
+			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
+				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle;";
+			return Crud.WikiPageCrud.SelectMany(command);
+		}
+
+		///<summary>Archives first by moving to WikiPageHist if it already exists.  Then, in either case, it inserts the new page.</summary>
+		public static long InsertAndArchive(WikiPage wikiPage) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
+				return wikiPage.WikiPageNum;
+			}
+			WikiPage wpExisting=GetByTitle(wikiPage.PageTitle);
+			if(wpExisting!=null) {
+				WikiPageHist wpHist=PageToHist(wpExisting);
+				WikiPageHists.Insert(wpHist);
+				string command= "DELETE FROM wikipage WHERE PageTitle = '"+POut.String(wikiPage.PageTitle)+"'";
+				Db.NonQ(command);
+			}
+			return Crud.WikiPageCrud.Insert(wikiPage);
+		}
 
 		///<summary></summary>
 		public static List<WikiPage> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
@@ -36,7 +129,7 @@ namespace OpenDentBusiness{
 			+(searchDeleted?"AND IsDeleted=1 ":"")
 			+"ORDER BY PageTitle;";
 			retVal=Crud.WikiPageCrud.SelectMany(command);
-		//Match PageTitle Second
+			//Match PageTitle Second
 			command=
 			"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
 			+"WHERE PageTitle LIKE '%"+searchText+"%' "
@@ -50,7 +143,7 @@ namespace OpenDentBusiness{
 				}
 				retVal.Add(wikiPage);
 			}
-		//Match Content third
+			//Match Content third
 			if(!ignoreContent) {
 				command=
 				"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
@@ -79,60 +172,28 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
-		///<summary>Returns null if page does not exist.</summary>
-		public static WikiPage GetByTitle(string pageTitle) {
+		///<summary>Validation was already done in FormWikiRename to make sure that the page does not already exist in WikiPage table.  But what if the page already exists in WikiPageHistory?  In that case, previous history for the other page would start showing as history for the newly renamed page, which is fine.</summary>
+		public static void Rename(WikiPage wikiPage, string newPageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
-			}
-			//string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"';";
-			return Crud.WikiPageCrud.SelectOne(command);
-		}
-
-		///<summary>Returns a list of pages with PageTitle LIKE '%searchText%'.</summary>
-		public static List<WikiPage> GetByTitleContains(string searchText) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
-			}
-			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
-				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle;";
-			return Crud.WikiPageCrud.SelectMany(command);
-		}
-
-		///<summary>If new, insert. Otherwise, copy old version to wikiPageHist, delete it from wikipage, and then insert.</summary>
-		public static long InsertOrUpdate(WikiPage wikiPage){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				wikiPage.WikiPageNum=Meth.GetLong(MethodBase.GetCurrentMethod(),wikiPage);
-				return wikiPage.WikiPageNum;
-			}
-			if(GetByTitle(wikiPage.PageTitle)!=null) {
-				WikiPageHists.Insert(GetByTitle(wikiPage.PageTitle).ToWikiPageHist());
-				string command= "DELETE FROM wikipage WHERE PageTitle = '"+POut.String(wikiPage.PageTitle)+"'";
-				Db.NonQ(command);
-			}
-			return Crud.WikiPageCrud.Insert(wikiPage);
-		}
-
-		///<summary></summary>
-		public static void Rename(string originalPageTitle, string newPageTitle) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),originalPageTitle,newPageTitle);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),wikiPage,newPageTitle);
 				return;
 			}
-			//Track history.
-			WikiPage tempWP = GetByTitle(originalPageTitle);
-			WikiPageHists.Insert(tempWP.ToWikiPageHist());
-			tempWP.UserNum=Security.CurUser.UserNum;
-			InsertOrUpdate(tempWP);//will create a new DateTimeSaved value and new PK.
-			//Rename pages in both tables, wikiPage and wikiPageHist.
-			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(originalPageTitle)+"';";
+			//a later improvement would be to validate again here in the business layer.
+			//WikiPage wikiPage=GetByTitle(originalPageTitle);
+			//I think these next two lines already get done as part of InsertAndArchive
+			//WikiPageHist wikiPageHist=PageToHist(wikiPage);
+			//WikiPageHists.Insert(wikiPageHist);//Save the current page to history.
+			wikiPage.UserNum=Security.CurUser.UserNum;
+			InsertAndArchive(wikiPage);
+			//Rename all pages in both tables: wikiPage and wikiPageHist.
+			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"';";
 			Db.NonQ(command);
-			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(originalPageTitle)+"';";
+			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"';";
 			Db.NonQ(command);
 			//For now, we will simply fix existing links in history
-			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(originalPageTitle)+@"]]', '[["+POut.String(newPageTitle)+@"]]')";
+			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(wikiPage.PageTitle)+"]]', '[["+POut.String(newPageTitle)+"]]')";
 			Db.NonQ(command);
-			command="UPDATE wikipagehist SET PageContent=REPLACE(PageContent,'[["+POut.String(originalPageTitle)+@"]]', '[["+POut.String(newPageTitle)+@"]]')";
+			command="UPDATE wikipagehist SET PageContent=REPLACE(PageContent,'[["+POut.String(wikiPage.PageTitle)+"]]', '[["+POut.String(newPageTitle)+"]]')";
 			Db.NonQ(command);
 			return;
 		}
@@ -149,6 +210,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\Wiki</summary>
 		public static string GetWikiPath() {
+			//No need to check RemotingRole; no call to db.
 			string wikiPath;
 			if(!PrefC.AtoZfolderUsed) {
 				throw new ApplicationException("Must be using AtoZ folders.");
@@ -162,6 +224,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
+			//No need to check RemotingRole; no call to db.
 			string s=wikiContent;
 			//"<" and ">"-----------------------------------------------------------------------------------------------------------
 			s=s.Replace("&<","&lt;");
@@ -330,24 +393,19 @@ namespace OpenDentBusiness{
 			//use a regex match to only affect within paragraphs.
 			s=s.Replace("\r\n","<br />");*/
 			//aggregate with master
-			if(MasterPage==null){
-				MasterPage=GetByTitle("_Master");
-			}
-			if(StyleSheet==null){
-				StyleSheet=GetByTitle("_Style");
-			}
 			s=MasterPage.PageContent.Replace("@@@Content@@@",s);
 			s=s.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return s;
 		}
 
-		///<summary>Creates historical entries into wikiPageHist.</summary>
+		///<summary>Creates historical entry of deletion into wikiPageHist, and deletes current page from WikiPage.</summary>
 		public static void Delete(string pageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),pageTitle);
 				return;
 			}
-			WikiPageHist wikiPageHist=GetByTitle(pageTitle).ToWikiPageHist();
+			WikiPage wikiPage=GetByTitle(pageTitle);
+			WikiPageHist wikiPageHist=PageToHist(wikiPage);
 			//preserve the existing page with user credentials
 			WikiPageHists.Insert(wikiPageHist);
 			//make entry to show who deleted the page
@@ -356,6 +414,18 @@ namespace OpenDentBusiness{
 			WikiPageHists.Insert(wikiPageHist);
 			string command= "DELETE FROM wikipage WHERE PageTitle = '"+POut.String(pageTitle)+"'";
 			Db.NonQ(command);
+		}
+
+		public static WikiPageHist PageToHist(WikiPage wikiPage) {
+			//No need to check RemotingRole; no call to db.
+			WikiPageHist wikiPageHist=new WikiPageHist();
+			wikiPageHist.WikiPageNum=-1;//todo:handle this -1, shouldn't be a problem since we always get pages by Title.
+			wikiPageHist.UserNum=wikiPage.UserNum;
+			wikiPageHist.PageTitle=wikiPage.PageTitle;
+			wikiPageHist.PageContent=wikiPage.PageContent;
+			wikiPageHist.DateTimeSaved=wikiPage.DateTimeSaved;//This gets set to NOW if this page is then inserted
+			wikiPageHist.IsDeleted=false;
+			return wikiPageHist;
 		}
 
 		/*

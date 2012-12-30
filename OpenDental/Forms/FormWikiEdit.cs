@@ -24,8 +24,7 @@ namespace OpenDental {
 
 		private void FormWikiEdit_Load(object sender,EventArgs e) {
 			ResizeControls();
-			LayoutToolBar();
-			LayoutToolBar();
+			//LayoutToolBar();
 			Text = "Wiki Edit - "+WikiPageCur.PageTitle;
 			textContent.Text=WikiPageCur.PageContent;
 			textContent.SelectionStart=textContent.TextLength;
@@ -50,9 +49,10 @@ namespace OpenDental {
 			webBrowserWiki.Left=ClientSize.Width/2+2;
 			webBrowserWiki.Width=ClientSize.Width/2-2;
 			//Toolbar resize
-			ToolBarMain.Width=ClientSize.Width/2-2;
+			ToolBarMain.Width=butRefresh.Left-ToolBarMain.Left-5;//ClientSize.Width/2-2;
+			LayoutToolBar();
 			//Button move
-			butRefresh.Left=ClientSize.Width/2+2;
+			//butRefresh.Left=ClientSize.Width/2+2;
 		}
 
 		private void FormWikiEdit_SizeChanged(object sender,EventArgs e) {
@@ -63,7 +63,7 @@ namespace OpenDental {
 			if(!ValidateWikiPage()) {
 				return;
 			}
-				webBrowserWiki.AllowNavigation=true;
+			webBrowserWiki.AllowNavigation=true;
 			LoadWikiPage();
 		}
 
@@ -73,25 +73,25 @@ namespace OpenDental {
 
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save"),-1,"","Save"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cancel"),-1,"","Cancel"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save"),0,"","Save"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cancel"),1,"","Cancel"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),-1,"","Cut"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),-1,"","Copy"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),-1,"","Paste"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),2,"","Cut"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),3,"","Copy"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),4,"","Paste"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),-1,"","Int Link"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),-1,"","Ext Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),5,"","Int Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),6,"","Ext Link"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"H1"),-1,"","H1"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"H2"),-1,"","H2"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"H3"),-1,"","H3"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"B"),-1,"","Bold"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"I"),-1,"","Italic"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),-1,"","Color"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),7,"","H1"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),8,"","H2"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),9,"","H3"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),10,"","Bold"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),11,"","Italic"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),12,"","Color"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),-1,"","Table"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),1,"","Image"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),13,"","Table"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),14,"","Image"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -151,7 +151,7 @@ namespace OpenDental {
 			//WikiPageCur.KeyWords=textKeyWords.Text;
 			WikiPageCur.PageContent=textContent.Text;
 			WikiPageCur.UserNum=Security.CurUser.UserNum;
-			WikiPages.InsertOrUpdate(WikiPageCur);
+			WikiPages.InsertAndArchive(WikiPageCur);
 			DialogResult=DialogResult.OK;
 		}
 

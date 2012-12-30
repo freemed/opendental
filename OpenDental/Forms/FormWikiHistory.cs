@@ -12,7 +12,7 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormWikiHistory:Form {
 		public string PageTitleCur;
-		private List<WikiPageHist> listWikiPageHists;
+		private List<WikiPageHist> ListWikiPageHists;
 
 		public FormWikiHistory() {
 			InitializeComponent();
@@ -27,7 +27,7 @@ namespace OpenDental {
 			Height=tempWorkAreaRect.Height;
 			FillGrid();
 			gridMain.SetSelected(gridMain.Rows.Count-1,true);
-			LoadWikiPage(listWikiPageHists[gridMain.SelectedIndices[0]]);//should never be null.
+			LoadWikiPage(ListWikiPageHists[gridMain.SelectedIndices[0]]);//should never be null.
 			Text="Wiki History - "+PageTitleCur;
 		}
 
@@ -46,13 +46,13 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"Saved"),80);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			listWikiPageHists=WikiPageHists.GetByTitle(PageTitleCur);
-			listWikiPageHists.Add(WikiPages.GetByTitle(PageTitleCur).ToWikiPageHist());
-			for(int i=0;i<listWikiPageHists.Count;i++) {
+			ListWikiPageHists=WikiPageHists.GetByTitle(PageTitleCur);
+			ListWikiPageHists.Add(WikiPages.PageToHist(WikiPages.GetByTitle(PageTitleCur)));
+			for(int i=0;i<ListWikiPageHists.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(Userods.GetName(listWikiPageHists[i].UserNum));
-				row.Cells.Add((listWikiPageHists[i].IsDeleted?"X":""));
-				row.Cells.Add(listWikiPageHists[i].DateTimeSaved.ToString());
+				row.Cells.Add(Userods.GetName(ListWikiPageHists[i].UserNum));
+				row.Cells.Add((ListWikiPageHists[i].IsDeleted?"X":""));
+				row.Cells.Add(ListWikiPageHists[i].DateTimeSaved.ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -63,12 +63,12 @@ namespace OpenDental {
 				return;
 			}
 			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage(listWikiPageHists[gridMain.SelectedIndices[0]]);
+			LoadWikiPage(ListWikiPageHists[gridMain.SelectedIndices[0]]);
 			gridMain.Focus();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPageHists[e.Row].PageContent);
+			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(ListWikiPageHists[e.Row].PageContent);
 			mbox.ShowDialog();
 			//FormWikiEdit FormWE = new FormWikiEdit();
 			//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];

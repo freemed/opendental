@@ -43,6 +43,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			listt=Crud.DictCustomCrud.TableToList(table);
 		}
+		#endregion CachePattern
 
 		///<summary></summary>
 		public static long Insert(DictCustom dictCustom){
@@ -70,7 +71,7 @@ namespace OpenDentBusiness{
 			}
 			Crud.DictCustomCrud.Delete(dictCustomNum);
 		}
-		#endregion
+		
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

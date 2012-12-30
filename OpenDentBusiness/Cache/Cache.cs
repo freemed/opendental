@@ -232,6 +232,9 @@ namespace OpenDentBusiness {
 				ds.Tables.Add(AppointmentRules.RefreshCache());
 				ds.Tables.Add(ProcApptColors.RefreshCache());
 			}
+			if(itypes.Contains((int)InvalidType.WikiMaster) || isAll) {
+				ds.Tables.Add(WikiPages.RefreshCache());
+			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll){
 				ds.Tables.Add(ZipCodes.RefreshCache());
 			}
@@ -412,6 +415,9 @@ namespace OpenDentBusiness {
 				ApptViewItems.FillCache(ds.Tables["ApptViewItem"]);
 				AppointmentRules.FillCache(ds.Tables["AppointmentRule"]);
 				ProcApptColors.FillCache(ds.Tables["ProcApptColor"]);
+			}
+			if(itypes.Contains((int)InvalidType.WikiMaster) || isAll) {
+				WikiPages.FillCache(ds.Tables["WikiPage"]);
 			}
 			if(itypes.Contains((int)InvalidType.ZipCodes) || isAll) {
 				ZipCodes.FillCache(ds.Tables["ZipCode"]);

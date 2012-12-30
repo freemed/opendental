@@ -44,6 +44,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"Page title cannot start with the underscore character.");
 				return false;
 			}
+			if(textPageTitle.Text.Contains("\"")) {
+				MsgBox.Show(this,"Page title cannot contain double quotes.");
+				return false;
+			}
+			if(textPageTitle.Text.Contains("\r") || textPageTitle.Text.Contains("\n")) {
+				MsgBox.Show(this,"Page title cannot contain carriage return.");//there is also no way to enter one.
+				return false;
+			}
 			if(WikiPages.GetByTitle(textPageTitle.Text)!=null){
 				MsgBox.Show(this,"Page title already exists.");
 				return false;

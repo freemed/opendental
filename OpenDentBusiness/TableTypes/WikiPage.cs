@@ -9,7 +9,7 @@ namespace OpenDentBusiness {
 		public long WikiPageNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
-		///<summary>Must be unique.  The only allowed characters are letters, numbers, and spaces.  When spaces are used, they are replaced with underscores during the translation to html.</summary>
+		///<summary>Must be unique.  Any character is allowed except: \r, \n, and ".  Needs to be tested, especially with apostrophes.</summary>
 		public string PageTitle;
 		///<summary>Content of page stored in "wiki markup language".  This should never be updated.  Medtext (16M)</summary>
 		public string PageContent;
@@ -24,16 +24,7 @@ namespace OpenDentBusiness {
 			return (WikiPage)MemberwiseClone();
 		}
 
-		public WikiPageHist ToWikiPageHist() {
-			WikiPageHist retVal=new WikiPageHist();
-			retVal.WikiPageNum=-1;//todo:handle this -1, shouldn't be a problem since we always get pages by Title.
-			retVal.UserNum=UserNum;
-			retVal.PageTitle=PageTitle;
-			retVal.PageContent=PageContent;
-			retVal.DateTimeSaved=DateTimeSaved;
-			retVal.IsDeleted=false;//we know this becuase wikipages do not exists unless they are not deleted.
-			return retVal;
-		}
+		
 
 	}
 }

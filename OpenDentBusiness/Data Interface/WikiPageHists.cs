@@ -7,45 +7,8 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class WikiPageHists{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all WikiPageHists.</summary>
-		private static List<WikiPageHist> listt;
-
-		///<summary>A list of all WikiPageHists.</summary>
-		public static List<WikiPageHist> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM wikipagehist ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="WikiPageHist";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.WikiPageHistCrud.TableToList(table);
-		}
-		#endregion
-
-		///<summary></summary>
+		///<summary>Ordered by dateTimeSaved.</summary>
 		public static List<WikiPageHist> GetByTitle(string pageTitle){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPageHist>>(MethodBase.GetCurrentMethod(),pageTitle);

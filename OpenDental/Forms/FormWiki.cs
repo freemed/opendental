@@ -69,19 +69,19 @@ if(wpage.IsDeleted) {
 
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"),-1,"","Back"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),-1,Lan.g(this,"Setup master page and styles."),"Setup"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"),0,"","Back"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),1,Lan.g(this,"Setup master page and styles."),"Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),-1,"","Home"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),-1,"","Edit"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),-1,"","Rename"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),-1,"","Delete"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"History"),-1,"","History"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),-1,"","Inc Links"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),2,"","Home"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),3,"","Edit"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),4,"","Rename"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),5,"","Delete"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"History"),6,"","History"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),7,"","Inc Links"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),-1,"","Add"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),-1,"","All Pages"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),-1,"","Search"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),8,"","Add"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),9,"","All Pages"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),10,"","Search"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -167,7 +167,7 @@ if(wpage.IsDeleted) {
 			if(FormWR.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			WikiPages.Rename(WikiPageCur.PageTitle,FormWR.PageTitle);
+			WikiPages.Rename(WikiPageCur,FormWR.PageTitle);
 			LoadWikiPage(FormWR.PageTitle);
 		}
 
