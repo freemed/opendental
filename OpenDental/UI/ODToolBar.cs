@@ -352,7 +352,7 @@ namespace OpenDental.UI{
 			if(!button.Enabled){
 				textColor=SystemColors.GrayText;
 			}
-			if(imageList!=null && button.ImageIndex!=-1){//draw image and text
+			if(imageList!=null && button.ImageIndex!=-1 && button.ImageIndex<imageList.Images.Count){//draw image and text
 				if(!button.Enabled){
 					System.Windows.Forms.ControlPaint.DrawImageDisabled(g,imageList.Images[button.ImageIndex]
 						,button.Bounds.X+3,button.Bounds.Y+1,SystemColors.Control);
