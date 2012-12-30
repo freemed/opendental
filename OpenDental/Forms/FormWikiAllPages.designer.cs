@@ -29,6 +29,7 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.textSearch = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.butBrackets = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -108,10 +109,27 @@ namespace OpenDental{
 			this.label1.Text = "Search";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// butBrackets
+			// 
+			this.butBrackets.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBrackets.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butBrackets.Autosize = true;
+			this.butBrackets.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrackets.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrackets.CornerRadius = 4F;
+			this.butBrackets.Font = new System.Drawing.Font("Courier New",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.butBrackets.Location = new System.Drawing.Point(925,587);
+			this.butBrackets.Name = "butBrackets";
+			this.butBrackets.Size = new System.Drawing.Size(75,24);
+			this.butBrackets.TabIndex = 12;
+			this.butBrackets.Text = "[[  ]]";
+			this.butBrackets.Click += new System.EventHandler(this.butBrackets_Click);
+			// 
 			// FormWikiAllPages
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1012,683);
+			this.Controls.Add(this.butBrackets);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.webBrowserWiki);
@@ -135,5 +153,6 @@ namespace OpenDental{
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.TextBox textSearch;
 		private System.Windows.Forms.Label label1;
+		private UI.Button butBrackets;
 	}
 }

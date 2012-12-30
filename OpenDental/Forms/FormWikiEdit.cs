@@ -16,7 +16,7 @@ namespace OpenDental {
 	public partial class FormWikiEdit:Form {
 		public WikiPage WikiPageCur;
 		private string AggregateContent;
-
+		
 		public FormWikiEdit() {
 			InitializeComponent();
 			Lan.F(this);
@@ -27,7 +27,7 @@ namespace OpenDental {
 			//LayoutToolBar();
 			Text = "Wiki Edit - "+WikiPageCur.PageTitle;
 			textContent.Text=WikiPageCur.PageContent;
-			textContent.SelectionStart=textContent.TextLength;
+			textContent.SelectionStart=textContent.Text.Length;
 			textContent.SelectionLength=0;
 			LoadWikiPage();
 		}
@@ -60,7 +60,7 @@ namespace OpenDental {
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
-			if(!ValidateWikiPage()) {
+			if(!ValidateWikiPage(false)) {
 				return;
 			}
 			webBrowserWiki.AllowNavigation=true;
@@ -79,19 +79,20 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),2,"","Cut"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),3,"","Copy"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),4,"","Paste"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),5,"","Undo"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),5,"","Int Link"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),6,"","Ext Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),6,"","Int Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),7,"","Ext Link"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),7,"","H1"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),8,"","H2"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),9,"","H3"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),10,"","Bold"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),11,"","Italic"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),12,"","Color"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),8,"","H1"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),9,"","H2"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),10,"","H3"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),11,"","Bold"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),12,"","Italic"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),13,"","Color"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),13,"","Table"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),14,"","Image"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),14,"","Table"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),15,"","Image"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -110,6 +111,9 @@ namespace OpenDental {
 					break;
 				case "Paste": 
 					Paste_Click(); 
+					break;
+				case "Undo":
+					Undo_Click();
 					break;
 				case "Int Link": 
 					Int_Link_Click(); 
@@ -144,8 +148,24 @@ namespace OpenDental {
 			}
 		}
 
+		private void menuItemCut_Click(object sender,EventArgs e) {
+			Cut_Click(); 
+		}
+
+		private void menuItemCopy_Click(object sender,EventArgs e) {
+			Copy_Click(); 
+		}
+
+		private void menuItemPaste_Click(object sender,EventArgs e) {
+			Paste_Click();
+		}
+
+		private void menuItemUndo_Click(object sender,EventArgs e) {
+			Undo_Click();
+		}
+
 		private void Save_Click() {
-			if(!ValidateWikiPage()) {
+			if(!ValidateWikiPage(true)) {
 				return;
 			}
 			//WikiPageCur.KeyWords=textKeyWords.Text;
@@ -174,22 +194,28 @@ namespace OpenDental {
 			textContent.Focus();
 		}
 
+		private void Undo_Click() {
+			textContent.Undo();
+			textContent.Focus();
+		}
+
 		private void Int_Link_Click() {
 			int tempStart=textContent.SelectionStart;
 			FormWikiAllPages FormWAPSelect = new FormWikiAllPages();
 			FormWAPSelect.IsSelectMode=true;
 			FormWAPSelect.ShowDialog();
 			if(FormWAPSelect.DialogResult==DialogResult.OK) {
-				textContent.Paste("[["+FormWAPSelect.SelectedWikiPage.PageTitle+"]]");
-				textContent.SelectionStart=tempStart+FormWAPSelect.SelectedWikiPage.PageTitle.Length+4;
-			}
-			else {
-				textContent.Paste("[[]]");
-				textContent.SelectionStart=tempStart+2;
+				if(FormWAPSelect.SelectedWikiPage==null) {
+					textContent.Paste("[[]]");
+					textContent.SelectionStart=tempStart+2;
+				}
+				else {
+					textContent.Paste(("[["+FormWAPSelect.SelectedWikiPage.PageTitle+"]]"));
+					textContent.SelectionStart=tempStart+FormWAPSelect.SelectedWikiPage.PageTitle.Length+4;
+				}
 			}
 			textContent.Focus();
 			textContent.SelectionLength=0;
-
 		}
 
 		private void Ext_Link_Click() {
@@ -246,6 +272,7 @@ namespace OpenDental {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
 			textContent.Paste("<b>"+textContent.SelectedText+"</b>");
+				//.Text=textContent.Text.Substring(0,tempStart)+"<b>"+textContent.SelectedText+"</b>"+textContent.Text.Substring(tempStart+tempLength);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
 				textContent.SelectionStart=tempStart+3;
@@ -320,18 +347,8 @@ namespace OpenDental {
 			//todo
 		}
 
-		private void textContent_KeyPress(object sender,KeyPressEventArgs e) {
-			switch(e.KeyChar) {
-				case (char)Keys.Tab:
-					textContent.Paste("     ");
-					//Tab();
-					e.Handled=true;
-					break;
-			}
-		}
-
-		///<summary>Validates content, and keywords.</summary>
-		private bool ValidateWikiPage() {
+		///<summary>Validates content, and keywords.  isForSaving can be false if just validating for refresh.</summary>
+		private bool ValidateWikiPage(bool isForSaving) {
 			//xml validation----------------------------------------------------------------------------------------------------
 			string s=textContent.Text;
 			s=s.Replace("&<","&lt;");
@@ -361,11 +378,13 @@ namespace OpenDental {
 				MsgBox.Show(this,"Cannot use images in wiki if storing images in database.");
 				return false;
 			}
-			for(int i=0;i<matches.Count;i++) {
-				string imgPath=ODFileUtils.CombinePaths(wikiImagePath,matches[i].Value.Substring(6).Trim(']'));
-				if(!System.IO.File.Exists(imgPath)) {
-					MessageBox.Show("Not allowed to save because file does not exist: "+imgPath);
-					return false;
+			if(isForSaving) {
+				for(int i=0;i<matches.Count;i++) {
+					string imgPath=ODFileUtils.CombinePaths(wikiImagePath,matches[i].Value.Substring(6).Trim(']'));
+					if(!System.IO.File.Exists(imgPath)) {
+						MessageBox.Show("Not allowed to save because file does not exist: "+imgPath);
+						return false;
+					}
 				}
 			}
 			//No pipes inside internal links.  This validation will be necessary during our conversion from our old wiki.--------------------------------
@@ -425,6 +444,12 @@ namespace OpenDental {
 				}
 			}
 		}
+
+	
+
+		
+
+		
 
 		
 		

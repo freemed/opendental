@@ -329,47 +329,17 @@ namespace OpenDentBusiness{
 				}
 				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
 			}
-			/*
-			matches = Regex.Matches(s,@"\*[\S](.|[\r\n][^(\r\n)])+");//(.|[\\n][^\\n])+[\\n][\\n]");
-			foreach(Match match in matches) {
-				string[] tokens = match.Value.Split('*');
-				StringBuilder listBuilder = new StringBuilder();
-				listBuilder.Append("<ul>\r\n");
-				foreach(string listItem in tokens) {
-					if(listItem!="") {
-						listBuilder.Append("<li>"+listItem+"</li>\r\n");
-					}
-				}
-				listBuilder.Append("</ul>\r\n");
-				s=s.Replace(match.Value,listBuilder.ToString());
-			}*/
-			//numbered list----------------------------------------------------------------------------------------------------------------
-			//todo: similar to above.
-			/*
-			matches = Regex.Matches(s,@"#[^(\s|\d)](.|[\r\n][^(\r\n)])+");//^(\\s|\\d) because color codes are being replaced.
-			foreach(Match match in matches) {
-				string[] tokens = match.Value.Split('#');
-				StringBuilder listBuilder = new StringBuilder();
-				listBuilder.Append("<ol>\r\n");
-				foreach(string listItem in tokens) {
-					if(listItem!="") {
-						listBuilder.Append("<li>"+listItem+"</li>\r\n");
-					}
-				}
-				listBuilder.Append("</ol>\r\n");
-				s=s.Replace(match.Value,listBuilder.ToString());
-			}*/
 			//now, we switch to working in xml
-			//////doc=new XmlDocument();
-			//////using(StringReader reader=new StringReader(s)) {
-			//////  try {
-			//////    doc.Load(reader);
-			//////  }
-			//////  catch(Exception ex) {
-			//////    return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
-			//////  }
-			//////}
-			//////XmlNode node=doc.DocumentElement;
+			doc=new XmlDocument();
+			using(StringReader reader=new StringReader(s)) {
+				try {
+					doc.Load(reader);
+				}
+				catch(Exception ex) {
+					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
+				}
+			}
+			XmlNode node=doc.DocumentElement;
 			//It's now time to look for paragraphs.
 			//My basic assumption will be that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
 			//i.e. they are siblings.  They will never be surrounded with <p> tags.
@@ -393,7 +363,7 @@ namespace OpenDentBusiness{
 			//use a regex match to only affect within paragraphs.
 			s=s.Replace("\r\n","<br />");*/
 			//aggregate with master
-			s=MasterPage.PageContent.Replace("@@@Content@@@",s);
+			s=MasterPage.PageContent.Replace("@@@body@@@",s);
 			s=s.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return s;
 		}

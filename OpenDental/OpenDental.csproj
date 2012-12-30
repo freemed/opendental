@@ -2614,6 +2614,12 @@
     <Compile Include="User Controls\ContrFamilyEcw.Designer.cs">
       <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
     </Compile>
+    <Compile Include="User Controls\TextBoxWiki.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\TextBoxWiki.Designer.cs">
+      <DependentUpon>TextBoxWiki.cs</DependentUpon>
+    </Compile>
     <Compile Include="Web References\CallFireService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -4507,6 +4513,9 @@
     <EmbeddedResource Include="User Controls\OutlookBar.resx">
       <DependentUpon>OutlookBar.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Controls\TextBoxWiki.resx">
+      <DependentUpon>TextBoxWiki.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\UserControlTasks.resx">
       <SubType>Designer</SubType>

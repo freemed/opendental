@@ -21,11 +21,10 @@ namespace OpenDental {
 
 		private void FormWikiAllPages_Load(object sender,EventArgs e) {
 			if(IsSelectMode) {
-				//butOK.Text=Lan.g(this,"");
-				butCancel.Font=new Font(FontFamily.GenericMonospace,butCancel.Font.Size);
-				butCancel.Text=Lan.g(this,"[[   ]]");
+
 			}
 			else{
+				butBrackets.Visible=false;
 				butOK.Visible=false;
 				butCancel.Text=Lan.g(this,"Close");
 			}
@@ -98,6 +97,12 @@ namespace OpenDental {
 		}
 
 		/// <summary>Only visible if IsSelect.</summary>
+		private void butBrackets_Click(object sender,EventArgs e) {
+			SelectedWikiPage=null;
+			DialogResult=DialogResult.OK;
+		}
+
+		/// <summary>Only visible if IsSelect.</summary>
 		private void butOK_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select a page first.");
@@ -110,6 +115,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 
