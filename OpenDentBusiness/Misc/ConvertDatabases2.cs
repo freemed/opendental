@@ -11604,13 +11604,64 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
 					+"0,"//no usernum set for the first 3 pages
 					+"'_Master',"	
-					+"'"+POut.String(@"<!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
-<html xmlns=""http://www.w3.org/1999/xhtml"">
+					+"'"+POut.String(@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"" ""http://www.w3.org/TR/html4/loose.dtd"">
 <head>
 <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
 <style type=""text/css"">
 <!--
-@@@Style@@@
+*{
+	border: 0px;
+	margin: 0px;
+}
+body{
+	margin:		3px;
+	font-size:	10pt;
+	font-family:	arial,sans-serif;
+}
+p{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+h1, h1 a{
+	font-size:20pt;
+	color:#005677;
+}
+h2, h2 a {
+	font-size:16pt;
+	color:#005677;
+}
+h3, h3 a {
+	font-size:12pt;
+	color:#005677;
+}
+ol{
+	margin-left:15px; /*this is critical to show the numbers*/
+}
+ul{
+	margin-left:15px; /*this is critical to show the bullets*/
+}
+a{
+	color:	#343C83;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+table, th, td, tr {
+	border-collapse:collapse;
+	border:1px solid #000000;
+	padding:2px;
+}
+.PageNotExists, a.PageNotExists {
+	border-bottom:1px dashed #000000;
+}
+a.PageNotExists:hover {
+	border-bottom:1px solid #000000;
+	text-decoration:none;
+}
+.keywords, a.keywords:hover {
+	
+}
 -->
 </style>
 </head>
@@ -11639,69 +11690,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				}
 				command+="0)";
 				Db.NonQ(command);
-				//syle sheet
-				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
-					+"0,"
-					+"'_Style',"	
-					+"'"+POut.String(@"
-*{
-	border: 0px;
-	margin: 0px;
-}
-body{
-	margin:		3px;
-	font-size:	10pt;
-	font-family:	arial,sans-serif;
-}
-h1, h1 a{
-	font-size:20pt;
-	color:#005677;
-}
-h2, h2 a {
-	font-size:16pt;
-	color:#005677;
-}
-h3, h3 a {
-	font-size:12pt;
-	color:#005677;
-}
-ol{
-	
-}
-ul{
-	
-}
-a{
-	color:	#343C83;
-	text-decoration:none;
-}
-a:hover{
-	text-decoration:underline;
-}
-table, th, td, tr {
-	border-collapse:collapse;
-	border:1px solid #000000;
-	padding:2px;
-}
-.PageNotExists, a.PageNotExists {
-	border-bottom:1px dashed #000000;
-}
-a.PageNotExists:hover {
-	border-bottom:1px solid #000000;
-	text-decoration:none;
-}
-.keywords, a.keywords:hover {
-	
-}
-")+"',";
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					command+="SYSDATE,";
-				}
-				else {
-					command+="NOW(),";
-				}
-				command+="0)";
-				Db.NonQ(command);
+				
 
 
 

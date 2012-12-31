@@ -9,8 +9,6 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWikiSetup:Form {
-		private WikiPage MasterPage;
-		private WikiPage StyleSheet;
 
 		public FormWikiSetup() {
 			InitializeComponent();
@@ -18,19 +16,14 @@ namespace OpenDental {
 		}
 
 		private void FormWikiSetup_Load(object sender,EventArgs e) {
-			MasterPage=WikiPages.GetByTitle("_Master");
-			StyleSheet=WikiPages.GetByTitle("_Style");
-			textMaster.Text=MasterPage.PageContent;
-			textStyle.Text=StyleSheet.PageContent;
+			textMaster.Text=WikiPages.MasterPage.PageContent;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			MasterPage.PageContent=textMaster.Text;
-			MasterPage.UserNum=Security.CurUser.UserNum;
-			WikiPages.InsertAndArchive(MasterPage);
-			StyleSheet.PageContent=textStyle.Text;
-			StyleSheet.UserNum=Security.CurUser.UserNum;
-			WikiPages.InsertAndArchive(StyleSheet);
+			WikiPage masterPage=WikiPages.MasterPage;
+			masterPage.PageContent=textMaster.Text;
+			masterPage.UserNum=Security.CurUser.UserNum;
+			WikiPages.InsertAndArchive(masterPage);
 			DataValid.SetInvalid(InvalidType.WikiMaster);
 			DialogResult=DialogResult.OK;
 		}

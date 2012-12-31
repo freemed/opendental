@@ -17,8 +17,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static WikiPage masterPage;
-		///<summary></summary>
-		private static WikiPage styleSheet;
 
 		///<summary></summary>
 		public static WikiPage MasterPage {
@@ -34,22 +32,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static WikiPage StyleSheet {
-			get {
-				if(styleSheet==null) {
-					RefreshCache();
-				}
-				return styleSheet;
-			}
-			set {
-				styleSheet=value;
-			}
-		}
-
-		///<summary></summary>
 		public static DataTable RefreshCache() {
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM wikipage WHERE PageTitle='_Style' OR PageTitle='_Master'";
+			string command="SELECT * FROM wikipage WHERE PageTitle='_Master'";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="WikiPage";
 			FillCache(table);
@@ -59,15 +44,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
-			List<WikiPage> listPages=Crud.WikiPageCrud.TableToList(table);
-			for(int i=0;i<listPages.Count;i++) {
-				if(listPages[i].PageTitle=="_Master") {
-					masterPage=listPages[i];
-				}
-				if(listPages[i].PageTitle=="_Style") {
-					styleSheet=listPages[i];
-				}
-			}
+			masterPage=Crud.WikiPageCrud.TableToList(table)[0];
 		}
 		#endregion CachePattern
 
@@ -273,7 +250,7 @@ namespace OpenDentBusiness{
 					if(lines[i].Trim().StartsWith("*")) {//we found the first line of an UL.
 						blockOriginal=lines[i]+"\r\n";
 						strb=new StringBuilder();
-						strb.Append("<ul>\r\n");
+						strb.Append("<p><ul>\r\n");
 						strb.Append("<li>");
 						//handle leading spaces later (not very important)
 						string curline=lines[i];
@@ -298,7 +275,7 @@ namespace OpenDentBusiness{
 						strb.Append("</li>\r\n");
 					}
 					else {//end of list.  The previous line was the last line.
-						strb.Append("</ul>\r\n");
+						strb.Append("</ul></p>\r\n");
 						s=s.Replace(blockOriginal,strb.ToString());
 						blockOriginal=null;
 					}
@@ -391,9 +368,10 @@ namespace OpenDentBusiness{
 			using(XmlWriter writer=XmlWriter.Create(strbOut,settings)) {
 				doc.WriteTo(writer);
 			}
+			//spaces can't be handled until this point unless I figure out why &nbsp; crashes the xml parser.
+			strbOut.Replace("<p></p>","<p>&nbsp;</p>");
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
-			s=s.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return s;
 		}
 
