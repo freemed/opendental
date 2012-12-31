@@ -31,12 +31,14 @@
 			this.textBoxMain.AcceptsReturn = true;
 			this.textBoxMain.AcceptsTab = true;
 			this.textBoxMain.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.textBoxMain.Font = new System.Drawing.Font("Courier New",9F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textBoxMain.Location = new System.Drawing.Point(0,0);
 			this.textBoxMain.Multiline = true;
 			this.textBoxMain.Name = "textBoxMain";
 			this.textBoxMain.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBoxMain.Size = new System.Drawing.Size(150,150);
 			this.textBoxMain.TabIndex = 0;
+			this.textBoxMain.Text = "this is a test";
 			this.textBoxMain.DoubleClick += new System.EventHandler(this.textBoxMain_DoubleClick);
 			this.textBoxMain.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMain_KeyPress);
 			this.textBoxMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBoxMain_MouseDown);

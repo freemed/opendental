@@ -195,6 +195,9 @@ namespace OpenDental {
 		}
 
 		private void textBoxMain_MouseDown(object sender,MouseEventArgs e) {
+			if((e.Button & MouseButtons.Left) != MouseButtons.Left) {
+				return;
+			}
 			//unfortunately, by the time this fires, the text is already deselected, but we remembered it
 			if(SelectionLengthMem==0) {
 				return;

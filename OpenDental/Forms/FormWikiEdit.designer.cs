@@ -29,13 +29,14 @@ namespace OpenDental{
 			this.butRefresh = new OpenDental.UI.Button();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
-			this.textContent = new TextBoxWiki();
+			this.textContent = new OpenDental.TextBoxWiki();
 			this.contextMenuMain = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.menuItemCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuItemUndo = new System.Windows.Forms.ToolStripMenuItem();
+			this.textNumbers = new System.Windows.Forms.TextBox();
 			this.contextMenuMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -101,9 +102,12 @@ namespace OpenDental{
 			// textContent
 			// 
 			this.textContent.ContextMenuStrip = this.contextMenuMain;
-			this.textContent.Location = new System.Drawing.Point(0,31);
+			this.textContent.Location = new System.Drawing.Point(28,31);
 			this.textContent.Name = "textContent";
-			this.textContent.Size = new System.Drawing.Size(470,542);
+			this.textContent.SelectedText = "";
+			this.textContent.SelectionLength = 0;
+			this.textContent.SelectionStart = 0;
+			this.textContent.Size = new System.Drawing.Size(442,542);
 			this.textContent.TabIndex = 80;
 			// 
 			// contextMenuMain
@@ -150,11 +154,25 @@ namespace OpenDental{
 			this.menuItemUndo.Text = "Undo";
 			this.menuItemUndo.Click += new System.EventHandler(this.menuItemUndo_Click);
 			// 
+			// textNumbers
+			// 
+			this.textNumbers.Font = new System.Drawing.Font("Courier New",9F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textNumbers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))),((int)(((byte)(117)))),((int)(((byte)(133)))));
+			this.textNumbers.Location = new System.Drawing.Point(0,31);
+			this.textNumbers.Multiline = true;
+			this.textNumbers.Name = "textNumbers";
+			this.textNumbers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNumbers.Size = new System.Drawing.Size(46,542);
+			this.textNumbers.TabIndex = 81;
+			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
+			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(944,573);
 			this.Controls.Add(this.textContent);
+			this.Controls.Add(this.textNumbers);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.ToolBarMain);
@@ -184,6 +202,7 @@ namespace OpenDental{
 		private System.Windows.Forms.ToolStripMenuItem menuItemPaste;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem menuItemUndo;
+		private System.Windows.Forms.TextBox textNumbers;
 
 	}
 }

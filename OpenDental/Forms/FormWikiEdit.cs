@@ -29,7 +29,20 @@ namespace OpenDental {
 			textContent.Text=WikiPageCur.PageContent;
 			textContent.SelectionStart=textContent.Text.Length;
 			textContent.SelectionLength=0;
+			string[] strArray=new string[1];
+			strArray[0]="\r\n";
+			int rowCount=textContent.Text.Split(strArray,StringSplitOptions.None).Length;
+			FillNumbers(rowCount);
 			LoadWikiPage();
+		}
+
+		private void FillNumbers(int rowCount) {
+			StringBuilder strb=new StringBuilder();
+			for(int i=0;i<rowCount+10;i++) {
+				strb.Append(i.ToString());
+				strb.Append("\r\n");
+			}
+			textNumbers.Text=strb.ToString();
 		}
 
 		private void LoadWikiPage() {
@@ -38,11 +51,13 @@ namespace OpenDental {
 
 		private void ResizeControls() {
 			int topborder=30;
+			//textNumbers resize
+			textNumbers.Height=ClientSize.Height-topborder;
 			//text resize
 			textContent.Top=topborder;
 			textContent.Height=ClientSize.Height-topborder;
-			textContent.Left=0;
-			textContent.Width=ClientSize.Width/2-2;
+			textContent.Left=28;
+			textContent.Width=ClientSize.Width/2-2-textContent.Left;
 			//Browser resize
 			webBrowserWiki.Top=topborder;
 			webBrowserWiki.Height=ClientSize.Height-topborder;

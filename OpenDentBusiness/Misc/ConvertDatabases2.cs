@@ -11643,78 +11643,57 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
 					+"0,"
 					+"'_Style',"	
-					+"'"+POut.String(@"<style type=""text/css"">
-	*{
-		color: #000000;
-		border: 0px;
-		margin: 0px;
-		padding: 0px;
-	}
-	body, h1, h2, h3, p{
-		border:		0px;
-		margin:		0px;
-		margin-right:	10px;
-		margin-left:	10px;
-		padding:	0px;
-		padding-bottom:	1px;
-		font-size:	10pt;
-		text-decoration:none;
-		font-weight:	normal;
-		font-family:	arial,sans-serif;
-	}
-	ol{
-		border: 0px;
-		margin-top:0px;
-		margin-bottom:0px;
-		margin-left:27px;
-		margin-right:0px;
-		padding: 0px;
-	}
-	ul{
-		border: 0px;
-		margin-top:0px;
-		margin-bottom:0px;
-		margin-left:20px;
-		margin-right:0px;
-		padding: 0px;
-	}
-	a{
-		color:	#343C83;
-		text-decoration:none;
-	}
-	a:hover{
-		text-decoration:underline;
-	}
-	h1, h1 a{
-		font-size:20pt;
-		color:#005677;
-	}
-	h2, h2 a {
-		font-size:16pt;
-		color:#005677;
-	}
-	h3, h3 a {
-		font-size:12pt;
-		color:#005677;
-	}
-	table, th, td, tr {
-		border-collapse:collapse;
-		border:1px solid #000000;
-		padding:2px;
-	}
-	.PageNotExists, a.PageNotExists {
-		border-bottom:1px dashed #000000;
-	}
-	a.PageNotExists:hover {
-		border-bottom:1px solid #000000;
-		text-decoration:none;
-	}
-	.keywords, a.keywords:hover {
-		display:block;
-		color:#FFFFFF;
-		background-color:teal;
-	}
-</style>")+"',";
+					+"'"+POut.String(@"
+*{
+	border: 0px;
+	margin: 0px;
+}
+body{
+	margin:		3px;
+	font-size:	10pt;
+	font-family:	arial,sans-serif;
+}
+h1, h1 a{
+	font-size:20pt;
+	color:#005677;
+}
+h2, h2 a {
+	font-size:16pt;
+	color:#005677;
+}
+h3, h3 a {
+	font-size:12pt;
+	color:#005677;
+}
+ol{
+	
+}
+ul{
+	
+}
+a{
+	color:	#343C83;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+table, th, td, tr {
+	border-collapse:collapse;
+	border:1px solid #000000;
+	padding:2px;
+}
+.PageNotExists, a.PageNotExists {
+	border-bottom:1px dashed #000000;
+}
+a.PageNotExists:hover {
+	border-bottom:1px solid #000000;
+	text-decoration:none;
+}
+.keywords, a.keywords:hover {
+	
+}
+")+"',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command+="SYSDATE,";
 				}

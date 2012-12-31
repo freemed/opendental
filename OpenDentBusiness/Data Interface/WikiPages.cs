@@ -236,13 +236,10 @@ namespace OpenDentBusiness{
 					doc.Load(reader);
 				}
 				catch(Exception ex) {
-					return MasterPage.PageContent.Replace("@@@Content@@@",ex.Message);
+					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
 				}
-			}
-			//Ryan, feel free to do minor debugging.  I didn't test any of this.
-			
-			//(foreach is ok for Matches, as you used them below.  That's one of the exceptions.)
-
+			}	
+//Ryan, foreach is ok for Matches, as you used them below.  That's one of the exceptions.
 			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
 			MatchCollection matches;
 			matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
@@ -340,32 +337,95 @@ namespace OpenDentBusiness{
 				}
 			}
 			XmlNode node=doc.DocumentElement;
-			//It's now time to look for paragraphs.
-			//My basic assumption will be that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
+			//It's time to look for paragraphs.
+			//The basic assumption is that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
 			//i.e. they are siblings.  They will never be surrounded with <p> tags.
 			//On the other hand, <b>, <i>, <a>, and <span> tags are always internal to others, including <p>, <h123>, <table>, <ol>, and <ul>.
 			//<br> tags will only be found within <p> (and <table>?)
-			//for(int i=0;i<node.ChildNodes.Count;i++) {
-
-			//}
-			
-
-
-			/*
-			//<p>
-			//double carriage returns have already been stripped out for lists.
-			s=s.Replace("\r\n\r\n","</p>\r\n<p>");
-			s=s.Replace("<p></p>","<p>&nbsp;</p>");//so that empty paragraphs will show up.
-			//"     "(tabs) and double spaces.
-			s=s.Replace("  ","&nbsp;&nbsp;");//because single space should always show in html.
-			//s=s.Replace("     ","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;").Replace("  ","&nbsp;&nbsp;");
-			//<br />
-			//use a regex match to only affect within paragraphs.
-			s=s.Replace("\r\n","<br />");*/
+			StringBuilder strb2=new StringBuilder();
+			strb2.Append("<body>");
+			string myParagraph="";
+			for(int i=0;i<node.ChildNodes.Count;i++) {
+				if(node.ChildNodes[i].NodeType==XmlNodeType.Element){
+					if(node.ChildNodes[i].Name=="b"
+						|| node.ChildNodes[i].Name=="i"
+						|| node.ChildNodes[i].Name=="a"
+						|| node.ChildNodes[i].Name=="span") 
+					{
+						myParagraph+=node.ChildNodes[i].OuterXml;
+					}
+					else {//<h123>, <image>, <table>, <ol>, and <ul>
+						if(myParagraph!="") {
+							myParagraph=ProcessParagraph(myParagraph);
+							strb2.Append(myParagraph);
+							myParagraph="";//reset
+						}
+						strb2.Append(node.ChildNodes[i].OuterXml);
+					}
+				}
+				else if(node.ChildNodes[i].NodeType==XmlNodeType.Text) {
+					myParagraph+=node.ChildNodes[i].OuterXml;
+				}
+				//there shouldn't be any more types.
+			}
+			if(myParagraph!="") {//the last paragraph was not yet added
+				myParagraph=ProcessParagraph(myParagraph);
+				strb2.Append(myParagraph);
+			}
+			strb2.Append("</body>");
+			doc=new XmlDocument();
+			using(StringReader reader=new StringReader(strb2.ToString())) {
+				try {
+					doc.Load(reader);
+				}
+				catch(Exception ex) {
+					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
+				}
+			}
+			StringBuilder strbOut=new StringBuilder();
+			XmlWriterSettings settings=new XmlWriterSettings();
+			settings.Indent=true;
+			settings.IndentChars="    ";
+			settings.OmitXmlDeclaration=true;
+			settings.NewLineChars="\r\n";
+			using(XmlWriter writer=XmlWriter.Create(strbOut,settings)) {
+				doc.WriteTo(writer);
+			}
 			//aggregate with master
-			s=MasterPage.PageContent.Replace("@@@body@@@",s);
+			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
 			s=s.Replace("@@@Style@@@",StyleSheet.PageContent);
 			return s;
+		}
+
+		///<summary>The value passed in will not include wrapping p tags.</summary>
+		private static string ProcessParagraph(string paragraph) {
+			//strip leading and trailing CRs off of these paragraphs to avoid weird BRs.
+			//This is only preliminary and will soon be tweaked. For example: 6 intentional CRs at the end.  h1 follows.  Shouldn't strip them off.
+			while(true) {
+				if(paragraph.StartsWith("\r")
+					|| paragraph.StartsWith("\n"))
+				{
+					paragraph=paragraph.Substring(1);
+				}
+				else if(paragraph.EndsWith("\r")
+					|| paragraph.EndsWith("\n"))
+				{
+					paragraph=paragraph.Substring(0,paragraph.Length-1);
+				}
+				else{
+					break;
+				}
+			}
+			paragraph="<p>"+paragraph+"</p>";
+			paragraph=paragraph.Replace("\r\n","</p><p>");
+			//this line might cause bugs, so I'm removing it for now
+			//paragraph=paragraph.Replace("<p></p>","<p>&nbsp;</p>");//so that empty paragraphs will show
+			//no need for this under the new strategy.
+			//paragraph=paragraph.Replace("\r\n","<br />");
+			//this line was causing bugs
+			//paragraph=paragraph.Replace("  ","&nbsp;&nbsp;");//because single space should always show in html.
+			//todo: enhance and debug. Also, spaces and carriage returns within other elements.
+			return paragraph;
 		}
 
 		///<summary>Creates historical entry of deletion into wikiPageHist, and deletes current page from WikiPage.</summary>
