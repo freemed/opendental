@@ -3277,8 +3277,10 @@ namespace OpenDental {
 			boolAptMoved=false;
 			TempApptSingle.Dispose();
 			List<string> procCodes=new List<string>();
-			for(int i=0;i<procsForSingleApt.Count;i++) {
-				procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
+			if(procsForSingleApt!=null) {
+				for(int i=0;i<procsForSingleApt.Count;i++) {
+					procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
+				}
 			}
 			Recalls.SynchScheduledApptLazy(apt.PatNum,apt.AptDateTime,procCodes);
 		}
