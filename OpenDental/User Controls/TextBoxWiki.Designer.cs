@@ -40,6 +40,7 @@
 			this.textBoxMain.TabIndex = 0;
 			this.textBoxMain.Text = "this is a test";
 			this.textBoxMain.DoubleClick += new System.EventHandler(this.textBoxMain_DoubleClick);
+			this.textBoxMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxMain_KeyDown);
 			this.textBoxMain.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMain_KeyPress);
 			this.textBoxMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.textBoxMain_MouseDown);
 			this.textBoxMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.textBoxMain_MouseMove);

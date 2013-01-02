@@ -11681,11 +11681,17 @@ h3, h3 a {
 	font-size:12pt;
 	color:#005677;
 }
-ol{
-	margin-left:15px; /*this is critical to show the numbers*/
-}
 ul{
-	margin-left:15px; /*this is critical to show the bullets*/
+	list-style-position: inside;/*This puts the bullets inside the div rect instead of outside*/
+}
+ol{
+	list-style-position: inside;
+}
+ul .ListItemContent{
+	position: relative; left: -5px;/*Tightens up the spacing between bullets and text*/
+}
+ol .ListItemContent{
+	position: relative; left: -1px;/*Tightens up the spacing between numbers and text*/
 }
 a{
 	color:	#343C83;
@@ -11707,7 +11713,8 @@ a.PageNotExists:hover {
 	text-decoration:none;
 }
 .keywords, a.keywords:hover {
-	
+	color:#000000;
+	background-color:#eeeeee;
 }
 -->
 </style>

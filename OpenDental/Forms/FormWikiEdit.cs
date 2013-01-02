@@ -38,7 +38,7 @@ namespace OpenDental {
 
 		private void FillNumbers(int rowCount) {
 			StringBuilder strb=new StringBuilder();
-			for(int i=0;i<rowCount+10;i++) {
+			for(int i=1;i<rowCount+10;i++) {
 				strb.Append(i.ToString());
 				strb.Append("\r\n");
 			}
@@ -64,7 +64,7 @@ namespace OpenDental {
 			webBrowserWiki.Left=ClientSize.Width/2+2;
 			webBrowserWiki.Width=ClientSize.Width/2-2;
 			//Toolbar resize
-			ToolBarMain.Width=butRefresh.Left-ToolBarMain.Left-5;//ClientSize.Width/2-2;
+			ToolBarMain.Width=ClientSize.Width;
 			LayoutToolBar();
 			//Button move
 			//butRefresh.Left=ClientSize.Width/2+2;
@@ -74,44 +74,42 @@ namespace OpenDental {
 			ResizeControls();
 		}
 
-		private void butRefresh_Click(object sender,EventArgs e) {
-			if(!ValidateWikiPage(false)) {
-				return;
-			}
-			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage();
-		}
-
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
 			webBrowserWiki.AllowNavigation=false;
 		}
 
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save"),0,"","Save"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cancel"),1,"","Cancel"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"),0,"","Refresh"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save"),1,"","Save"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cancel"),2,"","Cancel"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),2,"","Cut"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),3,"","Copy"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),4,"","Paste"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),5,"","Undo"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),3,"","Cut"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),4,"","Copy"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),5,"","Paste"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),6,"","Undo"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),6,"","Int Link"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),7,"","Ext Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),7,"","Int Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"File"),7,"","File Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Folder"),7,"","Folder Link"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),8,"","Ext Link"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),8,"","H1"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),9,"","H2"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),10,"","H3"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),11,"","Bold"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),12,"","Italic"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),13,"","Color"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),9,"","H1"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),10,"","H2"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),11,"","H3"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),12,"","Bold"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),13,"","Italic"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),14,"","Color"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),14,"","Table"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),15,"","Image"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),15,"","Table"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),16,"","Image"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			switch(e.Button.Tag.ToString()) {
+				case "Refresh":
+					Refresh_Click();
+					break;
 				case "Save":
 					Save_Click();
 					break;
@@ -132,6 +130,12 @@ namespace OpenDental {
 					break;
 				case "Int Link": 
 					Int_Link_Click(); 
+					break;
+				case "File Link":
+					File_Link_Click();
+					break;
+				case "Folder Link":
+					Folder_Link_Click();
 					break;
 				case "Ext Link": 
 					Ext_Link_Click(); 
@@ -177,6 +181,14 @@ namespace OpenDental {
 
 		private void menuItemUndo_Click(object sender,EventArgs e) {
 			Undo_Click();
+		}
+
+		private void Refresh_Click() {
+			if(!ValidateWikiPage(false)) {
+				return;
+			}
+			webBrowserWiki.AllowNavigation=true;
+			LoadWikiPage();
 		}
 
 		private void Save_Click() {
@@ -231,6 +243,14 @@ namespace OpenDental {
 			}
 			textContent.Focus();
 			textContent.SelectionLength=0;
+		}
+
+		private void File_Link_Click() {
+			
+		}
+
+		private void Folder_Link_Click() {
+
 		}
 
 		private void Ext_Link_Click() {
@@ -398,6 +418,30 @@ namespace OpenDental {
 					string imgPath=ODFileUtils.CombinePaths(wikiImagePath,matches[i].Value.Substring(6).Trim(']'));
 					if(!System.IO.File.Exists(imgPath)) {
 						MessageBox.Show("Not allowed to save because file does not exist: "+imgPath);
+						return false;
+					}
+				}
+			}
+			//spacing around bullets-----------------------------------------------------------------------------------------------
+			string[] lines=textContent.Text.Split(new string[] { "\r\n" },StringSplitOptions.None);
+			for(int i=0;i<lines.Length;i++) {
+				if(lines[i].Trim().StartsWith("*")) {
+					if(!lines[i].StartsWith("*")) {
+						MsgBox.Show(this,"Stars used for lists may not have a space before them.");
+						return false;
+					}
+					if(lines[i].Trim().StartsWith("* ")) {
+						MsgBox.Show(this,"Stars used for lists may not have a space after them.");
+						return false;
+					}
+				}
+				if(lines[i].Trim().StartsWith("#")) {
+					if(!lines[i].StartsWith("#")) {
+						MsgBox.Show(this,"Hashes used for lists may not have a space before them.");
+						return false;
+					}
+					if(lines[i].Trim().StartsWith("# ")) {
+						MsgBox.Show(this,"Hashes used for lists may not have a space after them.");
 						return false;
 					}
 				}

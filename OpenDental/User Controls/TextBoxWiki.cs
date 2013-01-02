@@ -186,10 +186,39 @@ namespace OpenDental {
 		}
 
 		private void textBoxMain_KeyPress(object sender,KeyPressEventArgs e) {
+			//this even wasn't firing for the Delete key.
+			/*
 			switch(e.KeyChar) {
+				case (char)Keys.ControlKey:
+				case (char)Keys.ShiftKey:
+					//don't reset the SelectionLengthMem to 0 because the text has not be deselected yet.
+					break;
+				default:
+					SelectionLengthMem=0;//typing a char such as backspace is a common way to move from selected text to a state where no text is selected. 
+					break;
 				case (char)Keys.Tab:
 					textBoxMain.Paste("     ");
-					e.Handled=true;
+					SelectionLengthMem=0;
+					e.Handled=true;//don't allow the tab char to go into the texbox
+					break;
+			}*/
+		}
+
+		private void textBoxMain_KeyDown(object sender,KeyEventArgs e) {
+			//the KeyPress event was useless because it wasn't even firing for the Delete key.
+			switch(e.KeyCode) {
+				case Keys.ControlKey:
+				case Keys.ShiftKey:
+					//don't reset the SelectionLengthMem to 0 because the text has not be deselected yet.
+					break;
+				default:
+					SelectionLengthMem=0;//typing a char such as backspace is a common way to move from selected text to a state where no text is selected. 
+					break;
+				case Keys.Tab:
+					textBoxMain.Paste("     ");
+					SelectionLengthMem=0;
+					e.SuppressKeyPress=true;//or use this?
+					//e.Handled=true;//don't allow the tab char to go into the texbox
 					break;
 			}
 		}
@@ -202,6 +231,7 @@ namespace OpenDental {
 			if(SelectionLengthMem==0) {
 				return;
 			}
+			//some text must have been selected already, and we need to decide whether we are going to try to drag the selected text.
 			if(textBoxMain.GetCharIndexFromPosition(e.Location)<SelectionStartMem) {
 				return;//clicked on a point before the selected text
 			}
@@ -276,6 +306,8 @@ namespace OpenDental {
 			}
 		}
 		#endregion Events
+
+		
 
 		
 

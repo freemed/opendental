@@ -202,6 +202,7 @@ namespace OpenDentBusiness{
 		///<summary>Also aggregates the content into the master page.</summary>
 		public static string TranslateToXhtml(string wikiContent) {
 			//No need to check RemotingRole; no call to db.
+			#region Basic Xml Validation
 			string s=wikiContent;
 			//"<" and ">"-----------------------------------------------------------------------------------------------------------
 			s=s.Replace("&<","&lt;");
@@ -215,8 +216,10 @@ namespace OpenDentBusiness{
 				catch(Exception ex) {
 					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
 				}
-			}	
-//Ryan, foreach is ok for Matches, as you used them below.  That's one of the exceptions.
+			}
+			#endregion
+			//Ryan, foreach is ok for Matches, as you used them below.  That's one of the exceptions.
+			#region regex replacements
 			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
 			MatchCollection matches;
 			matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
@@ -241,48 +244,10 @@ namespace OpenDentBusiness{
 			}
 			//Unordered List----------------------------------------------------------------------------------------------------------------
 			//Instead of using a regex, this will hunt through the rows in sequence.
-			//This is going to be critical as this section gets more complex with nesting and mixing.
-			string[] lines=s.Split(new string[]{"\r\n"},StringSplitOptions.None);//includes empty elements
-			string blockOriginal=null;//once a list is found, this string will be filled with the original text.
-			StringBuilder strb=null;//this will contain the final output enclosed in <ul> tags.
-			for(int i=0;i<lines.Length;i++) {
-				if(blockOriginal==null) {//we are still hunting for the first line of an UL.
-					if(lines[i].Trim().StartsWith("*")) {//we found the first line of an UL.
-						blockOriginal=lines[i]+"\r\n";
-						strb=new StringBuilder();
-						strb.Append("<p><ul>\r\n");
-						strb.Append("<li>");
-						//handle leading spaces later (not very important)
-						string curline=lines[i];
-						curline=curline.Remove(lines[i].IndexOf("*"),1);//for now, we will just remove the first * that we find.
-						curline=curline.Replace("  ","&nbsp;&nbsp;");//handle extra spaces.  This is the only place we will do this for <ul>.  We will improve it later.
-						strb.Append(curline);
-						strb.Append("</li>\r\n");
-					}
-					else {//no list
-						//nothing to do
-					}
-				}
-				else {//we are already building our list
-					if(lines[i].Trim().StartsWith("*")) {//we found another line of an UL.  Could be a middle line or the last line.
-						blockOriginal+=lines[i]+"\r\n";
-						strb.Append("<li>");
-						//handle leading spaces later (not very important)
-						string curline=lines[i];
-						curline=curline.Remove(lines[i].IndexOf("*"),1);//for now, we will just remove the first * that we find.
-						curline=curline.Replace("  ","&nbsp;&nbsp;");//handle extra spaces.  This is the only place we will do this for <ul>.  We will improve it later.
-						strb.Append(curline);
-						strb.Append("</li>\r\n");
-					}
-					else {//end of list.  The previous line was the last line.
-						strb.Append("</ul></p>\r\n");
-						s=s.Replace(blockOriginal,strb.ToString());
-						blockOriginal=null;
-					}
-				}
-			}
+			//later nesting by running ***, then **, then *
+			s=ProcessList(s,"*");
 			//numbered list---------------------------------------------------------------------------------------------------------------------
-			//todo: similar to above.
+			s=ProcessList(s,"#");
 			//{{color|red|text}}----------------------------------------------------------------------------------------------------------------
 			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
 			foreach(Match match in matches) {
@@ -303,6 +268,111 @@ namespace OpenDentBusiness{
 				}
 				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
 			}
+			#endregion regex replacements
+			#region paragraph grouping
+			StringBuilder strbSnew=new StringBuilder();
+			strbSnew.Append("<body>");
+			StringBuilder strbThisP=new StringBuilder();//used to accumulate paragraphs.  Might use iScanning instead.
+			//a paragraph is defined as all text between sibling tags, even if just a \r\n.
+			int iScanInParagraph=0;//scan starting at the beginning of s.  S gets chopped from the start each time we grab a paragraph or a sibiling element.
+			//The scanning position represents the verified paragraph content, and does not advance beyond that.
+			//move <body> tag over.
+			strbSnew.Append("<body>");
+			s=s.Substring(6);
+//todo: handle one leading CR if there is no text preceding it.
+			string tagName;
+			while(true) {//loop to either construct a paragraph, or to immediately add the next tag to strbSnew.
+				iScanInParagraph=s.IndexOf("<",iScanInParagraph);//Advance the scanner to the start of the next tag
+				if(iScanInParagraph==-1) {//there aren't any more tags, so current paragraph goes to end of string.  This won't happen
+					throw new ApplicationException("No tags found.");
+					//strbSnew.Append(ProcessParagraph(s));
+				}
+				if(s.Substring(iScanInParagraph).StartsWith("</body>")) {
+					strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph)));
+					strbSnew.Append("</body>");
+					s="";
+					iScanInParagraph=0;
+					break;
+				}
+				tagName="";
+				if(s.Substring(iScanInParagraph).StartsWith("<b")) {
+					tagName="b";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<i")) {
+					tagName="i";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<a")) {
+					tagName="a";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<span")) {
+					tagName="span";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<ul")) {
+					tagName="ul";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<ol")) {
+					tagName="ol";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<h1")) {
+					tagName="h1";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<h2")) {
+					tagName="h2";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<h3")) {
+					tagName="h3";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<img")) {
+					tagName="img";
+				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
+					tagName="table";
+				}
+				else {
+					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+				}
+				if(tagName=="b" || tagName=="i" || tagName=="a" || tagName=="span"){			
+					//scan to the ending tag because this is paragraph content.
+					iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
+					//we are still within the paragraph, so loop to keep looking for the end.
+				}
+				else{
+					//the found tag is the beginning of some sibling element such as a list or table.
+					if(iScanInParagraph==0) {//s starts with a non-paragraph tag, so there is no partially assembled paragraph to process.
+						//do nothing
+					}
+					else {//we are already part way into assembling a paragraph.  
+						strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph)));
+						s=s.Substring(iScanInParagraph);//chop off start of s
+						iScanInParagraph=0;
+					}
+					//scan to the end of this element
+					int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
+					//move the non-paragraph content over to s new.
+					strbSnew.Append(s.Substring(0,iScanSibling));
+					s=s.Substring(iScanSibling);
+					//scanning will start a totally new paragraph
+				}
+			}
+			strbSnew.Append("</body>");
+			#endregion
+			#region faulty paragraph grouping
+			/*This mostly works, but has at least one critical bug that requires a different approach
+			//any line that is just blank with \r\n needs to have a <p> tag so that it won't disappear when we switch to xml
+			string[] lines=s.Split(new string[] { "\r\n" },StringSplitOptions.None);//includes empty elements
+			StringBuilder strbEmptyLines=new StringBuilder();
+			for(int i=0;i<lines.Length;i++) {
+				if(lines[i]=="") {
+					strbEmptyLines.AppendLine("<p>[[nbsp]]</p>");//because &nbsp; doesn't work in xml.  This gets converted to &nbsp; further down.
+				}
+				else if(lines[i]=="<body>") {//this means there was a leading CR.
+					strbEmptyLines.AppendLine("<body><p>[[nbsp]]</p>");
+				}
+				else {
+					strbEmptyLines.AppendLine(lines[i]);
+				}
+			}
+			s=strbEmptyLines.ToString();
 			//now, we switch to working in xml
 			doc=new XmlDocument();
 			using(StringReader reader=new StringReader(s)) {
@@ -315,10 +385,12 @@ namespace OpenDentBusiness{
 			}
 			XmlNode node=doc.DocumentElement;
 			//It's time to look for paragraphs.
-			//The basic assumption is that <h123>, <image>, <table>, <ol>, and <ul> tags are external to paragraphs.
-			//i.e. they are siblings.  They will never be surrounded with <p> tags.
+			//The basic assumption is that <h123>, <img>, <table>, <ol>, and <ul> tags are external to paragraphs.
+			//xhtml does NOT allow a list inside of a paragraph.
+			//These objects are siblings to paragraphs.  They will never be surrounded with <p> tags.
 			//On the other hand, <b>, <i>, <a>, and <span> tags are always internal to others, including <p>, <h123>, <table>, <ol>, and <ul>.
-			//<br> tags will only be found within <p> (and <table>?)
+			//<br> tags will not be allowed anywhere.
+			//undecided how to handle newlines within table cells
 			StringBuilder strb2=new StringBuilder();
 			strb2.Append("<body>");
 			string myParagraph="";
@@ -349,9 +421,11 @@ namespace OpenDentBusiness{
 				myParagraph=ProcessParagraph(myParagraph);
 				strb2.Append(myParagraph);
 			}
-			strb2.Append("</body>");
+			strb2.Append("</body>");*/
+			#endregion faulty paragraph grouping
+			#region aggregation
 			doc=new XmlDocument();
-			using(StringReader reader=new StringReader(strb2.ToString())) {
+			using(StringReader reader=new StringReader(strbSnew.ToString())) {
 				try {
 					doc.Load(reader);
 				}
@@ -362,37 +436,89 @@ namespace OpenDentBusiness{
 			StringBuilder strbOut=new StringBuilder();
 			XmlWriterSettings settings=new XmlWriterSettings();
 			settings.Indent=true;
-			settings.IndentChars="    ";
+			settings.IndentChars="\t";
 			settings.OmitXmlDeclaration=true;
 			settings.NewLineChars="\r\n";
 			using(XmlWriter writer=XmlWriter.Create(strbOut,settings)) {
 				doc.WriteTo(writer);
 			}
-			//spaces can't be handled until this point unless I figure out why &nbsp; crashes the xml parser.
-			strbOut.Replace("<p></p>","<p>&nbsp;</p>");
+			//spaces can't be handled prior to this point because &nbsp; crashes the xml parser.
+			strbOut.Replace("  ","&nbsp;&nbsp;");//handle extra spaces. 
+			strbOut.Replace("[[nbsp]]","&nbsp;");
+			strbOut.Replace("<p></p>","<p>&nbsp;</p>");//probably redundant but harmless
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
+			#endregion aggregation
 			return s;
 		}
 
-		///<summary>The value passed in will not include wrapping p tags.</summary>
+		///<summary>This will get called repeatedly.  prefixChars is, for now, * or #.  Returns the altered text of the full document.</summary>
+		private static string ProcessList(string s,string prefixChars){
+			string[] lines=s.Split(new string[] { "\r\n" },StringSplitOptions.None);//includes empty elements
+			string blockOriginal=null;//once a list is found, this string will be filled with the original text.
+			StringBuilder strb=null;//this will contain the final output enclosed in <ul> or <ol> tags.
+			for(int i=0;i<lines.Length;i++) {
+				if(blockOriginal==null) {//we are still hunting for the first line of a list.
+					if(lines[i].StartsWith(prefixChars)) {//we found the first line of a list.
+						blockOriginal=lines[i]+"\r\n";
+						strb=new StringBuilder();
+						if(prefixChars.Contains("*")) {
+							strb.Append("<ul>\r\n");
+						}
+						else if(prefixChars.Contains("#")) {
+							strb.Append("<ol>\r\n");
+						}
+						lines[i]=lines[i].Substring(prefixChars.Length);//strip off the prefixChars
+						strb.Append("<li><span class='ListItemContent'>");
+						//lines[i]=lines[i].Replace("  ","[[nbsp]][[nbsp]]");//handle extra spaces.  We may move this to someplace more global
+						strb.Append(lines[i]);
+						strb.Append("</span></li>\r\n");
+					}
+					else {//no list
+						//nothing to do
+					}
+				}
+				else {//we are already building our list
+					if(lines[i].StartsWith(prefixChars)) {//we found another line of a list.  Could be a middle line or the last line.
+						blockOriginal+=lines[i]+"\r\n";
+						lines[i]=lines[i].Substring(prefixChars.Length);//strip off the prefixChars
+						strb.Append("<li><span class='ListItemContent'>");
+						//lines[i]=lines[i].Replace("  ","[[nbsp]][[nbsp]]");//handle extra spaces.  We may move this to someplace more global
+						strb.Append(lines[i]);
+						strb.Append("</span></li>\r\n");
+					}
+					else {//end of list.  The previous line was the last line.
+						if(prefixChars.Contains("*")) {
+							strb.Append("</ul>\r\n");
+						}
+						else if(prefixChars.Contains("#")) {
+							strb.Append("</ol>\r\n");
+						}
+						s=s.Replace(blockOriginal,strb.ToString());
+						blockOriginal=null;
+					}
+				}
+			}
+			return s;
+		}
+
+		///<summary>This will wrap the text in p tags as well as handle internal carriage returns.</summary>
 		private static string ProcessParagraph(string paragraph) {
+			if(paragraph=="") {
+				return "";
+			}
 			//strip leading and trailing CRs off of these paragraphs to avoid weird BRs.
 			//This is only preliminary and will soon be tweaked. For example: 6 intentional CRs at the end.  h1 follows.  Shouldn't strip them off.
-			while(true) {
-				if(paragraph.StartsWith("\r")
-					|| paragraph.StartsWith("\n"))
-				{
-					paragraph=paragraph.Substring(1);
-				}
-				else if(paragraph.EndsWith("\r")
-					|| paragraph.EndsWith("\n"))
-				{
-					paragraph=paragraph.Substring(0,paragraph.Length-1);
-				}
-				else{
-					break;
-				}
+			//strip leading CR which is from previous non-paragraph element.  This might fail:
+			//1. if a paragraph is the first element.
+			//2. if this paragraph follows another paragraph (which I don't think is possible)
+			//3. if a trailing \r\n was accidentally removed as part of processing a list.
+			if(paragraph.StartsWith("\r\n")){
+				paragraph=paragraph.Substring(2);
+			}
+			//should any trailing CRs be removed?
+			if(paragraph.EndsWith("\r\n")) {
+				paragraph=paragraph.Substring(0,paragraph.Length-2);
 			}
 			paragraph="<p>"+paragraph+"</p>";
 			paragraph=paragraph.Replace("\r\n","</p><p>");

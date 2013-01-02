@@ -25,11 +25,7 @@ namespace OpenDental{
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiEdit));
-			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
-			this.butRefresh = new OpenDental.UI.Button();
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
-			this.textContent = new OpenDental.TextBoxWiki();
 			this.contextMenuMain = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.menuItemCut = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,78 +33,33 @@ namespace OpenDental{
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuItemUndo = new System.Windows.Forms.ToolStripMenuItem();
 			this.textNumbers = new System.Windows.Forms.TextBox();
+			this.textContent = new OpenDental.TextBoxWiki();
+			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
+			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.contextMenuMain.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// webBrowserWiki
-			// 
-			this.webBrowserWiki.AllowWebBrowserDrop = false;
-			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.webBrowserWiki.Location = new System.Drawing.Point(474,31);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20,20);
-			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(470,542);
-			this.webBrowserWiki.TabIndex = 78;
-			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
-			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(869,1);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(75,24);
-			this.butRefresh.TabIndex = 77;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// ToolBarMain
-			// 
-			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(863,25);
-			this.ToolBarMain.TabIndex = 3;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
 			// imageListMain
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"save.gif");
-			this.imageListMain.Images.SetKeyName(1,"cancel.gif");
-			this.imageListMain.Images.SetKeyName(2,"cut.gif");
-			this.imageListMain.Images.SetKeyName(3,"copy.gif");
-			this.imageListMain.Images.SetKeyName(4,"paste.gif");
-			this.imageListMain.Images.SetKeyName(5,"undo.gif");
-			this.imageListMain.Images.SetKeyName(6,"link.gif");
-			this.imageListMain.Images.SetKeyName(7,"linkExternal.gif");
-			this.imageListMain.Images.SetKeyName(8,"h1.gif");
-			this.imageListMain.Images.SetKeyName(9,"h2.gif");
-			this.imageListMain.Images.SetKeyName(10,"h3.gif");
-			this.imageListMain.Images.SetKeyName(11,"bold.gif");
-			this.imageListMain.Images.SetKeyName(12,"italic.gif");
-			this.imageListMain.Images.SetKeyName(13,"color.gif");
-			this.imageListMain.Images.SetKeyName(14,"table.gif");
-			this.imageListMain.Images.SetKeyName(15,"image.gif");
-			// 
-			// textContent
-			// 
-			this.textContent.ContextMenuStrip = this.contextMenuMain;
-			this.textContent.Location = new System.Drawing.Point(28,31);
-			this.textContent.Name = "textContent";
-			this.textContent.SelectedText = "";
-			this.textContent.SelectionLength = 0;
-			this.textContent.SelectionStart = 0;
-			this.textContent.Size = new System.Drawing.Size(442,542);
-			this.textContent.TabIndex = 80;
+			this.imageListMain.Images.SetKeyName(0,"refresh.gif");
+			this.imageListMain.Images.SetKeyName(1,"save.gif");
+			this.imageListMain.Images.SetKeyName(2,"cancel.gif");
+			this.imageListMain.Images.SetKeyName(3,"cut.gif");
+			this.imageListMain.Images.SetKeyName(4,"copy.gif");
+			this.imageListMain.Images.SetKeyName(5,"paste.gif");
+			this.imageListMain.Images.SetKeyName(6,"undo.gif");
+			this.imageListMain.Images.SetKeyName(7,"link.gif");
+			this.imageListMain.Images.SetKeyName(8,"linkExternal.gif");
+			this.imageListMain.Images.SetKeyName(9,"h1.gif");
+			this.imageListMain.Images.SetKeyName(10,"h2.gif");
+			this.imageListMain.Images.SetKeyName(11,"h3.gif");
+			this.imageListMain.Images.SetKeyName(12,"bold.gif");
+			this.imageListMain.Images.SetKeyName(13,"italic.gif");
+			this.imageListMain.Images.SetKeyName(14,"color.gif");
+			this.imageListMain.Images.SetKeyName(15,"table.gif");
+			this.imageListMain.Images.SetKeyName(16,"image.gif");
 			// 
 			// contextMenuMain
 			// 
@@ -167,6 +118,40 @@ namespace OpenDental{
 			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
 			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// textContent
+			// 
+			this.textContent.ContextMenuStrip = this.contextMenuMain;
+			this.textContent.Location = new System.Drawing.Point(28,31);
+			this.textContent.Name = "textContent";
+			this.textContent.SelectedText = "";
+			this.textContent.SelectionLength = 0;
+			this.textContent.SelectionStart = 0;
+			this.textContent.Size = new System.Drawing.Size(442,542);
+			this.textContent.TabIndex = 80;
+			// 
+			// webBrowserWiki
+			// 
+			this.webBrowserWiki.AllowWebBrowserDrop = false;
+			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.webBrowserWiki.Location = new System.Drawing.Point(474,31);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20,20);
+			this.webBrowserWiki.Name = "webBrowserWiki";
+			this.webBrowserWiki.Size = new System.Drawing.Size(470,542);
+			this.webBrowserWiki.TabIndex = 78;
+			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
+			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
+			// 
+			// ToolBarMain
+			// 
+			this.ToolBarMain.ImageList = this.imageListMain;
+			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
+			this.ToolBarMain.Name = "ToolBarMain";
+			this.ToolBarMain.Size = new System.Drawing.Size(863,25);
+			this.ToolBarMain.TabIndex = 3;
+			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			// 
 			// FormWikiEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -174,7 +159,6 @@ namespace OpenDental{
 			this.Controls.Add(this.textContent);
 			this.Controls.Add(this.textNumbers);
 			this.Controls.Add(this.webBrowserWiki);
-			this.Controls.Add(this.butRefresh);
 			this.Controls.Add(this.ToolBarMain);
 			this.Name = "FormWikiEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -193,7 +177,6 @@ namespace OpenDental{
 
 		private UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
-		private UI.Button butRefresh;
 		private System.Windows.Forms.ImageList imageListMain;
 		private TextBoxWiki textContent;
 		private System.Windows.Forms.ContextMenuStrip contextMenuMain;

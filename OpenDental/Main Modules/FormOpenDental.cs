@@ -252,6 +252,7 @@ namespace OpenDental{
 		private MenuItem menuItemWiki;
 		private MenuItem menuItemProcLockTool;
 		private MenuItem menuItemHL7;
+		private FormWiki FormMyWiki;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -4694,8 +4695,14 @@ namespace OpenDental{
 		}
 
 		private void menuItemWiki_Click(object sender,EventArgs e) {
-			FormWiki FormW = new FormWiki();
-			FormW.Show();
+			if(FormMyWiki==null || FormMyWiki.IsDisposed) {
+				FormMyWiki=new FormWiki();
+			}
+			FormMyWiki.Show();
+			if(FormMyWiki.WindowState==FormWindowState.Minimized) {
+				FormMyWiki.WindowState=FormWindowState.Normal;
+			}
+			FormMyWiki.BringToFront();
 		}
 
 		//Help

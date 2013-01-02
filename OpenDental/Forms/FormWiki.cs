@@ -32,6 +32,8 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage(string pageTitle) {
+			//This is called from 11 different places, any time the program needs to refresh a page from the db.
+			//It's also called from the browser_Navigating event when a "wiki:" link is clicked.
 			WikiPage wpage=WikiPages.GetByTitle(pageTitle);
 			if(wpage==null) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page does not exist. Would you like to create it?")) {
@@ -49,21 +51,11 @@ namespace OpenDental {
 				}
 				wpage=WikiPages.GetByTitle(pageTitle);
 			}
-/* This makes no sense once we have wikipagehist.  Deleted page history will be totally ignored,and will not prevent adding that page again later.
-//If trying to navigate to a page that has been deleted, insert a copy of the page into the DB and unflag it as deleted.
-if(wpage.IsDeleted) {
-	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"That page has been deleted. Would you like to un-delete it?")) {
-		return;
-	}
-	wpage.UserNum=Security.CurUser.UserNum;
-	wpage.IsDeleted=false;
-	WikiPages.Insert(wpage);
-}*/
 			WikiPageCur=wpage;
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);//does not insert page title.
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
 			Text="Wiki - "+WikiPageCur.PageTitle;
-			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!=pageTitle) {
-				historyNav.Add(pageTitle);
+			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {
+				historyNav.Add("wiki:"+pageTitle);
 			}
 		}
 
@@ -74,14 +66,15 @@ if(wpage.IsDeleted) {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),2,"","Home"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),3,"","Edit"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),4,"","Rename"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),5,"","Delete"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"History"),6,"","History"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),7,"","Inc Links"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),4,"","Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Rename"),5,"","Rename"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),6,"","Delete"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"History"),7,"","History"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),8,"","Inc Links"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),8,"","Add"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),9,"","All Pages"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),10,"","Search"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),9,"","Add"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),10,"","All Pages"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),11,"","Search"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -97,6 +90,9 @@ if(wpage.IsDeleted) {
 					break;
 				case "Edit":
 					Edit_Click();
+					break;
+				case "Print":
+					Print_Click();
 					break;
 				case "Rename":
 					Rename_Click();
@@ -127,8 +123,25 @@ if(wpage.IsDeleted) {
 				MsgBox.Show(this,"No more history");
 				return;
 			}
-			historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
-			LoadWikiPage(historyNav[historyNav.Count-1]);
+			string pageName=historyNav[historyNav.Count-2];//-1 is the last/current page.
+			if(pageName.StartsWith("wiki:")) {
+				pageName=pageName.Substring(5);
+				WikiPage wpage=WikiPages.GetByTitle(pageName);
+				if(wpage==null) {
+					MessageBox.Show("'"+historyNav[historyNav.Count-2]+"' page does not exist.");//very rare
+					return;
+				}
+				historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
+				LoadWikiPage(pageName);//because it's a duplicate, it won't add it again to the list.
+			}
+			else if(pageName.StartsWith("http://")) {//www
+				historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
+				//no need to set the text because the Navigating event will fire and take care of that.
+				webBrowserWiki.Navigate(pageName);//adds new page to history
+			}
+			else {
+				//?
+			}
 		}
 
 		private void Setup_Click() {
@@ -155,6 +168,13 @@ if(wpage.IsDeleted) {
 				return;
 			}
 			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
+		}
+
+		private void Print_Click() {
+			if(WikiPageCur==null) {
+				return;
+			}
+			webBrowserWiki.ShowPrintDialog();
 		}
 
 		private void Rename_Click() {
@@ -242,25 +262,33 @@ if(wpage.IsDeleted) {
 		}
 
 		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {
-			if(e.Url.ToString().StartsWith("wiki:")) {
+			//For debugging, we need to remember that the following happens when you click on an internal link:
+			//1. This method fires. url includes 'wiki:'
+			//2. This causes LoadWikiPage method to fire.  It loads the document text.
+			//3. Which causes this method to fire again.  url is "about:blank".
+			//This doesn't seem to be a problem.  We wrote it so that it won't go into an infinite loop, but it's something to be aware of.
+			if(e.Url.ToString()=="about:blank") {
+				//webBrowserWiki.DocumentText was set externally. We want to ignore this situation.
+			}
+			else if(e.Url.ToString().StartsWith("wiki:")) {//user clicked on an internal link
 				LoadWikiPage(e.Url.ToString().Substring(5));
 				e.Cancel=true;
+				return;
 			}
-			else if(e.Url.ToString().Contains("http://")){//navigating outside of wiki.
-				WikiPageCur=null;
+			else if(e.Url.ToString().StartsWith("http://")){//navigating outside of wiki, either by clicking a link or using back button.
+				WikiPageCur=null;//this effectively disables most of the toolbar buttons
 				Text = "Wiki - WWW";
+				if(historyNav.Count==0 || historyNav[historyNav.Count-1]!=e.Url.ToString()) {
+					historyNav.Add(e.Url.ToString());
+				}
 			}
-			//WikiPageCur=null;
+			//else if(e.Url.ToString().StartsWith("file:"){
+			//	open the actual file
+			//}
+			//else if(folder){
+			//	open the actual folder
+			//}
 		}
-
-		//private void menuItemEdit_Click(object sender,EventArgs e) {
-		//  if(WikiPageCur==null) {//outside webpage i.e. http://www.opendental.com
-		//    return;
-		//  }
-		//  FormWikiEdit FormWE = new FormWikiEdit();
-		//  FormWE.WikiPageCur=WikiPageCur;
-		//  FormWE.Show();
-		//}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;

@@ -38,13 +38,14 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(1,"Manage22.gif");
 			this.imageListMain.Images.SetKeyName(2,"home.gif");
 			this.imageListMain.Images.SetKeyName(3,"editPencil.gif");
-			this.imageListMain.Images.SetKeyName(4,"rename.gif");
-			this.imageListMain.Images.SetKeyName(5,"deleteX.gif");
-			this.imageListMain.Images.SetKeyName(6,"history.gif");
-			this.imageListMain.Images.SetKeyName(7,"incoming.gif");
-			this.imageListMain.Images.SetKeyName(8,"Add.gif");
-			this.imageListMain.Images.SetKeyName(9,"allpages.gif");
-			this.imageListMain.Images.SetKeyName(10,"search.gif");
+			this.imageListMain.Images.SetKeyName(4,"print.gif");
+			this.imageListMain.Images.SetKeyName(5,"rename.gif");
+			this.imageListMain.Images.SetKeyName(6,"deleteX.gif");
+			this.imageListMain.Images.SetKeyName(7,"history.gif");
+			this.imageListMain.Images.SetKeyName(8,"incoming.gif");
+			this.imageListMain.Images.SetKeyName(9,"Add.gif");
+			this.imageListMain.Images.SetKeyName(10,"allpages.gif");
+			this.imageListMain.Images.SetKeyName(11,"search.gif");
 			// 
 			// ToolBarMain
 			// 
