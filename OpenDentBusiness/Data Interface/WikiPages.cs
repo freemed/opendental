@@ -368,8 +368,8 @@ namespace OpenDentBusiness{
 			matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
 			foreach(Match match in matches) {
 				string imgName = match.Value.Substring(match.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
-				string fullPath=CodeBase.ODFileUtils.CombinePaths(GetWikiPath(),imgName);
-				s=s.Replace(match.Value,"<img src=\"file:///"+fullPath.Replace("\\","/")+"\" />");
+				string fullPath=CodeBase.ODFileUtils.CombinePaths(GetWikiPath(),POut.String(imgName));
+				s=s.Replace(match.Value,"<img src=\"file:///"+fullPath.Replace("\\","/")+"\"></img>");//"\" />");
 			}
 			//[[keywords: key1, key2, etc.]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");
@@ -445,6 +445,9 @@ namespace OpenDentBusiness{
 				if(s.Substring(iScanInParagraph).StartsWith("<b")) {
 					tagName="b";
 				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<img")) {//must be before "i"
+					tagName="img";//does not have an ending tag...
+				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<i")) {
 					tagName="i";
 				}
@@ -468,9 +471,6 @@ namespace OpenDentBusiness{
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<h3")) {
 					tagName="h3";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<img")) {
-					tagName="img";
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
 					tagName="table";

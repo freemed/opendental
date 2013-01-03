@@ -10,18 +10,17 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWikiFileFolder:Form {
+		public bool IsFolderMode;
 
 		public FormWikiFileFolder() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+		private void FormWikiFileFolder_Load(object sender,EventArgs e) {
+			if(IsFolderMode) {
+				Text=Lan.g(this,"Insert Folder Link");
+			}
 		}
 
 	}

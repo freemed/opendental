@@ -65,7 +65,7 @@ namespace OpenDental {
 		}
 
 		///<summary></summary>
-		public string Text {
+		public override string Text {
 			get {
 				return textBoxMain.Text;
 			}

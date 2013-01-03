@@ -23,59 +23,15 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label1 = new System.Windows.Forms.Label();
 			this.textSearch = new System.Windows.Forms.TextBox();
 			this.checkIgnoreContent = new System.Windows.Forms.CheckBox();
 			this.checkDeletedOnly = new System.Windows.Forms.CheckBox();
+			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
+			this.butOK = new OpenDental.UI.Button();
+			this.butCancel = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(1097, 596);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(1097, 626);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// webBrowserWiki
-			// 
-			this.webBrowserWiki.AllowWebBrowserDrop = false;
-			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.webBrowserWiki.IsWebBrowserContextMenuEnabled = false;
-			this.webBrowserWiki.Location = new System.Drawing.Point(266, 38);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
-			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(825, 612);
-			this.webBrowserWiki.TabIndex = 11;
-			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
 			// 
 			// gridMain
 			// 
@@ -128,6 +84,51 @@ namespace OpenDental{
 			this.checkDeletedOnly.TabIndex = 15;
 			this.checkDeletedOnly.Text = "Deleted Only";
 			this.checkDeletedOnly.CheckedChanged += new System.EventHandler(this.checkDeletedOnly_CheckedChanged);
+			// 
+			// webBrowserWiki
+			// 
+			this.webBrowserWiki.AllowNavigation = false;
+			this.webBrowserWiki.AllowWebBrowserDrop = false;
+			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.webBrowserWiki.IsWebBrowserContextMenuEnabled = false;
+			this.webBrowserWiki.Location = new System.Drawing.Point(266, 38);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
+			this.webBrowserWiki.Name = "webBrowserWiki";
+			this.webBrowserWiki.Size = new System.Drawing.Size(825, 612);
+			this.webBrowserWiki.TabIndex = 11;
+			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(1097, 596);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 3;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
+			// 
+			// butCancel
+			// 
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butCancel.Autosize = true;
+			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.CornerRadius = 4F;
+			this.butCancel.Location = new System.Drawing.Point(1097, 626);
+			this.butCancel.Name = "butCancel";
+			this.butCancel.Size = new System.Drawing.Size(75, 24);
+			this.butCancel.TabIndex = 2;
+			this.butCancel.Text = "&Cancel";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormWikiSearch
 			// 

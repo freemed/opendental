@@ -379,7 +379,12 @@ namespace OpenDental {
 		}
 
 		private void Image_Click() {
-			//todo
+			FormWikiImages FormWI = new FormWikiImages();
+			FormWI.ShowDialog();
+			if(FormWI.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textContent.Paste("[[img:"+FormWI.SelectedImageName+"]]");
 		}
 
 		///<summary>Validates content, and keywords.  isForSaving can be false if just validating for refresh.</summary>

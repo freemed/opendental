@@ -30,6 +30,7 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage(string WikiPageTitleCur) {
+			webBrowserWiki.AllowNavigation=true;
 			if(checkDeletedOnly.Checked) {
 				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent);
 			}
