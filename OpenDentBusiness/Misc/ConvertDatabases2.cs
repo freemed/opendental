@@ -11637,7 +11637,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				} 
 				//todo: edit these 2 starting wikipages
-				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved,IsDeleted) VALUES("
+				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
 					+"0,"//no usernum set for the first 2 pages
 					+"'_Master',"
 					+"'',"
@@ -11712,29 +11712,28 @@ a.PageNotExists:hover {
 @@@body@@@
 </html>")+"',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					command+="SYSDATE,";
+					command+="SYSDATE";
 				}
 				else{
-					command+="NOW(),";
+					command+="NOW()";
 				}
-				command+="0)";
+				command+=")";
 				Db.NonQ(command);
 				//blank home page
-				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWordsPageContent,DateTimeSaved,IsDeleted) VALUES("
+				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
 					+"0,"
 					+"'Home',"	
 					+"'',"
 					+"'Home',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					command+="SYSDATE,";
+					command+="SYSDATE";
 				}
 				else {
-					command+="NOW(),";
+					command+="NOW()";
 				}
-				command+="0)";
+				command+=")";
 				Db.NonQ(command);
 				
-
 
 
 

@@ -54,7 +54,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
 			//string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
-			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"';";
+			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"'";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
@@ -64,7 +64,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
 			}
 			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
-				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle;";
+				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle";
 			return Crud.WikiPageCrud.SelectMany(command);
 		}
 
@@ -197,7 +197,7 @@ namespace OpenDentBusiness{
 					+"WHERE PageTitle NOT LIKE '\\_%' "
 					+"AND IsDeleted=1 "
 					+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle;";
+					+"ORDER BY PageTitle";
 					tableResults=Db.GetTable(command);
 					for(int i=0;i<tableResults.Rows.Count;i++) {
 						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
@@ -212,7 +212,7 @@ namespace OpenDentBusiness{
 				+"AND PageTitle NOT LIKE '\\_%' "
 				+"AND IsDeleted=1 "
 				+"GROUP BY PageTitle "
-				+"ORDER BY PageTitle;";
+				+"ORDER BY PageTitle";
 				tableResults=Db.GetTable(command);
 				for(int i=0;i<tableResults.Rows.Count;i++) {
 					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
@@ -227,7 +227,7 @@ namespace OpenDentBusiness{
 					+"AND PageTitle NOT LIKE '\\_%' "
 					+"AND IsDeleted=1 "
 					+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle;";
+					+"ORDER BY PageTitle";
 					tableResults=Db.GetTable(command);
 					for(int i=0;i<tableResults.Rows.Count;i++) {
 						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 				+"WHERE KeyWords LIKE '%"+searchText+"%' "
 				+"AND PageTitle NOT LIKE '\\_%' "
 				+"GROUP BY PageTitle "
-				+"ORDER BY PageTitle;";
+				+"ORDER BY PageTitle";
 					tableResults=Db.GetTable(command);
 					for(int i=0;i<tableResults.Rows.Count;i++) {
 						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
@@ -256,7 +256,7 @@ namespace OpenDentBusiness{
 				+"WHERE PageTitle LIKE '%"+searchText+"%' "
 				+"AND PageTitle NOT LIKE '\\_%' "
 				+"GROUP BY PageTitle "
-				+"ORDER BY PageTitle;";
+				+"ORDER BY PageTitle";
 					tableResults=Db.GetTable(command);
 					for(int i=0;i<tableResults.Rows.Count;i++) {
 						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
@@ -270,7 +270,7 @@ namespace OpenDentBusiness{
 					+"WHERE PageContent LIKE '%"+searchText+"%' "
 					+"AND PageTitle NOT LIKE '\\_%' "
 					+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle;";
+					+"ORDER BY PageTitle";
 					tableResults=Db.GetTable(command);
 					for(int i=0;i<tableResults.Rows.Count;i++) {
 						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
@@ -306,9 +306,9 @@ namespace OpenDentBusiness{
 			wikiPage.UserNum=Security.CurUser.UserNum;
 			InsertAndArchive(wikiPage);
 			//Rename all pages in both tables: wikiPage and wikiPageHist.
-			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"';";
+			string command="UPDATE wikipage SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"'";
 			Db.NonQ(command);
-			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"';";
+			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"'";
 			Db.NonQ(command);
 			//For now, we will simply fix existing links in history
 			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(wikiPage.PageTitle)+"]]', '[["+POut.String(newPageTitle)+"]]')";
@@ -415,16 +415,16 @@ namespace OpenDentBusiness{
 			#endregion regex replacements
 			#region paragraph grouping
 			StringBuilder strbSnew=new StringBuilder();
-			strbSnew.Append("<body>");
-			//StringBuilder strbThisP=new StringBuilder();//used to accumulate paragraphs.  Might use iScanning instead.
 			//a paragraph is defined as all text between sibling tags, even if just a \r\n.
 			int iScanInParagraph=0;//scan starting at the beginning of s.  S gets chopped from the start each time we grab a paragraph or a sibiling element.
 			//The scanning position represents the verified paragraph content, and does not advance beyond that.
 			//move <body> tag over.
-			//strbSnew.Append("<body>");
+			strbSnew.Append("<body>");
 			s=s.Substring(6);
-//todo: handle one leading CR if there is no text preceding it.
-
+			bool startsWithCR=false;//todo: handle one leading CR if there is no text preceding it.
+			if(s.StartsWith("\r\n")) {
+				startsWithCR=true;
+			}
 			string tagName;
 			while(true) {//loop to either construct a paragraph, or to immediately add the next tag to strbSnew.
 				iScanInParagraph=s.IndexOf("<",iScanInParagraph);//Advance the scanner to the start of the next tag
@@ -433,7 +433,8 @@ namespace OpenDentBusiness{
 					//strbSnew.Append(ProcessParagraph(s));
 				}
 				if(s.Substring(iScanInParagraph).StartsWith("</body>")) {
-					strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph)));
+					strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph),startsWithCR));
+					//startsWithCR=false;
 					//strbSnew.Append("</body>");
 					s="";
 					iScanInParagraph=0;
@@ -487,7 +488,8 @@ namespace OpenDentBusiness{
 						//do nothing
 					}
 					else {//we are already part way into assembling a paragraph.  
-						strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph)));
+						strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph),startsWithCR));
+						startsWithCR=false;//subsequent paragraphs will not need this
 						s=s.Substring(iScanInParagraph);//chop off start of s
 						iScanInParagraph=0;
 					}
@@ -647,33 +649,19 @@ namespace OpenDentBusiness{
 			return s;
 		}
 
-		///<summary>This will wrap the text in p tags as well as handle internal carriage returns.</summary>
-		private static string ProcessParagraph(string paragraph) {
+		///<summary>This will wrap the text in p tags as well as handle internal carriage returns.  startsWithCR is only used on the first paragraph for the unusual case where the entire content starts with a CR.  This prevents stripping it off.</summary>
+		private static string ProcessParagraph(string paragraph,bool startsWithCR) {
 			if(paragraph=="") {
 				return "";
 			}
-			//strip leading and trailing CRs off of these paragraphs to avoid weird BRs.
-			//This is only preliminary and will soon be tweaked. For example: 6 intentional CRs at the end.  h1 follows.  Shouldn't strip them off.
-			//strip leading CR which is from previous non-paragraph element.  This might fail:
-			//1. if a paragraph is the first element.
-			//2. if this paragraph follows another paragraph (which I don't think is possible)
-			//3. if a trailing \r\n was accidentally removed as part of processing a list.
-			if(paragraph.StartsWith("\r\n")){
+			if(paragraph.StartsWith("\r\n") && !startsWithCR){
 				paragraph=paragraph.Substring(2);
 			}
-			//should any trailing CRs be removed?
-			if(paragraph.EndsWith("\r\n")) {
+			if(paragraph.EndsWith("\r\n")) {//trailing CR remove
 				paragraph=paragraph.Substring(0,paragraph.Length-2);
 			}
 			paragraph="<p>"+paragraph+"</p>";
 			paragraph=paragraph.Replace("\r\n","</p><p>");
-			//this line might cause bugs, so I'm removing it for now
-			//paragraph=paragraph.Replace("<p></p>","<p>&nbsp;</p>");//so that empty paragraphs will show
-			//no need for this under the new strategy.
-			//paragraph=paragraph.Replace("\r\n","<br />");
-			//this line was causing bugs
-			//paragraph=paragraph.Replace("  ","&nbsp;&nbsp;");//because single space should always show in html.
-			//todo: enhance and debug. Also, spaces and carriage returns within other elements.
 			return paragraph;
 		}
 
