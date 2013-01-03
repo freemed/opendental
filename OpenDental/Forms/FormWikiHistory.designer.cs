@@ -110,6 +110,7 @@ namespace OpenDental{
 			this.Name = "FormWikiHistory";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Wiki History";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormWikiHistory_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();

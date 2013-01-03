@@ -203,6 +203,9 @@ namespace OpenDental {
 				MsgBox.Show(this,"Cannot delete homepage."); 
 					return;
 			}
+			if(MessageBox.Show(Lan.g(this,"Delete the wiki page")+":"+WikiPageCur.PageTitle+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				return;
+			}
 			WikiPages.Delete(WikiPageCur.PageTitle);
 			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)*/
 		}

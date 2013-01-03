@@ -365,6 +365,24 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiExternalLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiExternalLink.designer.cs">
+      <DependentUpon>FormWikiExternalLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiFileFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiFileFolder.designer.cs">
+      <DependentUpon>FormWikiFileFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiImages.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiImages.designer.cs">
+      <DependentUpon>FormWikiImages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWikiIncomingLinks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2672,6 +2690,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiExternalLink.resx">
+      <DependentUpon>FormWikiExternalLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiFileFolder.resx">
+      <DependentUpon>FormWikiFileFolder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiImages.resx">
+      <DependentUpon>FormWikiImages.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWikiIncomingLinks.resx">
       <DependentUpon>FormWikiIncomingLinks.cs</DependentUpon>

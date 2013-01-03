@@ -13,8 +13,25 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPageHist>>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			string command="SELECT * FROM wikipagehist WHERE PageTitle = '"+POut.String(pageTitle)+"' ORDER BY DateTimeSaved;";
+			string command="SELECT * FROM wikipagehist WHERE PageTitle = '"+POut.String(pageTitle)+"' ORDER BY DateTimeSaved";
 			return Crud.WikiPageHistCrud.SelectMany(command);
+		}
+
+		///<summary>Only returns the most recently deleted version of the page. Returns null if not found.</summary>
+		public static WikiPageHist GetDeletedByTitle(string pageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<WikiPageHist>(MethodBase.GetCurrentMethod(),pageTitle);
+			}
+			string command="SELECT * FROM wikipagehist "
+										+"WHERE PageTitle = '"+POut.String(pageTitle)+"' "
+										+"AND IsDeleted=1 "
+										+"AND DateTimeSaved="
+											+"(SELECT MAX(DateTimeSaved) "
+											+"FROM wikipagehist "
+											+"WHERE PageTitle = '"+POut.String(pageTitle)+"' "
+											+"AND IsDeleted=1)"
+											;
+			return Crud.WikiPageHistCrud.SelectOne(command);
 		}
 
 		///<summary></summary>

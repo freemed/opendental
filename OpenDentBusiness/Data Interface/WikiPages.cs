@@ -189,22 +189,23 @@ namespace OpenDentBusiness{
 			List<string> retVal=new List<string>();
 			DataTable tableResults=new DataTable();
 			string command="";
-			if(searchDeleted) {
-				//No Search Text-----------------------------------------------------------------------------------
-				if(searchText=="") {
-					command=
-					"SELECT PageTitle FROM wikiPageHist "
-					+"WHERE PageTitle NOT LIKE '\\_%' "
-					+"AND IsDeleted=1 "
-					+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
-					}
-				}
+			if(searchDeleted) {//SearchDeleted------------------------------------------------------------------------------
+				//  //No Search Text-----------------------------------------------------------------------------------
+				//  if(searchText=="") {
+				//    command=
+				//    "SELECT PageTitle FROM wikiPageHist "
+				//    +"WHERE PageTitle NOT LIKE '\\_%' "
+				//    +"AND IsDeleted=1 "
+				//    +"GROUP BY PageTitle "
+				//    +"ORDER BY PageTitle";
+				//    tableResults=Db.GetTable(command);
+				//    for(int i=0;i<tableResults.Rows.Count;i++) {
+				//      if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
+				//        retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+				//      }
+				//    }
+				//    return retVal;
+				//  }
 				//Match title First-----------------------------------------------------------------------------------
 				command=
 				"SELECT PageTitle FROM wikiPageHist "
@@ -235,8 +236,8 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-			}//end if searchDeleted
-			else {
+			}
+			else {//!SearchDeleted------------------------------------------------------------------------------
 				//Match keywords first-----------------------------------------------------------------------------------
 				command=
 				"SELECT PageTitle FROM wikiPage "

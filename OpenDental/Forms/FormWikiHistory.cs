@@ -20,15 +20,30 @@ namespace OpenDental {
 		}
 
 		private void FormWikiHistory_Load(object sender,EventArgs e) {
-			Rectangle tempWorkAreaRect=System.Windows.Forms.Screen.GetWorkingArea(this);
-			Top=0;
-			Left=Math.Max(0,(tempWorkAreaRect.Width-1200)/2);
-			Width=Math.Min(tempWorkAreaRect.Width,1200);
-			Height=tempWorkAreaRect.Height;
+			ResizeControls();
 			FillGrid();
-			gridMain.SetSelected(gridMain.Rows.Count-1,true);
+			gridMain.SetSelected(gridMain.Rows.Count-1,true);//There will always be at least one page in the history
 			LoadWikiPage(ListWikiPageHists[gridMain.SelectedIndices[0]]);//should never be null.
 			Text="Wiki History - "+PageTitleCur;
+		}
+
+		private void ResizeControls() {
+			//assuming gridMain, textNumbers do not change width or location.
+			Rectangle actualWorkingArea=new Rectangle(294,12,ClientSize.Width-397,ClientSize.Height-24);
+			//textNumbers resize
+			textNumbers.Height=actualWorkingArea.Height;
+			//text resize
+			textContent.Top=actualWorkingArea.Top;
+			textContent.Height=actualWorkingArea.Height;
+			textContent.Left=actualWorkingArea.Left;
+			textContent.Width=actualWorkingArea.Width/2-2;
+			//Browser resize
+			webBrowserWiki.Top=actualWorkingArea.Top;
+			webBrowserWiki.Height=actualWorkingArea.Height;
+			webBrowserWiki.Left=actualWorkingArea.Left+actualWorkingArea.Width/2+2;
+			webBrowserWiki.Width=actualWorkingArea.Width/2-2;
+			//Button move
+			//butRefresh.Left=ClientSize.Width/2+2;
 		}
 
 		private void LoadWikiPage(WikiPageHist WikiPageCur) {
@@ -69,8 +84,8 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(ListWikiPageHists[e.Row].PageContent);
-			mbox.ShowDialog();
+			//MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(ListWikiPageHists[e.Row].PageContent);
+			//mbox.ShowDialog();
 			//FormWikiEdit FormWE = new FormWikiEdit();
 			//FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
 			//FormWE.ShowDialog();

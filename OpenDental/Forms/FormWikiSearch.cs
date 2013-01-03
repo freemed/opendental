@@ -30,7 +30,12 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage(string WikiPageTitleCur) {
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent);
+			if(checkDeletedOnly.Checked) {
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent);
+			}
+			else {
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent);
+			}
 		}
 
 		/// <summary></summary>
@@ -59,6 +64,9 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {			
 			//SelectedWikiPage=listWikiPages[e.Row];
+			if(checkDeletedOnly.Checked) {
+				return;
+			}
 			wikiPageTitleSelected=listWikiPageTitles[e.Row];
 			DialogResult=DialogResult.OK;
 		}
@@ -72,6 +80,7 @@ namespace OpenDental {
 		}
 
 		private void checkDeletedOnly_CheckedChanged(object sender,EventArgs e) {
+			butOK.Enabled=!checkDeletedOnly.Checked;
 			FillGrid();
 		}
 
