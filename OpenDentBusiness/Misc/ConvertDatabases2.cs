@@ -11371,11 +11371,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.28.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To12_4_29();
+			To12_4_30();
 		}
 
-		private static void To12_4_29() {
-			if(FromVersion<new Version("12.4.29.0")) {
+		private static void To12_4_30() {
+			if(FromVersion<new Version("12.4.30.0")) {
 				string command;
 				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 					//Move depricated codes to the Obsolete procedure code category.
@@ -11415,7 +11415,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						Db.NonQ(command);
 					}
 				}//end United States update
-				command="UPDATE preference SET ValueString = '12.4.29.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '12.4.30.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
 			To12_5_0();
