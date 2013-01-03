@@ -26,6 +26,8 @@ namespace OpenDental{
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.butClose = new OpenDental.UI.Button();
+			this.textContent = new OpenDental.TextBoxWiki();
+			this.textNumbers = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -36,7 +38,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(248, 575);
+			this.gridMain.Size = new System.Drawing.Size(248, 614);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Page History";
 			this.gridMain.TranslationName = "TableWikiHistory";
@@ -50,10 +52,10 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.webBrowserWiki.IsWebBrowserContextMenuEnabled = false;
-			this.webBrowserWiki.Location = new System.Drawing.Point(266, 12);
+			this.webBrowserWiki.Location = new System.Drawing.Point(647, 12);
 			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
 			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(632, 575);
+			this.webBrowserWiki.Size = new System.Drawing.Size(414, 614);
 			this.webBrowserWiki.TabIndex = 6;
 			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
 			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
@@ -66,17 +68,42 @@ namespace OpenDental{
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(904, 563);
+			this.butClose.Location = new System.Drawing.Point(1067, 602);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 2;
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
+			// textContent
+			// 
+			this.textContent.Location = new System.Drawing.Point(294, 12);
+			this.textContent.Name = "textContent";
+			this.textContent.SelectedText = "";
+			this.textContent.SelectionLength = 0;
+			this.textContent.SelectionStart = 0;
+			this.textContent.Size = new System.Drawing.Size(347, 614);
+			this.textContent.TabIndex = 82;
+			// 
+			// textNumbers
+			// 
+			this.textNumbers.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textNumbers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(117)))), ((int)(((byte)(133)))));
+			this.textNumbers.Location = new System.Drawing.Point(266, 12);
+			this.textNumbers.Multiline = true;
+			this.textNumbers.Name = "textNumbers";
+			this.textNumbers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+			this.textNumbers.Size = new System.Drawing.Size(46, 614);
+			this.textNumbers.TabIndex = 83;
+			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
+			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
 			// FormWikiHistory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(991, 599);
+			this.ClientSize = new System.Drawing.Size(1154, 638);
+			this.Controls.Add(this.textContent);
+			this.Controls.Add(this.textNumbers);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
@@ -85,6 +112,7 @@ namespace OpenDental{
 			this.Text = "Wiki History";
 			this.Load += new System.EventHandler(this.FormWikiHistory_Load);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -93,5 +121,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butClose;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
+		private TextBoxWiki textContent;
+		private System.Windows.Forms.TextBox textNumbers;
 	}
 }

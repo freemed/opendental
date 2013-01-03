@@ -84,58 +84,201 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
 
+		//public static List<WikiPage> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
+		//  if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+		//    return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
+		//  }
+		//  string command="";
+		//  if(searchText=="") {//otherwise the search below is meaning less.
+		//    command="SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+		//      +"WHERE PageTitle NOT LIKE '\\_%' "
+		//      +(searchDeleted?"AND IsDeleted=1;":";");
+		//    return Crud.WikiPageCrud.SelectMany(command);
+		//  }
+		//  List<WikiPage> retVal=new List<WikiPage>();
+		//  List<WikiPage> listWikiPageTemp=new List<WikiPage>();
+		//  if(searchDeleted){
+		//    //Match title First-----------------------------------------------------------------------------------
+		//    command=
+		//    "SELECT * FROM wikiPageHist "
+		//    +"WHERE PagetTitle LIKE '%"+searchText+"%' "
+		//    +"AND PageTitle NOT LIKE '\\_%' "
+		//    +"AND IsDeleted=1 "
+		//    +"ORDER BY PageTitle;";
+		//    retVal=Crud.WikiPageCrud.SelectMany(command);
+		//    //Match Content Second-----------------------------------------------------------------------------------
+		//    if(!ignoreContent){
+		//      command=
+		//      "SELECT * FROM wikiPageHist "
+		//      +"WHERE PageContent LIKE '%"+searchText+"%' "
+		//      +"AND PageTitle NOT LIKE '\\_%' "
+		//      +"AND IsDeleted=1 "
+		//      +"ORDER BY PageTitle;";
+		//      listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
+		//      foreach(WikiPage wikiPage in listWikiPageTemp) {
+		//        bool alreadyFound=false;
+		//        for(int i=0;i<retVal.Count;i++) {
+		//          if(retVal[i].PageTitle==wikiPage.PageTitle) {
+		//            alreadyFound=true;
+		//            break;
+		//          }
+		//        }
+		//        if(!alreadyFound) {
+		//          retVal.Add(wikiPage);
+		//        }
+		//      }//end listWikiPageTemp
+		//    }//end if ignoreContent
+		//  }//end if searchDeleted
+		//  else{
+		//    //Match keywords first-----------------------------------------------------------------------------------
+		//    command=
+		//    "SELECT * FROM wikiPage "
+		//    +"WHERE KeyWords LIKE '%"+searchText+"%' "
+		//    +"AND PageTitle NOT LIKE '\\_%' "
+		//    +"ORDER BY PageTitle;";
+		//    retVal=Crud.WikiPageCrud.SelectMany(command);
+		//    //Match PageTitle Second-----------------------------------------------------------------------------------
+		//    command=
+		//    "SELECT * FROM wikiPage "
+		//    +"WHERE PageTitle LIKE '%"+searchText+"%' "
+		//    +"AND PageTitle NOT LIKE '\\_%' "
+		//    +"ORDER BY PageTitle;";
+		//    listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
+		//    foreach(WikiPage wikiPage in listWikiPageTemp) {
+		//      bool alreadyFound=false;
+		//      for(int i=0;i<retVal.Count;i++) {
+		//        if(retVal[i].PageTitle==wikiPage.PageTitle) {
+		//          alreadyFound=true;
+		//          break;
+		//        }
+		//      }
+		//      if(!alreadyFound) {
+		//        retVal.Add(wikiPage);
+		//      }
+		//    }
+		//    //Match Content third-----------------------------------------------------------------------------------
+		//    if(!ignoreContent) {
+		//      command=
+		//      "SELECT * FROM wikiPage "
+		//      +"WHERE PageContent LIKE '%"+searchText+"%' "
+		//      +"AND PageTitle NOT LIKE '\\_%' "
+		//      +"ORDER BY PageTitle;";
+		//      listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
+		//      foreach(WikiPage wikiPage in listWikiPageTemp) {
+		//        bool alreadyFound=false;
+		//        for(int i=0;i<retVal.Count;i++) {
+		//          if(retVal[i].PageTitle==wikiPage.PageTitle) {
+		//            alreadyFound=true;
+		//            break;
+		//          }
+		//        }
+		//        if(!alreadyFound) {
+		//          retVal.Add(wikiPage);
+		//        }
+		//      }
+		//    }//end !ignoreContent
+		//  }
+		//  return retVal;
+		//}
+
 		///<summary></summary>
-		public static List<WikiPage> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
+		public static List<string> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,searchDeleted,ignoreContent);
 			}
+			List<string> retVal=new List<string>();
+			DataTable tableResults=new DataTable();
 			string command="";
-			if(searchText=="") {//otherwise the search below is meaning less.
-				command="SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
+			if(searchDeleted) {
+				//No Search Text-----------------------------------------------------------------------------------
+				if(searchText=="") {
+					command=
+					"SELECT PageTitle FROM wikiPageHist "
 					+"WHERE PageTitle NOT LIKE '\\_%' "
-					+(searchDeleted?"AND IsDeleted=1;":";");
-				return Crud.WikiPageCrud.SelectMany(command);
-			}
-			List<WikiPage> retVal=new List<WikiPage>();
-			List<WikiPage> listWikiPageTemp=new List<WikiPage>();
-			//Match keywords first
-			command=
-			"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
-			+"WHERE PageContent LIKE '%[[keywords:%"+searchText+"%]]' "//This part needs work.
-			+"AND PageTitle NOT LIKE '\\_%' "
-			+(searchDeleted?"AND IsDeleted=1 ":"")
-			+"ORDER BY PageTitle;";
-			retVal=Crud.WikiPageCrud.SelectMany(command);
-			//Match PageTitle Second
-			command=
-			"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
-			+"WHERE PageTitle LIKE '%"+searchText+"%' "
-			+"AND PageTitle NOT LIKE '\\_%' "
-			+(searchDeleted?"AND IsDeleted=1 ":"")
-			+"ORDER BY PageTitle;";
-			listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
-			foreach(WikiPage wikiPage in listWikiPageTemp) {
-				if(retVal.Contains(wikiPage)) {
-					continue;
-				}
-				retVal.Add(wikiPage);
-			}
-			//Match Content third
-			if(!ignoreContent) {
-				command=
-				"SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
-				+"WHERE PageContent LIKE '%"+searchText+"%' "
-				+"AND PageTitle NOT LIKE '\\_%' "
-				+(searchDeleted?"AND IsDeleted=1 ":"")
-				+"ORDER BY PageTitle;";
-				listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
-				foreach(WikiPage wikiPage in listWikiPageTemp) {
-					if(retVal.Contains(wikiPage)) {
-						continue;
+					+"AND IsDeleted=1 "
+					+"GROUP BY PageTitle "
+					+"ORDER BY PageTitle;";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
 					}
-					retVal.Add(wikiPage);
 				}
-			}//end !ignoreContent
+				//Match title First-----------------------------------------------------------------------------------
+				command=
+				"SELECT PageTitle FROM wikiPageHist "
+				+"WHERE PageTitle LIKE '%"+searchText+"%' "
+				+"AND PageTitle NOT LIKE '\\_%' "
+				+"AND IsDeleted=1 "
+				+"GROUP BY PageTitle "
+				+"ORDER BY PageTitle;";
+				tableResults=Db.GetTable(command);
+				for(int i=0;i<tableResults.Rows.Count;i++) {
+					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+					}
+				}
+				//Match Content Second-----------------------------------------------------------------------------------
+				if(!ignoreContent) {
+					command=
+					"SELECT PageTitle FROM wikiPageHist "
+					+"WHERE PageContent LIKE '%"+searchText+"%' "
+					+"AND PageTitle NOT LIKE '\\_%' "
+					+"AND IsDeleted=1 "
+					+"GROUP BY PageTitle "
+					+"ORDER BY PageTitle;";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
+					}
+				}
+			}//end if searchDeleted
+			else {
+				//Match keywords first-----------------------------------------------------------------------------------
+				command=
+				"SELECT PageTitle FROM wikiPage "
+				+"WHERE KeyWords LIKE '%"+searchText+"%' "
+				+"AND PageTitle NOT LIKE '\\_%' "
+				+"GROUP BY PageTitle "
+				+"ORDER BY PageTitle;";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
+					}
+				//Match PageTitle Second-----------------------------------------------------------------------------------
+				command=
+				"SELECT PageTitle FROM wikiPage "
+				+"WHERE PageTitle LIKE '%"+searchText+"%' "
+				+"AND PageTitle NOT LIKE '\\_%' "
+				+"GROUP BY PageTitle "
+				+"ORDER BY PageTitle;";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
+					}
+				//Match Content third-----------------------------------------------------------------------------------
+				if(!ignoreContent) {
+					command=
+					"SELECT PageTitle FROM wikiPage "
+					+"WHERE PageContent LIKE '%"+searchText+"%' "
+					+"AND PageTitle NOT LIKE '\\_%' "
+					+"GROUP BY PageTitle "
+					+"ORDER BY PageTitle;";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
+					}
+				}
+			}//end search non deleted
 			return retVal;
 		}
 
@@ -229,12 +372,12 @@ namespace OpenDentBusiness{
 				s=s.Replace(match.Value,"<img src=\"file:///"+fullPath.Replace("\\","/")+"\" />");
 			}
 			//[[keywords: key1, key2, etc.]]------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");//^(\\s|\\d) because color codes are being replaced.
+			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");
 			foreach(Match match in matches) {//should be only one
 				s=s.Replace(match.Value,"<span class=\"keywords\">keywords:"+match.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
 			}
 			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\[\[.+?\]\]");//.*? matches as few as possible.
+			matches=Regex.Matches(s,@"\[\[.+?\]\]");
 			foreach(Match match in matches) {
 				string tmpStyle="";
 				if(GetByTitle(match.Value.Trim('[',']'))==null){//Later, instead of GetByTitle, we should just use a bool method. 
@@ -251,33 +394,35 @@ namespace OpenDentBusiness{
 			//{{color|red|text}}----------------------------------------------------------------------------------------------------------------
 			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
 			foreach(Match match in matches) {
+				string tempText="<span style=\"color:";
 				string[] tokens = match.Value.Split('|');
-				if(tokens.Length<3) {//not enough tokens
+				if(tokens.Length<2) {//not enough tokens
 					continue;
 				}
-				string tempText="";//text to be colored
-				for(int i=0;i<tokens.Length;i++){
-					if(i<2){//ignore the color and "#00FF00" values
-						continue;
-					}
-					if(i==tokens.Length-1) {//last token
-						tempText+=(i>2?"|":"")+tokens[i].TrimEnd('}');//This allows pipes "|" to be included in the colored text.
-						continue;
-					}
-					tempText+=(i>2?"|":"")+tokens[i];//This allows pipes "|" to be included in the colored text.
+				if(tokens[0].Split(':').Length!=2) {//Must have a color token and a color value seperated by a colon, no more no less.
+					continue;
 				}
-				s=s.Replace(match.Value,"<span style=\"color:"+tokens[1]+";\">"+tempText+"</span>");
+				for(int i=0;i<tokens.Length;i++){
+					if(i==0) {
+						tempText+=tokens[0].Split(':')[1]+";\">";//close <span> tag
+						continue;
+					}
+					tempText+=(i>1?"|":"")+tokens[i];
+				}
+				tempText=tempText.TrimEnd('}');
+				tempText+="</span>";
+				s=s.Replace(match.Value,tempText);
 			}
 			#endregion regex replacements
 			#region paragraph grouping
 			StringBuilder strbSnew=new StringBuilder();
 			strbSnew.Append("<body>");
-			StringBuilder strbThisP=new StringBuilder();//used to accumulate paragraphs.  Might use iScanning instead.
+			//StringBuilder strbThisP=new StringBuilder();//used to accumulate paragraphs.  Might use iScanning instead.
 			//a paragraph is defined as all text between sibling tags, even if just a \r\n.
 			int iScanInParagraph=0;//scan starting at the beginning of s.  S gets chopped from the start each time we grab a paragraph or a sibiling element.
 			//The scanning position represents the verified paragraph content, and does not advance beyond that.
 			//move <body> tag over.
-			strbSnew.Append("<body>");
+			//strbSnew.Append("<body>");
 			s=s.Substring(6);
 //todo: handle one leading CR if there is no text preceding it.
 			string tagName;
@@ -289,7 +434,7 @@ namespace OpenDentBusiness{
 				}
 				if(s.Substring(iScanInParagraph).StartsWith("</body>")) {
 					strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph)));
-					strbSnew.Append("</body>");
+					//strbSnew.Append("</body>");
 					s="";
 					iScanInParagraph=0;
 					break;
@@ -444,7 +589,7 @@ namespace OpenDentBusiness{
 			}
 			//spaces can't be handled prior to this point because &nbsp; crashes the xml parser.
 			strbOut.Replace("  ","&nbsp;&nbsp;");//handle extra spaces. 
-			strbOut.Replace("[[nbsp]]","&nbsp;");
+			//strbOut.Replace("[[nbsp]]","&nbsp;");//Maybe add back later if needed, but be sure to be careful to not catch this as an internal link to the "nbsp" page in the lines of code above.
 			strbOut.Replace("<p></p>","<p>&nbsp;</p>");//probably redundant but harmless
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());

@@ -49,6 +49,7 @@ namespace OpenDentBusiness.Crud{
 				wikiPage.WikiPageNum  = PIn.Long  (table.Rows[i]["WikiPageNum"].ToString());
 				wikiPage.UserNum      = PIn.Long  (table.Rows[i]["UserNum"].ToString());
 				wikiPage.PageTitle    = PIn.String(table.Rows[i]["PageTitle"].ToString());
+				wikiPage.KeyWords     = PIn.String(table.Rows[i]["KeyWords"].ToString());
 				wikiPage.PageContent  = PIn.String(table.Rows[i]["PageContent"].ToString());
 				wikiPage.DateTimeSaved= PIn.DateT (table.Rows[i]["DateTimeSaved"].ToString());
 				retVal.Add(wikiPage);
@@ -91,13 +92,14 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="WikiPageNum,";
 			}
-			command+="UserNum,PageTitle,PageContent,DateTimeSaved) VALUES(";
+			command+="UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(wikiPage.WikiPageNum)+",";
 			}
 			command+=
 				     POut.Long  (wikiPage.UserNum)+","
 				+"'"+POut.String(wikiPage.PageTitle)+"',"
+				+"'"+POut.String(wikiPage.KeyWords)+"',"
 				+"'"+POut.String(wikiPage.PageContent)+"',"
 				+    DbHelper.Now()+")";
 			if(useExistingPK || PrefC.RandomKeys) {
@@ -114,6 +116,7 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE wikipage SET "
 				+"UserNum      =  "+POut.Long  (wikiPage.UserNum)+", "
 				+"PageTitle    = '"+POut.String(wikiPage.PageTitle)+"', "
+				+"KeyWords     = '"+POut.String(wikiPage.KeyWords)+"', "
 				+"PageContent  = '"+POut.String(wikiPage.PageContent)+"', "
 				//DateTimeSaved not allowed to change
 				+"WHERE WikiPageNum = "+POut.Long(wikiPage.WikiPageNum);
@@ -130,6 +133,10 @@ namespace OpenDentBusiness.Crud{
 			if(wikiPage.PageTitle != oldWikiPage.PageTitle) {
 				if(command!=""){ command+=",";}
 				command+="PageTitle = '"+POut.String(wikiPage.PageTitle)+"'";
+			}
+			if(wikiPage.KeyWords != oldWikiPage.KeyWords) {
+				if(command!=""){ command+=",";}
+				command+="KeyWords = '"+POut.String(wikiPage.KeyWords)+"'";
 			}
 			if(wikiPage.PageContent != oldWikiPage.PageContent) {
 				if(command!=""){ command+=",";}

@@ -11554,6 +11554,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						WikiPageNum bigint NOT NULL auto_increment PRIMARY KEY,
 						UserNum bigint NOT NULL,
 						PageTitle varchar(255) NOT NULL,
+						KeyWords varchar(255) NOT NULL,
 						PageContent MEDIUMTEXT NOT NULL,
 						DateTimeSaved datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
 						INDEX(UserNum)
@@ -11567,6 +11568,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						WikiPageNum number(20) NOT NULL,
 						UserNum number(20) NOT NULL,
 						PageTitle varchar2(255),
+						KeyWords varchar2(255),
 						PageContent clob,
 						DateTimeSaved date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
 						CONSTRAINT wikipage_WikiPageNum PRIMARY KEY (WikiPageNum)
@@ -11634,23 +11636,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				} 
-				//todo: move this up to the wikipage table def
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE wikipage ADD IsDeleted tinyint NOT NULL";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE wikipage ADD IsDeleted number(3)";
-					Db.NonQ(command);
-					command="UPDATE wikipage SET IsDeleted = 0 WHERE IsDeleted IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE wikipage MODIFY IsDeleted NOT NULL";
-					Db.NonQ(command);
-				}
-				//todo: edit these 3 starting wikipages
-				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
-					+"0,"//no usernum set for the first 3 pages
-					+"'_Master',"	
+				//todo: edit these 2 starting wikipages
+				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved,IsDeleted) VALUES("
+					+"0,"//no usernum set for the first 2 pages
+					+"'_Master',"
+					+"'',"
 					+"'"+POut.String(@"<!DOCTYPE HTML PUBLIC ""-//W3C//DTD HTML 4.01 Transitional//EN"" ""http://www.w3.org/TR/html4/loose.dtd"">
 <head>
 <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
@@ -11719,9 +11709,7 @@ a.PageNotExists:hover {
 -->
 </style>
 </head>
-<body>
-@@@Content@@@
-</body>
+@@@body@@@
 </html>")+"',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command+="SYSDATE,";
@@ -11732,9 +11720,10 @@ a.PageNotExists:hover {
 				command+="0)";
 				Db.NonQ(command);
 				//blank home page
-				command="INSERT INTO wikipage (UserNum,PageTitle,PageContent,DateTimeSaved,IsDeleted) VALUES("
+				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWordsPageContent,DateTimeSaved,IsDeleted) VALUES("
 					+"0,"
 					+"'Home',"	
+					+"'',"
 					+"'Home',";
 				if(DataConnection.DBtype==DatabaseType.Oracle) {
 					command+="SYSDATE,";
@@ -11760,4 +11749,7 @@ a.PageNotExists:hover {
 
 	}
 }
+
+
+
 

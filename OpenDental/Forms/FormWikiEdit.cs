@@ -335,7 +335,7 @@ namespace OpenDental {
 		private void Color_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("{{color|red|"+textContent.SelectedText+"}}");//(tempLength>0?textContent.SelectedText:"")+"}}");
+			textContent.Paste("{{color:red|"+textContent.SelectedText+"}}");//(tempLength>0?textContent.SelectedText:"")+"}}");
 			textContent.Focus();
 			textContent.SelectionStart=tempStart+tempLength+12;
 			textContent.SelectionLength=0;

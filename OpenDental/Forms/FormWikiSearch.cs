@@ -10,7 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWikiSearch:Form {
-		private List<WikiPage> listWikiPages;
+		private List<string> listWikiPageTitles;
+		public string wikiPageTitleSelected;
 
 		public FormWikiSearch() {
 			InitializeComponent();
@@ -24,10 +25,12 @@ namespace OpenDental {
 			Width=Math.Min(tempWorkAreaRect.Width,1200);
 			Height=tempWorkAreaRect.Height;
 			FillGrid();
+			wikiPageTitleSelected="";
+			textSearch.Focus();
 		}
 
-		private void LoadWikiPage(WikiPage WikiPageCur) {
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
+		private void LoadWikiPage(string WikiPageTitleCur) {
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent);
 		}
 
 		/// <summary></summary>
@@ -39,10 +42,10 @@ namespace OpenDental {
 			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			listWikiPages=WikiPages.GetForSearch(textSearch.Text,checkDeletedOnly.Checked,checkIgnoreContent.Checked);
-			for(int i=0;i<listWikiPages.Count;i++) {
+			listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkDeletedOnly.Checked,checkIgnoreContent.Checked);
+			for(int i=0;i<listWikiPageTitles.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(listWikiPages[i].PageTitle);
+				row.Cells.Add(listWikiPageTitles[i]);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -50,12 +53,13 @@ namespace OpenDental {
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage(listWikiPages[e.Row]);
+			LoadWikiPage(listWikiPageTitles[e.Row]);
 			gridMain.Focus();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {			
 			//SelectedWikiPage=listWikiPages[e.Row];
+			wikiPageTitleSelected=listWikiPageTitles[e.Row];
 			DialogResult=DialogResult.OK;
 		}
 
@@ -76,6 +80,9 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length>0) {
+				wikiPageTitleSelected=listWikiPageTitles[gridMain.SelectedIndices[0]];
+			}
 			DialogResult=DialogResult.OK;
 		}
 

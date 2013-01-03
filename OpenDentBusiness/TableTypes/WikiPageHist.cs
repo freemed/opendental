@@ -20,8 +20,8 @@ namespace OpenDentBusiness {
 		public bool IsDeleted;
 
 		///<summary></summary>
-		public WikiPage Copy() {
-			return (WikiPage)MemberwiseClone();
+		public WikiPageHist Copy() {
+			return (WikiPageHist)MemberwiseClone();
 		}
 
 		/*If this does get added back, it belongs in an s class.

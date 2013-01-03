@@ -150,6 +150,9 @@ namespace OpenDental {
 			if(FormWS.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			if(WikiPageCur==null) {//if browsing the WWW
+				return;
+			}
 			LoadWikiPage(WikiPageCur.PageTitle);
 		}
 
@@ -259,6 +262,13 @@ namespace OpenDental {
 		private void Search_Click() {
 			FormWikiSearch FormWS=new FormWikiSearch();
 			FormWS.ShowDialog();
+			if(FormWS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(FormWS.wikiPageTitleSelected=="") {
+				return;
+			}
+			LoadWikiPage(FormWS.wikiPageTitleSelected);
 		}
 
 		private void webBrowserWiki_Navigating(object sender,WebBrowserNavigatingEventArgs e) {
