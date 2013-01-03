@@ -361,7 +361,6 @@ namespace OpenDentBusiness{
 				}
 			}
 			#endregion
-			//Ryan, foreach is ok for Matches, as you used them below.  That's one of the exceptions.
 			#region regex replacements
 			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
 			MatchCollection matches;
@@ -425,6 +424,7 @@ namespace OpenDentBusiness{
 			//strbSnew.Append("<body>");
 			s=s.Substring(6);
 //todo: handle one leading CR if there is no text preceding it.
+
 			string tagName;
 			while(true) {//loop to either construct a paragraph, or to immediately add the next tag to strbSnew.
 				iScanInParagraph=s.IndexOf("<",iScanInParagraph);//Advance the scanner to the start of the next tag
