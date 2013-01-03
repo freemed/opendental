@@ -481,8 +481,8 @@ namespace OpenDentBusiness {
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
 			command="SELECT ClaimNum,MAX(ClaimPaymentNum) ClaimPaymentNum,MAX(ClinicNum) ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,MAX(PatNum) PatNum,MAX(ProcDate) ProcDate,"//MAX functions added to preserve behavior in Oracle.
-				+"MAX(ProvNum) ProvNum,SUM(WriteOff) WriteOff_,"
-				+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "
+				+"MAX(ProvNum) ProvNum,SUM(WriteOff) WriteOff_ "
+				//+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "//not using this anymore.
 				+"FROM claimproc "
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (WriteOff>0 OR InsPayAmt!=0) "
@@ -536,7 +536,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]="0";
 				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
-				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaimPay.Rows[i]["provNum_"].ToString()));
+				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaimPay.Rows[i]["ProvNum"].ToString()));
 				row["StatementNum"]="0";
 				row["ToothNum"]="";
 				row["ToothRange"]="";
