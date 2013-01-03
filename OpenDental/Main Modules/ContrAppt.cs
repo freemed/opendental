@@ -4613,6 +4613,7 @@ namespace OpenDental {
 					ContrApptSingle3[GetIndex(apt.AptNum)].DataRoww["procs"].ToString()+", "+ apt.AptDateTime.ToString()+", Set Complete",
 					apt.AptNum);
 			}
+			Recalls.SynchScheduledApptFull(apt.PatNum);
 			ModuleSelected(pat.PatNum);
 			SetInvalid();
 			SecurityLogs.MakeLogEntry(Permissions.ProcComplCreate,pat.PatNum,

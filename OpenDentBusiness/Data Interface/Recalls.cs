@@ -640,7 +640,7 @@ namespace OpenDentBusiness{
 			}*/
 		}
 
-		/// <summary>Synchronizes DateScheduled column in recall table for one patient.  This must be used instead of lazy synch in RecallsForPatient, when deleting an appointment, when sending to unscheduled list, etc.  This is fast, but it would be inefficient to call it too much.</summary>
+		/// <summary>Synchronizes DateScheduled column in recall table for one patient.  This must be used instead of lazy synch in RecallsForPatient, when deleting an appointment, when sending to unscheduled list, setting an appointment complete, etc.  This is fast, but it would be inefficient to call it too much.</summary>
 		public static void SynchScheduledApptFull(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum);
