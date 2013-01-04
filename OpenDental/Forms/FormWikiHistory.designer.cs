@@ -79,6 +79,7 @@ namespace OpenDental{
 			// 
 			this.textContent.Location = new System.Drawing.Point(294, 12);
 			this.textContent.Name = "textContent";
+			this.textContent.ReadOnly = true;
 			this.textContent.SelectedText = "";
 			this.textContent.SelectionLength = 0;
 			this.textContent.SelectionStart = 0;

@@ -17,6 +17,50 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageHistCrud.SelectMany(command);
 		}
 
+		///<summary></summary>
+		public static List<string> GetForSearch(string searchText,bool ignoreContent) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,ignoreContent);
+			}
+			List<string> retVal=new List<string>();
+			DataTable tableResults=new DataTable();
+			string command="";
+				command=
+				"SELECT PageTitle FROM wikiPageHist "
+				+"WHERE PageTitle LIKE '%"+searchText+"%' "
+				+"AND PageTitle NOT LIKE '\\_%' "
+				+"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
+				+"AND IsDeleted=1 "
+				+"AND DateTimeSaved = (SELECT MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
+				//+"GROUP BY PageTitle "
+				+"ORDER BY PageTitle";
+				tableResults=Db.GetTable(command);
+				for(int i=0;i<tableResults.Rows.Count;i++) {
+					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+					}
+				}
+				//Match Content Second-----------------------------------------------------------------------------------
+				if(!ignoreContent) {
+					command=
+					"SELECT PageTitle FROM wikiPageHist "
+					+"WHERE PageContent LIKE '%"+searchText+"%' "
+					+"AND PageTitle NOT LIKE '\\_%' "
+					+"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
+					+"AND IsDeleted=1 "
+					+"AND DateTimeSaved = (Select MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
+					//+"GROUP BY PageTitle "
+					+"ORDER BY PageTitle";
+					tableResults=Db.GetTable(command);
+					for(int i=0;i<tableResults.Rows.Count;i++) {
+						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						}
+					}
+				}
+			return retVal;
+		}
+
 		///<summary>Only returns the most recently deleted version of the page. Returns null if not found.</summary>
 		public static WikiPageHist GetDeletedByTitle(string pageTitle) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

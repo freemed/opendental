@@ -182,62 +182,13 @@ namespace OpenDentBusiness{
 		//}
 
 		///<summary></summary>
-		public static List<string> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
+		public static List<string> GetForSearch(string searchText,bool ignoreContent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,searchDeleted,ignoreContent);
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,ignoreContent);
 			}
 			List<string> retVal=new List<string>();
 			DataTable tableResults=new DataTable();
 			string command="";
-			if(searchDeleted) {//SearchDeleted------------------------------------------------------------------------------
-				//  //No Search Text-----------------------------------------------------------------------------------
-				//  if(searchText=="") {
-				//    command=
-				//    "SELECT PageTitle FROM wikiPageHist "
-				//    +"WHERE PageTitle NOT LIKE '\\_%' "
-				//    +"AND IsDeleted=1 "
-				//    +"GROUP BY PageTitle "
-				//    +"ORDER BY PageTitle";
-				//    tableResults=Db.GetTable(command);
-				//    for(int i=0;i<tableResults.Rows.Count;i++) {
-				//      if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
-				//        retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-				//      }
-				//    }
-				//    return retVal;
-				//  }
-				//Match title First-----------------------------------------------------------------------------------
-				command=
-				"SELECT PageTitle FROM wikiPageHist "
-				+"WHERE PageTitle LIKE '%"+searchText+"%' "
-				+"AND PageTitle NOT LIKE '\\_%' "
-				+"AND IsDeleted=1 "
-				+"GROUP BY PageTitle "
-				+"ORDER BY PageTitle";
-				tableResults=Db.GetTable(command);
-				for(int i=0;i<tableResults.Rows.Count;i++) {
-					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
-						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-					}
-				}
-				//Match Content Second-----------------------------------------------------------------------------------
-				if(!ignoreContent) {
-					command=
-					"SELECT PageTitle FROM wikiPageHist "
-					+"WHERE PageContent LIKE '%"+searchText+"%' "
-					+"AND PageTitle NOT LIKE '\\_%' "
-					+"AND IsDeleted=1 "
-					+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
-					}
-				}
-			}
-			else {//!SearchDeleted------------------------------------------------------------------------------
 				//Match keywords first-----------------------------------------------------------------------------------
 				command=
 				"SELECT PageTitle FROM wikiPage "
@@ -279,7 +230,6 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-			}//end search non deleted
 			return retVal;
 		}
 
@@ -375,6 +325,16 @@ namespace OpenDentBusiness{
 			matches=Regex.Matches(s,@"\[\[(keywords:).*?\]\]");
 			foreach(Match match in matches) {//should be only one
 				s=s.Replace(match.Value,"<span class=\"keywords\">keywords:"+match.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
+			}
+			//[[file:C:\eaula.txt]]------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\[\[(notfile:).*?\]\]");
+			foreach(Match match in matches) {
+				s=s.Replace(match.Value,"<a href=\"notfile:"+match.Value.Replace("[[notfile:","").TrimEnd(']')+"\">notfile:"+match.Value.Replace("[[notfile:","").TrimEnd(']')+"</a>");
+			}
+			//[[folder:\\serverfiles\storage\]]------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\[\[(folder:).*?\]\]");
+			foreach(Match match in matches) {
+				s=s.Replace(match.Value,"<a href=\"folder:"+match.Value.Replace("[[folder:","").TrimEnd(']')+"\">"+match.Value.Replace("[[folder:","").TrimEnd(']')+"</a>");
 			}
 			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[.+?\]\]");

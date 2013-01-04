@@ -27,9 +27,10 @@ namespace OpenDental{
 			this.textSearch = new System.Windows.Forms.TextBox();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.picturePreview = new System.Windows.Forms.PictureBox();
+			this.labelImageSize = new System.Windows.Forms.Label();
+			this.butImport = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
 			((System.ComponentModel.ISupportInitialize)(this.picturePreview)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -48,6 +49,7 @@ namespace OpenDental{
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(113, 20);
 			this.textSearch.TabIndex = 14;
+			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
 			// 
 			// gridMain
 			// 
@@ -57,7 +59,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 38);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(248, 244);
+			this.gridMain.Size = new System.Drawing.Size(248, 444);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Available Images";
 			this.gridMain.TranslationName = "TableWikiSearchPages";
@@ -69,11 +71,36 @@ namespace OpenDental{
 			this.picturePreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.picturePreview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.picturePreview.Location = new System.Drawing.Point(266, 38);
 			this.picturePreview.Name = "picturePreview";
-			this.picturePreview.Size = new System.Drawing.Size(244, 244);
+			this.picturePreview.Size = new System.Drawing.Size(444, 444);
 			this.picturePreview.TabIndex = 17;
 			this.picturePreview.TabStop = false;
+			// 
+			// labelImageSize
+			// 
+			this.labelImageSize.Location = new System.Drawing.Point(263, 13);
+			this.labelImageSize.Name = "labelImageSize";
+			this.labelImageSize.Size = new System.Drawing.Size(447, 18);
+			this.labelImageSize.TabIndex = 21;
+			this.labelImageSize.Text = "Image Size:";
+			this.labelImageSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.Location = new System.Drawing.Point(716, 38);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(75, 24);
+			this.butImport.TabIndex = 20;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butImport_Click);
 			// 
 			// butOK
 			// 
@@ -83,11 +110,12 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(519, 228);
+			this.butOK.Location = new System.Drawing.Point(719, 428);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 19;
 			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
@@ -97,31 +125,19 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(519, 258);
+			this.butCancel.Location = new System.Drawing.Point(719, 458);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 18;
 			this.butCancel.Text = "&Cancel";
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(519, 198);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(75, 24);
-			this.button1.TabIndex = 20;
-			this.button1.Text = "Import";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormWikiImages
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(606, 294);
-			this.Controls.Add(this.button1);
+			this.ClientSize = new System.Drawing.Size(806, 494);
+			this.Controls.Add(this.labelImageSize);
+			this.Controls.Add(this.butImport);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.picturePreview);
@@ -132,6 +148,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Insert Image";
 			this.Load += new System.EventHandler(this.FormWikiImages_Load);
+			this.ResizeEnd += new System.EventHandler(this.FormWikiImages_ResizeEnd);
 			((System.ComponentModel.ISupportInitialize)(this.picturePreview)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -146,7 +163,8 @@ namespace OpenDental{
 		private System.Windows.Forms.PictureBox picturePreview;
 		private UI.Button butOK;
 		private UI.Button butCancel;
-		private UI.Button button1;
+		private UI.Button butImport;
+		private System.Windows.Forms.Label labelImageSize;
 
 
 	}

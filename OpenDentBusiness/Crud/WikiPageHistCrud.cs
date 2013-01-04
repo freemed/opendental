@@ -100,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 				     POut.Long  (wikiPageHist.UserNum)+","
 				+"'"+POut.String(wikiPageHist.PageTitle)+"',"
 				+"'"+POut.String(wikiPageHist.PageContent)+"',"
-				+    DbHelper.Now()+","
+				+    POut.DateT (wikiPageHist.DateTimeSaved)+","
 				+    POut.Bool  (wikiPageHist.IsDeleted)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
@@ -117,7 +117,7 @@ namespace OpenDentBusiness.Crud{
 				+"UserNum      =  "+POut.Long  (wikiPageHist.UserNum)+", "
 				+"PageTitle    = '"+POut.String(wikiPageHist.PageTitle)+"', "
 				+"PageContent  = '"+POut.String(wikiPageHist.PageContent)+"', "
-				//DateTimeSaved not allowed to change
+				+"DateTimeSaved=  "+POut.DateT (wikiPageHist.DateTimeSaved)+", "
 				+"IsDeleted    =  "+POut.Bool  (wikiPageHist.IsDeleted)+" "
 				+"WHERE WikiPageNum = "+POut.Long(wikiPageHist.WikiPageNum);
 			Db.NonQ(command);
@@ -138,7 +138,10 @@ namespace OpenDentBusiness.Crud{
 				if(command!=""){ command+=",";}
 				command+="PageContent = '"+POut.String(wikiPageHist.PageContent)+"'";
 			}
-			//DateTimeSaved not allowed to change
+			if(wikiPageHist.DateTimeSaved != oldWikiPageHist.DateTimeSaved) {
+				if(command!=""){ command+=",";}
+				command+="DateTimeSaved = "+POut.DateT(wikiPageHist.DateTimeSaved)+"";
+			}
 			if(wikiPageHist.IsDeleted != oldWikiPageHist.IsDeleted) {
 				if(command!=""){ command+=",";}
 				command+="IsDeleted = "+POut.Bool(wikiPageHist.IsDeleted)+"";

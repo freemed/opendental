@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -288,6 +289,22 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
+			else if(e.Url.ToString().Contains("notfile:")) {
+				try {
+					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("notfile:")+8).Replace("/","\\"));
+				}
+				catch(Exception ex) { }
+				e.Cancel=true;
+				return;
+			}
+			else if(e.Url.ToString().Contains("folder:")) {
+				try {
+					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("folder:")+7));
+				}
+				catch(Exception ex) { }
+				e.Cancel=true;
+				return;
+			}
 			else if(e.Url.ToString().StartsWith("http://")){//navigating outside of wiki, either by clicking a link or using back button.
 				WikiPageCur=null;//this effectively disables most of the toolbar buttons
 				Text = "Wiki - WWW";
@@ -295,12 +312,6 @@ namespace OpenDental {
 					historyNav.Add(e.Url.ToString());
 				}
 			}
-			//else if(e.Url.ToString().StartsWith("file:"){
-			//	open the actual file
-			//}
-			//else if(folder){
-			//	open the actual folder
-			//}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

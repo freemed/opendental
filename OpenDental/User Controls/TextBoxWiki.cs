@@ -63,6 +63,17 @@ namespace OpenDental {
 				textBoxMain.SelectionStart=value;
 			}
 		}
+		
+		///<summary></summary>
+		public bool ReadOnly{
+			get {
+				return textBoxMain.ReadOnly;
+			}
+			set {
+				textBoxMain.ReadOnly=value;
+				textBoxMain.BackColor=SystemColors.Window;
+			}
+		}
 
 		///<summary></summary>
 		public override string Text {

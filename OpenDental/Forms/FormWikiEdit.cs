@@ -46,6 +46,7 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage() {
+			webBrowserWiki.AllowNavigation=true;
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(textContent.Text);
 		}
 
@@ -187,7 +188,7 @@ namespace OpenDental {
 			if(!ValidateWikiPage(false)) {
 				return;
 			}
-			webBrowserWiki.AllowNavigation=true;
+			//webBrowserWiki.AllowNavigation=true;
 			LoadWikiPage();
 		}
 
@@ -198,6 +199,8 @@ namespace OpenDental {
 			//WikiPageCur.KeyWords=textKeyWords.Text;
 			WikiPageCur.PageContent=textContent.Text;
 			WikiPageCur.UserNum=Security.CurUser.UserNum;
+			WikiPageCur.KeyWords="";
+			WikiPageCur.KeyWords= new Regex(@"\[\[(keywords:).+?\]\]").Match(textContent.Text).Value.Replace("[[keywords:","").TrimEnd(']');//only grab first match
 			WikiPages.InsertAndArchive(WikiPageCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -246,11 +249,22 @@ namespace OpenDental {
 		}
 
 		private void File_Link_Click() {
-			
+			FormWikiFileFolder formWFF=new FormWikiFileFolder();
+			formWFF.ShowDialog();
+			if(formWFF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textContent.Paste("[[notfile:"+formWFF.SelectedLink+"]]");
 		}
 
 		private void Folder_Link_Click() {
-
+			FormWikiFileFolder formWFF=new FormWikiFileFolder();
+			formWFF.IsFolderMode=true;
+			formWFF.ShowDialog();
+			if(formWFF.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			textContent.Paste("[[folder:"+formWFF.SelectedLink+"]]");
 		}
 
 		private void Ext_Link_Click() {
@@ -385,6 +399,8 @@ namespace OpenDental {
 				return;
 			}
 			textContent.Paste("[[img:"+FormWI.SelectedImageName+"]]");
+			//webBrowserWiki.AllowNavigation=true;
+			LoadWikiPage();
 		}
 
 		///<summary>Validates content, and keywords.  isForSaving can be false if just validating for refresh.</summary>

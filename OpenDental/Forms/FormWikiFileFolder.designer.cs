@@ -24,27 +24,44 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.label1 = new System.Windows.Forms.Label();
-			this.textSearch = new System.Windows.Forms.TextBox();
+			this.textLink = new System.Windows.Forms.TextBox();
+			this.butBrowse = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.button1 = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12, 9);
+			this.label1.Location = new System.Drawing.Point(10, 24);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(76, 18);
 			this.label1.TabIndex = 15;
-			this.label1.Text = "Search";
+			this.label1.Text = "Path";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textSearch
+			// textLink
 			// 
-			this.textSearch.Location = new System.Drawing.Point(90, 8);
-			this.textSearch.Name = "textSearch";
-			this.textSearch.Size = new System.Drawing.Size(100, 20);
-			this.textSearch.TabIndex = 14;
+			this.textLink.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.textLink.Location = new System.Drawing.Point(88, 23);
+			this.textLink.Name = "textLink";
+			this.textLink.Size = new System.Drawing.Size(382, 20);
+			this.textLink.TabIndex = 14;
+			// 
+			// butBrowse
+			// 
+			this.butBrowse.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butBrowse.Autosize = true;
+			this.butBrowse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butBrowse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowse.CornerRadius = 4F;
+			this.butBrowse.Location = new System.Drawing.Point(476, 23);
+			this.butBrowse.Name = "butBrowse";
+			this.butBrowse.Size = new System.Drawing.Size(23, 20);
+			this.butBrowse.TabIndex = 18;
+			this.butBrowse.Text = "...";
+			this.butBrowse.Click += new System.EventHandler(this.butBrowse_Click);
 			// 
 			// butOK
 			// 
@@ -54,11 +71,12 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(321, 144);
+			this.butOK.Location = new System.Drawing.Point(478, 87);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 17;
 			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butCancel
 			// 
@@ -68,35 +86,22 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(402, 144);
+			this.butCancel.Location = new System.Drawing.Point(559, 87);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 16;
 			this.butCancel.Text = "&Cancel";
-			// 
-			// button1
-			// 
-			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.button1.CornerRadius = 4F;
-			this.button1.Location = new System.Drawing.Point(201, 13);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(23, 20);
-			this.button1.TabIndex = 18;
-			this.button1.Text = "...";
+			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// FormWikiFileFolder
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(489, 180);
-			this.Controls.Add(this.button1);
+			this.ClientSize = new System.Drawing.Size(646, 123);
+			this.Controls.Add(this.butBrowse);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textSearch);
+			this.Controls.Add(this.textLink);
 			this.Name = "FormWikiFileFolder";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Insert File Link";
@@ -109,10 +114,10 @@ namespace OpenDental{
 		#endregion
 
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textSearch;
+		private System.Windows.Forms.TextBox textLink;
 		private UI.Button butOK;
 		private UI.Button butCancel;
-		private UI.Button button1;
+		private UI.Button butBrowse;
 
 
 	}

@@ -21,6 +21,7 @@ namespace OpenDental {
 
 		private void FormWikiHistory_Load(object sender,EventArgs e) {
 			ResizeControls();
+			//textContent.ReadOnly=true;
 			FillGrid();
 			gridMain.SetSelected(gridMain.Rows.Count-1,true);//There will always be at least one page in the history
 			LoadWikiPage(ListWikiPageHists[gridMain.SelectedIndices[0]]);//should never be null.

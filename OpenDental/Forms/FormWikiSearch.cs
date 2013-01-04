@@ -48,13 +48,19 @@ namespace OpenDental {
 			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkDeletedOnly.Checked,checkIgnoreContent.Checked);
+			if(checkDeletedOnly.Checked) {
+				listWikiPageTitles=WikiPageHists.GetForSearch(textSearch.Text,checkIgnoreContent.Checked);
+			}
+			else {
+				listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkIgnoreContent.Checked);
+			}
 			for(int i=0;i<listWikiPageTitles.Count;i++) {
 				ODGridRow row=new ODGridRow();
 				row.Cells.Add(listWikiPageTitles[i]);
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			webBrowserWiki.DocumentText="";
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
