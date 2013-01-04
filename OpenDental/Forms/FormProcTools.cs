@@ -105,7 +105,7 @@ namespace OpenDental{
 			this.checkDcodes.Name = "checkDcodes";
 			this.checkDcodes.Size = new System.Drawing.Size(646,36);
 			this.checkDcodes.TabIndex = 45;
-			this.checkDcodes.Text = "D codes - Add any missing 2011 ADA codes and fix descriptions of existing codes. " +
+			this.checkDcodes.Text = "D codes - Add any missing 2013 ADA codes and fix descriptions of existing codes. " +
     " This option does not work in the trial version or compiled version.";
 			this.checkDcodes.UseVisualStyleBackColor = true;
 			// 

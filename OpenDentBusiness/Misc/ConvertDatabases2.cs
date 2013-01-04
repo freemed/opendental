@@ -11418,6 +11418,56 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.30.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_4_32();
+		}
+
+		private static void To12_4_32() {
+			if(FromVersion<new Version("12.4.32.0")) {
+				string command;
+				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
+					long codeNumD1203=0;
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1203'";
+					DataTable dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count>0) {
+						codeNumD1203=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					long codeNumD1204=0;
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1204'";
+					dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count>0) {
+						codeNumD1204=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					long codeNumD1208=0;
+					command="SELECT CodeNum FROM procedurecode WHERE ProcCode='D1208'";
+					dtProcCode=Db.GetTable(command);
+					if(dtProcCode.Rows.Count>0) {
+						codeNumD1208=PIn.Long(dtProcCode.Rows[0][0].ToString());
+					}
+					//Change the procedures on currently scheduled appointments to show D1208 instead of D1203/4.
+					command="UPDATE procedurelog "
+						+"SET CodeNum="+POut.Long(codeNumD1208)+" "
+						+"WHERE ProcStatus="+POut.Long((long)ProcStat.TP)+" AND CodeNum<>0 AND (CodeNum="+POut.Long(codeNumD1203)+" OR CodeNum="+POut.Long(codeNumD1204)+")";
+					Db.NonQ(command);
+					//Appt procs quick add, change the flouride code to D1208 instead of D1203/4.
+					command="SELECT DefNum,ItemValue FROM definition WHERE Category="+POut.Long((long)DefCat.ApptProcsQuickAdd);//A short list, so just get them all.
+					DataTable dtApptProcsQuickAdd=Db.GetTable(command);
+					for(int i=0;i<dtApptProcsQuickAdd.Rows.Count;i++) {
+						string procs=PIn.String(dtApptProcsQuickAdd.Rows[i]["ItemValue"].ToString());
+						string procs1208=procs.Replace("D1203","D1208").Replace("D1204","D1208");
+						if(procs==procs1208) {
+							continue; //There were no D1203 and no D1204.
+						}
+						long defNum=PIn.Long(dtApptProcsQuickAdd.Rows[i]["DefNum"].ToString());
+						command="UPDATE definition SET ItemValue='"+POut.String(procs1208)+"' WHERE DefNum="+POut.Long(defNum);
+						Db.NonQ(command);
+					}
+					//proc buttons, change flouride  to D1208 instead of D1203/4. We don't care about possible duplicates because they are highly unlikely.
+					command="UPDATE procbuttonitem SET CodeNum="+POut.Long(codeNumD1208)+" WHERE CodeNum<>0 AND (CodeNum="+POut.Long(codeNumD1203)+" OR CodeNum="+POut.Long(codeNumD1204)+")";
+					Db.NonQ(command);
+				}//end United States update
+				command="UPDATE preference SET ValueString = '12.4.32.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To12_5_0();
 		}
 
