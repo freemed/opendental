@@ -289,9 +289,9 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
-			else if(e.Url.ToString().Contains("notfile:")) {
+			else if(e.Url.ToString().Contains("wikifile:")) {
 				try {
-					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("notfile:")+8).Replace("/","\\"));
+					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifile:")+9).Replace("/","\\"));//Does not work with filenames that contain %20
 				}
 				catch(Exception ex) { }
 				e.Cancel=true;

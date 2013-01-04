@@ -10,6 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWikiExternalLink:Form {
+		public string URL;
+		public string DisplayText;
 
 		public FormWikiExternalLink() {
 			InitializeComponent();
@@ -17,6 +19,8 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			URL=textURL.Text;
+			DisplayText=textDisplay.Text;
 			DialogResult=DialogResult.OK;
 		}
 

@@ -254,7 +254,7 @@ namespace OpenDental {
 			if(formWFF.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			textContent.Paste("[[notfile:"+formWFF.SelectedLink+"]]");
+			textContent.Paste("[[file:"+formWFF.SelectedLink+"]]");
 		}
 
 		private void Folder_Link_Click() {
@@ -268,11 +268,17 @@ namespace OpenDental {
 		}
 
 		private void Ext_Link_Click() {
+			FormWikiExternalLink FormWEL=new FormWikiExternalLink();
+			FormWEL.ShowDialog();
 			int tempStart=textContent.SelectionStart;
-			textContent.Paste("<a href=\"\"></a>");
+			if(FormWEL.DialogResult!=DialogResult.OK) {
+				textContent.Paste("<a href=\"\"></a>");
+				textContent.SelectionStart=tempStart+11;
+				textContent.SelectionLength=0;
+				return;
+			}
+			textContent.Paste("<a href=\""+FormWEL.URL+"\">"+FormWEL.DisplayText+"</a>");
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+11;
-			textContent.SelectionLength=0;
 		}
 
 		private void H1_Click() {

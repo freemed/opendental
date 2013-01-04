@@ -327,9 +327,9 @@ namespace OpenDentBusiness{
 				s=s.Replace(match.Value,"<span class=\"keywords\">keywords:"+match.Value.Substring(11).TrimEnd("]".ToCharArray())+"</span>");
 			}
 			//[[file:C:\eaula.txt]]------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\[\[(notfile:).*?\]\]");
+			matches=Regex.Matches(s,@"\[\[(file:).*?\]\]");
 			foreach(Match match in matches) {
-				s=s.Replace(match.Value,"<a href=\"notfile:"+match.Value.Replace("[[notfile:","").TrimEnd(']')+"\">notfile:"+match.Value.Replace("[[notfile:","").TrimEnd(']')+"</a>");
+				s=s.Replace(match.Value,"<a href=\"wikifile:"+match.Value.Replace("[[file:","").TrimEnd(']')+"\">file:"+match.Value.Replace("[[file:","").TrimEnd(']')+"</a>");
 			}
 			//[[folder:\\serverfiles\storage\]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(folder:).*?\]\]");
