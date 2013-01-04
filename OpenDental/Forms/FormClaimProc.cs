@@ -1210,11 +1210,16 @@ namespace OpenDental
 		#endregion
 
 		private void FormClaimProcEdit_Load(object sender, System.EventArgs e) {
-			if(NoPermissionProc){//blocks users with no permission to edit procedure
+			Initialize();
+		}
+
+		///<summary>Same as calling FormClaimProcEdit_Load().  Used in unit test 28.</summary>
+		public void Initialize() {
+			if(NoPermissionProc) {//blocks users with no permission to edit procedure
 				butOK.Enabled=false;
 				butDelete.Enabled=false;
 			}
-			else if(ClaimProcCur.ClaimNum>0){
+			else if(ClaimProcCur.ClaimNum>0) {
 				Claim claim=Claims.GetClaim(ClaimProcCur.ClaimNum);
 				if(!Security.IsAuthorized(Permissions.ClaimSentEdit,claim.DateSent,true)) {//attached to claim, no permission for claims.
 					butOK.Enabled=false;
@@ -1231,9 +1236,9 @@ namespace OpenDental
 			List<InsSub> subList=InsSubs.RefreshForFam(FamCur);
 			textInsPlan.Text=InsPlans.GetDescript(ClaimProcCur.PlanNum,FamCur,PlanList,ClaimProcCur.InsSubNum,subList);
 			checkNoBillIns.Checked=ClaimProcCur.NoBillIns;
-			if(ClaimProcCur.ClaimPaymentNum>0){//attached to ins check
+			if(ClaimProcCur.ClaimPaymentNum>0) {//attached to ins check
 				textDateCP.ReadOnly=true;//DateCP always the same as the payment date and can't be changed here
-				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP)){
+				if(!Security.IsAuthorized(Permissions.InsPayEdit,ClaimProcCur.DateCP)) {
 					butOK.Enabled=false;
 				}
 				textInsPayAmt.ReadOnly=true;
@@ -1254,30 +1259,30 @@ namespace OpenDental
 				//listStatus.Enabled=false;//this is handled in the mousedown event
 				butDelete.Enabled=false;
 			}
-			else{
+			else {
 				labelAttachedToCheck.Visible=false;
 			}
-			if(ClaimProcCur.ProcNum==0){//total payment for a claim
+			if(ClaimProcCur.ProcNum==0) {//total payment for a claim
 				IsProc=false;
 				textDescription.Text="Total Payment";
 				textProcDate.ReadOnly=false;
 			}
-			else{
+			else {
 				IsProc=true;
 				BenefitList=Benefits.RefreshForPlan(ClaimProcCur.PlanNum,PatPlanNum);
-				if(proc==null){
+				if(proc==null) {
 					proc=Procedures.GetOneProc(ClaimProcCur.ProcNum,false);
 				}
 				textDescription.Text=ProcedureCodes.GetProcCode(proc.CodeNum).Descript;
 				textProcDate.ReadOnly=true;//user not allowed to edit ProcDate unless it's for a total payment
 			}
-			if(ClaimProcCur.ClaimNum>0){//attached to claim
+			if(ClaimProcCur.ClaimNum>0) {//attached to claim
 				radioClaim.Checked=true;
 				checkNoBillIns.Enabled=false;
-				if(IsInClaim){//(not from the procedure window)
+				if(IsInClaim) {//(not from the procedure window)
 					labelNotInClaim.Visible=false;
 				}
-				else{//must be accessing it from the Procedure window
+				else {//must be accessing it from the Procedure window
 					textCodeSent.ReadOnly=true;
 					textFeeBilled.ReadOnly=true;
 					labelNotInClaim.Visible=true;
@@ -1287,7 +1292,7 @@ namespace OpenDental
 					textWriteOff.ReadOnly=true;
 				}
 				groupClaimInfo.Visible=true;
-				if(ClaimProcCur.ProcNum==0){//if a total entry rather than by proc
+				if(ClaimProcCur.ProcNum==0) {//if a total entry rather than by proc
 					panelEstimateInfo.Visible=false;
 					//labelPatTotal.Visible=false;
 					labelInsPayAmt.Font=new Font(labelInsPayAmt.Font,FontStyle.Bold);
@@ -1298,7 +1303,7 @@ namespace OpenDental
 					labelFeeBilled.Visible=false;
 					textFeeBilled.Visible=false;
 				}
-				else if(ClaimProcCur.Status==ClaimProcStatus.Received){
+				else if(ClaimProcCur.Status==ClaimProcStatus.Received) {
 					labelInsPayAmt.Font=new Font(labelInsPayAmt.Font,FontStyle.Bold);
 				}
 				//butOK.Enabled=false;
@@ -1308,39 +1313,38 @@ namespace OpenDental
 			else //not attached to a claim
 				if(ClaimProcCur.PlanNum>0
 				&& (ClaimProcCur.Status==ClaimProcStatus.CapEstimate
-				|| ClaimProcCur.Status==ClaimProcStatus.CapComplete))
-			{
-				//InsPlans.Cur.PlanType=="c"){//capitation proc,whether Estimate or CapComplete,never billed to ins
-				foreach(System.Windows.Forms.Control control in panelEstimateInfo.Controls){
-					control.Visible=false;
+				|| ClaimProcCur.Status==ClaimProcStatus.CapComplete)) {
+					//InsPlans.Cur.PlanType=="c"){//capitation proc,whether Estimate or CapComplete,never billed to ins
+					foreach(System.Windows.Forms.Control control in panelEstimateInfo.Controls) {
+						control.Visible=false;
+					}
+					foreach(System.Windows.Forms.Control control in groupClaimInfo.Controls) {
+						control.Visible=false;
+					}
+					groupClaimInfo.Text="";
+					labelFee.Visible=true;
+					textFee.Visible=true;
+					labelCopayAmt.Visible=true;
+					textCopayAmt.Visible=true;
+					textCopayOverride.Visible=true;
+					if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate) {
+						labelWriteOffEst.Visible=true;
+						textWriteOffEst.Visible=true;
+					}
+					else {//capcomplete
+						labelWriteOff.Visible=true;
+						textWriteOff.Visible=true;
+					}
+					//labelPatTotal.Visible=true;
+					groupClaim.Visible=false;
+					labelNotInClaim.Visible=false;
 				}
-				foreach(System.Windows.Forms.Control control in groupClaimInfo.Controls){
-					control.Visible=false;
+				else {//estimate
+					groupClaimInfo.Visible=false;
+					radioEstimate.Checked=true;
+					labelNotInClaim.Visible=false;
+					panelClaimExtras.Visible=false;
 				}
-				groupClaimInfo.Text="";
-				labelFee.Visible=true;
-				textFee.Visible=true;
-				labelCopayAmt.Visible=true;
-				textCopayAmt.Visible=true;
-				textCopayOverride.Visible=true;
-				if(ClaimProcCur.Status==ClaimProcStatus.CapEstimate) {
-					labelWriteOffEst.Visible=true;
-					textWriteOffEst.Visible=true;
-				}
-				else {//capcomplete
-					labelWriteOff.Visible=true;
-					textWriteOff.Visible=true;
-				}
-				//labelPatTotal.Visible=true;
-				groupClaim.Visible=false;
-				labelNotInClaim.Visible=false;
-			}
-			else{//estimate
-				groupClaimInfo.Visible=false;
-				radioEstimate.Checked=true;
-				labelNotInClaim.Visible=false;
-				panelClaimExtras.Visible=false;
-			}
 			comboStatus.Items.Clear();
 			comboStatus.Items.Add(Lan.g(this,"Estimate"));
 			comboStatus.Items.Add(Lan.g(this,"Not Received"));
@@ -1351,18 +1355,18 @@ namespace OpenDental
 			comboStatus.Items.Add(Lan.g(this,"CapEstimate"));
 			comboStatus.Items.Add(Lan.g(this,"CapComplete"));
 			SetComboStatus(ClaimProcCur.Status);
-			if(ClaimProcCur.Status==ClaimProcStatus.Received || ClaimProcCur.Status==ClaimProcStatus.Supplemental){
+			if(ClaimProcCur.Status==ClaimProcStatus.Received || ClaimProcCur.Status==ClaimProcStatus.Supplemental) {
 				labelDateEntry.Visible=true;
 				textDateEntry.Visible=true;
 			}
-			else{
+			else {
 				labelDateEntry.Visible=false;
 				textDateEntry.Visible=false;
 			}
 			comboProvider.Items.Clear();
-			for(int i=0;i<ProviderC.ListShort.Count;i++){
+			for(int i=0;i<ProviderC.ListShort.Count;i++) {
 				comboProvider.Items.Add(ProviderC.ListShort[i].Abbr);
-				if(ClaimProcCur.ProvNum==ProviderC.ListShort[i].ProvNum){
+				if(ClaimProcCur.ProvNum==ProviderC.ListShort[i].ProvNum) {
 					comboProvider.SelectedIndex=i;
 				}
 			}
@@ -1378,16 +1382,16 @@ namespace OpenDental
 				textClinic.Text=Clinics.GetDesc(ClaimProcCur.ClinicNum);
 			}
 			textDateEntry.Text=ClaimProcCur.DateEntry.ToShortDateString();
-			if(ClaimProcCur.ProcDate.Year<1880){
+			if(ClaimProcCur.ProcDate.Year<1880) {
 				textProcDate.Text="";
 			}
-			else{
+			else {
 				textProcDate.Text=ClaimProcCur.ProcDate.ToShortDateString();
 			}
-			if(ClaimProcCur.DateCP.Year<1880){
+			if(ClaimProcCur.DateCP.Year<1880) {
 				textDateCP.Text="";
 			}
-			else{
+			else {
 				textDateCP.Text=ClaimProcCur.DateCP.ToShortDateString();
 			}
 			textCodeSent.Text=ClaimProcCur.CodeSent;
@@ -1396,6 +1400,40 @@ namespace OpenDental
 			FillInitialAmounts();
 			ComputeAmounts();
 			//MessageBox.Show(panelEstimateInfo.Visible.ToString());
+		}
+
+		///<summary>Do not use in release mode.  Used for unit test 28 to get UI values for text boxes in this form.  Returns null if textBoxName does not exist.</summary>
+		public string GetTextValue(string textBoxName) {
+			return GetTextValue(this,textBoxName);
+		}
+
+		///<summary>Recursive.  Do not use in release mode.  Used for unit test 28 to get UI values for text boxes in this form.  Returns null if textBoxName does not exist.</summary>
+		private string GetTextValue(Control control,string textBoxName) {
+			if(control.GetType()==typeof(TextBox)) {
+				TextBox textBox=(TextBox)control;
+				if(textBox.Name==textBoxName) {
+					return textBox.Text;
+				}
+			}
+			else if(control.GetType()==typeof(ValidDouble)) {
+				ValidDouble validDouble=(ValidDouble)control;
+				if(validDouble.Name==textBoxName) {
+					return validDouble.Text;
+				}
+			}
+			else if(control.GetType()==typeof(ValidDate)) {
+				ValidDate validDate=(ValidDate)control;
+				if(validDate.Name==textBoxName) {
+					return validDate.Text;
+				}
+			}
+			foreach(Control controlChild in control.Controls) {
+				string result=GetTextValue(controlChild,textBoxName);
+				if(result!=null) {
+					return result;
+				}
+			}
+			return null;
 		}
 
 		private void SetComboStatus(ClaimProcStatus status){

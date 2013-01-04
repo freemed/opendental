@@ -1533,6 +1533,221 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary>This unit test is the first one that looks at the values showing in the claimproc window.  This catches situations where the only "bug" is just a display issue in that window. Validates the values in the claimproc window when opened from the Chart module.</summary>
+		public static string TestTwentyEight(int specificTest) {
+			if(specificTest != 0 && specificTest !=28) {
+				return "";
+			}
+			string suffix="28";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMax(plan.PlanNum,1300);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,25);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
+			//proc1 - crown
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"1",800);//Tooth 1
+			ProcedureT.SetPriority(proc1,0);//Priority 1
+			//proc2 - crown
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"9",800);//Tooth 9
+			ProcedureT.SetPriority(proc2,1);//Priority 2
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			//Mimick the TP module estimate calculations when the TP module is loaded. We expect the user to refresh the TP module to calculate insurance estimates for all other areas of the program.
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++) {
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//Save changes in the list to the database, just like the TP module does when loaded. Then the values can be referenced elsewhere in the program instead of recalculating.
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			//Validate the estimates within the Edit Claim Proc window are correct when opened from inside of the Chart module by passing in a null histlist and a null looplist just like the Chart module would.
+			List<ClaimProcHist> histListNull=null;
+			List<ClaimProcHist> loopListNull=null;
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum,subNum);
+			FormClaimProc formCP1=new FormClaimProc(claimProc1,proc1,fam,pat,planList,histListNull,ref loopListNull,patPlans,false,subList);
+			formCP1.Initialize();
+			string dedEst1=formCP1.GetTextValue("textDedEst");
+			if(dedEst1!="25.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst1+" but should be $25.00 for proc1 from Chart module. \r\n");
+			}
+			string patPortCP1=formCP1.GetTextValue("textPatPortion1");
+			if(patPortCP1!="412.50") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP1+" but should be $412.50 for proc1 from Chart module. \r\n");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,subNum);
+			FormClaimProc formCP2=new FormClaimProc(claimProc2,proc2,fam,pat,planList,histListNull,ref loopListNull,patPlans,false,subList);
+			formCP2.Initialize();
+			string dedEst2=formCP2.GetTextValue("textDedEst");
+			if(dedEst2!="0.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst2+" but should be $0.00 for proc2 from Chart module. \r\n");
+			}
+			string patPortCP2=formCP2.GetTextValue("textPatPortion1");
+			if(patPortCP2!="400.00") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP2+" but should be $400.00 for proc2 from Chart module. \r\n");
+			}
+			retVal+="28: Passed.  Claim Procedure Edit window estimates correct from Chart module.\r\n";
+			return retVal;
+		}
+
+		///<summary>Validates the values in the claimproc window when opened from the Claim Edit window.</summary>
+		public static string TestTwentyNine(int specificTest) {
+			if(specificTest != 0 && specificTest !=29) {
+				return "";
+			}
+			string suffix="29";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMax(plan.PlanNum,1300);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,25);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
+			//proc1 - PerExam
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.C,"1",800);//Tooth 1
+			ProcedureT.SetPriority(proc1,0);//Priority 1
+			//proc2 - Prophy
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.C,"9",800);//Tooth 9
+			ProcedureT.SetPriority(proc2,1);//Priority 2
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			string retVal="";
+			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,ProcList,pat,ProcList,benefitList,subList);//Creates the claim in the same manner as the account module, including estimates.
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			//Validate the estimates as they would appear inside of the Claim Proc Edit window when opened from inside of the Edit Claim window by passing in the null histlist and null looplist that the Claim Edit window would send in.
+			List<ClaimProcHist> histList=null;
+			List<ClaimProcHist> loopList=null;
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum,subNum);
+			FormClaimProc formCP1=new FormClaimProc(claimProc1,proc1,fam,pat,planList,histList,ref loopList,patPlans,false,subList);
+			formCP1.IsInClaim=true;
+			formCP1.Initialize();
+			string dedEst1=formCP1.GetTextValue("textDedEst");
+			if(dedEst1!="25.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst1+" but should be $25.00 for proc1 from Edit Claim Window. \r\n");
+			}
+			string patPortCP1=formCP1.GetTextValue("textPatPortion1");
+			if(patPortCP1!="412.50") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP1+" but should be $412.50 for proc1 from Edit Claim Window. \r\n");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,subNum);
+			FormClaimProc formCP2=new FormClaimProc(claimProc2,proc2,fam,pat,planList,histList,ref loopList,patPlans,false,subList);
+			formCP2.IsInClaim=true;
+			formCP2.Initialize();
+			string dedEst2=formCP2.GetTextValue("textDedEst");
+			if(dedEst2!="0.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst2+" but should be $0.00 for proc2 from Edit Claim Window. \r\n");
+			}
+			string patPortCP2=formCP2.GetTextValue("textPatPortion1");
+			if(patPortCP2!="400.00") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP2+" but should be $400.00 for proc2 from Edit Claim Window. \r\n");
+			}
+			retVal+="29: Passed.  Claim Procedure Edit window estimates correct from Claim Edit window.\r\n";
+			return retVal;
+		}
+
+		///<summary>Validates the values in the claimproc window when opened from the TP module.</summary>
+		public static string TestThirty(int specificTest) {
+			if(specificTest != 0 && specificTest !=30) {
+				return "";
+			}
+			string suffix="30";
+			Patient pat=PatientT.CreatePatient(suffix);
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,plan.PlanNum);
+			long subNum=sub.InsSubNum;
+			BenefitT.CreateAnnualMax(plan.PlanNum,1300);
+			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,50);
+			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,25);
+			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
+			//proc1 - PerExam
+			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"1",800);//Tooth 1
+			ProcedureT.SetPriority(proc1,0);//Priority 1
+			//proc2 - Prophy
+			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"9",800);//Tooth 9
+			ProcedureT.SetPriority(proc2,1);//Priority 2
+			//Lists:
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			List<ClaimProc> claimProcListOld=new List<ClaimProc>();
+			Family fam=Patients.GetFamily(pat.PatNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(pat.PatNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=new List<ClaimProcHist>();
+			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Procedure[] ProcListTP=Procedures.GetListTP(ProcList);//sorted by priority, then toothnum
+			//Validate
+			//Mimick the TP module estimate calculations when the TP module is loaded.
+			string retVal="";
+			for(int i=0;i<ProcListTP.Length;i++) {
+				Procedures.ComputeEstimates(ProcListTP[i],pat.PatNum,ref claimProcs,false,planList,patPlans,benefitList,
+					histList,loopList,false,pat.Age,subList);
+				//then, add this information to loopList so that the next procedure is aware of it.
+				loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,ProcListTP[i].ProcNum,ProcListTP[i].CodeNum));
+			}
+			//Save changes in the list to the database, just like the TP module does when loaded.
+			ClaimProcs.Synch(ref claimProcs,claimProcListOld);
+			claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			//Validate the estimates within the Edit Claim Proc window are correct when opened from inside of the TP module by passing in same histlist and loop list that the TP module would.
+			histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlans,planList,DateTime.Today,subList);//The history list is fetched when the TP module is loaded and is passed in the same for all claimprocs.
+			loopList=new List<ClaimProcHist>();//Always empty for the first claimproc.
+			ClaimProc claimProc1=ClaimProcs.GetEstimate(claimProcs,proc1.ProcNum,plan.PlanNum,subNum);
+			FormClaimProc formCP1=new FormClaimProc(claimProc1,proc1,fam,pat,planList,histList,ref loopList,patPlans,false,subList);
+			formCP1.Initialize();
+			string dedEst1=formCP1.GetTextValue("textDedEst");
+			if(dedEst1!="25.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst1+" but should be $25.00 for proc1 from TP module. \r\n");
+			}
+			string patPortCP1=formCP1.GetTextValue("textPatPortion1");
+			if(patPortCP1!="412.50") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP1+" but should be $412.50 for proc1 from TP module. \r\n");
+			}
+			ClaimProc claimProc2=ClaimProcs.GetEstimate(claimProcs,proc2.ProcNum,plan.PlanNum,subNum);
+			histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlans,planList,DateTime.Today,subList);//The history list is fetched when the TP module is loaded and is passed in the same for all claimprocs.
+			loopList=new List<ClaimProcHist>();
+			loopList.AddRange(ClaimProcs.GetHistForProc(claimProcs,proc1.ProcNum,proc1.CodeNum));
+			FormClaimProc formCP2=new FormClaimProc(claimProc2,proc2,fam,pat,planList,histList,ref loopList,patPlans,false,subList);
+			formCP2.Initialize();
+			string dedEst2=formCP2.GetTextValue("textDedEst");
+			if(dedEst2!="0.00") {
+				throw new Exception("Deductible estimate in Claim Proc Edit window is $"+dedEst2+" but should be $0.00 for proc2 from TP module. \r\n");
+			}
+			string patPortCP2=formCP2.GetTextValue("textPatPortion1");
+			if(patPortCP2!="400.00") {
+				throw new Exception("Estimated patient portion in Claim Proc Edit window is $"+patPortCP2+" but should be $400.00 for proc2 from TP module. \r\n");
+			}
+			retVal+="30: Passed.  Claim Procedure Edit window estimates correct from TP module.\r\n";
+			return retVal;
+		}
+
 
 
 	}

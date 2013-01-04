@@ -330,6 +330,27 @@ namespace UnitTests {
 			catch(Exception ex) {
 				textResults.Text+="27: Failed. "+ex.Message;
 			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyEight(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="28: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestTwentyNine(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="29: Failed. "+ex.Message;
+			}
+			try {
+				Application.DoEvents();
+				textResults.Text+=AllTests.TestThirty(specificTest);
+			}
+			catch(Exception ex) {
+				textResults.Text+="30: Failed. "+ex.Message;
+			}
 			textResults.Text+="Done";
 			Cursor=Cursors.Default;
 		}
