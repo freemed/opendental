@@ -227,42 +227,42 @@ namespace OpenDentBusiness{
 				//FillMain(true);
 			}
 			//OT-------------------------------------------------------------------------------------------------------------
-			TimeSpan afterTime=TimeSpan.Zero;
-			TimeSpan beforeTime=TimeSpan.Zero;
-			TimeSpan overHours=TimeSpan.Zero;
+			TimeCardRule afterTimeRule=null;
+			TimeCardRule beforeTimeRule=null;
+			TimeCardRule overHoursRule=null;
 			//loop through timecardrules to find one rule of each kind.
 			for(int i=0;i<TimeCardRules.Listt.Count;i++) {
 				if(TimeCardRules.Listt[i].EmployeeNum!=0 && TimeCardRules.Listt[i].EmployeeNum!=EmployeeCur.EmployeeNum) {
 					continue;
 				}
 				if(TimeCardRules.Listt[i].AfterTimeOfDay > TimeSpan.Zero) {
-					if(afterTime > TimeSpan.Zero) {//already found a match, and this is a second match
+					if(afterTimeRule != null) {//already found a match, and this is a second match
 						throw new Exception("Error.  Multiple matches of AfterTimeOfDay found for this employee.  Only one allowed.");
 						//return;
 					}
-					afterTime=TimeCardRules.Listt[i].AfterTimeOfDay;
+					afterTimeRule=TimeCardRules.Listt[i];
 				}
 				else if(TimeCardRules.Listt[i].OverHoursPerDay > TimeSpan.Zero) {
-					if(overHours > TimeSpan.Zero) {//already found a match, and this is a second match
+					if(overHoursRule != null) {//already found a match, and this is a second match
 						throw new Exception("Error.  Multiple matches of OverHoursPerDay found for this employee.  Only one allowed.");
 						//return;
 					}
-					overHours=TimeCardRules.Listt[i].OverHoursPerDay;
+					overHoursRule=TimeCardRules.Listt[i];
 				}
-				if(afterTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
+				if(afterTimeRule!= null && overHoursRule != null) {
 					throw new Exception("Error.  Both an OverHoursPerDay and an AfterTimeOfDay found for this employee.  Only one or the other is allowed.");
 					//return;
 				}
-				if(beforeTime > TimeSpan.Zero && overHours > TimeSpan.Zero) {
+				if(beforeTimeRule != null && overHoursRule != null) {
 					throw new Exception("Error.  Both an OverHoursPerDay and an BeforeTimeOfDay found for this employee.  Only one or the other is allowed.");
 					//return;
 				}
 				if(TimeCardRules.Listt[i].BeforeTimeOfDay > TimeSpan.Zero) {
-					if(beforeTime>TimeSpan.Zero) {//already found a match, and this is a second match
+					if(beforeTimeRule != null) {//already found a match, and this is a second match
 						throw new Exception("Error.  Multiple matches of BeforeTimeOfDay found for this employee.  Only one allowed.");
 						//return;
 					}
-					beforeTime=TimeCardRules.Listt[i].BeforeTimeOfDay;
+					beforeTimeRule=TimeCardRules.Listt[i];
 				}
 			}
 			//loop through all ClockEvents in this grid.
@@ -301,29 +301,50 @@ namespace OpenDentBusiness{
 					dailyTotal-=ClockEventList[i].OTimeHours;
 					continue;
 				}
-				if(afterTime != TimeSpan.Zero) {
+				if(afterTimeRule != null) {
 					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTime) {//the start time is after time, so the whole pairTotal is OT
-						ClockEventList[i].OTimeAuto=pairTotal;
+					TimeSpan afterTime=TimeSpan.Zero;
+					if(ClockEventList[i].TimeDisplayed1.TimeOfDay > afterTimeRule.AfterTimeOfDay) {//the start time is after time, so the whole pairTotal is OT
+						afterTime=pairTotal;
 					}
-					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTime) {//only the second time is after time
-						ClockEventList[i].OTimeAuto=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTime;//only a portion of the pairTotal is OT
+					else if(ClockEventList[i].TimeDisplayed2.TimeOfDay > afterTimeRule.AfterTimeOfDay) {//only the second time is after time
+						afterTime=ClockEventList[i].TimeDisplayed2.TimeOfDay-afterTimeRule.AfterTimeOfDay;//only a portion of the pairTotal is OT
+					}
+					if(afterTimeRule.AmtDiff>0) {
+						ClockEventList[i].AmountBonusAuto=afterTimeRule.AmtDiff*((double)afterTime.Hours + (double)afterTime.Minutes/60);
+					}
+					else {
+						ClockEventList[i].OTimeAuto=afterTime;
 					}
 				}
-				if(beforeTime!=TimeSpan.Zero) {
+				if(beforeTimeRule != null) {
 					//test to see if this span is after specified time
-					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTime) {//the end time is before time, so the whole pairTotal is OT
-						ClockEventList[i].OTimeAuto+=pairTotal;
+					TimeSpan beforeTime=TimeSpan.Zero;
+					if(ClockEventList[i].TimeDisplayed2.TimeOfDay < beforeTimeRule.BeforeTimeOfDay) {//the end time is before time, so the whole pairTotal is OT
+						beforeTime+=pairTotal;
 					}
-					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTime) {//only the first time is before time
-						ClockEventList[i].OTimeAuto+=beforeTime-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
+					else if(ClockEventList[i].TimeDisplayed1.TimeOfDay < beforeTimeRule.BeforeTimeOfDay) {//only the first time is before time
+						beforeTime+=beforeTimeRule.BeforeTimeOfDay-ClockEventList[i].TimeDisplayed1.TimeOfDay;//only a portion of the pairTotal is OT
+					} 
+					if(beforeTimeRule.AmtDiff>0) {
+						ClockEventList[i].AmountBonusAuto+=beforeTimeRule.AmtDiff*((double)beforeTime.Hours + (double)beforeTime.Minutes/60);
+					}
+					else {
+						ClockEventList[i].OTimeAuto+=beforeTime;
 					}
 				}
-				if(overHours != TimeSpan.Zero) {
+				if(overHoursRule != null) {
 					//test dailyTotal
-					if(dailyTotal > overHours) {
-						ClockEventList[i].OTimeAuto=dailyTotal-overHours;
-						dailyTotal=overHours;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
+					TimeSpan overHours=TimeSpan.Zero;
+					if(dailyTotal > overHoursRule.OverHoursPerDay) {
+						overHours=dailyTotal-overHoursRule.OverHoursPerDay;
+						dailyTotal=overHoursRule.OverHoursPerDay;//e.g. reset to 8.  Any further pairs on this date will be wholly OT
+						if(overHoursRule.AmtDiff>0) {
+							ClockEventList[i].AmountBonus+=overHoursRule.AmtDiff*((double)overHours.Hours + (double)overHours.Minutes/60);
+						}
+						else {
+							ClockEventList[i].OTimeAuto+=overHours;
+						}
 					}
 				}
 				ClockEvents.Update(ClockEventList[i]);
