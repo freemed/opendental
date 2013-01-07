@@ -1622,10 +1622,10 @@ namespace UnitTests {
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,50);
 			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,25);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
-			//proc1 - PerExam
+			//proc1 - crown
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.C,"1",800);//Tooth 1
 			ProcedureT.SetPriority(proc1,0);//Priority 1
-			//proc2 - Prophy
+			//proc2 - crown
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.C,"9",800);//Tooth 9
 			ProcedureT.SetPriority(proc2,1);//Priority 2
 			//Lists:
@@ -1686,10 +1686,10 @@ namespace UnitTests {
 			BenefitT.CreateCategoryPercent(plan.PlanNum,EbenefitCategory.Crowns,50);
 			BenefitT.CreateDeductibleGeneral(plan.PlanNum,BenefitCoverageLevel.Individual,25);
 			PatPlanT.CreatePatPlan(1,pat.PatNum,subNum);
-			//proc1 - PerExam
+			//proc1 - crown
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"1",800);//Tooth 1
 			ProcedureT.SetPriority(proc1,0);//Priority 1
-			//proc2 - Prophy
+			//proc2 - crown
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D2790",ProcStat.TP,"9",800);//Tooth 9
 			ProcedureT.SetPriority(proc2,1);//Priority 2
 			//Lists:
