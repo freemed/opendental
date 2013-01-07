@@ -245,8 +245,9 @@ namespace OpenDental.UI{
 		///<summary></summary>
 		protected void OnButtonClicked(ODToolBarButton myButton){
 			ODToolBarButtonClickEventArgs bArgs=new ODToolBarButtonClickEventArgs(myButton);
-			if(ButtonClick!=null)
+			if(ButtonClick!=null) {
 				ButtonClick(this,bArgs);
+			}
 		}
 
 		private void RecalculateButtonsizes(Graphics g){
@@ -261,7 +262,7 @@ namespace OpenDental.UI{
 			}
 			foreach(ODToolBarButton button in buttons){
 				if(button.Style==ODToolBarButtonStyle.Separator){
-					width=3;
+					width=4;
 				}
 				else if(imageList==null || button.ImageIndex==-1){
 					width=(int)g.MeasureString(button.Text,Font).Width+10;
@@ -305,10 +306,15 @@ namespace OpenDental.UI{
 		private void DrawButton(Graphics g,ODToolBarButton button){
 			if(button.Style==ODToolBarButtonStyle.Separator){
 				//was 112,128,144
+				//medium stripe
 				g.DrawLine(new Pen(Color.FromArgb(190,200,210)),button.Bounds.Left,button.Bounds.Top+1,
 					button.Bounds.Left,button.Bounds.Bottom-2);
-				g.DrawLine(new Pen(Color.FromArgb(130,140,160)),button.Bounds.Left+1,button.Bounds.Top+1,
-					button.Bounds.Left+1,button.Bounds.Bottom-2);
+				//dark stripe
+				g.DrawLine(new Pen(Color.FromArgb(130,140,160)),button.Bounds.Left+1,button.Bounds.Top,
+					button.Bounds.Left+1,button.Bounds.Bottom-1);
+				//white stripe
+				g.DrawLine(new Pen(Color.FromArgb(255,255,255)),button.Bounds.Left+2,button.Bounds.Top+1,
+					button.Bounds.Left+2,button.Bounds.Bottom-2);
 				return;
 			}
 			//draw background

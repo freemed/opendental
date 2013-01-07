@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -13,6 +14,12 @@ namespace OpenDental {
 	public partial class FormWiki:Form {
 		public WikiPage WikiPageCur;		
 		private List<string> historyNav;
+		const int FEATURE_DISABLE_NAVIGATION_SOUNDS = 21;
+		const int SET_FEATURE_ON_PROCESS = 0x00000002;
+		[DllImport("urlmon.dll")]
+		[PreserveSig]
+		[return: MarshalAs(UnmanagedType.Error)]
+		static extern int CoInternetSetFeatureEnabled(int FeatureEntry,[MarshalAs(UnmanagedType.U4)] int dwFlags,bool fEnable);
 
 		public FormWiki() {
 			InitializeComponent();
@@ -20,16 +27,16 @@ namespace OpenDental {
 		}
 
 		private void FormWiki_Load(object sender,EventArgs e) {
-			//WindowState=FormWindowState.Maximized;
-			Rectangle tempWorkAreaRect=System.Windows.Forms.Screen.GetWorkingArea(this);
+			//disable the annoying clicking sound when the browser navigates
+			CoInternetSetFeatureEnabled(FEATURE_DISABLE_NAVIGATION_SOUNDS,SET_FEATURE_ON_PROCESS,true);
+			Rectangle rectWorkingArea=System.Windows.Forms.Screen.GetWorkingArea(this);
 			Top=0;
-			Left=Math.Max(0,(tempWorkAreaRect.Width-960)/2);
-			Width=Math.Min(tempWorkAreaRect.Width,960);
-			Height=tempWorkAreaRect.Height;
-			//Height=SystemInformation.PrimaryMonitorSize.Height;
+			Left=Math.Max(0,((rectWorkingArea.Width-960)/2)+rectWorkingArea.Left);
+			Width=Math.Min(rectWorkingArea.Width,960);
+			Height=rectWorkingArea.Height;
 			LayoutToolBar();
 			historyNav=new List<string>();
-			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
+			LoadWikiPage("Home");
 		}
 
 		private void LoadWikiPage(string pageTitle) {
@@ -53,7 +60,7 @@ namespace OpenDental {
 				wpage=WikiPages.GetByTitle(pageTitle);
 			}
 			WikiPageCur=wpage;
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent,false);
 			Text="Wiki - "+WikiPageCur.PageTitle;
 			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {
 				historyNav.Add("wiki:"+pageTitle);
@@ -196,19 +203,18 @@ namespace OpenDental {
 		}
 
 		private void Delete_Click() {
-			//MessageBox.Show("not yet functional");
 			if(WikiPageCur==null) {
 				return;
 			}
-			if(WikiPageCur.PageTitle=="Home") {//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
+			if(WikiPageCur.PageTitle=="Home") {
 				MsgBox.Show(this,"Cannot delete homepage."); 
-					return;
+				return;
 			}
-			if(MessageBox.Show(Lan.g(this,"Delete the wiki page")+":"+WikiPageCur.PageTitle+"?","",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this wiki page?  It will still be available from the Search window if needed.")) {
 				return;
 			}
 			WikiPages.Delete(WikiPageCur.PageTitle);
-			LoadWikiPage("Home");//TODO:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)*/
+			LoadWikiPage("Home");
 		}
 
 		private void History_Click() {
@@ -247,6 +253,8 @@ namespace OpenDental {
 			FormWE.WikiPageCur=new WikiPage();
 			FormWE.WikiPageCur.IsNew=true;
 			FormWE.WikiPageCur.PageTitle=FormWR.PageTitle;
+			FormWE.WikiPageCur.PageContent="[["+WikiPageCur.PageTitle+"]]\r\n"//link back
+				+"<h1>"+FormWR.PageTitle+"</h1>\r\n";//page title
 			FormWE.ShowDialog();
 			if(FormWE.DialogResult!=DialogResult.OK) {
 				return;
@@ -290,16 +298,28 @@ namespace OpenDental {
 				return;
 			}
 			else if(e.Url.ToString().Contains("wikifile:")) {
+				string fileName=e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifile:")+9).Replace("/","\\");
+				if(!File.Exists(fileName)) {
+					MessageBox.Show(Lan.g(this,"File does not exist: ")+fileName);
+					e.Cancel=true;
+					return;
+				}
 				try {
-					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifile:")+9).Replace("/","\\"));//Does not work with filenames that contain %20
+					System.Diagnostics.Process.Start(fileName);
 				}
 				catch(Exception ex) { }
 				e.Cancel=true;
 				return;
 			}
 			else if(e.Url.ToString().Contains("folder:")) {
+				string folderName=e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifile:")+7).Replace("/","\\");
+				if(!Directory.Exists(folderName)) {
+					MessageBox.Show(Lan.g(this,"Folder does not exist: ")+folderName);
+					e.Cancel=true;
+					return;
+				}
 				try {
-					System.Diagnostics.Process.Start(e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("folder:")+7));
+					System.Diagnostics.Process.Start(folderName);
 				}
 				catch(Exception ex) { }
 				e.Cancel=true;

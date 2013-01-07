@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 		public string PageTitle;
 		///<summary>The entire contents of the revision are stored in "wiki markup language".  This should never be updated.  Medtext (16M)</summary>
 		public string PageContent;
-		///<summary>The DateTime that the page was saved to the DB.  User can't edit.</summary>
+		///<summary>The DateTime from the original WikiPage object.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSaved;
 		///<summary>This flag will only be set for the revision where the user marked it deleted, not the ones prior.</summary>

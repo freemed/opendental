@@ -94,7 +94,7 @@ namespace OpenDental{
 			// 
 			// textSearch
 			// 
-			this.textSearch.Location = new System.Drawing.Point(90,8);
+			this.textSearch.Location = new System.Drawing.Point(112,8);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(100,20);
 			this.textSearch.TabIndex = 0;
@@ -102,11 +102,11 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12,9);
+			this.label1.Location = new System.Drawing.Point(7,9);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(76,18);
+			this.label1.Size = new System.Drawing.Size(102,18);
 			this.label1.TabIndex = 11;
-			this.label1.Text = "Search";
+			this.label1.Text = "Search Titles";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// butBrackets

@@ -11,7 +11,7 @@ namespace OpenDentBusiness {
 		public long UserNum;
 		///<summary>Must be unique.  Any character is allowed except: \r, \n, and ".  Needs to be tested, especially with apostrophes.</summary>
 		public string PageTitle;
-		///<summary>Automatically filled from the [[Keywords:]] tab in the PageContent field.</summary>
+		///<summary>Automatically filled from the [[Keywords:]] tab in the PageContent field as page is being saved.</summary>
 		public string KeyWords;
 		///<summary>Content of page stored in "wiki markup language".  This should never be updated.  Medtext (16M)</summary>
 		public string PageContent;

@@ -18,6 +18,9 @@ namespace OpenDental {
 		private int SelectionLengthMem;
 		private Point MouseDownLocation;
 		private Bitmap BitmapWhileDragging;
+		///<summary></summary>
+		[Category("Property Changed"),Description("Occurs when value of Text property is changed.")]
+		public event EventHandler TextChanged=null;
 	
 		public TextBoxWiki() {
 			InitializeComponent();
@@ -74,6 +77,15 @@ namespace OpenDental {
 				textBoxMain.BackColor=SystemColors.Window;
 			}
 		}
+		#endregion Properties
+
+		#region overrides
+		protected override void OnPaint(PaintEventArgs pe) {
+			base.OnPaint(pe);
+			if(paintIsBlocked) {
+				pe.Graphics.DrawImage(BitmapWhileDragging,new Point(0,0));
+			}
+		}
 
 		///<summary></summary>
 		public override string Text {
@@ -84,15 +96,17 @@ namespace OpenDental {
 				textBoxMain.Text=value;
 			}
 		}
-		#endregion Properties
 
-		#region overrides
-		protected override void OnPaint(PaintEventArgs pe) {
-			base.OnPaint(pe);
-			if(paintIsBlocked) {
-				pe.Graphics.DrawImage(BitmapWhileDragging,new Point(0,0));
+		public override Font Font {
+			get {
+				return base.Font;
+			}
+			set {
+				base.Font = value;
+				textBoxMain.Font=value;
 			}
 		}
+
 		#endregion overrides
 
 		#region Passthrough Methods
@@ -226,7 +240,7 @@ namespace OpenDental {
 					SelectionLengthMem=0;//typing a char such as backspace is a common way to move from selected text to a state where no text is selected. 
 					break;
 				case Keys.Tab:
-					textBoxMain.Paste("     ");
+					textBoxMain.Paste("   ");
 					SelectionLengthMem=0;
 					e.SuppressKeyPress=true;//or use this?
 					//e.Handled=true;//don't allow the tab char to go into the texbox
@@ -292,6 +306,9 @@ namespace OpenDental {
 						textBoxMain.SelectionStart=charIndexMouseUp;
 						textBoxMain.SelectionLength=SelectionLengthMem;
 					}
+					else if(charIndexMouseUp < SelectionStartMem+SelectionLengthMem){//new position is within the selected text
+						//do nothing
+					}
 					else {//new position is after old position
 						//add the text in at the new spot
 						textBoxMain.Text=textBoxMain.Text.Substring(0,charIndexMouseUp)+selectedText+textBoxMain.Text.Substring(charIndexMouseUp);
@@ -316,7 +333,15 @@ namespace OpenDental {
 				SelectionLengthMem=textBoxMain.SelectionLength;
 			}
 		}
+
+		private void textBoxMain_TextChanged(object sender,EventArgs e) {
+			if(TextChanged!=null) {
+				TextChanged(this,new EventArgs());
+			}
+		}
 		#endregion Events
+
+		
 
 		
 

@@ -53,12 +53,11 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(),pageTitle);
 			}
-			//string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"' and DateTimeSaved=(SELECT MAX(DateTimeSaved) FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"');";
 			string command="SELECT * FROM wikipage WHERE PageTitle='"+POut.String(pageTitle)+"'";
 			return Crud.WikiPageCrud.SelectOne(command);
 		}
 
-		///<summary>Returns a list of pages with PageTitle LIKE '%searchText%'.</summary>
+		///<summary>Returns a list of pages with PageTitle LIKE '%searchText%'.  Excludes titles that start with underscore.</summary>
 		public static List<WikiPage> GetByTitleContains(string searchText) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(),searchText);
@@ -66,6 +65,15 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' "
 				+"AND PageTitle LIKE '%"+POut.String(searchText)+"%' ORDER BY PageTitle";
 			return Crud.WikiPageCrud.SelectMany(command);
+		}
+
+		///<summary>Used when saving a page to check and fix the capitalization on each internal link. So the returned pagetitle might have different capitalization than the supplied pagetitle</summary>
+		public static string GetTitle(string pageTitle) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),pageTitle);
+			}
+			string command="SELECT PageTitle FROM wikipage WHERE PageTitle = '"+POut.String(pageTitle)+"'";
+			return Db.GetScalar(command);
 		}
 
 		///<summary>Archives first by moving to WikiPageHist if it already exists.  Then, in either case, it inserts the new page.</summary>
@@ -83,103 +91,6 @@ namespace OpenDentBusiness{
 			}
 			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
-
-		//public static List<WikiPage> GetForSearch(string searchText,bool searchDeleted,bool ignoreContent) {
-		//  if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-		//    return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod());
-		//  }
-		//  string command="";
-		//  if(searchText=="") {//otherwise the search below is meaning less.
-		//    command="SELECT * FROM "+(searchDeleted?"wikiPageHist ":"wikiPage ")
-		//      +"WHERE PageTitle NOT LIKE '\\_%' "
-		//      +(searchDeleted?"AND IsDeleted=1;":";");
-		//    return Crud.WikiPageCrud.SelectMany(command);
-		//  }
-		//  List<WikiPage> retVal=new List<WikiPage>();
-		//  List<WikiPage> listWikiPageTemp=new List<WikiPage>();
-		//  if(searchDeleted){
-		//    //Match title First-----------------------------------------------------------------------------------
-		//    command=
-		//    "SELECT * FROM wikiPageHist "
-		//    +"WHERE PagetTitle LIKE '%"+searchText+"%' "
-		//    +"AND PageTitle NOT LIKE '\\_%' "
-		//    +"AND IsDeleted=1 "
-		//    +"ORDER BY PageTitle;";
-		//    retVal=Crud.WikiPageCrud.SelectMany(command);
-		//    //Match Content Second-----------------------------------------------------------------------------------
-		//    if(!ignoreContent){
-		//      command=
-		//      "SELECT * FROM wikiPageHist "
-		//      +"WHERE PageContent LIKE '%"+searchText+"%' "
-		//      +"AND PageTitle NOT LIKE '\\_%' "
-		//      +"AND IsDeleted=1 "
-		//      +"ORDER BY PageTitle;";
-		//      listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
-		//      foreach(WikiPage wikiPage in listWikiPageTemp) {
-		//        bool alreadyFound=false;
-		//        for(int i=0;i<retVal.Count;i++) {
-		//          if(retVal[i].PageTitle==wikiPage.PageTitle) {
-		//            alreadyFound=true;
-		//            break;
-		//          }
-		//        }
-		//        if(!alreadyFound) {
-		//          retVal.Add(wikiPage);
-		//        }
-		//      }//end listWikiPageTemp
-		//    }//end if ignoreContent
-		//  }//end if searchDeleted
-		//  else{
-		//    //Match keywords first-----------------------------------------------------------------------------------
-		//    command=
-		//    "SELECT * FROM wikiPage "
-		//    +"WHERE KeyWords LIKE '%"+searchText+"%' "
-		//    +"AND PageTitle NOT LIKE '\\_%' "
-		//    +"ORDER BY PageTitle;";
-		//    retVal=Crud.WikiPageCrud.SelectMany(command);
-		//    //Match PageTitle Second-----------------------------------------------------------------------------------
-		//    command=
-		//    "SELECT * FROM wikiPage "
-		//    +"WHERE PageTitle LIKE '%"+searchText+"%' "
-		//    +"AND PageTitle NOT LIKE '\\_%' "
-		//    +"ORDER BY PageTitle;";
-		//    listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
-		//    foreach(WikiPage wikiPage in listWikiPageTemp) {
-		//      bool alreadyFound=false;
-		//      for(int i=0;i<retVal.Count;i++) {
-		//        if(retVal[i].PageTitle==wikiPage.PageTitle) {
-		//          alreadyFound=true;
-		//          break;
-		//        }
-		//      }
-		//      if(!alreadyFound) {
-		//        retVal.Add(wikiPage);
-		//      }
-		//    }
-		//    //Match Content third-----------------------------------------------------------------------------------
-		//    if(!ignoreContent) {
-		//      command=
-		//      "SELECT * FROM wikiPage "
-		//      +"WHERE PageContent LIKE '%"+searchText+"%' "
-		//      +"AND PageTitle NOT LIKE '\\_%' "
-		//      +"ORDER BY PageTitle;";
-		//      listWikiPageTemp=Crud.WikiPageCrud.SelectMany(command);
-		//      foreach(WikiPage wikiPage in listWikiPageTemp) {
-		//        bool alreadyFound=false;
-		//        for(int i=0;i<retVal.Count;i++) {
-		//          if(retVal[i].PageTitle==wikiPage.PageTitle) {
-		//            alreadyFound=true;
-		//            break;
-		//          }
-		//        }
-		//        if(!alreadyFound) {
-		//          retVal.Add(wikiPage);
-		//        }
-		//      }
-		//    }//end !ignoreContent
-		//  }
-		//  return retVal;
-		//}
 
 		///<summary></summary>
 		public static List<string> GetForSearch(string searchText,bool ignoreContent) {
@@ -250,10 +161,6 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//a later improvement would be to validate again here in the business layer.
-			//WikiPage wikiPage=GetByTitle(originalPageTitle);
-			//I think these next two lines already get done as part of InsertAndArchive
-			//WikiPageHist wikiPageHist=PageToHist(wikiPage);
-			//WikiPageHists.Insert(wikiPageHist);//Save the current page to history.
 			wikiPage.UserNum=Security.CurUser.UserNum;
 			InsertAndArchive(wikiPage);
 			//Rename all pages in both tables: wikiPage and wikiPageHist.
@@ -261,12 +168,41 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="UPDATE wikipagehist SET PageTitle='"+POut.String(newPageTitle)+"'WHERE PageTitle='"+POut.String(wikiPage.PageTitle)+"'";
 			Db.NonQ(command);
-			//For now, we will simply fix existing links in history
+			//For now, we will simply fix existing links in history.
+			//The way this is written currently is case sensitive.  That's fine, but it means that all existing links must be perfect, including case, or they will not get updated.
+			//To enforce proper case, we fix it when saving each page in the WikiEdit window.
 			command="UPDATE wikipage SET PageContent=REPLACE(PageContent,'[["+POut.String(wikiPage.PageTitle)+"]]', '[["+POut.String(newPageTitle)+"]]')";
 			Db.NonQ(command);
 			command="UPDATE wikipagehist SET PageContent=REPLACE(PageContent,'[["+POut.String(wikiPage.PageTitle)+"]]', '[["+POut.String(newPageTitle)+"]]')";
 			Db.NonQ(command);
 			return;
+		}
+
+		///<summary>Used in TranslateToXhtml to know whether to mark a page as not exists.</summary>
+		public static List<bool> CheckPageNamesExist(List<string> pageTitles) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<bool>>(MethodBase.GetCurrentMethod(),pageTitles);
+			}
+			string command="SELECT PageTitle FROM wikipage WHERE ";
+			for(int i=0;i<pageTitles.Count;i++){
+				if(i>0){
+					command+="OR ";
+				}
+				command+="PageTitle='"+POut.String(pageTitles[i])+"' ";
+			}
+			DataTable table=Db.GetTable(command);
+			List<bool> retVal=new List<bool>();
+			for(int p=0;p<pageTitles.Count;p++) {
+				bool valForThisPage=false;
+				for(int i=0;i<table.Rows.Count;i++) {
+					if(table.Rows[i]["PageTitle"].ToString().ToLower()==pageTitles[p].ToLower()) {
+						valForThisPage=true;
+						break;
+					}
+				}
+				retVal.Add(valForThisPage);
+			}
+			return retVal;
 		}
 
 		/*///<summary>Update may be implemented when versioning is improved.</summary>
@@ -293,8 +229,8 @@ namespace OpenDentBusiness{
 			return wikiPath;
 		}
 
-		///<summary>Also aggregates the content into the master page.</summary>
-		public static string TranslateToXhtml(string wikiContent) {
+		///<summary>Surround with try/catch.  Also aggregates the content into the master page.  If isPreviewOnly, then the internal links will not be checked to see if the page exists, as it would make the refresh sluggish.</summary>
+		public static string TranslateToXhtml(string wikiContent,bool isPreviewOnly) {
 			//No need to check RemotingRole; no call to db.
 			#region Basic Xml Validation
 			string s=wikiContent;
@@ -304,12 +240,12 @@ namespace OpenDentBusiness{
 			s="<body>"+s+"</body>";
 			XmlDocument doc=new XmlDocument();
 			using(StringReader reader=new StringReader(s)) {
-				try {
-					doc.Load(reader);
-				}
-				catch(Exception ex) {
-					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
-				}
+				//try {
+				doc.Load(reader);
+				//}
+				//catch(Exception ex) {
+				//	return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
+				//}
 			}
 			#endregion
 			#region regex replacements
@@ -329,30 +265,17 @@ namespace OpenDentBusiness{
 			//[[file:C:\eaula.txt]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(file:).*?\]\]");
 			foreach(Match match in matches) {
-				s=s.Replace(match.Value,"<a href=\"wikifile:"+match.Value.Replace("[[file:","").TrimEnd(']')+"\">file:"+match.Value.Replace("[[file:","").TrimEnd(']')+"</a>");
+				string fileName=match.Value.Replace("[[file:","").TrimEnd(']');
+				s=s.Replace(match.Value,"<a href=\"wikifile:"+fileName+"\">file:"+fileName+"</a>");
 			}
 			//[[folder:\\serverfiles\storage\]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(folder:).*?\]\]");
 			foreach(Match match in matches) {
-				s=s.Replace(match.Value,"<a href=\"folder:"+match.Value.Replace("[[folder:","").TrimEnd(']')+"\">"+match.Value.Replace("[[folder:","").TrimEnd(']')+"</a>");
+				string folderName=match.Value.Replace("[[folder:","").TrimEnd(']');
+				s=s.Replace(match.Value,"<a href=\"folder:"+folderName+"\">folder:"+folderName+"</a>");
 			}
-			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\[\[.+?\]\]");
-			foreach(Match match in matches) {
-				string tmpStyle="";
-				if(GetByTitle(match.Value.Trim('[',']'))==null){//Later, instead of GetByTitle, we should just use a bool method. 
-					tmpStyle="class='PageNotExists' ";
-				}
-				s=s.Replace(match.Value,"<a "+tmpStyle+"href=\""+"wiki:"+match.Value.Trim('[',']')/*.Replace(" ","_")*/+"\">"+match.Value.Trim('[',']')+"</a>");
-			}
-			//Unordered List----------------------------------------------------------------------------------------------------------------
-			//Instead of using a regex, this will hunt through the rows in sequence.
-			//later nesting by running ***, then **, then *
-			s=ProcessList(s,"*");
-			//numbered list---------------------------------------------------------------------------------------------------------------------
-			s=ProcessList(s,"#");
-			//{{color|red|text}}----------------------------------------------------------------------------------------------------------------
-			matches = Regex.Matches(s,"{{(color)(.*?)}}");//.*? matches as few as possible.
+			//[[color:red|text]]----------------------------------------------------------------------------------------------------------------
+			matches = Regex.Matches(s,@"\[\[(color:).*?\]\]");//.*? matches as few as possible.
 			foreach(Match match in matches) {
 				string tempText="<span style=\"color:";
 				string[] tokens = match.Value.Split('|');
@@ -362,17 +285,44 @@ namespace OpenDentBusiness{
 				if(tokens[0].Split(':').Length!=2) {//Must have a color token and a color value seperated by a colon, no more no less.
 					continue;
 				}
-				for(int i=0;i<tokens.Length;i++){
+				for(int i=0;i<tokens.Length;i++) {
 					if(i==0) {
 						tempText+=tokens[0].Split(':')[1]+";\">";//close <span> tag
 						continue;
 					}
 					tempText+=(i>1?"|":"")+tokens[i];
 				}
-				tempText=tempText.TrimEnd('}');
+				tempText=tempText.TrimEnd(']');
 				tempText+="</span>";
 				s=s.Replace(match.Value,tempText);
 			}
+			//[[InternalLink]]--------------------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\[\[.+?\]\]");
+			List<string> pageNamesToCheck=new List<string>();
+			List<bool> pageNamesExist=new List<bool>();
+			if(!isPreviewOnly) {
+				foreach(Match match in matches) {
+					pageNamesToCheck.Add(match.Value.Trim('[',']'));
+				}
+				pageNamesExist=CheckPageNamesExist(pageNamesToCheck);//this gets a list of bools for all pagenames in one shot.  One query.
+			}
+			foreach(Match match in matches) {
+				string styleNotExists="";
+				if(!isPreviewOnly) {
+					string pageName=match.Value.Trim('[',']');
+					int idx=pageNamesToCheck.IndexOf(pageName);
+					if(!pageNamesExist[idx]){
+						styleNotExists="class='PageNotExists' ";
+					}
+				}
+				s=s.Replace(match.Value,"<a "+styleNotExists+"href=\""+"wiki:"+match.Value.Trim('[',']')/*.Replace(" ","_")*/+"\">"+match.Value.Trim('[',']')+"</a>");
+			}
+			//Unordered List----------------------------------------------------------------------------------------------------------------
+			//Instead of using a regex, this will hunt through the rows in sequence.
+			//later nesting by running ***, then **, then *
+			s=ProcessList(s,"*");
+			//numbered list---------------------------------------------------------------------------------------------------------------------
+			s=ProcessList(s,"#");
 			#endregion regex replacements
 			#region paragraph grouping
 			StringBuilder strbSnew=new StringBuilder();
@@ -464,82 +414,15 @@ namespace OpenDentBusiness{
 			}
 			strbSnew.Append("</body>");
 			#endregion
-			#region faulty paragraph grouping
-			/*This mostly works, but has at least one critical bug that requires a different approach
-			//any line that is just blank with \r\n needs to have a <p> tag so that it won't disappear when we switch to xml
-			string[] lines=s.Split(new string[] { "\r\n" },StringSplitOptions.None);//includes empty elements
-			StringBuilder strbEmptyLines=new StringBuilder();
-			for(int i=0;i<lines.Length;i++) {
-				if(lines[i]=="") {
-					strbEmptyLines.AppendLine("<p>[[nbsp]]</p>");//because &nbsp; doesn't work in xml.  This gets converted to &nbsp; further down.
-				}
-				else if(lines[i]=="<body>") {//this means there was a leading CR.
-					strbEmptyLines.AppendLine("<body><p>[[nbsp]]</p>");
-				}
-				else {
-					strbEmptyLines.AppendLine(lines[i]);
-				}
-			}
-			s=strbEmptyLines.ToString();
-			//now, we switch to working in xml
-			doc=new XmlDocument();
-			using(StringReader reader=new StringReader(s)) {
-				try {
-					doc.Load(reader);
-				}
-				catch(Exception ex) {
-					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
-				}
-			}
-			XmlNode node=doc.DocumentElement;
-			//It's time to look for paragraphs.
-			//The basic assumption is that <h123>, <img>, <table>, <ol>, and <ul> tags are external to paragraphs.
-			//xhtml does NOT allow a list inside of a paragraph.
-			//These objects are siblings to paragraphs.  They will never be surrounded with <p> tags.
-			//On the other hand, <b>, <i>, <a>, and <span> tags are always internal to others, including <p>, <h123>, <table>, <ol>, and <ul>.
-			//<br> tags will not be allowed anywhere.
-			//undecided how to handle newlines within table cells
-			StringBuilder strb2=new StringBuilder();
-			strb2.Append("<body>");
-			string myParagraph="";
-			for(int i=0;i<node.ChildNodes.Count;i++) {
-				if(node.ChildNodes[i].NodeType==XmlNodeType.Element){
-					if(node.ChildNodes[i].Name=="b"
-						|| node.ChildNodes[i].Name=="i"
-						|| node.ChildNodes[i].Name=="a"
-						|| node.ChildNodes[i].Name=="span") 
-					{
-						myParagraph+=node.ChildNodes[i].OuterXml;
-					}
-					else {//<h123>, <image>, <table>, <ol>, and <ul>
-						if(myParagraph!="") {
-							myParagraph=ProcessParagraph(myParagraph);
-							strb2.Append(myParagraph);
-							myParagraph="";//reset
-						}
-						strb2.Append(node.ChildNodes[i].OuterXml);
-					}
-				}
-				else if(node.ChildNodes[i].NodeType==XmlNodeType.Text) {
-					myParagraph+=node.ChildNodes[i].OuterXml;
-				}
-				//there shouldn't be any more types.
-			}
-			if(myParagraph!="") {//the last paragraph was not yet added
-				myParagraph=ProcessParagraph(myParagraph);
-				strb2.Append(myParagraph);
-			}
-			strb2.Append("</body>");*/
-			#endregion faulty paragraph grouping
 			#region aggregation
 			doc=new XmlDocument();
 			using(StringReader reader=new StringReader(strbSnew.ToString())) {
-				try {
-					doc.Load(reader);
-				}
-				catch(Exception ex) {
-					return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
-				}
+				//try {
+				doc.Load(reader);
+				//}
+				//catch(Exception ex) {
+				//	return MasterPage.PageContent.Replace("@@@body@@@",ex.Message);
+				//}
 			}
 			StringBuilder strbOut=new StringBuilder();
 			XmlWriterSettings settings=new XmlWriterSettings();
@@ -552,7 +435,9 @@ namespace OpenDentBusiness{
 			}
 			//spaces can't be handled prior to this point because &nbsp; crashes the xml parser.
 			strbOut.Replace("  ","&nbsp;&nbsp;");//handle extra spaces. 
-			//strbOut.Replace("[[nbsp]]","&nbsp;");//Maybe add back later if needed, but be sure to be careful to not catch this as an internal link to the "nbsp" page in the lines of code above.
+			strbOut.Replace("<td></td>","<td>&nbsp;</td>");//force blank table cells to show not collapsed
+			strbOut.Replace("<th></th>","<th>&nbsp;</th>");//and blank table headers
+			strbOut.Replace("{{nbsp}}","&nbsp;");//couldn't add the &nbsp; earlier because 
 			strbOut.Replace("<p></p>","<p>&nbsp;</p>");//probably redundant but harmless
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
@@ -612,17 +497,23 @@ namespace OpenDentBusiness{
 
 		///<summary>This will wrap the text in p tags as well as handle internal carriage returns.  startsWithCR is only used on the first paragraph for the unusual case where the entire content starts with a CR.  This prevents stripping it off.</summary>
 		private static string ProcessParagraph(string paragraph,bool startsWithCR) {
-			if(paragraph=="") {
-				return "";
-			}
 			if(paragraph.StartsWith("\r\n") && !startsWithCR){
 				paragraph=paragraph.Substring(2);
+			}
+			if(paragraph=="") {//this must come after the first CR is stripped off, but before the ending CR is stripped off.
+				return "";
 			}
 			if(paragraph.EndsWith("\r\n")) {//trailing CR remove
 				paragraph=paragraph.Substring(0,paragraph.Length-2);
 			}
+			//if the paragraph starts with any number of spaces followed by a tag such as <b> or <span>, then we need to force those spaces to show.
+			if(paragraph.StartsWith(" ") && paragraph.TrimStart(' ').StartsWith("<")) {
+				paragraph="{{nbsp}}"+paragraph.Substring(1);//this will later be converted to &nbsp;
+			}
 			paragraph="<p>"+paragraph+"</p>";
 			paragraph=paragraph.Replace("\r\n","</p><p>");
+			//spaces at beginnings of lines
+			paragraph=paragraph.Replace("<p> ","<p>{{nbsp}}");
 			return paragraph;
 		}
 

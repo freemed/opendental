@@ -42,21 +42,25 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(IsFolderMode && !Directory.Exists(textLink.Text)) {
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Folder does not exist. Would you like to create it?")) {
-					return;
-				}
-				try {
-					Directory.CreateDirectory(textLink.Text);
-				}
-				catch(Exception ex) {
-					MessageBox.Show(this,ex.Message);
-					return;
+			if(IsFolderMode){
+				if(!Directory.Exists(textLink.Text)) {
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Folder does not exist. Continue anyway?")) {
+						return;
+					}
+					/*try {
+						Directory.CreateDirectory(textLink.Text);
+					}
+					catch(Exception ex) {
+						MessageBox.Show(this,ex.Message);
+						return;
+					}*/
 				}
 			}
-			else if(!File.Exists(textLink.Text)){//file mode
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"File does not exist. Would you like to create the link anyways?")) {
-					return;
+			else{//file mode
+				if(!File.Exists(textLink.Text)) {
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"File does not exist. Continue anyway?")) {
+						return;
+					}
 				}
 			}
 			SelectedLink=textLink.Text;

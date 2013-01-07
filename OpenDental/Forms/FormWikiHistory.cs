@@ -48,7 +48,7 @@ namespace OpenDental {
 		}
 
 		private void LoadWikiPage(WikiPageHist WikiPageCur) {
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent);
+			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent,false);
 			textContent.Text=WikiPageCur.PageContent;
 		}
 

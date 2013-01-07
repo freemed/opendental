@@ -19,11 +19,11 @@ namespace OpenDental {
 		}
 
 		private void FormWikiSearch_Load(object sender,EventArgs e) {
-			Rectangle tempWorkAreaRect=System.Windows.Forms.Screen.GetWorkingArea(this);
+			Rectangle rectWorkingArea=System.Windows.Forms.Screen.GetWorkingArea(this);
 			Top=0;
-			Left=Math.Max(0,(tempWorkAreaRect.Width-1200)/2);
-			Width=Math.Min(tempWorkAreaRect.Width,1200);
-			Height=tempWorkAreaRect.Height;
+			Left=Math.Max(0,((rectWorkingArea.Width-1200)/2)+rectWorkingArea.Left);
+			Width=Math.Min(rectWorkingArea.Width,1200);
+			Height=rectWorkingArea.Height;
 			FillGrid();
 			wikiPageTitleSelected="";
 			textSearch.Focus();
@@ -32,10 +32,10 @@ namespace OpenDental {
 		private void LoadWikiPage(string WikiPageTitleCur) {
 			webBrowserWiki.AllowNavigation=true;
 			if(checkDeletedOnly.Checked) {
-				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent);
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent,false);
 			}
 			else {
-				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent);
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent,false);
 			}
 		}
 

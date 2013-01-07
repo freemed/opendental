@@ -52,7 +52,12 @@ namespace OpenDental {
 				MsgBox.Show(this,"Page title cannot contain carriage return.");//there is also no way to enter one.
 				return false;
 			}
-			if(WikiPages.GetByTitle(textPageTitle.Text)!=null){
+			if(PageTitle!=null && textPageTitle.Text.ToLower()==PageTitle.ToLower()) {
+				//the user is just trying to change the capitalization, which is allowed
+				return true;
+			}
+			WikiPage wp=WikiPages.GetByTitle(textPageTitle.Text);//this is case insensitive, so it won't let you name it the same as another page even if capitalization is different.
+			if(wp!=null){
 				MsgBox.Show(this,"Page title already exists.");
 				return false;
 			}

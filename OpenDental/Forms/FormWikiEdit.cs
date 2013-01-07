@@ -20,6 +20,7 @@ namespace OpenDental {
 		public FormWikiEdit() {
 			InitializeComponent();
 			Lan.F(this);
+			this.textContent.TextChanged += new System.EventHandler(this.textContent_TextChanged);
 		}
 
 		private void FormWikiEdit_Load(object sender,EventArgs e) {
@@ -33,7 +34,8 @@ namespace OpenDental {
 			strArray[0]="\r\n";
 			int rowCount=textContent.Text.Split(strArray,StringSplitOptions.None).Length;
 			FillNumbers(rowCount);
-			LoadWikiPage();
+			//RefreshHtml();
+			textContent.Focus();
 		}
 
 		private void FillNumbers(int rowCount) {
@@ -45,19 +47,26 @@ namespace OpenDental {
 			textNumbers.Text=strb.ToString();
 		}
 
-		private void LoadWikiPage() {
+		private void RefreshHtml() {
 			webBrowserWiki.AllowNavigation=true;
-			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(textContent.Text);
+			try {
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(textContent.Text,true);
+			}
+			catch(Exception ex) {
+				//don't refresh
+			}
+			textContent.Focus();
 		}
 
 		private void ResizeControls() {
-			int topborder=30;
+			int topborder=53;
 			//textNumbers resize
+			textNumbers.Top=topborder;
 			textNumbers.Height=ClientSize.Height-topborder;
 			//text resize
 			textContent.Top=topborder;
 			textContent.Height=ClientSize.Height-topborder;
-			textContent.Left=28;
+			textContent.Left=32;
 			textContent.Width=ClientSize.Width/2-2-textContent.Left;
 			//Browser resize
 			webBrowserWiki.Top=topborder;
@@ -66,7 +75,7 @@ namespace OpenDental {
 			webBrowserWiki.Width=ClientSize.Width/2-2;
 			//Toolbar resize
 			ToolBarMain.Width=ClientSize.Width;
-			LayoutToolBar();
+			LayoutToolBars();
 			//Button move
 			//butRefresh.Left=ClientSize.Width/2+2;
 		}
@@ -75,20 +84,19 @@ namespace OpenDental {
 			ResizeControls();
 		}
 
+		private void textContent_TextChanged(object sender,EventArgs e) {
+			RefreshHtml();
+		}
+
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
 			webBrowserWiki.AllowNavigation=false;
 		}
 
-		private void LayoutToolBar() {
+		private void LayoutToolBars() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"),0,"","Refresh"));
+			//Refresh no longer needed.
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save"),1,"","Save"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cancel"),2,"","Cancel"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),3,"","Cut"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),4,"","Copy"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),5,"","Paste"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),6,"","Undo"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Int Link"),7,"","Int Link"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"File"),7,"","File Link"));
@@ -98,36 +106,28 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),9,"","H1"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),10,"","H2"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),11,"","H3"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),12,"","Bold"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),13,"","Italic"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),14,"","Color"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),15,"","Table"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),16,"","Image"));
+			toolBar2.Buttons.Clear();
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),3,"","Cut"));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),4,"","Copy"));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),5,"","Paste"));
+			toolBar2.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),6,"","Undo"));
+			toolBar2.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),12,"","Bold"));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),13,"","Italic"));
+			toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),14,"","Color"));
 		}
 
 		private void ToolBarMain_ButtonClick(object sender,OpenDental.UI.ODToolBarButtonClickEventArgs e) {
 			switch(e.Button.Tag.ToString()) {
-				case "Refresh":
-					Refresh_Click();
-					break;
 				case "Save":
 					Save_Click();
 					break;
 				case "Cancel":
 					Cancel_Click();
-					break;
-				case "Cut": 
-					Cut_Click(); 
-					break;
-				case "Copy": 
-					Copy_Click(); 
-					break;
-				case "Paste": 
-					Paste_Click(); 
-					break;
-				case "Undo":
-					Undo_Click();
 					break;
 				case "Int Link": 
 					Int_Link_Click(); 
@@ -150,15 +150,6 @@ namespace OpenDental {
 				case "H3": 
 					H3_Click(); 
 					break;
-				case "Bold": 
-					Bold_Click(); 
-					break;
-				case "Italic": 
-					Italic_Click(); 
-					break;
-				case "Color": 
-					Color_Click(); 
-					break;
 				case "Table": 
 					Table_Click(); 
 					break;
@@ -168,12 +159,38 @@ namespace OpenDental {
 			}
 		}
 
+		private void toolBar2_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
+			switch(e.Button.Tag.ToString()) {
+				case "Cut":
+					Cut_Click();
+					break;
+				case "Copy":
+					Copy_Click();
+					break;
+				case "Paste":
+					Paste_Click();
+					break;
+				case "Undo":
+					Undo_Click();
+					break;
+				case "Bold":
+					Bold_Click();
+					break;
+				case "Italic":
+					Italic_Click();
+					break;
+				case "Color":
+					Color_Click();
+					break;
+			}
+		}
+
 		private void menuItemCut_Click(object sender,EventArgs e) {
-			Cut_Click(); 
+			Cut_Click();
 		}
 
 		private void menuItemCopy_Click(object sender,EventArgs e) {
-			Copy_Click(); 
+			Copy_Click();
 		}
 
 		private void menuItemPaste_Click(object sender,EventArgs e) {
@@ -184,23 +201,37 @@ namespace OpenDental {
 			Undo_Click();
 		}
 
-		private void Refresh_Click() {
-			if(!ValidateWikiPage(false)) {
-				return;
-			}
-			//webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage();
-		}
-
 		private void Save_Click() {
 			if(!ValidateWikiPage(true)) {
 				return;
 			}
-			//WikiPageCur.KeyWords=textKeyWords.Text;
 			WikiPageCur.PageContent=textContent.Text;
+			//Fix case on all internal links
+			MatchCollection matches=Regex.Matches(WikiPageCur.PageContent,@"\[\[.+?\]\]");
+			foreach(Match match in matches) {
+				if(match.Value.StartsWith("[[img:")
+					|| match.Value.StartsWith("[[keywords:")
+					|| match.Value.StartsWith("[[file:")
+					|| match.Value.StartsWith("[[folder:")
+					|| match.Value.StartsWith("[[color:")) 
+				{
+					continue;//we don't care about these.  We are only checking internal links
+				}
+				//Get the pagename of the link
+				string oldTitle=match.Value.Substring(2,match.Value.Length-4);
+				string newTitle=WikiPages.GetTitle(oldTitle);
+				if(oldTitle==newTitle) {//casing matches
+					continue;
+				}
+				if(newTitle=="") {//broken link, leave alone
+					continue;
+				}
+				WikiPageCur.PageContent=WikiPageCur.PageContent.Replace("[["+oldTitle+"]]","[["+newTitle+"]]");
+			}
 			WikiPageCur.UserNum=Security.CurUser.UserNum;
-			WikiPageCur.KeyWords="";
-			WikiPageCur.KeyWords= new Regex(@"\[\[(keywords:).+?\]\]").Match(textContent.Text).Value.Replace("[[keywords:","").TrimEnd(']');//only grab first match
+			Regex regex=new Regex(@"\[\[(keywords:).+?\]\]");//only grab first match
+			Match m=regex.Match(textContent.Text);
+			WikiPageCur.KeyWords=m.Value.Replace("[[keywords:","").TrimEnd(']');//will be empty string if no match
 			WikiPages.InsertAndArchive(WikiPageCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -212,21 +243,25 @@ namespace OpenDental {
 		private void Cut_Click() {
 			textContent.Cut();
 			textContent.Focus();
+			//RefreshHtml();
 		}
 
 		private void Copy_Click() {
 			textContent.Copy();
 			textContent.Focus();
+			//RefreshHtml();
 		}
 
 		private void Paste_Click() {
 			textContent.Paste();
 			textContent.Focus();
+			//RefreshHtml();
 		}
 
 		private void Undo_Click() {
 			textContent.Undo();
 			textContent.Focus();
+			//RefreshHtml();
 		}
 
 		private void Int_Link_Click() {
@@ -246,6 +281,7 @@ namespace OpenDental {
 			}
 			textContent.Focus();
 			textContent.SelectionLength=0;
+			//RefreshHtml();
 		}
 
 		private void File_Link_Click() {
@@ -255,6 +291,7 @@ namespace OpenDental {
 				return;
 			}
 			textContent.Paste("[[file:"+formWFF.SelectedLink+"]]");
+			//RefreshHtml();
 		}
 
 		private void Folder_Link_Click() {
@@ -265,6 +302,7 @@ namespace OpenDental {
 				return;
 			}
 			textContent.Paste("[[folder:"+formWFF.SelectedLink+"]]");
+			//RefreshHtml();
 		}
 
 		private void Ext_Link_Click() {
@@ -279,106 +317,114 @@ namespace OpenDental {
 			}
 			textContent.Paste("<a href=\""+FormWEL.URL+"\">"+FormWEL.DisplayText+"</a>");
 			textContent.Focus();
+			//RefreshHtml();
 		}
 
 		private void H1_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("<h1>"+textContent.SelectedText+"</h1>");
+			string s="<h1>"+textContent.SelectedText+"</h1>";
+			textContent.Paste(s);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+4;
+				textContent.SelectionStart=tempStart+4+tempLength;
 			}
 			else {
-			textContent.SelectionStart=tempStart;
-			textContent.SelectionLength=tempLength+9;
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
 			}
+			//RefreshHtml();
 		}
 
 		private void H2_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("<h2>"+textContent.SelectedText+"</h2>");
+			string s="<h2>"+textContent.SelectedText+"</h2>";
+			textContent.Paste(s);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+4;
+				textContent.SelectionStart=tempStart+4+tempLength;
 			}
 			else {
-				textContent.SelectionStart=tempStart;
-				textContent.SelectionLength=tempLength+9;
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
 			}
+			//RefreshHtml();
 		}
 
 		private void H3_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("<h3>"+textContent.SelectedText+"</h3>");
+			string s="<h3>"+textContent.SelectedText+"</h3>";
+			textContent.Paste(s);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+4;
+				textContent.SelectionStart=tempStart+4+tempLength;
 			}
 			else {
-				textContent.SelectionStart=tempStart;
-				textContent.SelectionLength=tempLength+9;
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
 			}
+			//RefreshHtml();
 		}
 
 		private void Bold_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("<b>"+textContent.SelectedText+"</b>");
-				//.Text=textContent.Text.Substring(0,tempStart)+"<b>"+textContent.SelectedText+"</b>"+textContent.Text.Substring(tempStart+tempLength);
+			string s="<b>"+textContent.SelectedText+"</b>";
+			textContent.Paste(s);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+3;
+				textContent.SelectionStart=tempStart+3+tempLength;
 			}
 			else {
-				textContent.SelectionStart=tempStart;
-				textContent.SelectionLength=tempLength+7;
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
 			}
+			//RefreshHtml();
 		}
 
 		private void Italic_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("<i>"+textContent.SelectedText+"</i>");
+			string s="<i>"+textContent.SelectedText+"</i>";
+			textContent.Paste(s);
 			textContent.Focus();
 			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-				textContent.SelectionStart=tempStart+3;
+				textContent.SelectionStart=tempStart+3+tempLength;
 			}
 			else {
-				textContent.SelectionStart=tempStart;
-				textContent.SelectionLength=tempLength+7;
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
 			}
+			//RefreshHtml();
 		}
 
 		private void Color_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste("{{color:red|"+textContent.SelectedText+"}}");//(tempLength>0?textContent.SelectedText:"")+"}}");
+			string s="[[color:red|"+textContent.SelectedText+"]]";
+			textContent.Paste(s);
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+tempLength+12;
-			textContent.SelectionLength=0;
-			//if(tempLength==0) {//nothing selected, place cursor in middle of new tags
-			//  textContent.SelectionStart=tempStart+12;
-			//  textContent.SelectionLength=0;
-			//}
-			//else {
-			//  textContent.SelectionStart=tempStart+tempLength-3;
-			//  textContent.SelectionLength=0;
-			//}
-			textContent.Focus();
+			if(tempLength==0) {//nothing selected, place cursor in middle of new tags
+				textContent.SelectionStart=tempStart+12+tempLength;
+			}
+			else {
+				textContent.SelectionStart=tempStart+s.Length;
+				textContent.SelectionLength=0;
+			}
+			//RefreshHtml();
 		}
 
 		///<summary>Insert table boilderplate. Pastes selected text into the first cell.</summary>
 		private void Table_Click() {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
-			textContent.Paste(
+			string s=
 @"<table>
   <tr>
-    <th>Header1</th>
-    <th>Header2</th>
+    <th width="""">Header1</th>
+    <th width="""">Header2</th>
   </tr>
   <tr>
     <td>"+textContent.SelectedText+@"</td>
@@ -392,10 +438,10 @@ namespace OpenDental {
     <td></td>
     <td></td>
   </tr>
-</table>");
-			textContent.SelectionStart=tempStart+86;
-			textContent.SelectionLength=tempLength;
+</table>";
+			textContent.Paste(s);
 			textContent.Focus();
+			textContent.SelectionStart=tempStart+104+tempLength;
 		}
 
 		private void Image_Click() {
@@ -406,7 +452,7 @@ namespace OpenDental {
 			}
 			textContent.Paste("[[img:"+FormWI.SelectedImageName+"]]");
 			//webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage();
+			//RefreshHtml();
 		}
 
 		///<summary>Validates content, and keywords.  isForSaving can be false if just validating for refresh.</summary>
@@ -444,7 +490,7 @@ namespace OpenDental {
 				for(int i=0;i<matches.Count;i++) {
 					string imgPath=ODFileUtils.CombinePaths(wikiImagePath,matches[i].Value.Substring(6).Trim(']'));
 					if(!System.IO.File.Exists(imgPath)) {
-						MessageBox.Show("Not allowed to save because file does not exist: "+imgPath);
+						MessageBox.Show(Lan.g(this,"Not allowed to save because image does not exist: ")+imgPath);
 						return false;
 					}
 				}
@@ -473,8 +519,33 @@ namespace OpenDental {
 					}
 				}
 			}
-			//No pipes inside internal links.  This validation will be necessary during our conversion from our old wiki.--------------------------------
-//todo
+			//Invalid characters inside of various tags--------------------------------------------
+			matches=Regex.Matches(textContent.Text,@"\[\[.*?\]\]");
+			foreach(Match match in matches) {
+				if(match.Value.Contains("\"")) {
+					MessageBox.Show(Lan.g(this,"Link cannot contain double quotes: ")+match.Value);
+					return false;
+				}
+				//This is not needed because our regex doesn't even catch them if the span a line break.  It's just interpreted as plain text.
+				//if(match.Value.Contains("\r") || match.Value.Contains("\n")) {
+				//	MessageBox.Show(Lan.g(this,"Link cannot contain carriage returns: ")+match.Value);
+				//	return false;
+				//}
+				if(match.Value.StartsWith("[[img:")
+					|| match.Value.StartsWith("[[keywords:")
+					|| match.Value.StartsWith("[[file:")
+					|| match.Value.StartsWith("[[folder:")
+					|| match.Value.StartsWith("[[color:")) 
+				{
+					//other tags
+				}
+				else {
+					if(match.Value.Contains("|")) {
+						MessageBox.Show(Lan.g(this,"Internal link cannot contain a pipe character:")+match.Value);
+						return false;
+					}
+				}
+			}
 			return true;  
 		}
 
@@ -493,10 +564,20 @@ namespace OpenDental {
 					case "table":
 					case "tr":
 					case "td":
-					case "th":
 						//no attributes at all allowed on these tags
 						if(node.Attributes.Count!=0) {
 							throw new ApplicationException("'"+node.Attributes[0].Name+"' attribute is not allowed on <"+node.Name+"> tag.");
+						}
+						break;
+					case "th":
+						//only allowed attribute is width
+						for(int i=0;i<node.Attributes.Count;i++) {
+							if(node.Attributes[i].Name!="width") {
+								throw new ApplicationException(node.Attributes[i].Name+" attribute is not allowed on <th> tag.");
+							}
+							if(node.Attributes[i].InnerText.Contains("%")) {
+								throw new ApplicationException("Percentage is not allowed in <th> width attribute.");
+							}
 						}
 						break;
 					case "a":
@@ -530,6 +611,8 @@ namespace OpenDental {
 				}
 			}
 		}
+
+		
 
 	
 

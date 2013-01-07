@@ -11734,7 +11734,7 @@ ol .ListItemContent{
 	position: relative; left: -1px;/*Tightens up the spacing between numbers and text*/
 }
 a{
-	color:	#343C83;
+	color:rgb(68,81,199);/*same blue color as wikipedia*/
 	text-decoration:none;
 }
 a:hover{
@@ -11742,7 +11742,7 @@ a:hover{
 }
 table, th, td, tr {
 	border-collapse:collapse;
-	border:1px solid #000000;
+	border:1px solid #999999;
 	padding:2px;
 }
 .PageNotExists, a.PageNotExists {

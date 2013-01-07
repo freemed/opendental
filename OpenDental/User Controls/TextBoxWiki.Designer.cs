@@ -32,6 +32,7 @@
 			this.textBoxMain.AcceptsTab = true;
 			this.textBoxMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.textBoxMain.Font = new System.Drawing.Font("Courier New",9F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.textBoxMain.HideSelection = false;
 			this.textBoxMain.Location = new System.Drawing.Point(0,0);
 			this.textBoxMain.Multiline = true;
 			this.textBoxMain.Name = "textBoxMain";
@@ -39,6 +40,7 @@
 			this.textBoxMain.Size = new System.Drawing.Size(150,150);
 			this.textBoxMain.TabIndex = 0;
 			this.textBoxMain.Text = "this is a test";
+			this.textBoxMain.TextChanged += new System.EventHandler(this.textBoxMain_TextChanged);
 			this.textBoxMain.DoubleClick += new System.EventHandler(this.textBoxMain_DoubleClick);
 			this.textBoxMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxMain_KeyDown);
 			this.textBoxMain.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMain_KeyPress);
