@@ -323,6 +323,48 @@ namespace OpenDentBusiness{
 			s=ProcessList(s,"*");
 			//numbered list---------------------------------------------------------------------------------------------------------------------
 			s=ProcessList(s,"#");
+			//table-------------------------------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(s,@"\{|.+?|\}");
+			foreach(Match match in matches) {
+				string tableStrOrig=match.Value;
+				StringBuilder strbTable=new StringBuilder();
+				string[] lines=tableStrOrig.Split(new string[] {"\r\n"},StringSplitOptions.None);
+				bool isInHeader=false;
+				bool isInRow=false;
+				for(int i=0;i<lines.Length;i++) {
+					if(i==0) {
+						strbTable.AppendLine("<table>");
+						continue;
+					}
+					if(i==lines.Length-1) {
+						if(isInRow) {
+
+						}
+						strbTable.AppendLine("</table>");
+						continue;
+					}
+					if(isInRow) {
+						if(lines[i].StartsWith("|-")) {
+							strbTable.AppendLine("</tr>");
+							isInRow=false;
+							continue;
+						}
+					}
+					else {
+						//if(
+					}
+					//lines[i];
+				}
+
+				strbTable.AppendLine("");
+
+
+
+				string tableStrNew=match.Value;
+				tableStrNew=tableStrNew.Replace("{|","<table>");
+				tableStrNew=tableStrNew.Replace("|}","</table>");
+				tableStrNew=tableStrNew.Replace("","<tr>");
+			}
 			#endregion regex replacements
 			#region paragraph grouping
 			StringBuilder strbSnew=new StringBuilder();

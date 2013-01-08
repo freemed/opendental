@@ -421,27 +421,16 @@ namespace OpenDental {
 			int tempStart=textContent.SelectionStart;
 			int tempLength=textContent.SelectionLength;
 			string s=
-@"<table>
-  <tr>
-    <th width="""">Header1</th>
-    <th width="""">Header2</th>
-  </tr>
-  <tr>
-    <td>"+textContent.SelectedText+@"</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-  </tr>
-</table>";
+@"{|
+!Width=""""|Heading1!!Width=""""|Heading2!!Width=""""|Heading3
+|-
+|"+textContent.SelectedText+@"||
+|-
+|
+|}";
 			textContent.Paste(s);
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+104+tempLength;
+			textContent.SelectionStart=tempStart+67+tempLength;
 		}
 
 		private void Image_Click() {
@@ -561,15 +550,15 @@ namespace OpenDental {
 					case "h1":
 					case "h2":
 					case "h3":
-					case "table":
-					case "tr":
-					case "td":
+					//case "table"://table tag no longer allowed
+					//case "tr":
+					//case "td":
 						//no attributes at all allowed on these tags
 						if(node.Attributes.Count!=0) {
 							throw new ApplicationException("'"+node.Attributes[0].Name+"' attribute is not allowed on <"+node.Name+"> tag.");
 						}
 						break;
-					case "th":
+					/*case "th":
 						//only allowed attribute is width
 						for(int i=0;i<node.Attributes.Count;i++) {
 							if(node.Attributes[i].Name!="width") {
@@ -579,7 +568,7 @@ namespace OpenDental {
 								throw new ApplicationException("Percentage is not allowed in <th> width attribute.");
 							}
 						}
-						break;
+						break;*/
 					case "a":
 						//only allowed attribute is href
 						for(int i=0;i<node.Attributes.Count;i++) {
