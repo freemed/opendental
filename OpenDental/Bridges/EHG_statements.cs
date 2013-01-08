@@ -171,14 +171,14 @@ namespace OpenDental.Bridges {
 				writer.WriteStartElement("Note");
 				writer.WriteAttributeString("FgColor","Red");//ColorToHexString(Color.DarkRed));
 				//writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
-				writer.WriteCData(stmt.NoteBold);
+				writer.WriteString(Tidy(stmt.NoteBold,500));//Limit of 500 char on notes.
 				writer.WriteEndElement();//Note
 			}
 			if(stmt.Note!="") {
 				writer.WriteStartElement("Note");
 				//writer.WriteAttributeString("FgColor",ColorToHexString(Color.Black));
 				//writer.WriteAttributeString("BgColor",ColorToHexString(Color.White));
-				writer.WriteCData(stmt.Note);
+				writer.WriteString(Tidy(stmt.Note,500));//Limit of 500 char on notes.
 				writer.WriteEndElement();//Note
 			}
 			writer.WriteEndElement();//Notes
@@ -198,7 +198,7 @@ namespace OpenDental.Bridges {
 				procCode=tableAccount.Rows[i]["ProcCode"].ToString();
 				tth=tableAccount.Rows[i]["tth"].ToString();
 				descript=tableAccount.Rows[i]["description"].ToString();
-				fulldesc=procCode+" "+tth+" "+descript;
+				fulldesc=procCode+" "+tth+" "+descript;//There are frequently CRs within a procedure description for things like ins est.
 				lineArray=fulldesc.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
 				lines=new List<string>(lineArray);
 				//The specs say that the line limit is 30 char.  But in testing, it will take 50 char.
@@ -221,7 +221,7 @@ namespace OpenDental.Bridges {
 						writer.WriteElementString("Date","");
 						writer.WriteElementString("PatientName","");
 					}
-					writer.WriteElementString("Description",lines[li]);
+					writer.WriteElementString("Description",Tidy(lines[li],40));//Jessica at DentalXchange says limit is 120.  Docs say limit is 30.
 					if(li==0) {
 						writer.WriteElementString("Charges",tableAccount.Rows[i]["charges"].ToString());
 						writer.WriteElementString("Credits",tableAccount.Rows[i]["credits"].ToString());
@@ -286,8 +286,28 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//EISStatementFile
 		}
 
+		private static string Tidy(string str,int len) {
+			if(str.Length>len) {
+				return str.Substring(0,len);
+			}
+			return str;
+		}
+
 		///<summary>Surround with try catch.  The "data" is the previously constructed xml.</summary>
 		public static void Send(string data) {
+			//Validate the structure of the XML before sending.
+			StringReader sr=new StringReader(data);
+			try {
+				XmlReader xmlr=XmlReader.Create(sr);
+				while(xmlr.Read()) { //Read every node an ensure that there are no exceptions thrown.
+				}
+			}
+			catch(Exception ex) {
+				throw new ApplicationException("Invalid XML in statement batch: "+ex.Message);
+			}
+			finally {
+				sr.Dispose();
+			}
 			//Step 1: Post authentication request:
 			Version myVersion=new Version(Application.ProductVersion);
 			HttpWebRequest webReq;
