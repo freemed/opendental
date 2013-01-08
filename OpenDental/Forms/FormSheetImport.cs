@@ -185,160 +185,326 @@ namespace OpenDental {
 				//LName---------------------------------------------
 				fieldVal=GetInputValue("LName");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("LName","",PatCur.LName,PatCur.LName,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.LName!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="LName";
+					row.OldValDisplay=PatCur.LName;
+					row.OldValObj=PatCur.LName;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//FName---------------------------------------------
 				fieldVal=GetInputValue("FName");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("FName","",PatCur.FName,PatCur.FName,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.FName!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="FName";
+					row.OldValDisplay=PatCur.FName;
+					row.OldValObj=PatCur.FName;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//MiddleI---------------------------------------------
 				fieldVal=GetInputValue("MiddleI");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("MiddleI","",PatCur.MiddleI,PatCur.MiddleI,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.MiddleI!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="MiddleI";
+					row.OldValDisplay=PatCur.MiddleI;
+					row.OldValObj=PatCur.MiddleI;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Preferred---------------------------------------------
 				fieldVal=GetInputValue("Preferred");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Preferred","",PatCur.Preferred,PatCur.Preferred,fieldVal,fieldVal,fieldVal,fieldVal,
-						PatCur.Preferred!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="Preferred";
+					row.OldValDisplay=PatCur.Preferred;
+					row.OldValObj=PatCur.Preferred;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Gender---------------------------------------------
 				fieldVal=GetRadioValue("Gender");
 				if(fieldVal!=null) {//field exists on form
-					string newValDisplay="";
-					object newValObj=null;
-					if(fieldVal!="") {
+					row=new SheetImportRow();
+					row.FieldName="Gender";
+					row.OldValDisplay=Lan.g("enumPatientGender",PatCur.Gender.ToString());
+					row.OldValObj=PatCur.Gender;
+					if(fieldVal=="") {//no box was checked
+						row.NewValDisplay="";
+						row.NewValObj=null;
+					}
+					else {
 						try {
 							PatientGender gender=(PatientGender)Enum.Parse(typeof(PatientGender),fieldVal);
-							newValDisplay=Lan.g("enumPatientGender",gender.ToString());
-							newValObj=gender;
+							row.NewValDisplay=Lan.g("enumPatientGender",gender.ToString());
+							row.NewValObj=gender;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid gender."));
 						}
 					}
-					Rows.Add(CreateImportRow("Gender","",Lan.g("enumPatientGender",PatCur.Gender.ToString()),PatCur.Gender,
-						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientGender)newValObj!=PatCur.Gender,false,typeof(PatientGender),false,false));
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(PatientGender);
+					if(row.NewValObj!=null && (PatientGender)row.NewValObj!=PatCur.Gender) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Position---------------------------------------------
 				fieldVal=GetRadioValue("Position");
 				if(fieldVal!=null) {//field exists on form
-					string newValDisplay="";
-					object newValObj=null;
-					if(fieldVal!="") {
+					row=new SheetImportRow();
+					row.FieldName="Position";
+					row.OldValDisplay=Lan.g("enumPatientPositionr",PatCur.Position.ToString());
+					row.OldValObj=PatCur.Position;
+					if(fieldVal=="") {//no box was checked
+						row.NewValDisplay="";
+						row.NewValObj=null;
+					}
+					else {
 						try {
 							PatientPosition position=(PatientPosition)Enum.Parse(typeof(PatientPosition),fieldVal);
-							newValDisplay=Lan.g("enumPatientPosition",position.ToString());
-							newValObj=position;
+							row.NewValDisplay=Lan.g("enumPatientPosition",position.ToString());
+							row.NewValObj=position;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid PatientPosition."));
 						}
 					}
-					Rows.Add(CreateImportRow("Position","",Lan.g("enumPatientPositionr",PatCur.Position.ToString()),PatCur.Position,
-						newValDisplay,newValObj,newValDisplay,newValObj,newValObj!=null && (PatientPosition)newValObj!=PatCur.Position,false,typeof(PatientPosition),false,false));
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(PatientPosition);
+					if(row.NewValObj!=null && (PatientPosition)row.NewValObj!=PatCur.Position) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Birthdate---------------------------------------------
 				fieldVal=GetInputValue("Birthdate");
 				if(fieldVal!=null) {
-					string oldValDisplay="";
-					string newValDisplay="";
-					object newValObj=null;
-					if(PatCur.Birthdate.Year>1880) {
-						oldValDisplay=PatCur.Birthdate.ToShortDateString();
+					row=new SheetImportRow();
+					row.FieldName="Birthdate";
+					if(PatCur.Birthdate.Year<1880) {
+						row.OldValDisplay="";
 					}
-					newValObj=PIn.Date(fieldVal);
-					if(((DateTime)newValObj).Year>1880) {
-						newValDisplay=((DateTime)newValObj).ToShortDateString();
+					else {
+						row.OldValDisplay=PatCur.Birthdate.ToShortDateString();
 					}
-					Rows.Add(CreateImportRow("Birthdate","",oldValDisplay,PatCur.Birthdate,newValDisplay,newValObj,newValDisplay,newValObj,
-						oldValDisplay!=newValDisplay,false,typeof(DateTime),false,false));
+					row.OldValObj=PatCur.Birthdate;
+					row.NewValObj=PIn.Date(fieldVal);
+					if(((DateTime)row.NewValObj).Year<1880) {
+						row.NewValDisplay="";
+					}
+					else {
+						row.NewValDisplay=((DateTime)row.NewValObj).ToShortDateString();
+					}
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(DateTime);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//SSN---------------------------------------------
 				fieldVal=GetInputValue("SSN");
 				if(fieldVal!=null) {
-					string newValDisplay=fieldVal.Replace("-","");//quickly strip dashes
-					Rows.Add(CreateImportRow("SSN","",PatCur.SSN,PatCur.SSN,newValDisplay,newValDisplay,newValDisplay,newValDisplay,
-						PatCur.SSN!=newValDisplay,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="SSN";
+					row.OldValDisplay=PatCur.SSN;
+					row.OldValObj=PatCur.SSN;
+					row.NewValDisplay=fieldVal.Replace("-","");//quickly strip dashes
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//WkPhone---------------------------------------------
 				fieldVal=GetInputValue("WkPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("WkPhone","",PatCur.WkPhone,PatCur.WkPhone,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.WkPhone!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="WkPhone";
+					row.OldValDisplay=PatCur.WkPhone;
+					row.OldValObj=PatCur.WkPhone;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//WirelessPhone---------------------------------------------
 				fieldVal=GetInputValue("WirelessPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("WirelessPhone","",PatCur.WirelessPhone,PatCur.WirelessPhone,fieldVal,fieldVal,fieldVal,fieldVal,
-						PatCur.WirelessPhone!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="WirelessPhone";
+					row.OldValDisplay=PatCur.WirelessPhone;
+					row.OldValObj=PatCur.WirelessPhone;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//wirelessCarrier---------------------------------------------
 				fieldVal=GetInputValue("wirelessCarrier");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("wirelessCarrier","","","",fieldVal,fieldVal,fieldVal,fieldVal,false,false,typeof(string),true,false));
+					row=new SheetImportRow();
+					row.FieldName="wirelessCarrier";
+					row.OldValDisplay="";
+					row.OldValObj="";
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					row.DoImport=false;
+					row.IsFlagged=true;//if user entered nothing, the red text won't show anyway.
+					Rows.Add(row);
 				}
 				//Email---------------------------------------------
 				fieldVal=GetInputValue("Email");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Email","",PatCur.Email,PatCur.Email,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Email!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="Email";
+					row.OldValDisplay=PatCur.Email;
+					row.OldValObj=PatCur.Email;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//PreferContactMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferContactMethod");
 				if(fieldVal!=null) {
-					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferContactMethod.ToString());
-					string newValDisplay="";
-					object newValObj=null;
-					if(fieldVal!="") {
+					row=new SheetImportRow();
+					row.FieldName="PreferContactMethod";
+					row.OldValDisplay=Lan.g("enumContactMethod",PatCur.PreferContactMethod.ToString());
+					row.OldValObj=PatCur.PreferContactMethod;
+					if(fieldVal=="") {
+						row.NewValDisplay="";
+						row.NewValObj=null;
+					}
+					else {
 						try {
 							ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
-							newValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-							newValObj=cmeth;
+							row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+							row.NewValObj=cmeth;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferContactMethod","",oldValDisplay,PatCur.PreferContactMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferContactMethod,false,typeof(ContactMethod),false,false));
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(ContactMethod);
+					if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=PatCur.PreferContactMethod) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//PreferConfirmMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferConfirmMethod");
 				if(fieldVal!=null) {
-					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferConfirmMethod.ToString());
-					string newValDisplay="";
-					object newValObj=null;
-					if(fieldVal!="") {
+					row=new SheetImportRow();
+					row.FieldName="PreferConfirmMethod";
+					row.OldValDisplay=Lan.g("enumContactMethod",PatCur.PreferConfirmMethod.ToString());
+					row.OldValObj=PatCur.PreferConfirmMethod;
+					if(fieldVal=="") {
+						row.NewValDisplay="";
+						row.NewValObj=null;
+					}
+					else {
 						try {
 							ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
-							newValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-							newValObj=cmeth;
+							row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+							row.NewValObj=cmeth;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferConfirmMethod","",oldValDisplay,PatCur.PreferConfirmMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferConfirmMethod,false,typeof(ContactMethod),false,false));
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(ContactMethod);
+					if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=PatCur.PreferConfirmMethod) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//PreferRecallMethod---------------------------------------------
 				fieldVal=GetRadioValue("PreferRecallMethod");
 				if(fieldVal!=null) {
-					string oldValDisplay=Lan.g("enumContactMethod",PatCur.PreferRecallMethod.ToString());
-					string newValDisplay="";
-					object newValObj=null;
-					if(fieldVal!="") {
+					row=new SheetImportRow();
+					row.FieldName="PreferRecallMethod";
+					row.OldValDisplay=Lan.g("enumContactMethod",PatCur.PreferRecallMethod.ToString());
+					row.OldValObj=PatCur.PreferRecallMethod;
+					if(fieldVal=="") {
+						row.NewValDisplay="";
+						row.NewValObj=null;
+					}
+					else {
 						try {
 							ContactMethod cmeth=(ContactMethod)Enum.Parse(typeof(ContactMethod),fieldVal);
-							newValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
-							newValObj=cmeth;
+							row.NewValDisplay=Lan.g("enumContactMethod",cmeth.ToString());
+							row.NewValObj=cmeth;
 						}
 						catch {
 							MessageBox.Show(fieldVal+Lan.g(this," is not a valid ContactMethod."));
 						}
 					}
-					Rows.Add(CreateImportRow("PreferRecallMethod","",oldValDisplay,PatCur.PreferRecallMethod,newValDisplay,newValObj,newValDisplay,newValObj,
-						newValObj!=null && (ContactMethod)newValObj!=PatCur.PreferRecallMethod,false,typeof(ContactMethod),false,false));
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(ContactMethod);
+					if(row.NewValObj!=null && (ContactMethod)row.NewValObj!=PatCur.PreferRecallMethod) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//referredFrom---------------------------------------------
 				fieldVal=GetInputValue("referredFrom");
@@ -418,32 +584,104 @@ namespace OpenDental {
 				//Address---------------------------------------------
 				fieldVal=GetInputValue("Address");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Address","",PatCur.Address,PatCur.Address,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Address!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="Address";
+					row.OldValDisplay=PatCur.Address;
+					row.OldValObj=PatCur.Address;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Address2---------------------------------------------
 				fieldVal=GetInputValue("Address2");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Address2","",PatCur.Address2,PatCur.Address2,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Address2!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="Address2";
+					row.OldValDisplay=PatCur.Address2;
+					row.OldValObj=PatCur.Address2;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//City---------------------------------------------
 				fieldVal=GetInputValue("City");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("City","",PatCur.City,PatCur.City,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.City!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="City";
+					row.OldValDisplay=PatCur.City;
+					row.OldValObj=PatCur.City;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//State---------------------------------------------
 				fieldVal=GetInputValue("State");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("State","",PatCur.State,PatCur.State,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.State!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="State";
+					row.OldValDisplay=PatCur.State;
+					row.OldValObj=PatCur.State;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//Zip---------------------------------------------
 				fieldVal=GetInputValue("Zip");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("Zip","",PatCur.Zip,PatCur.Zip,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.Zip!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="Zip";
+					row.OldValDisplay=PatCur.Zip;
+					row.OldValObj=PatCur.Zip;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				//HmPhone---------------------------------------------
 				fieldVal=GetInputValue("HmPhone");
 				if(fieldVal!=null) {
-					Rows.Add(CreateImportRow("HmPhone","",PatCur.HmPhone,PatCur.HmPhone,fieldVal,fieldVal,fieldVal,fieldVal,PatCur.HmPhone!=fieldVal,false,typeof(string),false,false));
+					row=new SheetImportRow();
+					row.FieldName="HmPhone";
+					row.OldValDisplay=PatCur.HmPhone;
+					row.OldValObj=PatCur.HmPhone;
+					row.NewValDisplay=fieldVal;
+					row.NewValObj=row.NewValDisplay;
+					row.ImpValDisplay=row.NewValDisplay;
+					row.ImpValObj=row.NewValObj;
+					row.ObjType=typeof(string);
+					if(row.OldValDisplay!=row.NewValDisplay) {
+						row.DoImport=true;
+					}
+					Rows.Add(row);
 				}
 				#endregion address
 				//Separator-------------------------------------------
@@ -860,7 +1098,20 @@ namespace OpenDental {
 				//misc----------------------------------------------------
 				List<string> miscVals=GetMiscValues();
 				for(int i=0;i<miscVals.Count;i++) {
-					Rows.Add(CreateImportRow("misc","misc"+(i+1).ToString(),"","",miscVals[i],"","","",false,false,typeof(string),true,false));
+					fieldVal=miscVals[i];
+					row=new SheetImportRow();
+					row.FieldName="misc";
+					row.FieldDisplay="misc"+(i+1).ToString();
+					row.OldValDisplay="";
+					row.OldValObj="";
+					row.NewValDisplay=fieldVal;
+					row.NewValObj="";
+					row.ImpValDisplay="";
+					row.ImpValObj="";
+					row.ObjType=typeof(string);
+					row.DoImport=false;
+					row.IsFlagged=true;
+					Rows.Add(row);
 				}
 			}
 			#endregion
@@ -902,7 +1153,12 @@ namespace OpenDental {
 					if(allergyList[i].FieldValue=="") {//Current box not checked.
 						if(oppositeBox==null || oppositeBox.FieldValue=="") {//No opposite box or both boxes are not checked.
 							//Create a blank row just in case they want to import.
-							Rows.Add(CreateImportRow(row.FieldName,"",row.OldValDisplay,row.OldValObj,"",allergyList[i],"","",false,false,typeof(Allergy),false,false));
+							row.NewValDisplay="";
+							row.NewValObj=allergyList[i];
+							row.ImpValDisplay="";
+							row.ImpValObj="";
+							row.ObjType=typeof(Allergy);
+							Rows.Add(row);
 							if(oppositeBox!=null) {
 								allergyList.Remove(oppositeBox);//Removes possible duplicate entry.
 							}
@@ -1060,7 +1316,12 @@ namespace OpenDental {
 					if(problemList[i].FieldValue=="") {//Current box not checked.
 						if(oppositeBox==null || oppositeBox.FieldValue=="") {//No opposite box or both boxes are not checked.
 							//Create a blank row just in case they still want to import.
-							Rows.Add(CreateImportRow(row.FieldName,"",row.OldValDisplay,row.OldValObj,"",problemList[i],"","",false,false,typeof(Disease),false,false));
+							row.NewValDisplay="";
+							row.NewValObj=problemList[i];
+							row.ImpValDisplay="";
+							row.ImpValObj="";
+							row.ObjType=typeof(Disease);
+							Rows.Add(row);
 							if(oppositeBox!=null) {
 								problemList.Remove(oppositeBox);//Removes possible duplicate entry.
 							}
@@ -2340,27 +2601,6 @@ namespace OpenDental {
 			separator.FieldName=displayText;
 			separator.IsSeparator=true;
 			return separator;
-		}
-
-		///<summary>We create these import rows so often this will just save time.</summary>
-		private SheetImportRow CreateImportRow(string fieldName,string fieldDisplay,string oldValDisplay,object oldValObj,string newValDisplay,object newValObj,string impValDisplay,object impValObj,bool doImport,bool isSeparator,Type objType,bool isFlagged,bool isFlaggedImp) {
-			SheetImportRow importRow=new SheetImportRow();
-			importRow.FieldName=fieldName;
-			if(fieldDisplay!="") {
-				importRow.FieldDisplay=fieldDisplay;
-			}
-			importRow.OldValDisplay=oldValDisplay;
-			importRow.OldValObj=oldValObj;
-			importRow.NewValDisplay=newValDisplay;
-			importRow.NewValObj=newValObj;
-			importRow.ImpValDisplay=impValDisplay;
-			importRow.ImpValObj=impValObj;
-			importRow.DoImport=doImport;
-			importRow.IsSeparator=isSeparator;
-			importRow.ObjType=objType;
-			importRow.IsFlagged=isFlagged;
-			importRow.IsFlaggedImp=isFlaggedImp;
-			return importRow;
 		}
 
 		private class SheetImportRow {
