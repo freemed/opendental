@@ -4093,6 +4093,7 @@ namespace OpenDental {
 				xPos+=(int)(ApptDrawing.TimeWidth)+30;//30 for margins.
 				int xCenter=0;
 				int day=WeekStartDate.Day;
+				int daysInMonth=DateTime.DaysInMonth(WeekStartDate.Year,WeekStartDate.Month);
 				for(int i=0;i<7;i++) {
 					switch(i) {
 						case 0:
@@ -4118,6 +4119,9 @@ namespace OpenDental {
 							break;
 					}
 					day++;
+					if(day>daysInMonth) {
+						day=1;//Week contains days in the next month.
+					}
 					xCenter=(int)((ApptDrawing.ColDayWidth/2)-(g.MeasureString(columnDate,headerFont).Width/2));
 					g.DrawString(columnDate,headerFont,Brushes.Black,(int)(xPos+xCenter),yPos);
 					xPos+=ApptDrawing.ColDayWidth;
