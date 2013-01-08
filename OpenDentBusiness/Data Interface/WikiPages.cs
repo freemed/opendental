@@ -471,6 +471,9 @@ namespace OpenDentBusiness{
 				}
 				if(tagName=="b" || tagName=="i" || tagName=="a" || tagName=="span"){			
 					//scan to the ending tag because this is paragraph content.
+					if(s.IndexOf("</"+tagName+">")==-1) {//an invalid tag of some sort.  Example: <br />
+//todo: prevent infinite loop
+					}
 					iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
 					//we are still within the paragraph, so loop to keep looking for the end.
 				}
