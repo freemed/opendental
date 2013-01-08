@@ -67,6 +67,21 @@ namespace OpenDentBusiness{
 			DataTable table;
 			string command;
 			//if(isCanadian){
+			//Strip out the digits from the phone number.
+			string phonedigits="";
+			for(int i=0;i<carrierPhone.Length;i++) {
+				if(Regex.IsMatch(carrierPhone[i].ToString(),"[0-9]")) {
+					phonedigits=phonedigits+carrierPhone[i];
+				}
+			}
+			//Create a regular expression so that the phone search uses only numbers.
+			string regexp="";
+			for(int i=0;i<phonedigits.Length;i++) {
+				if(i!=0) {
+					regexp+="[^0-9]*";//zero or more intervening digits that are not numbers
+				}
+				regexp+=phonedigits[i];
+			}
 			command="SELECT Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
 				+"CarrierName,CDAnetVersion,City,ElectID,"
 				+"COUNT(insplan.PlanNum) insPlanCount,IsCDA,"
@@ -75,8 +90,15 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN canadiannetwork ON canadiannetwork.CanadianNetworkNum=carrier.CanadianNetworkNum "
 				+"LEFT JOIN insplan ON insplan.CarrierNum=carrier.CarrierNum "
 				+"WHERE "
-				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' "
-				+"AND Phone LIKE '%"+POut.String(carrierPhone)+"%' ";
+				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
+			if(regexp!="") {
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command+="AND Phone REGEXP '"+POut.String(regexp)+"' ";
+				}
+				else {//oracle
+					command+="AND (SELECT REGEXP_INSTR(Phone,'"+POut.String(regexp)+"') FROM dual)<>0";
+				}
+			}
 			if(isCanadian){
 				command+="AND IsCDA=1 ";
 			}

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	public class TelephoneNumbers {
-		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, and PT Dental bridge.</summary>
+		///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, carrier edit window, and PT Dental bridge.</summary>
 		public static string ReFormat(string phoneNum) {
 			if(CultureInfo.CurrentCulture.Name!="en-US" && !CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Not USA or Canadian. en-US or en-CA or fr-CA
 				return phoneNum;

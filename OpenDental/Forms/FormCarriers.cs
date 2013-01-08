@@ -421,12 +421,20 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				carrier.IsCDA=true;
 			}
-			FormCE.CarrierCur=new Carrier();
+			carrier.CarrierName=textCarrier.Text;
+			//The phone number will get formated while the user types inside the carrier edit window.
+			//However, the user could have typed in a poorly formatted number so we will reformat the number once before load.
+			string phoneFormatted=TelephoneNumbers.ReFormat(textPhone.Text);
+			carrier.Phone=phoneFormatted;
+			FormCE.CarrierCur=carrier;
 			FormCE.ShowDialog();
 			if(FormCE.DialogResult!=DialogResult.OK){
 				return;
 			}
 			changed=true;
+			//Load the name and phone number of the newly added carrier to the search fields so that the new carrier shows up in the grid.
+			textCarrier.Text=FormCE.CarrierCur.CarrierName;
+			textPhone.Text=FormCE.CarrierCur.Phone;
 			FillGrid();
 			for(int i=0;i<table.Rows.Count;i++){
 				if(FormCE.CarrierCur.CarrierNum.ToString()==table.Rows[i]["CarrierNum"].ToString()){
