@@ -363,46 +363,64 @@ namespace OpenDentBusiness{
 			//numbered list---------------------------------------------------------------------------------------------------------------------
 			s=ProcessList(s,"#");
 			//table-------------------------------------------------------------------------------------------------------------------------
-			matches=Regex.Matches(s,@"\{|.+?|\}");
+			//{|
+			//!Width="100"|Column Heading 1!!Width="150"|Column Heading 2!!Width=""|Column Heading 3
+			//|- 
+			//|Cell 1||Cell 2||Cell 3 
+			//|-
+			//|Cell A||Cell B||Cell C 
+			//|}
+			//There are many ways to parse this.  Our strategy is to do it in a way that the generated xml is never invalid.
+			//As the user types, the above example will frequently be in a state of partial completeness, and the parsing should gracefully continue anyway.
+			//rigorous enforcement only happens when validating during a save, not here.
+			matches=Regex.Matches(s,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
 			foreach(Match match in matches) {
 				string tableStrOrig=match.Value;
 				StringBuilder strbTable=new StringBuilder();
 				string[] lines=tableStrOrig.Split(new string[] {"\r\n"},StringSplitOptions.None);
-				bool isInHeader=false;
-				bool isInRow=false;
-				for(int i=0;i<lines.Length;i++) {
-					if(i==0) {
-						strbTable.AppendLine("<table>");
-						continue;
-					}
-					if(i==lines.Length-1) {
-						if(isInRow) {
-
+				strbTable.AppendLine("<table>");
+				for(int i=1;i<lines.Length-1;i++) {
+					if(lines[i].StartsWith("!")) {//header
+						strbTable.AppendLine("<tr>");
+						string[] cells=lines[i].Substring(1).Split(new string[] {"!!"},StringSplitOptions.None);//this also strips off the leading !
+						for(int c=0;c<cells.Length;c++){
+							if(Regex.IsMatch(cells[c],@"(Width="")\d+""\|")){//e.g. Width="90"|
+								strbTable.Append("<th ");
+								string width=cells[c].Substring(7);//90"|Column Heading 1
+								width=width.Substring(0,width.IndexOf("\""));//90
+								strbTable.Append("Width=\""+width+"\">");
+								strbTable.Append(cells[c].Substring(cells[c].IndexOf("|")+1));
+								strbTable.AppendLine("</th>");
+							}
+							else {
+								strbTable.Append("<th>");
+								strbTable.Append(cells[c]);
+								strbTable.AppendLine("</th>");
+							}
 						}
-						strbTable.AppendLine("</table>");
-						continue;
+						strbTable.AppendLine("</tr>");
 					}
-					if(isInRow) {
-						if(lines[i].StartsWith("|-")) {
-							strbTable.AppendLine("</tr>");
-							isInRow=false;
-							continue;
+					else if(lines[i].Trim()=="|-"){
+						//totally ignore these rows
+					}
+					else{//normal row
+						strbTable.AppendLine("<tr>");
+						string[] cells=lines[i].Split(new string[] {"||"},StringSplitOptions.None);
+						for(int c=0;c<cells.Length;c++) {
+							strbTable.Append("<td>");
+							if(c==0 && cells[c].StartsWith("|")) {
+								strbTable.Append(cells[c].Substring(1));
+							}
+							else {
+								strbTable.Append(cells[c]);
+							}
+							strbTable.AppendLine("</td>");
 						}
+						strbTable.AppendLine("</tr>");
 					}
-					else {
-						//if(
-					}
-					//lines[i];
 				}
-
-				strbTable.AppendLine("");
-
-
-
-				string tableStrNew=match.Value;
-				tableStrNew=tableStrNew.Replace("{|","<table>");
-				tableStrNew=tableStrNew.Replace("|}","</table>");
-				tableStrNew=tableStrNew.Replace("","<tr>");
+				strbTable.Append("</table>");
+				s=s.Replace(tableStrOrig,strbTable.ToString());
 			}
 			#endregion regex replacements
 			#region paragraph grouping
