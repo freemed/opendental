@@ -305,6 +305,7 @@
     <Compile Include="Data Interface\VaccineDefs.cs" />
     <Compile Include="Data Interface\VaccinePats.cs" />
     <Compile Include="Data Interface\Vitalsigns.cs" />
+    <Compile Include="Data Interface\WikiPageHists.cs" />
     <Compile Include="Data Interface\WikiPages.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="Remoting\DataTransferObject.cs" />
@@ -949,6 +950,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Serializing\WikiPage.cs" />
+    <Compile Include="Serializing\WikiPageHist.cs" />
     <Compile Include="Serializing\ZipCode.cs">
       <SubType>Code</SubType>
     </Compile>

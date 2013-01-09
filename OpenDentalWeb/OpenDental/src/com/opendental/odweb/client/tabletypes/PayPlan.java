@@ -10,7 +10,7 @@ public class PayPlan {
 		public int PayPlanNum;
 		/** FK to patient.PatNum.  The patient who had the treatment done. */
 		public int PatNum;
-		/** FK to patient.PatNum.  The person responsible for the payments.  Does not need to be in the same family as the patient.  Will be 0 if planNum has a value. */
+		/** FK to patient.PatNum.  The person responsible for the payments.  Does not need to be in the same family as the patient.  Will be 0 if PlanNum and InsSubNum have values. */
 		public int Guarantor;
 		/** Date that the payment plan will display in the account. */
 		public Date PayPlanDate;
@@ -18,11 +18,11 @@ public class PayPlan {
 		public double APR;
 		/** Generally used to archive the terms when the amortization schedule is created. */
 		public String Note;
-		/** FK to insplan.PlanNum.  Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to insplan.PlanNum and Guarantor will be 0. */
+		/** FK to insplan.PlanNum.  Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to insplan.PlanNum, and Guarantor will be 0. */
 		public int PlanNum;
 		/** The amount of the treatment that has already been completed.  This should match the sum of the principal amounts for most situations.  But if the procedures have not yet been completed, and the payment plan is to make any sense, then this number must be changed. */
 		public double CompletedAmt;
-		/** FK to inssub.InsSubNum. */
+		/** FK to inssub.InsSubNum.  Will be 0 if standard payment plan.  But if this is being used to track expected insurance payments, then this will be the foreign key to inssub.InsSubNum, and Guarantor will be 0. */
 		public int InsSubNum;
 
 		/** Deep copy of object. */

@@ -102,7 +102,7 @@ public class Procedure {
 		public ProcUnitQtyType UnitQtyType;
 		/** FK to statement.StatementNum.  Only used when the statement in an invoice. */
 		public int StatementNum;
-		/** If this flag is set, then the proc is locked down tight.  No changes at all can be made except to append, sign, or invalidate. Invalidate really just sets the proc to status 'deleted'.  An invalidated proc retains its IsLocked status.  All locked procs will be status of C or D. */
+		/** If this flag is set, then the proc is locked down tight.  No changes at all can be made except to append, sign, or invalidate. Invalidate really just sets the proc to status 'deleted'.  An invalidated proc retains its IsLocked status.  All locked procs will be status of C or D.  Locked group notes will be status of EC or D. */
 		public boolean IsLocked;
 
 		/** Deep copy of object. */

@@ -230,7 +230,7 @@ public class ProcedureCode {
 
 		/** Used in procedurecode setup to specify the treatment area for a procedure.  This determines what fields are available when editing an appointment. */
 		public enum TreatmentArea {
-			/** 0-never used */
+			/** 0-Same as 3 mouth. */
 			None,
 			/** 1 */
 			Surf,

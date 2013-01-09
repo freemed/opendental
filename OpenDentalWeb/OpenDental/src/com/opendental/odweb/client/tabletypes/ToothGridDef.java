@@ -6,7 +6,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 public class ToothGridDef {
 		/** Primary key. */
 		public int ToothGridDefNum;
-		/**  */
+		/** FK to sheetfielddef.SheetFieldDefNum */
 		public int SheetFieldDefNum;
 		/** This is the internal name that OD uses to identify the column.  Blank if this is a user-defined column.  We will keep a hard-coded list of available NameInternals in the code to pick from. */
 		public String NameInternal;

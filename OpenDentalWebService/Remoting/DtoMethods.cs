@@ -683,6 +683,9 @@ namespace OpenDentalWebService {
 			if(objectType=="OpenDentBusiness.WikiPage") {
 				return WikiPage.Serialize((OpenDentBusiness.WikiPage)obj);
 			}
+			if(objectType=="OpenDentBusiness.WikiPageHist") {
+				return WikiPageHist.Serialize((OpenDentBusiness.WikiPageHist)obj);
+			}
 			if(objectType=="OpenDentBusiness.ZipCode") {
 				return ZipCode.Serialize((OpenDentBusiness.ZipCode)obj);
 			}
@@ -1357,6 +1360,9 @@ namespace OpenDentalWebService {
 			if(typeName=="WikiPage") {
 				return WikiPage.Deserialize(xml);
 			}
+			if(typeName=="WikiPageHist") {
+				return WikiPageHist.Deserialize(xml);
+			}
 			if(typeName=="ZipCode") {
 				return ZipCode.Deserialize(xml);
 			}
@@ -2013,6 +2019,9 @@ namespace OpenDentalWebService {
 			}
 			if(className=="WikiPages") {
 				return MethodWikiPages(methodName,parameters);
+			}
+			if(className=="WikiPageHists") {
+				return MethodWikiPageHists(methodName,parameters);
 			}
 			if(className=="ZipCodes") {
 				return MethodZipCodes(methodName,parameters);
@@ -3319,6 +3328,12 @@ namespace OpenDentalWebService {
 
 		///<summary></summary>
 		private static object MethodWikiPages(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodWikiPageHists(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}

@@ -243,7 +243,7 @@ public class Clearinghouse {
 			AOS,
 			/** 8 */
 			PostnTrack,
-			/**  */
+			/** 9 Canadian clearinghouse. */
 			ITRANS,
 			/** 10 */
 			Tesia,
@@ -255,7 +255,7 @@ public class Clearinghouse {
 			DentiCal,
 			/** 14 */
 			EmdeonMedical,
-			/**  */
+			/** 15 Canadian clearinghouse. */
 			Claimstream
 		}
 
