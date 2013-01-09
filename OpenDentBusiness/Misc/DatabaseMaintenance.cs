@@ -2511,7 +2511,23 @@ namespace OpenDentBusiness {
 				}
 			}
 			else {
-				//Take no action.  Use descriptive explanation.
+				//Fix the cases where payplan.Guarantor and payplan.PatNum are not zero. 
+				command="UPDATE payplan,payplancharge "
+					+"SET payplancharge.Guarantor=payplan.Guarantor "
+					+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+					+"AND payplancharge.Guarantor != payplan.Guarantor "
+				  +"AND payplan.Guarantor != 0";
+				long numFixed=Db.NonQ(command);
+				command="UPDATE payplan,payplancharge "
+					+"SET payplancharge.PatNum=payplan.PatNum "
+					+"WHERE payplan.PayPlanNum=payplancharge.PayPlanNum "
+					+"AND payplancharge.PatNum != payplan.PatNum "
+				  +"AND payplan.PatNum != 0";
+				numFixed+=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","PayPlanCharge guarantors and pats fixed to match payplan: ")+numFixed+"\r\n";
+				}
+				//No fix yet if payplan.Guarantor or payplan.PatNum are zero but there are good values in PayPlanCharge.
 			}
 			return log;
 		}
