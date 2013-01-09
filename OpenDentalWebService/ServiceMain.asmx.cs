@@ -29,7 +29,7 @@ namespace OpenDentalWebService {
 			if(con==null) {
 				//Create database connection for testing purposes:
 				con=new OpenDentBusiness.DataConnection();
-				con.SetDb("localhost","development125","root","","","",DatabaseType.MySql);
+				con.SetDb("localhost","development130","root","","","",DatabaseType.MySql);
 			}
 			#endif
 			#endregion

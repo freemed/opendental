@@ -15,6 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<WikiPageNum>").Append(wikipage.WikiPageNum).Append("</WikiPageNum>");
 			sb.Append("<UserNum>").Append(wikipage.UserNum).Append("</UserNum>");
 			sb.Append("<PageTitle>").Append(SerializeStringEscapes.EscapeForXml(wikipage.PageTitle)).Append("</PageTitle>");
+			sb.Append("<KeyWords>").Append(SerializeStringEscapes.EscapeForXml(wikipage.KeyWords)).Append("</KeyWords>");
 			sb.Append("<PageContent>").Append(SerializeStringEscapes.EscapeForXml(wikipage.PageContent)).Append("</PageContent>");
 			sb.Append("<DateTimeSaved>").Append(wikipage.DateTimeSaved.ToString("yyyyMMddHHmmss")).Append("</DateTimeSaved>");
 			sb.Append("</WikiPage>");
@@ -40,6 +41,9 @@ namespace OpenDentalWebService {
 							break;
 						case "PageTitle":
 							wikipage.PageTitle=reader.ReadContentAsString();
+							break;
+						case "KeyWords":
+							wikipage.KeyWords=reader.ReadContentAsString();
 							break;
 						case "PageContent":
 							wikipage.PageContent=reader.ReadContentAsString();
