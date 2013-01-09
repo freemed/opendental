@@ -1,12 +1,14 @@
 using System;
 using System.ComponentModel;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using NHunspell;
 using System.Text.RegularExpressions;
 using OpenDental.UI;
+using System.Drawing;
 
 namespace OpenDental
 {
@@ -14,8 +16,12 @@ namespace OpenDental
 	public class ODtextBox : RichTextBox{//System.ComponentModel.Component
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.ComponentModel.Container components = null;// Required designer variable.
+		private static Hunspell hunspell;//We create this object one time for every instance of this textbox control within the entire program.
 		private QuickPasteType quickPasteType;
-
+		private List<string> correctList;
+		private List<string> incorrectList;
+		private Bitmap bitmap;//TODO: dispose when control is destroyed.
+		private Graphics bufferGraphics;//TODO: dispose when control is destroyed.
 		/*public ODtextBox(System.ComponentModel.IContainer container)
 		{
 			///
@@ -29,6 +35,12 @@ namespace OpenDental
 		///<summary></summary>
 		public ODtextBox(){
 			InitializeComponent();// Required for Windows.Forms Class Composition Designer support
+			if(hunspell==null) {
+				hunspell=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
+			}
+			
+			correctList=new List<string>();
+			incorrectList=new List<string>();
 			EventHandler onClick=new EventHandler(menuItem_Click);
 			MenuItem menuItem;
 			menuItem=new MenuItem(Lan.g(this,"Insert Date"),onClick,Shortcut.CtrlD);
@@ -53,6 +65,15 @@ namespace OpenDental
 				{
 					components.Dispose();
 				}
+				if(bufferGraphics!=null) {//Dispose before bitmap.
+					bufferGraphics.Dispose();
+					bufferGraphics=null;
+				}
+				if(bitmap!=null) {
+					bitmap.Dispose();
+					bitmap=null;
+				}
+				//We do not dispose the hunspell object because it will be automatially disposed of when the program closes.
 			}
 			base.Dispose( disposing );
 		}
@@ -77,7 +98,6 @@ namespace OpenDental
 			this.ContextMenu = this.contextMenu;
 			this.Multiline = true;
 			this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-
 		}
 		#endregion
 
@@ -148,7 +168,7 @@ namespace OpenDental
 
 		///<summary></summary>
 		protected override void OnKeyUp(KeyEventArgs e) {
-			base.OnKeyUp (e);
+			base.OnKeyUp(e);
 			int originalLength=base.Text.Length;
 			int originalCaret=base.SelectionStart;
 			string newText=QuickPasteNotes.Substitute(Text,quickPasteType);
@@ -160,9 +180,17 @@ namespace OpenDental
 			if(e.KeyCode==Keys.Q && e.Modifiers==Keys.Control){
 				ShowFullDialog();
 			}
-			if(e.KeyCode==Keys.Space || e.KeyCode==Keys.OemPeriod || e.KeyCode==Keys.OemQuestion) {
-			  checkSpelling();
-			}
+			if(this.bitmap==null) {
+				this.bitmap=new Bitmap(this.Width,this.Height);
+				bufferGraphics=Graphics.FromImage(this.bitmap);
+				bufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
+			}			
+			ClearWavyLines(bufferGraphics);
+			checkSpelling();
+			Graphics textBoxGraphics=Graphics.FromHwnd(this.Handle);
+			Application.DoEvents();
+			textBoxGraphics.DrawImageUnscaled(bitmap,0,0);
+			textBoxGraphics.Dispose();
 		}
 
 		private void ShowFullDialog(){
@@ -172,45 +200,86 @@ namespace OpenDental
 			FormQ.ShowDialog();
 		}
 
-		private void checkSpelling() {
-			//FormattingInstructionCollection instructions=new FormattingInstructionCollection();
-			//Format formatUnderline=new Format();
-			//Format formatDefault=new Format();
-			//formatUnderline.UnderlineFormat=new UnderlineFormat(UnderlineStyle.Wave,UnderlineColor.Red);
-			//formatDefault.UnderlineFormat=new UnderlineFormat(UnderlineStyle.None,UnderlineColor.Black);
-			//int curPos=base.SelectionStart;
-			//string[] words=Regex.Split(Text,"([\\s])|(\\p{Po})");
-			//if(words.Length==0) {//deleted all text, just return
-			//  return;
-			//}
-			//Hunspell hunspell=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
-			//  //"en_US.aff","en_US.dic");
-			//Clear();
-			//for(int i=0;i<words.Length;i++) {
-			//  bool correct=false;
-			//  if(words[i].Length==0 || char.IsPunctuation(words[i][0])) {//Only spell check non-punctuation
-			//    correct=true;
-			//  }
-			//  if(!correct) {//Only check custom list if not empty string and not punctuation
-			//    for(int w=0;w<DictCustoms.Listt.Count;w++) {//compare to custom word list
-			//      if(DictCustoms.Listt[w].WordText.ToLower()==words[i].ToLower()) {//convert to lower case before comparing
-			//        correct=true;
-			//      }
-			//    }
-			//  }
-			//  if(!correct) {//Not empty string, not punctuation, not in custom dictionary, so spell check
-			//    correct=hunspell.Spell(words[i]);
-			//  }
-			//  int textLength=Text.Length;//before appending word
-			//  this.AppendText(words[i]);
-			//  if(!correct) {
-			//    instructions.Add(new FormattingInstruction(textLength,words[i].Length,formatUnderline));
-			//  }
-			//}
-			//base.BatchFormat(instructions);
-			//base.SelectionStart=curPos;
+		private void ClearWavyLines(Graphics bufferGraphics) {
+			Point start=this.GetPositionFromCharIndex(0);
+			int numLines=(this.Height/this.FontHeight)+1;
+			int y=start.Y+this.FontHeight;//Start below the first line of text.
+			for(int i=0;i<numLines;i++) {
+				Rectangle wavyLineArea=new Rectangle(start.X,y,this.Width,3);
+				bufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
+				y+=this.FontHeight;
+			}
 		}
 
+		private void checkSpelling() {
+			int curPos=base.SelectionStart;
+			string[] words=Regex.Split(Text,"([\\s])");
+			if(words.Length==0) {//deleted all text, just return
+				return;
+			}
+			string[] noPunctWords=new string[words.Length];
+			for(int i=0;i<words.Length;i++) {
+				noPunctWords[i]=Regex.Replace(words[i],"[\\p{P}\\p{S}-['-]]","");
+			}
+			Clear();
+			for(int i=0;i<noPunctWords.Length;i++) {
+				int textLength=Text.Length;//length before appending word
+				this.AppendText(words[i]);
+				bool correct=false;
+				if(noPunctWords[i].Length==0) {
+					continue;
+				}
+				if(correctList.Contains(words[i])) {
+					continue;
+				}
+				if(incorrectList.Contains(words[i])) {
+					CustomPaint(textLength,textLength+words[i].Length);
+					continue;
+				}
+				for(int w=0;w<DictCustoms.Listt.Count;w++) {//compare to custom word list
+					if(DictCustoms.Listt[w].WordText.ToLower()==noPunctWords[i].ToLower()) {//convert to lower case before comparing
+						correct=true;
+						break;
+					}
+				}
+				if(!correct) {//Not in custom dictionary, so spell check
+					correct=hunspell.Spell(noPunctWords[i]);
+				}
+				if(!correct) {
+					CustomPaint(textLength,textLength+words[i].Length);
+					incorrectList.Add(words[i]);
+				}
+				else {//if it gets here, the word was spelled correctly, determined by comparing to the custom word list and/or the hunspell dict
+					correctList.Add(words[i]);
+				}
+			}
+			base.SelectionStart=curPos;
+			return;
+		}
+
+		private void CustomPaint(int startIndex,int endIndex) {
+			Point start=this.GetPositionFromCharIndex(startIndex);
+			Point end=this.GetPositionFromCharIndex(endIndex);
+			start.Y=start.Y+this.FontHeight;
+			end.Y=start.Y;
+			DrawWave(start,end);
+		}
+
+		private void DrawWave(Point start,Point end) {
+			Pen pen=Pens.Red;
+			if((end.X-start.X)>4) {
+				ArrayList pl=new ArrayList();
+				for(int i=start.X;i<=(end.X-2);i=i+4) {
+					pl.Add(new Point(i,start.Y));
+					pl.Add(new Point(i+2,start.Y+2));
+				}
+				Point[] p=(Point[])pl.ToArray(typeof(Point));
+				bufferGraphics.DrawLines(pen,p);
+			}
+			else {
+				bufferGraphics.DrawLine(pen,start,end);
+			}
+		}
 
 		private void InsertDate(){
 			int caret=SelectionStart;
