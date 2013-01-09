@@ -365,6 +365,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiTableEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiTableEdit.designer.cs">
+      <DependentUpon>FormWikiTableEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWikiExternalLink.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2690,6 +2696,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiTableEdit.resx">
+      <DependentUpon>FormWikiTableEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWikiExternalLink.resx">
       <DependentUpon>FormWikiExternalLink.cs</DependentUpon>

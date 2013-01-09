@@ -418,19 +418,32 @@ namespace OpenDental {
 
 		///<summary>Insert table boilderplate. Pastes selected text into the first cell.</summary>
 		private void Table_Click() {
-			int tempStart=textContent.SelectionStart;
-			int tempLength=textContent.SelectionLength;
-			string s=
-@"{|
-!Width=""""|Heading1!!Width=""""|Heading2!!Width=""""|Heading3
-|-
-|"+textContent.SelectedText+@"||
-|-
-|
-|}";
-			textContent.Paste(s);
+			FormWikiTableEdit FormWTE = new FormWikiTableEdit();
+			MatchCollection matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
+			if(matches.Count!=0) {
+				foreach(Match match in matches) {
+					if(textContent.SelectionStart > textContent.Text.IndexOf(match.Value)
+						&& textContent.SelectionStart > textContent.Text.IndexOf(match.Value)-match.Value.Length) 
+					{
+						//cursor is inside of this table
+						FormWTE.TableMarkup=match.Value;
+						FormWTE.ShowDialog();
+						if(FormWTE.DialogResult!=DialogResult.OK) {
+							return;
+						}
+						textContent.Text=textContent.Text.Replace(match.Value,FormWTE.TableMarkup);//always safe because dialog result was OK.
+						return;
+					}
+				}
+				//Cursor is not in any existing table markup.
+			}
+			FormWTE.ShowDialog();//blank/new table code is inside of form.
+			if(FormWTE.DialogResult!=DialogResult.OK){
+				return;
+			}
+			textContent.SelectionLength=0;
+			textContent.Paste(FormWTE.TableMarkup);
 			textContent.Focus();
-			textContent.SelectionStart=tempStart+67+tempLength;
 		}
 
 		private void Image_Click() {
