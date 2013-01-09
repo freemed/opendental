@@ -8376,6 +8376,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_0_6();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_0_6() {
 			if(FromVersion<new Version("12.0.6.0")) {
 				string command;
@@ -8400,6 +8401,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_1_0();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_1_0() {
 			if(FromVersion<new Version("12.1.0.0")) {
 				string command;
@@ -8530,6 +8532,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_1_7();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_1_7() {
 			if(FromVersion<new Version("12.1.7.0")) {
 				string command;
@@ -8555,6 +8558,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_2_1();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_2_1() {
 			if(FromVersion<new Version("12.2.1.0")) {
 				string command;
@@ -9006,6 +9010,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_2_17();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_2_17() {
 			if(FromVersion<new Version("12.2.17.0")) {
 				string command="";
@@ -9032,6 +9037,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_2_28();
 		}
 
+		///<summary>Oracle compatible: 01/08/2013</summary>
 		private static void To12_2_28() {
 			if(FromVersion<new Version("12.2.28.0")) {
 				string command="";
@@ -9063,6 +9069,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 
 		//In version 12.2.34, there is an eCW section here.
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_3_1() {
 			if(FromVersion<new Version("12.3.1.0")) {
 				string command;
@@ -9235,7 +9242,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,58)";//CarrierCreate
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+",58)";//CarrierCreate
 						Db.NonQ32(command);
 					}
 				}
@@ -9285,8 +9292,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
-						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Long((int)Permissions.ReportDashboard)+")";
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Long((int)Permissions.ReportDashboard)+")";
 						Db.NonQ(command);
 					}
 				}
@@ -9514,6 +9521,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_3_3();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_3_3() {
 			if(FromVersion<new Version("12.3.3.0")) {
 				string command="";
@@ -9533,7 +9541,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_3_6();
 		}
 
-		/// <summary>Also in 12.2.34</summary>
+		///<summary>Also in 12.2.34</summary>
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_3_6() {
 			if(FromVersion<new Version("12.3.6.0")) {
 				string command="";
@@ -9568,6 +9577,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_3_12();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_3_12() {
 			if(FromVersion<new Version("12.3.12.0")) {
 				string command="";
@@ -9583,6 +9593,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_3_20();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_3_20() {
 			if(FromVersion<new Version("12.3.20.0")) {
 				string command="";
@@ -9600,6 +9611,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_1();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_1() {
 			if(FromVersion<new Version("12.4.1.0")) {
 				string command;
@@ -10033,8 +10045,8 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				else {//oracle
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
-						command="INSERT INTO grouppermission (GroupPermNum,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),"+POut.Long(groupNum)+","+POut.Long((int)Permissions.Billing)+")";
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Long((int)Permissions.Billing)+")";
 						Db.NonQ(command);
 					}
 				}
@@ -10462,6 +10474,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_12();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_12() {
 			if(FromVersion<new Version("12.4.12.0")) {
 				string command;
@@ -11191,6 +11204,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_14();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_14() {
 			if(FromVersion<new Version("12.4.14.0")) {
 				string command;
@@ -11226,6 +11240,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_22();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_22() {
 			if(FromVersion<new Version("12.4.22.0")) {
 				string command;
@@ -11248,6 +11263,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_28();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_28() {
 			if(FromVersion<new Version("12.4.28.0")) {
 				string command;
@@ -11295,10 +11311,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						}
 						else {//oracle
 							command=@"INSERT INTO procedurecode(CodeNum,ProcCode,Descript,AbbrDesc,
-									ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,IsHygiene,PaintType,DefaultNote,SubstitutionCode) 
+									ProcTime,ProcCat,TreatArea,NoBillIns,IsProsth,IsHygiene,PaintType,IsCanadianLab,BaseUnits,SubstOnlyIf,IsMultiVisit,ProvNumDefault,GraphicColor,DefaultNote,SubstitutionCode) 
 								VALUES ((SELECT MAX(CodeNum)+1 FROM procedurecode),'"+POut.String(procCode)+"','"+POut.String(procDescript)+"','"+POut.String(procAbbrDesc)+"',"
 									+"'"+POut.String(procTime)+"','"+POut.Long(defNum)+"',"+POut.Long(procTreatArea)+","+POut.Int(procNoBillIns)+","+POut.Int(procIsProsth)+","
-									+POut.Int(procIsHygiene)+","+POut.Int(procPaintType)+",'','')";
+									+POut.Int(procIsHygiene)+","+POut.Int(procPaintType)+",0,0,0,0,0,0,'','')";
 							codeNum=Db.NonQ(command,true);
 						}
 					}//end D1208 insert
@@ -11374,6 +11390,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_30();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_30() {
 			if(FromVersion<new Version("12.4.30.0")) {
 				string command;
@@ -11421,6 +11438,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_32();
 		}
 
+		///<summary>Oracle compatible: 01/09/2013</summary>
 		private static void To12_4_32() {
 			if(FromVersion<new Version("12.4.32.0")) {
 				string command;
@@ -11479,7 +11497,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE clockevent MODIFY (AmountBonus double NOT NULL default -1)";
+					command="ALTER TABLE clockevent MODIFY (AmountBonus NUMBER(38,8) DEFAULT '-1')";//Column is already NOT NULL.
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -11487,7 +11505,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE clockevent MODIFY (AmountBonusAuto double NOT NULL default -1)";
+					command="ALTER TABLE clockevent MODIFY (AmountBonusAuto NUMBER(38,8) DEFAULT '-1')";//Column is already NOT NULL.
 					Db.NonQ(command);
 				}
 				command="SELECT ValueString FROM preference WHERE PrefName='StatementShowNotes'";
@@ -11686,8 +11704,10 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						)";
 					Db.NonQ(command);
 				} 
+				//Jason: Talked with Ryan and these are going to be the only two pages in this table.  Oracle requires a PK, so manually setting PK's of 1 and 2.
 				//todo: edit these 2 starting wikipages
-				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
+				command="INSERT INTO wikipage (WikiPageNum,UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
+					+"1,"//Oracle requires PK to be not null and does not have auto incrementing.  Simply hard code the PK here.
 					+"0,"//no usernum set for the first 2 pages
 					+"'_Master',"
 					+"'',"
@@ -11770,7 +11790,8 @@ a.PageNotExists:hover {
 				command+=")";
 				Db.NonQ(command);
 				//blank home page
-				command="INSERT INTO wikipage (UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
+				command="INSERT INTO wikipage (WikiPageNum,UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
+					+"2,"//Oracle requires PK to be not null and does not have auto incrementing.  Simply hard code the PK here.
 					+"0,"
 					+"'Home',"	
 					+"'',"
