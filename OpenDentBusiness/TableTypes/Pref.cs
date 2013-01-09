@@ -154,6 +154,8 @@ namespace OpenDentBusiness {
 		EHREmailPort,
 		///<summary>This pref is hidden, so no practical way for user to turn this on.  Only used for ehr testing.</summary>
 		EHREmailToAddress,
+		/// <summary>FK to EmailAddress.EmailAddressNum.  It is not required that a default be set.</summary>
+		EmailDefaultAddressNum,
 		EmailPassword,
 		EmailPort,
 		EmailSenderAddress,

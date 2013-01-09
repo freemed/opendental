@@ -771,8 +771,10 @@ namespace OpenDental{
 			string attachPath;
 			EmailMessage message;
 			EmailAttach attach;
+			EmailAddress emailAddress;
 			Family fam;
 			Patient pat;
+			Clinic clinic;
 			string patFolder;
 			int skipped=0;
 			int skippedElect=0;
@@ -813,8 +815,20 @@ namespace OpenDental{
 				pat=fam.GetPatient(stmt.PatNum);
 				patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				dataSet=AccountModules.GetStatementDataSet(stmt);
+				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
+					clinic=Clinics.GetClinic(pat.ClinicNum);
+					if(clinic != null && clinic.EmailAddressNum!=0) {
+						emailAddress=EmailAddresses.GetOne(Clinics.GetClinic(pat.ClinicNum).EmailAddressNum);
+					}
+					else {
+						emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+					}
+				}
+				else {
+					emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+				}
 				if(stmt.Mode_==StatementMode.Email){
-					if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
+					if(emailAddress==null || emailAddress.SMPTserver==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
 						isPrinting=false;
@@ -861,7 +875,7 @@ namespace OpenDental{
 					message=new EmailMessage();
 					message.PatNum=pat.PatNum;
 					message.ToAddress=pat.Email;
-					message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+					message.FromAddress=emailAddress.SenderAddress;
 					string str;
 					str=PrefC.GetString(PrefName.BillingEmailSubject);
 					str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));

@@ -862,7 +862,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-			if(PrefC.GetString(PrefName.EmailSMTPserver)=="") {
+//todo: handle null
+			if(EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum)).SMPTserver=="") {
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
@@ -914,7 +915,9 @@ namespace OpenDental{
 			string str="";
 			List<long> patNumsSelected=new List<long>();
 			List<long> patNumsFailed=new List<long>();
+			Clinic clinic;
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
+				clinic=Clinics.GetClinic(PIn.Long(table.Rows[grid.SelectedIndices[i]]["ClinicNum"].ToString()));
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=table.Rows[grid.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.

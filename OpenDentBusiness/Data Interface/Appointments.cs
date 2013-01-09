@@ -413,7 +413,7 @@ namespace OpenDentBusiness{
 			string command="SELECT patient.PatNum,"
 				+"patient.LName,"
 				+"patient.FName,patient.Preferred,patient.LName, "
-				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.HmPhone,patient.TxtMsgOk,"
+				+"patient.Guarantor,AptDateTime,patient.Birthdate,patient.ClinicNum,patient.HmPhone,patient.TxtMsgOk,"
 				+"patient.WkPhone,patient.WirelessPhone,ProcDescript,Confirmed,Note,"
 				+"patient.AddrNote,AptNum,patient.MedUrgNote,patient.PreferConfirmMethod,"
 				+"guar.Email guarEmail,patient.Email,patient.Premed,DateTimeAskedToArrive "
@@ -463,6 +463,7 @@ namespace OpenDentBusiness{
 				}
 				row["AptDateTime"]=dateT;
 				row["aptDateTime"]=dateT.ToShortDateString()+"\r\n"+dateT.ToShortTimeString();
+				row["ClinicNum"]=rawtable.Rows[i]["ClinicNum"].ToString();
 				row["confirmed"]=DefC.GetName(DefCat.ApptConfirmed,PIn.Long(rawtable.Rows[i]["Confirmed"].ToString()));
 				contmeth=(ContactMethod)PIn.Int(rawtable.Rows[i]["PreferConfirmMethod"].ToString());
 				if(contmeth==ContactMethod.None || contmeth==ContactMethod.HmPhone) {

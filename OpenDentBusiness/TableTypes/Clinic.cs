@@ -31,6 +31,8 @@ namespace OpenDentBusiness{
 		public long InsBillingProv;
 		///<summary>Does not include any punctuation.  Exactly 10 digits or empty in USA and Canada.</summary>
 		public string Fax;
+		///<summary>FK to EmailAddress.EmailAddressNum.</summary>
+		public long EmailAddressNum;
 
 		///<summary>Returns a copy of this Clinic.</summary>
 		public Clinic Copy(){

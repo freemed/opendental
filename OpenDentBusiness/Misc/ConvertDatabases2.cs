@@ -11783,6 +11783,40 @@ a.PageNotExists:hover {
 				}
 				command+=")";
 				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('EmailDefaultAddressNum','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailDefaultAddressNum','')";
+					Db.NonQ(command);
+				}
+				EmailAddress defaultEmailAddress=new EmailAddress();//Make a new email address with the existing preferences.
+				defaultEmailAddress.EmailPassword=PrefC.GetString(PrefName.EmailPassword);
+				defaultEmailAddress.EmailUsername=PrefC.GetString(PrefName.EmailUsername);
+				defaultEmailAddress.SenderAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+				defaultEmailAddress.ServerPort=PrefC.GetInt(PrefName.EmailPort);
+				defaultEmailAddress.SMPTserver=PrefC.GetString(PrefName.EmailSMTPserver);
+				defaultEmailAddress.UseSSL=PrefC.GetBool(PrefName.EmailUseSSL);
+				long defaultEmailAddressNum=EmailAddresses.Insert(defaultEmailAddress);
+				command="UPDATE preference SET ValueString = "+POut.Long(defaultEmailAddressNum)+" WHERE PrefName = 'EmailDefaultAddressNum'";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE clinic ADD EmailAddressNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE clinic ADD INDEX (EmailAddressNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE clinic ADD EmailAddressNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE clinic SET EmailAddressNum = 0 WHERE EmailAddressNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE clinic MODIFY EmailAddressNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX clinic_EmailAddressNum ON clinic (EmailAddressNum)";
+					Db.NonQ(command);
+				}
 				
 
 
@@ -11798,6 +11832,8 @@ a.PageNotExists:hover {
 
 	}
 }
+
+
 
 
 

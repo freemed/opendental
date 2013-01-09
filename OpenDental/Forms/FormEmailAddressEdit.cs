@@ -218,7 +218,7 @@ namespace OpenDental{
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(251,20);
 			this.label6.TabIndex = 23;
-			this.label6.Text = "Usually 587, or sometimes 25";
+			this.label6.Text = "Usually 587.  Sometimes 25 or 465.";
 			// 
 			// checkSSL
 			// 
@@ -268,7 +268,7 @@ namespace OpenDental{
 			this.Name = "FormEmailAddressEdit";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Setup E-mail";
+			this.Text = "Edit E-mail Address";
 			this.Load += new System.EventHandler(this.FormEmailAddress_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
@@ -291,25 +291,20 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			//Prefs.UpdateString(PrefName.EmailSMTPserver,textSMTPserver.Text);
-			//Prefs.UpdateString(PrefName.EmailUsername,textUsername.Text);
-			//Prefs.UpdateString(PrefName.EmailPassword,textPassword.Text);
-			//try{
-			//  Prefs.UpdateLong(PrefName.EmailPort,PIn.Long(textPort.Text));
-			//}
-			//catch{
-			//  MsgBox.Show(this,"invalid port number.");
-			//}
-			//Prefs.UpdateBool(PrefName.EmailUseSSL,checkSSL.Checked);
-			//Prefs.UpdateString(PrefName.EmailSenderAddress,textSender.Text);
-			//DataValid.SetInvalid(InvalidType.Prefs);
 			EmailAddressCur.SMPTserver=PIn.String(textSMTPserver.Text);
 			EmailAddressCur.EmailUsername=PIn.String(textUsername.Text);
 			EmailAddressCur.EmailPassword=PIn.String(textPassword.Text);
-			EmailAddressCur.ServerPort=PIn.Int(textPort.Text);
+			PIn.Int(textPort.Text);
+			try{
+			  EmailAddressCur.ServerPort=PIn.Int(textPort.Text);
+			}
+			catch{
+			  MsgBox.Show(this,"invalid port number.");
+			}
 			EmailAddressCur.UseSSL=checkSSL.Checked;
 			EmailAddressCur.SenderAddress=PIn.String(textSender.Text);
 			EmailAddresses.Update(EmailAddressCur);
+//DataValid.SetInvalid(InvalidType.?);
 			DialogResult=DialogResult.OK;
 		}
 

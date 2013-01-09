@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -44,7 +45,10 @@ namespace OpenDental{
 		private TextBox textFax;
 		private Label label8;
 		private Label label9;
+		private Label label10;
+		private ComboBox comboEmailAddresses;
 		private Clinic ClinicCur;
+		private List<EmailAddress> ListEmailAddresses;
 
 		///<summary></summary>
 		public FormClinicEdit(Clinic clinicCur)
@@ -108,6 +112,8 @@ namespace OpenDental{
 			this.textFax = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.comboEmailAddresses = new System.Windows.Forms.ComboBox();
 			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -317,7 +323,7 @@ namespace OpenDental{
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27,386);
+			this.butDelete.Location = new System.Drawing.Point(27,424);
 			this.butDelete.Name = "butDelete";
 			this.butDelete.Size = new System.Drawing.Size(81,26);
 			this.butDelete.TabIndex = 10;
@@ -332,7 +338,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(458,386);
+			this.butOK.Location = new System.Drawing.Point(458,424);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 11;
@@ -347,7 +353,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(549,386);
+			this.butCancel.Location = new System.Drawing.Point(549,424);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 12;
@@ -381,14 +387,34 @@ namespace OpenDental{
 			this.label9.Text = "(###)###-####";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(-2,379);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(168,17);
+			this.label10.TabIndex = 111;
+			this.label10.Text = "Clinic Email Address";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
+			// comboEmailAddresses
+			// 
+			this.comboEmailAddresses.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboEmailAddresses.Location = new System.Drawing.Point(169,376);
+			this.comboEmailAddresses.MaxDropDownItems = 30;
+			this.comboEmailAddresses.Name = "comboEmailAddresses";
+			this.comboEmailAddresses.Size = new System.Drawing.Size(177,21);
+			this.comboEmailAddresses.TabIndex = 8;
+			// 
 			// FormClinicEdit
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(650,430);
+			this.ClientSize = new System.Drawing.Size(650,468);
 			this.Controls.Add(this.textFax);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.groupBox4);
+			this.Controls.Add(this.comboEmailAddresses);
+			this.Controls.Add(this.label10);
 			this.Controls.Add(this.comboPlaceService);
 			this.Controls.Add(this.label7);
 			this.Controls.Add(this.textBankNumber);
@@ -462,9 +488,16 @@ namespace OpenDental{
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
 				comboInsBillingProv.SelectedIndex=Providers.GetIndex(ClinicCur.InsBillingProv);
 			}
+			ListEmailAddresses=EmailAddresses.GetAll();
+			for(int i=0;i<ListEmailAddresses.Count;i++) {
+				comboEmailAddresses.Items.Add(ListEmailAddresses[i].SenderAddress);
+				if(ListEmailAddresses[i].EmailAddressNum==ClinicCur.EmailAddressNum) {
+					comboEmailAddresses.SelectedIndex=i;
+				}
+			}
 		}
 
-		private void textPhone_TextChanged(object sender, System.EventArgs e) {
+		private void textPhone_TextChanged(object sender,System.EventArgs e) {
 			int cursor=textPhone.SelectionStart;
 			int length=textPhone.Text.Length;
 			textPhone.Text=TelephoneNumbers.AutoFormat(textPhone.Text);
@@ -548,6 +581,9 @@ namespace OpenDental{
 			}
 			else{
 				ClinicCur.InsBillingProv=ProviderC.ListShort[comboInsBillingProv.SelectedIndex].ProvNum;
+			}
+			if(comboEmailAddresses.SelectedIndex!=-1) {//Should only be if there isn't one selected yet.
+				ClinicCur.EmailAddressNum=ListEmailAddresses[comboEmailAddresses.SelectedIndex].EmailAddressNum;
 			}
 			if(IsNew){
 				Clinics.Insert(ClinicCur);

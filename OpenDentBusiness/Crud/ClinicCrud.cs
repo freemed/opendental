@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				clinic.DefaultPlaceService= (PlaceOfService)PIn.Int(table.Rows[i]["DefaultPlaceService"].ToString());
 				clinic.InsBillingProv     = PIn.Long  (table.Rows[i]["InsBillingProv"].ToString());
 				clinic.Fax                = PIn.String(table.Rows[i]["Fax"].ToString());
+				clinic.EmailAddressNum    = PIn.Long  (table.Rows[i]["EmailAddressNum"].ToString());
 				retVal.Add(clinic);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ClinicNum,";
 			}
-			command+="Description,Address,Address2,City,State,Zip,Phone,BankNumber,DefaultPlaceService,InsBillingProv,Fax) VALUES(";
+			command+="Description,Address,Address2,City,State,Zip,Phone,BankNumber,DefaultPlaceService,InsBillingProv,Fax,EmailAddressNum) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(clinic.ClinicNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(clinic.BankNumber)+"',"
 				+    POut.Int   ((int)clinic.DefaultPlaceService)+","
 				+    POut.Long  (clinic.InsBillingProv)+","
-				+"'"+POut.String(clinic.Fax)+"')";
+				+"'"+POut.String(clinic.Fax)+"',"
+				+    POut.Long  (clinic.EmailAddressNum)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +138,8 @@ namespace OpenDentBusiness.Crud{
 				+"BankNumber         = '"+POut.String(clinic.BankNumber)+"', "
 				+"DefaultPlaceService=  "+POut.Int   ((int)clinic.DefaultPlaceService)+", "
 				+"InsBillingProv     =  "+POut.Long  (clinic.InsBillingProv)+", "
-				+"Fax                = '"+POut.String(clinic.Fax)+"' "
+				+"Fax                = '"+POut.String(clinic.Fax)+"', "
+				+"EmailAddressNum    =  "+POut.Long  (clinic.EmailAddressNum)+" "
 				+"WHERE ClinicNum = "+POut.Long(clinic.ClinicNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(clinic.Fax != oldClinic.Fax) {
 				if(command!=""){ command+=",";}
 				command+="Fax = '"+POut.String(clinic.Fax)+"'";
+			}
+			if(clinic.EmailAddressNum != oldClinic.EmailAddressNum) {
+				if(command!=""){ command+=",";}
+				command+="EmailAddressNum = "+POut.Long(clinic.EmailAddressNum)+"";
 			}
 			if(command==""){
 				return;

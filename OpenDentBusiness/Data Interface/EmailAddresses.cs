@@ -16,7 +16,7 @@ namespace OpenDentBusiness{
 			return Crud.EmailAddressCrud.SelectMany(command);
 		}
 
-		///<summary>Gets one EmailAddress from the db.</summary>
+		///<summary>Gets one EmailAddress from the db.  Might be null.</summary>
 		public static EmailAddress GetOne(long emailAddressNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
 				return Meth.GetObject<EmailAddress>(MethodBase.GetCurrentMethod(),emailAddressNum);
