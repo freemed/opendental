@@ -46,14 +46,15 @@ namespace OpenDentBusiness.Crud{
 			ToothGridDef toothGridDef;
 			for(int i=0;i<table.Rows.Count;i++) {
 				toothGridDef=new ToothGridDef();
-				toothGridDef.ToothGridDefNum= PIn.Long  (table.Rows[i]["ToothGridDefNum"].ToString());
-				toothGridDef.NameInternal   = PIn.String(table.Rows[i]["NameInternal"].ToString());
-				toothGridDef.NameShowing    = PIn.String(table.Rows[i]["NameShowing"].ToString());
-				toothGridDef.CellType       = (ToothGridCellType)PIn.Int(table.Rows[i]["CellType"].ToString());
-				toothGridDef.ItemOrder      = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
-				toothGridDef.ColumnWidth    = PIn.Int   (table.Rows[i]["ColumnWidth"].ToString());
-				toothGridDef.CodeNum        = PIn.Long  (table.Rows[i]["CodeNum"].ToString());
-				toothGridDef.ProcStatus     = (ProcStat)PIn.Int(table.Rows[i]["ProcStatus"].ToString());
+				toothGridDef.ToothGridDefNum = PIn.Long  (table.Rows[i]["ToothGridDefNum"].ToString());
+				toothGridDef.SheetFieldDefNum= PIn.Long  (table.Rows[i]["SheetFieldDefNum"].ToString());
+				toothGridDef.NameInternal    = PIn.String(table.Rows[i]["NameInternal"].ToString());
+				toothGridDef.NameShowing     = PIn.String(table.Rows[i]["NameShowing"].ToString());
+				toothGridDef.CellType        = (ToothGridCellType)PIn.Int(table.Rows[i]["CellType"].ToString());
+				toothGridDef.ItemOrder       = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
+				toothGridDef.ColumnWidth     = PIn.Int   (table.Rows[i]["ColumnWidth"].ToString());
+				toothGridDef.CodeNum         = PIn.Long  (table.Rows[i]["CodeNum"].ToString());
+				toothGridDef.ProcStatus      = (ProcStat)PIn.Int(table.Rows[i]["ProcStatus"].ToString());
 				retVal.Add(toothGridDef);
 			}
 			return retVal;
@@ -94,12 +95,13 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="ToothGridDefNum,";
 			}
-			command+="NameInternal,NameShowing,CellType,ItemOrder,ColumnWidth,CodeNum,ProcStatus) VALUES(";
+			command+="SheetFieldDefNum,NameInternal,NameShowing,CellType,ItemOrder,ColumnWidth,CodeNum,ProcStatus) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(toothGridDef.ToothGridDefNum)+",";
 			}
 			command+=
-				 "'"+POut.String(toothGridDef.NameInternal)+"',"
+				     POut.Long  (toothGridDef.SheetFieldDefNum)+","
+				+"'"+POut.String(toothGridDef.NameInternal)+"',"
 				+"'"+POut.String(toothGridDef.NameShowing)+"',"
 				+    POut.Int   ((int)toothGridDef.CellType)+","
 				+    POut.Int   (toothGridDef.ItemOrder)+","
@@ -118,13 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ToothGridDef in the database.</summary>
 		internal static void Update(ToothGridDef toothGridDef){
 			string command="UPDATE toothgriddef SET "
-				+"NameInternal   = '"+POut.String(toothGridDef.NameInternal)+"', "
-				+"NameShowing    = '"+POut.String(toothGridDef.NameShowing)+"', "
-				+"CellType       =  "+POut.Int   ((int)toothGridDef.CellType)+", "
-				+"ItemOrder      =  "+POut.Int   (toothGridDef.ItemOrder)+", "
-				+"ColumnWidth    =  "+POut.Int   (toothGridDef.ColumnWidth)+", "
-				+"CodeNum        =  "+POut.Long  (toothGridDef.CodeNum)+", "
-				+"ProcStatus     =  "+POut.Int   ((int)toothGridDef.ProcStatus)+" "
+				+"SheetFieldDefNum=  "+POut.Long  (toothGridDef.SheetFieldDefNum)+", "
+				+"NameInternal    = '"+POut.String(toothGridDef.NameInternal)+"', "
+				+"NameShowing     = '"+POut.String(toothGridDef.NameShowing)+"', "
+				+"CellType        =  "+POut.Int   ((int)toothGridDef.CellType)+", "
+				+"ItemOrder       =  "+POut.Int   (toothGridDef.ItemOrder)+", "
+				+"ColumnWidth     =  "+POut.Int   (toothGridDef.ColumnWidth)+", "
+				+"CodeNum         =  "+POut.Long  (toothGridDef.CodeNum)+", "
+				+"ProcStatus      =  "+POut.Int   ((int)toothGridDef.ProcStatus)+" "
 				+"WHERE ToothGridDefNum = "+POut.Long(toothGridDef.ToothGridDefNum);
 			Db.NonQ(command);
 		}
@@ -132,6 +135,10 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one ToothGridDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
 		internal static void Update(ToothGridDef toothGridDef,ToothGridDef oldToothGridDef){
 			string command="";
+			if(toothGridDef.SheetFieldDefNum != oldToothGridDef.SheetFieldDefNum) {
+				if(command!=""){ command+=",";}
+				command+="SheetFieldDefNum = "+POut.Long(toothGridDef.SheetFieldDefNum)+"";
+			}
 			if(toothGridDef.NameInternal != oldToothGridDef.NameInternal) {
 				if(command!=""){ command+=",";}
 				command+="NameInternal = '"+POut.String(toothGridDef.NameInternal)+"'";
