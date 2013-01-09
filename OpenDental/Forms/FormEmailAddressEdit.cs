@@ -26,7 +26,9 @@ namespace OpenDental{
 		private CheckBox checkSSL;
 		private Label label7;
 		private System.ComponentModel.Container components = null;
+		private UI.Button butDelete;
 		public EmailAddress EmailAddressCur;
+		public bool IsNew;
 
 		///<summary></summary>
 		public FormEmailAddressEdit() {
@@ -74,6 +76,7 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.checkSSL = new System.Windows.Forms.CheckBox();
 			this.label7 = new System.Windows.Forms.Label();
+			this.butDelete = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butCancel
@@ -88,7 +91,7 @@ namespace OpenDental{
 			this.butCancel.Location = new System.Drawing.Point(634,382);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
-			this.butCancel.TabIndex = 4;
+			this.butCancel.TabIndex = 7;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
@@ -103,7 +106,7 @@ namespace OpenDental{
 			this.butOK.Location = new System.Drawing.Point(634,340);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
-			this.butOK.TabIndex = 3;
+			this.butOK.TabIndex = 6;
 			this.butOK.Text = "&OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
@@ -137,7 +140,7 @@ namespace OpenDental{
 			this.textSender.Location = new System.Drawing.Point(210,299);
 			this.textSender.Name = "textSender";
 			this.textSender.Size = new System.Drawing.Size(340,20);
-			this.textSender.TabIndex = 1;
+			this.textSender.TabIndex = 5;
 			// 
 			// textBox6
 			// 
@@ -168,7 +171,7 @@ namespace OpenDental{
 			this.textUsername.Location = new System.Drawing.Point(210,161);
 			this.textUsername.Name = "textUsername";
 			this.textUsername.Size = new System.Drawing.Size(218,20);
-			this.textUsername.TabIndex = 17;
+			this.textUsername.TabIndex = 1;
 			// 
 			// label3
 			// 
@@ -185,7 +188,7 @@ namespace OpenDental{
 			this.textPassword.Name = "textPassword";
 			this.textPassword.PasswordChar = '*';
 			this.textPassword.Size = new System.Drawing.Size(218,20);
-			this.textPassword.TabIndex = 19;
+			this.textPassword.TabIndex = 2;
 			// 
 			// label4
 			// 
@@ -201,7 +204,7 @@ namespace OpenDental{
 			this.textPort.Location = new System.Drawing.Point(210,213);
 			this.textPort.Name = "textPort";
 			this.textPort.Size = new System.Drawing.Size(56,20);
-			this.textPort.TabIndex = 21;
+			this.textPort.TabIndex = 3;
 			// 
 			// label5
 			// 
@@ -226,7 +229,7 @@ namespace OpenDental{
 			this.checkSSL.Location = new System.Drawing.Point(12,239);
 			this.checkSSL.Name = "checkSSL";
 			this.checkSSL.Size = new System.Drawing.Size(212,17);
-			this.checkSSL.TabIndex = 24;
+			this.checkSSL.TabIndex = 4;
 			this.checkSSL.Text = "Use SSL";
 			this.checkSSL.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkSSL.UseVisualStyleBackColor = true;
@@ -238,6 +241,23 @@ namespace OpenDental{
 			this.label7.Size = new System.Drawing.Size(251,20);
 			this.label7.TabIndex = 25;
 			this.label7.Text = "For Gmail and some others";
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(34,382);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75,24);
+			this.butDelete.TabIndex = 6;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// FormEmailAddressEdit
 			// 
@@ -260,6 +280,7 @@ namespace OpenDental{
 			this.Controls.Add(this.textSMTPserver);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
+			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -290,6 +311,18 @@ namespace OpenDental{
 			}
 		}
 
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(IsNew) {
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this email address?")){
+				return;
+			}
+			EmailAddresses.Delete(EmailAddressCur.EmailAddressNum);
+			DialogResult=DialogResult.OK;//OK triggers a refresh for the grid.
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			EmailAddressCur.SMPTserver=PIn.String(textSMTPserver.Text);
 			EmailAddressCur.EmailUsername=PIn.String(textUsername.Text);
@@ -303,8 +336,12 @@ namespace OpenDental{
 			}
 			EmailAddressCur.UseSSL=checkSSL.Checked;
 			EmailAddressCur.SenderAddress=PIn.String(textSender.Text);
-			EmailAddresses.Update(EmailAddressCur);
-//DataValid.SetInvalid(InvalidType.?);
+			if(IsNew) {
+				EmailAddresses.Insert(EmailAddressCur);
+			}
+			else {
+				EmailAddresses.Update(EmailAddressCur);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

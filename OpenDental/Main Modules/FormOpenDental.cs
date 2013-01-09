@@ -3996,8 +3996,8 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			FormEmailSetup FormE=new FormEmailSetup();
-			FormE.ShowDialog();
+			FormEmailAddresses FormEA=new FormEmailAddresses();
+			FormEA.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Email");
 		}
 

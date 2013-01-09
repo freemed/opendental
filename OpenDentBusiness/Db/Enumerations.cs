@@ -205,7 +205,7 @@ namespace OpenDentBusiness{
 		StartupOld,
 		///<summary>14</summary>
 		Defs,
-		///<summary>15</summary>
+		///<summary>15- Both templates and addresses.</summary>
 		Email,
 		///<summary>16</summary>
 		Fees,
