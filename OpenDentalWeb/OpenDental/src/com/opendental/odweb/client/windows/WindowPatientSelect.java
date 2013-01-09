@@ -112,7 +112,7 @@ public class WindowPatientSelect extends ODWindow {
 		gridMain.Columns.add(col);
 		gridMain.Rows.clear();
 		ODGridRow row;
-		for(int i=0;i<PatientTable.getNumRows();i++) {
+		for(int i=0;i<PatientTable.Rows.size();i++) {
 			row=new ODGridRow();
 			row.Cells.Add(PatientTable.getCellText(i,"LName"));
 			row.Cells.Add(PatientTable.getCellText(i,"FName"));

@@ -735,6 +735,9 @@ public class Serializing {
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.WikiPage")) {
 			return ((WikiPage)obj).serialize();
 		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.WikiPageHist")) {
+			return ((WikiPageHist)obj).serialize();
+		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.ZipCode")) {
 			return ((ZipCode)obj).serialize();
 		}
@@ -1878,6 +1881,11 @@ public class Serializing {
 			wikipage.deserialize(doc);
 			return wikipage;
 		}
+		if(type.equals("WikiPageHist")) {
+			WikiPageHist wikipagehist=new WikiPageHist();
+			wikipagehist.deserialize(doc);
+			return wikipagehist;
+		}
 		if(type.equals("ZipCode")) {
 			ZipCode zipcode=new ZipCode();
 			zipcode.deserialize(doc);
@@ -1895,46 +1903,47 @@ public class Serializing {
 		throw new Exception("deserializeList, error deserializing list.");
 	}
 
-	/** Pass in a node from the response and this method will use recursion to digest the entire XML and return a deserialized DataTable. */
+	/** Pass in a node from the response and this method will digest the entire XML and return a deserialized DataTable. */
 	private static DataTable deserializeDataTable(Node node) {
 		ArrayList<Node> nodeListAll=getChildNodesFiltered(node);
-		Node nodeName=nodeListAll.get(0);//always exists.
+		Node nodeName=nodeListAll.get(0);//Name node always exists.
 		String tableName="";
 		if(nodeName.getChildNodes().getLength()>0) {
 			tableName=nodeName.getChildNodes().item(0).getNodeValue();
 		}
-		Node nodeCols=nodeListAll.get(1);//always exists.
+		Node nodeCols=nodeListAll.get(1);//Cols node always exists.
 		ArrayList<Node> nodeListCols=getChildNodesFiltered(nodeCols);
 		if(nodeListCols==null) {
 			return new DataTable();//Should not happen. This could only happen if an empty data table is passed back (no columns).
 		}
 		ArrayList <DataColumn> columns=new ArrayList<DataColumn>();
 		for(int i=0;i<nodeListCols.size();i++) {
-			Node nodeCol=nodeListCols.get(i);//At this point, always exists.
+			Node nodeCol=nodeListCols.get(i);//At this point, Col node always exists.
 			String nodeColVal=nodeCol.getChildNodes().item(0).getNodeValue();//Should never be null or empty string.
 			columns.add(new DataColumn(nodeColVal));
 		}
-		Node nodeRows=nodeListAll.get(2);//always exists.
+		Node nodeRows=nodeListAll.get(2);//Cells node always exists.
 		ArrayList<Node> nodeListRows=getChildNodesFiltered(nodeRows);
 		if(nodeListRows==null) {//This happens if the query contains no results.
-			return new DataTable(tableName,0,columns);
+			return new DataTable(tableName,columns);
 		}
-		DataTable table=new DataTable(tableName,nodeListRows.size(),columns);
-		for(int i=0;i<table.getNumRows();i++) {
-			Node nodeRow=nodeListRows.get(i);//At this point, always exists.
+		DataTable table=new DataTable(tableName,columns);
+		for(int i=0;i<nodeListRows.size();i++) {
+			table.Rows.add(new DataRow());
+			Node nodeRow=nodeListRows.get(i);//At this point, y node always exists.
 			ArrayList<Node> nodeListCells=getChildNodesFiltered(nodeRow);//Should never be null.
 			for(int j=0;j<nodeListCells.size();j++) {
-				Node nodeCell=nodeListCells.get(j);//At this point, always exists.
+				Node nodeCell=nodeListCells.get(j);//At this point, x node always exists.
 				String cellVal="";
 				if(nodeCell.getChildNodes().getLength()>0) {
 					cellVal=nodeCell.getChildNodes().item(0).getNodeValue();
 				}
-				table.SetCell(i,j,cellVal);
+				table.Rows.get(i).addCell(cellVal);
 			}
 		}
 		return table;
 	}
-	
+
 	/** Children of the given node minus nodes which are text nodes.  Such as tabs or new lines. */
 	private static ArrayList<Node> getChildNodesFiltered(Node node) {
 		//Create an empty node list to fill.

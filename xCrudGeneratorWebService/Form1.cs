@@ -244,6 +244,7 @@ namespace xCrudGeneratorWebService {
 		private void StartJavaSerial(StringBuilder strb) {
 			#region JavaSerializing header
 			strb.Append("package com.opendental.odweb.client.remoting;"+rn+rn
+				+"import java.util.ArrayList;"+rn+rn
 				+"import com.google.gwt.xml.client.Document;"+rn
 				+"import com.google.gwt.xml.client.Element;"+rn
 				+"import com.google.gwt.xml.client.Node;"+rn
@@ -349,7 +350,7 @@ namespace xCrudGeneratorWebService {
 				+t+" * @throws Exception Throws exception if type is not yet supported or if a DtoException was returned. */"+rn
 				+t+"public static Object getDeserializedObject(String xml) throws Exception {"+rn
 				+t2+"Document doc=XMLParser.parse(xml);"+rn
-				+t2+"XMLParser.removeWhitespace(doc);"+rn
+				+t2+"//XMLParser.removeWhitespace(doc);"+rn
 				+t2+"Element element=doc.getDocumentElement();"+rn
 				+t2+"if(element==null) {"+rn
 				+t3+"throw new Exception(\"getDeserializedObject, the response from server was not valid XML.\");"+rn
@@ -389,7 +390,7 @@ namespace xCrudGeneratorWebService {
 				+t3+"return element.getFirstChild().getNodeValue();"+rn
 				+t2+"}"+rn
 				+t2+"if(type.equals(\"DataTable\")) {"+rn
-				+t3+"return deserializeDataTable(element,new DataTable());"+rn
+				+t3+"return deserializeDataTable(element);"+rn
 				+t2+"}"+rn
 				+t2+"if(type.startsWith(\"List&lt;\")) {"+rn
 				+t3+"return deserializeList(doc);"+rn
@@ -424,43 +425,65 @@ namespace xCrudGeneratorWebService {
 				+t+"}"+rn+rn);
 			#endregion
 			#region DeserializeDataTable
-			strb.Append(t+"/** Pass in a node from the response and this method will use recursion to digest the entire XML and return a deserialized DataTable. */"+rn
-				+t+"private static DataTable deserializeDataTable(Node node,DataTable table) {"+rn
-				+t2+"String nodeName=node.getNodeName();"+rn
-				+t2+"if(node.getNodeType()!=Node.TEXT_NODE) {"+rn
-					+t3+"if(nodeName.equals(\"Name\")) {"+rn
-						+t4+"if(node.getChildNodes().getLength()>0) {"+rn
-						+t5+"table.setTableName(node.getChildNodes().item(0).getNodeValue());"+rn
+			strb.Append(t+"/** Pass in a node from the response and this method will digest the entire XML and return a deserialized DataTable. */"+rn
+				+t+"private static DataTable deserializeDataTable(Node node) {"+rn
+				+t2+"ArrayList<Node> nodeListAll=getChildNodesFiltered(node);"+rn
+				+t2+"Node nodeName=nodeListAll.get(0);//Name node always exists."+rn
+				+t2+"String tableName=\"\";"+rn
+				+t2+"if(nodeName.getChildNodes().getLength()>0) {"+rn
+					+t3+"tableName=nodeName.getChildNodes().item(0).getNodeValue();"+rn
+				+t2+"}"+rn
+				+t2+"Node nodeCols=nodeListAll.get(1);//Cols node always exists."+rn
+				+t2+"ArrayList<Node> nodeListCols=getChildNodesFiltered(nodeCols);"+rn
+				+t2+"if(nodeListCols==null) {"+rn
+					+t3+"return new DataTable();//Should not happen. This could only happen if an empty data table is passed back (no columns)."+rn
+				+t2+"}"+rn
+				+t2+"ArrayList <DataColumn> columns=new ArrayList<DataColumn>();"+rn
+				+t2+"for(int i=0;i<nodeListCols.size();i++) {"+rn
+					+t3+"Node nodeCol=nodeListCols.get(i);//At this point, Col node always exists."+rn
+					+t3+"String nodeColVal=nodeCol.getChildNodes().item(0).getNodeValue();//Should never be null or empty string."+rn
+					+t3+"columns.add(new DataColumn(nodeColVal));"+rn
+				+t2+"}"+rn
+				+t2+"Node nodeRows=nodeListAll.get(2);//Cells node always exists."+rn
+				+t2+"ArrayList<Node> nodeListRows=getChildNodesFiltered(nodeRows);"+rn
+				+t2+"if(nodeListRows==null) {//This happens if the query contains no results."+rn
+					+t3+"return new DataTable(tableName,columns);"+rn
+				+t2+"}"+rn
+				+t2+"DataTable table=new DataTable(tableName,columns);"+rn
+				+t2+"for(int i=0;i<nodeListRows.size();i++) {"+rn
+					+t3+"table.Rows.add(new DataRow());"+rn
+					+t3+"Node nodeRow=nodeListRows.get(i);//At this point, y node always exists."+rn
+					+t3+"ArrayList<Node> nodeListCells=getChildNodesFiltered(nodeRow);//Should never be null."+rn
+					+t3+"for(int j=0;j<nodeListCells.size();j++) {"+rn
+						+t4+"Node nodeCell=nodeListCells.get(j);//At this point, x node always exists."+rn
+						+t4+"String cellVal=\"\";"+rn
+						+t4+"if(nodeCell.getChildNodes().getLength()>0) {"+rn
+							+t5+"cellVal=nodeCell.getChildNodes().item(0).getNodeValue();"+rn
 						+t4+"}"+rn
-						+t4+"else {//Set the table name to an empty string."+rn
-						+t5+"table.setTableName(\"\");"+rn
-						+t4+"}"+rn
-					+t3+"}"+rn
-					+t3+"else if(nodeName.equals(\"Col\")) {//Add a new column."+rn
-						+t4+"if(node.getChildNodes().getLength()>0) {"+rn
-						+t5+"table.Columns.add(new DataColumn(node.getChildNodes().item(0).getNodeValue()));"+rn
-						+t4+"}"+rn
-					+t3+"}"+rn
-					+t3+"else if(nodeName.equals(\"y\")) {//Add a new Row."+rn
-						+t4+"table.Rows.add(new DataRow());"+rn
-					+t3+"}"+rn
-					+t3+"else if(nodeName.equals(\"x\")) {//Add information to the next column in the last row."+rn
-						+t4+"DataRow row=table.Rows.get(table.Rows.size()-1);"+rn
-						+t4+"if(node.getChildNodes().getLength()>0) {"+rn
-						+t5+"row.addCell(node.getChildNodes().item(0).getNodeValue());"+rn
-						+t4+"}"+rn
-						+t4+"else {//Add an empty cell."+rn
-						+t5+"row.addCell(\"\");"+rn
-						+t4+"}"+rn
-					+t3+"}"+rn
-					+t3+"//Recursively iterate through child nodes."+rn
-					+t3+"NodeList children=node.getChildNodes();"+rn
-					+t3+"for(int i=0;i<children.getLength();i++) {"+rn
-						+t4+"Node childNode=children.item(i);"+rn
-						+t4+"table=deserializeDataTable(childNode,table);"+rn
+						+t4+"table.Rows.get(i).addCell(cellVal);"+rn
 					+t3+"}"+rn
 				+t2+"}"+rn
 				+t2+"return table;"+rn
+				+t+"}"+rn+rn);
+			#endregion
+			#region GetChildNodesFiltered
+			strb.Append(t+"/** Children of the given node minus nodes which are text nodes.  Such as tabs or new lines. */"+rn
+				+t+"private static ArrayList<Node> getChildNodesFiltered(Node node) {"+rn
+					+t2+"//Create an empty node list to fill."+rn
+					+t2+"ArrayList<Node> result=new ArrayList<Node>();"+rn
+					+t2+"NodeList childNodes=node.getChildNodes();"+rn
+					+t2+"if(childNodes==null) {"+rn
+						+t3+"return result;"+rn
+					+t2+"}"+rn
+					+t2+"for(int i=0;i<childNodes.getLength();i++) {"+rn
+						+t3+"Node childNode=childNodes.item(i);"+rn
+						+t3+"if(childNode.getNodeType()==Node.TEXT_NODE) {"+rn
+							+t4+"continue;"+rn
+						+t3+"}"+rn
+						+t3+"//Add the node to the node list."+rn
+						+t3+"result.add(childNode);"+rn
+					+t2+"}"+rn
+					+t2+"return result;//Return the filtered node list."+rn
 				+t+"}"+rn+rn);
 			#endregion
 			#region GetXmlNodeValue
