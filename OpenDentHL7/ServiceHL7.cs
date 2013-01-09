@@ -91,11 +91,11 @@ namespace OpenDentHL7 {
 				long progNum=Programs.GetProgramNum(ProgramName.eClinicalWorks);
 				string hl7Server=ProgramProperties.GetPropVal(progNum,"HL7Server");
 				string hl7ServiceName=ProgramProperties.GetPropVal(progNum,"HL7ServiceName");
-				if(hl7Server=="") {
+				if(hl7Server=="") {//for the first time run
 					ProgramProperties.SetProperty(progNum,"HL7Server",System.Environment.MachineName);
 					hl7Server=System.Environment.MachineName;
 				}
-				if(hl7ServiceName=="") {
+				if(hl7ServiceName=="") {//for the first time run
 					ProgramProperties.SetProperty(progNum,"HL7ServiceName",this.ServiceName);
 					hl7ServiceName=this.ServiceName;
 				}

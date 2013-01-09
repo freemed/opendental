@@ -23,13 +23,6 @@ namespace OpenDentServer {
 					serviceInstaller1.ServiceName=args[i].Substring(13);
 				}
 			}
-			////new strategy for setting the service name:
-			//if(Context.Parameters.ContainsKey("ServiceName")) {//if InstallUtil.exe was used with /ServiceName=xyz parameter 
-			//  serviceInstaller1.ServiceName=Context.Parameters["ServiceName"];
-			//}
-			//else {
-			//	serviceInstaller1.ServiceName="OpenDentHL7";
-			//}
 			Installers.Add(serviceInstaller1);
 			Installers.Add(processInstaller);
 		}

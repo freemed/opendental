@@ -119,10 +119,13 @@ namespace UnitTests {
 				DELETE FROM patplan;
 				DELETE FROM payperiod;
 				DELETE FROM procedurelog;
+				DELETE FROM provider;
 				DELETE FROM timeadjust;
 				DELETE FROM timecardrule;
 				";
 			DataCore.NonQ(command);
+			Providers.RefreshCache();
+			FeeScheds.RefreshCache();
 			return "Database cleared of old data.\r\n";
 		}
 
