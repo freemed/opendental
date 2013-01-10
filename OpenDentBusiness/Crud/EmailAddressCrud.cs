@@ -47,7 +47,7 @@ namespace OpenDentBusiness.Crud{
 			for(int i=0;i<table.Rows.Count;i++) {
 				emailAddress=new EmailAddress();
 				emailAddress.EmailAddressNum= PIn.Long  (table.Rows[i]["EmailAddressNum"].ToString());
-				emailAddress.SMPTserver     = PIn.String(table.Rows[i]["SMPTserver"].ToString());
+				emailAddress.SMTPserver     = PIn.String(table.Rows[i]["SMTPserver"].ToString());
 				emailAddress.EmailUsername  = PIn.String(table.Rows[i]["EmailUsername"].ToString());
 				emailAddress.EmailPassword  = PIn.String(table.Rows[i]["EmailPassword"].ToString());
 				emailAddress.ServerPort     = PIn.Int   (table.Rows[i]["ServerPort"].ToString());
@@ -93,12 +93,12 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmailAddressNum,";
 			}
-			command+="SMPTserver,EmailUsername,EmailPassword,ServerPort,UseSSL,SenderAddress) VALUES(";
+			command+="SMTPserver,EmailUsername,EmailPassword,ServerPort,UseSSL,SenderAddress) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(emailAddress.EmailAddressNum)+",";
 			}
 			command+=
-				 "'"+POut.String(emailAddress.SMPTserver)+"',"
+				 "'"+POut.String(emailAddress.SMTPserver)+"',"
 				+"'"+POut.String(emailAddress.EmailUsername)+"',"
 				+"'"+POut.String(emailAddress.EmailPassword)+"',"
 				+    POut.Int   (emailAddress.ServerPort)+","
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailAddress in the database.</summary>
 		internal static void Update(EmailAddress emailAddress){
 			string command="UPDATE emailaddress SET "
-				+"SMPTserver     = '"+POut.String(emailAddress.SMPTserver)+"', "
+				+"SMTPserver     = '"+POut.String(emailAddress.SMTPserver)+"', "
 				+"EmailUsername  = '"+POut.String(emailAddress.EmailUsername)+"', "
 				+"EmailPassword  = '"+POut.String(emailAddress.EmailPassword)+"', "
 				+"ServerPort     =  "+POut.Int   (emailAddress.ServerPort)+", "
@@ -129,9 +129,9 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailAddress in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
 		internal static void Update(EmailAddress emailAddress,EmailAddress oldEmailAddress){
 			string command="";
-			if(emailAddress.SMPTserver != oldEmailAddress.SMPTserver) {
+			if(emailAddress.SMTPserver != oldEmailAddress.SMTPserver) {
 				if(command!=""){ command+=",";}
-				command+="SMPTserver = '"+POut.String(emailAddress.SMPTserver)+"'";
+				command+="SMTPserver = '"+POut.String(emailAddress.SMTPserver)+"'";
 			}
 			if(emailAddress.EmailUsername != oldEmailAddress.EmailUsername) {
 				if(command!=""){ command+=",";}

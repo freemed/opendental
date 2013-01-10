@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		[CrudColumn(IsPriKey=true)]
 		public long EmailAddressNum;
 		///<summary>For example smtp.gmail.com</summary>
-		public string SMPTserver;
+		public string SMTPserver;
 		///<summary>.</summary>
 		public string EmailUsername;
 		///<summary>.</summary>

@@ -11680,7 +11680,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command=@"CREATE TABLE emailaddress (
 						EmailAddressNum bigint NOT NULL auto_increment PRIMARY KEY,
-						SMPTserver varchar(255) NOT NULL,
+						SMTPserver varchar(255) NOT NULL,
 						EmailUsername varchar(255) NOT NULL,
 						EmailPassword varchar(255) NOT NULL,
 						ServerPort int NOT NULL,
@@ -11694,7 +11694,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 					Db.NonQ(command);
 					command=@"CREATE TABLE emailaddress (
 						EmailAddressNum number(20) NOT NULL,
-						SMPTserver varchar2(255),
+						SMTPserver varchar2(255),
 						EmailUsername varchar2(255),
 						EmailPassword varchar2(255),
 						ServerPort number(11) NOT NULL,
@@ -11703,7 +11703,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 						CONSTRAINT emailaddress_EmailAddressNum PRIMARY KEY (EmailAddressNum)
 						)";
 					Db.NonQ(command);
-				} 
+				}
 				//Jason: Talked with Ryan and these are going to be the only two pages in this table.  Oracle requires a PK, so manually setting PK's of 1 and 2.
 				//todo: edit these 2 starting wikipages
 				command="INSERT INTO wikipage (WikiPageNum,UserNum,PageTitle,KeyWords,PageContent,DateTimeSaved) VALUES("
@@ -11812,16 +11812,21 @@ a.PageNotExists:hover {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EmailDefaultAddressNum','')";
 					Db.NonQ(command);
 				}
-				EmailAddress defaultEmailAddress=new EmailAddress();//Make a new email address with the existing preferences.
-				defaultEmailAddress.EmailPassword=PrefC.GetString(PrefName.EmailPassword);
-				defaultEmailAddress.EmailUsername=PrefC.GetString(PrefName.EmailUsername);
-				defaultEmailAddress.SenderAddress=PrefC.GetString(PrefName.EmailSenderAddress);
-				defaultEmailAddress.ServerPort=PrefC.GetInt(PrefName.EmailPort);
-				defaultEmailAddress.SMPTserver=PrefC.GetString(PrefName.EmailSMTPserver);
-				defaultEmailAddress.UseSSL=PrefC.GetBool(PrefName.EmailUseSSL);
-				long defaultEmailAddressNum=EmailAddresses.Insert(defaultEmailAddress);
-				command="UPDATE preference SET ValueString = "+POut.Long(defaultEmailAddressNum)+" WHERE PrefName = 'EmailDefaultAddressNum'";
-				Db.NonQ(command);
+				string emailUsername=Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailUsername'");
+				if(emailUsername!="") {
+					string emailPassword=Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailPassword'");
+					string senderAddress=Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailSenderAddress'");
+					int serverPort=PIn.Int(Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailPort'").ToString());
+					string smtpServer=Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailSMTPServer'");
+					bool useSSL=PIn.Bool(Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailUseSSL'"));
+					command="INSERT INTO emailaddress(EmailPassword,EmailUsername,SenderAddress,ServerPort,SMTPServer,UseSSL) "
+	//todo: parameterize:
+						+"VALUES('"+POut.String(emailPassword)+"','"+POut.String(emailUsername)+"','"+POut.String(senderAddress)+"',"
+						+POut.Int(serverPort)+",'"+POut.String(smtpServer)+"',"+POut.Bool(useSSL)+")";
+					long defaultEmailAddressNum=Db.NonQ(command,true);
+					command="UPDATE preference SET ValueString = "+POut.Long(defaultEmailAddressNum)+" WHERE PrefName = 'EmailDefaultAddressNum'";
+					Db.NonQ(command);
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clinic ADD EmailAddressNum bigint NOT NULL";
 					Db.NonQ(command);
@@ -11836,6 +11841,22 @@ a.PageNotExists:hover {
 					command="ALTER TABLE clinic MODIFY EmailAddressNum NOT NULL";
 					Db.NonQ(command);
 					command=@"CREATE INDEX clinic_EmailAddressNum ON clinic (EmailAddressNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE toothgriddef ADD SheetFieldDefNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE toothgriddef ADD INDEX (SheetFieldDefNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE toothgriddef ADD SheetFieldDefNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE toothgriddef SET SheetFieldDefNum = 0 WHERE SheetFieldDefNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE toothgriddef MODIFY SheetFieldDefNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX toothgriddef_SheetFieldDefNum ON toothgriddef (SheetFieldDefNum)";
 					Db.NonQ(command);
 				}
 				
@@ -11859,3 +11880,6 @@ a.PageNotExists:hover {
 
 
 
+
+
+				

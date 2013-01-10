@@ -302,7 +302,7 @@ namespace OpenDental{
 				textPassword.PasswordChar='*';
 			}
 			if(EmailAddressCur!=null) {
-				textSMTPserver.Text=EmailAddressCur.SMPTserver;
+				textSMTPserver.Text=EmailAddressCur.SMTPserver;
 				textUsername.Text=EmailAddressCur.EmailUsername;
 				textPassword.Text=EmailAddressCur.EmailPassword;
 				textPort.Text=EmailAddressCur.ServerPort.ToString();
@@ -324,10 +324,9 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			EmailAddressCur.SMPTserver=PIn.String(textSMTPserver.Text);
+			EmailAddressCur.SMTPserver=PIn.String(textSMTPserver.Text);
 			EmailAddressCur.EmailUsername=PIn.String(textUsername.Text);
 			EmailAddressCur.EmailPassword=PIn.String(textPassword.Text);
-			PIn.Int(textPort.Text);
 			try{
 			  EmailAddressCur.ServerPort=PIn.Int(textPort.Text);
 			}

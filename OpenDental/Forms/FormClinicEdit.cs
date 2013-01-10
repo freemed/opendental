@@ -46,9 +46,10 @@ namespace OpenDental{
 		private Label label8;
 		private Label label9;
 		private Label label10;
-		private ComboBox comboEmailAddresses;
+		private TextBox textEmail;
 		private Clinic ClinicCur;
-		private List<EmailAddress> ListEmailAddresses;
+		private UI.Button butEmail;
+		private long EmailAddressNum;
 
 		///<summary></summary>
 		public FormClinicEdit(Clinic clinicCur)
@@ -113,7 +114,8 @@ namespace OpenDental{
 			this.label8 = new System.Windows.Forms.Label();
 			this.label9 = new System.Windows.Forms.Label();
 			this.label10 = new System.Windows.Forms.Label();
-			this.comboEmailAddresses = new System.Windows.Forms.ComboBox();
+			this.textEmail = new System.Windows.Forms.TextBox();
+			this.butEmail = new OpenDental.UI.Button();
 			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -396,14 +398,29 @@ namespace OpenDental{
 			this.label10.Text = "Clinic Email Address";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// comboEmailAddresses
+			// textEmail
 			// 
-			this.comboEmailAddresses.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboEmailAddresses.Location = new System.Drawing.Point(169,376);
-			this.comboEmailAddresses.MaxDropDownItems = 30;
-			this.comboEmailAddresses.Name = "comboEmailAddresses";
-			this.comboEmailAddresses.Size = new System.Drawing.Size(177,21);
-			this.comboEmailAddresses.TabIndex = 8;
+			this.textEmail.Enabled = false;
+			this.textEmail.Location = new System.Drawing.Point(169,376);
+			this.textEmail.MaxLength = 255;
+			this.textEmail.Name = "textEmail";
+			this.textEmail.Size = new System.Drawing.Size(261,20);
+			this.textEmail.TabIndex = 7;
+			// 
+			// butEmail
+			// 
+			this.butEmail.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEmail.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butEmail.Autosize = true;
+			this.butEmail.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEmail.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEmail.CornerRadius = 4F;
+			this.butEmail.Location = new System.Drawing.Point(436,375);
+			this.butEmail.Name = "butEmail";
+			this.butEmail.Size = new System.Drawing.Size(24,21);
+			this.butEmail.TabIndex = 11;
+			this.butEmail.Text = "...";
+			this.butEmail.Click += new System.EventHandler(this.butEmail_Click);
 			// 
 			// FormClinicEdit
 			// 
@@ -413,10 +430,10 @@ namespace OpenDental{
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.label9);
 			this.Controls.Add(this.groupBox4);
-			this.Controls.Add(this.comboEmailAddresses);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.comboPlaceService);
 			this.Controls.Add(this.label7);
+			this.Controls.Add(this.textEmail);
 			this.Controls.Add(this.textBankNumber);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.textCity);
@@ -431,6 +448,7 @@ namespace OpenDental{
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.textDescription);
+			this.Controls.Add(this.butEmail);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.label1);
@@ -488,11 +506,9 @@ namespace OpenDental{
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
 				comboInsBillingProv.SelectedIndex=Providers.GetIndex(ClinicCur.InsBillingProv);
 			}
-			ListEmailAddresses=EmailAddresses.GetAll();
-			for(int i=0;i<ListEmailAddresses.Count;i++) {
-				comboEmailAddresses.Items.Add(ListEmailAddresses[i].SenderAddress);
-				if(ListEmailAddresses[i].EmailAddressNum==ClinicCur.EmailAddressNum) {
-					comboEmailAddresses.SelectedIndex=i;
+			for(int i=0;i<EmailAddresses.Listt.Count;i++) {
+				if(EmailAddresses.Listt[i].EmailAddressNum==ClinicCur.EmailAddressNum) {
+					textEmail.Text=EmailAddresses.Listt[i].EmailUsername;
 				}
 			}
 		}
@@ -513,6 +529,14 @@ namespace OpenDental{
 			if(textFax.Text.Length>length)
 				cursor++;
 			textFax.SelectionStart=cursor;
+		}
+
+		private void butEmail_Click(object sender,EventArgs e) {
+			FormEmailAddresses FormEA=new FormEmailAddresses();
+			FormEA.IsSelectionMode=true;
+			FormEA.ShowDialog();
+			ClinicCur.EmailAddressNum=FormEA.EmailAddressNum;
+			textEmail.Text=EmailAddresses.GetOne(FormEA.EmailAddressNum).EmailUsername;
 		}
 
 		private void butDelete_Click(object sender, System.EventArgs e) {
@@ -581,9 +605,6 @@ namespace OpenDental{
 			}
 			else{
 				ClinicCur.InsBillingProv=ProviderC.ListShort[comboInsBillingProv.SelectedIndex].ProvNum;
-			}
-			if(comboEmailAddresses.SelectedIndex!=-1) {//Should only be if there isn't one selected yet.
-				ClinicCur.EmailAddressNum=ListEmailAddresses[comboEmailAddresses.SelectedIndex].EmailAddressNum;
 			}
 			if(IsNew){
 				Clinics.Insert(ClinicCur);

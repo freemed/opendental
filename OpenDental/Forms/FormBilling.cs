@@ -828,7 +828,7 @@ namespace OpenDental{
 					emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
 				}
 				if(stmt.Mode_==StatementMode.Email){
-					if(emailAddress==null || emailAddress.SMPTserver==""){
+					if(emailAddress==null || emailAddress.SMTPserver==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
 						isPrinting=false;

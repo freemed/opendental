@@ -863,7 +863,7 @@ namespace OpenDental{
 				return;
 			}
 //todo: handle null
-			if(EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum)).SMPTserver=="") {
+			if(EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum)).SMTPserver=="") {
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}

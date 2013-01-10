@@ -10,7 +10,8 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormEmailAddresses:Form {
-		private List<EmailAddress> ListEmailAddresses;
+		public bool IsSelectionMode;
+		public long EmailAddressNum;
 
 		public FormEmailAddresses() {
 			InitializeComponent();
@@ -18,20 +19,30 @@ namespace OpenDental {
 		}
 
 		private void FormEmailAddresses_Load(object sender,EventArgs e) {
+			if(!IsSelectionMode) {
+				butOK.Visible=false;
+				butCancel.Text="Close";
+			}
 			FillGrid();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEmailAddressEdit FormEAE=new FormEmailAddressEdit();
-			FormEAE.EmailAddressCur=ListEmailAddresses[e.Row];
-			FormEAE.ShowDialog();
-			if(FormEAE.DialogResult==DialogResult.OK) {
-				FillGrid();
+			if(IsSelectionMode) {
+				EmailAddressNum=EmailAddresses.Listt[gridMain.GetSelectedIndex()].EmailAddressNum;
+				DialogResult=DialogResult.OK;
+			}
+			else {
+				FormEmailAddressEdit FormEAE=new FormEmailAddressEdit();
+				FormEAE.EmailAddressCur=EmailAddresses.Listt[e.Row];
+				FormEAE.ShowDialog();
+				if(FormEAE.DialogResult==DialogResult.OK) {
+					FillGrid();
+				}
 			}
 		}
 
 		private void FillGrid() {
-			ListEmailAddresses=EmailAddresses.GetAll();
+			EmailAddresses.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -41,10 +52,10 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ListEmailAddresses.Count;i++) {
+			for(int i=0;i<EmailAddresses.Listt.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(ListEmailAddresses[i].EmailUsername);
-				row.Cells.Add((ListEmailAddresses[i].EmailAddressNum==PrefC.GetLong(PrefName.EmailDefaultAddressNum))?"X":"");
+				row.Cells.Add(EmailAddresses.Listt[i].EmailUsername);
+				row.Cells.Add((EmailAddresses.Listt[i].EmailAddressNum==PrefC.GetLong(PrefName.EmailDefaultAddressNum))?"X":"");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -55,7 +66,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a row first.");
 				return;
 			}
-			if(Prefs.UpdateLong(PrefName.EmailDefaultAddressNum,ListEmailAddresses[gridMain.GetSelectedIndex()].EmailAddressNum)) {
+			if(Prefs.UpdateLong(PrefName.EmailDefaultAddressNum,EmailAddresses.Listt[gridMain.GetSelectedIndex()].EmailAddressNum)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			FillGrid();
@@ -71,8 +82,18 @@ namespace OpenDental {
 			}
 		}
 
-		private void butClose_Click(object sender,EventArgs e) {
+		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
+		}
+
+		///<summary>This button is only visible if IsSelectionMode</summary>
+		private void butOK_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1) {
+				MsgBox.Show(this,"Please select an email address.");
+				return;
+			}
+			EmailAddressNum=EmailAddresses.Listt[gridMain.GetSelectedIndex()].EmailAddressNum;
+			DialogResult=DialogResult.OK;
 		}
 
 		private void FormEmailAddresses_FormClosing(object sender,FormClosingEventArgs e) {
