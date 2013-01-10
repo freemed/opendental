@@ -1,5 +1,7 @@
 package com.opendental.odweb.client.ui;
 
+import java.util.ArrayList;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -11,21 +13,22 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HTMLTable.Cell;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /** A custom data grid.  This class contains panels, grids, labels, and other "widgets" that compose our data grid for the UI. Treat ODGrid like a Panel. */
-public class ODGrid extends Composite implements ClickHandler {
+public class ODGrid extends Composite {
 	private static ODGridUiBinder uiBinder = GWT.create(ODGridUiBinder.class);
 	interface ODGridUiBinder extends UiBinder<Widget, ODGrid> {
 	}
 	
 	/** This is going to allow me to have programmatic access to specified UiBinder styles. */
 	interface RowStyle extends CssResource {
-		/** This row formatter is used to color every odd row in the main grid. */
-		String tableMainRowFormatter();
+		/** This row formatter is used to color selected rows in the main grid. */
+		String tableMainSelectedRowFormatter();
 	}
 	/** RowStyle is strictly used to refer to the CSS portion of the UiBinder file programmatically. */
 	@UiField RowStyle style;
@@ -65,6 +68,10 @@ public class ODGrid extends Composite implements ClickHandler {
 	public int Height;
 	/** The width of the entire control.  Mainly for dictating how to draw the grid to the parent control. */
 	public int Width;
+	/** The currently selected row in the grid.  Defaults to -1 for no row selected. */
+	public ArrayList<Integer> SelectedIndices;
+	/** The type of selection mode the ODGrid is in.  Defaults to one. */
+	private GridSelectionMode SelectionMode=GridSelectionMode.One;  
 	
 	/** Creates a new ODGrid. */
 	public ODGrid() {
@@ -80,6 +87,10 @@ public class ODGrid extends Composite implements ClickHandler {
 		labelTitle.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		setTableTitle(title);
 		containerPanel.setCellHeight(scrollPanel, "100%");//This is so that tableMain takes up the most space.
+		//Add click handlers to the tables.
+		tableMain.addClickHandler(new tableMain_Click());
+		//Instantiate an empty array of selected indices so that it won't be null.
+		SelectedIndices=new ArrayList<Integer>();
 		//We have to call initWidget in the constructor because this class extends Composite. 
 		initWidget(containerPanel);
 	}
@@ -130,6 +141,24 @@ public class ODGrid extends Composite implements ClickHandler {
 		labelTitle.setText(TableTitle);
 	}
 	
+	/** Sets the grids selected index to the passed in index.  Does nothing if index is not greater than -1. */
+	public void setSelectedIndex(int index) {
+		if(index<0) {
+			return;
+		}
+		ArrayList<Integer> selectedIndices=new ArrayList<Integer>();
+		selectedIndices.add(index);
+		SelectedIndices=selectedIndices;
+	}
+
+	public GridSelectionMode getSelectionMode() {
+		return SelectionMode;
+	}
+
+	public void setSelectionMode(GridSelectionMode selectionMode) {
+		SelectionMode=selectionMode;
+	}
+
 	/**  */
 	public String getColumnText(int rowIndex,int columnIndex) {
 		return "";
@@ -219,7 +248,6 @@ public class ODGrid extends Composite implements ClickHandler {
 	
 	/**  */
 	private void drawRows() {
-		tableMain.clear();
 		tableMain.setVisible(false);
 		tableMain.resize(Rows.size(), Columns.size());
 		tableMain.setSize("100%", "100%");
@@ -230,28 +258,62 @@ public class ODGrid extends Composite implements ClickHandler {
 			}
 			drawRow(i);
 		}
+		//Set the selected rows.
+		for(int i=0;i<SelectedIndices.size();i++) {
+			tableMain.getRowFormatter().addStyleName(SelectedIndices.get(i), style.tableMainSelectedRowFormatter());
+		}
 	}
 	
 	/** Must be called after the column headers are drawn.  That is where ColWidths gets filled. */
 	private void drawRow(int row) {
-		// TODO Figure out if the row is selected here.
+		//Remove the selected row format.  The row will get reselected later if needed.
+		tableMain.getRowFormatter().removeStyleName(row, style.tableMainSelectedRowFormatter());
 		//Draw all of the columns.
 		for(int column=0;column<Columns.size();column++) {
 			tableMain.setText(row, column, Rows.get(row).Cells.get(column).getText());
 			//Set the width of the cell.
 			tableMain.getCellFormatter().setWidth(row,column,ColWidths[column]+"px");
 		}
-		if(!(row % 2==0)) {//Format odd rows so they look different.
-			tableMain.getRowFormatter().addStyleName(row, style.tableMainRowFormatter());
-		}
 	}
 	
 	//Clicking-------------------------------------------------------------------------------------------------------------------
 	
-	/** Click handler for the entire ODGrid. */
-	@Override
-	public void onClick(ClickEvent event) {
-		// TODO Enhance the ODGrid to handle click events.		
+	/** Click handler for table main which contains the rows and columns. */
+	public class tableMain_Click implements ClickHandler {
+		@Override
+		public void onClick(ClickEvent event) {
+			//Check if the click event was on tableMain.
+			Cell cell=tableMain.getCellForEvent(event);
+			//Can be null if the event did not hit the table or specific cell.
+			if(cell!=null) {
+				//Check what type of selection mode the grid is in.
+				switch(getSelectionMode()) {
+					case None:
+						return;
+					case One:
+						setSelectedIndex(cell.getRowIndex());
+						break;
+					case OneCell:
+						break;
+					case MultiExtended:
+						break;
+				}
+				drawRows();
+			}
+		}
+	}
+	
+	/** Click handler for table column headers. This is where the sorting will happen if we decide to implement that functionality. */
+	public class tableColumnHeaders_Click implements ClickHandler {
+		@Override
+		public void onClick(ClickEvent event) {
+			//Check if the click event was on the column headers.
+			Cell cell=tableColumnHeaders.getCellForEvent(event);
+			//Can be null if the event did not hit the table or specific cell.
+			if(cell!=null) {
+				//TODO enhance to handle sorting columns here. 
+			}
+		}
 	}
 	
 	//BeginEndUpdate-------------------------------------------------------------------------------------------------------------
@@ -270,6 +332,17 @@ public class ODGrid extends Composite implements ClickHandler {
 		onPaint();
 	}
 
+	/** Specifies the selection behavior of an ODGrid. */
+	public enum GridSelectionMode {
+		/** 0=None */
+		None,
+		/** 1=One */
+		One,
+		/** 2=OneCell */
+		OneCell,
+		/** 3=MultiExtended */
+		MultiExtended
+	}
 
 	
 	

@@ -30,11 +30,11 @@
 	.tableColumnHeaders {
 		font-weight: bold;
 		background-color: #d2d2d2;
-		border-bottom: 1px solid #66667a;
+		border-bottom: 1px solid #787878;
 	}
 	
 	.tableColumnHeaders td {
-		border-right: 1px solid #000;
+		border-right: 1px solid #787878;
 		word-wrap: break-word;
 	}
 	
@@ -44,12 +44,13 @@
 	}
 	
 	.tableMain td {
-		border-right: 1px solid #000;
+		border-right: 1px solid #b4b4b4;
+		border-bottom: 1px solid #b4b4b4;
 		word-wrap: break-word;
 	}
   
-  	.tableMainRowFormatter {
-		background-color: #ededed;
+  	.tableMainSelectedRowFormatter {
+		background-color: #c0c0c0;
 	}
 	
   </ui:style>
