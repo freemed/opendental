@@ -416,7 +416,7 @@ namespace OpenDental {
 			//RefreshHtml();
 		}
 
-		///<summary>Insert table boilderplate. Pastes selected text into the first cell.</summary>
+		///<summary>Insert table boilerplate. Pastes selected text into the first cell.</summary>
 		private void Table_Click() {
 			FormWikiTableEdit FormWTE = new FormWikiTableEdit();
 			MatchCollection matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
@@ -546,6 +546,55 @@ namespace OpenDental {
 						MessageBox.Show(Lan.g(this,"Internal link cannot contain a pipe character:")+match.Value);
 						return false;
 					}
+				}
+			}
+			//Table markup rigorously formatted----------------------------------------------------------------------
+			//{|
+			//!Width="100"|Column Heading 1!!Width="150"|Column Heading 2!!Width=""|Column Heading 3
+			//|- 
+			//|Cell 1||Cell 2||Cell 3 
+			//|-
+			//|Cell A||Cell B||Cell C 
+			//|}
+			matches=Regex.Matches(s,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
+			foreach(Match match in matches) {
+				lines=match.Value.Split(new string[] {"\r\n"},StringSplitOptions.None);
+				if(lines[0]!="{|") {
+					MsgBox.Show(this,"The first line of a table markup section must be exactly {|, with no additional characters.");
+					return false;
+				}
+				if(!lines[1].StartsWith("!")) {
+					MsgBox.Show(this,"The second line of a table markup section must start with ! to indicate column headers.");
+					return false;
+				}
+				if(lines[1].StartsWith("! ")) {
+					MsgBox.Show(this,"In the table, at line 2, there cannot be a space after the first !");
+					return false;
+				}
+				//Any garbage in the header will just show in the cell rather than being processed.
+				for(int i=2;i<lines.Length-1;i++) {//loop through the lines after the header
+					if((i % 2)==0) {//even row
+						if(lines[i]!="|-") {
+							MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", |- was expected, but this was found instead:")+lines[i]);
+							return false;
+						}
+					}
+					else {//odd row
+						if(!lines[i].StartsWith("|")) {
+							MessageBox.Show(Lan.g(this,"Table rows must start with |.  At line ")+(i+1).ToString()+Lan.g(this,", this was found instead:")+lines[i]);
+							return false;
+						}
+						//if(lines[i].StartsWith("| ")) {
+						//	MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", there cannot be a space after the first |."));
+						//	return false;
+						//}
+						//lines[i].in
+						//I guess we don't really care what they put in a row.  We can just interpret garbage as a single cell.
+					}
+				}
+				if(lines[lines.Length-1]!="|}") {
+					MsgBox.Show(this,"The last line of a table markup section must be exactly |}, with no additional characters.");
+					return false;
 				}
 			}
 			return true;  
