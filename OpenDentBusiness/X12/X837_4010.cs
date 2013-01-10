@@ -439,7 +439,7 @@ namespace OpenDentBusiness
 					seg++;
 					sw.WriteLine("NM1*IL*"//NM101: IL=Insured or Subscriber
 						+"1*"//NM102: 1=Person
-						+Sout(subscriber.LName,35)+"*"//NM103: LName
+						+Sout(subscriber.LName,35)+"*"//NM103: LName. Never blank, because validated in the patient edit window when a patient is added/edited.
 						+Sout(subscriber.FName,25)+"*"//NM104: FName
 						+Sout(subscriber.MiddleI,25)+"*"//NM105: MiddleName
 						+"*"//NM106: not used
@@ -548,7 +548,7 @@ namespace OpenDentBusiness
 					seg++;
 					sw.Write("NM1*QC*"//NM101: QC=Patient
 						+"1*"//NM102: 1=Person
-						+Sout(patient.LName,35)+"*"//NM103: Lname
+						+Sout(patient.LName,35)+"*"//NM103: Lname. Never blank, because validated in the patient edit window when a patient is added/edited.
 						+Sout(patient.FName,25));//NM104: Fname
 					string patID=patient.SSN;
 					for(int p=0;p<patPlans.Count;p++) {
@@ -1019,7 +1019,7 @@ namespace OpenDentBusiness
 					seg++;
 					sw.WriteLine("NM1*IL*"//NM010: IL=insured
 						+"1*"//NM102: 1=person
-						+Sout(otherSubsc.LName,35)+"*"//NM103: LName
+						+Sout(otherSubsc.LName,35)+"*"//NM103: LName. Never blank, because validated in the patient edit window when a patient is added/edited.
 						+Sout(otherSubsc.FName,25)+"*"//NM104: FName
 						+Sout(otherSubsc.MiddleI,25)+"*"//NM105: MiddleName
 						+"*"//NM106: not used

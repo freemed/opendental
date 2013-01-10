@@ -427,7 +427,7 @@ namespace OpenDentBusiness
 				sw.Write("NM1"+s
 					+"IL"+s//NM101 2/3 Entity Identifier Code: IL=Insured or Subscriber.
 					+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person, 2=Non-Person Entity.
-					+Sout(subscriber.LName,60)+s//NM103 1/60 Name Last or Organization Name:
+					+Sout(subscriber.LName,60)+s//NM103 1/60 Name Last or Organization Name: Never blank, because validated in the patient edit window when a patient is added/edited.
 					+Sout(subscriber.FName,35)+s//NM104 1/35 Name First:
 					+Sout(subscriber.MiddleI,25)+s//NM105 1/25 Name Middle:
 					+s//NM106 1/10 Name Prefix: Not Used.
@@ -543,7 +543,7 @@ namespace OpenDentBusiness
 						+"QC"+s//NM101 2/3 Entity Identifier Code: QC=Patient.
 						+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
 						+Sout(patient.LName,60)+s//NM103 1/60 Name Last or Organization Name:
-						+Sout(patient.FName,35));//NM104 1/35 Name First:
+						+Sout(patient.FName,35));//NM104 1/35 Name First: Never blank, because validated in the patient edit window when a patient is added/edited.
 						if(patient.MiddleI!="") {
 							sw.Write(s+Sout(patient.MiddleI,25));//NM105 1/25 Name Middle
 						}
@@ -1211,7 +1211,7 @@ namespace OpenDentBusiness
 					sw.Write("NM1"+s
 						+"IL"+s//NM101 2/3 Entity Identifier Code: IL=Insured or Subscriber.
 						+"1"+s//NM102 1/1 Entity Type Qualifier: 1=Person.
-						+Sout(otherSubsc.LName,60)+s//NM103 1/60 Name Last or Organization Name:
+						+Sout(otherSubsc.LName,60)+s//NM103 1/60 Name Last or Organization Name: Never blank, because validated in the patient edit window when a patient is added/edited.
 						+Sout(otherSubsc.FName,35)+s//NM104 1/35 Name First:
 						+Sout(otherSubsc.MiddleI,25)+s//NM105 1/25 Middle Name:
 						+s//NM106 1/10 Name Prefix: Not used.
