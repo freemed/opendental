@@ -3484,7 +3484,30 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-
+		public static string TimeCardRuleEmployeeNumInvalid(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM timecardrule "
+					+"WHERE timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Timecard rules found with invalid employee number: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				command="UPDATE timecardrule "
+					+"SET timecardrule.EmployeeNum=0 "
+					+"WHERE timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
+				long numberFixed=Db.NonQ(command);
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Timecard rules applied to All Employees due to invalid employee number: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
 
 
 
