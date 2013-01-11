@@ -88,6 +88,39 @@ namespace OpenDental {
 			RefreshHtml();
 		}
 
+		private void textContent_KeyPress(object sender,KeyPressEventArgs e) {
+			//this doesn't always fire, which is good because the user can still use the arrow keys to move around.
+			//look through all tables:
+			MatchCollection matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
+			foreach(Match match in matches) {
+				if(textContent.SelectionStart >	match.Index
+					&& textContent.SelectionStart <	match.Index+match.Length) 
+				{
+					e.Handled=true;
+					MsgBox.Show(this,"Direct editing of tables is not allowed here.  Use the table button or double click to edit.");
+					return;
+				}
+			}
+		}
+
+		private void textContent_MouseDoubleClick(object sender,MouseEventArgs e) {
+			int idx=textContent.GetCharIndexFromPosition(e.Location);
+			//look through all tables:
+			MatchCollection matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
+			foreach(Match match in matches) {
+				if(idx >	match.Index
+					&& idx <	match.Index+match.Length) 
+				{
+					FormWikiTableEdit formT=new FormWikiTableEdit();
+					formT.Markup=match.Value;
+					formT.ShowDialog();
+					if(formT.DialogResult==DialogResult.OK) {
+						textContent.Text=textContent.Text.Replace(match.Value,formT.Markup);
+					}
+				}
+			}
+		}
+
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
 			webBrowserWiki.AllowNavigation=false;
 		}
@@ -416,33 +449,37 @@ namespace OpenDental {
 			//RefreshHtml();
 		}
 
-		///<summary>Insert table boilerplate. Pastes selected text into the first cell.</summary>
+		///<summary>Works for a new table and for an existing table.</summary>
 		private void Table_Click() {
 			FormWikiTableEdit FormWTE = new FormWikiTableEdit();
 			MatchCollection matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
-			if(matches.Count!=0) {
-				foreach(Match match in matches) {
-					if(textContent.SelectionStart > textContent.Text.IndexOf(match.Value)
-						&& textContent.SelectionStart > textContent.Text.IndexOf(match.Value)-match.Value.Length) 
-					{
-						//cursor is inside of this table
-						FormWTE.TableMarkup=match.Value;
-						FormWTE.ShowDialog();
-						if(FormWTE.DialogResult!=DialogResult.OK) {
-							return;
-						}
-						textContent.Text=textContent.Text.Replace(match.Value,FormWTE.TableMarkup);//always safe because dialog result was OK.
-						return;
+			foreach(Match match in matches) {
+				if(textContent.SelectionStart > match.Index
+					&& textContent.SelectionStart < match.Index+match.Length) 
+				{
+					//cursor is inside of this table
+					FormWTE.Markup=match.Value;
+					FormWTE.ShowDialog();
+					if(FormWTE.DialogResult==DialogResult.OK) {
+						textContent.Text=textContent.Text.Replace(match.Value,FormWTE.Markup);
 					}
+					return;
 				}
-				//Cursor is not in any existing table markup.
 			}
-			FormWTE.ShowDialog();//blank/new table code is inside of form.
+			//Cursor is not in any existing table markup.
+			FormWTE.Markup=@"{|
+!Width=""""|Heading1!!Width=""""|Heading2!!Width=""""|Heading3
+|-
+|||
+|-
+|||
+|}";
+			FormWTE.ShowDialog();
 			if(FormWTE.DialogResult!=DialogResult.OK){
 				return;
 			}
 			textContent.SelectionLength=0;
-			textContent.Paste(FormWTE.TableMarkup);
+			textContent.Paste(FormWTE.Markup);
 			textContent.Focus();
 		}
 
@@ -550,12 +587,13 @@ namespace OpenDental {
 			}
 			//Table markup rigorously formatted----------------------------------------------------------------------
 			//{|
-			//!Width="100"|Column Heading 1!!Width="150"|Column Heading 2!!Width=""|Column Heading 3
+			//!Width="100"|Column Heading 1!!Width="150"|Column Heading 2!!Width="75"|Column Heading 3
 			//|- 
 			//|Cell 1||Cell 2||Cell 3 
 			//|-
 			//|Cell A||Cell B||Cell C 
 			//|}
+			//Although this is rarely needed, it might still come in handy in certain cases, like paste, or when user doesn't add the |} until later, and other hacks.
 			matches=Regex.Matches(s,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
 			foreach(Match match in matches) {
 				lines=match.Value.Split(new string[] {"\r\n"},StringSplitOptions.None);
@@ -571,7 +609,13 @@ namespace OpenDental {
 					MsgBox.Show(this,"In the table, at line 2, there cannot be a space after the first !");
 					return false;
 				}
-				//Any garbage in the header will just show in the cell rather than being processed.
+				string[] cells=lines[1].Substring(1).Split(new string[] { "!!" },StringSplitOptions.None);//this also strips off the leading !
+				for(int c=0;c<cells.Length;c++) {
+					if(!Regex.IsMatch(cells[c],@"^(Width="")\d+""\|")) {//e.g. Width="90"| 
+						MsgBox.Show(this,"In the table markup, each header must be formatted like this: Width=\"#\"|...");
+						return false;
+					}
+				}
 				for(int i=2;i<lines.Length-1;i++) {//loop through the lines after the header
 					if((i % 2)==0) {//even row
 						if(lines[i]!="|-") {
@@ -593,7 +637,7 @@ namespace OpenDental {
 					}
 				}
 				if(lines[lines.Length-1]!="|}") {
-					MsgBox.Show(this,"The last line of a table markup section must be exactly |}, with no additional characters.");
+					MsgBox.Show(this,"The last line of a table markup section must be exactly |}, with no additional characters.");//this doesn't work since the match stops after |}.
 					return false;
 				}
 			}
@@ -649,8 +693,6 @@ namespace OpenDental {
 			}
 		}
 
-		
-
 		private void FormWikiEdit_FormClosing(object sender,FormClosingEventArgs e) {
 			//handles both the Cancel button and the user clicking on the x
 			if(DialogResult==DialogResult.OK) {
@@ -662,6 +704,13 @@ namespace OpenDental {
 				}
 			}
 		}
+
+		
+
+		
+		
+
+	
 
 		
 

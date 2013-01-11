@@ -382,7 +382,8 @@ namespace OpenDentBusiness{
 				for(int i=1;i<lines.Length-1;i++) {
 					if(lines[i].StartsWith("!")) {//header
 						strbTable.AppendLine("<tr>");
-						string[] cells=lines[i].Substring(1).Split(new string[] {"!!"},StringSplitOptions.None);//this also strips off the leading !
+						lines[i]=lines[i].Substring(1);//strips off the leading !
+						string[] cells=lines[i].Split(new string[] {"!!"},StringSplitOptions.None);
 						for(int c=0;c<cells.Length;c++){
 							if(Regex.IsMatch(cells[c],@"(Width="")\d+""\|")){//e.g. Width="90"|
 								strbTable.Append("<th ");
@@ -405,15 +406,11 @@ namespace OpenDentBusiness{
 					}
 					else{//normal row
 						strbTable.AppendLine("<tr>");
+						lines[i]=lines[i].Substring(1);//strips off the leading |
 						string[] cells=lines[i].Split(new string[] {"||"},StringSplitOptions.None);
 						for(int c=0;c<cells.Length;c++) {
 							strbTable.Append("<td>");
-							if(c==0 && cells[c].StartsWith("|")) {
-								strbTable.Append(cells[c].Substring(1));
-							}
-							else {
-								strbTable.Append(cells[c]);
-							}
+							strbTable.Append(cells[c]);
 							strbTable.AppendLine("</td>");
 						}
 						strbTable.AppendLine("</tr>");

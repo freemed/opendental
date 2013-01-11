@@ -210,23 +210,12 @@ namespace OpenDental {
 			textBoxMain.SelectionLength-=(charsRemovedStart+charsRemovedEnd);
 		}
 
+		private void textBoxMain_MouseDoubleClick(object sender,MouseEventArgs e) {
+			this.OnMouseDoubleClick(e);
+		}
+
 		private void textBoxMain_KeyPress(object sender,KeyPressEventArgs e) {
-			//this even wasn't firing for the Delete key.
-			/*
-			switch(e.KeyChar) {
-				case (char)Keys.ControlKey:
-				case (char)Keys.ShiftKey:
-					//don't reset the SelectionLengthMem to 0 because the text has not be deselected yet.
-					break;
-				default:
-					SelectionLengthMem=0;//typing a char such as backspace is a common way to move from selected text to a state where no text is selected. 
-					break;
-				case (char)Keys.Tab:
-					textBoxMain.Paste("     ");
-					SelectionLengthMem=0;
-					e.Handled=true;//don't allow the tab char to go into the texbox
-					break;
-			}*/
+			this.OnKeyPress(e);
 		}
 
 		private void textBoxMain_KeyDown(object sender,KeyEventArgs e) {
@@ -242,8 +231,7 @@ namespace OpenDental {
 				case Keys.Tab:
 					textBoxMain.Paste("   ");
 					SelectionLengthMem=0;
-					e.SuppressKeyPress=true;//or use this?
-					//e.Handled=true;//don't allow the tab char to go into the texbox
+					e.SuppressKeyPress=true;
 					break;
 			}
 		}
@@ -340,6 +328,10 @@ namespace OpenDental {
 			}
 		}
 		#endregion Events
+
+		
+
+		
 
 		
 

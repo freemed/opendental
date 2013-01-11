@@ -33,10 +33,10 @@ namespace OpenDental{
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuItemUndo = new System.Windows.Forms.ToolStripMenuItem();
 			this.textNumbers = new System.Windows.Forms.TextBox();
+			this.toolBar2 = new OpenDental.UI.ODToolBar();
 			this.textContent = new OpenDental.TextBoxWiki();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.toolBar2 = new OpenDental.UI.ODToolBar();
 			this.contextMenuMain.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -119,6 +119,15 @@ namespace OpenDental{
 			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
 			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// toolBar2
+			// 
+			this.toolBar2.ImageList = this.imageListMain;
+			this.toolBar2.Location = new System.Drawing.Point(0,26);
+			this.toolBar2.Name = "toolBar2";
+			this.toolBar2.Size = new System.Drawing.Size(863,25);
+			this.toolBar2.TabIndex = 82;
+			this.toolBar2.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.toolBar2_ButtonClick);
+			// 
 			// textContent
 			// 
 			this.textContent.ContextMenuStrip = this.contextMenuMain;
@@ -131,6 +140,8 @@ namespace OpenDental{
 			this.textContent.SelectionStart = 0;
 			this.textContent.Size = new System.Drawing.Size(438,514);
 			this.textContent.TabIndex = 80;
+			this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
+			this.textContent.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textContent_MouseDoubleClick);
 			// 
 			// webBrowserWiki
 			// 
@@ -154,15 +165,6 @@ namespace OpenDental{
 			this.ToolBarMain.Size = new System.Drawing.Size(863,25);
 			this.ToolBarMain.TabIndex = 3;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// toolBar2
-			// 
-			this.toolBar2.ImageList = this.imageListMain;
-			this.toolBar2.Location = new System.Drawing.Point(0,26);
-			this.toolBar2.Name = "toolBar2";
-			this.toolBar2.Size = new System.Drawing.Size(863,25);
-			this.toolBar2.TabIndex = 82;
-			this.toolBar2.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.toolBar2_ButtonClick);
 			// 
 			// FormWikiEdit
 			// 
