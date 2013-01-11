@@ -131,6 +131,7 @@ namespace OpenDental{
 			this.butColumnLeft.Size = new System.Drawing.Size(28,24);
 			this.butColumnLeft.TabIndex = 29;
 			this.butColumnLeft.Text = "L";
+			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
 			// 
 			// butColumnRight
 			// 
@@ -144,6 +145,7 @@ namespace OpenDental{
 			this.butColumnRight.Size = new System.Drawing.Size(28,24);
 			this.butColumnRight.TabIndex = 30;
 			this.butColumnRight.Text = "R";
+			this.butColumnRight.Click += new System.EventHandler(this.butColumnRight_Click);
 			// 
 			// butHeaders
 			// 
@@ -157,6 +159,7 @@ namespace OpenDental{
 			this.butHeaders.Size = new System.Drawing.Size(62,24);
 			this.butHeaders.TabIndex = 31;
 			this.butHeaders.Text = "Headers";
+			this.butHeaders.Click += new System.EventHandler(this.butHeaders_Click);
 			// 
 			// groupBox2
 			// 
@@ -184,6 +187,7 @@ namespace OpenDental{
 			this.butRowInsert.Size = new System.Drawing.Size(62,24);
 			this.butRowInsert.TabIndex = 31;
 			this.butRowInsert.Text = "Insert";
+			this.butRowInsert.Click += new System.EventHandler(this.butRowInsert_Click);
 			// 
 			// butRowDown
 			// 
@@ -197,6 +201,7 @@ namespace OpenDental{
 			this.butRowDown.Size = new System.Drawing.Size(44,24);
 			this.butRowDown.TabIndex = 30;
 			this.butRowDown.Text = "Down";
+			this.butRowDown.Click += new System.EventHandler(this.butRowDown_Click);
 			// 
 			// butRowUp
 			// 
@@ -210,6 +215,7 @@ namespace OpenDental{
 			this.butRowUp.Size = new System.Drawing.Size(44,24);
 			this.butRowUp.TabIndex = 29;
 			this.butRowUp.Text = "Up";
+			this.butRowUp.Click += new System.EventHandler(this.butRowUp_Click);
 			// 
 			// butRowDelete
 			// 
@@ -223,6 +229,7 @@ namespace OpenDental{
 			this.butRowDelete.Size = new System.Drawing.Size(62,24);
 			this.butRowDelete.TabIndex = 32;
 			this.butRowDelete.Text = "Delete";
+			this.butRowDelete.Click += new System.EventHandler(this.butRowDelete_Click);
 			// 
 			// butColumnDelete
 			// 
@@ -236,6 +243,7 @@ namespace OpenDental{
 			this.butColumnDelete.Size = new System.Drawing.Size(62,24);
 			this.butColumnDelete.TabIndex = 34;
 			this.butColumnDelete.Text = "Delete";
+			this.butColumnDelete.Click += new System.EventHandler(this.butColumnDelete_Click);
 			// 
 			// butColumnInsert
 			// 
@@ -249,6 +257,7 @@ namespace OpenDental{
 			this.butColumnInsert.Size = new System.Drawing.Size(62,24);
 			this.butColumnInsert.TabIndex = 33;
 			this.butColumnInsert.Text = "Insert";
+			this.butColumnInsert.Click += new System.EventHandler(this.butColumnInsert_Click);
 			// 
 			// FormWikiTableEdit
 			// 

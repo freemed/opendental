@@ -127,7 +127,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			
+			//new big window to edit row
 		}
 
 		private void gridMain_CellTextChanged(object sender,EventArgs e) {
@@ -187,6 +187,45 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void butColumnLeft_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butColumnRight_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butHeaders_Click(object sender,EventArgs e) {
+			//new window to edit
+		}
+
+		private void butColumnInsert_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butColumnDelete_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butRowUp_Click(object sender,EventArgs e) {
+			if(gridMain.SelectedCell.Y==-1) {
+				MsgBox.Show(this,"Please select a cell first.");
+				return;
+			}
+		}
+
+		private void butRowDown_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butRowInsert_Click(object sender,EventArgs e) {
+
+		}
+
+		private void butRowDelete_Click(object sender,EventArgs e) {
+
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			PumpGridIntoTable();
 			Markup=GenerateMarkup();
@@ -196,6 +235,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 	
 
