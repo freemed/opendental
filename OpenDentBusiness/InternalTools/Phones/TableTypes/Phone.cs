@@ -42,6 +42,9 @@ namespace OpenDentBusiness{
 		public string ScreenshotImage;
 		///<summary>Always set to the phone number of the caller.</summary>
 		public string CustomerNumberRaw;
+		///<summary>A copy of DateTimeStart made when a call has ended.  Gets set to 0001-01-01 after the 30 second wrap up thread has run.</summary>
+		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		public DateTime LastCallTimeStart;
 
 		public Phone Copy() {
 			return (Phone)this.MemberwiseClone();

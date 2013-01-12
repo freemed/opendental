@@ -71,6 +71,7 @@ namespace OpenDentBusiness.Crud{
 				phone.ScreenshotPath   = PIn.String(table.Rows[i]["ScreenshotPath"].ToString());
 				phone.ScreenshotImage  = PIn.String(table.Rows[i]["ScreenshotImage"].ToString());
 				phone.CustomerNumberRaw= PIn.String(table.Rows[i]["CustomerNumberRaw"].ToString());
+				phone.LastCallTimeStart= PIn.DateT (table.Rows[i]["LastCallTimeStart"].ToString());
 				retVal.Add(phone);
 			}
 			return retVal;
@@ -111,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PhoneNum,";
 			}
-			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage,ScreenshotPath,ScreenshotImage,CustomerNumberRaw) VALUES(";
+			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,WebCamImage,ScreenshotPath,ScreenshotImage,CustomerNumberRaw,LastCallTimeStart) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(phone.PhoneNum)+",";
 			}
@@ -130,7 +131,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(phone.WebCamImage)+"',"
 				+"'"+POut.String(phone.ScreenshotPath)+"',"
 				+"'"+POut.String(phone.ScreenshotImage)+"',"
-				+"'"+POut.String(phone.CustomerNumberRaw)+"')";
+				+"'"+POut.String(phone.CustomerNumberRaw)+"',"
+				+    POut.DateT (phone.LastCallTimeStart)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -157,7 +159,8 @@ namespace OpenDentBusiness.Crud{
 				+"WebCamImage      = '"+POut.String(phone.WebCamImage)+"', "
 				+"ScreenshotPath   = '"+POut.String(phone.ScreenshotPath)+"', "
 				+"ScreenshotImage  = '"+POut.String(phone.ScreenshotImage)+"', "
-				+"CustomerNumberRaw= '"+POut.String(phone.CustomerNumberRaw)+"' "
+				+"CustomerNumberRaw= '"+POut.String(phone.CustomerNumberRaw)+"', "
+				+"LastCallTimeStart=  "+POut.DateT (phone.LastCallTimeStart)+" "
 				+"WHERE PhoneNum = "+POut.Long(phone.PhoneNum);
 			Db.NonQ(command);
 		}
@@ -224,6 +227,10 @@ namespace OpenDentBusiness.Crud{
 			if(phone.CustomerNumberRaw != oldPhone.CustomerNumberRaw) {
 				if(command!=""){ command+=",";}
 				command+="CustomerNumberRaw = '"+POut.String(phone.CustomerNumberRaw)+"'";
+			}
+			if(phone.LastCallTimeStart != oldPhone.LastCallTimeStart) {
+				if(command!=""){ command+=",";}
+				command+="LastCallTimeStart = "+POut.DateT(phone.LastCallTimeStart)+"";
 			}
 			if(command==""){
 				return;
