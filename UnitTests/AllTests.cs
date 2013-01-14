@@ -1748,6 +1748,42 @@ namespace UnitTests {
 			return retVal;
 		}
 
+		///<summary></summary>
+		public static string TestThirtyOne(int specificTest) {
+			if(specificTest != 0 && specificTest !=311) {
+				return "";
+			}
+			string suffix="31";
+			Patient pat=PatientT.CreatePatient(suffix);
+			long patNum=pat.PatNum;
+			Carrier carrier=CarrierT.CreateCarrier(suffix);
+			InsPlan plan=InsPlanT.CreateInsPlan(carrier.CarrierNum);
+			long planNum=plan.PlanNum;
+			InsSub sub=InsSubT.CreateInsSub(pat.PatNum,planNum);//guarantor is subscriber
+			long subNum=sub.InsSubNum;
+			long patPlanNum=PatPlanT.CreatePatPlan(1,pat.PatNum,subNum).PatPlanNum;
+			BenefitT.CreateAnnualMax(planNum,1000);
+			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.RoutinePreventive,100);
+			BenefitT.CreateLimitation(planNum,EbenefitCategory.RoutinePreventive,0);//The amount has no effect.
+			Procedure proc=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.C,"",125);//Prophy
+			long procNum=proc.ProcNum;
+			//Lists
+			List<ClaimProc> claimProcs=ClaimProcs.Refresh(pat.PatNum);
+			Family fam=Patients.GetFamily(patNum);
+			List<InsSub> subList=InsSubs.RefreshForFam(fam);
+			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
+			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
+			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today,subList);
+			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
+			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,ProcList,pat,ProcList,benefitList,subList);//Creates the claim in the same manner as the account module, including estimates and status NotReceived.
+			//Validate
+			double pending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,patNum,subNum);
+			if(pending!=0) {
+				throw new Exception("Pending amount should be 0.\r\n");
+			}
+			return "31: Passed.  \r\n";
+		}
 
 
 	}

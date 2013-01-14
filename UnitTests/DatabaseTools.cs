@@ -119,7 +119,7 @@ namespace UnitTests {
 				DELETE FROM patplan;
 				DELETE FROM payperiod;
 				DELETE FROM procedurelog;
-				DELETE FROM provider;
+				DELETE FROM provider WHERE ProvNum>2;
 				DELETE FROM timeadjust;
 				DELETE FROM timecardrule;
 				";
