@@ -268,43 +268,6 @@ namespace OpenDentBusiness{
 				string fileName=match.Value.Replace("[[file:","").TrimEnd(']');
 				s=s.Replace(match.Value,"<a href=\"wikifile:"+fileName+"\">file:"+fileName+"</a>");
 			}
-			/*//tables---------------------------------------------------------------------------------------------------------------------------
-			//{|
-			//!Width="100"|Column Heading 1!!Width="150"|Column Heading 2!!Width=""|Column Heading 3
-			//|- 
-			//|Cell 1||Cell 2||Cell 3 
-			//|-
-			//|Cell A||Cell B||Cell C 
-			//|}
-			matches=Regex.Matches(s,@"\{\|(.*?)\|\}",RegexOptions.Singleline);//\|}");
-			foreach(Match match in matches) {
-				StringBuilder tableBuilder = new StringBuilder();
-				tableBuilder.Append("<table>\r\n");
-				string[] tableRows = match.Value.Split("{|,|-,|}".Split(','),StringSplitOptions.RemoveEmptyEntries);
-				for(int i=0;i<tableRows.Length;i++) {
-					string[] cells;
-					tableBuilder.Append("<tr>\r\n");
-					if(i==0 && tableRows[i].Trim().StartsWith("!Width")) {//header row
-						cells=tableRows[i].Trim().Split("!!".Split(','),StringSplitOptions.RemoveEmptyEntries);
-						foreach(string cell in cells) {
-							if(cell.Split('|').Length!=2) {
-								throw new ApplicationException("Table header malformed.");
-							}
-							tableBuilder.Append("<th style=\"width:"+cell.Split('|')[0].Trim("!".ToCharArray()).ToLower().Replace("width=","").Trim("\"".ToCharArray())+"\">"+cell.Split('|')[1]+"</th>\r\n");
-						}
-					}
-					else {//non header row
-						cells=tableRows[i].Split("||".Split(','),StringSplitOptions.None);
-						foreach(string cell in cells) {
-							tableBuilder.Append("<td>"+cell.Trim().Trim("|".ToCharArray())+"</td>\r\n");
-						}
-					}
-					tableBuilder.Append("</tr>\r\n");
-				}
-				tableBuilder.Append("</table>");
-				s=s.Replace(match.Value,tableBuilder.ToString());
-			}
-			*/
 			//[[folder:\\serverfiles\storage\]]------------------------------------------------------------------------------------------------
 			matches=Regex.Matches(s,@"\[\[(folder:).*?\]\]");
 			foreach(Match match in matches) {
@@ -481,6 +444,9 @@ namespace OpenDentBusiness{
 				else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
 					tagName="table";
 				}
+				else if(s.Substring(iScanInParagraph).StartsWith("<TableViews")) {
+					tagName="TableViews";
+				}
 				else {
 					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
 				}
@@ -505,8 +471,13 @@ namespace OpenDentBusiness{
 					}
 					//scan to the end of this element
 					int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
-					//move the non-paragraph content over to s new.
-					strbSnew.Append(s.Substring(0,iScanSibling));
+					if(tagName=="TableViews") {
+						//This xml will not become part of the html page
+					}
+					else {
+						//move the non-paragraph content over to s new.
+						strbSnew.Append(s.Substring(0,iScanSibling));
+					}
 					s=s.Substring(iScanSibling);
 					//scanning will start a totally new paragraph
 				}
