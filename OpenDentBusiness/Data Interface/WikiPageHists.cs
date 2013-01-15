@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -85,6 +86,17 @@ namespace OpenDentBusiness{
 				return wikiPageHist.WikiPageNum;
 			}
 			return Crud.WikiPageHistCrud.Insert(wikiPageHist);
+		}
+
+		public static WikiPage RevertFrom(WikiPageHist wikiPageHist) {
+			WikiPage retVal=new WikiPage();
+			//retVal.WikiPageNum
+			//retVal.UserNum
+			retVal.PageTitle=wikiPageHist.PageTitle;
+			retVal.PageContent=wikiPageHist.PageContent;
+			retVal.KeyWords=Regex.Match(wikiPageHist.PageContent,@"\[\[(keywords:).*?\]\]").Value.Substring(11).TrimEnd(']');
+			//retVal.DateTimeSaved=DateTime.Now;//gets set when inserted.
+			return retVal;
 		}
 
 

@@ -28,6 +28,7 @@ namespace OpenDental{
 			this.butClose = new OpenDental.UI.Button();
 			this.textContent = new OpenDental.TextBoxWiki();
 			this.textNumbers = new System.Windows.Forms.TextBox();
+			this.butRevert = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// gridMain
@@ -99,10 +100,26 @@ namespace OpenDental{
 			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
 			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
+			// butRevert
+			// 
+			this.butRevert.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRevert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butRevert.Autosize = true;
+			this.butRevert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRevert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRevert.CornerRadius = 4F;
+			this.butRevert.Location = new System.Drawing.Point(1067, 12);
+			this.butRevert.Name = "butRevert";
+			this.butRevert.Size = new System.Drawing.Size(75, 24);
+			this.butRevert.TabIndex = 84;
+			this.butRevert.Text = "Revert";
+			this.butRevert.Click += new System.EventHandler(this.butRevert_Click);
+			// 
 			// FormWikiHistory
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(1154, 638);
+			this.Controls.Add(this.butRevert);
 			this.Controls.Add(this.textContent);
 			this.Controls.Add(this.textNumbers);
 			this.Controls.Add(this.webBrowserWiki);
@@ -125,5 +142,6 @@ namespace OpenDental{
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
 		private TextBoxWiki textContent;
 		private System.Windows.Forms.TextBox textNumbers;
+		private UI.Button butRevert;
 	}
 }

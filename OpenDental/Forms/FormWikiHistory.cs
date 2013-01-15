@@ -101,6 +101,26 @@ namespace OpenDental {
 			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
 		}
 
+		private void butRevert_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()==-1){
+				return;
+			}
+			if(gridMain.GetSelectedIndex()==gridMain.Rows.Count-1) {//current revision of page
+				//DialogResult=DialogResult.OK;
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Revert page to currently selected revision?")) {
+				return;
+			}
+			WikiPage wikiPageNew = WikiPageHists.RevertFrom(ListWikiPageHists[gridMain.GetSelectedIndex()]);
+			wikiPageNew.UserNum=Security.CurUser.UserNum;
+			WikiPages.InsertAndArchive(wikiPageNew);
+			FillGrid();
+			gridMain.SetSelected(false);
+			gridMain.SetSelected(gridMain.Rows.Count-1,true);//select the new revision.
+			gridMain.ScrollToEnd();//in case there are LOTS of revisions. Should this go in the fill grid code? 
+		}
+
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
