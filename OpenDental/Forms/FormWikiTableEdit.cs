@@ -28,7 +28,7 @@ namespace OpenDental {
 		///<summary>This is passed in from the calling form.  It is used when deciding whether to allow user to add tableviews.  Blocks them if more than one table in page.</summary>
 		public int CountTablesInPage;
 		public bool IsNew;
-		///<summary>This is necessary because when user clicks on listView, the SelectedIndex changes before the mousedown event fires.  This is the only way to know what the view is that we are switching from.</summary>
+		///<summary>SelectedIndex of listView.  This is necessary because when user clicks on listView, the SelectedIndex changes before the mousedown event fires.  This is the only way to know what the view is that we are switching from.</summary>
 		private int ViewShowing;
 
 		public FormWikiTableEdit() {
@@ -214,6 +214,11 @@ namespace OpenDental {
 			
 		}
 
+		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
+			Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
+		}
+
+		/*No longer necessary because gridMain_CellLeave does this as text is changed.
 		///<summary>This is done before generating markup, when adding or removing rows or columns, and when changing from "none" view to another view.  FillGrid can't be done until this is done.</summary>
 		private void PumpGridIntoTable() {
 			//table and grid will only have the same numbers of rows and columns if the view is none.
@@ -227,7 +232,7 @@ namespace OpenDental {
 					Table.Rows[i][c]=gridMain.Rows[i].Cells[c].Text;
 				}
 			}
-		}
+		}*/
 
 		///<summary>Happens when user clicks OK.  Also happens when user wants to manually edit markup.</summary>
 		private string GenerateMarkup() {
@@ -299,7 +304,7 @@ namespace OpenDental {
 		}
 
 		private void butManEdit_Click(object sender,EventArgs e) {
-			PumpGridIntoTable();
+			//PumpGridIntoTable();
 			Markup=GenerateMarkup();
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(Markup);
 			msgbox.ShowDialog();
@@ -352,7 +357,8 @@ namespace OpenDental {
 
 		private void listView_Click(object sender,EventArgs e) {
 			SetVisibilityForView();
-			PumpGridIntoTable();
+//instead of this, always save to table as cells are edited?  This is getting too complex.
+			//PumpGridIntoTable();
 			FillGrid();
 			ViewShowing=listView.SelectedIndex;
 		}
@@ -370,7 +376,13 @@ namespace OpenDental {
 			if(formW.DialogResult!=DialogResult.OK) {
 				return;
 			}
-//todo: delete
+			if(formW.WikiViewCur==null) {//deleted
+				Views.RemoveAt(selectedIdx-1);
+				FillViews();//selectedIndex gets lost
+				ViewShowing=0;
+				SetVisibilityForView();
+				return;
+			}
 			Views[selectedIdx-1]=formW.WikiViewCur;//I assume this needs to be done
 			FillViews();//selectedIndex gets lost
 			listView.SelectedIndex=selectedIdx;
@@ -444,7 +456,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			PumpGridIntoTable();
+			//PumpGridIntoTable();
 			Markup=GenerateMarkup();
 			MarkupForViews=GenerateMarkupForViews();
 			DialogResult=DialogResult.OK;
@@ -453,6 +465,8 @@ namespace OpenDental {
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+		
 
 		
 

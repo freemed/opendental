@@ -26,10 +26,10 @@ namespace OpenDental.UI {
 		[Category("Action"),Description("Occurs when a cell is single clicked.")]
 		public event ODGridClickEventHandler CellClick=null;
 		///<summary></summary>
-		[Category("Property Changed"),Description("Event raised when user types in a textbox.")]
+		[Category("Property Changed"),Description("Event used when cells are editable.  The TextChanged event is passed up from the textbox where the editing is taking place.")]
 		public event EventHandler CellTextChanged=null;
 		///<summary></summary>
-		[Category("Focus"),Description("When user presses Enter (or up or down arrows) to move to next cell.")]
+		[Category("Focus"),Description("Event used when cells are editable.  LostFocust event is passed up from the textbox where the editing is taking place.")]
 		public event ODGridClickEventHandler CellLeave=null;
 		private string title;
 		//private Font titleFont=new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold);
