@@ -38,6 +38,8 @@ public class Phone {
 		public String ScreenshotImage;
 		/** Always set to the phone number of the caller. */
 		public String CustomerNumberRaw;
+		/** A copy of DateTimeStart made when a call has ended.  Gets set to 0001-01-01 after the 30 second wrap up thread has run. */
+		public Date LastCallTimeStart;
 
 		/** Deep copy of object. */
 		public Phone deepCopy() {
@@ -58,6 +60,7 @@ public class Phone {
 			phone.ScreenshotPath=this.ScreenshotPath;
 			phone.ScreenshotImage=this.ScreenshotImage;
 			phone.CustomerNumberRaw=this.CustomerNumberRaw;
+			phone.LastCallTimeStart=this.LastCallTimeStart;
 			return phone;
 		}
 
@@ -81,6 +84,7 @@ public class Phone {
 			sb.append("<ScreenshotPath>").append(Serializing.escapeForXml(ScreenshotPath)).append("</ScreenshotPath>");
 			sb.append("<ScreenshotImage>").append(Serializing.escapeForXml(ScreenshotImage)).append("</ScreenshotImage>");
 			sb.append("<CustomerNumberRaw>").append(Serializing.escapeForXml(CustomerNumberRaw)).append("</CustomerNumberRaw>");
+			sb.append("<LastCallTimeStart>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(LastCallTimeStart)).append("</LastCallTimeStart>");
 			sb.append("</Phone>");
 			return sb.toString();
 		}
@@ -137,6 +141,9 @@ public class Phone {
 				}
 				if(Serializing.getXmlNodeValue(doc,"CustomerNumberRaw")!=null) {
 					CustomerNumberRaw=Serializing.getXmlNodeValue(doc,"CustomerNumberRaw");
+				}
+				if(Serializing.getXmlNodeValue(doc,"LastCallTimeStart")!=null) {
+					LastCallTimeStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"LastCallTimeStart"));
 				}
 			}
 			catch(Exception e) {

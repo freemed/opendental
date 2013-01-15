@@ -28,6 +28,8 @@ public class Clinic {
 		public int InsBillingProv;
 		/** Does not include any punctuation.  Exactly 10 digits or empty in USA and Canada. */
 		public String Fax;
+		/** FK to EmailAddress.EmailAddressNum. */
+		public int EmailAddressNum;
 
 		/** Deep copy of object. */
 		public Clinic deepCopy() {
@@ -44,6 +46,7 @@ public class Clinic {
 			clinic.DefaultPlaceService=this.DefaultPlaceService;
 			clinic.InsBillingProv=this.InsBillingProv;
 			clinic.Fax=this.Fax;
+			clinic.EmailAddressNum=this.EmailAddressNum;
 			return clinic;
 		}
 
@@ -63,6 +66,7 @@ public class Clinic {
 			sb.append("<DefaultPlaceService>").append(DefaultPlaceService.ordinal()).append("</DefaultPlaceService>");
 			sb.append("<InsBillingProv>").append(InsBillingProv).append("</InsBillingProv>");
 			sb.append("<Fax>").append(Serializing.escapeForXml(Fax)).append("</Fax>");
+			sb.append("<EmailAddressNum>").append(EmailAddressNum).append("</EmailAddressNum>");
 			sb.append("</Clinic>");
 			return sb.toString();
 		}
@@ -107,6 +111,9 @@ public class Clinic {
 				}
 				if(Serializing.getXmlNodeValue(doc,"Fax")!=null) {
 					Fax=Serializing.getXmlNodeValue(doc,"Fax");
+				}
+				if(Serializing.getXmlNodeValue(doc,"EmailAddressNum")!=null) {
+					EmailAddressNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailAddressNum"));
 				}
 			}
 			catch(Exception e) {

@@ -13,7 +13,7 @@ namespace OpenDentalWebService {
 			StringBuilder sb=new StringBuilder();
 			sb.Append("<EmailAddress>");
 			sb.Append("<EmailAddressNum>").Append(emailaddress.EmailAddressNum).Append("</EmailAddressNum>");
-			sb.Append("<SMPTserver>").Append(SerializeStringEscapes.EscapeForXml(emailaddress.SMPTserver)).Append("</SMPTserver>");
+			sb.Append("<SMTPserver>").Append(SerializeStringEscapes.EscapeForXml(emailaddress.SMTPserver)).Append("</SMTPserver>");
 			sb.Append("<EmailUsername>").Append(SerializeStringEscapes.EscapeForXml(emailaddress.EmailUsername)).Append("</EmailUsername>");
 			sb.Append("<EmailPassword>").Append(SerializeStringEscapes.EscapeForXml(emailaddress.EmailPassword)).Append("</EmailPassword>");
 			sb.Append("<ServerPort>").Append(emailaddress.ServerPort).Append("</ServerPort>");
@@ -37,8 +37,8 @@ namespace OpenDentalWebService {
 						case "EmailAddressNum":
 							emailaddress.EmailAddressNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
-						case "SMPTserver":
-							emailaddress.SMPTserver=reader.ReadContentAsString();
+						case "SMTPserver":
+							emailaddress.SMTPserver=reader.ReadContentAsString();
 							break;
 						case "EmailUsername":
 							emailaddress.EmailUsername=reader.ReadContentAsString();

@@ -13,8 +13,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
-import com.google.gwt.event.dom.client.HasMouseOutHandlers;
-import com.google.gwt.event.dom.client.HasMouseOverHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;

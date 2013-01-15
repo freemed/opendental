@@ -24,6 +24,7 @@ namespace OpenDentalWebService {
 			sb.Append("<DefaultPlaceService>").Append((int)clinic.DefaultPlaceService).Append("</DefaultPlaceService>");
 			sb.Append("<InsBillingProv>").Append(clinic.InsBillingProv).Append("</InsBillingProv>");
 			sb.Append("<Fax>").Append(SerializeStringEscapes.EscapeForXml(clinic.Fax)).Append("</Fax>");
+			sb.Append("<EmailAddressNum>").Append(clinic.EmailAddressNum).Append("</EmailAddressNum>");
 			sb.Append("</Clinic>");
 			return sb.ToString();
 		}
@@ -74,6 +75,9 @@ namespace OpenDentalWebService {
 							break;
 						case "Fax":
 							clinic.Fax=reader.ReadContentAsString();
+							break;
+						case "EmailAddressNum":
+							clinic.EmailAddressNum=System.Convert.ToInt64(reader.ReadContentAsString());
 							break;
 					}
 				}

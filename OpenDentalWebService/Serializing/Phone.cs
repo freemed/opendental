@@ -28,6 +28,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ScreenshotPath>").Append(SerializeStringEscapes.EscapeForXml(phone.ScreenshotPath)).Append("</ScreenshotPath>");
 			sb.Append("<ScreenshotImage>").Append(SerializeStringEscapes.EscapeForXml(phone.ScreenshotImage)).Append("</ScreenshotImage>");
 			sb.Append("<CustomerNumberRaw>").Append(SerializeStringEscapes.EscapeForXml(phone.CustomerNumberRaw)).Append("</CustomerNumberRaw>");
+			sb.Append("<LastCallTimeStart>").Append(phone.LastCallTimeStart.ToString("yyyyMMddHHmmss")).Append("</LastCallTimeStart>");
 			sb.Append("</Phone>");
 			return sb.ToString();
 		}
@@ -90,6 +91,9 @@ namespace OpenDentalWebService {
 							break;
 						case "CustomerNumberRaw":
 							phone.CustomerNumberRaw=reader.ReadContentAsString();
+							break;
+						case "LastCallTimeStart":
+							phone.LastCallTimeStart=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
 							break;
 					}
 				}

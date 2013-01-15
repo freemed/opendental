@@ -7,7 +7,7 @@ public class EmailAddress {
 		/** Primary key. */
 		public int EmailAddressNum;
 		/** For example smtp.gmail.com */
-		public String SMPTserver;
+		public String SMTPserver;
 		/** . */
 		public String EmailUsername;
 		/** . */
@@ -23,7 +23,7 @@ public class EmailAddress {
 		public EmailAddress deepCopy() {
 			EmailAddress emailaddress=new EmailAddress();
 			emailaddress.EmailAddressNum=this.EmailAddressNum;
-			emailaddress.SMPTserver=this.SMPTserver;
+			emailaddress.SMTPserver=this.SMTPserver;
 			emailaddress.EmailUsername=this.EmailUsername;
 			emailaddress.EmailPassword=this.EmailPassword;
 			emailaddress.ServerPort=this.ServerPort;
@@ -37,7 +37,7 @@ public class EmailAddress {
 			StringBuilder sb=new StringBuilder();
 			sb.append("<EmailAddress>");
 			sb.append("<EmailAddressNum>").append(EmailAddressNum).append("</EmailAddressNum>");
-			sb.append("<SMPTserver>").append(Serializing.escapeForXml(SMPTserver)).append("</SMPTserver>");
+			sb.append("<SMTPserver>").append(Serializing.escapeForXml(SMTPserver)).append("</SMTPserver>");
 			sb.append("<EmailUsername>").append(Serializing.escapeForXml(EmailUsername)).append("</EmailUsername>");
 			sb.append("<EmailPassword>").append(Serializing.escapeForXml(EmailPassword)).append("</EmailPassword>");
 			sb.append("<ServerPort>").append(ServerPort).append("</ServerPort>");
@@ -55,8 +55,8 @@ public class EmailAddress {
 				if(Serializing.getXmlNodeValue(doc,"EmailAddressNum")!=null) {
 					EmailAddressNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmailAddressNum"));
 				}
-				if(Serializing.getXmlNodeValue(doc,"SMPTserver")!=null) {
-					SMPTserver=Serializing.getXmlNodeValue(doc,"SMPTserver");
+				if(Serializing.getXmlNodeValue(doc,"SMTPserver")!=null) {
+					SMTPserver=Serializing.getXmlNodeValue(doc,"SMTPserver");
 				}
 				if(Serializing.getXmlNodeValue(doc,"EmailUsername")!=null) {
 					EmailUsername=Serializing.getXmlNodeValue(doc,"EmailUsername");
