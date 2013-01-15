@@ -472,8 +472,6 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPaymentCheckAmt(verbose,isCheck);//also fixes resulting deposit misbalances.
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.ClaimPaymentDeleteWithNoSplits(verbose,isCheck);
-			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimPaymentDetachMissingDeposit(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.ClaimProcDateNotMatchCapComplete(verbose,isCheck);

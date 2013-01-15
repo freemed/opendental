@@ -948,56 +948,6 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
-		public static string ClaimPaymentDeleteWithNoSplits(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			if(isCheck){
-				command="SELECT COUNT(*) FROM claimpayment WHERE NOT EXISTS("
-				  +"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
-				int numFound=PIn.Int(Db.GetCount(command));
-				if(numFound>0 || verbose) {
-				  log+=Lans.g("FormDatabaseMaintenance","Claim payments with no splits found: ")+numFound.ToString()+"\r\n";
-				}
-			}
-			else{
-				//Because it would change the sum on a deposit slip, can't easily delete these if attached to a deposit.
-				//Only delete claimpayments that are not attached to deposit slips.
-				//Above query might have more results than we can fix because of the deposit slips.
-				command="DELETE FROM claimpayment WHERE ClaimPaymentNum NOT IN ("
-					+"SELECT ClaimPaymentNum FROM claimproc) "
-					+"AND claimpayment.DepositNum=0";
-				long numberFixed=Db.NonQ(command);
-				if(numberFixed>0 || verbose) {
-					log+=Lans.g("FormDatabaseMaintenance","ClaimPayments with with no splits fixed: ")+numberFixed.ToString()+"\r\n";
-				}
-				//There might be claimpayments still attached to deposits which we cannot automatically fix. Notify user to manually fix.
-				command="SELECT claimpayment.ClaimPaymentNum FROM claimpayment WHERE NOT EXISTS("
-						+"SELECT * FROM claimproc WHERE claimpayment.ClaimPaymentNum=claimproc.ClaimPaymentNum)";
-				DataTable table=Db.GetTable(command);
-				for(int i=0;i<table.Rows.Count;i++) {
-					if(i==0) {
-						log+=Lans.g("FormDatabaseMaintenance","The following claim payments have no splits and are attached to deposits")+":\r\n";
-					}
-					command=@"SELECT deposit.DateDeposit,deposit.Amount,claimpayment.CarrierName,claimpayment.CheckDate,claimpayment.CheckAmt
-						FROM claimpayment,deposit
-						WHERE claimpayment.ClaimPaymentNum="+table.Rows[i]["ClaimPaymentNum"].ToString()+@"
-						AND claimpayment.DepositNum=deposit.DepositNum";
-					DataTable temp=Db.GetTable(command);
-					log+="   DepositDate: "+PIn.Date(temp.Rows[0]["DateDeposit"].ToString()).ToShortDateString()
-						+" DepositAmt: "+PIn.Double(temp.Rows[0]["Amount"].ToString()).ToString("F")
-						+" Carrier: "+temp.Rows[0]["CarrierName"].ToString()
-						+" CheckDate: "+PIn.Date(temp.Rows[0]["CheckDate"].ToString()).ToShortDateString()
-						+" CheckAmt: "+PIn.Double(temp.Rows[0]["CheckAmt"].ToString()).ToString("F")+"\r\n";
-				}
-				if(table.Rows.Count>0) {
-					log+=Lans.g("FormDatabaseMaintenance","   They need to be fixed manually.")+"\r\n";
-				}
-			}
-			return log;
-		}
-
 		public static string ClaimPaymentDetachMissingDeposit(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
