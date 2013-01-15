@@ -53,6 +53,8 @@ public class WindowOpenDental extends ResizeComposite {
   private HandlerRegistration apptViewSourceHandler;
   /** The panel that holds the content. */
   @UiField SimpleLayoutPanel contentPanel;
+  /** The label towards the top of the page that displays the information regarding the currently selected patient. */
+  @UiField LabelMainTitle labelMainTitle;
 	/** The outlook bar on the left used to navigate to different modules.  (provided=true) Means we will instantiate the object ourselves.  
 	 *  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
   @UiField(provided=true) OutlookBar outlookBar;

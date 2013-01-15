@@ -3,6 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
+/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
 public class VaccineDef {
 		/** Primary key. */
 		public int VaccineDefNum;

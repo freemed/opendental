@@ -578,7 +578,8 @@ namespace xCrudGeneratorWebService {
 					break;
 				}
 			}
-			strb.Append(rn+"public class "+className+docForjava+" {"+rn) ;
+			strb.Append(rn+"/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */"+rn);
+			strb.Append("public class "+className+docForjava+" {"+rn) ;
 			#endregion
 			#region fields
 			foreach(FieldInfo field in fields) {

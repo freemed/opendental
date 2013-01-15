@@ -53,8 +53,8 @@
     <g:north size='32'>
       <g:HTMLPanel styleName='{style.titleBar}'>
         <table ui:field='mainTitle' cellpadding='0' cellspacing='0'>
-        	<img src='http://www.opendental.com/images/LogoTiny.png' />
-        	<!-- Put the title bar widget here. -->
+        	<td><img src='http://www.opendental.com/images/LogoTiny.png' /></td>
+        	<td style="padding-left: 10px;"><s:LabelMainTitle ui:field='labelMainTitle' /></td>
         </table>
       </g:HTMLPanel>
     </g:north>

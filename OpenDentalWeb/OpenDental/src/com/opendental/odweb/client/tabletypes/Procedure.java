@@ -5,6 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
+/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
 public class Procedure {
 		/** Primary key. */
 		public int ProcNum;
