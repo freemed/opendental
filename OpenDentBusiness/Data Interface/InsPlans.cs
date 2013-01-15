@@ -247,7 +247,7 @@ namespace OpenDentBusiness {
 			//No need to check RemotingRole; no call to db.
 			double insUsed=GetInsUsedDisplay(histList,asofDate,planNum,patPlanNum,excludeClaim,planList,benList,patNum,insSubNum);
 			InsPlan plan=InsPlans.GetPlan(planNum,planList);
-			double insPending=GetPendingDisplay(histList,asofDate,plan,patPlanNum,excludeClaim,patNum,insSubNum);
+			double insPending=GetPendingDisplay(histList,asofDate,plan,patPlanNum,excludeClaim,patNum,insSubNum,benList);
 			double annualMaxFam=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum,true);
 			double annualMaxInd=Benefits.GetAnnualMaxDisplay(benList,planNum,patPlanNum,false);
 			double annualMax=annualMaxInd;
@@ -264,7 +264,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Only for display purposes rather than for calculations.  Get pending insurance for a given plan for one benefit year. Include a history list for the patient/family.  asofDate used to determine which benefit year to calc.  Usually the date of service for a claim.  The planNum is the plan to get value for.</summary>
-		public static double GetPendingDisplay(List<ClaimProcHist> histList,DateTime asofDate,InsPlan curPlan,long patPlanNum,long excludeClaim,long patNum,long insSubNum) {
+		public static double GetPendingDisplay(List<ClaimProcHist> histList,DateTime asofDate,InsPlan curPlan,long patPlanNum,long excludeClaim,long patNum,long insSubNum,List<Benefit> benefitList) {
 			//No need to check RemotingRole; no call to db.
 			//InsPlan curPlan=GetPlan(planNum,PlanList);
 			if(curPlan==null) {
@@ -274,16 +274,19 @@ namespace OpenDentBusiness {
 			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
-			CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
-			CovSpan[] covSpanArray=null;
-			if(generalCat!=null) {
-				covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
-			}
+			//CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+			//CovSpan[] covSpanArray=null;
+			//if(generalCat!=null) {
+			//  covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+			//}
 			for(int i=0;i<histList.Count;i++) {
-				if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
-					if(!CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)) {//for example, ortho
-						continue;
-					}
+				//if(generalCat!=null) {//If there is a general category, then we only consider codes within it.  This is how we exclude ortho.
+				//  if(!CovSpans.IsCodeInSpans(histList[i].StrProcCode,covSpanArray)) {//for example, ortho
+				//    continue;
+				//  }
+				//}
+				if(Benefits.LimitationExistsNotGeneral(benefitList,curPlan.PlanNum,patPlanNum,histList[i].StrProcCode)) {
+					continue;
 				}
 				if(histList[i].PlanNum==curPlan.PlanNum
 					&& histList[i].InsSubNum==insSubNum
@@ -312,11 +315,11 @@ namespace OpenDentBusiness {
 			DateTime renewDate=BenefitLogic.ComputeRenewDate(asofDate,curPlan.MonthRenew);
 			DateTime stopDate=renewDate.AddYears(1);
 			double retVal=0;
-			CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
-			CovSpan[] covSpanArray=null;
-			if(generalCat!=null) {
-				covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
-			}
+			//CovCat generalCat=CovCats.GetForEbenCat(EbenefitCategory.General);
+			//CovSpan[] covSpanArray=null;
+			//if(generalCat!=null) {
+			//  covSpanArray=CovSpans.GetForCat(generalCat.CovCatNum);
+			//}
 			for(int i=0;i<histList.Count;i++) {
 				if(histList[i].PlanNum!=planNum
 					|| histList[i].InsSubNum != insSubNum

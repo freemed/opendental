@@ -1521,7 +1521,7 @@ namespace OpenDental{
 			if(PatPlanList.Count>0){
 				SubCur=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
 				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
-				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatCur.PatNum,PatPlanList[0].InsSubNum);
+				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[0].PatPlanNum,-1,PatCur.PatNum,PatPlanList[0].InsSubNum,BenefitList);
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[0].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[0].InsSubNum);
 				textPriPend.Text=pend.ToString("F");
 				textPriUsed.Text=used.ToString("F");
@@ -1561,7 +1561,7 @@ namespace OpenDental{
 			if(PatPlanList.Count>1){
 				SubCur=InsSubs.GetSub(PatPlanList[1].InsSubNum,SubList);
 				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
-				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatCur.PatNum,PatPlanList[1].InsSubNum);
+				pend=InsPlans.GetPendingDisplay(HistList,DateTime.Today,PlanCur,PatPlanList[1].PatPlanNum,-1,PatCur.PatNum,PatPlanList[1].InsSubNum,BenefitList);
 				textSecPend.Text=pend.ToString("F");
 				used=InsPlans.GetInsUsedDisplay(HistList,DateTime.Today,PlanCur.PlanNum,PatPlanList[1].PatPlanNum,-1,InsPlanList,BenefitList,PatCur.PatNum,PatPlanList[1].InsSubNum);
 				textSecUsed.Text=used.ToString("F");
