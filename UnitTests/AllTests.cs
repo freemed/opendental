@@ -1750,7 +1750,7 @@ namespace UnitTests {
 
 		///<summary></summary>
 		public static string TestThirtyOne(int specificTest) {
-			if(specificTest != 0 && specificTest !=311) {
+			if(specificTest != 0 && specificTest !=31) {
 				return "";
 			}
 			string suffix="31";
@@ -1764,7 +1764,7 @@ namespace UnitTests {
 			long patPlanNum=PatPlanT.CreatePatPlan(1,pat.PatNum,subNum).PatPlanNum;
 			BenefitT.CreateAnnualMax(planNum,1000);
 			BenefitT.CreateCategoryPercent(planNum,EbenefitCategory.RoutinePreventive,100);
-			BenefitT.CreateLimitation(planNum,EbenefitCategory.RoutinePreventive,0);//The amount has no effect.
+			BenefitT.CreateLimitation(planNum,EbenefitCategory.RoutinePreventive,1000);//Changing this amount would affect patient portion vs ins portion.  But regardless of the amount, this should prevent any pending from showing in the box, which is for general pending only.
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.C,"",125);//Prophy
 			long procNum=proc.ProcNum;
 			//Lists
@@ -1774,17 +1774,19 @@ namespace UnitTests {
 			List<InsPlan> planList=InsPlans.RefreshForSubList(subList);
 			List<PatPlan> patPlans=PatPlans.Refresh(patNum);
 			List<Benefit> benefitList=Benefits.Refresh(patPlans,subList);
-			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today,subList);
 			List<Procedure> ProcList=Procedures.Refresh(pat.PatNum);
 			Claim claim=ClaimT.CreateClaim("P",patPlans,planList,claimProcs,ProcList,pat,ProcList,benefitList,subList);//Creates the claim in the same manner as the account module, including estimates and status NotReceived.
+			List<ClaimProcHist> histList=ClaimProcs.GetHistList(patNum,benefitList,patPlans,planList,DateTime.Today,subList);
 			//Validate
-			double pending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,patNum,subNum);
+			double pending=InsPlans.GetPendingDisplay(histList,DateTime.Today,plan,patPlanNum,-1,patNum,subNum,benefitList);
+			//The a limitation for preventive should override the general limitation.
+			//The 125 should apply to preventive, not general.
+			//This display box that we are looking at is only supposed to represent general.
 			if(pending!=0) {
 				throw new Exception("Pending amount should be 0.\r\n");
 			}
-			return "31: Passed.  \r\n";
+			return "31: Passed.  Limitations override more general limitations for pending insurance.\r\n";
 		}
-
 
 	}
 }
