@@ -5,11 +5,29 @@ import java.util.ArrayList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasMouseDownHandlers;
+import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
+import com.google.gwt.event.dom.client.HasMouseOutHandlers;
+import com.google.gwt.event.dom.client.HasMouseOverHandlers;
+import com.google.gwt.event.dom.client.HasMouseUpHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseEvent;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.Grid;
@@ -40,9 +58,9 @@ public class ODGrid extends Composite {
 	/** The bar that contains the title of the table. */
 	@UiField Label labelTitle;
 	/** This table will strictly be for holding the column headers.  It's in it's own table so that the body of tableMain can be contained in a scrollable panel. */
-	@UiField Grid tableColumnHeaders;
+	@UiField GridWithMouse tableColumnHeaders;
 	/** The main table portion of the ODGrid.  The columns, rows, and cells.  This will be a simple HTMLTable to start with. */
-	@UiField Grid tableMain;
+	@UiField GridWithMouse tableMain;
 	/** The scroll panel that will contain the column header and main grids.  It will automatically create horizontal and vertical scroll bars as needed. */
 	@UiField ScrollPanel scrollPanel;
 	/** This is used so that the resizing of the grid does not happen until all the information is done being added. */
@@ -70,8 +88,11 @@ public class ODGrid extends Composite {
 	public int Width;
 	/** The currently selected row in the grid.  Defaults to -1 for no row selected. */
 	public ArrayList<Integer> SelectedIndices;
+	private ArrayList<Integer> SelectedIndicesWhenMouseDown;
 	/** The type of selection mode the ODGrid is in.  Defaults to one. */
-	private GridSelectionMode SelectionMode=GridSelectionMode.One;  
+	private GridSelectionMode SelectionMode=GridSelectionMode.One;
+	private boolean MouseIsDown;
+	private int MouseDownRow;
 	
 	/** Creates a new ODGrid. */
 	public ODGrid() {
@@ -84,13 +105,16 @@ public class ODGrid extends Composite {
 		uiBinder.createAndBindUi(this);
 		Columns=new ODGridColumnCollection();
 		Rows=new ODGridRowCollection();
+		SelectedIndices=new ArrayList<Integer>();
 		labelTitle.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		setTableTitle(title);
 		containerPanel.setCellHeight(scrollPanel, "100%");//This is so that tableMain takes up the most space.
-		//Add click handlers to the tables.
-		tableMain.addClickHandler(new tableMain_Click());
-		//Instantiate an empty array of selected indices so that it won't be null.
-		SelectedIndices=new ArrayList<Integer>();
+		//Add click handlers to column headers.
+		tableColumnHeaders.addClickHandler(new tableColumnHeaders_Click());
+		//Add mouse handlers to table main.
+		tableMain.addMouseDownHandler(new tableMain_MouseDown());
+		tableMain.addMouseUpHandler(new tableMain_MouseUp());
+		tableMain.addMouseMoveHandler(new tableMain_MouseMove());
 		//We have to call initWidget in the constructor because this class extends Composite. 
 		initWidget(containerPanel);
 	}
@@ -140,16 +164,6 @@ public class ODGrid extends Composite {
 		TableTitle=tableTitle;
 		labelTitle.setText(TableTitle);
 	}
-	
-	/** Sets the grids selected index to the passed in index.  Does nothing if index is not greater than -1. */
-	public void setSelectedIndex(int index) {
-		if(index<0) {
-			return;
-		}
-		ArrayList<Integer> selectedIndices=new ArrayList<Integer>();
-		selectedIndices.add(index);
-		SelectedIndices=selectedIndices;
-	}
 
 	public GridSelectionMode getSelectionMode() {
 		return SelectionMode;
@@ -164,7 +178,6 @@ public class ODGrid extends Composite {
 		return "";
 	}
 
-	
 	//Computations---------------------------------------------------------------------------------------------------------------
 	
 	/** Computes the position of each column and the overall width.  Called from endUpdate. */
@@ -278,31 +291,6 @@ public class ODGrid extends Composite {
 	
 	//Clicking-------------------------------------------------------------------------------------------------------------------
 	
-	/** Click handler for table main which contains the rows and columns. */
-	public class tableMain_Click implements ClickHandler {
-		@Override
-		public void onClick(ClickEvent event) {
-			//Check if the click event was on tableMain.
-			Cell cell=tableMain.getCellForEvent(event);
-			//Can be null if the event did not hit the table or specific cell.
-			if(cell!=null) {
-				//Check what type of selection mode the grid is in.
-				switch(getSelectionMode()) {
-					case None:
-						return;
-					case One:
-						setSelectedIndex(cell.getRowIndex());
-						break;
-					case OneCell:
-						break;
-					case MultiExtended:
-						break;
-				}
-				drawRows();
-			}
-		}
-	}
-	
 	/** Click handler for table column headers. This is where the sorting will happen if we decide to implement that functionality. */
 	public class tableColumnHeaders_Click implements ClickHandler {
 		@Override
@@ -310,10 +298,60 @@ public class ODGrid extends Composite {
 			//Check if the click event was on the column headers.
 			Cell cell=tableColumnHeaders.getCellForEvent(event);
 			//Can be null if the event did not hit the table or specific cell.
-			if(cell!=null) {
-				//TODO enhance to handle sorting columns here. 
+			if(cell==null) {
+				return; 
+			}
+			// TODO enhance to handle sorting columns here.
+		}
+	}
+	
+	//Selections-----------------------------------------------------------------------------------------------------------------
+
+	/** Sets the grids selected index to the passed in index. */
+	public void setSelected(int index,boolean setValue) {
+		int[] iArray={ index };
+		setSelected(iArray,setValue);
+	}
+
+	/** Sets the grids selected indices to the passed in index array.  Does not select negative indices. */
+	public void setSelected(int[] iArray,boolean setValue) {
+		SelectedIndices.clear();
+		for(int i=0;i<iArray.length;i++) {
+			if(iArray[i]<0) {
+				continue;
+			}
+			SelectedIndices.add(iArray[i]);
+		}
+		drawRows();
+	}
+
+	/** Sets all rows to specified value if the selection mode is set to MultiExtended OR One and setValue is set to false. */
+	public void setSelected(boolean setValue) {
+		if(SelectionMode==GridSelectionMode.None) {
+			return;
+		}
+		if(SelectionMode==GridSelectionMode.One && setValue==true) {
+			return;
+		}
+		if(SelectionMode==GridSelectionMode.OneCell) {
+			return;
+		}
+		SelectedIndices.clear();
+		if(setValue) {//Select all the rows.
+			for(int i=0;i<Rows.size();i++) {
+				SelectedIndices.add(i);
 			}
 		}
+		drawRows();
+	}
+	
+	/** If one row is selected, it returns the index to that row.  If more than one row are selected, it returns the first selected row.
+	 *  Really only useful for SelectionMode.One.  If no rows selected, returns -1. */
+	public int GetSelectedIndex() {
+		if(SelectedIndices.size()>0) {
+			return SelectedIndices.get(0);
+		}
+		return -1;
 	}
 	
 	//BeginEndUpdate-------------------------------------------------------------------------------------------------------------
@@ -328,8 +366,177 @@ public class ODGrid extends Composite {
 		computeColumns();
 		computeRows();
 		IsUpdating=false;
+		SelectedIndices=new ArrayList<Integer>();
 		//Fill the data grid and refresh it so that it displays correctly.
 		onPaint();
+	}
+	
+	//MouseEvents----------------------------------------------------------------------------------------------------------------
+	
+	//Table Main Mouse Events
+	
+	public class tableMain_MouseDown implements MouseDownHandler {
+		@Override
+		public void onMouseDown(MouseDownEvent event) {
+			event.preventDefault();
+			int button=event.getNativeButton();
+			if(button==NativeEvent.BUTTON_RIGHT) {
+				if(SelectedIndices.size()>0) {//If there are already rows selected, then ignore right click.
+					return;
+				}
+				//Otherwise, row will be selected.  Useful when using context menu.
+			}
+			MouseIsDown=true;
+			//Figure out which cell was clicked.
+			Cell cell=((GridWithMouse)event.getSource()).getCellForEvent(event);
+			if(cell==null) {
+				return;//Mouse did not click on a cell.
+			}
+			MouseDownRow=cell.getRowIndex();
+			//Check what type of selection mode the grid is in.
+			switch(getSelectionMode()) {
+				case None:
+					return;
+				case One:
+					setSelected(MouseDownRow,true);
+					break;
+				case OneCell:
+					// TODO Enhance ODGrid to allow text boxes in cells.
+					break;
+				case MultiExtended:
+					if(event.isControlKeyDown()) {
+						//We need to remember exactly which rows were selected the moment the mouse down started.
+						//Then, if the mouse gets dragged up or down, the rows between mouse start and mouse end
+						//will be set to the opposite of these remembered values.
+						SelectedIndicesWhenMouseDown=new ArrayList<Integer>(SelectedIndices);
+						if(SelectedIndicesWhenMouseDown.contains(MouseDownRow)) {
+							SelectedIndices.remove(MouseDownRow);
+						}
+						else {
+							SelectedIndices.add(MouseDownRow);
+						}
+					}
+					else if(event.isShiftKeyDown()) {
+						if(SelectedIndices.size()==0) {
+							SelectedIndices.add(MouseDownRow);
+						}
+						else {
+							int fromRow=SelectedIndices.get(0);
+							SelectedIndices.clear();
+							if(MouseDownRow<fromRow) {//dragging down
+								for(int i=MouseDownRow;i<=fromRow;i++) {
+									SelectedIndices.add(i);
+								}
+							}
+							else {
+								for(int i=fromRow;i<=MouseDownRow;i++) {
+									SelectedIndices.add(i);
+								}
+							}
+						}
+					}
+					else {//Ctrl or Shift not down.
+						setSelected(MouseDownRow,true);
+					}
+					break;
+			}
+			drawRows();
+		}
+	}
+	
+	public class tableMain_MouseUp implements MouseUpHandler {
+		@Override
+		public void onMouseUp(MouseUpEvent event) {
+			MouseIsDown=false;
+		}
+	}
+	
+	public class tableMain_MouseMove implements MouseMoveHandler {
+		@Override
+		public void onMouseMove(MouseMoveEvent event) {
+			if(!MouseIsDown) {
+				return;
+			}
+			if(SelectionMode!=GridSelectionMode.MultiExtended) {
+				return;
+			}
+			Cell cell=((GridWithMouse)event.getSource()).getCellForEvent(event);
+			if(cell==null) {
+				return;
+			}
+			int curRow=cell.getRowIndex();
+			//Because the mouse might have moved faster than the computer could keep up, we have to loop through all rows between.
+			if(event.isControlKeyDown()) {
+				if(SelectedIndicesWhenMouseDown==null) {
+					SelectedIndices=new ArrayList<Integer>();
+				}
+				else {
+					SelectedIndices=new ArrayList<Integer>(SelectedIndicesWhenMouseDown);
+				}
+			}
+			else {
+				SelectedIndices=new ArrayList<Integer>();
+			}
+			if(MouseDownRow<curRow) {//dragging down
+				for(int i=MouseDownRow;i<=curRow;i++) {
+					if(i==-1) {
+						continue;
+					}
+					if(SelectedIndices.contains(i)) {
+						SelectedIndices.remove(i);
+					}
+					else {
+						SelectedIndices.add(i);
+					}
+				}
+			}
+			else {//dragging up
+				for(int i=curRow;i<=MouseDownRow;i++) {
+					if(SelectedIndices.contains(i)) {
+						SelectedIndices.remove(i);
+					}
+					else {
+						SelectedIndices.add(i);
+					}
+				}
+			}
+			drawRows();
+		}
+	}
+
+	/** A grid that has mouse events.  Used to figure out what cell the user has clicked on and allows for click and drag functionalities. */
+	public static class GridWithMouse extends Grid implements HasMouseMoveHandlers,HasMouseDownHandlers,HasMouseUpHandlers {
+		@SuppressWarnings("rawtypes")
+		public Cell getCellForEvent(MouseEvent event) {
+			Element td=getEventTargetCell(Event.as(event.getNativeEvent()));
+			if(td==null) {
+				return null;
+			}
+			int row=TableRowElement.as(td.getParentElement()).getSectionRowIndex();
+		int column=TableCellElement.as(td).getCellIndex();
+		return new Cell(row, column);
+		}
+		
+		@Override
+		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
+			return this.addDomHandler(handler, MouseMoveEvent.getType());
+		}
+
+		@Override
+		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
+			return this.addDomHandler(handler, MouseUpEvent.getType());
+		}
+
+		@Override
+		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
+			return this.addDomHandler(handler, MouseDownEvent.getType());
+		}
+		
+		public class Cell extends com.google.gwt.user.client.ui.HTMLTable.Cell {
+			public Cell(int rowIndex, int cellIndex) {
+			super(rowIndex, cellIndex);
+		}
+		}
 	}
 
 	/** Specifies the selection behavior of an ODGrid. */

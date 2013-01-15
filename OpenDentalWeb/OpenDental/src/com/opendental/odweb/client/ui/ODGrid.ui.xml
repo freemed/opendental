@@ -1,7 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
-  xmlns:g="urn:import:com.google.gwt.user.client.ui" >
+  xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:odgrid="urn:import:com.opendental.odweb.client.ui" >
   
   <ui:style type="com.opendental.odweb.client.ui.ODGrid.RowStyle">
   
@@ -62,8 +63,8 @@
 		  <g:Dock direction="CENTER">
 		  	<g:ScrollPanel ui:field="scrollPanel">
 		  		<g:VerticalPanel>
-		  			<g:Grid ui:field="tableColumnHeaders" addStyleNames="{style.tableColumnHeaders} {style.tablesODGrid}" />
-		  			<g:Grid ui:field="tableMain" addStyleNames="{style.tableMain} {style.tablesODGrid}" />
+		  			<odgrid:ODGrid.GridWithMouse ui:field="tableColumnHeaders" addStyleNames="{style.tableColumnHeaders} {style.tablesODGrid}" />
+		  			<odgrid:ODGrid.GridWithMouse ui:field="tableMain" addStyleNames="{style.tableMain} {style.tablesODGrid}" />
 		  		</g:VerticalPanel>
 		  	</g:ScrollPanel>
 		  </g:Dock>
