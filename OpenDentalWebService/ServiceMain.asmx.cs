@@ -95,8 +95,8 @@ namespace OpenDentalWebService {
 						DtoGetObject dtoGetObject=(DtoGetObject)dto;
 						//TODO: Check credentials.
 						xdoc.LoadXml(DtoMethods.CallClassSerializer(dtoGetObject.ObjectType,DtoMethods.ProcessDtoObject(dto)));
-						throw new NotSupportedException("ProcessRequest, DtoGetObject not supported yet.");
-						//break;
+						//throw new NotSupportedException("ProcessRequest, DtoGetObject not supported yet.");
+						break;
 					#endregion
 					#region DtoGetString
 					case "DtoGetString":

@@ -52,6 +52,8 @@ public class WindowPatientSelect extends ODWindow {
 	@UiField Button butAddAll;
 	@UiField Button butOK;
 	@UiField Button butCancel;
+	/** When closing the form, this will hold the value of the newly selected PatNum. */
+	private int SelectedPatNum;
 	
 	//These lines need to be in every class that uses UiBinder.  This is what makes this class point to it's respective ui.xml file. 
 	private static WindowPatientSelectUiBinder uiBinder=GWT.create(WindowPatientSelectUiBinder.class);
@@ -68,6 +70,14 @@ public class WindowPatientSelect extends ODWindow {
 		fillGrid();
 	}
 	
+	public int getSelectedPatNum() {
+		return SelectedPatNum;
+	}
+
+	public void setSelectedPatNum(int selectedPatNum) {
+		SelectedPatNum=selectedPatNum;
+	}
+
 	/** Refreshes the patient grid with the information in the PatientTable.  Does nothing if PatientTable is null. */
 	private void fillGrid() {
 		gridMain.beginUpdate();
@@ -217,9 +227,18 @@ public class WindowPatientSelect extends ODWindow {
 		
 	}
 	
+	private void patSelected() {
+		SelectedPatNum=Integer.parseInt(PatientTable.getCellText(gridMain.getSelectedIndex(), "PatNum"));
+		DialogResultCallback.OK();
+	}
 	
 	@UiHandler("butOK")
 	void butOK_Click(ClickEvent event) {
+		if(gridMain.getSelectedIndex()==-1) {
+			MsgBox.show("Please select a patient first.");
+			return;
+		}
+		patSelected();
 		this.hide();
 	}
 	

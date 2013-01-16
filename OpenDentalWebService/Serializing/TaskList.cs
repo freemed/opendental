@@ -21,6 +21,8 @@ namespace OpenDentalWebService {
 			sb.Append("<FromNum>").Append(tasklist.FromNum).Append("</FromNum>");
 			sb.Append("<ObjectType>").Append((int)tasklist.ObjectType).Append("</ObjectType>");
 			sb.Append("<DateTimeEntry>").Append(tasklist.DateTimeEntry.ToString("yyyyMMddHHmmss")).Append("</DateTimeEntry>");
+			sb.Append("<ParentDesc>").Append(SerializeStringEscapes.EscapeForXml(tasklist.ParentDesc)).Append("</ParentDesc>");
+			sb.Append("<NewTaskCount>").Append(tasklist.NewTaskCount).Append("</NewTaskCount>");
 			sb.Append("</TaskList>");
 			return sb.ToString();
 		}
@@ -62,6 +64,12 @@ namespace OpenDentalWebService {
 							break;
 						case "DateTimeEntry":
 							tasklist.DateTimeEntry=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
+							break;
+						case "ParentDesc":
+							tasklist.ParentDesc=reader.ReadContentAsString();
+							break;
+						case "NewTaskCount":
+							tasklist.NewTaskCount=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}

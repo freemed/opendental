@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Task {
 		/** Primary key. */
 		public int TaskNum;
@@ -33,6 +33,12 @@ public class Task {
 		public int UserNum;
 		/** The date and time that this task was marked "done". */
 		public Date DateTimeFinished;
+		/** Only used when tracking unread status by user instead of by task.  This gets set to true to indicate it has not yet been read. */
+		public boolean IsUnread;
+		/**  */
+		public String ParentDesc;
+		/**  */
+		public String PatientName;
 
 		/** Deep copy of object. */
 		public Task deepCopy() {
@@ -50,6 +56,9 @@ public class Task {
 			task.DateTimeEntry=this.DateTimeEntry;
 			task.UserNum=this.UserNum;
 			task.DateTimeFinished=this.DateTimeFinished;
+			task.IsUnread=this.IsUnread;
+			task.ParentDesc=this.ParentDesc;
+			task.PatientName=this.PatientName;
 			return task;
 		}
 
@@ -70,6 +79,9 @@ public class Task {
 			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEntry)).append("</DateTimeEntry>");
 			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
 			sb.append("<DateTimeFinished>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeFinished)).append("</DateTimeFinished>");
+			sb.append("<IsUnread>").append((IsUnread)?1:0).append("</IsUnread>");
+			sb.append("<ParentDesc>").append(Serializing.escapeForXml(ParentDesc)).append("</ParentDesc>");
+			sb.append("<PatientName>").append(Serializing.escapeForXml(PatientName)).append("</PatientName>");
 			sb.append("</Task>");
 			return sb.toString();
 		}
@@ -117,6 +129,15 @@ public class Task {
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTimeFinished")!=null) {
 					DateTimeFinished=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeFinished"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"IsUnread")!=null) {
+					IsUnread=(Serializing.getXmlNodeValue(doc,"IsUnread")=="0")?false:true;
+				}
+				if(Serializing.getXmlNodeValue(doc,"ParentDesc")!=null) {
+					ParentDesc=Serializing.getXmlNodeValue(doc,"ParentDesc");
+				}
+				if(Serializing.getXmlNodeValue(doc,"PatientName")!=null) {
+					PatientName=Serializing.getXmlNodeValue(doc,"PatientName");
 				}
 			}
 			catch(Exception e) {

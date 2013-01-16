@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class InsPlan {
 		/** Primary key. */
 		public int PlanNum;
@@ -61,6 +61,8 @@ public class InsPlan {
 		public String RxBIN;
 		/** Enum:EnumCobRule. 0=Basic, 1=Standard, 2=CarveOut.  */
 		public EnumCobRule CobRule;
+		/** This is not a database column.  It is just used to display the number of plans with the same info. */
+		public int NumberSubscribers;
 
 		/** Deep copy of object. */
 		public InsPlan deepCopy() {
@@ -93,6 +95,7 @@ public class InsPlan {
 			insplan.CanadianInstitutionCode=this.CanadianInstitutionCode;
 			insplan.RxBIN=this.RxBIN;
 			insplan.CobRule=this.CobRule;
+			insplan.NumberSubscribers=this.NumberSubscribers;
 			return insplan;
 		}
 
@@ -128,6 +131,7 @@ public class InsPlan {
 			sb.append("<CanadianInstitutionCode>").append(Serializing.escapeForXml(CanadianInstitutionCode)).append("</CanadianInstitutionCode>");
 			sb.append("<RxBIN>").append(Serializing.escapeForXml(RxBIN)).append("</RxBIN>");
 			sb.append("<CobRule>").append(CobRule.ordinal()).append("</CobRule>");
+			sb.append("<NumberSubscribers>").append(NumberSubscribers).append("</NumberSubscribers>");
 			sb.append("</InsPlan>");
 			return sb.toString();
 		}
@@ -220,6 +224,9 @@ public class InsPlan {
 				}
 				if(Serializing.getXmlNodeValue(doc,"CobRule")!=null) {
 					CobRule=EnumCobRule.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CobRule"))];
+				}
+				if(Serializing.getXmlNodeValue(doc,"NumberSubscribers")!=null) {
+					NumberSubscribers=Integer.valueOf(Serializing.getXmlNodeValue(doc,"NumberSubscribers"));
 				}
 			}
 			catch(Exception e) {

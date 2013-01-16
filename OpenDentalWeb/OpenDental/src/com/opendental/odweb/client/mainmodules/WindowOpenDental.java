@@ -21,15 +21,30 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.http.client.Request;
+import com.google.gwt.http.client.RequestBuilder;
+import com.google.gwt.http.client.RequestCallback;
+import com.google.gwt.http.client.RequestException;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import com.opendental.odweb.client.datainterface.*;
+import com.opendental.odweb.client.remoting.RemotingClient;
+import com.opendental.odweb.client.remoting.Serializing;
+import com.opendental.odweb.client.tabletypes.*;
+import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
+import com.opendental.odweb.client.ui.MsgBox;
 import com.opendental.odweb.client.usercontrols.*;
+import com.opendental.odweb.client.windows.WindowPatientSelect;
 
 /** This is where the shell of the Open Dental Web App lives. */
 public class WindowOpenDental extends ResizeComposite {
@@ -61,7 +76,9 @@ public class WindowOpenDental extends ResizeComposite {
   /** The main menu.  Holds options like Log Off, File, Setup, etc. */
   @UiField MenuBarMain mainMenu;
   /** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
-  @UiField MenuBarMainPatient mainToolBar;
+  @UiField(provided=true) ToolBarMain toolBarMain;
+  /** The currently selected patient.  Can be null. */
+  private Patient PatCur;
   
 	public WindowOpenDental() {
 		final SingleSelectionModel<OutlookButton> selectionModel=new SingleSelectionModel<OutlookButton>();
@@ -72,12 +89,21 @@ public class WindowOpenDental extends ResizeComposite {
         setModule(selectionModel.getSelectedObject().getButtonIndex());
       }
     });
+		toolBarMain=new ToolBarMain();
     //Initialize the UI binder.
     initWidget(uiBinder.createAndBindUi(this));  
     //Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
     setModule(-1);
 	}
 	
+	public Patient getPatCur() {
+		return PatCur;
+	}
+
+	public void setPatCur(Patient patCur) {
+		PatCur=patCur;
+	}
+
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
    * @param index The index of the module that needs to be displayed. */
   public void setModule(int index) {
@@ -145,12 +171,84 @@ public class WindowOpenDental extends ResizeComposite {
 	private void showModule() {
 		if(moduleCur==null) {
 			//Disable all the widgets?
-			//Have a default Open Dental logo with welcom text.  This would save time loading in case the user does not need the appts module yet.
+			//Have a default Open Dental logo with welcome text.  This would save time loading in case the user does not need the appts module yet.
 			return;
 		}
 		contentPanel.setWidget(moduleCur);
 	}
 	
+	//ToolBarMain-------------------------------------------------------------------------------------------------------------------------
 	
+	public class ToolBarMain extends MenuBar {
+		
+		public ToolBarMain() {
+			this.setWidth("auto");
+			this.setAnimationEnabled(true);
+			
+			MenuItem menuItemSelectPatient = new MenuItem("Select Patient", false, new SelectPatient_Command());
+			this.addItem(menuItemSelectPatient);
+			
+			MenuItem menuItemCommlog = new MenuItem("Commlog", false, new Commlog_Command());
+			this.addItem(menuItemCommlog);
+		}
+		
+		private class SelectPatient_Command implements Command {
+			public void execute() {
+				final WindowPatientSelect FormPS=new WindowPatientSelect();
+				FormPS.show();
+				FormPS.center();
+				//Add a DialogResultCallback to listen for the dialog result.
+				FormPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
+					@Override
+					public void OK() {
+						request_GetPat(FormPS.getSelectedPatNum());
+					}
+
+					@Override
+					public void Cancel() {
+					}		
+				};
+			}
+		}
+		
+		private class Commlog_Command implements Command {
+			public void execute() {
+			}
+		}
+
+	}
+	
+	private void request_GetPat(int patNum) {
+		RequestBuilder builder=RemotingClient.GetRequestBuilder(Patients.GetPat(patNum));
+		try {//Try catch is required around http request.
+			builder.sendRequest(null, new getPat_RequestCallback());
+		}
+		catch (RequestException e) {
+			MsgBox.show("Error: "+e.getMessage());
+		}
+	}
+	
+	private class getPat_RequestCallback implements RequestCallback {		
+		public void onResponseReceived(Request request, Response response) {
+			if(response.getStatusCode()==200) {
+				try {
+					PatCur=(Patient)Serializing.getDeserializedObject(response.getText());
+					// TODO RefreshCurrentModule();
+					labelMainTitle.setTitle(PatCur.FName+" "+PatCur.LName);
+				} catch (Exception e) {
+					MsgBox.show(e.getMessage());//This will be a more specific error.
+				}
+      }
+			else {
+      	MsgBox.show("Error status text: "+response.getStatusText()
+    			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
+    			+"\r\nError text: "+response.getText());
+      }
+		}
+		
+		public void onError(Request request, Throwable exception) {
+			MsgBox.show("Error: "+exception.getMessage());
+		}
+	}
 	
 }

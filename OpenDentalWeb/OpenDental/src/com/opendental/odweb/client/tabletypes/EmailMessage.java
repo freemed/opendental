@@ -4,8 +4,9 @@ import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class EmailMessage {
 		/** Primary key. */
 		public int EmailMessageNum;
@@ -23,6 +24,8 @@ public class EmailMessage {
 		public Date MsgDateTime;
 		/** 0=neither, 1=sent, 2=received. */
 		public CommSentOrReceived SentOrReceived;
+		/** Not a database column. */
+		public ArrayList<EmailAttach> Attachments;
 
 		/** Deep copy of object. */
 		public EmailMessage deepCopy() {
@@ -35,6 +38,7 @@ public class EmailMessage {
 			emailmessage.BodyText=this.BodyText;
 			emailmessage.MsgDateTime=this.MsgDateTime;
 			emailmessage.SentOrReceived=this.SentOrReceived;
+			emailmessage.Attachments=this.Attachments;
 			return emailmessage;
 		}
 

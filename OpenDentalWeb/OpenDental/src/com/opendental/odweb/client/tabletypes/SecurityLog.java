@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class SecurityLog {
 		/** Primary key. */
 		public int SecurityLogNum;
@@ -21,6 +21,8 @@ public class SecurityLog {
 		public int PatNum;
 		/** . */
 		public String CompName;
+		/** PatNum-NameLF */
+		public String PatientName;
 		/** FK to relevant table.  Not implemented yet.  Table will be based on PermType. */
 		public int FKey;
 
@@ -34,6 +36,7 @@ public class SecurityLog {
 			securitylog.LogText=this.LogText;
 			securitylog.PatNum=this.PatNum;
 			securitylog.CompName=this.CompName;
+			securitylog.PatientName=this.PatientName;
 			securitylog.FKey=this.FKey;
 			return securitylog;
 		}
@@ -49,6 +52,7 @@ public class SecurityLog {
 			sb.append("<LogText>").append(Serializing.escapeForXml(LogText)).append("</LogText>");
 			sb.append("<PatNum>").append(PatNum).append("</PatNum>");
 			sb.append("<CompName>").append(Serializing.escapeForXml(CompName)).append("</CompName>");
+			sb.append("<PatientName>").append(Serializing.escapeForXml(PatientName)).append("</PatientName>");
 			sb.append("<FKey>").append(FKey).append("</FKey>");
 			sb.append("</SecurityLog>");
 			return sb.toString();
@@ -79,6 +83,9 @@ public class SecurityLog {
 				}
 				if(Serializing.getXmlNodeValue(doc,"CompName")!=null) {
 					CompName=Serializing.getXmlNodeValue(doc,"CompName");
+				}
+				if(Serializing.getXmlNodeValue(doc,"PatientName")!=null) {
+					PatientName=Serializing.getXmlNodeValue(doc,"PatientName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"FKey")!=null) {
 					FKey=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FKey"));

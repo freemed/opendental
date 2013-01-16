@@ -2,8 +2,9 @@ package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class AutoCodeItem {
 		/** Primary key. */
 		public int AutoCodeItemNum;
@@ -13,6 +14,8 @@ public class AutoCodeItem {
 		public String OldCode;
 		/** FK to procedurecode.CodeNum */
 		public int CodeNum;
+		/** Only used in the validation section when closing FormAutoCodeEdit.  Will normally be empty. */
+		public ArrayList<AutoCodeCond> ListConditions;
 
 		/** Deep copy of object. */
 		public AutoCodeItem deepCopy() {
@@ -21,6 +24,7 @@ public class AutoCodeItem {
 			autocodeitem.AutoCodeNum=this.AutoCodeNum;
 			autocodeitem.OldCode=this.OldCode;
 			autocodeitem.CodeNum=this.CodeNum;
+			autocodeitem.ListConditions=this.ListConditions;
 			return autocodeitem;
 		}
 

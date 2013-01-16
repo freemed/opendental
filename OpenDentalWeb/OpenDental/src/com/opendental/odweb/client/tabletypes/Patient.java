@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Patient {
 		/** Primary key. */
 		public int PatNum;
@@ -45,6 +45,8 @@ public class Patient {
 		public String WirelessPhone;
 		/** FK to patient.PatNum.  Head of household. */
 		public int Guarantor;
+		/** Derived from Birthdate.  Not in the database table. */
+		public int Age;
 		/** Single char. Shows at upper right corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, but it can actually be used for any purpose. */
 		public String CreditType;
 		/** . */
@@ -180,6 +182,7 @@ public class Patient {
 			patient.WkPhone=this.WkPhone;
 			patient.WirelessPhone=this.WirelessPhone;
 			patient.Guarantor=this.Guarantor;
+			patient.Age=this.Age;
 			patient.CreditType=this.CreditType;
 			patient.Email=this.Email;
 			patient.Salutation=this.Salutation;
@@ -262,6 +265,7 @@ public class Patient {
 			sb.append("<WkPhone>").append(Serializing.escapeForXml(WkPhone)).append("</WkPhone>");
 			sb.append("<WirelessPhone>").append(Serializing.escapeForXml(WirelessPhone)).append("</WirelessPhone>");
 			sb.append("<Guarantor>").append(Guarantor).append("</Guarantor>");
+			sb.append("<Age>").append(Age).append("</Age>");
 			sb.append("<CreditType>").append(Serializing.escapeForXml(CreditType)).append("</CreditType>");
 			sb.append("<Email>").append(Serializing.escapeForXml(Email)).append("</Email>");
 			sb.append("<Salutation>").append(Serializing.escapeForXml(Salutation)).append("</Salutation>");
@@ -383,6 +387,9 @@ public class Patient {
 				}
 				if(Serializing.getXmlNodeValue(doc,"Guarantor")!=null) {
 					Guarantor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Guarantor"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"Age")!=null) {
+					Age=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Age"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"CreditType")!=null) {
 					CreditType=Serializing.getXmlNodeValue(doc,"CreditType");

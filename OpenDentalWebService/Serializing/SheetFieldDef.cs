@@ -28,6 +28,7 @@ namespace OpenDentalWebService {
 			sb.Append("<RadioButtonValue>").Append(SerializeStringEscapes.EscapeForXml(sheetfielddef.RadioButtonValue)).Append("</RadioButtonValue>");
 			sb.Append("<RadioButtonGroup>").Append(SerializeStringEscapes.EscapeForXml(sheetfielddef.RadioButtonGroup)).Append("</RadioButtonGroup>");
 			sb.Append("<IsRequired>").Append((sheetfielddef.IsRequired)?1:0).Append("</IsRequired>");
+			sb.Append("<ImageData>").Append(SerializeStringEscapes.EscapeForXml(sheetfielddef.ImageData)).Append("</ImageData>");
 			sb.Append("<TabOrder>").Append(sheetfielddef.TabOrder).Append("</TabOrder>");
 			sb.Append("<ReportableName>").Append(SerializeStringEscapes.EscapeForXml(sheetfielddef.ReportableName)).Append("</ReportableName>");
 			sb.Append("</SheetFieldDef>");
@@ -92,6 +93,9 @@ namespace OpenDentalWebService {
 							break;
 						case "IsRequired":
 							sheetfielddef.IsRequired=reader.ReadContentAsString()!="0";
+							break;
+						case "ImageData":
+							sheetfielddef.ImageData=reader.ReadContentAsString();
 							break;
 						case "TabOrder":
 							sheetfielddef.TabOrder=System.Convert.ToInt32(reader.ReadContentAsString());

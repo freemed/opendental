@@ -5,6 +5,10 @@ using System.Data;
 namespace OpenDentalWebService {
 	public class Patients {
 
+		public static OpenDentBusiness.Patient GetPat(long patNum) {
+			return OpenDentBusiness.Patients.GetPat(patNum);
+		}
+
 		///<summary></summary>
 		public static DataTable GetPtDataTable(bool limit,string lname,string fname,string phone,
 			string address,bool hideInactive,string city,string state,string ssn,string patnum,string chartnumber,

@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Signalod {
 		/** Primary key. */
 		public int SignalNum;
@@ -27,6 +27,8 @@ public class Signalod {
 		public Date AckTime;
 		/** FK to task.TaskNum.  If IType=Tasks, then this is the taskNum that was added. */
 		public int TaskNum;
+		/** Not a database field.  The sounds and lights attached to the signal. */
+		public SigElement[] ElementList;
 
 		/** Deep copy of object. */
 		public Signalod deepCopy() {
@@ -41,6 +43,7 @@ public class Signalod {
 			signalod.ToUser=this.ToUser;
 			signalod.AckTime=this.AckTime;
 			signalod.TaskNum=this.TaskNum;
+			signalod.ElementList=this.ElementList;
 			return signalod;
 		}
 

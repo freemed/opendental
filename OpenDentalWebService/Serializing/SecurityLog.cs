@@ -19,6 +19,7 @@ namespace OpenDentalWebService {
 			sb.Append("<LogText>").Append(SerializeStringEscapes.EscapeForXml(securitylog.LogText)).Append("</LogText>");
 			sb.Append("<PatNum>").Append(securitylog.PatNum).Append("</PatNum>");
 			sb.Append("<CompName>").Append(SerializeStringEscapes.EscapeForXml(securitylog.CompName)).Append("</CompName>");
+			sb.Append("<PatientName>").Append(SerializeStringEscapes.EscapeForXml(securitylog.PatientName)).Append("</PatientName>");
 			sb.Append("<FKey>").Append(securitylog.FKey).Append("</FKey>");
 			sb.Append("</SecurityLog>");
 			return sb.ToString();
@@ -55,6 +56,9 @@ namespace OpenDentalWebService {
 							break;
 						case "CompName":
 							securitylog.CompName=reader.ReadContentAsString();
+							break;
+						case "PatientName":
+							securitylog.PatientName=reader.ReadContentAsString();
 							break;
 						case "FKey":
 							securitylog.FKey=System.Convert.ToInt64(reader.ReadContentAsString());

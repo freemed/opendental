@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class TaskList {
 		/** Primary key. */
 		public int TaskListNum;
@@ -25,6 +25,10 @@ public class TaskList {
 		public TaskObjectType ObjectType;
 		/** The date and time that this list was added.  Used to sort the list by the order entered. */
 		public Date DateTimeEntry;
+		/**  */
+		public String ParentDesc;
+		/** Not a database column.  The number of new tasks found within a tasklist.  Used in the user tab to turn the tasklist orange, indicating that tasks are present. */
+		public int NewTaskCount;
 
 		/** Deep copy of object. */
 		public TaskList deepCopy() {
@@ -38,6 +42,8 @@ public class TaskList {
 			tasklist.FromNum=this.FromNum;
 			tasklist.ObjectType=this.ObjectType;
 			tasklist.DateTimeEntry=this.DateTimeEntry;
+			tasklist.ParentDesc=this.ParentDesc;
+			tasklist.NewTaskCount=this.NewTaskCount;
 			return tasklist;
 		}
 
@@ -54,6 +60,8 @@ public class TaskList {
 			sb.append("<FromNum>").append(FromNum).append("</FromNum>");
 			sb.append("<ObjectType>").append(ObjectType.ordinal()).append("</ObjectType>");
 			sb.append("<DateTimeEntry>").append(DateTimeFormat.getFormat("yyyyMMddHHmmss").format(DateTimeEntry)).append("</DateTimeEntry>");
+			sb.append("<ParentDesc>").append(Serializing.escapeForXml(ParentDesc)).append("</ParentDesc>");
+			sb.append("<NewTaskCount>").append(NewTaskCount).append("</NewTaskCount>");
 			sb.append("</TaskList>");
 			return sb.toString();
 		}
@@ -89,6 +97,12 @@ public class TaskList {
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTimeEntry")!=null) {
 					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEntry"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"ParentDesc")!=null) {
+					ParentDesc=Serializing.getXmlNodeValue(doc,"ParentDesc");
+				}
+				if(Serializing.getXmlNodeValue(doc,"NewTaskCount")!=null) {
+					NewTaskCount=Integer.valueOf(Serializing.getXmlNodeValue(doc,"NewTaskCount"));
 				}
 			}
 			catch(Exception e) {

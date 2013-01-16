@@ -571,21 +571,29 @@ namespace xCrudGeneratorWebService {
 			strb.Append("package com.opendental.odweb.client.tabletypes;"+rn
 				+rn+"import com.google.gwt.xml.client.Document;"+rn
 				+"import com.opendental.odweb.client.remoting.Serializing;"+rn);
+			bool hasDate=false;
+			bool hasList=false;
 			for(int i=0;i<fields.Length;i++) {
-				if(fields[i].FieldType.Name=="DateTime") {
+				Type type=fields[i].FieldType;
+				if(!hasDate && type.Name=="DateTime") {
 					strb.Append("import com.google.gwt.i18n.client.DateTimeFormat;"+rn
 						+"import java.util.Date;"+rn);
-					break;
+					hasDate=true;
+					continue;
+				}
+				if(!hasList && type.IsGenericType && type.GetGenericTypeDefinition()==typeof(List<>)) {
+					strb.Append("import java.util.ArrayList;"+rn);
+					hasList=true;
 				}
 			}
-			strb.Append(rn+"/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */"+rn);
+			strb.Append(rn+"//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD."+rn);
 			strb.Append("public class "+className+docForjava+" {"+rn) ;
 			#endregion
 			#region fields
 			foreach(FieldInfo field in fields) {
-				if(IsNotDbColumn(field)) {//if not a db column, skip
-					continue;
-				}
+				//if(IsNotDbColumn(field)) {//if not a db column, skip
+				//  continue;
+				//}
 				string summary=GetSummary("F:OpenDentBusiness."+className+"."+field.Name);
 				if(summary=="") {
 					//this deals with the situation where the new data access layer has public Properties instead of public Fields.
@@ -727,12 +735,12 @@ namespace xCrudGeneratorWebService {
 		///<summary>Fill Serialize</summary>
 		private void GetSerialize(StringBuilder strb,string className,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
-				if(IsNotDbColumn(field)) {//if not a db column, skip
-					continue;
-				}
-				strb.Append(t3+"sb.Append(\"<"+field.Name+">\").Append(");
+				//if(IsNotDbColumn(field)) {//if not a db column, skip
+				//  continue;
+				//}
+				string appendStr=t3+"sb.Append(\"<"+field.Name+">\").Append(";
 				if(field.FieldType.IsEnum) {
-					strb.Append("(int)"+className.ToLower()+"."+field.Name+").Append(\"</"+field.Name+">\");"+rn);
+					strb.Append(appendStr+"(int)"+className.ToLower()+"."+field.Name+").Append(\"</"+field.Name+">\");"+rn);
 					continue;
 				}
 				switch(field.FieldType.Name) {
@@ -742,22 +750,22 @@ namespace xCrudGeneratorWebService {
 					case "Int32": //int
 					case "Int64": //long
 					case "Single": //float
-						strb.Append(className.ToLower()+"."+field.Name+").Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+className.ToLower()+"."+field.Name+").Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "Boolean":
-						strb.Append("("+className.ToLower()+"."+field.Name+")?1:0).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+"("+className.ToLower()+"."+field.Name+")?1:0).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "Color":
-						strb.Append(className.ToLower()+"."+field.Name+".ToArgb()).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+className.ToLower()+"."+field.Name+".ToArgb()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "DateTime":
-						strb.Append(className.ToLower()+"."+field.Name+".ToString(\"yyyyMMddHHmmss\")).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+className.ToLower()+"."+field.Name+".ToString(\"yyyyMMddHHmmss\")).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "String":
-						strb.Append("SerializeStringEscapes.EscapeForXml("+className.ToLower()+"."+field.Name+")).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+"SerializeStringEscapes.EscapeForXml("+className.ToLower()+"."+field.Name+")).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 					case "TimeSpan":
-						strb.Append(className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
+						strb.Append(appendStr+className.ToLower()+"."+field.Name+".ToString()).Append(\"</"+field.Name+">\");"+rn);
 						continue;
 				}
 			}
@@ -766,59 +774,59 @@ namespace xCrudGeneratorWebService {
 		///<summary></summary>
 		private void GetDeserialize(StringBuilder strb,string className,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
-				if(IsNotDbColumn(field)) {//if not a db column, skip
-					continue;
-				}
-				strb.Append(t6+"case \""+field.Name+"\":"+rn
-					+t7+className.ToLower()+"."+field.Name+"=");
+				//if(IsNotDbColumn(field)) {//if not a db column, skip
+				//  continue;
+				//}
+				string appendStr=t6+"case \""+field.Name+"\":"+rn
+					+t7+className.ToLower()+"."+field.Name+"=";
 				if(field.FieldType.IsEnum) {
-					strb.Append("(OpenDentBusiness."+field.FieldType.Name+")System.Convert.ToInt32(reader.ReadContentAsString());"+rn
+					strb.Append(appendStr+"(OpenDentBusiness."+field.FieldType.Name+")System.Convert.ToInt32(reader.ReadContentAsString());"+rn
 						+t7+"break;"+rn);
 					continue;
 				}
 				switch(field.FieldType.Name) {
 					case "Boolean":
-						strb.Append("reader.ReadContentAsString()!=\"0\";"+rn
+						strb.Append(appendStr+"reader.ReadContentAsString()!=\"0\";"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Byte":
-						strb.Append("System.Convert.ToByte(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"System.Convert.ToByte(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Color":
-						strb.Append("Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
+						strb.Append(appendStr+"Color.FromArgb(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "DateTime":
-						strb.Append("DateTime.ParseExact(reader.ReadContentAsString(),\"yyyyMMddHHmmss\",null);"+rn
+						strb.Append(appendStr+"DateTime.ParseExact(reader.ReadContentAsString(),\"yyyyMMddHHmmss\",null);"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Double":
-						strb.Append("System.Convert.ToDouble(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"System.Convert.ToDouble(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Int32": //int
-						strb.Append("System.Convert.ToInt32(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"System.Convert.ToInt32(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Int64": //long
-						strb.Append("System.Convert.ToInt64(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"System.Convert.ToInt64(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Interval":
-						strb.Append("new OpenDentBusiness.Interval(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
+						strb.Append(appendStr+"new OpenDentBusiness.Interval(System.Convert.ToInt32(reader.ReadContentAsString()));"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "Single": //float
-						strb.Append("System.Convert.ToSingle(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"System.Convert.ToSingle(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "String":
-						strb.Append("reader.ReadContentAsString();"+rn
+						strb.Append(appendStr+"reader.ReadContentAsString();"+rn
 							+t7+"break;"+rn);
 						continue;
 					case "TimeSpan":
-						strb.Append("TimeSpan.Parse(reader.ReadContentAsString());"+rn
+						strb.Append(appendStr+"TimeSpan.Parse(reader.ReadContentAsString());"+rn
 							+t7+"break;"+rn);
 						continue;
 				}
@@ -828,74 +836,99 @@ namespace xCrudGeneratorWebService {
 		///<summary></summary>
 		private void GetSerializeForjava(StringBuilder strb,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
-				if(IsNotDbColumn(field)) {//if not a db column, skip
-					continue;
-				}
-				strb.Append(t3+"sb.append(\"<"+field.Name+">\").append(");
+				//if(IsNotDbColumn(field)) {//if not a db column, skip
+				//  continue;
+				//}
+				string appendStr=t3+"sb.append(\"<"+field.Name+">\").append(";
+				string appendStrEnd=").append(\"</"+field.Name+">\");"+rn;
 				if(field.FieldType.BaseType.Name=="Enum") {
-					strb.Append(field.Name+".ordinal()).append(\"</"+field.Name+">\");"+rn);
+					strb.Append(appendStr+field.Name+".ordinal()).append(\"</"+field.Name+">\");"+rn);
 					continue;
 				}
-				switch(field.FieldType.Name) {
+				Type type=field.FieldType;
+				//Check if the type is a List<object>
+				if(type.IsGenericType && type.GetGenericTypeDefinition()==typeof(List<>)) {
+					//Now get what the list is a list of.  This will return whatever object is from List<object>.
+					Type itemType=type.GetGenericArguments()[0];
+					//TODO Figure out how to serialize Lists in Java.
+					continue;
+				}
+				if(type.Name.EndsWith("[]")) {
+					//TODO Figure out how to serialize Arrays in Java.
+					continue;
+				}
+				switch(type.Name) {
 					case "Boolean":
-						strb.Append("("+field.Name+")?1:0");
+						strb.Append(appendStr+"("+field.Name+")?1:0"+appendStrEnd);
 						break;
 					case "DateTime":
-						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format("+field.Name+")");
+						strb.Append(appendStr+"DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format("+field.Name+")"+appendStrEnd);
 						break;
 					case "String":
 					case "TimeSpan":
-						strb.Append("Serializing.escapeForXml("+field.Name+")");
+						strb.Append(appendStr+"Serializing.escapeForXml("+field.Name+")"+appendStrEnd);
 						break;
 					default:
-						strb.Append(field.Name);
+						strb.Append(appendStr+field.Name+appendStrEnd);
 						break;
 				}
-				strb.Append(").append(\"</"+field.Name+">\");"+rn);
+				//strb.Append(").append(\"</"+field.Name+">\");"+rn);
 			}
 		}
 
 		///<summary></summary>
 		private void GetDeserializeForjava(StringBuilder strb,FieldInfo[] fields) {
 			foreach(FieldInfo field in fields) {
-				if(IsNotDbColumn(field)) {//if not a db column, skip
-					continue;
-				}
+				//if(IsNotDbColumn(field)) {//if not a db column, skip
+				//  continue;
+				//}
 				string ser="Serializing.getXmlNodeValue(doc,\""+field.Name+"\")";
-				strb.Append(t4+"if("+ser+"!=null) {"+rn
-					+t5+field.Name+"=");
+				string appendStr=t4+"if("+ser+"!=null) {"+rn+t5+field.Name+"=";
+				string appendStrEnd=t4+"}"+rn;
 				if(field.FieldType.BaseType.Name=="Enum") {
-					strb.Append(field.FieldType.Name+".values()[Integer.valueOf("+ser+")];"+rn
+					strb.Append(appendStr+field.FieldType.Name+".values()[Integer.valueOf("+ser+")];"+rn
 						+t4+"}"+rn);
 					continue;
 				}
-				switch(field.FieldType.Name) {
+				Type type=field.FieldType;
+				//Check if the type is a List<object>
+				if(type.IsGenericType && type.GetGenericTypeDefinition()==typeof(List<>)) {
+					//Now get what the list is a list of.  This will return whatever object is from List<object>.
+					Type itemType=type.GetGenericArguments()[0];
+					//TODO Figure out how to deserialize Lists in Java.
+					continue;
+				}
+				if(type.Name.EndsWith("[]")) {
+					//TODO Figure out how to deserialize Arrays in Java.
+					continue;
+				}
+				//Check the other known object types.
+				switch(type.Name) {
 					case "Color":
 					case "Int32":
 					case "Int64":
 					case "Interval":
-						strb.Append("Integer.valueOf("+ser+");"+rn);
+						strb.Append(appendStr+"Integer.valueOf("+ser+");"+rn+appendStrEnd);
 						break;
 					case "Boolean":
-						strb.Append("("+ser+"==\"0\")?false:true;"+rn);
+						strb.Append(appendStr+"("+ser+"==\"0\")?false:true;"+rn+appendStrEnd);
 						break;
 					case "Byte":
-						strb.Append("Byte.valueOf("+ser+");"+rn);
+						strb.Append(appendStr+"Byte.valueOf("+ser+");"+rn+appendStrEnd);
 						break;
 					case "DateTime":
-						strb.Append("DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").parseStrict("+ser+");"+rn);
+						strb.Append(appendStr+"DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").parseStrict("+ser+");"+rn+appendStrEnd);
 						break;
 					case "Double":
-						strb.Append("Double.valueOf("+ser+");"+rn);
+						strb.Append(appendStr+"Double.valueOf("+ser+");"+rn+appendStrEnd);
 						break;
 					case "Single":
-						strb.Append("Float.valueOf("+ser+");"+rn);
+						strb.Append(appendStr+"Float.valueOf("+ser+");"+rn+appendStrEnd);
 						break;
 					default:
-						strb.Append(ser+";"+rn);
+						strb.Append(appendStr+ser+";"+rn+appendStrEnd);
 						break;
 				}
-				strb.Append(t4+"}"+rn);
 			}
 		}
 
@@ -1017,32 +1050,50 @@ namespace xCrudGeneratorWebService {
 				strbEnums.Append(rn+t2+"}"+rn+rn);
 				return;
 			}
-			switch(field.FieldType.Name) {
+			Type type=field.FieldType;
+			//Check if the type is a List<object>
+			if(type.IsGenericType && type.GetGenericTypeDefinition()==typeof(List<>)) {
+				//Now get what the list is a list of.  This will return whatever object is from List<object>.
+				Type itemType=type.GetGenericArguments()[0];
+				string argType=GetFieldTypeHelperJava(itemType.Name);
+				if(argType=="") {//Not a list of primitives.
+					argType=itemType.Name;//Simply make it a list of itself.  Example: List<AutoCodeCond>
+				}
+				if(argType=="int") {
+					argType="Integer";
+				}
+				strb.Append("ArrayList<"+argType+">");
+				return;
+			}
+			strb.Append(GetFieldTypeHelperJava(type.Name));
+		}
+
+		///<summary>Returns the correct field type for Java.</summary>
+		private string GetFieldTypeHelperJava(string fieldName) {
+			if(fieldName.EndsWith("[]")) {
+				return fieldName;
+			}
+			switch(fieldName) {
 				case "Color":
 				case "Int32":
 				case "Int64":
 				case "Interval":
-					strb.Append("int");
-					break;
+					return "int";
 				case "Boolean":
-					strb.Append("boolean");
-					break;
+					return "boolean";
 				case "Byte":
-					strb.Append("byte");
-					break;
+					return "byte";
 				case "DateTime":
-					strb.Append("Date");
-					break;
+					return "Date";
 				case "Double":
-					strb.Append("double");
-					break;
+					return "double";
 				case "Single":
-					strb.Append("float");
-					break;
+					return "float";
 				case "String":
 				case "TimeSpan":
-					strb.Append("String");
-					break;
+					return "String";
+				default:
+					return "";
 			}
 		}
 	}

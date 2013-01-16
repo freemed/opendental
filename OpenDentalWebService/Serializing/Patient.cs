@@ -31,6 +31,7 @@ namespace OpenDentalWebService {
 			sb.Append("<WkPhone>").Append(SerializeStringEscapes.EscapeForXml(patient.WkPhone)).Append("</WkPhone>");
 			sb.Append("<WirelessPhone>").Append(SerializeStringEscapes.EscapeForXml(patient.WirelessPhone)).Append("</WirelessPhone>");
 			sb.Append("<Guarantor>").Append(patient.Guarantor).Append("</Guarantor>");
+			sb.Append("<Age>").Append(patient.Age).Append("</Age>");
 			sb.Append("<CreditType>").Append(SerializeStringEscapes.EscapeForXml(patient.CreditType)).Append("</CreditType>");
 			sb.Append("<Email>").Append(SerializeStringEscapes.EscapeForXml(patient.Email)).Append("</Email>");
 			sb.Append("<Salutation>").Append(SerializeStringEscapes.EscapeForXml(patient.Salutation)).Append("</Salutation>");
@@ -158,6 +159,9 @@ namespace OpenDentalWebService {
 							break;
 						case "Guarantor":
 							patient.Guarantor=System.Convert.ToInt64(reader.ReadContentAsString());
+							break;
+						case "Age":
+							patient.Age=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 						case "CreditType":
 							patient.CreditType=reader.ReadContentAsString();

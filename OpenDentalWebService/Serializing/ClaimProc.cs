@@ -50,6 +50,7 @@ namespace OpenDentalWebService {
 			sb.Append("<ClinicNum>").Append(claimproc.ClinicNum).Append("</ClinicNum>");
 			sb.Append("<InsSubNum>").Append(claimproc.InsSubNum).Append("</InsSubNum>");
 			sb.Append("<PaymentRow>").Append(claimproc.PaymentRow).Append("</PaymentRow>");
+			sb.Append("<DoDelete>").Append((claimproc.DoDelete)?1:0).Append("</DoDelete>");
 			sb.Append("</ClaimProc>");
 			return sb.ToString();
 		}
@@ -178,6 +179,9 @@ namespace OpenDentalWebService {
 							break;
 						case "PaymentRow":
 							claimproc.PaymentRow=System.Convert.ToInt32(reader.ReadContentAsString());
+							break;
+						case "DoDelete":
+							claimproc.DoDelete=reader.ReadContentAsString()!="0";
 							break;
 					}
 				}

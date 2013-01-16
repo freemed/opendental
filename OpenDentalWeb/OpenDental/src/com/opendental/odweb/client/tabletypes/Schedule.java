@@ -4,8 +4,9 @@ import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Schedule {
 		/** Primary key. */
 		public int ScheduleNum;
@@ -29,6 +30,8 @@ public class Schedule {
 		public int EmployeeNum;
 		/** Last datetime that this row was inserted or updated. */
 		public Date DateTStamp;
+		/** Not a db column.  Holds a list of ops that this schedule is assigned to. */
+		public ArrayList<Integer> Ops;
 
 		/** Deep copy of object. */
 		public Schedule deepCopy() {
@@ -44,6 +47,7 @@ public class Schedule {
 			schedule.Status=this.Status;
 			schedule.EmployeeNum=this.EmployeeNum;
 			schedule.DateTStamp=this.DateTStamp;
+			schedule.Ops=this.Ops;
 			return schedule;
 		}
 

@@ -15,6 +15,11 @@ namespace OpenDentalWebService {
 			sb.Append("<ScreenGroupNum>").Append(screengroup.ScreenGroupNum).Append("</ScreenGroupNum>");
 			sb.Append("<Description>").Append(SerializeStringEscapes.EscapeForXml(screengroup.Description)).Append("</Description>");
 			sb.Append("<SGDate>").Append(screengroup.SGDate.ToString("yyyyMMddHHmmss")).Append("</SGDate>");
+			sb.Append("<ProvName>").Append(SerializeStringEscapes.EscapeForXml(screengroup.ProvName)).Append("</ProvName>");
+			sb.Append("<ProvNum>").Append(screengroup.ProvNum).Append("</ProvNum>");
+			sb.Append("<PlaceService>").Append((int)screengroup.PlaceService).Append("</PlaceService>");
+			sb.Append("<County>").Append(SerializeStringEscapes.EscapeForXml(screengroup.County)).Append("</County>");
+			sb.Append("<GradeSchool>").Append(SerializeStringEscapes.EscapeForXml(screengroup.GradeSchool)).Append("</GradeSchool>");
 			sb.Append("</ScreenGroup>");
 			return sb.ToString();
 		}
@@ -38,6 +43,21 @@ namespace OpenDentalWebService {
 							break;
 						case "SGDate":
 							screengroup.SGDate=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
+							break;
+						case "ProvName":
+							screengroup.ProvName=reader.ReadContentAsString();
+							break;
+						case "ProvNum":
+							screengroup.ProvNum=System.Convert.ToInt64(reader.ReadContentAsString());
+							break;
+						case "PlaceService":
+							screengroup.PlaceService=(OpenDentBusiness.PlaceOfService)System.Convert.ToInt32(reader.ReadContentAsString());
+							break;
+						case "County":
+							screengroup.County=reader.ReadContentAsString();
+							break;
+						case "GradeSchool":
+							screengroup.GradeSchool=reader.ReadContentAsString();
 							break;
 					}
 				}

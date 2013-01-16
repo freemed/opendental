@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class ClaimForm {
 		/** Primary key. */
 		public int ClaimFormNum;
@@ -23,6 +23,8 @@ public class ClaimForm {
 		public int OffsetX;
 		/** Shifts all items by y/100th's of an inch to compensate for printer, typically less than 1/4 inch. */
 		public int OffsetY;
+		/** This is not a database column.  It is an array of all claimformItems that are attached to this ClaimForm. */
+		public ClaimFormItem[] Items;
 
 		/** Deep copy of object. */
 		public ClaimForm deepCopy() {
@@ -36,6 +38,7 @@ public class ClaimForm {
 			claimform.PrintImages=this.PrintImages;
 			claimform.OffsetX=this.OffsetX;
 			claimform.OffsetY=this.OffsetY;
+			claimform.Items=this.Items;
 			return claimform;
 		}
 

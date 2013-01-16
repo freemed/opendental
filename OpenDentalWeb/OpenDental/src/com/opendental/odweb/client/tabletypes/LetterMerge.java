@@ -2,8 +2,9 @@ package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class LetterMerge {
 		/** Primary key. */
 		public int LetterMergeNum;
@@ -15,6 +16,8 @@ public class LetterMerge {
 		public String DataFileName;
 		/** FK to definition.DefNum. */
 		public int Category;
+		/** Not a database column.  Filled using fk from the lettermergefields table.  A collection of strings representing field names. */
+		public ArrayList<String> Fields;
 
 		/** Deep copy of object. */
 		public LetterMerge deepCopy() {
@@ -24,6 +27,7 @@ public class LetterMerge {
 			lettermerge.TemplateName=this.TemplateName;
 			lettermerge.DataFileName=this.DataFileName;
 			lettermerge.Category=this.Category;
+			lettermerge.Fields=this.Fields;
 			return lettermerge;
 		}
 

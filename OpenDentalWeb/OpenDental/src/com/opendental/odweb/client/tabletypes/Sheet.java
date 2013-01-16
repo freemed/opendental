@@ -4,8 +4,9 @@ import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Sheet {
 		/** Primary key. */
 		public int SheetNum;
@@ -33,6 +34,10 @@ public class Sheet {
 		public byte ShowInTerminal;
 		/** True if this sheet was downloaded from the webforms service. */
 		public boolean IsWebForm;
+		/**  */
+		public ArrayList<SheetParameter> Parameters;
+		/**  */
+		public ArrayList<SheetField> SheetFields;
 
 		/** Deep copy of object. */
 		public Sheet deepCopy() {
@@ -50,6 +55,8 @@ public class Sheet {
 			sheet.Description=this.Description;
 			sheet.ShowInTerminal=this.ShowInTerminal;
 			sheet.IsWebForm=this.IsWebForm;
+			sheet.Parameters=this.Parameters;
+			sheet.SheetFields=this.SheetFields;
 			return sheet;
 		}
 

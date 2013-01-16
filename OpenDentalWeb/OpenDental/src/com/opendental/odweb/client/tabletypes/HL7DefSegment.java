@@ -2,8 +2,9 @@ package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class HL7DefSegment {
 		/** Primary key. */
 		public int HL7DefSegmentNum;
@@ -19,6 +20,8 @@ public class HL7DefSegment {
 		public SegmentNameHL7 SegmentName;
 		/** . */
 		public String Note;
+		/**  */
+		public ArrayList<HL7DefField> hl7DefFields;
 
 		/** Deep copy of object. */
 		public HL7DefSegment deepCopy() {
@@ -30,6 +33,7 @@ public class HL7DefSegment {
 			hl7defsegment.IsOptional=this.IsOptional;
 			hl7defsegment.SegmentName=this.SegmentName;
 			hl7defsegment.Note=this.Note;
+			hl7defsegment.hl7DefFields=this.hl7DefFields;
 			return hl7defsegment;
 		}
 

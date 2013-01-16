@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Procedure {
 		/** Primary key. */
 		public int ProcNum;
@@ -105,6 +105,14 @@ public class Procedure {
 		public int StatementNum;
 		/** If this flag is set, then the proc is locked down tight.  No changes at all can be made except to append, sign, or invalidate. Invalidate really just sets the proc to status 'deleted'.  An invalidated proc retains its IsLocked status.  All locked procs will be status of C or D.  Locked group notes will be status of EC or D. */
 		public boolean IsLocked;
+		/** Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table. */
+		public String Note;
+		/** Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote. */
+		public int UserNum;
+		/** Not a database column.  If viewing an individual procedure, then this will contain the encrypted signature.  If viewing a procedure list, this will typically just contain an "X" if a signature is present.  If user signs note, the signature will be encrypted before placing into this field.  Then it will be passed down and saved directly as is. */
+		public String Signature;
+		/** Not a database column. */
+		public boolean SigIsTopaz;
 
 		/** Deep copy of object. */
 		public Procedure deepCopy() {
@@ -158,6 +166,10 @@ public class Procedure {
 			procedure.UnitQtyType=this.UnitQtyType;
 			procedure.StatementNum=this.StatementNum;
 			procedure.IsLocked=this.IsLocked;
+			procedure.Note=this.Note;
+			procedure.UserNum=this.UserNum;
+			procedure.Signature=this.Signature;
+			procedure.SigIsTopaz=this.SigIsTopaz;
 			return procedure;
 		}
 
@@ -214,6 +226,10 @@ public class Procedure {
 			sb.append("<UnitQtyType>").append(UnitQtyType.ordinal()).append("</UnitQtyType>");
 			sb.append("<StatementNum>").append(StatementNum).append("</StatementNum>");
 			sb.append("<IsLocked>").append((IsLocked)?1:0).append("</IsLocked>");
+			sb.append("<Note>").append(Serializing.escapeForXml(Note)).append("</Note>");
+			sb.append("<UserNum>").append(UserNum).append("</UserNum>");
+			sb.append("<Signature>").append(Serializing.escapeForXml(Signature)).append("</Signature>");
+			sb.append("<SigIsTopaz>").append((SigIsTopaz)?1:0).append("</SigIsTopaz>");
 			sb.append("</Procedure>");
 			return sb.toString();
 		}
@@ -369,6 +385,18 @@ public class Procedure {
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsLocked")!=null) {
 					IsLocked=(Serializing.getXmlNodeValue(doc,"IsLocked")=="0")?false:true;
+				}
+				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
+					Note=Serializing.getXmlNodeValue(doc,"Note");
+				}
+				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
+					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"Signature")!=null) {
+					Signature=Serializing.getXmlNodeValue(doc,"Signature");
+				}
+				if(Serializing.getXmlNodeValue(doc,"SigIsTopaz")!=null) {
+					SigIsTopaz=(Serializing.getXmlNodeValue(doc,"SigIsTopaz")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class SigButDef {
 		/** Primary key. */
 		public int SigButDefNum;
@@ -15,6 +15,8 @@ public class SigButDef {
 		public byte SynchIcon;
 		/** Blank for the default buttons.  Or contains the computer name for the buttons that override the defaults. */
 		public String ComputerName;
+		/** Not a database field.  The sounds and lights attached to the button. */
+		public SigButDefElement[] ElementList;
 
 		/** Deep copy of object. */
 		public SigButDef deepCopy() {
@@ -24,6 +26,7 @@ public class SigButDef {
 			sigbutdef.ButtonIndex=this.ButtonIndex;
 			sigbutdef.SynchIcon=this.SynchIcon;
 			sigbutdef.ComputerName=this.ComputerName;
+			sigbutdef.ElementList=this.ElementList;
 			return sigbutdef;
 		}
 

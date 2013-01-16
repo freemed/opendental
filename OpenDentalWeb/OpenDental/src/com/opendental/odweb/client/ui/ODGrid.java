@@ -345,7 +345,7 @@ public class ODGrid extends Composite {
 	
 	/** If one row is selected, it returns the index to that row.  If more than one row are selected, it returns the first selected row.
 	 *  Really only useful for SelectionMode.One.  If no rows selected, returns -1. */
-	public int GetSelectedIndex() {
+	public int getSelectedIndex() {
 		if(SelectedIndices.size()>0) {
 			return SelectedIndices.get(0);
 		}

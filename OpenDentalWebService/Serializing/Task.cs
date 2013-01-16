@@ -25,6 +25,9 @@ namespace OpenDentalWebService {
 			sb.Append("<DateTimeEntry>").Append(task.DateTimeEntry.ToString("yyyyMMddHHmmss")).Append("</DateTimeEntry>");
 			sb.Append("<UserNum>").Append(task.UserNum).Append("</UserNum>");
 			sb.Append("<DateTimeFinished>").Append(task.DateTimeFinished.ToString("yyyyMMddHHmmss")).Append("</DateTimeFinished>");
+			sb.Append("<IsUnread>").Append((task.IsUnread)?1:0).Append("</IsUnread>");
+			sb.Append("<ParentDesc>").Append(SerializeStringEscapes.EscapeForXml(task.ParentDesc)).Append("</ParentDesc>");
+			sb.Append("<PatientName>").Append(SerializeStringEscapes.EscapeForXml(task.PatientName)).Append("</PatientName>");
 			sb.Append("</Task>");
 			return sb.ToString();
 		}
@@ -78,6 +81,15 @@ namespace OpenDentalWebService {
 							break;
 						case "DateTimeFinished":
 							task.DateTimeFinished=DateTime.ParseExact(reader.ReadContentAsString(),"yyyyMMddHHmmss",null);
+							break;
+						case "IsUnread":
+							task.IsUnread=reader.ReadContentAsString()!="0";
+							break;
+						case "ParentDesc":
+							task.ParentDesc=reader.ReadContentAsString();
+							break;
+						case "PatientName":
+							task.PatientName=reader.ReadContentAsString();
 							break;
 					}
 				}

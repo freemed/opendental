@@ -2,8 +2,9 @@ package com.opendental.odweb.client.tabletypes;
 
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class SheetDef {
 		/** Primary key. */
 		public int SheetDefNum;
@@ -21,6 +22,10 @@ public class SheetDef {
 		public int Height;
 		/** Set to true to print landscape. */
 		public boolean IsLandscape;
+		/**  */
+		public ArrayList<SheetParameter> Parameters;
+		/**  */
+		public ArrayList<SheetFieldDef> SheetFieldDefs;
 
 		/** Deep copy of object. */
 		public SheetDef deepCopy() {
@@ -33,6 +38,8 @@ public class SheetDef {
 			sheetdef.Width=this.Width;
 			sheetdef.Height=this.Height;
 			sheetdef.IsLandscape=this.IsLandscape;
+			sheetdef.Parameters=this.Parameters;
+			sheetdef.SheetFieldDefs=this.SheetFieldDefs;
 			return sheetdef;
 		}
 

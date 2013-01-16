@@ -3,7 +3,8 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui" 
   xmlns:c="urn:import:com.google.gwt.user.cellview.client"
-  xmlns:s="urn:import:com.opendental.odweb.client.usercontrols">
+  xmlns:s="urn:import:com.opendental.odweb.client.usercontrols"
+  xmlns:m="urn:import:com.opendental.odweb.client.mainmodules" >
   
   <!-- This lets us edit the title bar resource from anywhere in the web app. -->
   <ui:with field='mainTitleResource' type='com.opendental.odweb.client.usercontrols.LabelMainTitle' />
@@ -80,7 +81,7 @@
           	<!-- This is where the menu bar with Select Patient, E-mail, etc. will be kept. -->
             <g:north size='18'>
               <g:FlowPanel ui:field='mainToolBarPanel' styleName='{style.patientMenuBar}'>
-              	<s:MenuBarMainPatient ui:field='mainToolBar'/>
+              	<m:WindowOpenDental.ToolBarMain ui:field='toolBarMain'/>
               </g:FlowPanel>
             </g:north>
 

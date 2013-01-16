@@ -4,8 +4,9 @@ import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class FormPat {
 		/** Primary key. */
 		public int FormPatNum;
@@ -13,6 +14,8 @@ public class FormPat {
 		public int PatNum;
 		/** The date and time that this questionnaire was filled out. */
 		public Date FormDateTime;
+		/** Not a database field. */
+		public ArrayList<Question> QuestionList;
 
 		/** Deep copy of object. */
 		public FormPat deepCopy() {
@@ -20,6 +23,7 @@ public class FormPat {
 			formpat.FormPatNum=this.FormPatNum;
 			formpat.PatNum=this.PatNum;
 			formpat.FormDateTime=this.FormDateTime;
+			formpat.QuestionList=this.QuestionList;
 			return formpat;
 		}
 

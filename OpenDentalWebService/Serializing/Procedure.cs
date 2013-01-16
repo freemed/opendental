@@ -61,6 +61,10 @@ namespace OpenDentalWebService {
 			sb.Append("<UnitQtyType>").Append((int)procedure.UnitQtyType).Append("</UnitQtyType>");
 			sb.Append("<StatementNum>").Append(procedure.StatementNum).Append("</StatementNum>");
 			sb.Append("<IsLocked>").Append((procedure.IsLocked)?1:0).Append("</IsLocked>");
+			sb.Append("<Note>").Append(SerializeStringEscapes.EscapeForXml(procedure.Note)).Append("</Note>");
+			sb.Append("<UserNum>").Append(procedure.UserNum).Append("</UserNum>");
+			sb.Append("<Signature>").Append(SerializeStringEscapes.EscapeForXml(procedure.Signature)).Append("</Signature>");
+			sb.Append("<SigIsTopaz>").Append((procedure.SigIsTopaz)?1:0).Append("</SigIsTopaz>");
 			sb.Append("</Procedure>");
 			return sb.ToString();
 		}
@@ -222,6 +226,18 @@ namespace OpenDentalWebService {
 							break;
 						case "IsLocked":
 							procedure.IsLocked=reader.ReadContentAsString()!="0";
+							break;
+						case "Note":
+							procedure.Note=reader.ReadContentAsString();
+							break;
+						case "UserNum":
+							procedure.UserNum=System.Convert.ToInt64(reader.ReadContentAsString());
+							break;
+						case "Signature":
+							procedure.Signature=reader.ReadContentAsString();
+							break;
+						case "SigIsTopaz":
+							procedure.SigIsTopaz=reader.ReadContentAsString()!="0";
 							break;
 					}
 				}

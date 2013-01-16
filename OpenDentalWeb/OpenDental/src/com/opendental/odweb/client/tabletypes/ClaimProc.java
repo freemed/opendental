@@ -5,7 +5,7 @@ import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class ClaimProc {
 		/** Primary key. */
 		public int ClaimProcNum;
@@ -83,6 +83,8 @@ public class ClaimProc {
 		public int InsSubNum;
 		/** 1-indexed.  Allows user to sort the order of payments on an EOB.  All claimprocs for a payment will have the same PaymentRow value. */
 		public int PaymentRow;
+		/** Not a database column.  Used to help manage passing lists around. */
+		public boolean DoDelete;
 
 		/** Deep copy of object. */
 		public ClaimProc deepCopy() {
@@ -125,6 +127,7 @@ public class ClaimProc {
 			claimproc.ClinicNum=this.ClinicNum;
 			claimproc.InsSubNum=this.InsSubNum;
 			claimproc.PaymentRow=this.PaymentRow;
+			claimproc.DoDelete=this.DoDelete;
 			return claimproc;
 		}
 
@@ -170,6 +173,7 @@ public class ClaimProc {
 			sb.append("<ClinicNum>").append(ClinicNum).append("</ClinicNum>");
 			sb.append("<InsSubNum>").append(InsSubNum).append("</InsSubNum>");
 			sb.append("<PaymentRow>").append(PaymentRow).append("</PaymentRow>");
+			sb.append("<DoDelete>").append((DoDelete)?1:0).append("</DoDelete>");
 			sb.append("</ClaimProc>");
 			return sb.toString();
 		}
@@ -292,6 +296,9 @@ public class ClaimProc {
 				}
 				if(Serializing.getXmlNodeValue(doc,"PaymentRow")!=null) {
 					PaymentRow=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PaymentRow"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"DoDelete")!=null) {
+					DoDelete=(Serializing.getXmlNodeValue(doc,"DoDelete")=="0")?false:true;
 				}
 			}
 			catch(Exception e) {

@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class EhrMeasure {
 		/** Primary key. */
 		public int EhrMeasureNum;
@@ -13,6 +13,16 @@ public class EhrMeasure {
 		public int Numerator;
 		/** 0-100, -1 indicates not entered yet. */
 		public int Denominator;
+		/** Not a database column. */
+		public String Objective;
+		/** Not a database column. */
+		public String Measure;
+		/** Not a database column.  More than this percent for meaningful use. */
+		public int PercentThreshold;
+		/** Not a database column.  An explanation of which patients qualify for enumerator. */
+		public String NumeratorExplain;
+		/** Not a database column.  An explanation of which patients qualify for denominator. */
+		public String DenominatorExplain;
 
 		/** Deep copy of object. */
 		public EhrMeasure deepCopy() {
@@ -21,6 +31,11 @@ public class EhrMeasure {
 			ehrmeasure.MeasureType=this.MeasureType;
 			ehrmeasure.Numerator=this.Numerator;
 			ehrmeasure.Denominator=this.Denominator;
+			ehrmeasure.Objective=this.Objective;
+			ehrmeasure.Measure=this.Measure;
+			ehrmeasure.PercentThreshold=this.PercentThreshold;
+			ehrmeasure.NumeratorExplain=this.NumeratorExplain;
+			ehrmeasure.DenominatorExplain=this.DenominatorExplain;
 			return ehrmeasure;
 		}
 
@@ -32,6 +47,11 @@ public class EhrMeasure {
 			sb.append("<MeasureType>").append(MeasureType.ordinal()).append("</MeasureType>");
 			sb.append("<Numerator>").append(Numerator).append("</Numerator>");
 			sb.append("<Denominator>").append(Denominator).append("</Denominator>");
+			sb.append("<Objective>").append(Serializing.escapeForXml(Objective)).append("</Objective>");
+			sb.append("<Measure>").append(Serializing.escapeForXml(Measure)).append("</Measure>");
+			sb.append("<PercentThreshold>").append(PercentThreshold).append("</PercentThreshold>");
+			sb.append("<NumeratorExplain>").append(Serializing.escapeForXml(NumeratorExplain)).append("</NumeratorExplain>");
+			sb.append("<DenominatorExplain>").append(Serializing.escapeForXml(DenominatorExplain)).append("</DenominatorExplain>");
 			sb.append("</EhrMeasure>");
 			return sb.toString();
 		}
@@ -52,6 +72,21 @@ public class EhrMeasure {
 				}
 				if(Serializing.getXmlNodeValue(doc,"Denominator")!=null) {
 					Denominator=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Denominator"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"Objective")!=null) {
+					Objective=Serializing.getXmlNodeValue(doc,"Objective");
+				}
+				if(Serializing.getXmlNodeValue(doc,"Measure")!=null) {
+					Measure=Serializing.getXmlNodeValue(doc,"Measure");
+				}
+				if(Serializing.getXmlNodeValue(doc,"PercentThreshold")!=null) {
+					PercentThreshold=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PercentThreshold"));
+				}
+				if(Serializing.getXmlNodeValue(doc,"NumeratorExplain")!=null) {
+					NumeratorExplain=Serializing.getXmlNodeValue(doc,"NumeratorExplain");
+				}
+				if(Serializing.getXmlNodeValue(doc,"DenominatorExplain")!=null) {
+					DenominatorExplain=Serializing.getXmlNodeValue(doc,"DenominatorExplain");
 				}
 			}
 			catch(Exception e) {

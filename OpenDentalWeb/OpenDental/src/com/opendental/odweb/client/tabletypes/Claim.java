@@ -4,8 +4,9 @@ import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class Claim {
 		/** Primary key */
 		public int ClaimNum;
@@ -147,6 +148,8 @@ public class Claim {
 		public String ClaimIdentifier;
 		/** X12 2300 REF (F8). Used when resending claims to refer to the original claim. The user must type this value in after reading it from the original claim response report. */
 		public String OrigRefNum;
+		/** Not a data column. */
+		public ArrayList<ClaimAttach> Attachments;
 
 		/** Deep copy of object. */
 		public Claim deepCopy() {
@@ -221,6 +224,7 @@ public class Claim {
 			claim.CorrectionType=this.CorrectionType;
 			claim.ClaimIdentifier=this.ClaimIdentifier;
 			claim.OrigRefNum=this.OrigRefNum;
+			claim.Attachments=this.Attachments;
 			return claim;
 		}
 

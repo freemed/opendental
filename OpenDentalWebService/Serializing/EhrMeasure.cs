@@ -16,6 +16,11 @@ namespace OpenDentalWebService {
 			sb.Append("<MeasureType>").Append((int)ehrmeasure.MeasureType).Append("</MeasureType>");
 			sb.Append("<Numerator>").Append(ehrmeasure.Numerator).Append("</Numerator>");
 			sb.Append("<Denominator>").Append(ehrmeasure.Denominator).Append("</Denominator>");
+			sb.Append("<Objective>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasure.Objective)).Append("</Objective>");
+			sb.Append("<Measure>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasure.Measure)).Append("</Measure>");
+			sb.Append("<PercentThreshold>").Append(ehrmeasure.PercentThreshold).Append("</PercentThreshold>");
+			sb.Append("<NumeratorExplain>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasure.NumeratorExplain)).Append("</NumeratorExplain>");
+			sb.Append("<DenominatorExplain>").Append(SerializeStringEscapes.EscapeForXml(ehrmeasure.DenominatorExplain)).Append("</DenominatorExplain>");
 			sb.Append("</EhrMeasure>");
 			return sb.ToString();
 		}
@@ -42,6 +47,21 @@ namespace OpenDentalWebService {
 							break;
 						case "Denominator":
 							ehrmeasure.Denominator=System.Convert.ToInt32(reader.ReadContentAsString());
+							break;
+						case "Objective":
+							ehrmeasure.Objective=reader.ReadContentAsString();
+							break;
+						case "Measure":
+							ehrmeasure.Measure=reader.ReadContentAsString();
+							break;
+						case "PercentThreshold":
+							ehrmeasure.PercentThreshold=System.Convert.ToInt32(reader.ReadContentAsString());
+							break;
+						case "NumeratorExplain":
+							ehrmeasure.NumeratorExplain=reader.ReadContentAsString();
+							break;
+						case "DenominatorExplain":
+							ehrmeasure.DenominatorExplain=reader.ReadContentAsString();
 							break;
 					}
 				}

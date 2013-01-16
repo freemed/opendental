@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class SheetFieldDef {
 		/** Primary key. */
 		public int SheetFieldDefNum;
@@ -37,6 +37,8 @@ public class SheetFieldDef {
 		public String RadioButtonGroup;
 		/** Set to true if this field is required to have a value before the sheet is closed. */
 		public boolean IsRequired;
+		/** The Bitmap should be converted to Base64 using POut.Bitmap() before placing in this field.  Not stored in the database.  Only used when uploading SheetDefs to the web server. */
+		public String ImageData;
 		/** Tab stop order for all fields. One-based.  Only checkboxes and input fields can have values other than 0. */
 		public int TabOrder;
 		/** Allows reporting on misc fields. */
@@ -61,6 +63,7 @@ public class SheetFieldDef {
 			sheetfielddef.RadioButtonValue=this.RadioButtonValue;
 			sheetfielddef.RadioButtonGroup=this.RadioButtonGroup;
 			sheetfielddef.IsRequired=this.IsRequired;
+			sheetfielddef.ImageData=this.ImageData;
 			sheetfielddef.TabOrder=this.TabOrder;
 			sheetfielddef.ReportableName=this.ReportableName;
 			return sheetfielddef;
@@ -86,6 +89,7 @@ public class SheetFieldDef {
 			sb.append("<RadioButtonValue>").append(Serializing.escapeForXml(RadioButtonValue)).append("</RadioButtonValue>");
 			sb.append("<RadioButtonGroup>").append(Serializing.escapeForXml(RadioButtonGroup)).append("</RadioButtonGroup>");
 			sb.append("<IsRequired>").append((IsRequired)?1:0).append("</IsRequired>");
+			sb.append("<ImageData>").append(Serializing.escapeForXml(ImageData)).append("</ImageData>");
 			sb.append("<TabOrder>").append(TabOrder).append("</TabOrder>");
 			sb.append("<ReportableName>").append(Serializing.escapeForXml(ReportableName)).append("</ReportableName>");
 			sb.append("</SheetFieldDef>");
@@ -144,6 +148,9 @@ public class SheetFieldDef {
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsRequired")!=null) {
 					IsRequired=(Serializing.getXmlNodeValue(doc,"IsRequired")=="0")?false:true;
+				}
+				if(Serializing.getXmlNodeValue(doc,"ImageData")!=null) {
+					ImageData=Serializing.getXmlNodeValue(doc,"ImageData");
 				}
 				if(Serializing.getXmlNodeValue(doc,"TabOrder")!=null) {
 					TabOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"TabOrder"));

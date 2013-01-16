@@ -15,6 +15,7 @@ namespace OpenDentalWebService {
 			sb.Append("<CountyNum>").Append(county.CountyNum).Append("</CountyNum>");
 			sb.Append("<CountyName>").Append(SerializeStringEscapes.EscapeForXml(county.CountyName)).Append("</CountyName>");
 			sb.Append("<CountyCode>").Append(SerializeStringEscapes.EscapeForXml(county.CountyCode)).Append("</CountyCode>");
+			sb.Append("<OldCountyName>").Append(SerializeStringEscapes.EscapeForXml(county.OldCountyName)).Append("</OldCountyName>");
 			sb.Append("</County>");
 			return sb.ToString();
 		}
@@ -38,6 +39,9 @@ namespace OpenDentalWebService {
 							break;
 						case "CountyCode":
 							county.CountyCode=reader.ReadContentAsString();
+							break;
+						case "OldCountyName":
+							county.OldCountyName=reader.ReadContentAsString();
 							break;
 					}
 				}

@@ -3,7 +3,7 @@ package com.opendental.odweb.client.tabletypes;
 import com.google.gwt.xml.client.Document;
 import com.opendental.odweb.client.remoting.Serializing;
 
-/** DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD. */
+//DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.
 public class County {
 		/** Primary Key. */
 		public int CountyNum;
@@ -11,6 +11,8 @@ public class County {
 		public String CountyName;
 		/** Optional. Usage varies. */
 		public String CountyCode;
+		/** Not a database field. This is the unaltered CountyName. Used for Update. */
+		public String OldCountyName;
 
 		/** Deep copy of object. */
 		public County deepCopy() {
@@ -18,6 +20,7 @@ public class County {
 			county.CountyNum=this.CountyNum;
 			county.CountyName=this.CountyName;
 			county.CountyCode=this.CountyCode;
+			county.OldCountyName=this.OldCountyName;
 			return county;
 		}
 
@@ -28,6 +31,7 @@ public class County {
 			sb.append("<CountyNum>").append(CountyNum).append("</CountyNum>");
 			sb.append("<CountyName>").append(Serializing.escapeForXml(CountyName)).append("</CountyName>");
 			sb.append("<CountyCode>").append(Serializing.escapeForXml(CountyCode)).append("</CountyCode>");
+			sb.append("<OldCountyName>").append(Serializing.escapeForXml(OldCountyName)).append("</OldCountyName>");
 			sb.append("</County>");
 			return sb.toString();
 		}
@@ -45,6 +49,9 @@ public class County {
 				}
 				if(Serializing.getXmlNodeValue(doc,"CountyCode")!=null) {
 					CountyCode=Serializing.getXmlNodeValue(doc,"CountyCode");
+				}
+				if(Serializing.getXmlNodeValue(doc,"OldCountyName")!=null) {
+					OldCountyName=Serializing.getXmlNodeValue(doc,"OldCountyName");
 				}
 			}
 			catch(Exception e) {

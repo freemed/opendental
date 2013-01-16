@@ -21,13 +21,13 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. Use type names for C#.  Ex: long, Patient
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
-		public static int getInt(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
+		public static DtoGetInt getInt(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
 			DtoGetInt dto=new DtoGetInt();
 			dto.Credentials=new Credentials("","");// TODO Pass the user's credentials that is currently logged in.
 			dto.MethodName=classMethod;
 			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
-			return 1;
+			return dto;
 		}
 		
 		/** Calls the server to query the database for an object. 
@@ -35,13 +35,14 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
-		public static Object getObject(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
+		public static DtoGetObject getObject(String classMethod,String[] paramTypes,String objectType,Object... parameters) throws Exception {
 			DtoGetObject dto=new DtoGetObject();
 			dto.Credentials=new Credentials("","");// TODO Pass the user's credentials that is currently logged in.
 			dto.MethodName=classMethod;
 			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
-			return null;
+			dto.ObjectType=objectType;
+			return dto;
 		}
 		
 		/** Calls the server to query the database expecting no result. 
@@ -49,12 +50,13 @@ public class Meth {
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
-		public static void getVoid(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
+		public static DtoGetVoid getVoid(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
 			DtoGetVoid dto=new DtoGetVoid();
 			dto.Credentials=new Credentials("","");// TODO Pass the user's credentials that is currently logged in.
 			dto.MethodName=classMethod;
 			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
+			return dto;
 		}
 		
 		

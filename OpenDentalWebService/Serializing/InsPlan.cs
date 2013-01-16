@@ -40,6 +40,7 @@ namespace OpenDentalWebService {
 			sb.Append("<CanadianInstitutionCode>").Append(SerializeStringEscapes.EscapeForXml(insplan.CanadianInstitutionCode)).Append("</CanadianInstitutionCode>");
 			sb.Append("<RxBIN>").Append(SerializeStringEscapes.EscapeForXml(insplan.RxBIN)).Append("</RxBIN>");
 			sb.Append("<CobRule>").Append((int)insplan.CobRule).Append("</CobRule>");
+			sb.Append("<NumberSubscribers>").Append(insplan.NumberSubscribers).Append("</NumberSubscribers>");
 			sb.Append("</InsPlan>");
 			return sb.ToString();
 		}
@@ -138,6 +139,9 @@ namespace OpenDentalWebService {
 							break;
 						case "CobRule":
 							insplan.CobRule=(OpenDentBusiness.EnumCobRule)System.Convert.ToInt32(reader.ReadContentAsString());
+							break;
+						case "NumberSubscribers":
+							insplan.NumberSubscribers=System.Convert.ToInt32(reader.ReadContentAsString());
 							break;
 					}
 				}
