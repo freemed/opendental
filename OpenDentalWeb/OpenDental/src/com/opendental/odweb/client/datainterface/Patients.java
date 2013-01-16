@@ -7,7 +7,7 @@ import com.opendental.odweb.client.ui.MsgBox;
 
 public class Patients {
 
-	/** Returns a serialized DtoGetObject.  This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found. */
+	/** Server will return a Patient object.  This method returns a serialized DtoGetObject meant for Db.SendRequest.  This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found. */
 	public static String GetPat(int patNum) {
 		DtoGetObject dto=null;
 		try {
@@ -19,7 +19,7 @@ public class Patients {
 		return dto.serialize();
 	}
 
-	/** Returns a serialized DtoGetTable.  Only used for the Select Patient dialog. */
+	/** Server returns a DataTable.  This method returns a serialized DtoGetTable meant for Db.SendRequest.  Only used for the Select Patient dialog. */
 	public static String getPtDataTable(boolean limit,String lname,String fname,String phone,
 			String address,boolean hideInactive,String city,String state,String ssn,String patnum,String chartnumber,
 			int billingtype,boolean guarOnly,boolean showArchived,int clinicNum,Date birthdate,

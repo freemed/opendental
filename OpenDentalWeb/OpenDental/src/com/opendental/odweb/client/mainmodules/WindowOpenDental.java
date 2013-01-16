@@ -21,11 +21,6 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
@@ -37,8 +32,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.opendental.odweb.client.datainterface.*;
-import com.opendental.odweb.client.remoting.RemotingClient;
-import com.opendental.odweb.client.remoting.Serializing;
+import com.opendental.odweb.client.remoting.Db;
+import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
@@ -102,6 +97,16 @@ public class WindowOpenDental extends ResizeComposite {
 
 	public void setPatCur(Patient patCur) {
 		PatCur=patCur;
+	}
+	
+	private void fillPatientButton(Patient pat) {
+		setMainTitle(pat);
+	}
+
+	private void setMainTitle(Patient pat) {
+		//The actual main title bar code can be found in PatientL.cs around like 78.
+		//Temporary title bar for debugging.
+		labelMainTitle.setText(PatCur.PatNum+" "+PatCur.FName+" "+PatCur.LName);
 	}
 
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
@@ -201,7 +206,7 @@ public class WindowOpenDental extends ResizeComposite {
 				FormPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
 					@Override
 					public void OK() {
-						request_GetPat(FormPS.getSelectedPatNum());
+						Db.sendRequest(Patients.GetPat(FormPS.getSelectedPatNum()),new SelectPatientCallback());
 					}
 
 					@Override
@@ -211,44 +216,24 @@ public class WindowOpenDental extends ResizeComposite {
 			}
 		}
 		
+		private class SelectPatientCallback implements RequestCallbackResult {
+			@Override
+			public void onSuccess(Object obj) {
+				PatCur=(Patient)obj;
+				fillPatientButton(PatCur);
+			}
+
+			@Override
+			public void onError(String error) {
+				MsgBox.show(error);
+			}
+		}
+		
 		private class Commlog_Command implements Command {
 			public void execute() {
 			}
 		}
 
-	}
-	
-	private void request_GetPat(int patNum) {
-		RequestBuilder builder=RemotingClient.GetRequestBuilder(Patients.GetPat(patNum));
-		try {//Try catch is required around http request.
-			builder.sendRequest(null, new getPat_RequestCallback());
-		}
-		catch (RequestException e) {
-			MsgBox.show("Error: "+e.getMessage());
-		}
-	}
-	
-	private class getPat_RequestCallback implements RequestCallback {		
-		public void onResponseReceived(Request request, Response response) {
-			if(response.getStatusCode()==200) {
-				try {
-					PatCur=(Patient)Serializing.getDeserializedObject(response.getText());
-					// TODO RefreshCurrentModule();
-					labelMainTitle.setTitle(PatCur.FName+" "+PatCur.LName);
-				} catch (Exception e) {
-					MsgBox.show(e.getMessage());//This will be a more specific error.
-				}
-      }
-			else {
-      	MsgBox.show("Error status text: "+response.getStatusText()
-    			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
-    			+"\r\nError text: "+response.getText());
-      }
-		}
-		
-		public void onError(Request request, Throwable exception) {
-			MsgBox.show("Error: "+exception.getMessage());
-		}
 	}
 	
 }
