@@ -494,7 +494,8 @@ namespace xCrudGeneratorWebService {
 				+t2+"if(list!=null && list.getLength()>0) {"+rn
 				+t3+"Node node=list.item(0).getFirstChild();"+rn
 				+t3+"if(node!=null) {"+rn
-				+t4+"return node.getNodeValue();"+rn
+				+t4+"//We trim so that empty nodes to not insert \"/n\" into string variables."+rn
+				+t4+"return node.getNodeValue().trim();"+rn
 				+t3+"}"+rn
 				+t2+"}"+rn
 				+t2+"return null;"+rn

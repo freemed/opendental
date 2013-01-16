@@ -1970,7 +1970,8 @@ public class Serializing {
 		if(list!=null && list.getLength()>0) {
 			Node node=list.item(0).getFirstChild();
 			if(node!=null) {
-				return node.getNodeValue();
+				//We trim so that empty nodes to not insert "/n" into string variables.
+				return node.getNodeValue().trim();
 			}
 		}
 		return null;

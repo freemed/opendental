@@ -170,6 +170,7 @@ public class WindowPatientSelect extends ODWindow {
 		@Override
 		public void onSuccess(Object obj) {
 			PatientTable=(DataTable)obj;
+			fillGrid();
 		}
 
 		@Override
