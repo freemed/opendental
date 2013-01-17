@@ -59,7 +59,7 @@ public class MedicalOrder {
 					MedicalOrderNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicalOrderNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MedOrderType")!=null) {
-					MedOrderType=MedicalOrderType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedOrderType"))];
+					MedOrderType=MedicalOrderType.valueOf(Serializing.getXmlNodeValue(doc,"MedOrderType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
@@ -78,7 +78,7 @@ public class MedicalOrder {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing MedicalOrder: "+e.getMessage());
 			}
 		}
 

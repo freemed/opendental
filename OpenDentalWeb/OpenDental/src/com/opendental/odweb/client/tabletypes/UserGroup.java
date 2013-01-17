@@ -41,7 +41,7 @@ public class UserGroup {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing UserGroup: "+e.getMessage());
 			}
 		}
 

@@ -113,7 +113,7 @@ public class Adjustment {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Adjustment: "+e.getMessage());
 			}
 		}
 

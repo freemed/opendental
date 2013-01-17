@@ -66,7 +66,7 @@ public class HL7DefField {
 					TableId=Serializing.getXmlNodeValue(doc,"TableId");
 				}
 				if(Serializing.getXmlNodeValue(doc,"DataType")!=null) {
-					DataType=DataTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DataType"))];
+					DataType=DataTypeHL7.valueOf(Serializing.getXmlNodeValue(doc,"DataType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
 					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
@@ -76,7 +76,7 @@ public class HL7DefField {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing HL7DefField: "+e.getMessage());
 			}
 		}
 

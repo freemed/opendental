@@ -78,7 +78,7 @@ public class TimeAdjust {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TimeAdjust: "+e.getMessage());
 			}
 		}
 

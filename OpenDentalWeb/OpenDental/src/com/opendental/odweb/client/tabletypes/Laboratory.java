@@ -104,7 +104,7 @@ public class Laboratory {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Laboratory: "+e.getMessage());
 			}
 		}
 

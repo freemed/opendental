@@ -51,11 +51,11 @@ public class QuestionDef {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"QuestType")!=null) {
-					QuestType=QuestionType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"QuestType"))];
+					QuestType=QuestionType.valueOf(Serializing.getXmlNodeValue(doc,"QuestType"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing QuestionDef: "+e.getMessage());
 			}
 		}
 

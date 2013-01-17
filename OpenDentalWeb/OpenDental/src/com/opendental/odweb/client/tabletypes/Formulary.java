@@ -41,7 +41,7 @@ public class Formulary {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Formulary: "+e.getMessage());
 			}
 		}
 

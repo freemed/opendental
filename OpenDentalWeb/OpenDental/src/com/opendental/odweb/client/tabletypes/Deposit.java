@@ -64,7 +64,7 @@ public class Deposit {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Deposit: "+e.getMessage());
 			}
 		}
 

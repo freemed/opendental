@@ -113,7 +113,7 @@ public class RegistrationKey {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RegistrationKey: "+e.getMessage());
 			}
 		}
 

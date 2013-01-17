@@ -99,7 +99,7 @@ public class Equipment {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Equipment: "+e.getMessage());
 			}
 		}
 

@@ -57,7 +57,7 @@ public class ErxLog {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ErxLog: "+e.getMessage());
 			}
 		}
 

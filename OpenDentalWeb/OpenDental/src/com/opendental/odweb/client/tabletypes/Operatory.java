@@ -97,7 +97,7 @@ public class Operatory {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Operatory: "+e.getMessage());
 			}
 		}
 

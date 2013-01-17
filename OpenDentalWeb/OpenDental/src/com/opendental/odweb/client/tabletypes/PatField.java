@@ -55,7 +55,7 @@ public class PatField {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PatField: "+e.getMessage());
 			}
 		}
 

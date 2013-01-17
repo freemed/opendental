@@ -64,7 +64,7 @@ public class TaskNote {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TaskNote: "+e.getMessage());
 			}
 		}
 

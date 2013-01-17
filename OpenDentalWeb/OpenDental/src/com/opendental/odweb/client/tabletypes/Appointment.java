@@ -142,7 +142,7 @@ public class Appointment {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"AptStatus")!=null) {
-					AptStatus=ApptStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AptStatus"))];
+					AptStatus=ApptStatus.valueOf(Serializing.getXmlNodeValue(doc,"AptStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Pattern")!=null) {
 					Pattern=Serializing.getXmlNodeValue(doc,"Pattern");
@@ -218,7 +218,7 @@ public class Appointment {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Appointment: "+e.getMessage());
 			}
 		}
 

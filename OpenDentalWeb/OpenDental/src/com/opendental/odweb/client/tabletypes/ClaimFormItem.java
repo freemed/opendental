@@ -90,7 +90,7 @@ public class ClaimFormItem {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ClaimFormItem: "+e.getMessage());
 			}
 		}
 

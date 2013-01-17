@@ -48,7 +48,7 @@ public class Letter {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Letter: "+e.getMessage());
 			}
 		}
 

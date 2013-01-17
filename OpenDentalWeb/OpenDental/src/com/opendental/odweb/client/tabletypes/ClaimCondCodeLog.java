@@ -118,7 +118,7 @@ public class ClaimCondCodeLog {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ClaimCondCodeLog: "+e.getMessage());
 			}
 		}
 

@@ -83,7 +83,7 @@ public class ReplicationServer {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ReplicationServer: "+e.getMessage());
 			}
 		}
 

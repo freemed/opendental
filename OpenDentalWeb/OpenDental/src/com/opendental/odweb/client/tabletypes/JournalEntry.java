@@ -99,7 +99,7 @@ public class JournalEntry {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing JournalEntry: "+e.getMessage());
 			}
 		}
 

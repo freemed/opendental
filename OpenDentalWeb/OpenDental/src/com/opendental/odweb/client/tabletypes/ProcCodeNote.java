@@ -62,7 +62,7 @@ public class ProcCodeNote {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ProcCodeNote: "+e.getMessage());
 			}
 		}
 

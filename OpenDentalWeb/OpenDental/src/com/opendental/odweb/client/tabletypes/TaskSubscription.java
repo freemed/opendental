@@ -48,7 +48,7 @@ public class TaskSubscription {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TaskSubscription: "+e.getMessage());
 			}
 		}
 

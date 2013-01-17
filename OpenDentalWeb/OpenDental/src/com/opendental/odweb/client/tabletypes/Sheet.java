@@ -90,7 +90,7 @@ public class Sheet {
 					SheetNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SheetType")!=null) {
-					SheetType=SheetTypeEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetType"))];
+					SheetType=SheetTypeEnum.valueOf(Serializing.getXmlNodeValue(doc,"SheetType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
@@ -127,7 +127,7 @@ public class Sheet {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Sheet: "+e.getMessage());
 			}
 		}
 

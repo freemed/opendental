@@ -92,7 +92,7 @@ public class PayPlan {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PayPlan: "+e.getMessage());
 			}
 		}
 

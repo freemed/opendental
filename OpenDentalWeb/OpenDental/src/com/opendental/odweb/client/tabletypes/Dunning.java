@@ -62,14 +62,14 @@ public class Dunning {
 					AgeAccount=Byte.valueOf(Serializing.getXmlNodeValue(doc,"AgeAccount"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"InsIsPending")!=null) {
-					InsIsPending=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsIsPending"))];
+					InsIsPending=YN.valueOf(Serializing.getXmlNodeValue(doc,"InsIsPending"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MessageBold")!=null) {
 					MessageBold=Serializing.getXmlNodeValue(doc,"MessageBold");
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Dunning: "+e.getMessage());
 			}
 		}
 

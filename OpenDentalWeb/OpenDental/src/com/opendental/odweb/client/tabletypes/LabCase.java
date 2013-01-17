@@ -120,7 +120,7 @@ public class LabCase {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing LabCase: "+e.getMessage());
 			}
 		}
 

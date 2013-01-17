@@ -41,7 +41,7 @@ public class EtransMessageText {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EtransMessageText: "+e.getMessage());
 			}
 		}
 

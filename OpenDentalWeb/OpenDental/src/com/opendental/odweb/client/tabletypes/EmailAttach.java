@@ -55,7 +55,7 @@ public class EmailAttach {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EmailAttach: "+e.getMessage());
 			}
 		}
 

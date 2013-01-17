@@ -62,7 +62,7 @@ public class SupplyOrderItem {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SupplyOrderItem: "+e.getMessage());
 			}
 		}
 

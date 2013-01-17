@@ -54,7 +54,7 @@ public class FormPat {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing FormPat: "+e.getMessage());
 			}
 		}
 

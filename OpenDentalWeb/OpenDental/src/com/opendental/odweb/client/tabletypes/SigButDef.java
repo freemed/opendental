@@ -65,7 +65,7 @@ public class SigButDef {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SigButDef: "+e.getMessage());
 			}
 		}
 

@@ -1,5 +1,6 @@
 package com.opendental.odweb.client.windows;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
@@ -14,9 +15,11 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.data.DataTable;
+import com.opendental.odweb.client.datainterface.Appointments;
 import com.opendental.odweb.client.datainterface.Patients;
 import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
+import com.opendental.odweb.client.tabletypes.Appointment;
 import com.opendental.odweb.client.ui.*;
 
 public class WindowPatientSelect extends ODWindow {
@@ -224,7 +227,23 @@ public class WindowPatientSelect extends ODWindow {
 	
 	@UiHandler("butCancel")
 	void butCancel_Click(ClickEvent event) {
+		Db.sendRequest(Appointments.refreshASAP(0, 0, 0), new ButCancelCallback());
 		this.hide();
+	}
+	
+	private class ButCancelCallback implements RequestCallbackResult {
+		@Override
+		public void onSuccess(Object obj) {
+			ArrayList<Appointment> apptList=(ArrayList<Appointment>)obj;
+			for(int i=0;i<apptList.size();i++) {
+				MsgBox.show(Integer.toString(apptList.get(i).AptNum));
+			}
+		}
+
+		@Override
+		public void onError(String error) {
+			MsgBox.show(error);
+		}
 	}
 
 }

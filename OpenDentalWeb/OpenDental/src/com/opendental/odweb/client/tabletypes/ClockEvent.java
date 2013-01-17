@@ -100,7 +100,7 @@ public class ClockEvent {
 					TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeDisplayed1"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=TimeClockStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"))];
+					ClockStatus=TimeClockStatus.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
@@ -134,7 +134,7 @@ public class ClockEvent {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ClockEvent: "+e.getMessage());
 			}
 		}
 

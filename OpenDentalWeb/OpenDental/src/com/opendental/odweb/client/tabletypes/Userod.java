@@ -118,7 +118,7 @@ public class Userod {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Userod: "+e.getMessage());
 			}
 		}
 

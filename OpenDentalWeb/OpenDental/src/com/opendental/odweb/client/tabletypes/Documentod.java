@@ -138,7 +138,7 @@ public class Documentod {
 					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"ImgType")!=null) {
-					ImgType=ImageType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"))];
+					ImgType=ImageType.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsFlipped")!=null) {
 					IsFlipped=(Serializing.getXmlNodeValue(doc,"IsFlipped")=="0")?false:true;
@@ -190,7 +190,7 @@ public class Documentod {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Document: "+e.getMessage());
 			}
 		}
 

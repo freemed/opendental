@@ -55,7 +55,7 @@ public class CovSpan {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CovSpan: "+e.getMessage());
 			}
 		}
 

@@ -74,10 +74,10 @@ public class OrionProc {
 					ProcNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DPC")!=null) {
-					DPC=OrionDPC.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DPC"))];
+					DPC=OrionDPC.valueOf(Serializing.getXmlNodeValue(doc,"DPC"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DPCpost")!=null) {
-					DPCpost=OrionDPC.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DPCpost"))];
+					DPCpost=OrionDPC.valueOf(Serializing.getXmlNodeValue(doc,"DPCpost"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateScheduleBy")!=null) {
 					DateScheduleBy=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateScheduleBy"));
@@ -86,7 +86,7 @@ public class OrionProc {
 					DateStopClock=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStopClock"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Status2")!=null) {
-					Status2=OrionStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Status2"))];
+					Status2=OrionStatus.valueOf(Serializing.getXmlNodeValue(doc,"Status2"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsOnCall")!=null) {
 					IsOnCall=(Serializing.getXmlNodeValue(doc,"IsOnCall")=="0")?false:true;
@@ -99,7 +99,7 @@ public class OrionProc {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing OrionProc: "+e.getMessage());
 			}
 		}
 

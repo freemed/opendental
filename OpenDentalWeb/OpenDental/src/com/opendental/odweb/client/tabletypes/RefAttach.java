@@ -90,7 +90,7 @@ public class RefAttach {
 					IsFrom=(Serializing.getXmlNodeValue(doc,"IsFrom")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"RefToStatus")!=null) {
-					RefToStatus=ReferralToStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"RefToStatus"))];
+					RefToStatus=ReferralToStatus.valueOf(Serializing.getXmlNodeValue(doc,"RefToStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
@@ -106,7 +106,7 @@ public class RefAttach {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RefAttach: "+e.getMessage());
 			}
 		}
 

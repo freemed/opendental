@@ -62,7 +62,7 @@ public class CanadianNetwork {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CanadianNetwork: "+e.getMessage());
 			}
 		}
 

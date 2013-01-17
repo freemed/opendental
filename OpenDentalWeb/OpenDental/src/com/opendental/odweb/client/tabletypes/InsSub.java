@@ -99,7 +99,7 @@ public class InsSub {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing InsSub: "+e.getMessage());
 			}
 		}
 

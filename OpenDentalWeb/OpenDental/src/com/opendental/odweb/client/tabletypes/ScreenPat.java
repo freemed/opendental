@@ -55,7 +55,7 @@ public class ScreenPat {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ScreenPat: "+e.getMessage());
 			}
 		}
 

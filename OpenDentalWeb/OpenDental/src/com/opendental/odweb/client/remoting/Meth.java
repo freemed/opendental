@@ -41,7 +41,7 @@ public class Meth {
 			dto.MethodName=classMethod;
 			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
-			dto.ObjectType=objectType;
+			dto.ObjectType=Serializing.escapeForXml(objectType);
 			return dto;
 		}
 		

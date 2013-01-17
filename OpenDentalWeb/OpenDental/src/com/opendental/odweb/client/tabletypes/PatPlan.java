@@ -66,7 +66,7 @@ public class PatPlan {
 					IsPending=(Serializing.getXmlNodeValue(doc,"IsPending")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"Relationship")!=null) {
-					Relationship=Relat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"))];
+					Relationship=Relat.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatID")!=null) {
 					PatID=Serializing.getXmlNodeValue(doc,"PatID");
@@ -76,7 +76,7 @@ public class PatPlan {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PatPlan: "+e.getMessage());
 			}
 		}
 

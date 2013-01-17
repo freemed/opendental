@@ -65,11 +65,11 @@ public class CovCat {
 					IsHidden=(Serializing.getXmlNodeValue(doc,"IsHidden")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"EbenefitCat")!=null) {
-					EbenefitCat=EbenefitCategory.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EbenefitCat"))];
+					EbenefitCat=EbenefitCategory.valueOf(Serializing.getXmlNodeValue(doc,"EbenefitCat"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CovCat: "+e.getMessage());
 			}
 		}
 

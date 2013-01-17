@@ -64,14 +64,14 @@ public class AllergyDef {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Snomed")!=null) {
-					Snomed=SnomedAllergy.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Snomed"))];
+					Snomed=SnomedAllergy.valueOf(Serializing.getXmlNodeValue(doc,"Snomed"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
 					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AllergyDef: "+e.getMessage());
 			}
 		}
 

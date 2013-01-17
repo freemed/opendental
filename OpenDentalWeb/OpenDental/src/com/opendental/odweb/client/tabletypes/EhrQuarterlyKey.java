@@ -76,7 +76,7 @@ public class EhrQuarterlyKey {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EhrQuarterlyKey: "+e.getMessage());
 			}
 		}
 

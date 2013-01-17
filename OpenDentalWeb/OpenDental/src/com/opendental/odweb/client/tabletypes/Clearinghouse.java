@@ -138,7 +138,7 @@ public class Clearinghouse {
 					Payors=Serializing.getXmlNodeValue(doc,"Payors");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Eformat")!=null) {
-					Eformat=ElectronicClaimFormat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Eformat"))];
+					Eformat=ElectronicClaimFormat.valueOf(Serializing.getXmlNodeValue(doc,"Eformat"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ISA05")!=null) {
 					ISA05=Serializing.getXmlNodeValue(doc,"ISA05");
@@ -162,7 +162,7 @@ public class Clearinghouse {
 					ResponsePath=Serializing.getXmlNodeValue(doc,"ResponsePath");
 				}
 				if(Serializing.getXmlNodeValue(doc,"CommBridge")!=null) {
-					CommBridge=EclaimsCommBridge.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CommBridge"))];
+					CommBridge=EclaimsCommBridge.valueOf(Serializing.getXmlNodeValue(doc,"CommBridge"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClientProgram")!=null) {
 					ClientProgram=Serializing.getXmlNodeValue(doc,"ClientProgram");
@@ -202,7 +202,7 @@ public class Clearinghouse {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Clearinghouse: "+e.getMessage());
 			}
 		}
 

@@ -76,7 +76,7 @@ public class EmailAddress {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EmailAddress: "+e.getMessage());
 			}
 		}
 

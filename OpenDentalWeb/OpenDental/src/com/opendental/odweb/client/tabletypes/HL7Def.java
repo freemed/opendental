@@ -124,7 +124,7 @@ public class HL7Def {
 					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 				if(Serializing.getXmlNodeValue(doc,"ModeTx")!=null) {
-					ModeTx=ModeTxHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ModeTx"))];
+					ModeTx=ModeTxHL7.valueOf(Serializing.getXmlNodeValue(doc,"ModeTx"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"IncomingFolder")!=null) {
 					IncomingFolder=Serializing.getXmlNodeValue(doc,"IncomingFolder");
@@ -175,7 +175,7 @@ public class HL7Def {
 					HL7ServiceName=Serializing.getXmlNodeValue(doc,"HL7ServiceName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"ShowDemographics")!=null) {
-					ShowDemographics=HL7ShowDemographics.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ShowDemographics"))];
+					ShowDemographics=HL7ShowDemographics.valueOf(Serializing.getXmlNodeValue(doc,"ShowDemographics"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ShowAppts")!=null) {
 					ShowAppts=(Serializing.getXmlNodeValue(doc,"ShowAppts")=="0")?false:true;
@@ -185,7 +185,7 @@ public class HL7Def {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing HL7Def: "+e.getMessage());
 			}
 		}
 

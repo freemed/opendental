@@ -48,7 +48,7 @@ public class TaskUnread {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TaskUnread: "+e.getMessage());
 			}
 		}
 

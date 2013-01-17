@@ -69,7 +69,7 @@ public class MountItemDef {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing MountItemDef: "+e.getMessage());
 			}
 		}
 

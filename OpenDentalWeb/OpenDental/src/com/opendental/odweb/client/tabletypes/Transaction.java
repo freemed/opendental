@@ -64,7 +64,7 @@ public class Transaction {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Transaction: "+e.getMessage());
 			}
 		}
 

@@ -48,7 +48,7 @@ public class DrugUnit {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DrugUnit: "+e.getMessage());
 			}
 		}
 

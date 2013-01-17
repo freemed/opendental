@@ -55,7 +55,7 @@ public class PlannedAppt {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PlannedAppt: "+e.getMessage());
 			}
 		}
 

@@ -127,7 +127,7 @@ public class Recall {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Recall: "+e.getMessage());
 			}
 		}
 

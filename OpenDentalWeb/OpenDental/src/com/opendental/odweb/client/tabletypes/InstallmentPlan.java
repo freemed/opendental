@@ -78,7 +78,7 @@ public class InstallmentPlan {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing InstallmentPlan: "+e.getMessage());
 			}
 		}
 

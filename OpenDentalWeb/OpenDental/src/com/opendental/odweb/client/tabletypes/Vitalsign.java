@@ -113,7 +113,7 @@ public class Vitalsign {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Vitalsign: "+e.getMessage());
 			}
 		}
 

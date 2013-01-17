@@ -69,7 +69,7 @@ public class ElectID {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ElectID: "+e.getMessage());
 			}
 		}
 

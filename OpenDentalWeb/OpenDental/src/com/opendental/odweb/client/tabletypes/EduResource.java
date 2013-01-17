@@ -83,7 +83,7 @@ public class EduResource {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EduResource: "+e.getMessage());
 			}
 		}
 

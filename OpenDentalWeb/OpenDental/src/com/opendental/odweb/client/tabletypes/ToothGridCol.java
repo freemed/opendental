@@ -67,7 +67,7 @@ public class ToothGridCol {
 					NameItem=Serializing.getXmlNodeValue(doc,"NameItem");
 				}
 				if(Serializing.getXmlNodeValue(doc,"CellType")!=null) {
-					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CellType"))];
+					CellType=ToothGridCellType.valueOf(Serializing.getXmlNodeValue(doc,"CellType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
@@ -79,11 +79,11 @@ public class ToothGridCol {
 					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProcStatus")!=null) {
-					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"))];
+					ProcStatus=ProcStat.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ToothGridCol: "+e.getMessage());
 			}
 		}
 

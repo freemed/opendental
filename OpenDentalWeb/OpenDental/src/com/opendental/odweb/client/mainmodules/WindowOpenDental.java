@@ -206,7 +206,7 @@ public class WindowOpenDental extends ResizeComposite {
 				FormPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
 					@Override
 					public void OK() {
-						Db.sendRequest(Patients.GetPat(FormPS.getSelectedPatNum()),new SelectPatientCallback());
+						Db.sendRequest(Patients.getPat(FormPS.getSelectedPatNum()),new SelectPatientCallback());
 					}
 
 					@Override

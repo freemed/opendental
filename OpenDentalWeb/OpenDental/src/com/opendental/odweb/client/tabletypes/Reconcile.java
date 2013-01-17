@@ -71,7 +71,7 @@ public class Reconcile {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Reconcile: "+e.getMessage());
 			}
 		}
 

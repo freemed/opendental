@@ -62,7 +62,7 @@ public class AppointmentRule {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AppointmentRule: "+e.getMessage());
 			}
 		}
 

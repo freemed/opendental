@@ -106,7 +106,7 @@ public class ClaimPayment {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ClaimPayment: "+e.getMessage());
 			}
 		}
 

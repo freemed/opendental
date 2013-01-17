@@ -92,7 +92,7 @@ public class ReqStudent {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ReqStudent: "+e.getMessage());
 			}
 		}
 

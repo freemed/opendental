@@ -69,7 +69,7 @@ public class RxAlert {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RxAlert: "+e.getMessage());
 			}
 		}
 

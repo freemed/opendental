@@ -83,7 +83,7 @@ public class Signalod {
 					DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateViewing"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigType")!=null) {
-					SigType=SignalType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigType"))];
+					SigType=SignalType.valueOf(Serializing.getXmlNodeValue(doc,"SigType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigText")!=null) {
 					SigText=Serializing.getXmlNodeValue(doc,"SigText");
@@ -102,7 +102,7 @@ public class Signalod {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Signalod: "+e.getMessage());
 			}
 		}
 

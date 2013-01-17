@@ -8,7 +8,7 @@ import com.opendental.odweb.client.ui.MsgBox;
 public class Patients {
 
 	/** Server will return a Patient object.  This method returns a serialized DtoGetObject meant for Db.SendRequest.  This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found. */
-	public static String GetPat(int patNum) {
+	public static String getPat(int patNum) {
 		DtoGetObject dto=null;
 		try {
 			dto=Meth.getObject("Patients.GetPat", new String[] { "long"	},"OpenDentBusiness.Patient", patNum);

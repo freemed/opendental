@@ -48,7 +48,7 @@ public class EmailTemplate {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EmailTemplate: "+e.getMessage());
 			}
 		}
 

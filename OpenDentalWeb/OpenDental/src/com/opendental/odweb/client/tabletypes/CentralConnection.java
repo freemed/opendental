@@ -104,7 +104,7 @@ public class CentralConnection {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CentralConnection: "+e.getMessage());
 			}
 		}
 

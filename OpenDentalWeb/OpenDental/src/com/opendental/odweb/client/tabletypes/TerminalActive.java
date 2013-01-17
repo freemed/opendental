@@ -48,14 +48,14 @@ public class TerminalActive {
 					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"TerminalStatus")!=null) {
-					TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TerminalStatus"))];
+					TerminalStatus=TerminalStatusEnum.valueOf(Serializing.getXmlNodeValue(doc,"TerminalStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TerminalActive: "+e.getMessage());
 			}
 		}
 

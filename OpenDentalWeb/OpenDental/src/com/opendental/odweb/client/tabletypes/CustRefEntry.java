@@ -64,7 +64,7 @@ public class CustRefEntry {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CustRefEntry: "+e.getMessage());
 			}
 		}
 

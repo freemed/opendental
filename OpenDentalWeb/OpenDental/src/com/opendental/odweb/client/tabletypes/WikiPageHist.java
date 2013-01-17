@@ -71,7 +71,7 @@ public class WikiPageHist {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing WikiPageHist: "+e.getMessage());
 			}
 		}
 

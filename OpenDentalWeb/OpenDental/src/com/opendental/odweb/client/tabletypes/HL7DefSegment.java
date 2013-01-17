@@ -73,14 +73,14 @@ public class HL7DefSegment {
 					IsOptional=(Serializing.getXmlNodeValue(doc,"IsOptional")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"SegmentName")!=null) {
-					SegmentName=SegmentNameHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SegmentName"))];
+					SegmentName=SegmentNameHL7.valueOf(Serializing.getXmlNodeValue(doc,"SegmentName"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing HL7DefSegment: "+e.getMessage());
 			}
 		}
 

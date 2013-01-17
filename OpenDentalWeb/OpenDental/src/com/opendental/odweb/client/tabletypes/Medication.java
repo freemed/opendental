@@ -71,7 +71,7 @@ public class Medication {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Medication: "+e.getMessage());
 			}
 		}
 

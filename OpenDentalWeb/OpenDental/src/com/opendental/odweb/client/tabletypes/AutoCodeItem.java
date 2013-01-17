@@ -59,7 +59,7 @@ public class AutoCodeItem {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AutoCodeItem: "+e.getMessage());
 			}
 		}
 

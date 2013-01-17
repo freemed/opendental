@@ -83,7 +83,7 @@ public class Supplier {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Supplier: "+e.getMessage());
 			}
 		}
 

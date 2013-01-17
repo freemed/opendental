@@ -270,7 +270,7 @@ public class Procedure {
 					Priority=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Priority"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProcStatus")!=null) {
-					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"))];
+					ProcStatus=ProcStat.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
 					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
@@ -282,7 +282,7 @@ public class Procedure {
 					PlannedAptNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlannedAptNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PlaceService")!=null) {
-					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"))];
+					PlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Prosthesis")!=null) {
 					Prosthesis=Serializing.getXmlNodeValue(doc,"Prosthesis");
@@ -372,13 +372,13 @@ public class Procedure {
 					Prognosis=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Prognosis"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DrugUnit")!=null) {
-					DrugUnit=EnumProcDrugUnit.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DrugUnit"))];
+					DrugUnit=EnumProcDrugUnit.valueOf(Serializing.getXmlNodeValue(doc,"DrugUnit"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DrugQty")!=null) {
 					DrugQty=Float.valueOf(Serializing.getXmlNodeValue(doc,"DrugQty"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"UnitQtyType")!=null) {
-					UnitQtyType=ProcUnitQtyType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"UnitQtyType"))];
+					UnitQtyType=ProcUnitQtyType.valueOf(Serializing.getXmlNodeValue(doc,"UnitQtyType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"StatementNum")!=null) {
 					StatementNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"StatementNum"));
@@ -400,7 +400,7 @@ public class Procedure {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Procedure: "+e.getMessage());
 			}
 		}
 

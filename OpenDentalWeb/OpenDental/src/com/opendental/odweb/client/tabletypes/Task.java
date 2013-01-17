@@ -107,19 +107,19 @@ public class Task {
 					Descript=Serializing.getXmlNodeValue(doc,"Descript");
 				}
 				if(Serializing.getXmlNodeValue(doc,"TaskStatus")!=null) {
-					TaskStatus=TaskStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TaskStatus"))];
+					TaskStatus=TaskStatusEnum.valueOf(Serializing.getXmlNodeValue(doc,"TaskStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsRepeating")!=null) {
 					IsRepeating=(Serializing.getXmlNodeValue(doc,"IsRepeating")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateType")!=null) {
-					DateType=TaskDateType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DateType"))];
+					DateType=TaskDateType.valueOf(Serializing.getXmlNodeValue(doc,"DateType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"FromNum")!=null) {
 					FromNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FromNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ObjectType")!=null) {
-					ObjectType=TaskObjectType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"))];
+					ObjectType=TaskObjectType.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTimeEntry")!=null) {
 					DateTimeEntry=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTimeEntry"));
@@ -141,7 +141,7 @@ public class Task {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Task: "+e.getMessage());
 			}
 		}
 

@@ -99,7 +99,7 @@ public class PayPlanCharge {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PayPlanCharge: "+e.getMessage());
 			}
 		}
 

@@ -69,7 +69,7 @@ public class LanguageForeign {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing LanguageForeign: "+e.getMessage());
 			}
 		}
 

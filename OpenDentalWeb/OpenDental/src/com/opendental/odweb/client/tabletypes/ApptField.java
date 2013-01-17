@@ -55,7 +55,7 @@ public class ApptField {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ApptField: "+e.getMessage());
 			}
 		}
 

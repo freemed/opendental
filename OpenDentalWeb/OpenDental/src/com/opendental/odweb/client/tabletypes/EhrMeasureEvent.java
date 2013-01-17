@@ -54,7 +54,7 @@ public class EhrMeasureEvent {
 					DateTEvent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTEvent"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"EventType")!=null) {
-					EventType=EhrMeasureEventType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EventType"))];
+					EventType=EhrMeasureEventType.valueOf(Serializing.getXmlNodeValue(doc,"EventType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));
@@ -64,7 +64,7 @@ public class EhrMeasureEvent {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EhrMeasureEvent: "+e.getMessage());
 			}
 		}
 

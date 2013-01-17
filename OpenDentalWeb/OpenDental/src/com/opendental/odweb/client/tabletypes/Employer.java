@@ -83,7 +83,7 @@ public class Employer {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Employer: "+e.getMessage());
 			}
 		}
 

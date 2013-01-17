@@ -69,7 +69,7 @@ public class Question {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Question: "+e.getMessage());
 			}
 		}
 

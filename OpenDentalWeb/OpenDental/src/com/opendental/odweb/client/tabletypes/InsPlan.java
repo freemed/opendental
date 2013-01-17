@@ -223,14 +223,14 @@ public class InsPlan {
 					RxBIN=Serializing.getXmlNodeValue(doc,"RxBIN");
 				}
 				if(Serializing.getXmlNodeValue(doc,"CobRule")!=null) {
-					CobRule=EnumCobRule.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CobRule"))];
+					CobRule=EnumCobRule.valueOf(Serializing.getXmlNodeValue(doc,"CobRule"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"NumberSubscribers")!=null) {
 					NumberSubscribers=Integer.valueOf(Serializing.getXmlNodeValue(doc,"NumberSubscribers"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing InsPlan: "+e.getMessage());
 			}
 		}
 

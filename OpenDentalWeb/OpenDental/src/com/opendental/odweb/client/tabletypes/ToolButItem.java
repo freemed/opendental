@@ -48,14 +48,14 @@ public class ToolButItem {
 					ProgramNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProgramNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ToolBar")!=null) {
-					ToolBar=ToolBarsAvail.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ToolBar"))];
+					ToolBar=ToolBarsAvail.valueOf(Serializing.getXmlNodeValue(doc,"ToolBar"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ButtonText")!=null) {
 					ButtonText=Serializing.getXmlNodeValue(doc,"ButtonText");
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ToolButItem: "+e.getMessage());
 			}
 		}
 

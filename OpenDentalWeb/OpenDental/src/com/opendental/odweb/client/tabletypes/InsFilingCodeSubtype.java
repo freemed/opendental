@@ -48,7 +48,7 @@ public class InsFilingCodeSubtype {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing InsFilingCodeSubtype: "+e.getMessage());
 			}
 		}
 

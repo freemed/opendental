@@ -55,7 +55,7 @@ public class QuickPasteCat {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing QuickPasteCat: "+e.getMessage());
 			}
 		}
 

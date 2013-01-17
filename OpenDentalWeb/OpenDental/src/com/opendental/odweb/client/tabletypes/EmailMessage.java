@@ -85,11 +85,11 @@ public class EmailMessage {
 					MsgDateTime=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"MsgDateTime"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SentOrReceived")!=null) {
-					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"))];
+					SentOrReceived=CommSentOrReceived.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EmailMessage: "+e.getMessage());
 			}
 		}
 

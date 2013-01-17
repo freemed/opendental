@@ -50,7 +50,7 @@ public class Computer {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Computer: "+e.getMessage());
 			}
 		}
 

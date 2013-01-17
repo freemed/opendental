@@ -85,7 +85,7 @@ public class TreatPlan {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TreatPlan: "+e.getMessage());
 			}
 		}
 

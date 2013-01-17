@@ -146,7 +146,7 @@ public class ProcTP {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ProcTP: "+e.getMessage());
 			}
 		}
 

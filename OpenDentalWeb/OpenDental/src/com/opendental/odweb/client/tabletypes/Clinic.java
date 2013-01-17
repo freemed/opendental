@@ -105,7 +105,7 @@ public class Clinic {
 					BankNumber=Serializing.getXmlNodeValue(doc,"BankNumber");
 				}
 				if(Serializing.getXmlNodeValue(doc,"DefaultPlaceService")!=null) {
-					DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPlaceService"))];
+					DefaultPlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPlaceService"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"InsBillingProv")!=null) {
 					InsBillingProv=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsBillingProv"));
@@ -118,7 +118,7 @@ public class Clinic {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Clinic: "+e.getMessage());
 			}
 		}
 

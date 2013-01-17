@@ -76,7 +76,7 @@ public class Fee {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Fee: "+e.getMessage());
 			}
 		}
 

@@ -71,7 +71,7 @@ public class SheetDef {
 					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SheetType")!=null) {
-					SheetType=SheetTypeEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetType"))];
+					SheetType=SheetTypeEnum.valueOf(Serializing.getXmlNodeValue(doc,"SheetType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"FontSize")!=null) {
 					FontSize=Float.valueOf(Serializing.getXmlNodeValue(doc,"FontSize"));
@@ -90,7 +90,7 @@ public class SheetDef {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SheetDef: "+e.getMessage());
 			}
 		}
 

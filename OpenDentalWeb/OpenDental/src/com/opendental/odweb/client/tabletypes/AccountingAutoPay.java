@@ -48,7 +48,7 @@ public class AccountingAutoPay {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AccountingAutoPay: "+e.getMessage());
 			}
 		}
 

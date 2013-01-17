@@ -83,7 +83,7 @@ public class RxDef {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RxDef: "+e.getMessage());
 			}
 		}
 

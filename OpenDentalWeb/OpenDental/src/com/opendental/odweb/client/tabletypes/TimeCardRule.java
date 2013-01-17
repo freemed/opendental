@@ -69,7 +69,7 @@ public class TimeCardRule {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing TimeCardRule: "+e.getMessage());
 			}
 		}
 

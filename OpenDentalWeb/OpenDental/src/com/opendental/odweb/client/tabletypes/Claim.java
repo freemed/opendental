@@ -375,7 +375,7 @@ public class Claim {
 					RefNumString=Serializing.getXmlNodeValue(doc,"RefNumString");
 				}
 				if(Serializing.getXmlNodeValue(doc,"PlaceService")!=null) {
-					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"))];
+					PlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"AccidentRelated")!=null) {
 					AccidentRelated=Serializing.getXmlNodeValue(doc,"AccidentRelated");
@@ -387,7 +387,7 @@ public class Claim {
 					AccidentST=Serializing.getXmlNodeValue(doc,"AccidentST");
 				}
 				if(Serializing.getXmlNodeValue(doc,"EmployRelated")!=null) {
-					EmployRelated=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployRelated"))];
+					EmployRelated=YN.valueOf(Serializing.getXmlNodeValue(doc,"EmployRelated"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"IsOrtho")!=null) {
 					IsOrtho=(Serializing.getXmlNodeValue(doc,"IsOrtho")=="0")?false:true;
@@ -399,13 +399,13 @@ public class Claim {
 					OrthoDate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"OrthoDate"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatRelat")!=null) {
-					PatRelat=Relat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatRelat"))];
+					PatRelat=Relat.valueOf(Serializing.getXmlNodeValue(doc,"PatRelat"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PlanNum2")!=null) {
 					PlanNum2=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlanNum2"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatRelat2")!=null) {
-					PatRelat2=Relat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatRelat2"))];
+					PatRelat2=Relat.valueOf(Serializing.getXmlNodeValue(doc,"PatRelat2"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"WriteOff")!=null) {
 					WriteOff=Double.valueOf(Serializing.getXmlNodeValue(doc,"WriteOff"));
@@ -489,13 +489,13 @@ public class Claim {
 					PriorAuthorizationNumber=Serializing.getXmlNodeValue(doc,"PriorAuthorizationNumber");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SpecialProgramCode")!=null) {
-					SpecialProgramCode=EnumClaimSpecialProgram.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SpecialProgramCode"))];
+					SpecialProgramCode=EnumClaimSpecialProgram.valueOf(Serializing.getXmlNodeValue(doc,"SpecialProgramCode"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"UniformBillType")!=null) {
 					UniformBillType=Serializing.getXmlNodeValue(doc,"UniformBillType");
 				}
 				if(Serializing.getXmlNodeValue(doc,"MedType")!=null) {
-					MedType=EnumClaimMedType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedType"))];
+					MedType=EnumClaimMedType.valueOf(Serializing.getXmlNodeValue(doc,"MedType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"AdmissionTypeCode")!=null) {
 					AdmissionTypeCode=Serializing.getXmlNodeValue(doc,"AdmissionTypeCode");
@@ -513,7 +513,7 @@ public class Claim {
 					DateResent=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateResent"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"CorrectionType")!=null) {
-					CorrectionType=ClaimCorrectionType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CorrectionType"))];
+					CorrectionType=ClaimCorrectionType.valueOf(Serializing.getXmlNodeValue(doc,"CorrectionType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClaimIdentifier")!=null) {
 					ClaimIdentifier=Serializing.getXmlNodeValue(doc,"ClaimIdentifier");
@@ -523,7 +523,7 @@ public class Claim {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Claim: "+e.getMessage());
 			}
 		}
 

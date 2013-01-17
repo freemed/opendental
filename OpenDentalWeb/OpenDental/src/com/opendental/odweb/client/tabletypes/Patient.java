@@ -347,13 +347,13 @@ public class Patient {
 					Preferred=Serializing.getXmlNodeValue(doc,"Preferred");
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatStatus")!=null) {
-					PatStatus=PatientStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatStatus"))];
+					PatStatus=PatientStatus.valueOf(Serializing.getXmlNodeValue(doc,"PatStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Gender")!=null) {
-					Gender=PatientGender.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Gender"))];
+					Gender=PatientGender.valueOf(Serializing.getXmlNodeValue(doc,"Gender"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Position")!=null) {
-					Position=PatientPosition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Position"))];
+					Position=PatientPosition.valueOf(Serializing.getXmlNodeValue(doc,"Position"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Birthdate")!=null) {
 					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"Birthdate"));
@@ -467,16 +467,16 @@ public class Patient {
 					EmploymentNote=Serializing.getXmlNodeValue(doc,"EmploymentNote");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Race")!=null) {
-					Race=PatientRace.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Race"))];
+					Race=PatientRace.valueOf(Serializing.getXmlNodeValue(doc,"Race"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"County")!=null) {
 					County=Serializing.getXmlNodeValue(doc,"County");
 				}
 				if(Serializing.getXmlNodeValue(doc,"GradeLevel")!=null) {
-					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"))];
+					GradeLevel=PatientGrade.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Urgency")!=null) {
-					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"))];
+					Urgency=TreatmentUrgency.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateFirstVisit")!=null) {
 					DateFirstVisit=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateFirstVisit"));
@@ -500,13 +500,13 @@ public class Patient {
 					Ward=Serializing.getXmlNodeValue(doc,"Ward");
 				}
 				if(Serializing.getXmlNodeValue(doc,"PreferConfirmMethod")!=null) {
-					PreferConfirmMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferConfirmMethod"))];
+					PreferConfirmMethod=ContactMethod.valueOf(Serializing.getXmlNodeValue(doc,"PreferConfirmMethod"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PreferContactMethod")!=null) {
-					PreferContactMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactMethod"))];
+					PreferContactMethod=ContactMethod.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactMethod"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PreferRecallMethod")!=null) {
-					PreferRecallMethod=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferRecallMethod"))];
+					PreferRecallMethod=ContactMethod.valueOf(Serializing.getXmlNodeValue(doc,"PreferRecallMethod"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SchedBeforeTime")!=null) {
 					SchedBeforeTime=Serializing.getXmlNodeValue(doc,"SchedBeforeTime");
@@ -548,20 +548,20 @@ public class Patient {
 					OnlinePassword=Serializing.getXmlNodeValue(doc,"OnlinePassword");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SmokeStatus")!=null) {
-					SmokeStatus=SmokingStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SmokeStatus"))];
+					SmokeStatus=SmokingStatus.valueOf(Serializing.getXmlNodeValue(doc,"SmokeStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PreferContactConfidential")!=null) {
-					PreferContactConfidential=ContactMethod.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactConfidential"))];
+					PreferContactConfidential=ContactMethod.valueOf(Serializing.getXmlNodeValue(doc,"PreferContactConfidential"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SuperFamily")!=null) {
 					SuperFamily=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SuperFamily"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"TxtMsgOk")!=null) {
-					TxtMsgOk=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TxtMsgOk"))];
+					TxtMsgOk=YN.valueOf(Serializing.getXmlNodeValue(doc,"TxtMsgOk"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Patient: "+e.getMessage());
 			}
 		}
 

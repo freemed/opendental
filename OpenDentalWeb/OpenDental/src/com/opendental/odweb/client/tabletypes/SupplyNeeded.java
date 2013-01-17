@@ -50,7 +50,7 @@ public class SupplyNeeded {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SupplyNeeded: "+e.getMessage());
 			}
 		}
 

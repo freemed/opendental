@@ -76,7 +76,7 @@ public class Employee {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Employee: "+e.getMessage());
 			}
 		}
 

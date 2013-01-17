@@ -793,8 +793,8 @@ public class Serializing {
 		if(type.equals("DataTable")) {
 			return deserializeDataTable(element);
 		}
-		if(type.startsWith("List&lt;")) {
-			return deserializeList(doc);
+		if(type.equals("List")) {
+			return deserializeList(element);
 		}
 		//Open Dental object-------------------------------------------------------------------------------------------------
 		Object result=deserializeOpenDentalObject(type,doc);
@@ -1898,9 +1898,15 @@ public class Serializing {
 
 	/** Pass in the entire xml response and this method will return a deserialized ArrayList.
 	 * @throws Exception Throws exception if the list cannot be deserialized. */
-	private static Object deserializeList(Document doc) throws Exception {
-		// TODO Figure out how to deserialize list objects without reflection here.
-		throw new Exception("deserializeList, error deserializing list.");
+	private static ArrayList<Object> deserializeList(Node node) throws Exception {
+		//Create an array list of objects
+		ArrayList<Object> arrayList=new ArrayList<Object>();
+		ArrayList<Node> nodeListObjects=getChildNodesFiltered(node);
+		//Loop through the entire list of children and create an object for each and then add it to the list.
+		for(int i=0;i<nodeListObjects.size();i++) {
+			arrayList.add(getDeserializedObject(nodeListObjects.get(i).toString()));
+		}
+		return arrayList;
 	}
 
 	/** Pass in a node from the response and this method will digest the entire XML and return a deserialized DataTable. */

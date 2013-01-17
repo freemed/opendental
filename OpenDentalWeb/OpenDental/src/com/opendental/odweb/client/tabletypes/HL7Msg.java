@@ -59,7 +59,7 @@ public class HL7Msg {
 					HL7MsgNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7MsgNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"HL7Status")!=null) {
-					HL7Status=HL7MessageStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7Status"))];
+					HL7Status=HL7MessageStatus.valueOf(Serializing.getXmlNodeValue(doc,"HL7Status"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MsgText")!=null) {
 					MsgText=Serializing.getXmlNodeValue(doc,"MsgText");
@@ -78,7 +78,7 @@ public class HL7Msg {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing HL7Msg: "+e.getMessage());
 			}
 		}
 

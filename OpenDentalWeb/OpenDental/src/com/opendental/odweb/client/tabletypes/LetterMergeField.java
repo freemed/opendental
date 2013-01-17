@@ -48,7 +48,7 @@ public class LetterMergeField {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing LetterMergeField: "+e.getMessage());
 			}
 		}
 

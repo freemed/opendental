@@ -124,7 +124,7 @@ public class RxPat {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SendStatus")!=null) {
-					SendStatus=RxSendStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SendStatus"))];
+					SendStatus=RxSendStatus.valueOf(Serializing.getXmlNodeValue(doc,"SendStatus"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"RxCui")!=null) {
 					RxCui=Integer.valueOf(Serializing.getXmlNodeValue(doc,"RxCui"));
@@ -134,7 +134,7 @@ public class RxPat {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RxPat: "+e.getMessage());
 			}
 		}
 

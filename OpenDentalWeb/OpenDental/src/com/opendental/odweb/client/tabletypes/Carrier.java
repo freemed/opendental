@@ -135,11 +135,11 @@ public class Carrier {
 					CanadianEncryptionMethod=Byte.valueOf(Serializing.getXmlNodeValue(doc,"CanadianEncryptionMethod"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"CanadianSupportedTypes")!=null) {
-					CanadianSupportedTypes=CanSupTransTypes.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CanadianSupportedTypes"))];
+					CanadianSupportedTypes=CanSupTransTypes.valueOf(Serializing.getXmlNodeValue(doc,"CanadianSupportedTypes"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Carrier: "+e.getMessage());
 			}
 		}
 

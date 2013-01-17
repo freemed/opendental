@@ -55,7 +55,7 @@ public class UserQuery {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing UserQuery: "+e.getMessage());
 			}
 		}
 

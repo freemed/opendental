@@ -52,7 +52,7 @@ public class FeeSched {
 					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 				if(Serializing.getXmlNodeValue(doc,"FeeSchedType")!=null) {
-					FeeSchedType=FeeScheduleType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSchedType"))];
+					FeeSchedType=FeeScheduleType.valueOf(Serializing.getXmlNodeValue(doc,"FeeSchedType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
@@ -62,7 +62,7 @@ public class FeeSched {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing FeeSched: "+e.getMessage());
 			}
 		}
 

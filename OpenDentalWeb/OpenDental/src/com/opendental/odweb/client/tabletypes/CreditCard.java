@@ -120,7 +120,7 @@ public class CreditCard {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing CreditCard: "+e.getMessage());
 			}
 		}
 

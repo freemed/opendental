@@ -62,7 +62,7 @@ public class Language {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Language: "+e.getMessage());
 			}
 		}
 

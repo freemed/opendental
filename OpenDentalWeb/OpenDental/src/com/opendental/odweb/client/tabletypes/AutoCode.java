@@ -55,7 +55,7 @@ public class AutoCode {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AutoCode: "+e.getMessage());
 			}
 		}
 

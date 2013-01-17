@@ -184,7 +184,7 @@ public class Provider {
 					FeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSched"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Specialty")!=null) {
-					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Specialty"))];
+					Specialty=DentalSpecialty.valueOf(Serializing.getXmlNodeValue(doc,"Specialty"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SSN")!=null) {
 					SSN=Serializing.getXmlNodeValue(doc,"SSN");
@@ -260,7 +260,7 @@ public class Provider {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Provider: "+e.getMessage());
 			}
 		}
 

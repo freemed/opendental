@@ -113,7 +113,7 @@ public class Etrans {
 					ClearingHouseNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClearingHouseNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Etype")!=null) {
-					Etype=EtransType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Etype"))];
+					Etype=EtransType.valueOf(Serializing.getXmlNodeValue(doc,"Etype"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClaimNum")!=null) {
 					ClaimNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClaimNum"));
@@ -162,7 +162,7 @@ public class Etrans {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Etrans: "+e.getMessage());
 			}
 		}
 

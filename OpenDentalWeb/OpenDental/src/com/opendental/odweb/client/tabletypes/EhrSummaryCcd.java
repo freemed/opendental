@@ -57,7 +57,7 @@ public class EhrSummaryCcd {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EhrSummaryCcd: "+e.getMessage());
 			}
 		}
 

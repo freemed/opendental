@@ -48,7 +48,7 @@ public class ScheduleOp {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ScheduleOp: "+e.getMessage());
 			}
 		}
 

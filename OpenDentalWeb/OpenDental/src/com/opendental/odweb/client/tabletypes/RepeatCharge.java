@@ -78,7 +78,7 @@ public class RepeatCharge {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RepeatCharge: "+e.getMessage());
 			}
 		}
 

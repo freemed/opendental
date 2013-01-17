@@ -48,14 +48,14 @@ public class PatFieldDef {
 					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"FieldType")!=null) {
-					FieldType=PatFieldType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"))];
+					FieldType=PatFieldType.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PickList")!=null) {
 					PickList=Serializing.getXmlNodeValue(doc,"PickList");
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PatFieldDef: "+e.getMessage());
 			}
 		}
 

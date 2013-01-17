@@ -64,7 +64,7 @@ public class PhoneMetric {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PhoneMetric: "+e.getMessage());
 			}
 		}
 

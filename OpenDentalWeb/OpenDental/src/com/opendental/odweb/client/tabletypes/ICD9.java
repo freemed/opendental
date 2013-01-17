@@ -57,7 +57,7 @@ public class ICD9 {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ICD9: "+e.getMessage());
 			}
 		}
 

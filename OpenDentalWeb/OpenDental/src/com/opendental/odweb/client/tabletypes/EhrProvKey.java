@@ -83,7 +83,7 @@ public class EhrProvKey {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EhrProvKey: "+e.getMessage());
 			}
 		}
 

@@ -66,7 +66,7 @@ public class LetterMerge {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing LetterMerge: "+e.getMessage());
 			}
 		}
 

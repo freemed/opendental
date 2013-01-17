@@ -69,14 +69,14 @@ public class DisplayField {
 					ColumnWidth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ColumnWidth"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
-					Category=DisplayFieldCategory.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"))];
+					Category=DisplayFieldCategory.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ChartViewNum")!=null) {
 					ChartViewNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ChartViewNum"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DisplayField: "+e.getMessage());
 			}
 		}
 

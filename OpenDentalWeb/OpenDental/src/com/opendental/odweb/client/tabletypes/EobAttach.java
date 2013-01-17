@@ -64,7 +64,7 @@ public class EobAttach {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing EobAttach: "+e.getMessage());
 			}
 		}
 

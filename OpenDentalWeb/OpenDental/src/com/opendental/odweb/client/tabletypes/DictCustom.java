@@ -41,7 +41,7 @@ public class DictCustom {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DictCustom: "+e.getMessage());
 			}
 		}
 

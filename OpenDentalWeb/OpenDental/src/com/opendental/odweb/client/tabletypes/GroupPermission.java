@@ -60,11 +60,11 @@ public class GroupPermission {
 					UserGroupNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserGroupNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PermType")!=null) {
-					PermType=Permissions.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PermType"))];
+					PermType=Permissions.valueOf(Serializing.getXmlNodeValue(doc,"PermType"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing GroupPermission: "+e.getMessage());
 			}
 		}
 

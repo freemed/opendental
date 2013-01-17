@@ -57,7 +57,7 @@ public class DashboardAR {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DashboardAR: "+e.getMessage());
 			}
 		}
 

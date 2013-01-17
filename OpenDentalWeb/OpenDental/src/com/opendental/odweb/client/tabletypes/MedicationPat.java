@@ -85,7 +85,7 @@ public class MedicationPat {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing MedicationPat: "+e.getMessage());
 			}
 		}
 

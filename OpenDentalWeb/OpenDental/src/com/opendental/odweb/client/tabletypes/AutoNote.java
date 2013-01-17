@@ -48,7 +48,7 @@ public class AutoNote {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing AutoNote: "+e.getMessage());
 			}
 		}
 

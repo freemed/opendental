@@ -57,7 +57,7 @@ public class Def {
 					DefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
-					Category=DefCat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"))];
+					Category=DefCat.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
@@ -76,7 +76,7 @@ public class Def {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Def: "+e.getMessage());
 			}
 		}
 

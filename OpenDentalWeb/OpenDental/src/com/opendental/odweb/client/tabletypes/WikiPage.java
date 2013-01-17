@@ -71,7 +71,7 @@ public class WikiPage {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing WikiPage: "+e.getMessage());
 			}
 		}
 

@@ -76,7 +76,7 @@ public class Contact {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Contact: "+e.getMessage());
 			}
 		}
 

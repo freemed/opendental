@@ -55,7 +55,7 @@ public class InsFilingCode {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing InsFilingCode: "+e.getMessage());
 			}
 		}
 

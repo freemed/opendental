@@ -48,7 +48,7 @@ public class FormularyMed {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing FormularyMed: "+e.getMessage());
 			}
 		}
 

@@ -64,7 +64,7 @@ public class DiseaseDef {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DiseaseDef: "+e.getMessage());
 			}
 		}
 

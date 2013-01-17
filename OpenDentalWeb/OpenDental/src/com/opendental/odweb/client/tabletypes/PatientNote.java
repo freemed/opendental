@@ -76,7 +76,7 @@ public class PatientNote {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PatientNote: "+e.getMessage());
 			}
 		}
 

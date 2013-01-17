@@ -48,7 +48,7 @@ public class SigElement {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SigElement: "+e.getMessage());
 			}
 		}
 

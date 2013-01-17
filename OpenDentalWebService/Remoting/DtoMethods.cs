@@ -30,8 +30,8 @@ namespace OpenDentalWebService {
 				case "DataTable":
 					return aaGeneralTypes.Serialize(objectType,obj);
 			}
-			if(objectType.StartsWith("List<")) {//Lists.
-				return aaGeneralTypes.Serialize(objectType,obj);
+			if(objectType.StartsWith("List")) {//Lists.
+				return aaGeneralTypes.SerializeList(objectType,obj);
 			}
 			if(objectType.Contains("[")) {//Arrays.
 				return aaGeneralTypes.Serialize(objectType,obj);
@@ -2072,6 +2072,9 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		private static object MethodAppointments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="RefreshASAP") {
+				return Appointments.RefreshASAP(Convert.ToInt64(parameters[0]),Convert.ToInt64(parameters[1]),Convert.ToInt64(parameters[2]));
+			}
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}
 

@@ -62,7 +62,7 @@ public class RecallType {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing RecallType: "+e.getMessage());
 			}
 		}
 

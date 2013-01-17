@@ -127,7 +127,7 @@ public class PaySplit {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing PaySplit: "+e.getMessage());
 			}
 		}
 

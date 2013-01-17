@@ -62,7 +62,7 @@ public class ZipCode {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ZipCode: "+e.getMessage());
 			}
 		}
 

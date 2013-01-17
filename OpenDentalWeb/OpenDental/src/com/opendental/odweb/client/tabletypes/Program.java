@@ -83,7 +83,7 @@ public class Program {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Program: "+e.getMessage());
 			}
 		}
 

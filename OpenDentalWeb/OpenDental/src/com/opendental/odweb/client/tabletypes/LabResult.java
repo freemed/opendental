@@ -95,11 +95,11 @@ public class LabResult {
 					ObsRange=Serializing.getXmlNodeValue(doc,"ObsRange");
 				}
 				if(Serializing.getXmlNodeValue(doc,"AbnormalFlag")!=null) {
-					AbnormalFlag=LabAbnormalFlag.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AbnormalFlag"))];
+					AbnormalFlag=LabAbnormalFlag.valueOf(Serializing.getXmlNodeValue(doc,"AbnormalFlag"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing LabResult: "+e.getMessage());
 			}
 		}
 

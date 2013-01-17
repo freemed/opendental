@@ -113,7 +113,7 @@ public class Pharmacy {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing Pharmacy: "+e.getMessage());
 			}
 		}
 

@@ -64,7 +64,7 @@ public class OrthoChart {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing OrthoChart: "+e.getMessage());
 			}
 		}
 

@@ -55,7 +55,7 @@ public class ProcApptColor {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ProcApptColor: "+e.getMessage());
 			}
 		}
 

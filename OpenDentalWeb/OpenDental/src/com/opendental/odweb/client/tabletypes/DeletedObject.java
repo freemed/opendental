@@ -50,14 +50,14 @@ public class DeletedObject {
 					ObjectNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ObjectType")!=null) {
-					ObjectType=DeletedObjectType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"))];
+					ObjectType=DeletedObjectType.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DeletedObject: "+e.getMessage());
 			}
 		}
 

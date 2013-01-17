@@ -48,7 +48,7 @@ public class DrugManufacturer {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing DrugManufacturer: "+e.getMessage());
 			}
 		}
 

@@ -48,7 +48,7 @@ public class SchoolClass {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing SchoolClass: "+e.getMessage());
 			}
 		}
 

@@ -62,7 +62,7 @@ public class ProcButtonItem {
 				}
 			}
 			catch(Exception e) {
-				throw e;
+				throw new Exception("Error deserializing ProcButtonItem: "+e.getMessage());
 			}
 		}
 

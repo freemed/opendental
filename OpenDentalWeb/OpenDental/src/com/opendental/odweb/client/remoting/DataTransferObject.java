@@ -46,7 +46,9 @@ public class DataTransferObject {
 		}
 		xml.append("</Params>");
 		if(this.Type.equals("DtoGetObject")) {
-			xml.append("<ObjectType>"+((DtoGetObject)this).ObjectType+"</ObjectType>");
+			DtoGetObject dto=(DtoGetObject)this;
+			String objType=dto.ObjectType;
+			xml.append("<ObjectType>"+objType+"</ObjectType>");
 		}
 		xml.append("</"+Serializing.escapeForXml(Type)+">");//End of dto object.
 		return xml.toString();
