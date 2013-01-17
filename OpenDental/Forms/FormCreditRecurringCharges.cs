@@ -274,16 +274,33 @@ namespace OpenDental {
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
 				DateTime exp=PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["CCExpiration"].ToString());
+				string address=table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString();
+				string addressPat=table.Rows[gridMain.SelectedIndices[i]]["AddressPat"].ToString();
+				string zip=table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString();
+				string zipPat=table.Rows[gridMain.SelectedIndices[i]]["ZipPat"].ToString();
 				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" /LOCKAMOUNT ";
 				info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
 				if(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()!="") {
 					info.Arguments+="/XCACCOUNTID:"+table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()+" ";
+					info.Arguments+="/RECURRING ";
 				}
 				else {
 					info.Arguments+="/ACCOUNT:"+table.Rows[gridMain.SelectedIndices[i]]["CCNumberMasked"].ToString()+" ";
+				}
+				if(exp.Year>1880) {
 					info.Arguments+="/EXP:"+exp.ToString("MMyy")+" ";
-					info.Arguments+="\"/ADDRESS:"+table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString()+"\" ";
-					info.Arguments+="\"/ZIP:"+table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString()+"\" ";
+				}
+				if(address!="") {
+					info.Arguments+="\"/ADDRESS:"+address+"\" ";
+				}
+				else if(addressPat!="") {
+					info.Arguments+="\"/ADDRESS:"+addressPat+"\" ";
+				}
+				if(zip!="") {
+					info.Arguments+="\"/ZIP:"+zip+"\" ";
+				}
+				else if(zipPat!="") {
+					info.Arguments+="\"/ZIP:"+zipPat+"\" ";
 				}
 				info.Arguments+="/RECEIPT:Pat"+patNum+" ";//aka invoice#
 				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";

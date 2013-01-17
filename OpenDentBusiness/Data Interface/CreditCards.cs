@@ -82,12 +82,12 @@ namespace OpenDentBusiness{
 			//	-have recurring charges setup and today's date falls within the start and stop range.
 			//	-have a total balance >= recurring charge amount
 			//NOTE: Query will return patients with or without payments regardless of when that payment occurred, filtering is done below.
-			string command="SELECT PatNum,PatName,FamBalTotal,LatestPayment,DateStart,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ChargeAmt,PayPlanNum,ProvNum,ClinicNum "
+			string command="SELECT PatNum,PatName,FamBalTotal,LatestPayment,DateStart,Address,AddressPat,Zip,ZipPat,XChargeToken,CCNumberMasked,CCExpiration,ChargeAmt,PayPlanNum,ProvNum,ClinicNum "
 				+"FROM (";
 			#region Payments
 			command+="(SELECT 1,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+" PatName,"//The 'SELECT 1' garuntees the UNION will not combine results with payment plans.
 				+"guar.BalTotal-guar.InsEst FamBalTotal,CASE WHEN MAX(pay.PayDate) IS NULL THEN "+POut.Date(new DateTime(1,1,1))+" ELSE MAX(pay.PayDate) END LatestPayment,"
-				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop,0 ProvNum,pat.ClinicNum "
+				+"cc.DateStart,cc.Address,pat.Address AddressPat,cc.Zip,pat.Zip ZipPat,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop,0 ProvNum,pat.ClinicNum "
 				+"FROM (creditcard cc,patient pat,patient guar) "
 				+"LEFT JOIN payment pay ON cc.PatNum=pay.PatNum AND pay.IsRecurringCC=1 "
 				+"WHERE cc.PatNum=pat.PatNum "
@@ -110,7 +110,7 @@ namespace OpenDentBusiness{
 				+"WHERE ppc.ChargeDate <= "+DbHelper.Curdate()+" AND ppc.PayPlanNum=cc.PayPlanNum) "
 				+"- CASE WHEN SUM(ps.SplitAmt) IS NULL THEN 0 ELSE SUM(ps.SplitAmt) END,2) FamBalTotal,";
 			command+="CASE WHEN MAX(ps.DatePay) IS NULL THEN "+POut.Date(new DateTime(1,1,1))+" ELSE MAX(pay.PayDate) END LatestPayment,"
-				+"cc.DateStart,cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop,"
+				+"cc.DateStart,cc.Address,pat.Address AddressPat,cc.Zip,pat.Zip ZipPat,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop,"
 				+"(SELECT ppc1.ProvNum FROM payplancharge ppc1 WHERE ppc1.PayPlanNum=cc.PayPlanNum LIMIT 1) ProvNum,"
 				+"(SELECT ppc2.ClinicNum FROM payplancharge ppc2 WHERE ppc2.PayPlanNum=cc.PayPlanNum LIMIT 1) ClinicNum "
 				+"FROM creditcard cc "
@@ -123,7 +123,7 @@ namespace OpenDentBusiness{
 			}
 			else {//Oracle
 				command+="GROUP BY cc.CreditCardNum,cc.PatNum,"+DbHelper.Concat("pat.LName","', '","pat.FName")+",PatName,guar.BalTotal-guar.InsEst,"
-					+"cc.Address,cc.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop) ";
+					+"cc.Address,pat.Address,cc.Zip,pat.Zip,cc.XChargeToken,cc.CCNumberMasked,cc.CCExpiration,cc.ChargeAmt,cc.PayPlanNum,cc.DateStop) ";
 			}
 			#endregion
 			//Now we have all the results for payments and payment plans, so do an obvious filter. A more thorough filter happens later.
