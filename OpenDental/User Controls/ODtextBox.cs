@@ -35,7 +35,9 @@ namespace OpenDental
 		///<summary></summary>
 		public ODtextBox(){
 			InitializeComponent();// Required for Windows.Forms Class Composition Designer support
-			if(HunspellGlobal==null) {
+			if(System.ComponentModel.LicenseManager.UsageMode!=System.ComponentModel.LicenseUsageMode.Designtime
+				&& HunspellGlobal==null)
+			{
 				HunspellGlobal=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
 			}
 			ListCorrect=new List<string>();
