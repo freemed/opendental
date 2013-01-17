@@ -76,14 +76,14 @@ namespace OpenDentBusiness{
 			return null;
 		}
 
-		///<summary></summary>
+		///<summary>Checks to make sure at least one email address has a valid (not blank) SMTP server.</summary>
 		public static bool ExistsValidEmail() {
 			for(int i=0;i<Listt.Count;i++) {
 				if(Listt[i].SMTPserver!="") {
 					return true;
 				}
-				return false;
 			}
+			return false;
 		}
 
 		///<summary></summary>

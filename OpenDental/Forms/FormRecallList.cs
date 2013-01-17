@@ -1404,10 +1404,8 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));    
         return;
 			}
-			EmailAddress emailAddress=EmailAddresses.GetByClinic(0);
-//loop in s class
-			if(emailAddress==null || emailAddress.SMTPserver=="") {
-				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
+			if(!EmailAddresses.ExistsValidEmail()) {
+				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
 			if(PrefC.GetLong(PrefName.RecallStatusEmailed)==0){
@@ -1458,6 +1456,7 @@ namespace OpenDental{
 			string str="";
 			string[] recallNumArray;
 			string[] patNumArray;
+			EmailAddress emailAddress;
 			for(int i=0;i<addrTable.Rows.Count;i++){
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(addrTable.Rows[i]["emailPatNum"].ToString());

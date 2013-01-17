@@ -862,9 +862,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-			if(EmailAddresses.GetByClinic(0).SMTPserver=="") {
-//todo: loop through all emailaddresses
-				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
+			if(!EmailAddresses.ExistsValidEmail()) {
+				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
 			if(PrefC.GetLong(PrefName.ConfirmStatusEmailed)==0) {
