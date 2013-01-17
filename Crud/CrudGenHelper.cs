@@ -219,7 +219,7 @@ namespace Crud {
 
 		public static void ConnectToDatabaseM(string dbName) {
 			OpenDentBusiness.DataConnection dcon=new OpenDentBusiness.DataConnection();
-			dcon.SetDb("192.168.0.196",dbName,"root","","","",DatabaseType.MySql);
+			dcon.SetDb("10.10.1.196",dbName,"root","","","",DatabaseType.MySql);
 			RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 		}
 

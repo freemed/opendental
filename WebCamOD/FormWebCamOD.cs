@@ -17,7 +17,7 @@ namespace WebCamOD {
 	public partial class FormWebCamOD:Form {
 		private IntPtr intPtrVideo;
 		private VideoCapture vidCapt;
-		private string IpAddress192;
+		private string IpAddressCur;
 		///<summary>This is set to minVal when starting up.  Whenever saving a screenshot, if the purge date is not today, then it runs a purge to keep the number of files from getting too big.  So this will usually happen within 5 minutes of someone clocking in for the day.</summary>
 		private DateTime datePurged;
 
@@ -38,37 +38,22 @@ namespace WebCamOD {
 				return;
 			}
 			//since this tool is only used at HQ, we hard code everything
-			bool is192network=false;
 			IPHostEntry iphostentry=Dns.GetHostEntry(Environment.MachineName);
-			foreach(IPAddress ipaddress in iphostentry.AddressList) {
-				if(ipaddress.ToString().StartsWith("192.")) {
-					is192network=true;
-				}
-			}
 			DataConnection dbcon=new DataConnection();
 			try {
-				if(is192network) {
-					dbcon.SetDb("192.168.0.200","customers","root","","","",DatabaseType.MySql);
-				}
-				else {
-					dbcon.SetDb("10.10.10.200","customers","root","","","",DatabaseType.MySql);
-				}
+				dbcon.SetDb("10.10.1.200","customers","root","","","",DatabaseType.MySql);
 			}
 			catch {
 				MessageBox.Show("This tool is not designed for general use.");
 				return;
 			}
 			//get ipaddress on startup
-			IpAddress192="";
+			IpAddressCur="";
 			foreach(IPAddress ipaddress in iphostentry.AddressList) {
-				if(ipaddress.ToString().Contains("192.168.0")) {
-					IpAddress192=ipaddress.ToString();
+				if(ipaddress.ToString().Contains("10.10.1")) {
+					IpAddressCur=ipaddress.ToString();
 				}
 			}
-			//if(IpAddress192=="") {
-			//	MessageBox.Show("Could not locate ipaddress");
-			//	Application.Exit();
-			//}
 			intPtrVideo=IntPtr.Zero;
 			timerPhoneWebCam.Enabled=true;
 			timerScreenShots.Enabled=true;
@@ -88,11 +73,11 @@ namespace WebCamOD {
 						//image capture will now continue below if successful
 					}
 					catch {
-						Phones.SetWebCamImage(IpAddress192,null,Environment.MachineName);
+						Phones.SetWebCamImage(IpAddressCur,null,Environment.MachineName);
 						return;//haven't actually seen this happen since we started properly disposing of vidCapt
 					}
 				}
-				Phones.SetWebCamImage(IpAddress192,null,Environment.MachineName);
+				Phones.SetWebCamImage(IpAddressCur,null,Environment.MachineName);
 			}
 			if(vidCapt!=null) {
 				if(intPtrVideo != IntPtr.Zero) {// Release any previous buffer
@@ -121,8 +106,8 @@ namespace WebCamOD {
 				finally {
 					//Marshal.FreeCoTaskMem(intPtrVideo);
 				}
-				if(IpAddress192!="") {//found entry in phone table matching this machine ip.
-					Phones.SetWebCamImage(IpAddress192,bitmapSmall,Environment.MachineName);
+				if(IpAddressCur!="") {//found entry in phone table matching this machine ip.
+					Phones.SetWebCamImage(IpAddressCur,bitmapSmall,Environment.MachineName);
 				}
 				if(bitmapSmall!=null) {
 					bitmapSmall.Dispose();
@@ -133,11 +118,11 @@ namespace WebCamOD {
 
 		private void timerScreenShots_Tick(object sender,EventArgs e) {
 			//ticks every 5 minutes
-			int extension=Phones.IsOnClock(IpAddress192,Environment.MachineName);
+			int extension=Phones.IsOnClock(IpAddressCur,Environment.MachineName);
 			if(extension==0) {//if this person is on break
 				return;//don't save a screenshot
 			}
-			string folder=@"\\192.168.0.189\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
+			string folder=@"\\10.10.1.189\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
 			if(!Directory.Exists(folder)) {
 				Directory.CreateDirectory(folder);
 			}
