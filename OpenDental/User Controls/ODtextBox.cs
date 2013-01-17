@@ -16,12 +16,12 @@ namespace OpenDental
 	public class ODtextBox : RichTextBox{//System.ComponentModel.Component
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.ComponentModel.Container components = null;// Required designer variable.
-		private static Hunspell hunspell;//We create this object one time for every instance of this textbox control within the entire program.
+		private static Hunspell HunspellGlobal;//We create this object one time for every instance of this textbox control within the entire program.
 		private QuickPasteType quickPasteType;
-		private List<string> correctList;
-		private List<string> incorrectList;
-		private Bitmap bitmap;//TODO: dispose when control is destroyed.
-		private Graphics bufferGraphics;//TODO: dispose when control is destroyed.
+		private List<string> ListCorrect;
+		private List<string> ListIncorrect;
+		private Bitmap BitmapOverlay;//TODO: dispose when control is destroyed.
+		private Graphics BufferGraphics;//TODO: dispose when control is destroyed.
 		/*public ODtextBox(System.ComponentModel.IContainer container)
 		{
 			///
@@ -35,12 +35,12 @@ namespace OpenDental
 		///<summary></summary>
 		public ODtextBox(){
 			InitializeComponent();// Required for Windows.Forms Class Composition Designer support
-			if(hunspell==null) {
-				hunspell=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
+			if(HunspellGlobal==null) {
+				HunspellGlobal=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
 			}
-			correctList=new List<string>();
-			correctList.Add("\n");
-			incorrectList=new List<string>();
+			ListCorrect=new List<string>();
+			ListCorrect.Add("\n");
+			ListIncorrect=new List<string>();
 			EventHandler onClick=new EventHandler(menuItem_Click);
 			MenuItem menuItem;
 			menuItem=new MenuItem(Lan.g(this,"Insert Date"),onClick,Shortcut.CtrlD);
@@ -65,13 +65,13 @@ namespace OpenDental
 				{
 					components.Dispose();
 				}
-				if(bufferGraphics!=null) {//Dispose before bitmap.
-					bufferGraphics.Dispose();
-					bufferGraphics=null;
+				if(BufferGraphics!=null) {//Dispose before bitmap.
+					BufferGraphics.Dispose();
+					BufferGraphics=null;
 				}
-				if(bitmap!=null) {
-					bitmap.Dispose();
-					bitmap=null;
+				if(BitmapOverlay!=null) {
+					BitmapOverlay.Dispose();
+					BitmapOverlay=null;
 				}
 				//We do not dispose the hunspell object because it will be automatially disposed of when the program closes.
 			}
@@ -111,6 +111,7 @@ namespace OpenDental
 				quickPasteType=value;
 			}
 		}
+
 		private void contextMenu_Popup(object sender, System.EventArgs e) {
 			if(SelectionLength==0){
 				contextMenu.MenuItems[3].Enabled=false;//cut
@@ -180,17 +181,17 @@ namespace OpenDental
 			if(e.KeyCode==Keys.Q && e.Modifiers==Keys.Control){
 				ShowFullDialog();
 			}
-			if(this.bitmap==null) {
-				this.bitmap=new Bitmap(this.Width,this.Height);
-				bufferGraphics=Graphics.FromImage(this.bitmap);
-				bufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
+			if(this.BitmapOverlay==null) {
+				this.BitmapOverlay=new Bitmap(this.Width,this.Height);
+				BufferGraphics=Graphics.FromImage(this.BitmapOverlay);
+				BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
 			}			
-			ClearWavyLines(bufferGraphics);
+			ClearWavyLines(BufferGraphics);
 			checkSpelling();
-			Graphics textBoxGraphics=Graphics.FromHwnd(this.Handle);
+			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
 			Application.DoEvents();
-			textBoxGraphics.DrawImageUnscaled(bitmap,0,0);
-			textBoxGraphics.Dispose();
+			graphicsTextBox.DrawImageUnscaled(BitmapOverlay,0,0);
+			graphicsTextBox.Dispose();
 		}
 
 		private void ShowFullDialog(){
@@ -229,10 +230,10 @@ namespace OpenDental
 				if(noPunctWords[i].Length==0) {
 					continue;
 				}
-				if(correctList.Contains(words[i])) {
+				if(ListCorrect.Contains(words[i])) {
 					continue;
 				}
-				if(incorrectList.Contains(words[i])) {
+				if(ListIncorrect.Contains(words[i])) {
 					CustomPaint(textLength,textLength+words[i].Length);
 					continue;
 				}
@@ -243,14 +244,14 @@ namespace OpenDental
 					}
 				}
 				if(!correct) {//Not in custom dictionary, so spell check
-					correct=hunspell.Spell(noPunctWords[i]);
+					correct=HunspellGlobal.Spell(noPunctWords[i]);
 				}
 				if(!correct) {
 					CustomPaint(textLength,textLength+words[i].Length);
-					incorrectList.Add(words[i]);
+					ListIncorrect.Add(words[i]);
 				}
 				else {//if it gets here, the word was spelled correctly, determined by comparing to the custom word list and/or the hunspell dict
-					correctList.Add(words[i]);
+					ListCorrect.Add(words[i]);
 				}
 			}
 			base.SelectionStart=curPos;
@@ -274,10 +275,10 @@ namespace OpenDental
 					pl.Add(new Point(i+2,start.Y+2));
 				}
 				Point[] p=(Point[])pl.ToArray(typeof(Point));
-				bufferGraphics.DrawLines(pen,p);
+				BufferGraphics.DrawLines(pen,p);
 			}
 			else {
-				bufferGraphics.DrawLine(pen,start,end);
+				BufferGraphics.DrawLine(pen,start,end);
 			}
 		}
 
