@@ -1862,7 +1862,7 @@ namespace OpenDental{
 			EmailMessage message=new EmailMessage();
 			message.PatNum=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
-			message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+			message.FromAddress=EmailAddresses.GetDefault(PatCur.ClinicNum).SenderAddress;
 			message.Subject=Lan.g(this,"Treatment Plan");
 			EmailAttach attach=new EmailAttach();
 			attach.DisplayedFileName="TreatmentPlan.pdf";

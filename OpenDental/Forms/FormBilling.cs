@@ -815,20 +815,9 @@ namespace OpenDental{
 				pat=fam.GetPatient(stmt.PatNum);
 				patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				dataSet=AccountModules.GetStatementDataSet(stmt);
-				if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-					clinic=Clinics.GetClinic(pat.ClinicNum);
-					if(clinic != null && clinic.EmailAddressNum!=0) {
-						emailAddress=EmailAddresses.GetOne(Clinics.GetClinic(pat.ClinicNum).EmailAddressNum);
-					}
-					else {
-						emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
-					}
-				}
-				else {
-					emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
-				}
+				emailAddress=EmailAddresses.GetDefault(pat.ClinicNum);
 				if(stmt.Mode_==StatementMode.Email){
-					if(emailAddress==null || emailAddress.SMTPserver==""){
+					if(emailAddress.SMTPserver==""){
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
 						isPrinting=false;
@@ -896,7 +885,7 @@ namespace OpenDental{
 					attach.ActualFileName=fileName;
 					message.Attachments.Add(attach);
 					try{
-						FormEmailMessageEdit.SendEmail(message);
+						FormEmailMessageEdit.SendEmail(message,emailAddress);
 						message.SentOrReceived=CommSentOrReceived.Sent;
 						message.MsgDateTime=DateTime.Now;
 						EmailMessages.Insert(message);

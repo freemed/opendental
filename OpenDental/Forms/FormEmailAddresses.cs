@@ -12,6 +12,7 @@ namespace OpenDental {
 	public partial class FormEmailAddresses:Form {
 		public bool IsSelectionMode;
 		public long EmailAddressNum;
+		public bool IsChanged;
 
 		public FormEmailAddresses() {
 			InitializeComponent();
@@ -79,6 +80,7 @@ namespace OpenDental {
 			FormEAE.ShowDialog();
 			if(FormEAE.DialogResult==DialogResult.OK) {
 				FillGrid();
+				IsChanged=true;
 			}
 		}
 
@@ -97,8 +99,11 @@ namespace OpenDental {
 		}
 
 		private void FormEmailAddresses_FormClosing(object sender,FormClosingEventArgs e) {
-			//if changed
-			//DataValid.SetInvalid(InvalidType.Email);
+			if(IsChanged) {
+				DataValid.SetInvalid(InvalidType.Email);
+			}
 		}
+
+
 	}
 }

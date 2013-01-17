@@ -1403,9 +1403,10 @@ namespace OpenDental{
 			if(gridMain.Rows.Count < 1){
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));    
         return;
-      }
-			if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
-				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
+			}
+			EmailAddress emailAddress=EmailAddresses.GetDefault(0);
+			if(emailAddress==null || emailAddress.SMTPserver=="") {
+				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
 				return;
 			}
 			if(PrefC.GetLong(PrefName.RecallStatusEmailed)==0){
@@ -1460,7 +1461,8 @@ namespace OpenDental{
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(addrTable.Rows[i]["emailPatNum"].ToString());
 				message.ToAddress=PIn.String(addrTable.Rows[i]["email"].ToString());//might be guarantor email
-				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+				emailAddress=EmailAddresses.GetDefault(PIn.Long(addrTable.Rows[i]["ClinicNum"].ToString()));
+				message.FromAddress=emailAddress.SenderAddress;
 				if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
 					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject);
 				}
@@ -1500,7 +1502,7 @@ namespace OpenDental{
 				}
 				message.BodyText=str;
 				try{
-					FormEmailMessageEdit.SendEmail(message);
+					FormEmailMessageEdit.SendEmail(message,emailAddress);
 				}
 				catch(Exception ex){
 					Cursor=Cursors.Default;

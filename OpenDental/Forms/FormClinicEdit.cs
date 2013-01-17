@@ -535,6 +535,9 @@ namespace OpenDental{
 			FormEmailAddresses FormEA=new FormEmailAddresses();
 			FormEA.IsSelectionMode=true;
 			FormEA.ShowDialog();
+			if(FormEA.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			ClinicCur.EmailAddressNum=FormEA.EmailAddressNum;
 			textEmail.Text=EmailAddresses.GetOne(FormEA.EmailAddressNum).EmailUsername;
 		}

@@ -45,6 +45,29 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
+			///<summary>Gets the default email address for the clinic/practice. Takes a clinic num. If clinic num is 0 or there is no default for that clinic, 
+			///it will get practice default. May return a new blank object.</summary>
+			public static EmailAddress GetDefault(long clinicNum) {
+			EmailAddress emailAddress=null;
+			Clinic clinic=Clinics.GetClinic(clinicNum);
+			if(PrefC.GetBool(PrefName.EasyNoClinics) || clinic==null) {//No clinic, get practice default
+				emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+			}
+			else {
+				clinic=Clinics.GetClinic(clinicNum);
+				if(clinic!=null) {
+					emailAddress=EmailAddresses.GetOne(clinic.EmailAddressNum);
+				}
+				if(emailAddress==null) {//bad practice EmailAddressNum (probably 0), use default
+					emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+				}
+			}
+			if(emailAddress==null) {
+				emailAddress=new EmailAddress();//To avoid null checks.
+			}
+			return emailAddress;
+		}
+
 		///<summary>Gets one EmailAddress from the cached listt.  Might be null.</summary>
 		public static EmailAddress GetOne(long emailAddressNum){
 			//No need to check RemoteRole; Calls GetTableRemotelyIfNeeded().

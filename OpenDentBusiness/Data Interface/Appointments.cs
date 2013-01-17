@@ -395,6 +395,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("age");
 			table.Columns.Add("AptDateTime",typeof(DateTime));//This will actually be DateTimeAskedToArrive
 			table.Columns.Add("aptDateTime");//This will actually be DateTimeAskedToArrive
+			table.Columns.Add("ClinicNum");//patient.ClinicNum
 			table.Columns.Add("confirmed");
 			table.Columns.Add("contactMethod");
 			table.Columns.Add("email");//could be patient or guarantor email.

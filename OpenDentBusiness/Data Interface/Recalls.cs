@@ -80,6 +80,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("age");
 			table.Columns.Add("billingType");
 			table.Columns.Add("contactMethod");//text representation for display
+			table.Columns.Add("ClinicNum");
 			table.Columns.Add("dateLastReminder");
 			table.Columns.Add("DateDue",typeof(DateTime));
 			table.Columns.Add("dueDate");//blank if minVal
@@ -101,7 +102,7 @@ namespace OpenDentBusiness{
 			table.Columns.Add("status");
 			List<DataRow> rows=new List<DataRow>();
 			string command;
-			command=@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,MAX(CommDateTime) ""_dateLastReminder"",
+			command=@"SELECT patguar.BalTotal,patient.BillingType,patient.Birthdate,recall.DateDue,patient.ClinicNum,MAX(CommDateTime) ""_dateLastReminder"",
 				DisableUntilBalance,DisableUntilDate,
 				patient.Email,patguar.Email ""_guarEmail"",patguar.FName ""_guarFName"",
 				patguar.LName ""_guarLName"",patient.FName,
@@ -255,6 +256,7 @@ namespace OpenDentBusiness{
 				row=table.NewRow();
 				row["age"]=Patients.DateToAge(PIn.Date(rawtable.Rows[i]["Birthdate"].ToString())).ToString();//we don't care about m/y.
 				row["billingType"]=DefC.GetName(DefCat.BillingTypes,PIn.Long(rawtable.Rows[i]["BillingType"].ToString()));
+				row["ClinicNum"]=PIn.Long(rawtable.Rows[i]["ClinicNum"].ToString());
 				contmeth=(ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
 				if(contmeth==ContactMethod.None){
 					if(!PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress)){//if user only wants to use email if contact method is email (it isn't for this patient)

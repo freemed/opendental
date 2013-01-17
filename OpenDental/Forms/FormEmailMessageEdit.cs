@@ -55,6 +55,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonFuchsMailDMF;
 		//private int PatNum;
 		private EmailMessage MessageCur;
+		public Patient PatCur;
 
 		///<summary></summary>
 		public FormEmailMessageEdit(EmailMessage messageCur){
@@ -577,7 +578,7 @@ namespace OpenDental{
 		private void butAttach_Click(object sender,EventArgs e) {
 			OpenFileDialog dlg=new OpenFileDialog();
 			dlg.Multiselect=true;
-			Patient PatCur=Patients.GetPat(MessageCur.PatNum);
+			PatCur=Patients.GetPat(MessageCur.PatNum);
 			if(PatCur.ImageFolder!=""){
 				if(PrefC.AtoZfolderUsed){
 					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
@@ -749,15 +750,28 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			if(PrefC.GetString(PrefName.EmailSMTPserver)==""){
-				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
+			EmailAddress emailAddress;
+			if(PatCur==null) {
+				PatCur=Patients.GetPat(MessageCur.PatNum);
+				if(PatCur==null) {
+					emailAddress=EmailAddresses.GetDefault(0);
+				}
+				else {
+					emailAddress=EmailAddresses.GetDefault(PatCur.ClinicNum);
+				}
+			}
+			else {
+				emailAddress=EmailAddresses.GetDefault(PatCur.ClinicNum);
+			}
+			if(emailAddress.SMTPserver==""){
+				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
 			MessageCur.SentOrReceived=CommSentOrReceived.Sent;
 			SaveMsg();
 			try{
-				SendEmail(MessageCur);
+				SendEmail(MessageCur,emailAddress);
 				MsgBox.Show(this,"Sent");
 			}
 			catch(Exception ex){
@@ -771,16 +785,16 @@ namespace OpenDental{
 		}
 
 		/// <summary>This is used from wherever email needs to be sent throughout the program.</summary>
-		public static void SendEmail(EmailMessage emailMessage){
+		public static void SendEmail(EmailMessage emailMessage,EmailAddress emailAddress){
 			if(PrefC.GetInt(PrefName.EmailPort)==465) {//implicit
 				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
 				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",PrefC.GetString(PrefName.EmailSMTPserver));
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",emailAddress.SMTPserver);
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport","465");
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusing","2");//sendusing: cdoSendUsingPort, value 2, for sending the message using the network.
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate","1");//0=anonymous,1=clear text auth,2=context
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",PrefC.GetString(PrefName.EmailUsername));
-				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",PrefC.GetString(PrefName.EmailPassword));
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername",emailAddress.EmailUsername);
+				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword",emailAddress.EmailPassword);
 				//if(PrefC.GetBool(PrefName.EmailUseSSL)) {
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl","true");//false was also tested and does not work
 				message.From=emailMessage.FromAddress;
@@ -801,16 +815,16 @@ namespace OpenDental{
 					//no way to set displayed filename
 					message.Attachments.Add(attach);
 				}
-				System.Web.Mail.SmtpMail.SmtpServer=PrefC.GetString(PrefName.EmailSMTPserver)+":465";//"smtp.gmail.com:465";
+				System.Web.Mail.SmtpMail.SmtpServer=emailAddress.SMTPserver+":465";//"smtp.gmail.com:465";
 				System.Web.Mail.SmtpMail.Send(message);
 			}
 			else {//explicit default port 587 
-				SmtpClient client=new SmtpClient(PrefC.GetString(PrefName.EmailSMTPserver),PrefC.GetInt(PrefName.EmailPort));
+				SmtpClient client=new SmtpClient(emailAddress.SMTPserver,emailAddress.ServerPort);
 				//The default credentials are not used by default, according to: 
 				//http://msdn2.microsoft.com/en-us/library/system.net.mail.smtpclient.usedefaultcredentials.aspx
-				client.Credentials=new NetworkCredential(PrefC.GetString(PrefName.EmailUsername),PrefC.GetString(PrefName.EmailPassword));
+				client.Credentials=new NetworkCredential(emailAddress.EmailUsername,emailAddress.EmailPassword);
 				client.DeliveryMethod=SmtpDeliveryMethod.Network;
-				client.EnableSsl=PrefC.GetBool(PrefName.EmailUseSSL);
+				client.EnableSsl=emailAddress.UseSSL;
 				client.Timeout=10000;//10 seconds//180000;//Timeout of 3 minutes (in milliseconds).
 				MailMessage message=new MailMessage();
 				Attachment attach;

@@ -2327,7 +2327,7 @@ namespace OpenDental{
 			message.PatNum=CurPatNum;
 			Patient pat=Patients.GetPat(CurPatNum);
 			message.ToAddress=pat.Email;
-			message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+			message.FromAddress=EmailAddresses.GetDefault(pat.ClinicNum).SenderAddress;
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 			FormE.IsNew=true;
 			FormE.ShowDialog();
@@ -2382,7 +2382,7 @@ namespace OpenDental{
 				message.PatNum=CurPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
 				message.ToAddress=refer.EMail;//pat.Email;
-				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+				message.FromAddress=EmailAddresses.GetDefault(pat.ClinicNum).SenderAddress;
 				message.Subject=Lan.g(this,"RE: ")+pat.GetNameFL();
 				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message);
 				FormE.IsNew=true;

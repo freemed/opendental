@@ -862,9 +862,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-//todo: handle null
-			if(EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum)).SMTPserver=="") {
-				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
+			if(EmailAddresses.GetDefault(0).SMTPserver=="") {
+				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
 				return;
 			}
 			if(PrefC.GetLong(PrefName.ConfirmStatusEmailed)==0) {
@@ -915,13 +914,13 @@ namespace OpenDental{
 			string str="";
 			List<long> patNumsSelected=new List<long>();
 			List<long> patNumsFailed=new List<long>();
-			Clinic clinic;
+			EmailAddress emailAddress;
 			for(int i=0;i<grid.SelectedIndices.Length;i++){
-				clinic=Clinics.GetClinic(PIn.Long(table.Rows[grid.SelectedIndices[i]]["ClinicNum"].ToString()));
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(table.Rows[grid.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=table.Rows[grid.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
-				message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+				emailAddress=EmailAddresses.GetDefault(PIn.Long(table.Rows[grid.SelectedIndices[i]]["ClinicNum"].ToString()));
+				message.FromAddress=emailAddress.SenderAddress;				
 				message.Subject=PrefC.GetString(PrefName.ConfirmEmailSubject);
 				patNumsSelected.Add(message.PatNum);
 				str=PrefC.GetString(PrefName.ConfirmEmailMessage);
@@ -931,7 +930,7 @@ namespace OpenDental{
 				str=str.Replace("[time]",((DateTime)table.Rows[grid.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
 				message.BodyText=str;
 				try {
-					FormEmailMessageEdit.SendEmail(message);
+					FormEmailMessageEdit.SendEmail(message,emailAddress);
 				}
 				catch {
 					patNumsFailed.Add(message.PatNum);

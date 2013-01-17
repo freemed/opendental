@@ -1006,7 +1006,7 @@ namespace OpenDental{
 			EmailMessage message=new EmailMessage();
 			message.PatNum=pat.PatNum;
 			message.ToAddress=pat.Email;
-			message.FromAddress=PrefC.GetString(PrefName.EmailSenderAddress);
+			message.FromAddress=EmailAddresses.GetDefault(pat.ClinicNum).SenderAddress;
 			string str;
 			str=PrefC.GetString(PrefName.BillingEmailSubject);
 			str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(pat.PatNum));
