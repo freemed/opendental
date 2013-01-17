@@ -24,13 +24,12 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",200,true);
+			ODGridColumn col=new ODGridColumn("",200,false);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<DictCustoms.Listt.Count;i++) {
 				row=new ODGridRow();
-				row.Height=19;//To handle the isEditable functionality
 				row.Cells.Add(DictCustoms.Listt[i].WordText);
 				gridMain.Rows.Add(row);
 			}

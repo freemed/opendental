@@ -38,8 +38,8 @@ namespace OpenDental
 			if(hunspell==null) {
 				hunspell=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
 			}
-			
 			correctList=new List<string>();
+			correctList.Add("\n");
 			incorrectList=new List<string>();
 			EventHandler onClick=new EventHandler(menuItem_Click);
 			MenuItem menuItem;
