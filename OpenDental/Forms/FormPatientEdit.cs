@@ -1957,7 +1957,8 @@ namespace OpenDental{
 				comboRace.Items.Add("White");//1
 				comboRace.Items.Add("Black");//2
 				comboRace.Items.Add("Asian");//3
-				comboRace.Items.Add("HawaiiPacIsland");//4	
+				comboRace.Items.Add("HawaiiPacIsland");//4
+				comboRace.Items.Add("NativeAmerican");//5
 				comboEthnicity.Items.Add("Not Hispanic");//0
 				comboEthnicity.Items.Add("Hispanic");//1
 				switch(PatCur.Race) {
@@ -1966,7 +1967,6 @@ namespace OpenDental{
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
 					case PatientRace.Aboriginal:
-					case PatientRace.AmericanIndian:
 					case PatientRace.Multiracial:
 					case PatientRace.Other:
 					case PatientRace.White:
@@ -1987,6 +1987,10 @@ namespace OpenDental{
 						break;
 					case PatientRace.HawaiiOrPacIsland:
 						comboRace.SelectedIndex=4;//Hawaii
+						comboEthnicity.SelectedIndex=0;//not hispanic
+						break;
+					case PatientRace.AmericanIndian:
+						comboRace.SelectedIndex=5;//AmericanIndian
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
 					case PatientRace.HispanicLatino:
@@ -2972,6 +2976,9 @@ namespace OpenDental{
 						break;
 					case 4://hawaii
 						PatCur.Race=PatientRace.HawaiiOrPacIsland;
+						break;
+					case 5://native american
+						PatCur.Race=PatientRace.AmericanIndian;
 						break;
 				}
 			}
