@@ -82,7 +82,7 @@ public class Disease {
 					ICD9Num=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ICD9Num"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProbStatus")!=null) {
-					ProbStatus=ProblemStatus.valueOf(Serializing.getXmlNodeValue(doc,"ProbStatus"));
+					ProbStatus=ProblemStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProbStatus"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateStart")!=null) {
 					DateStart=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateStart"));

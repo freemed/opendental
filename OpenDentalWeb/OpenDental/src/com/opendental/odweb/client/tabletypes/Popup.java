@@ -58,7 +58,7 @@ public class Popup {
 					IsDisabled=(Serializing.getXmlNodeValue(doc,"IsDisabled")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"PopupLevel")!=null) {
-					PopupLevel=EnumPopupLevel.valueOf(Serializing.getXmlNodeValue(doc,"PopupLevel"));
+					PopupLevel=EnumPopupLevel.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PopupLevel"))];
 				}
 			}
 			catch(Exception e) {

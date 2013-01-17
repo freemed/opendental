@@ -64,13 +64,13 @@ public class HL7DefMessage {
 					HL7DefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"HL7DefNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MessageType")!=null) {
-					MessageType=MessageTypeHL7.valueOf(Serializing.getXmlNodeValue(doc,"MessageType"));
+					MessageType=MessageTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MessageType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"EventType")!=null) {
-					EventType=EventTypeHL7.valueOf(Serializing.getXmlNodeValue(doc,"EventType"));
+					EventType=EventTypeHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EventType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"InOrOut")!=null) {
-					InOrOut=InOutHL7.valueOf(Serializing.getXmlNodeValue(doc,"InOrOut"));
+					InOrOut=InOutHL7.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"InOrOut"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));

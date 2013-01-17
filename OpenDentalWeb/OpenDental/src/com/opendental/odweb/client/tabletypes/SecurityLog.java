@@ -67,7 +67,7 @@ public class SecurityLog {
 					SecurityLogNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SecurityLogNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PermType")!=null) {
-					PermType=Permissions.valueOf(Serializing.getXmlNodeValue(doc,"PermType"));
+					PermType=Permissions.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PermType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
 					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));

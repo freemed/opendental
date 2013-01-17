@@ -57,7 +57,7 @@ public class DocumentMisc {
 					FileName=Serializing.getXmlNodeValue(doc,"FileName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"DocMiscType")!=null) {
-					DocMiscType=DocumentMiscType.valueOf(Serializing.getXmlNodeValue(doc,"DocMiscType"));
+					DocMiscType=DocumentMiscType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DocMiscType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"RawBase64")!=null) {
 					RawBase64=Serializing.getXmlNodeValue(doc,"RawBase64");

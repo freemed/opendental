@@ -91,10 +91,10 @@ public class Commlog {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Mode_")!=null) {
-					Mode_=CommItemMode.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"));
+					Mode_=CommItemMode.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SentOrReceived")!=null) {
-					SentOrReceived=CommSentOrReceived.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"));
+					SentOrReceived=CommSentOrReceived.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SentOrReceived"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"UserNum")!=null) {
 					UserNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"UserNum"));

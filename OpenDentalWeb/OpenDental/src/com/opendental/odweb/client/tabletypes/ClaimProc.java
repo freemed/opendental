@@ -208,7 +208,7 @@ public class ClaimProc {
 					DedApplied=Double.valueOf(Serializing.getXmlNodeValue(doc,"DedApplied"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Status")!=null) {
-					Status=ClaimProcStatus.valueOf(Serializing.getXmlNodeValue(doc,"Status"));
+					Status=ClaimProcStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Status"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"InsPayAmt")!=null) {
 					InsPayAmt=Double.valueOf(Serializing.getXmlNodeValue(doc,"InsPayAmt"));

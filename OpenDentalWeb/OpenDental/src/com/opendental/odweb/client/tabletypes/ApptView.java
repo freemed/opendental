@@ -87,10 +87,10 @@ public class ApptView {
 					OnlySchedAfterTime=Serializing.getXmlNodeValue(doc,"OnlySchedAfterTime");
 				}
 				if(Serializing.getXmlNodeValue(doc,"StackBehavUR")!=null) {
-					StackBehavUR=ApptViewStackBehavior.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavUR"));
+					StackBehavUR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavUR"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"StackBehavLR")!=null) {
-					StackBehavLR=ApptViewStackBehavior.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavLR"));
+					StackBehavLR=ApptViewStackBehavior.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StackBehavLR"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClinicNum")!=null) {
 					ClinicNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClinicNum"));

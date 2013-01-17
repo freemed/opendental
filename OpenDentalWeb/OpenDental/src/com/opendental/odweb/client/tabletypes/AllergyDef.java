@@ -64,7 +64,7 @@ public class AllergyDef {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Snomed")!=null) {
-					Snomed=SnomedAllergy.valueOf(Serializing.getXmlNodeValue(doc,"Snomed"));
+					Snomed=SnomedAllergy.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Snomed"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"MedicationNum")!=null) {
 					MedicationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"MedicationNum"));

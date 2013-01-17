@@ -75,7 +75,7 @@ public class ScreenGroup {
 					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PlaceService")!=null) {
-					PlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"));
+					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"County")!=null) {
 					County=Serializing.getXmlNodeValue(doc,"County");

@@ -66,7 +66,7 @@ public class PatPlan {
 					IsPending=(Serializing.getXmlNodeValue(doc,"IsPending")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"Relationship")!=null) {
-					Relationship=Relat.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"));
+					Relationship=Relat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatID")!=null) {
 					PatID=Serializing.getXmlNodeValue(doc,"PatID");

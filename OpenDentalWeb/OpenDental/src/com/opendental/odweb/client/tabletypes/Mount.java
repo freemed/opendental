@@ -82,7 +82,7 @@ public class Mount {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 				if(Serializing.getXmlNodeValue(doc,"ImgType")!=null) {
-					ImgType=ImageType.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"));
+					ImgType=ImageType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ImgType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Width")!=null) {
 					Width=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Width"));

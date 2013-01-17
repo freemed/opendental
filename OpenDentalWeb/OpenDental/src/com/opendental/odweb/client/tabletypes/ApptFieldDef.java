@@ -48,7 +48,7 @@ public class ApptFieldDef {
 					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"FieldType")!=null) {
-					FieldType=ApptFieldType.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"));
+					FieldType=ApptFieldType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"PickList")!=null) {
 					PickList=Serializing.getXmlNodeValue(doc,"PickList");

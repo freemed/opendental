@@ -76,7 +76,7 @@ public class PerioMeasure {
 					PerioExamNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PerioExamNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SequenceType")!=null) {
-					SequenceType=PerioSequenceType.valueOf(Serializing.getXmlNodeValue(doc,"SequenceType"));
+					SequenceType=PerioSequenceType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SequenceType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"IntTooth")!=null) {
 					IntTooth=Integer.valueOf(Serializing.getXmlNodeValue(doc,"IntTooth"));

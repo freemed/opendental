@@ -56,7 +56,7 @@ public class Account {
 					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 				if(Serializing.getXmlNodeValue(doc,"AcctType")!=null) {
-					AcctType=AccountType.valueOf(Serializing.getXmlNodeValue(doc,"AcctType"));
+					AcctType=AccountType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AcctType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"BankNumber")!=null) {
 					BankNumber=Serializing.getXmlNodeValue(doc,"BankNumber");

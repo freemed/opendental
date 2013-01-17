@@ -184,7 +184,7 @@ public class Provider {
 					FeeSched=Integer.valueOf(Serializing.getXmlNodeValue(doc,"FeeSched"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Specialty")!=null) {
-					Specialty=DentalSpecialty.valueOf(Serializing.getXmlNodeValue(doc,"Specialty"));
+					Specialty=DentalSpecialty.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Specialty"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SSN")!=null) {
 					SSN=Serializing.getXmlNodeValue(doc,"SSN");

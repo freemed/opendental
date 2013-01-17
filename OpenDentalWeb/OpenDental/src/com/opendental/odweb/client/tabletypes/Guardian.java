@@ -51,7 +51,7 @@ public class Guardian {
 					PatNumGuardian=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNumGuardian"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Relationship")!=null) {
-					Relationship=GuardianRelationship.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"));
+					Relationship=GuardianRelationship.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Relationship"))];
 				}
 			}
 			catch(Exception e) {

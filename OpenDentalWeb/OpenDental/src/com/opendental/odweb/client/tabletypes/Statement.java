@@ -117,7 +117,7 @@ public class Statement {
 					NoteBold=Serializing.getXmlNodeValue(doc,"NoteBold");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Mode_")!=null) {
-					Mode_=StatementMode.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"));
+					Mode_=StatementMode.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Mode_"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"HidePayment")!=null) {
 					HidePayment=(Serializing.getXmlNodeValue(doc,"HidePayment")=="0")?false:true;

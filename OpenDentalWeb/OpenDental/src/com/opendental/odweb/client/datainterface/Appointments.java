@@ -10,7 +10,7 @@ public class Appointments {
 	public static String refreshASAP(int provNum,int siteNum,int clinicNum) {
 		DtoGetObject dto=null;
 		try {
-			dto=Meth.getObject("Appointments.RefreshASAP", new String[] { "long","long","long"	},"List<OpenDentBusiness.Account>", provNum,siteNum,clinicNum);
+			dto=Meth.getObject("Appointments.RefreshASAP", new String[] { "long","long","long"	},"List<OpenDentBusiness.Appointment>", provNum,siteNum,clinicNum);
 		}
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());

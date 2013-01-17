@@ -52,10 +52,10 @@ public class AutomationCondition {
 					AutomationNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutomationNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"CompareField")!=null) {
-					CompareField=AutoCondField.valueOf(Serializing.getXmlNodeValue(doc,"CompareField"));
+					CompareField=AutoCondField.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CompareField"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Comparison")!=null) {
-					Comparison=AutoCondComparison.valueOf(Serializing.getXmlNodeValue(doc,"Comparison"));
+					Comparison=AutoCondComparison.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Comparison"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"CompareString")!=null) {
 					CompareString=Serializing.getXmlNodeValue(doc,"CompareString");

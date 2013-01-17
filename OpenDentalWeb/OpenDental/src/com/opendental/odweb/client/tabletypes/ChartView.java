@@ -75,10 +75,10 @@ public class ChartView {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProcStatuses")!=null) {
-					ProcStatuses=ChartViewProcStat.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatuses"));
+					ProcStatuses=ChartViewProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatuses"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ObjectTypes")!=null) {
-					ObjectTypes=ChartViewObjs.valueOf(Serializing.getXmlNodeValue(doc,"ObjectTypes"));
+					ObjectTypes=ChartViewObjs.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectTypes"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ShowProcNotes")!=null) {
 					ShowProcNotes=(Serializing.getXmlNodeValue(doc,"ShowProcNotes")=="0")?false:true;
@@ -90,10 +90,10 @@ public class ChartView {
 					SelectedTeethOnly=(Serializing.getXmlNodeValue(doc,"SelectedTeethOnly")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"OrionStatusFlags")!=null) {
-					OrionStatusFlags=OrionStatus.valueOf(Serializing.getXmlNodeValue(doc,"OrionStatusFlags"));
+					OrionStatusFlags=OrionStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"OrionStatusFlags"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"DatesShowing")!=null) {
-					DatesShowing=ChartViewDates.valueOf(Serializing.getXmlNodeValue(doc,"DatesShowing"));
+					DatesShowing=ChartViewDates.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DatesShowing"))];
 				}
 			}
 			catch(Exception e) {

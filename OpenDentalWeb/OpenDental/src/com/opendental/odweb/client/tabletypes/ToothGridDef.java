@@ -74,7 +74,7 @@ public class ToothGridDef {
 					NameShowing=Serializing.getXmlNodeValue(doc,"NameShowing");
 				}
 				if(Serializing.getXmlNodeValue(doc,"CellType")!=null) {
-					CellType=ToothGridCellType.valueOf(Serializing.getXmlNodeValue(doc,"CellType"));
+					CellType=ToothGridCellType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CellType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));
@@ -86,7 +86,7 @@ public class ToothGridDef {
 					CodeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CodeNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProcStatus")!=null) {
-					ProcStatus=ProcStat.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"));
+					ProcStatus=ProcStat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcStatus"))];
 				}
 			}
 			catch(Exception e) {

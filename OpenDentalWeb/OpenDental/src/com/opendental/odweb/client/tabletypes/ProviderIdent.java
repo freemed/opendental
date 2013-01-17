@@ -55,7 +55,7 @@ public class ProviderIdent {
 					PayorID=Serializing.getXmlNodeValue(doc,"PayorID");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SuppIDType")!=null) {
-					SuppIDType=ProviderSupplementalID.valueOf(Serializing.getXmlNodeValue(doc,"SuppIDType"));
+					SuppIDType=ProviderSupplementalID.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SuppIDType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"IDNumber")!=null) {
 					IDNumber=Serializing.getXmlNodeValue(doc,"IDNumber");

@@ -48,7 +48,7 @@ public class TerminalActive {
 					ComputerName=Serializing.getXmlNodeValue(doc,"ComputerName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"TerminalStatus")!=null) {
-					TerminalStatus=TerminalStatusEnum.valueOf(Serializing.getXmlNodeValue(doc,"TerminalStatus"));
+					TerminalStatus=TerminalStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TerminalStatus"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"PatNum")!=null) {
 					PatNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PatNum"));

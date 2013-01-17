@@ -44,7 +44,7 @@ public class AutoCodeCond {
 					AutoCodeItemNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoCodeItemNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Cond")!=null) {
-					Cond=AutoCondition.valueOf(Serializing.getXmlNodeValue(doc,"Cond"));
+					Cond=AutoCondition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Cond"))];
 				}
 			}
 			catch(Exception e) {

@@ -63,7 +63,7 @@ public class SigElementDef {
 					LightColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"LightColor"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigElementType")!=null) {
-					SigElementType=SignalElementType.valueOf(Serializing.getXmlNodeValue(doc,"SigElementType"));
+					SigElementType=SignalElementType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigElementType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigText")!=null) {
 					SigText=Serializing.getXmlNodeValue(doc,"SigText");

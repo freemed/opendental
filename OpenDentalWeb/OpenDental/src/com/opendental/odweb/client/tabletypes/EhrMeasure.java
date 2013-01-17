@@ -65,7 +65,7 @@ public class EhrMeasure {
 					EhrMeasureNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EhrMeasureNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"MeasureType")!=null) {
-					MeasureType=EhrMeasureType.valueOf(Serializing.getXmlNodeValue(doc,"MeasureType"));
+					MeasureType=EhrMeasureType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MeasureType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Numerator")!=null) {
 					Numerator=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Numerator"));

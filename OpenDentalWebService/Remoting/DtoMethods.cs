@@ -14,18 +14,26 @@ namespace OpenDentalWebService {
 			return CallMethod(classAndMethod,parameters);
 		}
 
-		///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified.  Ex: System.Int32 or OpenDentBusiness.Account.  Throws exceptions.</summary>
+		///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified unless it's a primitive, then either way is fine.  Ex: Sytem.In32 or int or OpenDentBusiness.Account or List&lt;OpenDentBusiness.Account&gt;.  Throws exceptions if the object or class is not supported yet.</summary>
 		public static string CallClassSerializer(string objectType,Object obj) {
 			#region Primitive and General Types
 			//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenSerializerTypes and manually add it there.
 			switch(objectType) {
+				case "int":
 				case "System.Int32":
+				case "long":
 				case "System.Int64":
+				case "bool":
 				case "System.Boolean":
+				case "string":
 				case "System.String":
+				case "char":
 				case "System.Char":
+				case "Single":
 				case "System.Single":
+				case "byte":
 				case "System.Byte":
+				case "double":
 				case "System.Double":
 				case "DataTable":
 					return aaGeneralTypes.Serialize(objectType,obj);
@@ -34,7 +42,7 @@ namespace OpenDentalWebService {
 				return aaGeneralTypes.SerializeList(objectType,obj);
 			}
 			if(objectType.Contains("[")) {//Arrays.
-				return aaGeneralTypes.Serialize(objectType,obj);
+				return aaGeneralTypes.SerializeArray(objectType,obj);
 			}
 			#endregion
 			#region Open Dental Classes

@@ -83,7 +83,7 @@ public class Signalod {
 					DateViewing=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateViewing"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigType")!=null) {
-					SigType=SignalType.valueOf(Serializing.getXmlNodeValue(doc,"SigType"));
+					SigType=SignalType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SigType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SigText")!=null) {
 					SigText=Serializing.getXmlNodeValue(doc,"SigText");

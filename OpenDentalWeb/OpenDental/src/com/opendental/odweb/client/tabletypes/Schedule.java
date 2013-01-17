@@ -88,7 +88,7 @@ public class Schedule {
 					StopTime=Serializing.getXmlNodeValue(doc,"StopTime");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SchedType")!=null) {
-					SchedType=ScheduleType.valueOf(Serializing.getXmlNodeValue(doc,"SchedType"));
+					SchedType=ScheduleType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SchedType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
 					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
@@ -100,7 +100,7 @@ public class Schedule {
 					Note=Serializing.getXmlNodeValue(doc,"Note");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Status")!=null) {
-					Status=SchedStatus.valueOf(Serializing.getXmlNodeValue(doc,"Status"));
+					Status=SchedStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Status"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"EmployeeNum")!=null) {
 					EmployeeNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"EmployeeNum"));

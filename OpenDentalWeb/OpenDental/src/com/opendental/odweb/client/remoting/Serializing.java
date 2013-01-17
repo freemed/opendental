@@ -44,6 +44,29 @@ public class Serializing {
 		return strBuild.toString();
 	}
 
+	/** Escapes common characters used in URLs. */
+	public static String escapeForURL(String myString) {
+		StringBuilder strBuild=new StringBuilder();
+		int length=myString.length();
+		for(int i=0;i<length;i++) {
+			String character=myString.substring(i,i+1);
+			if(character.equals("<")) {
+				strBuild.append("%3C");
+				continue;
+			}
+			else if(character.equals(">")) {
+				strBuild.append("%3E");
+				continue;
+			}
+			else if(character.equals("&")) {
+				strBuild.append("%26");
+				continue;
+			}
+			strBuild.append(character);
+		}
+		return strBuild.toString();
+	}
+
 	/** Loops through all the known objects and calls the corresponding classes serialize method.
 	 * @param obj Can be any type of object.  Error will occur if the type hasn't been implemented yet. 
 	 * @throws Exception Throws exception if type is not yet supported. */

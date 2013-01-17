@@ -128,7 +128,7 @@ public class Screen {
 					County=Serializing.getXmlNodeValue(doc,"County");
 				}
 				if(Serializing.getXmlNodeValue(doc,"PlaceService")!=null) {
-					PlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"));
+					PlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PlaceService"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProvNum")!=null) {
 					ProvNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProvNum"));
@@ -137,37 +137,37 @@ public class Screen {
 					ProvName=Serializing.getXmlNodeValue(doc,"ProvName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Gender")!=null) {
-					Gender=PatientGender.valueOf(Serializing.getXmlNodeValue(doc,"Gender"));
+					Gender=PatientGender.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Gender"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Race")!=null) {
-					Race=PatientRace.valueOf(Serializing.getXmlNodeValue(doc,"Race"));
+					Race=PatientRace.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Race"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"GradeLevel")!=null) {
-					GradeLevel=PatientGrade.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"));
+					GradeLevel=PatientGrade.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GradeLevel"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Age")!=null) {
 					Age=Byte.valueOf(Serializing.getXmlNodeValue(doc,"Age"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Urgency")!=null) {
-					Urgency=TreatmentUrgency.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"));
+					Urgency=TreatmentUrgency.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Urgency"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"HasCaries")!=null) {
-					HasCaries=YN.valueOf(Serializing.getXmlNodeValue(doc,"HasCaries"));
+					HasCaries=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"HasCaries"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"NeedsSealants")!=null) {
-					NeedsSealants=YN.valueOf(Serializing.getXmlNodeValue(doc,"NeedsSealants"));
+					NeedsSealants=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"NeedsSealants"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"CariesExperience")!=null) {
-					CariesExperience=YN.valueOf(Serializing.getXmlNodeValue(doc,"CariesExperience"));
+					CariesExperience=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"CariesExperience"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"EarlyChildCaries")!=null) {
-					EarlyChildCaries=YN.valueOf(Serializing.getXmlNodeValue(doc,"EarlyChildCaries"));
+					EarlyChildCaries=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"EarlyChildCaries"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ExistingSealants")!=null) {
-					ExistingSealants=YN.valueOf(Serializing.getXmlNodeValue(doc,"ExistingSealants"));
+					ExistingSealants=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ExistingSealants"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"MissingAllTeeth")!=null) {
-					MissingAllTeeth=YN.valueOf(Serializing.getXmlNodeValue(doc,"MissingAllTeeth"));
+					MissingAllTeeth=YN.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"MissingAllTeeth"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Birthdate")!=null) {
 					Birthdate=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"Birthdate"));

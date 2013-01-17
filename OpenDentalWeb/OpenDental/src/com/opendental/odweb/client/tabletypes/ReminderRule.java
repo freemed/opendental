@@ -49,7 +49,7 @@ public class ReminderRule {
 					ReminderRuleNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReminderRuleNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ReminderCriterion")!=null) {
-					ReminderCriterion=EhrCriterion.valueOf(Serializing.getXmlNodeValue(doc,"ReminderCriterion"));
+					ReminderCriterion=EhrCriterion.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ReminderCriterion"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"CriterionFK")!=null) {
 					CriterionFK=Integer.valueOf(Serializing.getXmlNodeValue(doc,"CriterionFK"));

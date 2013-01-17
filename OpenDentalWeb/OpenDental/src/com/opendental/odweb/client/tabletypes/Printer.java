@@ -52,7 +52,7 @@ public class Printer {
 					ComputerNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ComputerNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"PrintSit")!=null) {
-					PrintSit=PrintSituation.valueOf(Serializing.getXmlNodeValue(doc,"PrintSit"));
+					PrintSit=PrintSituation.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PrintSit"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"PrinterName")!=null) {
 					PrinterName=Serializing.getXmlNodeValue(doc,"PrinterName");

@@ -50,7 +50,7 @@ public class DeletedObject {
 					ObjectNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ObjectType")!=null) {
-					ObjectType=DeletedObjectType.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"));
+					ObjectType=DeletedObjectType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ObjectType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));

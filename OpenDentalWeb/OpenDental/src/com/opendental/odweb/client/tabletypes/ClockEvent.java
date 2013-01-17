@@ -100,7 +100,7 @@ public class ClockEvent {
 					TimeDisplayed1=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"TimeDisplayed1"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=TimeClockStatus.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"));
+					ClockStatus=TimeClockStatus.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Note")!=null) {
 					Note=Serializing.getXmlNodeValue(doc,"Note");

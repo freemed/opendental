@@ -63,7 +63,7 @@ public class ToothInitial {
 					ToothNum=Serializing.getXmlNodeValue(doc,"ToothNum");
 				}
 				if(Serializing.getXmlNodeValue(doc,"InitialType")!=null) {
-					InitialType=ToothInitialType.valueOf(Serializing.getXmlNodeValue(doc,"InitialType"));
+					InitialType=ToothInitialType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"InitialType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Movement")!=null) {
 					Movement=Float.valueOf(Serializing.getXmlNodeValue(doc,"Movement"));

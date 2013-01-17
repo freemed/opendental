@@ -87,7 +87,7 @@ public class ApptViewItem {
 					ElementColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ElementColor"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"ElementAlignment")!=null) {
-					ElementAlignment=ApptViewAlignment.valueOf(Serializing.getXmlNodeValue(doc,"ElementAlignment"));
+					ElementAlignment=ApptViewAlignment.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ElementAlignment"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ApptFieldDefNum")!=null) {
 					ApptFieldDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ApptFieldDefNum"));

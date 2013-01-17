@@ -64,13 +64,13 @@ public class Automation {
 					Description=Serializing.getXmlNodeValue(doc,"Description");
 				}
 				if(Serializing.getXmlNodeValue(doc,"Autotrigger")!=null) {
-					Autotrigger=AutomationTrigger.valueOf(Serializing.getXmlNodeValue(doc,"Autotrigger"));
+					Autotrigger=AutomationTrigger.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Autotrigger"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ProcCodes")!=null) {
 					ProcCodes=Serializing.getXmlNodeValue(doc,"ProcCodes");
 				}
 				if(Serializing.getXmlNodeValue(doc,"AutoAction")!=null) {
-					AutoAction=AutomationAction.valueOf(Serializing.getXmlNodeValue(doc,"AutoAction"));
+					AutoAction=AutomationAction.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"AutoAction"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SheetDefNum")!=null) {
 					SheetDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetDefNum"));

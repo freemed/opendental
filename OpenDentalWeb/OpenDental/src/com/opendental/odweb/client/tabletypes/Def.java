@@ -57,7 +57,7 @@ public class Def {
 					DefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"Category")!=null) {
-					Category=DefCat.valueOf(Serializing.getXmlNodeValue(doc,"Category"));
+					Category=DefCat.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"Category"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"ItemOrder")!=null) {
 					ItemOrder=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ItemOrder"));

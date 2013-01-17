@@ -158,7 +158,7 @@ public class ProcedureCode {
 					ProcCat=Integer.valueOf(Serializing.getXmlNodeValue(doc,"ProcCat"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"TreatArea")!=null) {
-					TreatArea=TreatmentArea.valueOf(Serializing.getXmlNodeValue(doc,"TreatArea"));
+					TreatArea=TreatmentArea.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"TreatArea"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"NoBillIns")!=null) {
 					NoBillIns=(Serializing.getXmlNodeValue(doc,"NoBillIns")=="0")?false:true;
@@ -185,7 +185,7 @@ public class ProcedureCode {
 					IsTaxed=(Serializing.getXmlNodeValue(doc,"IsTaxed")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"PaintType")!=null) {
-					PaintType=ToothPaintingType.valueOf(Serializing.getXmlNodeValue(doc,"PaintType"));
+					PaintType=ToothPaintingType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"PaintType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"GraphicColor")!=null) {
 					GraphicColor=Integer.valueOf(Serializing.getXmlNodeValue(doc,"GraphicColor"));
@@ -206,7 +206,7 @@ public class ProcedureCode {
 					SubstitutionCode=Serializing.getXmlNodeValue(doc,"SubstitutionCode");
 				}
 				if(Serializing.getXmlNodeValue(doc,"SubstOnlyIf")!=null) {
-					SubstOnlyIf=SubstitutionCondition.valueOf(Serializing.getXmlNodeValue(doc,"SubstOnlyIf"));
+					SubstOnlyIf=SubstitutionCondition.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"SubstOnlyIf"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"DateTStamp")!=null) {
 					DateTStamp=DateTimeFormat.getFormat("yyyyMMddHHmmss").parseStrict(Serializing.getXmlNodeValue(doc,"DateTStamp"));

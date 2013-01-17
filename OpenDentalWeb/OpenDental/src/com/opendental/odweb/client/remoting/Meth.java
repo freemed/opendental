@@ -33,6 +33,7 @@ public class Meth {
 		/** Calls the server to query the database for an object. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
+		 * @param objectType Fully qualified name of the C# object that the calling method will return.  Examples: "List&lt;OpenDentBusiness.Account&gt;" or "System.Boolean"
 		 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
 		 * @throws Exception The method ConstructArray can throw an exception. */
 		public static DtoGetObject getObject(String classMethod,String[] paramTypes,String objectType,Object... parameters) throws Exception {
@@ -41,7 +42,7 @@ public class Meth {
 			dto.MethodName=classMethod;
 			dto.ParamTypes=paramTypes;
 			dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
-			dto.ObjectType=Serializing.escapeForXml(objectType);
+			dto.ObjectType=Serializing.escapeForURL(objectType);
 			return dto;
 		}
 		

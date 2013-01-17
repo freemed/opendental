@@ -79,7 +79,7 @@ public class PhoneEmpDefault {
 					NoColor=(Serializing.getXmlNodeValue(doc,"NoColor")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"RingGroups")!=null) {
-					RingGroups=AsteriskRingGroups.valueOf(Serializing.getXmlNodeValue(doc,"RingGroups"));
+					RingGroups=AsteriskRingGroups.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"RingGroups"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"EmpName")!=null) {
 					EmpName=Serializing.getXmlNodeValue(doc,"EmpName");
@@ -88,7 +88,7 @@ public class PhoneEmpDefault {
 					PhoneExt=Integer.valueOf(Serializing.getXmlNodeValue(doc,"PhoneExt"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"StatusOverride")!=null) {
-					StatusOverride=PhoneEmpStatusOverride.valueOf(Serializing.getXmlNodeValue(doc,"StatusOverride"));
+					StatusOverride=PhoneEmpStatusOverride.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"StatusOverride"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Notes")!=null) {
 					Notes=Serializing.getXmlNodeValue(doc,"Notes");

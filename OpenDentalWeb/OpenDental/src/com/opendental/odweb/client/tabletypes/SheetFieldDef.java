@@ -108,7 +108,7 @@ public class SheetFieldDef {
 					SheetDefNum=Integer.valueOf(Serializing.getXmlNodeValue(doc,"SheetDefNum"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"FieldType")!=null) {
-					FieldType=SheetFieldType.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"));
+					FieldType=SheetFieldType.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"FieldType"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"FieldName")!=null) {
 					FieldName=Serializing.getXmlNodeValue(doc,"FieldName");
@@ -138,7 +138,7 @@ public class SheetFieldDef {
 					Height=Integer.valueOf(Serializing.getXmlNodeValue(doc,"Height"));
 				}
 				if(Serializing.getXmlNodeValue(doc,"GrowthBehavior")!=null) {
-					GrowthBehavior=GrowthBehaviorEnum.valueOf(Serializing.getXmlNodeValue(doc,"GrowthBehavior"));
+					GrowthBehavior=GrowthBehaviorEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GrowthBehavior"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"RadioButtonValue")!=null) {
 					RadioButtonValue=Serializing.getXmlNodeValue(doc,"RadioButtonValue");

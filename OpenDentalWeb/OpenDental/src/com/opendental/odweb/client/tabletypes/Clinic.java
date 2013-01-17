@@ -105,7 +105,7 @@ public class Clinic {
 					BankNumber=Serializing.getXmlNodeValue(doc,"BankNumber");
 				}
 				if(Serializing.getXmlNodeValue(doc,"DefaultPlaceService")!=null) {
-					DefaultPlaceService=PlaceOfService.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPlaceService"));
+					DefaultPlaceService=PlaceOfService.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"DefaultPlaceService"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"InsBillingProv")!=null) {
 					InsBillingProv=Integer.valueOf(Serializing.getXmlNodeValue(doc,"InsBillingProv"));

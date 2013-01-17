@@ -210,7 +210,7 @@ namespace xCrudGeneratorWebService {
 		}
 
 		private void StartCallClassSerializer(StringBuilder strb) {
-			strb.Append(t2+"///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified.  Ex: System.Int32 or OpenDentBusiness.Account.  Throws exceptions.</summary>"+rn
+			strb.Append(t2+"///<summary>Calls the class serializer for any supported object, primitive or not.  objectType must be fully qualified unless it's a primitive, then either way is fine.  Ex: Sytem.In32 or int or OpenDentBusiness.Account or List&lt;OpenDentBusiness.Account&gt;.  Throws exceptions if the object or class is not supported yet.</summary>"+rn
 				+t2+"public static string CallClassSerializer(string objectType,Object obj) {"+rn
 				+t3+"#region Primitive and General Types"+rn
 				+t3+"//To add more primitive/general types go to method xCrudGeneratorWebService.Form1.GetPrimGenSerializerTypes and manually add it there."+rn);
@@ -280,6 +280,30 @@ namespace xCrudGeneratorWebService {
 				+t3+"}"+rn
 				+t3+"else if(character.equals(\"&\")) {"+rn
 				+t4+"strBuild.append(\"&amp;\");"+rn
+				+t4+"continue;"+rn
+				+t3+"}"+rn
+				+t3+"strBuild.append(character);"+rn
+				+t2+"}"+rn
+				+t2+"return strBuild.toString();"+rn
+				+t+"}"+rn+rn);
+			#endregion
+			#region EscapeForURL
+			strb.Append(t+"/** Escapes common characters used in URLs. */"+rn
+				+t+"public static String escapeForURL(String myString) {"+rn
+				+t2+"StringBuilder strBuild=new StringBuilder();"+rn
+				+t2+"int length=myString.length();"+rn
+				+t2+"for(int i=0;i<length;i++) {"+rn
+				+t3+"String character=myString.substring(i,i+1);"+rn
+				+t3+"if(character.equals(\"<\")) {"+rn
+				+t4+"strBuild.append(\"%3C\");"+rn
+				+t4+"continue;"+rn
+				+t3+"}"+rn
+				+t3+"else if(character.equals(\">\")) {"+rn
+				+t4+"strBuild.append(\"%3E\");"+rn
+				+t4+"continue;"+rn
+				+t3+"}"+rn
+				+t3+"else if(character.equals(\"&\")) {"+rn
+				+t4+"strBuild.append(\"%26\");"+rn
 				+t4+"continue;"+rn
 				+t3+"}"+rn
 				+t3+"strBuild.append(character);"+rn
@@ -893,7 +917,7 @@ namespace xCrudGeneratorWebService {
 				string appendStr=t4+"if("+ser+"!=null) {"+rn+t5+field.Name+"=";
 				string appendStrEnd=t4+"}"+rn;
 				if(field.FieldType.BaseType.Name=="Enum") {
-					strb.Append(appendStr+field.FieldType.Name+".valueOf("+ser+");"+rn
+					strb.Append(appendStr+field.FieldType.Name+".values()[Integer.valueOf("+ser+")];"+rn
 						+t4+"}"+rn);
 					continue;
 				}
@@ -993,13 +1017,21 @@ namespace xCrudGeneratorWebService {
 		///<summary>All of the primitive/general types handled by serialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
 		private void GetPrimGenSerializerTypes(StringBuilder strb) {
 			strb.Append(t3+"switch(objectType) {"+rn
+				+t4+@"case ""int"":"+rn
 				+t4+@"case ""System.Int32"":"+rn
+				+t4+@"case ""long"":"+rn
 				+t4+@"case ""System.Int64"":"+rn     //long
+				+t4+@"case ""bool"":"+rn
 				+t4+@"case ""System.Boolean"":"+rn
+				+t4+@"case ""string"":"+rn
 				+t4+@"case ""System.String"":"+rn
+				+t4+@"case ""char"":"+rn
 				+t4+@"case ""System.Char"":"+rn
+				+t4+@"case ""Single"":"+rn
 				+t4+@"case ""System.Single"":"+rn    //float
+				+t4+@"case ""byte"":"+rn
 				+t4+@"case ""System.Byte"":"+rn
+				+t4+@"case ""double"":"+rn
 				+t4+@"case ""System.Double"":"+rn
 				+t4+@"case ""DataTable"":"+rn
 				+t5+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
@@ -1010,7 +1042,7 @@ namespace xCrudGeneratorWebService {
 				+t3+"}"+rn);
 			//Arrays.
 			strb.Append(t3+"if(objectType.Contains(\"[\")) {//Arrays."+rn
-				+t4+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
+				+t4+"return aaGeneralTypes.SerializeArray(objectType,obj);"+rn
 				+t3+"}"+rn);
 		}
 

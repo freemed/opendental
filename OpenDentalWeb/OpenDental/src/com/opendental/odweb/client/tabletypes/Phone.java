@@ -105,7 +105,7 @@ public class Phone {
 					EmployeeName=Serializing.getXmlNodeValue(doc,"EmployeeName");
 				}
 				if(Serializing.getXmlNodeValue(doc,"ClockStatus")!=null) {
-					ClockStatus=ClockStatusEnum.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"));
+					ClockStatus=ClockStatusEnum.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"ClockStatus"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"Description")!=null) {
 					Description=Serializing.getXmlNodeValue(doc,"Description");

@@ -129,7 +129,7 @@ public class ComputerPref {
 					GraphicsUseHardware=(Serializing.getXmlNodeValue(doc,"GraphicsUseHardware")=="0")?false:true;
 				}
 				if(Serializing.getXmlNodeValue(doc,"GraphicsSimple")!=null) {
-					GraphicsSimple=DrawingMode.valueOf(Serializing.getXmlNodeValue(doc,"GraphicsSimple"));
+					GraphicsSimple=DrawingMode.values()[Integer.valueOf(Serializing.getXmlNodeValue(doc,"GraphicsSimple"))];
 				}
 				if(Serializing.getXmlNodeValue(doc,"SensorType")!=null) {
 					SensorType=Serializing.getXmlNodeValue(doc,"SensorType");
