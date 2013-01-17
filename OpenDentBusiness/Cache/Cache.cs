@@ -303,7 +303,7 @@ namespace OpenDentBusiness {
 				ElectIDs.FillCache(ds.Tables["ElectID"]);
 			}
 			if(itypes.Contains((int)InvalidType.Email) || isAll) {
-				EmailAddresses.FillCache(ds.Tables["EmailAddresses"]);
+				EmailAddresses.FillCache(ds.Tables["EmailAddress"]);
 				EmailTemplates.FillCache(ds.Tables["EmailTemplate"]);
 			}
 			if(itypes.Contains((int)InvalidType.Employees) || isAll) {

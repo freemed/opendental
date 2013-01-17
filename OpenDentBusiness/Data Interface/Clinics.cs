@@ -149,7 +149,7 @@ namespace OpenDentBusiness{
  			Db.NonQ(command);
 		}
 
-		///<summary>Returns null if clinic not found.</summary>
+		///<summary>Returns null if clinic not found.  Pulls from cache.</summary>
 		public static Clinic GetClinic(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			for(int i=0;i<List.Length;i++){

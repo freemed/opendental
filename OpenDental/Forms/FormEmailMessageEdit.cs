@@ -55,14 +55,15 @@ namespace OpenDental{
 		private OpenDental.UI.Button buttonFuchsMailDMF;
 		//private int PatNum;
 		private EmailMessage MessageCur;
-		public Patient PatCur;
+		///<summary>Used when attaching to get AtoZ folder, and when sending to get Clinic.</summary>
+		private Patient PatCur;
 
 		///<summary></summary>
 		public FormEmailMessageEdit(EmailMessage messageCur){
 			InitializeComponent();// Required for Windows Form Designer support
-			//PatNum=patNum;
 			Lan.F(this);
 			MessageCur=messageCur.Copy();
+			PatCur=Patients.GetPat(messageCur.PatNum);//we could just as easily pass this in.
 			listAttachments.ContextMenu=contextMenuAttachments;
 		}
 
@@ -578,7 +579,7 @@ namespace OpenDental{
 		private void butAttach_Click(object sender,EventArgs e) {
 			OpenFileDialog dlg=new OpenFileDialog();
 			dlg.Multiselect=true;
-			PatCur=Patients.GetPat(MessageCur.PatNum);
+			//PatCur=Patients.GetPat(MessageCur.PatNum);
 			if(PatCur.ImageFolder!=""){
 				if(PrefC.AtoZfolderUsed){
 					dlg.InitialDirectory=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
@@ -750,21 +751,9 @@ namespace OpenDental{
 				MessageBox.Show("Addresses not allowed to be blank.");
 				return;
 			}
-			EmailAddress emailAddress;
-			if(PatCur==null) {
-				PatCur=Patients.GetPat(MessageCur.PatNum);
-				if(PatCur==null) {
-					emailAddress=EmailAddresses.GetDefault(0);
-				}
-				else {
-					emailAddress=EmailAddresses.GetDefault(PatCur.ClinicNum);
-				}
-			}
-			else {
-				emailAddress=EmailAddresses.GetDefault(PatCur.ClinicNum);
-			}
+			EmailAddress emailAddress=EmailAddresses.GetByClinic(PatCur.ClinicNum);
 			if(emailAddress.SMTPserver==""){
-				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
+				MsgBox.Show(this,"The email address in email setup must have an SMTP server.");
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -786,7 +775,7 @@ namespace OpenDental{
 
 		/// <summary>This is used from wherever email needs to be sent throughout the program.</summary>
 		public static void SendEmail(EmailMessage emailMessage,EmailAddress emailAddress){
-			if(PrefC.GetInt(PrefName.EmailPort)==465) {//implicit
+			if(emailAddress.ServerPort==465) {//implicit
 				//uses System.Web.Mail, which is marked as deprecated, but still supports implicit
 				System.Web.Mail.MailMessage message = new System.Web.Mail.MailMessage();
 				message.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserver",emailAddress.SMTPserver);

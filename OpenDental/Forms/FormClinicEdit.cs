@@ -49,7 +49,6 @@ namespace OpenDental{
 		private TextBox textEmail;
 		private Clinic ClinicCur;
 		private UI.Button butEmail;
-		private long EmailAddressNum;
 
 		///<summary></summary>
 		public FormClinicEdit(Clinic clinicCur)
@@ -400,10 +399,11 @@ namespace OpenDental{
 			// 
 			// textEmail
 			// 
-			this.textEmail.Enabled = false;
+			this.textEmail.BackColor = System.Drawing.SystemColors.Window;
 			this.textEmail.Location = new System.Drawing.Point(169,376);
 			this.textEmail.MaxLength = 255;
 			this.textEmail.Name = "textEmail";
+			this.textEmail.ReadOnly = true;
 			this.textEmail.Size = new System.Drawing.Size(261,20);
 			this.textEmail.TabIndex = 7;
 			// 
@@ -506,10 +506,9 @@ namespace OpenDental{
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
 				comboInsBillingProv.SelectedIndex=Providers.GetIndex(ClinicCur.InsBillingProv);
 			}
-			for(int i=0;i<EmailAddresses.Listt.Count;i++) {
-				if(EmailAddresses.Listt[i].EmailAddressNum==ClinicCur.EmailAddressNum) {
-					textEmail.Text=EmailAddresses.Listt[i].EmailUsername;
-				}
+			EmailAddress emailAddress=EmailAddresses.GetOne(ClinicCur.EmailAddressNum);
+			if(emailAddress!=null) {
+				textEmail.Text=emailAddress.EmailUsername;
 			}
 		}
 

@@ -3692,7 +3692,7 @@ namespace OpenDental {
 				EmailMessage message=new EmailMessage();
 				message.PatNum=guar.PatNum;
 				message.ToAddress=guar.Email;
-				message.FromAddress=EmailAddresses.GetDefault(guar.ClinicNum).SenderAddress;
+				message.FromAddress=EmailAddresses.GetByClinic(guar.ClinicNum).SenderAddress;
 				string str;
 				str=PrefC.GetString(PrefName.BillingEmailSubject);
 				str=str.Replace("[monthlyCardsOnFile]",CreditCards.GetMonthlyCardsOnFile(guar.PatNum));

@@ -8,10 +8,6 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EmailAddresses{
 		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
 		///<summary>A list of all EmailAddresses.</summary>
 		private static List<EmailAddress> listt;
 
@@ -31,7 +27,7 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM emailaddress";//stub query probably needs to be changed
+			string command="SELECT * FROM emailaddress";
 			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
 			table.TableName="EmailAddress";
 			FillCache(table);
@@ -45,25 +41,26 @@ namespace OpenDentBusiness{
 		}
 		#endregion
 
-			///<summary>Gets the default email address for the clinic/practice. Takes a clinic num. If clinic num is 0 or there is no default for that clinic, 
-			///it will get practice default. May return a new blank object.</summary>
-			public static EmailAddress GetDefault(long clinicNum) {
+		///<summary>Gets the default email address for the clinic/practice. Takes a clinic num. If clinic num is 0 or there is no default for that clinic, it will get practice default. May return a new blank object.</summary>
+		public static EmailAddress GetByClinic(long clinicNum) {
 			EmailAddress emailAddress=null;
 			Clinic clinic=Clinics.GetClinic(clinicNum);
 			if(PrefC.GetBool(PrefName.EasyNoClinics) || clinic==null) {//No clinic, get practice default
-				emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+				emailAddress=GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
 			}
 			else {
-				clinic=Clinics.GetClinic(clinicNum);
-				if(clinic!=null) {
-					emailAddress=EmailAddresses.GetOne(clinic.EmailAddressNum);
-				}
-				if(emailAddress==null) {//bad practice EmailAddressNum (probably 0), use default
-					emailAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+				emailAddress=GetOne(clinic.EmailAddressNum);
+				if(emailAddress==null) {//clinic.EmailAddressNum 0. Use default.
+					emailAddress=GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
 				}
 			}
 			if(emailAddress==null) {
-				emailAddress=new EmailAddress();//To avoid null checks.
+				if(listt.Count>0) {//user didn't set a default
+					emailAddress=listt[0];
+				}
+				else {
+					emailAddress=new EmailAddress();//To avoid null checks.
+				}
 			}
 			return emailAddress;
 		}
@@ -77,6 +74,16 @@ namespace OpenDentBusiness{
 				}
 			}
 			return null;
+		}
+
+		///<summary></summary>
+		public static bool ExistsValidEmail() {
+			for(int i=0;i<Listt.Count;i++) {
+				if(Listt[i].SMTPserver!="") {
+					return true;
+				}
+				return false;
+			}
 		}
 
 		///<summary></summary>

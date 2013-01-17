@@ -156,11 +156,17 @@ namespace OpenDentBusiness {
 		EHREmailToAddress,
 		/// <summary>FK to EmailAddress.EmailAddressNum.  It is not required that a default be set.</summary>
 		EmailDefaultAddressNum,
+		/// <summary>Deprecated. Use emailaddress.EmailPassword instead.</summary>
 		EmailPassword,
+		/// <summary>Deprecated. Use emailaddress.ServerPort instead.</summary>
 		EmailPort,
+		/// <summary>Deprecated. Use emailaddress.SenderAddress instead.</summary>
 		EmailSenderAddress,
+		/// <summary>Deprecated. Use emailaddress.SMTPserver instead.</summary>
 		EmailSMTPserver,
+		/// <summary>Deprecated. Use emailaddress.EmailUsername instead.</summary>
 		EmailUsername,
+		/// <summary>Deprecated. Use emailaddress.UseSSL instead.</summary>
 		EmailUseSSL,
 		/// <summary>Boolean. 0 means false and means it is not an EHR Emergency, and emergency access to the family module is not granted.</summary>
 		EhrEmergencyNow,

@@ -587,7 +587,7 @@ namespace OpenDental {
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			string fileName;
 			string filePathAndName;
-			EmailAddress emailAddress=EmailAddresses.GetDefault(Patients.GetPat(SheetCur.PatNum).ClinicNum);
+			EmailAddress emailAddress=EmailAddresses.GetByClinic(Patients.GetPat(SheetCur.PatNum).ClinicNum);
 			//Graphics g=this.CreateGraphics();
 			if(FormS.EmailPatOrLab){
 				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
@@ -597,7 +597,7 @@ namespace OpenDental {
 				message=new EmailMessage();
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.EmailPatOrLabAddress;
-				message.FromAddress=emailAddress.SenderAddress;//Can be blank
+				message.FromAddress=emailAddress.SenderAddress;//Can be blank just as it could with the old pref.
 				message.Subject=SheetCur.Description.ToString();//this could be improved
 				EmailAttach attach=new EmailAttach();
 				string shortFileName=Regex.Replace(SheetCur.Description.ToString(), @"[^\w'@-_()&]", ""); 
@@ -620,7 +620,7 @@ namespace OpenDental {
 				message=new EmailMessage();
 				message.PatNum=SheetCur.PatNum;
 				message.ToAddress=FormS.Email2Address;
-				message.FromAddress=emailAddress.SenderAddress;//Can be blank.
+				message.FromAddress=emailAddress.SenderAddress;//Can be blank just as it could with the old pref.
 				message.Subject=Lan.g(this,"RE: ")+Patients.GetLim(SheetCur.PatNum).GetNameLF();//works even if patnum invalid
 					//SheetCur.Description.ToString()+" to "+Referrals.GetNameFL(referral.ReferralNum);//this could be improved
 				EmailAttach attach=new EmailAttach();

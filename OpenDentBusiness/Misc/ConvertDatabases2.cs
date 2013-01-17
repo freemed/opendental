@@ -11820,7 +11820,6 @@ a.PageNotExists:hover {
 					string smtpServer=Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailSMTPServer'");
 					bool useSSL=PIn.Bool(Db.GetScalar("SELECT ValueString FROM preference WHERE PrefName='EmailUseSSL'"));
 					command="INSERT INTO emailaddress(EmailPassword,EmailUsername,SenderAddress,ServerPort,SMTPServer,UseSSL) "
-	//todo: parameterize:
 						+"VALUES('"+POut.String(emailPassword)+"','"+POut.String(emailUsername)+"','"+POut.String(senderAddress)+"',"
 						+POut.Int(serverPort)+",'"+POut.String(smtpServer)+"',"+POut.Bool(useSSL)+")";
 					long defaultEmailAddressNum=Db.NonQ(command,true);

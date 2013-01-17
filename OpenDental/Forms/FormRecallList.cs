@@ -1404,7 +1404,8 @@ namespace OpenDental{
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one."));    
         return;
 			}
-			EmailAddress emailAddress=EmailAddresses.GetDefault(0);
+			EmailAddress emailAddress=EmailAddresses.GetByClinic(0);
+//loop in s class
 			if(emailAddress==null || emailAddress.SMTPserver=="") {
 				MsgBox.Show(this,"Your default email address in email setup must have an SMTP server.");
 				return;
@@ -1461,7 +1462,7 @@ namespace OpenDental{
 				message=new EmailMessage();
 				message.PatNum=PIn.Long(addrTable.Rows[i]["emailPatNum"].ToString());
 				message.ToAddress=PIn.String(addrTable.Rows[i]["email"].ToString());//might be guarantor email
-				emailAddress=EmailAddresses.GetDefault(PIn.Long(addrTable.Rows[i]["ClinicNum"].ToString()));
+				emailAddress=EmailAddresses.GetByClinic(PIn.Long(addrTable.Rows[i]["ClinicNum"].ToString()));
 				message.FromAddress=emailAddress.SenderAddress;
 				if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
 					message.Subject=PrefC.GetString(PrefName.RecallEmailSubject);
