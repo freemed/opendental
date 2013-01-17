@@ -2914,7 +2914,12 @@ namespace OpenDental{
 				}
 				procCodes.Add(DS.Tables["Procedure"].Rows[i]["ProcCode"].ToString());
 			}
-			Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
+			if(AptOld.AptStatus!=ApptStatus.Complete && AptCur.AptStatus==ApptStatus.Complete) {//user set appt complete
+				Recalls.SynchScheduledApptFull(AptCur.PatNum);
+			}
+			else {
+				Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
