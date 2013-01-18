@@ -274,10 +274,10 @@ namespace OpenDental {
 				info.Arguments="";
 				double amt=PIn.Double(table.Rows[gridMain.SelectedIndices[i]]["ChargeAmt"].ToString());
 				DateTime exp=PIn.Date(table.Rows[gridMain.SelectedIndices[i]]["CCExpiration"].ToString());
-				string address=table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString();
-				string addressPat=table.Rows[gridMain.SelectedIndices[i]]["AddressPat"].ToString();
-				string zip=table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString();
-				string zipPat=table.Rows[gridMain.SelectedIndices[i]]["ZipPat"].ToString();
+				string address=PIn.String(table.Rows[gridMain.SelectedIndices[i]]["Address"].ToString());
+				string addressPat=PIn.String(table.Rows[gridMain.SelectedIndices[i]]["AddressPat"].ToString());
+				string zip=PIn.String(table.Rows[gridMain.SelectedIndices[i]]["Zip"].ToString());
+				string zipPat=PIn.String(table.Rows[gridMain.SelectedIndices[i]]["ZipPat"].ToString());
 				info.Arguments+="/AMOUNT:"+amt.ToString("F2")+" /LOCKAMOUNT ";
 				info.Arguments+="/TRANSACTIONTYPE:PURCHASE /LOCKTRANTYPE ";
 				if(table.Rows[gridMain.SelectedIndices[i]]["XChargeToken"].ToString()!="") {
