@@ -20,8 +20,10 @@ namespace OpenDentalWebService.Remoting {
 			try {
 				string server="";
 				string db="";
-				string user="";
-				string password="";
+				string mysqlUser="";
+				string mysqlUserLow="";
+				string mysqlPassword="";
+				string mysqlPasswordLow="";
 				string connectionString="";
 				DataConnection con=new DataConnection();
 				XmlDocument document=new XmlDocument();
@@ -30,9 +32,9 @@ namespace OpenDentalWebService.Remoting {
 				XPathNavigator nav=null;
 				//DatabaseType
 				nav=navigator.SelectSingleNode("//DatabaseType");
-				DataConnection.DBtype=DatabaseType.MySql;
+				DatabaseType dbType=DatabaseType.MySql;
 				if(nav!=null && nav.Value=="Oracle") {
-					DataConnection.DBtype=DatabaseType.Oracle;
+					dbType=DatabaseType.Oracle;
 				}
 				//ConnectionString
 				nav=navigator.SelectSingleNode("//ConnectionString");
@@ -45,18 +47,20 @@ namespace OpenDentalWebService.Remoting {
 					try {
 						server=nav.SelectSingleNode("ComputerName").Value;
 						db=nav.SelectSingleNode("Database").Value;
-						user=nav.SelectSingleNode("User").Value;
-						password=nav.SelectSingleNode("Password").Value;
+						mysqlUser=nav.SelectSingleNode("User").Value;
+						mysqlPassword=nav.SelectSingleNode("Password").Value;
+						mysqlUserLow=nav.SelectSingleNode("UserLow").Value;
+						mysqlPasswordLow=nav.SelectSingleNode("PasswordLow").Value;
 					}
 					catch(Exception) {
-						throw new Exception("Malformed OpenDentalWebConfig file.  DatabaseConnection node needs to have ComputerName, Database, User, and Password child nodes.");
+						throw new Exception("Malformed OpenDentalWebConfig file.  DatabaseConnection node needs to have ComputerName, Database, User, Password, UserLow and PasswordLow child nodes.");
 					}
 				}
 				if(connectionString!="") {
 					con.SetDb(connectionString,"",DataConnection.DBtype);
 				}
 				else {
-					con.SetDb(server,db,user,password,"","",DataConnection.DBtype);
+					con.SetDb(server,db,mysqlUser,mysqlPassword,mysqlUserLow,mysqlPasswordLow,dbType);
 				}
 				return con;
 			}
