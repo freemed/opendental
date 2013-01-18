@@ -16,7 +16,7 @@ public class Db {
 	 *  @param dtoRequest Pass in any serialized DtoGet request. */
 	public static void sendRequest(String dtoRequest,RequestCallbackResult requestCallback) {
 		RequestCallback=requestCallback;
-		RequestBuilder builder=RemotingClient.GetRequestBuilder(dtoRequest);
+		RequestBuilder builder=RemotingClient.getRequestBuilder(dtoRequest);
 		try {//Try catch is required around http request.
 			builder.sendRequest(null, new GetRequest());
 		}
