@@ -751,6 +751,11 @@ namespace OpenDental{
 				if(clearinghouseNum!=0){//if they used the dropdown list to specify clearinghouse
 					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
 					for(int i=0;i<selectedindices.Length;i++) {
+						Clearinghouse clearRow=Clearinghouses.GetClearinghouse(listQueue[selectedindices[i]].ClearinghouseNum);
+						if(clearDefault.Eformat!=clearRow.Eformat) {
+							MsgBox.Show(this,"The default clearinghouse format does not match the format of the selected clearinghouse.  You may need to change the clearinghouse format.  Or, you may need to add a Payor ID into a clearhouse.");
+							return;
+						}
 						gridMain.Rows[selectedindices[i]].Cells[5].Text=clearDefault.Description;//show the changed clearinghouse
 					}
 					gridMain.Invalidate();
@@ -758,6 +763,20 @@ namespace OpenDental{
 				if(!MsgBox.Show(this,true,"Send all selected e-claims?")){
 					FillGrid();//this changes back any clearinghouse descriptions that we changed manually.
 					return;
+				}
+			}
+			else {//some rows were manually selected by the user
+				if(clearinghouseNum!=0) {//if they used the dropdown list to specify clearinghouse
+					int[] selectedindices=(int[])gridMain.SelectedIndices.Clone();
+					for(int i=0;i<selectedindices.Length;i++) {
+						Clearinghouse clearRow=Clearinghouses.GetClearinghouse(listQueue[selectedindices[i]].ClearinghouseNum);
+						if(clearDefault.Eformat!=clearRow.Eformat) {
+							MsgBox.Show(this,"The default clearinghouse format does not match the format of the selected clearinghouse.  You may need to change the clearinghouse format.  Or, you may need to add a Payor ID into a clearhouse.");
+							return;
+						}
+						gridMain.Rows[selectedindices[i]].Cells[5].Text=clearDefault.Description;//show the changed clearinghouse
+					}
+					gridMain.Invalidate();
 				}
 			}
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {//Clinics is in use
