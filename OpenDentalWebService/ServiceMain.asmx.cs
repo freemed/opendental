@@ -10,6 +10,7 @@ using System.Web.Script.Services;
 using System.Web.Services;
 using System.Xml;
 using OpenDentBusiness;
+using OpenDentalWebService.Remoting;
 
 namespace OpenDentalWebService {
 	///<summary>Summary description for ServiceMain</summary>
@@ -23,16 +24,11 @@ namespace OpenDentalWebService {
 		[WebMethod]
 		[ScriptMethod(UseHttpGet=true)]
 		public XmlDocument ProcessRequest(string dtoString) {
-			#region DEBUG
-			#if DEBUG
-			//TODO Remove from DEBUG and enhance to use an xml config file?
+			//The database connection will always be null the first time the web service is accessed.
 			if(con==null) {
-				//Create database connection for testing purposes:
-				con=new OpenDentBusiness.DataConnection();
-				con.SetDb("localhost","development131","root","","","",DatabaseType.MySql);
+				//Create a connection to the database.
+				con=DbConnection.GetDataConnectionFromConfigFile();
 			}
-			#endif
-			#endregion
 			DataTransferObject dto=null;
 			XmlDocument xdoc=new XmlDocument();
 			try {
