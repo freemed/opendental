@@ -143,9 +143,9 @@ public class WindowPatientSelect extends ODWindow {
 		gridMain.endUpdate();
 	}
 	
-	/** Makes a request to the server for the patient data table based on the text boxes filled in. 
+	/** Makes a request to the server for the patient data table based on the text boxes filled in and populates gridMain with the results. 
 	 *  @param limit Adds a LIMIT restriction to the SQL query so that the query doesn't take as long. */
-	private void request_GetPtDataTable(boolean limit) {
+	private void fillGrid(boolean limit) {
 		int billingType=0;
 //				if(comboBillingType.SelectedIndex!=0){
 //					billingType=DefC.Short[(int)DefCat.BillingTypes][comboBillingType.SelectedIndex-1].DefNum;
@@ -183,18 +183,18 @@ public class WindowPatientSelect extends ODWindow {
 	@SuppressWarnings("unused")
 	private void onDataEntered() {
 		if(checkRefresh.getValue()) {
-			request_GetPtDataTable(true);
+			fillGrid(true);
 		}
 	}
 
 	@UiHandler("butSearch")
 	void butSearch_Click(ClickEvent event) {
-		request_GetPtDataTable(true);
+		fillGrid(true);
 	}
 	
 	@UiHandler("butGetAll")
 	void butGetAll_Click(ClickEvent event) {
-		request_GetPtDataTable(false);
+		fillGrid(false);
 	}
 	
 	@UiHandler("butAddPt")

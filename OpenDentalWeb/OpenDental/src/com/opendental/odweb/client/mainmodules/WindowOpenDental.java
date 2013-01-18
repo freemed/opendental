@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.opendental.odweb.client.datainterface.*;
+import com.opendental.odweb.client.logic.PatientL;
 import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
@@ -100,13 +101,15 @@ public class WindowOpenDental extends ResizeComposite {
 	}
 	
 	private void fillPatientButton(Patient pat) {
-		setMainTitle(pat);
+		if(pat==null) {
+			pat=new Patient();
+		}
+		PatCur=pat;
+		setMainTitle(PatCur);
 	}
 
 	private void setMainTitle(Patient pat) {
-		//The actual main title bar code can be found in PatientL.cs around like 78.
-		//Temporary title bar for debugging.
-		labelMainTitle.setText(PatCur.PatNum+" "+PatCur.FName+" "+PatCur.LName);
+		labelMainTitle.setText(PatientL.getMainTitle(pat));
 	}
 
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
@@ -219,8 +222,7 @@ public class WindowOpenDental extends ResizeComposite {
 		private class SelectPatientCallback implements RequestCallbackResult {
 			@Override
 			public void onSuccess(Object obj) {
-				PatCur=(Patient)obj;
-				fillPatientButton(PatCur);
+				fillPatientButton((Patient)obj);
 			}
 
 			@Override
