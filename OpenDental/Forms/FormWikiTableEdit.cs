@@ -317,7 +317,13 @@ namespace OpenDental {
 		}
 
 		private void butColumnLeft_Click(object sender,EventArgs e) {
-
+			//check to make sure you're not already at the left
+			//we are guaranteed to have the Table and the gridMain synched.  Same # of rows and columns.
+			//swap ColNames
+			//swap ColWidths
+			//Loop through table rows.
+			//  Swap 2 cells.  Remember one of the first as part of the swap.
+			FillGrid();
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
@@ -344,11 +350,14 @@ namespace OpenDental {
 		}
 
 		private void butRowDown_Click(object sender,EventArgs e) {
-
+			//Table.Rows.InsertAt
+			//DataRow row=Table.Rows[i];
+			//Table.Rows.RemoveAt
 		}
 
 		private void butRowInsert_Click(object sender,EventArgs e) {
-
+			//DataRow row=Table.NewRow();
+			//Table.Rows.InsertAt(row,i);
 		}
 
 		private void butRowDelete_Click(object sender,EventArgs e) {
