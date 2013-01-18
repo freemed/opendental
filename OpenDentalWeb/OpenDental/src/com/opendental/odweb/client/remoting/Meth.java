@@ -16,6 +16,17 @@ public class Meth {
 			return dto;
 		}
 	
+		/** Calls the server to query the database for a DataTable.  Uses the username and password for MySQL that has less permissions. 
+		 * @param command The query that needs to be executed using the MySQL user with less permissions. */
+		public static DtoGetTableLow getTableLow(String command) throws Exception {
+			DtoGetTableLow dto=new DtoGetTableLow();
+			dto.Credentials=new Credentials("","");// TODO Pass the user's credentials that is currently logged in.
+			dto.MethodName="";
+			dto.ParamTypes=new String[] { "string" };
+			dto.Params=DtoObject.ConstructArray(dto.ParamTypes, new Object[] { command });
+			return dto;
+		}
+	
 		/** Calls the server to query the database for an integer. 
 		 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
 		 * @param paramTypes Declare the parameter types of the C# method being called into a String array. Use type names for C#.  Ex: long, Patient

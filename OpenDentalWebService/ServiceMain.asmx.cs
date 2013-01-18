@@ -58,8 +58,12 @@ namespace OpenDentalWebService {
 						break;
 					#endregion
 					#region DtoGetTableLow
-					//case "DtoGetTableLow":
-					//  return "";
+					case "DtoGetTableLow":
+						DtoGetTableLow dtoGetTableLow=(DtoGetTableLow)dto;
+						//TODO: Check credentials.
+						DataTable tableLow=(DataTable)Reports.GetTable((string)dto.Params[0].Obj);
+						xdoc.LoadXml(aaGeneralTypes.Serialize("DataTable",tableLow));
+						break;
 					#endregion
 					#region DtoGetDS
 					//case "DtoGetDS":
