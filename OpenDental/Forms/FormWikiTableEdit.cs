@@ -331,7 +331,14 @@ namespace OpenDental {
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
-			//new window to edit
+			FormWikiTableHeaders FormWTH=new FormWikiTableHeaders();
+			FormWTH.ColNames=ColNames;//Shallow copy. Just passes the pointer to the list in memory, so no need to "collect" the changes afterwords.
+			FormWTH.ColWidths=ColWidths;//Shallow copy. Just passes the pointer to the list in memory, so no need to "collect" the changes afterwords.
+			FormWTH.ShowDialog();
+			if(FormWTH.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FillGrid();
 		}
 
 		private void butColumnInsert_Click(object sender,EventArgs e) {
