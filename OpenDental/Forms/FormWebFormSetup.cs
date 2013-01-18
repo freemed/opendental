@@ -23,7 +23,8 @@ namespace OpenDental {
 		WebSheets.Sheets wh=new WebSheets.Sheets();
 		OpenDental.WebSheets.webforms_sheetdef[] sheetDefList;
 		long DentalOfficeID=0;
-		private String SynchUrlStaging="https://192.168.0.196/WebHostSynch/Sheets.asmx";
+		//private String SynchUrlStaging="https://192.168.0.196/WebHostSynch/Sheets.asmx";
+		private String SynchUrlStaging="https://10.10.1.196/WebHostSynch/Sheets.asmx";
 		private String SynchUrlDev="http://localhost:2923/Sheets.asmx";
 
 		public FormWebFormSetup() {
@@ -97,7 +98,8 @@ namespace OpenDental {
 		private bool TestWebServiceExists() {
 			try {
 				wh.Url=textboxWebHostAddress.Text;
-				if(textboxWebHostAddress.Text.Contains("192.168.0.196") || textboxWebHostAddress.Text.Contains("localhost")) {
+				//if(textboxWebHostAddress.Text.Contains("192.168.0.196") || textboxWebHostAddress.Text.Contains("localhost")) {
+				if(textboxWebHostAddress.Text.Contains("10.10.1.196") || textboxWebHostAddress.Text.Contains("localhost")) {
 					IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
 				}
 				if(wh.ServiceExists()){

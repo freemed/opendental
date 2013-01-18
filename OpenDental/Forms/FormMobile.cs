@@ -99,7 +99,8 @@ namespace OpenDental {
 			//	return false;
 			//}
 			// the text field is read because the keyed in values have not been saved yet
-			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+			//if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+			if(textMobileSyncServerURL.Text.Contains("10.10.1.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();// done so that TestWebServiceExists() does not thow an error.
 			}
 			// if this is not done then an old non-functional url prevents any new url from being saved.
@@ -516,7 +517,8 @@ namespace OpenDental {
 		}
 
 		private bool VerifyPaidCustomer() {
-			if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+			//if(textMobileSyncServerURL.Text.Contains("192.168.0.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
+			if(textMobileSyncServerURL.Text.Contains("10.10.1.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();
 			}
 			bool isPaidCustomer=mb.IsPaidCustomer(PrefC.GetString(PrefName.RegistrationKey));
@@ -544,7 +546,8 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
+			//if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
+			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("10.10.1.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
 				IgnoreCertificateErrors();
 			}
 			if(!TestWebServiceExists()) {
