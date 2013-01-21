@@ -323,21 +323,46 @@ namespace OpenDental {
 			//swap ColWidths
 			//Loop through table rows.
 			//  Swap 2 cells.  Remember one of the first as part of the swap.
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Please select a cell first.");
+				return;
+			}
+			if(gridMain.SelectedCell.X==0) {
+				return;//Row is already on the left.
+			}
+			string cellText;
+			for(int i=0;i<Table.Rows.Count;i++) {
+				cellText=Table.Rows[i][gridMain.SelectedCell.X].ToString();
+				Table.Rows[i][gridMain.SelectedCell.X]=Table.Rows[i][gridMain.SelectedCell.X-1];
+				Table.Rows[i][gridMain.SelectedCell.X-1]=cellText;
+			}
 			FillGrid();
+			gridMain.SetSelected(new Point(gridMain.SelectedCell.X-1,gridMain.SelectedCell.Y));
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Please select a cell first.");
+				return;
+			}
+			if(gridMain.SelectedCell.X==Table.Columns.Count-1) {
+				return;//Row is already on the right.
+			}
+			string cellText;
+			for(int i=0;i<Table.Rows.Count;i++) {
+				cellText=Table.Rows[i][gridMain.SelectedCell.X].ToString();
+				Table.Rows[i][gridMain.SelectedCell.X]=Table.Rows[i][gridMain.SelectedCell.X+1];
+				Table.Rows[i][gridMain.SelectedCell.X+1]=cellText;
+			}
+			FillGrid();
+			gridMain.SetSelected(new Point(gridMain.SelectedCell.X+1,gridMain.SelectedCell.Y));
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
 			FormWikiTableHeaders FormWTH=new FormWikiTableHeaders();
-			FormWTH.ColNames=ColNames;//Shallow copy. Just passes the pointer to the list in memory, so no need to "collect" the changes afterwords.
-			FormWTH.ColWidths=ColWidths;//Shallow copy. Just passes the pointer to the list in memory, so no need to "collect" the changes afterwords.
+			FormWTH.ColNames=ColNames;//Just passes the reference to the list in memory, so no need to "collect" the changes afterwords.
+			FormWTH.ColWidths=ColWidths;//Just passes the reference to the list in memory, so no need to "collect" the changes afterwords.
 			FormWTH.ShowDialog();
-			if(FormWTH.DialogResult!=DialogResult.OK) {
-				return;
-			}
 			FillGrid();
 		}
 

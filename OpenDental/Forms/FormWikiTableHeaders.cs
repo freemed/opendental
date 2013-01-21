@@ -28,7 +28,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			for(int i=1;i<ColNames.Count+1;i++) {
-				col=new ODGridColumn("Heading"+i,75,true);
+				col=new ODGridColumn("",75,true);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -36,7 +36,7 @@ namespace OpenDental {
 			ODGridRow row1=new ODGridRow();
 			for(int i=0;i<ColNames.Count;i++) {
 				row0.Cells.Add(ColNames[i]);
-				row1.Cells.Add(""+ColWidths[i]);
+				row1.Cells.Add(ColWidths[i].ToString());
 			}
 			gridMain.Rows.Add(row0);
 			gridMain.Rows.Add(row1);
