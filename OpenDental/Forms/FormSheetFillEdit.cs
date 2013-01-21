@@ -633,6 +633,7 @@ namespace OpenDental {
 				FormE.ShowDialog();
 			}
 			//g.Dispose();
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString()+" was printed");
 			DialogResult=DialogResult.OK;
 		}
 
@@ -646,6 +647,7 @@ namespace OpenDental {
 			SheetPrinting.CreatePdf(SheetCur,filePathAndName);
 			//g.Dispose();
 			Process.Start(filePathAndName);
+			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString()+" pdf was created");
 			DialogResult=DialogResult.OK;
 		}
 
