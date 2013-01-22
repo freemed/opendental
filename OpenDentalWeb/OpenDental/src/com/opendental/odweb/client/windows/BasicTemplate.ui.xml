@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<!-- This is where the styling belongs. -->
+	<ui:style>
+	</ui:style>
+	
+	<!-- Here is where you dictate the layout of the window. -->
+	<g:HorizontalPanel>
+		<g:Button ui:field="butOK" text="OK" />
+		<g:Button ui:field="butCancel" text="Cancel" />
+	</g:HorizontalPanel>
+	
+</ui:UiBinder>

@@ -2857,6 +2857,9 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		private static object MethodPrefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="RefreshCache") {
+				return Prefs.RefreshCache();
+			}
 			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
 		}
 

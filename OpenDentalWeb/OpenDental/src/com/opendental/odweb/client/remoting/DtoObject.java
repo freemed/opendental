@@ -21,6 +21,9 @@ public class DtoObject {
 	/** We must pass in a matching array of types for situations where nulls are used in parameters.  Otherwise, we won't know the parameter type. 
 	 * @throws Exception DtoObject constructor can throw an exception. */
 	public static DtoObject[] ConstructArray(String[] paramType,Object[] objArray) throws Exception {
+		if(paramType.length==0) {
+			return new DtoObject[0];
+		}
 		DtoObject[] retVal=new DtoObject[objArray.length];
 		for(int i=0;i<objArray.length;i++) {
 			retVal[i]=new DtoObject(objArray[i],paramType[i]);

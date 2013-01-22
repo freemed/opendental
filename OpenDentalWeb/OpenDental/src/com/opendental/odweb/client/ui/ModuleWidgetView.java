@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 /** A view of a {@link ModuleWidget} */
 public class ModuleWidgetView extends ResizeComposite {
 	interface ModuleWidgetViewUiBinder extends UiBinder<Widget,ModuleWidgetView> {
-  }
+	}
 	private static ModuleWidgetViewUiBinder uiBinder=GWT.create(ModuleWidgetViewUiBinder.class);
 
   private final boolean hasMargins;
@@ -28,11 +28,11 @@ public class ModuleWidgetView extends ResizeComposite {
     initWidget(uiBinder.createAndBindUi(this));
   }
 
-  public void setExample(Widget widget) {
-    modulePanel.setWidget(widget);
+  public void setModule(Widget widgetModule) {
+    modulePanel.setWidget(widgetModule);
     if(hasMargins) {
-      widget.getElement().getStyle().setMarginLeft(10.0,Unit.PX);
-      widget.getElement().getStyle().setMarginRight(10.0,Unit.PX);
+      widgetModule.getElement().getStyle().setMarginLeft(10.0,Unit.PX);
+      widgetModule.getElement().getStyle().setMarginRight(10.0,Unit.PX);
     }
   }
 

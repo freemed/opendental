@@ -38,7 +38,6 @@ import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
-import com.opendental.odweb.client.ui.MsgBox;
 import com.opendental.odweb.client.usercontrols.*;
 import com.opendental.odweb.client.windows.WindowPatientSelect;
 
@@ -49,47 +48,47 @@ public class WindowOpenDental extends ResizeComposite {
 	}
 	
 	/** The current {@link ModuleWidget} being displayed. */
-  private ModuleWidget moduleCur;
-  //Have a variable for each module so that we don't have to talk to the database for modules we have already loaded.
-  private ModuleWidget contrAppt;
-  private ModuleWidget contrFamily;
-  private ModuleWidget contrAccount;
-  private ModuleWidget contrTreatPlan;
-  private ModuleWidget contrChart;
-  private ModuleWidget contrImages;
-  private ModuleWidget contrManage;
-  /** Array list that contains the index of the selected module.  It might get enhanced to handle messaging buttons as well. */
+	private ModuleWidget moduleCur;
+	//Have a variable for each module so that we don't have to talk to the database for modules we have already loaded.
+	private ModuleWidget contrAppt;
+	private ModuleWidget contrFamily;
+	private ModuleWidget contrAccount;
+	private ModuleWidget contrTreatPlan;
+	private ModuleWidget contrChart;
+	private ModuleWidget contrImages;
+	private ModuleWidget contrManage;
+	/** Array list that contains the index of the selected module.  It might get enhanced to handle messaging buttons as well. */
 	public ArrayList<Integer> selectedIndicies=new ArrayList<Integer>();
-  /** The handler used to handle the user changing appointment views. */
-  private HandlerRegistration apptViewSourceHandler;
-  /** The panel that holds the content. */
-  @UiField SimpleLayoutPanel contentPanel;
-  /** The label towards the top of the page that displays the information regarding the currently selected patient. */
-  @UiField LabelMainTitle labelMainTitle;
+	/** The handler used to handle the user changing appointment views. */
+	private HandlerRegistration apptViewSourceHandler;
+	/** The panel that holds the content. */
+	@UiField SimpleLayoutPanel contentPanel;
+	/** The label towards the top of the page that displays the information regarding the currently selected patient. */
+	@UiField LabelMainTitle labelMainTitle;
 	/** The outlook bar on the left used to navigate to different modules.  (provided=true) Means we will instantiate the object ourselves.  
-	 *  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
-  @UiField(provided=true) OutlookBar outlookBar;
-  /** The main menu.  Holds options like Log Off, File, Setup, etc. */
-  @UiField MenuBarMain mainMenu;
-  /** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
-  @UiField(provided=true) ToolBarMain toolBarMain;
-  /** The currently selected patient.  Can be null. */
-  private Patient PatCur;
+	*  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
+	@UiField(provided=true) OutlookBar outlookBar;
+	/** The main menu.  Holds options like Log Off, File, Setup, etc. */
+	@UiField MenuBarMain mainMenu;
+	/** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
+	@UiField(provided=true) ToolBarMain toolBarMain;
+	/** The currently selected patient.  Can be null. */
+	private Patient PatCur;
   
 	public WindowOpenDental() {
 		final SingleSelectionModel<OutlookButton> selectionModel=new SingleSelectionModel<OutlookButton>();
 		outlookBar=new OutlookBar(selectionModel);
 		//Create an event handler for when users click between modules.
 		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-      public void onSelectionChange(SelectionChangeEvent event) {
-        setModule(selectionModel.getSelectedObject().getButtonIndex());
-      }
-    });
+			public void onSelectionChange(SelectionChangeEvent event) {
+				setModule(selectionModel.getSelectedObject().getButtonIndex());
+				}
+			});
 		toolBarMain=new ToolBarMain();
-    //Initialize the UI binder.
-    initWidget(uiBinder.createAndBindUi(this));  
-    //Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
-    setModule(-1);
+		//Initialize the UI binder.
+		initWidget(uiBinder.createAndBindUi(this));  
+		//Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
+		setModule(-1);
 	}
 	
 	public Patient getPatCur() {
@@ -121,12 +120,6 @@ public class WindowOpenDental extends ResizeComposite {
     	apptViewSourceHandler=null;
     }
     moduleCur=getModuleAtIndex(index);
-    if(moduleCur==null) {
-    	//This is where we can disable the tool bar buttons and such when no patient is selected or the user logs off.
-      contentPanel.setWidget(null);
-      return;
-    }
-    // TODO Setup the main tool bar here.
     showModule();
   }
 
@@ -180,7 +173,7 @@ public class WindowOpenDental extends ResizeComposite {
 		if(moduleCur==null) {
 			//Disable all the widgets?
 			//Have a default Open Dental logo with welcome text.  This would save time loading in case the user does not need the appts module yet.
-			return;
+			moduleCur=new ContrLogOn();
 		}
 		contentPanel.setWidget(moduleCur);
 	}
@@ -202,17 +195,14 @@ public class WindowOpenDental extends ResizeComposite {
 		
 		private class SelectPatient_Command implements Command {
 			public void execute() {
-				final WindowPatientSelect FormPS=new WindowPatientSelect();
-				FormPS.show();
-				FormPS.center();
+				final WindowPatientSelect windowPS=new WindowPatientSelect();
+				windowPS.show();
+				windowPS.center();
 				//Add a DialogResultCallback to listen for the dialog result.
-				FormPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
-					@Override
+				windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
 					public void OK() {
-						Db.sendRequest(Patients.getPat(FormPS.getSelectedPatNum()),new SelectPatientCallback());
+						Db.sendRequest(Patients.getPat(windowPS.getSelectedPatNum()),new SelectPatientCallback());
 					}
-
-					@Override
 					public void Cancel() {
 					}		
 				};
@@ -220,14 +210,8 @@ public class WindowOpenDental extends ResizeComposite {
 		}
 		
 		private class SelectPatientCallback implements RequestCallbackResult {
-			@Override
 			public void onSuccess(Object obj) {
 				fillPatientButton((Patient)obj);
-			}
-
-			@Override
-			public void onError(String error) {
-				MsgBox.show(error);
 			}
 		}
 		

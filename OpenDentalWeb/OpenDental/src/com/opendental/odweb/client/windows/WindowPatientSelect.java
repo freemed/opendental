@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.data.DataTable;
 import com.opendental.odweb.client.datainterface.Patients;
+import com.opendental.odweb.client.datainterface.Prefs;
+import com.opendental.odweb.client.datainterface.Prefs.PrefName;
 import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.*;
@@ -62,6 +64,7 @@ public class WindowPatientSelect extends ODWindow {
 		//Fills the @UiField objects.
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
+//		fillSearchOptions();
 		fillGrid();
 	}
 	
@@ -73,6 +76,21 @@ public class WindowPatientSelect extends ODWindow {
 		SelectedPatNum=selectedPatNum;
 	}
 
+	private void fillSearchOptions() {
+		if(Prefs.getBool(PrefName.PatientSelectUsesSearchButton)){
+			checkRefresh.setValue(false);
+		}
+		else {
+			checkRefresh.setValue(true);
+		}
+	}
+	
+	private class FillSearchOptionsCallBack implements RequestCallbackResult {
+		public void onSuccess(Object obj) {
+			
+		}
+	}
+	
 	/** Refreshes the patient grid with the information in the PatientTable.  Does nothing if PatientTable is null. */
 	private void fillGrid() {
 		gridMain.beginUpdate();
@@ -167,15 +185,9 @@ public class WindowPatientSelect extends ODWindow {
 	}
 	
 	private class ButSearchCallback implements RequestCallbackResult {
-		@Override
 		public void onSuccess(Object obj) {
 			PatientTable=(DataTable)obj;
 			fillGrid();
-		}
-
-		@Override
-		public void onError(String error) {
-			MsgBox.show(error);
 		}
 	}
 	

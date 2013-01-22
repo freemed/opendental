@@ -13,7 +13,7 @@ public class ProgramEntry implements EntryPoint {
 		//Instantiate the shell that holds the layout of the web application.
 		shell=new WindowOpenDental();
 		//Add the shell to the root panel.  This makes the app visible.
-    RootLayoutPanel.get().add(shell);
+		RootLayoutPanel.get().add(shell);
 	}
 
 }
