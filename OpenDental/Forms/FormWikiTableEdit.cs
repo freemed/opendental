@@ -324,12 +324,20 @@ namespace OpenDental {
 			//Loop through table rows.
 			//  Swap 2 cells.  Remember one of the first as part of the swap.
 			if(gridMain.SelectedCell.X==-1) {
-				MsgBox.Show(this,"Please select a cell first.");
+				MsgBox.Show(this,"Please select a column first.");
 				return;
 			}
 			if(gridMain.SelectedCell.X==0) {
 				return;//Row is already on the left.
 			}
+			string colName;
+			colName=ColNames[gridMain.SelectedCell.X];
+			ColNames[gridMain.SelectedCell.X]=ColNames[gridMain.SelectedCell.X-1];
+			ColNames[gridMain.SelectedCell.X-1]=colName;
+			int width;
+			width=ColWidths[gridMain.SelectedCell.X];
+			ColWidths[gridMain.SelectedCell.X]=ColWidths[gridMain.SelectedCell.X-1];
+			ColWidths[gridMain.SelectedCell.X-1]=width;
 			string cellText;
 			for(int i=0;i<Table.Rows.Count;i++) {
 				cellText=Table.Rows[i][gridMain.SelectedCell.X].ToString();
@@ -337,17 +345,24 @@ namespace OpenDental {
 				Table.Rows[i][gridMain.SelectedCell.X-1]=cellText;
 			}
 			FillGrid();
-			gridMain.SetSelected(new Point(gridMain.SelectedCell.X-1,gridMain.SelectedCell.Y));
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedCell.X==-1) {
-				MsgBox.Show(this,"Please select a cell first.");
+				MsgBox.Show(this,"Please select a column first.");
 				return;
 			}
 			if(gridMain.SelectedCell.X==Table.Columns.Count-1) {
 				return;//Row is already on the right.
 			}
+			string colName;
+			colName=ColNames[gridMain.SelectedCell.X];
+			ColNames[gridMain.SelectedCell.X]=ColNames[gridMain.SelectedCell.X+1];
+			ColNames[gridMain.SelectedCell.X+1]=colName;
+			int width;
+			width=ColWidths[gridMain.SelectedCell.X];
+			ColWidths[gridMain.SelectedCell.X]=ColWidths[gridMain.SelectedCell.X+1];
+			ColWidths[gridMain.SelectedCell.X+1]=width;
 			string cellText;
 			for(int i=0;i<Table.Rows.Count;i++) {
 				cellText=Table.Rows[i][gridMain.SelectedCell.X].ToString();
@@ -355,7 +370,6 @@ namespace OpenDental {
 				Table.Rows[i][gridMain.SelectedCell.X+1]=cellText;
 			}
 			FillGrid();
-			gridMain.SetSelected(new Point(gridMain.SelectedCell.X+1,gridMain.SelectedCell.Y));
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
@@ -367,24 +381,68 @@ namespace OpenDental {
 		}
 
 		private void butColumnInsert_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Please select a column first.");
+				return;
+			}
+			Table.Columns.Add();
+			ColNames.Insert(gridMain.SelectedCell.X+1,"Header"+(Table.Columns.Count));
+			ColWidths.Insert(gridMain.SelectedCell.X+1,100);
+			for(int i=0;i<Table.Rows.Count;i++) {
+				for(int j=gridMain.Columns.Count-1;j>gridMain.SelectedCell.X;j--) {
+					Table.Rows[i][j+1]=Table.Rows[i][j];
+				}
+				Table.Rows[i][gridMain.SelectedCell.X+1]="";
+			}
+			FillGrid();
 		}
 
 		private void butColumnDelete_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Please select a column first.");
+				return;
+			}
+			ColNames.RemoveAt(gridMain.SelectedCell.X);
+			ColWidths.RemoveAt(gridMain.SelectedCell.X);
+			Table.Columns.RemoveAt(gridMain.SelectedCell.X);
+			FillGrid();
 		}
 
 		private void butRowUp_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a cell first.");
+				MsgBox.Show(this,"Please select a row first.");
 				return;
 			}
+			if(gridMain.SelectedCell.Y==0) {
+				return;//Row is already at the top.
+			}
+			DataRow row=Table.NewRow();
+			for(int i=0;i<Table.Columns.Count;i++) {
+				row[i]=Table.Rows[gridMain.SelectedCell.Y][i];
+			}
+			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y-1);
+			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+1);
+			FillGrid();
 		}
 
 		private void butRowDown_Click(object sender,EventArgs e) {
 			//Table.Rows.InsertAt
 			//DataRow row=Table.Rows[i];
 			//Table.Rows.RemoveAt
+			if(gridMain.SelectedCell.Y==-1) {
+				MsgBox.Show(this,"Please select a row first.");
+				return;
+			}
+			if(gridMain.SelectedCell.Y==Table.Rows.Count-1) {
+				return;//Row is already at the bottom.
+			}
+			DataRow row=Table.NewRow();
+			for(int i=0;i<Table.Columns.Count;i++) {
+				row[i]=Table.Rows[gridMain.SelectedCell.Y+1][i];
+			}
+			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y);
+			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+2);
+			FillGrid();
 		}
 
 		private void butRowInsert_Click(object sender,EventArgs e) {
