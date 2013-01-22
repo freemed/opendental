@@ -11,6 +11,8 @@ import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseMoveHandlers;
 import com.google.gwt.event.dom.client.HasMouseUpHandlers;
@@ -21,6 +23,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -49,6 +52,8 @@ public class ODGrid extends Composite {
 	/** RowStyle is strictly used to refer to the CSS portion of the UiBinder file programmatically. */
 	@UiField RowStyle style;
 	
+	/** Occurs when a cell is double clicked. */
+	public ODGridDoubleClickHandler CellDoubleClick=null;
 	/** A simple panel that will contain all the widgets that compose the ODGrid. */
 	@UiField DockPanel containerPanel;
 	/** The title of the table. */
@@ -113,6 +118,7 @@ public class ODGrid extends Composite {
 		tableMain.addMouseDownHandler(new tableMain_MouseDown());
 		tableMain.addMouseUpHandler(new tableMain_MouseUp());
 		tableMain.addMouseMoveHandler(new tableMain_MouseMove());
+		tableMain.addDoubleClickHandler(new tableMain_DoubleClick());
 		//We have to call initWidget in the constructor because this class extends Composite. 
 		initWidget(containerPanel);
 	}
@@ -143,7 +149,6 @@ public class ODGrid extends Composite {
 		scrollPanel.setSize(width+"px", height+"px");//Scroll panel height will get set correctly with the deferred scheduler.  This is just so the window centers itself correctly in the browser.
 		//We have to use a deferred scheduler to set the height of the scroll panel because the widgets have yet to be drawn therefore their dimensions are 0.
 		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-			@Override
 			public void execute() {
 				int scrollHeight=height-labelTitle.getElement().getClientHeight();
 				if(scrollHeight<10) {
@@ -291,7 +296,6 @@ public class ODGrid extends Composite {
 	
 	/** Click handler for table column headers. This is where the sorting will happen if we decide to implement that functionality. */
 	public class tableColumnHeaders_Click implements ClickHandler {
-		@Override
 		public void onClick(ClickEvent event) {
 			//Check if the click event was on the column headers.
 			Cell cell=tableColumnHeaders.getCellForEvent(event);
@@ -301,6 +305,23 @@ public class ODGrid extends Composite {
 			}
 			// TODO enhance to handle sorting columns here.
 		}
+	}
+	
+	public class tableMain_DoubleClick implements DoubleClickHandler {
+		public void onDoubleClick(DoubleClickEvent event) {
+			Cell cell=tableMain.getCellForEvent(event);
+			if(cell==null) {
+				return;
+			}
+			setSelected(cell.getRowIndex(), true);
+			if(CellDoubleClick!=null){
+				CellDoubleClick.onCellDoubleClick();
+			}
+		}
+	}
+	
+	public void addCellDoubleClickHandler(ODGridDoubleClickHandler handler) {
+		CellDoubleClick=handler;
 	}
 	
 	//Selections-----------------------------------------------------------------------------------------------------------------
@@ -374,7 +395,6 @@ public class ODGrid extends Composite {
 	//Table Main Mouse Events
 	
 	public class tableMain_MouseDown implements MouseDownHandler {
-		@Override
 		public void onMouseDown(MouseDownEvent event) {
 			event.preventDefault();
 			int button=event.getNativeButton();
@@ -443,14 +463,12 @@ public class ODGrid extends Composite {
 	}
 	
 	public class tableMain_MouseUp implements MouseUpHandler {
-		@Override
 		public void onMouseUp(MouseUpEvent event) {
 			MouseIsDown=false;
 		}
 	}
 	
 	public class tableMain_MouseMove implements MouseMoveHandler {
-		@Override
 		public void onMouseMove(MouseMoveEvent event) {
 			if(!MouseIsDown) {
 				return;
@@ -515,17 +533,14 @@ public class ODGrid extends Composite {
 		return new Cell(row, column);
 		}
 		
-		@Override
 		public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
 			return this.addDomHandler(handler, MouseMoveEvent.getType());
 		}
 
-		@Override
 		public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
 			return this.addDomHandler(handler, MouseUpEvent.getType());
 		}
 
-		@Override
 		public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
 			return this.addDomHandler(handler, MouseDownEvent.getType());
 		}
@@ -547,6 +562,10 @@ public class ODGrid extends Composite {
 		OneCell,
 		/** 3=MultiExtended */
 		MultiExtended
+	}
+
+	public interface ODGridDoubleClickHandler extends EventHandler {
+		void onCellDoubleClick();
 	}
 
 	
