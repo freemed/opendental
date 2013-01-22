@@ -1575,11 +1575,11 @@ namespace OpenDental{
 			else{
 				//gridProc.SetSelected(e.Row,true);
 				Procedures.AttachToApt(procNums,AptCur.AptNum,isPlanned);
-				if(!isPlanned) {
-					List<string> procCodes=new List<string>();
-					procCodes.Add(DS.Tables["Procedure"].Rows[e.Row]["ProcCode"].ToString());
-					Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
-				}
+				//if(!isPlanned) {
+				//	List<string> procCodes=new List<string>();
+				//	procCodes.Add(DS.Tables["Procedure"].Rows[e.Row]["ProcCode"].ToString());
+				//	Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);//moved to closing event
+				//}
 			}
 			Recalls.Synch(AptCur.PatNum);//Maybe we should move this to the closing event?
 			//manually change existing table instead of refreshing from db?
@@ -2914,12 +2914,13 @@ namespace OpenDental{
 				}
 				procCodes.Add(DS.Tables["Procedure"].Rows[i]["ProcCode"].ToString());
 			}
-			if(AptOld.AptStatus!=ApptStatus.Complete && AptCur.AptStatus==ApptStatus.Complete) {//user set appt complete
-				Recalls.SynchScheduledApptFull(AptCur.PatNum);
-			}
-			else {
-				Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes);
-			}
+			//if(AptOld.AptStatus!=ApptStatus.Complete && AptCur.AptStatus==ApptStatus.Complete) {//user set appt complete
+			//Recalls.SynchScheduledApptFull(AptCur.PatNum);
+			//}
+			//else {
+			//This was causing bugs.  For example, when clicking ok on a completed appointment
+			//	Recalls.SynchScheduledApptLazy(AptCur.PatNum,AptCur.AptDateTime,procCodes); //moved to closing event
+			//}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -2928,13 +2929,12 @@ namespace OpenDental{
 		}
 
 		private void FormApptEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			if(DialogResult==DialogResult.OK){
-				return;
+			if(DialogResult!=DialogResult.OK) {
+				if(IsNew) {
+					Appointments.Delete(AptCur.AptNum);
+				}
 			}
-			if(IsNew) {
-				Appointments.Delete(AptCur.AptNum);
-				Recalls.SynchScheduledApptFull(AptCur.PatNum);
-			}
+			Recalls.SynchScheduledApptFull(AptCur.PatNum);
 		}
 		
 

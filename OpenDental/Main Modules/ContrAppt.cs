@@ -2638,7 +2638,8 @@ namespace OpenDental {
 			for(int i=0;i<procsForSingleApt.Count;i++) {
 				procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
 			}
-			Recalls.SynchScheduledApptLazy(aptCur.PatNum, aptCur.AptDateTime, procCodes);
+			//Recalls.SynchScheduledApptLazy(aptCur.PatNum, aptCur.AptDateTime, procCodes);
+			Recalls.SynchScheduledApptFull(aptCur.PatNum);
 		}
 
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
@@ -3282,7 +3283,8 @@ namespace OpenDental {
 					procCodes.Add(ProcedureCodes.GetProcCode((long)procsForSingleApt[i].CodeNum).ProcCode);
 				}
 			}
-			Recalls.SynchScheduledApptLazy(apt.PatNum,apt.AptDateTime,procCodes);
+			//Recalls.SynchScheduledApptLazy(apt.PatNum,apt.AptDateTime,procCodes);
+			Recalls.SynchScheduledApptFull(apt.PatNum);
 		}
 
 		private void ContrApptSheet2_MouseLeave(object sender,EventArgs e) {

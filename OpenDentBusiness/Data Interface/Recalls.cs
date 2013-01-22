@@ -677,6 +677,7 @@ namespace OpenDentBusiness{
 			}
 		}
 
+		/*
 		/// <summary>Whenever an appointment is scheduled or moved, or whenever procs are added to an appt.  Uses the final apt date and all the procs on the appt.  Pass in procs in the D#### format.</summary>
 		public static void SynchScheduledApptLazy(long patNum,DateTime date,List<string> procCodes) {
 			//compare procCodes to triggers so that you know which types of recalls to update.
@@ -707,8 +708,7 @@ namespace OpenDentBusiness{
 				command+=") ";
 				Db.NonQ(command);
 			}
-		}
-
+		}*/
 
 		///<summary>Updates RecallInterval and DueDate for all patients that have the recallTypeNum and defaultIntervalOld to use the defaultIntervalNew.</summary>
 		public static void UpdateDefaultIntervalForPatients(long recallTypeNum,Interval defaultIntervalOld,Interval defaultIntervalNew) {
