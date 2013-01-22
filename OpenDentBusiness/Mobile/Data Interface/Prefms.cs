@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Mobile {
 				DataTable table=Db.GetTable(command);
 				if(table.Rows.Count>0) {
 					command = "UPDATE preferencem SET "
-					+"ValueString = '"+prefm.ValueString+"' "
+					+"ValueString = '"+POut.String(prefm.ValueString)+"' "
 					+"WHERE CustomerNum =" +POut.Long(prefm.CustomerNum)+" AND PrefNum = "+POut.Long(prefm.PrefNum);
 					Db.NonQ(command);
 				}
