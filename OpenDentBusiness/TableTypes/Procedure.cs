@@ -43,7 +43,7 @@ namespace OpenDentBusiness {
 		public string Prosthesis;
 		///<summary>For a prosthesis Replacement, this is the original date.</summary>
 		public DateTime DateOriginalProsth;
-		///<summary>This note used to go out on e-claims, but the new format does not allow it.  So we removed the UI for this field.  We will probably drop this field completely soon.</summary>
+		///<summary>This note goes out on e-claims.  Not visible in Canada.</summary>
 		public string ClaimNote;
 		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
