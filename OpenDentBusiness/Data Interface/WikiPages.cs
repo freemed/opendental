@@ -342,16 +342,19 @@ namespace OpenDentBusiness{
 				StringBuilder strbTable=new StringBuilder();
 				string[] lines=tableStrOrig.Split(new string[] {"\r\n"},StringSplitOptions.None);
 				strbTable.AppendLine("<table>");
+				List<string> colWidths=new List<string>();
 				for(int i=1;i<lines.Length-1;i++) {
 					if(lines[i].StartsWith("!")) {//header
 						strbTable.AppendLine("<tr>");
 						lines[i]=lines[i].Substring(1);//strips off the leading !
 						string[] cells=lines[i].Split(new string[] {"!!"},StringSplitOptions.None);
+						colWidths.Clear();
 						for(int c=0;c<cells.Length;c++){
 							if(Regex.IsMatch(cells[c],@"(Width="")\d+""\|")){//e.g. Width="90"|
 								strbTable.Append("<th ");
 								string width=cells[c].Substring(7);//90"|Column Heading 1
 								width=width.Substring(0,width.IndexOf("\""));//90
+								colWidths.Add(width);
 								strbTable.Append("Width=\""+width+"\">");
 								strbTable.Append(cells[c].Substring(cells[c].IndexOf("|")+1));
 								strbTable.AppendLine("</th>");
@@ -372,7 +375,7 @@ namespace OpenDentBusiness{
 						lines[i]=lines[i].Substring(1);//strips off the leading |
 						string[] cells=lines[i].Split(new string[] {"||"},StringSplitOptions.None);
 						for(int c=0;c<cells.Length;c++) {
-							strbTable.Append("<td>");
+							strbTable.Append("<td Width=\""+colWidths[c]+"\">");
 							strbTable.Append(cells[c]);
 							strbTable.AppendLine("</td>");
 						}
