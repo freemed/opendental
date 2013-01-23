@@ -3,11 +3,8 @@
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
-
-	<ui:style>
-	</ui:style>
 	
-	<g:DockLayoutPanel unit='PX'>
+	<g:DockLayoutPanel ui:field="panelContainer" unit='PX'>
 		<g:center>
 			<!-- Put the appointment schedule here. -->
 			<g:SimplePanel ui:field="panelSchedule" />

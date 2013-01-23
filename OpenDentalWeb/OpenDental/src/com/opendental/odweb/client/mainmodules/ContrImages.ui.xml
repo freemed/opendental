@@ -2,8 +2,9 @@
 <ui:UiBinder 
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-
-	<ui:style>	
-	</ui:style>
+	
+	<g:SimplePanel ui:field="panelContainer">
+		<g:Label>Images Module</g:Label>
+	</g:SimplePanel>
 	
 </ui:UiBinder>

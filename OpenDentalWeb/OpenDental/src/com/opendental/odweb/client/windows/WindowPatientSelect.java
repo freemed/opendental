@@ -3,6 +3,8 @@ package com.opendental.odweb.client.windows;
 import java.util.Date;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -69,6 +71,12 @@ public class WindowPatientSelect extends ODWindow {
 		this.add(panelContainer);
 //		fillSearchOptions();
 		fillGrid();
+		//Simply setting the focus does not work.  A deferred scheduler needs to be used instead.
+		Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+			public void execute() {
+				textLName.setFocus(true);
+			}
+		});
 	}
 	
 	public int getSelectedPatNum() {

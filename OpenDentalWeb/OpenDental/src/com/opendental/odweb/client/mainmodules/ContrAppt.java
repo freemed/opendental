@@ -6,6 +6,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -21,6 +22,7 @@ public class ContrAppt extends ModuleWidget {
 	interface ContrApptUiBinder extends UiBinder<Widget, ContrAppt> {
 	}
 	
+	@UiField DockLayoutPanel panelContainer;
 	@UiField SimplePanel panelSchedule;
 	@UiField DatePicker calendar;
 	@UiField RadioButton radioDay;
@@ -43,12 +45,12 @@ public class ContrAppt extends ModuleWidget {
 	/** Constructor. */
 	public ContrAppt() {
 		uiBinder.createAndBindUi(this);
-		panelSchedule.setSize("235 px", "500 px");
+		this.add(panelContainer);
 	}
 
 	/** Loads up all of the information for the appointment module. */
 	public Widget onInitialize() {
-		return this;
+		return null;
 	}
 
 	protected void asyncOnInitialize(final AsyncCallback<Widget> callback) {
