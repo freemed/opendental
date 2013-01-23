@@ -53,12 +53,12 @@ public class ContrAppt extends ModuleWidget {
 
 	protected void asyncOnInitialize(final AsyncCallback<Widget> callback) {
 		GWT.runAsync(ContrAppt.class, new RunAsyncCallback() {
-	      public void onFailure(Throwable error) {
-	        callback.onFailure(error);
-	      }
-	      public void onSuccess() {
-	    	  callback.onSuccess(onInitialize());
-	      }
+			public void onFailure(Throwable error) {
+				callback.onFailure(error);
+			}
+			public void onSuccess() {
+				callback.onSuccess(onInitialize());
+			}
 		});
 	}
 }

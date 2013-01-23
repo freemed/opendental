@@ -2,8 +2,6 @@ package com.opendental.odweb.client.usercontrols;
 
 import java.util.ArrayList;
 
-import java_cup.internal_error;
-
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.opendental.odweb.client.usercontrols.OutlookButton.ButtonClickHandler;
@@ -49,9 +47,15 @@ public class OutlookBar extends SimplePanel {
 	/** This sets each outlook button's isSelected accordingly so that the mouse methods work correctly in showing the hovering etc. */
 	private void setSelectedButton(int buttonIndex) {
 		for(int i=0;i<Buttons.size();i++) {
-			Buttons.get(i).setSelected(false);
+			if(i==buttonIndex) {
+				Buttons.get(i).setSelected(true);
+			}
+			else {
+				Buttons.get(i).setSelected(false);
+			}
+			//Now update the CSS so that the correct button shows selected.
+			Buttons.get(i).refreshButtonStyles();
 		}
-		Buttons.get(buttonIndex).setSelected(true);
 	}
 	
 	private class outlookButton_Click implements ButtonClickHandler {

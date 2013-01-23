@@ -1,5 +1,6 @@
 package com.opendental.odweb.client.usercontrols;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.HasMouseDownHandlers;
 import com.google.gwt.event.dom.client.HasMouseOutHandlers;
@@ -11,20 +12,36 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.CssResource;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 /** Simple cell container that holds the module buttons and will eventually hold the messaging buttons as well.
  *  It uses HtmlConstants to display the information within the AbstractCell. */
 public class OutlookButton extends Composite implements HasMouseDownHandlers,HasMouseOutHandlers,HasMouseOverHandlers {
+	private static OutlookButtonUiBinder uiBinder = GWT.create(OutlookButtonUiBinder.class);
+	interface OutlookButtonUiBinder extends UiBinder<Widget, OutlookButton> {
+	}
 	
-	private VerticalPanel contentPanel;
+	/** This is going to allow programmatic access to specified UiBinder styles. */
+	interface ButtonStyle extends CssResource {
+		String buttonStandard();
+		String buttonSelected();
+		String buttonHover();
+	}
+	/** RowStyle is strictly used to refer to the CSS portion of the UiBinder file programmatically. */
+	@UiField ButtonStyle style;
+	
+	@UiField DecoratorPanel contentPanel;
+	@UiField Label labelText;
 	private boolean isSelected;
 	private String caption;
 	private int buttonIndex;
 	private ButtonClickHandler buttonClickHandler;
-	private Label labelText;
 	// TODO Enhance OutlookButton to accept images for the module "buttons".
   //private Image image;
 	// TODO Enhance to accept colors.
@@ -38,16 +55,16 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 	
 	/** Used to add the main module buttons.  This constructor sets the Button Index and sets the caption.  We will be able to enhance this class to accept images. */
 	public OutlookButton(String text,int index,ButtonClickHandler clickHandler) {
+		initWidget(uiBinder.createAndBindUi(this));
 		caption=text;
 		buttonIndex=index;
-		labelText=new Label(caption);
+		labelText.setText(caption);
 		//Make it so that the cursor does not change to the TEXT cursor when hovering over text.
 		labelText.getElement().getStyle().setCursor(Cursor.DEFAULT);
+		// TODO: Change the border of the decorator panel by creating my own pictures to make a rounded edge.  But for now just use CSS.
+		contentPanel.setStyleName(style.buttonStandard());
 		//Set the click handler.
 		buttonClickHandler=clickHandler;
-		contentPanel=new VerticalPanel();
-		contentPanel.add(labelText);
-		initWidget(contentPanel);
 		//Add mouse handlers.
 		this.addMouseDownHandler(new mouseDownHandler());
 		this.addMouseOverHandler(new mouseOverHandler());
@@ -78,7 +95,10 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 	private class mouseDownHandler implements MouseDownHandler {
 		public void onMouseDown(MouseDownEvent event) {
 			if(!isSelected()){//Already suppressed.
-				buttonClickHandler.onClick(buttonIndex);			
+				removeButtonStyles();
+				//Set the CSS for this button to selected.
+				contentPanel.setStyleName(style.buttonSelected());
+				buttonClickHandler.onClick(buttonIndex);
 			}
 		}
 	}
@@ -87,7 +107,9 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 		public void onMouseOver(MouseOverEvent event) {
 			// TODO Add code so that the panel gets a little outline so that the user can tell they are hovering over the module button.
 			if(!isSelected()) {
+				removeButtonStyles();
 				//Change the CSS style so that the panel has an outline.
+				contentPanel.setStyleName(style.buttonHover());
 			}
 		}
 	}
@@ -96,9 +118,28 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 		public void onMouseOut(MouseOutEvent event) {
 			// TODO Add code to change the button to remove the hover affect.
 			if(!isSelected()) {
+				removeButtonStyles();
 				//Change the CSS style back to normal.
+				contentPanel.setStyleName(style.buttonStandard());
 			}
 		}
+	}
+	
+	/** Gets called after a module button gets clicked.  This will make sure the correct module is showing selected. */
+	public void refreshButtonStyles() {
+		removeButtonStyles();
+		if(isSelected()) {
+			contentPanel.setStyleName(style.buttonSelected());
+		}
+		else {
+			contentPanel.setStyleName(style.buttonStandard());
+		}
+	}
+	
+	private void removeButtonStyles() {
+		contentPanel.removeStyleName(style.buttonHover());
+		contentPanel.removeStyleName(style.buttonSelected());
+		contentPanel.removeStyleName(style.buttonStandard());
 	}
 	
 	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {

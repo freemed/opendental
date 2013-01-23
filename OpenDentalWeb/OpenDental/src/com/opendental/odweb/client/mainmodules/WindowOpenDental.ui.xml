@@ -12,30 +12,32 @@
   <!-- This will be the main CSS settings for the web app unless we make a more general file later. -->
   <ui:style>
   	.titleBar {
-      padding: 0 10px;
-      background-color: #d8e2e1;
-      border-bottom: 1px solid #3c756e;
+      /* padding: 0 10px; */
+      background-color: #e8e8e8;
+      border-bottom: 1px solid #bbbbbb;
 	}
 	
 	.mainMenuBar {
       background-color: #e8eeee;
-      border-bottom: 1px solid #3c756e;
+      /* border-bottom: 1px solid #3c756e; */
 	}
 	
 	.patientMenuBar {
       background-color: #e8eeee;
-      border-top: 1px solid #3c756e;
-      border-bottom: 1px solid #3c756e;
+      /* border-top: 1px solid #3c756e; */
+      border-bottom: 1px solid #bbbbbb;
 	}
 	
 	.moduleList {
-	  background-color: #3c756e;
+	  background-color: #f0f0f0;
+		border-top: 1px solid #bbbbbb;
+		border-right: 1px solid #bbbbbb;
 	}
     
-    .moduleContent {
-      background-color: #d7dde8;
-      border-right: 1px solid #3c756e;
-    }
+	.moduleContent {
+	  background-color: #d7dde8;
+	  /* border-right: 1px solid #3c756e; */
+	}
 	
 	.styleModuleStandard {
 	
@@ -51,17 +53,16 @@
   <g:DockLayoutPanel unit='PT'>
     
     <!-- Title bar that contains the selected patient information. -->
-    <g:north size='32'>
+    <g:north size='12'>
       <g:HTMLPanel styleName='{style.titleBar}'>
         <table ui:field='mainTitle' cellpadding='0' cellspacing='0'>
-        	<td><img src='http://www.opendental.com/images/LogoTiny.png' /></td>
         	<td style="padding-left: 10px;"><s:LabelMainTitle ui:field='labelMainTitle' /></td>
         </table>
       </g:HTMLPanel>
     </g:north>
 
     <!-- Main Menu Bar. -->
-    <g:north size='17'>
+    <g:north size='18'>
     	<s:MenuBarMain ui:field="mainMenu" />
     </g:north>
 
@@ -69,7 +70,7 @@
     <g:center>
       <g:DockLayoutPanel unit='PX'>
         <!-- Modules Tree. -->
-        <g:lineStart size='56'>
+        <g:lineStart size='58'>
           <g:ScrollPanel styleName='{style.moduleList}'>
             <s:OutlookBar ui:field='outlookBar' />
           </g:ScrollPanel>
@@ -79,7 +80,7 @@
         <g:center>
           <g:DockLayoutPanel unit='PT'>
           	<!-- This is where the menu bar with Select Patient, E-mail, etc. will be kept. -->
-            <g:north size='18'>
+            <g:north size='17'>
               <g:FlowPanel ui:field='mainToolBarPanel' styleName='{style.patientMenuBar}'>
               	<m:WindowOpenDental.ToolBarMain ui:field='toolBarMain'/>
               </g:FlowPanel>
