@@ -1125,7 +1125,7 @@ namespace OpenDentBusiness{
 						List<DateTime> listVisits=new List<DateTime>();//for this year
 						List<Procedure> listProcs=Procedures.Refresh(pat.PatNum);
 						for(int p=0;p<listProcs.Count;p++) {
-							if(listProcs[p].ProcDate < DateTime.Now.AddYears(-1) || listProcs[i].ProcStatus!=ProcStat.C) {//not within the last year or not a completed procedure
+							if(listProcs[p].ProcDate < DateTime.Now.AddYears(-1) || listProcs[p].ProcStatus!=ProcStat.C) {//not within the last year or not a completed procedure
 								continue;
 							}
 							if(!listVisits.Contains(listProcs[p].ProcDate)) {
