@@ -1125,7 +1125,7 @@ namespace OpenDentBusiness{
 						List<DateTime> listVisits=new List<DateTime>();//for this year
 						List<Procedure> listProcs=Procedures.Refresh(pat.PatNum);
 						for(int p=0;p<listProcs.Count;p++) {
-							if(listProcs[p].ProcDate < DateTime.Now.AddYears(-1)) {//not within the last year
+							if(listProcs[p].ProcDate < DateTime.Now.AddYears(-1) || listProcs[i].ProcStatus!=ProcStat.C) {//not within the last year or not a completed procedure
 								continue;
 							}
 							if(!listVisits.Contains(listProcs[p].ProcDate)) {
@@ -1144,7 +1144,7 @@ namespace OpenDentBusiness{
 								summaryProvidedinTime=false;
 								DateTime deadlineDate=listVisits[p].AddDays(3);
 								if(listVisits[p].DayOfWeek==DayOfWeek.Wednesday || listVisits[p].DayOfWeek==DayOfWeek.Thursday || listVisits[p].DayOfWeek==DayOfWeek.Friday){
-									deadlineDate.AddDays(2);//add two days for the weekend
+									deadlineDate=deadlineDate.AddDays(2);//add two days for the weekend
 								}
 								for(int r=0;r<listClinSum.Count;r++) {
 									if(listClinSum[r].DateTEvent.Date > deadlineDate) {
