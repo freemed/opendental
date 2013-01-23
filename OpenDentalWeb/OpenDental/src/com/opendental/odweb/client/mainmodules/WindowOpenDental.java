@@ -29,8 +29,6 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.view.client.SingleSelectionModel;
 import com.opendental.odweb.client.datainterface.*;
 import com.opendental.odweb.client.logic.PatientL;
 import com.opendental.odweb.client.remoting.Db;
@@ -39,6 +37,7 @@ import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
 import com.opendental.odweb.client.usercontrols.*;
+import com.opendental.odweb.client.usercontrols.OutlookBar.OutlookBarClickHandler;
 import com.opendental.odweb.client.windows.WindowPatientSelect;
 
 /** This is where the shell of the Open Dental Web App lives. */
@@ -47,7 +46,7 @@ public class WindowOpenDental extends ResizeComposite {
 	interface WindowOpenDentalUiBinder extends UiBinder<Widget, WindowOpenDental> {
 	}
 	
-	/** The current {@link ModuleWidget} being displayed. */
+	/** The current ModuleWidget being displayed. */
 	private ModuleWidget moduleCur;
 	//Have a variable for each module so that we don't have to talk to the database for modules we have already loaded.
 	private ModuleWidget contrAppt;
@@ -69,24 +68,19 @@ public class WindowOpenDental extends ResizeComposite {
 	*  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
 	@UiField(provided=true) OutlookBar outlookBar;
 	/** The main menu.  Holds options like Log Off, File, Setup, etc. */
-	@UiField MenuBarMain mainMenu;
+	@UiField(provided=true) MenuBarMain mainMenu;
 	/** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
 	@UiField(provided=true) ToolBarMain toolBarMain;
 	/** The currently selected patient.  Can be null. */
 	private Patient PatCur;
   
 	public WindowOpenDental() {
-		final SingleSelectionModel<OutlookButton> selectionModel=new SingleSelectionModel<OutlookButton>();
-		outlookBar=new OutlookBar(selectionModel);
 		//Create an event handler for when users click between modules.
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			public void onSelectionChange(SelectionChangeEvent event) {
-				setModule(selectionModel.getSelectedObject().getButtonIndex());
-				}
-			});
 		toolBarMain=new ToolBarMain();
+		mainMenu=new MenuBarMain(this);
+		outlookBar=new OutlookBar(new outlookBar_Click());
 		//Initialize the UI binder.
-		initWidget(uiBinder.createAndBindUi(this));  
+		initWidget(uiBinder.createAndBindUi(this));
 		//Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
 		setModule(-1);
 	}
@@ -110,18 +104,27 @@ public class WindowOpenDental extends ResizeComposite {
 	private void setMainTitle(Patient pat) {
 		labelMainTitle.setText(PatientL.getMainTitle(pat));
 	}
-
+	
+	private class outlookBar_Click implements OutlookBarClickHandler {
+		public void onClick(ArrayList<Integer> selectedIndices) {
+			for(int i=0;i<selectedIndices.size();i++) {
+				//For now we only support modules being selected.  This should be enhanced to handle messaging buttons as well.
+				setModule(selectedIndices.get(i));
+			}
+		}
+	}
+	
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
-   * @param index The index of the module that needs to be displayed. */
-  public void setModule(int index) {
-    //Clear the old handler.
-    if(apptViewSourceHandler!=null) {
-    	apptViewSourceHandler.removeHandler();
-    	apptViewSourceHandler=null;
-    }
-    moduleCur=getModuleAtIndex(index);
-    showModule();
-  }
+	 *  @param index The index of the module that needs to be displayed. */
+	public void setModule(int index) {
+	    //Clear the old handler.
+	    if(apptViewSourceHandler!=null) {
+	    	apptViewSourceHandler.removeHandler();
+	    	apptViewSourceHandler=null;
+	    }
+	    moduleCur=getModuleAtIndex(index);
+		showModule();
+	}
 
   /** Gets the corresponding module in regards to the selected index of the module buttons. */
 	private ModuleWidget getModuleAtIndex(int index) {
@@ -171,7 +174,8 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Sets the visible module in the content panel to moduleCur.  OK if moduleCur is null. */
 	private void showModule() {
 		if(moduleCur==null) {
-			//Disable all the widgets?
+			//Disable all widgets.
+			labelMainTitle.setMainTitle("");
 			//Have a default Open Dental logo with welcome text.  This would save time loading in case the user does not need the appts module yet.
 			moduleCur=new ContrLogOn();
 		}

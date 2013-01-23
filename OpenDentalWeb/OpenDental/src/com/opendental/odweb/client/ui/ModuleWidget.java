@@ -6,7 +6,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 /** A widget used to show the selected module in the ContentPanel. */
 public abstract class ModuleWidget extends SimpleLayoutPanel {
-	private final String name;
 	/** Whether the demo widget has been initialized. */
 	private boolean moduleInitialized;
 	/** Whether the module is (asynchronously) initializing. */
@@ -14,24 +13,8 @@ public abstract class ModuleWidget extends SimpleLayoutPanel {
 	/** The view that holds the name, description, and module. */
 	private ModuleWidgetView moduleView;
   
-	public ModuleWidget(String name) {
-		this.name=name;
-	}
-  
-	public String getName() {
-		return name;
-	}
-	
-	/** Check if the widget should have margins.
-	*  @return true to use margins, false to flush against edges. */
-	public boolean hasMargins() {
-		return true;
-	}
-
-	/** Check if the widget should be wrapped in a scrollable div.
-	* @return true to use add scrollbars, false not to. */
-	public boolean hasScrollableContent() {
-		return true;
+	public ModuleWidget() {
+		
 	}
 	
 	/** When a module widget is first initialized, this method is called. If it returns a Widget, the widget will be added to the content panel. 
@@ -43,12 +26,10 @@ public abstract class ModuleWidget extends SimpleLayoutPanel {
 	public void onInitializeComplete() {
 		
 	}
-  
-	@Override
+	
 	protected void onLoad() {
 		if(moduleView==null) {
-			moduleView=new ModuleWidgetView(hasMargins(), hasScrollableContent());
-			moduleView.setName(getName());
+			moduleView=new ModuleWidgetView(true, true);
 			moduleView.setModule(getWidget());
 			setWidget(moduleView);
 		}

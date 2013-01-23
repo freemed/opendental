@@ -4,11 +4,18 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.MenuItemSeparator;
+import com.opendental.odweb.client.mainmodules.WindowOpenDental;
 
 public class MenuBarMain extends MenuBar{
+	private WindowOpenDental WindowOD;
 	
-	public MenuBarMain(){
-		MenuItem menuLogOff = new MenuItem("Log Off", false, (Command) null);
+	public MenuBarMain(WindowOpenDental windowOD) {
+		WindowOD=windowOD;
+		MenuItem menuLogOff = new MenuItem("Log Off", false, new Command() {
+			public void execute() {
+				WindowOD.setModule(-1);
+			}
+		});
 		this.addItem(menuLogOff);
 		
 		MenuBar subMenuFile=new MenuBar(true);

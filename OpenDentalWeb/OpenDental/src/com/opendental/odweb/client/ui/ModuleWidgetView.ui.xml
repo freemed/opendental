@@ -3,14 +3,7 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-  <g:HeaderPanel>
-    <!-- Header. -->
-    <g:HTMLPanel>
-      <div ui:field='nameElem'>Name</div>
-    </g:HTMLPanel>
-
-    <!-- Content. -->
-    <g:SimplePanel ui:field='modulePanel' />
-  </g:HeaderPanel>
+  <!-- Content. -->
+  <g:SimplePanel ui:field='modulePanel' />
 
 </ui:UiBinder> 

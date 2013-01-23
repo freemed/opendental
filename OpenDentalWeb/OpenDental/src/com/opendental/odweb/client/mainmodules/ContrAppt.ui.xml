@@ -1,0 +1,59 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder 
+	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
+
+	<ui:style>
+	</ui:style>
+	
+	<g:DockLayoutPanel unit='PX'>
+		<g:center>
+			<!-- Put the appointment schedule here. -->
+			<g:SimplePanel ui:field="panelSchedule" />
+		</g:center>
+		<g:east size="300">
+			<!-- Put the calendar and other searching tools here. -->
+			<g:VerticalPanel>
+				<dp:DatePicker ui:field="calendar"/>
+				<g:RadioButton ui:field="radioDay" name="radioDay">Day</g:RadioButton>
+				<g:RadioButton ui:field="radioWeek" name="radioWeek">Week</g:RadioButton>
+				<g:HorizontalPanel>
+					<g:Label>View</g:Label>
+					<g:ListBox ui:field="comboView" />
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Button ui:field="butLab">LabCases</g:Button>
+					<g:TextBox ui:field="textLab" />
+				</g:HorizontalPanel>
+				<g:HorizontalPanel>
+					<g:Label>Daily Prod</g:Label>
+					<g:TextBox ui:field="textProduction" />
+				</g:HorizontalPanel>
+				<g:DockLayoutPanel>
+					<g:west size="50">
+						<g:VerticalPanel>
+							<g:Button ui:field="butUnsched">U</g:Button>
+							<g:Button ui:field="butBreak">B</g:Button>
+							<g:Button ui:field="butComplete">C</g:Button>
+							<g:Button ui:field="butDelete">D</g:Button>
+						</g:VerticalPanel>
+					</g:west>
+					<g:center>
+						<g:ListBox ui:field="listConfirmed" />
+					</g:center>
+					<g:east size="50">
+						<g:VerticalPanel>
+							<g:Button ui:field="butMakeAppt">Make Appt</g:Button>
+							<g:Button ui:field="butMakeRecall">Make Recall</g:Button>
+							<g:Button ui:field="butFamRecall">Fam Recall</g:Button>
+							<g:Button ui:field="butViewAppts">View Pat Appts</g:Button>
+						</g:VerticalPanel>
+					</g:east>
+				</g:DockLayoutPanel>
+				<g:TabLayoutPanel ui:field="tabControl" barHeight="15" />
+			</g:VerticalPanel>
+		</g:east>
+	</g:DockLayoutPanel>
+	
+</ui:UiBinder>

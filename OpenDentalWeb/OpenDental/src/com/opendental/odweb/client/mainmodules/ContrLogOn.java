@@ -1,6 +1,7 @@
 package com.opendental.odweb.client.mainmodules;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -22,7 +23,6 @@ public class ContrLogOn extends ModuleWidget {
 	@UiField TextBox textPassword;
 	
 	public ContrLogOn() {
-		super("Log On");
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
 	}
@@ -31,16 +31,19 @@ public class ContrLogOn extends ModuleWidget {
 	void butOK_Click(ClickEvent event) {
 	}
 
-	@Override
 	public Widget onInitialize() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	protected void asyncOnInitialize(AsyncCallback<Widget> callback) {
-		// TODO Auto-generated method stub
-		
+	
+	protected void asyncOnInitialize(final AsyncCallback<Widget> callback) {
+		GWT.runAsync(ContrAppt.class, new RunAsyncCallback() {
+		      public void onFailure(Throwable error) {
+		    	  callback.onFailure(error);
+		      }
+		      public void onSuccess() {
+		    	  callback.onSuccess(onInitialize());
+		      }
+		});
 	}
 
 }

@@ -20,6 +20,7 @@ import com.opendental.odweb.client.datainterface.Prefs.PrefName;
 import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.*;
+import com.opendental.odweb.client.ui.ODGrid.ODGridDoubleClickHandler;
 
 public class WindowPatientSelect extends ODWindow {
 	private DataTable PatientTable=new DataTable();
@@ -61,6 +62,8 @@ public class WindowPatientSelect extends ODWindow {
 		super("Patient Select");		
 		gridMain=new ODGrid("Select Patient");
 		gridMain.setHeightAndWidth(500,625);
+		//Add a double click handler to the grid.
+		gridMain.addCellDoubleClickHandler(new gridMain_CellDoubleClick());
 		//Fills the @UiField objects.
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
@@ -77,7 +80,7 @@ public class WindowPatientSelect extends ODWindow {
 	}
 
 	private void fillSearchOptions() {
-		if(Prefs.getBool(PrefName.PatientSelectUsesSearchButton)){
+		if(Prefs.getBool(PrefName.PatientSelectUsesSearchButton)) {
 			checkRefresh.setValue(false);
 		}
 		else {
@@ -222,6 +225,13 @@ public class WindowPatientSelect extends ODWindow {
 	private void patSelected() {
 		SelectedPatNum=Integer.parseInt(PatientTable.getCellText(gridMain.getSelectedIndex(), "PatNum"));
 		DialogResultCallback.OK();
+		this.hide();
+	}
+	
+	private class gridMain_CellDoubleClick implements ODGridDoubleClickHandler {
+		public void onCellDoubleClick() {
+			patSelected();
+		}
 	}
 	
 	@UiHandler("butOK")
@@ -231,7 +241,6 @@ public class WindowPatientSelect extends ODWindow {
 			return;
 		}
 		patSelected();
-		this.hide();
 	}
 	
 	@UiHandler("butCancel")
