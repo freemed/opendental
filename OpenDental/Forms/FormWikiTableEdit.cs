@@ -133,7 +133,7 @@ namespace OpenDental {
 						//	colName=cells[c];
 						//}
 						ColNames.Add(colName);
-						Table.Columns.Add(colName);
+						Table.Columns.Add("");//must be an empty string because Table object does not allow duplicate column names.
 					}
 					continue;
 				}
@@ -190,7 +190,6 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<Table.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Height=19;//To handle the isEditable functionality
 				for(int c=0;c<ColNames.Count;c++) {
 					if(listView.SelectedIndex!=0) {
 						if(Views[listView.SelectedIndex-1].Columns.Contains(ColNames[c])) {
@@ -344,7 +343,9 @@ namespace OpenDental {
 				Table.Rows[i][gridMain.SelectedCell.X]=Table.Rows[i][gridMain.SelectedCell.X-1];
 				Table.Rows[i][gridMain.SelectedCell.X-1]=cellText;
 			}
-			FillGrid();
+			Point newCellSelected=new Point(gridMain.SelectedCell.X-1,gridMain.SelectedCell.Y);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
@@ -369,7 +370,9 @@ namespace OpenDental {
 				Table.Rows[i][gridMain.SelectedCell.X]=Table.Rows[i][gridMain.SelectedCell.X+1];
 				Table.Rows[i][gridMain.SelectedCell.X+1]=cellText;
 			}
-			FillGrid();
+			Point newCellSelected=new Point(gridMain.SelectedCell.X+1,gridMain.SelectedCell.Y);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
@@ -380,21 +383,26 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void butColumnInsert_Click(object sender,EventArgs e) {
+		private void butColumnAdd_Click(object sender,EventArgs e) {
+			int index;
 			if(gridMain.SelectedCell.X==-1) {
-				MsgBox.Show(this,"Please select a column first.");
-				return;
+				index=Table.Columns.Count-1;
+			}
+			else {
+				index=gridMain.SelectedCell.X;
 			}
 			Table.Columns.Add();
-			ColNames.Insert(gridMain.SelectedCell.X+1,"Header"+(Table.Columns.Count));
-			ColWidths.Insert(gridMain.SelectedCell.X+1,100);
+			ColNames.Insert(index+1,"Header"+(Table.Columns.Count));
+			ColWidths.Insert(index+1,100);
 			for(int i=0;i<Table.Rows.Count;i++) {
-				for(int j=gridMain.Columns.Count-1;j>gridMain.SelectedCell.X;j--) {
+				for(int j=gridMain.Columns.Count-1;j>index;j--) {
 					Table.Rows[i][j+1]=Table.Rows[i][j];
 				}
-				Table.Rows[i][gridMain.SelectedCell.X+1]="";
+				Table.Rows[i][index+1]="";
 			}
-			FillGrid();
+			Point newCellSelected=new Point(index+1,gridMain.SelectedCell.Y);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butColumnDelete_Click(object sender,EventArgs e) {
@@ -405,7 +413,9 @@ namespace OpenDental {
 			ColNames.RemoveAt(gridMain.SelectedCell.X);
 			ColWidths.RemoveAt(gridMain.SelectedCell.X);
 			Table.Columns.RemoveAt(gridMain.SelectedCell.X);
-			FillGrid();
+			Point newCellSelected=new Point(Math.Max(gridMain.SelectedCell.X-1,0),gridMain.SelectedCell.Y);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butRowUp_Click(object sender,EventArgs e) {
@@ -422,7 +432,9 @@ namespace OpenDental {
 			}
 			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y-1);
 			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+1);
-			FillGrid();
+			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y-1);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butRowDown_Click(object sender,EventArgs e) {
@@ -442,16 +454,36 @@ namespace OpenDental {
 			}
 			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y);
 			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+2);
-			FillGrid();
+			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y+1);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
-		private void butRowInsert_Click(object sender,EventArgs e) {
+		private void butRowAdd_Click(object sender,EventArgs e) {
 			//DataRow row=Table.NewRow();
 			//Table.Rows.InsertAt(row,i);
+			Point selectedCell;
+			if(gridMain.SelectedCell.Y==-1) {
+				selectedCell=new Point(0,Table.Rows.Count-1);
+			}
+			else {
+				selectedCell=gridMain.SelectedCell;
+			}
+			DataRow row=Table.NewRow();
+			Table.Rows.InsertAt(row,selectedCell.Y+1);
+			Point newCellSelected=new Point(selectedCell.X,selectedCell.Y+1);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butRowDelete_Click(object sender,EventArgs e) {
-
+			if(gridMain.SelectedCell.Y==-1) {
+				MsgBox.Show(this,"Please select a row first.");
+			}
+			Table.Rows.RemoveAt(gridMain.SelectedCell.Y);
+			Point newCellSelected=new Point(gridMain.SelectedCell.X,Math.Max(gridMain.SelectedCell.Y-1,0));
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void listView_Click(object sender,EventArgs e) {

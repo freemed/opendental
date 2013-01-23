@@ -425,7 +425,13 @@ namespace OpenDental.UI {
 			}
 		}
 
-		///<summary>After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
+		///<summary>Is checked and set when ComputeRows is called. If any columns are editable HasEditableColumn is true.</summary>
+		private bool HasEditableColumn;
+
+		///<summary></summary>
+		private const int EDITABLE_ROW_HEIGHT=19;
+
+		///<summary>Called from PrintPage() and EndUpdate(). After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(Graphics g) {
 			//using(Graphics g=this.CreateGraphics()) {
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
@@ -449,7 +455,11 @@ namespace OpenDental.UI {
 						}
 					}
 					int imageH=0;
+					HasEditableColumn=false;
 					for(int i=0;i<columns.Count;i++) {
+						if(columns[i].IsEditable){
+							HasEditableColumn=true;
+						}
 						if(columns[i].ImageList!=null) {
 							if(columns[i].ImageList.ImageSize.Height>imageH) {
 								imageH=columns[i].ImageList.ImageSize.Height+1;
@@ -461,24 +471,39 @@ namespace OpenDental.UI {
 						if(wrapText) {
 							//find the tallest col
 							for(int j=0;j<rows[i].Cells.Count;j++) {
-								if(rows[i].Height==0) {//not set
+								if(HasEditableColumn) {
 									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
+									if(cellH < EDITABLE_ROW_HEIGHT) {
+										cellH=EDITABLE_ROW_HEIGHT;//to fit the text box
+									}
 								}
 								else {
-									cellH=rows[i].Height;
+									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
 								}
+								//if(rows[i].Height==0) {//not set
+								//  cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
+								//}
+								//else {
+								//  cellH=rows[i].Height;
+								//}
 								if(cellH>RowHeights[i]) {
 									RowHeights[i]=cellH;
 								}
 							}
 						}
-						else {
-							if(rows[i].Height==0) {//not set
-								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100).Height+1;
+						else {//text not wrapping
+							if(HasEditableColumn) {
+								RowHeights[i]=EDITABLE_ROW_HEIGHT;
 							}
 							else {
-								RowHeights[i]=rows[i].Height;
+								RowHeights[i]=(int)g.MeasureString("Any",cellFont,100).Height+1;
 							}
+							//if(rows[i].Height==0) {//not set
+							//	RowHeights[i]=(int)g.MeasureString("Any",cellFont,100).Height+1;
+							//}
+							//else {
+							//	RowHeights[i]=rows[i].Height;
+							//}
 						}
 						if(imageH>RowHeights[i]) {
 							RowHeights[i]=imageH;
@@ -711,12 +736,14 @@ namespace OpenDental.UI {
 				int horizontal=-hScroll.Value+1+ColPos[i]+1;
 				int cellW=columns[i].ColWidth;
 				int cellH=RowHeights[rowI];
-				if(rows[rowI].Height!=0) {//eg 19 for handling textbox
-					vertical+=2;
-					cellH-=3;
+				if(HasEditableColumn) {//These cells are taller
+					if(cellH==EDITABLE_ROW_HEIGHT) {//if it is a single line row
+						vertical+=2;//so this is to push text down to center it in the cell
+						cellH-=3;//to keep it from spilling into the next cell
+					}
 				}
 				if(columns[i].TextAlign==HorizontalAlignment.Right) {
-					if(rows[rowI].Height!=0) {//eg 19 for handling textbox
+					if(HasEditableColumn) {
 						horizontal-=4;
 						cellW+=2;
 					}

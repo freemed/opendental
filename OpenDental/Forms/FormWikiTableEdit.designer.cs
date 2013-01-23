@@ -54,9 +54,9 @@ namespace OpenDental{
 			this.groupBox1.Controls.Add(this.butColumnInsert);
 			this.groupBox1.Controls.Add(this.butColumnRight);
 			this.groupBox1.Controls.Add(this.butColumnLeft);
-			this.groupBox1.Location = new System.Drawing.Point(863,66);
+			this.groupBox1.Location = new System.Drawing.Point(861,66);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(83,141);
+			this.groupBox1.Size = new System.Drawing.Size(88,141);
 			this.groupBox1.TabIndex = 28;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Column";
@@ -68,9 +68,9 @@ namespace OpenDental{
 			this.butColumnDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnDelete.CornerRadius = 4F;
-			this.butColumnDelete.Location = new System.Drawing.Point(10,109);
+			this.butColumnDelete.Location = new System.Drawing.Point(8,109);
 			this.butColumnDelete.Name = "butColumnDelete";
-			this.butColumnDelete.Size = new System.Drawing.Size(62,24);
+			this.butColumnDelete.Size = new System.Drawing.Size(71,24);
 			this.butColumnDelete.TabIndex = 34;
 			this.butColumnDelete.Text = "Delete";
 			this.butColumnDelete.Click += new System.EventHandler(this.butColumnDelete_Click);
@@ -82,9 +82,9 @@ namespace OpenDental{
 			this.butHeaders.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHeaders.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHeaders.CornerRadius = 4F;
-			this.butHeaders.Location = new System.Drawing.Point(10,49);
+			this.butHeaders.Location = new System.Drawing.Point(8,49);
 			this.butHeaders.Name = "butHeaders";
-			this.butHeaders.Size = new System.Drawing.Size(62,24);
+			this.butHeaders.Size = new System.Drawing.Size(71,24);
 			this.butHeaders.TabIndex = 31;
 			this.butHeaders.Text = "Headers";
 			this.butHeaders.Click += new System.EventHandler(this.butHeaders_Click);
@@ -96,12 +96,12 @@ namespace OpenDental{
 			this.butColumnInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnInsert.CornerRadius = 4F;
-			this.butColumnInsert.Location = new System.Drawing.Point(10,79);
+			this.butColumnInsert.Location = new System.Drawing.Point(8,79);
 			this.butColumnInsert.Name = "butColumnInsert";
-			this.butColumnInsert.Size = new System.Drawing.Size(62,24);
+			this.butColumnInsert.Size = new System.Drawing.Size(71,24);
 			this.butColumnInsert.TabIndex = 33;
-			this.butColumnInsert.Text = "Insert";
-			this.butColumnInsert.Click += new System.EventHandler(this.butColumnInsert_Click);
+			this.butColumnInsert.Text = "Add Column";
+			this.butColumnInsert.Click += new System.EventHandler(this.butColumnAdd_Click);
 			// 
 			// butColumnRight
 			// 
@@ -110,9 +110,9 @@ namespace OpenDental{
 			this.butColumnRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnRight.CornerRadius = 4F;
-			this.butColumnRight.Location = new System.Drawing.Point(44,19);
+			this.butColumnRight.Location = new System.Drawing.Point(47,19);
 			this.butColumnRight.Name = "butColumnRight";
-			this.butColumnRight.Size = new System.Drawing.Size(28,24);
+			this.butColumnRight.Size = new System.Drawing.Size(30,24);
 			this.butColumnRight.TabIndex = 30;
 			this.butColumnRight.Text = "R";
 			this.butColumnRight.Click += new System.EventHandler(this.butColumnRight_Click);
@@ -124,9 +124,9 @@ namespace OpenDental{
 			this.butColumnLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnLeft.CornerRadius = 4F;
-			this.butColumnLeft.Location = new System.Drawing.Point(10,19);
+			this.butColumnLeft.Location = new System.Drawing.Point(8,19);
 			this.butColumnLeft.Name = "butColumnLeft";
-			this.butColumnLeft.Size = new System.Drawing.Size(28,24);
+			this.butColumnLeft.Size = new System.Drawing.Size(30,24);
 			this.butColumnLeft.TabIndex = 29;
 			this.butColumnLeft.Text = "L";
 			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
@@ -138,9 +138,9 @@ namespace OpenDental{
 			this.groupRow.Controls.Add(this.butRowInsert);
 			this.groupRow.Controls.Add(this.butRowDown);
 			this.groupRow.Controls.Add(this.butRowUp);
-			this.groupRow.Location = new System.Drawing.Point(863,214);
+			this.groupRow.Location = new System.Drawing.Point(861,214);
 			this.groupRow.Name = "groupRow";
-			this.groupRow.Size = new System.Drawing.Size(83,141);
+			this.groupRow.Size = new System.Drawing.Size(88,141);
 			this.groupRow.TabIndex = 32;
 			this.groupRow.TabStop = false;
 			this.groupRow.Text = "Row";
@@ -152,9 +152,9 @@ namespace OpenDental{
 			this.butRowDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRowDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRowDelete.CornerRadius = 4F;
-			this.butRowDelete.Location = new System.Drawing.Point(10,109);
+			this.butRowDelete.Location = new System.Drawing.Point(8,109);
 			this.butRowDelete.Name = "butRowDelete";
-			this.butRowDelete.Size = new System.Drawing.Size(62,24);
+			this.butRowDelete.Size = new System.Drawing.Size(71,24);
 			this.butRowDelete.TabIndex = 32;
 			this.butRowDelete.Text = "Delete";
 			this.butRowDelete.Click += new System.EventHandler(this.butRowDelete_Click);
@@ -166,12 +166,12 @@ namespace OpenDental{
 			this.butRowInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRowInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRowInsert.CornerRadius = 4F;
-			this.butRowInsert.Location = new System.Drawing.Point(10,79);
+			this.butRowInsert.Location = new System.Drawing.Point(8,79);
 			this.butRowInsert.Name = "butRowInsert";
-			this.butRowInsert.Size = new System.Drawing.Size(62,24);
+			this.butRowInsert.Size = new System.Drawing.Size(71,24);
 			this.butRowInsert.TabIndex = 31;
-			this.butRowInsert.Text = "Insert";
-			this.butRowInsert.Click += new System.EventHandler(this.butRowInsert_Click);
+			this.butRowInsert.Text = "Add Row";
+			this.butRowInsert.Click += new System.EventHandler(this.butRowAdd_Click);
 			// 
 			// butRowDown
 			// 
@@ -180,7 +180,7 @@ namespace OpenDental{
 			this.butRowDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRowDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRowDown.CornerRadius = 4F;
-			this.butRowDown.Location = new System.Drawing.Point(10,49);
+			this.butRowDown.Location = new System.Drawing.Point(8,49);
 			this.butRowDown.Name = "butRowDown";
 			this.butRowDown.Size = new System.Drawing.Size(44,24);
 			this.butRowDown.TabIndex = 30;
@@ -194,7 +194,7 @@ namespace OpenDental{
 			this.butRowUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRowUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRowUp.CornerRadius = 4F;
-			this.butRowUp.Location = new System.Drawing.Point(10,19);
+			this.butRowUp.Location = new System.Drawing.Point(8,19);
 			this.butRowUp.Name = "butRowUp";
 			this.butRowUp.Size = new System.Drawing.Size(44,24);
 			this.butRowUp.TabIndex = 29;

@@ -333,7 +333,6 @@ namespace OpenDental
 			Procedure ProcCur;
 			for(int i=0;i<ClaimProcsToEdit.Length;i++){
 				row=new ODGridRow();
-				row.Height=19;//To handle the isEditable functionality
 				row.Cells.Add(ClaimProcsToEdit[i].ProcDate.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(ClaimProcsToEdit[i].ProvNum));
 				if(ClaimProcsToEdit[i].ProcNum==0) {

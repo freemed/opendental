@@ -197,7 +197,6 @@ namespace OpenDental
 			Procedure ProcCur;
 			for(int i=0;i<ClaimProcsToEdit.Count;i++){
 				row=new ODGridRow();
-				row.Height=19;//To handle the isEditable functionality
 				ProcCur=Procedures.GetProcFromList(ProcList,ClaimProcsToEdit[i].ProcNum);
 				row.Cells.Add(ProcedureCodes.GetProcCode(ProcCur.CodeNum).ProcCode);
 				row.Cells.Add(ProcCur.ToothNum);

@@ -639,7 +639,6 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<ProcTable.Rows.Count;i++){
 				row=new ODGridRow();
-				row.Height=19;//To handle the isEditable functionality
 				if(i==0 || ProcTable.Rows[i-1]["ProcCat"].ToString() != ProcTable.Rows[i]["ProcCat"].ToString()){
 					row.Cells.Add(DefC.GetName(DefCat.ProcCodeCats,PIn.Long(ProcTable.Rows[i]["ProcCat"].ToString())));
 				}

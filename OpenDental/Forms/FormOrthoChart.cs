@@ -95,7 +95,6 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Height=19;//fixes isEditable look and feel
 				DateTime tempDate=(DateTime)table.Rows[i]["Date"];
 				row.Cells.Add(tempDate.ToShortDateString());
 				row.Tag=tempDate;
