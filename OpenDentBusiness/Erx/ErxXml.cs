@@ -11,26 +11,54 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	public class ErxXml {
 
+		public static string NewCropPartnerName {
+			get { return "OpenDental"; } //Assigned by NewCrop. Used globally for all customers.
+		}
+
+		public static string NewCropAccountName {
+			get {
+				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
+#if DEBUG
+					return CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+#else
+					return CodeBase.MiscUtils.Decrypt("HumacKlUtM1MLCHsZY/PH86W10AY5u2bukFp15lEKhT6zD/aa9nG//zYzbYgpH8+");//Assigned by NewCrop. Used globally for all customers.
+#endif
+				}
+				return newCropName;//Reseller.
+			}
+		}
+
+		public static string NewCropAccountPasssword {
+			get {
+				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
+#if DEBUG
+					return CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
+#else
+					return CodeBase.MiscUtils.Decrypt("I0Itlo5F3ZOYUSwMKpgbY5X6++XpUetMvrqj0vVB7bKzYwJlWtsLiFFgpMBplLaH");//Assigned by NewCrop. Used globally for all customers.
+#endif
+				}
+				return PrefC.GetString(PrefName.NewCropPassword);//Reseller.
+			}
+		}
+
+		public static string NewCropProductName {
+			get { return "OpenDental"; }
+		}
+
+		public static string NewCropProductVersion {
+			get { return Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString(); }
+		}
+
 		public static string BuildClickThroughXml(Provider prov,Employee emp,Patient pat) {
 			NCScript ncScript=new NCScript();
 			ncScript.Credentials=new CredentialsType();
-			ncScript.Credentials.partnerName="OpenDental";//Assigned by NewCrop. Used globally for all customers.
-			string newCropName=PrefC.GetString(PrefName.NewCropName);
-			if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
-#if DEBUG
-				ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.
-				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.					
-#else
-				ncScript.Credentials.name=CodeBase.MiscUtils.Decrypt("HumacKlUtM1MLCHsZY/PH86W10AY5u2bukFp15lEKhT6zD/aa9nG//zYzbYgpH8+");//Assigned by NewCrop. Used globally for all customers.
-				ncScript.Credentials.password=CodeBase.MiscUtils.Decrypt("I0Itlo5F3ZOYUSwMKpgbY5X6++XpUetMvrqj0vVB7bKzYwJlWtsLiFFgpMBplLaH");//Assigned by NewCrop. Used globally for all customers.					
-#endif
-			}
-			else { //Reseller
-				ncScript.Credentials.name=newCropName;
-				ncScript.Credentials.password=PrefC.GetString(PrefName.NewCropPassword);
-			}
-			ncScript.Credentials.productName="OpenDental";
-			ncScript.Credentials.productVersion=Assembly.GetAssembly(typeof(Db)).GetName().Version.ToString();
+			ncScript.Credentials.partnerName=NewCropPartnerName;
+			ncScript.Credentials.name=NewCropAccountName;
+			ncScript.Credentials.password=NewCropAccountPasssword;
+			ncScript.Credentials.productName=NewCropProductName;
+			ncScript.Credentials.productVersion=NewCropProductVersion;
 			ncScript.UserRole=new UserRoleType();
 			if(emp==null) {
 				ncScript.UserRole.user=UserType.LicensedPrescriber;
@@ -177,6 +205,7 @@ namespace OpenDentBusiness {
 				ncScript.Patient.PatientCharacteristics.gender=GenderType.U;
 			}
 			ncScript.Patient.PatientCharacteristics.genderSpecified=true;
+			//ncScript.NewPrescription.ID=;
 			//Serialize
 			MemoryStream memoryStream=new MemoryStream();
 			XmlSerializer xmlSerializer=new XmlSerializer(typeof(NCScript));

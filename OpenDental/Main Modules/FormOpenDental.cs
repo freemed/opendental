@@ -3360,11 +3360,16 @@ namespace OpenDental{
 			}
 			UnselectActive();
 			allNeutral();
-			SetModuleSelected();
+			SetModuleSelected(true);
 		}
 
 		///<summary>Sets the currently selected module based on the selectedIndex of the outlook bar. If selectedIndex is -1, which might happen if user does not have permission to any module, then this does nothing.</summary>
-		private void SetModuleSelected(){
+		private void SetModuleSelected() {
+			SetModuleSelected(false);
+		}
+
+		///<summary>Sets the currently selected module based on the selectedIndex of the outlook bar. If selectedIndex is -1, which might happen if user does not have permission to any module, then this does nothing.</summary>
+		private void SetModuleSelected(bool menuBarClicked){
 			switch(myOutlookBar.SelectedIndex){
 				case 0:
 					ContrAppt2.InitializeOnStartup();
@@ -3417,7 +3422,12 @@ namespace OpenDental{
 					ContrChart2.InitializeOnStartup();
 					ContrChart2.Visible=true;
 					this.ActiveControl=this.ContrChart2;
-					ContrChart2.ModuleSelected(CurPatNum);
+					if(menuBarClicked) {
+						ContrChart2.ModuleClicked(CurPatNum);
+					}
+					else {
+						ContrChart2.ModuleSelected(CurPatNum);
+					}
 					break;
 				case 5:
 					ContrImages2.InitializeOnStartup();
