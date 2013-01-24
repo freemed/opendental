@@ -747,6 +747,12 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\EvaluationCriterion.cs" />
+    <Compile Include="TableTypes\GradingScaleItem.cs" />
+    <Compile Include="TableTypes\EvaluationCriterionDef.cs" />
+    <Compile Include="TableTypes\EvaluationDef.cs" />
+    <Compile Include="TableTypes\GradingScale.cs" />
+    <Compile Include="TableTypes\Evaluation.cs" />
     <Compile Include="TableTypes\WikiPageHist.cs" />
     <Compile Include="TableTypes\WikiPage.cs" />
     <Compile Include="TableTypes\DictCustom.cs" />
