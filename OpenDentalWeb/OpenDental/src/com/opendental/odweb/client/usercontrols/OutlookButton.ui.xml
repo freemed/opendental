@@ -8,6 +8,11 @@
 
 	<ui:style type="com.opendental.odweb.client.usercontrols.OutlookButton.ButtonStyle">
 	
+		.labelText {
+			font-weight: bold;
+			color: #666666;
+		}
+
 		.buttonStandard {
 			border-style: solid;
 			border-width: 1px;
@@ -32,7 +37,7 @@
 	
 	<g:DecoratorPanel ui:field="contentPanel" width="100%">
 		<g:VerticalPanel>
-			<g:Label ui:field="labelText" />
+			<g:Label ui:field="labelText" styleName="{style.labelText}" />
 		</g:VerticalPanel>
 	</g:DecoratorPanel>
 	

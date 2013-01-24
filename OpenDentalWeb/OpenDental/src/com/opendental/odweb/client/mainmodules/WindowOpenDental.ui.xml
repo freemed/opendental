@@ -11,42 +11,40 @@
   
   <!-- This will be the main CSS settings for the web app unless we make a more general file later. -->
   <ui:style>
-  	.titleBar {
-      /* padding: 0 10px; */
-      background-color: #e8e8e8;
-      border-bottom: 1px solid #bbbbbb;
-	}
-	
-	.mainMenuBar {
-      background-color: #e8eeee;
-      /* border-bottom: 1px solid #3c756e; */
-	}
-	
-	.patientMenuBar {
-      background-color: #e8eeee;
-      /* border-top: 1px solid #3c756e; */
-      border-bottom: 1px solid #bbbbbb;
-	}
-	
-	.moduleList {
-	  background-color: #f0f0f0;
-		border-top: 1px solid #bbbbbb;
-		border-right: 1px solid #bbbbbb;
-	}
-    
-	.moduleContent {
-	  background-color: #d7dde8;
-	  /* border-right: 1px solid #3c756e; */
-	}
-	
-	.styleModuleStandard {
-	
-	}
-	
-	.styleModuleSelected {
-	
-	}
-	
+  
+	 	.titleBar {
+	     /* padding: 0 10px; */
+	     background-color: #e8e8e8;
+	     border-bottom: 1px solid #bbbbbb;
+		}
+		
+		.titleLabel {
+			font-weight: bold;
+			color: #666666;
+		}
+		
+		.mainMenuBar {
+	      background-color: #e8eeee;
+	      /* border-bottom: 1px solid #3c756e; */
+		}
+		
+		.patientMenuBar {
+	      background-color: #e8eeee;
+	      /* border-top: 1px solid #3c756e; */
+	      border-bottom: 1px solid #bbbbbb;
+		}
+		
+		.moduleList {
+		  background-color: #f0f0f0;
+			border-top: 1px solid #bbbbbb;
+			border-right: 1px solid #bbbbbb;
+		}
+	    
+		.moduleContent {
+		  background-color: #d7dde8;
+		  /* border-right: 1px solid #3c756e; */
+		}
+		
   </ui:style>
   
   <!-- Use a DockLayoutPanel to lay out the entire main screen. -->
@@ -56,7 +54,9 @@
     <g:north size='12'>
       <g:HTMLPanel styleName='{style.titleBar}'>
         <table ui:field='mainTitle' cellpadding='0' cellspacing='0'>
-        	<td style="padding-left: 10px;"><s:LabelMainTitle ui:field='labelMainTitle' /></td>
+        	<td style="padding-left: 10px;">
+        		<s:LabelMainTitle ui:field='labelMainTitle' styleName="{style.titleLabel}" />
+        	</td>
         </table>
       </g:HTMLPanel>
     </g:north>

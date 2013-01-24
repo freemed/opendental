@@ -9,6 +9,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.dom.client.TableRowElement;
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -119,6 +120,10 @@ public class ODGrid extends Composite {
 		tableMain.addMouseUpHandler(new tableMain_MouseUp());
 		tableMain.addMouseMoveHandler(new tableMain_MouseMove());
 		tableMain.addDoubleClickHandler(new tableMain_DoubleClick());
+		//Have the mouse cursor never change when hovering over any grid.  Mainly to stop the cursor from going into text mode.
+		labelTitle.getElement().getStyle().setCursor(Cursor.DEFAULT);
+		tableMain.getElement().getStyle().setCursor(Cursor.DEFAULT);
+		tableColumnHeaders.getElement().getStyle().setCursor(Cursor.DEFAULT);
 		//We have to call initWidget in the constructor because this class extends Composite. 
 		initWidget(containerPanel);
 	}
@@ -142,7 +147,7 @@ public class ODGrid extends Composite {
 	}
 	
 	/** Sets the height and width and updates the container's size.  This should be called right after instantiating ODGrid so that the window knows how big to draw a possibly empty grid. */
-	public void setHeightAndWidth(final int width,final int height) {
+	public void setWidthAndHeight(final int width,final int height) {
 		setHeight(height);
 		setWidth(width);
 		containerPanel.setSize(width+"px", height+"px");

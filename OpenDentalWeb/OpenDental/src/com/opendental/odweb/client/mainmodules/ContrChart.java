@@ -6,8 +6,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.ui.ModuleWidget;
+import com.opendental.odweb.client.ui.ODGrid;
 
 public class ContrChart extends ModuleWidget {
 	//These lines need to be in every class that uses UiBinder.  This is what makes this class point to it's respective ui.xml file. 
@@ -16,8 +19,16 @@ public class ContrChart extends ModuleWidget {
 	}
 	
 	@UiField SimplePanel panelContainer;
+	@UiField TextBox textTreatmentNotes;
+	@UiField(provided=true) ODGrid gridPtInfo;
+	@UiField TabLayoutPanel tabProc;
+	@UiField(provided=true) ODGrid gridProg;
 	
 	public ContrChart() {
+		gridPtInfo=new ODGrid("Patient Info");
+		gridPtInfo.setWidthAndHeight(400, 320);
+		gridProg=new ODGrid("Progress Notes");
+		gridProg.setWidthAndHeight(400, 300);
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
 	}

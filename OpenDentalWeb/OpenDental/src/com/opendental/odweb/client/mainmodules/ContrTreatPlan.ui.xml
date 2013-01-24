@@ -1,10 +1,112 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder 
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:odgrid="urn:import:com.opendental.odweb.client.ui">
 	
 	<g:SimplePanel ui:field="panelContainer">
-		<g:Label>Treat Plan Module</g:Label>
+		<g:DockPanel>
+			<g:Dock direction="NORTH">
+				<g:VerticalPanel>
+					<g:cell horizontalAlignment="ALIGN_CENTER">
+						<g:Label>ODToolBar goes here.</g:Label>
+					</g:cell>
+				</g:VerticalPanel>
+			</g:Dock>
+			<g:Dock direction="CENTER">
+				<g:VerticalPanel>
+					<g:HorizontalPanel>
+						<odgrid:ODGrid ui:field="gridPlans"/>
+							<!-- Show group box. -->
+							<g:DecoratorPanel>
+								<g:VerticalPanel>
+									<g:CheckBox ui:field="checkShowCompleted">Graphical Completed Tx</g:CheckBox>
+									<g:CheckBox ui:field="checkShowMaxDed">Use Ins Max and Deduct</g:CheckBox>
+									<g:CheckBox ui:field="checkShowFees">Fees</g:CheckBox>
+									<!-- Horizontally offset these check boxes. -->
+									<g:VerticalPanel>
+										<g:CheckBox ui:field="checkShowIns">Insurance Estimates</g:CheckBox>
+										<g:CheckBox ui:field="checkShowDiscount">Discount (PPO)</g:CheckBox>
+										<g:CheckBox ui:field="checkShowSubtotals">Subtotals</g:CheckBox>
+										<g:CheckBox ui:field="checkShowTotals">Totals</g:CheckBox>
+									</g:VerticalPanel>
+								</g:VerticalPanel>
+							</g:DecoratorPanel>
+						<odgrid:ODGrid ui:field="gridPreAuth"/>
+					</g:HorizontalPanel>
+					<g:HorizontalPanel>
+						<odgrid:ODGrid ui:field="gridMain"/>
+						<g:VerticalPanel>
+							<g:Label>Set Priority</g:Label>
+							<g:ListBox ui:field="listSetPr"/>
+								<!-- Family insurance group box. -->
+								<g:DecoratorPanel>
+									<g:VerticalPanel>
+										<g:Label>Family Insurance</g:Label>
+										<g:HorizontalPanel>
+											<g:Label>Primary</g:Label>
+											<g:Label>Secondary</g:Label>
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Annual Max</g:Label>
+											<g:TextBox ui:field="textFamPriMax" />
+											<g:TextBox ui:field="textFamSecMax" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Fam Ded</g:Label>
+											<g:TextBox ui:field="textFamPriDed" />
+											<g:TextBox ui:field="textFamSecDed" />
+										</g:HorizontalPanel>
+									</g:VerticalPanel>
+								</g:DecoratorPanel>
+								<g:DecoratorPanel>
+									<!-- Individual insurance group box. -->
+									<g:VerticalPanel>
+										<g:Label>Individual Insurance</g:Label>
+										<g:HorizontalPanel>
+											<g:Label>Primary</g:Label>
+											<g:Label>Secondary</g:Label>
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Annual Max</g:Label>
+											<g:TextBox ui:field="textPriMax" />
+											<g:TextBox ui:field="textSecMax" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Deductible</g:Label>
+											<g:TextBox ui:field="textPriDed" />
+											<g:TextBox ui:field="textSecDed" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Ded Remain</g:Label>
+											<g:TextBox ui:field="textPriDedRem" />
+											<g:TextBox ui:field="textSecDedRem" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Ins Used</g:Label>
+											<g:TextBox ui:field="textPriUsed" />
+											<g:TextBox ui:field="textSecUsed" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Pending</g:Label>
+											<g:TextBox ui:field="textPriPend" />
+											<g:TextBox ui:field="textSecPend" />
+										</g:HorizontalPanel>
+										<g:HorizontalPanel>
+											<g:Label>Remaining</g:Label>
+											<g:TextBox ui:field="textPriRem" />
+											<g:TextBox ui:field="textSecRem" />
+										</g:HorizontalPanel>
+									</g:VerticalPanel>
+								</g:DecoratorPanel>
+						</g:VerticalPanel>
+					</g:HorizontalPanel>
+				</g:VerticalPanel>
+			</g:Dock>
+			<g:Dock direction="SOUTH">
+				<g:TextBox ui:field="textNote"></g:TextBox>
+			</g:Dock>
+		</g:DockPanel>
 	</g:SimplePanel>
 	
 </ui:UiBinder>

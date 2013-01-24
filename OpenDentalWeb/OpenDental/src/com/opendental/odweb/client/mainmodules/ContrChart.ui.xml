@@ -1,10 +1,40 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder 
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:odgrid="urn:import:com.opendental.odweb.client.ui">
 	
 	<g:SimplePanel ui:field="panelContainer">
-		<g:Label>Chart Module</g:Label>
+		<g:DockPanel>
+			<g:Dock direction="NORTH">
+				<g:VerticalPanel>
+					<g:cell horizontalAlignment="ALIGN_CENTER">
+						<g:Label>ODToolBar goes here.</g:Label>
+					</g:cell>
+				</g:VerticalPanel>
+			</g:Dock>
+			<g:Dock direction="CENTER">
+				<g:DockPanel>
+					<g:Dock direction="WEST">
+						<g:VerticalPanel>
+							<g:SimplePanel width="100px" height="100px"><g:Label>OD Tooth Chart</g:Label></g:SimplePanel>
+							<g:TextBox ui:field="textTreatmentNotes" />
+							<odgrid:ODGrid ui:field="gridPtInfo" />
+						</g:VerticalPanel>
+					</g:Dock>
+					<g:Dock direction="CENTER">
+						<g:VerticalPanel>
+							<g:TabPanel ui:field="tabProc" />
+							<odgrid:ODGrid ui:field="gridProg" />
+						</g:VerticalPanel>
+					</g:Dock>
+				</g:DockPanel>
+			</g:Dock>
+			<g:Dock direction="SOUTH">
+				<!-- Have the images control viewing down here. -->
+				<g:Label></g:Label>
+			</g:Dock>
+		</g:DockPanel>
 	</g:SimplePanel>
 	
 </ui:UiBinder>

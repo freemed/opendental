@@ -63,7 +63,7 @@ public class WindowPatientSelect extends ODWindow {
 	public WindowPatientSelect() {		
 		super("Patient Select");		
 		gridMain=new ODGrid("Select Patient");
-		gridMain.setHeightAndWidth(500,625);
+		gridMain.setWidthAndHeight(500,625);
 		//Add a double click handler to the grid.
 		gridMain.addCellDoubleClickHandler(new gridMain_CellDoubleClick());
 		//Fills the @UiField objects.
