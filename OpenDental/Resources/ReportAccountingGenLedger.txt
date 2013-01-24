@@ -117,7 +117,7 @@
         <Header>
           <TableRows>
             <TableRow>
-              <Height>12 pt</Height>
+              <Height>10.4pt</Height>
               <TableCells>
                 <TableCell>
                   <ReportItems>
@@ -134,6 +134,7 @@
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
                         <BorderWidth />
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -152,6 +153,7 @@
                           <Default>Black</Default>
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -170,6 +172,7 @@
                           <Default>Black</Default>
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -189,6 +192,7 @@
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
                         <BorderWidth />
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -208,6 +212,7 @@
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
                         <BorderWidth />
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -227,6 +232,7 @@
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
                         <BorderWidth />
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -246,6 +252,7 @@
                         </BorderColor>
                         <BackgroundColor>Lightgrey</BackgroundColor>
                         <BorderWidth />
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -258,7 +265,7 @@
         <Details>
           <TableRows>
             <TableRow>
-              <Height>12 pt</Height>
+              <Height>9.6pt</Height>
               <TableCells>
                 <TableCell>
                   <ReportItems>
@@ -276,6 +283,7 @@
                         <PaddingLeft>2 pt</PaddingLeft>
                         <BorderWidth />
                         <Format>MM/dd/yyyy</Format>
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -295,6 +303,7 @@
                         </BorderColor>
                         <PaddingLeft>2 pt</PaddingLeft>
                         <BorderWidth />
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -314,6 +323,7 @@
                         </BorderColor>
                         <PaddingLeft>2 pt</PaddingLeft>
                         <BorderWidth />
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -333,6 +343,7 @@
                         </BorderColor>
                         <PaddingLeft>2 pt</PaddingLeft>
                         <BorderWidth />
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -353,6 +364,7 @@
                         <BorderWidth />
                         <Format>None</Format>
                         <TextAlign>Right</TextAlign>
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -373,6 +385,7 @@
                         <BorderWidth />
                         <Format>None</Format>
                         <TextAlign>Right</TextAlign>
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -393,6 +406,7 @@
                         <BorderWidth />
                         <Format>None</Format>
                         <TextAlign>Right</TextAlign>
+                        <FontSize>7pt</FontSize>
                       </Style>
                     </Textbox>
                   </ReportItems>
@@ -402,7 +416,7 @@
           </TableRows>
         </Details>
         <Left>27.9pt</Left>
-        <Top>43.3pt</Top>
+        <Top>39.3pt</Top>
         <TableGroups>
           <TableGroup>
             <Grouping Name="Account">
@@ -416,7 +430,7 @@
               <RepeatOnNewPage>true</RepeatOnNewPage>
               <TableRows>
                 <TableRow>
-                  <Height>16.9pt</Height>
+                  <Height>13.7pt</Height>
                   <TableCells>
                     <TableCell>
                       <ReportItems>
@@ -433,6 +447,7 @@
                             <BorderWidth />
                             <VerticalAlign>Bottom</VerticalAlign>
                             <FontWeight>Bold</FontWeight>
+                            <FontSize>8pt</FontSize>
                           </Style>
                           <Value>=Fields!Description.Value</Value>
                         </Textbox>
@@ -685,7 +700,7 @@
           <BorderStyle />
           <BorderColor />
           <BorderWidth />
-          <FontSize>12pt</FontSize>
+          <FontSize>10pt</FontSize>
           <BackgroundColor>
           </BackgroundColor>
           <TextAlign>Center</TextAlign>
@@ -697,20 +712,21 @@
         <Width>163.33pt</Width>
         <Value>1/1/2007 - 12/31/2007</Value>
         <Left>203.9pt</Left>
-        <Top>25.5pt</Top>
+        <Top>23.1pt</Top>
         <Style>
           <BorderStyle />
           <BorderColor />
           <BorderWidth />
           <TextAlign>Center</TextAlign>
+          <FontSize>8pt</FontSize>
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>89.4pt</Height>
+    <Height>75.0pt</Height>
     <Columns>1</Columns>
   </Body>
   <PageFooter>
-    <Height>14 pt</Height>
+    <Height>9.2pt</Height>
     <ReportItems>
       <Textbox Name="Textbox22">
         <Top>1 pt</Top>
@@ -719,7 +735,7 @@
         <Width>3in</Width>
         <Value>=Globals!PageNumber.Value + ' of ' + Globals!TotalPages.Value</Value>
         <Style>
-          <FontSize>10pt</FontSize>
+          <FontSize>7pt</FontSize>
           <FontWeight>Normal</FontWeight>
         </Style>
       </Textbox>
