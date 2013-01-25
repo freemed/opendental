@@ -2195,7 +2195,12 @@ namespace OpenDental{
 			if(formPS.DialogResult==DialogResult.OK) {
 				CurPatNum=formPS.SelectedPatNum;
 				Patient pat=Patients.GetPat(CurPatNum);
-				RefreshCurrentModule();
+				if(ContrChart2.Visible) {//If currently in the chart module, then also refresh NewCrop prescription information on top of a regular refresh.
+					ContrChart2.ModuleSelectedNewCrop(CurPatNum);
+				}
+				else {
+					RefreshCurrentModule();
+				}
 				FillPatientButton(pat);
 				Plugins.HookAddCode(this,"FormOpenDental.OnPatient_Click_end");   
 			}
@@ -3423,7 +3428,7 @@ namespace OpenDental{
 					ContrChart2.Visible=true;
 					this.ActiveControl=this.ContrChart2;
 					if(menuBarClicked) {
-						ContrChart2.ModuleClicked(CurPatNum);//Special refresh that also queries the NewCrop web service for prescription information.
+						ContrChart2.ModuleSelectedNewCrop(CurPatNum);//Special refresh that also queries the NewCrop web service for prescription information.
 					}
 					else {
 						ContrChart2.ModuleSelected(CurPatNum);
