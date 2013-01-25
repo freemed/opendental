@@ -52,6 +52,8 @@ public class ContrAppt extends ModuleWidget {
 		this.add(panelContainer);
 	}
 	
+	//Tab control---------------------------------------------------------------------------------------------------------------------------------
+	
 	/** Instantiates the grids for the module and then fills the tab panel in the lower right of the appointment module with the waiting room and employee schedule grids. */
 	private void fillTabControl() {
 		tabControl.add(getTabWaiting(),"Waiting");

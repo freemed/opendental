@@ -1,10 +1,118 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder 
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+  xmlns:odgrid="urn:import:com.opendental.odweb.client.ui">
+  
+  <ui:style>
+  	
+  	.labelTime{
+			font-weight: bold;
+			font-size: large;
+		}
+  	
+  	.labelSending{
+			font-weight: bold;
+			font-size: large;
+			color: red;
+		}
+  	
+  </ui:style>
 	
 	<g:SimplePanel ui:field="panelContainer">
-		<g:Label>Manage Module</g:Label>
+		<g:DockPanel>
+			<g:Dock direction="NORTH">
+				<g:HorizontalPanel>
+					<g:DecoratorPanel>
+						<g:HorizontalPanel>
+							<g:VerticalPanel>
+								<g:Button ui:field="butSendClaims">Send Claims</g:Button>
+								<g:Button ui:field="butClaimPay">Batch Ins</g:Button>
+								<g:Button ui:field="butBilling">Billing</g:Button>
+								<g:Button ui:field="butDeposit">Deposits</g:Button>
+								<g:Button ui:field="butSupply">Supply Inventory</g:Button>
+							</g:VerticalPanel>
+							<g:VerticalPanel>
+								<g:Button ui:field="butTasks">Tasks</g:Button>
+								<g:Button ui:field="butSendRx">Send Rx</g:Button>
+								<g:Button ui:field="butBackup">Backup</g:Button>
+								<g:Button ui:field="butAccounting">Accounting</g:Button>
+							</g:VerticalPanel>				
+						</g:HorizontalPanel>
+					</g:DecoratorPanel>
+					<g:DecoratorPanel>
+						<g:VerticalPanel>
+							<g:Label>Time Clock</g:Label>
+							<g:HorizontalPanel>
+								<odgrid:ODGrid ui:field="gridEmp" />
+								<g:VerticalPanel>
+									<g:Button ui:field="butManage">Manage</g:Button>
+									<g:Button ui:field="butTimeCard">View Timecard</g:Button>
+									<g:Button ui:field="butBreaks">View Breaks</g:Button>
+									<g:Label>Server Time</g:Label>
+									<g:Label ui:field="labelTime" styleName="{style.labelTime}">12:00:00</g:Label>
+									<g:Button ui:field="butClockIn">Clock In</g:Button>
+									<g:Button ui:field="butClockOut">Clock Out For:</g:Button>
+									<g:ListBox ui:field="listStatus" multipleSelect="true" width="100px" height="50px"></g:ListBox>
+								</g:VerticalPanel>
+							</g:HorizontalPanel>
+						</g:VerticalPanel>
+					</g:DecoratorPanel>
+				</g:HorizontalPanel>
+			</g:Dock>
+			<g:Dock direction="CENTER">
+				<g:DecoratorPanel>
+					<g:VerticalPanel>
+						<g:Label>Messaging</g:Label>
+						<g:HorizontalPanel>
+							<g:VerticalPanel>
+								<g:HorizontalPanel>
+									<g:VerticalPanel>
+										<g:Label>To</g:Label>
+										<g:ListBox ui:field="listTo" multipleSelect="true" width="100px" height="400px" />
+									</g:VerticalPanel>
+									<g:VerticalPanel>
+										<g:Label>From</g:Label>
+										<g:ListBox ui:field="listFrom" multipleSelect="true" width="100px" height="400px" />
+									</g:VerticalPanel>
+									<g:VerticalPanel>
+										<g:Label>Extras</g:Label>
+										<g:ListBox ui:field="listExtras" multipleSelect="true" width="100px" height="400px" />
+									</g:VerticalPanel>
+									<g:VerticalPanel>
+										<g:Label>Message (Send)</g:Label>
+										<g:ListBox ui:field="listTMessages" multipleSelect="true" width="115px" height="400px" />
+									</g:VerticalPanel>
+								</g:HorizontalPanel>
+								<g:HorizontalPanel>
+									<g:HorizontalPanel>
+										<g:VerticalPanel>
+											<g:Label>Text Message</g:Label>
+											<g:TextBox ui:field="textMessage" />
+										</g:VerticalPanel>
+										<g:VerticalPanel>
+											<g:Label ui:field="labelSending" styleName="{style.labelSending}">Sending</g:Label>
+											<g:Button ui:field="butSend">Send Text</g:Button>
+										</g:VerticalPanel>
+									</g:HorizontalPanel>
+								</g:HorizontalPanel>
+							</g:VerticalPanel>
+							<g:VerticalPanel>
+								<g:HorizontalPanel>
+									<g:Label>Include Acknowledged</g:Label><g:CheckBox ui:field="checkIncludeAck"></g:CheckBox>
+									<g:Label>Days</g:Label>
+									<g:TextBox ui:field="textDays" />
+									<g:Button ui:field="butAck">Ack</g:Button>
+									<g:Label>To User</g:Label>
+									<g:ListBox ui:field="listViewUser" />
+								</g:HorizontalPanel>
+								<odgrid:ODGrid ui:field="gridMessages" />
+							</g:VerticalPanel>
+						</g:HorizontalPanel>
+					</g:VerticalPanel>
+				</g:DecoratorPanel>
+			</g:Dock>
+		</g:DockPanel>
 	</g:SimplePanel>
 	
 </ui:UiBinder>

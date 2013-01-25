@@ -15,8 +15,8 @@
 				<!-- Put the calendar and other searching tools here. -->
 				<g:VerticalPanel>
 					<dp:DatePicker ui:field="calendar"/>
-					<g:RadioButton ui:field="radioDay" name="radioDay">Day</g:RadioButton>
-					<g:RadioButton ui:field="radioWeek" name="radioWeek">Week</g:RadioButton>
+					<g:RadioButton ui:field="radioDay" name="radioView" checked="true">Day</g:RadioButton>
+					<g:RadioButton ui:field="radioWeek" name="radioView">Week</g:RadioButton>
 					<g:HorizontalPanel>
 						<g:Label>View</g:Label>
 						<g:ListBox ui:field="comboView" />
@@ -39,7 +39,7 @@
 							</g:VerticalPanel>
 						</g:Dock>
 						<g:Dock direction="CENTER">
-							<g:ListBox ui:field="listConfirmed" />
+							<g:ListBox ui:field="listConfirmed" multipleSelect="true" width="100px" height="100px" />
 						</g:Dock>
 						<g:Dock direction="EAST" size="50">
 							<g:VerticalPanel>
