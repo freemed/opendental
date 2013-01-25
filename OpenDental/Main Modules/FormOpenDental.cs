@@ -3368,7 +3368,7 @@ namespace OpenDental{
 			SetModuleSelected(false);
 		}
 
-		///<summary>Sets the currently selected module based on the selectedIndex of the outlook bar. If selectedIndex is -1, which might happen if user does not have permission to any module, then this does nothing.</summary>
+		///<summary>Sets the currently selected module based on the selectedIndex of the outlook bar. If selectedIndex is -1, which might happen if user does not have permission to any module, then this does nothing. The menuBarClicked variable should be set to true when a module button is clicked, and should be false when called for refresh purposes.</summary>
 		private void SetModuleSelected(bool menuBarClicked){
 			switch(myOutlookBar.SelectedIndex){
 				case 0:
@@ -3423,7 +3423,7 @@ namespace OpenDental{
 					ContrChart2.Visible=true;
 					this.ActiveControl=this.ContrChart2;
 					if(menuBarClicked) {
-						ContrChart2.ModuleClicked(CurPatNum);
+						ContrChart2.ModuleClicked(CurPatNum);//Special refresh that also queries the NewCrop web service for prescription information.
 					}
 					else {
 						ContrChart2.ModuleSelected(CurPatNum);

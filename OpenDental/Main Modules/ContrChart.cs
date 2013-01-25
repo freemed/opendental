@@ -3532,6 +3532,7 @@ namespace OpenDental{
 			Plugins.HookAddCode(this,"ContrChart.LayoutToolBar_end",PatCur);
 		}
 
+		///<summary>This function does not follow our usual pattern. This function is just like ModuleSelected() but also pulls down prescription data for the current patient from the NewCrop web service. It was created to limit the number of times that NewCrop prescriptions are refreshed. Each time that NewCrop data is refreshed, the user must wait at least a few seconds. This function allows the chart to fully load, then a wait cursor displays while the web service call is being performed. If new data is pulled in from NewCrop, then the module is refreshed again to show the new prescriptions. Only called from FormOpenDental when the Chart module button is clicked or when a new patient is selected.</summary>
 		public void ModuleClicked(long patNum) {
 			ModuleSelected(patNum);
 			this.Cursor=Cursors.WaitCursor;
