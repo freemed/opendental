@@ -49,7 +49,6 @@
   
   <!-- Use a DockLayoutPanel to lay out the entire main screen. -->
   <g:DockLayoutPanel unit='PT'>
-    
     <!-- Title bar that contains the selected patient information. -->
     <g:north size='12'>
       <g:HTMLPanel styleName='{style.titleBar}'>
@@ -60,13 +59,11 @@
         </table>
       </g:HTMLPanel>
     </g:north>
-
     <!-- Main Menu Bar. -->
     <g:north size='18'>
     	<s:MenuBarMain ui:field="mainMenu" />
     </g:north>
-
-	<!-- Module buttons and the module content area. -->
+		<!-- Module buttons and the module content area. -->
     <g:center>
       <g:DockLayoutPanel unit='PX'>
         <!-- Modules Tree. -->
@@ -75,18 +72,19 @@
             <s:OutlookBar ui:field='outlookBar' />
           </g:ScrollPanel>
         </g:lineStart>
-
         <!-- Main content area. -->
         <g:center>
           <g:DockLayoutPanel unit='PT'>
           	<!-- This is where the menu bar with Select Patient, E-mail, etc. will be kept. -->
             <g:north size='17'>
               <g:FlowPanel ui:field='mainToolBarPanel' styleName='{style.patientMenuBar}'>
-              	<m:WindowOpenDental.ToolBarMain ui:field='toolBarMain'/>
+              	<g:MenuBar width="auto" animationEnabled="true">
+              		<g:MenuItem ui:field="menuItemSelectPatient" text="Select Patient" />
+              		<g:MenuItem ui:field="menuItemCommlog" text="Commlog" />
+              	</g:MenuBar>
               </g:FlowPanel>
             </g:north>
-
-			<!-- Module content area. -->
+						<!-- Module content area. -->
             <g:center>
               <g:SimpleLayoutPanel ui:field='contentPanel' />
             </g:center>

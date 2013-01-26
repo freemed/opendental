@@ -24,7 +24,6 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
@@ -70,17 +69,19 @@ public class WindowOpenDental extends ResizeComposite {
 	/** The main menu.  Holds options like Log Off, File, Setup, etc. */
 	@UiField(provided=true) MenuBarMain mainMenu;
 	/** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
-	@UiField(provided=true) ToolBarMain toolBarMain;
+	@UiField MenuItem menuItemSelectPatient;
+	@UiField MenuItem menuItemCommlog;
 	/** The currently selected patient.  Can be null. */
 	private Patient PatCur;
   
 	public WindowOpenDental() {
-		//Create an event handler for when users click between modules.
-		toolBarMain=new ToolBarMain();
 		mainMenu=new MenuBarMain(this);
 		outlookBar=new OutlookBar(new outlookBar_Click());
 		//Initialize the UI binder.
 		initWidget(uiBinder.createAndBindUi(this));
+		//Attach commands to all of the menu items.
+		menuItemSelectPatient.setCommand(new SelectPatient_Command());
+		menuItemCommlog.setCommand(new Commlog_Command());
 		//Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
 		setModule(-1);
 	}
@@ -182,48 +183,33 @@ public class WindowOpenDental extends ResizeComposite {
 		contentPanel.setWidget(moduleCur);
 	}
 	
-	//ToolBarMain-------------------------------------------------------------------------------------------------------------------------
+	//ToolBarCommands-------------------------------------------------------------------------------------------------------------------------
 	
-	public class ToolBarMain extends MenuBar {
-		
-		public ToolBarMain() {
-			this.setWidth("auto");
-			this.setAnimationEnabled(true);
-			
-			MenuItem menuItemSelectPatient = new MenuItem("Select Patient", false, new SelectPatient_Command());
-			this.addItem(menuItemSelectPatient);
-			
-			MenuItem menuItemCommlog = new MenuItem("Commlog", false, new Commlog_Command());
-			this.addItem(menuItemCommlog);
+	private class SelectPatient_Command implements Command {
+		public void execute() {
+			final WindowPatientSelect windowPS=new WindowPatientSelect();
+			windowPS.show();
+			windowPS.center();
+			//Add a DialogResultCallback to listen for the dialog result.
+			windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
+				public void OK() {
+					Db.sendRequest(Patients.getPat(windowPS.getSelectedPatNum()),new SelectPatientCallback());
+				}
+				public void Cancel() {
+				}
+			};
 		}
-		
-		private class SelectPatient_Command implements Command {
-			public void execute() {
-				final WindowPatientSelect windowPS=new WindowPatientSelect();
-				windowPS.show();
-				windowPS.center();
-				//Add a DialogResultCallback to listen for the dialog result.
-				windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
-					public void OK() {
-						Db.sendRequest(Patients.getPat(windowPS.getSelectedPatNum()),new SelectPatientCallback());
-					}
-					public void Cancel() {
-					}		
-				};
-			}
+	}
+	
+	private class SelectPatientCallback implements RequestCallbackResult {
+		public void onSuccess(Object obj) {
+			fillPatientButton((Patient)obj);
 		}
-		
-		private class SelectPatientCallback implements RequestCallbackResult {
-			public void onSuccess(Object obj) {
-				fillPatientButton((Patient)obj);
-			}
+	}
+	
+	private class Commlog_Command implements Command {
+		public void execute() {
 		}
-		
-		private class Commlog_Command implements Command {
-			public void execute() {
-			}
-		}
-
 	}
 	
 }
