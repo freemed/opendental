@@ -50,7 +50,14 @@
 							</g:VerticalPanel>
 						</g:Dock>
 					</g:DockPanel>
-					<g:TabPanel ui:field="tabControl"/>
+					<g:TabPanel ui:field="tabControl">
+						<g:Tab text="Waiting">
+							<odgrid:ODGrid ui:field="gridWaiting" />
+						</g:Tab>
+						<g:Tab text="Emp">
+							<odgrid:ODGrid ui:field="gridEmpSched" />
+						</g:Tab>
+					</g:TabPanel>
 				</g:VerticalPanel>
 			</g:Dock>
 		</g:DockPanel>

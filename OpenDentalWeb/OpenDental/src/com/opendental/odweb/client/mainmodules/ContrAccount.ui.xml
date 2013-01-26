@@ -3,6 +3,14 @@
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
   xmlns:odgrid="urn:import:com.opendental.odweb.client.ui">
+  
+  <ui:style>
+  
+  	.labelUrgFinNote {
+			font-weight: bold;
+		}
+  
+  </ui:style>
 	
 	<g:SimplePanel ui:field="panelContainer">
 		<g:DockPanel>
@@ -24,7 +32,37 @@
 			</g:Dock>
 			<g:Dock direction="EAST">
 				<g:VerticalPanel>
-					<g:TabPanel ui:field="tabControlShow"/>
+					<g:TabPanel ui:field="tabControlShow">
+						<g:Tab text="Main">
+							<g:VerticalPanel>
+								<g:Label ui:field="labelUrgFinNote">Fam Urgent Fin Note</g:Label>
+								<g:TextBox ui:field="textUrgFinNote" width="170px" height="75px" />
+								<g:Button ui:field="butCreditCard">Credit Card Manage</g:Button>
+								<odgrid:ODGrid ui:field="gridAcctPat" />
+								<g:Label ui:field="labelFamFinancial">Family Financial Notes</g:Label>
+								<g:TextBox ui:field="textFinNotes" width="170px" height="85px" />
+							</g:VerticalPanel>
+						</g:Tab>
+						<g:Tab text="Show">
+							<g:VerticalPanel>
+								<g:HorizontalPanel>
+									<g:Label ui:field="labelStartDate">Start Date</g:Label>
+									<g:TextBox ui:field="textDateStart" />
+								</g:HorizontalPanel>
+								<g:HorizontalPanel>
+									<g:Label ui:field="labelEndDate">End Date</g:Label>
+									<g:TextBox ui:field="textDateEnd" />
+								</g:HorizontalPanel>
+								<g:Button ui:field="butToday">Today</g:Button>
+								<g:Button ui:field="but45days">Last 45 Days</g:Button>
+								<g:Button ui:field="but90days">Last 90 Days</g:Button>
+								<g:Button ui:field="butDatesAll">All Dates</g:Button>
+								<g:Button ui:field="butRefresh">Refresh</g:Button>
+								<g:CheckBox ui:field="checkShowDetail" value="true">Show Proc Breakdowns</g:CheckBox>
+								<g:CheckBox ui:field="checkShowFamilyComm">Show Family Comm Entries</g:CheckBox>
+							</g:VerticalPanel>
+						</g:Tab>
+					</g:TabPanel>
 					<g:Button ui:field="butTrojan">Send Transaction to Trojan</g:Button>
 					<g:Button ui:field="butComm">Questionnaire</g:Button>
 				</g:VerticalPanel>

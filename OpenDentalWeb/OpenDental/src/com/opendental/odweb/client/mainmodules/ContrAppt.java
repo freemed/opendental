@@ -41,49 +41,18 @@ public class ContrAppt extends ModuleWidget {
 	@UiField Button butFamRecall;
 	@UiField Button butViewAppts;
 	@UiField TabPanel tabControl;
-	//These grids are not UiFields because they have to be added to a tab panel.
-	private ODGrid gridWaiting;
-	private ODGrid gridEmpSched;
+	@UiField(provided=true) ODGrid gridWaiting;
+	@UiField(provided=true) ODGrid gridEmpSched;
 	
 	/** Constructor. */
 	public ContrAppt() {
-		uiBinder.createAndBindUi(this);
-		fillTabControl();
-		this.add(panelContainer);
-	}
-	
-	//Tab control---------------------------------------------------------------------------------------------------------------------------------
-	
-	/** Instantiates the grids for the module and then fills the tab panel in the lower right of the appointment module with the waiting room and employee schedule grids. */
-	private void fillTabControl() {
-		tabControl.add(getTabWaiting(),"Waiting");
-		tabControl.add(getTabEmpSched(),"Emp");
-		//Select the first tab.
-		tabControl.selectTab(0);
-	}
-	
-	/** Fills the waiting grid and returns it as a widget so that it can be added to tabControl. */
-	private Widget getTabWaiting() {
 		gridWaiting=new ODGrid("Waiting Room");
 		gridWaiting.setWidthAndHeight(200, 200);
-		fillWaitingRoom();
-		return gridWaiting;
-	}
-	
-	private void fillWaitingRoom() {
-		
-	}
-
-	/** Fills the employee schedules grid and returns it as a widget so that it can be added to tabControl. */
-	private Widget getTabEmpSched() {
 		gridEmpSched=new ODGrid("Employee Schedules");
 		gridEmpSched.setWidthAndHeight(200, 200);
-		fillEmpSched();
-		return gridEmpSched;
-	}
-
-	private void fillEmpSched() {
-		
+		uiBinder.createAndBindUi(this);
+		tabControl.selectTab(0);
+		this.add(panelContainer);
 	}
 
 	/** Loads up all of the information for the appointment module. */

@@ -17,14 +17,127 @@
 				<g:DockPanel>
 					<g:Dock direction="WEST">
 						<g:VerticalPanel>
-							<g:SimplePanel width="100px" height="100px"><g:Label>OD Tooth Chart</g:Label></g:SimplePanel>
+							<g:SimplePanel width="100px" height="100px">
+								<g:Label>OD Tooth Chart</g:Label>
+							</g:SimplePanel>
 							<g:TextBox ui:field="textTreatmentNotes" />
 							<odgrid:ODGrid ui:field="gridPtInfo" />
 						</g:VerticalPanel>
 					</g:Dock>
 					<g:Dock direction="CENTER">
 						<g:VerticalPanel>
-							<g:TabPanel ui:field="tabProc" />
+							<g:TabPanel ui:field="tabProc">
+								<g:Tab text="Enter Treatment">
+									<g:HorizontalPanel>
+										<g:VerticalPanel>
+											<g:TextBox ui:field="textSurf" />
+											<g:HorizontalPanel>
+												<g:Button ui:field="butBF">BF</g:Button>
+												<g:Button ui:field="butV">V</g:Button>
+											</g:HorizontalPanel>
+											<g:HorizontalPanel>
+												<g:Button ui:field="butM">M</g:Button>
+												<g:Button ui:field="butOI">OI</g:Button>
+												<g:Button ui:field="butD">D</g:Button>
+											</g:HorizontalPanel>
+											<g:Button ui:field="butL">L</g:Button>
+											<g:DecoratorPanel>
+												<g:VerticalPanel>
+													<g:Label>Entry Status</g:Label>
+													<g:VerticalPanel>
+														<g:RadioButton ui:field="radioEntryTP" name="Status">Treat Plan</g:RadioButton>
+														<g:RadioButton ui:field="radioEntryC" name="Status">Complete</g:RadioButton>
+														<g:RadioButton ui:field="radioEntryEC" name="Status">ExistCurProv</g:RadioButton>
+														<g:RadioButton ui:field="radioEntryEO" name="Status">ExistOther</g:RadioButton>
+														<g:RadioButton ui:field="radioEntryR" name="Status">Referred</g:RadioButton>
+														<g:RadioButton ui:field="radioEntryCn" name="Status">Condition</g:RadioButton>
+													</g:VerticalPanel>
+												</g:VerticalPanel>
+											</g:DecoratorPanel>
+											<g:CheckBox ui:field="checkToday">Today</g:CheckBox>
+											<g:TextBox ui:field="textDate" />
+										</g:VerticalPanel>
+										<g:VerticalPanel>
+											<g:Label ui:field="labelDx">Diagnosis</g:Label>
+											<g:ListBox ui:field="listDx" multipleSelect="true" width="100px" height="150px" />
+											<g:Label ui:field="labelPrognosis">Prognosis</g:Label>
+											<g:ListBox ui:field="listPrognosis" />
+											<g:Label ui:field="labelPriority">Priority</g:Label>
+											<g:ListBox ui:field="listPriority" />
+										</g:VerticalPanel>
+										<g:VerticalPanel>
+											<g:Button ui:field="butAddProc">Procedure List</g:Button>
+											<g:ListBox ui:field="listButtonCats" multipleSelect="true" width="150px" height="240px" />
+										</g:VerticalPanel>
+										<g:VerticalPanel>
+											<g:HorizontalPanel>
+												<g:Label>Or</g:Label>
+												<g:TextBox ui:field="textProcCode">Type Proc Code</g:TextBox>
+												<g:Button ui:field="butOK">OK</g:Button>
+											</g:HorizontalPanel>
+											<g:Label>Or Single Click:</g:Label>
+											<g:DecoratorPanel>
+												<g:VerticalPanel>
+													<g:Label>Post.Composite</g:Label>
+													<g:HorizontalPanel>
+														<g:Button ui:field="butCMO">MO</g:Button>
+														<g:Button ui:field="butCMOD">MOD</g:Button>
+														<g:Button ui:field="butCO">O</g:Button>
+														<g:Button ui:field="butCDO">DO</g:Button>
+														<g:Button ui:field="butCSeal">Seal</g:Button>
+													</g:HorizontalPanel>
+													<g:HorizontalPanel>
+														<g:Button ui:field="butCOL">OL</g:Button>
+														<g:Button ui:field="butCOB">OB</g:Button>
+														<g:Button ui:field="butCMODL">MODL</g:Button>
+														<g:Button ui:field="butCMODB">MODB</g:Button>
+													</g:HorizontalPanel>
+													<g:Label>Ant. Composite</g:Label>
+													<g:HorizontalPanel>
+														<g:Button ui:field="butDL">DL</g:Button>
+														<g:Button ui:field="butMDL">MDL</g:Button>
+														<g:Button ui:field="butML">ML</g:Button>
+													</g:HorizontalPanel>
+													<g:Label>Amalgam</g:Label>
+													<g:HorizontalPanel>
+														<g:Button ui:field="butAMO">MO</g:Button>
+														<g:Button ui:field="butAMOD">MOD</g:Button>
+														<g:Button ui:field="butAO">O</g:Button>
+														<g:Button ui:field="butADO">DO</g:Button>
+													</g:HorizontalPanel>
+													<g:HorizontalPanel>
+														<g:Button ui:field="butAOL">OL</g:Button>
+														<g:Button ui:field="butAOB">OB</g:Button>
+														<g:Button ui:field="butAMODL">MODL</g:Button>
+														<g:Button ui:field="butAMODB">MODB</g:Button>
+													</g:HorizontalPanel>
+												</g:VerticalPanel>
+											</g:DecoratorPanel>
+										</g:VerticalPanel>
+									</g:HorizontalPanel>
+								</g:Tab>
+								<g:Tab text="Missing Teeth">
+									<g:Label>Missing Teeth</g:Label>
+								</g:Tab>
+								<g:Tab text="Movements">
+									<g:Label>Movements</g:Label>
+								</g:Tab>
+								<g:Tab text="Primary">
+									<g:Label>Primary</g:Label>
+								</g:Tab>
+								<g:Tab text="Planned Appts">
+									<g:Label>Planned Appts</g:Label>
+								</g:Tab>
+								<g:Tab text="Show">
+									<g:Label>Show</g:Label>
+								</g:Tab>
+								<g:Tab text="Draw">
+									<g:Label>Draw</g:Label>
+								</g:Tab>
+								<g:Tab text="Pat Info">
+									<g:Label>Pat Info</g:Label>
+								</g:Tab>
+							</g:TabPanel>
 							<odgrid:ODGrid ui:field="gridProg" />
 						</g:VerticalPanel>
 					</g:Dock>
