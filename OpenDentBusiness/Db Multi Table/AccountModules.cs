@@ -481,8 +481,13 @@ namespace OpenDentBusiness {
 			string command;
 			//claimprocs (ins payments)----------------------------------------------------------------------------
 			command="SELECT ClaimNum,MAX(ClaimPaymentNum) ClaimPaymentNum,MAX(ClinicNum) ClinicNum,DateCP,SUM(InsPayAmt) InsPayAmt_,MAX(PatNum) PatNum,MAX(ProcDate) ProcDate,"//MAX functions added to preserve behavior in Oracle.
-				+"MAX(ProvNum) ProvNum,SUM(WriteOff) WriteOff_ "
-				//+"(SELECT ProvBill FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "//not using this anymore.
+				//+"MAX(ProvNum) ProvNum,
+				+"SUM(WriteOff) WriteOff_, "
+				//js 1/28/13  The following line has been the source of many complaints in the past.  
+				//When it was claim.ProvBill, it didn't match daily payment report or the account Claim row entry.
+				//When it was MAX(claimproc.ProvNum), the user had no control over it because it was one prov at random.
+ 				//By switching to claim.ProvTreat, we are more closely matching the P&I report and the account Claim row.  ProvBill is not very meaningful outside of the claim itself.
+				+"(SELECT ProvTreat FROM claim WHERE claimproc.ClaimNum=claim.ClaimNum) provNum_ "
 				+"FROM claimproc "
 				+"WHERE (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
 				+"AND (WriteOff>0 OR InsPayAmt!=0) "
@@ -536,7 +541,7 @@ namespace OpenDentBusiness {
 				row["ProcNum"]="0";
 				row["ProcNumLab"]="";
 				row["procsOnObj"]="";
-				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaimPay.Rows[i]["ProvNum"].ToString()));
+				row["prov"]=Providers.GetAbbr(PIn.Long(rawClaimPay.Rows[i]["provNum_"].ToString()));
 				row["StatementNum"]="0";
 				row["ToothNum"]="";
 				row["ToothRange"]="";
