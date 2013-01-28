@@ -115,7 +115,7 @@ namespace OpenDentBusiness{
 		/// <summary>Gets all secondary claims for the related ClaimPaySplits. Called after a payment has been received.</summary>
 		public static DataTable GetSecondaryClaims(List<ClaimPaySplit> claimsAttached) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),claimsAttached);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),claimsAttached);
 			}
 			string command="SELECT DISTINCT ProcNum FROM claimproc WHERE ClaimNum IN (";
 			string claimNums="";//used twice
