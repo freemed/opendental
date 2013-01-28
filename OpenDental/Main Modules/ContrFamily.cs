@@ -1076,6 +1076,7 @@ namespace OpenDental{
 			PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			//CovPats.Refresh(planList,PatPlanList);
 			List<RefAttach> RefAttachList=RefAttaches.Refresh(PatCur.PatNum);
+			List<Sheet> sheetList=Sheets.GetForPatient(PatCur.PatNum);
 			bool hasProcs=procList.Count>0;
 			bool hasClaims=claimList.Count>0;
 			bool hasAdj=AdjustmentList.Length>0;
@@ -1092,8 +1093,9 @@ namespace OpenDental{
 				}
 			}
 			bool hasRef=RefAttachList.Count>0;
+			bool hasSheets=sheetList.Count>0;
 			if(hasProcs || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
-				|| hasInsPlans || hasRef || hasMeds || isSuperFamilyHead)
+				|| hasInsPlans || hasRef || hasMeds || isSuperFamilyHead || hasSheets)
 			{
 				string message=Lan.g(this,
 					"You cannot delete this patient without first deleting the following data:")+"\r";
@@ -1119,6 +1121,8 @@ namespace OpenDental{
 					message+=Lan.g(this,"Medications")+"\r";
 				if(isSuperFamilyHead)
 					message+=Lan.g(this,"Attached Super Family")+"\r";
+				if(hasSheets)
+					message+=Lan.g(this,"Sheets")+"\r";
 				MessageBox.Show(message);
 				return;
 			}
