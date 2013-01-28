@@ -68,8 +68,80 @@ public class WindowOpenDental extends ResizeComposite {
 	@UiField(provided=true) OutlookBar outlookBar;
 	/** The currently selected patient.  Can be null. */
 	private Patient PatCur;
-	/** The main menu. */
-	/** The tool bar.  Holds options like Select Patient, Commlog, etc. */
+	//Main menu bar----------------------------------------------
+	//Log Off
+	@UiField MenuItem menuItemPassword;
+	@UiField MenuItem menuItemExit;
+	//Setup
+	@UiField MenuItem menuItemApptFieldDefs;
+	@UiField MenuItem menuItemApptRules;
+	@UiField MenuItem menuItemAutoCodes;
+	@UiField MenuItem menuItemAutomation;
+	@UiField MenuItem menuItemAutoNotes;
+	@UiField MenuItem menuItemClearinghouses;
+	@UiField MenuItem menuItemDataPath;
+	@UiField MenuItem menuItemDefinitions;
+	@UiField MenuItem menuItemDisplayFields;
+	@UiField MenuItem menuItemFeeScheds;
+	@UiField MenuItem menuItemInsCats;
+	@UiField MenuItem menuItemInsFilingCodes;
+	@UiField MenuItem menuItemLaboratories;
+	@UiField MenuItem menuItemMisc;
+	@UiField MenuItem menuItemModules;
+	@UiField MenuItem menuItemOperatories;
+	@UiField MenuItem menuItemPatFieldDefs;
+	@UiField MenuItem menuItemPayerIDs;
+	@UiField MenuItem menuItemPractice;
+	@UiField MenuItem menuItemProblems;
+	@UiField MenuItem menuItemProcedureButtons;
+	@UiField MenuItem menuItemLinks;
+	@UiField MenuItem menuItemQuestions;
+	@UiField MenuItem menuItemRecall;
+	@UiField MenuItem menuItemRecallTypes;
+	@UiField MenuItem menuItemSecurity;
+	@UiField MenuItem menuItemSched;
+	@UiField MenuItem menuItemShowFeatures;
+	@UiField MenuItem menuItemTimeCards;
+	//Lists
+	@UiField MenuItem menuItemClinics;
+	@UiField MenuItem menuItemContacts;
+	@UiField MenuItem menuItemCounties;
+	@UiField MenuItem menuItemEmployees;
+	@UiField MenuItem menuItemEmployers;
+	@UiField MenuItem menuItemCarriers;
+	@UiField MenuItem menuItemInsPlans;
+	@UiField MenuItem menuItemLabCases;
+	@UiField MenuItem menuItemMedications;
+	@UiField MenuItem menuItemPharmacies;
+	@UiField MenuItem menuItemProviders;
+	@UiField MenuItem menuItemPrescriptions;
+	@UiField MenuItem menuItemReferrals;
+	@UiField MenuItem menuItemSchools;
+	@UiField MenuItem menuItemZipCodes;
+	//Reports
+	@UiField MenuItem subMenuReports;
+	//Tools
+	@UiField MenuItem menuItemPrintScreen;
+	//Misc Tools
+	@UiField MenuItem menuItemTelephone;
+	@UiField MenuItem menuItemMergePatients;
+	@UiField MenuItem menuItemDuplicateBlockouts;
+	@UiField MenuItem menuItemShutdown;
+	//End Misc Tools
+	@UiField MenuItem menuItemAging;
+	@UiField MenuItem menuItemAuditTrail;
+	@UiField MenuItem menuItemBillingFinance;
+	@UiField MenuItem menuItemDatabaseMaint;
+	@UiField MenuItem menuItemMobileSynch;
+	@UiField MenuItem menuItemRepeatingCharges;
+	@UiField MenuItem menuItemWebForms;
+	//Tools
+	@UiField MenuItem menuItemRemote;
+	@UiField MenuItem menuItemHelpContents;
+	@UiField MenuItem menuItemHelpIndex;
+	@UiField MenuItem menuItemRequestFeatures;
+	@UiField MenuItem menuItemUpdate;
+	//The main tool bar----------------------------------------------------------
 	@UiField MenuItem menuItemSelectPatient;
 	@UiField MenuItem menuItemCommlog;
 	
