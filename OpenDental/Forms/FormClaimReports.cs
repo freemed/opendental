@@ -241,7 +241,7 @@ namespace OpenDental{
 					return;
 				}
 				try{
-					Process.Start(@"http://www.dentalxchange.com/newdxc");
+					Process.Start(@"http://www.dentalxchange.com");
 				}
 				catch{
 					MessageBox.Show("Could not locate the site.");
