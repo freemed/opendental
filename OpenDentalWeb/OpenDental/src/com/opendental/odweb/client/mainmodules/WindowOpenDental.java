@@ -66,20 +66,22 @@ public class WindowOpenDental extends ResizeComposite {
 	/** The outlook bar on the left used to navigate to different modules.  (provided=true) Means we will instantiate the object ourselves.  
 	*  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
 	@UiField(provided=true) OutlookBar outlookBar;
-	/** The main menu.  Holds options like Log Off, File, Setup, etc. */
-	@UiField(provided=true) MenuBarMain mainMenu;
-	/** The main tool bar.  Holds options like Select Patient, Commlog, etc. */
-	@UiField MenuItem menuItemSelectPatient;
-	@UiField MenuItem menuItemCommlog;
 	/** The currently selected patient.  Can be null. */
 	private Patient PatCur;
+	/** The main menu. */
+	/** The tool bar.  Holds options like Select Patient, Commlog, etc. */
+	@UiField MenuItem menuItemSelectPatient;
+	@UiField MenuItem menuItemCommlog;
+	
   
 	public WindowOpenDental() {
-		mainMenu=new MenuBarMain(this);
 		outlookBar=new OutlookBar(new outlookBar_Click());
 		//Initialize the UI binder.
 		initWidget(uiBinder.createAndBindUi(this));
 		//Attach commands to all of the menu items.
+		//Main menu------------------------------------------------------------------------
+		// TODO Add menu command handlers here.
+		//ToolBar commands-----------------------------------------------------------------
 		menuItemSelectPatient.setCommand(new SelectPatient_Command());
 		menuItemCommlog.setCommand(new Commlog_Command());
 		//Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.

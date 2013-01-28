@@ -61,7 +61,100 @@
     </g:north>
     <!-- Main Menu Bar. -->
     <g:north size='18'>
-    	<s:MenuBarMain ui:field="mainMenu" />
+    	<g:MenuBar>
+    		<g:MenuItem ui:field="subMenuLogOff" text="Log Off" />
+    		<g:MenuItem text="File">
+    			<g:MenuBar vertical="true">
+	    			<g:MenuItem ui:field="menuItemPassword" text="Change Password" />
+	    			<g:MenuItem ui:field="menuItemExit" text="Exit" />
+    			</g:MenuBar>
+    		</g:MenuItem>
+    		<g:MenuItem text="Setup">
+    			<g:MenuBar vertical="true">
+	    			<g:MenuItem ui:field="menuItemApptFieldDefs" text="Appt Field Defs" />
+	    			<g:MenuItem ui:field="menuItemApptRules" text="Appt Rules" />
+	    			<g:MenuItem ui:field="menuItemAutoCodes" text="Auto Codes" />
+	    			<g:MenuItem ui:field="menuItemAutomation" text="Automation" />
+	    			<g:MenuItem ui:field="menuItemAutoNotes" text="Auto Notes" />
+	    			<g:MenuItem ui:field="menuItemClearinghouses" text="Clearinghouses" />
+	    			<g:MenuItem ui:field="menuItemDataPath" text="Data Paths" />
+	    			<g:MenuItem ui:field="menuItemDefinitions" text="Definitions" />
+	    			<g:MenuItem ui:field="menuItemDisplayFields" text="Display Fields" />
+	    			<g:MenuItem ui:field="menuItemFeeScheds" text="Fee Schedules" />
+	    			<g:MenuItem ui:field="menuItemInsCats" text="Insurance Categories" />
+	    			<g:MenuItem ui:field="menuItemInsFilingCodes" text="Insurance Filing Codes" />
+	    			<g:MenuItem ui:field="menuItemLaboratories" text="Laboratories" />
+	    			<g:MenuItem ui:field="menuItemMisc" text="Miscellaneous" />
+	    			<g:MenuItem ui:field="menuItemModules" text="Modules" />
+	    			<g:MenuItem ui:field="menuItemOperatories" text="Operatories" />
+	    			<g:MenuItem ui:field="menuItemPatFieldDefs" text="Pat Field Defs" />
+	    			<g:MenuItem ui:field="menuItemPayerIDs" text="Payer IDs" />
+	    			<g:MenuItem ui:field="menuItemPractice" text="Practice" />
+	    			<g:MenuItem ui:field="menuItemProblems" text="Problems" />
+	    			<g:MenuItem ui:field="menuItemProcedureButtons" text="Procedure Buttons" />
+	    			<g:MenuItem ui:field="menuItemLinks" text="Program Links" />
+	    			<g:MenuItem ui:field="menuItemQuestions" text="Questionnaire" />
+	    			<g:MenuItem ui:field="menuItemRecall" text="Recall" />
+	    			<g:MenuItem ui:field="menuItemRecallTypes" text="RecallTypes" />
+	    			<g:MenuItem ui:field="menuItemSecurity" text="Security" />
+	    			<g:MenuItem ui:field="menuItemSched" text="Schedules" />
+	    			<g:MenuItem ui:field="menuItemShowFeatures" text="Show Features" />
+	    			<g:MenuItem ui:field="menuItemTimeCards" text="Time Cards" />
+    			</g:MenuBar>
+    		</g:MenuItem>
+    		<g:MenuItem text="Lists">
+    			<g:MenuBar ui:field="subMenuLists" vertical="true">
+	    			<g:MenuItem ui:field="menuItemProcCodes" text="Procedure Codes" />
+	    			<g:MenuItemSeparator />
+	    			<g:MenuItem ui:field="menuItemClinics" text="Clinics" />
+	    			<g:MenuItem ui:field="menuItemContacts" text="Contacts" />
+	    			<g:MenuItem ui:field="menuItemCounties" text="Counties" />
+	    			<g:MenuItem ui:field="menuItemEmployees" text="Employees" />
+	    			<g:MenuItem ui:field="menuItemEmployers" text="Employers" />
+	    			<g:MenuItem ui:field="menuItemCarriers" text="Insurance Carriers" />
+	    			<g:MenuItem ui:field="menuItemInsPlans" text="Insurance Plans" />
+	    			<g:MenuItem ui:field="menuItemLabCases" text="Lab Cases" />
+	    			<g:MenuItem ui:field="menuItemMedications" text="Medications" />
+	    			<g:MenuItem ui:field="menuItemPharmacies" text="Pharmacies" />
+	    			<g:MenuItem ui:field="menuItemProviders" text="Providers" />
+	    			<g:MenuItem ui:field="menuItemPrescriptions" text="Prescriptions" />
+	    			<g:MenuItem ui:field="menuItemReferrals" text="Referrals" />
+	    			<g:MenuItem ui:field="menuItemSchools" text="Sites" />
+	    			<g:MenuItem ui:field="menuItemZipCodes" text="Zip Codes" />
+    			</g:MenuBar>
+    		</g:MenuItem>
+    		<g:MenuItem ui:field="subMenuReports" text="Reports" />
+    		<g:MenuItem text="Tools">
+    			<g:MenuBar vertical="true">
+	    			<g:MenuItem ui:field="menuItemPrintScreen" text="Print Screen Tool" />
+	    			<g:MenuItem text="Misc Tools">
+	    				<g:MenuBar vertical="true">
+	    					<g:MenuItem ui:field="menuItemTelephone" text="Telephone Numbers" />
+	    					<g:MenuItem ui:field="menuItemMergePatients" text="Merge Patients" />
+	    					<g:MenuItem ui:field="menuItemDuplicateBlockouts" text="Clear Duplicate Blackouts" />
+	    					<g:MenuItem ui:field="menuItemShutdown" text="Shutdown All Workstations" />
+	    				</g:MenuBar>
+	    			</g:MenuItem>
+	    			<g:MenuItemSeparator />
+	    			<g:MenuItem ui:field="menuItemAging" text="Aging" />
+	    			<g:MenuItem ui:field="menuItemAuditTrail" text="Audit Trail" />
+	    			<g:MenuItem ui:field="menuItemBillingFinance" text="Shutdown All Workstations" />
+	    			<g:MenuItem ui:field="menuItemDatabaseMaint" text="Database Maintenance" />
+	    			<g:MenuItem ui:field="menuItemMobileSynch" text="Mobile and Patient Portal Synch" />
+	    			<g:MenuItem ui:field="menuItemRepeatingCharges" text="Repeating Charges" />
+	    			<g:MenuItem ui:field="menuItemWebForms" text="Web Forms" />
+    			</g:MenuBar>
+    		</g:MenuItem>
+    		<g:MenuItem text="Help">
+    			<g:MenuBar vertical="true">
+	    			<g:MenuItem ui:field="menuItemRemote" text="Online Support" />
+	    			<g:MenuItem ui:field="menuItemHelpContents" text="Online Help - Contents" />
+	    			<g:MenuItem ui:field="menuItemHelpIndex" text="Online Help - Index" />
+	    			<g:MenuItem ui:field="menuItemRequestFeatures" text="Request Features" />
+	    			<g:MenuItem ui:field="menuItemUpdate" text="Update" />
+    			</g:MenuBar>
+    		</g:MenuItem>
+    	</g:MenuBar>
     </g:north>
 		<!-- Module buttons and the module content area. -->
     <g:center>
