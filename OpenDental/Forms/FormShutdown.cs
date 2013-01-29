@@ -24,6 +24,7 @@ namespace OpenDental {
 			}
 			if(IsUpdate) {
 				butShutdown.Text=Lan.g(this,"Continue");
+				butCancel.Text=Lan.g(this,"Skip");//used to say "cancel" but still continues with the update, just skips the "shutdown all workstations" step.
 			}
 		}
 
