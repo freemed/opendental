@@ -29,6 +29,7 @@ namespace OpenDental {
 		private void FormWiki_Load(object sender,EventArgs e) {
 			//disable the annoying clicking sound when the browser navigates
 			CoInternetSetFeatureEnabled(FEATURE_DISABLE_NAVIGATION_SOUNDS,SET_FEATURE_ON_PROCESS,true);
+			webBrowserWiki.StatusTextChanged += new EventHandler(WebBrowserWiki_StatusTextChanged);
 			Rectangle rectWorkingArea=System.Windows.Forms.Screen.GetWorkingArea(this);
 			Top=0;
 			Left=Math.Max(0,((rectWorkingArea.Width-960)/2)+rectWorkingArea.Left);
@@ -37,6 +38,16 @@ namespace OpenDental {
 			LayoutToolBar();
 			historyNav=new List<string>();
 			LoadWikiPage("Home");
+		}
+
+		private void WebBrowserWiki_StatusTextChanged(object sender,EventArgs e) {
+			//if(webBrowserWiki.StatusText=="") {
+			//  return;
+			//}
+			labelStatus.Text=webBrowserWiki.StatusText;
+			if(labelStatus.Text=="Done") {
+				labelStatus.Text="";
+			}
 		}
 
 		private void LoadWikiPage(string pageTitle) {
@@ -291,6 +302,10 @@ namespace OpenDental {
 			//This doesn't seem to be a problem.  We wrote it so that it won't go into an infinite loop, but it's something to be aware of.
 			if(e.Url.ToString()=="about:blank") {
 				//webBrowserWiki.DocumentText was set externally. We want to ignore this situation.
+			}
+			else if(e.Url.ToString().StartsWith("about:")){//malformed URL.
+					e.Cancel=true;
+					return;
 			}
 			else if(e.Url.ToString().StartsWith("wiki:")) {//user clicked on an internal link
 				LoadWikiPage(e.Url.ToString().Substring(5));

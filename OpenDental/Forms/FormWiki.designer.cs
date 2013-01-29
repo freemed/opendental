@@ -28,32 +28,33 @@ namespace OpenDental{
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
+			this.labelStatus = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// imageListMain
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Left.gif");
-			this.imageListMain.Images.SetKeyName(1,"Manage22.gif");
-			this.imageListMain.Images.SetKeyName(2,"home.gif");
-			this.imageListMain.Images.SetKeyName(3,"editPencil.gif");
-			this.imageListMain.Images.SetKeyName(4,"print.gif");
-			this.imageListMain.Images.SetKeyName(5,"rename.gif");
-			this.imageListMain.Images.SetKeyName(6,"deleteX.gif");
-			this.imageListMain.Images.SetKeyName(7,"history.gif");
-			this.imageListMain.Images.SetKeyName(8,"incoming.gif");
-			this.imageListMain.Images.SetKeyName(9,"Add.gif");
-			this.imageListMain.Images.SetKeyName(10,"allpages.gif");
-			this.imageListMain.Images.SetKeyName(11,"search.gif");
+			this.imageListMain.Images.SetKeyName(0, "Left.gif");
+			this.imageListMain.Images.SetKeyName(1, "Manage22.gif");
+			this.imageListMain.Images.SetKeyName(2, "home.gif");
+			this.imageListMain.Images.SetKeyName(3, "editPencil.gif");
+			this.imageListMain.Images.SetKeyName(4, "print.gif");
+			this.imageListMain.Images.SetKeyName(5, "rename.gif");
+			this.imageListMain.Images.SetKeyName(6, "deleteX.gif");
+			this.imageListMain.Images.SetKeyName(7, "history.gif");
+			this.imageListMain.Images.SetKeyName(8, "incoming.gif");
+			this.imageListMain.Images.SetKeyName(9, "Add.gif");
+			this.imageListMain.Images.SetKeyName(10, "allpages.gif");
+			this.imageListMain.Images.SetKeyName(11, "search.gif");
 			// 
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
 			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
+			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(944,25);
+			this.ToolBarMain.Size = new System.Drawing.Size(944, 25);
 			this.ToolBarMain.TabIndex = 72;
 			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
 			// 
@@ -62,17 +63,29 @@ namespace OpenDental{
 			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.webBrowserWiki.Location = new System.Drawing.Point(0,28);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20,20);
+			this.webBrowserWiki.Location = new System.Drawing.Point(0, 28);
+			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
 			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(944,677);
+			this.webBrowserWiki.Size = new System.Drawing.Size(944, 657);
 			this.webBrowserWiki.TabIndex = 0;
 			this.webBrowserWiki.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowserWiki_Navigating);
+			// 
+			// labelStatus
+			// 
+			this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelStatus.Location = new System.Drawing.Point(-3, 686);
+			this.labelStatus.Name = "labelStatus";
+			this.labelStatus.Size = new System.Drawing.Size(947, 18);
+			this.labelStatus.TabIndex = 73;
+			this.labelStatus.Text = "Status Bar";
+			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormWiki
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(944,704);
+			this.ClientSize = new System.Drawing.Size(944, 704);
+			this.Controls.Add(this.labelStatus);
 			this.Controls.Add(this.ToolBarMain);
 			this.Controls.Add(this.webBrowserWiki);
 			this.Name = "FormWiki";
@@ -88,6 +101,7 @@ namespace OpenDental{
 		private System.Windows.Forms.WebBrowser webBrowserWiki;
 		private UI.ODToolBar ToolBarMain;
 		private System.Windows.Forms.ImageList imageListMain;
+		private System.Windows.Forms.Label labelStatus;
 
 	}
 }
