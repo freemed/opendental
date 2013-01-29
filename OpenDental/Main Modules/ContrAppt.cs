@@ -2588,6 +2588,7 @@ namespace OpenDental {
 				if(procAlreadyAttached) {
 					MessageBox.Show(Lan.g(this,"One or more procedures could not be scheduled because they were already attached to another appointment. Someone probably forgot to update the Next appointment in the Chart module."));
 					FormApptEdit formAE=new FormApptEdit(aptCur.AptNum);
+					CheckStatus();
 					formAE.IsNew=true;
 					formAE.ShowDialog();//to force refresh of aptDescript
 					if(formAE.DialogResult!=DialogResult.OK) {//apt gets deleted from within aptEdit window.
@@ -2640,6 +2641,18 @@ namespace OpenDental {
 			}
 			//Recalls.SynchScheduledApptLazy(aptCur.PatNum, aptCur.AptDateTime, procCodes);
 			Recalls.SynchScheduledApptFull(aptCur.PatNum);
+		}
+
+		///<summary>Copied from FormApptsOther. Does not limit appointment creation, only warns user. This check should be run before creating a new appointment. </summary>
+		private void CheckStatus() {
+			if(PatCur.PatStatus == PatientStatus.Inactive
+				|| PatCur.PatStatus == PatientStatus.Archived
+				|| PatCur.PatStatus == PatientStatus.Prospective) {
+				MsgBox.Show(this,"Warning. Patient is not active.");
+			}
+			if(PatCur.PatStatus == PatientStatus.Deceased) {
+				MsgBox.Show(this,"Warning. Patient is deceased.");
+			}
 		}
 
 		///<summary>Called when releasing an appointment to make sure it does not overlap any other appointment.  Tests all appts for the day, even if not visible.</summary>
@@ -3634,12 +3647,13 @@ namespace OpenDental {
 						SetInvalid();
 					}
 				}
-				else {
+				else {//new patient not added
 					if(Appointments.HasPlannedEtc(PatCur.PatNum)) {
 						DisplayOtherDlg(true);
 					}
 					else {
 						FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
+						CheckStatus();
 						FormAO.InitialClick=true;
 						FormAO.MakeAppointment();
 						//if(FormAO.OResult==OtherResult.Cancel) {//this wasn't catching user hitting cancel from within appt edit window
@@ -4390,6 +4404,7 @@ namespace OpenDental {
 				return;
 			}
 			FormApptsOther FormAO=new FormApptsOther(PatCur.PatNum);//doesn't actually get shown
+			CheckStatus();
 			FormAO.InitialClick=false;
 			FormAO.MakeAppointment();
 			SendToPinBoard(FormAO.AptNumsSelected);
