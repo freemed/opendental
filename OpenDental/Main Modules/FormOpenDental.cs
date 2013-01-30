@@ -5419,6 +5419,14 @@ namespace OpenDental{
 				ThreadVM.Join();
 				ThreadVM=null;
 			}
+			if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
+				for(int f=Application.OpenForms.Count-1;f>=0;f--) {
+					if(Application.OpenForms[f]==this) {// main form
+						continue;
+					}
+					Application.OpenForms[f].Close();
+				}
+			}
 		}
 
 		private void FormOpenDental_FormClosed(object sender,FormClosedEventArgs e) {
