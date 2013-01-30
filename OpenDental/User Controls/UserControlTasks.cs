@@ -1038,7 +1038,8 @@ namespace OpenDental {
 				long newTaskNum=Tasks.Insert(childTasks[i]);
 				for(int t=0;t<noteList.Count;t++) {
 					noteList[t].TaskNum=newTaskNum;
-					TaskNotes.Insert(noteList[t]);
+					TaskNotes.Insert(noteList[t]);//Creates the new note with the current datetime stamp.
+					TaskNotes.Update(noteList[t]);//Restores the historical datetime for the note.
 				}
 			}
 		}
