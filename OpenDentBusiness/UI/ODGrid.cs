@@ -95,6 +95,10 @@ namespace OpenDental.UI {
 		private Point oldSelectedCell;
 		///<summary>Holds the amount of the grid that is hidden due to the user making the window too small.  We need to keep track of this so that when they resize the window the scroll bar will become visible again.</summary>
 		private int widthHidden;
+		///<summary>Is set when ComputeRows is called, then used . If any columns are editable HasEditableColumn is true.</summary>
+		private bool HasEditableColumn;
+		///<summary></summary>
+		private const int EDITABLE_ROW_HEIGHT=19;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -425,13 +429,7 @@ namespace OpenDental.UI {
 			}
 		}
 
-		///<summary>Is checked and set when ComputeRows is called. If any columns are editable HasEditableColumn is true.</summary>
-		private bool HasEditableColumn;
-
-		///<summary></summary>
-		private const int EDITABLE_ROW_HEIGHT=19;
-
-		///<summary>Called from PrintPage() and EndUpdate(). After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
+		///<summary>Called from PrintPage() and EndUpdate().  After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(Graphics g) {
 			//using(Graphics g=this.CreateGraphics()) {
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
@@ -472,9 +470,9 @@ namespace OpenDental.UI {
 							//find the tallest col
 							for(int j=0;j<rows[i].Cells.Count;j++) {
 								if(HasEditableColumn) {
-									cellH=(int)g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height+1;
+									cellH=(int)((1.03)*(float)(g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height))+4;//because textbox will be bigger
 									if(cellH < EDITABLE_ROW_HEIGHT) {
-										cellH=EDITABLE_ROW_HEIGHT;//to fit the text box
+										cellH=EDITABLE_ROW_HEIGHT;//only used for single line text
 									}
 								}
 								else {
@@ -737,10 +735,8 @@ namespace OpenDental.UI {
 				int cellW=columns[i].ColWidth;
 				int cellH=RowHeights[rowI];
 				if(HasEditableColumn) {//These cells are taller
-					if(cellH==EDITABLE_ROW_HEIGHT) {//if it is a single line row
 						vertical+=2;//so this is to push text down to center it in the cell
 						cellH-=3;//to keep it from spilling into the next cell
-					}
 				}
 				if(columns[i].TextAlign==HorizontalAlignment.Right) {
 					if(HasEditableColumn) {
@@ -1669,8 +1665,9 @@ namespace OpenDental.UI {
 		private void CreateEditBox() {
 			editBox=new TextBox();
 			//The problem is that it ignores the height.
-			editBox.Size=new Size(Columns[selectedCell.X].ColWidth+1,RowHeights[selectedCell.Y]+1);//+NoteHeights[rowI]-1);
-			//editBox.Multiline=true;
+			editBox.Multiline=true;
+			editBox.Font=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			editBox.Size=new Size(Columns[selectedCell.X].ColWidth+1,RowHeights[selectedCell.Y]+1);
 			editBox.Location=new Point(-hScroll.Value+1+ColPos[selectedCell.X],
 				-vScroll.Value+1+titleHeight+headerHeight+RowLocs[selectedCell.Y]);
 			editBox.Text=Rows[selectedCell.Y].Cells[selectedCell.X].Text;
@@ -1697,6 +1694,10 @@ namespace OpenDental.UI {
 		}
 
 		void editBox_KeyDown(object sender,KeyEventArgs e) {
+			if(e.Shift && e.KeyCode == Keys.Enter) {
+					Rows[selectedCell.X].Cells[selectedCell.Y].Text+="\r\n";
+					return;
+			}
 			if(e.KeyCode==Keys.Enter) {
 				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
 				editBox=null;
