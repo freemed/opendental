@@ -11722,7 +11722,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 }
 body{
 	margin:		3px;
-	font-size:	10pt;
+	font-size:	9pt;
 	font-family:	arial,sans-serif;
 }
 p{
