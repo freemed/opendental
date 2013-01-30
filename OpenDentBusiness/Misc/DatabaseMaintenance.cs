@@ -2145,16 +2145,19 @@ namespace OpenDentBusiness {
 			}
 			string log="";
 			//same behavior whether check or fix
-			if(PrefC.GetBool(PrefName.EasyNoClinics)){
+			if(PrefC.GetBool(PrefName.EasyNoClinics)) {
 				return log;
 			}
-			command=@"SELECT PatNum,LName,FName FROM patient WHERE ClinicNum=0 AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
+			//Get the number of patients not assigned to a clinic:
+			command=@"SELECT COUNT(*) FROM patient WHERE ClinicNum=0 AND PatStatus!="+POut.Int((int)PatientStatus.Deleted);
+			int count=PIn.Int(Db.GetCount(command));
+			command=@"SELECT PatNum,LName,FName FROM patient WHERE ClinicNum=0 AND PatStatus!="+POut.Int((int)PatientStatus.Deleted)+" LIMIT 30";
 			table=Db.GetTable(command);
-			if(table.Rows.Count==0){
+			if(table.Rows.Count==0) {
 				return log;
 			}
-			log+=Lans.g("FormDatabaseMaintenance","Patients with no Clinic assigned: ")+table.Rows.Count.ToString()+Lans.g("FormDatabaseMaintenance",", including: ");
-			for(int i=0;i<table.Rows.Count;i++){
+			log+=Lans.g("FormDatabaseMaintenance","Patients with no Clinic assigned: ")+count.ToString()+Lans.g("FormDatabaseMaintenance",", including: ");
+			for(int i=0;i<table.Rows.Count;i++) {
 				//Start a new line and indent every three patients for printing purposes.
 				if(i%3==0) {
 					log+="\r\n   ";
