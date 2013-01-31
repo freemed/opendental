@@ -303,7 +303,7 @@ namespace OpenDental {
 					info.Arguments+="\"/ZIP:"+zipPat+"\" ";
 				}
 				info.Arguments+="/RECEIPT:Pat"+patNum+" ";//aka invoice#
-				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+"\" /LOCKCLERK ";
+				info.Arguments+="\"/CLERK:"+Security.CurUser.UserName+" R\" /LOCKCLERK ";
 				info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
 				info.Arguments+="/USERID:"+user+" ";
 				info.Arguments+="/PASSWORD:"+password+" ";
