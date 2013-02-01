@@ -41,7 +41,7 @@ public class Procedure {
 		public String Prosthesis;
 		/** For a prosthesis Replacement, this is the original date. */
 		public Date DateOriginalProsth;
-		/** This note used to go out on e-claims, but the new format does not allow it.  So we removed the UI for this field.  We will probably drop this field completely soon. */
+		/** This note goes out on e-claims.  Not visible in Canada. */
 		public String ClaimNote;
 		/** This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later. */
 		public Date DateEntryC;
