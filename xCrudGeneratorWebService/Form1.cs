@@ -777,7 +777,7 @@ namespace xCrudGeneratorWebService {
 			}
 			#endregion
 			#region method footer
-			strb.Append(t3+"throw new NotSupportedException(\"MethodAccounts, unknown method: \"+methodName);"+rn
+			strb.Append(t3+"throw new NotSupportedException(\"Method"+wSType.Name+", unknown method: \"+methodName);"+rn
 				+t2+"}"+rn+rn);
 			#endregion
 		}

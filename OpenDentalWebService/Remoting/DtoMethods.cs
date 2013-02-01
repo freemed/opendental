@@ -2056,25 +2056,25 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		private static object MethodAccountingAutoPays(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAccountingAutoPays, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAdjustments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAdjustments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAllergies(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAllergies, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAllergyDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAllergyDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
@@ -2083,667 +2083,667 @@ namespace OpenDentalWebService {
 			if(methodName=="RefreshASAP") {
 				return Appointments.RefreshASAP(Convert.ToInt64(parameters[0]),Convert.ToInt64(parameters[1]),Convert.ToInt64(parameters[2]));
 			}
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAppointments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAppointmentRules(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAppointmentRules, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodApptFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodApptFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodApptFieldDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodApptFieldDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodApptViews(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodApptViews, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodApptViewItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodApptViewItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutoCodes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutoCodes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutoCodeConds(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutoCodeConds, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutoCodeItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutoCodeItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutomations(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutomations, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutomationConditions(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutomationConditions, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutoNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutoNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodAutoNoteControls(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodAutoNoteControls, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodBenefits(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodBenefits, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCanadianNetworks(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCanadianNetworks, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCarriers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCarriers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCentralConnections(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCentralConnections, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodChartViews(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodChartViews, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaims(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaims, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimAttaches(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimAttaches, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimCondCodeLogs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimCondCodeLogs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimForms(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimForms, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimFormItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimFormItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimPayments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimPayments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimProcs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimProcs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClaimValCodeLogs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClaimValCodeLogs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClearinghouses(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClearinghouses, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClinics(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClinics, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodClockEvents(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodClockEvents, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCommlogs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCommlogs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodComputers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodComputers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodComputerPrefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodComputerPrefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodContacts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodContacts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCounties(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCounties, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCovCats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCovCats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCovSpans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCovSpans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCreditCards(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCreditCards, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCustRefEntries(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCustRefEntries, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodCustReferences(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodCustReferences, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDashboardARs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDashboardARs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDeletedObjects(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDeletedObjects, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDeposits(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDeposits, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDictCustoms(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDictCustoms, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDiseases(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDiseases, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDiseaseDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDiseaseDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDisplayFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDisplayFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDocuments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDocuments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDocumentMiscs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDocumentMiscs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDrugManufacturers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDrugManufacturers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDrugUnits(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDrugUnits, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodDunnings(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodDunnings, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEduResources(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEduResources, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEhrMeasures(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEhrMeasures, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEhrMeasureEvents(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEhrMeasureEvents, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEhrProvKeys(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEhrProvKeys, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEhrQuarterlyKeys(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEhrQuarterlyKeys, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEhrSummaryCcds(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEhrSummaryCcds, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodElectIDs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodElectIDs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmailAddresses(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmailAddresses, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmailAttaches(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmailAttaches, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmailMessages(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmailMessages, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmailTemplates(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmailTemplates, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmployees(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmployees, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEmployers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEmployers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEobAttaches(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEobAttaches, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEquipments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEquipments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodErxLogs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodErxLogs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEtranss(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEtranss, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodEtransMessageTexts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodEtransMessageTexts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodFees(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodFees, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodFeeScheds(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodFeeScheds, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodFormPats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodFormPats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodFormularies(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodFormularies, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodFormularyMeds(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodFormularyMeds, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodGroupPermissions(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodGroupPermissions, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodGuardians(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodGuardians, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodHL7Defs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodHL7Defs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodHL7DefFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodHL7DefFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodHL7DefMessages(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodHL7DefMessages, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodHL7DefSegments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodHL7DefSegments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodHL7Msgs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodHL7Msgs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodICD9s(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodICD9s, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodInsFilingCodes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodInsFilingCodes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodInsFilingCodeSubtypes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodInsFilingCodeSubtypes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodInsPlans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodInsPlans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodInsSubs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodInsSubs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodInstallmentPlans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodInstallmentPlans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodJournalEntries(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodJournalEntries, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLabCases(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLabCases, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLaboratories(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLaboratories, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLabPanels(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLabPanels, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLabResults(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLabResults, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLabTurnarounds(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLabTurnarounds, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLanguageForeigns(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLanguageForeigns, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLetters(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLetters, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLetterMerges(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLetterMerges, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodLetterMergeFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodLetterMergeFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMedicalOrders(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMedicalOrders, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMedications(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMedications, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMedicationPats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMedicationPats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMounts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMounts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMountDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMountDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMountItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMountItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodMountItemDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodMountItemDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodOperatories(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodOperatories, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodOrionProcs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodOrionProcs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodOrthoCharts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodOrthoCharts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPatFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPatFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPatFieldDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPatFieldDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
@@ -2755,103 +2755,103 @@ namespace OpenDentalWebService {
 			if(methodName=="GetPtDataTable") {
 				return Patients.GetPtDataTable(Convert.ToBoolean(parameters[0]),Convert.ToString(parameters[1]),Convert.ToString(parameters[2]),Convert.ToString(parameters[3]),Convert.ToString(parameters[4]),Convert.ToBoolean(parameters[5]),Convert.ToString(parameters[6]),Convert.ToString(parameters[7]),Convert.ToString(parameters[8]),Convert.ToString(parameters[9]),Convert.ToString(parameters[10]),Convert.ToInt64(parameters[11]),Convert.ToBoolean(parameters[12]),Convert.ToBoolean(parameters[13]),Convert.ToInt64(parameters[14]),(System.DateTime)parameters[15],Convert.ToInt64(parameters[16]),Convert.ToString(parameters[17]),Convert.ToString(parameters[18]));
 			}
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPatients, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPatientNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPatientNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPatPlans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPatPlans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPayments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPayments, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPayPeriods(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPayPeriods, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPayPlans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPayPlans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPayPlanCharges(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPayPlanCharges, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPaySplits(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPaySplits, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPerioExams(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPerioExams, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPerioMeasures(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPerioMeasures, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPharmacies(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPharmacies, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPhones(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPhones, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPhoneEmpDefaults(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPhoneEmpDefaults, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPhoneMetrics(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPhoneMetrics, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPhoneNumbers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPhoneNumbers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPlannedAppts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPlannedAppts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPopups(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPopups, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
@@ -2860,505 +2860,505 @@ namespace OpenDentalWebService {
 			if(methodName=="RefreshCache") {
 				return Prefs.RefreshCache();
 			}
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPrefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPrinters(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPrinters, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcApptColors(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcApptColors, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcButtons(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcButtons, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcButtonItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcButtonItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcCodeNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcCodeNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcedures(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcedures, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcedureCodes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcedureCodes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcGroupItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcGroupItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProcTPs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProcTPs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodPrograms(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodPrograms, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProgramProperties(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProgramProperties, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProviders(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProviders, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodProviderIdents(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodProviderIdents, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodQuestions(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodQuestions, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodQuestionDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodQuestionDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodQuickPasteCats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodQuickPasteCats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodQuickPasteNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodQuickPasteNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRecalls(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRecalls, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRecallTriggers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRecallTriggers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRecallTypes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRecallTypes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReconciles(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReconciles, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRefAttaches(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRefAttaches, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReferrals(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReferrals, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRegistrationKeys(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRegistrationKeys, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReminderRules(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReminderRules, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRepeatCharges(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRepeatCharges, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReplicationServers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReplicationServers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReqNeededs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReqNeededs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodReqStudents(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodReqStudents, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRxAlerts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRxAlerts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRxDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRxDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRxNorms(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRxNorms, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodRxPats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodRxPats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSchedules(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSchedules, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodScheduleOps(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodScheduleOps, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSchoolClasses(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSchoolClasses, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSchoolCourses(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSchoolCourses, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodScreens(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodScreens, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodScreenGroups(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodScreenGroups, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodScreenPats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodScreenPats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSecurityLogs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSecurityLogs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSheets(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSheets, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSheetDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSheetDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSheetFields(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSheetFields, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSheetFieldDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSheetFieldDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSigButDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSigButDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSigButDefElements(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSigButDefElements, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSigElements(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSigElements, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSigElementDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSigElementDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSignalods(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSignalods, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSites(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSites, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodStatements(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodStatements, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSuppliers(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSuppliers, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSupplies(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSupplies, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSupplyNeededs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSupplyNeededs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSupplyOrders(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSupplyOrders, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodSupplyOrderItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodSupplyOrderItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTasks(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTasks, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTaskAncestors(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTaskAncestors, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTaskLists(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTaskLists, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTaskNotes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTaskNotes, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTaskSubscriptions(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTaskSubscriptions, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTaskUnreads(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTaskUnreads, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTerminalActives(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTerminalActives, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTimeAdjusts(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTimeAdjusts, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTimeCardRules(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTimeCardRules, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodToolButItems(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodToolButItems, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodToothGridCells(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodToothGridCells, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodToothGridCols(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodToothGridCols, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodToothGridDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodToothGridDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodToothInitials(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodToothInitials, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTransactions(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTransactions, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodTreatPlans(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodTreatPlans, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodUserGroups(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodUserGroups, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodUserods(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodUserods, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodUserQueries(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodUserQueries, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodVaccineDefs(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodVaccineDefs, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodVaccinePats(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodVaccinePats, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodVitalsigns(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodVitalsigns, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodWikiPages(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodWikiPages, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodWikiPageHists(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodWikiPageHists, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
 		private static object MethodZipCodes(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
-			throw new NotSupportedException("MethodAccounts, unknown method: "+methodName);
+			throw new NotSupportedException("MethodZipCodes, unknown method: "+methodName);
 		}
 
 		#endregion

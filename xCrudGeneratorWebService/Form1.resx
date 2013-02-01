@@ -121,7 +121,7 @@
     <value>Set this project as the startup project.  Use Debug.  Push the run button and for the Web Service it will:
 - Create an "S" class if one does not exist.
 - Recreate all serializing classes.
-- Check the "S" classes for new methods and add them to the DtoMethods method calling.
+- Checks the C# Web Service project's "S" classes for new methods and adds them to the DtoMethod's method calling.
 - Create a Java "S" if one does not exist.
 - Recreate all Java table type classes (which also contain serializing and deserializing).</value>
   </data>
