@@ -3309,7 +3309,7 @@ namespace OpenDental{
 				double allowed=PIn.Double(textProcFee.Text);
 				cp.BaseEst=allowed;
 				cp.InsEstTotal=allowed;
-				cp.CopayAmt=InsPlans.GetCopay(ProcCur.CodeNum,plan.FeeSched,plan.CopayFeeSched);
+				cp.CopayAmt=InsPlans.GetCopay(ProcCur.CodeNum,plan.FeeSched,plan.CopayFeeSched,plan.CodeSubstNone,ProcCur.ToothNum);
 				if(cp.CopayAmt > allowed) {//if the copay is greater than the allowed fee calculated above
 					cp.CopayAmt=allowed;//reduce the copay
 				}

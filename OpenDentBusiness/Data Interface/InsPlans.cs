@@ -863,12 +863,18 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Returns -1 if no copay feeschedule.  Can return -1 if copay amount is blank.</summary>
-		public static double GetCopay(long codeNum,long feeSched,long copayFeeSched) {
+		public static double GetCopay(long codeNum,long feeSched,long copayFeeSched,bool codeSubstNone,string toothNum) {
 			//No need to check RemotingRole; no call to db.
 			if(copayFeeSched==0) {
 				return -1;
 			}
-			double retVal=Fees.GetAmount(codeNum,copayFeeSched);
+			long substCodeNum=codeNum;
+			//codeSubstNone, true if the insplan does not allow procedure code downgrade substitution.
+			if(!codeSubstNone) {
+				//Plan allows substitution codes.  Get the substitution code if one exists.
+				substCodeNum=ProcedureCodes.GetSubstituteCodeNum(ProcedureCodes.GetStringProcCode(codeNum),toothNum);//for posterior composites
+			}
+			double retVal=Fees.GetAmount(substCodeNum,copayFeeSched);
 			if(retVal==-1) {//blank co-pay
 				if(PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero)) {
 					return -1;//will act like zero.  No patient co-pay.
@@ -876,7 +882,7 @@ namespace OpenDentBusiness {
 				else {
 					//The amount from the regular fee schedule
 					//In other words, the patient is responsible for procs that are not specified in a managed care fee schedule.
-					return Fees.GetAmount(codeNum,feeSched);
+					return Fees.GetAmount(substCodeNum,feeSched);
 				}
 			}
 			return retVal;

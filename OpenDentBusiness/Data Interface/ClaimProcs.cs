@@ -590,7 +590,7 @@ namespace OpenDentBusiness{
 				}
 			}
 			//Copay----------------------------------------------------------------------------------------------
-			cp.CopayAmt=InsPlans.GetCopay(codeNum,plan.FeeSched,plan.CopayFeeSched);
+			cp.CopayAmt=InsPlans.GetCopay(codeNum,plan.FeeSched,plan.CopayFeeSched,plan.CodeSubstNone,toothNum);
 			if(cp.CopayAmt > allowed) {//if the copay is greater than the allowed fee calculated above
 				cp.CopayAmt=allowed;//reduce the copay
 			}
