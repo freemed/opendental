@@ -51,27 +51,27 @@ namespace UnitTests {
 			this.textResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textResults.Location = new System.Drawing.Point(12,208);
+			this.textResults.Location = new System.Drawing.Point(12, 208);
 			this.textResults.Multiline = true;
 			this.textResults.Name = "textResults";
 			this.textResults.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textResults.Size = new System.Drawing.Size(733,587);
+			this.textResults.Size = new System.Drawing.Size(733, 587);
 			this.textResults.TabIndex = 1;
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(10,34);
+			this.label1.Location = new System.Drawing.Point(10, 34);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(347,18);
+			this.label1.Size = new System.Drawing.Size(347, 18);
 			this.label1.TabIndex = 3;
 			this.label1.Text = "Before running the tests below, make sure \'unittest\' database exists.";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butNewDb
 			// 
-			this.butNewDb.Location = new System.Drawing.Point(12,154);
+			this.butNewDb.Location = new System.Drawing.Point(12, 154);
 			this.butNewDb.Name = "butNewDb";
-			this.butNewDb.Size = new System.Drawing.Size(75,23);
+			this.butNewDb.Size = new System.Drawing.Size(75, 23);
 			this.butNewDb.TabIndex = 0;
 			this.butNewDb.Text = "Fresh Db";
 			this.butNewDb.UseVisualStyleBackColor = true;
@@ -79,9 +79,9 @@ namespace UnitTests {
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(92,156);
+			this.label2.Location = new System.Drawing.Point(92, 156);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(505,18);
+			this.label2.Size = new System.Drawing.Size(505, 18);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "The scripts are all designed so that this will not normally be necessary except f" +
     "or new versions.";
@@ -89,9 +89,9 @@ namespace UnitTests {
 			// 
 			// butRun
 			// 
-			this.butRun.Location = new System.Drawing.Point(12,179);
+			this.butRun.Location = new System.Drawing.Point(12, 179);
 			this.butRun.Name = "butRun";
-			this.butRun.Size = new System.Drawing.Size(75,23);
+			this.butRun.Size = new System.Drawing.Size(75, 23);
 			this.butRun.TabIndex = 7;
 			this.butRun.Text = "Run";
 			this.butRun.UseVisualStyleBackColor = true;
@@ -99,35 +99,35 @@ namespace UnitTests {
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(92,181);
+			this.label3.Location = new System.Drawing.Point(92, 181);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(90,18);
+			this.label3.Size = new System.Drawing.Size(90, 18);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "Specific test #";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textSpecificTest
 			// 
-			this.textSpecificTest.Location = new System.Drawing.Point(177,181);
+			this.textSpecificTest.Location = new System.Drawing.Point(177, 181);
 			this.textSpecificTest.Name = "textSpecificTest";
-			this.textSpecificTest.Size = new System.Drawing.Size(74,20);
+			this.textSpecificTest.Size = new System.Drawing.Size(74, 20);
 			this.textSpecificTest.TabIndex = 9;
 			// 
 			// butWebService
 			// 
-			this.butWebService.Location = new System.Drawing.Point(12,5);
+			this.butWebService.Location = new System.Drawing.Point(12, 5);
 			this.butWebService.Name = "butWebService";
-			this.butWebService.Size = new System.Drawing.Size(75,23);
+			this.butWebService.Size = new System.Drawing.Size(75, 23);
 			this.butWebService.TabIndex = 10;
-			this.butWebService.Text = "WebService";
+			this.butWebService.Text = "Middle Tier";
 			this.butWebService.UseVisualStyleBackColor = true;
 			this.butWebService.Click += new System.EventHandler(this.butWebService_Click);
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(92,7);
+			this.label4.Location = new System.Drawing.Point(92, 7);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(600,18);
+			this.label4.Size = new System.Drawing.Size(600, 18);
 			this.label4.TabIndex = 11;
 			this.label4.Text = "Set both this project and OpenDentalServer as startup.  Edit OpenDentalServer.Ope" +
     "nDentalServerConfig.xml to be valid.";
@@ -135,9 +135,9 @@ namespace UnitTests {
 			// 
 			// butCore
 			// 
-			this.butCore.Location = new System.Drawing.Point(12,79);
+			this.butCore.Location = new System.Drawing.Point(12, 79);
 			this.butCore.Name = "butCore";
-			this.butCore.Size = new System.Drawing.Size(75,23);
+			this.butCore.Size = new System.Drawing.Size(75, 23);
 			this.butCore.TabIndex = 12;
 			this.butCore.Text = "Core Types";
 			this.butCore.UseVisualStyleBackColor = true;
@@ -145,9 +145,9 @@ namespace UnitTests {
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(93,82);
+			this.label5.Location = new System.Drawing.Point(93, 82);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(547,18);
+			this.label5.Size = new System.Drawing.Size(547, 18);
 			this.label5.TabIndex = 13;
 			this.label5.Text = "Stores and retrieves core data types in database, ensuring that db engine and con" +
     "nector are working.";
@@ -156,26 +156,26 @@ namespace UnitTests {
 			// listType
 			// 
 			this.listType.FormattingEnabled = true;
-			this.listType.Location = new System.Drawing.Point(646,63);
+			this.listType.Location = new System.Drawing.Point(646, 63);
 			this.listType.Name = "listType";
-			this.listType.Size = new System.Drawing.Size(99,30);
+			this.listType.Size = new System.Drawing.Size(99, 30);
 			this.listType.TabIndex = 22;
 			this.listType.SelectedIndexChanged += new System.EventHandler(this.listType_SelectedIndexChanged);
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(643,42);
+			this.label7.Location = new System.Drawing.Point(643, 42);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(99,18);
+			this.label7.Size = new System.Drawing.Size(99, 18);
 			this.label7.TabIndex = 21;
 			this.label7.Text = "Database Type";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// butSchema
 			// 
-			this.butSchema.Location = new System.Drawing.Point(12,54);
+			this.butSchema.Location = new System.Drawing.Point(12, 54);
 			this.butSchema.Name = "butSchema";
-			this.butSchema.Size = new System.Drawing.Size(75,23);
+			this.butSchema.Size = new System.Drawing.Size(75, 23);
 			this.butSchema.TabIndex = 23;
 			this.butSchema.Text = "Schema";
 			this.butSchema.UseVisualStyleBackColor = true;
@@ -184,9 +184,9 @@ namespace UnitTests {
 			// radioSchema1
 			// 
 			this.radioSchema1.Checked = true;
-			this.radioSchema1.Location = new System.Drawing.Point(97,57);
+			this.radioSchema1.Location = new System.Drawing.Point(97, 57);
 			this.radioSchema1.Name = "radioSchema1";
-			this.radioSchema1.Size = new System.Drawing.Size(133,18);
+			this.radioSchema1.Size = new System.Drawing.Size(133, 18);
 			this.radioSchema1.TabIndex = 24;
 			this.radioSchema1.TabStop = true;
 			this.radioSchema1.Text = "Test proposed crud";
@@ -194,27 +194,27 @@ namespace UnitTests {
 			// 
 			// radioSchema2
 			// 
-			this.radioSchema2.Location = new System.Drawing.Point(234,57);
+			this.radioSchema2.Location = new System.Drawing.Point(234, 57);
 			this.radioSchema2.Name = "radioSchema2";
-			this.radioSchema2.Size = new System.Drawing.Size(189,18);
+			this.radioSchema2.Size = new System.Drawing.Size(189, 18);
 			this.radioSchema2.TabIndex = 25;
 			this.radioSchema2.Text = "Compare proposed to generated";
 			this.radioSchema2.UseVisualStyleBackColor = true;
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(93,107);
+			this.label6.Location = new System.Drawing.Point(93, 107);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(547,18);
+			this.label6.Size = new System.Drawing.Size(547, 18);
 			this.label6.TabIndex = 27;
 			this.label6.Text = "Checks signatures from both old and new Topaz dlls.";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butTopaz
 			// 
-			this.butTopaz.Location = new System.Drawing.Point(12,104);
+			this.butTopaz.Location = new System.Drawing.Point(12, 104);
 			this.butTopaz.Name = "butTopaz";
-			this.butTopaz.Size = new System.Drawing.Size(75,23);
+			this.butTopaz.Size = new System.Drawing.Size(75, 23);
 			this.butTopaz.TabIndex = 26;
 			this.butTopaz.Text = "Topaz";
 			this.butTopaz.UseVisualStyleBackColor = true;
@@ -222,18 +222,18 @@ namespace UnitTests {
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(92,131);
+			this.label8.Location = new System.Drawing.Point(92, 131);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(445,18);
+			this.label8.Size = new System.Drawing.Size(445, 18);
 			this.label8.TabIndex = 29;
 			this.label8.Text = "This will test the old eCW HL7 message processing as well as the new HL7Defs.";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// butHL7
 			// 
-			this.butHL7.Location = new System.Drawing.Point(12,129);
+			this.butHL7.Location = new System.Drawing.Point(12, 129);
 			this.butHL7.Name = "butHL7";
-			this.butHL7.Size = new System.Drawing.Size(75,23);
+			this.butHL7.Size = new System.Drawing.Size(75, 23);
 			this.butHL7.TabIndex = 28;
 			this.butHL7.Text = "HL7";
 			this.butHL7.UseVisualStyleBackColor = true;
@@ -241,9 +241,9 @@ namespace UnitTests {
 			// 
 			// FormUnitTests
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(757,807);
+			this.ClientSize = new System.Drawing.Size(757, 807);
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.butHL7);
 			this.Controls.Add(this.label6);
