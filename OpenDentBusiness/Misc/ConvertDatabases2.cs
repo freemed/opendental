@@ -11858,7 +11858,22 @@ a.PageNotExists:hover {
 					command=@"CREATE INDEX toothgriddef_SheetFieldDefNum ON toothgriddef (SheetFieldDefNum)";
 					Db.NonQ(command);
 				}
-				
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('ElectronicRxDateStartedUsing131',"+DbHelper.Now()+")";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'ElectronicRxDateStartedUsing131',"+DbHelper.Now()+")";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE rxpat ADD NewCropGuid varchar(40) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE rxpat ADD NewCropGuid varchar2(40)";
+					Db.NonQ(command);
+				}
 
 
 

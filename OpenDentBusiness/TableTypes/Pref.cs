@@ -154,6 +154,8 @@ namespace OpenDentBusiness {
 		EHREmailPort,
 		///<summary>This pref is hidden, so no practical way for user to turn this on.  Only used for ehr testing.</summary>
 		EHREmailToAddress,
+		///<summary>Date when use upgraded to 13.1 and started using NewCrop Guids on Rxs.</summary>
+		ElectronicRxDateStartedUsing131,
 		/// <summary>FK to EmailAddress.EmailAddressNum.  It is not required that a default be set.</summary>
 		EmailDefaultAddressNum,
 		/// <summary>Deprecated. Use emailaddress.EmailPassword instead.</summary>

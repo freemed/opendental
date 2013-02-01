@@ -103,6 +103,19 @@ namespace OpenDentBusiness{
 			return Crud.RxPatCrud.SelectMany(command);
 		}
 
+		///<summary></summary>
+		public static RxPat GetRxNewCrop(string newCropGuid) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RxPat>(MethodBase.GetCurrentMethod(),newCropGuid);
+			}
+			string command="SELECT * FROM rxpat WHERE NewCropGuid='"+POut.String(newCropGuid)+"'";
+			List<RxPat> rxNewCrop=Crud.RxPatCrud.SelectMany(command);
+			if(rxNewCrop.Count==0) {
+				return null;
+			}
+			return rxNewCrop[0];
+		}
+
 		
 
 	}

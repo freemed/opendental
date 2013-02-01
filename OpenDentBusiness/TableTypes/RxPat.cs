@@ -12,13 +12,13 @@ namespace OpenDentBusiness{
 		public long PatNum;
 		///<summary>Date of Rx.</summary>
 		public DateTime RxDate;
-		///<summary>Drug name.</summary>
+		///<summary>Drug name. Example: PenVK 500 mg capsules. Example: Percocet 5/500 tablets.</summary>
 		public string Drug;
-		///<summary>Directions.</summary>
+		///<summary>Directions. Example: Take 2 tablets qid. (qid means 4 times a day)</summary>
 		public string Sig;
-		///<summary>Amount to dispense.</summary>
+		///<summary>Amount to dispense. Example: 12 (twelve)</summary>
 		public string Disp;
-		///<summary>Number of refills.</summary>
+		///<summary>Number of refills. Example: 3.  Example: 1 per month.</summary>
 		public string Refills;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long ProvNum;
@@ -35,8 +35,10 @@ namespace OpenDentBusiness{
 		public RxSendStatus SendStatus;
 		///<summary>RxNorm Code identifier.</summary>
 		public long RxCui;
-		///<summary>NCI Pharmaceutical Dosage Form code.  Only used with ehr.</summary>
+		///<summary>NCI Pharmaceutical Dosage Form code.  Only used with ehr.  For example, C48542 is the code for “Tablet dosing unit”.  User enters code manually, and it's only used for Rx Send, which will be deprecated with 2014 cert.  Guaranteed that nobody actually uses or cares about this field.</summary>
 		public string DosageCode;
+		///<summary>NewCrop returns this unique identifier to use for electronic Rx.</summary>
+		public string NewCropGuid;
 
 		///<summary></summary>
 		public RxPat Copy() {
@@ -48,7 +50,7 @@ namespace OpenDentBusiness{
 	public enum RxSendStatus {
 		///<summary>0</summary>
 		Unsent,
-		///<summary>1</summary>
+		///<summary>1- This will never be used in production.  It was only used for proof of concept when building EHR.</summary>
 		InElectQueue,
 		///<summary>2</summary>
 		SentElect,

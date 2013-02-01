@@ -3911,7 +3911,7 @@ namespace OpenDental{
 			newCropAccountId="6566-nnv";
 			wsNewCrop.Url="https://preproduction.newcropaccounts.com/v7/WebServices/Update1.asmx";
 #else
-			return false;//TODO: Remove when final release is ready.
+			return false;//TODO: Remove when final release is ready. Prevents this feature from going live before we are ready.
 #endif
 			credentials.PartnerName=ErxXml.NewCropPartnerName;
 			credentials.Name=ErxXml.NewCropAccountName;
@@ -3919,14 +3919,14 @@ namespace OpenDental{
 			accountRequest.AccountId=newCropAccountId;
 			accountRequest.SiteId="1";//Accounts are always created with SiteId=1.
 			patientRequest.PatientId=POut.Long(PatCur.PatNum);
-			prescriptionHistoryRequest.StartHistory=new DateTime(2012,11,2);//This is the date of first release for NewCrop integration.
-			prescriptionHistoryRequest.EndHistory=DateTime.Now;
+			prescriptionHistoryRequest.StartHistory=new DateTime(2012,11,2);//Only used for archived prescriptions. This is the date of first release for NewCrop integration.
+			prescriptionHistoryRequest.EndHistory=DateTime.Now;//Only used for archived prescriptions.
 			//Prescription Archive Status Values:
 			//N = Not archived (i.e. Current Medication) 
 			//Y = Archived (i.e. Previous Mediation)
 			//% = Both Not Archived and Archived
 			//Note: This field will contain values other than Y,N in future releases.
-			prescriptionHistoryRequest.PrescriptionArchiveStatus="%";
+			prescriptionHistoryRequest.PrescriptionArchiveStatus="N";
 			//Prescription Status Values:
 			//C = Completed Prescription
 			//P = Pending Medication
@@ -3947,8 +3947,8 @@ namespace OpenDental{
 			}
 			patientInfoRequester.UserId=POut.Long(Security.CurUser.UserNum);
 			//Send the request to NewCrop. Always returns all current medications, and returns medications between the StartHistory and EndHistory dates if requesting archived medications.
-			//The patientIdType parameter was added for another vendor and is not often use. We do not use this field. We must pass empty string.
-			//The includeSchema parameter is useful for debugging, but in release mode, we should pass N for no.
+			//The patientIdType parameter was added for another vendor and is not often used. We do not use this field. We must pass empty string.
+			//The includeSchema parameter is useful for first-time debugging, but in release mode, we should pass N for no.
 			response=wsNewCrop.GetPatientFullMedicationHistory6(credentials,accountRequest,patientRequest,prescriptionHistoryRequest,patientInfoRequester,"","N");
 			//response.Message = Error message if error.
 			//response.RowCount = Number of prescription records returned.
@@ -3956,85 +3956,126 @@ namespace OpenDental{
 			//response.Timing = Not sure what this is for. Tells us how quickly the server responded to the request?
 			//response.XmlResponse = The XML data returned, encoded in base 64.
 			if(response.Status!=NewCrop.StatusType.OK) {//Other statuses include Fail (ex if credentials are invalid), NotFound (ex if patientId invalid or accoundId invalid), Unknown (no known examples yet)
-				//For now we simply abort the request.
+				//For now we simply abort gracefully.
 				return false;
 			}
 			byte[] xmlResponseBytes=Convert.FromBase64String(response.XmlResponse);
 			string xmlResponse=Encoding.UTF8.GetString(xmlResponseBytes);
+#if DEBUG//For capturing the xmlReponse with the newlines properly showing.
+			string tempFile=ODFileUtils.CreateRandomFile(Path.GetTempPath(),".txt");
+			File.WriteAllText(tempFile,xmlResponse);
+#endif
 			XmlDocument xml=new XmlDocument();
 			try {
 				xml.LoadXml(xmlResponse);
 			}
 			catch { //In case NewCrop returns invalid XML.
-				return false;//abort
+				return false;//abort gracefully
 			}
+			DateTime rxStartDateT=PrefC.GetDateT(PrefName.ElectronicRxDateStartedUsing131);
 			XmlNode nodeNewDataSet=xml.FirstChild;
 			foreach(XmlNode nodeTable in nodeNewDataSet.ChildNodes) {
+				string dosageNumberDescrption="";
+				string route="";
+				string dosageFrequencyDescription="";
+				string takeAsNeeded="";
+				RxPat rxOld=null;
 				RxPat rx=new RxPat();
 				rx.Disp="";
 				rx.DosageCode="";
 				rx.Drug="";
 				rx.Notes="";
 				rx.Refills="";
-				rx.RxDate=DateTime.MinValue;
-				rx.SendStatus=RxSendStatus.Unsent;
-				string status="";
-				string substatus="";
+				rx.SendStatus=RxSendStatus.SentElect;
+				rx.Sig="";
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
 						continue;
 					}
 					switch(nodeRxFieldParent.Name.ToLower()) {
-						case "dispense":
+						case "dispense"://ex 5.555
 							rx.Disp=nodeRxField.Value;
 							break;
-						case "dosageform":
-							//TODO: rx.DosageCode=;
-							break;
-						case "drugname":
+						case "druginfo"://ex lisinopril 5 mg Tab
 							rx.Drug=nodeRxField.Value;
 							break;
-						//TODO: rx.IsControlled=;
-						case "prescriptionnotes":
-							rx.Notes=nodeRxField.Value;
+						//rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
+						case "dosagenumberdescription"://ex 0.5/half
+							dosageNumberDescrption=nodeRxField.Value;
 							break;
-						case "externalpatientid":
+						case "route"://ex By Mouth
+							route=nodeRxField.Value;
+							break;
+						case "dosagefrequencydescription"://ex as directed.  Hopefully would include something like "4 times a day".
+							dosageFrequencyDescription=nodeRxField.Value;
+							break;
+						case "takeasneeded":
+							takeAsNeeded=nodeRxField.Value;
+							break;
+						case "patientfriendlysig":
+							rx.Sig=nodeRxField.Value;
+							break;
+						case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
 							rx.PatNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "pharmacyncpdp":
+						case "pharmacyncpdp"://ex 9998888
+							//We will use this information in the future to find a pharmacy already entered into OD, or to create one dynamically if it does not exist.
 							//rx.PharmacyNum;//Get the pharmacy where pharmacy.PharmID = node.Value
 							break;
-						case "externalphysicianid":
+						case "externalphysicianid"://provnum passed back from the compose request that initiated this prescription
 							rx.ProvNum=PIn.Long(nodeRxField.Value);
 							break;
-						case "refills":
+						case "refills"://ex 1
 							rx.Refills=nodeRxField.Value;
 							break;
-						case "rxcui":
+						case "rxcui"://ex 311354
 							rx.RxCui=PIn.Long(nodeRxField.Value);
 							break;
 						case "prescriptiondate":
-							rx.RxDate=DateTime.Parse(nodeRxField.Value);
+							rx.RxDate=PIn.DateT(nodeRxField.Value);
 							break;
-						case "originalprescriptionguid":
-							//TODO: rx.RxNum=;//Get the RxNum for an existing prescription based on GUID, if such a prescription exists.
-							break;
-						case "status":
-							status=nodeRxField.Value;
-							break;
-						case "SubStatus":
-							substatus=nodeRxField.Value;
+						case "prescriptionguid"://32 characters with 4 hyphens. ex ba4d4a84-af0a-4cbf-9437-36feda97d1b6
+							rx.NewCropGuid=nodeRxField.Value;
+							rxOld=RxPats.GetRxNewCrop(nodeRxField.Value);
 							break;
 					}
 				}//end inner foreach
-				if(status=="C") {//Complete
-					rx.SendStatus=RxSendStatus.InElectQueue;
+				if(rx.RxDate<rxStartDateT) {//Ignore prescriptions created before version 13.1, because those prescriptions were entered manually by the user.
+					continue;
 				}
-				else if(status=="P") {//Pending
-					rx.SendStatus=RxSendStatus.SentElect;
+				if(rx.Sig=="") {//No PatientFriendlySIG was provided, so we construct our own based on other fields.
+					rx.Sig=dosageNumberDescrption;
+					if(route!="") {
+						if(rx.Sig!="") {
+							rx.Sig+=" ";
+						}
+						rx.Sig+=route;
+					}
+					if(dosageFrequencyDescription!="") {
+						if(rx.Sig!="") {
+							rx.Sig+=" ";
+						}
+						rx.Sig+=dosageFrequencyDescription;
+					}
+					if(takeAsNeeded=="Y") {
+						if(rx.Sig!="") {
+							rx.Sig+=" ";
+						}
+						rx.Sig+="Take as needed.";
+					}
+					else {//takeAsNeeded="N"
+						//TODO: where is "for 7 days"?
+					}
 				}
-				//TODO: rx.IsNew=;
+				if(rxOld==null) {
+					rx.IsNew=true;//Might not be necessary, but does not hurt.
+					RxPats.Insert(rx);
+				}
+				else {//The prescription was already in our database. Update it.
+					rx.RxNum=rxOld.RxNum;
+					RxPats.Update(rx);
+				}
 			}//end foreach
 			return true;
 		}

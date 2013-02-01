@@ -61,6 +61,7 @@ namespace OpenDentBusiness.Crud{
 				rxPat.SendStatus  = (RxSendStatus)PIn.Int(table.Rows[i]["SendStatus"].ToString());
 				rxPat.RxCui       = PIn.Long  (table.Rows[i]["RxCui"].ToString());
 				rxPat.DosageCode  = PIn.String(table.Rows[i]["DosageCode"].ToString());
+				rxPat.NewCropGuid = PIn.String(table.Rows[i]["NewCropGuid"].ToString());
 				retVal.Add(rxPat);
 			}
 			return retVal;
@@ -101,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RxNum,";
 			}
-			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus,RxCui,DosageCode) VALUES(";
+			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus,RxCui,DosageCode,NewCropGuid) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(rxPat.RxNum)+",";
 			}
@@ -119,7 +120,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Int   ((int)rxPat.SendStatus)+","
 				+    POut.Long  (rxPat.RxCui)+","
-				+"'"+POut.String(rxPat.DosageCode)+"')";
+				+"'"+POut.String(rxPat.DosageCode)+"',"
+				+"'"+POut.String(rxPat.NewCropGuid)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -145,7 +147,8 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+"SendStatus  =  "+POut.Int   ((int)rxPat.SendStatus)+", "
 				+"RxCui       =  "+POut.Long  (rxPat.RxCui)+", "
-				+"DosageCode  = '"+POut.String(rxPat.DosageCode)+"' "
+				+"DosageCode  = '"+POut.String(rxPat.DosageCode)+"', "
+				+"NewCropGuid = '"+POut.String(rxPat.NewCropGuid)+"' "
 				+"WHERE RxNum = "+POut.Long(rxPat.RxNum);
 			Db.NonQ(command);
 		}
@@ -205,6 +208,10 @@ namespace OpenDentBusiness.Crud{
 			if(rxPat.DosageCode != oldRxPat.DosageCode) {
 				if(command!=""){ command+=",";}
 				command+="DosageCode = '"+POut.String(rxPat.DosageCode)+"'";
+			}
+			if(rxPat.NewCropGuid != oldRxPat.NewCropGuid) {
+				if(command!=""){ command+=",";}
+				command+="NewCropGuid = '"+POut.String(rxPat.NewCropGuid)+"'";
 			}
 			if(command==""){
 				return;
