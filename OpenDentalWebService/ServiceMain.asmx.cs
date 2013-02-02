@@ -88,7 +88,8 @@ namespace OpenDentalWebService {
 						DtoGetVoid dtoGetVoid=(DtoGetVoid)dto;
 						//TODO: Check credentials.
 						DtoMethods.ProcessDtoObject(dto);
-						return null;
+						xdoc.LoadXml("<void />");
+						return xdoc;
 					#endregion
 					#region DtoGetObject
 					case "DtoGetObject":

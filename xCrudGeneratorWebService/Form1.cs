@@ -319,48 +319,48 @@ namespace xCrudGeneratorWebService {
 				+t+" * @param obj Can be any type of object.  Error will occur if the type hasn't been implemented yet. "+rn
 				+t+" * @throws Exception Throws exception if type is not yet supported. */"+rn
 				+t+"public static String getSerializedObject(Object obj) throws Exception {"+rn
-				+t2+"String result;"+rn
-				+t2+"//Figure out what type of object we're dealing with and return the serialized form."+rn
-				+t2+"String qualifiedName=obj.getClass().getName();//Ex: ArrayList = \"java.util.ArrayList\""+rn
-				+t2+"//Primitives--------------------------------------------------------------------------------------------------------"+rn
-				+t2+"if(qualifiedName.equals(\"Z\") || qualifiedName.equals(\"java.lang.Boolean\")) {//boolean  \"Z\""+rn
-				+t3+"result=(Boolean)obj?\"1\":\"0\";"+rn
-				+t3+"return \"<bool>\"+result+\"</bool>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"B\") || qualifiedName.equals(\"java.lang.Byte\")) {//byte  \"B\""+rn
-				+t3+"return \"<byte>\"+(Byte)obj+\"</byte>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"C\") || qualifiedName.equals(\"java.lang.Character\")) {//char  \"C\""+rn
-				+t3+"return \"<char>\"+(Character)obj+\"</char>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"S\") || qualifiedName.equals(\"java.lang.Short\")) {//short  \"S\""+rn
-				+t3+"return \"<short>\"+(Short)obj+\"</short>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"I\") || qualifiedName.equals(\"java.lang.Integer\")) {//int  \"I\""+rn
-				+t3+"return \"<int>\"+(Integer)obj+\"</int>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"J\") || qualifiedName.equals(\"java.lang.Long\")) {//long  \"J\""+rn
-				+t3+"//return \"<long>\"+(Long)obj+\"</long>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"F\") || qualifiedName.equals(\"java.lang.Float\")) {//float  \"F\""+rn
-				+t3+"return \"<float>\"+(Float)obj+\"</float>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"D\") || qualifiedName.equals(\"java.lang.Double\")) {//double  \"D\""+rn
-				+t3+"return \"<double>\"+(Double)obj+\"</double>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"java.lang.String\")) {//String  \"java.lang.String\""+rn
-				+t3+"return \"<string>\"+(String)obj+\"</string>\";"+rn
-				+t2+"}"+rn
-				+t2+"if(qualifiedName.equals(\"java.util.Date\")) {//Date  \"java.util.Date\""+rn
-				+t3+"// TODO Enhance serializer to handle Date objects."+rn
-				+t3+"return \"<DateTime>0001-01-01</DateTime>\";"+rn
-				+t2+"}"+rn
-				+t2+"//Arrays------------------------------------------------------------------------------------------------------------"+rn
-				+t2+"//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L..."+rn
-				+t2+"//Object[]  \"[Lcom.opendental.odweb.client.tabletypes.Account;\" from Account[]"+rn
-				+t2+"//int[]     \"[I\""+rn
-				+t2+"//String[]  \"[Ljava.lang.String;\""+rn
-				+t2+"//Open Dental Objects-----------------------------------------------------------------------------------------------"+rn);
+					+t2+"String result;"+rn
+					+t2+"//Figure out what type of object we're dealing with and return the serialized form."+rn
+					+t2+"String qualifiedName=obj.getClass().getName();//Ex: ArrayList = \"java.util.ArrayList\""+rn
+					+t2+"//Primitives--------------------------------------------------------------------------------------------------------"+rn
+					+t2+"if(qualifiedName.equals(\"Z\") || qualifiedName.equals(\"java.lang.Boolean\")) {//boolean  \"Z\""+rn
+						+t3+"result=(Boolean)obj?\"1\":\"0\";"+rn
+						+t3+"return \"<bool>\"+result+\"</bool>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"B\") || qualifiedName.equals(\"java.lang.Byte\")) {//byte  \"B\""+rn
+						+t3+"return \"<byte>\"+(Byte)obj+\"</byte>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"C\") || qualifiedName.equals(\"java.lang.Character\")) {//char  \"C\""+rn
+						+t3+"return \"<char>\"+(Character)obj+\"</char>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"S\") || qualifiedName.equals(\"java.lang.Short\")) {//short  \"S\""+rn
+						+t3+"return \"<short>\"+(Short)obj+\"</short>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"I\") || qualifiedName.equals(\"java.lang.Integer\")) {//int  \"I\""+rn
+						+t3+"return \"<int>\"+(Integer)obj+\"</int>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"J\") || qualifiedName.equals(\"java.lang.Long\")) {//long  \"J\""+rn
+						+t3+"//return \"<long>\"+(Long)obj+\"</long>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"F\") || qualifiedName.equals(\"java.lang.Float\")) {//float  \"F\""+rn
+						+t3+"return \"<float>\"+(Float)obj+\"</float>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"D\") || qualifiedName.equals(\"java.lang.Double\")) {//double  \"D\""+rn
+						+t3+"return \"<double>\"+(Double)obj+\"</double>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"java.lang.String\")) {//String  \"java.lang.String\""+rn
+						+t3+"return \"<string>\"+(String)obj+\"</string>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"java.util.Date\")) {//Date  \"java.util.Date\""+rn
+						+t3+"// TODO Enhance serializer to handle Date objects."+rn
+						+t3+"return \"<DateTime>0001-01-01</DateTime>\";"+rn
+					+t2+"}"+rn
+					+t2+"//Arrays------------------------------------------------------------------------------------------------------------"+rn
+					+t2+"//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L..."+rn
+					+t2+"//Object[]  \"[Lcom.opendental.odweb.client.tabletypes.Account;\" from Account[]"+rn
+					+t2+"//int[]     \"[I\""+rn
+					+t2+"//String[]  \"[Ljava.lang.String;\""+rn
+					+t2+"//Open Dental Objects-----------------------------------------------------------------------------------------------"+rn);
 			#endregion
 		}
 
@@ -385,6 +385,11 @@ namespace xCrudGeneratorWebService {
 					+t2+"}"+rn
 					+t2+"//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>"+rn
 					+t2+"String type=element.getNodeName();"+rn
+					+t2+"//Void method calls will simply return an empty void node:  <void />"+rn
+					+t2+"if(type.equals(\"void\")) {"+rn
+						+t3+"deserializeCallback.onComplete(null);"+rn
+						+t3+"return;"+rn
+					+t2+"}"+rn
 					+t2+"if(type.equals(\"DtoException\")) {//Check for exceptions first."+rn
 						+t3+"//Read the \"msg\" node and throw an exception with that error message."+rn
 						+t3+"throw new Exception(doc.getElementsByTagName(\"msg\").item(0).getFirstChild().getNodeValue());"+rn

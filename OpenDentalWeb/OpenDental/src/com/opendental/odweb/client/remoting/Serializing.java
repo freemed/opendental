@@ -784,6 +784,11 @@ public class Serializing {
 		}
 		//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>
 		String type=element.getNodeName();
+		//Void method calls will simply return an empty void node:  <void />
+		if(type.equals("void")) {
+			deserializeCallback.onComplete(null);
+			return;
+		}
 		if(type.equals("DtoException")) {//Check for exceptions first.
 			//Read the "msg" node and throw an exception with that error message.
 			throw new Exception(doc.getElementsByTagName("msg").item(0).getFirstChild().getNodeValue());
