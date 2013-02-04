@@ -317,7 +317,7 @@ namespace OpenDentBusiness{
 			}
 			if(!isAllProv) {
 				if(provNumList.Count>0) {
-					command+="AND claim.ProvBill IN (";
+					command+="AND claim.ProvTreat IN (";
 					command+=""+provNumList[0];
 					for(int i=1;i<provNumList.Count;i++) {
 						command+=","+provNumList[i];
