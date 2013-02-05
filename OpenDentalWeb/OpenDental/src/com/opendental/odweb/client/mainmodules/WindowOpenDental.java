@@ -57,8 +57,6 @@ public class WindowOpenDental extends ResizeComposite {
 	private ModuleWidget contrManage;
 	/** Array list that contains the index of the selected module.  It might get enhanced to handle messaging buttons as well. */
 	public ArrayList<Integer> selectedIndicies=new ArrayList<Integer>();
-	/** The handler used to handle the user changing appointment views. */
-	private HandlerRegistration apptViewSourceHandler;
 	/** The panel that holds the content. */
 	@UiField SimpleLayoutPanel contentPanel;
 	/** The label towards the top of the page that displays the information regarding the currently selected patient. */
@@ -70,6 +68,8 @@ public class WindowOpenDental extends ResizeComposite {
 	private Patient PatCur;
 	//Main menu bar----------------------------------------------
 	//Log Off
+	@UiField MenuItem subMenuLogOff;
+	//File
 	@UiField MenuItem menuItemPassword;
 	@UiField MenuItem menuItemExit;
 	//Setup
@@ -150,9 +150,9 @@ public class WindowOpenDental extends ResizeComposite {
 		outlookBar=new OutlookBar(new outlookBar_Click());
 		//Initialize the UI binder.
 		initWidget(uiBinder.createAndBindUi(this));
-		//Attach commands to all of the menu items.
-		//Main menu------------------------------------------------------------------------
-		// TODO Add menu command handlers here.
+		//Attach command handlers to all of the menu items.
+		//Main menu commands---------------------------------------------------------------
+		subMenuLogOff.setCommand(new LogOff_Command());
 		//ToolBar commands-----------------------------------------------------------------
 		menuItemSelectPatient.setCommand(new SelectPatient_Command());
 		menuItemCommlog.setCommand(new Commlog_Command());
@@ -192,13 +192,8 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
 	 *  @param index The index of the module that needs to be displayed. */
 	public void setModule(int index) {
-	    //Clear the old handler.
-	    if(apptViewSourceHandler!=null) {
-	    	apptViewSourceHandler.removeHandler();
-	    	apptViewSourceHandler=null;
-	    }
-	    moduleCur=getModuleAtIndex(index);
-		showModule();
+	moduleCur=getModuleAtIndex(index);
+	showModule();
 	}
 
   /** Gets the corresponding module in regards to the selected index of the module buttons. */
@@ -249,12 +244,28 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Sets the visible module in the content panel to moduleCur.  OK if moduleCur is null. */
 	private void showModule() {
 		if(moduleCur==null) {
-			//Disable all widgets.
-			labelMainTitle.setMainTitle("");
-			//Have a default Open Dental logo with welcome text.  This would save time loading in case the user does not need the appts module yet.
+			disableWidgets();
 			moduleCur=new ContrLogOn();
 		}
 		contentPanel.setWidget(moduleCur);
+	}
+	
+	/** Typically called when the user logs off.  This will clear out the title bar, disable the menu bars and disable the module buttons. */
+	private void disableWidgets() {
+		labelMainTitle.setMainTitle("");
+		//outlookBar.setEnabled(false);
+	}
+	
+	private void logOffNow() {
+		setModule(-1);
+	}
+	
+	//MainMenuCommands------------------------------------------------------------------------------------------------------------------------
+	
+	private class LogOff_Command implements Command {
+		public void execute() {
+			logOffNow();
+		}
 	}
 	
 	//ToolBarCommands-------------------------------------------------------------------------------------------------------------------------
@@ -267,7 +278,7 @@ public class WindowOpenDental extends ResizeComposite {
 			//Add a DialogResultCallback to listen for the dialog result.
 			windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
 				public void OK() {
-					Db.sendRequest(Patients.getPat(windowPS.getSelectedPatNum()),new SelectPatientCallback());
+					Patients.getPat(windowPS.getSelectedPatNum(),new SelectPatientCallback());
 				}
 				public void Cancel() {
 				}

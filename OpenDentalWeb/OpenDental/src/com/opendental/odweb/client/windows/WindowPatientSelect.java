@@ -188,11 +188,11 @@ public class WindowPatientSelect extends ODWindow {
 //				if(Security.CurUser.ClinicNum!=0 && Security.CurUser.ClinicIsRestricted){
 //					clinicNum=Security.CurUser.ClinicNum;
 //				}
-		Db.sendRequest(Patients.getPtDataTable(limit, textLName.getText(), textFName.getText(), textHmPhone.getText(),
-				textAddress.getText(), checkHideInactive.getValue(), textCity.getText(), textState.getText(),
-				textSSN.getText(), textPatNum.getText(), textChartNumber.getText(), billingType,
-				checkGuarantors.getValue(), checkShowArchived.getValue(), clinicNum, birthdate, siteNum, textSubscriberID.getText(), textEmail.getText())
-				, new ButSearchCallback());
+		Patients.getPtDataTable(limit, textLName.getText(), textFName.getText(), textHmPhone.getText(),
+			textAddress.getText(), checkHideInactive.getValue(), textCity.getText(), textState.getText(),
+			textSSN.getText(), textPatNum.getText(), textChartNumber.getText(), billingType,
+			checkGuarantors.getValue(), checkShowArchived.getValue(), clinicNum, birthdate, siteNum, 
+			textSubscriberID.getText(), textEmail.getText(),new ButSearchCallback());
 	}
 	
 	private class ButSearchCallback implements RequestCallbackResult {

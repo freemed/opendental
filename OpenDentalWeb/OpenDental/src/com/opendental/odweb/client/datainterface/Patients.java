@@ -3,12 +3,14 @@ package com.opendental.odweb.client.datainterface;
 import java.util.Date;
 
 import com.opendental.odweb.client.remoting.*;
+import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Patients {
 
-	/** Server will return a Patient object.  This method returns a serialized DtoGetObject meant for Db.SendRequest.  This is a way to get a single patient from the database if you don't already have a family object to use.  Will return null if not found. */
-	public static String getPat(int patNum) {
+	/** This is a way to get a single patient from the database if you don't already have a family object to use.
+	 *  @return Patient object.  Null if patient is not found. */
+	public static void getPat(int patNum,RequestCallbackResult requestCallback) {
 		DtoGetObject dto=null;
 		try {
 			dto=Meth.getObject("Patients.GetPat", new String[] { "long"	},"OpenDentBusiness.Patient", patNum);
@@ -16,14 +18,15 @@ public class Patients {
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		return dto.serialize();
+		Db.sendRequest(dto.serialize(), requestCallback);
 	}
 
-	/** Server returns a DataTable.  This method returns a serialized DtoGetTable meant for Db.SendRequest.  Only used for the Select Patient dialog. */
-	public static String getPtDataTable(boolean limit,String lname,String fname,String phone,
+	/** Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.
+	 *  @return DataTable */
+	public static void getPtDataTable(boolean limit,String lname,String fname,String phone,
 			String address,boolean hideInactive,String city,String state,String ssn,String patnum,String chartnumber,
 			int billingtype,boolean guarOnly,boolean showArchived,int clinicNum,Date birthdate,
-			int siteNum,String subscriberId,String email) {
+			int siteNum,String subscriberId,String email,RequestCallbackResult requestCallback) {
 		DtoGetTable dto=null;
 		//The parameter types in the C# method that we will be calling.
 		String[] paramTypes=new String[] { 
@@ -38,7 +41,7 @@ public class Patients {
 		} catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		return dto.serialize();
+		Db.sendRequest(dto.serialize(), requestCallback);
 	}
 	
 	/** Converts a date to an age. If age is over 115, then returns 0. */

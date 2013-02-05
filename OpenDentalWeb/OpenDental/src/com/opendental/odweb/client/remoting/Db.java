@@ -38,7 +38,8 @@ public class Db {
 	
 	/** Every call to the database calls this method.  It will pack up the passed in dto request into a RequestBuilder and send it off to the server.
 	 *  If the response from the server is successful, it will call the onSuccess method in the RequestCallbackResult. 
-	 *  @param dtoRequest Pass in any serialized DtoGet request. */
+	 *  @param dtoRequest Pass in any serialized DtoGet request.
+	 *  @param requestCallback The callback that will have it's onSucces() called once the server returns a result. */
 	public static void sendRequest(String dtoRequest,RequestCallbackResult requestCallback) {
 		RequestCallback=requestCallback;
 		DeserializeCallback=new Deserialize_Callback();
@@ -84,7 +85,9 @@ public class Db {
 		}		
 	}
 	
-	/** Every request sent to the database will result in a call being made to this callback.  This is the callback that every window should listen to when making a call to the database for their result. */
+	/** Every request sent to the database will result in a call being made to this callback.
+	 *  This is the callback that every window should listen to when making a call to the database for their result.
+	 *  onSuccess() will be called with the object that the calling method should return.  Null can be returned. */
 	public interface RequestCallbackResult {
 		void onSuccess(Object obj);
 	}
