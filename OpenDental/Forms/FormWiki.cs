@@ -14,6 +14,8 @@ namespace OpenDental {
 	public partial class FormWiki:Form {
 		public WikiPage WikiPageCur;		
 		private List<string> historyNav;
+		///<summary>Number of pages back that you are browsing. Current page == 0, Oldest page == historyNav.Length. </summary>
+		private int historyNavBack;
 		const int FEATURE_DISABLE_NAVIGATION_SOUNDS = 21;
 		const int SET_FEATURE_ON_PROCESS = 0x00000002;
 		[DllImport("urlmon.dll")]
@@ -73,7 +75,15 @@ namespace OpenDental {
 			WikiPageCur=wpage;
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent,false);
 			Text="Wiki - "+WikiPageCur.PageTitle;
-			if(historyNav.Count==0 || historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {
+			if(historyNav.Count==0) {//empty history
+				historyNav.Add("wiki:"+pageTitle);
+			}
+			else if(historyNavBack==0 && historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {//current page, check for duplicate
+				historyNav.Add("wiki:"+pageTitle);
+			}
+			else if(historyNav[historyNav.Count-(1+historyNavBack)]!="wiki:"+pageTitle) {//branching from page in history
+				historyNav.RemoveRange(historyNav.Count-(1+historyNavBack),historyNavBack);//remove "future" history. branching off in a new direction
+				historyNavBack=0;
 				historyNav.Add("wiki:"+pageTitle);
 			}
 		}
@@ -81,6 +91,7 @@ namespace OpenDental {
 		private void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"),0,"","Back"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Forward"),0,"","Forward"));//TODO: fix image
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),1,Lan.g(this,"Setup master page and styles."),"Setup"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Home"),2,"","Home"));
@@ -100,6 +111,9 @@ namespace OpenDental {
 			switch(e.Button.Tag.ToString()) {
 				case "Back":
 					Back_Click();
+					break;
+				case "Forward":
+					Forward_Click();
 					break;
 				case "Setup":
 					Setup_Click();
@@ -138,25 +152,62 @@ namespace OpenDental {
 		}
 
 		private void Back_Click() {
-			if(historyNav.Count<2) {//should always be 1 or greater
-				MsgBox.Show(this,"No more history");
+			if(historyNavBack<historyNav.Count-1) {
+				historyNavBack++;
+			}
+			NavToHistory();
+			//if(historyNav.Count<2) {//should always be 1 or greater
+			//  MsgBox.Show(this,"No more history");
+			//  return;
+			//}
+			//string pageName=historyNav[historyNav.Count-2];//-1 is the last/current page.
+			//if(pageName.StartsWith("wiki:")) {
+			//  pageName=pageName.Substring(5);
+			//  WikiPage wpage=WikiPages.GetByTitle(pageName);
+			//  if(wpage==null) {
+			//    MessageBox.Show("'"+historyNav[historyNav.Count-2]+"' page does not exist.");//very rare
+			//    return;
+			//  }
+			//  historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
+			//  LoadWikiPage(pageName);//because it's a duplicate, it won't add it again to the list.
+			//}
+			//else if(pageName.StartsWith("http://")) {//www
+			//  //historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
+			//  //no need to set the text because the Navigating event will fire and take care of that.
+			//  webBrowserWiki.Navigate(pageName);//adds new page to history
+			//}
+			//else {
+			//  //?
+			//}
+		}
+
+		private void Forward_Click() {
+			if(historyNavBack>0) {
+				historyNavBack--;
+			}
+			NavToHistory();
+		}
+
+		///<summary>Loads page from history based on historyCurIndex.</summary> 
+		private void NavToHistory() {
+			if(historyNavBack<0 || historyNavBack>historyNav.Count-1) {
+				//This should never happen.
+				MsgBox.Show(this,"Invalid history index.");
 				return;
 			}
-			string pageName=historyNav[historyNav.Count-2];//-1 is the last/current page.
+			string pageName=historyNav[historyNav.Count-(1+historyNavBack)];//-1 is the last/current page.
 			if(pageName.StartsWith("wiki:")) {
 				pageName=pageName.Substring(5);
 				WikiPage wpage=WikiPages.GetByTitle(pageName);
 				if(wpage==null) {
-					MessageBox.Show("'"+historyNav[historyNav.Count-2]+"' page does not exist.");//very rare
+					MessageBox.Show("'"+historyNav[historyNav.Count-(1+historyNavBack)]+"' page does not exist.");//very rare
 					return;
 				}
-				historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
 				LoadWikiPage(pageName);//because it's a duplicate, it won't add it again to the list.
 			}
 			else if(pageName.StartsWith("http://")) {//www
-				historyNav.RemoveAt(historyNav.Count-1);//remove the current page from history
 				//no need to set the text because the Navigating event will fire and take care of that.
-				webBrowserWiki.Navigate(pageName);//adds new page to history
+				webBrowserWiki.Navigate(pageName);
 			}
 			else {
 				//?
@@ -343,7 +394,15 @@ namespace OpenDental {
 			else if(e.Url.ToString().StartsWith("http://")){//navigating outside of wiki, either by clicking a link or using back button.
 				WikiPageCur=null;//this effectively disables most of the toolbar buttons
 				Text = "Wiki - WWW";
-				if(historyNav.Count==0 || historyNav[historyNav.Count-1]!=e.Url.ToString()) {
+				if(historyNav.Count==0){//empty history
+					historyNav.Add(e.Url.ToString());
+				}
+				else if(historyNavBack==0 && historyNav[historyNav.Count-1]!=e.Url.ToString()) {//current page, check for duplicate
+					historyNav.Add(e.Url.ToString());
+				}
+				else if(historyNav[historyNav.Count-(1+historyNavBack)]!=e.Url.ToString()) {//branching from page in history
+					historyNav.RemoveRange(historyNav.Count-(1+historyNavBack),historyNavBack);//remove "future" history. branching off in a new direction
+					historyNavBack=0;
 					historyNav.Add(e.Url.ToString());
 				}
 			}
