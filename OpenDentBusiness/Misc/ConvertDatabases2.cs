@@ -11874,6 +11874,14 @@ a.PageNotExists:hover {
 					command="ALTER TABLE rxpat ADD NewCropGuid varchar2(40)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE payment CHANGE PayNote PayNote TEXT NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE payment MODIFY (PayNote varchar2(4000) NOT NULL)";
+					Db.NonQ(command);
+				}
 
 
 

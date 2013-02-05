@@ -575,7 +575,7 @@ namespace OpenDental {
 			// textNote
 			// 
 			this.textNote.Location = new System.Drawing.Point(106, 152);
-			this.textNote.MaxLength = 255;
+			this.textNote.MaxLength = 4000;
 			this.textNote.Name = "textNote";
 			this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Payment;
 			this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;

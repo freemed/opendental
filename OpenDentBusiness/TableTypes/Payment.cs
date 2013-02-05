@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public string CheckNum;
 		///<summary>Bank-branch for checks.</summary>
 		public string BankBranch;
-		///<summary>Any admin note.  Not for patient to see.</summary>
+		///<summary>Any admin note.  Not for patient to see.  Length 4000.</summary>
 		public string PayNote;
 		///<summary>Set to true to indicate that a payment is split.  Just makes a few functions easier.  Might be eliminated.</summary>
 		public bool IsSplit;
