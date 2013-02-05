@@ -4044,6 +4044,7 @@ namespace OpenDental{
 				if(rx.RxDate<rxStartDateT) {//Ignore prescriptions created before version 13.1, because those prescriptions were entered manually by the user.
 					continue;
 				}
+				//TODO: Verify that SIG is properly constructed from the various other fields.
 				if(rx.Sig=="") {//No PatientFriendlySIG was provided, so we construct our own based on other fields.
 					rx.Sig=dosageNumberDescrption;
 					if(route!="") {
@@ -4065,7 +4066,7 @@ namespace OpenDental{
 						rx.Sig+="Take as needed.";
 					}
 					else {//takeAsNeeded="N"
-						//TODO: where is "for 7 days"?
+						//TODO: where is "for 7 days"? DaysSupply?
 					}
 				}
 				if(rxOld==null) {
@@ -7056,6 +7057,7 @@ namespace OpenDental{
 			int skippedSecurity=0;
 			int skippedC=0;
 			int skippedComlog=0;
+			int skippedLabCases=0;
 			DataRow row;
 			for(int i=0;i<gridProg.SelectedIndices.Length;i++){
 				row=(DataRow)gridProg.Rows[gridProg.SelectedIndices[i]].Tag;
@@ -7089,6 +7091,9 @@ namespace OpenDental{
 				else if(row["CommlogNum"].ToString()!="0"){
 					skippedComlog++;
 				}
+				else if(row["LabCaseNum"].ToString()!="0") {
+					skippedLabCases++;
+				}
 			}
 			Recalls.Synch(PatCur.PatNum);
 			if(skippedC>0){
@@ -7102,6 +7107,10 @@ namespace OpenDental{
 			if(skippedSecurity>0) {
 				MessageBox.Show(Lan.g(this,"Not allowed to delete procedures due to security.")+"\r"
 					+skippedSecurity.ToString()+" "+Lan.g(this,"item(s) skipped."));
+			}
+			if(skippedLabCases>0) {
+				MessageBox.Show(Lan.g(this,"Not allowed to delete lab case entries from here.")+"\r"
+					+skippedLabCases.ToString()+" "+Lan.g(this,"item(s) skipped."));
 			}
 			ModuleSelected(PatCur.PatNum);
 		}
