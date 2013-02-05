@@ -62,14 +62,14 @@
     <!-- Main Menu Bar. -->
     <g:north size='18'>
     	<g:MenuBar>
-    		<g:MenuItem ui:field="subMenuLogOff" text="Log Off" />
-    		<g:MenuItem text="File">
+    		<g:MenuItem ui:field="rootMenuItemLogOff" text="Log Off" />
+    		<g:MenuItem ui:field="rootMenuItemFile" text="File">
     			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemPassword" text="Change Password" />
 	    			<g:MenuItem ui:field="menuItemExit" text="Exit" />
     			</g:MenuBar>
     		</g:MenuItem>
-    		<g:MenuItem text="Setup">
+    		<g:MenuItem ui:field="rootMenuItemSetup" text="Setup">
     			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemApptFieldDefs" text="Appt Field Defs" />
 	    			<g:MenuItem ui:field="menuItemApptRules" text="Appt Rules" />
@@ -102,8 +102,8 @@
 	    			<g:MenuItem ui:field="menuItemTimeCards" text="Time Cards" />
     			</g:MenuBar>
     		</g:MenuItem>
-    		<g:MenuItem text="Lists">
-    			<g:MenuBar ui:field="subMenuLists" vertical="true">
+    		<g:MenuItem ui:field="rootMenuItemLists" text="Lists">
+    			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemProcCodes" text="Procedure Codes" />
 	    			<g:MenuItemSeparator />
 	    			<g:MenuItem ui:field="menuItemClinics" text="Clinics" />
@@ -123,8 +123,8 @@
 	    			<g:MenuItem ui:field="menuItemZipCodes" text="Zip Codes" />
     			</g:MenuBar>
     		</g:MenuItem>
-    		<g:MenuItem ui:field="subMenuReports" text="Reports" />
-    		<g:MenuItem text="Tools">
+    		<g:MenuItem ui:field="rootMenuItemReports" text="Reports" />
+    		<g:MenuItem ui:field="rootMenuItemTools" text="Tools">
     			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemPrintScreen" text="Print Screen Tool" />
 	    			<g:MenuItem text="Misc Tools">
@@ -145,7 +145,7 @@
 	    			<g:MenuItem ui:field="menuItemWebForms" text="Web Forms" />
     			</g:MenuBar>
     		</g:MenuItem>
-    		<g:MenuItem text="Help">
+    		<g:MenuItem ui:field="rootMenuItemHelp" text="Help">
     			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemRemote" text="Online Support" />
 	    			<g:MenuItem ui:field="menuItemHelpContents" text="Online Help - Contents" />

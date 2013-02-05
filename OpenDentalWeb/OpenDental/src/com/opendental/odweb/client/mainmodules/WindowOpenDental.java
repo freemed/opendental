@@ -20,7 +20,6 @@ package com.opendental.odweb.client.mainmodules;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
@@ -30,7 +29,6 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.datainterface.*;
 import com.opendental.odweb.client.logic.PatientL;
-import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
@@ -68,11 +66,13 @@ public class WindowOpenDental extends ResizeComposite {
 	private Patient PatCur;
 	//Main menu bar----------------------------------------------
 	//Log Off
-	@UiField MenuItem subMenuLogOff;
+	@UiField MenuItem rootMenuItemLogOff;
 	//File
+	@UiField MenuItem rootMenuItemFile;
 	@UiField MenuItem menuItemPassword;
 	@UiField MenuItem menuItemExit;
 	//Setup
+	@UiField MenuItem rootMenuItemSetup;
 	@UiField MenuItem menuItemApptFieldDefs;
 	@UiField MenuItem menuItemApptRules;
 	@UiField MenuItem menuItemAutoCodes;
@@ -103,6 +103,7 @@ public class WindowOpenDental extends ResizeComposite {
 	@UiField MenuItem menuItemShowFeatures;
 	@UiField MenuItem menuItemTimeCards;
 	//Lists
+	@UiField MenuItem rootMenuItemLists;
 	@UiField MenuItem menuItemClinics;
 	@UiField MenuItem menuItemContacts;
 	@UiField MenuItem menuItemCounties;
@@ -119,8 +120,9 @@ public class WindowOpenDental extends ResizeComposite {
 	@UiField MenuItem menuItemSchools;
 	@UiField MenuItem menuItemZipCodes;
 	//Reports
-	@UiField MenuItem subMenuReports;
+	@UiField MenuItem rootMenuItemReports;
 	//Tools
+	@UiField MenuItem rootMenuItemTools;
 	@UiField MenuItem menuItemPrintScreen;
 	//Misc Tools
 	@UiField MenuItem menuItemTelephone;
@@ -135,7 +137,8 @@ public class WindowOpenDental extends ResizeComposite {
 	@UiField MenuItem menuItemMobileSynch;
 	@UiField MenuItem menuItemRepeatingCharges;
 	@UiField MenuItem menuItemWebForms;
-	//Tools
+	//Help
+	@UiField MenuItem rootMenuItemHelp;
 	@UiField MenuItem menuItemRemote;
 	@UiField MenuItem menuItemHelpContents;
 	@UiField MenuItem menuItemHelpIndex;
@@ -152,7 +155,7 @@ public class WindowOpenDental extends ResizeComposite {
 		initWidget(uiBinder.createAndBindUi(this));
 		//Attach command handlers to all of the menu items.
 		//Main menu commands---------------------------------------------------------------
-		subMenuLogOff.setCommand(new LogOff_Command());
+		rootMenuItemLogOff.setCommand(new LogOff_Command());
 		//ToolBar commands-----------------------------------------------------------------
 		menuItemSelectPatient.setCommand(new SelectPatient_Command());
 		menuItemCommlog.setCommand(new Commlog_Command());
@@ -243,6 +246,7 @@ public class WindowOpenDental extends ResizeComposite {
 
 	/** Sets the visible module in the content panel to moduleCur.  OK if moduleCur is null. */
 	private void showModule() {
+		setMenuItemsEnabled(true);
 		if(moduleCur==null) {
 			disableWidgets();
 			moduleCur=new ContrLogOn();
@@ -253,7 +257,29 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Typically called when the user logs off.  This will clear out the title bar, disable the menu bars and disable the module buttons. */
 	private void disableWidgets() {
 		labelMainTitle.setMainTitle("");
-		//outlookBar.setEnabled(false);
+		outlookBar.unselectMainModules();
+		setMenuItemsEnabled(false);
+	}
+	
+	/** Enables or disables all menu items. */
+	private void setMenuItemsEnabled(boolean enabled) {
+		if(enabled && rootMenuItemLogOff.isEnabled()
+				|| !enabled && !rootMenuItemLogOff.isEnabled()) 
+		{
+			//Menu items are already enabled OR disabled so simply return.
+			return;
+		}
+		//Main menu
+		rootMenuItemLogOff.setEnabled(enabled);
+		rootMenuItemFile.setEnabled(enabled);
+		rootMenuItemSetup.setEnabled(enabled);
+		rootMenuItemLists.setEnabled(enabled);
+		rootMenuItemReports.setEnabled(enabled);
+		rootMenuItemTools.setEnabled(enabled);
+		rootMenuItemHelp.setEnabled(enabled);
+		//Tool bar
+		menuItemSelectPatient.setEnabled(enabled);
+		menuItemCommlog.setEnabled(enabled);
 	}
 	
 	private void logOffNow() {

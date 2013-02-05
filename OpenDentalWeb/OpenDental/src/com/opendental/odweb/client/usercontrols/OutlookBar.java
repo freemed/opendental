@@ -37,11 +37,25 @@ public class OutlookBar extends SimplePanel {
 		return buttonList;
 	}
 	
-	public void refreshOutlookBar() {
+	private void refreshOutlookBar() {
 		contentPanel.clear();
 		for(int i=0;i<Buttons.size();i++) {
 			contentPanel.add(Buttons.get(i));
 		}
+	}
+	
+	public void unselectMainModules() {
+		setSelectedButton(-1);
+		ArrayList<Integer> al=new ArrayList<Integer>();
+		al.add(0);
+		al.add(1);
+		al.add(2);
+		al.add(3);
+		al.add(4);
+		al.add(5);
+		al.add(6);
+		selectedIndices.removeAll(al);
+		refreshOutlookBar();
 	}
 	
 	/** This sets each outlook button's isSelected accordingly so that the mouse methods work correctly in showing the hovering etc. */

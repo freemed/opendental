@@ -19,7 +19,6 @@ import com.opendental.odweb.client.data.DataTable;
 import com.opendental.odweb.client.datainterface.Patients;
 import com.opendental.odweb.client.datainterface.Prefs;
 import com.opendental.odweb.client.datainterface.Prefs.PrefName;
-import com.opendental.odweb.client.remoting.Db;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.*;
 import com.opendental.odweb.client.ui.ODGrid.ODGridDoubleClickHandler;
