@@ -252,6 +252,7 @@ namespace OpenDental{
 		private MenuItem menuItemWiki;
 		private MenuItem menuItemProcLockTool;
 		private MenuItem menuItemHL7;
+		private MenuItem menuItemNewCropBilling;
 		private FormWiki FormMyWiki;
 
 		///<summary></summary>
@@ -438,13 +439,14 @@ namespace OpenDental{
 			this.menuItemTools = new System.Windows.Forms.MenuItem();
 			this.menuItemPrintScreen = new System.Windows.Forms.MenuItem();
 			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuTelephone = new System.Windows.Forms.MenuItem();
+			this.menuItemDuplicateBlockouts = new System.Windows.Forms.MenuItem();
 			this.menuItemCreateAtoZFolders = new System.Windows.Forms.MenuItem();
 			this.menuItemImportXML = new System.Windows.Forms.MenuItem();
 			this.menuItemMergePatients = new System.Windows.Forms.MenuItem();
-			this.menuItemDuplicateBlockouts = new System.Windows.Forms.MenuItem();
-			this.menuItemTestLatency = new System.Windows.Forms.MenuItem();
+			this.menuItemProcLockTool = new System.Windows.Forms.MenuItem();
 			this.menuItemShutdown = new System.Windows.Forms.MenuItem();
+			this.menuTelephone = new System.Windows.Forms.MenuItem();
+			this.menuItemTestLatency = new System.Windows.Forms.MenuItem();
 			this.menuItem9 = new System.Windows.Forms.MenuItem();
 			this.menuItemAging = new System.Windows.Forms.MenuItem();
 			this.menuItemAuditTrail = new System.Windows.Forms.MenuItem();
@@ -456,6 +458,7 @@ namespace OpenDental{
 			this.menuItemTerminalManager = new System.Windows.Forms.MenuItem();
 			this.menuItemTranslation = new System.Windows.Forms.MenuItem();
 			this.menuItemMobileSetup = new System.Windows.Forms.MenuItem();
+			this.menuItemNewCropBilling = new System.Windows.Forms.MenuItem();
 			this.menuItemScreening = new System.Windows.Forms.MenuItem();
 			this.menuItemRepeatingCharges = new System.Windows.Forms.MenuItem();
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
@@ -492,7 +495,6 @@ namespace OpenDental{
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
-			this.menuItemProcLockTool = new System.Windows.Forms.MenuItem();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1058,6 +1060,7 @@ namespace OpenDental{
             this.menuItemTerminalManager,
             this.menuItemTranslation,
             this.menuItemMobileSetup,
+            this.menuItemNewCropBilling,
             this.menuItemScreening,
             this.menuItemRepeatingCharges,
             this.menuItemReqStudents,
@@ -1086,11 +1089,11 @@ namespace OpenDental{
             this.menuItemTestLatency});
 			this.menuItem1.Text = "Misc Tools";
 			// 
-			// menuTelephone
+			// menuItemDuplicateBlockouts
 			// 
-			this.menuTelephone.Index = 6;
-			this.menuTelephone.Text = "Telephone Numbers";
-			this.menuTelephone.Click += new System.EventHandler(this.menuTelephone_Click);
+			this.menuItemDuplicateBlockouts.Index = 0;
+			this.menuItemDuplicateBlockouts.Text = "Clear Duplicate Blockouts";
+			this.menuItemDuplicateBlockouts.Click += new System.EventHandler(this.menuItemDuplicateBlockouts_Click);
 			// 
 			// menuItemCreateAtoZFolders
 			// 
@@ -1110,23 +1113,29 @@ namespace OpenDental{
 			this.menuItemMergePatients.Text = "Merge Patients";
 			this.menuItemMergePatients.Click += new System.EventHandler(this.menuItemMergePatients_Click);
 			// 
-			// menuItemDuplicateBlockouts
+			// menuItemProcLockTool
 			// 
-			this.menuItemDuplicateBlockouts.Index = 0;
-			this.menuItemDuplicateBlockouts.Text = "Clear Duplicate Blockouts";
-			this.menuItemDuplicateBlockouts.Click += new System.EventHandler(this.menuItemDuplicateBlockouts_Click);
-			// 
-			// menuItemTestLatency
-			// 
-			this.menuItemTestLatency.Index = 7;
-			this.menuItemTestLatency.Text = "Test Latency";
-			this.menuItemTestLatency.Click += new System.EventHandler(this.menuItemTestLatency_Click);
+			this.menuItemProcLockTool.Index = 4;
+			this.menuItemProcLockTool.Text = "Procedure Lock Tool";
+			this.menuItemProcLockTool.Click += new System.EventHandler(this.menuItemProcLockTool_Click);
 			// 
 			// menuItemShutdown
 			// 
 			this.menuItemShutdown.Index = 5;
 			this.menuItemShutdown.Text = "Shutdown All Workstations";
 			this.menuItemShutdown.Click += new System.EventHandler(this.menuItemShutdown_Click);
+			// 
+			// menuTelephone
+			// 
+			this.menuTelephone.Index = 6;
+			this.menuTelephone.Text = "Telephone Numbers";
+			this.menuTelephone.Click += new System.EventHandler(this.menuTelephone_Click);
+			// 
+			// menuItemTestLatency
+			// 
+			this.menuItemTestLatency.Index = 7;
+			this.menuItemTestLatency.Text = "Test Latency";
+			this.menuItemTestLatency.Click += new System.EventHandler(this.menuItemTestLatency_Click);
 			// 
 			// menuItem9
 			// 
@@ -1193,33 +1202,39 @@ namespace OpenDental{
 			this.menuItemMobileSetup.Text = "Mobile and Patient Portal Synch";
 			this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
 			// 
+			// menuItemNewCropBilling
+			// 
+			this.menuItemNewCropBilling.Index = 13;
+			this.menuItemNewCropBilling.Text = "NewCrop Billing";
+			this.menuItemNewCropBilling.Click += new System.EventHandler(this.menuItemNewCropBilling_Click);
+			// 
 			// menuItemScreening
 			// 
-			this.menuItemScreening.Index = 13;
+			this.menuItemScreening.Index = 14;
 			this.menuItemScreening.Text = "Public Health Screening";
 			this.menuItemScreening.Click += new System.EventHandler(this.menuItemScreening_Click);
 			// 
 			// menuItemRepeatingCharges
 			// 
-			this.menuItemRepeatingCharges.Index = 14;
+			this.menuItemRepeatingCharges.Index = 15;
 			this.menuItemRepeatingCharges.Text = "Repeating Charges";
 			this.menuItemRepeatingCharges.Click += new System.EventHandler(this.menuItemRepeatingCharges_Click);
 			// 
 			// menuItemReqStudents
 			// 
-			this.menuItemReqStudents.Index = 15;
+			this.menuItemReqStudents.Index = 16;
 			this.menuItemReqStudents.Text = "Student Requirements";
 			this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
 			// 
 			// menuItemWebForms
 			// 
-			this.menuItemWebForms.Index = 16;
+			this.menuItemWebForms.Index = 17;
 			this.menuItemWebForms.Text = "WebForms";
 			this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
 			// 
 			// menuItemWiki
 			// 
-			this.menuItemWiki.Index = 17;
+			this.menuItemWiki.Index = 18;
 			this.menuItemWiki.Text = "Wiki";
 			this.menuItemWiki.Click += new System.EventHandler(this.menuItemWiki_Click);
 			// 
@@ -1459,12 +1474,6 @@ namespace OpenDental{
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
-			// menuItemProcLockTool
-			// 
-			this.menuItemProcLockTool.Index = 4;
-			this.menuItemProcLockTool.Text = "Procedure Lock Tool";
-			this.menuItemProcLockTool.Click += new System.EventHandler(this.menuItemProcLockTool_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -1942,12 +1951,13 @@ namespace OpenDental{
 				else {
 					menuItemRepeatingCharges.Visible=true;
 				}
-
 				if(PrefC.GetString(PrefName.DistributorKey)=="") {
 					menuItemCustomerManage.Visible=false;
+					menuItemNewCropBilling.Visible=false;
 				}
 				else {
 					menuItemCustomerManage.Visible=true;
+					menuItemNewCropBilling.Visible=true;
 				}
 				CheckCustomReports();
 				ContrChart2.InitializeLocalData();
@@ -4676,6 +4686,11 @@ namespace OpenDental{
 			FormMobile FormM=new FormMobile();
 			FormM.ShowDialog();
 			//SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Mobile Sync");
+		}
+
+		private void menuItemNewCropBilling_Click(object sender,EventArgs e) {
+			FormNewCropBilling FormN=new FormNewCropBilling();
+			FormN.ShowDialog();
 		}
 
 		private void menuItemRepeatingCharges_Click(object sender, System.EventArgs e) {
