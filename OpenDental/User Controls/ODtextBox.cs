@@ -46,6 +46,7 @@ namespace OpenDental
 			}
 			ListCorrect=new List<string>();
 			ListCorrect.Add("\n");
+			ListCorrect.Add("\t");
 			ListIncorrect=new List<string>();
 			EventHandler onClick=new EventHandler(menuItem_Click);
 			MenuItem menuItem;
@@ -288,8 +289,11 @@ namespace OpenDental
 					}
 					string strPaste=(string)iData.GetData(DataFormats.Text); 
 					Text=Text.Insert(caret,strPaste);
+					//MaxLength is not enforced by the RichTextBox.  It allows us to set the Text value to a longer length, so we have to handle it manually.
+					if(Text.Length>MaxLength) {
+						Text=Text.Substring(0,MaxLength);
+					}
 					SelectionStart=caret+strPaste.Length;
-					timer1.Start();
 					break;
 			}
 		}
