@@ -1961,16 +1961,78 @@ FROM insplan";
 			return retVal;
 		}
 
-		/// <summary>Get all patients with the specified provider.</summary>
+		/// <summary>Change preferred provider for all patients with provNumFrom to provNumTo.</summary>
 		public static void ChangeProviders(long provNumFrom,long provNumTo) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),provNumFrom,provNumTo);
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),provNumFrom,provNumTo);
 			}
 			string command= 
 				"UPDATE patient " 
 				+"SET PriProv = '"+provNumTo+"' "
 				+"WHERE PriProv = '"+provNumFrom+"'";
-			Db.NonQ(command); Patient pat=new Patient();
+			Db.NonQ(command);
+		}
+		
+		/// <summary>Gets all patients whose primary provider PriProv is in the list provNums.</summary>
+		public static DataTable GetPatsByPriProvs(List<long> provNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<DataTable>(MethodBase.GetCurrentMethod(),provNums);
+			}
+			if(provNums.Count==0) {
+				return null;
+			}
+			string providers="";
+			for(int i=0;i<provNums.Count;i++) {
+				providers+=provNums[i].ToString();
+				if(i<provNums.Count-1) {
+					providers+=",";
+				}
+			}
+			string command="SELECT PatNum,PriProv FROM patient WHERE PriProv IN ("+providers+")";
+			return Db.GetTable(command);
+		}
+
+		/// <summary>Find the most used provider for a single patient. Bias towards the most recently used provider if they have done an equal number of procedures.</summary>
+		public static long ReassignProvGetMostUsed(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum);
+			}
+			string command="SELECT ProvNum,MAX(ProcDate) MaxProcDate,COUNT(ProvNum) ProcCount "
+				+"FROM procedurelog "
+				+"WHERE PatNum="+POut.Long(patNum)+" "
+				+"AND ProcStatus="+POut.Int((int)ProcStat.C)+" "
+				+"GROUP BY ProvNum";
+			DataTable table=Db.GetTable(command);
+			long newProv=0;
+			int mostVisits=0;
+			DateTime maxProcDate=new DateTime();
+			for(int i=0;i<table.Rows.Count;i++) {//loop through providers
+				if(PIn.Int(table.Rows[i]["ProcCount"].ToString())>mostVisits) {//New leader for most visits.
+					mostVisits=PIn.Int(table.Rows[i]["ProcCount"].ToString());
+					maxProcDate=PIn.DateT(table.Rows[i]["MaxProcDate"].ToString());
+					newProv=PIn.Long(table.Rows[i]["ProvNum"].ToString());
+				}
+				else if(PIn.Int(table.Rows[i]["ProcCount"].ToString())==mostVisits) {//Tie for most visits, use MaxProcDate as a tie breaker.
+					if(PIn.DateT(table.Rows[i]["MaxProcDate"].ToString())>maxProcDate) {
+						//mostVisits same as before
+						maxProcDate=PIn.DateT(table.Rows[i]["MaxProcDate"].ToString());
+						newProv=PIn.Long(table.Rows[i]["ProvNum"].ToString());
+					}
+				}
+			}
+			return newProv;
+		}
+
+		/// <summary>Change preferred provider PriProv to provNum for patient with PatNum=patNum.</summary>
+		public static void ReassignProv(long patNum,long provNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,provNum);
+			}
+			string command= 
+				"UPDATE patient " 
+				+"SET PriProv = '"+POut.Long(provNum)+"' "
+				+"WHERE PatNum = '"+POut.Long(patNum)+"'";
+			Db.NonQ(command);
 		}
 
 		///<summary>Gets the number of patients with unknown Zip.</summary>
@@ -2105,6 +2167,8 @@ FROM insplan";
 			string command = "SELECT * FROM patient WHERE PatNum IN (SELECT PatNum FROM screenpat WHERE ScreenGroupNum="+POut.Long(screenGroupNum)+")";
 			return Crud.PatientCrud.SelectMany(command);
 		}
+
+
 
 
 	}

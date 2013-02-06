@@ -30,6 +30,8 @@ namespace OpenDental{
 		private Label label2;
 		private ComboBox comboProv;
 		private UI.Button butMove;
+		private UI.Button butReassign;
+		private Label label5;
 		//private User user;
 		private DataTable table;
 
@@ -67,6 +69,8 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboUserGroup = new System.Windows.Forms.ComboBox();
 			this.groupMovePats = new System.Windows.Forms.GroupBox();
+			this.butReassign = new OpenDental.UI.Button();
+			this.label5 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.comboProv = new System.Windows.Forms.ComboBox();
 			this.butMove = new OpenDental.UI.Button();
@@ -77,23 +81,23 @@ namespace OpenDental{
 			// 
 			// butClose
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butClose.Location = new System.Drawing.Point(724,628);
+			this.butClose.Location = new System.Drawing.Point(724, 628);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(82,26);
+			this.butClose.Size = new System.Drawing.Size(82, 26);
 			this.butClose.TabIndex = 3;
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butDown
 			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butDown.Autosize = true;
 			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -101,16 +105,16 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(724,450);
+			this.butDown.Location = new System.Drawing.Point(724, 450);
 			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(82,26);
+			this.butDown.Size = new System.Drawing.Size(82, 26);
 			this.butDown.TabIndex = 12;
 			this.butDown.Text = "&Down";
 			this.butDown.Click += new System.EventHandler(this.butDown_Click);
 			// 
 			// butUp
 			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0,1);
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butUp.Autosize = true;
 			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -118,16 +122,16 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(724,411);
+			this.butUp.Location = new System.Drawing.Point(724, 411);
 			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(82,26);
+			this.butUp.Size = new System.Drawing.Size(82, 26);
 			this.butUp.TabIndex = 11;
 			this.butUp.Text = "&Up";
 			this.butUp.Click += new System.EventHandler(this.butUp_Click);
 			// 
 			// butAdd
 			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
 			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
@@ -135,9 +139,9 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(724,522);
+			this.butAdd.Location = new System.Drawing.Point(724, 522);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(82,26);
+			this.butAdd.Size = new System.Drawing.Size(82, 26);
 			this.butAdd.TabIndex = 10;
 			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
@@ -148,11 +152,11 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(16,12);
+			this.gridMain.Location = new System.Drawing.Point(16, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(593,642);
+			this.gridMain.Size = new System.Drawing.Size(593, 642);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Providers";
 			this.gridMain.TranslationName = null;
@@ -164,9 +168,9 @@ namespace OpenDental{
 			this.groupDentalSchools.Controls.Add(this.checkAlphabetical);
 			this.groupDentalSchools.Controls.Add(this.label1);
 			this.groupDentalSchools.Controls.Add(this.comboClass);
-			this.groupDentalSchools.Location = new System.Drawing.Point(622,12);
+			this.groupDentalSchools.Location = new System.Drawing.Point(622, 12);
 			this.groupDentalSchools.Name = "groupDentalSchools";
-			this.groupDentalSchools.Size = new System.Drawing.Size(184,100);
+			this.groupDentalSchools.Size = new System.Drawing.Size(184, 100);
 			this.groupDentalSchools.TabIndex = 14;
 			this.groupDentalSchools.TabStop = false;
 			this.groupDentalSchools.Text = "Dental Schools";
@@ -175,9 +179,9 @@ namespace OpenDental{
 			// 
 			this.checkAlphabetical.Checked = true;
 			this.checkAlphabetical.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkAlphabetical.Location = new System.Drawing.Point(10,73);
+			this.checkAlphabetical.Location = new System.Drawing.Point(10, 73);
 			this.checkAlphabetical.Name = "checkAlphabetical";
-			this.checkAlphabetical.Size = new System.Drawing.Size(165,18);
+			this.checkAlphabetical.Size = new System.Drawing.Size(165, 18);
 			this.checkAlphabetical.TabIndex = 17;
 			this.checkAlphabetical.Text = "Alph by class";
 			this.checkAlphabetical.UseVisualStyleBackColor = true;
@@ -185,9 +189,9 @@ namespace OpenDental{
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(7,16);
+			this.label1.Location = new System.Drawing.Point(7, 16);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,18);
+			this.label1.Size = new System.Drawing.Size(100, 18);
 			this.label1.TabIndex = 16;
 			this.label1.Text = "Classes";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -196,23 +200,23 @@ namespace OpenDental{
 			// 
 			this.comboClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboClass.FormattingEnabled = true;
-			this.comboClass.Location = new System.Drawing.Point(9,37);
+			this.comboClass.Location = new System.Drawing.Point(9, 37);
 			this.comboClass.Name = "comboClass";
-			this.comboClass.Size = new System.Drawing.Size(166,21);
+			this.comboClass.Size = new System.Drawing.Size(166, 21);
 			this.comboClass.TabIndex = 0;
 			this.comboClass.SelectionChangeCommitted += new System.EventHandler(this.comboClass_SelectionChangeCommitted);
 			// 
 			// butCreateUsers
 			// 
-			this.butCreateUsers.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCreateUsers.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCreateUsers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCreateUsers.Autosize = true;
 			this.butCreateUsers.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCreateUsers.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCreateUsers.CornerRadius = 4F;
-			this.butCreateUsers.Location = new System.Drawing.Point(93,64);
+			this.butCreateUsers.Location = new System.Drawing.Point(93, 64);
 			this.butCreateUsers.Name = "butCreateUsers";
-			this.butCreateUsers.Size = new System.Drawing.Size(82,26);
+			this.butCreateUsers.Size = new System.Drawing.Size(82, 26);
 			this.butCreateUsers.TabIndex = 15;
 			this.butCreateUsers.Text = "Create";
 			this.butCreateUsers.Click += new System.EventHandler(this.butCreateUsers_Click);
@@ -223,18 +227,18 @@ namespace OpenDental{
 			this.groupCreateUsers.Controls.Add(this.label3);
 			this.groupCreateUsers.Controls.Add(this.comboUserGroup);
 			this.groupCreateUsers.Controls.Add(this.butCreateUsers);
-			this.groupCreateUsers.Location = new System.Drawing.Point(622,120);
+			this.groupCreateUsers.Location = new System.Drawing.Point(622, 120);
 			this.groupCreateUsers.Name = "groupCreateUsers";
-			this.groupCreateUsers.Size = new System.Drawing.Size(184,100);
+			this.groupCreateUsers.Size = new System.Drawing.Size(184, 100);
 			this.groupCreateUsers.TabIndex = 18;
 			this.groupCreateUsers.TabStop = false;
 			this.groupCreateUsers.Text = "Create Users";
 			// 
 			// label3
 			// 
-			this.label3.Location = new System.Drawing.Point(7,14);
+			this.label3.Location = new System.Drawing.Point(7, 14);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(151,18);
+			this.label3.Size = new System.Drawing.Size(151, 18);
 			this.label3.TabIndex = 18;
 			this.label3.Text = "User Group";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -243,29 +247,55 @@ namespace OpenDental{
 			// 
 			this.comboUserGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboUserGroup.FormattingEnabled = true;
-			this.comboUserGroup.Location = new System.Drawing.Point(9,35);
+			this.comboUserGroup.Location = new System.Drawing.Point(9, 35);
 			this.comboUserGroup.Name = "comboUserGroup";
-			this.comboUserGroup.Size = new System.Drawing.Size(166,21);
+			this.comboUserGroup.Size = new System.Drawing.Size(166, 21);
 			this.comboUserGroup.TabIndex = 17;
 			// 
 			// groupMovePats
 			// 
 			this.groupMovePats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupMovePats.Controls.Add(this.butReassign);
+			this.groupMovePats.Controls.Add(this.label5);
 			this.groupMovePats.Controls.Add(this.label2);
 			this.groupMovePats.Controls.Add(this.comboProv);
 			this.groupMovePats.Controls.Add(this.butMove);
-			this.groupMovePats.Location = new System.Drawing.Point(622,226);
+			this.groupMovePats.Location = new System.Drawing.Point(622, 226);
 			this.groupMovePats.Name = "groupMovePats";
-			this.groupMovePats.Size = new System.Drawing.Size(184,100);
+			this.groupMovePats.Size = new System.Drawing.Size(184, 164);
 			this.groupMovePats.TabIndex = 18;
 			this.groupMovePats.TabStop = false;
 			this.groupMovePats.Text = "Move Patients";
 			// 
+			// butReassign
+			// 
+			this.butReassign.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butReassign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butReassign.Autosize = true;
+			this.butReassign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butReassign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReassign.CornerRadius = 4F;
+			this.butReassign.Location = new System.Drawing.Point(93, 132);
+			this.butReassign.Name = "butReassign";
+			this.butReassign.Size = new System.Drawing.Size(82, 26);
+			this.butReassign.TabIndex = 15;
+			this.butReassign.Text = "Reassign";
+			this.butReassign.Click += new System.EventHandler(this.butReassign_Click);
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(9, 112);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(168, 15);
+			this.label5.TabIndex = 18;
+			this.label5.Text = "Reassign by most-used provider";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(7,14);
+			this.label2.Location = new System.Drawing.Point(7, 14);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(151,18);
+			this.label2.Size = new System.Drawing.Size(151, 18);
 			this.label2.TabIndex = 18;
 			this.label2.Text = "To Provider";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -274,31 +304,31 @@ namespace OpenDental{
 			// 
 			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboProv.FormattingEnabled = true;
-			this.comboProv.Location = new System.Drawing.Point(9,35);
+			this.comboProv.Location = new System.Drawing.Point(9, 35);
 			this.comboProv.Name = "comboProv";
-			this.comboProv.Size = new System.Drawing.Size(166,21);
+			this.comboProv.Size = new System.Drawing.Size(166, 21);
 			this.comboProv.TabIndex = 17;
 			// 
 			// butMove
 			// 
-			this.butMove.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMove.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butMove.Autosize = true;
 			this.butMove.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMove.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMove.CornerRadius = 4F;
-			this.butMove.Location = new System.Drawing.Point(93,64);
+			this.butMove.Location = new System.Drawing.Point(93, 62);
 			this.butMove.Name = "butMove";
-			this.butMove.Size = new System.Drawing.Size(82,26);
+			this.butMove.Size = new System.Drawing.Size(82, 26);
 			this.butMove.TabIndex = 15;
 			this.butMove.Text = "Move";
 			this.butMove.Click += new System.EventHandler(this.butMove_Click);
 			// 
 			// FormProviderSelect
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butClose;
-			this.ClientSize = new System.Drawing.Size(827,670);
+			this.ClientSize = new System.Drawing.Size(827, 670);
 			this.Controls.Add(this.groupMovePats);
 			this.Controls.Add(this.groupCreateUsers);
 			this.Controls.Add(this.butAdd);
@@ -551,11 +581,11 @@ namespace OpenDental{
 		///<summary>Not possible if no security admin.</summary>
 		private void butMove_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedIndices.Length!=1) {
-				MsgBox.Show(this,"You select exactly one provider to move patients from.");
+				MsgBox.Show(this,"You must select exactly one provider to move patients from.");
 				return;
 			}
 			if(comboProv.SelectedIndex==-1) {
-				MsgBox.Show(this,"You must select a provider to move patients to.");
+				MsgBox.Show(this,"You must select exactly one provider to move patients to.");
 				return;
 			}			
 			Provider provFrom=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
@@ -564,6 +594,55 @@ namespace OpenDental{
 				Patients.ChangeProviders(provFrom.ProvNum,provTo.ProvNum);
 			}
 			changed=true;
+			FillGrid();
+		}
+
+		private void butReassign_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will take a few minutes, and may make the program unresponsive on other computers during that time.  Continue?")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;//On a very large database we have seen this take as long as 106 seconds.  The first loop takes about 80% of the time.
+			List<long> provsFrom=new List<long>();
+			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+				provsFrom.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["ProvNum"].ToString()));
+			}
+			DataTable tablePats=Patients.GetPatsByPriProvs(provsFrom);//list of all patients who are using the selected providers.
+			if(tablePats==null || table.Rows.Count==0) {
+				Cursor=Cursors.Default;
+				MsgBox.Show(this,"No patients to reassign.");
+				return;
+			}
+			int countPatsToUpdate=0;
+			List<long> mostUsedProvs=new List<long>();//1:1 relationship with table.
+			for(int i=0;i<tablePats.Rows.Count;i++) {
+				long provNumMostUsed=Patients.ReassignProvGetMostUsed(PIn.Long(tablePats.Rows[i]["PatNum"].ToString()));
+				mostUsedProvs.Add(provNumMostUsed);
+				if(mostUsedProvs[i]==0) {
+					continue;
+				}
+				if(tablePats.Rows[i]["PriProv"].ToString()!=provNumMostUsed.ToString()) {//Provnums don't match.
+					countPatsToUpdate++;
+				}
+			}
+			//inform user of count. Continue?
+			Cursor=Cursors.Default;
+			string msg=Lan.g(this,"You are about to reassign")+" "+countPatsToUpdate.ToString()+" "+Lan.g(this,"patients to different providers.  Continue?");
+			if(MessageBox.Show(msg,"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
+			for(int i=0;i<tablePats.Rows.Count;i++) {
+				if(mostUsedProvs[i]==0) {
+					continue;
+				}
+				if(tablePats.Rows[i]["PriProv"].ToString()!=mostUsedProvs[i].ToString()) {//Provnums don't match, so update
+					long provNumPrevTest=PIn.Long(tablePats.Rows[i]["PriProv"].ToString());
+					long newProvNum=mostUsedProvs[i];
+					Patients.ReassignProv(PIn.Long(tablePats.Rows[i]["PatNum"].ToString()),mostUsedProvs[i]);
+				}
+			}
+			Cursor=Cursors.Default;
+			//changed=true;//We didn't change any providers
 			FillGrid();
 		}
 
