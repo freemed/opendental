@@ -636,8 +636,6 @@ namespace OpenDental{
 					continue;
 				}
 				if(tablePats.Rows[i]["PriProv"].ToString()!=mostUsedProvs[i].ToString()) {//Provnums don't match, so update
-					long provNumPrevTest=PIn.Long(tablePats.Rows[i]["PriProv"].ToString());
-					long newProvNum=mostUsedProvs[i];
 					Patients.ReassignProv(PIn.Long(tablePats.Rows[i]["PatNum"].ToString()),mostUsedProvs[i]);
 				}
 			}
