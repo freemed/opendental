@@ -26,8 +26,8 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormNewCropBilling));
 			this.textBoxHTML = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
-			this.butGo = new System.Windows.Forms.Button();
-			this.butPaste = new System.Windows.Forms.Button();
+			this.butPaste = new OpenDental.UI.Button();
+			this.butGo = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textBoxHTML
@@ -54,35 +54,45 @@
     "ottom)";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
-			// butGo
-			// 
-			this.butGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butGo.Location = new System.Drawing.Point(895,668);
-			this.butGo.Name = "butGo";
-			this.butGo.Size = new System.Drawing.Size(75,23);
-			this.butGo.TabIndex = 2;
-			this.butGo.Text = "Go";
-			this.butGo.UseVisualStyleBackColor = true;
-			this.butGo.Click += new System.EventHandler(this.butGo_Click);
-			// 
 			// butPaste
 			// 
+			this.butPaste.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPaste.Location = new System.Drawing.Point(454,668);
+			this.butPaste.Autosize = true;
+			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPaste.CornerRadius = 4F;
+			this.butPaste.Location = new System.Drawing.Point(453,667);
 			this.butPaste.Name = "butPaste";
 			this.butPaste.Size = new System.Drawing.Size(75,23);
-			this.butPaste.TabIndex = 3;
+			this.butPaste.TabIndex = 4;
 			this.butPaste.Text = "Paste";
 			this.butPaste.UseVisualStyleBackColor = true;
 			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
+			// 
+			// butGo
+			// 
+			this.butGo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butGo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butGo.Autosize = true;
+			this.butGo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butGo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGo.CornerRadius = 4F;
+			this.butGo.Location = new System.Drawing.Point(895,667);
+			this.butGo.Name = "butGo";
+			this.butGo.Size = new System.Drawing.Size(75,23);
+			this.butGo.TabIndex = 5;
+			this.butGo.Text = "Go";
+			this.butGo.UseVisualStyleBackColor = true;
+			this.butGo.Click += new System.EventHandler(this.butGo_Click);
 			// 
 			// FormNewCropBilling
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(982,707);
-			this.Controls.Add(this.butPaste);
 			this.Controls.Add(this.butGo);
+			this.Controls.Add(this.butPaste);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textBoxHTML);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -100,8 +110,8 @@
 
 		private System.Windows.Forms.TextBox textBoxHTML;
 		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button butGo;
-		private System.Windows.Forms.Button butPaste;
+		private UI.Button butPaste;
+		private UI.Button butGo;
 	}
 }
 

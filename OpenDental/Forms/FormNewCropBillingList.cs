@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using OpenDental.UI;
+using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormNewCropBillingList:Form {
@@ -141,21 +142,48 @@ namespace OpenDental {
 			int firstLastNameWidth=practiceTitleWidth;
 			int addressWidth=practiceTitleWidth;
 			int cityStateZipWidth=variableWidth-practiceTitleWidth-clinicOrTitleWidth-firstLastNameWidth-addressWidth;
-			gridBillingList.Columns.Add(new ODGridColumn("PatNum",patNumWidth,HorizontalAlignment.Center));
-			gridBillingList.Columns.Add(new ODGridColumn("Phone",phoneWidth,HorizontalAlignment.Center));
-			gridBillingList.Columns.Add(new ODGridColumn("PracticeTitle",practiceTitleWidth,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("ClinicOrTitle",clinicOrTitleWidth,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("FirstLastName",firstLastNameWidth,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("Address",addressWidth,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("Address2",address2Width,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("CityStateZip",cityStateZipWidth,HorizontalAlignment.Left));
-			gridBillingList.Columns.Add(new ODGridColumn("DateAdded",dateAddedWidth,HorizontalAlignment.Center));
-			gridBillingList.Columns.Add(new ODGridColumn("NPI",npiWidth,HorizontalAlignment.Center));
+			gridBillingList.Columns.Add(new ODGridColumn("PatNum",patNumWidth,HorizontalAlignment.Center));//0
+			gridBillingList.Columns.Add(new ODGridColumn("Phone",phoneWidth,HorizontalAlignment.Center));//1
+			gridBillingList.Columns.Add(new ODGridColumn("PracticeTitle",practiceTitleWidth,HorizontalAlignment.Left));//2
+			gridBillingList.Columns.Add(new ODGridColumn("ClinicOrTitle",clinicOrTitleWidth,HorizontalAlignment.Left));//3
+			gridBillingList.Columns.Add(new ODGridColumn("FirstLastName",firstLastNameWidth,HorizontalAlignment.Left));//4
+			gridBillingList.Columns.Add(new ODGridColumn("Address",addressWidth,HorizontalAlignment.Left));//5
+			gridBillingList.Columns.Add(new ODGridColumn("Address2",address2Width,HorizontalAlignment.Left));//6
+			gridBillingList.Columns.Add(new ODGridColumn("CityStateZip",cityStateZipWidth,HorizontalAlignment.Left));//7
+			gridBillingList.Columns.Add(new ODGridColumn("DateAdded",dateAddedWidth,HorizontalAlignment.Center));//8
+			gridBillingList.Columns.Add(new ODGridColumn("NPI",npiWidth,HorizontalAlignment.Center));//9
 			gridBillingList.EndUpdate();
 		}
 
 		private void FormBillingList_Resize(object sender,EventArgs e) {
 			RefreshGridColumns();
+		}
+
+		private void butProcess_Click(object sender,EventArgs e) {
+			int numChargesAdded=0;
+			for(int i=0;i<gridBillingList.Rows.Count;i++) {
+				DateTime dateAdded=PIn.Date(gridBillingList.Rows[i].Cells[8].Text);
+				//TODO: warn if older than 3 months.
+				//if(PIn.Date(textDateStart.Text)<DateTime.Today.AddMonths(-1)) {
+				//  MsgBox.Show(this,"Start date cannot be more than a month in the past.  But you can still enter previous charges manually in the account.");
+				//  return;
+				//}
+				long patNum=PIn.Long(gridBillingList.Rows[i].Cells[0].Text);
+				string npi=PIn.String(gridBillingList.Rows[i].Cells[9].Text);
+				RepeatCharge RepeatCur=RepeatCharges.GetForNewCrop(patNum,npi);
+				if(RepeatCur==null) {//No such repeating charge exists yet.
+					RepeatCur=new RepeatCharge();
+					RepeatCur.IsNew=true;
+					RepeatCur.PatNum=patNum;
+					RepeatCur.ProcCode="NewCrop";
+					RepeatCur.ChargeAmt=15;
+					RepeatCur.DateStart=dateAdded;
+					RepeatCur.Note="NPI="+npi;
+					RepeatCharges.Insert(RepeatCur);
+					numChargesAdded++;
+				}
+			}
+			MessageBox.Show("Done. Number of repeating charges added: "+numChargesAdded);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

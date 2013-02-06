@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace OpenDentBusiness{
@@ -63,8 +64,21 @@ namespace OpenDentBusiness{
 			}
 			return retVal;
 		}
-		
 
+		///<summary>For internal use only. Returns all repeating charges within a single customer account for a specific provider NPI. The NPI does not have its own field, it is stored in the repeating charge note.</summary>
+		public static RepeatCharge GetForNewCrop(long patNum,string npi) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<RepeatCharge>(MethodBase.GetCurrentMethod(),patNum,npi);
+			}
+			string command="SELECT * FROM repeatcharge "
+				+"WHERE PatNum="+POut.Long(patNum)
+				+" AND Note LIKE 'NPI="+POut.String(npi)+"%'";
+			List <RepeatCharge> result=Crud.RepeatChargeCrud.SelectMany(command);
+			if(result.Count==0) {
+				return null;
+			}
+			return result[0];
+		}
 		
 
 		
