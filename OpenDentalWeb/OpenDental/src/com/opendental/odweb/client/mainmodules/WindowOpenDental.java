@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.odweb.client.datainterface.*;
 import com.opendental.odweb.client.logic.PatientL;
+import com.opendental.odweb.client.mainmodules.ContrLogOn.LogOnHandler;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
@@ -53,8 +54,6 @@ public class WindowOpenDental extends ResizeComposite {
 	private ModuleWidget contrChart;
 	private ModuleWidget contrImages;
 	private ModuleWidget contrManage;
-	/** Array list that contains the index of the selected module.  It might get enhanced to handle messaging buttons as well. */
-	public ArrayList<Integer> selectedIndicies=new ArrayList<Integer>();
 	/** The panel that holds the content. */
 	@UiField SimpleLayoutPanel contentPanel;
 	/** The label towards the top of the page that displays the information regarding the currently selected patient. */
@@ -63,7 +62,7 @@ public class WindowOpenDental extends ResizeComposite {
 	*  This is because the OutlookBar class requires constructor args and I'm not comfortable with UiFactory or UiConstructor yet. */
 	@UiField(provided=true) OutlookBar outlookBar;
 	/** The currently selected patient.  Can be null. */
-	private Patient PatCur;
+	private Patient patCur;
 	//Main menu bar----------------------------------------------
 	//Log Off
 	@UiField MenuItem rootMenuItemLogOff;
@@ -163,20 +162,27 @@ public class WindowOpenDental extends ResizeComposite {
 		setModule(-1);
 	}
 	
+	private class LogOnUser implements LogOnHandler {
+		public void onSuccess(Userod user) {
+			// TODO Update the title bar with the database name and the newly logged in user.
+			outlookBar.getButtonAtIndex(0).clickButton();
+		}
+	}
+	
 	public Patient getPatCur() {
-		return PatCur;
+		return patCur;
 	}
 
-	public void setPatCur(Patient patCur) {
-		PatCur=patCur;
+	public void setPatCur(Patient pat) {
+		patCur=pat;
 	}
 	
 	private void fillPatientButton(Patient pat) {
 		if(pat==null) {
 			pat=new Patient();
 		}
-		PatCur=pat;
-		setMainTitle(PatCur);
+		patCur=pat;
+		setMainTitle(patCur);
 	}
 
 	private void setMainTitle(Patient pat) {
@@ -195,8 +201,8 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Sets the module to display depending on the index of the buttons.  Pass -1 to treat clear out the modules.  This will be used for loading the app and when a user logs off.
 	 *  @param index The index of the module that needs to be displayed. */
 	public void setModule(int index) {
-	moduleCur=getModuleAtIndex(index);
-	showModule();
+		moduleCur=getModuleAtIndex(index);
+		showModule();
 	}
 
   /** Gets the corresponding module in regards to the selected index of the module buttons. */
@@ -247,9 +253,10 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Sets the visible module in the content panel to moduleCur.  OK if moduleCur is null. */
 	private void showModule() {
 		setMenuItemsEnabled(true);
+		setModuleButtonsEnabled(true);
 		if(moduleCur==null) {
 			disableWidgets();
-			moduleCur=new ContrLogOn();
+			moduleCur=new ContrLogOn(new LogOnUser());
 		}
 		contentPanel.setWidget(moduleCur);
 	}
@@ -257,10 +264,10 @@ public class WindowOpenDental extends ResizeComposite {
 	/** Typically called when the user logs off.  This will clear out the title bar, disable the menu bars and disable the module buttons. */
 	private void disableWidgets() {
 		labelMainTitle.setMainTitle("");
-		outlookBar.unselectMainModules();
 		setMenuItemsEnabled(false);
+		setModuleButtonsEnabled(false);
 	}
-	
+
 	/** Enables or disables all menu items. */
 	private void setMenuItemsEnabled(boolean enabled) {
 		if(enabled && rootMenuItemLogOff.isEnabled()
@@ -280,6 +287,19 @@ public class WindowOpenDental extends ResizeComposite {
 		//Tool bar
 		menuItemSelectPatient.setEnabled(enabled);
 		menuItemCommlog.setEnabled(enabled);
+	}
+	
+	private void setModuleButtonsEnabled(boolean enabled) {
+		if(enabled && outlookBar.isEnabled()
+				|| !enabled && !outlookBar.isEnabled()) 
+		{
+			//Menu items are already enabled OR disabled so simply return.
+			return;
+		}
+		if(!enabled) {
+			outlookBar.unselectMainModules();
+		}
+		outlookBar.setEnabled(enabled);
 	}
 	
 	private void logOffNow() {

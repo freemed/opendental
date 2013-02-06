@@ -7,9 +7,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.opendental.odweb.client.tabletypes.Userod;
 import com.opendental.odweb.client.ui.ModuleWidget;
 
 public class ContrLogOn extends ModuleWidget {
@@ -21,14 +23,24 @@ public class ContrLogOn extends ModuleWidget {
 	@UiField VerticalPanel panelContainer;
 	@UiField TextBox textUser;
 	@UiField TextBox textPassword;
+	@UiField Button butOK;
+	private LogOnHandler logOnHandler;
 	
-	public ContrLogOn() {
+	public ContrLogOn(LogOnHandler logOnHandler) {
+		this.logOnHandler=logOnHandler;
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
 	}
 
 	@UiHandler("butOK")
 	void butOK_Click(ClickEvent event) {
+		// TODO Verify the credentials somehow. 
+		// TODO Pass the correct UserOD object.
+		Userod user=new Userod();
+		user.UserName="Jason";
+		if(logOnHandler!=null) {//Should never be null.
+			logOnHandler.onSuccess(user);
+		}
 	}
 
 	public Widget onInitialize() {
@@ -44,6 +56,11 @@ public class ContrLogOn extends ModuleWidget {
 				callback.onSuccess(onInitialize());
 			}
 		});
+	}
+	
+	/**  */
+	public interface LogOnHandler {
+		void onSuccess(Userod user);
 	}
 
 }

@@ -17,12 +17,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /** Simple cell container that holds the module buttons and will eventually hold the messaging buttons as well.
  *  It uses HtmlConstants to display the information within the AbstractCell. */
-public class OutlookButton extends Composite implements HasMouseDownHandlers,HasMouseOutHandlers,HasMouseOverHandlers {
+public class OutlookButton extends Composite implements HasMouseDownHandlers,HasMouseOutHandlers,HasMouseOverHandlers,HasEnabled {
 	private static OutlookButtonUiBinder uiBinder = GWT.create(OutlookButtonUiBinder.class);
 	interface OutlookButtonUiBinder extends UiBinder<Widget, OutlookButton> {
 	}
@@ -42,6 +43,7 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 	private String caption;
 	private int buttonIndex;
 	private ButtonClickHandler buttonClickHandler;
+	private boolean isEnabled;
 	// TODO Enhance OutlookButton to accept images for the module "buttons".
   //private Image image;
 	// TODO Enhance to accept colors.
@@ -83,8 +85,24 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 		return isSelected;
 	}
 
-	public void setSelected(boolean isSelected) {
-		this.isSelected = isSelected;
+	public void setSelected(boolean selected) {
+		isSelected=selected;
+	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		isEnabled=enabled;
+	}
+	
+	/** Called when a user clicks a button.  This method can be called to simulate the user physically clicking this button as well.  Example is when a user logs in, we simulate them clicking the Appts module. */
+	public void clickButton() {
+		removeButtonStyles();
+		//Set the CSS for this button to selected.
+		contentPanel.setStyleName(style.buttonSelected());
+		buttonClickHandler.onClick(buttonIndex);
 	}
 
 	/** Returns the index of the button that was clicked. */
@@ -94,18 +112,20 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 	
 	private class mouseDownHandler implements MouseDownHandler {
 		public void onMouseDown(MouseDownEvent event) {
+			if(!isEnabled) {
+				return;
+			}
 			if(!isSelected()){//Already suppressed.
-				removeButtonStyles();
-				//Set the CSS for this button to selected.
-				contentPanel.setStyleName(style.buttonSelected());
-				buttonClickHandler.onClick(buttonIndex);
+				clickButton();
 			}
 		}
 	}
 	
 	private class mouseOverHandler implements MouseOverHandler {
 		public void onMouseOver(MouseOverEvent event) {
-			// TODO Add code so that the panel gets a little outline so that the user can tell they are hovering over the module button.
+			if(!isEnabled) {
+				return;
+			}
 			if(!isSelected()) {
 				removeButtonStyles();
 				//Change the CSS style so that the panel has an outline.
@@ -116,7 +136,9 @@ public class OutlookButton extends Composite implements HasMouseDownHandlers,Has
 	
 	private class mouseOutHandler implements MouseOutHandler {
 		public void onMouseOut(MouseOutEvent event) {
-			// TODO Add code to change the button to remove the hover affect.
+			if(!isEnabled) {
+				return;
+			}
 			if(!isSelected()) {
 				removeButtonStyles();
 				//Change the CSS style back to normal.

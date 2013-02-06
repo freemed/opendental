@@ -2,22 +2,24 @@ package com.opendental.odweb.client.usercontrols;
 
 import java.util.ArrayList;
 
+import com.google.gwt.user.client.ui.HasEnabled;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.opendental.odweb.client.usercontrols.OutlookButton.ButtonClickHandler;
 
-public class OutlookBar extends SimplePanel {
+public class OutlookBar extends SimplePanel implements HasEnabled {
 	
 	private ArrayList<Integer> selectedIndices=new ArrayList<Integer>();
-	private ArrayList<OutlookButton> Buttons;
+	private ArrayList<OutlookButton> buttons;
 	private OutlookBarClickHandler clickHandler;
 	private VerticalPanel contentPanel;
+	private boolean isEnabled;
 	
 	/**  */
 	public OutlookBar(OutlookBarClickHandler outlookClickHandler) {
 		contentPanel=new VerticalPanel();
 		//Fill the button list with the main modules.
-		Buttons=GetModuleButtons();
+		buttons=GetModuleButtons();
 		refreshOutlookBar();
 		this.add(contentPanel);
 		clickHandler=outlookClickHandler;
@@ -36,11 +38,31 @@ public class OutlookBar extends SimplePanel {
 		buttonList.add(new OutlookButton("Manage",6,new outlookButton_Click()));
 		return buttonList;
 	}
+
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		if(enabled==isEnabled) {
+			//Nothing to do, simply return.
+			return;
+		}
+		//Loop through all buttons on the outlook bar.
+		for(int i=0;i<7;i++) {
+			buttons.get(i).setEnabled(enabled);
+		}
+		isEnabled=enabled;
+	}
+	
+	public OutlookButton getButtonAtIndex(int index) {
+		return buttons.get(index);
+	}
 	
 	private void refreshOutlookBar() {
 		contentPanel.clear();
-		for(int i=0;i<Buttons.size();i++) {
-			contentPanel.add(Buttons.get(i));
+		for(int i=0;i<buttons.size();i++) {
+			contentPanel.add(buttons.get(i));
 		}
 	}
 	
@@ -60,15 +82,15 @@ public class OutlookBar extends SimplePanel {
 	
 	/** This sets each outlook button's isSelected accordingly so that the mouse methods work correctly in showing the hovering etc. */
 	private void setSelectedButton(int buttonIndex) {
-		for(int i=0;i<Buttons.size();i++) {
+		for(int i=0;i<buttons.size();i++) {
 			if(i==buttonIndex) {
-				Buttons.get(i).setSelected(true);
+				buttons.get(i).setSelected(true);
 			}
 			else {
-				Buttons.get(i).setSelected(false);
+				buttons.get(i).setSelected(false);
 			}
 			//Now update the CSS so that the correct button shows selected.
-			Buttons.get(i).refreshButtonStyles();
+			buttons.get(i).refreshButtonStyles();
 		}
 	}
 	
