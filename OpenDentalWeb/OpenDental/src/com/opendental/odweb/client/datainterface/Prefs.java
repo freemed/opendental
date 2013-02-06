@@ -16,10 +16,10 @@ public class Prefs {
 	//The preference cache pattern is not the standard way to handle cache.  Do not use this pattern as a reference.
 	private static HashMap<String,Pref> Dict;
 	
-	private static void refreshCache(RequestCallbackResult callback) {
+	public static void refreshCache(RequestCallbackResult callback) {
 		DtoGetTable dto=null;
 		try {
-			dto=Meth.getTable("Prefs.RefreshCache", new String[]{}, "");
+			dto=Meth.getTable("Prefs.RefreshCache");
 		}
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
@@ -27,13 +27,7 @@ public class Prefs {
 		Db.sendRequest(dto.serialize(),callback);
 	}
 	
-	private static class refreshCacheCallback implements RequestCallbackResult {
-		public void onSuccess(Object obj) {
-			fillCache((DataTable)obj);
-		}
-	}
-	
-	private static void fillCache(DataTable table) {
+	public static void fillCache(DataTable table) {
 		Dict=new HashMap<String,Pref>();
 		Pref pref;
 		for(int i=0;i<table.Rows.size();i++) {
@@ -46,18 +40,25 @@ public class Prefs {
 	}
 	
 	//PrefC----------------------------------------------------------------------------------------------------------------
-	//This section of the preference cache will contain the methods that are in OpenDentBusiness\Cache\PrefC.cs 
+	//This section of the preference cache will contain the methods that are in OpenDentBusiness\Cache\PrefC.cs
 	
-	public static int getInt(PrefName prefName) throws Exception {
+	public static long getLong(PrefName prefName) {
 		if(!Dict.containsKey(prefName.toString())) {
-			throw new Exception("");
+			MsgBox.show("Unknown PrefName: "+prefName.toString());
+		}
+		return PIn.Long(Dict.get(prefName.toString()).ValueString);
+	}
+	
+	public static int getInt(PrefName prefName) {
+		if(!Dict.containsKey(prefName.toString())) {
+			MsgBox.show("Unknown PrefName: "+prefName.toString());
 		}
 		return PIn.Int(Dict.get(prefName.toString()).ValueString);
 	}
 	
-	public static double getDouble(PrefName prefName) throws Exception {
+	public static double getDouble(PrefName prefName) {
 		if(!Dict.containsKey(prefName.toString())) {
-			throw new Exception("");
+			MsgBox.show("Unknown PrefName: "+prefName.toString());
 		}
 		return PIn.Double(Dict.get(prefName.toString()).ValueString);
 	}
@@ -69,6 +70,12 @@ public class Prefs {
 		return PIn.Bool((Dict.get(prefName.toString()).ValueString));
 	}
 	
+	public static String getString(PrefName prefName) {
+		if(!Dict.containsKey(prefName.toString())) {
+			MsgBox.show("Unknown PrefName: "+prefName.toString());
+		}
+		return PIn.String((Dict.get(prefName.toString()).ValueString));
+	}	
 	
 	//Preference Callbacks-------------------------------------------------------------------------------------------------
 	

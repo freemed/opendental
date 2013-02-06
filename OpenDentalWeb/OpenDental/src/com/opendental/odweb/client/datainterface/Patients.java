@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.opendental.odweb.client.remoting.*;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
+import com.opendental.odweb.client.tabletypes.Patient;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Patients {
@@ -62,6 +63,23 @@ public class Patients {
 			return now.getYear()-date.getYear();
 		}
 		return now.getYear()-date.getYear()-1;
+	}
+
+	public static String getNameLF(Patient pat) {
+		return getNameLF(pat.LName,pat.FName,pat.Preferred,pat.MiddleI);
+	}
+
+	private static String getNameLF(String lName,String fName,String preferred,String middleI) {
+		String retVal="";
+		retVal+=lName+", ";
+		if(!preferred.equals("")) {
+			retVal+="'"+preferred+"' ";
+		}
+		retVal+=fName;
+		if(!middleI.equals("")) {
+			retVal+=" "+middleI;
+		}
+		return retVal;
 	}
 
 }

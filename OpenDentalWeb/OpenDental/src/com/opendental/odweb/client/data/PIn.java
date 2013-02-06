@@ -29,6 +29,15 @@ public class PIn {
 		}
 		return Integer.parseInt(myString);
 	}
+	
+	public static long Long (String myString){
+		if(myString=="") {
+			return 0;
+		}
+		else {
+			return Long.parseLong(myString);
+		}
+	}
 
 	/** Currently does nothing. */
 	public static String String(String myString) {

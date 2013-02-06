@@ -27,7 +27,9 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.ResizeComposite;
 import com.google.gwt.user.client.ui.SimpleLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.opendental.odweb.client.data.DataTable;
 import com.opendental.odweb.client.datainterface.*;
+import com.opendental.odweb.client.dbmultitable.Security;
 import com.opendental.odweb.client.logic.PatientL;
 import com.opendental.odweb.client.mainmodules.ContrLogOn.LogOnHandler;
 import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
@@ -158,13 +160,25 @@ public class WindowOpenDental extends ResizeComposite {
 		//ToolBar commands-----------------------------------------------------------------
 		menuItemSelectPatient.setCommand(new SelectPatient_Command());
 		menuItemCommlog.setCommand(new Commlog_Command());
-		//Default the module to null so that a nice Open Dental logo shows instead of wasting time loading a module the user might not be interested in.
-		setModule(-1);
+		Prefs.refreshCache(new PrefStartUp());
 	}
 	
-	private class LogOnUser implements LogOnHandler {
+	private class PrefStartUp implements RequestCallbackResult {
+		public void onSuccess(Object obj) {
+			Prefs.fillCache((DataTable)obj);
+			// TODO Check versions, paths, and registration key.
+			// TODO Update definitions, providers,programs, tool buttons etc.
+			// TODO Set the signalLastRefreshed if we're going to be using it.
+			//Show the log on module.
+			setModule(-1);
+		}
+	}
+	
+	private class LogOn_Handler implements LogOnHandler {
 		public void onSuccess(Userod user) {
-			// TODO Update the title bar with the database name and the newly logged in user.
+			Security.setCurUser(user);
+			fillPatientButton(null);
+			// TODO Enhance this to show the module that the user has permission to view.
 			outlookBar.getButtonAtIndex(0).clickButton();
 		}
 	}
@@ -256,7 +270,7 @@ public class WindowOpenDental extends ResizeComposite {
 		setModuleButtonsEnabled(true);
 		if(moduleCur==null) {
 			disableWidgets();
-			moduleCur=new ContrLogOn(new LogOnUser());
+			moduleCur=new ContrLogOn(new LogOn_Handler());
 		}
 		contentPanel.setWidget(moduleCur);
 	}
