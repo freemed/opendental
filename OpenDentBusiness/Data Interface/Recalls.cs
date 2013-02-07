@@ -663,7 +663,8 @@ namespace OpenDentBusiness{
 				AND recalltrigger.RecallTypeNum=recall.RecallTypeNum 
 				AND (appointment.AptStatus=1 "//Scheduled
 				+"OR appointment.AptStatus=4) "//ASAP
-				+"AND appointment.AptDateTime > "+DbHelper.Curdate()+" ";//early this morning
+				+"AND appointment.AptDateTime > "+DbHelper.Curdate()+" "//early this morning
+				+"GROUP BY recalltrigger.RecallTypeNum";
 			DataTable table=Db.GetTable(command);
 			//Update the recalls for this patient with DATE(AptDateTime) where there is a future appointment with recall proc on it
 			for(int i=0;i<table.Rows.Count;i++) {

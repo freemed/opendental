@@ -11486,6 +11486,55 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.32.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To12_4_38();
+		}
+
+		private static void To12_4_38() {
+			if(FromVersion<new Version("12.4.38.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					//skip.  Too hard for too little benefit.
+				}
+				else {
+					//The code below synchronizes recall.DateScheduled for all patients.  There was a bug, that necessitated doing this.
+					//This is essentially a copy of the code from Recalls.SynchScheduledApptFull().
+					//Clear out DateScheduled column for all pats before changing
+					command="UPDATE recall SET recall.DateScheduled="+POut.Date(DateTime.MinValue);
+					Db.NonQ(command);
+					//get all active patients
+					command="SELECT PatNum "
+						+"FROM patient "
+						+"WHERE PatStatus=0";
+					DataTable tablePats=Db.GetTable(command);
+					for(int p=0;p<tablePats.Rows.Count;p++) {
+						//Get table of future appointment dates with recall type for this patient, where a procedure is attached that is a recall trigger procedure
+						command=@"SELECT recalltrigger.RecallTypeNum,MIN(DATE(appointment.AptDateTime)) AS AptDateTime
+							FROM appointment,procedurelog,recalltrigger,recall
+							WHERE appointment.AptNum=procedurelog.AptNum 
+							AND appointment.PatNum="+POut.Long(PIn.Long(tablePats.Rows[p][0].ToString()))+@" 
+							AND procedurelog.CodeNum=recalltrigger.CodeNum 
+							AND recall.PatNum=appointment.PatNum 
+							AND recalltrigger.RecallTypeNum=recall.RecallTypeNum 
+							AND (appointment.AptStatus=1 "//Scheduled
+							+"OR appointment.AptStatus=4) "//ASAP
+							+"AND appointment.AptDateTime>CURDATE() "//early this morning
+							+"GROUP BY recalltrigger.RecallTypeNum";
+						DataTable tableSchedDate=Db.GetTable(command);
+						//Update the recalls for this patient with DATE(AptDateTime) where there is a future appointment with recall proc on it
+						for(int i=0;i<tableSchedDate.Rows.Count;i++) {
+							if(tableSchedDate.Rows[i]["RecallTypeNum"].ToString()=="") {
+								continue;
+							}
+							command=@"UPDATE recall	SET recall.DateScheduled="+POut.Date(PIn.Date(tableSchedDate.Rows[i]["AptDateTime"].ToString()))+" " 
+								+"WHERE recall.RecallTypeNum="+POut.Long(PIn.Long(tableSchedDate.Rows[i]["RecallTypeNum"].ToString()))+" "
+								+"AND recall.PatNum="+POut.Long(PIn.Long(tablePats.Rows[p][0].ToString()))+" ";
+							Db.NonQ(command);
+						}
+					}
+				}
+				command="UPDATE preference SET ValueString = '12.4.38.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_1_0();
 		}
 
