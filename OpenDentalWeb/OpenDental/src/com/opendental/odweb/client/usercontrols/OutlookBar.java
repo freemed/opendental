@@ -18,6 +18,7 @@ public class OutlookBar extends SimplePanel implements HasEnabled {
 	/**  */
 	public OutlookBar(OutlookBarClickHandler outlookClickHandler) {
 		contentPanel=new VerticalPanel();
+		contentPanel.setWidth("100%");
 		//Fill the button list with the main modules.
 		buttons=GetModuleButtons();
 		refreshOutlookBar();

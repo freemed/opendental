@@ -34,7 +34,7 @@ public class ContrAccount extends ModuleWidget {
 	public ContrAccount() {
 		//Instantiate all the grids.
 		gridAccount=new ODGrid("Patient Account");
-		gridAccount.setWidthAndHeight(700, 100);
+		gridAccount.setWidthAndHeight(600, 363);
 		gridAcctPat=new ODGrid("Select Patient");
 		gridAcctPat.setWidthAndHeight(200, 120);
 		uiBinder.createAndBindUi(this);

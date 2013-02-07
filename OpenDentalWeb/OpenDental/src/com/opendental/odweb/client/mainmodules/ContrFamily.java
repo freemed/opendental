@@ -25,9 +25,9 @@ public class ContrFamily extends ModuleWidget {
 	public ContrFamily() {
 		//Instantiate the grids.
 		gridFamily=new ODGrid("Family Members");
-		gridFamily.setWidthAndHeight(300, 100);
+		gridFamily.setWidthAndHeight(400, 100);
 		gridPat=new ODGrid("Patient Information");
-		gridPat.setWidthAndHeight(200, 500);
+		gridPat.setWidthAndHeight(400, 500);
 		uiBinder.createAndBindUi(this);
 		this.add(panelContainer);
 	}

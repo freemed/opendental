@@ -19,9 +19,11 @@
 					</g:Dock>
 					<g:Dock direction="CENTER">
 						<g:VerticalPanel>
-							<g:TabPanel ui:field="tabProc">
+							<g:TabPanel ui:field="tabProc" width="100%">
 								<g:Tab text="Enter Treatment">
-									<g:Button ui:field="butAddProc">Procedure List</g:Button>
+									<g:VerticalPanel>
+										<g:Button ui:field="butAddProc">Procedure List</g:Button>
+									</g:VerticalPanel>
 								</g:Tab>
 							</g:TabPanel>
 							<odgrid:ODGrid ui:field="gridProg" />

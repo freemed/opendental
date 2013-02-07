@@ -32,17 +32,17 @@
 			border-color: #1c5180;
 		}
 		
-		.contentPanelStyle {
-			border-top: 5px;
-			border-bottom: 5px;
+		.panelSpacing {
+			padding-top: 3px;
+			padding-bottom: 3px;
 		}
 		
 	</ui:style>
 	
 	
-	<g:DecoratorPanel ui:field="contentPanel" width="100%" styleName="{style.contentPanelStyle}">
-		<g:VerticalPanel>
-			<g:Label ui:field="labelText" styleName="{style.labelText}" />
+	<g:DecoratorPanel ui:field="contentPanel" width="100%">
+		<g:VerticalPanel width="100%" styleName="{style.panelSpacing}">
+			<g:Label ui:field="labelText" width="100%" horizontalAlignment="CENTER" styleName="{style.labelText}"/>
 		</g:VerticalPanel>
 	</g:DecoratorPanel>
 	
