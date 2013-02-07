@@ -15,19 +15,15 @@
 	<g:SimplePanel ui:field="panelContainer">
 		<g:DockPanel>
 			<g:Dock direction="NORTH">
-				<g:VerticalPanel>
-					<g:cell horizontalAlignment="ALIGN_CENTER">
-						<g:Label>ODToolBar goes here.</g:Label>
-					</g:cell>
-				</g:VerticalPanel>
+				<!-- OD tool bar will just be buttons for now. -->
+				<g:HorizontalPanel>
+					<g:Button ui:field="butPayment">Payment</g:Button>
+					<g:Button ui:field="butAdj">Adjustment</g:Button>
+				</g:HorizontalPanel>
 			</g:Dock>
 			<g:Dock direction="CENTER">
 				<g:VerticalPanel>
-					<odgrid:ODGrid ui:field="gridRepeat"/>
-					<odgrid:ODGrid ui:field="gridPayPlan"/>
 					<odgrid:ODGrid ui:field="gridAccount"/>
-					<odgrid:ODGrid ui:field="gridComm"/>
-					<odgrid:ODGrid ui:field="gridProg"/>
 				</g:VerticalPanel>
 			</g:Dock>
 			<g:Dock direction="EAST">
@@ -37,34 +33,12 @@
 							<g:VerticalPanel>
 								<g:Label ui:field="labelUrgFinNote">Fam Urgent Fin Note</g:Label>
 								<g:TextBox ui:field="textUrgFinNote" width="170px" height="75px" />
-								<g:Button ui:field="butCreditCard">Credit Card Manage</g:Button>
 								<odgrid:ODGrid ui:field="gridAcctPat" />
 								<g:Label ui:field="labelFamFinancial">Family Financial Notes</g:Label>
 								<g:TextBox ui:field="textFinNotes" width="170px" height="85px" />
 							</g:VerticalPanel>
 						</g:Tab>
-						<g:Tab text="Show">
-							<g:VerticalPanel>
-								<g:HorizontalPanel>
-									<g:Label ui:field="labelStartDate">Start Date</g:Label>
-									<g:TextBox ui:field="textDateStart" />
-								</g:HorizontalPanel>
-								<g:HorizontalPanel>
-									<g:Label ui:field="labelEndDate">End Date</g:Label>
-									<g:TextBox ui:field="textDateEnd" />
-								</g:HorizontalPanel>
-								<g:Button ui:field="butToday">Today</g:Button>
-								<g:Button ui:field="but45days">Last 45 Days</g:Button>
-								<g:Button ui:field="but90days">Last 90 Days</g:Button>
-								<g:Button ui:field="butDatesAll">All Dates</g:Button>
-								<g:Button ui:field="butRefresh">Refresh</g:Button>
-								<g:CheckBox ui:field="checkShowDetail" value="true">Show Proc Breakdowns</g:CheckBox>
-								<g:CheckBox ui:field="checkShowFamilyComm">Show Family Comm Entries</g:CheckBox>
-							</g:VerticalPanel>
-						</g:Tab>
 					</g:TabPanel>
-					<g:Button ui:field="butTrojan">Send Transaction to Trojan</g:Button>
-					<g:Button ui:field="butComm">Questionnaire</g:Button>
 				</g:VerticalPanel>
 			</g:Dock>
 		</g:DockPanel>

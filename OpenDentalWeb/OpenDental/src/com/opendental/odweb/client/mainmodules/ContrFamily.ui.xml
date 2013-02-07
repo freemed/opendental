@@ -8,22 +8,17 @@
 		<g:DockPanel>
 			<g:Dock direction="NORTH">
 				<g:VerticalPanel>
-					<g:cell horizontalAlignment="ALIGN_CENTER">
-						<g:Label>ODToolBar goes here.</g:Label>
-					</g:cell>
+					<!-- OD tool bar will just be buttons for now. -->
 					<g:HorizontalPanel>
-						<g:SimplePanel ui:field="panelPicture" width="100" height="100"><g:Label>Patient Picture Unavailable</g:Label></g:SimplePanel>
+						<g:Button ui:field="butAdd">Add</g:Button>
+					</g:HorizontalPanel>
+					<g:HorizontalPanel>
 						<odgrid:ODGrid ui:field="gridFamily"/>
-						<odgrid:ODGrid ui:field="gridRecall"/>
 					</g:HorizontalPanel>
 				</g:VerticalPanel>
 			</g:Dock>
 			<g:Dock direction="CENTER">
-				<g:HorizontalPanel>
-					<odgrid:ODGrid ui:field="gridPat"/>
-					<odgrid:ODGrid ui:field="gridSuperFam"/>
-					<odgrid:ODGrid ui:field="gridIns"/>
-				</g:HorizontalPanel>
+				<odgrid:ODGrid ui:field="gridPat"/>
 			</g:Dock>
 		</g:DockPanel>
 	</g:SimplePanel>

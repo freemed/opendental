@@ -2,8 +2,7 @@
 <ui:UiBinder 
 	xmlns:ui="urn:ui:com.google.gwt.uibinder" 
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client"
-  xmlns:odgrid="urn:import:com.opendental.odweb.client.ui">
+	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
   	
 	<g:SimplePanel ui:field="panelContainer" >
 		<g:DockPanel>
@@ -14,50 +13,12 @@
 			<g:Dock direction="EAST" size="300">
 				<!-- Put the calendar and other searching tools here. -->
 				<g:VerticalPanel>
-					<dp:DatePicker ui:field="calendar"/>
-					<g:RadioButton ui:field="radioDay" name="radioView" checked="true">Day</g:RadioButton>
-					<g:RadioButton ui:field="radioWeek" name="radioView">Week</g:RadioButton>
-					<g:HorizontalPanel>
-						<g:Label>View</g:Label>
-						<g:ListBox ui:field="comboView" />
-					</g:HorizontalPanel>
-					<g:HorizontalPanel>
-						<g:Button ui:field="butLab">LabCases</g:Button>
-						<g:TextBox ui:field="textLab" />
-					</g:HorizontalPanel>
-					<g:HorizontalPanel>
-						<g:Label>Daily Prod</g:Label>
-						<g:TextBox ui:field="textProduction" />
-					</g:HorizontalPanel>
-					<g:DockPanel>
-						<g:Dock direction="WEST" size="50">
-							<g:VerticalPanel>
-								<g:Button ui:field="butUnsched">U</g:Button>
-								<g:Button ui:field="butBreak">B</g:Button>
-								<g:Button ui:field="butComplete">C</g:Button>
-								<g:Button ui:field="butDelete">D</g:Button>
-							</g:VerticalPanel>
-						</g:Dock>
-						<g:Dock direction="CENTER">
-							<g:ListBox ui:field="listConfirmed" multipleSelect="true" width="100px" height="100px" />
-						</g:Dock>
-						<g:Dock direction="EAST" size="50">
-							<g:VerticalPanel>
-								<g:Button ui:field="butMakeAppt">Make Appt</g:Button>
-								<g:Button ui:field="butMakeRecall">Make Recall</g:Button>
-								<g:Button ui:field="butFamRecall">Fam Recall</g:Button>
-								<g:Button ui:field="butViewAppts">View Pat Appts</g:Button>
-							</g:VerticalPanel>
-						</g:Dock>
-					</g:DockPanel>
-					<g:TabPanel ui:field="tabControl">
-						<g:Tab text="Waiting">
-							<odgrid:ODGrid ui:field="gridWaiting" />
-						</g:Tab>
-						<g:Tab text="Emp">
-							<odgrid:ODGrid ui:field="gridEmpSched" />
-						</g:Tab>
-					</g:TabPanel>
+					<dp:DatePicker ui:field="calendar" />
+					<g:SimplePanel>
+						<g:Label ui:field="pinBoard">PinBoard</g:Label>
+					</g:SimplePanel>
+					<g:Button ui:field="butMakeAppt">Make Appt</g:Button>
+					<g:Button ui:field="butDelete">Delete</g:Button>
 				</g:VerticalPanel>
 			</g:Dock>
 		</g:DockPanel>

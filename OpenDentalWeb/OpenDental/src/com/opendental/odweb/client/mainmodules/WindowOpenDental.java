@@ -54,8 +54,6 @@ public class WindowOpenDental extends ResizeComposite {
 	private ModuleWidget contrAccount;
 	private ModuleWidget contrTreatPlan;
 	private ModuleWidget contrChart;
-	private ModuleWidget contrImages;
-	private ModuleWidget contrManage;
 	/** The panel that holds the content. */
 	@UiField SimpleLayoutPanel contentPanel;
 	/** The label towards the top of the page that displays the information regarding the currently selected patient. */
@@ -72,37 +70,6 @@ public class WindowOpenDental extends ResizeComposite {
 	@UiField MenuItem rootMenuItemFile;
 	@UiField MenuItem menuItemPassword;
 	@UiField MenuItem menuItemExit;
-	//Setup
-	@UiField MenuItem rootMenuItemSetup;
-	@UiField MenuItem menuItemApptFieldDefs;
-	@UiField MenuItem menuItemApptRules;
-	@UiField MenuItem menuItemAutoCodes;
-	@UiField MenuItem menuItemAutomation;
-	@UiField MenuItem menuItemAutoNotes;
-	@UiField MenuItem menuItemClearinghouses;
-	@UiField MenuItem menuItemDataPath;
-	@UiField MenuItem menuItemDefinitions;
-	@UiField MenuItem menuItemDisplayFields;
-	@UiField MenuItem menuItemFeeScheds;
-	@UiField MenuItem menuItemInsCats;
-	@UiField MenuItem menuItemInsFilingCodes;
-	@UiField MenuItem menuItemLaboratories;
-	@UiField MenuItem menuItemMisc;
-	@UiField MenuItem menuItemModules;
-	@UiField MenuItem menuItemOperatories;
-	@UiField MenuItem menuItemPatFieldDefs;
-	@UiField MenuItem menuItemPayerIDs;
-	@UiField MenuItem menuItemPractice;
-	@UiField MenuItem menuItemProblems;
-	@UiField MenuItem menuItemProcedureButtons;
-	@UiField MenuItem menuItemLinks;
-	@UiField MenuItem menuItemQuestions;
-	@UiField MenuItem menuItemRecall;
-	@UiField MenuItem menuItemRecallTypes;
-	@UiField MenuItem menuItemSecurity;
-	@UiField MenuItem menuItemSched;
-	@UiField MenuItem menuItemShowFeatures;
-	@UiField MenuItem menuItemTimeCards;
 	//Lists
 	@UiField MenuItem rootMenuItemLists;
 	@UiField MenuItem menuItemClinics;
@@ -249,16 +216,6 @@ public class WindowOpenDental extends ResizeComposite {
 					contrChart=new ContrChart();
 				}
 				return contrChart;
-			case 5:
-				if(contrImages==null) {
-					contrImages=new ContrImages();
-				}
-				return contrImages;
-			case 6:
-				if(contrManage==null) {
-					contrManage=new ContrManage();
-				}
-				return contrManage;
 		}
 		// TODO Handle messaging buttons here?
 		return null;
@@ -293,7 +250,6 @@ public class WindowOpenDental extends ResizeComposite {
 		//Main menu
 		rootMenuItemLogOff.setEnabled(enabled);
 		rootMenuItemFile.setEnabled(enabled);
-		rootMenuItemSetup.setEnabled(enabled);
 		rootMenuItemLists.setEnabled(enabled);
 		rootMenuItemReports.setEnabled(enabled);
 		rootMenuItemTools.setEnabled(enabled);

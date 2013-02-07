@@ -23,7 +23,7 @@ public class Db {
 	/** Simple popup panel showing a loading bar.  The loading spinner was too jittery when deserializing so I went with the bar. */
 	private static void showLoading() {
 		Popup=new PopupPanel();
-		Popup.add(new Image("images/loadingBar.gif"));
+		Popup.add(new Image("images/loadingSpinner.gif"));
 		Popup.setGlassEnabled(true);
 		Popup.center();
 		Popup.show();

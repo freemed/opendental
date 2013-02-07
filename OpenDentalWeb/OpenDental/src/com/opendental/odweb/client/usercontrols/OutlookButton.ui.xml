@@ -32,10 +32,15 @@
 			border-color: #1c5180;
 		}
 		
+		.contentPanelStyle {
+			border-top: 5px;
+			border-bottom: 5px;
+		}
+		
 	</ui:style>
 	
 	
-	<g:DecoratorPanel ui:field="contentPanel" width="100%">
+	<g:DecoratorPanel ui:field="contentPanel" width="100%" styleName="{style.contentPanelStyle}">
 		<g:VerticalPanel>
 			<g:Label ui:field="labelText" styleName="{style.labelText}" />
 		</g:VerticalPanel>

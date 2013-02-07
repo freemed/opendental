@@ -34,8 +34,6 @@ public class OutlookBar extends SimplePanel implements HasEnabled {
 		buttonList.add(new OutlookButton("Account",2,new outlookButton_Click()));
 		buttonList.add(new OutlookButton("Treat' Plan",3,new outlookButton_Click()));
 		buttonList.add(new OutlookButton("Chart",4,new outlookButton_Click()));
-		buttonList.add(new OutlookButton("Images",5,new outlookButton_Click()));
-		buttonList.add(new OutlookButton("Manage",6,new outlookButton_Click()));
 		return buttonList;
 	}
 
@@ -49,7 +47,7 @@ public class OutlookBar extends SimplePanel implements HasEnabled {
 			return;
 		}
 		//Loop through all buttons on the outlook bar.
-		for(int i=0;i<7;i++) {
+		for(int i=0;i<buttons.size();i++) {
 			buttons.get(i).setEnabled(enabled);
 		}
 		isEnabled=enabled;

@@ -69,39 +69,6 @@
 	    			<g:MenuItem ui:field="menuItemExit" text="Exit" />
     			</g:MenuBar>
     		</g:MenuItem>
-    		<g:MenuItem ui:field="rootMenuItemSetup" text="Setup">
-    			<g:MenuBar vertical="true">
-	    			<g:MenuItem ui:field="menuItemApptFieldDefs" text="Appt Field Defs" />
-	    			<g:MenuItem ui:field="menuItemApptRules" text="Appt Rules" />
-	    			<g:MenuItem ui:field="menuItemAutoCodes" text="Auto Codes" />
-	    			<g:MenuItem ui:field="menuItemAutomation" text="Automation" />
-	    			<g:MenuItem ui:field="menuItemAutoNotes" text="Auto Notes" />
-	    			<g:MenuItem ui:field="menuItemClearinghouses" text="Clearinghouses" />
-	    			<g:MenuItem ui:field="menuItemDataPath" text="Data Paths" />
-	    			<g:MenuItem ui:field="menuItemDefinitions" text="Definitions" />
-	    			<g:MenuItem ui:field="menuItemDisplayFields" text="Display Fields" />
-	    			<g:MenuItem ui:field="menuItemFeeScheds" text="Fee Schedules" />
-	    			<g:MenuItem ui:field="menuItemInsCats" text="Insurance Categories" />
-	    			<g:MenuItem ui:field="menuItemInsFilingCodes" text="Insurance Filing Codes" />
-	    			<g:MenuItem ui:field="menuItemLaboratories" text="Laboratories" />
-	    			<g:MenuItem ui:field="menuItemMisc" text="Miscellaneous" />
-	    			<g:MenuItem ui:field="menuItemModules" text="Modules" />
-	    			<g:MenuItem ui:field="menuItemOperatories" text="Operatories" />
-	    			<g:MenuItem ui:field="menuItemPatFieldDefs" text="Pat Field Defs" />
-	    			<g:MenuItem ui:field="menuItemPayerIDs" text="Payer IDs" />
-	    			<g:MenuItem ui:field="menuItemPractice" text="Practice" />
-	    			<g:MenuItem ui:field="menuItemProblems" text="Problems" />
-	    			<g:MenuItem ui:field="menuItemProcedureButtons" text="Procedure Buttons" />
-	    			<g:MenuItem ui:field="menuItemLinks" text="Program Links" />
-	    			<g:MenuItem ui:field="menuItemQuestions" text="Questionnaire" />
-	    			<g:MenuItem ui:field="menuItemRecall" text="Recall" />
-	    			<g:MenuItem ui:field="menuItemRecallTypes" text="RecallTypes" />
-	    			<g:MenuItem ui:field="menuItemSecurity" text="Security" />
-	    			<g:MenuItem ui:field="menuItemSched" text="Schedules" />
-	    			<g:MenuItem ui:field="menuItemShowFeatures" text="Show Features" />
-	    			<g:MenuItem ui:field="menuItemTimeCards" text="Time Cards" />
-    			</g:MenuBar>
-    		</g:MenuItem>
     		<g:MenuItem ui:field="rootMenuItemLists" text="Lists">
     			<g:MenuBar vertical="true">
 	    			<g:MenuItem ui:field="menuItemProcCodes" text="Procedure Codes" />
@@ -160,7 +127,7 @@
     <g:center>
       <g:DockLayoutPanel unit='PX'>
         <!-- Modules Tree. -->
-        <g:lineStart size='58'>
+        <g:lineStart size='75'>
           <g:ScrollPanel styleName='{style.moduleList}'>
             <s:OutlookBar ui:field='outlookBar' />
           </g:ScrollPanel>
