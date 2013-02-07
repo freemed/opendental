@@ -46,6 +46,7 @@ namespace OpenDentBusiness {
 		AppointmentTimeSeatedTrigger,
 		ApptBubbleDelay,
 		ApptExclamationShowForUnsentIns,
+		///<summary>Keeps the waiting room indicator times current.  Initially 1.</summary>
 		ApptModuleRefreshesEveryMinute,
 		///<summary>Integer</summary>
 		ApptPrintColumnsPerPage,
