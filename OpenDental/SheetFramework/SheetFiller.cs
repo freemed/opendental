@@ -236,20 +236,22 @@ namespace OpenDental{
 					dateFirstVisit="";
 				}
 				fam=Patients.GetFamily(pat.PatNum);
-				List<Procedure> procsList=null;
+				//todo some day: move this section down to TP section
+				List<Procedure> procsList=null;//there is another variable that does the same thing. Carefully combine them.
 				if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs") || Sheets.ContainsStaticField(sheet,"plannedAppointmentInfo")) {
 					procsList=Procedures.Refresh(pat.PatNum);
 					if(Sheets.ContainsStaticField(sheet,"treatmentPlanProcs")) {
-						for(int i=0;i<procsList.Count;i++) {
-							if(procsList[i].ProcStatus!=ProcStat.TP) {
+						Procedure[] procListTP=Procedures.GetListTP(procsList);//sorted by priority, then toothnum
+						for(int i=0;i<procListTP.Length;i++) {
+							if(procListTP[i].ProcStatus!=ProcStat.TP) {
 								continue;
 							}
 							if(treatmentPlanProcs!="") {
 								treatmentPlanProcs+="\r\n";
 							}
-							treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procsList[i].CodeNum)+", "
-							+Procedures.GetDescription(procsList[i])+", "
-							+procsList[i].ProcFee.ToString("c");
+							treatmentPlanProcs+=ProcedureCodes.GetStringProcCode(procListTP[i].CodeNum)+", "
+							+Procedures.GetDescription(procListTP[i])+", "
+							+procListTP[i].ProcFee.ToString("c");
 						}
 					}
 				}
