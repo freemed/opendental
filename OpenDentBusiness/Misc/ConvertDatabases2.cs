@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 	//The other file was simply getting too big.  It was bogging down VS speed.
 	///<summary></summary>
 	public partial class ConvertDatabases {
-		public static System.Version LatestVersion=new Version("13.1.0.0");//This value must be changed when a new conversion is to be triggered.
+		public static System.Version LatestVersion=new Version("13.2.0.0");//This value must be changed when a new conversion is to be triggered.
 
 		private static void To6_2_9() {
 			if(FromVersion<new Version("6.2.9.0")) {
@@ -11535,11 +11535,11 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 				command="UPDATE preference SET ValueString = '12.4.38.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To13_1_0();
+			To13_1_1();
 		}
 
-		private static void To13_1_0() {
-			if(FromVersion<new Version("13.1.0.0")) {
+		private static void To13_1_1() {
+			if(FromVersion<new Version("13.1.1.0")) {
 				string command;
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE clockevent CHANGE AmountBonus AmountBonus double NOT NULL default -1";
@@ -11931,13 +11931,23 @@ a.PageNotExists:hover {
 					command="ALTER TABLE payment MODIFY (PayNote varchar2(4000) NOT NULL)";
 					Db.NonQ(command);
 				}
-
-
-
-				command="UPDATE preference SET ValueString = '13.1.0.0' WHERE PrefName = 'DataBaseVersion'";
+				command="UPDATE preference SET ValueString = '13.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			//To13_1_2();
+			To13_2_0();
+		}
+
+		private static void To13_2_0() {
+			if(FromVersion<new Version("13.2.0.0")) {
+				string command;
+
+
+
+
+				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			//To13_3_0();
 		}
 
 
