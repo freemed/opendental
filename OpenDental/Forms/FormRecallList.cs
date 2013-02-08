@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using OpenDental.DivvyConnect;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -613,7 +614,6 @@ namespace OpenDental{
 			this.butECards.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butECards.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butECards.CornerRadius = 4F;
-			this.butECards.Enabled = false;
 			this.butECards.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butECards.Location = new System.Drawing.Point(256, 637);
 			this.butECards.Name = "butECards";
@@ -663,6 +663,9 @@ namespace OpenDental{
 
 		private void FormRecallList_Load(object sender, System.EventArgs e) {
 			//AptNumsSelected=new List<long>();
+#if DEBUG
+			butECards.Visible=true;
+#endif
 			checkGroupFamilies.Checked=PrefC.GetBool(PrefName.RecallGroupByFamily);
 			for(int i=0;i<Enum.GetNames(typeof(RecallListSort)).Length;i++){
 				comboSort.Items.Add(Lan.g("enumRecallListSort",Enum.GetNames(typeof(RecallListSort))[i]));
@@ -1273,30 +1276,30 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Send postcards for all of the selected patients?")) {
 				return;
 			}
+			Guid guid=new Guid();
 			RecallListSort sortBy=(RecallListSort)comboSort.SelectedIndex;
 			List<long> recallNums=new List<long>();
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				recallNums.Add(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()));
 			}
 			addrTable=Recalls.GetAddrTable(recallNums,checkGroupFamilies.Checked,sortBy);
-			DivvySystemsService.Postcard postcard;
-			DivvySystemsService.Recipient recipient;
-			DivvySystemsService.Postcard[] listPostcards=new DivvySystemsService.Postcard[gridMain.SelectedIndices.Length];
+			DivvyConnect.Postcard postcard;
+			DivvyConnect.Recipient recipient;
+			DivvyConnect.Postcard[] listPostcards=new DivvyConnect.Postcard[gridMain.SelectedIndices.Length];
 			string message;
 			long clinicNum;
 			Clinic clinic;
 			string phone;
 			for(int i=0;i<addrTable.Rows.Count;i++) {
-				postcard=new DivvySystemsService.Postcard();
-				recipient=new DivvySystemsService.Recipient();
+				postcard=new DivvyConnect.Postcard();
+				recipient=new DivvyConnect.Recipient();
 				recipient.Name=addrTable.Rows[i]["patientNameFL"].ToString();
-				recipient.Id=addrTable.Rows[i]["patNums"].ToString();
+				recipient.ExternalRecipientID=addrTable.Rows[i]["patNums"].ToString();
 				recipient.Address1=addrTable.Rows[i]["Address"].ToString();//Includes Address2
 				recipient.City=addrTable.Rows[i]["City"].ToString();
 				recipient.State=addrTable.Rows[i]["State"].ToString();
 				recipient.Zip=addrTable.Rows[i]["Zip"].ToString();
-				//postcard.AppointmentDateTime=PIn.Date(addrTable.Rows[i]["dateDue"].ToString());//js I don't know why they would ask for this.  We put this in our message.
-				postcard.AppointmentDateTimeSpecified=false;
+				postcard.AppointmentDateTime=PIn.Date(addrTable.Rows[i]["dateDue"].ToString());//js I don't know why they would ask for this.  We put this in our message.
 				//Body text, family card ------------------------------------------------------------------
 				if(checkGroupFamilies.Checked	&& addrTable.Rows[i]["famList"].ToString()!=""){
 					if(addrTable.Rows[i]["numberOfReminders"].ToString()=="0") {
@@ -1327,10 +1330,9 @@ namespace OpenDental{
 				postcard.Message=message;
 				postcard.Recipient=recipient;
 				postcard.DesignID=PIn.Int(ProgramProperties.GetPropVal(ProgramName.Divvy,"DesignID for Recall Cards"));
-				postcard.DesignIDSpecified=true;
 				listPostcards[i]=postcard;
 			}
-			DivvySystemsService.Practice practice=new DivvySystemsService.Practice();
+			DivvyConnect.Practice practice=new DivvyConnect.Practice();
 			clinicNum=PIn.Long(addrTable.Rows[patientsPrinted]["ClinicNum"].ToString());
 			if(!PrefC.GetBool(PrefName.EasyNoClinics) && Clinics.List.Length>0 //if using clinics
 				&& Clinics.GetClinic(clinicNum)!=null)//and this patient assigned to a clinic
@@ -1362,27 +1364,29 @@ namespace OpenDental{
 			else {
 				practice.Phone=phone;
 			}
-			DivvySystemsService.PostcardService service=new DivvySystemsService.PostcardService();
-			DivvySystemsService.PostcardReturnMessage returnMessage=new DivvySystemsService.PostcardReturnMessage();
+			DivvyConnect.PostcardServiceClient client=new DivvyConnect.PostcardServiceClient();
+			DivvyConnect.PostcardReturnMessage returnMessage=new DivvyConnect.PostcardReturnMessage();
 			string messages="";
 			Cursor=Cursors.WaitCursor;
 			try {
-				returnMessage=service.SendPostcards(
-					ProgramProperties.GetPropVal(ProgramName.Divvy,"API Key"),
-					ProgramProperties.GetPropVal(ProgramName.Divvy,"Username"),
-					ProgramProperties.GetPropVal(ProgramName.Divvy,"Password"),
-					listPostcards,practice);
+				returnMessage=client.SendPostcards(
+				  Guid.Parse(ProgramProperties.GetPropVal(ProgramName.Divvy,"API Key")),
+				  ProgramProperties.GetPropVal(ProgramName.Divvy,"Username"),
+				  ProgramProperties.GetPropVal(ProgramName.Divvy,"Password"),
+				  listPostcards,practice);
 			}
 			catch (Exception ex) {
 				messages+="Exception: "+ex.Message+"\r\nData: "+ex.Data+"\r\n";
 			}
 			messages+="MessageCode: "+returnMessage.MessageCode.ToString();//MessageCode enum. 0=CompletedSuccessfully, 1=CompletedWithErrors, 2=Failure
 			MsgBox.Show(this,"Return Messages: "+returnMessage.Message+"\r\n"+messages);
-			if(returnMessage.MessageCode==DivvySystemsService.MessageCode.CompletedSucessfully) {
+			if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedSucessfully) {
 				Cursor=Cursors.WaitCursor;
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 					//make commlog entries for each patient
-					Commlogs.InsertForRecall(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+					//Commlogs.InsertForRecall(PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString()),CommItemMode.Mail,
+					//  PIn.Int(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetLong(PrefName.RecallStatusMailed));					
+					Commlogs.InsertForRecall(1,CommItemMode.Mail,
 						PIn.Int(table.Rows[gridMain.SelectedIndices[i]]["numberOfReminders"].ToString()),PrefC.GetLong(PrefName.RecallStatusMailed));
 				}
 				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
@@ -1390,7 +1394,7 @@ namespace OpenDental{
 						PIn.Long(table.Rows[gridMain.SelectedIndices[i]]["RecallNum"].ToString()),PrefC.GetLong(PrefName.RecallStatusMailed));
 				}
 			}
-			else if(returnMessage.MessageCode==DivvySystemsService.MessageCode.CompletedWithErrors) {
+			else if(returnMessage.MessageCode==DivvyConnect.MessageCode.CompletedWithErrors) {
 				for(int i=0;i<returnMessage.PostcardMessages.Length;i++) {
 					//todo: process return messages. Update commlog and change recall statuses for postcards that were sent.
 				}

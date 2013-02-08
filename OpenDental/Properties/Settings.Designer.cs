@@ -116,17 +116,6 @@ namespace OpenDental.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://www.divvysystems.com/DivvyConnectAPI/DivvyConnect.Services.PostcardService" +
-            ".svc")]
-        public string OpenDental_DivvySystemsService_PostcardService {
-            get {
-                return ((string)(this["OpenDental_DivvySystemsService_PostcardService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("https://secure.newcropaccounts.com/v7/WebServices/Update1.asmx")]
         public string OpenDental_NewCrop_Update1 {
             get {
