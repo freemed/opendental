@@ -25,6 +25,19 @@ namespace OpenDental
 		private Timer timer1;
 		private Point PositionOfClick;
 		private ReplaceWord ReplWord;
+		private bool spellCheckIsEnabled;
+
+		///<summary>Set true to enable spell checking in this control.</summary>
+		[Category("Behavior"),Description("Set true to enable spell checking.")]
+		[DefaultValue(true)]
+		public bool SpellCheckIsEnabled {
+			get {
+				return spellCheckIsEnabled;
+			}
+			set {
+				spellCheckIsEnabled=value;
+			}
+		}
 
 		/*public ODtextBox(System.ComponentModel.IContainer container)
 		{
@@ -39,6 +52,7 @@ namespace OpenDental
 		///<summary></summary>
 		public ODtextBox(){
 			InitializeComponent();// Required for Windows.Forms Class Composition Designer support
+			spellCheckIsEnabled=true;
 			if(System.ComponentModel.LicenseManager.UsageMode!=System.ComponentModel.LicenseUsageMode.Designtime
 				&& HunspellGlobal==null)
 			{
@@ -202,21 +216,21 @@ namespace OpenDental
 				}
 				int endIndex=startIndex+words[i].Length-1;
 				if(charIndex>=startIndex && charIndex<=endIndex) {//this is our word
-					ReplWord.word=words[i];
-					ReplWord.startIndex=startIndex;
-					ReplWord.endIndex=endIndex;
+					ReplWord.Word=words[i];
+					ReplWord.StartIndex=startIndex;
+					ReplWord.EndIndex=endIndex;
 					break;
 				}
 				startIndex=startIndex+words[i].Length;
 			}
-			if(ListIncorrect.Contains(ReplWord.word)) {
+			if(ListIncorrect.Contains(ReplWord.Word)) {
 				return true;
 			}
 			return false;
 		}
 
 		private List<string> SpellSuggest() {
-			List<string> suggestions=HunspellGlobal.Suggest(ReplWord.word);
+			List<string> suggestions=HunspellGlobal.Suggest(ReplWord.Word);
 			return suggestions;
 		}
 
@@ -236,8 +250,8 @@ namespace OpenDental
 				case 3:
 				case 4:
 					int originalCaret=this.SelectionStart;
-					this.Text=this.Text.Remove(ReplWord.startIndex,ReplWord.word.Length);
-					this.Text=this.Text.Insert(ReplWord.startIndex,contextMenu.MenuItems[contextMenu.MenuItems.IndexOf((MenuItem)sender)].Text);
+					this.Text=this.Text.Remove(ReplWord.StartIndex,ReplWord.Word.Length);
+					this.Text=this.Text.Insert(ReplWord.StartIndex,contextMenu.MenuItems[contextMenu.MenuItems.IndexOf((MenuItem)sender)].Text);
 					if(this.Text.Length<=originalCaret) {
 						this.SelectionStart=this.Text.Length;
 					}
@@ -247,15 +261,15 @@ namespace OpenDental
 					timer1.Start();
 					break;
 				//case 5 is separator
-				case 6:
-					string newWord=Regex.Replace(ReplWord.word,"[\\s]|[\\p{P}\\p{S}-['-]]","");//don't allow words with spaces or punctuation except ' and - in them
-					//we don't need to make sure it is not already in the custom dict, since if it was it would not be underlined and this menu item could not be selected
+				case 6://Add to dict
+					string newWord=Regex.Replace(ReplWord.Word,"[\\s]|[\\p{P}\\p{S}-['-]]","");//don't allow words with spaces or punctuation except ' and - in them
+					//guaranteed to not already exist in custom dictionary, or it wouldn't be underlined.
 					DictCustom word=new DictCustom();
 					word.WordText=newWord;
 					DictCustoms.Insert(word);
 					DataValid.SetInvalid(InvalidType.DictCustoms);
-					ListIncorrect.Remove(ReplWord.word);
-					ListCorrect.Add(ReplWord.word);
+					ListIncorrect.Remove(ReplWord.Word);
+					ListCorrect.Add(ReplWord.Word);
 					timer1.Start();
 					break;
 				//case 7 is separator
@@ -453,12 +467,13 @@ namespace OpenDental
 		}
 
 		private class ReplaceWord {
-			public string word="";
-			public int startIndex=0;
-			public int endIndex=0;
+			public string Word="";
+			public int StartIndex=0;
+			public int EndIndex=0;
 		}
 
 	}
+
 }
 
 
