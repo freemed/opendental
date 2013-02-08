@@ -2674,11 +2674,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\DivvySystemsService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\EmdeonITSTest\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -4909,23 +4904,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\CallFireService\SMSService.wsdl" />
-    <None Include="Web References\DivvySystemsService\DivvyConnect.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\DivvySystemsService\DivvyConnect0.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\DivvySystemsService\DivvyConnect1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\DivvySystemsService\PostcardReturnMessage.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DivvySystemsService\PostcardService.wsdl" />
-    <None Include="Web References\DivvySystemsService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Web References\EmdeonITSTest\ITSReturn.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -5714,17 +5692,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_localhost_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://www.divvysystems.com/divvyconnectapi/DivvyConnect.Services.PostcardService.svc%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\DivvySystemsService\</RelPath>
-      <UpdateFromURL>http://www.divvysystems.com/divvyconnectapi/DivvyConnect.Services.PostcardService.svc%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_DivvySystemsService_PostcardService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="https://cert.its.emdeon.com/ITS/ITSWS.asmx%3fwsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
