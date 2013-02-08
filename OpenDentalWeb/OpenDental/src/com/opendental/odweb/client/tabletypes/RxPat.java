@@ -37,6 +37,8 @@ public class RxPat {
 		public int RxCui;
 		/** NCI Pharmaceutical Dosage Form code.  Only used with ehr. */
 		public String DosageCode;
+		/**  */
+		public String NewCropGuid;
 
 		/** Deep copy of object. */
 		public RxPat deepCopy() {
@@ -56,6 +58,7 @@ public class RxPat {
 			rxpat.SendStatus=this.SendStatus;
 			rxpat.RxCui=this.RxCui;
 			rxpat.DosageCode=this.DosageCode;
+			rxpat.NewCropGuid=this.NewCropGuid;
 			return rxpat;
 		}
 
@@ -78,6 +81,7 @@ public class RxPat {
 			sb.append("<SendStatus>").append(SendStatus.ordinal()).append("</SendStatus>");
 			sb.append("<RxCui>").append(RxCui).append("</RxCui>");
 			sb.append("<DosageCode>").append(Serializing.escapeForXml(DosageCode)).append("</DosageCode>");
+			sb.append("<NewCropGuid>").append(Serializing.escapeForXml(NewCropGuid)).append("</NewCropGuid>");
 			sb.append("</RxPat>");
 			return sb.toString();
 		}
@@ -131,6 +135,9 @@ public class RxPat {
 				}
 				if(Serializing.getXmlNodeValue(doc,"DosageCode")!=null) {
 					DosageCode=Serializing.getXmlNodeValue(doc,"DosageCode");
+				}
+				if(Serializing.getXmlNodeValue(doc,"NewCropGuid")!=null) {
+					NewCropGuid=Serializing.getXmlNodeValue(doc,"NewCropGuid");
 				}
 			}
 			catch(Exception e) {

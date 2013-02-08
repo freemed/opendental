@@ -9,7 +9,7 @@
 			<g:Dock direction="CENTER">
 				<!-- Put the appointment schedule here. -->
 				<g:SimplePanel ui:field="panelSchedule">
-					<g:Label>Picture of the appointment sched here.</g:Label>
+					<g:Image ui:field="imageApptSched" />
 				</g:SimplePanel>
 			</g:Dock>
 			<g:Dock direction="EAST" size="300">

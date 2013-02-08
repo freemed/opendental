@@ -90,6 +90,25 @@ public class Meth {
 		dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
 		return dto;
 	}
+	
+	/** Calls the server to query a method that takes no arguments that returns a string. */
+	public static DtoGetString getString(String classMethod) throws Exception {
+		return getString(classMethod,new String[0],"");
+	}
+	
+	/** Calls the server to query the database for a string. 
+	 * @param classMethod Must be a string in "Class.Method" format.  Ex: Accounts.GetBalance
+	 * @param paramTypes Declare the parameter types of the C# method being called into a String array.  Use type names for C#.  Ex: long, Patient 
+	 * @param parameters An array of objects that must exactly match the parameters of the calling method. 
+	 * @throws Exception The method ConstructArray can throw an exception. */
+	public static DtoGetString getString(String classMethod,String[] paramTypes,Object... parameters) throws Exception {
+		DtoGetString dto=new DtoGetString();
+		dto.Credentials=new Credentials("","");// TODO Pass the user's credentials that is currently logged in.
+		dto.MethodName=classMethod;
+		dto.ParamTypes=paramTypes;
+		dto.Params=DtoObject.ConstructArray(paramTypes,parameters);
+		return dto;
+	}
 		
 		
 		

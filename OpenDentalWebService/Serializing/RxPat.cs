@@ -27,6 +27,7 @@ namespace OpenDentalWebService {
 			sb.Append("<SendStatus>").Append((int)rxpat.SendStatus).Append("</SendStatus>");
 			sb.Append("<RxCui>").Append(rxpat.RxCui).Append("</RxCui>");
 			sb.Append("<DosageCode>").Append(SerializeStringEscapes.EscapeForXml(rxpat.DosageCode)).Append("</DosageCode>");
+			sb.Append("<NewCropGuid>").Append(SerializeStringEscapes.EscapeForXml(rxpat.NewCropGuid)).Append("</NewCropGuid>");
 			sb.Append("</RxPat>");
 			return sb.ToString();
 		}
@@ -86,6 +87,9 @@ namespace OpenDentalWebService {
 							break;
 						case "DosageCode":
 							rxpat.DosageCode=reader.ReadContentAsString();
+							break;
+						case "NewCropGuid":
+							rxpat.NewCropGuid=reader.ReadContentAsString();
 							break;
 					}
 				}

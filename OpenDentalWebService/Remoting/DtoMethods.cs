@@ -2083,6 +2083,9 @@ namespace OpenDentalWebService {
 			if(methodName=="RefreshASAP") {
 				return Appointments.RefreshASAP(Convert.ToInt64(parameters[0]),Convert.ToInt64(parameters[1]),Convert.ToInt64(parameters[2]));
 			}
+			if(methodName=="GetScheduleAsImage") {
+				return Appointments.GetScheduleAsImage((System.DateTime)parameters[0]);
+			}
 			throw new NotSupportedException("MethodAppointments, unknown method: "+methodName);
 		}
 

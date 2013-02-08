@@ -1,21 +1,23 @@
 package com.opendental.odweb.client.datainterface;
 
-import com.opendental.odweb.client.remoting.DtoGetObject;
-import com.opendental.odweb.client.remoting.Meth;
+import java.util.Date;
+
+import com.opendental.odweb.client.remoting.*;
+import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Appointments {
-
-	/** Server will return a list of Appointments.  This method returns a serialized DtoGetObject meant for Db.SendRequest.  Gets list of ASAP appointments. */
-	public static String refreshASAP(int provNum,int siteNum,int clinicNum) {
-		DtoGetObject dto=null;
+	
+	/** Gets the image of the schedule for the day passed in as a Base64 string. */
+	public static void getScheduleAsImage(Date date,RequestCallbackResult requestCallback) {
+		DtoGetString dto=null;
 		try {
-			dto=Meth.getObject("Appointments.RefreshASAP", new String[] { "long","long","long"	},"List<OpenDentBusiness.Appointment>", provNum,siteNum,clinicNum);
+			dto=Meth.getString("Appointments.GetScheduleAsImage", new String[] { "DateTime"	}, date);
 		}
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		return dto.serialize();
+		Db.sendRequest(dto.serialize(), requestCallback);
 	}
 
 }
