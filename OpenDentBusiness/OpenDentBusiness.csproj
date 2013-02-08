@@ -461,6 +461,7 @@
     <Compile Include="Erx\NCScript.cs" />
     <Compile Include="HL7old\EhrORU.cs" />
     <Compile Include="HL7old\EhrVXU.cs" />
+    <Compile Include="HL7\InternalCentricity.cs" />
     <Compile Include="HL7\FieldConstructor.cs" />
     <Compile Include="HL7\InternalEcwFull.cs" />
     <Compile Include="HL7\InternalEcwStandalone.cs" />

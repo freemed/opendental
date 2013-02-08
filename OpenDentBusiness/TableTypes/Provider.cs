@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		public string TaxonomyCodeOverride;
 		///<summary>For Canada. Set to true if CDA Net provider.</summary>
 		public bool IsCDAnet;
-		///<summary>UserID from eCW so that prov abbreviations can be human readable.</summary>
+		///<summary>The name of this field is bad and will soon be changed to MedicalSoftID.  This allows an ID field that can be used for HL7 synch with other software.  Before this field was added, we were using prov abbreviation, which did not work well.</summary>
 		public string EcwID;
 		///<summary>Allows using ehr module for this provider.  Tied to provider fname and lname.</summary>
 		public string EhrKey;

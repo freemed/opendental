@@ -81,6 +81,8 @@ namespace OpenDentBusiness.HL7 {
 					return gDTM(proc.ProcDate,14);
 				case "proc.ProcFee":
 					return proc.ProcFee.ToString("F2");
+				case "proc.ProcNum":
+					return proc.ProcNum.ToString();
 				case "proc.toothSurfRange":
 					return gTreatArea(def.ComponentSeparator,proc);
 				case "proccode.ProcCode":
@@ -91,6 +93,8 @@ namespace OpenDentBusiness.HL7 {
 					return gSep(def);
 				case "sequenceNum":
 					return sequenceNum.ToString();
+				case "uniqueGUID":
+					return Guid.NewGuid().ToString("N");
 				default:
 					return "";
 			}

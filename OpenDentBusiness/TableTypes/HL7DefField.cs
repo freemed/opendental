@@ -82,12 +82,14 @@ namespace OpenDentBusiness{
 			retVal.Add(new FieldNameAndType("proc.DiagnosticCode",DataTypeHL7.CWE,"0051"));
 			retVal.Add(new FieldNameAndType("proc.procDateTime",DataTypeHL7.DTM));
 			retVal.Add(new FieldNameAndType("proc.ProcFee",DataTypeHL7.CP));
+			retVal.Add(new FieldNameAndType("proc.ProcNum",DataTypeHL7.ST));
 			retVal.Add(new FieldNameAndType("proc.toothSurfRange",DataTypeHL7.CNE,"0340"));
 			retVal.Add(new FieldNameAndType("proccode.ProcCode",DataTypeHL7.CNE,"0088"));
 			retVal.Add(new FieldNameAndType("prov.provIdNameLFM",DataTypeHL7.XCN));//Provider id table is user defined table and different number depending on what segment it is pulled from.  Example: FT1 Performed By Code table is 0084, 
 			retVal.Add(new FieldNameAndType("prov.provIdName",DataTypeHL7.XCN));
 			retVal.Add(new FieldNameAndType("separators^~\\&",DataTypeHL7.ST));
 			retVal.Add(new FieldNameAndType("sequenceNum",DataTypeHL7.SI));
+			retVal.Add(new FieldNameAndType("uniqueGUID",DataTypeHL7.ST));
 			return retVal;
 		}
 

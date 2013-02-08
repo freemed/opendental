@@ -91,6 +91,9 @@ namespace OpenDentBusiness{
 			def=GetInternalFromDb("eCWTight");
 			def=InternalEcwTight.GetDeepInternal(def);
 			listInternal.Add(def);
+			def=GetInternalFromDb("Centricity");
+			def=InternalCentricity.GetDeepInternal(def);
+			listInternal.Add(def);
 			//Add defs for other companies like Centricity here later.
 			return listInternal;
 		}
@@ -106,6 +109,9 @@ namespace OpenDentBusiness{
 			}
 			else if(def.InternalType=="eCWTight") {
 				def=InternalEcwTight.GetDeepInternal(def);
+			}
+			else if(def.InternalType=="Centricity") {
+				def=InternalCentricity.GetDeepInternal(def);
 			}
 			//no need to return a def because the original reference won't have been lost.
 		}
