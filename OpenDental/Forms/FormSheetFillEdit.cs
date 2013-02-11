@@ -587,7 +587,14 @@ namespace OpenDental {
 			string attachPath=FormEmailMessageEdit.GetAttachPath();
 			string fileName;
 			string filePathAndName;
-			EmailAddress emailAddress=EmailAddresses.GetByClinic(Patients.GetPat(SheetCur.PatNum).ClinicNum);
+			EmailAddress emailAddress;
+			Patient patCur=Patients.GetPat(SheetCur.PatNum);
+			if(patCur==null) {
+				emailAddress=EmailAddresses.GetByClinic(0);
+			}
+			else {
+				emailAddress=EmailAddresses.GetByClinic(patCur.ClinicNum);
+			}
 			//Graphics g=this.CreateGraphics();
 			if(FormS.EmailPatOrLab){
 				fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
