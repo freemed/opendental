@@ -214,7 +214,7 @@ namespace OpenDentBusiness{
 			//Paysplits for the entire office history.
 			command+="INSERT INTO "+tempOdAgingTransTableName+" (PatNum,TranDate,TranAmount) "+
 				"SELECT ps.PatNum PatNum,"+
-						"ps.ProcDate TranDate,"+
+						"ps.DatePay TranDate,"+
 						"-ps.SplitAmt TranAmount "+
 					"FROM paysplit ps "+
 					"WHERE ps.PayPlanNum=0 "+//Only splits not attached to payment plans.
@@ -343,7 +343,7 @@ namespace OpenDentBusiness{
 					"(SELECT ps.PatNum,SUM(ps.SplitAmt) PayPlanPayments "+
 					"FROM paysplit ps "+
 					"WHERE ps.PayPlanNum<>0 "+//only payments attached to payment plans.
-					(historic?(" AND ps.ProcDate<="+DbHelper.DateColumn(asOfDate)+" "):"")+
+					(historic?(" AND ps.DatePay<="+DbHelper.DateColumn(asOfDate)+" "):"")+
 					"GROUP BY ps.PatNum) p "+
 				"SET a.PayPlanDue=a.PayPlanDue-p.PayPlanPayments "+
 					"WHERE p.PatNum=a.PatNum;";
