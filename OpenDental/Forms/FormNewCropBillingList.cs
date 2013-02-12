@@ -20,6 +20,10 @@ namespace OpenDental {
 		}
 
 		private void FormBillingList_Load(object sender,EventArgs e) {
+			FillGrid();
+		}
+
+		private void FillGrid() {
 			try {
 				html=html.Replace("&nbsp;"," ");
 				int tableRootStartIndex=html.IndexOf("<table")+7;//Should always exist.
@@ -91,13 +95,14 @@ namespace OpenDental {
 					int accountIdLength=shortName.Substring(accountIdStartIndex).LastIndexOf("-");
 					string accountId=shortName.Substring(accountIdStartIndex,accountIdLength);
 					int patNumLength=accountId.IndexOf("-");
-					string patNum=accountId.Substring(0,patNumLength);
-					if(patNum=="6566") {//Account 6566 corresponds to our software key in the training database. These accounts are test accounts.
+					string patNumStr=PIn.String(accountId.Substring(0,patNumLength));
+					if(patNumStr=="6566") {//Account 6566 corresponds to our software key in the training database. These accounts are test accounts.
 						continue;//Do not show OD test accounts.
 					}
+					long patNum=PIn.Long(patNumStr);
 					ODGridRow gr=new ODGridRow();
 					//PatNum
-					gr.Cells.Add(new ODGridCell(patNum));
+					gr.Cells.Add(new ODGridCell(patNumStr));
 					//Phone
 					gr.Cells.Add(new ODGridCell(trCells[14]));
 					//PracticeTitle
@@ -113,11 +118,20 @@ namespace OpenDental {
 					//CityStateZip
 					gr.Cells.Add(new ODGridCell(trCells[13]));
 					//DateAdded
-					string datet=trCells[18];
-					string date=datet.Substring(0,datet.IndexOf(" "));
-					gr.Cells.Add(new ODGridCell(date));
+					string datetstr=trCells[18];
+					string datestr=datetstr.Substring(0,datetstr.IndexOf(" "));
+					gr.Cells.Add(new ODGridCell(datestr));
 					//NPI
-					gr.Cells.Add(new ODGridCell(trCells[7]));
+					string npi=PIn.String(trCells[7]);
+					gr.Cells.Add(new ODGridCell(npi));
+					//IsNew
+					RepeatCharge RepeatCur=RepeatCharges.GetForNewCrop(patNum,npi);
+					if(RepeatCur==null) {//No such repeating charge exists yet. New provider.
+						gr.Cells.Add(new ODGridCell("X"));
+					}
+					else {//Existing provider.
+						gr.Cells.Add(new ODGridCell(""));
+					}
 					gridBillingList.Rows.Add(gr);
 				}
 				gridBillingList.EndUpdate();
@@ -136,12 +150,13 @@ namespace OpenDental {
 			int address2Width=70;//fixed width
 			int dateAddedWidth=68;//fixed width
 			int npiWidth=70;//fixed width
-			int variableWidth=gridWidth-patNumWidth-phoneWidth-address2Width-dateAddedWidth-npiWidth;
-			int practiceTitleWidth=variableWidth/5;
-			int clinicOrTitleWidth=practiceTitleWidth;
-			int firstLastNameWidth=practiceTitleWidth;
-			int addressWidth=practiceTitleWidth;
-			int cityStateZipWidth=variableWidth-practiceTitleWidth-clinicOrTitleWidth-firstLastNameWidth-addressWidth;
+			int isNewWidth=46;//fixed width
+			int variableWidth=gridWidth-patNumWidth-phoneWidth-address2Width-dateAddedWidth-npiWidth-isNewWidth;
+			int practiceTitleWidth=variableWidth/5;//variable width
+			int clinicOrTitleWidth=practiceTitleWidth;//variable width
+			int firstLastNameWidth=practiceTitleWidth;//variable width
+			int addressWidth=practiceTitleWidth;//variable width
+			int cityStateZipWidth=variableWidth-practiceTitleWidth-clinicOrTitleWidth-firstLastNameWidth-addressWidth;//variable width
 			gridBillingList.Columns.Add(new ODGridColumn("PatNum",patNumWidth,HorizontalAlignment.Center));//0
 			gridBillingList.Columns.Add(new ODGridColumn("Phone",phoneWidth,HorizontalAlignment.Center));//1
 			gridBillingList.Columns.Add(new ODGridColumn("PracticeTitle",practiceTitleWidth,HorizontalAlignment.Left));//2
@@ -152,6 +167,7 @@ namespace OpenDental {
 			gridBillingList.Columns.Add(new ODGridColumn("CityStateZip",cityStateZipWidth,HorizontalAlignment.Left));//7
 			gridBillingList.Columns.Add(new ODGridColumn("DateAdded",dateAddedWidth,HorizontalAlignment.Center));//8
 			gridBillingList.Columns.Add(new ODGridColumn("NPI",npiWidth,HorizontalAlignment.Center));//9
+			gridBillingList.Columns.Add(new ODGridColumn("IsNew",isNewWidth,HorizontalAlignment.Center));//10
 			gridBillingList.EndUpdate();
 		}
 
@@ -160,30 +176,43 @@ namespace OpenDental {
 		}
 
 		private void butProcess_Click(object sender,EventArgs e) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will add a new repeating charge for each provider in the list above"
+				+" who is new (does not already have a repeating charge), based on PatNum and NPI.  Continue?")) {
+				return;
+			}
+			Cursor=Cursors.WaitCursor;
 			int numChargesAdded=0;
+			int numSkipped=0;
 			for(int i=0;i<gridBillingList.Rows.Count;i++) {
-				DateTime dateAdded=PIn.Date(gridBillingList.Rows[i].Cells[8].Text);
-				//TODO: warn if older than 3 months.
-				//if(PIn.Date(textDateStart.Text)<DateTime.Today.AddMonths(-1)) {
-				//  MsgBox.Show(this,"Start date cannot be more than a month in the past.  But you can still enter previous charges manually in the account.");
-				//  return;
-				//}
 				long patNum=PIn.Long(gridBillingList.Rows[i].Cells[0].Text);
 				string npi=PIn.String(gridBillingList.Rows[i].Cells[9].Text);
 				RepeatCharge RepeatCur=RepeatCharges.GetForNewCrop(patNum,npi);
 				if(RepeatCur==null) {//No such repeating charge exists yet.
-					RepeatCur=new RepeatCharge();
-					RepeatCur.IsNew=true;
-					RepeatCur.PatNum=patNum;
-					RepeatCur.ProcCode="NewCrop";
-					RepeatCur.ChargeAmt=15;
-					RepeatCur.DateStart=dateAdded;
-					RepeatCur.Note="NPI="+npi;
-					RepeatCharges.Insert(RepeatCur);
-					numChargesAdded++;
+					DateTime dateAdded=PIn.Date(gridBillingList.Rows[i].Cells[8].Text);
+					if(dateAdded<DateTime.Today.AddDays(-90)) {//The customer was added into NewCrop over 90 days ago. Not really new. Skip and warn.
+						numSkipped++;
+					}
+					else {
+						//We consider the provider a new provider and create a new repeating charge.
+						RepeatCur=new RepeatCharge();
+						RepeatCur.IsNew=true;
+						RepeatCur.PatNum=patNum;
+						RepeatCur.ProcCode="NewCrop";
+						RepeatCur.ChargeAmt=15;
+						RepeatCur.DateStart=dateAdded;
+						RepeatCur.Note="NPI="+npi;
+						RepeatCharges.Insert(RepeatCur);
+						numChargesAdded++;
+					}
 				}
 			}
-			MessageBox.Show("Done. Number of repeating charges added: "+numChargesAdded);
+			FillGrid();
+			Cursor=Cursors.Default;
+			string msg="Done. Number of repeating charges added: "+numChargesAdded;
+			if(numSkipped>0) {
+				msg+=Environment.NewLine+"Number skipped due to old DateAdded (over 90 days ago): "+numSkipped;
+			}
+			MessageBox.Show(msg);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

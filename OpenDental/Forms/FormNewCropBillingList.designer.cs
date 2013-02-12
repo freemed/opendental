@@ -39,7 +39,7 @@
 			this.gridBillingList.Name = "gridBillingList";
 			this.gridBillingList.ScrollValue = 0;
 			this.gridBillingList.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridBillingList.Size = new System.Drawing.Size(918,622);
+			this.gridBillingList.Size = new System.Drawing.Size(918,617);
 			this.gridBillingList.TabIndex = 0;
 			this.gridBillingList.Title = null;
 			this.gridBillingList.TranslationName = null;
@@ -52,7 +52,7 @@
 			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(855,640);
+			this.butClose.Location = new System.Drawing.Point(855,635);
 			this.butClose.Name = "butClose";
 			this.butClose.Size = new System.Drawing.Size(75,23);
 			this.butClose.TabIndex = 2;
@@ -68,7 +68,7 @@
 			this.butProcess.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butProcess.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butProcess.CornerRadius = 4F;
-			this.butProcess.Location = new System.Drawing.Point(434,638);
+			this.butProcess.Location = new System.Drawing.Point(471,635);
 			this.butProcess.Name = "butProcess";
 			this.butProcess.Size = new System.Drawing.Size(75,23);
 			this.butProcess.TabIndex = 3;

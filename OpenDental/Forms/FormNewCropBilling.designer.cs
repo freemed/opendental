@@ -28,6 +28,7 @@
 			this.label1 = new System.Windows.Forms.Label();
 			this.butPaste = new OpenDental.UI.Button();
 			this.butGo = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// textBoxHTML
@@ -40,7 +41,7 @@
 			this.textBoxHTML.Name = "textBoxHTML";
 			this.textBoxHTML.ReadOnly = true;
 			this.textBoxHTML.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.textBoxHTML.Size = new System.Drawing.Size(958,639);
+			this.textBoxHTML.Size = new System.Drawing.Size(958,640);
 			this.textBoxHTML.TabIndex = 0;
 			this.textBoxHTML.WordWrap = false;
 			// 
@@ -62,7 +63,7 @@
 			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butPaste.CornerRadius = 4F;
-			this.butPaste.Location = new System.Drawing.Point(453,667);
+			this.butPaste.Location = new System.Drawing.Point(414,669);
 			this.butPaste.Name = "butPaste";
 			this.butPaste.Size = new System.Drawing.Size(75,23);
 			this.butPaste.TabIndex = 4;
@@ -78,7 +79,7 @@
 			this.butGo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butGo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butGo.CornerRadius = 4F;
-			this.butGo.Location = new System.Drawing.Point(895,667);
+			this.butGo.Location = new System.Drawing.Point(495,669);
 			this.butGo.Name = "butGo";
 			this.butGo.Size = new System.Drawing.Size(75,23);
 			this.butGo.TabIndex = 5;
@@ -86,17 +87,34 @@
 			this.butGo.UseVisualStyleBackColor = true;
 			this.butGo.Click += new System.EventHandler(this.butGo_Click);
 			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(895,669);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75,23);
+			this.butClose.TabIndex = 6;
+			this.butClose.Text = "Close";
+			this.butClose.UseVisualStyleBackColor = true;
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormNewCropBilling
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(982,707);
+			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butGo);
 			this.Controls.Add(this.butPaste);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.textBoxHTML);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(950,700);
+			this.MinimumSize = new System.Drawing.Size(990,734);
 			this.Name = "FormNewCropBilling";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "NewCrop Billing";
@@ -112,6 +130,7 @@
 		private System.Windows.Forms.Label label1;
 		private UI.Button butPaste;
 		private UI.Button butGo;
+		private UI.Button butClose;
 	}
 }
 
