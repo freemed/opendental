@@ -25,6 +25,7 @@ namespace OpenDental {
 		///<summary>When you first mouse down, if you clicked on a valid control, this will be false.  For drag selection, this must be true.</summary>
 		private bool ClickedOnBlankSpace;
 		private bool AltIsDown;
+		///<summary>This is our 'clipboard' for copy/paste of fields.</summary>
 		private List<SheetFieldDef> ListSheetFieldDefsCopyPaste;
 		private int PasteOffset=0;
 		///<summary>After each 10 pastes to the upper left origin, this increments 10 to shift the next 10 down.</summary>
@@ -165,6 +166,13 @@ namespace OpenDental {
 				}
 				else {
 					listFields.Items.Add(SheetDefCur.SheetFieldDefs[i].FieldName);
+				}
+				if(ListSheetFieldDefsCopyPaste!=null) {//reselect pasted controls
+					for(int cp=0;cp<ListSheetFieldDefsCopyPaste.Count;cp++) {
+						if(SheetDefCur.SheetFieldDefs[i].SheetFieldDefNum==ListSheetFieldDefsCopyPaste[cp].SheetFieldDefNum) {
+							listFields.SetSelected(i,true);//safe to run multiple times.
+						}
+					}
 				}
 			}
 		}
@@ -1165,6 +1173,12 @@ namespace OpenDental {
 				minY=Math.Min(minY,ListSheetFieldDefsCopyPaste[i].YPos);
 			} 
 			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//create new controls
+				Random rand = new Random();
+				//this new key is only used for copy and paste function.
+				//When this sheet is saved, all sheetfielddefs are deleted and reinserted, so the dummy PKs are harmless.
+				//There's a VERY slight chance of PK duplication, but the only result would be selection of wrong field.
+				int newDefNum = rand.Next(int.MaxValue);
+				ListSheetFieldDefsCopyPaste[i].SheetFieldDefNum=newDefNum;
 				SheetFieldDef fielddef=ListSheetFieldDefsCopyPaste[i].Copy();
 				fielddef.XPos=fielddef.XPos-minX+origin.X;
 				fielddef.YPos=fielddef.YPos-minY+origin.Y;
@@ -1176,9 +1190,9 @@ namespace OpenDental {
 
 			}
 			FillFieldList();
-			for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//reselect newly added controls
-				listFields.SetSelected((listFields.Items.Count-1)-i,true);//Add to selected indicies, which will be the newest clipboard.count controls on the bottom of the list.
-			}
+			//for(int i=0;i<ListSheetFieldDefsCopyPaste.Count;i++) {//reselect newly added controls
+			//  listFields.SetSelected((listFields.Items.Count-1)-i,true);//Add to selected indicies, which will be the newest clipboard.count controls on the bottom of the list.
+			//}
 			panelMain.Refresh();
 		}
 
