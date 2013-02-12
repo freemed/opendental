@@ -3908,7 +3908,6 @@ namespace OpenDental{
 			NewCrop.PatientInformationRequester patientInfoRequester=new NewCrop.PatientInformationRequester();
 			NewCrop.Result response=new NewCrop.Result();
 #if DEBUG
-			newCropAccountId="6566-nnv";
 			wsNewCrop.Url="https://preproduction.newcropaccounts.com/v7/WebServices/Update1.asmx";
 #else
 			return false;//TODO: Remove when final release is ready. Prevents this feature from going live before we are ready.
@@ -7449,11 +7448,16 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(CultureInfo.CurrentCulture.Name=="en-US"
-				&& Regex.IsMatch(textProcCode.Text,@"^\d{4}$")//if exactly 4 digits
-				&& !ProcedureCodeC.HList.ContainsKey(textProcCode.Text))//and the 4 digit code is not found
-			{
-				textProcCode.Text="D"+textProcCode.Text;
+			if(CultureInfo.CurrentCulture.Name=="en-US" && Regex.IsMatch(textProcCode.Text,@"^\d{4}$")){//if exactly 4 digits
+				if(!ProcedureCodeC.HList.ContainsKey(textProcCode.Text)) {//4 digit code is not found
+					textProcCode.Text="D"+textProcCode.Text;
+				}
+				else { //or if it's a 4 digit code that's hidden, also add the D
+					ProcedureCode procCode=ProcedureCodes.GetProcCode(textProcCode.Text);
+					if(DefC.GetHidden(DefCat.ProcCodeCats,procCode.ProcCat)) {
+						textProcCode.Text="D"+textProcCode.Text;
+					}
+				}
 			}
 			if(!ProcedureCodeC.HList.ContainsKey(textProcCode.Text)) {
 				MessageBox.Show(Lan.g(this,"Invalid code."));
