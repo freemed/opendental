@@ -254,6 +254,7 @@ namespace OpenDental{
 		private MenuItem menuItemHL7;
 		private MenuItem menuItemNewCropBilling;
 		private FormWiki FormMyWiki;
+		private FormCreditRecurringCharges FormCRC;
 
 		///<summary></summary>
 		public FormOpenDental(string[] cla){
@@ -348,6 +349,12 @@ namespace OpenDental{
 			if( disposing ){
 				if(components != null){
 					components.Dispose();
+				}
+				if(FormCRC!=null) {
+					FormCRC.Dispose();
+				}
+				if(FormMyWiki!=null) {
+					FormMyWiki.Dispose();
 				}
 			}
 			base.Dispose( disposing );
@@ -4631,8 +4638,14 @@ namespace OpenDental{
 		}
 
 		private void menuItemCCRecurring_Click(object sender,EventArgs e) {
-			FormCreditRecurringCharges FormRC=new FormCreditRecurringCharges();
-			FormRC.Show();
+			if(FormCRC==null || FormCRC.IsDisposed) {
+				FormCRC=new FormCreditRecurringCharges();
+			}
+			FormCRC.Show();
+			if(FormCRC.WindowState==FormWindowState.Minimized) {
+				FormCRC.WindowState=FormWindowState.Normal;
+			}
+			FormCRC.BringToFront();
 		}
 
 		private void menuItemCustomerManage_Click(object sender,EventArgs e) {
