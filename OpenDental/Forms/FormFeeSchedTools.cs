@@ -729,7 +729,7 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			FormFeeSchedPickRemote formPick=new FormFeeSchedPickRemote();
-			formPick.Url=@"http://www.opendental.com/feescanada/";
+			formPick.Url=@"http://www.opendental.com/feescanada/";//points to index.php file
 			if(formPick.ShowDialog()!=DialogResult.OK) {
 				Cursor=Cursors.Default;
 				return;
