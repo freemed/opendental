@@ -362,6 +362,7 @@ namespace OpenDentBusiness {
 		ShowProgressNotesInsteadofCommLog,
 		ShowUrgFinNoteInProgressNotes,
 		SolidBlockouts,
+		SpellCheckIsEnabled,
 		StatementAccountsUseChartNumber,
 		StatementsCalcDueDate,
 		StatementShowCreditCard,

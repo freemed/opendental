@@ -11934,13 +11934,30 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.1.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_1_2();
+		}
+
+		private static void To13_1_2() {
+			if(FromVersion<new Version("13.1.2.0")) {
+				string command;
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('SpellCheckIsEnabled','1')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'SpellCheckIsEnabled','1')";
+					Db.NonQ(command);
+				}
+				command="UPDATE preference SET ValueString = '13.1.2.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_2_0();
 		}
+
 
 		private static void To13_2_0() {
 			if(FromVersion<new Version("13.2.0.0")) {
 				string command;
-
 
 
 
