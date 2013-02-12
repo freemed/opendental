@@ -400,14 +400,23 @@ namespace OpenDental {
 				}
 				Table.Rows[i][index+1]="";
 			}
-			Point newCellSelected=new Point(index+1,gridMain.SelectedCell.Y);
+			Point newCellSelected=new Point(index,gridMain.SelectedCell.Y);
+			if(gridMain.SelectedCell.X==gridMain.Columns.Count-1) {//only if this is the last column
+				newCellSelected=new Point(index+1,gridMain.SelectedCell.Y);//shift the selected column to the right
+			}
 			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
+			if(newCellSelected.Y>-1) {
+				gridMain.SetSelected(newCellSelected);
+			}
 		}
 
 		private void butColumnDelete_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedCell.X==-1) {
 				MsgBox.Show(this,"Please select a column first.");
+				return;
+			}
+			if(gridMain.Columns.Count==1) {
+				MsgBox.Show(this,"Cannot delete last column.");
 				return;
 			}
 			ColNames.RemoveAt(gridMain.SelectedCell.X);
@@ -479,11 +488,18 @@ namespace OpenDental {
 		private void butRowDelete_Click(object sender,EventArgs e) {
 			if(gridMain.SelectedCell.Y==-1) {
 				MsgBox.Show(this,"Please select a row first.");
+				return;
+			}
+			if(gridMain.Rows.Count==1) {
+				MsgBox.Show(this,"Cannot delete last row.");
+				return;
 			}
 			Table.Rows.RemoveAt(gridMain.SelectedCell.Y);
 			Point newCellSelected=new Point(gridMain.SelectedCell.X,Math.Max(gridMain.SelectedCell.Y-1,0));
 			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
+			if(newCellSelected.X>-1 && newCellSelected.Y >-1) {
+				gridMain.SetSelected(newCellSelected);
+			}
 		}
 
 		private void listView_Click(object sender,EventArgs e) {
