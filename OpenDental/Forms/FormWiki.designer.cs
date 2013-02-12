@@ -26,9 +26,9 @@ namespace OpenDental{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWiki));
 			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
+			this.labelStatus = new System.Windows.Forms.Label();
 			this.ToolBarMain = new OpenDental.UI.ODToolBar();
 			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
-			this.labelStatus = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// imageListMain
@@ -36,17 +36,29 @@ namespace OpenDental{
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListMain.Images.SetKeyName(0, "Left.gif");
-			this.imageListMain.Images.SetKeyName(1, "Manage22.gif");
-			this.imageListMain.Images.SetKeyName(2, "home.gif");
-			this.imageListMain.Images.SetKeyName(3, "editPencil.gif");
-			this.imageListMain.Images.SetKeyName(4, "print.gif");
-			this.imageListMain.Images.SetKeyName(5, "rename.gif");
-			this.imageListMain.Images.SetKeyName(6, "deleteX.gif");
-			this.imageListMain.Images.SetKeyName(7, "history.gif");
-			this.imageListMain.Images.SetKeyName(8, "incoming.gif");
-			this.imageListMain.Images.SetKeyName(9, "Add.gif");
-			this.imageListMain.Images.SetKeyName(10, "allpages.gif");
-			this.imageListMain.Images.SetKeyName(11, "search.gif");
+			this.imageListMain.Images.SetKeyName(1, "Right.gif");
+			this.imageListMain.Images.SetKeyName(2, "Manage22.gif");
+			this.imageListMain.Images.SetKeyName(3, "home.gif");
+			this.imageListMain.Images.SetKeyName(4, "editPencil.gif");
+			this.imageListMain.Images.SetKeyName(5, "print.gif");
+			this.imageListMain.Images.SetKeyName(6, "rename.gif");
+			this.imageListMain.Images.SetKeyName(7, "deleteX.gif");
+			this.imageListMain.Images.SetKeyName(8, "history.gif");
+			this.imageListMain.Images.SetKeyName(9, "incoming.gif");
+			this.imageListMain.Images.SetKeyName(10, "Add.gif");
+			this.imageListMain.Images.SetKeyName(11, "allpages.gif");
+			this.imageListMain.Images.SetKeyName(12, "search.gif");
+			// 
+			// labelStatus
+			// 
+			this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelStatus.Location = new System.Drawing.Point(-3, 686);
+			this.labelStatus.Name = "labelStatus";
+			this.labelStatus.Size = new System.Drawing.Size(947, 18);
+			this.labelStatus.TabIndex = 73;
+			this.labelStatus.Text = "Status Bar";
+			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// ToolBarMain
 			// 
@@ -69,17 +81,6 @@ namespace OpenDental{
 			this.webBrowserWiki.Size = new System.Drawing.Size(944, 657);
 			this.webBrowserWiki.TabIndex = 0;
 			this.webBrowserWiki.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowserWiki_Navigating);
-			// 
-			// labelStatus
-			// 
-			this.labelStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelStatus.Location = new System.Drawing.Point(-3, 686);
-			this.labelStatus.Name = "labelStatus";
-			this.labelStatus.Size = new System.Drawing.Size(947, 18);
-			this.labelStatus.TabIndex = 73;
-			this.labelStatus.Text = "Status Bar";
-			this.labelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormWiki
 			// 
