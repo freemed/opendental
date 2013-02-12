@@ -234,9 +234,11 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			#region Basic Xml Validation
 			string s=wikiContent;
-			//"<" and ">"-----------------------------------------------------------------------------------------------------------
-			s=s.Replace("&<","&lt;");
-			s=s.Replace("&>","&gt;");
+			MatchCollection matches;
+			//"<",">", and "&"-----------------------------------------------------------------------------------------------------------
+			s=s.Replace("&","&amp;");
+			s=s.Replace("&amp;<","&lt;");//because "&" was changed to "&amp;" in the line above.
+			s=s.Replace("&amp;>","&gt;");//because "&" was changed to "&amp;" in the line above.
 			s="<body>"+s+"</body>";
 			XmlDocument doc=new XmlDocument();
 			using(StringReader reader=new StringReader(s)) {
@@ -250,7 +252,7 @@ namespace OpenDentBusiness{
 			#endregion
 			#region regex replacements
 			//[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
-			MatchCollection matches;
+			//MatchCollection matches;
 			matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
 			foreach(Match match in matches) {
 				string imgName = match.Value.Substring(match.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
