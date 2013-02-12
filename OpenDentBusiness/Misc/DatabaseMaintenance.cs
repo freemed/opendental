@@ -1068,12 +1068,28 @@ namespace OpenDentBusiness {
 				}
 			}
 			else{//fix
-				//We can't touch those claimprocs because it would mess up the accounting.  So the only option, if we decide to fix automatically, is going to be to create some sort of claim that has the specific ClaimNum that seems to be missing.
+				//We can't touch those claimprocs because it would mess up the accounting. 
+				//For those that are not received, just warn the user
 				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
 				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
-					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) ";
+					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
+					+"AND claimproc.Status!="+POut.Int((int)ClaimProcStatus.Received);
 				table=Db.GetTable(command);
 				List<ClaimProc> cpList=Crud.ClaimProcCrud.TableToList(table);
+				for(int i=0;i<cpList.Count;i++) {
+					Patient pat=Patients.GetLim(cpList[i].PatNum);
+					log+=Lans.g("FormDatabaseMaintenance","Claimproc found with invalid ClaimNum for patient: ")
+						+pat.PatNum+" - "+Patients.GetNameFL(pat.LName,pat.FName,pat.Preferred,pat.MiddleI)+", "
+						+Lans.g("FormDatabaseMaintenance","Date: ")+cpList[i].ProcDate.ToShortDateString()
+						+"\r\n";
+				}
+				//For those that are received, create dummy claim that has the specific ClaimNum that seems to be missing.
+				command="SELECT * FROM claimproc WHERE claimproc.ClaimNum!=0 "
+				  +"AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
+					+"AND (claimproc.InsPayAmt!=0 OR claimproc.WriteOff!=0) "
+					+"AND claimproc.Status="+POut.Int((int)ClaimProcStatus.Received);
+				table=Db.GetTable(command);
+				cpList=Crud.ClaimProcCrud.TableToList(table);
 				Claim claim;
 				for(int i=0;i<cpList.Count;i++) {
 					claim=new Claim();
@@ -1344,7 +1360,7 @@ namespace OpenDentBusiness {
 				command=@"SELECT COUNT(*) FROM claimproc,claim
 					WHERE claimproc.ClaimNum=claim.ClaimNum
 					AND claim.ClaimStatus='R'
-					AND claimproc.Status=0";
+					AND claimproc.Status="+POut.Int((int)ClaimProcStatus.NotReceived);
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","ClaimProcs with status not matching claim found: ")+numFound+"\r\n";
@@ -1356,7 +1372,7 @@ namespace OpenDentBusiness {
 					FROM claimproc,claim
 					WHERE claimproc.ClaimNum=claim.ClaimNum
 					AND claim.ClaimStatus='R'
-					AND claimproc.Status=0";
+					AND claimproc.Status="+POut.Int((int)ClaimProcStatus.NotReceived);
 				table=Db.GetTable(command);
 				for(int i=0;i<table.Rows.Count;i++) {
 					Patient pat=Patients.GetPat(PIn.Long(table.Rows[i]["PatNum"].ToString()));
