@@ -248,11 +248,11 @@ namespace OpenDental{
 		private Thread ThreadVM;
 		///<summary>Holds the time for the oldest triage task.</summary>
 		private DateTime triageTime;
-		private MenuItem menuItemCustomDict;
 		private MenuItem menuItemWiki;
 		private MenuItem menuItemProcLockTool;
 		private MenuItem menuItemHL7;
 		private MenuItem menuItemNewCropBilling;
+		private MenuItem menuItemSpellCheck;
 		private FormWiki FormMyWiki;
 		private FormCreditRecurringCharges FormCRC;
 
@@ -426,7 +426,6 @@ namespace OpenDental{
 			this.menuItemClinics = new System.Windows.Forms.MenuItem();
 			this.menuItemContacts = new System.Windows.Forms.MenuItem();
 			this.menuItemCounties = new System.Windows.Forms.MenuItem();
-			this.menuItemCustomDict = new System.Windows.Forms.MenuItem();
 			this.menuItemSchoolClass = new System.Windows.Forms.MenuItem();
 			this.menuItemSchoolCourses = new System.Windows.Forms.MenuItem();
 			this.menuItemEmployees = new System.Windows.Forms.MenuItem();
@@ -502,6 +501,7 @@ namespace OpenDental{
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
+			this.menuItemSpellCheck = new System.Windows.Forms.MenuItem();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -634,6 +634,7 @@ namespace OpenDental{
             this.menuItemSecurity,
             this.menuItemSheets,
             this.menuItemEasy,
+            this.menuItemSpellCheck,
             this.menuItemTimeCards});
 			this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
 			this.menuItemSettings.Text = "&Setup";
@@ -886,7 +887,7 @@ namespace OpenDental{
 			// 
 			// menuItemTimeCards
 			// 
-			this.menuItemTimeCards.Index = 41;
+			this.menuItemTimeCards.Index = 42;
 			this.menuItemTimeCards.Text = "Time Cards";
 			this.menuItemTimeCards.Click += new System.EventHandler(this.menuItemTimeCards_Click);
 			// 
@@ -899,7 +900,6 @@ namespace OpenDental{
             this.menuItemClinics,
             this.menuItemContacts,
             this.menuItemCounties,
-            this.menuItemCustomDict,
             this.menuItemSchoolClass,
             this.menuItemSchoolCourses,
             this.menuItemEmployees,
@@ -948,93 +948,87 @@ namespace OpenDental{
 			this.menuItemCounties.Text = "Counties";
 			this.menuItemCounties.Click += new System.EventHandler(this.menuItemCounties_Click);
 			// 
-			// menuItemCustomDict
-			// 
-			this.menuItemCustomDict.Index = 5;
-			this.menuItemCustomDict.Text = "Custom Dictionary";
-			this.menuItemCustomDict.Click += new System.EventHandler(this.menuItemCustomDict_Click);
-			// 
 			// menuItemSchoolClass
 			// 
-			this.menuItemSchoolClass.Index = 6;
+			this.menuItemSchoolClass.Index = 5;
 			this.menuItemSchoolClass.Text = "Dental School Classes";
 			this.menuItemSchoolClass.Click += new System.EventHandler(this.menuItemSchoolClass_Click);
 			// 
 			// menuItemSchoolCourses
 			// 
-			this.menuItemSchoolCourses.Index = 7;
+			this.menuItemSchoolCourses.Index = 6;
 			this.menuItemSchoolCourses.Text = "Dental School Courses";
 			this.menuItemSchoolCourses.Click += new System.EventHandler(this.menuItemSchoolCourses_Click);
 			// 
 			// menuItemEmployees
 			// 
-			this.menuItemEmployees.Index = 8;
+			this.menuItemEmployees.Index = 7;
 			this.menuItemEmployees.Text = "&Employees";
 			this.menuItemEmployees.Click += new System.EventHandler(this.menuItemEmployees_Click);
 			// 
 			// menuItemEmployers
 			// 
-			this.menuItemEmployers.Index = 9;
+			this.menuItemEmployers.Index = 8;
 			this.menuItemEmployers.Text = "Employers";
 			this.menuItemEmployers.Click += new System.EventHandler(this.menuItemEmployers_Click);
 			// 
 			// menuItemCarriers
 			// 
-			this.menuItemCarriers.Index = 10;
+			this.menuItemCarriers.Index = 9;
 			this.menuItemCarriers.Text = "Insurance Carriers";
 			this.menuItemCarriers.Click += new System.EventHandler(this.menuItemCarriers_Click);
 			// 
 			// menuItemInsPlans
 			// 
-			this.menuItemInsPlans.Index = 11;
+			this.menuItemInsPlans.Index = 10;
 			this.menuItemInsPlans.Text = "&Insurance Plans";
 			this.menuItemInsPlans.Click += new System.EventHandler(this.menuItemInsPlans_Click);
 			// 
 			// menuItemLabCases
 			// 
-			this.menuItemLabCases.Index = 12;
+			this.menuItemLabCases.Index = 11;
 			this.menuItemLabCases.Text = "Lab Cases";
 			this.menuItemLabCases.Click += new System.EventHandler(this.menuItemLabCases_Click);
 			// 
 			// menuItemMedications
 			// 
-			this.menuItemMedications.Index = 13;
+			this.menuItemMedications.Index = 12;
 			this.menuItemMedications.Text = "&Medications";
 			this.menuItemMedications.Click += new System.EventHandler(this.menuItemMedications_Click);
 			// 
 			// menuItemPharmacies
 			// 
-			this.menuItemPharmacies.Index = 14;
+			this.menuItemPharmacies.Index = 13;
 			this.menuItemPharmacies.Text = "Pharmacies";
 			this.menuItemPharmacies.Click += new System.EventHandler(this.menuItemPharmacies_Click);
 			// 
 			// menuItemProviders
 			// 
-			this.menuItemProviders.Index = 15;
+			this.menuItemProviders.Index = 14;
 			this.menuItemProviders.Text = "Providers";
 			this.menuItemProviders.Click += new System.EventHandler(this.menuItemProviders_Click);
 			// 
 			// menuItemPrescriptions
 			// 
-			this.menuItemPrescriptions.Index = 16;
+			this.menuItemPrescriptions.Index = 15;
 			this.menuItemPrescriptions.Text = "Pre&scriptions";
 			this.menuItemPrescriptions.Click += new System.EventHandler(this.menuItemPrescriptions_Click);
 			// 
 			// menuItemReferrals
 			// 
-			this.menuItemReferrals.Index = 17;
+			this.menuItemReferrals.Index = 16;
 			this.menuItemReferrals.Text = "&Referrals";
 			this.menuItemReferrals.Click += new System.EventHandler(this.menuItemReferrals_Click);
 			// 
 			// menuItemSchools
 			// 
-			this.menuItemSchools.Index = 18;
+			this.menuItemSchools.Index = 17;
 			this.menuItemSchools.Text = "Sites";
 			this.menuItemSchools.Click += new System.EventHandler(this.menuItemSites_Click);
 			// 
 			// menuItemZipCodes
 			// 
-			this.menuItemZipCodes.Index = 19;
+			this.menuItemZipCodes.Index = 18;
 			this.menuItemZipCodes.Text = "&Zip Codes";
 			this.menuItemZipCodes.Click += new System.EventHandler(this.menuItemZipCodes_Click);
 			// 
@@ -1298,13 +1292,13 @@ namespace OpenDental{
 			// 
 			this.imageList32.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList32.ImageStream")));
 			this.imageList32.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList32.Images.SetKeyName(0,"Appt32.gif");
-			this.imageList32.Images.SetKeyName(1,"Family32b.gif");
-			this.imageList32.Images.SetKeyName(2,"Account32b.gif");
-			this.imageList32.Images.SetKeyName(3,"TreatPlan3D.gif");
-			this.imageList32.Images.SetKeyName(4,"chart32.gif");
-			this.imageList32.Images.SetKeyName(5,"Images32.gif");
-			this.imageList32.Images.SetKeyName(6,"Manage32.gif");
+			this.imageList32.Images.SetKeyName(0, "Appt32.gif");
+			this.imageList32.Images.SetKeyName(1, "Family32b.gif");
+			this.imageList32.Images.SetKeyName(2, "Account32b.gif");
+			this.imageList32.Images.SetKeyName(3, "TreatPlan3D.gif");
+			this.imageList32.Images.SetKeyName(4, "chart32.gif");
+			this.imageList32.Images.SetKeyName(5, "Images32.gif");
+			this.imageList32.Images.SetKeyName(6, "Manage32.gif");
 			// 
 			// timerSignals
 			// 
@@ -1314,9 +1308,9 @@ namespace OpenDental{
 			// 
 			this.panelSplitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.panelSplitter.Cursor = System.Windows.Forms.Cursors.HSplit;
-			this.panelSplitter.Location = new System.Drawing.Point(71,542);
+			this.panelSplitter.Location = new System.Drawing.Point(71, 542);
 			this.panelSplitter.Name = "panelSplitter";
-			this.panelSplitter.Size = new System.Drawing.Size(769,7);
+			this.panelSplitter.Size = new System.Drawing.Size(769, 7);
 			this.panelSplitter.TabIndex = 50;
 			this.panelSplitter.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseDown);
 			this.panelSplitter.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelSplitter_MouseMove);
@@ -1344,12 +1338,12 @@ namespace OpenDental{
 			// 
 			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
 			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0,"Pat.gif");
-			this.imageListMain.Images.SetKeyName(1,"commlog.gif");
-			this.imageListMain.Images.SetKeyName(2,"email.gif");
-			this.imageListMain.Images.SetKeyName(3,"tasksNicer.gif");
-			this.imageListMain.Images.SetKeyName(4,"label.gif");
-			this.imageListMain.Images.SetKeyName(5,"Text.gif");
+			this.imageListMain.Images.SetKeyName(0, "Pat.gif");
+			this.imageListMain.Images.SetKeyName(1, "commlog.gif");
+			this.imageListMain.Images.SetKeyName(2, "email.gif");
+			this.imageListMain.Images.SetKeyName(3, "tasksNicer.gif");
+			this.imageListMain.Images.SetKeyName(4, "label.gif");
+			this.imageListMain.Images.SetKeyName(5, "Text.gif");
 			// 
 			// menuPatient
 			// 
@@ -1407,88 +1401,94 @@ namespace OpenDental{
 			this.panelPhoneSmall.Controls.Add(this.labelWaitTime);
 			this.panelPhoneSmall.Controls.Add(this.labelTriage);
 			this.panelPhoneSmall.Controls.Add(this.labelMsg);
-			this.panelPhoneSmall.Location = new System.Drawing.Point(71,333);
+			this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
 			this.panelPhoneSmall.Name = "panelPhoneSmall";
-			this.panelPhoneSmall.Size = new System.Drawing.Size(150,265);
+			this.panelPhoneSmall.Size = new System.Drawing.Size(150, 265);
 			this.panelPhoneSmall.TabIndex = 56;
 			// 
 			// butTriage
 			// 
-			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butTriage.Autosize = true;
 			this.butTriage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butTriage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butTriage.CornerRadius = 4F;
-			this.butTriage.Location = new System.Drawing.Point(98,0);
+			this.butTriage.Location = new System.Drawing.Point(98, 0);
 			this.butTriage.Name = "butTriage";
-			this.butTriage.Size = new System.Drawing.Size(22,24);
+			this.butTriage.Size = new System.Drawing.Size(22, 24);
 			this.butTriage.TabIndex = 52;
 			this.butTriage.Text = "T";
 			this.butTriage.Click += new System.EventHandler(this.butTriage_Click);
 			// 
 			// butBigPhones
 			// 
-			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBigPhones.Autosize = true;
 			this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBigPhones.CornerRadius = 4F;
-			this.butBigPhones.Location = new System.Drawing.Point(122,0);
+			this.butBigPhones.Location = new System.Drawing.Point(122, 0);
 			this.butBigPhones.Name = "butBigPhones";
-			this.butBigPhones.Size = new System.Drawing.Size(28,24);
+			this.butBigPhones.Size = new System.Drawing.Size(28, 24);
 			this.butBigPhones.TabIndex = 52;
 			this.butBigPhones.Text = "Big";
 			this.butBigPhones.Click += new System.EventHandler(this.butBigPhones_Click);
 			// 
 			// labelWaitTime
 			// 
-			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelWaitTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelWaitTime.ForeColor = System.Drawing.Color.Black;
-			this.labelWaitTime.Location = new System.Drawing.Point(66,2);
+			this.labelWaitTime.Location = new System.Drawing.Point(66, 2);
 			this.labelWaitTime.Name = "labelWaitTime";
-			this.labelWaitTime.Size = new System.Drawing.Size(32,20);
+			this.labelWaitTime.Size = new System.Drawing.Size(32, 20);
 			this.labelWaitTime.TabIndex = 53;
 			this.labelWaitTime.Text = "00m";
 			this.labelWaitTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// labelTriage
 			// 
-			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelTriage.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelTriage.ForeColor = System.Drawing.Color.Black;
-			this.labelTriage.Location = new System.Drawing.Point(31,2);
+			this.labelTriage.Location = new System.Drawing.Point(31, 2);
 			this.labelTriage.Name = "labelTriage";
-			this.labelTriage.Size = new System.Drawing.Size(38,20);
+			this.labelTriage.Size = new System.Drawing.Size(38, 20);
 			this.labelTriage.TabIndex = 53;
 			this.labelTriage.Text = "T:00";
 			this.labelTriage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelMsg
 			// 
-			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.labelMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.labelMsg.ForeColor = System.Drawing.Color.Firebrick;
-			this.labelMsg.Location = new System.Drawing.Point(-1,2);
+			this.labelMsg.Location = new System.Drawing.Point(-1, 2);
 			this.labelMsg.Name = "labelMsg";
-			this.labelMsg.Size = new System.Drawing.Size(44,20);
+			this.labelMsg.Size = new System.Drawing.Size(44, 20);
 			this.labelMsg.TabIndex = 53;
 			this.labelMsg.Text = "V:00";
 			this.labelMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// lightSignalGrid1
 			// 
-			this.lightSignalGrid1.Location = new System.Drawing.Point(0,463);
+			this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
 			this.lightSignalGrid1.Name = "lightSignalGrid1";
-			this.lightSignalGrid1.Size = new System.Drawing.Size(50,206);
+			this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
 			// 
+			// menuItemSpellCheck
+			// 
+			this.menuItemSpellCheck.Index = 41;
+			this.menuItemSpellCheck.Text = "Spell Check";
+			this.menuItemSpellCheck.Click += new System.EventHandler(this.menuItemSpellCheck_Click);
+			// 
 			// FormOpenDental
 			// 
-			this.ClientSize = new System.Drawing.Size(982,564);
+			this.ClientSize = new System.Drawing.Size(982, 564);
 			this.Controls.Add(this.panelPhoneSmall);
 			this.Controls.Add(this.panelSplitter);
 			this.Controls.Add(this.lightSignalGrid1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Regular,System.Drawing.GraphicsUnit.Point,((byte)(0)));
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.Menu = this.mainMenu;
@@ -4332,6 +4332,11 @@ namespace OpenDental{
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Show Features");
 		}
 
+		private void menuItemSpellCheck_Click(object sender,EventArgs e) {
+			FormDictCustoms FormD=new FormDictCustoms();
+			FormD.ShowDialog();
+		}
+
 		private void menuItemTimeCards_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
@@ -4482,11 +4487,6 @@ namespace OpenDental{
 			FormS.ShowDialog();
 			RefreshCurrentModule();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Sites");
-		}
-
-		private void menuItemCustomDict_Click(object sender,EventArgs e) {
-			FormDictCustoms FormD=new FormDictCustoms();
-			FormD.ShowDialog();
 		}
 
 		private void menuItemZipCodes_Click(object sender, System.EventArgs e) {
