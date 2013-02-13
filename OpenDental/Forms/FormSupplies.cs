@@ -125,6 +125,10 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			if(DefC.Short[(int)DefCat.SupplyCats].Length==0) {//No supply categories have been entered, not allowed to enter supply
+				MsgBox.Show(this,"No supply categories have been created.  Go to the supply inventory window, select categories, and enter at least one supply category first.");
+				return;
+			}
 			if(comboSupplier.SelectedIndex < 1) {//Includes no items or the ALL item being selected
 				MsgBox.Show(this,"Please select a supplier first.");
 				return;
