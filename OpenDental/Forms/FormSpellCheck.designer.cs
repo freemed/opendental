@@ -1,5 +1,5 @@
 namespace OpenDental{
-	partial class FormDictCustoms {
+	partial class FormSpellCheck {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -23,7 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDictCustoms));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSpellCheck));
 			this.label4 = new System.Windows.Forms.Label();
 			this.textCustom = new System.Windows.Forms.TextBox();
 			this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -139,7 +139,7 @@ namespace OpenDental{
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Spell Check";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSpellCheck_FormClosing);
-			this.Load += new System.EventHandler(this.FormDictCustoms_Load);
+			this.Load += new System.EventHandler(this.FormSpellCheck_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

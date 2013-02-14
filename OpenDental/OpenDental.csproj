@@ -378,6 +378,12 @@
     <Compile Include="Forms\FormNewCropBillingList.designer.cs">
       <DependentUpon>FormNewCropBillingList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormSpellCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSpellCheck.designer.cs">
+      <DependentUpon>FormSpellCheck.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWikiTableHeaders.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -464,12 +470,6 @@
     </Compile>
     <Compile Include="Forms\FormEmailAddressEdit.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormDictCustoms.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormDictCustoms.designer.cs">
-      <DependentUpon>FormDictCustoms.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormFeeSchedPickRemote.cs">
       <SubType>Form</SubType>
@@ -2728,6 +2728,9 @@
     <EmbeddedResource Include="Forms\FormNewCropBillingList.resx">
       <DependentUpon>FormNewCropBillingList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSpellCheck.resx">
+      <DependentUpon>FormSpellCheck.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWikiTableHeaders.resx">
       <DependentUpon>FormWikiTableHeaders.cs</DependentUpon>
     </EmbeddedResource>
@@ -2773,9 +2776,6 @@
     <EmbeddedResource Include="Forms\FormEmailAddressEdit.resx">
       <DependentUpon>FormEmailAddressEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormDictCustoms.resx">
-      <DependentUpon>FormDictCustoms.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormFeeSchedPickRemote.resx">
       <DependentUpon>FormFeeSchedPickRemote.cs</DependentUpon>

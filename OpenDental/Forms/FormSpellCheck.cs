@@ -10,14 +10,14 @@ using OpenDental.UI;
 using System.Text.RegularExpressions;
 
 namespace OpenDental {
-	public partial class FormDictCustoms:Form {
+	public partial class FormSpellCheck:Form {
 
-		public FormDictCustoms() {
+		public FormSpellCheck() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
-		private void FormDictCustoms_Load(object sender,EventArgs e) {
+		private void FormSpellCheck_Load(object sender,EventArgs e) {
 			checkBox1.Checked=PrefC.GetBool(PrefName.SpellCheckIsEnabled);
 			FillGrid();
 		}

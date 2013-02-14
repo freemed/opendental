@@ -4333,7 +4333,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemSpellCheck_Click(object sender,EventArgs e) {
-			FormDictCustoms FormD=new FormDictCustoms();
+			FormSpellCheck FormD=new FormSpellCheck();
 			FormD.ShowDialog();
 		}
 
