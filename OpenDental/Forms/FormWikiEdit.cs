@@ -585,8 +585,10 @@ namespace OpenDental {
 		private bool ValidateWikiPage(bool isForSaving) {
 			//xml validation----------------------------------------------------------------------------------------------------
 			string s=textContent.Text;
-			s=s.Replace("&<","&lt;");
-			s=s.Replace("&>","&gt;");
+			//"<",">", and "&"-----------------------------------------------------------------------------------------------------------
+			s=s.Replace("&","&amp;");
+			s=s.Replace("&amp;<","&lt;");//because "&" was changed to "&amp;" in the line above.
+			s=s.Replace("&amp;>","&gt;");//because "&" was changed to "&amp;" in the line above.
 			s="<body>"+s+"</body>";
 			XmlDocument doc=new XmlDocument();
 			StringReader reader=new StringReader(s);
