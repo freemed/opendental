@@ -5,12 +5,12 @@ using OpenDentBusiness;
 namespace ODR{
 	///<summary></summary>
 	public class Aggregate{
-		private static double runningSum;
+		private static decimal runningSum;
 		private static string groupByVal;
 
 		///<summary></summary>
 		public static string RunningSum(string groupBy,string addValue){
-			double num=PIn.Double(addValue);
+			decimal num=PIn.Decimal(addValue);
 			if(groupByVal==null || groupBy!=groupByVal){//if new or changed group
 				runningSum=0;
 			}
@@ -24,6 +24,7 @@ namespace ODR{
 			if(debitAmt==null || creditAmt==null){
 				return 0.ToString("N");
 			}
+			//Cannot read debitAmt and creditAmt as decimals because it makes the general ledger detail report fail.  Simply cast as decimals when doing mathematical operations.
 			double debit=(double)debitAmt;//PIn.PDouble(debitAmt);
 			double credit=(double)creditAmt;//PIn.PDouble(creditAmt);
 			if(groupByVal==null || groupBy.ToString()!=groupByVal) {//if new or changed group
@@ -31,10 +32,10 @@ namespace ODR{
 			}
 			groupByVal=groupBy.ToString();
 			if(TestValue.AccountDebitIsPos(acctType.ToString())){
-				runningSum+=debit-credit;
+				runningSum+=(decimal)debit-(decimal)credit;
 			}
 			else{
-				runningSum+=credit-debit;
+				runningSum+=(decimal)credit-(decimal)debit;
 			}
 			return runningSum.ToString("N");
 		}
