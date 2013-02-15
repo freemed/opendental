@@ -162,6 +162,9 @@ namespace OpenDental {
 
 		///<summary>Uploads Preferences to the Patient Portal /Mobile Web.</summary>
 		public static void UploadPreference(PrefName prefname) {
+			if(PrefC.GetString(PrefName.RegistrationKey)=="") {
+				return;//Prevents a bug when using the trial version with no registration key.  Practice edit, OK, was giving error.
+			}
 			try {
 				if(TestWebServiceExists()) {
 					Prefm prefm = Prefms.GetPrefm(prefname.ToString());
