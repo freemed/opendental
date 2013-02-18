@@ -814,7 +814,7 @@ namespace OpenDental{
 				client.Credentials=new NetworkCredential(emailAddress.EmailUsername,emailAddress.EmailPassword);
 				client.DeliveryMethod=SmtpDeliveryMethod.Network;
 				client.EnableSsl=emailAddress.UseSSL;
-				client.Timeout=10000;//10 seconds//180000;//Timeout of 3 minutes (in milliseconds).
+				client.Timeout=180000;//3 minutes
 				MailMessage message=new MailMessage();
 				Attachment attach;
 				message.From=new MailAddress(emailMessage.FromAddress);
