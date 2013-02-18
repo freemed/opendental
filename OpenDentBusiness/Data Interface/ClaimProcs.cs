@@ -416,14 +416,14 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
-		///<summary>Detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.  It also sets their DateCP's to min.</summary>
+		///<summary>Detaches claimprocs from the specified claimPayment. Updates all claimprocs on a claim with one query.</summary>
 		public static void DetachFromPayment(long claimNum,long claimPaymentNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),claimNum,claimPaymentNum);
 				return;
 			}
 			string command= "UPDATE claimproc SET ClaimPaymentNum=0, "
-				+"DateCP="+POut.Date(DateTime.MinValue)+", "
+				//+"DateCP="+POut.Date(DateTime.MinValue)+", "
 				+"PaymentRow=0 "
 				+"WHERE ClaimNum="+POut.Long(claimNum)+" "
 				+"AND ClaimPaymentNum="+POut.Long(claimPaymentNum);
