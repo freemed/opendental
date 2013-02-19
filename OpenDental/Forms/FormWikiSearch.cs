@@ -49,7 +49,7 @@ namespace OpenDental {
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			if(checkDeletedOnly.Checked) {
-				listWikiPageTitles=WikiPageHists.GetForSearch(textSearch.Text,checkIgnoreContent.Checked);
+				listWikiPageTitles=WikiPageHists.GetDeletedPages(textSearch.Text,checkIgnoreContent.Checked);
 			}
 			else {
 				listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkIgnoreContent.Checked);

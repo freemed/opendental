@@ -188,6 +188,7 @@ namespace OpenDentBusiness{
 				else {
 					switch(myString.Substring(i,1)) {
 						//note. When using binary data, must escape ',",\, and nul(? haven't done nul)
+						//_ and % are special characters in LIKE clauses.  But they need not be escaped.  Only a potential problem when using LIKE.
 						case "'": strBuild.Append(@"\'"); break;// ' replaced by \'
 						case "\"": strBuild.Append("\\\""); break;// " replaced by \"
 						case @"\": strBuild.Append(@"\\"); break;//single \ replaced by \\

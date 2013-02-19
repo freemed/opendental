@@ -92,55 +92,67 @@ namespace OpenDentBusiness{
 			return Crud.WikiPageCrud.Insert(wikiPage);
 		}
 
-		///<summary></summary>
+		///<summary>Searches keywords, title, content.</summary>
 		public static List<string> GetForSearch(string searchText,bool ignoreContent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,ignoreContent);
 			}
 			List<string> retVal=new List<string>();
 			DataTable tableResults=new DataTable();
+			string[] searchTokens = POut.String(searchText).Split(' ');
 			string command="";
-				//Match keywords first-----------------------------------------------------------------------------------
-				command=
+			//Match keywords first-----------------------------------------------------------------------------------
+			command=
 				"SELECT PageTitle FROM wikiPage "
-				+"WHERE KeyWords LIKE '%"+searchText+"%' "
-				+"AND PageTitle NOT LIKE '\\_%' "
-				+"GROUP BY PageTitle "
+				// \_ represents a literal _ because _ has a special meaning in LIKE clauses.
+				//The second \ is just to escape the first \.  The other option would be to pass the \ through POut.String.
+				+"WHERE PageTitle NOT LIKE '\\_%' ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+="AND KeyWords LIKE '%"+POut.String(searchTokens[i])+"%' ";
+			}
+			command+=
+				"GROUP BY PageTitle "
 				+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
-					}
-				//Match PageTitle Second-----------------------------------------------------------------------------------
-				command=
+			tableResults=Db.GetTable(command);
+			for(int i=0;i<tableResults.Rows.Count;i++) {
+				if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+					retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+				}
+			}
+			//Match PageTitle Second-----------------------------------------------------------------------------------
+			command=
 				"SELECT PageTitle FROM wikiPage "
-				+"WHERE PageTitle LIKE '%"+searchText+"%' "
-				+"AND PageTitle NOT LIKE '\\_%' "
-				+"GROUP BY PageTitle "
+				+"WHERE PageTitle NOT LIKE '\\_%' ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+="AND PageTitle LIKE '%"+POut.String(searchTokens[i])+"%' ";
+			}
+			command+=
+				"GROUP BY PageTitle "
 				+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
-					}
-				//Match Content third-----------------------------------------------------------------------------------
-				if(!ignoreContent) {
-					command=
+			tableResults=Db.GetTable(command);
+			for(int i=0;i<tableResults.Rows.Count;i++) {
+				if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+					retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+				}
+			}
+			//Match Content third-----------------------------------------------------------------------------------
+			if(!ignoreContent) {
+				command=
 					"SELECT PageTitle FROM wikiPage "
-					+"WHERE PageContent LIKE '%"+searchText+"%' "
-					+"AND PageTitle NOT LIKE '\\_%' "
-					+"GROUP BY PageTitle "
+					+"WHERE PageTitle NOT LIKE '\\_%' ";
+				for(int i=0;i<searchTokens.Length;i++) {
+					command+="AND PageContent LIKE '%"+POut.String(searchTokens[i])+"%' ";
+				}
+				command+=
+					"GROUP BY PageTitle "
 					+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())){
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
+				tableResults=Db.GetTable(command);
+				for(int i=0;i<tableResults.Rows.Count;i++) {
+					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
 					}
 				}
+			}
 			return retVal;
 		}
 

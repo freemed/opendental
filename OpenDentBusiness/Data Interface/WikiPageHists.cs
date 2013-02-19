@@ -19,46 +19,55 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<string> GetForSearch(string searchText,bool ignoreContent) {
+		public static List<string> GetDeletedPages(string searchText,bool ignoreContent) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(),searchText,ignoreContent);
 			}
 			List<string> retVal=new List<string>();
 			DataTable tableResults=new DataTable();
+			string[] searchTokens = searchText.Split(' ');
 			string command="";
-				command=
+			command=
 				"SELECT PageTitle FROM wikiPageHist "
-				+"WHERE PageTitle LIKE '%"+searchText+"%' "
-				+"AND PageTitle NOT LIKE '\\_%' "
-				+"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
+				// \_ represents a literal _ because _ has a special meaning in LIKE clauses.
+				//The second \ is just to escape the first \.  The other option would be to pass the \ through POut.String.
+				+"WHERE PageTitle NOT LIKE '\\_%' ";
+			for(int i=0;i<searchTokens.Length;i++) {
+				command+="AND PageTitle LIKE '%"+POut.String(searchTokens[i])+"%' ";
+			}
+			command+=
+				"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that were re-added after they were deleted
 				+"AND IsDeleted=1 "
+				//only the newest deleted version if there are multiple:
 				+"AND DateTimeSaved = (SELECT MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
-				//+"GROUP BY PageTitle "
 				+"ORDER BY PageTitle";
+			tableResults=Db.GetTable(command);
+			for(int i=0;i<tableResults.Rows.Count;i++) {
+				if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+					retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+				}
+			}
+			//Match Content Second-----------------------------------------------------------------------------------
+			if(!ignoreContent) {
+				command=
+					"SELECT PageTitle FROM wikiPageHist "
+					+"WHERE PageTitle NOT LIKE '\\_%' ";
+				for(int i=0;i<searchTokens.Length;i++) {
+					command+="AND PageContent LIKE '%"+POut.String(searchTokens[i])+"%' ";
+				}
+				command+=
+					"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
+					+"AND IsDeleted=1 "
+					+"AND DateTimeSaved = (Select MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
+					//+"GROUP BY PageTitle "
+					+"ORDER BY PageTitle";
 				tableResults=Db.GetTable(command);
 				for(int i=0;i<tableResults.Rows.Count;i++) {
 					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
 						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
 					}
 				}
-				//Match Content Second-----------------------------------------------------------------------------------
-				if(!ignoreContent) {
-					command=
-					"SELECT PageTitle FROM wikiPageHist "
-					+"WHERE PageContent LIKE '%"+searchText+"%' "
-					+"AND PageTitle NOT LIKE '\\_%' "
-					+"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
-					+"AND IsDeleted=1 "
-					+"AND DateTimeSaved = (Select MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
-					//+"GROUP BY PageTitle "
-					+"ORDER BY PageTitle";
-					tableResults=Db.GetTable(command);
-					for(int i=0;i<tableResults.Rows.Count;i++) {
-						if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
-							retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
-						}
-					}
-				}
+			}
 			return retVal;
 		}
 
