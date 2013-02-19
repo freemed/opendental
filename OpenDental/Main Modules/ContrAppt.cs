@@ -2844,7 +2844,7 @@ namespace OpenDental {
 			//not clicked on appt---------------------------------------------------------------------------------------------------
 			else {
 				if(e.Button==MouseButtons.Right) {
-					bool clickedOnBlock=false;
+					int clickedOnBlockCount=0;
 					Schedule[] ListForType=Schedules.GetForType(SchedListPeriod,ScheduleType.Blockout,0);
 					//List<ScheduleOp> listForSched;
 					for(int i=0;i<ListForType.Length;i++) {
@@ -2858,17 +2858,20 @@ namespace OpenDental {
 						//listForSched=ScheduleOps.GetForSched(ListForType[i].ScheduleNum);
 						for(int p=0;p<ListForType[i].Ops.Count;p++) {
 							if(ListForType[i].Ops[p]==SheetClickedonOp) {
-								clickedOnBlock=true;
-								break;
+								clickedOnBlockCount++;
+								break;//out of ops loop
 							}
 						}
 					}
-					if(clickedOnBlock) {
+					if(clickedOnBlockCount>0) {
 						menuBlockout.MenuItems[0].Enabled=true;//Edit
 						menuBlockout.MenuItems[1].Enabled=true;//Cut
 						menuBlockout.MenuItems[2].Enabled=true;//Clone
 						menuBlockout.MenuItems[3].Enabled=false;//paste. Can't paste on top of an existing blockout
 						menuBlockout.MenuItems[4].Enabled=true;//Delete
+						if(clickedOnBlockCount>1) {
+						  MsgBox.Show(this,"There are multiple blockouts in this slot.  You should try to delete or move one of them.");
+						}
 					}
 					else {
 						menuBlockout.MenuItems[0].Enabled=false;//edit
@@ -4772,10 +4775,16 @@ namespace OpenDental {
 				((int)Math.Round((decimal)timeOfDay.TotalMinutes/(decimal)ApptDrawing.MinPerIncr))*ApptDrawing.MinPerIncr);
 			sched.StartTime=timeOfDay;
 			sched.StopTime=sched.StartTime.Add(span);
-			//if(sched.StopTime.Date!=sched.StartTime.Date) {//long span that spills over to next day
-			//	sched.StopTime=DateTime.Today+(new TimeSpan(23,59,0));
-			//}
-			Schedules.Insert(sched,false);
+			if(sched.StopTime >= TimeSpan.FromDays(1)) {//long span that spills over to next day
+				MsgBox.Show(this,"This Blockout would go past midnight.");
+				return;
+			}
+			sched.ScheduleNum=0;//Because Schedules.Overlaps() ignores matching ScheduleNums and we used the Copy() function above. Also, we insert below, so a new key will be created anyway.
+			if(Schedules.Overlaps(sched)) {
+				MsgBox.Show(this,"Blockouts not allowed to overlap.");
+				return;
+			}
+			Schedules.Insert(sched,true);
 			RefreshPeriod();
 		}
 

@@ -305,6 +305,10 @@ namespace OpenDental{
 			for(int i=0;i<listOp.SelectedIndices.Count;i++){
 				SchedCur.Ops.Add(OperatoryC.ListShort[listOp.SelectedIndices[i]].OperatoryNum);
 			}
+			if(Schedules.Overlaps(SchedCur)) {
+				MsgBox.Show(this,"Blockouts not allowed to overlap.");
+				return;
+			}
 			try{
 				if(IsNew) {
 					Schedules.Insert(SchedCur,true);

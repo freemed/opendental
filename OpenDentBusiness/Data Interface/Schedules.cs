@@ -198,6 +198,9 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		private static void Validate(Schedule sched){
+			if(sched.StopTime > TimeSpan.FromDays(1)) {//if pasting to late afternoon, the stop time might be calculated as early the next morning.
+				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
+			}
 			if(sched.StartTime > sched.StopTime) {
 				throw new Exception(Lans.g("Schedule","Stop time must be later than start time."));
 			}
@@ -206,15 +209,15 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
-		private static bool Overlaps(Schedule sched){
+		///<summary>Goes to the db to look for overlaps.  Implemented for blockouts, but should work for other types, too.</summary>
+		public static bool Overlaps(Schedule sched){
 			//No need to check RemotingRole; no call to db.
 			List<Schedule> SchedListDay=Schedules.GetDayList(sched.SchedDate);
-			Schedule[] ListForType=Schedules.GetForType(SchedListDay,sched.SchedType,sched.ProvNum);
+			Schedule[] ListForType=Schedules.GetForType(SchedListDay,sched.SchedType,sched.ProvNum);//blockouts
 			bool opsMatch;
 			for(int i=0;i<ListForType.Length;i++){
 				if(ListForType[i].SchedType==ScheduleType.Blockout){
-					//skip if blockout, and ops don't interfere
+					//only look in the same ops
 					opsMatch=false;
 					for(int s1=0;s1<sched.Ops.Count;s1++){
 						if(ListForType[i].Ops.Contains(sched.Ops[s1])){
