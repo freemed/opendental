@@ -7,7 +7,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 	///<summary></summary>
 	public class FeeL {
-
+		/* doesn't seem to be used from anywhere
 		///<summary>If the named fee schedule does not exist, then it will be created.  It always returns the defnum for the feesched used, regardless of whether it already existed.  procCode must have already been tested for valid code, and feeSchedName must not be blank.</summary>
 		public static long ImportTrojan(string procCode,double amt,string feeSchedName) {
 			FeeSched feeSched=FeeScheds.GetByExactName(feeSchedName);
@@ -42,7 +42,7 @@ namespace OpenDental{
 				Fees.Update(fee);
 			}
 			return feeSched.FeeSchedNum;
-		}	
+		}	*/
 
 	}
 }
