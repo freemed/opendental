@@ -2800,7 +2800,7 @@ namespace OpenDental{
 			perms.Add(Permissions.AppointmentCreate);
 			perms.Add(Permissions.AppointmentEdit);
 			perms.Add(Permissions.AppointmentMove);
-			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"All Appointments for")+pat.GetNameFL(),AptCur.AptNum);
+			FormAuditOneType FormA=new FormAuditOneType(pat.PatNum,perms,Lan.g(this,"All Appointments for ")+pat.GetNameFL(),AptCur.AptNum);
 			FormA.ShowDialog();
 		}
 
