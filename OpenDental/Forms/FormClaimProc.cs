@@ -1610,6 +1610,7 @@ namespace OpenDental
 				FeeCur.FeeSched=feeSched;
 				FeeCur.CodeNum=proc.CodeNum;
 				Fees.Insert(FeeCur);
+				//SecurityLog is updated in FormFeeEdit.
 				FormFE.IsNew=true;
 			}
 			FormFE.FeeCur=FeeCur;

@@ -965,7 +965,7 @@ namespace OpenDental{
 		}
 
 		private void butCopy_Click(object sender,EventArgs e) {
-			string taskText=textDescript.Text;
+			string taskText=TaskCur.DateTimeEntry.ToShortDateString()+" "+TaskCur.DateTimeEntry.ToShortTimeString()+(textObjectDesc.Visible?" - "+textObjectDesc.Text:"")+" - "+textUser.Text+" - "+textDescript.Text;
 			for(int i=0;i<NoteList.Count;i++) {
 				taskText+="\r\n--------------------------------------------------\r\n";
 				taskText+="=="+Userods.GetName(NoteList[i].UserNum)+" - "+NoteList[i].DateTimeNote.ToShortDateString()+" "+NoteList[i].DateTimeNote.ToShortTimeString()+" - "+NoteList[i].Note;

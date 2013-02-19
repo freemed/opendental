@@ -472,6 +472,15 @@ namespace OpenDental{
 			Fees.ClearFeeSched(SchedNum);
 			//copy any values over
 			Fees.CopyFees(FeeSchedC.ListShort[comboCopyFrom.SelectedIndex].FeeSchedNum,SchedNum);
+			for(int i=0;i<Fees.Listt.Count;i++) {
+				//ignore all but the OLD fee schedule.
+				if(Fees.Listt[i].FeeSched!=FeeSchedC.ListShort[comboCopyFrom.SelectedIndex].FeeSchedNum) {
+					continue;
+				}
+				SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(Fees.Listt[i].CodeNum)
+					+", "+Lan.g(this,"Fee")+": "+Fees.Listt[i].Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(Fees.Listt[i].FeeSched)
+					+". "+Lan.g(this,"Fee copied from")+" "+FeeScheds.GetDescription(FeeSchedC.ListShort[comboCopyFrom.SelectedIndex].FeeSchedNum)+" "+Lan.g(this,"using Fee Tools."),Fees.Listt[i].CodeNum);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -504,6 +513,19 @@ namespace OpenDental{
 				round=2;
 			}
 			Fees.Increase(SchedNum,percent,round);
+			Fees.RefreshCache();
+			for(int i=0;i<Fees.Listt.Count;i++) {
+				if(Fees.Listt[i].FeeSched!=SchedNum) {
+					continue;
+				}
+				if(Fees.Listt[i].Amount==0) {
+					continue;
+				}
+				SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(Fees.Listt[i].CodeNum)
+					+", "+Lan.g(this,"Fee")+": "+Fees.Listt[i].Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(Fees.Listt[i].FeeSched)
+					+". "+Lan.g(this,"Fee increased by")+" "+((float)percent/100.0f).ToString("p")+" "+Lan.g(this," using the increase button in the Fee Tools window.")
+					,Fees.Listt[i].CodeNum);
+			}
 			DialogResult=DialogResult.OK;
 		}
 
@@ -576,6 +598,9 @@ namespace OpenDental{
 							feeAmt=PIn.Double(fields[1]);
 						}
 						Fees.Import(fields[0],feeAmt,SchedNum);
+						SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+fields[0]
+							+", "+Lan.g(this,"Fee")+": "+feeAmt.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(SchedNum)
+							+". "+Lan.g(this,"Fee changed using the Import button in the Fee Tools window."),ProcedureCodes.GetCodeNum(fields[0]));
 					}
 					line=sr.ReadLine();
 				}

@@ -119,7 +119,7 @@ namespace OpenDentBusiness{
 		ImageDelete,
 		///<summary>45. Uses date restrictions.</summary>
 		PerioEdit,
-		///<summary>46</summary>
+		///<summary>46. Shows the fee textbox in the proc edit window.</summary>
 		ProcEditShowFee,
 		///<summary>47</summary>
 		AdjustmentEditZero,
@@ -154,7 +154,9 @@ namespace OpenDentBusiness{
 		///<summary>62</summary>
 		Billing,
 		///<summary>63</summary>
-		ProblemEdit
+		ProblemEdit,
+		///<summary>64- There is no user interface in the security window for this permission.  It is only used for tracking.</summary>
+		ProcFeeEdit
 	}
 
 	

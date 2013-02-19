@@ -616,6 +616,9 @@ namespace OpenDental
 					FeeCur.Amount=PIn.Double(gridMain.Rows[i].Cells[7].Text);
 					Fees.Update(FeeCur);
 				}
+				SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+					+", "+Lan.g(this,"Fee: ")+""+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+" "+FeeScheds.GetDescription(FeeCur.FeeSched)
+					+". "+Lan.g(this,"Automatic change to allowed fee in Enter Payment window.  Confirmed by user."),FeeCur.CodeNum);
 			}
 			//Fees.Refresh();//redundant?
 			DataValid.SetInvalid(InvalidType.Fees);

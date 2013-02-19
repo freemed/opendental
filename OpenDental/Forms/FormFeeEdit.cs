@@ -185,6 +185,9 @@ namespace OpenDental{
 				//Fee object always created and inserted externally first
 				Fees.Update(FeeCur);
 			}
+			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(FeeCur.CodeNum)
+				+", "+Lan.g(this,"Fee: ")+""+FeeCur.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(FeeCur.FeeSched)
+				+". "+Lan.g(this,"Manual edit in Edit Fee window."),FeeCur.CodeNum);//==Michael - 2/15/2013 - Could be from FormProcCodeEdit, FormClaimProcEdit, or FormProcCodes.
 			//FeeCur.UseDefaultCov=checkDefCov.Checked;
 			//FeeCur.UseDefaultFee=checkDefFee.Checked;			
 			DialogResult=DialogResult.OK;

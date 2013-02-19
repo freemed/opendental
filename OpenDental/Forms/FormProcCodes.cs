@@ -959,6 +959,7 @@ namespace OpenDental{
 					FeeCur.FeeSched=feesched;
 					FeeCur.CodeNum=codeNum;
 					Fees.Insert(FeeCur);
+					//SecurityLog is updated in FormFeeEdit.
 					FormFE.IsNew=true;
 				}
 				FormFE.FeeCur=FeeCur;
@@ -1036,7 +1037,10 @@ namespace OpenDental{
 					Fees.Update(fee);
 					Fees.Listt[Fees.Listt.IndexOf(fee)].Amount=dNew;
 				}
-			}		
+			}
+			SecurityLogs.MakeLogEntry(Permissions.ProcFeeEdit,0,Lan.g(this,"Procedure")+": "+ProcedureCodes.GetStringProcCode(fee.CodeNum)
+				+", "+Lan.g(this,"Fee: ")+""+fee.Amount.ToString("c")+", "+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(fee.FeeSched)
+				+". "+Lan.g(this,"Manual edit in grid from Procedure Codes list."),fee.CodeNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){

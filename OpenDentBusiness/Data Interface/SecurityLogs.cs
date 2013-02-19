@@ -96,7 +96,7 @@ namespace OpenDentBusiness{
 			MakeLogEntry(permType,patNum,logText,0);
 		}	
 
-		///<summary>PatNum can be 0.</summary>
+		///<summary>Takes fKey, which is a key to a table associated with that permType. Right now only used for AptNum. PatNum can be 0.</summary>
 		public static void MakeLogEntry(Permissions permType,long patNum,string logText,long fKey) {
 			//No need to check RemotingRole; no call to db.
 			SecurityLog securityLog=new SecurityLog();

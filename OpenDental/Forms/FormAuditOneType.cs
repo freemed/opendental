@@ -8,13 +8,11 @@ using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
+	/// <summary>This form shows all of the security log entries for one fKey item. So far this only applies to a single appointment or a single procedure code.</summary>
 	public class FormAuditOneType : System.Windows.Forms.Form{
 		private OpenDental.UI.ODGrid grid;
 		private long PatNum;
-		private Label label1;
+		private Label labelDisclaimer;
 		private List <Permissions> PermTypes;
 		private long FKey;
 
@@ -40,7 +38,7 @@ namespace OpenDental{
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAuditOneType));
 			this.grid = new OpenDental.UI.ODGrid();
-			this.label1 = new System.Windows.Forms.Label();
+			this.labelDisclaimer = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// grid
@@ -55,23 +53,23 @@ namespace OpenDental{
 			this.grid.Title = "Audit Trail";
 			this.grid.TranslationName = "TableAudit";
 			// 
-			// label1
+			// labelDisclaimer
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.ForeColor = System.Drawing.Color.Firebrick;
-			this.label1.Location = new System.Drawing.Point(8, 3);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(780, 15);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "Changes made to this appointment before the update to 12.3 will not be reflected " +
+			this.labelDisclaimer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelDisclaimer.ForeColor = System.Drawing.Color.Firebrick;
+			this.labelDisclaimer.Location = new System.Drawing.Point(8, 3);
+			this.labelDisclaimer.Name = "labelDisclaimer";
+			this.labelDisclaimer.Size = new System.Drawing.Size(780, 15);
+			this.labelDisclaimer.TabIndex = 3;
+			this.labelDisclaimer.Text = "Changes made to this appointment before the update to 12.3 will not be reflected " +
     "below, but can be found in the regular audit trail.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.labelDisclaimer.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// FormAuditOneType
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(905, 634);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.labelDisclaimer);
 			this.Controls.Add(this.grid);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
@@ -113,6 +111,9 @@ namespace OpenDental{
 				row.Cells.Add(logList[i].PermType.ToString());
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);
+			}
+			if(PermTypes.Contains(Permissions.ProcFeeEdit)) {
+				labelDisclaimer.Text="Changes made to this procedure fee before the update to 13.2 were not tracked in the audit trail.";
 			}
 			grid.EndUpdate();
 			grid.ScrollToEnd();
