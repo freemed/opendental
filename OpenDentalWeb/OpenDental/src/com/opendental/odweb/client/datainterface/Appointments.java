@@ -8,7 +8,8 @@ import com.opendental.odweb.client.ui.MsgBox;
 
 public class Appointments {
 	
-	/** Gets the image of the schedule for the day passed in as a Base64 string. */
+	/** Gets the image of the schedule for the day passed in as a Base64 string.  
+	 *  Side note: We need to store the images as small as possible byte wise.  Some browsers max out their URL sizes at 32 KBs, others in MBs. */
 	public static void getScheduleAsImage(Date date,RequestCallbackResult requestCallback) {
 		DtoGetString dto=null;
 		try {

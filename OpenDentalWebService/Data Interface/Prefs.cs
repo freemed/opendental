@@ -6,9 +6,13 @@ namespace OpenDentalWebService{
 	///<summary></summary>
 	public class Prefs{
 
-		///<summary>This should be enhanced to only grab the preferences that the web version will need to use.</summary>
+		///<summary>Only gets the preferences specifically used in the web application.  This query must be enhanced for new preferences desired in the web application.</summary>
 		public static DataTable RefreshCache() {
-			string command= "SELECT * FROM preference";
+			string command= "SELECT * FROM preference WHERE PrefName IN ("
+				+"\""+OpenDentBusiness.PrefName.MainWindowTitle+"\""
+				+",\""+OpenDentBusiness.PrefName.ShowIDinTitleBar+"\""
+				+",\""+OpenDentBusiness.PrefName.PatientSelectUsesSearchButton+"\""
+				+")";
 			return OpenDentBusiness.DataCore.GetTable(command);
 		}
 

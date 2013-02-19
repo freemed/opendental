@@ -13,8 +13,8 @@
 			<g:Dock direction="CENTER">
 				<g:DockPanel>
 					<g:Dock direction="WEST">
-						<g:SimplePanel width="100px" height="100px">
-							<g:Label>Picture of OD Tooth Chart here.</g:Label>
+						<g:SimplePanel>
+							<g:Image ui:field="imageToothChart" />
 						</g:SimplePanel>
 					</g:Dock>
 					<g:Dock direction="CENTER">

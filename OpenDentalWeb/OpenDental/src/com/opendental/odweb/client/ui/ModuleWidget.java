@@ -29,7 +29,7 @@ public abstract class ModuleWidget extends SimpleLayoutPanel {
 	
 	protected void onLoad() {
 		if(moduleView==null) {
-			moduleView=new ModuleWidgetView(true, true);
+			moduleView=new ModuleWidgetView(false, true);
 			moduleView.setModule(getWidget());
 			setWidget(moduleView);
 		}

@@ -4,6 +4,14 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui"
 	xmlns:dp="urn:import:com.google.gwt.user.datepicker.client">
   	
+  <ui:style>
+  	
+  	.pinBoardBackground {
+			background-color: #e3e3e3;
+		}
+  	
+  </ui:style>
+  	
 	<g:SimplePanel ui:field="panelContainer" >
 		<g:DockPanel>
 			<g:Dock direction="CENTER">
@@ -16,9 +24,11 @@
 				<!-- Put the calendar and other searching tools here. -->
 				<g:VerticalPanel>
 					<dp:DatePicker ui:field="calendar" />
-					<g:SimplePanel>
-						<g:Label ui:field="pinBoard">PinBoard</g:Label>
-					</g:SimplePanel>
+					<g:VerticalPanel width="100px" height="100px" styleName="{style.pinBoardBackground}" >
+						<g:cell horizontalAlignment="ALIGN_CENTER" verticalAlignment="ALIGN_MIDDLE">
+							<g:Label ui:field="pinBoard" width="100%" horizontalAlignment="CENTER">Appointments on the PinBoard</g:Label>
+						</g:cell>
+					</g:VerticalPanel>
 					<g:Button ui:field="butMakeAppt">Make Appt</g:Button>
 					<g:Button ui:field="butDelete">Delete</g:Button>
 				</g:VerticalPanel>
