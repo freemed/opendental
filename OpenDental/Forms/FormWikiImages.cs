@@ -11,6 +11,7 @@ using System.IO;
 
 namespace OpenDental {
 	public partial class FormWikiImages:Form {
+		///<summary>This contains the entire qualified names including path and extension.</summary>
 		private List<string> ImageNamesList;
 		public string SelectedImageName;
 
@@ -30,23 +31,21 @@ namespace OpenDental {
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Image Name"),70);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
-			string[] imageNamesArray=System.IO.Directory.GetFiles(WikiPages.GetWikiPath());
+			string[] fileNames=System.IO.Directory.GetFiles(WikiPages.GetWikiPath());//All files from the wiki file path, including images and other files.
 			ImageNamesList=new List<string>();
-			for(int i=0;i<imageNamesArray.Length;i++) {//only add image files to the list.
-				if(textSearch.Text!="" && !imageNamesArray[i].Replace(WikiPages.GetWikiPath(),"").TrimStart('\\').Contains(textSearch.Text)) {
+			for(int i=0;i<fileNames.Length;i++) {
+				//If the user has entered a search keyword, then only show file names which contain the keyword.
+				if(textSearch.Text!="" && !Path.GetFileName(fileNames[i]).ToLower().Contains(textSearch.Text.ToLower())) {
 					continue;
 				}
-				if(imageNamesArray[i].EndsWith(".jpg") ||
-					imageNamesArray[i].EndsWith(".bmp") ||
-					imageNamesArray[i].EndsWith(".png") ||
-					imageNamesArray[i].EndsWith(".gif")) 
-				{
-					ImageNamesList.Add(imageNamesArray[i]);
+				//Only add image files to the ImageNamesList, not other files such at text files.
+				if(ImageHelper.HasImageExtension(fileNames[i])) {
+					ImageNamesList.Add(fileNames[i]);
 				}
 			}
 			for(int i=0;i<ImageNamesList.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(ImageNamesList[i].Replace(WikiPages.GetWikiPath(),"").TrimStart('\\'));
+				row.Cells.Add(Path.GetFileName(ImageNamesList[i]));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -63,8 +62,8 @@ namespace OpenDental {
 			if(gridMain.GetSelectedIndex()==-1) {
 				return;
 			}
-			string s=ImageNamesList[gridMain.GetSelectedIndex()];
-			Image tmpImg=new Bitmap(ImageNamesList[gridMain.GetSelectedIndex()].Replace("\\\\","\\"));
+			string imagePath=ImageNamesList[gridMain.GetSelectedIndex()];
+			Image tmpImg=new Bitmap(imagePath);//Could throw an exception if someone manually deletes the image right after this window loads.
 			float imgScale=1;//will be between 0 and 1
 			if(tmpImg.PhysicalDimension.Height>picturePreview.Height || tmpImg.PhysicalDimension.Width>picturePreview.Width) {//image is too large
 				//Image is larger than PictureBox, resize to fit.
@@ -73,12 +72,19 @@ namespace OpenDental {
 				}
 				else {//resize image based on height
 					imgScale=picturePreview.Height/tmpImg.PhysicalDimension.Height;
-				}
-						
+				}						
+			}
+			if(picturePreview.Image!=null) {
+				picturePreview.Image.Dispose();
+				picturePreview.Image=null;
 			}
 			picturePreview.Image=new Bitmap(tmpImg,(int)(tmpImg.PhysicalDimension.Width*imgScale),(int)(tmpImg.PhysicalDimension.Height*imgScale));
 			labelImageSize.Text=Lan.g(this,"Image Size")+": "+(int)tmpImg.PhysicalDimension.Width+" x "+(int)tmpImg.PhysicalDimension.Height;
 			picturePreview.Invalidate();
+			if(tmpImg!=null) {
+				tmpImg.Dispose();
+			}
+			tmpImg=null;
 		}
 
 		private void FormWikiImages_ResizeEnd(object sender,EventArgs e) {
@@ -94,23 +100,29 @@ namespace OpenDental {
 			Invalidate();
 			foreach(string fileName in openFD.FileNames) {
 				//check file types?
-				string destinationPath=WikiPages.GetWikiPath()+"\\"+fileName.Split('\\')[fileName.Split('\\').Length-1];
+				string destinationPath=WikiPages.GetWikiPath()+"\\"+Path.GetFileName(fileName);
 				if(File.Exists(destinationPath)){
 					switch(MessageBox.Show(Lan.g(this,"Overwrite Existing File")+": "+destinationPath,"",MessageBoxButtons.YesNoCancel)){
-						case DialogResult.No://rename
-							InputBox ip = new InputBox(Lan.g(this,"New file name."));
-							ip.textResult.Text=fileName.Split('\\')[fileName.Split('\\').Length-1];
+						case DialogResult.No://rename, do not overwrite
+							InputBox ip=new InputBox(Lan.g(this,"New file name."));
+							ip.textResult.Text=Path.GetFileName(fileName);
 							ip.ShowDialog();
 							if(ip.DialogResult!=DialogResult.OK) {
 								continue;//cancel, next file.
 							}
-							while(File.Exists(WikiPages.GetWikiPath()+"\\"+ip.textResult.Text) && ip.DialogResult==DialogResult.OK){
+							bool cancel=false;
+							while(File.Exists(WikiPages.GetWikiPath()+"\\"+ip.textResult.Text) && !cancel){
 								MsgBox.Show(this,"File name already exists.");
-								ip.ShowDialog();
+								if(ip.ShowDialog()!=DialogResult.OK) {
+									cancel=true;
+								}
+							}
+							if(cancel) {
+								continue;//cancel rename, and go to next file.
 							}
 							destinationPath=WikiPages.GetWikiPath()+"\\"+ip.textResult.Text;
 							break;//proceed to save file.
-						case DialogResult.OK://overwrite
+						case DialogResult.Yes://overwrite
 							try {
 								File.Delete(destinationPath);
 							}
@@ -119,7 +131,7 @@ namespace OpenDental {
 								continue;
 							}
 							break;//file deleted, proceed to save.
-						default://anything that is not OK and not NO
+						default://cancel
 							continue;//skip this file.
 					}
 				}
@@ -136,7 +148,7 @@ namespace OpenDental {
 			if(gridMain.GetSelectedIndex()==-1) {
 				return;
 			}
-			SelectedImageName=ImageNamesList[gridMain.GetSelectedIndex()].Replace(WikiPages.GetWikiPath(),"").TrimStart('\\');
+			SelectedImageName=Path.GetFileName(ImageNamesList[gridMain.GetSelectedIndex()]);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -144,7 +156,7 @@ namespace OpenDental {
 			if(gridMain.GetSelectedIndex()==-1) {
 				return;
 			}
-			SelectedImageName=ImageNamesList[gridMain.GetSelectedIndex()].Replace(WikiPages.GetWikiPath(),"").TrimStart('\\');
+			SelectedImageName=Path.GetFileName(ImageNamesList[gridMain.GetSelectedIndex()]);
 			DialogResult=DialogResult.OK;
 		}
 
