@@ -4196,13 +4196,15 @@ namespace OpenDental{
 				MsgBox.Show(this,"Practice city blank.");
 				return;
 			}
-			List <string> stateCodes=new List <string> (new string[] {
+			List<string> stateCodes=new List<string>(new string[] {
 				//50 States.
-				"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",
-				"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
-				"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
-				"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
-				"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY",
+				"AK","AL","AR","AZ","CA","CO","CT","DE","FL","GA",
+				"HI","IA","ID","IL","IN","KS","KY","LA","MA","MD",
+				"ME","MI","MN","MO","MS","MT","NC","ND","NE","NH",
+				"NJ","NM","NV","NY","OH","OK","OR","PA","RI","SC",
+				"SD","TN","TX","UT","VA","VT","WA","WI","WV","WY",
+				//US Districts
+				"DC",
 				//US territories. Reference http://www.itl.nist.gov/fipspubs/fip5-2.htm
 				"AS","FM","GU","MH","MP","PW","PR","UM","VI",
 			});
