@@ -1993,10 +1993,18 @@ namespace OpenDental {
 			else{
 				textUrgFinNote.Text=FamCur.ListPats[0].FamFinUrgNote;
 				textFinNotes.Text=PatientNoteCur.FamFinancial;
-				textFinNotes.Select(textFinNotes.Text.Length+2,1);
-				textFinNotes.ScrollToCaret();
-				textUrgFinNote.SelectionStart=0;
-				textUrgFinNote.ScrollToCaret();
+				if(!textFinNotes.Focused) {
+					textFinNotes.SelectionStart=textFinNotes.Text.Length;
+					//This will cause a crash if the richTextBox currently has focus. We don't know why.
+					//Only happens if you call this during a Leave event, and only when moving between two ODtextBoxes.
+					//Tested with two ordinary richTextBoxes, and the problem does not exist.
+					//We may pursue fixing the root problem some day, but this workaround will do for now.
+					textFinNotes.ScrollToCaret();
+				}
+				if(!textUrgFinNote.Focused) {
+					textUrgFinNote.SelectionStart=0;
+					textUrgFinNote.ScrollToCaret();
+				}
 				//if(PrefC.GetBool(PrefName.StoreCCnumbers)) {
 					//string cc=PatientNoteCur.CCNumber;
 					//if(Regex.IsMatch(cc,@"^\d{16}$")){
