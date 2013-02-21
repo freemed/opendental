@@ -219,6 +219,9 @@ namespace OpenDental
 					break;
 			  }
 			}
+			if(ReplWord==null) {
+				return false;
+			}
 			if(ListIncorrect.Contains(ReplWord.Value)) {
 				return true;
 			}
