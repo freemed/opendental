@@ -136,7 +136,7 @@ namespace OpenDentBusiness{
 			}
 			if(payorID!="" && HList.ContainsKey(payorID)){//an override exists for this payorID
 				Clearinghouse ch=GetClearinghouse((long)HList[payorID]);
-				if(ch.Eformat==ElectronicClaimFormat.x837D_4010 || ch.Eformat==ElectronicClaimFormat.x837D_5010_dental){
+				if(ch.Eformat==ElectronicClaimFormat.x837D_4010 || ch.Eformat==ElectronicClaimFormat.x837D_5010_dental || ch.Eformat==ElectronicClaimFormat.Canadian){//all dental formats
 					if(medType==EnumClaimMedType.Dental){//med type matches
 						return ch.ClearinghouseNum;
 					}
