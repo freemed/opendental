@@ -295,6 +295,9 @@ namespace OpenDental{
 		private void FillListUsed() {
 			listUsed.Items.Clear();
 			for(int i=0;i<LangsUsed.Count;i++) {
+				if(LangsUsed[i]=="") {
+					continue;
+				}
 				try {
 					listUsed.Items.Add(CultureInfo.GetCultureInfo(LangsUsed[i]).DisplayName);
 				}

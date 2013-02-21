@@ -1838,18 +1838,24 @@ namespace OpenDental{
 			textEmployer.Text=Employers.GetName(PatCur.EmployerNum);
 			//textEmploymentNote.Text=PatCur.EmploymentNote;
 			languageList=new List<string>();
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!=""){
+			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!="") {
 				string[] lanstring=PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(',');
 				for(int i=0;i<lanstring.Length;i++) {
+					if(lanstring[i]=="") {
+						continue;
+					}
 					languageList.Add(lanstring[i]);
 				}
 			}
-			if(PatCur.Language!="" && PatCur.Language!=null && !languageList.Contains(PatCur.Language)){
+			if(PatCur.Language!="" && PatCur.Language!=null && !languageList.Contains(PatCur.Language)) {
 				languageList.Add(PatCur.Language);
 			}
 			comboLanguage.Items.Add(Lan.g(this,"none"));//regardless of how many languages are listed, the first item is "none"
 			comboLanguage.SelectedIndex=0;
 			for(int i=0;i<languageList.Count;i++) {
+				if(languageList[i]=="") {
+					continue;
+				}
 				try {
 					comboLanguage.Items.Add(CultureInfo.GetCultureInfo(languageList[i]).DisplayName);
 				}
