@@ -3460,7 +3460,8 @@ namespace OpenDentBusiness {
 			string log="";
 			if(isCheck) {
 				command="SELECT COUNT(*) FROM timecardrule "
-					+"WHERE timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
+					+"WHERE timecardrule.EmployeeNum!=0 " //0 is all employees, so it is a 'valid' employee number
+					+"AND timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
 				int numFound=PIn.Int(Db.GetCount(command));
 				if(numFound>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Timecard rules found with invalid employee number: ")+numFound+"\r\n";
@@ -3469,7 +3470,8 @@ namespace OpenDentBusiness {
 			else {
 				command="UPDATE timecardrule "
 					+"SET timecardrule.EmployeeNum=0 "
-					+"WHERE timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
+					+"WHERE timecardrule.EmployeeNum!=0 " //don't set to 0 if already 0
+					+"AND timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
 				long numberFixed=Db.NonQ(command);
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Timecard rules applied to All Employees due to invalid employee number: ")+numberFixed.ToString()+"\r\n";
