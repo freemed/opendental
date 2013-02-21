@@ -1041,6 +1041,11 @@ namespace OpenDental{
 				Cursor=Cursors.WaitCursor;
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
 				string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+				if(!File.Exists(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder))) {
+					Cursor=Cursors.Default;
+					MsgBox.Show(this,"File not found: " + Documents.GetByNum(StmtCur.DocNum).FileName);
+					return;
+				}
 				Process.Start(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder));
 				Cursor=Cursors.Default;
 			}
