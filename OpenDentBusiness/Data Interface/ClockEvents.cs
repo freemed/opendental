@@ -170,9 +170,13 @@ namespace OpenDentBusiness{
 		///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
 		public static TimeSpan GetWeekTotal(long empNum,DateTime date) {
 			//No need to check RemotingRole; no call to db.
+			TimeSpan retVal=new TimeSpan(0);
+			//If the first day of the pay period is the starting date for the overtime, then there is no need to retrieve any times from the previous pay period.
+			if(date.DayOfWeek==(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)) {
+				return retVal;
+			}
 			List<ClockEvent> events=Refresh(empNum,date.AddDays(-6),date.AddDays(-1),false);
 			//eg, if this is Thursday, then we are getting last Friday through this Wed.
-			TimeSpan retVal=new TimeSpan(0);
 			for(int i=0;i<events.Count;i++){
 				if(events[i].TimeDisplayed1.DayOfWeek > date.DayOfWeek){//eg, Friday > Thursday, so ignore
 					continue;
