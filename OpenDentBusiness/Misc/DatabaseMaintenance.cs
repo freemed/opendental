@@ -565,7 +565,7 @@ namespace OpenDentBusiness {
 				"610226",1,"04",claimTypes|reversalTypes|predeterminationTypes,canadianNetworkNumTelusB,
 				//appq
 				"628112",1,"02",claimTypes|reversalTypes|predeterminationTypes|cobTypes,canadianNetworkNumTelusB,
-				//alberta blue cross (not on ITRANS carrier list but is needed).
+				//alberta blue cross. Usually sent through ClaimStream instead of ITRANS.
 				"000090",1,"04",claimTypes|reversalTypes|predeterminationTypes|rotTypes|cobTypes,canadianNetworkNumABC,
 				//assumption life
 				"610191",1,"04",claimTypes,canadianNetworkNumTelusB,

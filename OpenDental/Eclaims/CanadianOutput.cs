@@ -28,7 +28,7 @@ namespace OpenDental.Eclaims {
 			Patient patient=Patients.GetPat(patNum);
 			Patient subscriber=Patients.GetPat(insSub.Subscriber);
 			Provider provDefaultTreat=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
-			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse();
+			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse(carrier);
 			if(clearhouse==null){
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
@@ -319,7 +319,8 @@ namespace OpenDental.Eclaims {
 		///<summary></summary>
 		public static long SendClaimReversal(Claim claim,InsPlan plan,InsSub insSub) {
 			StringBuilder strb=new StringBuilder();
-			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse();
+			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
+			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse(carrier);
 			if(clearhouse==null) {
 				throw new ApplicationException(Lan.g("CanadianOutput","Canadian clearinghouse not found."));
 			}
@@ -327,7 +328,6 @@ namespace OpenDental.Eclaims {
 			if(!Directory.Exists(saveFolder)) {
 				throw new ApplicationException(saveFolder+" not found.");
 			}
-			Carrier carrier=Carriers.GetCarrier(plan.CarrierNum);
 			if((carrier.CanadianSupportedTypes&CanSupTransTypes.ClaimReversal_02)!=CanSupTransTypes.ClaimReversal_02) {
 				throw new ApplicationException(Lan.g("CanadianOutput","The carrier does not support reversal transactions."));
 			}
@@ -523,10 +523,10 @@ namespace OpenDental.Eclaims {
 			return etransAck.EtransNum;
 		}
 
-		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response. Set version2 to true if version 02 request and false for version 04 request. Set sendToItrans to true only when sending to carrier 999999 representing the entire ITRANS network. When version2 is false and sendToItrans is false then carrier must be set to a valid Canadian carrier, otherwise it can be set to null. Prov must be validated as a CDANet provider before calling this function.</summary>
+		///<summary>Returns the list of etrans requests. The etrans.AckEtransNum can be used to get the etrans ack. The following are the only possible formats that can be returned in the acks: 21 EOB Response, 11 Claim Ack, 14 Outstanding Transactions Response, 23 Predetermination EOB, 13 Predetermination Ack, 24 E-Mail Response. Set version2 to true if version 02 request and false for version 04 request. Set sendToItrans to true only when sending to carrier 999999 representing the entire ITRANS network. When version2 is false and sendToItrans is false then carrier must be set to a valid Canadian carrier (because the request implies that a version 04 request needs to be sent to the carrier), otherwise it can be set to null. Prov must be validated as a CDANet provider before calling this function.</summary>
 		public static List <Etrans> GetOutstandingTransactions(bool version2,bool sendToItrans,Carrier carrier,Provider prov) {
 			List<Etrans> etransAcks=new List<Etrans>();
-			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse();
+			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse(carrier);
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
@@ -733,9 +733,9 @@ namespace OpenDental.Eclaims {
 			return etransAcks;
 		}
 
-		///<summary>Each payment reconciliation request can return up to 9 pages. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02. The provTreat and provBilling must be validated as CDANet providers before calling this function.</summary>
+		///<summary>Each payment reconciliation request can return up to 9 pages. Each request is to one carrier only, so carrier cannot be null. This function will return one etrans ack for each page in the result, since each page must be requested individually. Only for version 04, no such transaction exists for version 02. The provTreat and provBilling must be validated as CDANet providers before calling this function.</summary>
 		public static List<Etrans> GetPaymentReconciliations(Carrier carrier,Provider provTreat,Provider provBilling,DateTime reconciliationDate) {
-			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse();
+			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse(carrier);
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
@@ -849,7 +849,7 @@ namespace OpenDental.Eclaims {
 		//THIS TRANSACTION TYPE IS NOT USED BY ANY CANADIAN CARRIERS, AND IS NOT PART OF CERTIFICATION, EVEN THOUGH IT IS IN THE SPECIFICATIONS. WE NEED TO FIX BELOW COMMENTS AND MAKE THIS CODE FUNCTION MORE LIKE THE GetPaymentReconciliations() FUNCTION ABOVE.
 		///<summary>Does not exist in version 02 so only supported for version 04. Returns the request Etrans record. Usually pass in a carrier with network null.  If sending to a network, carrier will be null and we still don't see anywhere in the message format to specify network.  We expect to get clarification on this issue later. Validate provTreat as a CDANet provider before calling this function.</summary>
 		public static Etrans GetSummaryReconciliation(Carrier carrier,CanadianNetwork network,Provider provTreat,DateTime reconciliationDate) {
-			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse();
+			Clearinghouse clearhouse=Canadian.GetCanadianClearinghouse(carrier);
 			if(clearhouse==null) {
 				throw new ApplicationException("Canadian clearinghouse not found.");
 			}
