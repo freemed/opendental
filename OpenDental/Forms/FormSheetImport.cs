@@ -2101,6 +2101,7 @@ namespace OpenDental {
 				for(int i=0;i<subList.Count;i++) {
 					if(subList[i].PlanNum==plan.PlanNum) {
 						sub=subList[i];
+						insSubNum=sub.InsSubNum;
 					}
 				}
 				if(sub==null) {//Create a new inssub if subscriber is not subscribed to this plan yet.
