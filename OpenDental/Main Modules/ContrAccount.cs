@@ -2920,10 +2920,15 @@ namespace OpenDental {
 			}
 			proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[0]]["ProcNum"].ToString()));
 			long clinicNum=proc.ClinicNum;
+			PlaceOfService placeService=proc.PlaceService;
 			for(int i=1;i<gridAccount.SelectedIndices.Length;i++){//skips 0
 				proc=Procedures.GetProcFromList(procsForPat,PIn.Long(table.Rows[gridAccount.SelectedIndices[i]]["ProcNum"].ToString()));
 				if(clinicNum!=proc.ClinicNum){
 					MsgBox.Show(this,"All procedures do not have the same clinic.");
+					return new Claim();
+				}
+				if(proc.PlaceService!=placeService) {
+					MsgBox.Show(this,"All procedures do not have the same place of service.");
 					return new Claim();
 				}
 			}
@@ -2960,6 +2965,7 @@ namespace OpenDental {
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.DateService=claimProcs[claimProcs.Length-1].ProcDate;
 			ClaimCur.ClinicNum=clinicNum;
+			ClaimCur.PlaceService=proc.PlaceService;
 			//datesent
 			ClaimCur.ClaimStatus="U";
 			//datereceived
