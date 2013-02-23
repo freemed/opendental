@@ -11489,6 +11489,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To12_4_38();
 		}
 
+		///<summary>Oracle compatible: 02/23/2013</summary>
 		private static void To12_4_38() {
 			if(FromVersion<new Version("12.4.38.0")) {
 				string command;
@@ -11538,6 +11539,7 @@ VALUES('MercuryDE','"+POut.String(@"C:\MercuryDE\Temp\")+@"','0','','1','','','1
 			To13_1_1();
 		}
 
+		///<summary>Oracle compatible: 02/23/2013</summary>
 		private static void To13_1_1() {
 			if(FromVersion<new Version("13.1.1.0")) {
 				string command;
@@ -11937,6 +11939,7 @@ a.PageNotExists:hover {
 			To13_1_3();
 		}
 
+		///<summary>Oracle compatible: 02/23/2013</summary>
 		private static void To13_1_3() {
 			if(FromVersion<new Version("13.1.3.0")) {
 				string command;
