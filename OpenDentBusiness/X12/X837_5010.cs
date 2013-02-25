@@ -161,7 +161,10 @@ namespace OpenDentBusiness
 			sw.Write("NM1"+s
 				+"40"+s//NM101 2/3 Entity Identifier Code: 40=Receiver.
 				+"2"+s);//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
-			if(IsDentiCal(clearhouse)) {
+			if(IsClaimConnect(clearhouse)) {
+				sw.Write("CLAIMCONNECT"+s);//NM103 1/60 Name Last or Organization Name: Receiver Name.
+			}
+			else if(IsDentiCal(clearhouse)) {
 				sw.Write("DENTICAL"+s);//NM103 1/60 Name Last or Organization Name: Receiver Name.
 			}
 			else {
