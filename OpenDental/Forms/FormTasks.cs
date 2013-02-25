@@ -16,7 +16,7 @@ namespace OpenDental{
 		private IContainer components;
 		/////<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
 		//public long GotoKeyNum;
-
+		private bool IsTriage;
 	
 		///<summary></summary>
 		public FormTasks()
@@ -89,7 +89,12 @@ namespace OpenDental{
 				if(gotoKeyNum!=0){
 					Patient pat=Patients.GetPat(gotoKeyNum);
 					//OnPatientSelected(pat);
-					GotoModule.GotoAccount(pat.PatNum);
+					if(IsTriage) {
+						GotoModule.GotoChart(pat.PatNum);
+					}
+					else {
+						GotoModule.GotoAccount(pat.PatNum);
+					}
 				}
 			}
 			if(gotoType==TaskObjectType.Appointment){
@@ -120,6 +125,7 @@ namespace OpenDental{
 		///<summary>Used by OD HQ.</summary>
 		public void ShowTriage() {
 			userControlTasks1.FillGridWithTriageList();
+			IsTriage=true;
 		}
 
 		///<summary>Simply tells the user task control to refresh the currently showing task list.</summary>
