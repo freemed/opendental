@@ -683,6 +683,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"New Patients");
 					break;
 				case 4://Patients - Raw
+					if(!Security.IsAuthorized(Permissions.UserQuery)) {
+						return;
+					}
 					FormRpPatients FormPatients=new FormRpPatients();
 					FormPatients.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patients - Raw");
@@ -738,11 +741,17 @@ namespace OpenDental {
 			}
 			switch(selected) {
 				case 0://Raw Screening Data
+					if(!Security.IsAuthorized(Permissions.UserQuery)) {
+						return;
+					}
 					FormRpPHRawScreen FormPH=new FormRpPHRawScreen();
 					FormPH.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PH Raw Screening");
 					break;
 				case 1://Raw Population Data
+					if(!Security.IsAuthorized(Permissions.UserQuery)) {
+						return;
+					}
 					FormRpPHRawPop FormPHR=new FormRpPHRawPop();
 					FormPHR.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"PH Raw population");
