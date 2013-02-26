@@ -155,8 +155,10 @@ namespace OpenDentBusiness{
 		Billing,
 		///<summary>63</summary>
 		ProblemEdit,
-		///<summary>64- There is no user interface in the security window for this permission.  It is only used for tracking.</summary>
-		ProcFeeEdit
+		///<summary>64- There is no user interface in the security window for this permission.  It is only used for tracking.  FK to CodeNum.</summary>
+		ProcFeeEdit,
+		///<summary>65- There is no user interface in the security window for this permission.  It is only used for tracking.  Only tracks changes to carriername, not any other carrier info.  FK to PlanNum for tracking.</summary>
+		InsPlanChangeCarrierName
 	}
 
 	

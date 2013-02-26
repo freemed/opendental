@@ -469,7 +469,22 @@ namespace OpenDental{
 			//	carrierNums[i]=Carriers.List[tbCarriers.SelectedIndices[i]].CarrierNum;
 			//}
 			try{
+				//Prepare audit trail entry data, then combine, then make audit trail entries if successful
+				List<string> carrierNames=new List<string>();
+				List<List<long>> insPlanNums=new List<List<long>>();
+				string carrierTo=Carriers.GetName(FormCB.PickedCarrierNum);
+				for(int i=0;i<pickedCarrierNums.Count;i++) {
+					carrierNames.Add(Carriers.GetName(pickedCarrierNums[i]));
+					insPlanNums.Add(InsPlans.GetPlanNumsByCarrierNum(pickedCarrierNums[i]));					
+				}
 				Carriers.Combine(pickedCarrierNums,FormCB.PickedCarrierNum);
+				//Carriers were combined successfully. Loop through all the associated insplans and make a securitylog entry that their carrier changed.
+				for(int i=0;i<insPlanNums.Count;i++) {
+					for(int j=0;j<insPlanNums[i].Count;j++) {
+						SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier changed from")+" "+carrierNames[i]+" "
+							+Lan.g(this,"to")+" "+carrierTo,insPlanNums[i][j]);
+					}
+				}
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);

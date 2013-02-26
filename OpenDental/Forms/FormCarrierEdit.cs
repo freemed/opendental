@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -862,6 +863,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Carrier Name cannot be blank."));
 				return;
 			}
+			string carrierNameOld=CarrierCur.CarrierName;
 			CarrierCur.CarrierName=textCarrierName.Text;
 			CarrierCur.Phone=textPhone.Text;
 			CarrierCur.Address=textAddress.Text;
@@ -885,6 +887,15 @@ namespace OpenDental{
 			else{
 				try{
 					Carriers.Update(CarrierCur);
+					//If the carrier name has changed loop through all the insplans that use this carrier and make a securitylog entry.
+					if(carrierNameOld!=CarrierCur.CarrierName) {
+						List<long> insPlanNums=InsPlans.GetPlanNumsByCarrierNum(CarrierCur.CarrierNum);
+						for(int i=0;i<insPlanNums.Count;i++) {
+							SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier changed from")+" "
+								+carrierNameOld+" "+Lan.g(this,"to")+" "+CarrierCur.CarrierName,
+								insPlanNums[i]);
+						}
+					}
 				}
 				catch(ApplicationException ex){
 					MessageBox.Show(ex.Message);

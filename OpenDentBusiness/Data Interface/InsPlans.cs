@@ -926,6 +926,24 @@ namespace OpenDentBusiness {
 			return Fees.GetAmount(substCodeNum,feeSched);
 		}
 
+
+		public static List<InsPlan> GetByInsSubs(List<long> insSubNums) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<InsPlan>>(MethodBase.GetCurrentMethod(),insSubNums);
+			}
+			string insSubString="";
+			for(int i=0;i<insSubNums.Count;i++) {
+				insSubString+=insSubNums[i].ToString();
+				if(i<insSubNums.Count-1) {
+					insSubString+=",";
+				}
+			}
+			string command="SELECT DISTINCT insplan.* FROM insplan,inssub "
+				+"WHERE insplan.PlanNum=inssub.PlanNum "
+				+"AND inssub.InsSubNum IN ("+insSubString+")";
+			return Crud.InsPlanCrud.SelectMany(command);
+		}
+
 		///<summary>Used when closing the edit plan window to find all patients using this plan and to update all claimProcs for each patient.  This keeps estimates correct.</summary>
 		public static void ComputeEstimatesForTrojanPlan(long planNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -1093,6 +1111,19 @@ namespace OpenDentBusiness {
 			return plan;
 		}
 
+		public static List<long> GetPlanNumsByCarrierNum(long carrierNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),carrierNum);
+			}
+			string command="SELECT PlanNum FROM insplan WHERE CarrierNum="+POut.Long(carrierNum);
+			DataTable table=Db.GetTable(command);
+			List<long> planNums=new List<long>();
+			for(int i=0;i<table.Rows.Count;i++) {
+				planNums.Add(PIn.Long(table.Rows[i]["PlanNum"].ToString()));
+			}
+			return planNums;
+		}
+
 		public static void UpdateCobRuleForAll(EnumCobRule cobRule) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),cobRule);
@@ -1101,6 +1132,5 @@ namespace OpenDentBusiness {
 			string command="UPDATE insplan SET CobRule="+POut.Int((int)cobRule);
 			Db.NonQ(command);
 		}
-
 	}
 }

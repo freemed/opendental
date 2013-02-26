@@ -86,6 +86,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAuditOneType_Load(object sender, System.EventArgs e) {
+			//Default is "Changes made to this appointment before the update to 12.3 will not be reflected below, but can be found in the regular audit trail."
+			if(PermTypes.Contains(Permissions.ProcFeeEdit)) {
+				labelDisclaimer.Text=Lan.g(this,"Changes made to this procedure fee before the update to 13.2 were not tracked in the audit trail.");
+			} 
+			else if(PermTypes.Contains(Permissions.InsPlanChangeCarrierName)) {
+				labelDisclaimer.Text=Lan.g(this,"Changes made to the carrier for this ins plan before the update to 13.2 were not tracked in the audit trail.");
+			}
 			FillGrid();
 		}
 
@@ -111,9 +118,6 @@ namespace OpenDental{
 				row.Cells.Add(logList[i].PermType.ToString());
 				row.Cells.Add(logList[i].LogText);
 				grid.Rows.Add(row);
-			}
-			if(PermTypes.Contains(Permissions.ProcFeeEdit)) {
-				labelDisclaimer.Text="Changes made to this procedure fee before the update to 13.2 were not tracked in the audit trail.";
 			}
 			grid.EndUpdate();
 			grid.ScrollToEnd();
