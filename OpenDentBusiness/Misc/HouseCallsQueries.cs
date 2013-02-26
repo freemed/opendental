@@ -31,13 +31,15 @@ namespace OpenDentBusiness {
 			//15-DoctorNumber (for the Doctor, we currently use the patient primary provider. Otherwise, we would run into trouble with appointments assigned to a specific hygienist.)
 			//15-DoctorName
 			//16-IsNewPatient
+			//17-WirelessPhone
 			string command=@"SELECT patient.LName,patient.FName,patient.Preferred
 				,patient.PatNum,patient.ChartNumber,patient.HmPhone,patient.WkPhone
 				,patient.Email,patient.Address,patient.Address2,patient.City,patient.State
 				,patient.Zip
 				,appointment.AptDateTime,appointment.ProcDescript
 				,patient.PriProv
-				,appointment.IsNewPatient
+				,appointment.IsNewPatient,
+				patient.WirelessPhone
 				FROM patient,appointment 
 				WHERE patient.PatNum=appointment.PatNum "
 				+"AND (appointment.AptStatus=1 OR appointment.AptStatus=4) "//sched or ASAP

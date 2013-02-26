@@ -256,7 +256,7 @@ namespace OpenDental{
 			StreamWriter sr=File.CreateText(fileName);
 			sr.WriteLine("\"LastName\",\"FirstName\",\"PatientNumber\",\"HomePhone\",\"WorkNumber\","
 				+"\"EmailAddress\",\"SendEmail\",\"Address\",\"Address2\",\"City\",\"State\",\"Zip\","
-				+"\"ApptDate\",\"ApptTime\",\"ApptReason\",\"DoctorNumber\",\"DoctorName\",\"IsNewPatient\"");
+				+"\"ApptDate\",\"ApptTime\",\"ApptReason\",\"DoctorNumber\",\"DoctorName\",\"IsNewPatient\",\"WirelessPhone\"");
 			DataTable table=HouseCallsQueries.GetHouseCalls(FromDate,ToDate);
 			bool usePatNum=false;
 			PPCur=ProgramProperties.GetCur(ForProgram, "Enter 0 to use PatientNum, or 1 to use ChartNum");;
@@ -300,11 +300,12 @@ namespace OpenDental{
 				//15-DoctorName. Can handle 0 without any problem.
 				sr.Write("\""+Dequote(Providers.GetLName(PIn.Long(table.Rows[i][15].ToString())))+"\",");
 				if(table.Rows[i][16].ToString()=="1"){//16-IsNewPatient
-					sr.WriteLine("\"T\"");//SendEmail
+					sr.WriteLine("\"T\",");//SendEmail
 				}
 				else{
-					sr.WriteLine("\"F\"");
+					sr.WriteLine("\"F\",");
 				}
+				sr.Write("\""+Dequote(PIn.String(table.Rows[i][17].ToString()))+"\"");//17-WirelessPhone
 			}
 			sr.Close();
 			MessageBox.Show("Done");
