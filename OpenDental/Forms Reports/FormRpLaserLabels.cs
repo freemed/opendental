@@ -1407,10 +1407,10 @@ namespace OpenDental {
 			return (carrier.CarrierName);
 		}
 		private void textInsCoStart_Click(object sender,EventArgs e) {
-			insRange = 0;
+			//insRange = 0;
 		}
 		private void textInsCoEnd_Click(object sender,EventArgs e) {
-			insRange = 1;
+			//insRange = 1;
 		}
 
 		private void butInsCo_Click(object sender,EventArgs e) {
@@ -1419,6 +1419,10 @@ namespace OpenDental {
 			FormIP.ShowDialog();
 			if(FormIP.DialogResult == DialogResult.Cancel) {
 				return;
+			}
+			insRange=0;
+			if(sender==butInsCoEnd) {
+				insRange=1;
 			}
 			FillFromInsCoList(FormIP.SelectedPlan.CarrierNum);
 		}
