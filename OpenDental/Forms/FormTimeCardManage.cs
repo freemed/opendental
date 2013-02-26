@@ -30,6 +30,11 @@ namespace OpenDental {
 
 		private void FormTimeCardManage_Load(object sender,EventArgs e) {
 			SelectedPayPeriod=PayPeriods.GetForDate(DateTime.Today);
+			if(SelectedPayPeriod==-1) {
+				MsgBox.Show(this,"At least one pay period needs to exist before you can manage time cards.");
+				DialogResult=DialogResult.Cancel;
+				return;
+			}
 			FillPayPeriod();
 			FillMain();
 			//butCompute.Visible=false;			//only until unit tests are complete.
