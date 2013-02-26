@@ -481,8 +481,8 @@ namespace OpenDental{
 				//Carriers were combined successfully. Loop through all the associated insplans and make a securitylog entry that their carrier changed.
 				for(int i=0;i<insPlanNums.Count;i++) {
 					for(int j=0;j<insPlanNums[i].Count;j++) {
-						SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier changed from")+" "+carrierNames[i]+" "
-							+Lan.g(this,"to")+" "+carrierTo,insPlanNums[i][j]);
+						SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier with name ")+" "+carrierNames[i]+" "
+							+Lan.g(this,"was merged with")+" "+carrierTo,insPlanNums[i][j]);
 					}
 				}
 			}

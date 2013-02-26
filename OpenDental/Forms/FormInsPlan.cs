@@ -4241,7 +4241,7 @@ namespace OpenDental{
 			}
 			//Check for changes in the carrier
 			if(PlanCur.CarrierNum!=PlanCurOriginal.CarrierNum) {
-				SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,PatPlanCur.PatNum,Lan.g(this,"Carrier changed from")+" "
+				SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,PatPlanCur.PatNum,Lan.g(this,"Carrier name changed in Edit Insurance Plan window from from")+" "
 					+Carriers.GetCarrier(PlanCurOriginal.CarrierNum).CarrierName+" "+Lan.g(this,"to")+" "+Carriers.GetCarrier(PlanCur.CarrierNum).CarrierName,
 					PlanCur.PlanNum);
 			}

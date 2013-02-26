@@ -69,10 +69,12 @@ namespace OpenDentBusiness{
 				types+=" PermType="+POut.Long((int)permTypes[i]);
 			}
 			string command="SELECT * FROM securitylog "
-				+"WHERE PatNum= '"+POut.Long(patNum)+"' "
-				+"AND ("+types+") "
-				+"AND FKey="+POut.Long(fKey)+" "
-				+"ORDER BY LogDateTime";
+				+"WHERE ("+types+") "
+				+"AND FKey="+POut.Long(fKey)+" ";
+			if(patNum!=0) {
+				command+=" PatNum="+POut.Long(patNum)+" ";
+			}
+			command+="ORDER BY LogDateTime";
 			return Crud.SecurityLogCrud.SelectMany(command).ToArray();
 			/*
 			DataTable table=Db.GetTable(command);

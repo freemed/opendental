@@ -891,7 +891,7 @@ namespace OpenDental{
 					if(carrierNameOld!=CarrierCur.CarrierName) {
 						List<long> insPlanNums=InsPlans.GetPlanNumsByCarrierNum(CarrierCur.CarrierNum);
 						for(int i=0;i<insPlanNums.Count;i++) {
-							SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier changed from")+" "
+							SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,0,Lan.g(this,"Carrier name changed in Edit Carrier window from")+" "
 								+carrierNameOld+" "+Lan.g(this,"to")+" "+CarrierCur.CarrierName,
 								insPlanNums[i]);
 						}
