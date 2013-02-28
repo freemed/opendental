@@ -78,37 +78,22 @@ namespace OpenDental.Bridges{
 		}
 
 		///<summary>Guaranteed to always return a valid foldername unless major error or user chooses to exit.  This also saves the TrophyFolder value to this patient in the db and creates the new folder.</summary>
-		private static string AutomaticallyGetTrophyFolderNumbered(Patient pat,string storagePath) {
-			string retVal="";
-			string folderDesired=pat.PatNum.ToString();//.PadLeft(6,'0');
-			DirectoryInfo dirInfo=new DirectoryInfo(storagePath);
-			DirectoryInfo[] dirArray=dirInfo.GetDirectories(folderDesired,SearchOption.AllDirectories);
-			List<DirectoryInfo> dirList=new List<DirectoryInfo>();
-			for(int i=0;i<dirArray.Length;i++) {
-				if(dirArray[i].Parent.FullName.TrimEnd('\\')==storagePath.TrimEnd('\\')){//filter out any that are directly in the AtoZ folder
-					continue;
+		private static string AutomaticallyGetTrophyFolderNumbered(Patient pat,string trophyPath) {
+			//if this a patient with existing images in a trophy folder, find that folder
+			//Different Trophy might? be organized differently.
+			//But our logic will only cover the one situation that we are aware of.
+			//In numbered mode, the folder numbering scheme is [trophyImageDir]\XX\PatNum.  The two digits XX are obtained by retrieving the 5th and 6th (indexes 4 and 5) digits of the patient's PatNum, left padded with 0's to ensure the PatNum is at least 6 digits long.  Examples: PatNum=103, left pad to 000103, substring to 03, patient's folder location is [trophyDirectory]\03\103.  PatNum=1003457, no need to left pad, substring to 45, pat folder is [trophyDirectory]\45\1003457.
+			string retVal=ODFileUtils.CombinePaths(pat.PatNum.ToString().PadLeft(6,'0').Substring(4,2),pat.PatNum.ToString());//this is our default return value
+			string fullPath=ODFileUtils.CombinePaths(trophyPath,retVal);
+			if(!Directory.Exists(fullPath)) {
+				try {
+					Directory.CreateDirectory(fullPath);
 				}
-				dirList.Add(dirArray[i]);
-			}
-			if(dirList.Count==0) {//Create a folder using the numbering convention
-				retVal=ODFileUtils.CombinePaths(folderDesired.PadLeft(6,'0').Substring(4,2),folderDesired);
-				string fullPath=ODFileUtils.CombinePaths(storagePath,retVal);
-				if(!Directory.Exists(fullPath)) {
-					try {
-						Directory.CreateDirectory(fullPath);
-					}
-					catch {
-						throw new Exception("Error.  Could not create folder: "+fullPath);
-					}
+				catch {
+					throw new Exception("Error.  Could not create folder: "+fullPath);
 				}
 			}
-			else {//use the found folder
-				if(storagePath != dirList[0].FullName.Substring(0,storagePath.Length)) {
-					throw new ApplicationException("storagePath variable ("+storagePath+") does not match dirList value ("+dirList[0].FullName.Substring(0,storagePath.Length)+")");
-				}
-				retVal=dirList[0].FullName.Substring(storagePath.Length);
-				retVal=retVal.TrimStart('\\');
-			}
+			//folder either existed before we got here, or we successfully created it
 			Patient PatOld=pat.Copy();
 			pat.TrophyFolder=retVal;
 			Patients.Update(pat,PatOld);
