@@ -68,7 +68,7 @@
 			this.butProcess.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butProcess.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butProcess.CornerRadius = 4F;
-			this.butProcess.Location = new System.Drawing.Point(471,635);
+			this.butProcess.Location = new System.Drawing.Point(774,635);
 			this.butProcess.Name = "butProcess";
 			this.butProcess.Size = new System.Drawing.Size(75,23);
 			this.butProcess.TabIndex = 3;

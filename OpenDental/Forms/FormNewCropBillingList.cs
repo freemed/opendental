@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
@@ -12,11 +14,11 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormNewCropBillingList:Form {
 
-		private string html;
+		private string xmlFilePath;
 
-		public FormNewCropBillingList(string pHtml) {
+		public FormNewCropBillingList(string pXmlFilePath) {
 			InitializeComponent();
-			html=pHtml;
+			xmlFilePath=pXmlFilePath;
 		}
 
 		private void FormBillingList_Load(object sender,EventArgs e) {
@@ -25,72 +27,20 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			try {
-				html=html.Replace("&nbsp;"," ");
-				int tableRootStartIndex=html.IndexOf("<table")+7;//Should always exist.
-				int tableDataStartIndex=html.IndexOf("<table",tableRootStartIndex)+7;//Should always exist.
-				int tableDataLength=html.Substring(tableDataStartIndex).IndexOf("</table");//Should always exist. Length of the data between the <table> and </table> tags.
-				string htmlTableData=html.Substring(tableDataStartIndex,tableDataLength);//Excludes the <table> and </table> tags.
-				//Now take the HTML table data and divide it into HTML table rows using <tr> and </tr> tags.
-				List<string> tableRows=new List<string>();
-				for(int i=0;i<htmlTableData.Length;) {
-					int rowStartIndex=htmlTableData.IndexOf("<tr",i);
-					if(rowStartIndex<0) {//If we passed the last row, then break out of the loop.
-						break;
-					}
-					rowStartIndex+=4;//To get inside the <tr> tag
-					int rowLength=htmlTableData.Substring(rowStartIndex).IndexOf("</tr");//Length of the row between the <tr> and </tr> tags.
-					tableRows.Add(htmlTableData.Substring(rowStartIndex,rowLength).Trim());//Excludes the <tr> and </tr> tags.
-					i+=rowLength+9;//Advance 4 for length of <tr>, 5 for length of </tr>. 4+5=9.
-				}
+				string xmlData=File.ReadAllText(xmlFilePath);
+				xmlData=xmlData.Replace("&nbsp;","");
+				XmlDocument xml=new XmlDocument();
+				xml.LoadXml(xmlData);
+				XmlNode divNode=xml.FirstChild;
+				XmlNode tableNode=divNode.FirstChild;
 				RefreshGridColumns();
-				//Available Columns from NewCrop are:
-				//0: Blank (for the "Select" link)
-				//1: Parent (always "OpenDental")
-				//2: AccountName (Customer Business Name)
-				//3: ShortName ("OpenDental-" followed by OD assigned account number followed by "-1")
-				//4: LocationName (Practice or clinic name for real providers, "Default Location/WorkgroupOpenDental-" followed by OD assigned account number followed by "-1" for test providers)
-				//5: FirstLastName (First and last name of provider for real providers, "Doctor D. Test MD" for test providers)
-				//6: DeaNumber (DEA number for real providers, "Dea2" for test providers)
-				//7: NPI (NPI for real providers, blank for test providers)
-				//8: ExternalID (OD ProvNum for real providers, blank for test providers)
-				//9: SPIRoot (A 10 digit number for real providers, blank for test providers)
-				//10: SPILocation ("002" for real providers, blank for test providers),
-				//11: Address (Address of real provider for both test accounts and real accounts)
-				//12: AddressLine1 (Address line 2 of real provider, blank for test accounts)
-				//13: CityStateZip (City state and zip of real provider for both test accounts and real accounts, with a comma between state and zip)
-				//14: PrimaryPhone (10 digit phone number without dashes for real providers, "555-555-1212" for test providers)
-				//15: Fax (10 digit phone number without dashes for real providers, blank for test providers)
-				//16: StateLicenseNumber (State license number for real providers, "State2" for test providers)
-				//17: InternalValidationStatus (Obviously this is a NewCrop internal field. Some acceptable values are 0 and 32)
-				//18: DateAdded (The date that the real or test provider was created within NewCrop)
-				//19: IsActive (0 if inactive, 1 if active)
-				//20: Pager (usually blank)
-				//21: CellPhone (usually blank)
-				//22: Email (usually blank)
-				//23: DoctorType (usually "D". I think D stands for Dental, and they probably use "M" for medical)
 				gridBillingList.BeginUpdate();
 				gridBillingList.Rows.Clear();
-				for(int i=1;i<tableRows.Count;i++) { //Skip the first row, because it contains the column names.
-					string tr=tableRows[i];
-					//Split the row into cells.
-					List<string> trCells=new List<string>();
-					for(int j=0;j<tr.Length;) {
-						int cellStartIndex=tr.IndexOf("<td",j);
-						if(cellStartIndex<0) { //End of row found.
-							break;
-						}
-						cellStartIndex+=4;//To get inside of the <td> tag.
-						int cellLength=tr.Substring(cellStartIndex).IndexOf("</td");//Length of the cell between the <td> and </td> tags.
-						string cellData=tr.Substring(cellStartIndex,cellLength);//Excludes the <td> and </td> tags.
-						trCells.Add(cellData);
-						j+=cellLength+9;//Advance 4 for length of <td>, 5 for length of </td>. 4+5=9.
-					}
-					if(trCells[8].Trim()=="") {//ProvNum is blank.
-						//ProvNum will be a natural number if the provider clicked over from OD to NewCrop and accepted the fees.
-						//Therefore if ProvNum is blank, then the provider is an account created by NewCrop staff (all examples so far are test accounts, which we do not want to bill).
-						continue;//Do not show NewCrop test providers.
-					}
-					string shortName=trCells[3];
+				for(int i=1;i<tableNode.ChildNodes.Count;i++) { //Skip the first row, because it contains the column names.
+					ODGridRow gr=new ODGridRow();
+					XmlNode trNode=tableNode.ChildNodes[i];
+					//PatNum
+					string shortName=trNode.ChildNodes[1].InnerText;
 					int accountIdStartIndex=shortName.IndexOf("-")+1;
 					int accountIdLength=shortName.Substring(accountIdStartIndex).LastIndexOf("-");
 					string accountId=shortName.Substring(accountIdStartIndex,accountIdLength);
@@ -100,30 +50,12 @@ namespace OpenDental {
 						continue;//Do not show OD test accounts.
 					}
 					long patNum=PIn.Long(patNumStr);
-					ODGridRow gr=new ODGridRow();
-					//PatNum
 					gr.Cells.Add(new ODGridCell(patNumStr));
-					//Phone
-					gr.Cells.Add(new ODGridCell(trCells[14]));
-					//PracticeTitle
-					gr.Cells.Add(new ODGridCell(trCells[2]));
-					//ClinicOrTitle
-					gr.Cells.Add(new ODGridCell(trCells[4]));
-					//FirstLastName
-					gr.Cells.Add(new ODGridCell(trCells[5]));
-					//Address
-					gr.Cells.Add(new ODGridCell(trCells[11]));
-					//Address2
-					gr.Cells.Add(new ODGridCell(trCells[12]));
-					//CityStateZip
-					gr.Cells.Add(new ODGridCell(trCells[13]));
-					//DateAdded
-					string datetstr=trCells[18];
-					string datestr=datetstr.Substring(0,datetstr.IndexOf(" "));
-					gr.Cells.Add(new ODGridCell(datestr));
 					//NPI
-					string npi=PIn.String(trCells[7]);
+					string npi=PIn.String(trNode.ChildNodes[8].InnerText);
 					gr.Cells.Add(new ODGridCell(npi));
+					//YearMonthAdded
+					gr.Cells.Add(new ODGridCell(trNode.ChildNodes[9].InnerText));
 					//IsNew
 					RepeatCharge RepeatCur=RepeatCharges.GetForNewCrop(patNum,npi);
 					if(RepeatCur==null) {//No such repeating charge exists yet. New provider.
@@ -132,12 +64,16 @@ namespace OpenDental {
 					else {//Existing provider.
 						gr.Cells.Add(new ODGridCell(""));
 					}
+					//PracticeTitle
+					gr.Cells.Add(new ODGridCell(trNode.ChildNodes[0].InnerText));					
+					//FirstLastName
+					gr.Cells.Add(new ODGridCell(trNode.ChildNodes[2].InnerText));					
 					gridBillingList.Rows.Add(gr);
 				}
 				gridBillingList.EndUpdate();
 			}
 			catch(Exception ex) {
-				MessageBox.Show("There is something wrong with the HTML code. Try again. If issue persists, then contact a programmer: "+ex.Message);
+				MessageBox.Show("There is something wrong with the input file. Try again. If issue persists, then contact a programmer: "+ex.Message);
 			}
 		}
 
@@ -146,29 +82,19 @@ namespace OpenDental {
 			gridBillingList.Columns.Clear();
 			int gridWidth=this.Width-50;
 			int patNumWidth=54;//fixed width
-			int phoneWidth=70;//fixed width
-			int address2Width=70;//fixed width
-			int dateAddedWidth=68;//fixed width
 			int npiWidth=70;//fixed width
+			int yearMonthAddedWidth=104;//fixed width
 			int isNewWidth=46;//fixed width
-			int variableWidth=gridWidth-patNumWidth-phoneWidth-address2Width-dateAddedWidth-npiWidth-isNewWidth;
-			int practiceTitleWidth=variableWidth/5;//variable width
-			int clinicOrTitleWidth=practiceTitleWidth;//variable width
-			int firstLastNameWidth=practiceTitleWidth;//variable width
-			int addressWidth=practiceTitleWidth;//variable width
-			int cityStateZipWidth=variableWidth-practiceTitleWidth-clinicOrTitleWidth-firstLastNameWidth-addressWidth;//variable width
+			int variableWidth=gridWidth-patNumWidth-npiWidth-yearMonthAddedWidth-isNewWidth;
+			int practiceTitleWidth=variableWidth/2;//variable width
+			int firstLastNameWidth=variableWidth-practiceTitleWidth;//variable width
 			gridBillingList.Columns.Add(new ODGridColumn("PatNum",patNumWidth,HorizontalAlignment.Center));//0
-			gridBillingList.Columns.Add(new ODGridColumn("Phone",phoneWidth,HorizontalAlignment.Center));//1
-			gridBillingList.Columns.Add(new ODGridColumn("PracticeTitle",practiceTitleWidth,HorizontalAlignment.Left));//2
-			gridBillingList.Columns.Add(new ODGridColumn("ClinicOrTitle",clinicOrTitleWidth,HorizontalAlignment.Left));//3
-			gridBillingList.Columns.Add(new ODGridColumn("FirstLastName",firstLastNameWidth,HorizontalAlignment.Left));//4
-			gridBillingList.Columns.Add(new ODGridColumn("Address",addressWidth,HorizontalAlignment.Left));//5
-			gridBillingList.Columns.Add(new ODGridColumn("Address2",address2Width,HorizontalAlignment.Left));//6
-			gridBillingList.Columns.Add(new ODGridColumn("CityStateZip",cityStateZipWidth,HorizontalAlignment.Left));//7
-			gridBillingList.Columns.Add(new ODGridColumn("DateAdded",dateAddedWidth,HorizontalAlignment.Center));//8
-			gridBillingList.Columns.Add(new ODGridColumn("NPI",npiWidth,HorizontalAlignment.Center));//9
-			gridBillingList.Columns.Add(new ODGridColumn("IsNew",isNewWidth,HorizontalAlignment.Center));//10
-			gridBillingList.EndUpdate();
+			gridBillingList.Columns.Add(new ODGridColumn("NPI",npiWidth,HorizontalAlignment.Center));//1
+			gridBillingList.Columns.Add(new ODGridColumn("YearMonthAdded",yearMonthAddedWidth,HorizontalAlignment.Center));//2
+			gridBillingList.Columns.Add(new ODGridColumn("IsNew",isNewWidth,HorizontalAlignment.Center));//3
+			gridBillingList.Columns.Add(new ODGridColumn("PracticeTitle",practiceTitleWidth,HorizontalAlignment.Left));//4
+			gridBillingList.Columns.Add(new ODGridColumn("FirstLastName",firstLastNameWidth,HorizontalAlignment.Left));//5			
+			gridBillingList.EndUpdate();			
 		}
 
 		private void FormBillingList_Resize(object sender,EventArgs e) {
@@ -185,11 +111,29 @@ namespace OpenDental {
 			int numSkipped=0;
 			for(int i=0;i<gridBillingList.Rows.Count;i++) {
 				long patNum=PIn.Long(gridBillingList.Rows[i].Cells[0].Text);
-				string npi=PIn.String(gridBillingList.Rows[i].Cells[9].Text);
+				string npi=PIn.String(gridBillingList.Rows[i].Cells[1].Text);
 				RepeatCharge RepeatCur=RepeatCharges.GetForNewCrop(patNum,npi);
 				if(RepeatCur==null) {//No such repeating charge exists yet.
-					DateTime dateAdded=PIn.Date(gridBillingList.Rows[i].Cells[8].Text);
-					if(dateAdded<DateTime.Today.AddDays(-90)) {//The customer was added into NewCrop over 90 days ago. Not really new. Skip and warn.
+					string yearMonth=gridBillingList.Rows[i].Cells[2].Text;
+					int year=PIn.Int(yearMonth.Substring(0,4));
+					int month=PIn.Int(yearMonth.Substring(4));
+					//Match the day of the month for the NewCrop repeating charge to their existing monthly support charge (even if the monthly support is disabled).
+					int day=15;//Day 15 will be used if they do not have any existing repeating charges.
+					RepeatCharge[] chargesForPat=RepeatCharges.Refresh(patNum);
+					bool hasMaintCharge=false;
+					for(int j=0;j<chargesForPat.Length;j++) {
+						if(chargesForPat[j].ProcCode=="001") {//Monthly maintenance repeating charge
+							hasMaintCharge=true;
+							day=chargesForPat[j].DateStart.Day;
+							break;
+						}
+					}
+					//The customer is not on monthly support, so use any other existing repeating charge day (example EHR Monthly and Mobile).
+					if(!hasMaintCharge && chargesForPat.Length>0) {
+						day=chargesForPat[0].DateStart.Day;
+					}
+					DateTime dateBilling=new DateTime(year,month,day);
+					if(dateBilling<DateTime.Today.AddDays(-90)) {//The customer was added into NewCrop over 90 days ago. Not really new. Skip and warn.
 						numSkipped++;
 					}
 					else {
@@ -199,7 +143,7 @@ namespace OpenDental {
 						RepeatCur.PatNum=patNum;
 						RepeatCur.ProcCode="NewCrop";
 						RepeatCur.ChargeAmt=15;
-						RepeatCur.DateStart=dateAdded;
+						RepeatCur.DateStart=dateBilling;
 						RepeatCur.Note="NPI="+npi;
 						RepeatCharges.Insert(RepeatCur);
 						numChargesAdded++;
@@ -210,7 +154,7 @@ namespace OpenDental {
 			Cursor=Cursors.Default;
 			string msg="Done. Number of repeating charges added: "+numChargesAdded;
 			if(numSkipped>0) {
-				msg+=Environment.NewLine+"Number skipped due to old DateAdded (over 90 days ago): "+numSkipped;
+				msg+=Environment.NewLine+"Number skipped due to old DateBilling (over 90 days ago): "+numSkipped;
 			}
 			MessageBox.Show(msg);
 		}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -14,17 +15,17 @@ namespace OpenDental {
 			InitializeComponent();
 		}
 
-		private void butPaste_Click(object sender,EventArgs e) {
-			try {
-				textBoxHTML.Text=Clipboard.GetText();
-			}
-			catch(Exception ex) {
-				MessageBox.Show("Failed to paste: "+ex.Message);
+		private void butBrowse_Click(object sender,EventArgs e) {
+			if(openFileDialog1.ShowDialog()==DialogResult.OK) {
+				textBillingXmlPath.Text=openFileDialog1.FileName;
 			}
 		}
 
-		private void butGo_Click(object sender,EventArgs e) {
-			FormNewCropBillingList form=new FormNewCropBillingList(textBoxHTML.Text);
+		private void butOK_Click(object sender,EventArgs e) {
+			if(!File.Exists(textBillingXmlPath.Text)) {
+				MessageBox.Show("File does not exist or could not be accessed. Make sure the file is not open in another program and try again.");
+			}
+			FormNewCropBillingList form=new FormNewCropBillingList(textBillingXmlPath.Text);
 			form.ShowDialog();			
 		}
 
