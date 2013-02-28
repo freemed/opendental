@@ -22,7 +22,7 @@
 				//Get the current page and domain information so that we know where the location of the web service is.
 				var pageName=window.location.href.substring(window.location.href.lastIndexOf("/")+1);
 				var domainName=window.location.href.split(pageName)[0];
-				//Set the action to call the local web service's method ProcessLoginRequestLocal.  Example: http://www.supersmiledentist.com:52441/ServiceMain.asmx/ProcessLoginRequestLocal
+				//Set the action to call the local web service's method ProcessLoginRequestLocal.  Example: https://www.supersmiledentist.com:52441/ServiceMain.asmx/ProcessLoginRequestLocal
 				webServiceURL=domainName+"ServiceMain.asmx/ProcessLoginRequestLocal";
 				//Read in the ID parameter that each office is required to pass in the URL so that we know which office is trying to log in.
 				var urlParams=window.location.search.substring(1);
@@ -38,7 +38,7 @@
 					}
 					document.getElementById("custID").value=custID[1];
 					//The action needs to be redirected to our web service which will always be hard coded.
-					webServiceURL="http://localhost:52441/ServiceMain.asmx/ProcessLoginRequestHQ";
+					webServiceURL="https://localhost:52441/ServiceMain.asmx/ProcessLoginRequestHQ";
 				}
 				var formLogin=document.getElementById("formLogin");
 				formLogin.action=webServiceURL;
