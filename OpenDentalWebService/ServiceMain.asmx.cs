@@ -18,16 +18,42 @@ namespace OpenDentalWebService {
 	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 	[ToolboxItem(false)]
 	public class ServiceMain:System.Web.Services.WebService {
-		private OpenDentBusiness.DataConnection con=null;
+		private OpenDentBusiness.DataConnection conLocal=null;
+		private OpenDentBusiness.DataConnection conHQ=null;
+
+		[WebMethod]
+		///<summary>Customers will be able to host their own web services.  In order to access their local db, they will simply leave out the id parameter in the URLs of their login page.</summary>
+		public string ProcessLoginRequestLocal(string textUserName,string textPassword) {
+			//The customer is hosting their own web service.  The database settings will be located in a config file locally.
+			//The database connection will always be null the first time the web service is accessed.
+			if(conLocal==null) {
+				//Create a connection to the database.  The same database connector that is used for the web app can be used here because the service is local.
+				conLocal=DbConnection.GetConnectionLocal();
+			}
+			//Check the credentials that were passed in and dictate whether a patient portal page should be returned or the Web Application.
+			return "";
+		}
+
+		[WebMethod]
+		///<summary>Only used at HQ.  Users will be able to launch our login page as log as the URL is preceeded with an id parameter.  When the id parameter is present, this method will be called on the web service at HQ.</summary>
+		public string ProcessLoginRequestHQ(string custID,string textUserName,string textPassword) {
+			//The database connection will always be null the first time the web service is accessed.
+			if(conHQ==null) {
+				//Create a connection to the database at HQ.
+				conHQ=DbConnection.GetConnectionHQ();
+			}
+			//Check the credentials in our internal db at HQ and dictate whether a patient portal page should be returned or the Web Application home page.
+			return "";
+		}
 
 		///<summary>Pass in a serialized dto.  It returns the desired object in xml or a dto exception which must be deserialized by the client.  We return an XmlDocument because returning a string will encode the XML thus the less than and greater than symbols get translated to &lt; and &gt;</summary>
 		[WebMethod]
 		[ScriptMethod(UseHttpGet=true)]
 		public XmlDocument ProcessRequest(string dtoString) {
 			//The database connection will always be null the first time the web service is accessed.
-			if(con==null) {
-				//Create a connection to the database.
-				con=DbConnection.GetDataConnectionFromConfigFile();
+			if(conLocal==null) {
+				//Create a connection to the database.  This connection will always be local, even if used at HQ because that would mean our local service would be hosting the data.
+				conLocal=DbConnection.GetConnectionLocal();
 			}
 			DataTransferObject dto=null;
 			XmlDocument xdoc=new XmlDocument();

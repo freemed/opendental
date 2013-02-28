@@ -11,11 +11,20 @@ namespace OpenDentalWebService.Remoting {
 	///<summary>This class is only used the first time the web service is turned on.  It is used to read the xml config file that contains the connection information and return a DataConnection.</summary>
 	public class DbConnection {
 
+		public static DataConnection GetConnectionLocal() {
+			string configPath=Path.Combine(HttpRuntime.AppDomainAppPath,"OpenDentalWebConfig.xml");
+			return GetDataConnectionFromConfigFile(configPath);
+		}
+
+		public static DataConnection GetConnectionHQ() {
+			string configPath=Path.Combine(HttpRuntime.AppDomainAppPath,"OpenDentalWebConfigHQ.xml");
+			return GetDataConnectionFromConfigFile(configPath);
+		}
+
 		///<summary>Reads the xml config file that contains the connection information for the correct database and returns a DataConnection to it.</summary>
-		public static DataConnection GetDataConnectionFromConfigFile() {
-			string xmlPath=Path.Combine(HttpRuntime.AppDomainAppPath,"OpenDentalWebConfig.xml");
-			if(!File.Exists(xmlPath)) {
-				throw new ApplicationException("Cannot find config file: "+xmlPath);
+		private static DataConnection GetDataConnectionFromConfigFile(string configPath) {
+			if(!File.Exists(configPath)) {
+				throw new ApplicationException("Cannot find config file: "+configPath);
 			}
 			try {
 				string server="";
@@ -27,7 +36,7 @@ namespace OpenDentalWebService.Remoting {
 				string connectionString="";
 				DataConnection con=new DataConnection();
 				XmlDocument document=new XmlDocument();
-				document.Load(xmlPath);
+				document.Load(configPath);
 				XPathNavigator navigator=document.CreateNavigator();
 				XPathNavigator nav=null;
 				//DatabaseType
@@ -65,7 +74,7 @@ namespace OpenDentalWebService.Remoting {
 				return con;
 			}
 			catch(Exception ex) {
-				throw new Exception("Error making a connection to the database with the settings in the OpenDentalWebConfig.xml:\r\n"+ex.Message);
+				throw new Exception("Error making a connection to the database with the settings in "+configPath+":\r\n"+ex.Message);
 			}
 		}
 
