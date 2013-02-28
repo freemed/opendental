@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<script type="text/javascript">
@@ -50,7 +51,7 @@
 		</noscript>
 	</head>
 	<body>
-		<form name="formLogin" id="formLogin" method="POST" onSubmit="javascript:loginSubmit();">
+		<form name="formLogin" id="formLogin" method="POST" onSubmit="javascript:loginSubmit();" style="position:fixed;top:30px;left:30px;">
 			<!-- This is just an invisible input field that will get filled with the office ID if one was passed in the URL when submitted.  -->
 			<input type="hidden" name="custID" id="custID" value="" />
 			<span id="labelCustID" style="display:none;color:#FF0000;"><label>Customer id was not passed in the URL correctly.  Users cannot log in until the URL includes the office id.  URL should end like '?id=###', where ### is the office id.</label></span>
