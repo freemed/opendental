@@ -26,6 +26,7 @@ namespace OpenDental
 		private Point PositionOfClick;
 		private Group ReplWord;
 		private bool spellCheckIsEnabled;//set to true in constructor
+		private Point textEndPoint;
 
 		///<summary>Set true to enable spell checking in this control.</summary>
 		[Category("Behavior"),Description("Set true to enable spell checking.")]
@@ -132,6 +133,7 @@ namespace OpenDental
 			// 
 			this.ContextMenu = this.contextMenu;
 			this.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+			this.ContentsResized += new System.Windows.Forms.ContentsResizedEventHandler(this.ODtextBox_ContentsResized);
 			this.VScroll += new System.EventHandler(this.ODtextBox_VScroll);
 			this.ResumeLayout(false);
 
@@ -222,7 +224,7 @@ namespace OpenDental
 			if(ReplWord==null) {
 				return false;
 			}
-			if(ListIncorrect.Contains(ReplWord.Value)) {
+			if(ListIncorrect.Contains(ReplWord.Value.ToLower())) {
 				return true;
 			}
 			return false;
@@ -267,8 +269,8 @@ namespace OpenDental
 					word.WordText=newWord;
 					DictCustoms.Insert(word);
 					DataValid.SetInvalid(InvalidType.DictCustoms);
-					ListIncorrect.Remove(ReplWord.Value);
-					ListCorrect.Add(ReplWord.Value);
+					ListIncorrect.Remove(ReplWord.Value.ToLower());
+					ListCorrect.Add(ReplWord.Value.ToLower());
 					timer1.Start();
 					break;
 				case 7://Disable spell check
@@ -277,14 +279,7 @@ namespace OpenDental
 					}
 					Prefs.UpdateBool(PrefName.SpellCheckIsEnabled,false);
 					DataValid.SetInvalid(InvalidType.Prefs);
-					Bitmap BitmapOverlay=new Bitmap(this.Width,this.Height);//Clear wavy lines
-					BufferGraphics=Graphics.FromImage(BitmapOverlay);
-					BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
-					ClearWavyLines(BufferGraphics);
-					Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
-					graphicsTextBox.DrawImageUnscaled(BitmapOverlay,0,0);
-					graphicsTextBox.Dispose();
-					BitmapOverlay.Dispose();
+					ClearWavyLines();
 					break;
 				//case 8 is separator
 				case 9:
@@ -328,7 +323,7 @@ namespace OpenDental
 
 		private void timer1_Tick(object sender,EventArgs e) {
 			timer1.Stop();
-			CheckSpelling();
+			SpellCheck();
 		}
 
 		private void ODtextBox_VScroll(object sender,EventArgs e) {
@@ -340,34 +335,24 @@ namespace OpenDental
 			base.OnKeyDown(e);
 			if(!PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
 				return;
+			}	
+			//The lines were shifted due to new input. This causes the location of the red wavy underline to shift down as well, so clear them.
+			if(e.KeyCode==Keys.Enter) {
+				ClearWavyLines();
 			}
-			Bitmap BitmapOverlay=new Bitmap(this.Width,this.Height);
-			BufferGraphics=Graphics.FromImage(BitmapOverlay);
-			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
-			ClearWavyLines(BufferGraphics);
-			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
-			graphicsTextBox.DrawImageUnscaled(BitmapOverlay,0,0);
-			graphicsTextBox.Dispose();
-			BitmapOverlay.Dispose();
 		}
 
-		private void ClearWavyLines(Graphics bufferGraphics) {
-			string[] words=Regex.Split(Text,"([\\s])");
-			int startInd=0;
-			for(int i=0;i<words.Length;i++) {//go through each word and use GetPositionFromCharIndex to determine the y position to draw our white box
-				Point start=this.GetPositionFromCharIndex(startInd);//get pos of character at startInd, y could be negative if scroll bar active
-				start.Y=start.Y+this.FontHeight;
-				if(start.Y<0) {
-					startInd=startInd+words[i].Length;
-					continue;
-				}
-				if(start.Y>=this.Height) {
-					break;
-				}
-				Rectangle wavyLineArea=new Rectangle(start.X,start.Y,this.Width,2);
-			  bufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
-				startInd=startInd+words[i].Length;
+		///<summary>When the contents of the text box is resized, e.g. when word wrap creates a new line, clear red wavy lines so they don't shift down.</summary>
+		private void ODtextBox_ContentsResized(object sender,ContentsResizedEventArgs e) {
+			Point textEndPointCur=this.GetPositionFromCharIndex(Text.Length-1);
+			if(textEndPoint==new Point(0,0)) {
+				textEndPoint=textEndPointCur;
+				return;
 			}
+			if(textEndPointCur.Y!=textEndPoint.Y) {//textEndPoint cannot be null, if not set it defaults to 0,0
+				ClearWavyLines();
+			}
+			textEndPoint=textEndPointCur;
 		}
 		
 		///<summary></summary>
@@ -388,34 +373,65 @@ namespace OpenDental
 			timer1.Start();
 		}
 
-		private void CheckSpelling() {
-			if(!PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
-				return;
-			}
-			Bitmap BitmapOverlay=new Bitmap(this.Width,this.Height);
-			BufferGraphics=Graphics.FromImage(BitmapOverlay);
+		private void ClearWavyLines() {
+			Bitmap bitmapOverlay=new Bitmap(this.Width,this.Height);
+			BufferGraphics=Graphics.FromImage(bitmapOverlay);
 			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
-			ClearWavyLines(BufferGraphics);
-			SpellCheck();
+			string[] words=Regex.Split(Text,"([\\s])");
+			int startInd=0;
+			for(int i=0;i<words.Length;i++) {//go through each word and use GetPositionFromCharIndex to determine the y position to draw our white box
+				if(words[i]==" ") {//spaces should never be underlined, so no need to clear line underneath
+					startInd=startInd+1;
+					continue;
+				}
+				Point start=this.GetPositionFromCharIndex(startInd);//get pos of character at startInd, y could be negative if scroll bar active
+				Point end=this.GetPositionFromCharIndex(startInd+words[i].Length-1);//get pos of the char at the end of this word, to see if the 'word' spans more than one line
+				start.Y=start.Y+this.FontHeight;
+				end.Y=end.Y+this.FontHeight;
+				if(start.Y<0 && end.Y<0) {//if the entire word is above the visible area, y pos will be negative with scroll bar active
+					startInd=startInd+words[i].Length;
+					continue;
+				}
+				if(start.Y>=this.Height) {//y pos is below the visible area, with scroll bar active
+					break;
+				}
+				//word may span more than one line, so white out all lines between the starting char line and the ending char line
+				for(int j=start.Y;j<=end.Y;j+=this.FontHeight) {
+					Rectangle wavyLineArea=new Rectangle(1,j,this.Width,2);
+					BufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
+				}
+				startInd=startInd+words[i].Length;
+			}
 			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
-			graphicsTextBox.DrawImageUnscaled(BitmapOverlay,0,0);
+			graphicsTextBox.DrawImageUnscaled(bitmapOverlay,0,0);
 			graphicsTextBox.Dispose();
-			BitmapOverlay.Dispose();
+			bitmapOverlay.Dispose();
 		}
 
 		///<summary>Performs spell checking against indiviudal words against the English USA dictionary.</summary>
 		private void SpellCheck() {
+			if(!PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+				return;
+			}
+			ClearWavyLines();
+			Bitmap bitmapOverlay=new Bitmap(this.Width,this.Height);
+			BufferGraphics=Graphics.FromImage(bitmapOverlay);
+			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
 			//Matches a word containing at least one alpha-numeric and might include punctuation in the middle of the word.
 			MatchCollection words=GetWords();
 			foreach(Match m in words) {
 				Group word=m.Groups[1];//Group 0 is the entire match, group 1 is our word, group 2 is our word without the first character (determined by parentheses).
-				bool correct=false;
-				if(ListCorrect.Contains(word.Value)) {
+				if(ListCorrect.Contains(word.Value.ToLower())) {
 					continue;//Spelled correctly
 				}
+				if(Regex.IsMatch(word.Value,@"\d")) {//"[a-zA-Z']")){//"\d")) {//"\D*\d+\D*")) {//if "word" contains a number, do not spell check.
+					ListCorrect.Add(word.Value.ToLower());
+					continue;
+				}
+				bool correct=false;
 				int startIndex=word.Index;//word.Index is relative to Text.
 				int endIndex=startIndex+word.Length;//One spot past the end of the word, because DrawWave() draws to the beginning of the character of the endIndex.
-				if(ListIncorrect.Contains(word.Value)) {
+				if(ListIncorrect.Contains(word.Value.ToLower())) {
 					DrawWave(startIndex,endIndex);
 					continue;//Spelled incorrectly
 				}
@@ -430,17 +446,30 @@ namespace OpenDental
 				}
 				if(!correct) {
 					DrawWave(startIndex,endIndex);
-					ListIncorrect.Add(word.Value);
+					ListIncorrect.Add(word.Value.ToLower());
 				}
 				else {//if it gets here, the word was spelled correctly, determined by comparing to the custom word list and/or the hunspell dict
-					ListCorrect.Add(word.Value);
+					ListCorrect.Add(word.Value.ToLower());
 				}
 			}
+			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
+			graphicsTextBox.DrawImageUnscaled(bitmapOverlay,0,0);
+			graphicsTextBox.Dispose();
+			bitmapOverlay.Dispose();
 		}
 
 		///<summary>Determines individual words by matching regular expression pattern.  Pattern is 0 or more non word characters, followed by a word character (defined as [a-zA-Z0-9_]), followed by 0 or 1 (non-white space chars followed by a word char), followed by 0 or more non-word chars.  So a word has to begin and end with a word character (could be the same char) and in between those chars there can be any number of chars as long as they are not white space.</summary>
 		private MatchCollection GetWords() {
 			return Regex.Matches(Text,@"\W*(\w([\S-[/\\]]*\w)?)\W*",RegexOptions.Multiline|RegexOptions.CultureInvariant);
+			//split by spaces
+			//loop
+			//trim anything off the beginnings and ends of each word by stepping through the chars in the word
+			//  look at first char.
+			//  is it a letter?  Range of char vals.
+					//yes: done
+					//no: remove it.
+			//  ditto for end trim.
+			//any word that contains anything but letters, apostrophes, or dashes, don't spell check.
 		}
 
 		private void DrawWave(int startIndex,int endIndex) {
@@ -512,25 +541,4 @@ namespace OpenDental
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
