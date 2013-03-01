@@ -56,7 +56,7 @@ namespace OpenDentBusiness{
 
 		//there are no methods for deleting or changing log entries because that will never be allowed.
 
-		///<summary>Used when viewing various audit trails of specific types.  Only implemented Appointments so far.</summary>
+		///<summary>Used when viewing various audit trails of specific types.  Only implemented Appointments,ProcFeeEdit,InsPlanChangeCarrierName so far. patNum only used for Appointments.  The other two are zero.</summary>
 		public static SecurityLog[] Refresh(long patNum,List<Permissions> permTypes,long fKey) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<SecurityLog[]>(MethodBase.GetCurrentMethod(),patNum,permTypes,fKey);
@@ -71,8 +71,8 @@ namespace OpenDentBusiness{
 			string command="SELECT * FROM securitylog "
 				+"WHERE ("+types+") "
 				+"AND FKey="+POut.Long(fKey)+" ";
-			if(patNum!=0) {
-				command+=" PatNum="+POut.Long(patNum)+" ";
+			if(patNum!=0) {//appointments
+				command+=" AND PatNum="+POut.Long(patNum)+" ";
 			}
 			command+="ORDER BY LogDateTime";
 			return Crud.SecurityLogCrud.SelectMany(command).ToArray();

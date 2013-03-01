@@ -529,21 +529,8 @@ namespace OpenDental{
 				if(planToMergeTo.PlanNum==listSelected[i].PlanNum){
 					continue;
 				}
-				//==Michael - We are changing plans here, not carriers, so there is nothing to report in the audit trail for any plans. The code commented out below should be deleted.
-				////loop through all the patplans for that plan and make a securitylog entry that they are changing from one carrier to this carrier.
-				//PatPlan[] patPlans=PatPlans.GetByPlanNum(listSelected[i].PlanNum);
-				////Create a list of FK nums to get a list of InsPlans
-				//List<long> insSubNums=new List<long>();
-				//for(int k=0;k<patPlans.Length;k++) {
-				//  insSubNums.Add(patPlans[i].InsSubNum);
-				//}
-				//List<InsPlan> insPlans=InsPlans.GetByInsSubs(insSubNums);
-				//for(int n=0;n<patPlans.Length;n++) {
-				//  SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName,patPlans[i].PatNum,Lan.g(this,"Carrier changed from")+" "
-				//  +Carriers.GetCarrier(InsPlans.GetPlan(listSelected[i].PlanNum,insPlans).CarrierNum).CarrierName+" "+Lan.g(this,"to")+" "
-				//  +Carriers.GetCarrier(InsPlans.GetPlan(planToMergeTo.PlanNum,insPlans).CarrierNum).CarrierName,
-				//    PlanNum?);
-				//}
+				//==Michael - We are changing plans here, but not carriers, so this is not needed:
+				//SecurityLogs.MakeLogEntry(Permissions.InsPlanChangeCarrierName
 				InsPlans.ChangeReferences(listSelected[i].PlanNum,planToMergeTo.PlanNum);
 				Benefits.DeleteForPlan(listSelected[i].PlanNum);
 				InsPlans.Delete(listSelected[i].PlanNum);

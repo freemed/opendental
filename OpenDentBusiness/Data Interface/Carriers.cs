@@ -408,7 +408,7 @@ namespace OpenDentBusiness{
 		///<summary>Surround with try/catch Combines all the given carriers into one. The carrier that will be used as the basis of the combination is specified in the pickedCarrier argument. Updates insplan, then deletes all the other carriers.</summary>
 		public static void Combine(List<long> carrierNums,long pickedCarrierNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),carrierNums,pickedCarrierNum);
+				Meth.GetBool(MethodBase.GetCurrentMethod(),carrierNums,pickedCarrierNum);
 				return;
 			}
 			if(carrierNums.Count==1){

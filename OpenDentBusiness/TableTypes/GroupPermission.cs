@@ -158,7 +158,9 @@ namespace OpenDentBusiness{
 		///<summary>64- There is no user interface in the security window for this permission.  It is only used for tracking.  FK to CodeNum.</summary>
 		ProcFeeEdit,
 		///<summary>65- There is no user interface in the security window for this permission.  It is only used for tracking.  Only tracks changes to carriername, not any other carrier info.  FK to PlanNum for tracking.</summary>
-		InsPlanChangeCarrierName
+		InsPlanChangeCarrierName,
+		///<summary>66- If user does not have this permission, then they can't delete, edit original description, or double click on note rows.</summary>
+		TaskEdit
 	}
 
 	
