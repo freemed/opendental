@@ -1109,6 +1109,44 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string ClaimProcDeleteDuplicateEstimateForSameInsPlan(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			//Get all the claimproc estimates that already have a claimproc marked as received from the same InsPlan.
+			command="SELECT cp.ClaimProcNum FROM claimproc cp "
+				+" INNER JOIN claimproc cp2 ON cp2.PatNum=cp.PatNum"
+				+" AND cp2.PlanNum=cp.PlanNum"//The same insurance plan
+				+" AND cp2.ProcNum=cp.ProcNum"//for the same procedure
+				+" AND cp2.Status="+POut.Int((int)ClaimProcStatus.Received)
+				+" WHERE cp.Status="+POut.Int((int)ClaimProcStatus.Estimate)
+				+" AND cp.ClaimNum=0";//Make sure the estimate is not already attached to a claim somehow.
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Duplicate ClaimProc estimates for the same InsPlan found: ")+table.Rows.Count+"\r\n";
+				}
+			}
+			else {
+				if(table.Rows.Count>0) {
+					command="DELETE FROM claimproc WHERE ClaimProcNum IN (";
+					for(int i=0;i<table.Rows.Count;i++) {
+						if(i>0) {
+							command+=",";
+						}
+						command+=table.Rows[i]["ClaimProcNum"].ToString();
+					}
+					command+=")";
+					Db.NonQ(command);
+				}
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Duplicate ClaimProc estimates for the same InsPlan deleted: ")+table.Rows.Count+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
