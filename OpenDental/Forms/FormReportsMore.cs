@@ -691,6 +691,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patients - Raw");
 					break;
 				case 5://Patient Notes
+					if(!Security.IsAuthorized(Permissions.UserQuery)) {
+						return;
+					}
 					FormSearchPatNotes FormPN=new FormSearchPatNotes();
 					FormPN.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Patient Notes");
@@ -706,6 +709,9 @@ namespace OpenDental {
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Procedure Codes");
 					break;
 				case 8://Referrals - Raw
+					if(!Security.IsAuthorized(Permissions.UserQuery)) {
+						return;
+					}
 					FormRpReferrals FormReferral=new FormRpReferrals();
 					FormReferral.ShowDialog();
 					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Referrals - Raw");
@@ -785,6 +791,10 @@ namespace OpenDental {
 		}
 
 		private void butUDS_Click(object sender,EventArgs e) {
+			//Recommend checking for user query permission, unless bringing up the preview window first, then the query view button prevents user from accessing user queries.
+			//if(!Security.IsAuthorized(Permissions.UserQuery)) {
+			//  return;
+			//}
 			//not visible
 			FormReportsUds FormRU=new FormReportsUds();
 			FormRU.ShowDialog();

@@ -1137,6 +1137,9 @@ namespace OpenDental{
 		}
 
 		private void butQView_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.UserQuery)) {
+				return;
+			}
 			printPreviewControl2.Visible=false;
 			panelZoom.Visible=false;
 			butPrintPreview.Visible=true;

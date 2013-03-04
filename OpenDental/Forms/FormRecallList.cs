@@ -1034,6 +1034,9 @@ namespace OpenDental{
 		}
 
 		private void butReport_Click(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.UserQuery)) {
+				return;
+			}
 		  if(gridMain.Rows.Count < 1){
         MessageBox.Show(Lan.g(this,"There are no Patients in the Recall table.  Must have at least one to run report."));    
         return;

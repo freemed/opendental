@@ -485,6 +485,9 @@ namespace OpenDental {
 		}
 
 		private void butReport_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.UserQuery)) {
+				return;
+			}
 			//Basically a preview of gridMain (every employee on one page), allow user to export as excel sheet or print it.
 			string query=ClockEvents.GetTimeCardManageCommand(DateStart,DateStop);
 			ReportSimpleGrid rsg=new ReportSimpleGrid();
