@@ -62,7 +62,7 @@ namespace OpenDental{
 			this.textSearch.Location = new System.Drawing.Point(160, 12);
 			this.textSearch.Name = "textSearch";
 			this.textSearch.Size = new System.Drawing.Size(100, 20);
-			this.textSearch.TabIndex = 12;
+			this.textSearch.TabIndex = 0;
 			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
 			// 
 			// checkIgnoreContent

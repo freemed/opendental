@@ -26,7 +26,6 @@ namespace OpenDental {
 			Height=rectWorkingArea.Height;
 			FillGrid();
 			wikiPageTitleSelected="";
-			textSearch.Focus();
 		}
 
 		private void LoadWikiPage(string WikiPageTitleCur) {
