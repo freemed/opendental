@@ -291,6 +291,7 @@ namespace OpenDentBusiness{
 			//[[color:red|text]]----------------------------------------------------------------------------------------------------------------
 			matches = Regex.Matches(s,@"\[\[(color:).*?\]\]");//.*? matches as few as possible.
 			foreach(Match match in matches) {
+				//string[] paragraphs = match.Value.Split(new string[] { "\r\n" },StringSplitOptions.None);
 				string tempText="<span style=\"color:";
 				string[] tokens = match.Value.Split('|');
 				if(tokens.Length<2) {//not enough tokens
@@ -428,16 +429,25 @@ namespace OpenDentBusiness{
 					break;
 				}
 				tagName="";
-				if(s.Substring(iScanInParagraph).StartsWith("<b")) {
+				//regex match <...>
+				//if no space, then trim the <>
+				//if ends with /, then throw exception
+				//split at first space
+				//that gives you the tag name.
+				//switch tagName
+				//case b:
+				//case img:
+				//etc.
+				if(s.Substring(iScanInParagraph).StartsWith("<b>")) {
 					tagName="b";
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<img")) {//must be before "i"
-					tagName="img";//does not have an ending tag...
+					tagName="img";//ending tag is inserted above during regexp replacements. i.e. <img src="..."></img>
 				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<i")) {
+				else if(s.Substring(iScanInParagraph).StartsWith("<i>")) {//must have ending bracket otherwise it catches things like "<inherits"
 					tagName="i";
 				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<a")) {
+				else if(s.Substring(iScanInParagraph).StartsWith("<a ")) {
 					tagName="a";
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<span")) {
@@ -449,16 +459,18 @@ namespace OpenDentBusiness{
 				else if(s.Substring(iScanInParagraph).StartsWith("<ol")) {
 					tagName="ol";
 				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h1")) {
+				else if(s.Substring(iScanInParagraph).StartsWith("<h1>")) {
 					tagName="h1";
 				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h2")) {
+				else if(s.Substring(iScanInParagraph).StartsWith("<h2>")) {
 					tagName="h2";
 				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h3")) {
+				else if(s.Substring(iScanInParagraph).StartsWith("<h3>")) {
 					tagName="h3";
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
+					//All the tags inside, such as tr, td, etc, do not need to be handled, 
+					//because this is only concerned with top-level tags, and it will jump to the end of this entire section
 					tagName="table";
 				}
 				else if(s.Substring(iScanInParagraph).StartsWith("<TableViews")) {
@@ -470,6 +482,7 @@ namespace OpenDentBusiness{
 				if(tagName=="b" || tagName=="i" || tagName=="a" || tagName=="span"){			
 					//scan to the ending tag because this is paragraph content.
 					if(s.IndexOf("</"+tagName+">")==-1) {//an invalid tag of some sort.  Example: <br />
+							throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
 //todo: prevent infinite loop
 					}
 					iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
