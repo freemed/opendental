@@ -94,6 +94,23 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 		}
 
+		///<summary>Surround with try/catch.  If there are any dependencies, then this will throw an exception.  This is currently only called from FormClaimProc.</summary>
+		public static void DeleteAfterValidating(ClaimProc cp) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),cp);
+				return;
+			}
+			//Validate: make sure this is not the last claimproc on the claim
+			string command="SELECT COUNT(*) FROM claimproc WHERE ClaimNum= "+POut.Long(cp.ClaimNum)+" AND ClaimProcNum!= "+POut.Long(cp.ClaimProcNum);
+			long remainingCP=PIn.Long(Db.GetCount(command));
+			if(remainingCP==0) {
+				throw new ApplicationException(Lans.g("ClaimProcs","Not allowed to delete the last procedure from a claim.  The entire claim would have to be deleted."));
+			}
+			//end of validation
+			command= "DELETE FROM claimproc WHERE ClaimProcNum = "+POut.Long(cp.ClaimProcNum);
+			Db.NonQ(command);
+		}
+
 		///<summary>Used when creating a claim to create any missing claimProcs. Also used in FormProcEdit if click button to add Estimate.  Inserts it into db. It will still be altered after this to fill in the fields that actually attach it to the claim.</summary>
 		public static void CreateEst(ClaimProc cp, Procedure proc, InsPlan plan,InsSub sub) {
 			//No need to check RemotingRole; no call to db.

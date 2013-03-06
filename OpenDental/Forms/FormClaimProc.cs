@@ -1917,7 +1917,13 @@ namespace OpenDental
 				,MessageBoxButtons.OKCancel)!=DialogResult.OK){
 				return;
 			}
-			ClaimProcs.Delete(ClaimProcCur);
+			try {
+				ClaimProcs.DeleteAfterValidating(ClaimProcCur);
+			}
+			catch(ApplicationException ex) {
+				MessageBox.Show(ex.Message);
+				return;
+			}
 			DialogResult=DialogResult.OK;
 		}
 
