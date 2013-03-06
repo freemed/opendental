@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -35,6 +36,8 @@ namespace OpenDental {
 		public static Font tabOrderFont = new Font("Times New Roman",12f,FontStyle.Regular,GraphicsUnit.Pixel);
 		private Bitmap BmBackground;
 		private Graphics GraphicsBackground;
+		///<summary>This stores the previous calculations so that we don't have to recal unless certain things have changed.  The key is the index of the sheetfield.  The data is an array of objects of different types as seen in the code.</summary>
+		private Hashtable HashRtfStringCache=new Hashtable();
 
 		///<summary>Some controls (panels in this case) do not pass key events to the parent (the form in this case) even when the property KeyPreview is set.  Instead, the default key functionality occurs.  An example would be the arrow keys.  By default, arrow keys set focus to the "next" control.  Instead, want all key presses on this form and all of it's child controls to always call the FormSheetDefEdit_KeyDown method.</summary>
 		protected override bool ProcessCmdKey(ref Message msg,Keys keyData) {
@@ -390,7 +393,8 @@ namespace OpenDental {
 						Math.Abs(MouseCurrentPos.X-MouseOriginalPos.X),//Width
 						Math.Abs(MouseCurrentPos.Y-MouseOriginalPos.Y));//Height
 				}
-				g.DrawString(str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
+				//g.DrawString(str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);//This was drawing differently than in RichTextBox, so problems with large text.
+				DrawRTFstring(i,str,font,brush,g);
 				//GraphicsHelper.DrawString(g,g,str,font,brush,SheetDefCur.SheetFieldDefs[i].Bounds);
 				if(IsTabMode && SheetDefCur.SheetFieldDefs[i].FieldType==SheetFieldType.InputField) {
 					Rectangle tabRect = new Rectangle(
@@ -410,6 +414,59 @@ namespace OpenDental {
 						//GraphicsHelper.DrawString(g,g,SheetDefCur.SheetFieldDefs[i].TabOrder.ToString(),SheetDefCur.GetFont(),Brushes.White,tabRect);
 					}
 				}
+			}
+		}
+
+		///<summary>We need this special function to draw strings just like the RichTextBox control does, because sheet text is displayed using RichTextBoxes within FormSheetFillEdit.
+		///Graphics.DrawString() uses a different font spacing than the RichTextBox control does.</summary>
+		private void DrawRTFstring(int index,string str,Font font,Brush brush,Graphics g) {
+			SheetFieldDef field=SheetDefCur.SheetFieldDefs[index];
+			//Font spacing is different for g.DrawString() as compared to RichTextBox and TextBox controls.
+			//We create a RichTextBox here in the same manner as in FormSheetFillEdit, but we only use it to determine where to draw text.
+			//We do not add the RichTextBox control to this form, because its background will overwrite everything behind that we have already drawn.
+			bool doCalc=true;
+			object[] data=(object[])HashRtfStringCache[index.ToString()];
+			if(data!=null) {//That field has been calculated
+				//If any of the following factors change, then that could potentially change text positions.
+				if(field.FontName.CompareTo(data[1])==0//Has font name changed since last pass?
+			      && field.FontSize.CompareTo(data[2])==0//Has font size changed since last pass?
+			      && field.FontIsBold.CompareTo(data[3])==0//Has font boldness changed since last pass?
+			      && field.Width.CompareTo(data[4])==0//Has field width changed since last pass?
+			      && field.Height.CompareTo(data[5])==0//Has field height changed since last pass?
+			      && str.CompareTo(data[6])==0)//Has field text changed since last pass?
+			    {
+					doCalc=false;//Nothing has changed. Do not recalculate.
+				}
+			}
+			if(doCalc) { //Data has not yet been cached for this text field, or the field has changed and needs to be recalculated.
+				//All of these textbox fields are set using the same logic as in FormSheetFillEdit, so that text in this form matches exaclty.
+				RichTextBox textbox=new RichTextBox();
+				textbox.Visible=false;
+				textbox.BorderStyle=BorderStyle.None;
+				textbox.ScrollBars=RichTextBoxScrollBars.None;
+				textbox.Location=new Point(field.XPos,field.YPos);
+				textbox.Width=field.Width;
+				textbox.Height=field.Height;
+				textbox.Font=font;
+				textbox.ForeColor=((SolidBrush)brush).Color;
+				if(field.Height<textbox.Font.Height+2) {//Same logic as FormSheetFillEdit.
+					textbox.Multiline=false;
+				}
+				else {
+					textbox.Multiline=true;
+				}
+				textbox.Text=str;
+				Point[] positions=new Point[str.Length];
+				for(int j=0;j<str.Length;j++) {
+					positions[j]=textbox.GetPositionFromCharIndex(j);//This line is slow, so we try to minimize calling it by chaching positions each time there are changes.
+				}
+				textbox.Dispose();
+				data=new object[] { positions,field.FontName,field.FontSize,field.FontIsBold,field.Width,field.Height,str };
+				HashRtfStringCache[index.ToString()]=data;
+			}
+			Point[] charPositions=(Point[])data[0];
+			for(int j=0;j<charPositions.Length;j++) { //This will draw text below the bottom line if the text is long. This is by design, so the user can see that the text is too big.
+				g.DrawString(str.Substring(j,1),font,brush,field.Bounds.X+charPositions[j].X,field.Bounds.Y+charPositions[j].Y);
 			}
 		}
 
