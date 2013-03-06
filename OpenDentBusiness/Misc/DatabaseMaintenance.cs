@@ -3544,6 +3544,42 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		/// <summary>userod has an invalid FK to usergroup</summary>
+		public static string UserODInvalidUserGroupNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT Count(*) FROM userod WHERE UserGroupNum NOT IN (SELECT UserGroupNum FROM usergroup) ";
+				long numFound=PIn.Long(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Users found with invalid UserGroupNum: ")+numFound+"\r\n";
+				}
+			}
+			else {//isFix
+				command="SELECT * FROM userod WHERE UserGroupNum NOT IN (SELECT UserGroupNum FROM usergroup) ";
+				table=Db.GetTable(command);
+				long userNum;
+				string userName;
+				long userGroupNum;
+				long numberFixed=0;
+				for(int i=0;i<table.Rows.Count;i++) {//Create a usergroup with the same name as the userod+"Group"
+					userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
+					userName=PIn.String(table.Rows[i]["UserName"].ToString());
+					command="INSERT INTO usergroup (Description) VALUES('"+POut.String(userName+" Group")+"')";
+					userGroupNum=Db.NonQ(command,true);
+					command="UPDATE userod SET UserGroupNum="+POut.Long(userGroupNum)+" WHERE UserNum="+POut.Long(userNum);
+					Db.NonQ(command);
+					numberFixed++;
+				}
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Users fixed with invalid UserGroupNum: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 
 
 
