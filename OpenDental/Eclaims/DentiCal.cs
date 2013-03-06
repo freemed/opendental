@@ -27,7 +27,7 @@ namespace OpenDental.Eclaims {
 	/// </summary>
 	public class DentiCal {
 
-		private static string remoteHost="";//todo: get address for denti-cal sftp server.
+		private static string remoteHost="ftp.delta.org";
 		private static Clearinghouse clearinghouse=null;
 
 		///<summary></summary>
@@ -50,7 +50,7 @@ namespace OpenDental.Eclaims {
 			ChannelSftp ch=null;
 			JSch jsch=new JSch();
 			try {
-				session=jsch.getSession(clearinghouse.LoginID,remoteHost,22);//TODO: is this the right port number?
+				session=jsch.getSession(clearinghouse.LoginID,remoteHost);
 				session.setPassword(clearinghouse.Password);
 				Hashtable config=new Hashtable();
 				config.Add("StrictHostKeyChecking","no");
@@ -125,15 +125,11 @@ namespace OpenDental.Eclaims {
 					}
 					//First upload the batch to the temporary directory.
 					string[] files=Directory.GetFiles(clearhouse.ExportPath);
+					string homeDir="/Home/"+clearhouse.LoginID+"/";
 					for(int i=0;i<files.Length;i++) {
 						string remoteFileName="claim"+DateTime.Now.ToString("yyyyMMddhhmmss")+i.ToString().PadLeft(5,'0')+".txt";
-						//TODO:Is a temp subdirectory allowed?
-						string remoteTempFilePath="/In/Temp/"+remoteFileName;
-						ch.put(files[i],remoteTempFilePath);
-						//Read, Write and Execute permissions for everyone. This appears to cause no effect.
-						ch.chmod((((7<<3)|7)<<3)|7,remoteTempFilePath);
-						string remoteFilePath="/In/"+remoteFileName;
-						ch.rename(remoteTempFilePath,remoteFilePath);
+						string remoteFilePath=homeDir+"In/"+remoteFileName;
+						ch.put(files[i],remoteFilePath);
 						File.Delete(files[i]);//Remove the processed file.
 					}
 				}

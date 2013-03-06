@@ -111,6 +111,11 @@ namespace OpenDental.Eclaims
 					return;
 				}
 			}
+			else if(clearhouse.CommBridge==EclaimsCommBridge.DentiCal) {
+				if(!DentiCal.Launch(clearhouse,batchNum)) {
+					return;//Error message was already shown inside of the DentiCal class.
+				}
+			}
 			//----------------------------------------------------------------------------------------
 			//finally, mark the claims sent. (only if not Canadian)
 			EtransType etype=EtransType.ClaimSent;
