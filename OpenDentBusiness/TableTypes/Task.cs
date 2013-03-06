@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		///<summary>The description of this task.  Might be very long.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Descript;
-		///<summary>Enum:TaskStatusEnum New,Viewed,Done.</summary>
+		///<summary>Enum:TaskStatusEnum New,Viewed,Done.  We may want to put an index on this column someday.</summary>
 		public TaskStatusEnum TaskStatus;
 		///<summary>True if it is to show in the repeating section.  There should be no date.  All children and parents should also be set to IsRepeating=true.</summary>
 		public bool IsRepeating;
