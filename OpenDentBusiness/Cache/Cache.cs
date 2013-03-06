@@ -311,7 +311,7 @@ namespace OpenDentBusiness {
 				PayPeriods.FillCache(ds.Tables["PayPeriod"]);
 			}
 			if(itypes.Contains((int)InvalidType.Employers) || isAll) {
-				Employers.FillCache(ds.Tables["Employers"]);
+				Employers.FillCache(ds.Tables["Employer"]);
 			}
 			if(itypes.Contains((int)InvalidType.Fees) || isAll) {
 				Fees.FillCache(ds.Tables["Fee"]);
