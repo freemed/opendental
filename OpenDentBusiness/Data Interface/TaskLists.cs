@@ -43,8 +43,9 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<TaskList>>(MethodBase.GetCurrentMethod(),userNum);
 			}
-			string command="SELECT tasklist.*,"
-				+"(SELECT COUNT(*) FROM taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
+			string command="SELECT tasklist.*,IFNULL(A.Num,0) "
+				+"FROM tasklist "
+				+"LEFT JOIN (SELECT tasklist.TaskListNum,COUNT(*) Num FROM tasklist,taskancestor,task WHERE taskancestor.TaskListNum=tasklist.TaskListNum "
 				+"AND task.TaskNum=taskancestor.TaskNum ";
 			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
 				command+="AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum ";
@@ -57,10 +58,9 @@ namespace OpenDentBusiness{
 					+"AND task.TaskStatus !=2 ";//not done
 			}
 			else {
-				command+="AND task.TaskStatus=0";
+				command+="AND task.TaskStatus=0 ";
 			}
-			command+=") "
-				+"FROM tasklist "
+			command+="GROUP BY tasklist.TaskListNum) A ON A.TaskListNum=tasklist.TaskListNum "
 				+"WHERE Parent=0 "
 				+"AND DateTL < "+POut.Date(new DateTime(1880,01,01))+" "
 				+"AND IsRepeating=0 "
