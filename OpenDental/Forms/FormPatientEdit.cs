@@ -3042,7 +3042,7 @@ namespace OpenDental{
 					break;
 				}
 			}
-			//if patient is inactive, then diable any recalls
+			//if patient is inactive, then disable any recalls
 			if(PatCur.PatStatus==PatientStatus.Archived
 				|| PatCur.PatStatus==PatientStatus.Deceased
 				|| PatCur.PatStatus==PatientStatus.Inactive
@@ -3055,6 +3055,17 @@ namespace OpenDental{
 					recalls[i].DateDue=DateTime.MinValue;
 					Recalls.Update(recalls[i]);
 				}
+			}
+			//if patient was re-activated, then re-enable any recalls
+			else if(PatCur.PatStatus!=PatOld.PatStatus && PatCur.PatStatus==PatientStatus.Patient) {//if changed patstatus, and new status is Patient
+				List<Recall> recalls=Recalls.GetList(PatCur.PatNum);
+				for(int i=0;i<recalls.Count;i++) {
+					if(recalls[i].IsDisabled) {
+						recalls[i].IsDisabled=false;
+						Recalls.Update(recalls[i]);
+					}
+				}
+				Recalls.Synch(PatCur.PatNum);
 			}
 			DialogResult=DialogResult.OK;
 		}
