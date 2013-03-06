@@ -3531,7 +3531,7 @@ namespace OpenDental{
 			comboProcStatus.Enabled=true;
 			checkNoBillIns.Enabled=true;
 			butDelete.Enabled=true;
-			butChange.Enabled=true;
+			//butChange.Enabled=true;//No. We no longer allow this because part of "change" is to delete all the claimprocs.  This is a terrible idea for a completed proc attached to a claim.
 			//checkIsCovIns.Enabled=true;
 		}
 
