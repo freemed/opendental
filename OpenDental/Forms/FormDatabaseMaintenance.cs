@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Collections;
@@ -700,42 +701,58 @@ namespace OpenDental {
 			for(int i=0;i<aptList.Length;i++) {
 				aptNums.Add(aptList[i].AptNum);
 			}
-			List<Procedure> procsMultApts=Procedures.GetProcsMultApts(aptNums);
 			for(int i=0;i<aptList.Length;i++) {
+				//This gets the list of procedures in the correct order.
+				DataTable procTable=Appointments.GetProcTable(aptList[i].PatNum.ToString(),aptList[i].AptNum.ToString(),((int)aptList[i].AptStatus).ToString(),aptList[i].AptDateTime.ToString());
 				Appointment newApt=aptList[i].Clone();
 				newApt.ProcDescript="";
-				Procedure[] procsForOne=Procedures.GetProcsOneApt(aptList[i].AptNum,procsMultApts);
-				string procDescript="";
-				for(int j=0;j<procsForOne.Length;j++) {
-					ProcedureCode procCode=ProcedureCodes.GetProcCodeFromDb(procsForOne[j].CodeNum);
+				newApt.ProcsColored="";
+				for(int j=0;j<procTable.Rows.Count;j++) {
+					string procDescOne="";
+					string procCode=procTable.Rows[j]["ProcCode"].ToString();
 					if(j>0) {
-						procDescript+=", ";
+						newApt.ProcDescript+=", ";
 					}
-					switch(procCode.TreatArea) {
-						case TreatmentArea.Surf:
-							procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-"
-							+procsForOne[j].Surf+"-";//""#12-MOD-"
+					switch(procTable.Rows[j]["TreatArea"].ToString()) {
+						case "1"://TreatmentArea.Surf:
+							procDescOne+="#"+Tooth.GetToothLabel(procTable.Rows[j]["ToothNum"].ToString())+"-"
+								+procTable.Rows[j]["Surf"].ToString()+"-";//""#12-MOD-"
 							break;
-						case TreatmentArea.Tooth:
-							procDescript+="#"+Tooth.GetToothLabel(procsForOne[j].ToothNum)+"-";//"#12-"
-							break;
-						case TreatmentArea.Quad:
-							procDescript+=procsForOne[j].Surf+"-";//"UL-"
-							break;
-						case TreatmentArea.Sextant:
-							procDescript+="S"+procsForOne[j].Surf+"-";//"S2-"
-							break;
-						case TreatmentArea.Arch:
-							procDescript+=procsForOne[j].Surf+"-";//"U-"
-							break;
-						case TreatmentArea.ToothRange:
+						case "2"://TreatmentArea.Tooth:
+							procDescOne+="#"+Tooth.GetToothLabel(procTable.Rows[j]["ToothNum"].ToString())+"-";//"#12-"
 							break;
 						default://area 3 or 0 (mouth)
 							break;
+						case "4"://TreatmentArea.Quad:
+							procDescOne+=procTable.Rows[j]["Surf"].ToString()+"-";//"UL-"
+							break;
+						case "5"://TreatmentArea.Sextant:
+							procDescOne+="S"+procTable.Rows[j]["Surf"].ToString()+"-";//"S2-"
+							break;
+						case "6"://TreatmentArea.Arch:
+							procDescOne+=procTable.Rows[j]["Surf"].ToString()+"-";//"U-"
+							break;
+						case "7"://TreatmentArea.ToothRange:
+							//strLine+=table.Rows[j][13].ToString()+" ";//don't show range
+							break;
 					}
-					procDescript+=procCode.AbbrDesc;
+					procDescOne+=procTable.Rows[j]["AbbrDesc"].ToString();
+					newApt.ProcDescript+=procDescOne;
+					//Color and previous date are determined by ProcApptColor object
+					ProcApptColor pac=ProcApptColors.GetMatch(procCode);
+					System.Drawing.Color pColor=System.Drawing.Color.Black;
+					string prevDateString="";
+					if(pac!=null) {
+						pColor=pac.ColorText;
+						if(pac.ShowPreviousDate) {
+							prevDateString=Procedures.GetRecentProcDateString(newApt.PatNum,newApt.AptDateTime,pac.CodeRange);
+							if(prevDateString!="") {
+								prevDateString=" ("+prevDateString+")";
+							}
+						}
+					}
+					newApt.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
 				}
-				newApt.ProcDescript=procDescript;
 				Appointments.Update(newApt,aptList[i]);
 			}
 			#endregion
