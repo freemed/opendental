@@ -286,6 +286,7 @@ namespace OpenDental {
 			FormWikiHistory FormWH = new FormWikiHistory();
 			FormWH.PageTitleCur=WikiPageCur.PageTitle;
 			FormWH.ShowDialog();
+			LoadWikiPage(FormWH.PageTitleCur);
 			//if(FormWH.DialogResult!=DialogResult.OK) {
 			//	return;
 			//}

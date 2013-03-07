@@ -103,7 +103,11 @@ namespace OpenDentBusiness{
 			//retVal.UserNum
 			retVal.PageTitle=wikiPageHist.PageTitle;
 			retVal.PageContent=wikiPageHist.PageContent;
-			retVal.KeyWords=Regex.Match(wikiPageHist.PageContent,@"\[\[(keywords:).*?\]\]").Value.Substring(11).TrimEnd(']');
+			retVal.KeyWords="";
+			Match m=Regex.Match(wikiPageHist.PageContent,@"\[\[(keywords:).*?\]\]");
+			if(m.Length>0) {
+				retVal.KeyWords=m.Value.Substring(11).TrimEnd(']');
+			}
 			//retVal.DateTimeSaved=DateTime.Now;//gets set when inserted.
 			return retVal;
 		}
