@@ -692,7 +692,7 @@ namespace OpenDentBusiness
 					if(claim.IsOrtho) {
 						seg++;
 						sw.WriteLine("DN1*"
-							+"*"//DN101 not used because no field yet in OD.
+							+"*"//DN101 . Orthodontic total months of treatment. Not used because no field yet in OD.
 							+claim.OrthoRemainM.ToString()+"~");
 					}
 					//2300 DN2: Missing teeth

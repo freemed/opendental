@@ -732,7 +732,7 @@ namespace OpenDentBusiness
 					//2300 DN1: Orthodontic Total Months of Treatment.
 					if(claim.IsOrtho) {
 						sw.Write("DN1"+s
-							+s//DN101 1/15 Quantity: Not used because no field yet in OD.
+							+s//DN101 1/15 Quantity: Total months of orthodontic treatment. Not used because no field yet in OD.
 							+claim.OrthoRemainM.ToString());//DN102 1/15 Quantity: Number of treatment months remaining.
 						EndSegment(sw);//DN103 is not used and DN104 is situational but we do not use it.
 					}
