@@ -329,6 +329,7 @@ namespace OpenDental{
 				return;
 			}
 			InputBox input=new InputBox("Password");
+			input.textResult.PasswordChar='*';
 			input.ShowDialog();
 			if(input.DialogResult!=DialogResult.OK){
 				return;
