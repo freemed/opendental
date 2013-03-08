@@ -861,7 +861,7 @@ namespace OpenDental{
 			this.butComplete.Name = "butComplete";
 			this.butComplete.Size = new System.Drawing.Size(92,24);
 			this.butComplete.TabIndex = 155;
-			this.butComplete.Text = "Complete";
+			this.butComplete.Text = "Finish && Send";
 			this.butComplete.Visible = false;
 			this.butComplete.Click += new System.EventHandler(this.butComplete_Click);
 			// 
@@ -1311,7 +1311,7 @@ namespace OpenDental{
 					butDeleteProc.Enabled=false;
 				}
 				else {//hl7 was not sent for this appt
-					butComplete.Text="Complete";
+					butComplete.Text="Finish && Send";
 					if(Bridges.ECW.AptNum != AptCur.AptNum) {
 						butComplete.Enabled=false;
 					}
@@ -2737,7 +2737,7 @@ namespace OpenDental{
 
 		private void butComplete_Click(object sender,EventArgs e) {
 			//This is only used with eCW HL7 interface.
-			if(butComplete.Text=="Complete") {
+			if(butComplete.Text=="Finish && Send") {
 				List<Procedure> procs=Procedures.GetProcsForSingle(AptCur.AptNum,false);
 				string duplicateProcs=ProcedureL.ProcsContainDuplicates(procs);
 				if(duplicateProcs!="") {
