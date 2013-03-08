@@ -75,6 +75,9 @@ namespace OpenDental {
 			webBrowserWiki.Width=ClientSize.Width/2-2;
 			//Toolbar resize
 			ToolBarMain.Width=ClientSize.Width;
+			toolBar2.Width=ClientSize.Width;
+			ToolBarMain.Invalidate();
+			toolBar2.Invalidate();
 			LayoutToolBars();
 			//Button move
 			//butRefresh.Left=ClientSize.Width/2+2;
