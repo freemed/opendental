@@ -65,13 +65,14 @@ namespace OpenDental.Eclaims {
 				return false;
 			}
 			try {
+				string homeDir="/Home/"+clearhouse.LoginID+"/";
 				//At this point we are connected to the Denti-Cal SFTP server.
 				if(batchNum==0) { //Retrieve reports.
 					if(!Directory.Exists(clearhouse.ResponsePath)) {
 						throw new Exception("Clearinghouse response path is invalid.");
 					}
 					//Only retrieving reports so do not send new claims.
-					string retrievePath="/Out/";
+					string retrievePath=homeDir+"out/";
 					Tamir.SharpSsh.java.util.Vector fileList=ch.ls(retrievePath);
 					for(int i=0;i<fileList.Count;i++) {
 						string listItem=fileList[i].ToString().Trim();
@@ -105,17 +106,13 @@ namespace OpenDental.Eclaims {
 								fileStream.Dispose();
 							}
 						}
-						//TODO: Is the following archive step allowed?
 						if(success) {
-							//Move the processed files into the Archive folder within the Out folder on the Denti-Cal sftp so that history is preserved.
-							string archiveFilePath=retrievePath+"Archive/"+getFileName;
+							//Removed the processed report from the Denti-Cal SFTP so it does not get processed again in the future.
 							try {
-								ch.rm(archiveFilePath);
+								ch.rm(getFilePath);
 							}
 							catch {
-								//Remove any destination files by the same exact name. The file will most likely not be present.
 							}
-							ch.rename(getFilePath,archiveFilePath);
 						}
 					}
 				}
@@ -125,10 +122,9 @@ namespace OpenDental.Eclaims {
 					}
 					//First upload the batch to the temporary directory.
 					string[] files=Directory.GetFiles(clearhouse.ExportPath);
-					string homeDir="/Home/"+clearhouse.LoginID+"/";
 					for(int i=0;i<files.Length;i++) {
 						string remoteFileName="claim"+DateTime.Now.ToString("yyyyMMddhhmmss")+i.ToString().PadLeft(5,'0')+".txt";
-						string remoteFilePath=homeDir+"In/"+remoteFileName;
+						string remoteFilePath=homeDir+"in/"+remoteFileName;
 						ch.put(files[i],remoteFilePath);
 						File.Delete(files[i]);//Remove the processed file.
 					}

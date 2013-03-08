@@ -274,6 +274,13 @@ namespace OpenDental{
 					return;
 				}
 			}
+			else if(Clearinghouses.Listt[comboClearhouse.SelectedIndex].CommBridge==EclaimsCommBridge.DentiCal) {
+				if(!DentiCal.Launch(Clearinghouses.Listt[comboClearhouse.SelectedIndex],0)) {
+					Cursor=Cursors.Default;
+					MessageBox.Show(Lan.g(this,"Error retrieving."));
+					return;
+				}
+			}
 			Cursor=Cursors.Default;
 			if(!AutomaticMode){
 				MsgBox.Show(this,"Retrieval successful");
