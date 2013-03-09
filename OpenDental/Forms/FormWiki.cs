@@ -39,7 +39,14 @@ namespace OpenDental {
 			Height=rectWorkingArea.Height;
 			LayoutToolBar();
 			historyNav=new List<string>();
+			historyNavBack=0;//This is the pointer that keeps track of our position in historyNav.  0 means this is the newest page in history, a positive number is the number of pages before the newest page.
 			LoadWikiPage("Home");
+		}
+
+		/// <summary>Because FormWikiEdit is no longer modal, this is necessary to be able to tell FormWiki to refresh when saving an edited page.</summary>
+		public void RefreshPage(string pageTitle) {
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
+			LoadWikiPage(pageTitle);
 		}
 
 		private void WebBrowserWiki_StatusTextChanged(object sender,EventArgs e) {
@@ -52,6 +59,7 @@ namespace OpenDental {
 			}
 		}
 
+		///<summary>Before calling this, make sure to increment/decrement the historyNavBack index to keep track of the position in history.  If loading a new page, decrement historyNavBack before calling this function.  </summary>
 		private void LoadWikiPage(string pageTitle) {
 			//This is called from 11 different places, any time the program needs to refresh a page from the db.
 			//It's also called from the browser_Navigating event when a "wiki:" link is clicked.
@@ -66,26 +74,37 @@ namespace OpenDental {
 				FormWE.WikiPageCur.PageTitle=pageTitle;
 				FormWE.WikiPageCur.PageContent="[["+WikiPageCur.PageTitle+"]]\r\n"//link back
 					+"<h1>"+pageTitle+"</h1>\r\n";//page title
-				FormWE.ShowDialog();
-				if(FormWE.DialogResult!=DialogResult.OK) {
-					return;
-				}
-				wpage=WikiPages.GetByTitle(pageTitle);
+				FormWE.OwnerForm=this;
+				FormWE.Show();
+				return;
+				//FormWE.ShowDialog();
+				//if(FormWE.DialogResult!=DialogResult.OK) {
+				//  return;
+				//}
+				//wpage=WikiPages.GetByTitle(pageTitle);
 			}
 			WikiPageCur=wpage;
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent,false);
 			Text="Wiki - "+WikiPageCur.PageTitle;
+			#region historyMaint
+			//This region is duplicated in webBrowserWiki_Navigating() for external links.  Modifications here will need to be reflected there.
+			int indexInHistory=historyNav.Count-(1+historyNavBack);//historyNavBack number of pages before the last page in history.  This is the index of the page we are loading.
 			if(historyNav.Count==0) {//empty history
-				historyNav.Add("wiki:"+pageTitle);
-			}
-			else if(historyNavBack==0 && historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {//current page, check for duplicate
-				historyNav.Add("wiki:"+pageTitle);
-			}
-			else if(historyNav[historyNav.Count-(1+historyNavBack)]!="wiki:"+pageTitle) {//branching from page in history
-				historyNav.RemoveRange(historyNav.Count-(1+historyNavBack),historyNavBack);//remove "future" history. branching off in a new direction
 				historyNavBack=0;
 				historyNav.Add("wiki:"+pageTitle);
 			}
+			else if(historyNavBack<0) {//historyNavBack could be negative here.  This means before the action that caused this load, we were not navigating through history, simply set back to 0 and add to historyNav[] if necessary.
+				historyNavBack=0;
+				if(historyNav[historyNav.Count-1]!="wiki:"+pageTitle) {
+					historyNav.Add("wiki:"+pageTitle);
+				}
+			}
+			else if(historyNavBack>=0 && historyNav[indexInHistory]!="wiki:"+pageTitle) {//branching from page in history
+				historyNav.RemoveRange(indexInHistory,historyNavBack+1);//remove "forward" history. branching off in a new direction
+				historyNavBack=0;
+				historyNav.Add("wiki:"+pageTitle);
+			}
+			#endregion
 		}
 
 		private void LayoutToolBar() {
@@ -203,6 +222,7 @@ namespace OpenDental {
 					MessageBox.Show("'"+historyNav[historyNav.Count-(1+historyNavBack)]+"' page does not exist.");//very rare
 					return;
 				}
+				//historyNavBack--;//no need to decrement since this is only called from Back_Click and Forward_Click and the appropriate adjustment to this index happens there
 				LoadWikiPage(pageName);//because it's a duplicate, it won't add it again to the list.
 			}
 			else if(pageName.StartsWith("http://")) {//www
@@ -223,10 +243,12 @@ namespace OpenDental {
 			if(WikiPageCur==null) {//if browsing the WWW
 				return;
 			}
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage(WikiPageCur.PageTitle);
 		}
 
 		private void Home_Click() {
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage("Home");//TODO later:replace with dynamic PrefC.Getstring(PrefName.WikiHomePage)
 		}
 
@@ -236,11 +258,14 @@ namespace OpenDental {
 			}
 			FormWikiEdit FormWE=new FormWikiEdit();
 			FormWE.WikiPageCur=WikiPageCur;
-			FormWE.ShowDialog();
-			if(FormWE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
+			FormWE.OwnerForm=this;
+			FormWE.Show();
+			//FormWE.ShowDialog();
+			//if(FormWE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			////historyNavBack--;//no need to decrement history counter since we are loading the same page, will not add duplicate to the history list
+			//LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 		}
 
 		private void Print_Click() {
@@ -261,6 +286,8 @@ namespace OpenDental {
 				return;
 			}
 			WikiPages.Rename(WikiPageCur,FormWR.PageTitle);
+			historyNav[historyNav.Count-(1+historyNavBack)]="wiki:"+FormWR.PageTitle;//keep history updated, do not decrement historyNavBack, stay at the same index in history
+			//historyNavBack--;//no need to decrement history counter since we are loading the same page, just with a different name, historyNav was edited above with new name
 			LoadWikiPage(FormWR.PageTitle);
 		}
 
@@ -276,6 +303,7 @@ namespace OpenDental {
 				return;
 			}
 			WikiPages.Delete(WikiPageCur.PageTitle);
+			//historyNavBack--;//do not decrement, load will consider this a branch and put "wiki:Home" in place of the deleted page and remove "forward" history.
 			LoadWikiPage("Home");
 		}
 
@@ -286,6 +314,7 @@ namespace OpenDental {
 			FormWikiHistory FormWH = new FormWikiHistory();
 			FormWH.PageTitleCur=WikiPageCur.PageTitle;
 			FormWH.ShowDialog();
+			//historyNavBack--;//no need to decrement since we are loading the same page, possibly a different version, but the same PageTitle
 			LoadWikiPage(FormWH.PageTitleCur);
 			//if(FormWH.DialogResult!=DialogResult.OK) {
 			//	return;
@@ -303,6 +332,7 @@ namespace OpenDental {
 			if(FormWIC.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage(FormWIC.JumpToPage.PageTitle);
 		}
 
@@ -318,11 +348,14 @@ namespace OpenDental {
 			FormWE.WikiPageCur.PageTitle=FormWR.PageTitle;
 			FormWE.WikiPageCur.PageContent="[["+WikiPageCur.PageTitle+"]]\r\n"//link back
 				+"<h1>"+FormWR.PageTitle+"</h1>\r\n";//page title
-			FormWE.ShowDialog();
-			if(FormWE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			LoadWikiPage(FormWE.WikiPageCur.PageTitle);
+			FormWE.OwnerForm=this;
+			FormWE.Show();
+			//FormWE.ShowDialog();
+			//if(FormWE.DialogResult!=DialogResult.OK) {
+			//  return;
+			//}
+			//historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
+			//LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 		}
 
 		private void All_Pages_Click() {
@@ -331,6 +364,7 @@ namespace OpenDental {
 			if(FormWAP.DialogResult!=DialogResult.OK) {
 				return;
 			}
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage(FormWAP.SelectedWikiPage.PageTitle);
 		}
 
@@ -343,6 +377,7 @@ namespace OpenDental {
 			if(FormWS.wikiPageTitleSelected=="") {
 				return;
 			}
+			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history
 			LoadWikiPage(FormWS.wikiPageTitleSelected);
 		}
 
@@ -360,6 +395,7 @@ namespace OpenDental {
 					return;
 			}
 			else if(e.Url.ToString().StartsWith("wiki:")) {//user clicked on an internal link
+				historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 				LoadWikiPage(e.Url.ToString().Substring(5));
 				e.Cancel=true;
 				return;
@@ -395,17 +431,25 @@ namespace OpenDental {
 			else if(e.Url.ToString().StartsWith("http://")){//navigating outside of wiki, either by clicking a link or using back button.
 				WikiPageCur=null;//this effectively disables most of the toolbar buttons
 				Text = "Wiki - WWW";
+				historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
+				#region historyMaint
+				//This region is duplicated in LoadWikiPage() for internal wiki pages.  Modifications here will need to be reflected there.
+				int indexInHistory=historyNav.Count-(1+historyNavBack);//historyNavBack number of pages before the last page in history.  This is the index of the page we are loading.
 				if(historyNav.Count==0){//empty history
 					historyNav.Add(e.Url.ToString());
 				}
-				else if(historyNavBack==0 && historyNav[historyNav.Count-1]!=e.Url.ToString()) {//current page, check for duplicate
-					historyNav.Add(e.Url.ToString());
+				else if(historyNavBack<0) {///historyNavBack could be negative here.  This means before the action that caused this load, we were not navigating through history, simply set back to 0 and add to historyNav[] if necessary.
+					historyNavBack=0;
+					if(historyNav[historyNav.Count-1]!=e.Url.ToString()) {
+						historyNav.Add(e.Url.ToString());
+					}
 				}
-				else if(historyNav[historyNav.Count-(1+historyNavBack)]!=e.Url.ToString()) {//branching from page in history
-					historyNav.RemoveRange(historyNav.Count-(1+historyNavBack),historyNavBack);//remove "future" history. branching off in a new direction
+				else if(historyNavBack>=0 && historyNav[indexInHistory]!=e.Url.ToString()) {//branching from page in history
+					historyNav.RemoveRange(indexInHistory,historyNavBack+1);//remove "forward" history. branching off in a new direction
 					historyNavBack=0;
 					historyNav.Add(e.Url.ToString());
 				}
+				#endregion
 			}
 		}
 
