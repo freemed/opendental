@@ -77,11 +77,6 @@ namespace OpenDental {
 				FormWE.OwnerForm=this;
 				FormWE.Show();
 				return;
-				//FormWE.ShowDialog();
-				//if(FormWE.DialogResult!=DialogResult.OK) {
-				//  return;
-				//}
-				//wpage=WikiPages.GetByTitle(pageTitle);
 			}
 			WikiPageCur=wpage;
 			webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageCur.PageContent,false);
@@ -260,12 +255,6 @@ namespace OpenDental {
 			FormWE.WikiPageCur=WikiPageCur;
 			FormWE.OwnerForm=this;
 			FormWE.Show();
-			//FormWE.ShowDialog();
-			//if(FormWE.DialogResult!=DialogResult.OK) {
-			//  return;
-			//}
-			////historyNavBack--;//no need to decrement history counter since we are loading the same page, will not add duplicate to the history list
-			//LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 		}
 
 		private void Print_Click() {
@@ -350,12 +339,6 @@ namespace OpenDental {
 				+"<h1>"+FormWR.PageTitle+"</h1>\r\n";//page title
 			FormWE.OwnerForm=this;
 			FormWE.Show();
-			//FormWE.ShowDialog();
-			//if(FormWE.DialogResult!=DialogResult.OK) {
-			//  return;
-			//}
-			//historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
-			//LoadWikiPage(FormWE.WikiPageCur.PageTitle);
 		}
 
 		private void All_Pages_Click() {

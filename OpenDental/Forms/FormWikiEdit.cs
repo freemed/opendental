@@ -15,6 +15,8 @@ using System.Text.RegularExpressions;
 namespace OpenDental {
 	public partial class FormWikiEdit:Form {
 		public WikiPage WikiPageCur;
+		///<summary>Need a reference to the form where this was launched from so that we can tell it to refresh later.</summary>
+		public FormWiki OwnerForm;
 		private string AggregateContent;
 		
 		public FormWikiEdit() {
@@ -355,11 +357,15 @@ namespace OpenDental {
 			Match m=regex.Match(textContent.Text);
 			WikiPageCur.KeyWords=m.Value.Replace("[[keywords:","").TrimEnd(']');//will be empty string if no match
 			WikiPages.InsertAndArchive(WikiPageCur);
-			DialogResult=DialogResult.OK;
+			FormWiki formWiki=(FormWiki)this.OwnerForm;
+			if(formWiki!=null && !formWiki.IsDisposed) {
+				formWiki.RefreshPage(WikiPageCur.PageTitle);
+			}
+			Close();
 		}
 
 		private void Cancel_Click() {
-			DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
 		private void Cut_Click() {
