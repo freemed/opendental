@@ -3606,6 +3606,11 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.ProcComplCreate)){
 				return;
 			}
+			//If user is trying to change status to complete and using eCW.
+			if((IsNew || ProcOld.ProcStatus!=ProcStat.C) && Programs.UsingEcwTightOrFullMode()) {
+				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
+				return;
+			}
 			Procedures.SetDateFirstVisit(DateTime.Today,2,PatCur);
 			if(ProcCur.AptNum!=0){//if attached to an appointment
 				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
@@ -4367,6 +4372,11 @@ namespace OpenDental{
 					MsgBox.Show(this,"Please fix drug qty first.");
 					return false;
 				}
+			}
+			//If user is trying to change status to complete and using eCW.
+			if(ProcCur.ProcStatus==ProcStat.C && (IsNew || ProcOld.ProcStatus!=ProcStat.C) && Programs.UsingEcwTightOrFullMode()) {
+				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
+				return false;
 			}
 			if(ProcOld.ProcStatus!=ProcStat.C && ProcCur.ProcStatus==ProcStat.C){//if status was changed to complete
 				if(ProcCur.AptNum!=0) {//if attached to an appointment
