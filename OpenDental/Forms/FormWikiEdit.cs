@@ -18,6 +18,7 @@ namespace OpenDental {
 		///<summary>Need a reference to the form where this was launched from so that we can tell it to refresh later.</summary>
 		public FormWiki OwnerForm;
 		private string AggregateContent;
+		private int ScrollTop;
 		
 		public FormWikiEdit() {
 			InitializeComponent();
@@ -52,12 +53,20 @@ namespace OpenDental {
 		private void RefreshHtml() {
 			webBrowserWiki.AllowNavigation=true;
 			try {
+				//remember scroll
+				if(webBrowserWiki.Document!=null) {
+					ScrollTop=webBrowserWiki.Document.GetElementsByTagName("HTML")[0].ScrollTop;
+				}
 				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(textContent.Text,true);
 			}
 			catch(Exception ex) {
 				//don't refresh
 			}
 			//textContent.Focus();//this was causing a bug where it would re-highlight text after a backspace.
+		}
+
+		private void webBrowserWiki_DocumentCompleted(object sender,WebBrowserDocumentCompletedEventArgs e) {
+			webBrowserWiki.Document.GetElementsByTagName("HTML")[0].ScrollTop=ScrollTop;
 		}
 
 		private void ResizeControls() {
@@ -275,7 +284,7 @@ namespace OpenDental {
 					H3_Click(); 
 					break;
 				case "Table": 
-					Table_Click(); 
+					Table_Click();
 					break;
 				case "Image":
 					Image_Click();
@@ -798,6 +807,8 @@ namespace OpenDental {
 				}
 			}
 		}
+
+		
 
 		
 
