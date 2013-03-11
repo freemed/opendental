@@ -47,10 +47,26 @@ namespace xCrudGeneratorWebService {
 					if(IsMobile(typeClass)) {
 						continue;
 					}
+					//The mobile app will only contain table types for classes that it explicitly uses to save on loading time.
+					if(!IsWebClass(typeClass)) {
+						continue;
+					}
 					TableTypes.Add(typeClass);	
 				}
 			}
 			TableTypes.Sort(CompareTypesByName);
+		}
+
+		///<summary>Returns true if the table type is a web class and needs to be added to the TableTypes array so that the class files are created.  Add classes to this function that will be needed in the web version.</summary>
+		private bool IsWebClass(Type typeClass) {
+			if(typeClass==typeof(Appointment)
+				|| typeClass==typeof(Patient)
+				|| typeClass==typeof(Pref)
+				|| typeClass==typeof(Userod)) 
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private int CompareTypesByName(Type x, Type y){
