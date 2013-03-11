@@ -689,8 +689,7 @@ namespace OpenDental {
 		}
 
 		private void butApptProcs_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will fix procedure descriptions in the Appt module that aren't correctly showing tooth numbers.\r\nContinue?")) 
-			{
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"This will fix procedure descriptions in the Appt module that aren't correctly showing tooth numbers.\r\nContinue?")) {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -707,10 +706,14 @@ namespace OpenDental {
 				Appointment newApt=aptList[i].Clone();
 				newApt.ProcDescript="";
 				newApt.ProcsColored="";
+				int count=0;
 				for(int j=0;j<procTable.Rows.Count;j++) {
+					if(procTable.Rows[j]["attached"].ToString()!="1") {
+						continue;
+					}
 					string procDescOne="";
 					string procCode=procTable.Rows[j]["ProcCode"].ToString();
-					if(j>0) {
+					if(count>0) {
 						newApt.ProcDescript+=", ";
 					}
 					switch(procTable.Rows[j]["TreatArea"].ToString()) {
@@ -752,6 +755,7 @@ namespace OpenDental {
 						}
 					}
 					newApt.ProcsColored+="<span color=\""+pColor.ToArgb().ToString()+"\">"+procDescOne+prevDateString+"</span>";
+					count++;
 				}
 				Appointments.Update(newApt,aptList[i]);
 			}
