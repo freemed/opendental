@@ -1379,7 +1379,7 @@ namespace OpenDental{
 							displayStrings[i]="X";
 						}
 						break;
-					case "IsEnclosuresAtatched":
+					case "IsEnclosuresAttached":
 						if(ClaimCur.Radiographs>0 || ClaimCur.AttachedImages>0 || ClaimCur.AttachedModels>0) {
 							displayStrings[i]="X";
 						}
