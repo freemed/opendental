@@ -156,9 +156,6 @@ namespace OpenDental {
 				case "Add":
 					Add_Click();
 					break;
-				case "All Pages":
-					All_Pages_Click();
-					break;
 				case "Search":
 					Search_Click();
 					break;
@@ -341,15 +338,16 @@ namespace OpenDental {
 			FormWE.Show();
 		}
 
+		/*No longer used
 		private void All_Pages_Click() {
 			FormWikiAllPages FormWAP=new FormWikiAllPages();
 			FormWAP.ShowDialog();
 			if(FormWAP.DialogResult!=DialogResult.OK) {
-				return;
+			  return;
 			}
 			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage(FormWAP.SelectedWikiPage.PageTitle);
-		}
+		}*/
 
 		private void Search_Click() {
 			FormWikiSearch FormWS=new FormWikiSearch();

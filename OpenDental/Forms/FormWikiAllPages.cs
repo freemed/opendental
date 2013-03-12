@@ -10,9 +10,9 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormWikiAllPages:Form {
-		public bool IsSelectMode;
-		public WikiPage SelectedWikiPage;
 		private List<WikiPage> listWikiPages;
+		///<summary>Need a reference to the form where this was launched from so that we can tell it to refresh later.</summary>
+		public FormWikiEdit OwnerForm;
 
 		public FormWikiAllPages() {
 			InitializeComponent();
@@ -20,14 +20,6 @@ namespace OpenDental {
 		}
 
 		private void FormWikiAllPages_Load(object sender,EventArgs e) {
-			if(IsSelectMode) {
-
-			}
-			else{
-				butBrackets.Visible=false;
-				butOK.Visible=false;
-				butCancel.Text=Lan.g(this,"Close");
-			}
 			FillGrid();
 		}
 
@@ -69,51 +61,38 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			if(IsSelectMode) {
-				SelectedWikiPage=listWikiPages[e.Row];
-				DialogResult=DialogResult.OK;
-				return;
+			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
+				OwnerForm.RefreshPage(listWikiPages[e.Row]);
 			}
-			SelectedWikiPage=listWikiPages[e.Row];
-			DialogResult=DialogResult.OK;
-			return;
-			//else {//Non select mode.
-			//  //do nothing
-			//  //MsgBoxCopyPaste mbox = new MsgBoxCopyPaste(listWikiPages[gridMain.SelectedIndices[0]].PageContent);
-			//  //mbox.ShowDialog();
-			//  //FormWikiEdit FormWE = new FormWikiEdit();
-			//  //FormWE.WikiPageCur=listWikiPages[gridMain.SelectedIndices[0]];
-			//  //FormWE.ShowDialog();
-			//  //if(FormWE.DialogResult!=DialogResult.OK) {
-			//  //  return;
-			//  //}
-			//  //FillGrid();
-			//  //LoadWikiPage(listWikiPages[0]);
-			//}
+			Close();
 		}
 
 		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
 			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
 		}
 
-		/// <summary>Only visible if IsSelect.</summary>
+		/// <summary></summary>
 		private void butBrackets_Click(object sender,EventArgs e) {
-			SelectedWikiPage=null;
-			DialogResult=DialogResult.OK;
+			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
+				OwnerForm.RefreshPage(null);
+			}
+			Close();
 		}
 
-		/// <summary>Only visible if IsSelect.</summary>
+		/// <summary></summary>
 		private void butOK_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1) {
 				MsgBox.Show(this,"Please select a page first.");
 				return;
 			}
-			SelectedWikiPage=listWikiPages[gridMain.GetSelectedIndex()];
-			DialogResult=DialogResult.OK;
+			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
+				OwnerForm.RefreshPage(listWikiPages[gridMain.GetSelectedIndex()]);
+			}
+			Close();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
+			Close();
 		}
 
 		

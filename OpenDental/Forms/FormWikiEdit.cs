@@ -41,6 +41,21 @@ namespace OpenDental {
 			textContent.Focus();
 		}
 
+		/// <summary>Because FormWikiAllPages is no longer modal, this is necessary to be able to tell FormWikiEdit to refresh with inserted data.</summary>
+		public void RefreshPage(WikiPage selectedWikiPage) {
+			int tempStart=textContent.SelectionStart;
+			if(selectedWikiPage==null) {
+				textContent.Paste("[[]]");
+				textContent.SelectionStart=tempStart+2;
+			}
+			else {
+				textContent.Paste(("[["+selectedWikiPage.PageTitle+"]]"));
+				textContent.SelectionStart=tempStart+selectedWikiPage.PageTitle.Length+4;
+			}
+			textContent.Focus();
+			textContent.SelectionLength=0;
+		}
+
 		private void FillNumbers(int rowCount) {
 			StringBuilder strb=new StringBuilder();
 			for(int i=1;i<rowCount+10;i++) {
@@ -402,23 +417,9 @@ namespace OpenDental {
 		}
 
 		private void Int_Link_Click() {
-			int tempStart=textContent.SelectionStart;
 			FormWikiAllPages FormWAPSelect = new FormWikiAllPages();
-			FormWAPSelect.IsSelectMode=true;
-			FormWAPSelect.ShowDialog();
-			if(FormWAPSelect.DialogResult==DialogResult.OK) {
-				if(FormWAPSelect.SelectedWikiPage==null) {
-					textContent.Paste("[[]]");
-					textContent.SelectionStart=tempStart+2;
-				}
-				else {
-					textContent.Paste(("[["+FormWAPSelect.SelectedWikiPage.PageTitle+"]]"));
-					textContent.SelectionStart=tempStart+FormWAPSelect.SelectedWikiPage.PageTitle.Length+4;
-				}
-			}
-			textContent.Focus();
-			textContent.SelectionLength=0;
-			//RefreshHtml();
+			FormWAPSelect.OwnerForm=this;
+			FormWAPSelect.Show();
 		}
 
 		private void File_Link_Click() {
