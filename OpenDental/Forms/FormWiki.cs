@@ -396,7 +396,7 @@ namespace OpenDental {
 				return;
 			}
 			else if(e.Url.ToString().Contains("folder:")) {
-				string folderName=e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifile:")+7).Replace("/","\\");
+				string folderName=e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("folder:")+7).Replace("/","\\");
 				if(!Directory.Exists(folderName)) {
 					MessageBox.Show(Lan.g(this,"Folder does not exist: ")+folderName);
 					e.Cancel=true;
