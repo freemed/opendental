@@ -413,7 +413,8 @@ namespace OpenDentBusiness{
 			if(s.StartsWith("\r\n")) {
 				startsWithCR=true;
 			}
-			string tagName;
+			string tagName; 
+			Match tagCurMatch;
 			while(true) {//loop to either construct a paragraph, or to immediately add the next tag to strbSnew.
 				iScanInParagraph=s.IndexOf("<",iScanInParagraph);//Advance the scanner to the start of the next tag
 				if(iScanInParagraph==-1) {//there aren't any more tags, so current paragraph goes to end of string.  This won't happen
@@ -429,88 +430,140 @@ namespace OpenDentBusiness{
 					break;
 				}
 				tagName="";
-				//regex match <...>
-				//if no space, then trim the <>
-				//if ends with /, then throw exception
-				//split at first space
-				//that gives you the tag name.
-				//switch tagName
-				//case b:
-				//case img:
-				//etc.
-				if(s.Substring(iScanInParagraph).StartsWith("<b>")) {
-					tagName="b";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<img")) {//must be before "i"
-					tagName="img";//ending tag is inserted above during regexp replacements. i.e. <img src="..."></img>
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<i>")) {//must have ending bracket otherwise it catches things like "<inherits"
-					tagName="i";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<a ")) {
-					tagName="a";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<span")) {
-					tagName="span";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<ul")) {
-					tagName="ul";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<ol")) {
-					tagName="ol";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h1>")) {
-					tagName="h1";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h2>")) {
-					tagName="h2";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<h3>")) {
-					tagName="h3";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
-					//All the tags inside, such as tr, td, etc, do not need to be handled, 
-					//because this is only concerned with top-level tags, and it will jump to the end of this entire section
-					tagName="table";
-				}
-				else if(s.Substring(iScanInParagraph).StartsWith("<TableViews")) {
-					tagName="TableViews";
-				}
-				else {
+				tagCurMatch=Regex.Match(s.Substring(iScanInParagraph),"^<.*?>");//regMatch);
+				if(tagCurMatch==null) {
+					//shouldn't happen
 					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
 				}
-				if(tagName=="b" || tagName=="i" || tagName=="a" || tagName=="span"){			
-					//scan to the ending tag because this is paragraph content.
-					if(s.IndexOf("</"+tagName+">")==-1) {//an invalid tag of some sort.  Example: <br />
-							throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
-//todo: prevent infinite loop
+				if(tagCurMatch.Value.Trim(new char[] { '<','>' }).EndsWith("/")) {
+					//self terminating img tags are allowed, all others are not
+					//this should catch all non-allowed self-terminating tags i.e. <br />, <inherits />, etc...
+					if(!tagCurMatch.Value.StartsWith("<img ")) {
+						throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
 					}
-					iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
-					//we are still within the paragraph, so loop to keep looking for the end.
 				}
-				else{
-					//the found tag is the beginning of some sibling element such as a list or table.
-					if(iScanInParagraph==0) {//s starts with a non-paragraph tag, so there is no partially assembled paragraph to process.
-						//do nothing
-					}
-					else {//we are already part way into assembling a paragraph.  
-						strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph),startsWithCR));
-						startsWithCR=false;//subsequent paragraphs will not need this
-						s=s.Substring(iScanInParagraph);//chop off start of s
-						iScanInParagraph=0;
-					}
-					//scan to the end of this element
-					int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
-					if(tagName=="TableViews") {
-						//This xml will not become part of the html page
-					}
-					else {
-						//move the non-paragraph content over to s new.
-						strbSnew.Append(s.Substring(0,iScanSibling));
-					}
-					s=s.Substring(iScanSibling);
-					//scanning will start a totally new paragraph
+				tagName=tagCurMatch.Value.Split(new string[] { "<"," ",">" },StringSplitOptions.RemoveEmptyEntries)[0];//works with tags like <i>, <span ...>, and <img .../>
+				if(s.IndexOf("</"+tagName+">")==-1 && !tagCurMatch.Value.StartsWith("<img ")) {//should never happen, but catches tags that have no ending tag.
+					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
 				}
+				switch(tagName){
+					case "a":
+					case "b": 
+					case "i": 
+					case "span":
+						iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
+						continue;//continues scanning this paragraph.
+					case "h1": 
+					case "h2": 
+					case "h3": 
+					case "ol": 
+					case "ul": 
+					case "table":
+					case "img"://can be self-terminating
+						if(iScanInParagraph==0) {//s starts with a non-paragraph tag, so there is no partially assembled paragraph to process.
+							//do nothing
+						}
+						else {//we are already part way into assembling a paragraph.  
+							strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph),startsWithCR));
+							startsWithCR=false;//subsequent paragraphs will not need this
+							s=s.Substring(iScanInParagraph);//chop off start of s
+							iScanInParagraph=0;
+						}
+						//scan to the end of this element
+						int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
+						if(iScanSibling==2+tagName.Length && tagName=="img") {//IndexOf() returned -1
+							iScanSibling=s.IndexOf("/>")+2;//only for img
+						}
+						//tags without a closing tag were caught above.
+						if(tagName=="TableViews") {
+							//This xml will not become part of the html page
+						}
+						else {
+							//move the non-paragraph content over to s new.
+							strbSnew.Append(s.Substring(0,iScanSibling));
+						}
+						s=s.Substring(iScanSibling);
+						//scanning will start a totally new paragraph
+						break;
+					default:
+						throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+				}
+//        iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
+
+
+//        if(s.Substring(iScanInParagraph).StartsWith("<b>")) {
+//          tagName="b";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<img")) {//must be before "i"
+//          tagName="img";//ending tag is inserted above during regexp replacements. i.e. <img src="..."></img>
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<i>")) {//must have ending bracket otherwise it catches things like "<inherits"
+//          tagName="i";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<a ")) {
+//          tagName="a";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<span")) {
+//          tagName="span";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<ul")) {
+//          tagName="ul";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<ol")) {
+//          tagName="ol";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<h1>")) {
+//          tagName="h1";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<h2>")) {
+//          tagName="h2";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<h3>")) {
+//          tagName="h3";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<table")) {
+//          //All the tags inside, such as tr, td, etc, do not need to be handled, 
+//          //because this is only concerned with top-level tags, and it will jump to the end of this entire section
+//          tagName="table";
+//        }
+//        else if(s.Substring(iScanInParagraph).StartsWith("<TableViews")) {
+//          tagName="TableViews";
+//        }
+//        else {
+//          throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+//        }
+//        if(tagName=="b" || tagName=="i" || tagName=="a" || tagName=="span"){			
+//          //scan to the ending tag because this is paragraph content.
+//          if(s.IndexOf("</"+tagName+">")==-1) {//an invalid tag of some sort.  Example: <br />
+//              throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+////todo: prevent infinite loop
+//          }
+//          iScanInParagraph=s.IndexOf("</"+tagName+">",iScanInParagraph)+3+tagName.Length;
+//          //we are still within the paragraph, so loop to keep looking for the end.
+//        }
+//        else{
+//          //the found tag is the beginning of some sibling element such as a list or table.
+//          if(iScanInParagraph==0) {//s starts with a non-paragraph tag, so there is no partially assembled paragraph to process.
+//            //do nothing
+//          }
+//          else {//we are already part way into assembling a paragraph.  
+//            strbSnew.Append(ProcessParagraph(s.Substring(0,iScanInParagraph),startsWithCR));
+//            startsWithCR=false;//subsequent paragraphs will not need this
+//            s=s.Substring(iScanInParagraph);//chop off start of s
+//            iScanInParagraph=0;
+//          }
+//          //scan to the end of this element
+//          int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
+//          if(tagName=="TableViews") {
+//            //This xml will not become part of the html page
+//          }
+//          else {
+//            //move the non-paragraph content over to s new.
+//            strbSnew.Append(s.Substring(0,iScanSibling));
+//          }
+//          s=s.Substring(iScanSibling);
+//          //scanning will start a totally new paragraph
+//        }
 			}
 			strbSnew.Append("</body>");
 			#endregion
