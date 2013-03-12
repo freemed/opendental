@@ -99,13 +99,13 @@ namespace OpenDentHL7 {
 					ProgramProperties.SetProperty(progNum,"HL7ServiceName",this.ServiceName);
 					hl7ServiceName=this.ServiceName;
 				}
-				if(hl7Server!=System.Environment.MachineName) {
+				if(hl7Server.ToLower()!=System.Environment.MachineName.ToLower()) {
 					EventLog.WriteEntry("OpenDentHL7","The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
 						+", Server name in Program Links: "+hl7Server,EventLogEntryType.Error);
 					throw new ApplicationException("The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: "+System.Environment.MachineName
 						+", Server name in Program Links: "+hl7Server);
 				}
-				if(hl7ServiceName!=this.ServiceName) {
+				if(hl7ServiceName.ToLower()!=this.ServiceName.ToLower()) {
 					EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", Service name in Program Links: "
 						+hl7ServiceName,EventLogEntryType.Error);
 					throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: "+this.ServiceName+", Service name in Program Links: "
@@ -126,12 +126,12 @@ namespace OpenDentHL7 {
 				hL7Def.HL7ServiceName=this.ServiceName;
 				HL7Defs.Update(hL7Def);
 			}
-			if(hL7Def.HL7Server!=System.Environment.MachineName) {
+			if(hL7Def.HL7Server.ToLower()!=System.Environment.MachineName.ToLower()) {
 				EventLog.WriteEntry("OpenDentHL7","The HL7 Server name does not match the name in the enabled HL7Def Setup.  Server name: "+System.Environment.MachineName+", Server name in HL7Def: "+hL7Def.HL7Server,
 					EventLogEntryType.Error);
 				throw new ApplicationException("The HL7 Server name does not match the name in the enabled HL7Def Setup.  Server name: "+System.Environment.MachineName+", Server name in HL7Def: "+hL7Def.HL7Server);
 			}
-			if(hL7Def.HL7ServiceName!=this.ServiceName) {
+			if(hL7Def.HL7ServiceName.ToLower()!=this.ServiceName.ToLower()) {
 				EventLog.WriteEntry("OpenDentHL7","The HL7 Service Name does not match the name in the enabled HL7Def Setup.  Service name: "+this.ServiceName+", Service name in HL7Def: "+hL7Def.HL7ServiceName,
 					EventLogEntryType.Error);
 				throw new ApplicationException("The HL7 Service Name does not match the name in the enabled HL7Def Setup.  Service name: "+this.ServiceName+", Service name in HL7Def: "+hL7Def.HL7ServiceName);
