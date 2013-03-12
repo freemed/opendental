@@ -22,6 +22,6 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='com.opendental.patientportal.client.PatientPortal'/>
+  <entry-point class='com.opendental.patientportal.client.ProgramEntry'/>
 
 </module>
