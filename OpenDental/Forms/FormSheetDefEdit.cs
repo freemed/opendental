@@ -420,6 +420,7 @@ namespace OpenDental {
 		///<summary>We need this special function to draw strings just like the RichTextBox control does, because sheet text is displayed using RichTextBoxes within FormSheetFillEdit.
 		///Graphics.DrawString() uses a different font spacing than the RichTextBox control does.</summary>
 		private void DrawRTFstring(int index,string str,Font font,Brush brush,Graphics g) {
+			str=str.Replace("\r","");//For some reason '\r' throws off character position calculations.  \n still handles the CRs.
 			SheetFieldDef field=SheetDefCur.SheetFieldDefs[index];
 			//Font spacing is different for g.DrawString() as compared to RichTextBox and TextBox controls.
 			//We create a RichTextBox here in the same manner as in FormSheetFillEdit, but we only use it to determine where to draw text.
