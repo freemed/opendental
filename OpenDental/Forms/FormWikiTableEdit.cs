@@ -127,11 +127,6 @@ namespace OpenDental {
 						width=width.Substring(0,width.IndexOf("\""));//90
 						ColWidths.Add(PIn.Int(width));
 						colName=cells[c].Substring(cells[c].IndexOf("|")+1);
-						//}
-						//else {
-						//	ColWidths.Add(0);
-						//	colName=cells[c];
-						//}
 						ColNames.Add(colName);
 						Table.Columns.Add("");//must be an empty string because Table object does not allow duplicate column names.
 					}
