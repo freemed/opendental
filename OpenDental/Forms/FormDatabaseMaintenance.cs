@@ -627,7 +627,9 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.TimeCardRuleEmployeeNumInvalid(verbose,isCheck);
 			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.UserODInvalidUserGroupNum(verbose,isCheck);
+			textLog.Text+=DatabaseMaintenance.UserodInvalidClinicNum(verbose,isCheck);
+			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.UserodInvalidUserGroupNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=Lan.g("FormDatabaseMaintenance","Done");
 			SaveLogToFile();

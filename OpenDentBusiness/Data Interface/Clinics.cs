@@ -57,65 +57,70 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
-		public static void Delete(Clinic clinic){
+		public static void Delete(Clinic clinic) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
 				return;
 			}
-			//check patients for dependencies
+			//Check FK dependencies.
+			#region Patients
 			string command="SELECT LName,FName FROM patient WHERE ClinicNum ="
 				+POut.Long(clinic.ClinicNum);
 			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because it is in use by the following patients:")+pats);
 			}
-			//check payments for dependencies
+			#endregion
+			#region Payments
 			command="SELECT patient.LName,patient.FName FROM patient,payment "
 				+"WHERE payment.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=payment.PatNum";
 			table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have payments using it:")+pats);
 			}
-			//check claimpayments for dependencies
+			#endregion
+			#region ClaimPayments
 			command="SELECT patient.LName,patient.FName FROM patient,claimproc,claimpayment "
 				+"WHERE claimpayment.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=claimproc.PatNum"
 				+" AND claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
 				+"GROUP BY patient.LName,patient.FName,claimpayment.ClaimPaymentNum";
 			table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have claim payments using it:")+pats);
 			}
-			//check appointments for dependencies
+			#endregion
+			#region Appointments
 			command="SELECT patient.LName,patient.FName FROM patient,appointment "
 				+"WHERE appointment.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=appointment.PatNum";
 			table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have appointments using it:")+pats);
 			}
-			//check procedures for dependencies
+			#endregion
+			#region Procedures
 			//reassign procedure.ClinicNum=0 if the procs are status D.
 			command="UPDATE procedurelog SET ClinicNum=0 WHERE ProcStatus="+POut.Int((int)ProcStat.D);
 			Db.NonQ(command);
@@ -123,30 +128,46 @@ namespace OpenDentBusiness{
 				+"WHERE procedurelog.ClinicNum ="+POut.Long(clinic.ClinicNum)
 				+" AND patient.PatNum=procedurelog.PatNum";
 			table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string pats="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					pats+="\r";
 					pats+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following patients have procedures using it:")+pats);
 			}
-			//check operatories for dependencies
+			#endregion
+			#region Operatories
 			command="SELECT OpName FROM operatory "
 				+"WHERE ClinicNum ="+POut.Long(clinic.ClinicNum);
 			table=Db.GetTable(command);
-			if(table.Rows.Count>0){
+			if(table.Rows.Count>0) {
 				string ops="";
-				for(int i=0;i<table.Rows.Count;i++){
+				for(int i=0;i<table.Rows.Count;i++) {
 					ops+="\r";
 					ops+=table.Rows[i][0].ToString();
 				}
 				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following operatories are using it:")+ops);
 			}
-			//delete
+			#endregion
+			#region Userod
+			command="SELECT UserName FROM userod "
+				+"WHERE ClinicNum ="+POut.Long(clinic.ClinicNum);
+			table=Db.GetTable(command);
+			if(table.Rows.Count>0) {
+				string userNames="";
+				for(int i=0;i<table.Rows.Count;i++) {
+					userNames+="\r";
+					userNames+=table.Rows[i][0].ToString();
+				}
+				throw new Exception(Lans.g("Clinics","Cannot delete clinic because the following Open Dental users are using it:")+userNames);
+			}
+			#endregion
+			//End checking for dependencies.
+			//Clinic is not being used, OK to delete.
 			command= "DELETE FROM clinic" 
 				+" WHERE ClinicNum = "+POut.Long(clinic.ClinicNum);
- 			Db.NonQ(command);
+			Db.NonQ(command);
 		}
 
 		///<summary>Returns null if clinic not found.  Pulls from cache.</summary>
