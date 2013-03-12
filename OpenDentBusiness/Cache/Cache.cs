@@ -287,7 +287,7 @@ namespace OpenDentBusiness {
 			}
 			if(itypes.Contains((int)InvalidType.DentalSchools) || isAll) {
 				SchoolClasses.FillCache(ds.Tables["SchoolClass"]);
-				SchoolClasses.FillCache(ds.Tables["SchoolCourse"]);
+				SchoolCourses.FillCache(ds.Tables["SchoolCourse"]);
 			}
 			if(itypes.Contains((int)InvalidType.DictCustoms) || isAll) {
 				DictCustoms.FillCache(ds.Tables["DictCustom"]);
@@ -326,8 +326,8 @@ namespace OpenDentBusiness {
 				HL7DefFields.FillCache(ds.Tables["HL7DefField"]);
 			}
 			if(itypes.Contains((int)InvalidType.InsCats) || isAll) {
-				FeeScheds.FillCache(ds.Tables["CovCat"]);
-				FeeScheds.FillCache(ds.Tables["CovSpan"]);
+				CovCats.FillCache(ds.Tables["CovCat"]);
+				CovSpans.FillCache(ds.Tables["CovSpan"]);
 			}
 			if(itypes.Contains((int)InvalidType.InsFilingCodes) || isAll){
 				InsFilingCodes.FillCache(ds.Tables["InsFilingCode"]);
@@ -337,10 +337,10 @@ namespace OpenDentBusiness {
 				Lans.FillCache(ds.Tables["Language"]);
 			}
 			if(itypes.Contains((int)InvalidType.Letters) || isAll) {
-				Letters.FillCache(ds.Tables["Fee"]);
+				Letters.FillCache(ds.Tables["Letter"]);
 			}
 			if(itypes.Contains((int)InvalidType.LetterMerge) || isAll) {
-				LetterMergeFields.FillCache(ds.Tables["LetterMergeFields"]);
+				LetterMergeFields.FillCache(ds.Tables["LetterMergeField"]);
 				LetterMerges.FillCache(ds.Tables["LetterMerge"]);
 			}
 			if(itypes.Contains((int)InvalidType.Operatories) || isAll) {

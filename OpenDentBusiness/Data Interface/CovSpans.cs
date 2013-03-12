@@ -20,7 +20,8 @@ namespace OpenDentBusiness{
 			return table;
 		}
 
-		private static void FillCache(DataTable table){
+		//private static void FillCache(DataTable table){//js 3/12/13  Not sure why it was this way
+		public static void FillCache(DataTable table) {
 			//No need to check RemotingRole; no call to db.
 			CovSpanC.List=Crud.CovSpanCrud.TableToList(table).ToArray();
 		}
