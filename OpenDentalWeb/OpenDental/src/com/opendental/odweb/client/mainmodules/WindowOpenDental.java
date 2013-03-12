@@ -20,6 +20,7 @@ package com.opendental.odweb.client.mainmodules;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
@@ -36,6 +37,7 @@ import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
+import com.opendental.odweb.client.ui.MsgBox;
 import com.opendental.odweb.client.usercontrols.*;
 import com.opendental.odweb.client.usercontrols.OutlookBar.OutlookBarClickHandler;
 import com.opendental.odweb.client.windows.WindowPatientSelect;
@@ -142,11 +144,19 @@ public class WindowOpenDental extends ResizeComposite {
 	}
 	
 	private class LogOn_Handler implements LogOnHandler {
-		public void onSuccess(Userod user) {
-			Security.setCurUser(user);
-			fillPatientButton(null);
-			// TODO Enhance this to show the module that the user has permission to view.
-			outlookBar.getButtonAtIndex(0).clickButton();
+		public void onSuccess(final Userod user) {
+			GWT.runAsync(new RunAsyncCallback() {
+				public void onSuccess() {
+					Security.setCurUser(user);
+					fillPatientButton(null);
+					// TODO Enhance this to show the module that the user has permission to view.
+					outlookBar.getButtonAtIndex(0).clickButton();
+				}
+				
+				public void onFailure(Throwable reason) {
+					MsgBox.show(reason.getMessage());
+				}
+			});
 		}
 	}
 	
@@ -288,17 +298,25 @@ public class WindowOpenDental extends ResizeComposite {
 	
 	private class SelectPatient_Command implements Command {
 		public void execute() {
-			final WindowPatientSelect windowPS=new WindowPatientSelect();
-			windowPS.show();
-			windowPS.center();
-			//Add a DialogResultCallback to listen for the dialog result.
-			windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
-				public void OK() {
-					Patients.getPat(windowPS.getSelectedPatNum(),new SelectPatientCallback());
+			GWT.runAsync(new RunAsyncCallback() {
+				public void onSuccess() {
+					final WindowPatientSelect windowPS=new WindowPatientSelect();
+					windowPS.show();
+					windowPS.center();
+					//Add a DialogResultCallback to listen for the dialog result.
+					windowPS.DialogResultCallback=new DialogResultCallbackOkCancel() {
+						public void OK() {
+							Patients.getPat(windowPS.getSelectedPatNum(),new SelectPatientCallback());
+						}
+						public void Cancel() {
+						}
+					};
 				}
-				public void Cancel() {
+				
+				public void onFailure(Throwable reason) {
+					MsgBox.show(reason.getMessage());
 				}
-			};
+			});
 		}
 	}
 	
