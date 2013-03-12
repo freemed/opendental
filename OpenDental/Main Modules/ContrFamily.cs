@@ -937,6 +937,14 @@ namespace OpenDental{
 							}
 						}
 						break;
+					case "Super Head":
+						string fieldVal="";
+						if(PatCur.SuperFamily!=0) {
+							Patient supHead=Patients.GetPat(PatCur.SuperFamily);
+							fieldVal=supHead.GetNameLF()+" ("+supHead.PatNum+")";
+						}
+						row.Cells.Add(fieldVal);
+						break;
 				}
 				if(fields[f].InternalName=="PatFields"){
 					//don't add the row here
