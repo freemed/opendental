@@ -82,6 +82,7 @@ namespace OpenDental {
 
 		private void webBrowserWiki_DocumentCompleted(object sender,WebBrowserDocumentCompletedEventArgs e) {
 			webBrowserWiki.Document.GetElementsByTagName("HTML")[0].ScrollTop=ScrollTop;
+			textContent.Focus();
 		}
 
 		private void ResizeControls() {
