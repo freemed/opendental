@@ -1614,6 +1614,32 @@ namespace OpenDental {
 						ben.CodeNum=0;
 						Benefits.Insert(ben);
 					}
+					//Zero deductible diagnostic
+					if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)!=null) {
+						ben=new Benefit();
+						ben.CodeNum=0;
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+						ben.PlanNum=selectedPlan1.PlanNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;
+						ben.Percent=-1;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						Benefits.Insert(ben);
+					}
+					//Zero deductible preventive
+					if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null) {
+						ben=new Benefit();
+						ben.CodeNum=0;
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+						ben.PlanNum=selectedPlan1.PlanNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;
+						ben.Percent=-1;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						Benefits.Insert(ben);
+					}
 				}
 				sub1=new InsSub();
 				sub1.PlanNum=selectedPlan1.PlanNum;
@@ -1665,6 +1691,32 @@ namespace OpenDental {
 						ben.Percent=CovCatC.ListShort[i].DefaultPercent;
 						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
 						ben.CodeNum=0;
+						Benefits.Insert(ben);
+					}
+					//Zero deductible diagnostic
+					if(CovCats.GetForEbenCat(EbenefitCategory.Diagnostic)!=null) {
+						ben=new Benefit();
+						ben.CodeNum=0;
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.Diagnostic).CovCatNum;
+						ben.PlanNum=selectedPlan2.PlanNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;
+						ben.Percent=-1;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
+						Benefits.Insert(ben);
+					}
+					//Zero deductible preventive
+					if(CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive)!=null) {
+						ben=new Benefit();
+						ben.CodeNum=0;
+						ben.BenefitType=InsBenefitType.Deductible;
+						ben.CovCatNum=CovCats.GetForEbenCat(EbenefitCategory.RoutinePreventive).CovCatNum;
+						ben.PlanNum=selectedPlan2.PlanNum;
+						ben.TimePeriod=BenefitTimePeriod.CalendarYear;
+						ben.MonetaryAmt=0;
+						ben.Percent=-1;
+						ben.CoverageLevel=BenefitCoverageLevel.Individual;
 						Benefits.Insert(ben);
 					}
 				}
