@@ -433,16 +433,16 @@ namespace OpenDental{
 			// 
 			// label8
 			// 
-			this.label8.Location = new System.Drawing.Point(396, 200);
+			this.label8.Location = new System.Drawing.Point(396, 196);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(242, 18);
+			this.label8.Size = new System.Drawing.Size(183, 28);
 			this.label8.TabIndex = 70;
-			this.label8.Text = "The computer where the HL7 Service is running.";
+			this.label8.Text = "The computer name (not IP) where the HL7 Service is running.";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(396, 226);
+			this.label9.Location = new System.Drawing.Point(396, 227);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(237, 18);
 			this.label9.TabIndex = 71;
@@ -467,9 +467,9 @@ namespace OpenDental{
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.CancelButton = this.butCancel;
 			this.ClientSize = new System.Drawing.Size(650, 516);
+			this.Controls.Add(this.label8);
 			this.Controls.Add(this.labelDefEnabledWarning);
 			this.Controls.Add(this.label9);
-			this.Controls.Add(this.label8);
 			this.Controls.Add(this.textHL7ServiceName);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textHL7Server);

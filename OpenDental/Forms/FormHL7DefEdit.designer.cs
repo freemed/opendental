@@ -422,20 +422,20 @@ namespace OpenDental{
 			// 
 			// label16
 			// 
-			this.label16.Location = new System.Drawing.Point(720, 92);
+			this.label16.Location = new System.Drawing.Point(720, 94);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(237, 18);
 			this.label16.TabIndex = 77;
-			this.label16.Text = "Typically OpenDentalHL7.";
+			this.label16.Text = "--Typically OpenDentalHL7.";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label17
 			// 
-			this.label17.Location = new System.Drawing.Point(720, 72);
+			this.label17.Location = new System.Drawing.Point(720, 69);
 			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(237, 18);
+			this.label17.Size = new System.Drawing.Size(242, 28);
 			this.label17.TabIndex = 76;
-			this.label17.Text = "The computer where the HL7 Service is running.";
+			this.label17.Text = "--The computer name (not IP) where the HL7\r\n     Service is running.";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// textHL7ServiceName
@@ -678,11 +678,11 @@ namespace OpenDental{
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.ClientSize = new System.Drawing.Size(974, 696);
+			this.Controls.Add(this.label17);
 			this.Controls.Add(this.checkShowAccount);
 			this.Controls.Add(this.checkShowAppts);
 			this.Controls.Add(this.groupShowDemographics);
 			this.Controls.Add(this.label16);
-			this.Controls.Add(this.label17);
 			this.Controls.Add(this.textHL7ServiceName);
 			this.Controls.Add(this.label18);
 			this.Controls.Add(this.textHL7Server);
