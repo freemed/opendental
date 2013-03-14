@@ -24,7 +24,7 @@ namespace OpenDental
 		private Graphics BufferGraphics;
 		private Timer timer1;
 		private Point PositionOfClick;
-		private Group ReplWord;
+		private MatchOD ReplWord;
 		private bool spellCheckIsEnabled;//set to true in constructor
 		private Point textEndPoint;
 
@@ -202,7 +202,6 @@ namespace OpenDental
 
 		///<summary>Determines whether the right click was on a misspelled word.  Also sets the start and end index of chars to be replaced in text.</summary>
 		private bool IsOnMisspelled(Point PositionOfClick) {
-			MatchCollection words=GetWords();
 			int charIndex=this.GetCharIndexFromPosition(PositionOfClick);
 			Point charLocation=this.GetPositionFromCharIndex(charIndex);
 			if(PositionOfClick.Y<charLocation.Y-2 || PositionOfClick.Y>charLocation.Y+this.FontHeight+2) {//this is the closest char but they were not very close when they right clicked
@@ -212,14 +211,42 @@ namespace OpenDental
 			if(c=='\n') {//if closest char is a new line char, then assume not on a misspelled word
 			  return false;
 			}
-			foreach(Match m in words) {
-			  Group word=m.Groups[1];//Group 0 is the entire match, group 1 is our word, group 2 is our word without the first character (determined by parentheses).
-			  int startIndex=word.Index;//word.Index is relative to Text.
-			  int endIndex=startIndex+word.Length-1;
-			  if(charIndex>=startIndex && charIndex<=endIndex) {//this is our word
-					ReplWord=word;
+			List<MatchOD> words=GetWords();
+			int ind=0;
+			#region Binary search to find first word in visible area
+			int minIndex=0;
+			int maxIndex=words.Count-1;
+			ind=maxIndex;
+			while(maxIndex > minIndex) {
+				if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y<0) {//words[ind] is above the visible area, so make ind our new minimum index
+					minIndex=ind;
+				}
+				else if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y>this.Height) {//words[ind] is beyond the visible area, so make ind our new maximum index
+					maxIndex=ind;
+				}
+				else {
 					break;
-			  }
+				}
+				ind=maxIndex-((maxIndex-minIndex)/2);//set ind to be the halfway point between max and min
+				if(ind==maxIndex || ind==minIndex) {//this will occur if there is no word in the visible area, break out of loop
+					break;
+				}
+			}
+			#endregion
+			if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y>0 && this.GetPositionFromCharIndex(words[ind].StartIndex).Y<=this.Height) {//if words[ind] is in visible area
+				while(ind>0 && this.GetPositionFromCharIndex(words[ind-1].StartIndex).Y>0) {
+					ind--;//backup to first visible word
+				}
+			}
+			for(int i=ind;i<words.Count;i++) {
+				if(this.GetPositionFromCharIndex(words[i].StartIndex).Y>this.Height) {
+					ReplWord=null;
+					break;
+				}
+				if(charIndex>=words[i].StartIndex && charIndex<=(words[i].StartIndex+words[i].Value.Length-1)) {
+					ReplWord=words[i];
+					break;
+				}
 			}
 			if(ReplWord==null) {
 				return false;
@@ -251,8 +278,8 @@ namespace OpenDental
 				case 3:
 				case 4:
 					int originalCaret=this.SelectionStart;
-					this.Text=this.Text.Remove(ReplWord.Index,ReplWord.Value.Length);
-					this.Text=this.Text.Insert(ReplWord.Index,contextMenu.MenuItems[contextMenu.MenuItems.IndexOf((MenuItem)sender)].Text);
+					this.Text=this.Text.Remove(ReplWord.StartIndex,ReplWord.Value.Length);
+					this.Text=this.Text.Insert(ReplWord.StartIndex,contextMenu.MenuItems[contextMenu.MenuItems.IndexOf((MenuItem)sender)].Text);
 					if(this.Text.Length<=originalCaret) {
 						this.SelectionStart=this.Text.Length;
 					}
@@ -377,21 +404,59 @@ namespace OpenDental
 			Bitmap bitmapOverlay=new Bitmap(this.Width,this.Height);
 			BufferGraphics=Graphics.FromImage(bitmapOverlay);
 			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
-			string[] words=Regex.Split(Text,"([\\s])");
-			int startInd=0;
-			for(int i=0;i<words.Length;i++) {//go through each word and use GetPositionFromCharIndex to determine the y position to draw our white box
-				if(words[i]==" ") {//spaces should never be underlined, so no need to clear line underneath
-					startInd=startInd+1;
-					continue;
+			//split by spaces
+			MatchCollection mc=Regex.Matches(Text,@"(\S+)");//use Regex.Matches because our matches include the index within our text for underlining
+			if(mc.Count==0) {
+				bitmapOverlay.Dispose();
+				return;
+			}
+			int ind=0;
+			if(mc.Count==1) {
+				//ind=0;//just clear the line our only word is on
+			}
+			else if(this.GetPositionFromCharIndex(0).Y>0 && this.GetPositionFromCharIndex(0).Y<=this.Height) {
+				//ind=0;//the first 'word' is visible, just clear starting here
+			}
+			else {
+				if(this.GetPositionFromCharIndex(0).Y<0 && this.GetPositionFromCharIndex(mc[mc.Count-1].Index).Y<0) {//all text above visible area, just return
+					bitmapOverlay.Dispose();
+					return;
 				}
-				Point start=this.GetPositionFromCharIndex(startInd);//get pos of character at startInd, y could be negative if scroll bar active
-				Point end=this.GetPositionFromCharIndex(startInd+words[i].Length-1);//get pos of the char at the end of this word, to see if the 'word' spans more than one line
+				if(this.GetPositionFromCharIndex(0).Y>this.Height && this.GetPositionFromCharIndex(mc[mc.Count-1].Index).Y>this.Height) {//all text beyond visible area
+					bitmapOverlay.Dispose();
+					return;
+				}
+				#region Binary search to find first word in visible area
+				int minIndex=0;
+				int maxIndex=mc.Count-1;
+				ind=maxIndex;
+				while(maxIndex > minIndex) {
+					if(this.GetPositionFromCharIndex(mc[ind].Index).Y<0) {//mc[ind] is above the visible area, so make ind our new minimum index
+						minIndex=ind;
+					}
+					else if(this.GetPositionFromCharIndex(mc[ind].Index).Y>this.Height) {//mc[ind] is beyond the visible area, so make ind our new maximum index
+						maxIndex=ind;
+					}
+					else {
+						break;
+					}
+					ind=maxIndex-((maxIndex-minIndex)/2);//set ind to be the halfway point between max and min
+					if(ind==maxIndex || ind==minIndex) {//this will occur if there is no word in the visible area, break out of loop
+						break;
+					}
+				}
+				#endregion
+				if(this.GetPositionFromCharIndex(mc[ind].Index).Y>0 && this.GetPositionFromCharIndex(mc[ind].Index).Y<=this.Height) {//if mc[ind] is in visible area
+					while(ind>0 && this.GetPositionFromCharIndex(mc[ind-1].Index).Y>0) {
+						ind--;//backup to first visible word
+					}
+				}
+			}
+			for(int i=ind;i<mc.Count;i++) {
+				Point start=this.GetPositionFromCharIndex(mc[i].Index);//get pos of character at index of match
+				Point end=this.GetPositionFromCharIndex(mc[i].Index+mc[i].Value.Length-1);//get pos of the char at the end of this word, to see if the 'word' spans more than one line
 				start.Y=start.Y+this.FontHeight;
 				end.Y=end.Y+this.FontHeight;
-				if(start.Y<0 && end.Y<0) {//if the entire word is above the visible area, y pos will be negative with scroll bar active
-					startInd=startInd+words[i].Length;
-					continue;
-				}
 				if(start.Y>=this.Height) {//y pos is below the visible area, with scroll bar active
 					break;
 				}
@@ -400,7 +465,6 @@ namespace OpenDental
 					Rectangle wavyLineArea=new Rectangle(1,j,this.Width,2);
 					BufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
 				}
-				startInd=startInd+words[i].Length;
 			}
 			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
 			graphicsTextBox.DrawImageUnscaled(bitmapOverlay,0,0);
@@ -417,39 +481,82 @@ namespace OpenDental
 			Bitmap bitmapOverlay=new Bitmap(this.Width,this.Height);
 			BufferGraphics=Graphics.FromImage(bitmapOverlay);
 			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
-			//Matches a word containing at least one alpha-numeric and might include punctuation in the middle of the word.
-			MatchCollection words=GetWords();
-			foreach(Match m in words) {
-				Group word=m.Groups[1];//Group 0 is the entire match, group 1 is our word, group 2 is our word without the first character (determined by parentheses).
-				if(ListCorrect.Contains(word.Value.ToLower())) {
+			List<MatchOD> words=GetWords();
+			if(words.Count==0) {
+				bitmapOverlay.Dispose();
+				return;
+			}
+			int ind=0;
+			if(words.Count==1) {
+				//ind=0;//just clear the line our only word is on
+			}
+			else if(this.GetPositionFromCharIndex(0).Y>0 && this.GetPositionFromCharIndex(0).Y<=this.Height) {
+				//ind=0;//the first 'word' is visible, just clear starting here
+			}
+			else {
+				if(this.GetPositionFromCharIndex(0).Y<0 && this.GetPositionFromCharIndex(words[words.Count-1].StartIndex).Y<0) {//all text above visible area, just return
+					bitmapOverlay.Dispose();
+					return;
+				}
+				if(this.GetPositionFromCharIndex(0).Y>this.Height && this.GetPositionFromCharIndex(words[words.Count-1].StartIndex).Y>this.Height) {//all text beyond visible area
+					bitmapOverlay.Dispose();
+					return;
+				}
+				#region binary search to find first word in visible area
+				int minIndex=0;
+				int maxIndex=words.Count-1;
+				ind=maxIndex;
+				while(maxIndex > minIndex) {
+					if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y<0) {//words[ind] is above the visible area, so make ind our new minimum index
+						minIndex=ind;
+					}
+					else if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y>this.Height) {//words[ind] is beyond the visible area, so make ind our new maximum index
+						maxIndex=ind;
+					}
+					else {
+						break;
+					}
+					ind=maxIndex-((maxIndex-minIndex)/2);//set ind to be the halfway point between max and min
+					if(ind==maxIndex || ind==minIndex) {//this will occur if there is no word in the visible area, break out of loop
+						break;
+					}
+				}
+				#endregion
+				if(this.GetPositionFromCharIndex(words[ind].StartIndex).Y>0 && this.GetPositionFromCharIndex(words[ind].StartIndex).Y<=this.Height) {//if words[ind] is in visible area
+					while(ind>0 && this.GetPositionFromCharIndex(words[ind-1].StartIndex).Y>0) {
+						ind--;//backup to first visible word
+					}
+				}
+			}
+			for(int i=ind;i<words.Count;i++) {
+				if(this.GetPositionFromCharIndex(words[i].StartIndex).Y>=this.Height) {
+					break;//stop spell checking once we go beyond visible area
+				}
+				if(ListCorrect.Contains(words[i].Value.ToLower())) {
 					continue;//Spelled correctly
 				}
-				if(Regex.IsMatch(word.Value,@"\d")) {//"[a-zA-Z']")){//"\d")) {//"\D*\d+\D*")) {//if "word" contains a number, do not spell check.
-					ListCorrect.Add(word.Value.ToLower());
-					continue;
-				}
 				bool correct=false;
-				int startIndex=word.Index;//word.Index is relative to Text.
-				int endIndex=startIndex+word.Length;//One spot past the end of the word, because DrawWave() draws to the beginning of the character of the endIndex.
-				if(ListIncorrect.Contains(word.Value.ToLower())) {
+				int startIndex=words[i].StartIndex;//words[i].StartIndex is relative to Text.
+				int endIndex=startIndex+words[i].Value.Length;//One spot past the end of the word, because DrawWave() draws to the beginning of the character of the endIndex.
+				if(ListIncorrect.Contains(words[i].Value.ToLower())) {
 					DrawWave(startIndex,endIndex);
 					continue;//Spelled incorrectly
 				}
-				for(int w=0;w<DictCustoms.Listt.Count;w++) {//compare to custom word list
-					if(DictCustoms.Listt[w].WordText.ToLower()==word.Value.ToLower()) {//convert to lower case before comparing
+				for(int j=0;j<DictCustoms.Listt.Count;j++) {//compare to custom word list
+					if(DictCustoms.Listt[j].WordText.ToLower()==words[i].Value.ToLower()) {//convert to lower case before comparing
 						correct=true;
 						break;
 					}
 				}
 				if(!correct) {//Not in custom dictionary, so spell check
-					correct=HunspellGlobal.Spell(word.Value);
+					correct=HunspellGlobal.Spell(words[i].Value);
 				}
 				if(!correct) {
 					DrawWave(startIndex,endIndex);
-					ListIncorrect.Add(word.Value.ToLower());
+					ListIncorrect.Add(words[i].Value.ToLower());
 				}
 				else {//if it gets here, the word was spelled correctly, determined by comparing to the custom word list and/or the hunspell dict
-					ListCorrect.Add(word.Value.ToLower());
+					ListCorrect.Add(words[i].Value.ToLower());
 				}
 			}
 			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
@@ -458,18 +565,35 @@ namespace OpenDental
 			bitmapOverlay.Dispose();
 		}
 
-		///<summary>Determines individual words by matching regular expression pattern.  Pattern is 0 or more non word characters, followed by a word character (defined as [a-zA-Z0-9_]), followed by 0 or 1 (non-white space chars followed by a word char), followed by 0 or more non-word chars.  So a word has to begin and end with a word character (could be the same char) and in between those chars there can be any number of chars as long as they are not white space.</summary>
-		private MatchCollection GetWords() {
-			return Regex.Matches(Text,@"\W*(\w([\S-[/\\]]*\w)?)\W*",RegexOptions.Multiline|RegexOptions.CultureInvariant);
-			//split by spaces
-			//loop
-			//trim anything off the beginnings and ends of each word by stepping through the chars in the word
-			//  look at first char.
-			//  is it a letter?  Range of char vals.
-					//yes: done
-					//no: remove it.
-			//  ditto for end trim.
-			//any word that contains anything but letters, apostrophes, or dashes, don't spell check.
+		///<summary></summary>
+		private List<MatchOD> GetWords() {
+			List<MatchOD> wordList=new List<MatchOD>();
+			MatchCollection mc=Regex.Matches(Text,@"(\S+)");//use Regex.Matches because our matches include the index within our text for underlining
+			foreach(Match m in mc) {
+				Group g=m.Groups[0];//Group 0 is the entire match
+				if(g.Value.Length<2) {//only allow 'words' that are at least two chars long, 1 char 'words' are assumed spelled correctly
+					continue;
+				}
+				MatchOD word=new MatchOD();
+				word.StartIndex=g.Index;//this index is the index within Text of the first char of this word (match)
+				word.Value=g.Value;
+				//loop through starting at the beginning of word looking for first letter or digit
+				while(word.Value.Length>1 && !Char.IsLetterOrDigit(word.Value[0])) {
+					word.Value=word.Value.Substring(1);
+					word.StartIndex++;
+				}
+				//loop through starting at the last char looking for the last letter or digit
+				while(word.Value.Length>1 && !Char.IsLetterOrDigit(word.Value[word.Value.Length-1])) {
+					word.Value=word.Value.Substring(0,word.Value.Length-1);
+				}
+				if(word.Value.Length>1) {
+					if(Regex.IsMatch(word.Value,@"[^a-zA-Z\'\-]")) {
+						continue;
+					}
+					wordList.Add(word);
+				}
+			}
+			return wordList;
 		}
 
 		private void DrawWave(int startIndex,int endIndex) {
@@ -536,6 +660,14 @@ namespace OpenDental
 			string strPaste=DateTime.Today.ToShortDateString();
 			Text=Text.Insert(caret,strPaste);
 			SelectionStart=caret+strPaste.Length;
+		}
+
+		///<summary>Analogous to a Match.  We use it to keep track of words that we find and their location within the larger string.</summary>
+		private class MatchOD {
+			//This is the 'word' for this match
+			public string Value="";
+			//This is the starting index of the first char of the 'word' within the full textbox text
+			public int StartIndex=0;
 		}
 
 	}
