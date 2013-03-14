@@ -404,9 +404,14 @@ namespace OpenDental
 			Bitmap bitmapOverlay=new Bitmap(this.Width,this.Height);
 			BufferGraphics=Graphics.FromImage(bitmapOverlay);
 			BufferGraphics.Clear(Color.Transparent);//We don't want to overwrite the text in the rich text box.
+			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
 			//split by spaces
 			MatchCollection mc=Regex.Matches(Text,@"(\S+)");//use Regex.Matches because our matches include the index within our text for underlining
-			if(mc.Count==0) {
+			if(mc.Count==0) {//all text was deleted, clear the entire text box
+				Rectangle wavyLineArea=new Rectangle(1,1,this.Width,this.Height);
+				BufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
+				graphicsTextBox.DrawImageUnscaled(bitmapOverlay,0,0);
+				graphicsTextBox.Dispose();
 				bitmapOverlay.Dispose();
 				return;
 			}
@@ -466,7 +471,6 @@ namespace OpenDental
 					BufferGraphics.FillRectangle(Brushes.White,wavyLineArea);
 				}
 			}
-			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
 			graphicsTextBox.DrawImageUnscaled(bitmapOverlay,0,0);
 			graphicsTextBox.Dispose();
 			bitmapOverlay.Dispose();
