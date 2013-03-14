@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.remoting;
+package com.opendental.opendentbusiness.remoting;
 
 /** The username and password are internal to OD.  They are not the MySQL username and password. 
  * We might use a different method of verifying credentials and permissions... this will probably change.*/

@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.remoting;
+package com.opendental.opendentbusiness.remoting;
 
 /** Gets a bool. */
 public class DtoGetBool extends DataTransferObject {

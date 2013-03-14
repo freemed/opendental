@@ -15,13 +15,13 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.opendental.odweb.client.data.DataTable;
+import com.opendental.opendentbusiness.data.DataTable;
 import com.opendental.odweb.client.datainterface.Patients;
 import com.opendental.odweb.client.datainterface.Prefs;
 import com.opendental.odweb.client.datainterface.Prefs.PrefName;
-import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
 import com.opendental.odweb.client.ui.*;
 import com.opendental.odweb.client.ui.ODGrid.ODGridDoubleClickHandler;
+import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 
 public class WindowPatientSelect extends ODWindow {
 	private DataTable PatientTable=new DataTable();

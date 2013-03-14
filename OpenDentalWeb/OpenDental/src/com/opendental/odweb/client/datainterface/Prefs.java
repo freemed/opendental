@@ -2,13 +2,13 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.HashMap;
 
-import com.opendental.odweb.client.data.DataTable;
-import com.opendental.odweb.client.data.PIn;
-import com.opendental.odweb.client.remoting.Db;
-import com.opendental.odweb.client.remoting.DtoGetTable;
-import com.opendental.odweb.client.remoting.Meth;
-import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
-import com.opendental.odweb.client.tabletypes.Pref;
+import com.opendental.opendentbusiness.data.DataTable;
+import com.opendental.opendentbusiness.data.PIn;
+import com.opendental.opendentbusiness.remoting.DtoGetTable;
+import com.opendental.opendentbusiness.remoting.Meth;
+import com.opendental.odweb.client.ui.RequestHelper;
+import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
+import com.opendental.opendentbusiness.tabletypes.Pref;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Prefs {
@@ -24,7 +24,7 @@ public class Prefs {
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		Db.sendRequest(dto.serialize(),callback);
+		RequestHelper.sendRequest(dto.serialize(),callback);
 	}
 	
 	public static void fillCache(DataTable table) {

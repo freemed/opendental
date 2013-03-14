@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.opendental.odweb.client.tabletypes.Userod;
+import com.opendental.opendentbusiness.tabletypes.Userod;
 import com.opendental.odweb.client.ui.ModuleWidget;
 
 public class ContrLogOn extends ModuleWidget {

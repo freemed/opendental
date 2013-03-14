@@ -1,7 +1,7 @@
 package com.opendental.odweb.client.usercontrols;
 
 import com.google.gwt.user.client.ui.Label;
-import com.opendental.odweb.client.tabletypes.Patient;
+import com.opendental.opendentbusiness.tabletypes.Patient;
 
 public class LabelMainTitle extends Label {
 	

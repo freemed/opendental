@@ -4,7 +4,7 @@ import com.opendental.odweb.client.datainterface.Patients;
 import com.opendental.odweb.client.datainterface.Prefs;
 import com.opendental.odweb.client.datainterface.Prefs.PrefName;
 import com.opendental.odweb.client.dbmultitable.Security;
-import com.opendental.odweb.client.tabletypes.Patient;
+import com.opendental.opendentbusiness.tabletypes.Patient;
 
 public class PatientL {
 	

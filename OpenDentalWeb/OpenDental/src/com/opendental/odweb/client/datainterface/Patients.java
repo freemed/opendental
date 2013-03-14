@@ -2,10 +2,11 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.Date;
 
-import com.opendental.odweb.client.remoting.*;
-import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
-import com.opendental.odweb.client.tabletypes.Patient;
+import com.opendental.opendentbusiness.remoting.*;
+import com.opendental.opendentbusiness.tabletypes.Patient;
 import com.opendental.odweb.client.ui.MsgBox;
+import com.opendental.odweb.client.ui.RequestHelper;
+import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 
 public class Patients {
 
@@ -19,7 +20,7 @@ public class Patients {
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		Db.sendRequest(dto.serialize(), requestCallback);
+		RequestHelper.sendRequest(dto.serialize(), requestCallback);
 	}
 
 	/** Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.
@@ -42,7 +43,7 @@ public class Patients {
 		} catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		Db.sendRequest(dto.serialize(), requestCallback);
+		RequestHelper.sendRequest(dto.serialize(), requestCallback);
 	}
 	
 	/** Converts a date to an age. If age is over 115, then returns 0. */

@@ -2,8 +2,9 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.Date;
 
-import com.opendental.odweb.client.remoting.*;
-import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
+import com.opendental.opendentbusiness.remoting.*;
+import com.opendental.odweb.client.ui.RequestHelper;
+import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Appointments {
@@ -18,7 +19,7 @@ public class Appointments {
 		catch (Exception e) {
 			MsgBox.show("Error:\r\n"+e.getMessage());
 		}
-		Db.sendRequest(dto.serialize(), requestCallback);
+		RequestHelper.sendRequest(dto.serialize(), requestCallback);
 	}
 
 }

@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.opendental.odweb.client.datainterface.Appointments;
-import com.opendental.odweb.client.remoting.Db.RequestCallbackResult;
+import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.ui.ModuleWidget;
 
 public class ContrAppt extends ModuleWidget {

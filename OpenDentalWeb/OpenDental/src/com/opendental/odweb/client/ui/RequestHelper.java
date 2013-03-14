@@ -1,4 +1,4 @@
-package com.opendental.opendentbusiness.remoting;
+package com.opendental.odweb.client.ui;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -7,10 +7,12 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.PopupPanel;
+import com.opendental.opendentbusiness.remoting.RemotingClient;
+import com.opendental.opendentbusiness.remoting.Serializing;
 import com.opendental.opendentbusiness.remoting.Serializing.DeserializeCallbackResult;
 
 /** This class is used to initiate communication to the server.  It's more like a helper class because communicating with the server gets ugly, especially since we do it so often. */
-public class Db {
+public class RequestHelper {
 	/** This is the callback that every call to the database should listen to.  Even void requests should instantiate this callback in case an error occurs. */
 	private static RequestCallbackResult RequestCallback;
 	/** This is a callback that will call the RequestCallback.  Sounds redundant but it is necessary because deserializing might take a while and so we need to use a RepeatingCommand.
@@ -47,7 +49,7 @@ public class Db {
 			builder.sendRequest(null, new GetRequest());
 		}
 		catch (RequestException e) {
-			//MsgBox.show("Send request error: "+e.getMessage());
+			MsgBox.show("Send request error: "+e.getMessage());
 		}
 	}
 	
@@ -60,19 +62,19 @@ public class Db {
 				}
 				catch (Exception e) {
 					hideLoading();
-					//MsgBox.show(e.getMessage());//This will be a more specific error.
+					MsgBox.show(e.getMessage());//This will be a more specific error.
 				}
 			}
 			else {
 				hideLoading();
-				//MsgBox.show("Error status text: "+response.getStatusText()
-      	//		+"\r\nError status code: "+Integer.toString(response.getStatusCode())
-      	//		+"\r\nError text: "+response.getText());
+				MsgBox.show("Error status text: "+response.getStatusText()
+      			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
+      			+"\r\nError text: "+response.getText());
 			}
 		}
 
 		public void onError(Request request, Throwable exception) {
-			//MsgBox.show(exception.getMessage());
+			MsgBox.show(exception.getMessage());
 		}
 	}
 	

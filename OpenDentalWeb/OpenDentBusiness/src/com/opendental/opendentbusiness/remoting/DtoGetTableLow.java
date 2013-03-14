@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.remoting;
+package com.opendental.opendentbusiness.remoting;
 
 public class DtoGetTableLow extends DataTransferObject {
 

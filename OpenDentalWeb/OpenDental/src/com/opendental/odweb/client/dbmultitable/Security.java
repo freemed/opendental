@@ -1,6 +1,6 @@
 package com.opendental.odweb.client.dbmultitable;
 
-import com.opendental.odweb.client.tabletypes.Userod;
+import com.opendental.opendentbusiness.tabletypes.Userod;
 
 public class Security {
 	private static Userod curUser;
