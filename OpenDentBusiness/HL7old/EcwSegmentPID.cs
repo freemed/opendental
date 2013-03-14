@@ -37,7 +37,9 @@ namespace OpenDentBusiness.HL7 {
 			pat.Position=MaritalStatusParse(seg.GetFieldFullText(16));
 			//pat.ChartNumber=seg.GetFieldFullText(18);//this is wrong.  Would also break standalone mode
 			pat.SSN=seg.GetFieldFullText(19);
-			pat.FeeSched=FeeScheduleParse(seg.GetFieldFullText(22));
+			if(ProgramProperties.GetPropVal(ProgramName.eClinicalWorks,"FeeSchedulesSetManually")=="0") {//if !FeeSchedulesSetManually
+				pat.FeeSched=FeeScheduleParse(seg.GetFieldFullText(22));
+			}
 		}
 
 		///<summary>If relationship is self, this loop does nothing.  A new pat will later change guarantor to be same as patnum. </summary>
