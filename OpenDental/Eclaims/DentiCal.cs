@@ -120,12 +120,14 @@ namespace OpenDental.Eclaims {
 					if(!Directory.Exists(clearhouse.ExportPath)) {
 						throw new Exception("Clearinghouse export path is invalid.");
 					}
-					//First upload the batch to the temporary directory.
 					string[] files=Directory.GetFiles(clearhouse.ExportPath);
 					for(int i=0;i<files.Length;i++) {
-						string remoteFileName="claim"+DateTime.Now.ToString("yyyyMMddhhmmss")+i.ToString().PadLeft(5,'0')+".txt";
-						string remoteFilePath=homeDir+"in/"+remoteFileName;
-						ch.put(files[i],remoteFilePath);
+						//First upload the batch file to a temporary file name. Denti-Cal does not process file names unless they start with the Login ID.
+						//Uploading to a temporary file and then renaming the file allows us to avoid partial file uploads if there is connection loss.
+						string tempRemoteFilePath=homeDir+"in/temp_"+Path.GetFileName(files[i]);
+						ch.put(files[i],tempRemoteFilePath);
+						string remoteFilePath=homeDir+"in/"+clearhouse.LoginID+"_"+Path.GetFileName(files[i]);//Denti-Cal requires the file name to start with the Login ID.
+						ch.rename(tempRemoteFilePath,remoteFilePath);
 						File.Delete(files[i]);//Remove the processed file.
 					}
 				}
