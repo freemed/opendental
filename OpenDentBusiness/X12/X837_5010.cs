@@ -440,17 +440,18 @@ namespace OpenDentBusiness
 				EndSegment(sw);//NM110 through NM112 are not used.
 				//In 4010s, at the request of Emdeon, we always include N3,N4,and DMG even if patient is not subscriber.  This did not make the transaction non-compliant, and they found it useful.
 				//In 5010s, we will follow the X12 specification for most clearinghouses and only include subsc address when subscriber=patient.
-				//But for any clearinghouse who requests it, we will always include.  List them here:
-				//ClaimConnect, EmdeonMed, EmdeonDent, LindsayTechnicalConsultants: Always include.
+				//But for any clearinghouse who requests it, we will always include, [js 3/14/13 even when subscriber!=patient].  List them here:
+				//ClaimConnect, EmdeonMed, EmdeonDent, LindsayTechnicalConsultants, OfficeAlly: Always include.
 				//PostNTrack, BCBSIdaho: Only include when subscriber=patient.
 				bool subscIncludeAddressAndGender=false;
-				if(IsClaimConnect(clearhouse) || IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse) || IsLindsayTechnicalConsultants(clearhouse)) {
+				if(IsClaimConnect(clearhouse) || IsEmdeonDental(clearhouse) || IsEmdeonMedical(clearhouse) || IsLindsayTechnicalConsultants(clearhouse) || IsOfficeAlly(clearhouse)) {
 					subscIncludeAddressAndGender=true;
 				}
 				else {//X12 standard behavior for everyone else, including: PostNTrack, BCBSIdaho.
-					if(subscriber.PatNum==patient.PatNum) {
+					if(subscriber.PatNum==patient.PatNum) {//[js 3/14/13 only include when subscriber==patient]
 						subscIncludeAddressAndGender=true;
 					}
+					//[js 3/14/13 when subscriber!=patient, don't include address]
 				}
 				if(subscIncludeAddressAndGender) {
 					//2010BA N3: (medical,institutional,dental) Subscriber Address. Situational. Required when the patient is the subscriber.
@@ -1782,6 +1783,10 @@ namespace OpenDentBusiness
 
 		private static bool IsLindsayTechnicalConsultants(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="LTC");
+		}
+
+		private static bool IsOfficeAlly(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="330897513");
 		}
 
 		private static bool IsTesia(Clearinghouse clearinghouse) {
