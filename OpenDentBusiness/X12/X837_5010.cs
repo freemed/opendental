@@ -1458,14 +1458,12 @@ namespace OpenDentBusiness
 						if(proc.Prosthesis!="" || proc.UnitQty>1) {
 							sw.Write(s+proc.Prosthesis);//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
 						}
-						//if(IsPostNTrack(clearhouse)) { //The Post-N-Track clearinghouse does not want this value if it is less than 2.
-							if(proc.UnitQty>1) {
-								sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
-							}
-						//}
-						//else { //Every other clearinghouse always wants us to report the procedure count even if it is 1, although the guide says not to send this value if less than 2.
-						//	sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
-						//}
+						if(proc.UnitQty>1) {
+							sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
+						}
+						else if(IsColoradoMedicaid(clearhouse)) { //These clearinghouses always wants us to report the procedure count even if it is 1, although the guide says not to send this value if less than 2.
+							sw.Write(s+"1");//SV306 1/15 Quantity: Situational. Procedure count.
+						}
 						EndSegment(sw);//SV307 throug SV311 are either not used or are situational and we do not use.
 						//2400 TOO: Tooth Information. Number/Surface. Multiple iterations of the TOO segment are allowed only when the quantity reported in Loop ID-2400 SV306 is equal to one.
 						if(procCode.TreatArea==TreatmentArea.Tooth) {
@@ -1755,6 +1753,10 @@ namespace OpenDentBusiness
 
 		private static bool IsClaimConnect(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="330989922");
+		}
+
+		private static bool IsColoradoMedicaid(Clearinghouse clearinghouse) {
+			return (clearinghouse.ISA08=="100000" && clearinghouse.GS03=="77016");
 		}
 
 		///<summary>DentiCal is a carrier.</summary>
