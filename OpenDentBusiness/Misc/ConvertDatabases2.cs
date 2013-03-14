@@ -11953,10 +11953,19 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.3.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
-			To13_2_0();
+			To13_1_14();
 		}
 
-
+		private static void To13_1_14() {
+			if(FromVersion<new Version("13.1.14.0")) {
+				string command;
+				command="UPDATE preference SET ValueString = "+DbHelper.Now()+" WHERE PrefName = 'ElectronicRxDateStartedUsing131'";
+				Db.NonQ(command);
+				command="UPDATE preference SET ValueString = '13.1.14.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
+			To13_2_0();
+		}
 
 
 	}

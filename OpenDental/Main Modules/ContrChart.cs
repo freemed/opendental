@@ -3909,8 +3909,6 @@ namespace OpenDental{
 			NewCrop.Result response=new NewCrop.Result();
 #if DEBUG
 			wsNewCrop.Url="https://preproduction.newcropaccounts.com/v7/WebServices/Update1.asmx";
-#else
-			return false;//TODO: Remove when final release is ready. Prevents this feature from going live before we are ready.
 #endif
 			credentials.PartnerName=ErxXml.NewCropPartnerName;
 			credentials.Name=ErxXml.NewCropAccountName;
@@ -3930,7 +3928,7 @@ namespace OpenDental{
 			//C = Completed Prescription
 			//P = Pending Medication
 			//% = Both C and P.
-			prescriptionHistoryRequest.PrescriptionStatus="%";
+			prescriptionHistoryRequest.PrescriptionStatus="C";
 			//Prescription Sub Status Values:
 			//% = All meds (Returns all meds regardless of the sub status)
 			//A = NS (Returns only meds that have a 'NS' - Needs staff sub status)
@@ -3938,8 +3936,8 @@ namespace OpenDental{
 			//P = Renewal Request that has been selected for processing on the NewCrop screens - it has not yet been denied, denied and re-written or accepted
 			//S = Standard Rx (Returns only meds that have an 'InProc' - InProcess sub status)
 			//D = DrugSet source - indicates the prescription was created by selecting the medication from the DrugSet selection box on the ComposeRx page
-			//O = Outside Prescription - indicates the prescription was created on the MedEntry page
-			prescriptionHistoryRequest.PrescriptionSubStatus="%";
+			//O = Outside Prescription - indicates the prescription was created on the MedEntry page, not prescribed.
+			prescriptionHistoryRequest.PrescriptionSubStatus="S";
 			patientInfoRequester.UserType="Staff";//Allowed values: Doctor,Staff
 			if(Security.CurUser.ProvNum!=0) {//If the current OD user is associated to a doctor, then the request is from a doctor, otherwise from a staff member.
 			  patientInfoRequester.UserType="Doctor";
@@ -3974,10 +3972,6 @@ namespace OpenDental{
 			DateTime rxStartDateT=PrefC.GetDateT(PrefName.ElectronicRxDateStartedUsing131);
 			XmlNode nodeNewDataSet=xml.FirstChild;
 			foreach(XmlNode nodeTable in nodeNewDataSet.ChildNodes) {
-				string dosageNumberDescrption="";
-				string route="";
-				string dosageFrequencyDescription="";
-				string takeAsNeeded="";
 				RxPat rxOld=null;
 				RxPat rx=new RxPat();
 				rx.Disp="";
@@ -3987,6 +3981,7 @@ namespace OpenDental{
 				rx.Refills="";
 				rx.SendStatus=RxSendStatus.SentElect;
 				rx.Sig="";
+				string additionalSig="";
 				foreach(XmlNode nodeRxFieldParent in nodeTable.ChildNodes) {
 					XmlNode nodeRxField=nodeRxFieldParent.FirstChild;
 					if(nodeRxField==null) {
@@ -4000,20 +3995,11 @@ namespace OpenDental{
 							rx.Drug=nodeRxField.Value;
 							break;
 						//rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
-						case "dosagenumberdescription"://ex 0.5/half
-							dosageNumberDescrption=nodeRxField.Value;
-							break;
-						case "route"://ex By Mouth
-							route=nodeRxField.Value;
-							break;
-						case "dosagefrequencydescription"://ex as directed.  Hopefully would include something like "4 times a day".
-							dosageFrequencyDescription=nodeRxField.Value;
-							break;
-						case "takeasneeded":
-							takeAsNeeded=nodeRxField.Value;
-							break;
-						case "patientfriendlysig":
+						case "patientfriendlysig"://The concat of all the codified fields.
 							rx.Sig=nodeRxField.Value;
+							break;
+						case "prescriptionnotes"://from the Additional Sig box at the bottom
+							additionalSig=nodeRxField.Value;
 							break;
 						case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
 							rx.PatNum=PIn.Long(nodeRxField.Value);
@@ -4040,33 +4026,14 @@ namespace OpenDental{
 							break;
 					}
 				}//end inner foreach
-				if(rx.RxDate<rxStartDateT) {//Ignore prescriptions created before version 13.1, because those prescriptions were entered manually by the user.
+				if(rx.RxDate<rxStartDateT) {//Ignore prescriptions created before version 13.1.14, because those prescriptions were entered manually by the user.
 					continue;
 				}
-				//TODO: Verify that SIG is properly constructed from the various other fields.
-				if(rx.Sig=="") {//No PatientFriendlySIG was provided, so we construct our own based on other fields.
-					rx.Sig=dosageNumberDescrption;
-					if(route!="") {
-						if(rx.Sig!="") {
-							rx.Sig+=" ";
-						}
-						rx.Sig+=route;
+				if(additionalSig!="") {
+					if(rx.Sig!="") {//If patient friend SIG is present.
+						rx.Sig+=" ";
 					}
-					if(dosageFrequencyDescription!="") {
-						if(rx.Sig!="") {
-							rx.Sig+=" ";
-						}
-						rx.Sig+=dosageFrequencyDescription;
-					}
-					if(takeAsNeeded=="Y") {
-						if(rx.Sig!="") {
-							rx.Sig+=" ";
-						}
-						rx.Sig+="Take as needed.";
-					}
-					else {//takeAsNeeded="N"
-						//TODO: where is "for 7 days"? DaysSupply?
-					}
+					rx.Sig+=additionalSig;
 				}
 				if(rxOld==null) {
 					rx.IsNew=true;//Might not be necessary, but does not hurt.
