@@ -172,6 +172,7 @@ namespace OpenDental {
 				}
 				textbox=new RichTextBox();
 				textbox.BorderStyle=BorderStyle.None;
+				textbox.TabStop=false;//Only input fields allow tab stop (set below for input text).
 				//textbox.Multiline=true;//due to MS malfunction at 9pt which cuts off the bottom of the text.
 				if(field.FieldType==SheetFieldType.OutputText
 					|| field.FieldType==SheetFieldType.StaticText) {
