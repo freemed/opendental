@@ -7,7 +7,7 @@ public class ProgramEntry implements EntryPoint {
 
 	public void onModuleLoad() {
 		//Add the shell to the root panel.  This makes the app visible.
-		RootLayoutPanel.get().add(new WindowPatientPortal());
+		RootLayoutPanel.get().add(new WindowContent());
 	}
 	
 	
