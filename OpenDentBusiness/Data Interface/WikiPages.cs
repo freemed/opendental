@@ -355,10 +355,13 @@ namespace OpenDentBusiness{
 			foreach(Match match in matches) {
 				string tableStrOrig=match.Value;
 				StringBuilder strbTable=new StringBuilder();
-				string[] lines=tableStrOrig.Split(new string[] {"\r\n"},StringSplitOptions.None);
+				string[] lines=tableStrOrig.Split(new string[] { "{|","|-","|}" },StringSplitOptions.RemoveEmptyEntries);
+				for(int i=0;i<lines.Length;i++) {
+					lines[i]=lines[i].Trim();
+				}
 				strbTable.AppendLine("<table>");
 				List<string> colWidths=new List<string>();
-				for(int i=1;i<lines.Length-1;i++) {
+				for(int i=0;i<lines.Length;i++) {
 					if(lines[i].StartsWith("!")) {//header
 						strbTable.AppendLine("<tr>");
 						lines[i]=lines[i].Substring(1);//strips off the leading !
