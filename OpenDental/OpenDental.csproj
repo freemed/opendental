@@ -372,12 +372,6 @@
     <Compile Include="Forms\FormNewCropBilling.designer.cs">
       <DependentUpon>FormNewCropBilling.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormNewCropBillingList.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormNewCropBillingList.designer.cs">
-      <DependentUpon>FormNewCropBillingList.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormSpellCheck.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2724,9 +2718,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormNewCropBilling.resx">
       <DependentUpon>FormNewCropBilling.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormNewCropBillingList.resx">
-      <DependentUpon>FormNewCropBillingList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSpellCheck.resx">
       <DependentUpon>FormSpellCheck.cs</DependentUpon>

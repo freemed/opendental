@@ -65,14 +65,13 @@ namespace OpenDentBusiness{
 			return retVal;
 		}
 
-		///<summary>For internal use only. Returns all repeating charges within a single customer account for a specific provider NPI. The NPI does not have its own field, it is stored in the repeating charge note.</summary>
-		public static RepeatCharge GetForNewCrop(long patNum,string npi) {
+		///<summary>For internal use only. Returns the first NewCrop repeating charge on the specified customer account. The NPI does not have its own field, it is stored in the repeating charge note.</summary>
+		public static RepeatCharge GetForNewCrop(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<RepeatCharge>(MethodBase.GetCurrentMethod(),patNum,npi);
+				return Meth.GetObject<RepeatCharge>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command="SELECT * FROM repeatcharge "
-				+"WHERE PatNum="+POut.Long(patNum)
-				+" AND Note LIKE 'NPI="+POut.String(npi)+"%'";
+				+"WHERE PatNum="+POut.Long(patNum)+" AND ProcCode='NewCrop'";
 			List <RepeatCharge> result=Crud.RepeatChargeCrud.SelectMany(command);
 			if(result.Count==0) {
 				return null;
