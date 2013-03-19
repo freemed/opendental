@@ -1709,8 +1709,8 @@ namespace OpenDental.UI {
 
 		void editBox_KeyDown(object sender,KeyEventArgs e) {
 			if(e.Shift && e.KeyCode == Keys.Enter) {
-					Rows[selectedCell.X].Cells[selectedCell.Y].Text+="\r\n";
-					return;
+				Rows[selectedCell.Y].Cells[selectedCell.X].Text+="\r\n";
+				return;
 			}
 			if(e.KeyCode==Keys.Enter) {//usually move to the next cell
 				if(editableAcceptsCR) {
