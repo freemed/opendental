@@ -436,21 +436,16 @@ namespace OpenDentBusiness{
 				tagCurMatch=Regex.Match(s.Substring(iScanInParagraph),"^<.*?>");//regMatch);//.*? means any char, zero or more, as few as possible
 				if(tagCurMatch==null) {
 					//shouldn't happen unless closing bracket is missing
-//better error message
-					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));//message not seen by user, look in FormWikiEdit for relevant error messages.
 				}
 				if(tagCurMatch.Value.Trim('<','>').EndsWith("/")) {
-//I don't think there are any <img .../> tags.  Show me.
-					//self terminating img tags are allowed, all others are not
+					//self terminating tags NOT are allowed
 					//this should catch all non-allowed self-terminating tags i.e. <br />, <inherits />, etc...
-					if(!tagCurMatch.Value.StartsWith("<img ")) {
-//better error message
-						throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
-					}
+					throw new ApplicationException("All elements must have a beginning and ending tag. Unexpected tag: "+s.Substring(iScanInParagraph));//not seen by user
 				}
 				tagName=tagCurMatch.Value.Split(new string[] { "<"," ",">" },StringSplitOptions.RemoveEmptyEntries)[0];//works with tags like <i>, <span ...>, and <img .../>
-				if(s.IndexOf("</"+tagName+">")==-1 && !tagCurMatch.Value.StartsWith("<img ")) {//should never happen, but catches tags that have no ending tag.
-					throw new ApplicationException("Unexpected tag: "+s.Substring(iScanInParagraph));
+				if(s.IndexOf("</"+tagName+">")==-1) {//this will happen if no ending tag.
+					throw new ApplicationException("No ending tag: "+s.Substring(iScanInParagraph));
 				}
 				switch(tagName){
 					case "a":
@@ -465,8 +460,7 @@ namespace OpenDentBusiness{
 					case "ol": 
 					case "ul": 
 					case "table":
-//comment still needs verification:
-					case "img"://can be self-terminating
+					case "img"://can NOT be self-terminating
 						if(iScanInParagraph==0) {//s starts with a non-paragraph tag, so there is no partially assembled paragraph to process.
 							//do nothing
 						}
@@ -478,10 +472,6 @@ namespace OpenDentBusiness{
 						}
 						//scan to the end of this element
 						int iScanSibling=s.IndexOf("</"+tagName+">")+3+tagName.Length;
-//is this really needed?:
-						if(iScanSibling==2+tagName.Length && tagName=="img") {//IndexOf() returned -1
-							iScanSibling=s.IndexOf("/>")+2;//only for img
-						}
 						//tags without a closing tag were caught above.
 						//move the non-paragraph content over to s new.
 						strbSnew.Append(s.Substring(0,iScanSibling));

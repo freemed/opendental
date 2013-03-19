@@ -715,8 +715,10 @@ namespace OpenDental {
 							}
 						}
 						break;
+					case "img":
+						throw new ApplicationException("Image tags are not allowed. Instead use [[img: ... ]]");
 					default:
-						throw new ApplicationException("<"+node.Name+"> is not one of the allowed tags.");
+						throw new ApplicationException("<"+node.Name+"> is not one of the allowed tags. To display as plain text, escape the brackets with ampersands. I.e. \"&<"+node.Name+"&>\"");
 				}
 				ValidateNodes(node.ChildNodes);
 			}
