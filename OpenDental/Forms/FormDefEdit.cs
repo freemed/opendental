@@ -360,6 +360,17 @@ namespace OpenDental{
 						textValue.Text="";
 					}
 					break;
+				case DefCat.ProcCodeCats:
+					if(checkHidden.Checked) {
+						Defs.RefreshCache();
+						Def[] enabledDefs=DefC.Short[(int)DefCat.ProcCodeCats];
+						//if no enabled defs or this is the only enabled def, don't allow disabling
+						if(enabledDefs.Length==0 || (enabledDefs.Length==1 && enabledDefs[0].DefNum==DefCur.DefNum)) {
+							MsgBox.Show(this,"At least one procedure code category must be enabled.");
+							return;
+						}
+					}
+					break;
 				/*case DefCat.FeeSchedNames:
 					if(textValue.Text=="C" || textValue.Text=="c") {
 						textValue.Text="C";
