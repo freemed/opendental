@@ -126,7 +126,9 @@ namespace OpenDental.Eclaims {
 						//Uploading to a temporary file and then renaming the file allows us to avoid partial file uploads if there is connection loss.
 						string tempRemoteFilePath=homeDir+"in/temp_"+Path.GetFileName(files[i]);
 						ch.put(files[i],tempRemoteFilePath);
-						string remoteFilePath=homeDir+"in/"+clearhouse.LoginID+"_"+Path.GetFileName(files[i]);//Denti-Cal requires the file name to start with the Login ID.
+						//Denti-Cal requires the file name to start with the Login ID followed by a period and end with a .txt extension.
+						//The middle part of the file name can be anything.
+						string remoteFilePath=homeDir+"in/"+clearhouse.LoginID+"."+Path.GetFileName(files[i]);
 						ch.rename(tempRemoteFilePath,remoteFilePath);
 						File.Delete(files[i]);//Remove the processed file.
 					}
