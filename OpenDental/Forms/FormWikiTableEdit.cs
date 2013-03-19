@@ -402,6 +402,47 @@ namespace OpenDental {
 			}
 		}
 
+		private void butPaste_Click(object sender,EventArgs e) {
+			Point startingPoint=gridMain.SelectedCell;
+			int ColsNeeded=0;
+			int RowsNeeded=0;
+			List<List<string>> tableBuilder = new List<List<string>>();//tableBuilder[Y][X] to access cell.
+			string CBText = Clipboard.GetText();
+			string[] TableRows = CBText.Split(new string[] {"\r\n"},StringSplitOptions.None);
+			RowsNeeded=TableRows.Length;
+			List<string> currentRow;
+			for(int i=0;i<TableRows.Length;i++) {
+				currentRow = new List<string>();//currentRow[X] to access cell data
+				string[] rowCells = TableRows[i].Split('\t');
+				foreach(string cell in rowCells) {
+					currentRow.Add(cell);
+				}
+				tableBuilder.Add(currentRow);
+				ColsNeeded=Math.Max(currentRow.Count,ColsNeeded);
+			}
+			//At this point:
+			//ColsNeeded = number of columns needed
+			//rowsNeeded = number of rows needed
+			//access data as tableBuilder[Y][X], tableBuilder contains all of the table data in a potentially uneven array (technically a list), 
+
+			if(startingPoint.X + ColsNeeded > gridMain.Columns.Count) {
+				MessageBox.Show(this,Lan.g(this,"Additional columns required to paste")+": "+(startingPoint.X+ColsNeeded-gridMain.Columns.Count));
+				return;
+			}
+			if(gridMain.Rows.Count< startingPoint.Y+RowsNeeded) {
+				//TODO: add rows
+				MessageBox.Show(this,Lan.g(this,"Additional rows required."));
+				return;
+			}
+			//TODO: check for existing content
+			for(int i=0;i<tableBuilder.Count;i++) {
+				for(int j=0;j<tableBuilder[i].Count;j++) {
+					gridMain.Rows[startingPoint.Y+i].Cells[startingPoint.X+j].Text=tableBuilder[i][j];
+				}
+			}
+			//done
+		}
+
 		private void butOK_Click(object sender,EventArgs e) {
 			//PumpGridIntoTable();
 			Markup=GenerateMarkup();
