@@ -100,6 +100,7 @@ namespace OpenDental {
 			FormS.HL7DefFieldCur=new HL7DefField();
 			FormS.HL7DefFieldCur.HL7DefSegmentNum=HL7DefSegCur.HL7DefSegmentNum;
 			FormS.HL7DefFieldCur.IsNew=true;
+			FormS.HL7DefFieldCur.FixedText="";
 			FormS.IsHL7DefInternal=false;
 			FormS.ShowDialog();
 			FillGrid();
