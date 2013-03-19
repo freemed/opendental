@@ -20,13 +20,13 @@
     <g:center>
     	<g:TabPanel ui:field="tabMain">
 				<g:Tab ui:field="tabFamily" text="Family">
-					<g:SimpleLayoutPanel ui:field="panelFamily" />
+					<g:SimplePanel ui:field="panelFamily" />
 				</g:Tab>
 				<g:Tab ui:field="tabAccount" text="Account">
-					<g:SimpleLayoutPanel ui:field="panelAccount" />
+					<g:SimplePanel ui:field="panelAccount" />
 				</g:Tab>
 				<g:Tab text="Medical">
-					<g:SimpleLayoutPanel ui:field="panelMedical" />
+					<g:SimplePanel ui:field="panelMedical" />
 				</g:Tab>
 			</g:TabPanel>
     </g:center>

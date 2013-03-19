@@ -3,6 +3,8 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui" >
   
-  <g:SimpleLayoutPanel ui:field="contentPanel" />
+  <g:VerticalPanel ui:field="contentPanel">
+  	<g:Label>Family Members:</g:Label>
+  </g:VerticalPanel>
   
 </ui:UiBinder>

@@ -3,6 +3,10 @@
   xmlns:ui="urn:ui:com.google.gwt.uibinder"
   xmlns:g="urn:import:com.google.gwt.user.client.ui" >
   
-  <g:SimpleLayoutPanel ui:field="contentPanel" />
+  <g:VerticalPanel ui:field="panelContainer">
+  	<g:Grid ui:field="gridAccount" />
+  	<g:Label>Statement History:</g:Label>
+  	<g:Label ui:field="labelStatements" />
+  </g:VerticalPanel>
   
 </ui:UiBinder>
