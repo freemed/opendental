@@ -117,6 +117,7 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Incoming Links"),9,"","Inc Links"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),10,"","Add"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Lists"),13,"","Lists"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),11,"","All Pages"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),12,"","Search"));
 		}
@@ -155,6 +156,9 @@ namespace OpenDental {
 					break;
 				case "Add":
 					Add_Click();
+					break;
+				case "Lists":
+					Lists_Click();
 					break;
 				case "Search":
 					Search_Click();
@@ -348,6 +352,11 @@ namespace OpenDental {
 			historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
 			LoadWikiPage(FormWAP.SelectedWikiPage.PageTitle);
 		}*/
+
+		private void Lists_Click() {
+			FormWikiLists FormWL=new FormWikiLists();
+			FormWL.ShowDialog();
+		}
 
 		private void Search_Click() {
 			FormWikiSearch FormWS=new FormWikiSearch();

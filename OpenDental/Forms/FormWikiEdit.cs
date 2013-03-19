@@ -140,22 +140,8 @@ namespace OpenDental {
 
 		///<summary>This is called both when a user double clicks anywhere in the edit box, or when the click the Table button in the toolbar.  This ONLY handles popping up an edit window for an existing table.  If the cursor was not in an existing table, then this returns false.  After that, the behavior in the two areas differs.  Returns true if it popped up.</summary>
 		private bool TableOrDoubleClick(int charIdx){
-			//Tableviews-------------------------------------------------------------------------------
-			string strViewClicked="";
-			string strViewFirst="";
-			int countView=0;
-			MatchCollection matches=Regex.Matches(textContent.Text,@"<TableViews>.+</TableViews>",RegexOptions.Singleline);
-			countView=matches.Count;
-			for(int i=0;i<matches.Count;i++) {
-				if(i==0){
-					strViewFirst=matches[i].Value;
-				}
-				if(charIdx >	matches[i].Index
-					&& charIdx <	matches[i].Index+matches[i].Length) 
-				{
-					strViewClicked=matches[i].Value;
-				}
-			}
+			//there is some code clutter in this method from when we used TableViews.  It seems harmless, but can be removed whenever.
+			MatchCollection matches;
 			//Tables-------------------------------------------------------------------------------
 			string strTableClicked="";
 			string strTableFirst="";
@@ -172,41 +158,16 @@ namespace OpenDental {
 					strTableClicked=matches[i].Value;
 				}
 			}
-			//Validate counts-----------------------------------------------------------------------------
-			if(countView>1){
-				MsgBox.Show(this,"More than one TableViews section found.  Only one allowed per page.  Delete one of them first.");
-				return true;//whether or not they clicked inside a table, there are issues that need to be resolved.
-			}
-			if(countView==1){
-				if(countTable>1){
-					MsgBox.Show(this,"More than one Table section found.  Only one allowed if a TableView is present.  Delete one of the tables first.");
-					return true;
-				}
-				if(countTable==0){
-					MsgBox.Show(this,"A TableView is present without a table.  Delete the view first.");
-					return true;
-				}
-			}
 			//handle the clicks----------------------------------------------------------------------------
-			string strViewLoad="";
 			string strTableLoad="";
 			if(strTableClicked!=""){//clicked in a table
 				strTableLoad=strTableClicked;
-				if(strViewFirst!=""){//if there is a view
-					strViewLoad=strViewFirst;
-				}
-			}
-			else if(strViewClicked!=""){//clicked in a view
-				//already validated that there is exactly one table
-				strTableLoad=strTableFirst;
-				strViewLoad=strViewClicked;
 			}
 			else{
-				return false;//did not click inside a table or view
+				return false;//did not click inside a table
 			}
 			textContent.SelectionLength=0;//otherwise we get an annoying highlight
 			FormWikiTableEdit formT=new FormWikiTableEdit();
-			formT.MarkupForViews=strViewLoad;
 			formT.Markup=strTableLoad;
 			formT.CountTablesInPage=countTable;
 			formT.IsNew=false;
@@ -216,23 +177,10 @@ namespace OpenDental {
 			}
 			if(formT.Markup==null) {//indicates delete
 				textContent.Text=textContent.Text.Replace(strTableLoad,"");
-				if(strViewLoad!="") {
-					textContent.Text=textContent.Text.Replace(strViewLoad,"");
-				}
 				textContent.SelectionLength=0;
 				return true;
 			}
 			textContent.Text=textContent.Text.Replace(strTableLoad,formT.Markup);
-			if(strViewLoad!="") {
-				textContent.Text=textContent.Text.Replace(strViewLoad,formT.MarkupForViews);
-			}
-			else {//no view was originally present
-				if(formT.MarkupForViews!="") {//but user is trying to insert one.
-					//FormWikiTableEdit will have already verified that an insert is allowed
-					matches=Regex.Matches(textContent.Text,@"\{\|(.+?)\|\}",RegexOptions.Singleline);//there will be exactly one
-					textContent.Text=textContent.Text.Substring(0,matches[0].Index)+formT.MarkupForViews+"\r\n"+textContent.Text.Substring(matches[0].Index);
-				}
-			}
 			textContent.SelectionLength=0;
 			return true;
 		}
@@ -562,13 +510,7 @@ namespace OpenDental {
 				return;//so it was already handled with an edit table dialog
 			}
 			//User did not click inside a table, so they must want to add a new table.
-			MatchCollection matches=Regex.Matches(textContent.Text,@"<TableViews>.+</TableViews>",RegexOptions.Singleline);
-			if(matches.Count>0) {//if a TableView already exists
-				MsgBox.Show(this,"A TableView is present, so not allowed to add another table.");
-				return;
-			}
 			FormWikiTableEdit FormWTE=new FormWikiTableEdit();
-			FormWTE.MarkupForViews="";
 			FormWTE.Markup=@"{|
 !Width=""100""|Heading1!!Width=""100""|Heading2!!Width=""100""|Heading3
 |-
@@ -583,9 +525,6 @@ namespace OpenDental {
 			}
 			textContent.SelectionLength=0;
 			textContent.Paste(FormWTE.Markup);
-			if(FormWTE.MarkupForViews!=""){
-				textContent.Paste("\r\n"+FormWTE.MarkupForViews);
-			}
 			textContent.SelectionLength=0;
 			textContent.Focus();
 		}
@@ -765,21 +704,6 @@ namespace OpenDental {
 					case "h1":
 					case "h2":
 					case "h3":
-					case "TableViews":
-					case "TableViewCol":
-						//no attributes at all allowed on these tags
-						if(node.Attributes.Count!=0) {
-							throw new ApplicationException("'"+node.Attributes[0].Name+"' attribute is not allowed on <"+node.Name+"> tag.");
-						}
-						break;
-					case "TableView":
-						//only allowed attributes are Name and OrderBy
-						for(int i=0;i<node.Attributes.Count;i++) {
-							if(node.Attributes[i].Name!="Name" && node.Attributes[i].Name!="OrderBy") {
-								throw new ApplicationException(node.Attributes[i].Name+" attribute is not allowed on <TableView> tag.");
-							}
-						}
-						break;
 					case "a":
 						//only allowed attribute is href
 						for(int i=0;i<node.Attributes.Count;i++) {

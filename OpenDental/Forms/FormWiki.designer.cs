@@ -48,6 +48,7 @@ namespace OpenDental{
 			this.imageListMain.Images.SetKeyName(10, "Add.gif");
 			this.imageListMain.Images.SetKeyName(11, "allpages.gif");
 			this.imageListMain.Images.SetKeyName(12, "search.gif");
+			this.imageListMain.Images.SetKeyName(13, "WikiLists.png");
 			// 
 			// labelStatus
 			// 
