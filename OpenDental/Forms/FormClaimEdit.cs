@@ -5067,10 +5067,10 @@ namespace OpenDental{
 
 		private void butLabel_Click(object sender, System.EventArgs e) {
 			//LabelSingle label=new LabelSingle();
-			PrintDocument pd=new PrintDocument();//only used to pass printerName
-			if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)){
-				return;
-			}
+			//PrintDocument pd=new PrintDocument();//only used to pass printerName
+			//if(!PrinterL.SetPrinter(pd,PrintSituation.LabelSingle)){
+			//  return;
+			//}
 			//ask if print secondary?
 			InsPlan planCur=InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 			Carrier carrierCur=Carriers.GetCarrier(planCur.CarrierNum);
