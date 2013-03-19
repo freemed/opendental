@@ -5,6 +5,8 @@
   
   <g:VerticalPanel ui:field="contentPanel">
   	<g:Label>Family Members:</g:Label>
+  	<g:Grid ui:field="gridFamily" />
+  	<g:Grid ui:field="gridPatient" />
   </g:VerticalPanel>
   
 </ui:UiBinder>

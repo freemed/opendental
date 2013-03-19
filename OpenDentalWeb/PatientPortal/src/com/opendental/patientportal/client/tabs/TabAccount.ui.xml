@@ -6,7 +6,8 @@
   <g:VerticalPanel ui:field="panelContainer">
   	<g:Grid ui:field="gridAccount" />
   	<g:Label>Statement History:</g:Label>
-  	<g:Label ui:field="labelStatements" />
+  	<g:Label ui:field="labelStatements">No statements found.</g:Label>
+  	<g:Grid ui:field="gridStatements" />
   </g:VerticalPanel>
   
 </ui:UiBinder>

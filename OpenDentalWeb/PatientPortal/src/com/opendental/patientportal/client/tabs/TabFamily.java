@@ -13,24 +13,23 @@ public class TabFamily extends Composite {
 	interface TabFamilyUiBinder extends UiBinder<Widget, TabFamily> {
 	}
 	
-	private Grid gridFamily;
-	private Grid gridPatient;
+	@UiField Grid gridFamily;
+	@UiField Grid gridPatient;
 	@UiField VerticalPanel contentPanel;
 	
 	public TabFamily() {
 		//Initialize the UI binder.
-		initWidget(uiBinder.createAndBindUi(this));
+		uiBinder.createAndBindUi(this);
 		fillFamily();
-		contentPanel.add(gridFamily);
 		fillPatient();
-		contentPanel.add(gridPatient);
+		initWidget(contentPanel);
 	}
 
 	private void fillFamily() {
 		// TODO Dynamically set the number of rows.
 		int rows=3;
 		int columns=5;
-		gridFamily=new Grid(rows, columns);
+		gridFamily.resize(rows, columns);
 		for(int r=0;r<rows+1;r++) {
 			// TODO Enhance to loop through the rows.
 			for(int c=0;c<columns;c++) {
@@ -46,13 +45,12 @@ public class TabFamily extends Composite {
 				// TODO Set the Name, Position, Gender, Status, and Age of the patient.
 			}
 		}
-		gridFamily.setSize("100%", "100%");
 	}
 
 	private void fillPatient() {
 		int rows=16;
 		int columns=2;
-		gridPatient=new Grid(rows, columns);
+		gridPatient.resize(rows, columns);
 		// TODO Enhance to fill in the patients data.
 		for(int i=0;i<rows;i++) {
 			switch(i) {
@@ -116,13 +114,12 @@ public class TabFamily extends Composite {
 					gridPatient.setText(i, 0, "Cell Phone:");
 					gridPatient.setText(i, 1, "");
 					break;
-				case 15://Home Phone
-					gridPatient.setText(i, 0, "Home Phone:");
+				case 15://Email
+					gridPatient.setText(i, 0, "Email:");
 					gridPatient.setText(i, 1, "");
 					break;
 			}
 		}
-		gridPatient.setSize("100%", "100%");
 	}
 
 }

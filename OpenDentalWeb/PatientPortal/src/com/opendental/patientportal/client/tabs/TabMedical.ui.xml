@@ -5,9 +5,25 @@
   
   <g:VerticalPanel ui:field="panelContainer">
   	<g:Label>Lab Panel:</g:Label>
+  	<g:VerticalPanel>
+  		<g:Label ui:field="labelPanels">No lab panels found.</g:Label>
+  		<g:Grid ui:field="gridPanels" />
+  	</g:VerticalPanel>
   	<g:Label>List of Medications:</g:Label>
+  	<g:VerticalPanel>
+  		<g:Label ui:field="labelMedications">No lab medications found.</g:Label>
+  		<g:Grid ui:field="gridMedications" />
+  	</g:VerticalPanel>
   	<g:Label>List of Problems:</g:Label>
+  	<g:VerticalPanel>
+  		<g:Label ui:field="labelProblems">No lab problems found.</g:Label>
+  		<g:Grid ui:field="gridProblems" />
+  	</g:VerticalPanel>
   	<g:Label>List of Allergies:</g:Label>
+  	<g:VerticalPanel>
+  		<g:Label ui:field="labelAllergies">No lab allergies found.</g:Label>
+  		<g:Grid ui:field="gridAllergies" />
+  	</g:VerticalPanel>
   </g:VerticalPanel>
   
 </ui:UiBinder>
