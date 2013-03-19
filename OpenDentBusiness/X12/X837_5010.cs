@@ -999,6 +999,34 @@ namespace OpenDentBusiness
 				//2300 HI: TC (institutional) Treatment Code Information. Situational. We do not use. When home health agencies need to report plan of treatment information under contracts.
 				//2300 HCP: (medical,institutional,dental) Claim Pricing/Repricing Information. Situational. We do not use.
 				#endregion Claim HI HCP
+				bool sendFacilityNameAndAddress=false;
+				if(medType==EnumClaimMedType.Medical) {
+					//Code added to send the segment below, but no logic here for sending yet, so it is never sent.
+				}
+				else if(medType==EnumClaimMedType.Institutional) {
+					//Code added to send the segment below, but no logic here for sending yet, so it is never sent.
+				}
+				else if(medType==EnumClaimMedType.Dental) {
+					if(claim.PlaceService!=PlaceOfService.Office) {
+						if(IsClaimConnect(clearhouse)) {
+							//Osvaldo Ferrer, VIP account manager for DentalXChange, says we need the segment whenever the place of service is not office.
+							sendFacilityNameAndAddress=true;
+						}
+						else {//for other clearinghouses, the X12 specs say that we don't send it if it's the same as the billing prov.
+							//and since we always set it the same as the billing prov, we shouldn't send it.
+						}
+					}
+				}
+				Provider facilityProv=billProv;//If this provider changes in the future, then the validation section will also need to be updated.
+				string facilityAddress1=billingAddress1;
+				string facilityAddress2=billingAddress2;
+				string facilityCity=billingCity;
+				string facilityState=billingState;
+				string facilityZip=billingZip;
+				//For medical, instititional, and dental, sending facility NPI must be for an organization (non-person).
+				if(!facilityProv.IsNotPerson) {//Validated also
+					sendFacilityNameAndAddress=false;
+				}
 				provTreat=Providers.GetProv(claim.ProvTreat);
 				#region 2310 Claim Providers (medical)
 				//Since order might be important, we have to handle medical, institutional, and dental separately.
@@ -1013,13 +1041,36 @@ namespace OpenDentBusiness
 					WriteNM1Provider("82",sw,provTreat);
 					//2310B PRV: PE (medical) Rendering Provider Specialty Information. Situational.
 					WritePRV_PE(sw,provTreat);
-					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.
-					//}
-					//2310C NM1: (medical) Service Facility Location Name. Situational. We do not use.
-					//2310C N3: (medical) Service Facility Location Address. We do not use.
-					//2310C N4: (medical) Service Facility Location City, State, Zip Code. We do not use.
-					//2310C REF: (medical) Service Facility Location Secondary Identification. Situational. We do not use.
-					//2310C PER: (medical) Service Facility Contact Information. Situational. We do not use.
+					//2310B REF: (medical) Rendering Provider Secondary Identification. Situational. We do not use.					
+					//2310C NM1: 77 (medical) Service Facility Location Name. Conditions different than 4010.  
+					//Not supposed to send if same location as 2010AA Billing Provider, but some clearinghouses want this segment anyway.
+					if(sendFacilityNameAndAddress) {
+						sw.Write("NM1"+s
+							+"77"+s//NM101 2/3 Entity Identifier Code: 77=Service Location.
+							+"2"+s//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+							+Sout(facilityProv.LName,60)+s//NM103 1/60 Name Last or Organization Name: Laboratory or Facility Name.
+							+s//NM104 1/35 Name First: Not used.
+							+s//NM105 1/25 Name Middle: Not used.
+							+s//NM106 1/10 Name Prefix: Not used.
+							+s//NM107 1/10 Name Suffix: Not used.
+							+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=NPI.
+							+Sout(facilityProv.NationalProvID,80));//NM109 2/80 Identification Code: Laboratory or Facility Identifier. Validated.
+						EndSegment(sw);//NM110 through NM112 not used.
+						//2310C N3: (medical) Service Facility Location Address.
+						sw.Write("N3"+s+Sout(facilityAddress1,55));//N301 1/55 Address Information: Laboratory or Facility Address Line.
+						if(facilityAddress2!="") {
+							sw.Write(s+Sout(facilityAddress2,55));//N302 1/55 Address Information: Laboratory or Facility Address Line 2. Only required when there is a secondary address line.
+						}
+						EndSegment(sw);
+						//2310C N4: (medical) Service Facility Location City, State, Zip Code.
+						sw.Write("N4"+s
+							+Sout(facilityCity,30)+s//N401 2/30 City Name: Laboratory or Facility City Name.
+							+Sout(facilityState,2,2)+s//N402 2/2 State or Provice Code: Laboratory or Facility State or Province Code.
+							+Sout(facilityZip.Replace("-",""),15));//N403 3/15 Postal Code: Laboratory or Facility Postal Zone or ZIP Code.
+						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.
+						//2310C REF: (medical) Service Facility Location Secondary Identification. Situational. We do not use this.
+						//2310C PER: (medical) Service Facility Contact Information. Situational. Required for property and casualty claims. We do not use.
+					}
 					//2310D NM1: (medical) Supervising Provider Name. Situational. We do not use.
 					//2310D REF: (medical) Supervising Provider Secondary Identification. Situational. We do not use.
 					//2310E NM1: (medical) Ambulance Pick-up Location. Situational. We do not use.
@@ -1047,11 +1098,34 @@ namespace OpenDentBusiness
 					//2310C REF: ZZ (institutional) Other Operating Physician Secondary Identification. Situational.
 					//2310D NM1: 82 (institutional) Rendering Provider Name. Situational. If different from attending provider AND when regulations require both facility and professional components.
 					//2310D REF: ZZ (institutional) Rendering Provider Secondary Identificaiton. Situational.
-					//2310E NM1: 77 (institutional) Service Facility Location Name. Situational. Required if different than billing provider loop 2010AA.
-	//todo: However, there shouldn't be too many situations where the facility location is different than the billing location, except maybe multi-location institutions.
-					//2310E N3: (institutional) Service Facility Location Address. Required when place of service is different from loop 2010AA billing provider.
-					//2310E N4: (institutional) Service Facility Location City, State, Zip Code.
-					//2310E REF: ZZ (institutional) Service Facility Location Secondary Identificiation. Situational.
+					//2310E NM1: 77 (institutional) Service Facility Location Name. Conditions different than 4010.  
+					//Not supposed to send if same location as 2010AA Billing Provider, but some clearinghouses want this segment anyway.
+					if(sendFacilityNameAndAddress) {
+						sw.Write("NM1"+s
+							+"77"+s//NM101 2/3 Entity Identifier Code: 77=Service Location.
+							+"2"+s//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
+							+Sout(facilityProv.LName,60)+s//NM103 1/60 Name Last or Organization Name: Laboratory or Facility Name.
+							+s//NM104 1/35 Name First: Not used.
+							+s//NM105 1/25 Name Middle: Not used.
+							+s//NM106 1/10 Name Prefix: Not used.
+							+s//NM107 1/10 Name Suffix: Not used.
+							+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=NPI.
+							+Sout(facilityProv.NationalProvID,80));//NM109 2/80 Identification Code: Laboratory or Facility Primary Identifier. Validated.
+						EndSegment(sw);//NM110 through NM112 not used.
+						//2310E N3: (institutional) Service Facility Location Address.
+						sw.Write("N3"+s+Sout(facilityAddress1,55));//N301 1/55 Address Information: Laboratory or Facility Address Line.
+						if(facilityAddress2!="") {
+							sw.Write(s+Sout(facilityAddress2,55));//N302 1/55 Address Information: Laboratory or Facility Address Line 2. Only required when there is a secondary address line.
+						}
+						EndSegment(sw);
+						//2310E N4: (institutional) Service Facility Location City, State, Zip Code.
+						sw.Write("N4"+s
+							+Sout(facilityCity,30)+s//N401 2/30 City Name: Laboratory or Facility City Name.
+							+Sout(facilityState,2,2)+s//N402 2/2 State or Provice Code: Laboratory or Facility State or Province Code.
+							+Sout(facilityZip.Replace("-",""),15));//N403 3/15 Postal Code: Laboratory or Facility Postal Zone or ZIP Code.
+						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.
+						//2310E REF: ZZ (institutional) Service Facility Location Secondary Identificiation. Situational. We do not use.
+					}
 					//2310F NM1: DN (institutional) Referring Provider Name. Situational. Required when referring provider is different from attending provider.
 					if(claim.ReferringProv!=claim.ProvTreat) {
 						WriteNM1_DN(sw,claim.ReferringProv);
@@ -1083,34 +1157,34 @@ namespace OpenDentBusiness
 							WriteProv_REFG2orLU(sw,provTreat,carrier.ElectID);
 						}
 					}
-					//2310C NM1: 77 (dental) Service Facility Location Name. Conditions different than 4010.  Do not send if same as location as 2010AA Billing Provider.
-					/*
-					if() {//js removed this section on 12/14/12 because nobody seems to care about it and we were never sending it anyway.
+					//2310C NM1: 77 (dental) Service Facility Location Name. Conditions different than 4010.  
+					//Not supposed to send if same location as 2010AA Billing Provider, but ClaimConnect wants this segment anyway.
+					if(sendFacilityNameAndAddress) {
 						sw.Write("NM1"+s
 							+"77"+s//NM101 2/3 Entity Identifier Code: 77=Service Location.
 							+"2"+s//NM102 1/1 Entity Type Qualifier: 2=Non-Person Entity.
-							+Sout(billProv.LName,60)+s//NM103 1/60 Name Last or Organization Name:
+							+Sout(facilityProv.LName,60)+s//NM103 1/60 Name Last or Organization Name: Laboratory or Facility Name.
 							+s//NM104 1/35 Name First: Not used.
 							+s//NM105 1/25 Name Middle: Not used.
 							+s//NM106 1/10 Name Prefix: Not used.
 							+s//NM107 1/10 Name Suffix: Not used.
 							+"XX"+s//NM108 1/2 Identification Code Qualifier: XX=NPI.
-							+Sout(billProv.NationalProvID,80));//NM109 2/80 Identification Code: Validated.
+							+Sout(facilityProv.NationalProvID,80));//NM109 2/80 Identification Code: Laboratory or Facility Identifier. Validated.
 						EndSegment(sw);//NM110 through NM112 not used.
 						//2310C N3: (dental) Service Facility Location Address.
-						sw.Write("N3"+s+Sout(billingAddress1,55));//N301 1/55 Address Information:
-						if(billingAddress2!="") {
-							sw.Write(s+Sout(billingAddress2,55));//N302 1/55 Address Information: Only required when there is a secondary address line.
+						sw.Write("N3"+s+Sout(facilityAddress1,55));//N301 1/55 Address Information: Laboratory or Facility Address Line.
+						if(facilityAddress2!="") {
+							sw.Write(s+Sout(facilityAddress2,55));//N302 1/55 Address Information: Laboratory or Facility Address Line 2. Only required when there is a secondary address line.
 						}
 						EndSegment(sw);
 						//2310C N4: (dental) Service Facility Location City, State, Zip Code.
 						sw.Write("N4"+s
-							+Sout(billingCity,30)+s//N401 2/30 City Name:
-							+Sout(billingState,2,2)+s//N402 2/2 State or Provice Code:
-							+Sout(billingZip.Replace("-",""),15));//N403 3/15 Postal Code:
+							+Sout(facilityCity,30)+s//N401 2/30 City Name: Laboratory or Facility City Name.
+							+Sout(facilityState,2,2)+s//N402 2/2 State or Provice Code: Laboratory or Facility State or Province Code.
+							+Sout(facilityZip.Replace("-",""),15));//N403 3/15 Postal Code: Laboratory or Facility Postal Zone or ZIP Code.
 						EndSegment(sw);//N404 through N407 are either not used or only required when outside of the United States.
 						//2310C REF: (dental) Service Facility Location Secondary Identification. Situational. We do not use this.
-					}*/
+					}
 					//2310D NM1: (dental) Assistant Surgeon Name. Situational. We do not support.
 					//2310D PRV: (dental) Assistant Surgeon Specialty Information. We do not support.
 					//2310D REF: (dental) Assistant Surgeon Secondary Identification. We do not support.
@@ -2368,6 +2442,20 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Treating Prov NPI for claim must be a 10 digit number with an optional prefix of 80840");
 			}
+			//facility provider, used for facility name and facility NPI
+			Provider facilityProv=billProv;
+			if(claim.MedType==EnumClaimMedType.Dental) {
+				if(claim.PlaceService!=PlaceOfService.Office) {
+					//Only specific clearinghouses want the facility information.
+					if(IsClaimConnect(clearhouse)) {
+						if(!facilityProv.IsNotPerson) {//In medical, institutional and dental, the facility provider must be a non-person.
+							Comma(strb);
+							strb.Append("Billing/Facility Prov cannot be a person when claim Place of Service is not Office");
+						}
+					}
+				}
+			}
+			//Addresses
 			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
 				Comma(strb);
 				strb.Append("Practice Title");
