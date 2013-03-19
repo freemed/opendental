@@ -99,6 +99,7 @@ namespace OpenDental.UI {
 		private bool HasEditableColumn;
 		///<summary></summary>
 		private const int EDITABLE_ROW_HEIGHT=19;
+		private bool editableAcceptsCR;
 
 		///<summary></summary>
 		public ODGrid() {
@@ -389,6 +390,18 @@ namespace OpenDental.UI {
 				if(!allowSortingByColumn) {
 					sortedByColumnIdx=-1;
 				}
+			}
+		}
+
+		///<summary>Set true to allow control to accept carriage returns.</summary>
+		[Category("Behavior"),Description("Set true to allow editable cells to accept carriage returns.")]
+		[DefaultValue(false)]
+		public bool EditableAcceptsCR {
+			get {
+				return editableAcceptsCR;
+			}
+			set {
+				editableAcceptsCR=value;
 			}
 		}
 
@@ -1674,6 +1687,7 @@ namespace OpenDental.UI {
 			editBox.TextChanged+=new EventHandler(editBox_TextChanged);
 			editBox.LostFocus+=new EventHandler(editBox_LostFocus);
 			editBox.KeyDown+=new KeyEventHandler(editBox_KeyDown);
+			editBox.KeyUp+=new KeyEventHandler(editBox_KeyUp);
 			if(Columns[selectedCell.X].TextAlign==HorizontalAlignment.Right) {
 				editBox.TextAlign=HorizontalAlignment.Right;
 			}
@@ -1698,7 +1712,10 @@ namespace OpenDental.UI {
 					Rows[selectedCell.X].Cells[selectedCell.Y].Text+="\r\n";
 					return;
 			}
-			if(e.KeyCode==Keys.Enter) {
+			if(e.KeyCode==Keys.Enter) {//usually move to the next cell
+				if(editableAcceptsCR) {
+					return;
+				}
 				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
 				editBox=null;
 				//OnCellLeave(selectedCell.X,selectedCell.Y);
@@ -1750,8 +1767,42 @@ namespace OpenDental.UI {
 			}
 		}
 
+		void editBox_KeyUp(object sender,KeyEventArgs e) {
+			//this probably belongs in KeyUp so that we have the text in the box
+			//test editBox.Text.
+			//==Michael - This doesn't work yet. It is supposed to refresh the size of the grid and textbox while you are typing if you need to grow or shrink your editBox vertically.
+			//if(editBox==null) {
+			//  return;
+			//}	
+			//if(editBox.Text==""){
+			//  return;
+			//}
+			//Graphics g=CreateGraphics();
+			//Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			//int cellH=(int)((1.03)*(float)(g.MeasureString(editBox.Text,cellFont,editBox.Width).Height))+4;
+			//if(cellH < EDITABLE_ROW_HEIGHT) {
+			//  cellH=EDITABLE_ROW_HEIGHT;//only used for single line text
+			//}
+			////If cellH doesn't match, then do a redraw:
+			////   This will involve a grid redraw.
+			////   Then, try to reselect cell, get the cursor to the right spot, etc.
+			//if(cellH>editBox.Height) {
+			//  //get caret position
+			//  int caret=editBox.SelectionStart;
+			//  editBox.Dispose();
+			//  editBox=null;
+			//  selectedCell=new Point(selectedCell.X,selectedCell.Y);
+			//  CreateEditBox();
+			//  if(editBox!=null) {
+			//    editBox.SelectionStart=caret;
+			//  }
+			//}
+		}
+
 		void editBox_TextChanged(object sender,EventArgs e) {
-			Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
+			if(editBox!=null) {
+				Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
+			}
 			OnCellTextChanged();
 		}
 
@@ -1941,6 +1992,7 @@ namespace OpenDental.UI {
 			}
 		}
 		#endregion KeyEvents
+
 
 
 
