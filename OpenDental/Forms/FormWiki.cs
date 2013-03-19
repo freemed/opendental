@@ -354,8 +354,8 @@ namespace OpenDental {
 		}*/
 
 		private void Lists_Click() {
-			FormWikiLists FormWL=new FormWikiLists();
-			FormWL.ShowDialog();
+			//FormWikiLists FormWL=new FormWikiLists();
+			//FormWL.ShowDialog();
 		}
 
 		private void Search_Click() {
