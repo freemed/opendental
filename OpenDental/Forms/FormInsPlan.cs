@@ -364,6 +364,7 @@ namespace OpenDental{
 			this.textDentaide = new OpenDental.ValidNumber();
 			this.butPickCarrier = new OpenDental.UI.Button();
 			this.butSearch = new OpenDental.UI.Button();
+			this.butAudit = new OpenDental.UI.Button();
 			this.butPick = new OpenDental.UI.Button();
 			this.textPlanNote = new OpenDental.ODtextBox();
 			this.butOK = new OpenDental.UI.Button();
@@ -382,7 +383,6 @@ namespace OpenDental{
 			this.textDateEffect = new OpenDental.ValidDate();
 			this.textDateTerm = new OpenDental.ValidDate();
 			this.textSubscNote = new OpenDental.ODtextBox();
-			this.butAudit = new OpenDental.UI.Button();
 			this.groupSubscriber.SuspendLayout();
 			this.groupCoPay.SuspendLayout();
 			this.groupRequestBen.SuspendLayout();
@@ -1446,6 +1446,21 @@ namespace OpenDental{
 			this.butSearch.Text = "Search IDs";
 			this.butSearch.Click += new System.EventHandler(this.butSearch_Click);
 			// 
+			// butAudit
+			// 
+			this.butAudit.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAudit.Autosize = true;
+			this.butAudit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAudit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAudit.CornerRadius = 4F;
+			this.butAudit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAudit.Location = new System.Drawing.Point(229, 93);
+			this.butAudit.Name = "butAudit";
+			this.butAudit.Size = new System.Drawing.Size(69, 23);
+			this.butAudit.TabIndex = 153;
+			this.butAudit.Text = "Audit Trail";
+			this.butAudit.Click += new System.EventHandler(this.butAudit_Click);
+			// 
 			// butPick
 			// 
 			this.butPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -1536,7 +1551,6 @@ namespace OpenDental{
 			this.butLabel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butLabel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butLabel.CornerRadius = 4F;
-			this.butLabel.Enabled = false;
 			this.butLabel.Image = global::OpenDental.Properties.Resources.butLabel;
 			this.butLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butLabel.Location = new System.Drawing.Point(201, 673);
@@ -1695,21 +1709,6 @@ namespace OpenDental{
 			this.textSubscNote.TabIndex = 5;
 			this.textSubscNote.Text = "1 - InsPlan subscriber\n2\n3 lines will show here in 46 vert.\n4 lines will show her" +
     "e in 59 vert.\n5 lines in 72 vert\n6 lines in 85 vert\n7 lines in 98";
-			// 
-			// butAudit
-			// 
-			this.butAudit.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAudit.Autosize = true;
-			this.butAudit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAudit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAudit.CornerRadius = 4F;
-			this.butAudit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAudit.Location = new System.Drawing.Point(229, 93);
-			this.butAudit.Name = "butAudit";
-			this.butAudit.Size = new System.Drawing.Size(69, 23);
-			this.butAudit.TabIndex = 153;
-			this.butAudit.Text = "Audit Trail";
-			this.butAudit.Click += new System.EventHandler(this.butAudit_Click);
 			// 
 			// FormInsPlan
 			// 
