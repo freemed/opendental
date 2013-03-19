@@ -138,9 +138,6 @@ namespace OpenDental {
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
 			Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
-			Point cellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(cellSelected);
 		}
 
 		/*No longer necessary because gridMain_CellLeave does this as text is changed.
