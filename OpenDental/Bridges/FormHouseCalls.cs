@@ -300,12 +300,13 @@ namespace OpenDental{
 				//15-DoctorName. Can handle 0 without any problem.
 				sr.Write("\""+Dequote(Providers.GetLName(PIn.Long(table.Rows[i][15].ToString())))+"\",");
 				if(table.Rows[i][16].ToString()=="1"){//16-IsNewPatient
-					sr.WriteLine("\"T\",");//SendEmail
+					sr.Write("\"T\",");//SendEmail
 				}
 				else{
-					sr.WriteLine("\"F\",");
+					sr.Write("\"F\",");
 				}
 				sr.Write("\""+Dequote(PIn.String(table.Rows[i][17].ToString()))+"\"");//17-WirelessPhone
+				sr.WriteLine();//Must be last.
 			}
 			sr.Close();
 			MessageBox.Show("Done");
