@@ -3448,9 +3448,11 @@ namespace OpenDental{
 						if(!Environment.Is64BitOperatingSystem) {
 							ToolBarMain.Buttons["Rx"].Enabled=false;
 						}
+						//eRx already disabled because it is never enabled for eCW Tight or Full
 					}
 					else {
 						ToolBarMain.Buttons["Rx"].Enabled=false;
+						ToolBarMain.Buttons["eRx"].Enabled=false;
 					}
 					ToolBarMain.Buttons["LabCase"].Enabled=false;
 					ToolBarMain.Buttons["Perio"].Enabled = false;
@@ -3486,16 +3488,16 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			ODToolBarButton button;
-			//if(UsingEcwTight()) {
 			if(UsingEcwTightOrFull()) {
 				if(!Environment.Is64BitOperatingSystem) {
 					ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
 				}
+				//don't add eRx
 			}
 			else {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"eRx"),1,"","eRx"));
 			}
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"eRx"),1,"","eRx"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ortho Chart"),-1,"","Ortho"));
@@ -3616,9 +3618,11 @@ namespace OpenDental{
 					if(!Environment.Is64BitOperatingSystem) {
 						ToolBarMain.Buttons["Rx"].Enabled=false;
 					}
+					//eRx already disabled because it is never enabled for eCW Tight or Full
 				}
 				else {
 					ToolBarMain.Buttons["Rx"].Enabled=false;
+					ToolBarMain.Buttons["eRx"].Enabled=false;
 				}
 				ToolBarMain.Buttons["LabCase"].Enabled=false;
 				ToolBarMain.Buttons["Perio"].Enabled = false;
@@ -3653,9 +3657,11 @@ namespace OpenDental{
 					if(!Environment.Is64BitOperatingSystem) {
 						ToolBarMain.Buttons["Rx"].Enabled=true;
 					}
+					//don't enable eRx
 				}
 				else {
 					ToolBarMain.Buttons["Rx"].Enabled=true;
+					ToolBarMain.Buttons["eRx"].Enabled=true;
 				}
 				ToolBarMain.Buttons["LabCase"].Enabled=true;
 				ToolBarMain.Buttons["Perio"].Enabled = true;
