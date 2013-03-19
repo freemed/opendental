@@ -17,12 +17,12 @@ namespace OpenDentBusiness{
 				return new SigElement[0];
 			}
 			string command="SELECT sigelement.* FROM sigelement,sigelementdef WHERE "
-				+"sigelement.SigElementDefNum=sigelementdef.SigElementDefNum AND (";
+				+"sigelement.SigElementDefNum=sigelementdef.SigElementDefNum AND SignalNum IN (";
 			for(int i=0;i<signalList.Count;i++) {
 				if(i>0) {
-					command+=" OR ";
+					command+=",";
 				}
-				command+="SignalNum="+POut.Long(signalList[i].SignalNum);
+				command+=POut.Long(signalList[i].SignalNum);
 			}
 			command+=") ORDER BY sigelementdef.SigElementType";
 			return Crud.SigElementCrud.SelectMany(command).ToArray();
