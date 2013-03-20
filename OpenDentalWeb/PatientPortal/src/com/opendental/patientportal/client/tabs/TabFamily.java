@@ -10,7 +10,10 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.Patient;
+import com.opendental.patientportal.client.MsgBox;
+import com.opendental.patientportal.client.datainterface.Patients;
 
 public class TabFamily extends Composite {
 	private static TabFamilyUiBinder uiBinder = GWT.create(TabFamilyUiBinder.class);
@@ -26,30 +29,65 @@ public class TabFamily extends Composite {
 		patCur=pat;
 		//Initialize the UI binder.
 		uiBinder.createAndBindUi(this);
-		fillFamily();
+		getFamily();
 		fillPatient();
 		initWidget(contentPanel);
 	}
-
-	private void fillFamily() {
+	
+	private void getFamily() {
 		//Get the family members from the database.
-//		ArrayList<Patient> listFamily=Patients.
-		//Compute the ages for the members in the family.
-		int rows=2+1;//+1 is for the column headers.
+		Patients.getFamilyPatientPortal(patCur.PatNum, new getFamily_Callback());
+	}
+	
+	private class getFamily_Callback implements RequestCallbackResult {
+		@SuppressWarnings("unchecked")
+		public void onSuccess(Object obj) {
+			fillFamily((ArrayList<Patient>)obj);
+		}
+		
+		public void onError(String error) {
+			MsgBox.show(error);
+		}
+		
+	}
+
+	/** This gets called whenever the results from the database come back.  This happens very quickly and I think it will be fine that it loads slightly slower than the rest.  */
+	private void fillFamily(ArrayList<Patient> family) {
+		int famCount=family.size();
+		if(famCount==0) {
+			return;
+		}
+		int rows=famCount+1;//+1 is for the column headers.
 		int columns=5;
 		gridFamily.resize(rows, columns);
 		for(int r=0;r<rows+1;r++) {
+			if(r==0) {//If the first row.
+				//Add the column headers.
+				gridFamily.setText(r, 0, "Name");
+				gridFamily.setText(r, 1, "Position");
+				gridFamily.setText(r, 2, "Gender");
+				gridFamily.setText(r, 3, "Status");
+				gridFamily.setText(r, 4, "Age");
+				continue;
+			}
 			for(int c=0;c<columns;c++) {
-				if(r==0) {//If the first row.
-					//Add the column headers as bold.
-					gridFamily.setText(r, 0, "Name");
-					gridFamily.setText(r, 1, "Position");
-					gridFamily.setText(r, 2, "Gender");
-					gridFamily.setText(r, 3, "Status");
-					gridFamily.setText(r, 4, "Age");
-					break;
+				switch(c) {
+					case 0://Name
+						gridFamily.setText(r, c, family.get(r-1).LName+", "+family.get(r-1).FName);
+						break;
+					case 1://Position
+						gridFamily.setText(r, c, family.get(r-1).Position.toString());
+						break;
+					case 2://Gender
+						gridFamily.setText(r, c, family.get(r-1).Gender.toString());
+						break;
+					case 3://Status
+						gridFamily.setText(r, c, family.get(r-1).PatStatus.toString());
+						break;
+					case 4://Age
+						gridFamily.setText(r, c, Integer.toString(family.get(r-1).Age));
+						break;
 				}
-				// TODO Set the Name, Position, Gender, Status, and Age of the family members.
 			}
 		}
 	}

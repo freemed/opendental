@@ -13,19 +13,19 @@ public class Patients {
 	
 	/** Gets all of the patient's family members.
 	 *  @return List of patients.  Empty list if no family members exist. */
-	public static void getFamilyForPat(int patNum,RequestCallbackResult requestCallback) {
+	public static void getFamilyPatientPortal(int patNum,RequestCallbackResult requestCallback) {
 		DtoGetObject dto=null;
 		try {
 			dto=Meth.getObject("Patients.GetFamilyPatientPortal", new String[] { "long"	},"List<OpenDentBusiness.Patient>", patNum);
 		}
 		catch (Exception e) {
-			MsgBox.show("Patients.getFamilyForPat getObject error:\r\n"+e.getMessage());
+			MsgBox.show("Patients.getFamilyPatientPortal getObject error:\r\n"+e.getMessage());
 		}
 		try {
 			RequestHelper.sendRequest(dto.serialize(), requestCallback);
 		}
 		catch (RequestException e) {
-			MsgBox.show("Patients.getFamilyForPat sendRequest error:\r\n"+e.getMessage());
+			MsgBox.show("Patients.getFamilyPatientPortal sendRequest error:\r\n"+e.getMessage());
 		}
 	}
 	

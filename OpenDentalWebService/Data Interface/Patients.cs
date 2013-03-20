@@ -20,6 +20,16 @@ namespace OpenDentalWebService {
 			return table;
 		}
 
+		///<summary>Only used for the patient portal.  Gets all family members of the patient passed in.</summary>
+		public static List<OpenDentBusiness.Patient> GetFamilyPatientPortal(long patNum) {
+			OpenDentBusiness.Family family=OpenDentBusiness.Patients.GetFamily(patNum);
+			List<OpenDentBusiness.Patient> famList=new List<OpenDentBusiness.Patient>();
+			foreach(OpenDentBusiness.Patient pat in family.ListPats) {
+				famList.Add(pat);
+			}
+			return famList;
+		}
+
 
 	}
 }
