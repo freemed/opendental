@@ -14,8 +14,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.user.datepicker.client.DatePicker;
 import com.opendental.odweb.client.datainterface.Appointments;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.ui.ModuleWidget;
+import com.opendental.odweb.client.ui.MsgBox;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 
 public class ContrAppt extends ModuleWidget {
 	//These lines need to be in every class that uses UiBinder.  This is what makes this class point to it's respective ui.xml file. 
@@ -40,6 +41,10 @@ public class ContrAppt extends ModuleWidget {
 		public void onSuccess(Object obj) {
 			String imgStr="data:image/png;base64,"+(String)obj;
 			imageApptSched.setUrl(imgStr);
+		}
+
+		public void onError(String error) {
+			MsgBox.show(error);
 		}
 	}
 

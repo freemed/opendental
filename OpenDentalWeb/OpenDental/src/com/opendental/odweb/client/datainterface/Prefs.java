@@ -2,12 +2,13 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.HashMap;
 
+import com.google.gwt.http.client.RequestException;
 import com.opendental.opendentbusiness.data.DataTable;
 import com.opendental.opendentbusiness.data.PIn;
 import com.opendental.opendentbusiness.remoting.DtoGetTable;
 import com.opendental.opendentbusiness.remoting.Meth;
-import com.opendental.odweb.client.ui.RequestHelper;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
+import com.opendental.opendentbusiness.remoting.RequestHelper;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.Pref;
 import com.opendental.odweb.client.ui.MsgBox;
 
@@ -22,9 +23,14 @@ public class Prefs {
 			dto=Meth.getTable("Prefs.RefreshCache");
 		}
 		catch (Exception e) {
-			MsgBox.show("Error:\r\n"+e.getMessage());
+			MsgBox.show("Prefs.refreshCache getTable Error:\r\n"+e.getMessage());
 		}
-		RequestHelper.sendRequest(dto.serialize(),callback);
+		try {
+			RequestHelper.sendRequest(dto.serialize(),callback);
+		}
+		catch (RequestException e) {
+			MsgBox.show("Prefs.refreshCache sendRequest Error:\r\n"+e.getMessage());
+		}
 	}
 	
 	public static void fillCache(DataTable table) {

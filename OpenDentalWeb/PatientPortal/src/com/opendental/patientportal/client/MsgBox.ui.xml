@@ -1,0 +1,22 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder
+  xmlns:ui="urn:ui:com.google.gwt.uibinder"
+  xmlns:g="urn:import:com.google.gwt.user.client.ui">
+  
+  <g:VerticalPanel ui:field="contentPanel" horizontalAlignment="ALIGN_CENTER">
+    <g:DockPanel ui:field="messagePanel">
+	<!-- Add the message text to the center of the MsgBox. -->
+    <g:Dock direction="CENTER">
+      <g:HTML ui:field="text" />
+    </g:Dock>
+	<!-- Add the OK and Cancel buttons. -->
+    <g:Dock direction="SOUTH" horizontalAlignment="ALIGN_CENTER">
+      <g:HorizontalPanel ui:field="buttonPanel" >
+      	<g:Button ui:field="butOK" text="OK" />
+      	<g:Button ui:field="butClose" text="Close" />
+      </g:HorizontalPanel>
+    </g:Dock>  
+    </g:DockPanel>
+  </g:VerticalPanel>
+  
+</ui:UiBinder>

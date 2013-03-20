@@ -2,11 +2,11 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.Date;
 
+import com.google.gwt.http.client.RequestException;
 import com.opendental.opendentbusiness.remoting.*;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.Patient;
 import com.opendental.odweb.client.ui.MsgBox;
-import com.opendental.odweb.client.ui.RequestHelper;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 
 public class Patients {
 
@@ -18,9 +18,14 @@ public class Patients {
 			dto=Meth.getObject("Patients.GetPat", new String[] { "long"	},"OpenDentBusiness.Patient", patNum);
 		}
 		catch (Exception e) {
-			MsgBox.show("Error:\r\n"+e.getMessage());
+			MsgBox.show("Patients.getPat getObject error:\r\n"+e.getMessage());
 		}
-		RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		try {
+			RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		}
+		catch (RequestException e) {
+			MsgBox.show("Patients.getPat sendRequest error:\r\n"+e.getMessage());
+		}
 	}
 
 	/** Only used for the Select Patient dialog.  Pass in a billing type of 0 for all billing types.
@@ -40,10 +45,16 @@ public class Patients {
 					limit,lname,fname,phone,address,hideInactive,city,
 					state,ssn,patnum,chartnumber,billingtype,guarOnly,
 					showArchived,clinicNum,birthdate,siteNum,subscriberId,email);
-		} catch (Exception e) {
-			MsgBox.show("Error:\r\n"+e.getMessage());
+		} 
+		catch (Exception e) {
+			MsgBox.show("Patients.getPtDataTable getTable error:\r\n"+e.getMessage());
 		}
-		RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		try {
+			RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		}
+		catch (RequestException e) {
+			MsgBox.show("Patients.getPtDataTable sendRequest error:\r\n"+e.getMessage());
+		}
 	}
 	
 	/** Converts a date to an age. If age is over 115, then returns 0. */

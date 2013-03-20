@@ -56,7 +56,7 @@ public class WindowPatientPortal extends Composite {
 					}
 					public void onSuccess() {
 						if(tabFamily==null) {
-							tabFamily=new TabFamily();
+							tabFamily=new TabFamily(patCur);
 						}
 						panelFamily.setWidget(tabFamily);
 					}

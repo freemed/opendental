@@ -1,4 +1,4 @@
-package com.opendental.odweb.client.ui;
+package com.opendental.opendentbusiness.remoting;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
@@ -40,17 +40,13 @@ public class RequestHelper {
 	/** Every call to the database calls this method.  It will pack up the passed in dto request into a RequestBuilder and send it off to the server.
 	 *  If the response from the server is successful, it will call the onSuccess method in the RequestCallbackResult. 
 	 *  @param dtoRequest Pass in any serialized DtoGet request.
-	 *  @param requestCallback The callback that will have it's onSucces() called once the server returns a result. */
-	public static void sendRequest(String dtoRequest,RequestCallbackResult requestCallback) {
+	 *  @param requestCallback The callback that will have it's onSucces() called once the server returns a result. 
+	 * @throws RequestException sendRequest can throw exceptions. */
+	public static void sendRequest(String dtoRequest,RequestCallbackResult requestCallback) throws RequestException {
 		RequestCallback=requestCallback;
 		DeserializeCallback=new Deserialize_Callback();
 		RequestBuilder builder=RemotingClient.getRequestBuilder(dtoRequest);
-		try {//Try catch is required around http request.
-			builder.sendRequest(null, new GetRequest());
-		}
-		catch (RequestException e) {
-			MsgBox.show("Send request error: "+e.getMessage());
-		}
+		builder.sendRequest(null, new GetRequest());
 	}
 	
 	private static class GetRequest implements RequestCallback {		
@@ -61,20 +57,18 @@ public class RequestHelper {
 					Serializing.getDeserializedObject(response.getText(),DeserializeCallback);
 				}
 				catch (Exception e) {
-					hideLoading();
-					MsgBox.show(e.getMessage());//This will be a more specific error.
+					DeserializeCallback.onError(e.getMessage());
 				}
 			}
 			else {
-				hideLoading();
-				MsgBox.show("Error status text: "+response.getStatusText()
+				DeserializeCallback.onError("Error status text: "+response.getStatusText()
       			+"\r\nError status code: "+Integer.toString(response.getStatusCode())
       			+"\r\nError text: "+response.getText());
 			}
 		}
 
 		public void onError(Request request, Throwable exception) {
-			MsgBox.show(exception.getMessage());
+			DeserializeCallback.onError(exception.getMessage());
 		}
 	}
 	
@@ -83,6 +77,11 @@ public class RequestHelper {
 		public void onComplete(Object obj) {
 			hideLoading();
 			RequestCallback.onSuccess(obj);
+		}
+
+		public void onError(String error) {
+			hideLoading();
+			RequestCallback.onError(error);
 		}		
 	}
 	
@@ -91,6 +90,7 @@ public class RequestHelper {
 	 *  onSuccess() will be called with the object that the calling method should return.  Null can be returned. */
 	public interface RequestCallbackResult {
 		void onSuccess(Object obj);
+		void onError(String error);
 	}
 	
 }

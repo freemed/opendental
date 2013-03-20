@@ -33,11 +33,11 @@ import com.opendental.odweb.client.datainterface.*;
 import com.opendental.odweb.client.dbmultitable.Security;
 import com.opendental.odweb.client.logic.PatientL;
 import com.opendental.odweb.client.mainmodules.ContrLogOn.LogOnHandler;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.*;
 import com.opendental.odweb.client.ui.DialogResultCallbackOkCancel;
 import com.opendental.odweb.client.ui.ModuleWidget;
 import com.opendental.odweb.client.ui.MsgBox;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.usercontrols.*;
 import com.opendental.odweb.client.usercontrols.OutlookBar.OutlookBarClickHandler;
 import com.opendental.odweb.client.windows.WindowPatientSelect;
@@ -140,6 +140,10 @@ public class WindowOpenDental extends ResizeComposite {
 			// TODO Set the signalLastRefreshed if we're going to be using it.
 			//Show the log on module.
 			setModule(-1);
+		}
+
+		public void onError(String error) {
+			MsgBox.show(error);
 		}
 	}
 	
@@ -323,6 +327,10 @@ public class WindowOpenDental extends ResizeComposite {
 	private class SelectPatientCallback implements RequestCallbackResult {
 		public void onSuccess(Object obj) {
 			fillPatientButton((Patient)obj);
+		}
+
+		public void onError(String error) {
+			MsgBox.show(error);
 		}
 	}
 	

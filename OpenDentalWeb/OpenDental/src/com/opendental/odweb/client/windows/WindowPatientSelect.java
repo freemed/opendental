@@ -16,12 +16,12 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.opendental.opendentbusiness.data.DataTable;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.datainterface.Patients;
 import com.opendental.odweb.client.datainterface.Prefs;
 import com.opendental.odweb.client.datainterface.Prefs.PrefName;
 import com.opendental.odweb.client.ui.*;
 import com.opendental.odweb.client.ui.ODGrid.ODGridDoubleClickHandler;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
 
 public class WindowPatientSelect extends ODWindow {
 	private DataTable PatientTable=new DataTable();
@@ -98,6 +98,10 @@ public class WindowPatientSelect extends ODWindow {
 	private class FillSearchOptionsCallBack implements RequestCallbackResult {
 		public void onSuccess(Object obj) {
 			
+		}
+
+		public void onError(String error) {
+			MsgBox.show(error);
 		}
 	}
 	
@@ -198,6 +202,10 @@ public class WindowPatientSelect extends ODWindow {
 		public void onSuccess(Object obj) {
 			PatientTable=(DataTable)obj;
 			fillGrid();
+		}
+
+		public void onError(String error) {
+			MsgBox.show(error);
 		}
 	}
 	

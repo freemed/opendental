@@ -2,9 +2,9 @@ package com.opendental.odweb.client.datainterface;
 
 import java.util.Date;
 
+import com.google.gwt.http.client.RequestException;
 import com.opendental.opendentbusiness.remoting.*;
-import com.opendental.odweb.client.ui.RequestHelper;
-import com.opendental.odweb.client.ui.RequestHelper.RequestCallbackResult;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.odweb.client.ui.MsgBox;
 
 public class Appointments {
@@ -17,9 +17,14 @@ public class Appointments {
 			dto=Meth.getString("Appointments.GetScheduleAsImage", new String[] { "DateTime"	}, date);
 		}
 		catch (Exception e) {
-			MsgBox.show("Error:\r\n"+e.getMessage());
+			MsgBox.show("Appointments.getScheduleAsImage getString error:\r\n"+e.getMessage());
 		}
-		RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		try {
+			RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		}
+		catch (RequestException e) {
+			MsgBox.show("Appointments.getScheduleAsImage sendRequest error:\r\n"+e.getMessage());
+		}
 	}
 
 }

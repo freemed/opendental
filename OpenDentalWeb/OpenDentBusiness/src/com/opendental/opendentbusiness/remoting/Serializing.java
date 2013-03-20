@@ -251,6 +251,9 @@ public class Serializing {
 							public void onComplete(Object obj) {
 								arrayList.add(obj);
 							}
+							public void onError(String error) {
+								//Not sure how to have the error message passed on.  Do nothing for now.
+							}
 						});
 					}
 					catch (Exception e) {
@@ -359,6 +362,7 @@ public class Serializing {
 	/** The sole purpose of this interface is to return a result to the Db class after the repeating command has finished.  The Db class should be the only class listening to this callback. */
 	public interface DeserializeCallbackResult {
 		void onComplete(Object obj);
+		void onError(String error);
 	}
 
 }
