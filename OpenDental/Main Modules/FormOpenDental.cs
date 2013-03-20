@@ -3149,15 +3149,16 @@ namespace OpenDental{
 	
 		///<summary>Called every time timerSignals_Tick fires.  Usually about every 5-10 seconds.</summary>
 		public void ProcessSignals(){
+			if(Security.CurUser==null) {
+				//User must be at the log in screen, so no need to process signals.  We will need to look for shutdown signals since the last refreshed time when the user attempts to log in.
+				return;
+			}
 			try {
 				List<Signalod> sigList=Signalods.RefreshTimed(signalLastRefreshed);//this also attaches all elements to their sigs
 				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
 					FillTriageMinutes();
 				}
 				if(sigList.Count==0) {
-					return;
-				}
-				if(Security.CurUser==null) {
 					return;
 				}
 				//look for shutdown signal
