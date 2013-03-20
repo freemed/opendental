@@ -418,28 +418,13 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
-			else if(e.Url.ToString().StartsWith("http://")){//navigating outside of wiki, either by clicking a link or using back button.
-				WikiPageCur=null;//this effectively disables most of the toolbar buttons
-				Text = "Wiki - WWW";
-				historyNavBack--;//We have to decrement historyNavBack to tell whether or not we need to branch our page history or add to page history
-				#region historyMaint
-				//This region is duplicated in LoadWikiPage() for internal wiki pages.  Modifications here will need to be reflected there.
-				int indexInHistory=historyNav.Count-(1+historyNavBack);//historyNavBack number of pages before the last page in history.  This is the index of the page we are loading.
-				if(historyNav.Count==0){//empty history
-					historyNav.Add(e.Url.ToString());
+			else if(e.Url.ToString().StartsWith("http://")) {//navigating outside of wiki by clicking a link
+				try {
+					System.Diagnostics.Process.Start(e.Url.ToString());
 				}
-				else if(historyNavBack<0) {///historyNavBack could be negative here.  This means before the action that caused this load, we were not navigating through history, simply set back to 0 and add to historyNav[] if necessary.
-					historyNavBack=0;
-					if(historyNav[historyNav.Count-1]!=e.Url.ToString()) {
-						historyNav.Add(e.Url.ToString());
-					}
-				}
-				else if(historyNavBack>=0 && historyNav[indexInHistory]!=e.Url.ToString()) {//branching from page in history
-					historyNav.RemoveRange(indexInHistory,historyNavBack+1);//remove "forward" history. branching off in a new direction
-					historyNavBack=0;
-					historyNav.Add(e.Url.ToString());
-				}
-				#endregion
+				catch(Exception ex) { }
+				e.Cancel=true;//Stops the page from loading in FormWiki.
+				return;
 			}
 		}
 
