@@ -34,8 +34,6 @@ namespace OpenDental {
 		///<summary></summary>
 		[Category("Property Changed"),Description("Event raised when user wants to go to a patient or related object.")]
 		public event EventHandler GoToChanged=null;
-		///<summary>Toggle button controls this field.</summary>
-		public bool PopupsAreBlocked;
 		///<summary>All notes for the showing tasks, ordered by date time.</summary>
 		private List<TaskNote> TaskNoteList;
 		private const int _TriageListNum=1697;
@@ -169,7 +167,6 @@ namespace OpenDental {
 			button.ToolTipText=Lan.g(this,"Sounds will still play, but popups will be blocked.");
 			button.Tag="Block";
 			button.Pushed=Security.CurUser.DefaultHidePopups;
-			PopupsAreBlocked=button.Pushed;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Invalidate();
 		}
@@ -748,12 +745,9 @@ namespace OpenDental {
 
 		private void Block_Clicked() {
 			if(ToolBarMain.Buttons["Block"].Pushed) {
-				PopupsAreBlocked=true;
-				//MsgBox.Show(this,"Try not to block popups for too long.  Remember to unblock after a while.");
 				Security.CurUser.DefaultHidePopups=true;
 			}
 			else {
-				PopupsAreBlocked=false;
 				Security.CurUser.DefaultHidePopups=false;
 			}
 			try {

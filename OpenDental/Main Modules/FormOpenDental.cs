@@ -3222,7 +3222,7 @@ namespace OpenDental{
 							}
 						}
 						if(tasksPopup[i].TaskListNum!=Security.CurUser.TaskListInBox//if not my inbox
-							&& userControlTasks1.PopupsAreBlocked)//and popups blocked
+							&& Security.CurUser.DefaultHidePopups)//and popups blocked
 						{
 							continue;//no sound or popup
 							//in other words, popups will always show for my inbox even if popups blocked.
