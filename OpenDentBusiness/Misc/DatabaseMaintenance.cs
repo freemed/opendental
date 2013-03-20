@@ -2000,13 +2000,17 @@ namespace OpenDentBusiness {
 			else {
 				command="SELECT COUNT(*) FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory)";
 				long numberFixed=long.Parse(Db.GetCount(command));
-				command="SELECT LaboratoryNum FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory) GROUP BY LaboratoryNum";
+				command="SELECT * FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory) GROUP BY LaboratoryNum";
 				table=Db.GetTable(command);
+				long labnum;
 				for(int i=0;i<table.Rows.Count;i++) {
 					Laboratory lab=new Laboratory();
 					lab.LaboratoryNum=PIn.Long(table.Rows[i]["LaboratoryNum"].ToString());
 					lab.Description="Laboratory "+table.Rows[i]["LaboratoryNum"].ToString();
-					Crud.LaboratoryCrud.Insert(lab,true);//use crud to define PK.
+					//laboratoryNum is not allowed to be zero
+					labnum=Crud.LaboratoryCrud.Insert(lab);
+					command="UPDATE labcase SET LaboratoryNum="+POut.Long(labnum)+" WHERE LaboratoryNum="+table.Rows[i]["LaboratoryNum"].ToString();
+					Db.NonQ(command);
 				}
 				if(numberFixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Lab cases fixed with invalid laboratories")+": "+numberFixed.ToString()+"\r\n";
