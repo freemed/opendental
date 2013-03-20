@@ -1,9 +1,8 @@
 package com.opendental.opendentbusiness.tabletypes;
 
 import com.google.gwt.xml.client.Document;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.opendental.opendentbusiness.remoting.Serializing;
-
+import com.google.gwt.i18n.client.DateTimeFormat;
 import java.util.Date;
 
 //DO NOT MAKE CHANGES TO THIS FILE.  THEY WILL GET OVERWRITTEN BY THE CRUD.

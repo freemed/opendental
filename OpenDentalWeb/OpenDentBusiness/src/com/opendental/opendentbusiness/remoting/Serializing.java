@@ -358,7 +358,7 @@ public class Serializing {
 		}
 		return null;
 	}
-	
+
 	/** The sole purpose of this interface is to return a result to the Db class after the repeating command has finished.  The Db class should be the only class listening to this callback. */
 	public interface DeserializeCallbackResult {
 		void onComplete(Object obj);
