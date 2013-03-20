@@ -1547,7 +1547,8 @@ namespace OpenDental{
 			textPayPlansBillInAdvanceDays.Text=PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays).ToString();
 			checkStatementSummaryShowInsInfo.Checked=PrefC.GetBool(PrefName.StatementSummaryShowInsInfo);
 			checkIntermingleDefault.Checked=PrefC.GetBool(PrefName.IntermingleFamilyDefault);
-			IsLoading=false;
+			IsLoading=false; 
+			Plugins.HookAddCode(this,"FormModuleSetup.FormModuleSetup_Load_end");
 		}
 
 		private void checkAllowedFeeSchedsAutomate_Click(object sender,EventArgs e) {

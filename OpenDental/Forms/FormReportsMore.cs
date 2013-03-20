@@ -379,6 +379,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormReportsMore_Load(object sender,EventArgs e) {
+			Plugins.HookAddCode(this,"FormReportsMore.FormReportsMore_Load_beginning");
 			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
 			listProdInc.Items.AddRange(new string[] {
 				Lan.g(this,"Today"),
