@@ -52,7 +52,8 @@ namespace OpenDental.Bridges {
 					pibridge.StartInfo.CreateNoWindow=false;
 					pibridge.StartInfo.UseShellExecute=true;
 					pibridge.StartInfo.FileName=path;
-					pibridge.StartInfo.Arguments="cmd=open, id="+id+", first="+fname+", last="+lname;
+					//Double-quotes are removed from id and name to prevent malformed command. ID could have double-quote if chart number.
+					pibridge.StartInfo.Arguments="cmd=open id=\""+id.Replace("\"","")+"\" first=\""+fname.Replace("\"","")+"\" last=\""+lname.Replace("\"","")+"\"";
 					pibridge.Start();
 				}//if patient is loaded
 				else{
