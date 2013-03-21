@@ -366,6 +366,18 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiListEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiListEdit.designer.cs">
+      <DependentUpon>FormWikiListEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormWikiLists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiLists.designer.cs">
+      <DependentUpon>FormWikiLists.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormNewCropBilling.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2715,6 +2727,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiListEdit.resx">
+      <DependentUpon>FormWikiListEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiLists.resx">
+      <DependentUpon>FormWikiLists.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormNewCropBilling.resx">
       <DependentUpon>FormNewCropBilling.cs</DependentUpon>
