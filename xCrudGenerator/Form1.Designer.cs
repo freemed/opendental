@@ -1,4 +1,4 @@
-﻿namespace Crud {
+﻿namespace xCrudGenerator {
 	partial class Form1 {
 		/// <summary>
 		/// Required designer variable.

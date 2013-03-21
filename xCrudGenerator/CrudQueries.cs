@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	public class CrudQueries {
 		private const string rn="\r\n";
 		private const string t4="\t\t\t\t";

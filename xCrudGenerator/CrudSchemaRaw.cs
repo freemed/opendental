@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	///<summary>This is the class that actually generates snippets of raw schema code.</summary>
 	public class CrudSchemaRaw {
 		private const string rn="\r\n";

@@ -8,8 +8,8 @@
     <ProjectGuid>{76227E95-B261-4B6A-A97C-3764E7EDDF97}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Crud</RootNamespace>
-    <AssemblyName>Crud</AssemblyName>
+    <RootNamespace>xCrudGenerator</RootNamespace>
+    <AssemblyName>CrudGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>

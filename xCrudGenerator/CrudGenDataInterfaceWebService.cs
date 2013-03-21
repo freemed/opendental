@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentalWebService;
 
-namespace Crud {
+namespace xCrudGenerator {
 	public class CrudGenDataInterfaceWebService {
 
 		private static string GetSname(string typeClassName){

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	///<summary>See UnitTests.SchemaT.cs.  This class generates the SchemaCrudTest file.</summary>
 	public class CrudSchemaForUnitTest {
 		public static string Create() {

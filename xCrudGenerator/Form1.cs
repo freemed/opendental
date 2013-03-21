@@ -10,7 +10,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	public partial class Form1:Form {
 		private string crudDir;
 		private string crudmDir;

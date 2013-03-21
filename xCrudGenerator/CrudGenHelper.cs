@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	public class CrudGenHelper {
 		///<summary>Will throw exception if no primary key attribute defined.</summary>
 		public static FieldInfo GetPriKey(FieldInfo[] fields,string tableName){

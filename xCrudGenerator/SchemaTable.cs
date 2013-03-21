@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using OpenDentBusiness;
 
-namespace Crud {
+namespace xCrudGenerator {
 	[CrudTable(TableName="tempcore")]
 	class SchemaTable {//do not inherit from TableBase because it's not a real table
 		/// <summary></summary>
