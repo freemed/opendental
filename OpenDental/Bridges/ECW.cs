@@ -15,6 +15,7 @@ namespace OpenDental.Bridges {
 		public static long UserId;
 		public static string JSessionId;
 		public static string JSessionIdSSO;
+		public static string LBSessionId;
 
 		//OD accepts commandline arguments from eCW.  That's handled in FormOpenDental.
 

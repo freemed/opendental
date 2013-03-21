@@ -3699,6 +3699,9 @@ namespace OpenDental{
 							if(!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO)) {
 								InternetSetCookie("http://"+strAppServer,null,"JSESSIONIDSSO = "+Bridges.ECW.JSessionIdSSO);
 							}
+							if(!String.IsNullOrEmpty(Bridges.ECW.LBSessionId)) {
+								InternetSetCookie("http://"+strAppServer,null,"LBSESSIONID = "+Bridges.ECW.LBSessionId);
+							}
 							//navigate
 							webBrowserEcw.Navigate(path); 
 							labelECWerror.Visible=false;

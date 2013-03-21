@@ -4893,6 +4893,7 @@ namespace OpenDental{
 			int userId=0;
 			string jSessionId = "";
 			string jSessionIdSSO = "";
+			string lbSessionId="";
 			for(int i=0;i<args.Length;i++) {
 				if(args[i].StartsWith("PatNum=") && args[i].Length>7) {
 					string patNumStr=args[i].Substring(7).Trim('"');
@@ -4932,6 +4933,9 @@ namespace OpenDental{
 				if(args[i].StartsWith("JSESSIONIDSSO=") && args[i].Length > 14) {
 					jSessionIdSSO = args[i].Substring(14).Trim('"');
 				}
+				if(args[i].StartsWith("LBSESSIOINID=") && args[i].Length>12) {
+					lbSessionId=args[i].Substring(12).Trim('"');
+				}
 			}
 			//eCW bridge values-------------------------------------------------------------
 			Bridges.ECW.AptNum=PIn.Long(aptNum);
@@ -4939,6 +4943,7 @@ namespace OpenDental{
 			Bridges.ECW.UserId=userId;
 			Bridges.ECW.JSessionId=jSessionId;
 			Bridges.ECW.JSessionIdSSO=jSessionIdSSO;
+			Bridges.ECW.LBSessionId=lbSessionId;
 			//Username and password-----------------------------------------------------
 			//users are allowed to use ecw tight integration without command line.  They can manually launch Open Dental.
 			//if((Programs.UsingEcwTight() && Security.CurUser==null)//We always want to trigger login window for eCW tight, even if no username was passed in.
