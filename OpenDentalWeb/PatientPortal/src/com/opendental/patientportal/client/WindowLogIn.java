@@ -10,7 +10,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.Patient;
+import com.opendental.patientportal.client.datainterface.Patients;
 
 public class WindowLogIn extends Composite {
 	private static WindowLogInlUiBinder uiBinder = GWT.create(WindowLogInlUiBinder.class);
@@ -30,14 +32,27 @@ public class WindowLogIn extends Composite {
 
 	@UiHandler("butLogIn")
 	void butLogIn_Click(ClickEvent event) {
+		// TODO Validate the text boxes and show messages if there are errors.
 		// TODO Verify the credentials.  Returns null patient if the credentials are not valid. 
 		// TODO Show a message that lets the user know the credentials are invalid and do nothing.
 		// The method should return a patient object if the credentials are valid that we will pass on.
-		Patient patCur=new Patient();
-		patCur.FName="Jason";
-		patCur.LName="Salmon";
-		//User credentials are correct so load up the Patient Portal widget with the patient that just logged in.
-		logOnHandler.onSuccess(patCur);
+		Patients.getOnePatientPortal(textUserName.getText(), textPassword.getText(), new getOnePatientPortal_Callback());
+	}
+	
+	private class getOnePatientPortal_Callback implements RequestCallbackResult {
+		public void onSuccess(Object obj) {
+			if(obj==null) {
+				// TODO Show login failure message.
+				return;
+			}
+			//User credentials are correct so load up the Patient Portal widget with the patient that just logged in.
+			logOnHandler.onSuccess((Patient)obj);
+		}
+		
+		public void onError(String error) {
+			MsgBox.show(error);
+		}
+		
 	}
 	
 	/** onSuccess will get called and will contain the patient object when a patient enters valid credentials */

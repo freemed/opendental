@@ -11,6 +11,10 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		public static string Serialize(OpenDentBusiness.Pref pref) {
 			StringBuilder sb=new StringBuilder();
+			if(pref==null) {
+				sb.Append("<null />");
+				return sb.ToString();
+			}
 			sb.Append("<Pref>");
 			sb.Append("<PrefNum>").Append(pref.PrefNum).Append("</PrefNum>");
 			sb.Append("<PrefName>").Append(SerializeStringEscapes.EscapeForXml(pref.PrefName)).Append("</PrefName>");

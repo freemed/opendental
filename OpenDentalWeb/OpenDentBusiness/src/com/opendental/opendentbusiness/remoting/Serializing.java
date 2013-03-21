@@ -150,6 +150,11 @@ public class Serializing {
 			deserializeCallback.onComplete(null);
 			return;
 		}
+		//Method calls will simply return a null node if the result was null:  <null />
+		if(type.equals("null")) {
+			deserializeCallback.onComplete(null);
+			return;
+		}
 		if(type.equals("DtoException")) {//Check for exceptions first.
 			//Read the "msg" node and throw an exception with that error message.
 			throw new Exception(doc.getElementsByTagName("msg").item(0).getFirstChild().getNodeValue());

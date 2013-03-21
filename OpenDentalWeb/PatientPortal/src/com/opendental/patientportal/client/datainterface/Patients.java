@@ -11,6 +11,24 @@ import com.opendental.patientportal.client.MsgBox;
 
 public class Patients {
 	
+	/** Gets one patient from the database.  This is called when the patient is trying to log in. 
+	 *  @return Patient object.  Null if no matching patient found. */
+	public static void getOnePatientPortal(String userName,String password,RequestCallbackResult requestCallback) {
+		DtoGetObject dto=null;
+		try {
+			dto=Meth.getObject("Patients.GetOnePatientPortal", new String[] { "string","string"	},"OpenDentBusiness.Patient", userName,password);
+		}
+		catch (Exception e) {
+			MsgBox.show("Patients.getOnePatientPortal getObject error:\r\n"+e.getMessage());
+		}
+		try {
+			RequestHelper.sendRequest(dto.serialize(), requestCallback);
+		}
+		catch (RequestException e) {
+			MsgBox.show("Patients.getOnePatientPortal sendRequest error:\r\n"+e.getMessage());
+		}
+	}
+	
 	/** Gets all of the patient's family members.
 	 *  @return List of patients.  Empty list if no family members exist. */
 	public static void getFamilyPatientPortal(int patNum,RequestCallbackResult requestCallback) {

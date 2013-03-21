@@ -406,6 +406,11 @@ namespace xCrudGeneratorWebService {
 						+t3+"deserializeCallback.onComplete(null);"+rn
 						+t3+"return;"+rn
 					+t2+"}"+rn
+					+t2+"//Method calls will simply return a null node if the result was null:  <null />"+rn
+					+t2+"if(type.equals(\"null\")) {"+rn
+						+t3+"deserializeCallback.onComplete(null);"+rn
+						+t3+"return;"+rn
+					+t2+"}"+rn
 					+t2+"if(type.equals(\"DtoException\")) {//Check for exceptions first."+rn
 						+t3+"//Read the \"msg\" node and throw an exception with that error message."+rn
 						+t3+"throw new Exception(doc.getElementsByTagName(\"msg\").item(0).getFirstChild().getNodeValue());"+rn
@@ -631,6 +636,10 @@ namespace xCrudGeneratorWebService {
 			strb.Append(rn+t2+"///<summary></summary>"+rn
 				+t2+"public static string Serialize(OpenDentBusiness."+className+" "+className.ToLower()+") {"+rn
 				+t3+"StringBuilder sb=new StringBuilder();"+rn
+				+t3+"if("+className.ToLower()+"==null) {"+rn
+				+t4+"sb.Append(\"<null />\");"+rn
+				+t4+"return sb.ToString();"+rn
+				+t3+"}"+rn
 				+t3+"sb.Append(\"<"+className+">\");"+rn);
 			GetSerialize(strb,className,fields);
 			strb.Append(t3+"sb.Append(\"</"+className+">\");"+rn

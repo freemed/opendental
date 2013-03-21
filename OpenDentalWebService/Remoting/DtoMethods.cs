@@ -144,6 +144,9 @@ namespace OpenDentalWebService {
 			if(methodName=="GetPtDataTable") {
 				return Patients.GetPtDataTable(Convert.ToBoolean(parameters[0]),Convert.ToString(parameters[1]),Convert.ToString(parameters[2]),Convert.ToString(parameters[3]),Convert.ToString(parameters[4]),Convert.ToBoolean(parameters[5]),Convert.ToString(parameters[6]),Convert.ToString(parameters[7]),Convert.ToString(parameters[8]),Convert.ToString(parameters[9]),Convert.ToString(parameters[10]),Convert.ToInt64(parameters[11]),Convert.ToBoolean(parameters[12]),Convert.ToBoolean(parameters[13]),Convert.ToInt64(parameters[14]),(System.DateTime)parameters[15],Convert.ToInt64(parameters[16]),Convert.ToString(parameters[17]),Convert.ToString(parameters[18]));
 			}
+			if(methodName=="GetOnePatientPortal") {
+				return Patients.GetOnePatientPortal(Convert.ToString(parameters[0]),Convert.ToString(parameters[1]));
+			}
 			if(methodName=="GetFamilyPatientPortal") {
 				return Patients.GetFamilyPatientPortal(Convert.ToInt64(parameters[0]));
 			}
