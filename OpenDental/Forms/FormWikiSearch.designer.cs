@@ -99,6 +99,7 @@ namespace OpenDental{
 			this.webBrowserWiki.Size = new System.Drawing.Size(825, 612);
 			this.webBrowserWiki.TabIndex = 11;
 			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
+			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
 			// 
 			// butOK
 			// 

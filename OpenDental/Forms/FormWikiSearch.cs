@@ -31,10 +31,10 @@ namespace OpenDental {
 		private void LoadWikiPage(string WikiPageTitleCur) {
 			webBrowserWiki.AllowNavigation=true;
 			if(checkDeletedOnly.Checked) {
-				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent,false);
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPageHists.GetDeletedByTitle(WikiPageTitleCur).PageContent,true);
 			}
 			else {
-				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent,false);
+				webBrowserWiki.DocumentText=WikiPages.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent,true);
 			}
 		}
 
@@ -63,7 +63,6 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			webBrowserWiki.AllowNavigation=true;
 			LoadWikiPage(listWikiPageTitles[e.Row]);
 			gridMain.Focus();
 		}

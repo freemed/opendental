@@ -241,7 +241,7 @@ namespace OpenDentBusiness{
 			return wikiPath;
 		}
 
-		///<summary>Surround with try/catch.  Also aggregates the content into the master page.  If isPreviewOnly, then the internal links will not be checked to see if the page exists, as it would make the refresh sluggish.</summary>
+		///<summary>Surround with try/catch.  Also aggregates the content into the master page.  If isPreviewOnly, then the internal links will not be checked to see if the page exists, as it would make the refresh sluggish.  And isPreviewOnly also changes the pointer so that the page looks non-clickable.</summary>
 		public static string TranslateToXhtml(string wikiContent,bool isPreviewOnly) {
 			//No need to check RemotingRole; no call to db.
 			#region Basic Xml Validation
@@ -512,6 +512,12 @@ namespace OpenDentBusiness{
 			//aggregate with master
 			s=MasterPage.PageContent.Replace("@@@body@@@",strbOut.ToString());
 			#endregion aggregation
+			if(isPreviewOnly) {
+				//do not change cursor from pointer to IBeam to Hand as you move the cursor around the preview page
+				s=s.Replace("*{\r\n\t","*{\r\n\tcursor:default;\r\n\t");
+				//do not underline links if you hover over them in the preview window
+				s=s.Replace("a:hover{\r\n\ttext-decoration:underline;","a:hover{\r\n\t");
+			}
 			return s;
 		}
 
