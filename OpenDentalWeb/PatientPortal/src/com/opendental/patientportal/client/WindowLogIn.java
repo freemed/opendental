@@ -2,11 +2,13 @@ package com.opendental.patientportal.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
@@ -20,8 +22,11 @@ public class WindowLogIn extends Composite {
 	}
 	
 	@UiField TextBox textUserName;
+	@UiField Label labelUserName;
 	@UiField PasswordTextBox textPassword;
+	@UiField Label labelPassword;
 	@UiField Button butLogIn;
+	@UiField Label labelLogIn;
 	private LogInHandler logOnHandler;
 	
 	public WindowLogIn(LogInHandler handler) {
@@ -29,20 +34,39 @@ public class WindowLogIn extends Composite {
 		//Initialize the UI binder.
 		initWidget(uiBinder.createAndBindUi(this));
 	}
+	
+	@UiHandler("textUserName")
+	void textUserName_ValueChanged(ValueChangeEvent<String> event) {
+		//Hide the warning labels.
+		labelLogIn.setVisible(false);
+		labelUserName.setVisible(false);
+	}
+	
+	@UiHandler("textPassword")
+	void textPassword_ValueChanged(ValueChangeEvent<String> event) {
+		//Hide the warning labels.
+		labelLogIn.setVisible(false);
+		labelPassword.setVisible(false);
+	}
 
 	@UiHandler("butLogIn")
 	void butLogIn_Click(ClickEvent event) {
-		// TODO Validate the text boxes and show messages if there are errors.
-		// TODO Verify the credentials.  Returns null patient if the credentials are not valid. 
-		// TODO Show a message that lets the user know the credentials are invalid and do nothing.
-		// The method should return a patient object if the credentials are valid that we will pass on.
+		if(textUserName.getText().equals("")) {
+			labelUserName.setVisible(true);
+			return;
+		}
+		if(textPassword.getText().equals("")) {
+			labelPassword.setVisible(true);
+			return;
+		}
 		Patients.getOnePatientPortal(textUserName.getText(), textPassword.getText(), new getOnePatientPortal_Callback());
 	}
 	
+	/** A patient object will be returned if the log in was successful.  Null if patient credentials were invalid. */
 	private class getOnePatientPortal_Callback implements RequestCallbackResult {
 		public void onSuccess(Object obj) {
 			if(obj==null) {
-				// TODO Show login failure message.
+				labelLogIn.setVisible(true);
 				return;
 			}
 			//User credentials are correct so load up the Patient Portal widget with the patient that just logged in.

@@ -86,7 +86,6 @@ public class TabMedical extends Composite {
 		for(int i=0;i<rows;i++) {
 			if(i==0) {
 				labelProblems.setVisible(false);
-				// TODO Look at the patient portal code to see what information is currently displayed.
 				gridProblems.setText(0, 0, "ICD");
 				continue;
 			}

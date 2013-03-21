@@ -9,9 +9,16 @@
   		<g:DecoratorPanel>
   			<g:VerticalPanel>
   				<g:Label>User name</g:Label>
-  				<g:TextBox ui:field="textUserName" />
+  				<g:HorizontalPanel>
+  					<g:TextBox ui:field="textUserName" />
+  					<g:Label ui:field="labelUserName" visible="false">The User name field is required.</g:Label>
+  				</g:HorizontalPanel>
   				<g:Label>Password</g:Label>
-  				<g:PasswordTextBox ui:field="textPassword" />
+  				<g:HorizontalPanel>
+  					<g:PasswordTextBox ui:field="textPassword" />
+  					<g:Label ui:field="labelPassword" visible="false">The Password field is required.</g:Label>
+  				</g:HorizontalPanel>
+  				<g:Label ui:field="labelLogIn" visible="false">Login failed, please try again.</g:Label>
   				<g:Button ui:field="butLogIn">Log In</g:Button>
   			</g:VerticalPanel>
   		</g:DecoratorPanel>

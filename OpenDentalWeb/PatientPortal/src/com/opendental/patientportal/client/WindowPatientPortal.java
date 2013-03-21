@@ -42,17 +42,18 @@ public class WindowPatientPortal extends Composite {
 		//Initialize the UI binder.
 		initWidget(uiBinder.createAndBindUi(this));
 		labelPatName.setText(patCur.LName+", "+patCur.FName);
-		//Start with the Medical tab selected.
+		//Start with the Medical tab showing.
 		tabMain.selectTab(2);
 	}
 	
 	@UiHandler("tabMain")
 	void tabMain_SelectionChange(SelectionEvent<Integer> event) {
+		//Each tab is surrounded with an AsyncCallback which will download the javascript code when needed.  This saves on loading times and calls to the database.
 		switch(event.getSelectedItem()) { 
-			case 0:
+			case 0://Family tab
 				GWT.runAsync(new RunAsyncCallback() {
 					public void onFailure(Throwable reason) {
-						// TODO Show the reason for the failure?
+						MsgBox.show("Failed to download the family tab:\r\n"+reason.getMessage());
 					}
 					public void onSuccess() {
 						if(tabFamily==null) {
@@ -62,10 +63,10 @@ public class WindowPatientPortal extends Composite {
 					}
 				});
 				break;
-			case 1:
+			case 1://Account tab
 				GWT.runAsync(new RunAsyncCallback() {
 					public void onFailure(Throwable reason) {
-						// TODO Show the reason for the failure?
+						MsgBox.show("Failed to download the account tab:\r\n"+reason.getMessage());
 					}
 					public void onSuccess() {
 						if(tabAccount==null) {
@@ -75,10 +76,10 @@ public class WindowPatientPortal extends Composite {
 					}
 				});
 				break;
-			case 2:
+			case 2://Medical tab
 				GWT.runAsync(new RunAsyncCallback() {
 					public void onFailure(Throwable reason) {
-						// TODO Show the reason for the failure?
+						MsgBox.show("Failed to download the medical tab:\r\n"+reason.getMessage());
 					}
 					public void onSuccess() {
 						if(tabMedical==null) {

@@ -32,12 +32,14 @@ public class WindowContent extends ResizeComposite {
 	}
 	
 	private class PatientLoggedIn implements LogInHandler {
+		/** Called when a patient has successfully logged into the patient portal.  The patient portal widget will be loaded into the contentPanel. */
 		public void onSuccess(Patient patCur) {
 			setContent(new WindowPatientPortal(patCur,new PatientLoggedOff()));
 		}
 	}
 	
 	private class PatientLoggedOff implements LogOffHandler {
+		/** Called when the user logs off.  The log in widget will be loaded into the contentPanel. */
 		public void logOff() {
 			setContent(new WindowLogIn(new PatientLoggedIn()));
 		}
