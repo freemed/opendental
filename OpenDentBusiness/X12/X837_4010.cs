@@ -1686,12 +1686,7 @@ namespace OpenDentBusiness
 				}
 				strb.Append("Treating Prov FName");
 			}
-			if(treatProv.SSN.Length<2) {
-				if(strb.Length!=0) {
-					strb.Append(",");
-				}
-				strb.Append("Treating Prov SSN");
-			}
+			//Treating prov SSN/TIN is not sent on paper or eclaims. Do not verify or block.
 			if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				if(strb.Length!=0) {
 					strb.Append(",");
@@ -1967,12 +1962,7 @@ namespace OpenDentBusiness
 						}
 						strb.Append("Treating Prov FName");
 					}
-					if(treatProv.SSN.Length<2) {
-						if(strb.Length!=0) {
-							strb.Append(",");
-						}
-						strb.Append("Treating Prov SSN");
-					}
+					//Treating prov SSN/TIN is not sent on paper or eclaims. Do not verify or block.
 					if(treatProv.NationalProvID.Length<2) {
 						if(strb.Length!=0) {
 							strb.Append(",");

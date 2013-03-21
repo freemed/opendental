@@ -2434,10 +2434,7 @@ namespace OpenDentBusiness
 				Comma(strb);
 				strb.Append("Treating Prov Taxonomy Code must be 10 characters");
 			}
-			if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) { //and >=2
-				Comma(strb);
-				strb.Append("Treating Prov SSN/TIN for claim must be a 9 digit number");
-			}
+			//Treating prov SSN/TIN is not sent on paper or eclaims. Do not verify or block.
 			if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				Comma(strb);
 				strb.Append("Treating Prov NPI for claim must be a 10 digit number with an optional prefix of 80840");
@@ -2805,10 +2802,7 @@ namespace OpenDentBusiness
 							strb.Append("Treating Prov Taxonomy Code for proc "+procCode.ProcCode+" must be 10 characters");
 						}
 					}
-					if(!Regex.IsMatch(treatProv.SSN,"^[0-9]{9}$")) {//and >=2
-						Comma(strb);
-						strb.Append("Treat Prov SSN/TIN for proc "+procCode.ProcCode+" must be a 9 digit number");
-					}
+					//Treating prov SSN/TIN is not sent on paper or eclaims. Do not verify or block.
 					if(!Regex.IsMatch(treatProv.NationalProvID,"^(80840)?[0-9]{10}$")) {
 						Comma(strb);
 						strb.Append("Treat Prov NPI for proc "+procCode.ProcCode+" must be a 10 digit number with an optional prefix of 80840");
