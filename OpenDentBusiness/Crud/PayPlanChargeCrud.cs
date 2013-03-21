@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PayPlanChargeCrud {
+	public class PayPlanChargeCrud {
 		///<summary>Gets one PayPlanCharge object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PayPlanCharge SelectOne(long payPlanChargeNum){
+		public static PayPlanCharge SelectOne(long payPlanChargeNum){
 			string command="SELECT * FROM payplancharge "
 				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum);
 			List<PayPlanCharge> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PayPlanCharge object from the database using a query.</summary>
-		internal static PayPlanCharge SelectOne(string command){
+		public static PayPlanCharge SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PayPlanCharge objects from the database using a query.</summary>
-		internal static List<PayPlanCharge> SelectMany(string command){
+		public static List<PayPlanCharge> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PayPlanCharge> TableToList(DataTable table){
+		public static List<PayPlanCharge> TableToList(DataTable table){
 			List<PayPlanCharge> retVal=new List<PayPlanCharge>();
 			PayPlanCharge payPlanCharge;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPlanCharge into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PayPlanCharge payPlanCharge){
+		public static long Insert(PayPlanCharge payPlanCharge){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				payPlanCharge.PayPlanChargeNum=DbHelper.GetNextOracleKey("payplancharge","PayPlanChargeNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPlanCharge into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PayPlanCharge payPlanCharge,bool useExistingPK){
+		public static long Insert(PayPlanCharge payPlanCharge,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				payPlanCharge.PayPlanChargeNum=ReplicationServers.GetKey("payplancharge","PayPlanChargeNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPlanCharge in the database.</summary>
-		internal static void Update(PayPlanCharge payPlanCharge){
+		public static void Update(PayPlanCharge payPlanCharge){
 			string command="UPDATE payplancharge SET "
 				+"PayPlanNum      =  "+POut.Long  (payPlanCharge.PayPlanNum)+", "
 				+"Guarantor       =  "+POut.Long  (payPlanCharge.Guarantor)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPlanCharge in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PayPlanCharge payPlanCharge,PayPlanCharge oldPayPlanCharge){
+		public static void Update(PayPlanCharge payPlanCharge,PayPlanCharge oldPayPlanCharge){
 			string command="";
 			if(payPlanCharge.PayPlanNum != oldPayPlanCharge.PayPlanNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PayPlanCharge from the database.</summary>
-		internal static void Delete(long payPlanChargeNum){
+		public static void Delete(long payPlanChargeNum){
 			string command="DELETE FROM payplancharge "
 				+"WHERE PayPlanChargeNum = "+POut.Long(payPlanChargeNum);
 			Db.NonQ(command);

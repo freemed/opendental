@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DisplayFieldCrud {
+	public class DisplayFieldCrud {
 		///<summary>Gets one DisplayField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DisplayField SelectOne(long displayFieldNum){
+		public static DisplayField SelectOne(long displayFieldNum){
 			string command="SELECT * FROM displayfield "
 				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum);
 			List<DisplayField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DisplayField object from the database using a query.</summary>
-		internal static DisplayField SelectOne(string command){
+		public static DisplayField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DisplayField objects from the database using a query.</summary>
-		internal static List<DisplayField> SelectMany(string command){
+		public static List<DisplayField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DisplayField> TableToList(DataTable table){
+		public static List<DisplayField> TableToList(DataTable table){
 			List<DisplayField> retVal=new List<DisplayField>();
 			DisplayField displayField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DisplayField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DisplayField displayField){
+		public static long Insert(DisplayField displayField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				displayField.DisplayFieldNum=DbHelper.GetNextOracleKey("displayfield","DisplayFieldNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DisplayField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DisplayField displayField,bool useExistingPK){
+		public static long Insert(DisplayField displayField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				displayField.DisplayFieldNum=ReplicationServers.GetKey("displayfield","DisplayFieldNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DisplayField in the database.</summary>
-		internal static void Update(DisplayField displayField){
+		public static void Update(DisplayField displayField){
 			string command="UPDATE displayfield SET "
 				+"InternalName   = '"+POut.String(displayField.InternalName)+"', "
 				+"ItemOrder      =  "+POut.Int   (displayField.ItemOrder)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DisplayField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DisplayField displayField,DisplayField oldDisplayField){
+		public static void Update(DisplayField displayField,DisplayField oldDisplayField){
 			string command="";
 			if(displayField.InternalName != oldDisplayField.InternalName) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DisplayField from the database.</summary>
-		internal static void Delete(long displayFieldNum){
+		public static void Delete(long displayFieldNum){
 			string command="DELETE FROM displayfield "
 				+"WHERE DisplayFieldNum = "+POut.Long(displayFieldNum);
 			Db.NonQ(command);

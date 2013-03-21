@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CustReferenceCrud {
+	public class CustReferenceCrud {
 		///<summary>Gets one CustReference object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CustReference SelectOne(long custReferenceNum){
+		public static CustReference SelectOne(long custReferenceNum){
 			string command="SELECT * FROM custreference "
 				+"WHERE CustReferenceNum = "+POut.Long(custReferenceNum);
 			List<CustReference> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CustReference object from the database using a query.</summary>
-		internal static CustReference SelectOne(string command){
+		public static CustReference SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CustReference objects from the database using a query.</summary>
-		internal static List<CustReference> SelectMany(string command){
+		public static List<CustReference> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CustReference> TableToList(DataTable table){
+		public static List<CustReference> TableToList(DataTable table){
 			List<CustReference> retVal=new List<CustReference>();
 			CustReference custReference;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CustReference into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CustReference custReference){
+		public static long Insert(CustReference custReference){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				custReference.CustReferenceNum=DbHelper.GetNextOracleKey("custreference","CustReferenceNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CustReference into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CustReference custReference,bool useExistingPK){
+		public static long Insert(CustReference custReference,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				custReference.CustReferenceNum=ReplicationServers.GetKey("custreference","CustReferenceNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CustReference in the database.</summary>
-		internal static void Update(CustReference custReference){
+		public static void Update(CustReference custReference){
 			string command="UPDATE custreference SET "
 				+"PatNum          =  "+POut.Long  (custReference.PatNum)+", "
 				+"DateMostRecent  =  "+POut.Date  (custReference.DateMostRecent)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CustReference in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CustReference custReference,CustReference oldCustReference){
+		public static void Update(CustReference custReference,CustReference oldCustReference){
 			string command="";
 			if(custReference.PatNum != oldCustReference.PatNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CustReference from the database.</summary>
-		internal static void Delete(long custReferenceNum){
+		public static void Delete(long custReferenceNum){
 			string command="DELETE FROM custreference "
 				+"WHERE CustReferenceNum = "+POut.Long(custReferenceNum);
 			Db.NonQ(command);

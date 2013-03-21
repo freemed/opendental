@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CentralConnectionCrud {
+	public class CentralConnectionCrud {
 		///<summary>Gets one CentralConnection object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CentralConnection SelectOne(long centralConnectionNum){
+		public static CentralConnection SelectOne(long centralConnectionNum){
 			string command="SELECT * FROM centralconnection "
 				+"WHERE CentralConnectionNum = "+POut.Long(centralConnectionNum);
 			List<CentralConnection> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CentralConnection object from the database using a query.</summary>
-		internal static CentralConnection SelectOne(string command){
+		public static CentralConnection SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CentralConnection objects from the database using a query.</summary>
-		internal static List<CentralConnection> SelectMany(string command){
+		public static List<CentralConnection> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CentralConnection> TableToList(DataTable table){
+		public static List<CentralConnection> TableToList(DataTable table){
 			List<CentralConnection> retVal=new List<CentralConnection>();
 			CentralConnection centralConnection;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CentralConnection into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CentralConnection centralConnection){
+		public static long Insert(CentralConnection centralConnection){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				centralConnection.CentralConnectionNum=DbHelper.GetNextOracleKey("centralconnection","CentralConnectionNum");
 				int loopcount=0;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CentralConnection into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CentralConnection centralConnection,bool useExistingPK){
+		public static long Insert(CentralConnection centralConnection,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				centralConnection.CentralConnectionNum=ReplicationServers.GetKey("centralconnection","CentralConnectionNum");
 			}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CentralConnection in the database.</summary>
-		internal static void Update(CentralConnection centralConnection){
+		public static void Update(CentralConnection centralConnection){
 			string command="UPDATE centralconnection SET "
 				+"ServerName          = '"+POut.String(centralConnection.ServerName)+"', "
 				+"DatabaseName        = '"+POut.String(centralConnection.DatabaseName)+"', "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CentralConnection in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CentralConnection centralConnection,CentralConnection oldCentralConnection){
+		public static void Update(CentralConnection centralConnection,CentralConnection oldCentralConnection){
 			string command="";
 			if(centralConnection.ServerName != oldCentralConnection.ServerName) {
 				if(command!=""){ command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CentralConnection from the database.</summary>
-		internal static void Delete(long centralConnectionNum){
+		public static void Delete(long centralConnectionNum){
 			string command="DELETE FROM centralconnection "
 				+"WHERE CentralConnectionNum = "+POut.Long(centralConnectionNum);
 			Db.NonQ(command);

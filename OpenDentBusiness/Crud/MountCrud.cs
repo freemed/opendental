@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class MountCrud {
+	public class MountCrud {
 		///<summary>Gets one Mount object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Mount SelectOne(long mountNum){
+		public static Mount SelectOne(long mountNum){
 			string command="SELECT * FROM mount "
 				+"WHERE MountNum = "+POut.Long(mountNum);
 			List<Mount> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Mount object from the database using a query.</summary>
-		internal static Mount SelectOne(string command){
+		public static Mount SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Mount objects from the database using a query.</summary>
-		internal static List<Mount> SelectMany(string command){
+		public static List<Mount> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Mount> TableToList(DataTable table){
+		public static List<Mount> TableToList(DataTable table){
 			List<Mount> retVal=new List<Mount>();
 			Mount mount;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Mount into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Mount mount){
+		public static long Insert(Mount mount){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				mount.MountNum=DbHelper.GetNextOracleKey("mount","MountNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Mount into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Mount mount,bool useExistingPK){
+		public static long Insert(Mount mount,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				mount.MountNum=ReplicationServers.GetKey("mount","MountNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Mount in the database.</summary>
-		internal static void Update(Mount mount){
+		public static void Update(Mount mount){
 			string command="UPDATE mount SET "
 				+"PatNum     =  "+POut.Long  (mount.PatNum)+", "
 				+"DocCategory=  "+POut.Long  (mount.DocCategory)+", "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Mount in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Mount mount,Mount oldMount){
+		public static void Update(Mount mount,Mount oldMount){
 			string command="";
 			if(mount.PatNum != oldMount.PatNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Mount from the database.</summary>
-		internal static void Delete(long mountNum){
+		public static void Delete(long mountNum){
 			string command="DELETE FROM mount "
 				+"WHERE MountNum = "+POut.Long(mountNum);
 			Db.NonQ(command);

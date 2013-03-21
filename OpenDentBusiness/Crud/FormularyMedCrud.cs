@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class FormularyMedCrud {
+	public class FormularyMedCrud {
 		///<summary>Gets one FormularyMed object from the database using the primary key.  Returns null if not found.</summary>
-		internal static FormularyMed SelectOne(long formularyMedNum){
+		public static FormularyMed SelectOne(long formularyMedNum){
 			string command="SELECT * FROM formularymed "
 				+"WHERE FormularyMedNum = "+POut.Long(formularyMedNum);
 			List<FormularyMed> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one FormularyMed object from the database using a query.</summary>
-		internal static FormularyMed SelectOne(string command){
+		public static FormularyMed SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of FormularyMed objects from the database using a query.</summary>
-		internal static List<FormularyMed> SelectMany(string command){
+		public static List<FormularyMed> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<FormularyMed> TableToList(DataTable table){
+		public static List<FormularyMed> TableToList(DataTable table){
 			List<FormularyMed> retVal=new List<FormularyMed>();
 			FormularyMed formularyMed;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one FormularyMed into the database.  Returns the new priKey.</summary>
-		internal static long Insert(FormularyMed formularyMed){
+		public static long Insert(FormularyMed formularyMed){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				formularyMed.FormularyMedNum=DbHelper.GetNextOracleKey("formularymed","FormularyMedNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one FormularyMed into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(FormularyMed formularyMed,bool useExistingPK){
+		public static long Insert(FormularyMed formularyMed,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				formularyMed.FormularyMedNum=ReplicationServers.GetKey("formularymed","FormularyMedNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one FormularyMed in the database.</summary>
-		internal static void Update(FormularyMed formularyMed){
+		public static void Update(FormularyMed formularyMed){
 			string command="UPDATE formularymed SET "
 				+"FormularyNum   =  "+POut.Long  (formularyMed.FormularyNum)+", "
 				+"MedicationNum  =  "+POut.Long  (formularyMed.MedicationNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one FormularyMed in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(FormularyMed formularyMed,FormularyMed oldFormularyMed){
+		public static void Update(FormularyMed formularyMed,FormularyMed oldFormularyMed){
 			string command="";
 			if(formularyMed.FormularyNum != oldFormularyMed.FormularyNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one FormularyMed from the database.</summary>
-		internal static void Delete(long formularyMedNum){
+		public static void Delete(long formularyMedNum){
 			string command="DELETE FROM formularymed "
 				+"WHERE FormularyMedNum = "+POut.Long(formularyMedNum);
 			Db.NonQ(command);

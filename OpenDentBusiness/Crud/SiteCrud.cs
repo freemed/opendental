@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SiteCrud {
+	public class SiteCrud {
 		///<summary>Gets one Site object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Site SelectOne(long siteNum){
+		public static Site SelectOne(long siteNum){
 			string command="SELECT * FROM site "
 				+"WHERE SiteNum = "+POut.Long(siteNum);
 			List<Site> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Site object from the database using a query.</summary>
-		internal static Site SelectOne(string command){
+		public static Site SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Site objects from the database using a query.</summary>
-		internal static List<Site> SelectMany(string command){
+		public static List<Site> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Site> TableToList(DataTable table){
+		public static List<Site> TableToList(DataTable table){
 			List<Site> retVal=new List<Site>();
 			Site site;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Site into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Site site){
+		public static long Insert(Site site){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				site.SiteNum=DbHelper.GetNextOracleKey("site","SiteNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Site into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Site site,bool useExistingPK){
+		public static long Insert(Site site,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				site.SiteNum=ReplicationServers.GetKey("site","SiteNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Site in the database.</summary>
-		internal static void Update(Site site){
+		public static void Update(Site site){
 			string command="UPDATE site SET "
 				+"Description= '"+POut.String(site.Description)+"', "
 				+"Note       = '"+POut.String(site.Note)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Site in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Site site,Site oldSite){
+		public static void Update(Site site,Site oldSite){
 			string command="";
 			if(site.Description != oldSite.Description) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Site from the database.</summary>
-		internal static void Delete(long siteNum){
+		public static void Delete(long siteNum){
 			string command="DELETE FROM site "
 				+"WHERE SiteNum = "+POut.Long(siteNum);
 			Db.NonQ(command);

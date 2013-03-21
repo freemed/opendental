@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class FormularyCrud {
+	public class FormularyCrud {
 		///<summary>Gets one Formulary object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Formulary SelectOne(long formularyNum){
+		public static Formulary SelectOne(long formularyNum){
 			string command="SELECT * FROM formulary "
 				+"WHERE FormularyNum = "+POut.Long(formularyNum);
 			List<Formulary> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Formulary object from the database using a query.</summary>
-		internal static Formulary SelectOne(string command){
+		public static Formulary SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Formulary objects from the database using a query.</summary>
-		internal static List<Formulary> SelectMany(string command){
+		public static List<Formulary> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Formulary> TableToList(DataTable table){
+		public static List<Formulary> TableToList(DataTable table){
 			List<Formulary> retVal=new List<Formulary>();
 			Formulary formulary;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Formulary into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Formulary formulary){
+		public static long Insert(Formulary formulary){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				formulary.FormularyNum=DbHelper.GetNextOracleKey("formulary","FormularyNum");
 				int loopcount=0;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Formulary into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Formulary formulary,bool useExistingPK){
+		public static long Insert(Formulary formulary,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				formulary.FormularyNum=ReplicationServers.GetKey("formulary","FormularyNum");
 			}
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Formulary in the database.</summary>
-		internal static void Update(Formulary formulary){
+		public static void Update(Formulary formulary){
 			string command="UPDATE formulary SET "
 				+"Description = '"+POut.String(formulary.Description)+"' "
 				+"WHERE FormularyNum = "+POut.Long(formulary.FormularyNum);
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Formulary in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Formulary formulary,Formulary oldFormulary){
+		public static void Update(Formulary formulary,Formulary oldFormulary){
 			string command="";
 			if(formulary.Description != oldFormulary.Description) {
 				if(command!=""){ command+=",";}
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Formulary from the database.</summary>
-		internal static void Delete(long formularyNum){
+		public static void Delete(long formularyNum){
 			string command="DELETE FROM formulary "
 				+"WHERE FormularyNum = "+POut.Long(formularyNum);
 			Db.NonQ(command);

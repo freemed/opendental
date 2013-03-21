@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReminderRuleCrud {
+	public class ReminderRuleCrud {
 		///<summary>Gets one ReminderRule object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ReminderRule SelectOne(long reminderRuleNum){
+		public static ReminderRule SelectOne(long reminderRuleNum){
 			string command="SELECT * FROM reminderrule "
 				+"WHERE ReminderRuleNum = "+POut.Long(reminderRuleNum);
 			List<ReminderRule> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ReminderRule object from the database using a query.</summary>
-		internal static ReminderRule SelectOne(string command){
+		public static ReminderRule SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ReminderRule objects from the database using a query.</summary>
-		internal static List<ReminderRule> SelectMany(string command){
+		public static List<ReminderRule> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ReminderRule> TableToList(DataTable table){
+		public static List<ReminderRule> TableToList(DataTable table){
 			List<ReminderRule> retVal=new List<ReminderRule>();
 			ReminderRule reminderRule;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReminderRule into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ReminderRule reminderRule){
+		public static long Insert(ReminderRule reminderRule){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				reminderRule.ReminderRuleNum=DbHelper.GetNextOracleKey("reminderrule","ReminderRuleNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReminderRule into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ReminderRule reminderRule,bool useExistingPK){
+		public static long Insert(ReminderRule reminderRule,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				reminderRule.ReminderRuleNum=ReplicationServers.GetKey("reminderrule","ReminderRuleNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReminderRule in the database.</summary>
-		internal static void Update(ReminderRule reminderRule){
+		public static void Update(ReminderRule reminderRule){
 			string command="UPDATE reminderrule SET "
 				+"ReminderCriterion=  "+POut.Int   ((int)reminderRule.ReminderCriterion)+", "
 				+"CriterionFK      =  "+POut.Long  (reminderRule.CriterionFK)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReminderRule in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ReminderRule reminderRule,ReminderRule oldReminderRule){
+		public static void Update(ReminderRule reminderRule,ReminderRule oldReminderRule){
 			string command="";
 			if(reminderRule.ReminderCriterion != oldReminderRule.ReminderCriterion) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ReminderRule from the database.</summary>
-		internal static void Delete(long reminderRuleNum){
+		public static void Delete(long reminderRuleNum){
 			string command="DELETE FROM reminderrule "
 				+"WHERE ReminderRuleNum = "+POut.Long(reminderRuleNum);
 			Db.NonQ(command);

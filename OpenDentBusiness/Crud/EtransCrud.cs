@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EtransCrud {
+	public class EtransCrud {
 		///<summary>Gets one Etrans object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Etrans SelectOne(long etransNum){
+		public static Etrans SelectOne(long etransNum){
 			string command="SELECT * FROM etrans "
 				+"WHERE EtransNum = "+POut.Long(etransNum);
 			List<Etrans> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Etrans object from the database using a query.</summary>
-		internal static Etrans SelectOne(string command){
+		public static Etrans SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Etrans objects from the database using a query.</summary>
-		internal static List<Etrans> SelectMany(string command){
+		public static List<Etrans> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Etrans> TableToList(DataTable table){
+		public static List<Etrans> TableToList(DataTable table){
 			List<Etrans> retVal=new List<Etrans>();
 			Etrans etrans;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -71,7 +71,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Etrans into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Etrans etrans){
+		public static long Insert(Etrans etrans){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				etrans.EtransNum=DbHelper.GetNextOracleKey("etrans","EtransNum");
 				int loopcount=0;
@@ -97,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Etrans into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Etrans etrans,bool useExistingPK){
+		public static long Insert(Etrans etrans,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				etrans.EtransNum=ReplicationServers.GetKey("etrans","EtransNum");
 			}
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Etrans in the database.</summary>
-		internal static void Update(Etrans etrans){
+		public static void Update(Etrans etrans){
 			string command="UPDATE etrans SET "
 				+"DateTimeTrans       =  "+POut.DateT (etrans.DateTimeTrans)+", "
 				+"ClearingHouseNum    =  "+POut.Long  (etrans.ClearingHouseNum)+", "
@@ -163,7 +163,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Etrans in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Etrans etrans,Etrans oldEtrans){
+		public static void Update(Etrans etrans,Etrans oldEtrans){
 			string command="";
 			if(etrans.DateTimeTrans != oldEtrans.DateTimeTrans) {
 				if(command!=""){ command+=",";}
@@ -246,7 +246,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Etrans from the database.</summary>
-		internal static void Delete(long etransNum){
+		public static void Delete(long etransNum){
 			string command="DELETE FROM etrans "
 				+"WHERE EtransNum = "+POut.Long(etransNum);
 			Db.NonQ(command);

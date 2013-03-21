@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcButtonCrud {
+	public class ProcButtonCrud {
 		///<summary>Gets one ProcButton object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcButton SelectOne(long procButtonNum){
+		public static ProcButton SelectOne(long procButtonNum){
 			string command="SELECT * FROM procbutton "
 				+"WHERE ProcButtonNum = "+POut.Long(procButtonNum);
 			List<ProcButton> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcButton object from the database using a query.</summary>
-		internal static ProcButton SelectOne(string command){
+		public static ProcButton SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcButton objects from the database using a query.</summary>
-		internal static List<ProcButton> SelectMany(string command){
+		public static List<ProcButton> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcButton> TableToList(DataTable table){
+		public static List<ProcButton> TableToList(DataTable table){
 			List<ProcButton> retVal=new List<ProcButton>();
 			ProcButton procButton;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcButton into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcButton procButton){
+		public static long Insert(ProcButton procButton){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procButton.ProcButtonNum=DbHelper.GetNextOracleKey("procbutton","ProcButtonNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcButton into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcButton procButton,bool useExistingPK){
+		public static long Insert(ProcButton procButton,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procButton.ProcButtonNum=ReplicationServers.GetKey("procbutton","ProcButtonNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcButton in the database.</summary>
-		internal static void Update(ProcButton procButton){
+		public static void Update(ProcButton procButton){
 			string command="UPDATE procbutton SET "
 				+"Description  = '"+POut.String(procButton.Description)+"', "
 				+"ItemOrder    =  "+POut.Int   (procButton.ItemOrder)+", "
@@ -129,7 +129,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcButton in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcButton procButton,ProcButton oldProcButton){
+		public static void Update(ProcButton procButton,ProcButton oldProcButton){
 			string command="";
 			if(procButton.Description != oldProcButton.Description) {
 				if(command!=""){ command+=",";}
@@ -160,7 +160,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcButton from the database.</summary>
-		internal static void Delete(long procButtonNum){
+		public static void Delete(long procButtonNum){
 			string command="DELETE FROM procbutton "
 				+"WHERE ProcButtonNum = "+POut.Long(procButtonNum);
 			Db.NonQ(command);

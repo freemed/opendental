@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AllergyCrud {
+	public class AllergyCrud {
 		///<summary>Gets one Allergy object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Allergy SelectOne(long allergyNum){
+		public static Allergy SelectOne(long allergyNum){
 			string command="SELECT * FROM allergy "
 				+"WHERE AllergyNum = "+POut.Long(allergyNum);
 			List<Allergy> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Allergy object from the database using a query.</summary>
-		internal static Allergy SelectOne(string command){
+		public static Allergy SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Allergy objects from the database using a query.</summary>
-		internal static List<Allergy> SelectMany(string command){
+		public static List<Allergy> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Allergy> TableToList(DataTable table){
+		public static List<Allergy> TableToList(DataTable table){
 			List<Allergy> retVal=new List<Allergy>();
 			Allergy allergy;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Allergy into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Allergy allergy){
+		public static long Insert(Allergy allergy){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				allergy.AllergyNum=DbHelper.GetNextOracleKey("allergy","AllergyNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Allergy into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Allergy allergy,bool useExistingPK){
+		public static long Insert(Allergy allergy,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				allergy.AllergyNum=ReplicationServers.GetKey("allergy","AllergyNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Allergy in the database.</summary>
-		internal static void Update(Allergy allergy){
+		public static void Update(Allergy allergy){
 			string command="UPDATE allergy SET "
 				+"AllergyDefNum      =  "+POut.Long  (allergy.AllergyDefNum)+", "
 				+"PatNum             =  "+POut.Long  (allergy.PatNum)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Allergy in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Allergy allergy,Allergy oldAllergy){
+		public static void Update(Allergy allergy,Allergy oldAllergy){
 			string command="";
 			if(allergy.AllergyDefNum != oldAllergy.AllergyDefNum) {
 				if(command!=""){ command+=",";}
@@ -159,7 +159,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Allergy from the database.</summary>
-		internal static void Delete(long allergyNum){
+		public static void Delete(long allergyNum){
 			string command="DELETE FROM allergy "
 				+"WHERE AllergyNum = "+POut.Long(allergyNum);
 			Db.NonQ(command);

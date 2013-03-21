@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PayPlanCrud {
+	public class PayPlanCrud {
 		///<summary>Gets one PayPlan object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PayPlan SelectOne(long payPlanNum){
+		public static PayPlan SelectOne(long payPlanNum){
 			string command="SELECT * FROM payplan "
 				+"WHERE PayPlanNum = "+POut.Long(payPlanNum);
 			List<PayPlan> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PayPlan object from the database using a query.</summary>
-		internal static PayPlan SelectOne(string command){
+		public static PayPlan SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PayPlan objects from the database using a query.</summary>
-		internal static List<PayPlan> SelectMany(string command){
+		public static List<PayPlan> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PayPlan> TableToList(DataTable table){
+		public static List<PayPlan> TableToList(DataTable table){
 			List<PayPlan> retVal=new List<PayPlan>();
 			PayPlan payPlan;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPlan into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PayPlan payPlan){
+		public static long Insert(PayPlan payPlan){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				payPlan.PayPlanNum=DbHelper.GetNextOracleKey("payplan","PayPlanNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPlan into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PayPlan payPlan,bool useExistingPK){
+		public static long Insert(PayPlan payPlan,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				payPlan.PayPlanNum=ReplicationServers.GetKey("payplan","PayPlanNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPlan in the database.</summary>
-		internal static void Update(PayPlan payPlan){
+		public static void Update(PayPlan payPlan){
 			string command="UPDATE payplan SET "
 				+"PatNum      =  "+POut.Long  (payPlan.PatNum)+", "
 				+"Guarantor   =  "+POut.Long  (payPlan.Guarantor)+", "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPlan in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PayPlan payPlan,PayPlan oldPayPlan){
+		public static void Update(PayPlan payPlan,PayPlan oldPayPlan){
 			string command="";
 			if(payPlan.PatNum != oldPayPlan.PatNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PayPlan from the database.</summary>
-		internal static void Delete(long payPlanNum){
+		public static void Delete(long payPlanNum){
 			string command="DELETE FROM payplan "
 				+"WHERE PayPlanNum = "+POut.Long(payPlanNum);
 			Db.NonQ(command);

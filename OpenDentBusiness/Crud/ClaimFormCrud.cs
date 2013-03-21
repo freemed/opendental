@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimFormCrud {
+	public class ClaimFormCrud {
 		///<summary>Gets one ClaimForm object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimForm SelectOne(long claimFormNum){
+		public static ClaimForm SelectOne(long claimFormNum){
 			string command="SELECT * FROM claimform "
 				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum);
 			List<ClaimForm> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimForm object from the database using a query.</summary>
-		internal static ClaimForm SelectOne(string command){
+		public static ClaimForm SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimForm objects from the database using a query.</summary>
-		internal static List<ClaimForm> SelectMany(string command){
+		public static List<ClaimForm> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimForm> TableToList(DataTable table){
+		public static List<ClaimForm> TableToList(DataTable table){
 			List<ClaimForm> retVal=new List<ClaimForm>();
 			ClaimForm claimForm;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimForm into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimForm claimForm){
+		public static long Insert(ClaimForm claimForm){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimForm.ClaimFormNum=DbHelper.GetNextOracleKey("claimform","ClaimFormNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimForm into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimForm claimForm,bool useExistingPK){
+		public static long Insert(ClaimForm claimForm,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimForm.ClaimFormNum=ReplicationServers.GetKey("claimform","ClaimFormNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimForm in the database.</summary>
-		internal static void Update(ClaimForm claimForm){
+		public static void Update(ClaimForm claimForm){
 			string command="UPDATE claimform SET "
 				+"Description = '"+POut.String(claimForm.Description)+"', "
 				+"IsHidden    =  "+POut.Bool  (claimForm.IsHidden)+", "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimForm in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimForm claimForm,ClaimForm oldClaimForm){
+		public static void Update(ClaimForm claimForm,ClaimForm oldClaimForm){
 			string command="";
 			if(claimForm.Description != oldClaimForm.Description) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimForm from the database.</summary>
-		internal static void Delete(long claimFormNum){
+		public static void Delete(long claimFormNum){
 			string command="DELETE FROM claimform "
 				+"WHERE ClaimFormNum = "+POut.Long(claimFormNum);
 			Db.NonQ(command);

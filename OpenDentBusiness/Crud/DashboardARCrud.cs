@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DashboardARCrud {
+	public class DashboardARCrud {
 		///<summary>Gets one DashboardAR object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DashboardAR SelectOne(long dashboardARNum){
+		public static DashboardAR SelectOne(long dashboardARNum){
 			string command="SELECT * FROM dashboardar "
 				+"WHERE DashboardARNum = "+POut.Long(dashboardARNum);
 			List<DashboardAR> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DashboardAR object from the database using a query.</summary>
-		internal static DashboardAR SelectOne(string command){
+		public static DashboardAR SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DashboardAR objects from the database using a query.</summary>
-		internal static List<DashboardAR> SelectMany(string command){
+		public static List<DashboardAR> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DashboardAR> TableToList(DataTable table){
+		public static List<DashboardAR> TableToList(DataTable table){
 			List<DashboardAR> retVal=new List<DashboardAR>();
 			DashboardAR dashboardAR;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DashboardAR into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DashboardAR dashboardAR){
+		public static long Insert(DashboardAR dashboardAR){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				dashboardAR.DashboardARNum=DbHelper.GetNextOracleKey("dashboardar","DashboardARNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DashboardAR into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DashboardAR dashboardAR,bool useExistingPK){
+		public static long Insert(DashboardAR dashboardAR,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				dashboardAR.DashboardARNum=ReplicationServers.GetKey("dashboardar","DashboardARNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DashboardAR in the database.</summary>
-		internal static void Update(DashboardAR dashboardAR){
+		public static void Update(DashboardAR dashboardAR){
 			string command="UPDATE dashboardar SET "
 				+"DateCalc      =  "+POut.Date  (dashboardAR.DateCalc)+", "
 				+"BalTotal      = '"+POut.Double(dashboardAR.BalTotal)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DashboardAR in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DashboardAR dashboardAR,DashboardAR oldDashboardAR){
+		public static void Update(DashboardAR dashboardAR,DashboardAR oldDashboardAR){
 			string command="";
 			if(dashboardAR.DateCalc != oldDashboardAR.DateCalc) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DashboardAR from the database.</summary>
-		internal static void Delete(long dashboardARNum){
+		public static void Delete(long dashboardARNum){
 			string command="DELETE FROM dashboardar "
 				+"WHERE DashboardARNum = "+POut.Long(dashboardARNum);
 			Db.NonQ(command);

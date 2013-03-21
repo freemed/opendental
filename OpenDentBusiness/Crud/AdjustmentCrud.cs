@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AdjustmentCrud {
+	public class AdjustmentCrud {
 		///<summary>Gets one Adjustment object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Adjustment SelectOne(long adjNum){
+		public static Adjustment SelectOne(long adjNum){
 			string command="SELECT * FROM adjustment "
 				+"WHERE AdjNum = "+POut.Long(adjNum);
 			List<Adjustment> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Adjustment object from the database using a query.</summary>
-		internal static Adjustment SelectOne(string command){
+		public static Adjustment SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Adjustment objects from the database using a query.</summary>
-		internal static List<Adjustment> SelectMany(string command){
+		public static List<Adjustment> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Adjustment> TableToList(DataTable table){
+		public static List<Adjustment> TableToList(DataTable table){
 			List<Adjustment> retVal=new List<Adjustment>();
 			Adjustment adjustment;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Adjustment into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Adjustment adjustment){
+		public static long Insert(Adjustment adjustment){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				adjustment.AdjNum=DbHelper.GetNextOracleKey("adjustment","AdjNum");
 				int loopcount=0;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Adjustment into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Adjustment adjustment,bool useExistingPK){
+		public static long Insert(Adjustment adjustment,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				adjustment.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Adjustment in the database.</summary>
-		internal static void Update(Adjustment adjustment){
+		public static void Update(Adjustment adjustment){
 			string command="UPDATE adjustment SET "
 				+"AdjDate     =  "+POut.Date  (adjustment.AdjDate)+", "
 				+"AdjAmt      = '"+POut.Double(adjustment.AdjAmt)+"', "
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Adjustment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Adjustment adjustment,Adjustment oldAdjustment){
+		public static void Update(Adjustment adjustment,Adjustment oldAdjustment){
 			string command="";
 			if(adjustment.AdjDate != oldAdjustment.AdjDate) {
 				if(command!=""){ command+=",";}
@@ -194,7 +194,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Adjustment from the database.</summary>
-		internal static void Delete(long adjNum){
+		public static void Delete(long adjNum){
 			string command="DELETE FROM adjustment "
 				+"WHERE AdjNum = "+POut.Long(adjNum);
 			Db.NonQ(command);

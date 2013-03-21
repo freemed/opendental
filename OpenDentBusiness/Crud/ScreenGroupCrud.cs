@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ScreenGroupCrud {
+	public class ScreenGroupCrud {
 		///<summary>Gets one ScreenGroup object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ScreenGroup SelectOne(long screenGroupNum){
+		public static ScreenGroup SelectOne(long screenGroupNum){
 			string command="SELECT * FROM screengroup "
 				+"WHERE ScreenGroupNum = "+POut.Long(screenGroupNum);
 			List<ScreenGroup> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ScreenGroup object from the database using a query.</summary>
-		internal static ScreenGroup SelectOne(string command){
+		public static ScreenGroup SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ScreenGroup objects from the database using a query.</summary>
-		internal static List<ScreenGroup> SelectMany(string command){
+		public static List<ScreenGroup> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ScreenGroup> TableToList(DataTable table){
+		public static List<ScreenGroup> TableToList(DataTable table){
 			List<ScreenGroup> retVal=new List<ScreenGroup>();
 			ScreenGroup screenGroup;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScreenGroup into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ScreenGroup screenGroup){
+		public static long Insert(ScreenGroup screenGroup){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				screenGroup.ScreenGroupNum=DbHelper.GetNextOracleKey("screengroup","ScreenGroupNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScreenGroup into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ScreenGroup screenGroup,bool useExistingPK){
+		public static long Insert(ScreenGroup screenGroup,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				screenGroup.ScreenGroupNum=ReplicationServers.GetKey("screengroup","ScreenGroupNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScreenGroup in the database.</summary>
-		internal static void Update(ScreenGroup screenGroup){
+		public static void Update(ScreenGroup screenGroup){
 			string command="UPDATE screengroup SET "
 				+"Description   = '"+POut.String(screenGroup.Description)+"', "
 				+"SGDate        =  "+POut.Date  (screenGroup.SGDate)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScreenGroup in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ScreenGroup screenGroup,ScreenGroup oldScreenGroup){
+		public static void Update(ScreenGroup screenGroup,ScreenGroup oldScreenGroup){
 			string command="";
 			if(screenGroup.Description != oldScreenGroup.Description) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ScreenGroup from the database.</summary>
-		internal static void Delete(long screenGroupNum){
+		public static void Delete(long screenGroupNum){
 			string command="DELETE FROM screengroup "
 				+"WHERE ScreenGroupNum = "+POut.Long(screenGroupNum);
 			Db.NonQ(command);

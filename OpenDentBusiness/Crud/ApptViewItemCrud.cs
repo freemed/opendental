@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ApptViewItemCrud {
+	public class ApptViewItemCrud {
 		///<summary>Gets one ApptViewItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ApptViewItem SelectOne(long apptViewItemNum){
+		public static ApptViewItem SelectOne(long apptViewItemNum){
 			string command="SELECT * FROM apptviewitem "
 				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
 			List<ApptViewItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ApptViewItem object from the database using a query.</summary>
-		internal static ApptViewItem SelectOne(string command){
+		public static ApptViewItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ApptViewItem objects from the database using a query.</summary>
-		internal static List<ApptViewItem> SelectMany(string command){
+		public static List<ApptViewItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ApptViewItem> TableToList(DataTable table){
+		public static List<ApptViewItem> TableToList(DataTable table){
 			List<ApptViewItem> retVal=new List<ApptViewItem>();
 			ApptViewItem apptViewItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptViewItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ApptViewItem apptViewItem){
+		public static long Insert(ApptViewItem apptViewItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				apptViewItem.ApptViewItemNum=DbHelper.GetNextOracleKey("apptviewitem","ApptViewItemNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptViewItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ApptViewItem apptViewItem,bool useExistingPK){
+		public static long Insert(ApptViewItem apptViewItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				apptViewItem.ApptViewItemNum=ReplicationServers.GetKey("apptviewitem","ApptViewItemNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptViewItem in the database.</summary>
-		internal static void Update(ApptViewItem apptViewItem){
+		public static void Update(ApptViewItem apptViewItem){
 			string command="UPDATE apptviewitem SET "
 				+"ApptViewNum     =  "+POut.Long  (apptViewItem.ApptViewNum)+", "
 				+"OpNum           =  "+POut.Long  (apptViewItem.OpNum)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptViewItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ApptViewItem apptViewItem,ApptViewItem oldApptViewItem){
+		public static void Update(ApptViewItem apptViewItem,ApptViewItem oldApptViewItem){
 			string command="";
 			if(apptViewItem.ApptViewNum != oldApptViewItem.ApptViewNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ApptViewItem from the database.</summary>
-		internal static void Delete(long apptViewItemNum){
+		public static void Delete(long apptViewItemNum){
 			string command="DELETE FROM apptviewitem "
 				+"WHERE ApptViewItemNum = "+POut.Long(apptViewItemNum);
 			Db.NonQ(command);

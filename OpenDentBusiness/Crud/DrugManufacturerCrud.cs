@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DrugManufacturerCrud {
+	public class DrugManufacturerCrud {
 		///<summary>Gets one DrugManufacturer object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DrugManufacturer SelectOne(long drugManufacturerNum){
+		public static DrugManufacturer SelectOne(long drugManufacturerNum){
 			string command="SELECT * FROM drugmanufacturer "
 				+"WHERE DrugManufacturerNum = "+POut.Long(drugManufacturerNum);
 			List<DrugManufacturer> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DrugManufacturer object from the database using a query.</summary>
-		internal static DrugManufacturer SelectOne(string command){
+		public static DrugManufacturer SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DrugManufacturer objects from the database using a query.</summary>
-		internal static List<DrugManufacturer> SelectMany(string command){
+		public static List<DrugManufacturer> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DrugManufacturer> TableToList(DataTable table){
+		public static List<DrugManufacturer> TableToList(DataTable table){
 			List<DrugManufacturer> retVal=new List<DrugManufacturer>();
 			DrugManufacturer drugManufacturer;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DrugManufacturer into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DrugManufacturer drugManufacturer){
+		public static long Insert(DrugManufacturer drugManufacturer){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				drugManufacturer.DrugManufacturerNum=DbHelper.GetNextOracleKey("drugmanufacturer","DrugManufacturerNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DrugManufacturer into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DrugManufacturer drugManufacturer,bool useExistingPK){
+		public static long Insert(DrugManufacturer drugManufacturer,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				drugManufacturer.DrugManufacturerNum=ReplicationServers.GetKey("drugmanufacturer","DrugManufacturerNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DrugManufacturer in the database.</summary>
-		internal static void Update(DrugManufacturer drugManufacturer){
+		public static void Update(DrugManufacturer drugManufacturer){
 			string command="UPDATE drugmanufacturer SET "
 				+"ManufacturerName   = '"+POut.String(drugManufacturer.ManufacturerName)+"', "
 				+"ManufacturerCode   = '"+POut.String(drugManufacturer.ManufacturerCode)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DrugManufacturer in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DrugManufacturer drugManufacturer,DrugManufacturer oldDrugManufacturer){
+		public static void Update(DrugManufacturer drugManufacturer,DrugManufacturer oldDrugManufacturer){
 			string command="";
 			if(drugManufacturer.ManufacturerName != oldDrugManufacturer.ManufacturerName) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DrugManufacturer from the database.</summary>
-		internal static void Delete(long drugManufacturerNum){
+		public static void Delete(long drugManufacturerNum){
 			string command="DELETE FROM drugmanufacturer "
 				+"WHERE DrugManufacturerNum = "+POut.Long(drugManufacturerNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TimeCardRuleCrud {
+	public class TimeCardRuleCrud {
 		///<summary>Gets one TimeCardRule object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TimeCardRule SelectOne(long timeCardRuleNum){
+		public static TimeCardRule SelectOne(long timeCardRuleNum){
 			string command="SELECT * FROM timecardrule "
 				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum);
 			List<TimeCardRule> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TimeCardRule object from the database using a query.</summary>
-		internal static TimeCardRule SelectOne(string command){
+		public static TimeCardRule SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TimeCardRule objects from the database using a query.</summary>
-		internal static List<TimeCardRule> SelectMany(string command){
+		public static List<TimeCardRule> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TimeCardRule> TableToList(DataTable table){
+		public static List<TimeCardRule> TableToList(DataTable table){
 			List<TimeCardRule> retVal=new List<TimeCardRule>();
 			TimeCardRule timeCardRule;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TimeCardRule into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TimeCardRule timeCardRule){
+		public static long Insert(TimeCardRule timeCardRule){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				timeCardRule.TimeCardRuleNum=DbHelper.GetNextOracleKey("timecardrule","TimeCardRuleNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TimeCardRule into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TimeCardRule timeCardRule,bool useExistingPK){
+		public static long Insert(TimeCardRule timeCardRule,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				timeCardRule.TimeCardRuleNum=ReplicationServers.GetKey("timecardrule","TimeCardRuleNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TimeCardRule in the database.</summary>
-		internal static void Update(TimeCardRule timeCardRule){
+		public static void Update(TimeCardRule timeCardRule){
 			string command="UPDATE timecardrule SET "
 				+"EmployeeNum    =  "+POut.Long  (timeCardRule.EmployeeNum)+", "
 				+"OverHoursPerDay=  "+POut.Time  (timeCardRule.OverHoursPerDay)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TimeCardRule in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TimeCardRule timeCardRule,TimeCardRule oldTimeCardRule){
+		public static void Update(TimeCardRule timeCardRule,TimeCardRule oldTimeCardRule){
 			string command="";
 			if(timeCardRule.EmployeeNum != oldTimeCardRule.EmployeeNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TimeCardRule from the database.</summary>
-		internal static void Delete(long timeCardRuleNum){
+		public static void Delete(long timeCardRuleNum){
 			string command="DELETE FROM timecardrule "
 				+"WHERE TimeCardRuleNum = "+POut.Long(timeCardRuleNum);
 			Db.NonQ(command);

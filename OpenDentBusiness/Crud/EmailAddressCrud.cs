@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EmailAddressCrud {
+	public class EmailAddressCrud {
 		///<summary>Gets one EmailAddress object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EmailAddress SelectOne(long emailAddressNum){
+		public static EmailAddress SelectOne(long emailAddressNum){
 			string command="SELECT * FROM emailaddress "
 				+"WHERE EmailAddressNum = "+POut.Long(emailAddressNum);
 			List<EmailAddress> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EmailAddress object from the database using a query.</summary>
-		internal static EmailAddress SelectOne(string command){
+		public static EmailAddress SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EmailAddress objects from the database using a query.</summary>
-		internal static List<EmailAddress> SelectMany(string command){
+		public static List<EmailAddress> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EmailAddress> TableToList(DataTable table){
+		public static List<EmailAddress> TableToList(DataTable table){
 			List<EmailAddress> retVal=new List<EmailAddress>();
 			EmailAddress emailAddress;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailAddress into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EmailAddress emailAddress){
+		public static long Insert(EmailAddress emailAddress){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				emailAddress.EmailAddressNum=DbHelper.GetNextOracleKey("emailaddress","EmailAddressNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailAddress into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EmailAddress emailAddress,bool useExistingPK){
+		public static long Insert(EmailAddress emailAddress,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				emailAddress.EmailAddressNum=ReplicationServers.GetKey("emailaddress","EmailAddressNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailAddress in the database.</summary>
-		internal static void Update(EmailAddress emailAddress){
+		public static void Update(EmailAddress emailAddress){
 			string command="UPDATE emailaddress SET "
 				+"SMTPserver     = '"+POut.String(emailAddress.SMTPserver)+"', "
 				+"EmailUsername  = '"+POut.String(emailAddress.EmailUsername)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailAddress in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EmailAddress emailAddress,EmailAddress oldEmailAddress){
+		public static void Update(EmailAddress emailAddress,EmailAddress oldEmailAddress){
 			string command="";
 			if(emailAddress.SMTPserver != oldEmailAddress.SMTPserver) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EmailAddress from the database.</summary>
-		internal static void Delete(long emailAddressNum){
+		public static void Delete(long emailAddressNum){
 			string command="DELETE FROM emailaddress "
 				+"WHERE EmailAddressNum = "+POut.Long(emailAddressNum);
 			Db.NonQ(command);

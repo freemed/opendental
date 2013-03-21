@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EtransMessageTextCrud {
+	public class EtransMessageTextCrud {
 		///<summary>Gets one EtransMessageText object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EtransMessageText SelectOne(long etransMessageTextNum){
+		public static EtransMessageText SelectOne(long etransMessageTextNum){
 			string command="SELECT * FROM etransmessagetext "
 				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageTextNum);
 			List<EtransMessageText> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EtransMessageText object from the database using a query.</summary>
-		internal static EtransMessageText SelectOne(string command){
+		public static EtransMessageText SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EtransMessageText objects from the database using a query.</summary>
-		internal static List<EtransMessageText> SelectMany(string command){
+		public static List<EtransMessageText> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EtransMessageText> TableToList(DataTable table){
+		public static List<EtransMessageText> TableToList(DataTable table){
 			List<EtransMessageText> retVal=new List<EtransMessageText>();
 			EtransMessageText etransMessageText;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EtransMessageText into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EtransMessageText etransMessageText){
+		public static long Insert(EtransMessageText etransMessageText){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				etransMessageText.EtransMessageTextNum=DbHelper.GetNextOracleKey("etransmessagetext","EtransMessageTextNum");
 				int loopcount=0;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EtransMessageText into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EtransMessageText etransMessageText,bool useExistingPK){
+		public static long Insert(EtransMessageText etransMessageText,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				etransMessageText.EtransMessageTextNum=ReplicationServers.GetKey("etransmessagetext","EtransMessageTextNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EtransMessageText in the database.</summary>
-		internal static void Update(EtransMessageText etransMessageText){
+		public static void Update(EtransMessageText etransMessageText){
 			string command="UPDATE etransmessagetext SET "
 				+"MessageText         =  "+DbHelper.ParamChar+"paramMessageText "
 				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageText.EtransMessageTextNum);
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EtransMessageText in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EtransMessageText etransMessageText,EtransMessageText oldEtransMessageText){
+		public static void Update(EtransMessageText etransMessageText,EtransMessageText oldEtransMessageText){
 			string command="";
 			if(etransMessageText.MessageText != oldEtransMessageText.MessageText) {
 				if(command!=""){ command+=",";}
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EtransMessageText from the database.</summary>
-		internal static void Delete(long etransMessageTextNum){
+		public static void Delete(long etransMessageTextNum){
 			string command="DELETE FROM etransmessagetext "
 				+"WHERE EtransMessageTextNum = "+POut.Long(etransMessageTextNum);
 			Db.NonQ(command);

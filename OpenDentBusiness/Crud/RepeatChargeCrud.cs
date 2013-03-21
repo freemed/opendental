@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RepeatChargeCrud {
+	public class RepeatChargeCrud {
 		///<summary>Gets one RepeatCharge object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RepeatCharge SelectOne(long repeatChargeNum){
+		public static RepeatCharge SelectOne(long repeatChargeNum){
 			string command="SELECT * FROM repeatcharge "
 				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum);
 			List<RepeatCharge> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RepeatCharge object from the database using a query.</summary>
-		internal static RepeatCharge SelectOne(string command){
+		public static RepeatCharge SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RepeatCharge objects from the database using a query.</summary>
-		internal static List<RepeatCharge> SelectMany(string command){
+		public static List<RepeatCharge> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RepeatCharge> TableToList(DataTable table){
+		public static List<RepeatCharge> TableToList(DataTable table){
 			List<RepeatCharge> retVal=new List<RepeatCharge>();
 			RepeatCharge repeatCharge;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RepeatCharge into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RepeatCharge repeatCharge){
+		public static long Insert(RepeatCharge repeatCharge){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				repeatCharge.RepeatChargeNum=DbHelper.GetNextOracleKey("repeatcharge","RepeatChargeNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RepeatCharge into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RepeatCharge repeatCharge,bool useExistingPK){
+		public static long Insert(RepeatCharge repeatCharge,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				repeatCharge.RepeatChargeNum=ReplicationServers.GetKey("repeatcharge","RepeatChargeNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RepeatCharge in the database.</summary>
-		internal static void Update(RepeatCharge repeatCharge){
+		public static void Update(RepeatCharge repeatCharge){
 			string command="UPDATE repeatcharge SET "
 				+"PatNum         =  "+POut.Long  (repeatCharge.PatNum)+", "
 				+"ProcCode       = '"+POut.String(repeatCharge.ProcCode)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RepeatCharge in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RepeatCharge repeatCharge,RepeatCharge oldRepeatCharge){
+		public static void Update(RepeatCharge repeatCharge,RepeatCharge oldRepeatCharge){
 			string command="";
 			if(repeatCharge.PatNum != oldRepeatCharge.PatNum) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RepeatCharge from the database.</summary>
-		internal static void Delete(long repeatChargeNum){
+		public static void Delete(long repeatChargeNum){
 			string command="DELETE FROM repeatcharge "
 				+"WHERE RepeatChargeNum = "+POut.Long(repeatChargeNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SigButDefElementCrud {
+	public class SigButDefElementCrud {
 		///<summary>Gets one SigButDefElement object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SigButDefElement SelectOne(long elementNum){
+		public static SigButDefElement SelectOne(long elementNum){
 			string command="SELECT * FROM sigbutdefelement "
 				+"WHERE ElementNum = "+POut.Long(elementNum);
 			List<SigButDefElement> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SigButDefElement object from the database using a query.</summary>
-		internal static SigButDefElement SelectOne(string command){
+		public static SigButDefElement SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SigButDefElement objects from the database using a query.</summary>
-		internal static List<SigButDefElement> SelectMany(string command){
+		public static List<SigButDefElement> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SigButDefElement> TableToList(DataTable table){
+		public static List<SigButDefElement> TableToList(DataTable table){
 			List<SigButDefElement> retVal=new List<SigButDefElement>();
 			SigButDefElement sigButDefElement;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigButDefElement into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SigButDefElement sigButDefElement){
+		public static long Insert(SigButDefElement sigButDefElement){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sigButDefElement.ElementNum=DbHelper.GetNextOracleKey("sigbutdefelement","ElementNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigButDefElement into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SigButDefElement sigButDefElement,bool useExistingPK){
+		public static long Insert(SigButDefElement sigButDefElement,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sigButDefElement.ElementNum=ReplicationServers.GetKey("sigbutdefelement","ElementNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigButDefElement in the database.</summary>
-		internal static void Update(SigButDefElement sigButDefElement){
+		public static void Update(SigButDefElement sigButDefElement){
 			string command="UPDATE sigbutdefelement SET "
 				+"SigButDefNum    =  "+POut.Long  (sigButDefElement.SigButDefNum)+", "
 				+"SigElementDefNum=  "+POut.Long  (sigButDefElement.SigElementDefNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigButDefElement in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SigButDefElement sigButDefElement,SigButDefElement oldSigButDefElement){
+		public static void Update(SigButDefElement sigButDefElement,SigButDefElement oldSigButDefElement){
 			string command="";
 			if(sigButDefElement.SigButDefNum != oldSigButDefElement.SigButDefNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SigButDefElement from the database.</summary>
-		internal static void Delete(long elementNum){
+		public static void Delete(long elementNum){
 			string command="DELETE FROM sigbutdefelement "
 				+"WHERE ElementNum = "+POut.Long(elementNum);
 			Db.NonQ(command);

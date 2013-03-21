@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class HL7MsgCrud {
+	public class HL7MsgCrud {
 		///<summary>Gets one HL7Msg object from the database using the primary key.  Returns null if not found.</summary>
-		internal static HL7Msg SelectOne(long hL7MsgNum){
+		public static HL7Msg SelectOne(long hL7MsgNum){
 			string command="SELECT * FROM hl7msg "
 				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
 			List<HL7Msg> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one HL7Msg object from the database using a query.</summary>
-		internal static HL7Msg SelectOne(string command){
+		public static HL7Msg SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of HL7Msg objects from the database using a query.</summary>
-		internal static List<HL7Msg> SelectMany(string command){
+		public static List<HL7Msg> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<HL7Msg> TableToList(DataTable table){
+		public static List<HL7Msg> TableToList(DataTable table){
 			List<HL7Msg> retVal=new List<HL7Msg>();
 			HL7Msg hL7Msg;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7Msg into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7Msg hL7Msg){
+		public static long Insert(HL7Msg hL7Msg){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				hL7Msg.HL7MsgNum=DbHelper.GetNextOracleKey("hl7msg","HL7MsgNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7Msg into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(HL7Msg hL7Msg,bool useExistingPK){
+		public static long Insert(HL7Msg hL7Msg,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				hL7Msg.HL7MsgNum=ReplicationServers.GetKey("hl7msg","HL7MsgNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7Msg in the database.</summary>
-		internal static void Update(HL7Msg hL7Msg){
+		public static void Update(HL7Msg hL7Msg){
 			string command="UPDATE hl7msg SET "
 				+"HL7Status =  "+POut.Int   ((int)hL7Msg.HL7Status)+", "
 				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText, "
@@ -135,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7Msg in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(HL7Msg hL7Msg,HL7Msg oldHL7Msg){
+		public static void Update(HL7Msg hL7Msg,HL7Msg oldHL7Msg){
 			string command="";
 			if(hL7Msg.HL7Status != oldHL7Msg.HL7Status) {
 				if(command!=""){ command+=",";}
@@ -171,7 +171,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one HL7Msg from the database.</summary>
-		internal static void Delete(long hL7MsgNum){
+		public static void Delete(long hL7MsgNum){
 			string command="DELETE FROM hl7msg "
 				+"WHERE HL7MsgNum = "+POut.Long(hL7MsgNum);
 			Db.NonQ(command);

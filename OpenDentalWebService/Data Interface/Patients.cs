@@ -24,16 +24,15 @@ namespace OpenDentalWebService {
 
 		///<summary>Gets one Patient from the db based on username.  This is used when the patient is attempting to log in.</summary>
 		public static OpenDentBusiness.Patient GetOnePatientPortal(string patUserName,string OnlinePassword) {
-			//This is the code that the current patient portal uses.
-			//string command="SELECT * FROM patient"
-			//    +" WHERE OnlinePassword= '"+OpenDentBusiness.POut.String(OnlinePassword)+"' "
-			//    +" AND LCASE(Concat(FName,PatNum))= '"+OpenDentBusiness.POut.String(patUserName.ToLower())+"'";
-			//List<OpenDentBusiness.Patient> list= OpenDentBusiness.Crud.PatientmCrud.SelectMany(command);
-			//if(list.Count>0) {
-			//  return list[0];
-			//}
-			OpenDentBusiness.Patient pat=OpenDentBusiness.Patients.GetPat(6013);//For testing until I spend time figuring out how to directly contact the crud.
-			return pat;
+			string command="SELECT * FROM patient"
+				+" WHERE OnlinePassword= '"+OpenDentBusiness.POut.String(OnlinePassword)+"' "
+				+" AND LCASE(Concat(FName,PatNum))='"+OpenDentBusiness.POut.String(patUserName.ToLower())+"'";
+			List<OpenDentBusiness.Patient> list=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
+			if(list.Count>0) {
+				return list[0];
+			}
+			//No patient was found or the password was incorrect.  Return null.
+			return null;
 		}
 
 		///<summary>Gets all family members of the patient passed in.</summary>

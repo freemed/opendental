@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SchoolCourseCrud {
+	public class SchoolCourseCrud {
 		///<summary>Gets one SchoolCourse object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SchoolCourse SelectOne(long schoolCourseNum){
+		public static SchoolCourse SelectOne(long schoolCourseNum){
 			string command="SELECT * FROM schoolcourse "
 				+"WHERE SchoolCourseNum = "+POut.Long(schoolCourseNum);
 			List<SchoolCourse> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SchoolCourse object from the database using a query.</summary>
-		internal static SchoolCourse SelectOne(string command){
+		public static SchoolCourse SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SchoolCourse objects from the database using a query.</summary>
-		internal static List<SchoolCourse> SelectMany(string command){
+		public static List<SchoolCourse> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SchoolCourse> TableToList(DataTable table){
+		public static List<SchoolCourse> TableToList(DataTable table){
 			List<SchoolCourse> retVal=new List<SchoolCourse>();
 			SchoolCourse schoolCourse;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SchoolCourse into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SchoolCourse schoolCourse){
+		public static long Insert(SchoolCourse schoolCourse){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				schoolCourse.SchoolCourseNum=DbHelper.GetNextOracleKey("schoolcourse","SchoolCourseNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SchoolCourse into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SchoolCourse schoolCourse,bool useExistingPK){
+		public static long Insert(SchoolCourse schoolCourse,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				schoolCourse.SchoolCourseNum=ReplicationServers.GetKey("schoolcourse","SchoolCourseNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SchoolCourse in the database.</summary>
-		internal static void Update(SchoolCourse schoolCourse){
+		public static void Update(SchoolCourse schoolCourse){
 			string command="UPDATE schoolcourse SET "
 				+"CourseID       = '"+POut.String(schoolCourse.CourseID)+"', "
 				+"Descript       = '"+POut.String(schoolCourse.Descript)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SchoolCourse in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SchoolCourse schoolCourse,SchoolCourse oldSchoolCourse){
+		public static void Update(SchoolCourse schoolCourse,SchoolCourse oldSchoolCourse){
 			string command="";
 			if(schoolCourse.CourseID != oldSchoolCourse.CourseID) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SchoolCourse from the database.</summary>
-		internal static void Delete(long schoolCourseNum){
+		public static void Delete(long schoolCourseNum){
 			string command="DELETE FROM schoolcourse "
 				+"WHERE SchoolCourseNum = "+POut.Long(schoolCourseNum);
 			Db.NonQ(command);

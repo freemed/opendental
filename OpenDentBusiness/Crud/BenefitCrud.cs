@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class BenefitCrud {
+	public class BenefitCrud {
 		///<summary>Gets one Benefit object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Benefit SelectOne(long benefitNum){
+		public static Benefit SelectOne(long benefitNum){
 			string command="SELECT * FROM benefit "
 				+"WHERE BenefitNum = "+POut.Long(benefitNum);
 			List<Benefit> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Benefit object from the database using a query.</summary>
-		internal static Benefit SelectOne(string command){
+		public static Benefit SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Benefit objects from the database using a query.</summary>
-		internal static List<Benefit> SelectMany(string command){
+		public static List<Benefit> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Benefit> TableToList(DataTable table){
+		public static List<Benefit> TableToList(DataTable table){
 			List<Benefit> retVal=new List<Benefit>();
 			Benefit benefit;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Benefit into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Benefit benefit){
+		public static long Insert(Benefit benefit){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				benefit.BenefitNum=DbHelper.GetNextOracleKey("benefit","BenefitNum");
 				int loopcount=0;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Benefit into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Benefit benefit,bool useExistingPK){
+		public static long Insert(Benefit benefit,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				benefit.BenefitNum=ReplicationServers.GetKey("benefit","BenefitNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Benefit in the database.</summary>
-		internal static void Update(Benefit benefit){
+		public static void Update(Benefit benefit){
 			string command="UPDATE benefit SET "
 				+"PlanNum          =  "+POut.Long  (benefit.PlanNum)+", "
 				+"PatPlanNum       =  "+POut.Long  (benefit.PatPlanNum)+", "
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Benefit in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Benefit benefit,Benefit oldBenefit){
+		public static void Update(Benefit benefit,Benefit oldBenefit){
 			string command="";
 			if(benefit.PlanNum != oldBenefit.PlanNum) {
 				if(command!=""){ command+=",";}
@@ -197,7 +197,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Benefit from the database.</summary>
-		internal static void Delete(long benefitNum){
+		public static void Delete(long benefitNum){
 			string command="DELETE FROM benefit "
 				+"WHERE BenefitNum = "+POut.Long(benefitNum);
 			Db.NonQ(command);

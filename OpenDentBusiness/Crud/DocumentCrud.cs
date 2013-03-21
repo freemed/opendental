@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DocumentCrud {
+	public class DocumentCrud {
 		///<summary>Gets one Document object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Document SelectOne(long docNum){
+		public static Document SelectOne(long docNum){
 			string command="SELECT * FROM document "
 				+"WHERE DocNum = "+POut.Long(docNum);
 			List<Document> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Document object from the database using a query.</summary>
-		internal static Document SelectOne(string command){
+		public static Document SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Document objects from the database using a query.</summary>
-		internal static List<Document> SelectMany(string command){
+		public static List<Document> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Document> TableToList(DataTable table){
+		public static List<Document> TableToList(DataTable table){
 			List<Document> retVal=new List<Document>();
 			Document document;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -75,7 +75,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Document into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Document document){
+		public static long Insert(Document document){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				document.DocNum=DbHelper.GetNextOracleKey("document","DocNum");
 				int loopcount=0;
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Document into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Document document,bool useExistingPK){
+		public static long Insert(Document document,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				document.DocNum=ReplicationServers.GetKey("document","DocNum");
 			}
@@ -154,7 +154,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Document in the database.</summary>
-		internal static void Update(Document document){
+		public static void Update(Document document){
 			string command="UPDATE document SET "
 				+"Description   = '"+POut.String(document.Description)+"', "
 				+"DateCreated   =  "+POut.Date  (document.DateCreated)+", "
@@ -191,7 +191,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Document in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Document document,Document oldDocument){
+		public static void Update(Document document,Document oldDocument){
 			string command="";
 			if(document.Description != oldDocument.Description) {
 				if(command!=""){ command+=",";}
@@ -295,7 +295,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Document from the database.</summary>
-		internal static void Delete(long docNum){
+		public static void Delete(long docNum){
 			string command="DELETE FROM document "
 				+"WHERE DocNum = "+POut.Long(docNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutoCodeCrud {
+	public class AutoCodeCrud {
 		///<summary>Gets one AutoCode object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutoCode SelectOne(long autoCodeNum){
+		public static AutoCode SelectOne(long autoCodeNum){
 			string command="SELECT * FROM autocode "
 				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum);
 			List<AutoCode> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutoCode object from the database using a query.</summary>
-		internal static AutoCode SelectOne(string command){
+		public static AutoCode SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutoCode objects from the database using a query.</summary>
-		internal static List<AutoCode> SelectMany(string command){
+		public static List<AutoCode> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutoCode> TableToList(DataTable table){
+		public static List<AutoCode> TableToList(DataTable table){
 			List<AutoCode> retVal=new List<AutoCode>();
 			AutoCode autoCode;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCode into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutoCode autoCode){
+		public static long Insert(AutoCode autoCode){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				autoCode.AutoCodeNum=DbHelper.GetNextOracleKey("autocode","AutoCodeNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCode into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutoCode autoCode,bool useExistingPK){
+		public static long Insert(AutoCode autoCode,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				autoCode.AutoCodeNum=ReplicationServers.GetKey("autocode","AutoCodeNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCode in the database.</summary>
-		internal static void Update(AutoCode autoCode){
+		public static void Update(AutoCode autoCode){
 			string command="UPDATE autocode SET "
 				+"Description  = '"+POut.String(autoCode.Description)+"', "
 				+"IsHidden     =  "+POut.Bool  (autoCode.IsHidden)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCode in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutoCode autoCode,AutoCode oldAutoCode){
+		public static void Update(AutoCode autoCode,AutoCode oldAutoCode){
 			string command="";
 			if(autoCode.Description != oldAutoCode.Description) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutoCode from the database.</summary>
-		internal static void Delete(long autoCodeNum){
+		public static void Delete(long autoCodeNum){
 			string command="DELETE FROM autocode "
 				+"WHERE AutoCodeNum = "+POut.Long(autoCodeNum);
 			Db.NonQ(command);

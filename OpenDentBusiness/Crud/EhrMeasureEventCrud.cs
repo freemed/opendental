@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EhrMeasureEventCrud {
+	public class EhrMeasureEventCrud {
 		///<summary>Gets one EhrMeasureEvent object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EhrMeasureEvent SelectOne(long ehrMeasureEventNum){
+		public static EhrMeasureEvent SelectOne(long ehrMeasureEventNum){
 			string command="SELECT * FROM ehrmeasureevent "
 				+"WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEventNum);
 			List<EhrMeasureEvent> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EhrMeasureEvent object from the database using a query.</summary>
-		internal static EhrMeasureEvent SelectOne(string command){
+		public static EhrMeasureEvent SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EhrMeasureEvent objects from the database using a query.</summary>
-		internal static List<EhrMeasureEvent> SelectMany(string command){
+		public static List<EhrMeasureEvent> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EhrMeasureEvent> TableToList(DataTable table){
+		public static List<EhrMeasureEvent> TableToList(DataTable table){
 			List<EhrMeasureEvent> retVal=new List<EhrMeasureEvent>();
 			EhrMeasureEvent ehrMeasureEvent;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrMeasureEvent into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EhrMeasureEvent ehrMeasureEvent){
+		public static long Insert(EhrMeasureEvent ehrMeasureEvent){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				ehrMeasureEvent.EhrMeasureEventNum=DbHelper.GetNextOracleKey("ehrmeasureevent","EhrMeasureEventNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrMeasureEvent into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EhrMeasureEvent ehrMeasureEvent,bool useExistingPK){
+		public static long Insert(EhrMeasureEvent ehrMeasureEvent,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				ehrMeasureEvent.EhrMeasureEventNum=ReplicationServers.GetKey("ehrmeasureevent","EhrMeasureEventNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrMeasureEvent in the database.</summary>
-		internal static void Update(EhrMeasureEvent ehrMeasureEvent){
+		public static void Update(EhrMeasureEvent ehrMeasureEvent){
 			string command="UPDATE ehrmeasureevent SET "
 				+"DateTEvent        =  "+POut.DateT (ehrMeasureEvent.DateTEvent)+", "
 				+"EventType         =  "+POut.Int   ((int)ehrMeasureEvent.EventType)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrMeasureEvent in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EhrMeasureEvent ehrMeasureEvent,EhrMeasureEvent oldEhrMeasureEvent){
+		public static void Update(EhrMeasureEvent ehrMeasureEvent,EhrMeasureEvent oldEhrMeasureEvent){
 			string command="";
 			if(ehrMeasureEvent.DateTEvent != oldEhrMeasureEvent.DateTEvent) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EhrMeasureEvent from the database.</summary>
-		internal static void Delete(long ehrMeasureEventNum){
+		public static void Delete(long ehrMeasureEventNum){
 			string command="DELETE FROM ehrmeasureevent "
 				+"WHERE EhrMeasureEventNum = "+POut.Long(ehrMeasureEventNum);
 			Db.NonQ(command);

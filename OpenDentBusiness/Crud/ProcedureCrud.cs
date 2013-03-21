@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcedureCrud {
+	public class ProcedureCrud {
 		///<summary>Gets one Procedure object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Procedure SelectOne(long procNum){
+		public static Procedure SelectOne(long procNum){
 			string command="SELECT * FROM procedurelog "
 				+"WHERE ProcNum = "+POut.Long(procNum);
 			List<Procedure> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Procedure object from the database using a query.</summary>
-		internal static Procedure SelectOne(string command){
+		public static Procedure SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Procedure objects from the database using a query.</summary>
-		internal static List<Procedure> SelectMany(string command){
+		public static List<Procedure> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Procedure> TableToList(DataTable table){
+		public static List<Procedure> TableToList(DataTable table){
 			List<Procedure> retVal=new List<Procedure>();
 			Procedure procedure;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Procedure into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Procedure procedure){
+		public static long Insert(Procedure procedure){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procedure.ProcNum=DbHelper.GetNextOracleKey("procedurelog","ProcNum");
 				int loopcount=0;
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Procedure into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Procedure procedure,bool useExistingPK){
+		public static long Insert(Procedure procedure,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procedure.ProcNum=ReplicationServers.GetKey("procedurelog","ProcNum");
 			}
@@ -198,7 +198,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Procedure in the database.</summary>
-		internal static void Update(Procedure procedure){
+		public static void Update(Procedure procedure){
 			string command="UPDATE procedurelog SET "
 				+"PatNum            =  "+POut.Long  (procedure.PatNum)+", "
 				+"AptNum            =  "+POut.Long  (procedure.AptNum)+", "
@@ -253,7 +253,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Procedure in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Procedure procedure,Procedure oldProcedure){
+		public static void Update(Procedure procedure,Procedure oldProcedure){
 			string command="";
 			if(procedure.PatNum != oldProcedure.PatNum) {
 				if(command!=""){ command+=",";}
@@ -453,7 +453,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		//Delete not allowed for this table
-		//internal static void Delete(long procNum){
+		//public static void Delete(long procNum){
 		//
 		//}
 

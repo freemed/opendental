@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskSubscriptionCrud {
+	public class TaskSubscriptionCrud {
 		///<summary>Gets one TaskSubscription object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TaskSubscription SelectOne(long taskSubscriptionNum){
+		public static TaskSubscription SelectOne(long taskSubscriptionNum){
 			string command="SELECT * FROM tasksubscription "
 				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
 			List<TaskSubscription> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TaskSubscription object from the database using a query.</summary>
-		internal static TaskSubscription SelectOne(string command){
+		public static TaskSubscription SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TaskSubscription objects from the database using a query.</summary>
-		internal static List<TaskSubscription> SelectMany(string command){
+		public static List<TaskSubscription> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TaskSubscription> TableToList(DataTable table){
+		public static List<TaskSubscription> TableToList(DataTable table){
 			List<TaskSubscription> retVal=new List<TaskSubscription>();
 			TaskSubscription taskSubscription;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskSubscription into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TaskSubscription taskSubscription){
+		public static long Insert(TaskSubscription taskSubscription){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				taskSubscription.TaskSubscriptionNum=DbHelper.GetNextOracleKey("tasksubscription","TaskSubscriptionNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskSubscription into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TaskSubscription taskSubscription,bool useExistingPK){
+		public static long Insert(TaskSubscription taskSubscription,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				taskSubscription.TaskSubscriptionNum=ReplicationServers.GetKey("tasksubscription","TaskSubscriptionNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskSubscription in the database.</summary>
-		internal static void Update(TaskSubscription taskSubscription){
+		public static void Update(TaskSubscription taskSubscription){
 			string command="UPDATE tasksubscription SET "
 				+"UserNum            =  "+POut.Long  (taskSubscription.UserNum)+", "
 				+"TaskListNum        =  "+POut.Long  (taskSubscription.TaskListNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskSubscription in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TaskSubscription taskSubscription,TaskSubscription oldTaskSubscription){
+		public static void Update(TaskSubscription taskSubscription,TaskSubscription oldTaskSubscription){
 			string command="";
 			if(taskSubscription.UserNum != oldTaskSubscription.UserNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TaskSubscription from the database.</summary>
-		internal static void Delete(long taskSubscriptionNum){
+		public static void Delete(long taskSubscriptionNum){
 			string command="DELETE FROM tasksubscription "
 				+"WHERE TaskSubscriptionNum = "+POut.Long(taskSubscriptionNum);
 			Db.NonQ(command);

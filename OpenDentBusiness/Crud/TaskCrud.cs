@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskCrud {
+	public class TaskCrud {
 		///<summary>Gets one Task object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Task SelectOne(long taskNum){
+		public static Task SelectOne(long taskNum){
 			string command="SELECT * FROM task "
 				+"WHERE TaskNum = "+POut.Long(taskNum);
 			List<Task> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Task object from the database using a query.</summary>
-		internal static Task SelectOne(string command){
+		public static Task SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Task objects from the database using a query.</summary>
-		internal static List<Task> SelectMany(string command){
+		public static List<Task> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Task> TableToList(DataTable table){
+		public static List<Task> TableToList(DataTable table){
 			List<Task> retVal=new List<Task>();
 			Task task;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,7 +65,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Task into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Task task){
+		public static long Insert(Task task){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				task.TaskNum=DbHelper.GetNextOracleKey("task","TaskNum");
 				int loopcount=0;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Task into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Task task,bool useExistingPK){
+		public static long Insert(Task task,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				task.TaskNum=ReplicationServers.GetKey("task","TaskNum");
 			}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Task in the database.</summary>
-		internal static void Update(Task task){
+		public static void Update(Task task){
 			string command="UPDATE task SET "
 				+"TaskListNum     =  "+POut.Long  (task.TaskListNum)+", "
 				+"DateTask        =  "+POut.Date  (task.DateTask)+", "
@@ -153,7 +153,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Task in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Task task,Task oldTask){
+		public static void Update(Task task,Task oldTask){
 			string command="";
 			if(task.TaskListNum != oldTask.TaskListNum) {
 				if(command!=""){ command+=",";}
@@ -216,7 +216,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Task from the database.</summary>
-		internal static void Delete(long taskNum){
+		public static void Delete(long taskNum){
 			string command="DELETE FROM task "
 				+"WHERE TaskNum = "+POut.Long(taskNum);
 			Db.NonQ(command);

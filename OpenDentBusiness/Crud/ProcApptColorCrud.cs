@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcApptColorCrud {
+	public class ProcApptColorCrud {
 		///<summary>Gets one ProcApptColor object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcApptColor SelectOne(long procApptColorNum){
+		public static ProcApptColor SelectOne(long procApptColorNum){
 			string command="SELECT * FROM procapptcolor "
 				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum);
 			List<ProcApptColor> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcApptColor object from the database using a query.</summary>
-		internal static ProcApptColor SelectOne(string command){
+		public static ProcApptColor SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcApptColor objects from the database using a query.</summary>
-		internal static List<ProcApptColor> SelectMany(string command){
+		public static List<ProcApptColor> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcApptColor> TableToList(DataTable table){
+		public static List<ProcApptColor> TableToList(DataTable table){
 			List<ProcApptColor> retVal=new List<ProcApptColor>();
 			ProcApptColor procApptColor;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcApptColor into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcApptColor procApptColor){
+		public static long Insert(ProcApptColor procApptColor){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procApptColor.ProcApptColorNum=DbHelper.GetNextOracleKey("procapptcolor","ProcApptColorNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcApptColor into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcApptColor procApptColor,bool useExistingPK){
+		public static long Insert(ProcApptColor procApptColor,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procApptColor.ProcApptColorNum=ReplicationServers.GetKey("procapptcolor","ProcApptColorNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcApptColor in the database.</summary>
-		internal static void Update(ProcApptColor procApptColor){
+		public static void Update(ProcApptColor procApptColor){
 			string command="UPDATE procapptcolor SET "
 				+"CodeRange       = '"+POut.String(procApptColor.CodeRange)+"', "
 				+"ShowPreviousDate=  "+POut.Bool  (procApptColor.ShowPreviousDate)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcApptColor in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcApptColor procApptColor,ProcApptColor oldProcApptColor){
+		public static void Update(ProcApptColor procApptColor,ProcApptColor oldProcApptColor){
 			string command="";
 			if(procApptColor.CodeRange != oldProcApptColor.CodeRange) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcApptColor from the database.</summary>
-		internal static void Delete(long procApptColorNum){
+		public static void Delete(long procApptColorNum){
 			string command="DELETE FROM procapptcolor "
 				+"WHERE ProcApptColorNum = "+POut.Long(procApptColorNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class MedicalOrderCrud {
+	public class MedicalOrderCrud {
 		///<summary>Gets one MedicalOrder object from the database using the primary key.  Returns null if not found.</summary>
-		internal static MedicalOrder SelectOne(long medicalOrderNum){
+		public static MedicalOrder SelectOne(long medicalOrderNum){
 			string command="SELECT * FROM medicalorder "
 				+"WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
 			List<MedicalOrder> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one MedicalOrder object from the database using a query.</summary>
-		internal static MedicalOrder SelectOne(string command){
+		public static MedicalOrder SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of MedicalOrder objects from the database using a query.</summary>
-		internal static List<MedicalOrder> SelectMany(string command){
+		public static List<MedicalOrder> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<MedicalOrder> TableToList(DataTable table){
+		public static List<MedicalOrder> TableToList(DataTable table){
 			List<MedicalOrder> retVal=new List<MedicalOrder>();
 			MedicalOrder medicalOrder;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MedicalOrder into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MedicalOrder medicalOrder){
+		public static long Insert(MedicalOrder medicalOrder){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				medicalOrder.MedicalOrderNum=DbHelper.GetNextOracleKey("medicalorder","MedicalOrderNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MedicalOrder into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(MedicalOrder medicalOrder,bool useExistingPK){
+		public static long Insert(MedicalOrder medicalOrder,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				medicalOrder.MedicalOrderNum=ReplicationServers.GetKey("medicalorder","MedicalOrderNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MedicalOrder in the database.</summary>
-		internal static void Update(MedicalOrder medicalOrder){
+		public static void Update(MedicalOrder medicalOrder){
 			string command="UPDATE medicalorder SET "
 				+"MedOrderType   =  "+POut.Int   ((int)medicalOrder.MedOrderType)+", "
 				+"PatNum         =  "+POut.Long  (medicalOrder.PatNum)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MedicalOrder in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(MedicalOrder medicalOrder,MedicalOrder oldMedicalOrder){
+		public static void Update(MedicalOrder medicalOrder,MedicalOrder oldMedicalOrder){
 			string command="";
 			if(medicalOrder.MedOrderType != oldMedicalOrder.MedOrderType) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one MedicalOrder from the database.</summary>
-		internal static void Delete(long medicalOrderNum){
+		public static void Delete(long medicalOrderNum){
 			string command="DELETE FROM medicalorder "
 				+"WHERE MedicalOrderNum = "+POut.Long(medicalOrderNum);
 			Db.NonQ(command);

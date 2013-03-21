@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ScreenPatCrud {
+	public class ScreenPatCrud {
 		///<summary>Gets one ScreenPat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ScreenPat SelectOne(long screenPatNum){
+		public static ScreenPat SelectOne(long screenPatNum){
 			string command="SELECT * FROM screenpat "
 				+"WHERE ScreenPatNum = "+POut.Long(screenPatNum);
 			List<ScreenPat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ScreenPat object from the database using a query.</summary>
-		internal static ScreenPat SelectOne(string command){
+		public static ScreenPat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ScreenPat objects from the database using a query.</summary>
-		internal static List<ScreenPat> SelectMany(string command){
+		public static List<ScreenPat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ScreenPat> TableToList(DataTable table){
+		public static List<ScreenPat> TableToList(DataTable table){
 			List<ScreenPat> retVal=new List<ScreenPat>();
 			ScreenPat screenPat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScreenPat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ScreenPat screenPat){
+		public static long Insert(ScreenPat screenPat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				screenPat.ScreenPatNum=DbHelper.GetNextOracleKey("screenpat","ScreenPatNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScreenPat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ScreenPat screenPat,bool useExistingPK){
+		public static long Insert(ScreenPat screenPat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				screenPat.ScreenPatNum=ReplicationServers.GetKey("screenpat","ScreenPatNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScreenPat in the database.</summary>
-		internal static void Update(ScreenPat screenPat){
+		public static void Update(ScreenPat screenPat){
 			string command="UPDATE screenpat SET "
 				+"PatNum        =  "+POut.Long  (screenPat.PatNum)+", "
 				+"ScreenGroupNum=  "+POut.Long  (screenPat.ScreenGroupNum)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScreenPat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ScreenPat screenPat,ScreenPat oldScreenPat){
+		public static void Update(ScreenPat screenPat,ScreenPat oldScreenPat){
 			string command="";
 			if(screenPat.PatNum != oldScreenPat.PatNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ScreenPat from the database.</summary>
-		internal static void Delete(long screenPatNum){
+		public static void Delete(long screenPatNum){
 			string command="DELETE FROM screenpat "
 				+"WHERE ScreenPatNum = "+POut.Long(screenPatNum);
 			Db.NonQ(command);

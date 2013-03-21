@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PayPeriodCrud {
+	public class PayPeriodCrud {
 		///<summary>Gets one PayPeriod object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PayPeriod SelectOne(long payPeriodNum){
+		public static PayPeriod SelectOne(long payPeriodNum){
 			string command="SELECT * FROM payperiod "
 				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum);
 			List<PayPeriod> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PayPeriod object from the database using a query.</summary>
-		internal static PayPeriod SelectOne(string command){
+		public static PayPeriod SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PayPeriod objects from the database using a query.</summary>
-		internal static List<PayPeriod> SelectMany(string command){
+		public static List<PayPeriod> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PayPeriod> TableToList(DataTable table){
+		public static List<PayPeriod> TableToList(DataTable table){
 			List<PayPeriod> retVal=new List<PayPeriod>();
 			PayPeriod payPeriod;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPeriod into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PayPeriod payPeriod){
+		public static long Insert(PayPeriod payPeriod){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				payPeriod.PayPeriodNum=DbHelper.GetNextOracleKey("payperiod","PayPeriodNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PayPeriod into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PayPeriod payPeriod,bool useExistingPK){
+		public static long Insert(PayPeriod payPeriod,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				payPeriod.PayPeriodNum=ReplicationServers.GetKey("payperiod","PayPeriodNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPeriod in the database.</summary>
-		internal static void Update(PayPeriod payPeriod){
+		public static void Update(PayPeriod payPeriod){
 			string command="UPDATE payperiod SET "
 				+"DateStart   =  "+POut.Date  (payPeriod.DateStart)+", "
 				+"DateStop    =  "+POut.Date  (payPeriod.DateStop)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PayPeriod in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PayPeriod payPeriod,PayPeriod oldPayPeriod){
+		public static void Update(PayPeriod payPeriod,PayPeriod oldPayPeriod){
 			string command="";
 			if(payPeriod.DateStart != oldPayPeriod.DateStart) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PayPeriod from the database.</summary>
-		internal static void Delete(long payPeriodNum){
+		public static void Delete(long payPeriodNum){
 			string command="DELETE FROM payperiod "
 				+"WHERE PayPeriodNum = "+POut.Long(payPeriodNum);
 			Db.NonQ(command);

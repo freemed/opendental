@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class VaccinePatCrud {
+	public class VaccinePatCrud {
 		///<summary>Gets one VaccinePat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static VaccinePat SelectOne(long vaccinePatNum){
+		public static VaccinePat SelectOne(long vaccinePatNum){
 			string command="SELECT * FROM vaccinepat "
 				+"WHERE VaccinePatNum = "+POut.Long(vaccinePatNum);
 			List<VaccinePat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one VaccinePat object from the database using a query.</summary>
-		internal static VaccinePat SelectOne(string command){
+		public static VaccinePat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of VaccinePat objects from the database using a query.</summary>
-		internal static List<VaccinePat> SelectMany(string command){
+		public static List<VaccinePat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<VaccinePat> TableToList(DataTable table){
+		public static List<VaccinePat> TableToList(DataTable table){
 			List<VaccinePat> retVal=new List<VaccinePat>();
 			VaccinePat vaccinePat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one VaccinePat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(VaccinePat vaccinePat){
+		public static long Insert(VaccinePat vaccinePat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				vaccinePat.VaccinePatNum=DbHelper.GetNextOracleKey("vaccinepat","VaccinePatNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one VaccinePat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(VaccinePat vaccinePat,bool useExistingPK){
+		public static long Insert(VaccinePat vaccinePat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				vaccinePat.VaccinePatNum=ReplicationServers.GetKey("vaccinepat","VaccinePatNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one VaccinePat in the database.</summary>
-		internal static void Update(VaccinePat vaccinePat){
+		public static void Update(VaccinePat vaccinePat){
 			string command="UPDATE vaccinepat SET "
 				+"VaccineDefNum  =  "+POut.Long  (vaccinePat.VaccineDefNum)+", "
 				+"DateTimeStart  =  "+POut.DateT (vaccinePat.DateTimeStart)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one VaccinePat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(VaccinePat vaccinePat,VaccinePat oldVaccinePat){
+		public static void Update(VaccinePat vaccinePat,VaccinePat oldVaccinePat){
 			string command="";
 			if(vaccinePat.VaccineDefNum != oldVaccinePat.VaccineDefNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one VaccinePat from the database.</summary>
-		internal static void Delete(long vaccinePatNum){
+		public static void Delete(long vaccinePatNum){
 			string command="DELETE FROM vaccinepat "
 				+"WHERE VaccinePatNum = "+POut.Long(vaccinePatNum);
 			Db.NonQ(command);

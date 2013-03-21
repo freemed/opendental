@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SupplyOrderItemCrud {
+	public class SupplyOrderItemCrud {
 		///<summary>Gets one SupplyOrderItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SupplyOrderItem SelectOne(long supplyOrderItemNum){
+		public static SupplyOrderItem SelectOne(long supplyOrderItemNum){
 			string command="SELECT * FROM supplyorderitem "
 				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum);
 			List<SupplyOrderItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SupplyOrderItem object from the database using a query.</summary>
-		internal static SupplyOrderItem SelectOne(string command){
+		public static SupplyOrderItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SupplyOrderItem objects from the database using a query.</summary>
-		internal static List<SupplyOrderItem> SelectMany(string command){
+		public static List<SupplyOrderItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SupplyOrderItem> TableToList(DataTable table){
+		public static List<SupplyOrderItem> TableToList(DataTable table){
 			List<SupplyOrderItem> retVal=new List<SupplyOrderItem>();
 			SupplyOrderItem supplyOrderItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SupplyOrderItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SupplyOrderItem supplyOrderItem){
+		public static long Insert(SupplyOrderItem supplyOrderItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				supplyOrderItem.SupplyOrderItemNum=DbHelper.GetNextOracleKey("supplyorderitem","SupplyOrderItemNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SupplyOrderItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SupplyOrderItem supplyOrderItem,bool useExistingPK){
+		public static long Insert(SupplyOrderItem supplyOrderItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				supplyOrderItem.SupplyOrderItemNum=ReplicationServers.GetKey("supplyorderitem","SupplyOrderItemNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SupplyOrderItem in the database.</summary>
-		internal static void Update(SupplyOrderItem supplyOrderItem){
+		public static void Update(SupplyOrderItem supplyOrderItem){
 			string command="UPDATE supplyorderitem SET "
 				+"SupplyOrderNum    =  "+POut.Long  (supplyOrderItem.SupplyOrderNum)+", "
 				+"SupplyNum         =  "+POut.Long  (supplyOrderItem.SupplyNum)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SupplyOrderItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SupplyOrderItem supplyOrderItem,SupplyOrderItem oldSupplyOrderItem){
+		public static void Update(SupplyOrderItem supplyOrderItem,SupplyOrderItem oldSupplyOrderItem){
 			string command="";
 			if(supplyOrderItem.SupplyOrderNum != oldSupplyOrderItem.SupplyOrderNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SupplyOrderItem from the database.</summary>
-		internal static void Delete(long supplyOrderItemNum){
+		public static void Delete(long supplyOrderItemNum){
 			string command="DELETE FROM supplyorderitem "
 				+"WHERE SupplyOrderItemNum = "+POut.Long(supplyOrderItemNum);
 			Db.NonQ(command);

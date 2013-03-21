@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutoNoteControlCrud {
+	public class AutoNoteControlCrud {
 		///<summary>Gets one AutoNoteControl object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutoNoteControl SelectOne(long autoNoteControlNum){
+		public static AutoNoteControl SelectOne(long autoNoteControlNum){
 			string command="SELECT * FROM autonotecontrol "
 				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum);
 			List<AutoNoteControl> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutoNoteControl object from the database using a query.</summary>
-		internal static AutoNoteControl SelectOne(string command){
+		public static AutoNoteControl SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutoNoteControl objects from the database using a query.</summary>
-		internal static List<AutoNoteControl> SelectMany(string command){
+		public static List<AutoNoteControl> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutoNoteControl> TableToList(DataTable table){
+		public static List<AutoNoteControl> TableToList(DataTable table){
 			List<AutoNoteControl> retVal=new List<AutoNoteControl>();
 			AutoNoteControl autoNoteControl;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoNoteControl into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutoNoteControl autoNoteControl){
+		public static long Insert(AutoNoteControl autoNoteControl){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				autoNoteControl.AutoNoteControlNum=DbHelper.GetNextOracleKey("autonotecontrol","AutoNoteControlNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoNoteControl into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutoNoteControl autoNoteControl,bool useExistingPK){
+		public static long Insert(AutoNoteControl autoNoteControl,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				autoNoteControl.AutoNoteControlNum=ReplicationServers.GetKey("autonotecontrol","AutoNoteControlNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoNoteControl in the database.</summary>
-		internal static void Update(AutoNoteControl autoNoteControl){
+		public static void Update(AutoNoteControl autoNoteControl){
 			string command="UPDATE autonotecontrol SET "
 				+"Descript          = '"+POut.String(autoNoteControl.Descript)+"', "
 				+"ControlType       = '"+POut.String(autoNoteControl.ControlType)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoNoteControl in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutoNoteControl autoNoteControl,AutoNoteControl oldAutoNoteControl){
+		public static void Update(AutoNoteControl autoNoteControl,AutoNoteControl oldAutoNoteControl){
 			string command="";
 			if(autoNoteControl.Descript != oldAutoNoteControl.Descript) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutoNoteControl from the database.</summary>
-		internal static void Delete(long autoNoteControlNum){
+		public static void Delete(long autoNoteControlNum){
 			string command="DELETE FROM autonotecontrol "
 				+"WHERE AutoNoteControlNum = "+POut.Long(autoNoteControlNum);
 			Db.NonQ(command);

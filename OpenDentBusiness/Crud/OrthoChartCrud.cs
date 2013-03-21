@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class OrthoChartCrud {
+	public class OrthoChartCrud {
 		///<summary>Gets one OrthoChart object from the database using the primary key.  Returns null if not found.</summary>
-		internal static OrthoChart SelectOne(long orthoChartNum){
+		public static OrthoChart SelectOne(long orthoChartNum){
 			string command="SELECT * FROM orthochart "
 				+"WHERE OrthoChartNum = "+POut.Long(orthoChartNum);
 			List<OrthoChart> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one OrthoChart object from the database using a query.</summary>
-		internal static OrthoChart SelectOne(string command){
+		public static OrthoChart SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of OrthoChart objects from the database using a query.</summary>
-		internal static List<OrthoChart> SelectMany(string command){
+		public static List<OrthoChart> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<OrthoChart> TableToList(DataTable table){
+		public static List<OrthoChart> TableToList(DataTable table){
 			List<OrthoChart> retVal=new List<OrthoChart>();
 			OrthoChart orthoChart;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one OrthoChart into the database.  Returns the new priKey.</summary>
-		internal static long Insert(OrthoChart orthoChart){
+		public static long Insert(OrthoChart orthoChart){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				orthoChart.OrthoChartNum=DbHelper.GetNextOracleKey("orthochart","OrthoChartNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one OrthoChart into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(OrthoChart orthoChart,bool useExistingPK){
+		public static long Insert(OrthoChart orthoChart,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				orthoChart.OrthoChartNum=ReplicationServers.GetKey("orthochart","OrthoChartNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one OrthoChart in the database.</summary>
-		internal static void Update(OrthoChart orthoChart){
+		public static void Update(OrthoChart orthoChart){
 			string command="UPDATE orthochart SET "
 				+"PatNum       =  "+POut.Long  (orthoChart.PatNum)+", "
 				+"DateService  =  "+POut.Date  (orthoChart.DateService)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one OrthoChart in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(OrthoChart orthoChart,OrthoChart oldOrthoChart){
+		public static void Update(OrthoChart orthoChart,OrthoChart oldOrthoChart){
 			string command="";
 			if(orthoChart.PatNum != oldOrthoChart.PatNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one OrthoChart from the database.</summary>
-		internal static void Delete(long orthoChartNum){
+		public static void Delete(long orthoChartNum){
 			string command="DELETE FROM orthochart "
 				+"WHERE OrthoChartNum = "+POut.Long(orthoChartNum);
 			Db.NonQ(command);

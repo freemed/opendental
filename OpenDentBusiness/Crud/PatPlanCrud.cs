@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PatPlanCrud {
+	public class PatPlanCrud {
 		///<summary>Gets one PatPlan object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PatPlan SelectOne(long patPlanNum){
+		public static PatPlan SelectOne(long patPlanNum){
 			string command="SELECT * FROM patplan "
 				+"WHERE PatPlanNum = "+POut.Long(patPlanNum);
 			List<PatPlan> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PatPlan object from the database using a query.</summary>
-		internal static PatPlan SelectOne(string command){
+		public static PatPlan SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PatPlan objects from the database using a query.</summary>
-		internal static List<PatPlan> SelectMany(string command){
+		public static List<PatPlan> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PatPlan> TableToList(DataTable table){
+		public static List<PatPlan> TableToList(DataTable table){
 			List<PatPlan> retVal=new List<PatPlan>();
 			PatPlan patPlan;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatPlan into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PatPlan patPlan){
+		public static long Insert(PatPlan patPlan){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				patPlan.PatPlanNum=DbHelper.GetNextOracleKey("patplan","PatPlanNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatPlan into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PatPlan patPlan,bool useExistingPK){
+		public static long Insert(PatPlan patPlan,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				patPlan.PatPlanNum=ReplicationServers.GetKey("patplan","PatPlanNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatPlan in the database.</summary>
-		internal static void Update(PatPlan patPlan){
+		public static void Update(PatPlan patPlan){
 			string command="UPDATE patplan SET "
 				+"PatNum      =  "+POut.Long  (patPlan.PatNum)+", "
 				+"Ordinal     =  "+POut.Byte  (patPlan.Ordinal)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatPlan in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PatPlan patPlan,PatPlan oldPatPlan){
+		public static void Update(PatPlan patPlan,PatPlan oldPatPlan){
 			string command="";
 			if(patPlan.PatNum != oldPatPlan.PatNum) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PatPlan from the database.</summary>
-		internal static void Delete(long patPlanNum){
+		public static void Delete(long patPlanNum){
 			string command="DELETE FROM patplan "
 				+"WHERE PatPlanNum = "+POut.Long(patPlanNum);
 			Db.NonQ(command);

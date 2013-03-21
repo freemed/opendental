@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcTPCrud {
+	public class ProcTPCrud {
 		///<summary>Gets one ProcTP object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcTP SelectOne(long procTPNum){
+		public static ProcTP SelectOne(long procTPNum){
 			string command="SELECT * FROM proctp "
 				+"WHERE ProcTPNum = "+POut.Long(procTPNum);
 			List<ProcTP> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcTP object from the database using a query.</summary>
-		internal static ProcTP SelectOne(string command){
+		public static ProcTP SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcTP objects from the database using a query.</summary>
-		internal static List<ProcTP> SelectMany(string command){
+		public static List<ProcTP> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcTP> TableToList(DataTable table){
+		public static List<ProcTP> TableToList(DataTable table){
 			List<ProcTP> retVal=new List<ProcTP>();
 			ProcTP procTP;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -69,7 +69,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcTP into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcTP procTP){
+		public static long Insert(ProcTP procTP){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procTP.ProcTPNum=DbHelper.GetNextOracleKey("proctp","ProcTPNum");
 				int loopcount=0;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcTP into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcTP procTP,bool useExistingPK){
+		public static long Insert(ProcTP procTP,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procTP.ProcTPNum=ReplicationServers.GetKey("proctp","ProcTPNum");
 			}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcTP in the database.</summary>
-		internal static void Update(ProcTP procTP){
+		public static void Update(ProcTP procTP){
 			string command="UPDATE proctp SET "
 				+"TreatPlanNum=  "+POut.Long  (procTP.TreatPlanNum)+", "
 				+"PatNum      =  "+POut.Long  (procTP.PatNum)+", "
@@ -157,7 +157,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcTP in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcTP procTP,ProcTP oldProcTP){
+		public static void Update(ProcTP procTP,ProcTP oldProcTP){
 			string command="";
 			if(procTP.TreatPlanNum != oldProcTP.TreatPlanNum) {
 				if(command!=""){ command+=",";}
@@ -232,7 +232,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcTP from the database.</summary>
-		internal static void Delete(long procTPNum){
+		public static void Delete(long procTPNum){
 			string command="DELETE FROM proctp "
 				+"WHERE ProcTPNum = "+POut.Long(procTPNum);
 			Db.NonQ(command);

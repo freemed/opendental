@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class HL7DefFieldCrud {
+	public class HL7DefFieldCrud {
 		///<summary>Gets one HL7DefField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static HL7DefField SelectOne(long hL7DefFieldNum){
+		public static HL7DefField SelectOne(long hL7DefFieldNum){
 			string command="SELECT * FROM hl7deffield "
 				+"WHERE HL7DefFieldNum = "+POut.Long(hL7DefFieldNum);
 			List<HL7DefField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one HL7DefField object from the database using a query.</summary>
-		internal static HL7DefField SelectOne(string command){
+		public static HL7DefField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of HL7DefField objects from the database using a query.</summary>
-		internal static List<HL7DefField> SelectMany(string command){
+		public static List<HL7DefField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<HL7DefField> TableToList(DataTable table){
+		public static List<HL7DefField> TableToList(DataTable table){
 			List<HL7DefField> retVal=new List<HL7DefField>();
 			HL7DefField hL7DefField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -68,7 +68,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7DefField hL7DefField){
+		public static long Insert(HL7DefField hL7DefField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				hL7DefField.HL7DefFieldNum=DbHelper.GetNextOracleKey("hl7deffield","HL7DefFieldNum");
 				int loopcount=0;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(HL7DefField hL7DefField,bool useExistingPK){
+		public static long Insert(HL7DefField hL7DefField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				hL7DefField.HL7DefFieldNum=ReplicationServers.GetKey("hl7deffield","HL7DefFieldNum");
 			}
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefField in the database.</summary>
-		internal static void Update(HL7DefField hL7DefField){
+		public static void Update(HL7DefField hL7DefField){
 			string command="UPDATE hl7deffield SET "
 				+"HL7DefSegmentNum=  "+POut.Long  (hL7DefField.HL7DefSegmentNum)+", "
 				+"OrdinalPos      =  "+POut.Int   (hL7DefField.OrdinalPos)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(HL7DefField hL7DefField,HL7DefField oldHL7DefField){
+		public static void Update(HL7DefField hL7DefField,HL7DefField oldHL7DefField){
 			string command="";
 			if(hL7DefField.HL7DefSegmentNum != oldHL7DefField.HL7DefSegmentNum) {
 				if(command!=""){ command+=",";}
@@ -171,7 +171,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one HL7DefField from the database.</summary>
-		internal static void Delete(long hL7DefFieldNum){
+		public static void Delete(long hL7DefFieldNum){
 			string command="DELETE FROM hl7deffield "
 				+"WHERE HL7DefFieldNum = "+POut.Long(hL7DefFieldNum);
 			Db.NonQ(command);

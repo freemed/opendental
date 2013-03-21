@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EhrMeasureCrud {
+	public class EhrMeasureCrud {
 		///<summary>Gets one EhrMeasure object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EhrMeasure SelectOne(long ehrMeasureNum){
+		public static EhrMeasure SelectOne(long ehrMeasureNum){
 			string command="SELECT * FROM ehrmeasure "
 				+"WHERE EhrMeasureNum = "+POut.Long(ehrMeasureNum);
 			List<EhrMeasure> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EhrMeasure object from the database using a query.</summary>
-		internal static EhrMeasure SelectOne(string command){
+		public static EhrMeasure SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EhrMeasure objects from the database using a query.</summary>
-		internal static List<EhrMeasure> SelectMany(string command){
+		public static List<EhrMeasure> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EhrMeasure> TableToList(DataTable table){
+		public static List<EhrMeasure> TableToList(DataTable table){
 			List<EhrMeasure> retVal=new List<EhrMeasure>();
 			EhrMeasure ehrMeasure;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrMeasure into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EhrMeasure ehrMeasure){
+		public static long Insert(EhrMeasure ehrMeasure){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				ehrMeasure.EhrMeasureNum=DbHelper.GetNextOracleKey("ehrmeasure","EhrMeasureNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrMeasure into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EhrMeasure ehrMeasure,bool useExistingPK){
+		public static long Insert(EhrMeasure ehrMeasure,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				ehrMeasure.EhrMeasureNum=ReplicationServers.GetKey("ehrmeasure","EhrMeasureNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrMeasure in the database.</summary>
-		internal static void Update(EhrMeasure ehrMeasure){
+		public static void Update(EhrMeasure ehrMeasure){
 			string command="UPDATE ehrmeasure SET "
 				+"MeasureType  =  "+POut.Int   ((int)ehrMeasure.MeasureType)+", "
 				+"Numerator    =  "+POut.Int   (ehrMeasure.Numerator)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrMeasure in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EhrMeasure ehrMeasure,EhrMeasure oldEhrMeasure){
+		public static void Update(EhrMeasure ehrMeasure,EhrMeasure oldEhrMeasure){
 			string command="";
 			if(ehrMeasure.MeasureType != oldEhrMeasure.MeasureType) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EhrMeasure from the database.</summary>
-		internal static void Delete(long ehrMeasureNum){
+		public static void Delete(long ehrMeasureNum){
 			string command="DELETE FROM ehrmeasure "
 				+"WHERE EhrMeasureNum = "+POut.Long(ehrMeasureNum);
 			Db.NonQ(command);

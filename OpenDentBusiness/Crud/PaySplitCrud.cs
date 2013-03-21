@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PaySplitCrud {
+	public class PaySplitCrud {
 		///<summary>Gets one PaySplit object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PaySplit SelectOne(long splitNum){
+		public static PaySplit SelectOne(long splitNum){
 			string command="SELECT * FROM paysplit "
 				+"WHERE SplitNum = "+POut.Long(splitNum);
 			List<PaySplit> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PaySplit object from the database using a query.</summary>
-		internal static PaySplit SelectOne(string command){
+		public static PaySplit SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PaySplit objects from the database using a query.</summary>
-		internal static List<PaySplit> SelectMany(string command){
+		public static List<PaySplit> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PaySplit> TableToList(DataTable table){
+		public static List<PaySplit> TableToList(DataTable table){
 			List<PaySplit> retVal=new List<PaySplit>();
 			PaySplit paySplit;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -66,7 +66,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PaySplit into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PaySplit paySplit){
+		public static long Insert(PaySplit paySplit){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				paySplit.SplitNum=DbHelper.GetNextOracleKey("paysplit","SplitNum");
 				int loopcount=0;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PaySplit into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PaySplit paySplit,bool useExistingPK){
+		public static long Insert(PaySplit paySplit,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				paySplit.SplitNum=ReplicationServers.GetKey("paysplit","SplitNum");
 			}
@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PaySplit in the database.</summary>
-		internal static void Update(PaySplit paySplit){
+		public static void Update(PaySplit paySplit){
 			string command="UPDATE paysplit SET "
 				+"SplitAmt    = '"+POut.Double(paySplit.SplitAmt)+"', "
 				+"PatNum      =  "+POut.Long  (paySplit.PatNum)+", "
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PaySplit in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PaySplit paySplit,PaySplit oldPaySplit){
+		public static void Update(PaySplit paySplit,PaySplit oldPaySplit){
 			string command="";
 			if(paySplit.SplitAmt != oldPaySplit.SplitAmt) {
 				if(command!=""){ command+=",";}
@@ -208,7 +208,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PaySplit from the database.</summary>
-		internal static void Delete(long splitNum){
+		public static void Delete(long splitNum){
 			string command="DELETE FROM paysplit "
 				+"WHERE SplitNum = "+POut.Long(splitNum);
 			Db.NonQ(command);

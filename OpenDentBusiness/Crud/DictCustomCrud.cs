@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DictCustomCrud {
+	public class DictCustomCrud {
 		///<summary>Gets one DictCustom object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DictCustom SelectOne(long dictCustomNum){
+		public static DictCustom SelectOne(long dictCustomNum){
 			string command="SELECT * FROM dictcustom "
 				+"WHERE DictCustomNum = "+POut.Long(dictCustomNum);
 			List<DictCustom> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DictCustom object from the database using a query.</summary>
-		internal static DictCustom SelectOne(string command){
+		public static DictCustom SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DictCustom objects from the database using a query.</summary>
-		internal static List<DictCustom> SelectMany(string command){
+		public static List<DictCustom> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DictCustom> TableToList(DataTable table){
+		public static List<DictCustom> TableToList(DataTable table){
 			List<DictCustom> retVal=new List<DictCustom>();
 			DictCustom dictCustom;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DictCustom into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DictCustom dictCustom){
+		public static long Insert(DictCustom dictCustom){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				dictCustom.DictCustomNum=DbHelper.GetNextOracleKey("dictcustom","DictCustomNum");
 				int loopcount=0;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DictCustom into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DictCustom dictCustom,bool useExistingPK){
+		public static long Insert(DictCustom dictCustom,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				dictCustom.DictCustomNum=ReplicationServers.GetKey("dictcustom","DictCustomNum");
 			}
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DictCustom in the database.</summary>
-		internal static void Update(DictCustom dictCustom){
+		public static void Update(DictCustom dictCustom){
 			string command="UPDATE dictcustom SET "
 				+"WordText     = '"+POut.String(dictCustom.WordText)+"' "
 				+"WHERE DictCustomNum = "+POut.Long(dictCustom.DictCustomNum);
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DictCustom in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DictCustom dictCustom,DictCustom oldDictCustom){
+		public static void Update(DictCustom dictCustom,DictCustom oldDictCustom){
 			string command="";
 			if(dictCustom.WordText != oldDictCustom.WordText) {
 				if(command!=""){ command+=",";}
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DictCustom from the database.</summary>
-		internal static void Delete(long dictCustomNum){
+		public static void Delete(long dictCustomNum){
 			string command="DELETE FROM dictcustom "
 				+"WHERE DictCustomNum = "+POut.Long(dictCustomNum);
 			Db.NonQ(command);

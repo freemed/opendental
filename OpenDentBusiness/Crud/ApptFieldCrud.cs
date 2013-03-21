@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ApptFieldCrud {
+	public class ApptFieldCrud {
 		///<summary>Gets one ApptField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ApptField SelectOne(long apptFieldNum){
+		public static ApptField SelectOne(long apptFieldNum){
 			string command="SELECT * FROM apptfield "
 				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum);
 			List<ApptField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ApptField object from the database using a query.</summary>
-		internal static ApptField SelectOne(string command){
+		public static ApptField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ApptField objects from the database using a query.</summary>
-		internal static List<ApptField> SelectMany(string command){
+		public static List<ApptField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ApptField> TableToList(DataTable table){
+		public static List<ApptField> TableToList(DataTable table){
 			List<ApptField> retVal=new List<ApptField>();
 			ApptField apptField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ApptField apptField){
+		public static long Insert(ApptField apptField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				apptField.ApptFieldNum=DbHelper.GetNextOracleKey("apptfield","ApptFieldNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ApptField apptField,bool useExistingPK){
+		public static long Insert(ApptField apptField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				apptField.ApptFieldNum=ReplicationServers.GetKey("apptfield","ApptFieldNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptField in the database.</summary>
-		internal static void Update(ApptField apptField){
+		public static void Update(ApptField apptField){
 			string command="UPDATE apptfield SET "
 				+"AptNum      =  "+POut.Long  (apptField.AptNum)+", "
 				+"FieldName   = '"+POut.String(apptField.FieldName)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ApptField apptField,ApptField oldApptField){
+		public static void Update(ApptField apptField,ApptField oldApptField){
 			string command="";
 			if(apptField.AptNum != oldApptField.AptNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ApptField from the database.</summary>
-		internal static void Delete(long apptFieldNum){
+		public static void Delete(long apptFieldNum){
 			string command="DELETE FROM apptfield "
 				+"WHERE ApptFieldNum = "+POut.Long(apptFieldNum);
 			Db.NonQ(command);

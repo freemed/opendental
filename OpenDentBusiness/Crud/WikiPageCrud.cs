@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class WikiPageCrud {
+	public class WikiPageCrud {
 		///<summary>Gets one WikiPage object from the database using the primary key.  Returns null if not found.</summary>
-		internal static WikiPage SelectOne(long wikiPageNum){
+		public static WikiPage SelectOne(long wikiPageNum){
 			string command="SELECT * FROM wikipage "
 				+"WHERE WikiPageNum = "+POut.Long(wikiPageNum);
 			List<WikiPage> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one WikiPage object from the database using a query.</summary>
-		internal static WikiPage SelectOne(string command){
+		public static WikiPage SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of WikiPage objects from the database using a query.</summary>
-		internal static List<WikiPage> SelectMany(string command){
+		public static List<WikiPage> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<WikiPage> TableToList(DataTable table){
+		public static List<WikiPage> TableToList(DataTable table){
 			List<WikiPage> retVal=new List<WikiPage>();
 			WikiPage wikiPage;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one WikiPage into the database.  Returns the new priKey.</summary>
-		internal static long Insert(WikiPage wikiPage){
+		public static long Insert(WikiPage wikiPage){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				wikiPage.WikiPageNum=DbHelper.GetNextOracleKey("wikipage","WikiPageNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one WikiPage into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(WikiPage wikiPage,bool useExistingPK){
+		public static long Insert(WikiPage wikiPage,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				wikiPage.WikiPageNum=ReplicationServers.GetKey("wikipage","WikiPageNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one WikiPage in the database.</summary>
-		internal static void Update(WikiPage wikiPage){
+		public static void Update(WikiPage wikiPage){
 			string command="UPDATE wikipage SET "
 				+"UserNum      =  "+POut.Long  (wikiPage.UserNum)+", "
 				+"PageTitle    = '"+POut.String(wikiPage.PageTitle)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one WikiPage in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(WikiPage wikiPage,WikiPage oldWikiPage){
+		public static void Update(WikiPage wikiPage,WikiPage oldWikiPage){
 			string command="";
 			if(wikiPage.UserNum != oldWikiPage.UserNum) {
 				if(command!=""){ command+=",";}
@@ -152,7 +152,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one WikiPage from the database.</summary>
-		internal static void Delete(long wikiPageNum){
+		public static void Delete(long wikiPageNum){
 			string command="DELETE FROM wikipage "
 				+"WHERE WikiPageNum = "+POut.Long(wikiPageNum);
 			Db.NonQ(command);

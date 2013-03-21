@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimProcCrud {
+	public class ClaimProcCrud {
 		///<summary>Gets one ClaimProc object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimProc SelectOne(long claimProcNum){
+		public static ClaimProc SelectOne(long claimProcNum){
 			string command="SELECT * FROM claimproc "
 				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum);
 			List<ClaimProc> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimProc object from the database using a query.</summary>
-		internal static ClaimProc SelectOne(string command){
+		public static ClaimProc SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimProc objects from the database using a query.</summary>
-		internal static List<ClaimProc> SelectMany(string command){
+		public static List<ClaimProc> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimProc> TableToList(DataTable table){
+		public static List<ClaimProc> TableToList(DataTable table){
 			List<ClaimProc> retVal=new List<ClaimProc>();
 			ClaimProc claimProc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimProc into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimProc claimProc){
+		public static long Insert(ClaimProc claimProc){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimProc.ClaimProcNum=DbHelper.GetNextOracleKey("claimproc","ClaimProcNum");
 				int loopcount=0;
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimProc into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimProc claimProc,bool useExistingPK){
+		public static long Insert(ClaimProc claimProc,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimProc.ClaimProcNum=ReplicationServers.GetKey("claimproc","ClaimProcNum");
 			}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimProc in the database.</summary>
-		internal static void Update(ClaimProc claimProc){
+		public static void Update(ClaimProc claimProc){
 			string command="UPDATE claimproc SET "
 				+"ProcNum             =  "+POut.Long  (claimProc.ProcNum)+", "
 				+"ClaimNum            =  "+POut.Long  (claimProc.ClaimNum)+", "
@@ -220,7 +220,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimProc in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimProc claimProc,ClaimProc oldClaimProc){
+		public static void Update(ClaimProc claimProc,ClaimProc oldClaimProc){
 			string command="";
 			if(claimProc.ProcNum != oldClaimProc.ProcNum) {
 				if(command!=""){ command+=",";}
@@ -379,7 +379,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimProc from the database.</summary>
-		internal static void Delete(long claimProcNum){
+		public static void Delete(long claimProcNum){
 			string command="DELETE FROM claimproc "
 				+"WHERE ClaimProcNum = "+POut.Long(claimProcNum);
 			Db.NonQ(command);

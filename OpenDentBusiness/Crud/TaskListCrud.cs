@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskListCrud {
+	public class TaskListCrud {
 		///<summary>Gets one TaskList object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TaskList SelectOne(long taskListNum){
+		public static TaskList SelectOne(long taskListNum){
 			string command="SELECT * FROM tasklist "
 				+"WHERE TaskListNum = "+POut.Long(taskListNum);
 			List<TaskList> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TaskList object from the database using a query.</summary>
-		internal static TaskList SelectOne(string command){
+		public static TaskList SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TaskList objects from the database using a query.</summary>
-		internal static List<TaskList> SelectMany(string command){
+		public static List<TaskList> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TaskList> TableToList(DataTable table){
+		public static List<TaskList> TableToList(DataTable table){
 			List<TaskList> retVal=new List<TaskList>();
 			TaskList taskList;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskList into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TaskList taskList){
+		public static long Insert(TaskList taskList){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				taskList.TaskListNum=DbHelper.GetNextOracleKey("tasklist","TaskListNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskList into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TaskList taskList,bool useExistingPK){
+		public static long Insert(TaskList taskList,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				taskList.TaskListNum=ReplicationServers.GetKey("tasklist","TaskListNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskList in the database.</summary>
-		internal static void Update(TaskList taskList){
+		public static void Update(TaskList taskList){
 			string command="UPDATE tasklist SET "
 				+"Descript     = '"+POut.String(taskList.Descript)+"', "
 				+"Parent       =  "+POut.Long  (taskList.Parent)+", "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskList in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TaskList taskList,TaskList oldTaskList){
+		public static void Update(TaskList taskList,TaskList oldTaskList){
 			string command="";
 			if(taskList.Descript != oldTaskList.Descript) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TaskList from the database.</summary>
-		internal static void Delete(long taskListNum){
+		public static void Delete(long taskListNum){
 			string command="DELETE FROM tasklist "
 				+"WHERE TaskListNum = "+POut.Long(taskListNum);
 			Db.NonQ(command);

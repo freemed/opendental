@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CustRefEntryCrud {
+	public class CustRefEntryCrud {
 		///<summary>Gets one CustRefEntry object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CustRefEntry SelectOne(long custRefEntryNum){
+		public static CustRefEntry SelectOne(long custRefEntryNum){
 			string command="SELECT * FROM custrefentry "
 				+"WHERE CustRefEntryNum = "+POut.Long(custRefEntryNum);
 			List<CustRefEntry> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CustRefEntry object from the database using a query.</summary>
-		internal static CustRefEntry SelectOne(string command){
+		public static CustRefEntry SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CustRefEntry objects from the database using a query.</summary>
-		internal static List<CustRefEntry> SelectMany(string command){
+		public static List<CustRefEntry> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CustRefEntry> TableToList(DataTable table){
+		public static List<CustRefEntry> TableToList(DataTable table){
 			List<CustRefEntry> retVal=new List<CustRefEntry>();
 			CustRefEntry custRefEntry;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CustRefEntry into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CustRefEntry custRefEntry){
+		public static long Insert(CustRefEntry custRefEntry){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				custRefEntry.CustRefEntryNum=DbHelper.GetNextOracleKey("custrefentry","CustRefEntryNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CustRefEntry into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CustRefEntry custRefEntry,bool useExistingPK){
+		public static long Insert(CustRefEntry custRefEntry,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				custRefEntry.CustRefEntryNum=ReplicationServers.GetKey("custrefentry","CustRefEntryNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CustRefEntry in the database.</summary>
-		internal static void Update(CustRefEntry custRefEntry){
+		public static void Update(CustRefEntry custRefEntry){
 			string command="UPDATE custrefentry SET "
 				+"PatNumCust     =  "+POut.Long  (custRefEntry.PatNumCust)+", "
 				+"PatNumRef      =  "+POut.Long  (custRefEntry.PatNumRef)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CustRefEntry in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CustRefEntry custRefEntry,CustRefEntry oldCustRefEntry){
+		public static void Update(CustRefEntry custRefEntry,CustRefEntry oldCustRefEntry){
 			string command="";
 			if(custRefEntry.PatNumCust != oldCustRefEntry.PatNumCust) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CustRefEntry from the database.</summary>
-		internal static void Delete(long custRefEntryNum){
+		public static void Delete(long custRefEntryNum){
 			string command="DELETE FROM custrefentry "
 				+"WHERE CustRefEntryNum = "+POut.Long(custRefEntryNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SupplierCrud {
+	public class SupplierCrud {
 		///<summary>Gets one Supplier object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Supplier SelectOne(long supplierNum){
+		public static Supplier SelectOne(long supplierNum){
 			string command="SELECT * FROM supplier "
 				+"WHERE SupplierNum = "+POut.Long(supplierNum);
 			List<Supplier> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Supplier object from the database using a query.</summary>
-		internal static Supplier SelectOne(string command){
+		public static Supplier SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Supplier objects from the database using a query.</summary>
-		internal static List<Supplier> SelectMany(string command){
+		public static List<Supplier> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Supplier> TableToList(DataTable table){
+		public static List<Supplier> TableToList(DataTable table){
 			List<Supplier> retVal=new List<Supplier>();
 			Supplier supplier;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Supplier into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Supplier supplier){
+		public static long Insert(Supplier supplier){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				supplier.SupplierNum=DbHelper.GetNextOracleKey("supplier","SupplierNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Supplier into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Supplier supplier,bool useExistingPK){
+		public static long Insert(Supplier supplier,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				supplier.SupplierNum=ReplicationServers.GetKey("supplier","SupplierNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Supplier in the database.</summary>
-		internal static void Update(Supplier supplier){
+		public static void Update(Supplier supplier){
 			string command="UPDATE supplier SET "
 				+"Name       = '"+POut.String(supplier.Name)+"', "
 				+"Phone      = '"+POut.String(supplier.Phone)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Supplier in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Supplier supplier,Supplier oldSupplier){
+		public static void Update(Supplier supplier,Supplier oldSupplier){
 			string command="";
 			if(supplier.Name != oldSupplier.Name) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Supplier from the database.</summary>
-		internal static void Delete(long supplierNum){
+		public static void Delete(long supplierNum){
 			string command="DELETE FROM supplier "
 				+"WHERE SupplierNum = "+POut.Long(supplierNum);
 			Db.NonQ(command);

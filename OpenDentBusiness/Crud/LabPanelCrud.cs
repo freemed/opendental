@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LabPanelCrud {
+	public class LabPanelCrud {
 		///<summary>Gets one LabPanel object from the database using the primary key.  Returns null if not found.</summary>
-		internal static LabPanel SelectOne(long labPanelNum){
+		public static LabPanel SelectOne(long labPanelNum){
 			string command="SELECT * FROM labpanel "
 				+"WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			List<LabPanel> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one LabPanel object from the database using a query.</summary>
-		internal static LabPanel SelectOne(string command){
+		public static LabPanel SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of LabPanel objects from the database using a query.</summary>
-		internal static List<LabPanel> SelectMany(string command){
+		public static List<LabPanel> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<LabPanel> TableToList(DataTable table){
+		public static List<LabPanel> TableToList(DataTable table){
 			List<LabPanel> retVal=new List<LabPanel>();
 			LabPanel labPanel;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LabPanel into the database.  Returns the new priKey.</summary>
-		internal static long Insert(LabPanel labPanel){
+		public static long Insert(LabPanel labPanel){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				labPanel.LabPanelNum=DbHelper.GetNextOracleKey("labpanel","LabPanelNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LabPanel into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(LabPanel labPanel,bool useExistingPK){
+		public static long Insert(LabPanel labPanel,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				labPanel.LabPanelNum=ReplicationServers.GetKey("labpanel","LabPanelNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LabPanel in the database.</summary>
-		internal static void Update(LabPanel labPanel){
+		public static void Update(LabPanel labPanel){
 			string command="UPDATE labpanel SET "
 				+"PatNum           =  "+POut.Long  (labPanel.PatNum)+", "
 				+"RawMessage       =  "+DbHelper.ParamChar+"paramRawMessage, "
@@ -144,7 +144,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LabPanel in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(LabPanel labPanel,LabPanel oldLabPanel){
+		public static void Update(LabPanel labPanel,LabPanel oldLabPanel){
 			string command="";
 			if(labPanel.PatNum != oldLabPanel.PatNum) {
 				if(command!=""){ command+=",";}
@@ -192,7 +192,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one LabPanel from the database.</summary>
-		internal static void Delete(long labPanelNum){
+		public static void Delete(long labPanelNum){
 			string command="DELETE FROM labpanel "
 				+"WHERE LabPanelNum = "+POut.Long(labPanelNum);
 			Db.NonQ(command);

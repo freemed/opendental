@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class JournalEntryCrud {
+	public class JournalEntryCrud {
 		///<summary>Gets one JournalEntry object from the database using the primary key.  Returns null if not found.</summary>
-		internal static JournalEntry SelectOne(long journalEntryNum){
+		public static JournalEntry SelectOne(long journalEntryNum){
 			string command="SELECT * FROM journalentry "
 				+"WHERE JournalEntryNum = "+POut.Long(journalEntryNum);
 			List<JournalEntry> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one JournalEntry object from the database using a query.</summary>
-		internal static JournalEntry SelectOne(string command){
+		public static JournalEntry SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of JournalEntry objects from the database using a query.</summary>
-		internal static List<JournalEntry> SelectMany(string command){
+		public static List<JournalEntry> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<JournalEntry> TableToList(DataTable table){
+		public static List<JournalEntry> TableToList(DataTable table){
 			List<JournalEntry> retVal=new List<JournalEntry>();
 			JournalEntry journalEntry;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one JournalEntry into the database.  Returns the new priKey.</summary>
-		internal static long Insert(JournalEntry journalEntry){
+		public static long Insert(JournalEntry journalEntry){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				journalEntry.JournalEntryNum=DbHelper.GetNextOracleKey("journalentry","JournalEntryNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one JournalEntry into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(JournalEntry journalEntry,bool useExistingPK){
+		public static long Insert(JournalEntry journalEntry,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				journalEntry.JournalEntryNum=ReplicationServers.GetKey("journalentry","JournalEntryNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one JournalEntry in the database.</summary>
-		internal static void Update(JournalEntry journalEntry){
+		public static void Update(JournalEntry journalEntry){
 			string command="UPDATE journalentry SET "
 				+"TransactionNum =  "+POut.Long  (journalEntry.TransactionNum)+", "
 				+"AccountNum     =  "+POut.Long  (journalEntry.AccountNum)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one JournalEntry in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(JournalEntry journalEntry,JournalEntry oldJournalEntry){
+		public static void Update(JournalEntry journalEntry,JournalEntry oldJournalEntry){
 			string command="";
 			if(journalEntry.TransactionNum != oldJournalEntry.TransactionNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one JournalEntry from the database.</summary>
-		internal static void Delete(long journalEntryNum){
+		public static void Delete(long journalEntryNum){
 			string command="DELETE FROM journalentry "
 				+"WHERE JournalEntryNum = "+POut.Long(journalEntryNum);
 			Db.NonQ(command);

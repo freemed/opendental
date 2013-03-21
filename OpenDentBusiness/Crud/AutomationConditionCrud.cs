@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutomationConditionCrud {
+	public class AutomationConditionCrud {
 		///<summary>Gets one AutomationCondition object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutomationCondition SelectOne(long automationConditionNum){
+		public static AutomationCondition SelectOne(long automationConditionNum){
 			string command="SELECT * FROM automationcondition "
 				+"WHERE AutomationConditionNum = "+POut.Long(automationConditionNum);
 			List<AutomationCondition> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutomationCondition object from the database using a query.</summary>
-		internal static AutomationCondition SelectOne(string command){
+		public static AutomationCondition SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutomationCondition objects from the database using a query.</summary>
-		internal static List<AutomationCondition> SelectMany(string command){
+		public static List<AutomationCondition> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutomationCondition> TableToList(DataTable table){
+		public static List<AutomationCondition> TableToList(DataTable table){
 			List<AutomationCondition> retVal=new List<AutomationCondition>();
 			AutomationCondition automationCondition;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutomationCondition into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutomationCondition automationCondition){
+		public static long Insert(AutomationCondition automationCondition){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				automationCondition.AutomationConditionNum=DbHelper.GetNextOracleKey("automationcondition","AutomationConditionNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutomationCondition into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutomationCondition automationCondition,bool useExistingPK){
+		public static long Insert(AutomationCondition automationCondition,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				automationCondition.AutomationConditionNum=ReplicationServers.GetKey("automationcondition","AutomationConditionNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutomationCondition in the database.</summary>
-		internal static void Update(AutomationCondition automationCondition){
+		public static void Update(AutomationCondition automationCondition){
 			string command="UPDATE automationcondition SET "
 				+"AutomationNum         =  "+POut.Long  (automationCondition.AutomationNum)+", "
 				+"CompareField          =  "+POut.Int   ((int)automationCondition.CompareField)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutomationCondition in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutomationCondition automationCondition,AutomationCondition oldAutomationCondition){
+		public static void Update(AutomationCondition automationCondition,AutomationCondition oldAutomationCondition){
 			string command="";
 			if(automationCondition.AutomationNum != oldAutomationCondition.AutomationNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutomationCondition from the database.</summary>
-		internal static void Delete(long automationConditionNum){
+		public static void Delete(long automationConditionNum){
 			string command="DELETE FROM automationcondition "
 				+"WHERE AutomationConditionNum = "+POut.Long(automationConditionNum);
 			Db.NonQ(command);

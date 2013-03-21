@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AccountingAutoPayCrud {
+	public class AccountingAutoPayCrud {
 		///<summary>Gets one AccountingAutoPay object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AccountingAutoPay SelectOne(long accountingAutoPayNum){
+		public static AccountingAutoPay SelectOne(long accountingAutoPayNum){
 			string command="SELECT * FROM accountingautopay "
 				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum);
 			List<AccountingAutoPay> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AccountingAutoPay object from the database using a query.</summary>
-		internal static AccountingAutoPay SelectOne(string command){
+		public static AccountingAutoPay SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AccountingAutoPay objects from the database using a query.</summary>
-		internal static List<AccountingAutoPay> SelectMany(string command){
+		public static List<AccountingAutoPay> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AccountingAutoPay> TableToList(DataTable table){
+		public static List<AccountingAutoPay> TableToList(DataTable table){
 			List<AccountingAutoPay> retVal=new List<AccountingAutoPay>();
 			AccountingAutoPay accountingAutoPay;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AccountingAutoPay into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AccountingAutoPay accountingAutoPay){
+		public static long Insert(AccountingAutoPay accountingAutoPay){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				accountingAutoPay.AccountingAutoPayNum=DbHelper.GetNextOracleKey("accountingautopay","AccountingAutoPayNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AccountingAutoPay into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AccountingAutoPay accountingAutoPay,bool useExistingPK){
+		public static long Insert(AccountingAutoPay accountingAutoPay,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				accountingAutoPay.AccountingAutoPayNum=ReplicationServers.GetKey("accountingautopay","AccountingAutoPayNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AccountingAutoPay in the database.</summary>
-		internal static void Update(AccountingAutoPay accountingAutoPay){
+		public static void Update(AccountingAutoPay accountingAutoPay){
 			string command="UPDATE accountingautopay SET "
 				+"PayType             =  "+POut.Long  (accountingAutoPay.PayType)+", "
 				+"PickList            = '"+POut.String(accountingAutoPay.PickList)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AccountingAutoPay in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AccountingAutoPay accountingAutoPay,AccountingAutoPay oldAccountingAutoPay){
+		public static void Update(AccountingAutoPay accountingAutoPay,AccountingAutoPay oldAccountingAutoPay){
 			string command="";
 			if(accountingAutoPay.PayType != oldAccountingAutoPay.PayType) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AccountingAutoPay from the database.</summary>
-		internal static void Delete(long accountingAutoPayNum){
+		public static void Delete(long accountingAutoPayNum){
 			string command="DELETE FROM accountingautopay "
 				+"WHERE AccountingAutoPayNum = "+POut.Long(accountingAutoPayNum);
 			Db.NonQ(command);

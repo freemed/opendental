@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EduResourceCrud {
+	public class EduResourceCrud {
 		///<summary>Gets one EduResource object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EduResource SelectOne(long eduResourceNum){
+		public static EduResource SelectOne(long eduResourceNum){
 			string command="SELECT * FROM eduresource "
 				+"WHERE EduResourceNum = "+POut.Long(eduResourceNum);
 			List<EduResource> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EduResource object from the database using a query.</summary>
-		internal static EduResource SelectOne(string command){
+		public static EduResource SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EduResource objects from the database using a query.</summary>
-		internal static List<EduResource> SelectMany(string command){
+		public static List<EduResource> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EduResource> TableToList(DataTable table){
+		public static List<EduResource> TableToList(DataTable table){
 			List<EduResource> retVal=new List<EduResource>();
 			EduResource eduResource;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EduResource into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EduResource eduResource){
+		public static long Insert(EduResource eduResource){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				eduResource.EduResourceNum=DbHelper.GetNextOracleKey("eduresource","EduResourceNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EduResource into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EduResource eduResource,bool useExistingPK){
+		public static long Insert(EduResource eduResource,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				eduResource.EduResourceNum=ReplicationServers.GetKey("eduresource","EduResourceNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EduResource in the database.</summary>
-		internal static void Update(EduResource eduResource){
+		public static void Update(EduResource eduResource){
 			string command="UPDATE eduresource SET "
 				+"DiseaseDefNum   =  "+POut.Long  (eduResource.DiseaseDefNum)+", "
 				+"MedicationNum   =  "+POut.Long  (eduResource.MedicationNum)+", "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EduResource in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EduResource eduResource,EduResource oldEduResource){
+		public static void Update(EduResource eduResource,EduResource oldEduResource){
 			string command="";
 			if(eduResource.DiseaseDefNum != oldEduResource.DiseaseDefNum) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EduResource from the database.</summary>
-		internal static void Delete(long eduResourceNum){
+		public static void Delete(long eduResourceNum){
 			string command="DELETE FROM eduresource "
 				+"WHERE EduResourceNum = "+POut.Long(eduResourceNum);
 			Db.NonQ(command);

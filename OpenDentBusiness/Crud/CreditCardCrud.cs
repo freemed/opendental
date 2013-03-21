@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CreditCardCrud {
+	public class CreditCardCrud {
 		///<summary>Gets one CreditCard object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CreditCard SelectOne(long creditCardNum){
+		public static CreditCard SelectOne(long creditCardNum){
 			string command="SELECT * FROM creditcard "
 				+"WHERE CreditCardNum = "+POut.Long(creditCardNum);
 			List<CreditCard> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CreditCard object from the database using a query.</summary>
-		internal static CreditCard SelectOne(string command){
+		public static CreditCard SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CreditCard objects from the database using a query.</summary>
-		internal static List<CreditCard> SelectMany(string command){
+		public static List<CreditCard> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CreditCard> TableToList(DataTable table){
+		public static List<CreditCard> TableToList(DataTable table){
 			List<CreditCard> retVal=new List<CreditCard>();
 			CreditCard creditCard;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,7 +65,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CreditCard into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CreditCard creditCard){
+		public static long Insert(CreditCard creditCard){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				creditCard.CreditCardNum=DbHelper.GetNextOracleKey("creditcard","CreditCardNum");
 				int loopcount=0;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CreditCard into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CreditCard creditCard,bool useExistingPK){
+		public static long Insert(CreditCard creditCard,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				creditCard.CreditCardNum=ReplicationServers.GetKey("creditcard","CreditCardNum");
 			}
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CreditCard in the database.</summary>
-		internal static void Update(CreditCard creditCard){
+		public static void Update(CreditCard creditCard){
 			string command="UPDATE creditcard SET "
 				+"PatNum        =  "+POut.Long  (creditCard.PatNum)+", "
 				+"Address       = '"+POut.String(creditCard.Address)+"', "
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CreditCard in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CreditCard creditCard,CreditCard oldCreditCard){
+		public static void Update(CreditCard creditCard,CreditCard oldCreditCard){
 			string command="";
 			if(creditCard.PatNum != oldCreditCard.PatNum) {
 				if(command!=""){ command+=",";}
@@ -204,7 +204,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CreditCard from the database.</summary>
-		internal static void Delete(long creditCardNum){
+		public static void Delete(long creditCardNum){
 			string command="DELETE FROM creditcard "
 				+"WHERE CreditCardNum = "+POut.Long(creditCardNum);
 			Db.NonQ(command);

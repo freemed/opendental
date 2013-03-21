@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class MedicationPatCrud {
+	public class MedicationPatCrud {
 		///<summary>Gets one MedicationPat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static MedicationPat SelectOne(long medicationPatNum){
+		public static MedicationPat SelectOne(long medicationPatNum){
 			string command="SELECT * FROM medicationpat "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPatNum);
 			List<MedicationPat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one MedicationPat object from the database using a query.</summary>
-		internal static MedicationPat SelectOne(string command){
+		public static MedicationPat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of MedicationPat objects from the database using a query.</summary>
-		internal static List<MedicationPat> SelectMany(string command){
+		public static List<MedicationPat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<MedicationPat> TableToList(DataTable table){
+		public static List<MedicationPat> TableToList(DataTable table){
 			List<MedicationPat> retVal=new List<MedicationPat>();
 			MedicationPat medicationPat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MedicationPat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MedicationPat medicationPat){
+		public static long Insert(MedicationPat medicationPat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				medicationPat.MedicationPatNum=DbHelper.GetNextOracleKey("medicationpat","MedicationPatNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MedicationPat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(MedicationPat medicationPat,bool useExistingPK){
+		public static long Insert(MedicationPat medicationPat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				medicationPat.MedicationPatNum=ReplicationServers.GetKey("medicationpat","MedicationPatNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MedicationPat in the database.</summary>
-		internal static void Update(MedicationPat medicationPat){
+		public static void Update(MedicationPat medicationPat){
 			string command="UPDATE medicationpat SET "
 				+"PatNum          =  "+POut.Long  (medicationPat.PatNum)+", "
 				+"MedicationNum   =  "+POut.Long  (medicationPat.MedicationNum)+", "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MedicationPat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(MedicationPat medicationPat,MedicationPat oldMedicationPat){
+		public static void Update(MedicationPat medicationPat,MedicationPat oldMedicationPat){
 			string command="";
 			if(medicationPat.PatNum != oldMedicationPat.PatNum) {
 				if(command!=""){ command+=",";}
@@ -166,7 +166,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one MedicationPat from the database.</summary>
-		internal static void Delete(long medicationPatNum){
+		public static void Delete(long medicationPatNum){
 			string command="DELETE FROM medicationpat "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPatNum);
 			Db.NonQ(command);

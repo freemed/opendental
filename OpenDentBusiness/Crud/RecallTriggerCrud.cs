@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RecallTriggerCrud {
+	public class RecallTriggerCrud {
 		///<summary>Gets one RecallTrigger object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RecallTrigger SelectOne(long recallTriggerNum){
+		public static RecallTrigger SelectOne(long recallTriggerNum){
 			string command="SELECT * FROM recalltrigger "
 				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum);
 			List<RecallTrigger> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RecallTrigger object from the database using a query.</summary>
-		internal static RecallTrigger SelectOne(string command){
+		public static RecallTrigger SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RecallTrigger objects from the database using a query.</summary>
-		internal static List<RecallTrigger> SelectMany(string command){
+		public static List<RecallTrigger> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RecallTrigger> TableToList(DataTable table){
+		public static List<RecallTrigger> TableToList(DataTable table){
 			List<RecallTrigger> retVal=new List<RecallTrigger>();
 			RecallTrigger recallTrigger;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RecallTrigger into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RecallTrigger recallTrigger){
+		public static long Insert(RecallTrigger recallTrigger){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				recallTrigger.RecallTriggerNum=DbHelper.GetNextOracleKey("recalltrigger","RecallTriggerNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RecallTrigger into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RecallTrigger recallTrigger,bool useExistingPK){
+		public static long Insert(RecallTrigger recallTrigger,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				recallTrigger.RecallTriggerNum=ReplicationServers.GetKey("recalltrigger","RecallTriggerNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RecallTrigger in the database.</summary>
-		internal static void Update(RecallTrigger recallTrigger){
+		public static void Update(RecallTrigger recallTrigger){
 			string command="UPDATE recalltrigger SET "
 				+"RecallTypeNum   =  "+POut.Long  (recallTrigger.RecallTypeNum)+", "
 				+"CodeNum         =  "+POut.Long  (recallTrigger.CodeNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RecallTrigger in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RecallTrigger recallTrigger,RecallTrigger oldRecallTrigger){
+		public static void Update(RecallTrigger recallTrigger,RecallTrigger oldRecallTrigger){
 			string command="";
 			if(recallTrigger.RecallTypeNum != oldRecallTrigger.RecallTypeNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RecallTrigger from the database.</summary>
-		internal static void Delete(long recallTriggerNum){
+		public static void Delete(long recallTriggerNum){
 			string command="DELETE FROM recalltrigger "
 				+"WHERE RecallTriggerNum = "+POut.Long(recallTriggerNum);
 			Db.NonQ(command);

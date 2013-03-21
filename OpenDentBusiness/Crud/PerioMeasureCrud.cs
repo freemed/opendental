@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PerioMeasureCrud {
+	public class PerioMeasureCrud {
 		///<summary>Gets one PerioMeasure object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PerioMeasure SelectOne(long perioMeasureNum){
+		public static PerioMeasure SelectOne(long perioMeasureNum){
 			string command="SELECT * FROM periomeasure "
 				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum);
 			List<PerioMeasure> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PerioMeasure object from the database using a query.</summary>
-		internal static PerioMeasure SelectOne(string command){
+		public static PerioMeasure SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PerioMeasure objects from the database using a query.</summary>
-		internal static List<PerioMeasure> SelectMany(string command){
+		public static List<PerioMeasure> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PerioMeasure> TableToList(DataTable table){
+		public static List<PerioMeasure> TableToList(DataTable table){
 			List<PerioMeasure> retVal=new List<PerioMeasure>();
 			PerioMeasure perioMeasure;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PerioMeasure into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PerioMeasure perioMeasure){
+		public static long Insert(PerioMeasure perioMeasure){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				perioMeasure.PerioMeasureNum=DbHelper.GetNextOracleKey("periomeasure","PerioMeasureNum");
 				int loopcount=0;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PerioMeasure into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PerioMeasure perioMeasure,bool useExistingPK){
+		public static long Insert(PerioMeasure perioMeasure,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				perioMeasure.PerioMeasureNum=ReplicationServers.GetKey("periomeasure","PerioMeasureNum");
 			}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PerioMeasure in the database.</summary>
-		internal static void Update(PerioMeasure perioMeasure){
+		public static void Update(PerioMeasure perioMeasure){
 			string command="UPDATE periomeasure SET "
 				+"PerioExamNum   =  "+POut.Long  (perioMeasure.PerioExamNum)+", "
 				+"SequenceType   =  "+POut.Int   ((int)perioMeasure.SequenceType)+", "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PerioMeasure in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PerioMeasure perioMeasure,PerioMeasure oldPerioMeasure){
+		public static void Update(PerioMeasure perioMeasure,PerioMeasure oldPerioMeasure){
 			string command="";
 			if(perioMeasure.PerioExamNum != oldPerioMeasure.PerioExamNum) {
 				if(command!=""){ command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PerioMeasure from the database.</summary>
-		internal static void Delete(long perioMeasureNum){
+		public static void Delete(long perioMeasureNum){
 			string command="DELETE FROM periomeasure "
 				+"WHERE PerioMeasureNum = "+POut.Long(perioMeasureNum);
 			Db.NonQ(command);

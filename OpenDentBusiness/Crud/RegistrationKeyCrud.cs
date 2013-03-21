@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RegistrationKeyCrud {
+	public class RegistrationKeyCrud {
 		///<summary>Gets one RegistrationKey object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RegistrationKey SelectOne(long registrationKeyNum){
+		public static RegistrationKey SelectOne(long registrationKeyNum){
 			string command="SELECT * FROM registrationkey "
 				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum);
 			List<RegistrationKey> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RegistrationKey object from the database using a query.</summary>
-		internal static RegistrationKey SelectOne(string command){
+		public static RegistrationKey SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RegistrationKey objects from the database using a query.</summary>
-		internal static List<RegistrationKey> SelectMany(string command){
+		public static List<RegistrationKey> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RegistrationKey> TableToList(DataTable table){
+		public static List<RegistrationKey> TableToList(DataTable table){
 			List<RegistrationKey> retVal=new List<RegistrationKey>();
 			RegistrationKey registrationKey;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RegistrationKey into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RegistrationKey registrationKey){
+		public static long Insert(RegistrationKey registrationKey){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				registrationKey.RegistrationKeyNum=DbHelper.GetNextOracleKey("registrationkey","RegistrationKeyNum");
 				int loopcount=0;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RegistrationKey into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RegistrationKey registrationKey,bool useExistingPK){
+		public static long Insert(RegistrationKey registrationKey,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				registrationKey.RegistrationKeyNum=ReplicationServers.GetKey("registrationkey","RegistrationKeyNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RegistrationKey in the database.</summary>
-		internal static void Update(RegistrationKey registrationKey){
+		public static void Update(RegistrationKey registrationKey){
 			string command="UPDATE registrationkey SET "
 				+"PatNum            =  "+POut.Long  (registrationKey.PatNum)+", "
 				+"RegKey            = '"+POut.String(registrationKey.RegKey)+"', "
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RegistrationKey in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RegistrationKey registrationKey,RegistrationKey oldRegistrationKey){
+		public static void Update(RegistrationKey registrationKey,RegistrationKey oldRegistrationKey){
 			string command="";
 			if(registrationKey.PatNum != oldRegistrationKey.PatNum) {
 				if(command!=""){ command+=",";}
@@ -197,7 +197,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RegistrationKey from the database.</summary>
-		internal static void Delete(long registrationKeyNum){
+		public static void Delete(long registrationKeyNum){
 			string command="DELETE FROM registrationkey "
 				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKeyNum);
 			Db.NonQ(command);

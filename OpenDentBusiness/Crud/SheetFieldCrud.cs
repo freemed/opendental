@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SheetFieldCrud {
+	public class SheetFieldCrud {
 		///<summary>Gets one SheetField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SheetField SelectOne(long sheetFieldNum){
+		public static SheetField SelectOne(long sheetFieldNum){
 			string command="SELECT * FROM sheetfield "
 				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum);
 			List<SheetField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SheetField object from the database using a query.</summary>
-		internal static SheetField SelectOne(string command){
+		public static SheetField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SheetField objects from the database using a query.</summary>
-		internal static List<SheetField> SelectMany(string command){
+		public static List<SheetField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SheetField> TableToList(DataTable table){
+		public static List<SheetField> TableToList(DataTable table){
 			List<SheetField> retVal=new List<SheetField>();
 			SheetField sheetField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -70,7 +70,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SheetField sheetField){
+		public static long Insert(SheetField sheetField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sheetField.SheetFieldNum=DbHelper.GetNextOracleKey("sheetfield","SheetFieldNum");
 				int loopcount=0;
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SheetField sheetField,bool useExistingPK){
+		public static long Insert(SheetField sheetField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sheetField.SheetFieldNum=ReplicationServers.GetKey("sheetfield","SheetFieldNum");
 			}
@@ -140,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetField in the database.</summary>
-		internal static void Update(SheetField sheetField){
+		public static void Update(SheetField sheetField){
 			string command="UPDATE sheetfield SET "
 				+"SheetNum        =  "+POut.Long  (sheetField.SheetNum)+", "
 				+"FieldType       =  "+POut.Int   ((int)sheetField.FieldType)+", "
@@ -168,7 +168,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SheetField sheetField,SheetField oldSheetField){
+		public static void Update(SheetField sheetField,SheetField oldSheetField){
 			string command="";
 			if(sheetField.SheetNum != oldSheetField.SheetNum) {
 				if(command!=""){ command+=",";}
@@ -251,7 +251,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SheetField from the database.</summary>
-		internal static void Delete(long sheetFieldNum){
+		public static void Delete(long sheetFieldNum){
 			string command="DELETE FROM sheetfield "
 				+"WHERE SheetFieldNum = "+POut.Long(sheetFieldNum);
 			Db.NonQ(command);

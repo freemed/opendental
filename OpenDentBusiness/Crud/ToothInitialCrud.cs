@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ToothInitialCrud {
+	public class ToothInitialCrud {
 		///<summary>Gets one ToothInitial object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ToothInitial SelectOne(long toothInitialNum){
+		public static ToothInitial SelectOne(long toothInitialNum){
 			string command="SELECT * FROM toothinitial "
 				+"WHERE ToothInitialNum = "+POut.Long(toothInitialNum);
 			List<ToothInitial> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ToothInitial object from the database using a query.</summary>
-		internal static ToothInitial SelectOne(string command){
+		public static ToothInitial SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ToothInitial objects from the database using a query.</summary>
-		internal static List<ToothInitial> SelectMany(string command){
+		public static List<ToothInitial> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ToothInitial> TableToList(DataTable table){
+		public static List<ToothInitial> TableToList(DataTable table){
 			List<ToothInitial> retVal=new List<ToothInitial>();
 			ToothInitial toothInitial;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothInitial into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ToothInitial toothInitial){
+		public static long Insert(ToothInitial toothInitial){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				toothInitial.ToothInitialNum=DbHelper.GetNextOracleKey("toothinitial","ToothInitialNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothInitial into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ToothInitial toothInitial,bool useExistingPK){
+		public static long Insert(ToothInitial toothInitial,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				toothInitial.ToothInitialNum=ReplicationServers.GetKey("toothinitial","ToothInitialNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothInitial in the database.</summary>
-		internal static void Update(ToothInitial toothInitial){
+		public static void Update(ToothInitial toothInitial){
 			string command="UPDATE toothinitial SET "
 				+"PatNum         =  "+POut.Long  (toothInitial.PatNum)+", "
 				+"ToothNum       = '"+POut.String(toothInitial.ToothNum)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothInitial in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ToothInitial toothInitial,ToothInitial oldToothInitial){
+		public static void Update(ToothInitial toothInitial,ToothInitial oldToothInitial){
 			string command="";
 			if(toothInitial.PatNum != oldToothInitial.PatNum) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ToothInitial from the database.</summary>
-		internal static void Delete(long toothInitialNum){
+		public static void Delete(long toothInitialNum){
 			string command="DELETE FROM toothinitial "
 				+"WHERE ToothInitialNum = "+POut.Long(toothInitialNum);
 			Db.NonQ(command);

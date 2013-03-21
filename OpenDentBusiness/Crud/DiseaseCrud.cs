@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DiseaseCrud {
+	public class DiseaseCrud {
 		///<summary>Gets one Disease object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Disease SelectOne(long diseaseNum){
+		public static Disease SelectOne(long diseaseNum){
 			string command="SELECT * FROM disease "
 				+"WHERE DiseaseNum = "+POut.Long(diseaseNum);
 			List<Disease> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Disease object from the database using a query.</summary>
-		internal static Disease SelectOne(string command){
+		public static Disease SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Disease objects from the database using a query.</summary>
-		internal static List<Disease> SelectMany(string command){
+		public static List<Disease> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Disease> TableToList(DataTable table){
+		public static List<Disease> TableToList(DataTable table){
 			List<Disease> retVal=new List<Disease>();
 			Disease disease;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Disease into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Disease disease){
+		public static long Insert(Disease disease){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				disease.DiseaseNum=DbHelper.GetNextOracleKey("disease","DiseaseNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Disease into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Disease disease,bool useExistingPK){
+		public static long Insert(Disease disease,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				disease.DiseaseNum=ReplicationServers.GetKey("disease","DiseaseNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Disease in the database.</summary>
-		internal static void Update(Disease disease){
+		public static void Update(Disease disease){
 			string command="UPDATE disease SET "
 				+"PatNum       =  "+POut.Long  (disease.PatNum)+", "
 				+"DiseaseDefNum=  "+POut.Long  (disease.DiseaseDefNum)+", "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Disease in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Disease disease,Disease oldDisease){
+		public static void Update(Disease disease,Disease oldDisease){
 			string command="";
 			if(disease.PatNum != oldDisease.PatNum) {
 				if(command!=""){ command+=",";}
@@ -173,7 +173,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Disease from the database.</summary>
-		internal static void Delete(long diseaseNum){
+		public static void Delete(long diseaseNum){
 			string command="DELETE FROM disease "
 				+"WHERE DiseaseNum = "+POut.Long(diseaseNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReplicationServerCrud {
+	public class ReplicationServerCrud {
 		///<summary>Gets one ReplicationServer object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ReplicationServer SelectOne(long replicationServerNum){
+		public static ReplicationServer SelectOne(long replicationServerNum){
 			string command="SELECT * FROM replicationserver "
 				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum);
 			List<ReplicationServer> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ReplicationServer object from the database using a query.</summary>
-		internal static ReplicationServer SelectOne(string command){
+		public static ReplicationServer SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ReplicationServer objects from the database using a query.</summary>
-		internal static List<ReplicationServer> SelectMany(string command){
+		public static List<ReplicationServer> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ReplicationServer> TableToList(DataTable table){
+		public static List<ReplicationServer> TableToList(DataTable table){
 			List<ReplicationServer> retVal=new List<ReplicationServer>();
 			ReplicationServer replicationServer;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReplicationServer into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ReplicationServer replicationServer){
+		public static long Insert(ReplicationServer replicationServer){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				replicationServer.ReplicationServerNum=DbHelper.GetNextOracleKey("replicationserver","ReplicationServerNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReplicationServer into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ReplicationServer replicationServer,bool useExistingPK){
+		public static long Insert(ReplicationServer replicationServer,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				replicationServer.ReplicationServerNum=ReplicationServers.GetKey("replicationserver","ReplicationServerNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReplicationServer in the database.</summary>
-		internal static void Update(ReplicationServer replicationServer){
+		public static void Update(ReplicationServer replicationServer){
 			string command="UPDATE replicationserver SET "
 				+"Descript            = '"+POut.String(replicationServer.Descript)+"', "
 				+"ServerId            =  "+POut.Int   (replicationServer.ServerId)+", "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReplicationServer in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ReplicationServer replicationServer,ReplicationServer oldReplicationServer){
+		public static void Update(ReplicationServer replicationServer,ReplicationServer oldReplicationServer){
 			string command="";
 			if(replicationServer.Descript != oldReplicationServer.Descript) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ReplicationServer from the database.</summary>
-		internal static void Delete(long replicationServerNum){
+		public static void Delete(long replicationServerNum){
 			string command="DELETE FROM replicationserver "
 				+"WHERE ReplicationServerNum = "+POut.Long(replicationServerNum);
 			Db.NonQ(command);

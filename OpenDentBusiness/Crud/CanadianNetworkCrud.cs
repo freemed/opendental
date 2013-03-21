@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CanadianNetworkCrud {
+	public class CanadianNetworkCrud {
 		///<summary>Gets one CanadianNetwork object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CanadianNetwork SelectOne(long canadianNetworkNum){
+		public static CanadianNetwork SelectOne(long canadianNetworkNum){
 			string command="SELECT * FROM canadiannetwork "
 				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
 			List<CanadianNetwork> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CanadianNetwork object from the database using a query.</summary>
-		internal static CanadianNetwork SelectOne(string command){
+		public static CanadianNetwork SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CanadianNetwork objects from the database using a query.</summary>
-		internal static List<CanadianNetwork> SelectMany(string command){
+		public static List<CanadianNetwork> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CanadianNetwork> TableToList(DataTable table){
+		public static List<CanadianNetwork> TableToList(DataTable table){
 			List<CanadianNetwork> retVal=new List<CanadianNetwork>();
 			CanadianNetwork canadianNetwork;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CanadianNetwork into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CanadianNetwork canadianNetwork){
+		public static long Insert(CanadianNetwork canadianNetwork){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				canadianNetwork.CanadianNetworkNum=DbHelper.GetNextOracleKey("canadiannetwork","CanadianNetworkNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CanadianNetwork into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CanadianNetwork canadianNetwork,bool useExistingPK){
+		public static long Insert(CanadianNetwork canadianNetwork,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				canadianNetwork.CanadianNetworkNum=ReplicationServers.GetKey("canadiannetwork","CanadianNetworkNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CanadianNetwork in the database.</summary>
-		internal static void Update(CanadianNetwork canadianNetwork){
+		public static void Update(CanadianNetwork canadianNetwork){
 			string command="UPDATE canadiannetwork SET "
 				+"Abbrev                   = '"+POut.String(canadianNetwork.Abbrev)+"', "
 				+"Descript                 = '"+POut.String(canadianNetwork.Descript)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CanadianNetwork in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CanadianNetwork canadianNetwork,CanadianNetwork oldCanadianNetwork){
+		public static void Update(CanadianNetwork canadianNetwork,CanadianNetwork oldCanadianNetwork){
 			string command="";
 			if(canadianNetwork.Abbrev != oldCanadianNetwork.Abbrev) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CanadianNetwork from the database.</summary>
-		internal static void Delete(long canadianNetworkNum){
+		public static void Delete(long canadianNetworkNum){
 			string command="DELETE FROM canadiannetwork "
 				+"WHERE CanadianNetworkNum = "+POut.Long(canadianNetworkNum);
 			Db.NonQ(command);

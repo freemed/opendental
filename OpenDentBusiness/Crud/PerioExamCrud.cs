@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PerioExamCrud {
+	public class PerioExamCrud {
 		///<summary>Gets one PerioExam object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PerioExam SelectOne(long perioExamNum){
+		public static PerioExam SelectOne(long perioExamNum){
 			string command="SELECT * FROM perioexam "
 				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			List<PerioExam> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PerioExam object from the database using a query.</summary>
-		internal static PerioExam SelectOne(string command){
+		public static PerioExam SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PerioExam objects from the database using a query.</summary>
-		internal static List<PerioExam> SelectMany(string command){
+		public static List<PerioExam> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PerioExam> TableToList(DataTable table){
+		public static List<PerioExam> TableToList(DataTable table){
 			List<PerioExam> retVal=new List<PerioExam>();
 			PerioExam perioExam;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PerioExam into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PerioExam perioExam){
+		public static long Insert(PerioExam perioExam){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				perioExam.PerioExamNum=DbHelper.GetNextOracleKey("perioexam","PerioExamNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PerioExam into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PerioExam perioExam,bool useExistingPK){
+		public static long Insert(PerioExam perioExam,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				perioExam.PerioExamNum=ReplicationServers.GetKey("perioexam","PerioExamNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PerioExam in the database.</summary>
-		internal static void Update(PerioExam perioExam){
+		public static void Update(PerioExam perioExam){
 			string command="UPDATE perioexam SET "
 				+"PatNum      =  "+POut.Long  (perioExam.PatNum)+", "
 				+"ExamDate    =  "+POut.Date  (perioExam.ExamDate)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PerioExam in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PerioExam perioExam,PerioExam oldPerioExam){
+		public static void Update(PerioExam perioExam,PerioExam oldPerioExam){
 			string command="";
 			if(perioExam.PatNum != oldPerioExam.PatNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PerioExam from the database.</summary>
-		internal static void Delete(long perioExamNum){
+		public static void Delete(long perioExamNum){
 			string command="DELETE FROM perioexam "
 				+"WHERE PerioExamNum = "+POut.Long(perioExamNum);
 			Db.NonQ(command);

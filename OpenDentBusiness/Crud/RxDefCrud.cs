@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RxDefCrud {
+	public class RxDefCrud {
 		///<summary>Gets one RxDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RxDef SelectOne(long rxDefNum){
+		public static RxDef SelectOne(long rxDefNum){
 			string command="SELECT * FROM rxdef "
 				+"WHERE RxDefNum = "+POut.Long(rxDefNum);
 			List<RxDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RxDef object from the database using a query.</summary>
-		internal static RxDef SelectOne(string command){
+		public static RxDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RxDef objects from the database using a query.</summary>
-		internal static List<RxDef> SelectMany(string command){
+		public static List<RxDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RxDef> TableToList(DataTable table){
+		public static List<RxDef> TableToList(DataTable table){
 			List<RxDef> retVal=new List<RxDef>();
 			RxDef rxDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RxDef rxDef){
+		public static long Insert(RxDef rxDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				rxDef.RxDefNum=DbHelper.GetNextOracleKey("rxdef","RxDefNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RxDef rxDef,bool useExistingPK){
+		public static long Insert(RxDef rxDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				rxDef.RxDefNum=ReplicationServers.GetKey("rxdef","RxDefNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxDef in the database.</summary>
-		internal static void Update(RxDef rxDef){
+		public static void Update(RxDef rxDef){
 			string command="UPDATE rxdef SET "
 				+"Drug        = '"+POut.String(rxDef.Drug)+"', "
 				+"Sig         = '"+POut.String(rxDef.Sig)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RxDef rxDef,RxDef oldRxDef){
+		public static void Update(RxDef rxDef,RxDef oldRxDef){
 			string command="";
 			if(rxDef.Drug != oldRxDef.Drug) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RxDef from the database.</summary>
-		internal static void Delete(long rxDefNum){
+		public static void Delete(long rxDefNum){
 			string command="DELETE FROM rxdef "
 				+"WHERE RxDefNum = "+POut.Long(rxDefNum);
 			Db.NonQ(command);

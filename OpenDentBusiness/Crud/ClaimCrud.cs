@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimCrud {
+	public class ClaimCrud {
 		///<summary>Gets one Claim object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Claim SelectOne(long claimNum){
+		public static Claim SelectOne(long claimNum){
 			string command="SELECT * FROM claim "
 				+"WHERE ClaimNum = "+POut.Long(claimNum);
 			List<Claim> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Claim object from the database using a query.</summary>
-		internal static Claim SelectOne(string command){
+		public static Claim SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Claim objects from the database using a query.</summary>
-		internal static List<Claim> SelectMany(string command){
+		public static List<Claim> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Claim> TableToList(DataTable table){
+		public static List<Claim> TableToList(DataTable table){
 			List<Claim> retVal=new List<Claim>();
 			Claim claim;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Claim into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Claim claim){
+		public static long Insert(Claim claim){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claim.ClaimNum=DbHelper.GetNextOracleKey("claim","ClaimNum");
 				int loopcount=0;
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Claim into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Claim claim,bool useExistingPK){
+		public static long Insert(Claim claim,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claim.ClaimNum=ReplicationServers.GetKey("claim","ClaimNum");
 			}
@@ -240,7 +240,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Claim in the database.</summary>
-		internal static void Update(Claim claim){
+		public static void Update(Claim claim){
 			string command="UPDATE claim SET "
 				+"PatNum                      =  "+POut.Long  (claim.PatNum)+", "
 				+"DateService                 =  "+POut.Date  (claim.DateService)+", "
@@ -316,7 +316,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Claim in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Claim claim,Claim oldClaim){
+		public static void Update(Claim claim,Claim oldClaim){
 			string command="";
 			if(claim.PatNum != oldClaim.PatNum) {
 				if(command!=""){ command+=",";}
@@ -603,7 +603,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Claim from the database.</summary>
-		internal static void Delete(long claimNum){
+		public static void Delete(long claimNum){
 			string command="DELETE FROM claim "
 				+"WHERE ClaimNum = "+POut.Long(claimNum);
 			Db.NonQ(command);

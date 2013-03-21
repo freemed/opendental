@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ToolButItemCrud {
+	public class ToolButItemCrud {
 		///<summary>Gets one ToolButItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ToolButItem SelectOne(long toolButItemNum){
+		public static ToolButItem SelectOne(long toolButItemNum){
 			string command="SELECT * FROM toolbutitem "
 				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum);
 			List<ToolButItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ToolButItem object from the database using a query.</summary>
-		internal static ToolButItem SelectOne(string command){
+		public static ToolButItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ToolButItem objects from the database using a query.</summary>
-		internal static List<ToolButItem> SelectMany(string command){
+		public static List<ToolButItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ToolButItem> TableToList(DataTable table){
+		public static List<ToolButItem> TableToList(DataTable table){
 			List<ToolButItem> retVal=new List<ToolButItem>();
 			ToolButItem toolButItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToolButItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ToolButItem toolButItem){
+		public static long Insert(ToolButItem toolButItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				toolButItem.ToolButItemNum=DbHelper.GetNextOracleKey("toolbutitem","ToolButItemNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToolButItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ToolButItem toolButItem,bool useExistingPK){
+		public static long Insert(ToolButItem toolButItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				toolButItem.ToolButItemNum=ReplicationServers.GetKey("toolbutitem","ToolButItemNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToolButItem in the database.</summary>
-		internal static void Update(ToolButItem toolButItem){
+		public static void Update(ToolButItem toolButItem){
 			string command="UPDATE toolbutitem SET "
 				+"ProgramNum    =  "+POut.Long  (toolButItem.ProgramNum)+", "
 				+"ToolBar       =  "+POut.Int   ((int)toolButItem.ToolBar)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToolButItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ToolButItem toolButItem,ToolButItem oldToolButItem){
+		public static void Update(ToolButItem toolButItem,ToolButItem oldToolButItem){
 			string command="";
 			if(toolButItem.ProgramNum != oldToolButItem.ProgramNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ToolButItem from the database.</summary>
-		internal static void Delete(long toolButItemNum){
+		public static void Delete(long toolButItemNum){
 			string command="DELETE FROM toolbutitem "
 				+"WHERE ToolButItemNum = "+POut.Long(toolButItemNum);
 			Db.NonQ(command);

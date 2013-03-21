@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class HL7DefSegmentCrud {
+	public class HL7DefSegmentCrud {
 		///<summary>Gets one HL7DefSegment object from the database using the primary key.  Returns null if not found.</summary>
-		internal static HL7DefSegment SelectOne(long hL7DefSegmentNum){
+		public static HL7DefSegment SelectOne(long hL7DefSegmentNum){
 			string command="SELECT * FROM hl7defsegment "
 				+"WHERE HL7DefSegmentNum = "+POut.Long(hL7DefSegmentNum);
 			List<HL7DefSegment> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one HL7DefSegment object from the database using a query.</summary>
-		internal static HL7DefSegment SelectOne(string command){
+		public static HL7DefSegment SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of HL7DefSegment objects from the database using a query.</summary>
-		internal static List<HL7DefSegment> SelectMany(string command){
+		public static List<HL7DefSegment> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<HL7DefSegment> TableToList(DataTable table){
+		public static List<HL7DefSegment> TableToList(DataTable table){
 			List<HL7DefSegment> retVal=new List<HL7DefSegment>();
 			HL7DefSegment hL7DefSegment;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -68,7 +68,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefSegment into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7DefSegment hL7DefSegment){
+		public static long Insert(HL7DefSegment hL7DefSegment){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				hL7DefSegment.HL7DefSegmentNum=DbHelper.GetNextOracleKey("hl7defsegment","HL7DefSegmentNum");
 				int loopcount=0;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefSegment into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(HL7DefSegment hL7DefSegment,bool useExistingPK){
+		public static long Insert(HL7DefSegment hL7DefSegment,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				hL7DefSegment.HL7DefSegmentNum=ReplicationServers.GetKey("hl7defsegment","HL7DefSegmentNum");
 			}
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefSegment in the database.</summary>
-		internal static void Update(HL7DefSegment hL7DefSegment){
+		public static void Update(HL7DefSegment hL7DefSegment){
 			string command="UPDATE hl7defsegment SET "
 				+"HL7DefMessageNum=  "+POut.Long  (hL7DefSegment.HL7DefMessageNum)+", "
 				+"ItemOrder       =  "+POut.Int   (hL7DefSegment.ItemOrder)+", "
@@ -144,7 +144,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefSegment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(HL7DefSegment hL7DefSegment,HL7DefSegment oldHL7DefSegment){
+		public static void Update(HL7DefSegment hL7DefSegment,HL7DefSegment oldHL7DefSegment){
 			string command="";
 			if(hL7DefSegment.HL7DefMessageNum != oldHL7DefSegment.HL7DefMessageNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one HL7DefSegment from the database.</summary>
-		internal static void Delete(long hL7DefSegmentNum){
+		public static void Delete(long hL7DefSegmentNum){
 			string command="DELETE FROM hl7defsegment "
 				+"WHERE HL7DefSegmentNum = "+POut.Long(hL7DefSegmentNum);
 			Db.NonQ(command);

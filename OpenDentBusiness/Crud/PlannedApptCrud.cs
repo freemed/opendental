@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PlannedApptCrud {
+	public class PlannedApptCrud {
 		///<summary>Gets one PlannedAppt object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PlannedAppt SelectOne(long plannedApptNum){
+		public static PlannedAppt SelectOne(long plannedApptNum){
 			string command="SELECT * FROM plannedappt "
 				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum);
 			List<PlannedAppt> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PlannedAppt object from the database using a query.</summary>
-		internal static PlannedAppt SelectOne(string command){
+		public static PlannedAppt SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PlannedAppt objects from the database using a query.</summary>
-		internal static List<PlannedAppt> SelectMany(string command){
+		public static List<PlannedAppt> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PlannedAppt> TableToList(DataTable table){
+		public static List<PlannedAppt> TableToList(DataTable table){
 			List<PlannedAppt> retVal=new List<PlannedAppt>();
 			PlannedAppt plannedAppt;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PlannedAppt into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PlannedAppt plannedAppt){
+		public static long Insert(PlannedAppt plannedAppt){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				plannedAppt.PlannedApptNum=DbHelper.GetNextOracleKey("plannedappt","PlannedApptNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PlannedAppt into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PlannedAppt plannedAppt,bool useExistingPK){
+		public static long Insert(PlannedAppt plannedAppt,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				plannedAppt.PlannedApptNum=ReplicationServers.GetKey("plannedappt","PlannedApptNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PlannedAppt in the database.</summary>
-		internal static void Update(PlannedAppt plannedAppt){
+		public static void Update(PlannedAppt plannedAppt){
 			string command="UPDATE plannedappt SET "
 				+"PatNum        =  "+POut.Long  (plannedAppt.PatNum)+", "
 				+"AptNum        =  "+POut.Long  (plannedAppt.AptNum)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PlannedAppt in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PlannedAppt plannedAppt,PlannedAppt oldPlannedAppt){
+		public static void Update(PlannedAppt plannedAppt,PlannedAppt oldPlannedAppt){
 			string command="";
 			if(plannedAppt.PatNum != oldPlannedAppt.PatNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PlannedAppt from the database.</summary>
-		internal static void Delete(long plannedApptNum){
+		public static void Delete(long plannedApptNum){
 			string command="DELETE FROM plannedappt "
 				+"WHERE PlannedApptNum = "+POut.Long(plannedApptNum);
 			Db.NonQ(command);

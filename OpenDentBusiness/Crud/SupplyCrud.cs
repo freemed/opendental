@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SupplyCrud {
+	public class SupplyCrud {
 		///<summary>Gets one Supply object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Supply SelectOne(long supplyNum){
+		public static Supply SelectOne(long supplyNum){
 			string command="SELECT * FROM supply "
 				+"WHERE SupplyNum = "+POut.Long(supplyNum);
 			List<Supply> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Supply object from the database using a query.</summary>
-		internal static Supply SelectOne(string command){
+		public static Supply SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Supply objects from the database using a query.</summary>
-		internal static List<Supply> SelectMany(string command){
+		public static List<Supply> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Supply> TableToList(DataTable table){
+		public static List<Supply> TableToList(DataTable table){
 			List<Supply> retVal=new List<Supply>();
 			Supply supply;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Supply into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Supply supply){
+		public static long Insert(Supply supply){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				supply.SupplyNum=DbHelper.GetNextOracleKey("supply","SupplyNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Supply into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Supply supply,bool useExistingPK){
+		public static long Insert(Supply supply,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				supply.SupplyNum=ReplicationServers.GetKey("supply","SupplyNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Supply in the database.</summary>
-		internal static void Update(Supply supply){
+		public static void Update(Supply supply){
 			string command="UPDATE supply SET "
 				+"SupplierNum  =  "+POut.Long  (supply.SupplierNum)+", "
 				+"CatalogNumber= '"+POut.String(supply.CatalogNumber)+"', "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Supply in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Supply supply,Supply oldSupply){
+		public static void Update(Supply supply,Supply oldSupply){
 			string command="";
 			if(supply.SupplierNum != oldSupply.SupplierNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Supply from the database.</summary>
-		internal static void Delete(long supplyNum){
+		public static void Delete(long supplyNum){
 			string command="DELETE FROM supply "
 				+"WHERE SupplyNum = "+POut.Long(supplyNum);
 			Db.NonQ(command);

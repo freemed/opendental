@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ScreenCrud {
+	public class ScreenCrud {
 		///<summary>Gets one Screen object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Screen SelectOne(long screenNum){
+		public static Screen SelectOne(long screenNum){
 			string command="SELECT * FROM screen "
 				+"WHERE ScreenNum = "+POut.Long(screenNum);
 			List<Screen> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Screen object from the database using a query.</summary>
-		internal static Screen SelectOne(string command){
+		public static Screen SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Screen objects from the database using a query.</summary>
-		internal static List<Screen> SelectMany(string command){
+		public static List<Screen> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Screen> TableToList(DataTable table){
+		public static List<Screen> TableToList(DataTable table){
 			List<Screen> retVal=new List<Screen>();
 			Screen screen;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -74,7 +74,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Screen into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Screen screen){
+		public static long Insert(Screen screen){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				screen.ScreenNum=DbHelper.GetNextOracleKey("screen","ScreenNum");
 				int loopcount=0;
@@ -100,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Screen into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Screen screen,bool useExistingPK){
+		public static long Insert(Screen screen,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				screen.ScreenNum=ReplicationServers.GetKey("screen","ScreenNum");
 			}
@@ -144,7 +144,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Screen in the database.</summary>
-		internal static void Update(Screen screen){
+		public static void Update(Screen screen){
 			string command="UPDATE screen SET "
 				+"ScreenDate      =  "+POut.Date  (screen.ScreenDate)+", "
 				+"GradeSchool     = '"+POut.String(screen.GradeSchool)+"', "
@@ -172,7 +172,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Screen in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Screen screen,Screen oldScreen){
+		public static void Update(Screen screen,Screen oldScreen){
 			string command="";
 			if(screen.ScreenDate != oldScreen.ScreenDate) {
 				if(command!=""){ command+=",";}
@@ -267,7 +267,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Screen from the database.</summary>
-		internal static void Delete(long screenNum){
+		public static void Delete(long screenNum){
 			string command="DELETE FROM screen "
 				+"WHERE ScreenNum = "+POut.Long(screenNum);
 			Db.NonQ(command);

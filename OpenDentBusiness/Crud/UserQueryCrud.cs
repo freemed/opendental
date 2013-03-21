@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class UserQueryCrud {
+	public class UserQueryCrud {
 		///<summary>Gets one UserQuery object from the database using the primary key.  Returns null if not found.</summary>
-		internal static UserQuery SelectOne(long queryNum){
+		public static UserQuery SelectOne(long queryNum){
 			string command="SELECT * FROM userquery "
 				+"WHERE QueryNum = "+POut.Long(queryNum);
 			List<UserQuery> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one UserQuery object from the database using a query.</summary>
-		internal static UserQuery SelectOne(string command){
+		public static UserQuery SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of UserQuery objects from the database using a query.</summary>
-		internal static List<UserQuery> SelectMany(string command){
+		public static List<UserQuery> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<UserQuery> TableToList(DataTable table){
+		public static List<UserQuery> TableToList(DataTable table){
 			List<UserQuery> retVal=new List<UserQuery>();
 			UserQuery userQuery;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UserQuery into the database.  Returns the new priKey.</summary>
-		internal static long Insert(UserQuery userQuery){
+		public static long Insert(UserQuery userQuery){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				userQuery.QueryNum=DbHelper.GetNextOracleKey("userquery","QueryNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UserQuery into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(UserQuery userQuery,bool useExistingPK){
+		public static long Insert(UserQuery userQuery,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				userQuery.QueryNum=ReplicationServers.GetKey("userquery","QueryNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one UserQuery in the database.</summary>
-		internal static void Update(UserQuery userQuery){
+		public static void Update(UserQuery userQuery){
 			string command="UPDATE userquery SET "
 				+"Description= '"+POut.String(userQuery.Description)+"', "
 				+"FileName   = '"+POut.String(userQuery.FileName)+"', "
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one UserQuery in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(UserQuery userQuery,UserQuery oldUserQuery){
+		public static void Update(UserQuery userQuery,UserQuery oldUserQuery){
 			string command="";
 			if(userQuery.Description != oldUserQuery.Description) {
 				if(command!=""){ command+=",";}
@@ -153,7 +153,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one UserQuery from the database.</summary>
-		internal static void Delete(long queryNum){
+		public static void Delete(long queryNum){
 			string command="DELETE FROM userquery "
 				+"WHERE QueryNum = "+POut.Long(queryNum);
 			Db.NonQ(command);

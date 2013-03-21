@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class GuardianCrud {
+	public class GuardianCrud {
 		///<summary>Gets one Guardian object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Guardian SelectOne(long guardianNum){
+		public static Guardian SelectOne(long guardianNum){
 			string command="SELECT * FROM guardian "
 				+"WHERE GuardianNum = "+POut.Long(guardianNum);
 			List<Guardian> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Guardian object from the database using a query.</summary>
-		internal static Guardian SelectOne(string command){
+		public static Guardian SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Guardian objects from the database using a query.</summary>
-		internal static List<Guardian> SelectMany(string command){
+		public static List<Guardian> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Guardian> TableToList(DataTable table){
+		public static List<Guardian> TableToList(DataTable table){
 			List<Guardian> retVal=new List<Guardian>();
 			Guardian guardian;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Guardian into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Guardian guardian){
+		public static long Insert(Guardian guardian){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				guardian.GuardianNum=DbHelper.GetNextOracleKey("guardian","GuardianNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Guardian into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Guardian guardian,bool useExistingPK){
+		public static long Insert(Guardian guardian,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				guardian.GuardianNum=ReplicationServers.GetKey("guardian","GuardianNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Guardian in the database.</summary>
-		internal static void Update(Guardian guardian){
+		public static void Update(Guardian guardian){
 			string command="UPDATE guardian SET "
 				+"PatNumChild   =  "+POut.Long  (guardian.PatNumChild)+", "
 				+"PatNumGuardian=  "+POut.Long  (guardian.PatNumGuardian)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Guardian in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Guardian guardian,Guardian oldGuardian){
+		public static void Update(Guardian guardian,Guardian oldGuardian){
 			string command="";
 			if(guardian.PatNumChild != oldGuardian.PatNumChild) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Guardian from the database.</summary>
-		internal static void Delete(long guardianNum){
+		public static void Delete(long guardianNum){
 			string command="DELETE FROM guardian "
 				+"WHERE GuardianNum = "+POut.Long(guardianNum);
 			Db.NonQ(command);

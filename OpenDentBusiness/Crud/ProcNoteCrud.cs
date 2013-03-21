@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcNoteCrud {
+	public class ProcNoteCrud {
 		///<summary>Gets one ProcNote object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcNote SelectOne(long procNoteNum){
+		public static ProcNote SelectOne(long procNoteNum){
 			string command="SELECT * FROM procnote "
 				+"WHERE ProcNoteNum = "+POut.Long(procNoteNum);
 			List<ProcNote> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcNote object from the database using a query.</summary>
-		internal static ProcNote SelectOne(string command){
+		public static ProcNote SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcNote objects from the database using a query.</summary>
-		internal static List<ProcNote> SelectMany(string command){
+		public static List<ProcNote> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcNote> TableToList(DataTable table){
+		public static List<ProcNote> TableToList(DataTable table){
 			List<ProcNote> retVal=new List<ProcNote>();
 			ProcNote procNote;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcNote into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcNote procNote){
+		public static long Insert(ProcNote procNote){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procNote.ProcNoteNum=DbHelper.GetNextOracleKey("procnote","ProcNoteNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcNote into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcNote procNote,bool useExistingPK){
+		public static long Insert(ProcNote procNote,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procNote.ProcNoteNum=ReplicationServers.GetKey("procnote","ProcNoteNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcNote in the database.</summary>
-		internal static void Update(ProcNote procNote){
+		public static void Update(ProcNote procNote){
 			string command="UPDATE procnote SET "
 				+"PatNum       =  "+POut.Long  (procNote.PatNum)+", "
 				+"ProcNum      =  "+POut.Long  (procNote.ProcNum)+", "
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcNote procNote,ProcNote oldProcNote){
+		public static void Update(ProcNote procNote,ProcNote oldProcNote){
 			string command="";
 			if(procNote.PatNum != oldProcNote.PatNum) {
 				if(command!=""){ command+=",";}
@@ -178,7 +178,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcNote from the database.</summary>
-		internal static void Delete(long procNoteNum){
+		public static void Delete(long procNoteNum){
 			string command="DELETE FROM procnote "
 				+"WHERE ProcNoteNum = "+POut.Long(procNoteNum);
 			Db.NonQ(command);

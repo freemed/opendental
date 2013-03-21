@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimValCodeLogCrud {
+	public class ClaimValCodeLogCrud {
 		///<summary>Gets one ClaimValCodeLog object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimValCodeLog SelectOne(long claimValCodeLogNum){
+		public static ClaimValCodeLog SelectOne(long claimValCodeLogNum){
 			string command="SELECT * FROM claimvalcodelog "
 				+"WHERE ClaimValCodeLogNum = "+POut.Long(claimValCodeLogNum);
 			List<ClaimValCodeLog> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimValCodeLog object from the database using a query.</summary>
-		internal static ClaimValCodeLog SelectOne(string command){
+		public static ClaimValCodeLog SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimValCodeLog objects from the database using a query.</summary>
-		internal static List<ClaimValCodeLog> SelectMany(string command){
+		public static List<ClaimValCodeLog> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimValCodeLog> TableToList(DataTable table){
+		public static List<ClaimValCodeLog> TableToList(DataTable table){
 			List<ClaimValCodeLog> retVal=new List<ClaimValCodeLog>();
 			ClaimValCodeLog claimValCodeLog;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimValCodeLog into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimValCodeLog claimValCodeLog){
+		public static long Insert(ClaimValCodeLog claimValCodeLog){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimValCodeLog.ClaimValCodeLogNum=DbHelper.GetNextOracleKey("claimvalcodelog","ClaimValCodeLogNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimValCodeLog into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimValCodeLog claimValCodeLog,bool useExistingPK){
+		public static long Insert(ClaimValCodeLog claimValCodeLog,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimValCodeLog.ClaimValCodeLogNum=ReplicationServers.GetKey("claimvalcodelog","ClaimValCodeLogNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimValCodeLog in the database.</summary>
-		internal static void Update(ClaimValCodeLog claimValCodeLog){
+		public static void Update(ClaimValCodeLog claimValCodeLog){
 			string command="UPDATE claimvalcodelog SET "
 				+"ClaimNum          =  "+POut.Long  (claimValCodeLog.ClaimNum)+", "
 				+"ClaimField        = '"+POut.String(claimValCodeLog.ClaimField)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimValCodeLog in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimValCodeLog claimValCodeLog,ClaimValCodeLog oldClaimValCodeLog){
+		public static void Update(ClaimValCodeLog claimValCodeLog,ClaimValCodeLog oldClaimValCodeLog){
 			string command="";
 			if(claimValCodeLog.ClaimNum != oldClaimValCodeLog.ClaimNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimValCodeLog from the database.</summary>
-		internal static void Delete(long claimValCodeLogNum){
+		public static void Delete(long claimValCodeLogNum){
 			string command="DELETE FROM claimvalcodelog "
 				+"WHERE ClaimValCodeLogNum = "+POut.Long(claimValCodeLogNum);
 			Db.NonQ(command);

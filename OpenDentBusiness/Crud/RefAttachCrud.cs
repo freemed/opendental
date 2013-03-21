@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RefAttachCrud {
+	public class RefAttachCrud {
 		///<summary>Gets one RefAttach object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RefAttach SelectOne(long refAttachNum){
+		public static RefAttach SelectOne(long refAttachNum){
 			string command="SELECT * FROM refattach "
 				+"WHERE RefAttachNum = "+POut.Long(refAttachNum);
 			List<RefAttach> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RefAttach object from the database using a query.</summary>
-		internal static RefAttach SelectOne(string command){
+		public static RefAttach SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RefAttach objects from the database using a query.</summary>
-		internal static List<RefAttach> SelectMany(string command){
+		public static List<RefAttach> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RefAttach> TableToList(DataTable table){
+		public static List<RefAttach> TableToList(DataTable table){
 			List<RefAttach> retVal=new List<RefAttach>();
 			RefAttach refAttach;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RefAttach into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RefAttach refAttach){
+		public static long Insert(RefAttach refAttach){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				refAttach.RefAttachNum=DbHelper.GetNextOracleKey("refattach","RefAttachNum");
 				int loopcount=0;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RefAttach into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RefAttach refAttach,bool useExistingPK){
+		public static long Insert(RefAttach refAttach,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				refAttach.RefAttachNum=ReplicationServers.GetKey("refattach","RefAttachNum");
 			}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RefAttach in the database.</summary>
-		internal static void Update(RefAttach refAttach){
+		public static void Update(RefAttach refAttach){
 			string command="UPDATE refattach SET "
 				+"ReferralNum       =  "+POut.Long  (refAttach.ReferralNum)+", "
 				+"PatNum            =  "+POut.Long  (refAttach.PatNum)+", "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RefAttach in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RefAttach refAttach,RefAttach oldRefAttach){
+		public static void Update(RefAttach refAttach,RefAttach oldRefAttach){
 			string command="";
 			if(refAttach.ReferralNum != oldRefAttach.ReferralNum) {
 				if(command!=""){ command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RefAttach from the database.</summary>
-		internal static void Delete(long refAttachNum){
+		public static void Delete(long refAttachNum){
 			string command="DELETE FROM refattach "
 				+"WHERE RefAttachNum = "+POut.Long(refAttachNum);
 			Db.NonQ(command);

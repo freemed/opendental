@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EhrProvKeyCrud {
+	public class EhrProvKeyCrud {
 		///<summary>Gets one EhrProvKey object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EhrProvKey SelectOne(long ehrProvKeyNum){
+		public static EhrProvKey SelectOne(long ehrProvKeyNum){
 			string command="SELECT * FROM ehrprovkey "
 				+"WHERE EhrProvKeyNum = "+POut.Long(ehrProvKeyNum);
 			List<EhrProvKey> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EhrProvKey object from the database using a query.</summary>
-		internal static EhrProvKey SelectOne(string command){
+		public static EhrProvKey SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EhrProvKey objects from the database using a query.</summary>
-		internal static List<EhrProvKey> SelectMany(string command){
+		public static List<EhrProvKey> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EhrProvKey> TableToList(DataTable table){
+		public static List<EhrProvKey> TableToList(DataTable table){
 			List<EhrProvKey> retVal=new List<EhrProvKey>();
 			EhrProvKey ehrProvKey;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrProvKey into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EhrProvKey ehrProvKey){
+		public static long Insert(EhrProvKey ehrProvKey){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				ehrProvKey.EhrProvKeyNum=DbHelper.GetNextOracleKey("ehrprovkey","EhrProvKeyNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrProvKey into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EhrProvKey ehrProvKey,bool useExistingPK){
+		public static long Insert(EhrProvKey ehrProvKey,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				ehrProvKey.EhrProvKeyNum=ReplicationServers.GetKey("ehrprovkey","EhrProvKeyNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrProvKey in the database.</summary>
-		internal static void Update(EhrProvKey ehrProvKey){
+		public static void Update(EhrProvKey ehrProvKey){
 			string command="UPDATE ehrprovkey SET "
 				+"PatNum         =  "+POut.Long  (ehrProvKey.PatNum)+", "
 				+"LName          = '"+POut.String(ehrProvKey.LName)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrProvKey in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EhrProvKey ehrProvKey,EhrProvKey oldEhrProvKey){
+		public static void Update(EhrProvKey ehrProvKey,EhrProvKey oldEhrProvKey){
 			string command="";
 			if(ehrProvKey.PatNum != oldEhrProvKey.PatNum) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EhrProvKey from the database.</summary>
-		internal static void Delete(long ehrProvKeyNum){
+		public static void Delete(long ehrProvKeyNum){
 			string command="DELETE FROM ehrprovkey "
 				+"WHERE EhrProvKeyNum = "+POut.Long(ehrProvKeyNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EhrSummaryCcdCrud {
+	public class EhrSummaryCcdCrud {
 		///<summary>Gets one EhrSummaryCcd object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EhrSummaryCcd SelectOne(long ehrSummaryCcdNum){
+		public static EhrSummaryCcd SelectOne(long ehrSummaryCcdNum){
 			string command="SELECT * FROM ehrsummaryccd "
 				+"WHERE EhrSummaryCcdNum = "+POut.Long(ehrSummaryCcdNum);
 			List<EhrSummaryCcd> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EhrSummaryCcd object from the database using a query.</summary>
-		internal static EhrSummaryCcd SelectOne(string command){
+		public static EhrSummaryCcd SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EhrSummaryCcd objects from the database using a query.</summary>
-		internal static List<EhrSummaryCcd> SelectMany(string command){
+		public static List<EhrSummaryCcd> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EhrSummaryCcd> TableToList(DataTable table){
+		public static List<EhrSummaryCcd> TableToList(DataTable table){
 			List<EhrSummaryCcd> retVal=new List<EhrSummaryCcd>();
 			EhrSummaryCcd ehrSummaryCcd;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrSummaryCcd into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EhrSummaryCcd ehrSummaryCcd){
+		public static long Insert(EhrSummaryCcd ehrSummaryCcd){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				ehrSummaryCcd.EhrSummaryCcdNum=DbHelper.GetNextOracleKey("ehrsummaryccd","EhrSummaryCcdNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrSummaryCcd into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EhrSummaryCcd ehrSummaryCcd,bool useExistingPK){
+		public static long Insert(EhrSummaryCcd ehrSummaryCcd,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				ehrSummaryCcd.EhrSummaryCcdNum=ReplicationServers.GetKey("ehrsummaryccd","EhrSummaryCcdNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrSummaryCcd in the database.</summary>
-		internal static void Update(EhrSummaryCcd ehrSummaryCcd){
+		public static void Update(EhrSummaryCcd ehrSummaryCcd){
 			string command="UPDATE ehrsummaryccd SET "
 				+"PatNum          =  "+POut.Long  (ehrSummaryCcd.PatNum)+", "
 				+"DateSummary     =  "+POut.Date  (ehrSummaryCcd.DateSummary)+", "
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrSummaryCcd in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EhrSummaryCcd ehrSummaryCcd,EhrSummaryCcd oldEhrSummaryCcd){
+		public static void Update(EhrSummaryCcd ehrSummaryCcd,EhrSummaryCcd oldEhrSummaryCcd){
 			string command="";
 			if(ehrSummaryCcd.PatNum != oldEhrSummaryCcd.PatNum) {
 				if(command!=""){ command+=",";}
@@ -153,7 +153,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EhrSummaryCcd from the database.</summary>
-		internal static void Delete(long ehrSummaryCcdNum){
+		public static void Delete(long ehrSummaryCcdNum){
 			string command="DELETE FROM ehrsummaryccd "
 				+"WHERE EhrSummaryCcdNum = "+POut.Long(ehrSummaryCcdNum);
 			Db.NonQ(command);

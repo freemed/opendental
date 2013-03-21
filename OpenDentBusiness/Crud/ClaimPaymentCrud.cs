@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimPaymentCrud {
+	public class ClaimPaymentCrud {
 		///<summary>Gets one ClaimPayment object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimPayment SelectOne(long claimPaymentNum){
+		public static ClaimPayment SelectOne(long claimPaymentNum){
 			string command="SELECT * FROM claimpayment "
 				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum);
 			List<ClaimPayment> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimPayment object from the database using a query.</summary>
-		internal static ClaimPayment SelectOne(string command){
+		public static ClaimPayment SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimPayment objects from the database using a query.</summary>
-		internal static List<ClaimPayment> SelectMany(string command){
+		public static List<ClaimPayment> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimPayment> TableToList(DataTable table){
+		public static List<ClaimPayment> TableToList(DataTable table){
 			List<ClaimPayment> retVal=new List<ClaimPayment>();
 			ClaimPayment claimPayment;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimPayment into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimPayment claimPayment){
+		public static long Insert(ClaimPayment claimPayment){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimPayment.ClaimPaymentNum=DbHelper.GetNextOracleKey("claimpayment","ClaimPaymentNum");
 				int loopcount=0;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimPayment into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimPayment claimPayment,bool useExistingPK){
+		public static long Insert(ClaimPayment claimPayment,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimPayment.ClaimPaymentNum=ReplicationServers.GetKey("claimpayment","ClaimPaymentNum");
 			}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimPayment in the database.</summary>
-		internal static void Update(ClaimPayment claimPayment){
+		public static void Update(ClaimPayment claimPayment){
 			string command="UPDATE claimpayment SET "
 				+"CheckDate      =  "+POut.Date  (claimPayment.CheckDate)+", "
 				+"CheckAmt       = '"+POut.Double(claimPayment.CheckAmt)+"', "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimPayment in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimPayment claimPayment,ClaimPayment oldClaimPayment){
+		public static void Update(ClaimPayment claimPayment,ClaimPayment oldClaimPayment){
 			string command="";
 			if(claimPayment.CheckDate != oldClaimPayment.CheckDate) {
 				if(command!=""){ command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimPayment from the database.</summary>
-		internal static void Delete(long claimPaymentNum){
+		public static void Delete(long claimPaymentNum){
 			string command="DELETE FROM claimpayment "
 				+"WHERE ClaimPaymentNum = "+POut.Long(claimPaymentNum);
 			Db.NonQ(command);

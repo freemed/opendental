@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ApptViewCrud {
+	public class ApptViewCrud {
 		///<summary>Gets one ApptView object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ApptView SelectOne(long apptViewNum){
+		public static ApptView SelectOne(long apptViewNum){
 			string command="SELECT * FROM apptview "
 				+"WHERE ApptViewNum = "+POut.Long(apptViewNum);
 			List<ApptView> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ApptView object from the database using a query.</summary>
-		internal static ApptView SelectOne(string command){
+		public static ApptView SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ApptView objects from the database using a query.</summary>
-		internal static List<ApptView> SelectMany(string command){
+		public static List<ApptView> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ApptView> TableToList(DataTable table){
+		public static List<ApptView> TableToList(DataTable table){
 			List<ApptView> retVal=new List<ApptView>();
 			ApptView apptView;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptView into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ApptView apptView){
+		public static long Insert(ApptView apptView){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				apptView.ApptViewNum=DbHelper.GetNextOracleKey("apptview","ApptViewNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptView into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ApptView apptView,bool useExistingPK){
+		public static long Insert(ApptView apptView,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				apptView.ApptViewNum=ReplicationServers.GetKey("apptview","ApptViewNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptView in the database.</summary>
-		internal static void Update(ApptView apptView){
+		public static void Update(ApptView apptView){
 			string command="UPDATE apptview SET "
 				+"Description        = '"+POut.String(apptView.Description)+"', "
 				+"ItemOrder          =  "+POut.Int   (apptView.ItemOrder)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptView in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ApptView apptView,ApptView oldApptView){
+		public static void Update(ApptView apptView,ApptView oldApptView){
 			string command="";
 			if(apptView.Description != oldApptView.Description) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ApptView from the database.</summary>
-		internal static void Delete(long apptViewNum){
+		public static void Delete(long apptViewNum){
 			string command="DELETE FROM apptview "
 				+"WHERE ApptViewNum = "+POut.Long(apptViewNum);
 			Db.NonQ(command);

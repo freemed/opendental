@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EhrQuarterlyKeyCrud {
+	public class EhrQuarterlyKeyCrud {
 		///<summary>Gets one EhrQuarterlyKey object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EhrQuarterlyKey SelectOne(long ehrQuarterlyKeyNum){
+		public static EhrQuarterlyKey SelectOne(long ehrQuarterlyKeyNum){
 			string command="SELECT * FROM ehrquarterlykey "
 				+"WHERE EhrQuarterlyKeyNum = "+POut.Long(ehrQuarterlyKeyNum);
 			List<EhrQuarterlyKey> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EhrQuarterlyKey object from the database using a query.</summary>
-		internal static EhrQuarterlyKey SelectOne(string command){
+		public static EhrQuarterlyKey SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EhrQuarterlyKey objects from the database using a query.</summary>
-		internal static List<EhrQuarterlyKey> SelectMany(string command){
+		public static List<EhrQuarterlyKey> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EhrQuarterlyKey> TableToList(DataTable table){
+		public static List<EhrQuarterlyKey> TableToList(DataTable table){
 			List<EhrQuarterlyKey> retVal=new List<EhrQuarterlyKey>();
 			EhrQuarterlyKey ehrQuarterlyKey;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrQuarterlyKey into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EhrQuarterlyKey ehrQuarterlyKey){
+		public static long Insert(EhrQuarterlyKey ehrQuarterlyKey){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				ehrQuarterlyKey.EhrQuarterlyKeyNum=DbHelper.GetNextOracleKey("ehrquarterlykey","EhrQuarterlyKeyNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EhrQuarterlyKey into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EhrQuarterlyKey ehrQuarterlyKey,bool useExistingPK){
+		public static long Insert(EhrQuarterlyKey ehrQuarterlyKey,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				ehrQuarterlyKey.EhrQuarterlyKeyNum=ReplicationServers.GetKey("ehrquarterlykey","EhrQuarterlyKeyNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrQuarterlyKey in the database.</summary>
-		internal static void Update(EhrQuarterlyKey ehrQuarterlyKey){
+		public static void Update(EhrQuarterlyKey ehrQuarterlyKey){
 			string command="UPDATE ehrquarterlykey SET "
 				+"YearValue         =  "+POut.Int   (ehrQuarterlyKey.YearValue)+", "
 				+"QuarterValue      =  "+POut.Int   (ehrQuarterlyKey.QuarterValue)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EhrQuarterlyKey in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EhrQuarterlyKey ehrQuarterlyKey,EhrQuarterlyKey oldEhrQuarterlyKey){
+		public static void Update(EhrQuarterlyKey ehrQuarterlyKey,EhrQuarterlyKey oldEhrQuarterlyKey){
 			string command="";
 			if(ehrQuarterlyKey.YearValue != oldEhrQuarterlyKey.YearValue) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EhrQuarterlyKey from the database.</summary>
-		internal static void Delete(long ehrQuarterlyKeyNum){
+		public static void Delete(long ehrQuarterlyKeyNum){
 			string command="DELETE FROM ehrquarterlykey "
 				+"WHERE EhrQuarterlyKeyNum = "+POut.Long(ehrQuarterlyKeyNum);
 			Db.NonQ(command);

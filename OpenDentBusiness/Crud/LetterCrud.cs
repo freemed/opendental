@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LetterCrud {
+	public class LetterCrud {
 		///<summary>Gets one Letter object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Letter SelectOne(long letterNum){
+		public static Letter SelectOne(long letterNum){
 			string command="SELECT * FROM letter "
 				+"WHERE LetterNum = "+POut.Long(letterNum);
 			List<Letter> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Letter object from the database using a query.</summary>
-		internal static Letter SelectOne(string command){
+		public static Letter SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Letter objects from the database using a query.</summary>
-		internal static List<Letter> SelectMany(string command){
+		public static List<Letter> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Letter> TableToList(DataTable table){
+		public static List<Letter> TableToList(DataTable table){
 			List<Letter> retVal=new List<Letter>();
 			Letter letter;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Letter into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Letter letter){
+		public static long Insert(Letter letter){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				letter.LetterNum=DbHelper.GetNextOracleKey("letter","LetterNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Letter into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Letter letter,bool useExistingPK){
+		public static long Insert(Letter letter,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				letter.LetterNum=ReplicationServers.GetKey("letter","LetterNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Letter in the database.</summary>
-		internal static void Update(Letter letter){
+		public static void Update(Letter letter){
 			string command="UPDATE letter SET "
 				+"Description= '"+POut.String(letter.Description)+"', "
 				+"BodyText   =  "+DbHelper.ParamChar+"paramBodyText "
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Letter in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Letter letter,Letter oldLetter){
+		public static void Update(Letter letter,Letter oldLetter){
 			string command="";
 			if(letter.Description != oldLetter.Description) {
 				if(command!=""){ command+=",";}
@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Letter from the database.</summary>
-		internal static void Delete(long letterNum){
+		public static void Delete(long letterNum){
 			string command="DELETE FROM letter "
 				+"WHERE LetterNum = "+POut.Long(letterNum);
 			Db.NonQ(command);

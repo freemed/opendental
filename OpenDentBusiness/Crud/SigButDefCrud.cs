@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SigButDefCrud {
+	public class SigButDefCrud {
 		///<summary>Gets one SigButDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SigButDef SelectOne(long sigButDefNum){
+		public static SigButDef SelectOne(long sigButDefNum){
 			string command="SELECT * FROM sigbutdef "
 				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum);
 			List<SigButDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SigButDef object from the database using a query.</summary>
-		internal static SigButDef SelectOne(string command){
+		public static SigButDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SigButDef objects from the database using a query.</summary>
-		internal static List<SigButDef> SelectMany(string command){
+		public static List<SigButDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SigButDef> TableToList(DataTable table){
+		public static List<SigButDef> TableToList(DataTable table){
 			List<SigButDef> retVal=new List<SigButDef>();
 			SigButDef sigButDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigButDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SigButDef sigButDef){
+		public static long Insert(SigButDef sigButDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sigButDef.SigButDefNum=DbHelper.GetNextOracleKey("sigbutdef","SigButDefNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigButDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SigButDef sigButDef,bool useExistingPK){
+		public static long Insert(SigButDef sigButDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sigButDef.SigButDefNum=ReplicationServers.GetKey("sigbutdef","SigButDefNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigButDef in the database.</summary>
-		internal static void Update(SigButDef sigButDef){
+		public static void Update(SigButDef sigButDef){
 			string command="UPDATE sigbutdef SET "
 				+"ButtonText  = '"+POut.String(sigButDef.ButtonText)+"', "
 				+"ButtonIndex =  "+POut.Int   (sigButDef.ButtonIndex)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigButDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SigButDef sigButDef,SigButDef oldSigButDef){
+		public static void Update(SigButDef sigButDef,SigButDef oldSigButDef){
 			string command="";
 			if(sigButDef.ButtonText != oldSigButDef.ButtonText) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SigButDef from the database.</summary>
-		internal static void Delete(long sigButDefNum){
+		public static void Delete(long sigButDefNum){
 			string command="DELETE FROM sigbutdef "
 				+"WHERE SigButDefNum = "+POut.Long(sigButDefNum);
 			Db.NonQ(command);

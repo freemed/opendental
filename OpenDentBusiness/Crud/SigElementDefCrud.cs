@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SigElementDefCrud {
+	public class SigElementDefCrud {
 		///<summary>Gets one SigElementDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SigElementDef SelectOne(long sigElementDefNum){
+		public static SigElementDef SelectOne(long sigElementDefNum){
 			string command="SELECT * FROM sigelementdef "
 				+"WHERE SigElementDefNum = "+POut.Long(sigElementDefNum);
 			List<SigElementDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SigElementDef object from the database using a query.</summary>
-		internal static SigElementDef SelectOne(string command){
+		public static SigElementDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SigElementDef objects from the database using a query.</summary>
-		internal static List<SigElementDef> SelectMany(string command){
+		public static List<SigElementDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SigElementDef> TableToList(DataTable table){
+		public static List<SigElementDef> TableToList(DataTable table){
 			List<SigElementDef> retVal=new List<SigElementDef>();
 			SigElementDef sigElementDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigElementDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SigElementDef sigElementDef){
+		public static long Insert(SigElementDef sigElementDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sigElementDef.SigElementDefNum=DbHelper.GetNextOracleKey("sigelementdef","SigElementDefNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SigElementDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SigElementDef sigElementDef,bool useExistingPK){
+		public static long Insert(SigElementDef sigElementDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sigElementDef.SigElementDefNum=ReplicationServers.GetKey("sigelementdef","SigElementDefNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigElementDef in the database.</summary>
-		internal static void Update(SigElementDef sigElementDef){
+		public static void Update(SigElementDef sigElementDef){
 			string command="UPDATE sigelementdef SET "
 				+"LightRow        =  "+POut.Byte  (sigElementDef.LightRow)+", "
 				+"LightColor      =  "+POut.Int   (sigElementDef.LightColor.ToArgb())+", "
@@ -135,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SigElementDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SigElementDef sigElementDef,SigElementDef oldSigElementDef){
+		public static void Update(SigElementDef sigElementDef,SigElementDef oldSigElementDef){
 			string command="";
 			if(sigElementDef.LightRow != oldSigElementDef.LightRow) {
 				if(command!=""){ command+=",";}
@@ -174,7 +174,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SigElementDef from the database.</summary>
-		internal static void Delete(long sigElementDefNum){
+		public static void Delete(long sigElementDefNum){
 			string command="DELETE FROM sigelementdef "
 				+"WHERE SigElementDefNum = "+POut.Long(sigElementDefNum);
 			Db.NonQ(command);

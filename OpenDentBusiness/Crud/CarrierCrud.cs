@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CarrierCrud {
+	public class CarrierCrud {
 		///<summary>Gets one Carrier object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Carrier SelectOne(long carrierNum){
+		public static Carrier SelectOne(long carrierNum){
 			string command="SELECT * FROM carrier "
 				+"WHERE CarrierNum = "+POut.Long(carrierNum);
 			List<Carrier> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Carrier object from the database using a query.</summary>
-		internal static Carrier SelectOne(string command){
+		public static Carrier SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Carrier objects from the database using a query.</summary>
-		internal static List<Carrier> SelectMany(string command){
+		public static List<Carrier> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Carrier> TableToList(DataTable table){
+		public static List<Carrier> TableToList(DataTable table){
 			List<Carrier> retVal=new List<Carrier>();
 			Carrier carrier;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -68,7 +68,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Carrier into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Carrier carrier){
+		public static long Insert(Carrier carrier){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				carrier.CarrierNum=DbHelper.GetNextOracleKey("carrier","CarrierNum");
 				int loopcount=0;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Carrier into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Carrier carrier,bool useExistingPK){
+		public static long Insert(Carrier carrier,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				carrier.CarrierNum=ReplicationServers.GetKey("carrier","CarrierNum");
 			}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Carrier in the database.</summary>
-		internal static void Update(Carrier carrier){
+		public static void Update(Carrier carrier){
 			string command="UPDATE carrier SET "
 				+"CarrierName             = '"+POut.String(carrier.CarrierName)+"', "
 				+"Address                 = '"+POut.String(carrier.Address)+"', "
@@ -154,7 +154,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Carrier in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Carrier carrier,Carrier oldCarrier){
+		public static void Update(Carrier carrier,Carrier oldCarrier){
 			string command="";
 			if(carrier.CarrierName != oldCarrier.CarrierName) {
 				if(command!=""){ command+=",";}
@@ -225,7 +225,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Carrier from the database.</summary>
-		internal static void Delete(long carrierNum){
+		public static void Delete(long carrierNum){
 			string command="DELETE FROM carrier "
 				+"WHERE CarrierNum = "+POut.Long(carrierNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class MountDefCrud {
+	public class MountDefCrud {
 		///<summary>Gets one MountDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static MountDef SelectOne(long mountDefNum){
+		public static MountDef SelectOne(long mountDefNum){
 			string command="SELECT * FROM mountdef "
 				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
 			List<MountDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one MountDef object from the database using a query.</summary>
-		internal static MountDef SelectOne(string command){
+		public static MountDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of MountDef objects from the database using a query.</summary>
-		internal static List<MountDef> SelectMany(string command){
+		public static List<MountDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<MountDef> TableToList(DataTable table){
+		public static List<MountDef> TableToList(DataTable table){
 			List<MountDef> retVal=new List<MountDef>();
 			MountDef mountDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MountDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MountDef mountDef){
+		public static long Insert(MountDef mountDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				mountDef.MountDefNum=DbHelper.GetNextOracleKey("mountdef","MountDefNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MountDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(MountDef mountDef,bool useExistingPK){
+		public static long Insert(MountDef mountDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				mountDef.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MountDef in the database.</summary>
-		internal static void Update(MountDef mountDef){
+		public static void Update(MountDef mountDef){
 			string command="UPDATE mountdef SET "
 				+"Description = '"+POut.String(mountDef.Description)+"', "
 				+"ItemOrder   =  "+POut.Int   (mountDef.ItemOrder)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MountDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(MountDef mountDef,MountDef oldMountDef){
+		public static void Update(MountDef mountDef,MountDef oldMountDef){
 			string command="";
 			if(mountDef.Description != oldMountDef.Description) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one MountDef from the database.</summary>
-		internal static void Delete(long mountDefNum){
+		public static void Delete(long mountDefNum){
 			string command="DELETE FROM mountdef "
 				+"WHERE MountDefNum = "+POut.Long(mountDefNum);
 			Db.NonQ(command);

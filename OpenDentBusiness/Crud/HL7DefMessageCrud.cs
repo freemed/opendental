@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class HL7DefMessageCrud {
+	public class HL7DefMessageCrud {
 		///<summary>Gets one HL7DefMessage object from the database using the primary key.  Returns null if not found.</summary>
-		internal static HL7DefMessage SelectOne(long hL7DefMessageNum){
+		public static HL7DefMessage SelectOne(long hL7DefMessageNum){
 			string command="SELECT * FROM hl7defmessage "
 				+"WHERE HL7DefMessageNum = "+POut.Long(hL7DefMessageNum);
 			List<HL7DefMessage> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one HL7DefMessage object from the database using a query.</summary>
-		internal static HL7DefMessage SelectOne(string command){
+		public static HL7DefMessage SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of HL7DefMessage objects from the database using a query.</summary>
-		internal static List<HL7DefMessage> SelectMany(string command){
+		public static List<HL7DefMessage> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<HL7DefMessage> TableToList(DataTable table){
+		public static List<HL7DefMessage> TableToList(DataTable table){
 			List<HL7DefMessage> retVal=new List<HL7DefMessage>();
 			HL7DefMessage hL7DefMessage;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -77,7 +77,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefMessage into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7DefMessage hL7DefMessage){
+		public static long Insert(HL7DefMessage hL7DefMessage){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				hL7DefMessage.HL7DefMessageNum=DbHelper.GetNextOracleKey("hl7defmessage","HL7DefMessageNum");
 				int loopcount=0;
@@ -103,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7DefMessage into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(HL7DefMessage hL7DefMessage,bool useExistingPK){
+		public static long Insert(HL7DefMessage hL7DefMessage,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				hL7DefMessage.HL7DefMessageNum=ReplicationServers.GetKey("hl7defmessage","HL7DefMessageNum");
 			}
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefMessage in the database.</summary>
-		internal static void Update(HL7DefMessage hL7DefMessage){
+		public static void Update(HL7DefMessage hL7DefMessage){
 			string command="UPDATE hl7defmessage SET "
 				+"HL7DefNum       =  "+POut.Long  (hL7DefMessage.HL7DefNum)+", "
 				+"MessageType     = '"+POut.String(hL7DefMessage.MessageType.ToString())+"', "
@@ -153,7 +153,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7DefMessage in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(HL7DefMessage hL7DefMessage,HL7DefMessage oldHL7DefMessage){
+		public static void Update(HL7DefMessage hL7DefMessage,HL7DefMessage oldHL7DefMessage){
 			string command="";
 			if(hL7DefMessage.HL7DefNum != oldHL7DefMessage.HL7DefNum) {
 				if(command!=""){ command+=",";}
@@ -192,7 +192,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one HL7DefMessage from the database.</summary>
-		internal static void Delete(long hL7DefMessageNum){
+		public static void Delete(long hL7DefMessageNum){
 			string command="DELETE FROM hl7defmessage "
 				+"WHERE HL7DefMessageNum = "+POut.Long(hL7DefMessageNum);
 			Db.NonQ(command);

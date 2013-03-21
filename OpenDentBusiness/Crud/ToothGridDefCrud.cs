@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ToothGridDefCrud {
+	public class ToothGridDefCrud {
 		///<summary>Gets one ToothGridDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ToothGridDef SelectOne(long toothGridDefNum){
+		public static ToothGridDef SelectOne(long toothGridDefNum){
 			string command="SELECT * FROM toothgriddef "
 				+"WHERE ToothGridDefNum = "+POut.Long(toothGridDefNum);
 			List<ToothGridDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ToothGridDef object from the database using a query.</summary>
-		internal static ToothGridDef SelectOne(string command){
+		public static ToothGridDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ToothGridDef objects from the database using a query.</summary>
-		internal static List<ToothGridDef> SelectMany(string command){
+		public static List<ToothGridDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ToothGridDef> TableToList(DataTable table){
+		public static List<ToothGridDef> TableToList(DataTable table){
 			List<ToothGridDef> retVal=new List<ToothGridDef>();
 			ToothGridDef toothGridDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothGridDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ToothGridDef toothGridDef){
+		public static long Insert(ToothGridDef toothGridDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				toothGridDef.ToothGridDefNum=DbHelper.GetNextOracleKey("toothgriddef","ToothGridDefNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothGridDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ToothGridDef toothGridDef,bool useExistingPK){
+		public static long Insert(ToothGridDef toothGridDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				toothGridDef.ToothGridDefNum=ReplicationServers.GetKey("toothgriddef","ToothGridDefNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothGridDef in the database.</summary>
-		internal static void Update(ToothGridDef toothGridDef){
+		public static void Update(ToothGridDef toothGridDef){
 			string command="UPDATE toothgriddef SET "
 				+"SheetFieldDefNum=  "+POut.Long  (toothGridDef.SheetFieldDefNum)+", "
 				+"NameInternal    = '"+POut.String(toothGridDef.NameInternal)+"', "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothGridDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ToothGridDef toothGridDef,ToothGridDef oldToothGridDef){
+		public static void Update(ToothGridDef toothGridDef,ToothGridDef oldToothGridDef){
 			string command="";
 			if(toothGridDef.SheetFieldDefNum != oldToothGridDef.SheetFieldDefNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ToothGridDef from the database.</summary>
-		internal static void Delete(long toothGridDefNum){
+		public static void Delete(long toothGridDefNum){
 			string command="DELETE FROM toothgriddef "
 				+"WHERE ToothGridDefNum = "+POut.Long(toothGridDefNum);
 			Db.NonQ(command);

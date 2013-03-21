@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ComputerPrefCrud {
+	public class ComputerPrefCrud {
 		///<summary>Gets one ComputerPref object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ComputerPref SelectOne(long computerPrefNum){
+		public static ComputerPref SelectOne(long computerPrefNum){
 			string command="SELECT * FROM computerpref "
 				+"WHERE ComputerPrefNum = "+POut.Long(computerPrefNum);
 			List<ComputerPref> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ComputerPref object from the database using a query.</summary>
-		internal static ComputerPref SelectOne(string command){
+		public static ComputerPref SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ComputerPref objects from the database using a query.</summary>
-		internal static List<ComputerPref> SelectMany(string command){
+		public static List<ComputerPref> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ComputerPref> TableToList(DataTable table){
+		public static List<ComputerPref> TableToList(DataTable table){
 			List<ComputerPref> retVal=new List<ComputerPref>();
 			ComputerPref computerPref;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -75,7 +75,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ComputerPref into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ComputerPref computerPref){
+		public static long Insert(ComputerPref computerPref){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				computerPref.ComputerPrefNum=DbHelper.GetNextOracleKey("computerpref","ComputerPrefNum");
 				int loopcount=0;
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ComputerPref into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ComputerPref computerPref,bool useExistingPK){
+		public static long Insert(ComputerPref computerPref,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				computerPref.ComputerPrefNum=ReplicationServers.GetKey("computerpref","ComputerPrefNum");
 			}
@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ComputerPref in the database.</summary>
-		internal static void Update(ComputerPref computerPref){
+		public static void Update(ComputerPref computerPref){
 			string command="UPDATE computerpref SET "
 				+"ComputerName           = '"+POut.String(computerPref.ComputerName)+"', "
 				+"GraphicsUseHardware    =  "+POut.Bool  (computerPref.GraphicsUseHardware)+", "
@@ -175,7 +175,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ComputerPref in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ComputerPref computerPref,ComputerPref oldComputerPref){
+		public static void Update(ComputerPref computerPref,ComputerPref oldComputerPref){
 			string command="";
 			if(computerPref.ComputerName != oldComputerPref.ComputerName) {
 				if(command!=""){ command+=",";}
@@ -274,7 +274,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ComputerPref from the database.</summary>
-		internal static void Delete(long computerPrefNum){
+		public static void Delete(long computerPrefNum){
 			string command="DELETE FROM computerpref "
 				+"WHERE ComputerPrefNum = "+POut.Long(computerPrefNum);
 			Db.NonQ(command);

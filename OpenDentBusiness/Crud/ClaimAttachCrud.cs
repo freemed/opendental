@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimAttachCrud {
+	public class ClaimAttachCrud {
 		///<summary>Gets one ClaimAttach object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimAttach SelectOne(long claimAttachNum){
+		public static ClaimAttach SelectOne(long claimAttachNum){
 			string command="SELECT * FROM claimattach "
 				+"WHERE ClaimAttachNum = "+POut.Long(claimAttachNum);
 			List<ClaimAttach> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimAttach object from the database using a query.</summary>
-		internal static ClaimAttach SelectOne(string command){
+		public static ClaimAttach SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimAttach objects from the database using a query.</summary>
-		internal static List<ClaimAttach> SelectMany(string command){
+		public static List<ClaimAttach> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimAttach> TableToList(DataTable table){
+		public static List<ClaimAttach> TableToList(DataTable table){
 			List<ClaimAttach> retVal=new List<ClaimAttach>();
 			ClaimAttach claimAttach;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimAttach into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimAttach claimAttach){
+		public static long Insert(ClaimAttach claimAttach){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimAttach.ClaimAttachNum=DbHelper.GetNextOracleKey("claimattach","ClaimAttachNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimAttach into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimAttach claimAttach,bool useExistingPK){
+		public static long Insert(ClaimAttach claimAttach,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimAttach.ClaimAttachNum=ReplicationServers.GetKey("claimattach","ClaimAttachNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimAttach in the database.</summary>
-		internal static void Update(ClaimAttach claimAttach){
+		public static void Update(ClaimAttach claimAttach){
 			string command="UPDATE claimattach SET "
 				+"ClaimNum         =  "+POut.Long  (claimAttach.ClaimNum)+", "
 				+"DisplayedFileName= '"+POut.String(claimAttach.DisplayedFileName)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimAttach in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimAttach claimAttach,ClaimAttach oldClaimAttach){
+		public static void Update(ClaimAttach claimAttach,ClaimAttach oldClaimAttach){
 			string command="";
 			if(claimAttach.ClaimNum != oldClaimAttach.ClaimNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimAttach from the database.</summary>
-		internal static void Delete(long claimAttachNum){
+		public static void Delete(long claimAttachNum){
 			string command="DELETE FROM claimattach "
 				+"WHERE ClaimAttachNum = "+POut.Long(claimAttachNum);
 			Db.NonQ(command);

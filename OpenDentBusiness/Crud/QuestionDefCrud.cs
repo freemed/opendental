@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class QuestionDefCrud {
+	public class QuestionDefCrud {
 		///<summary>Gets one QuestionDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static QuestionDef SelectOne(long questionDefNum){
+		public static QuestionDef SelectOne(long questionDefNum){
 			string command="SELECT * FROM questiondef "
 				+"WHERE QuestionDefNum = "+POut.Long(questionDefNum);
 			List<QuestionDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one QuestionDef object from the database using a query.</summary>
-		internal static QuestionDef SelectOne(string command){
+		public static QuestionDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of QuestionDef objects from the database using a query.</summary>
-		internal static List<QuestionDef> SelectMany(string command){
+		public static List<QuestionDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<QuestionDef> TableToList(DataTable table){
+		public static List<QuestionDef> TableToList(DataTable table){
 			List<QuestionDef> retVal=new List<QuestionDef>();
 			QuestionDef questionDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuestionDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(QuestionDef questionDef){
+		public static long Insert(QuestionDef questionDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				questionDef.QuestionDefNum=DbHelper.GetNextOracleKey("questiondef","QuestionDefNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuestionDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(QuestionDef questionDef,bool useExistingPK){
+		public static long Insert(QuestionDef questionDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				questionDef.QuestionDefNum=ReplicationServers.GetKey("questiondef","QuestionDefNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuestionDef in the database.</summary>
-		internal static void Update(QuestionDef questionDef){
+		public static void Update(QuestionDef questionDef){
 			string command="UPDATE questiondef SET "
 				+"Description   = '"+POut.String(questionDef.Description)+"', "
 				+"ItemOrder     =  "+POut.Int   (questionDef.ItemOrder)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuestionDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(QuestionDef questionDef,QuestionDef oldQuestionDef){
+		public static void Update(QuestionDef questionDef,QuestionDef oldQuestionDef){
 			string command="";
 			if(questionDef.Description != oldQuestionDef.Description) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one QuestionDef from the database.</summary>
-		internal static void Delete(long questionDefNum){
+		public static void Delete(long questionDefNum){
 			string command="DELETE FROM questiondef "
 				+"WHERE QuestionDefNum = "+POut.Long(questionDefNum);
 			Db.NonQ(command);

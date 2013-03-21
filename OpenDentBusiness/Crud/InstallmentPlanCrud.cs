@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class InstallmentPlanCrud {
+	public class InstallmentPlanCrud {
 		///<summary>Gets one InstallmentPlan object from the database using the primary key.  Returns null if not found.</summary>
-		internal static InstallmentPlan SelectOne(long installmentPlanNum){
+		public static InstallmentPlan SelectOne(long installmentPlanNum){
 			string command="SELECT * FROM installmentplan "
 				+"WHERE InstallmentPlanNum = "+POut.Long(installmentPlanNum);
 			List<InstallmentPlan> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one InstallmentPlan object from the database using a query.</summary>
-		internal static InstallmentPlan SelectOne(string command){
+		public static InstallmentPlan SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of InstallmentPlan objects from the database using a query.</summary>
-		internal static List<InstallmentPlan> SelectMany(string command){
+		public static List<InstallmentPlan> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<InstallmentPlan> TableToList(DataTable table){
+		public static List<InstallmentPlan> TableToList(DataTable table){
 			List<InstallmentPlan> retVal=new List<InstallmentPlan>();
 			InstallmentPlan installmentPlan;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InstallmentPlan into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InstallmentPlan installmentPlan){
+		public static long Insert(InstallmentPlan installmentPlan){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				installmentPlan.InstallmentPlanNum=DbHelper.GetNextOracleKey("installmentplan","InstallmentPlanNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InstallmentPlan into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(InstallmentPlan installmentPlan,bool useExistingPK){
+		public static long Insert(InstallmentPlan installmentPlan,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				installmentPlan.InstallmentPlanNum=ReplicationServers.GetKey("installmentplan","InstallmentPlanNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InstallmentPlan in the database.</summary>
-		internal static void Update(InstallmentPlan installmentPlan){
+		public static void Update(InstallmentPlan installmentPlan){
 			string command="UPDATE installmentplan SET "
 				+"PatNum            =  "+POut.Long  (installmentPlan.PatNum)+", "
 				+"DateAgreement     =  "+POut.Date  (installmentPlan.DateAgreement)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InstallmentPlan in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(InstallmentPlan installmentPlan,InstallmentPlan oldInstallmentPlan){
+		public static void Update(InstallmentPlan installmentPlan,InstallmentPlan oldInstallmentPlan){
 			string command="";
 			if(installmentPlan.PatNum != oldInstallmentPlan.PatNum) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one InstallmentPlan from the database.</summary>
-		internal static void Delete(long installmentPlanNum){
+		public static void Delete(long installmentPlanNum){
 			string command="DELETE FROM installmentplan "
 				+"WHERE InstallmentPlanNum = "+POut.Long(installmentPlanNum);
 			Db.NonQ(command);

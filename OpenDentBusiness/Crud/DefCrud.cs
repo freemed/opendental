@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DefCrud {
+	public class DefCrud {
 		///<summary>Gets one Def object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Def SelectOne(long defNum){
+		public static Def SelectOne(long defNum){
 			string command="SELECT * FROM definition "
 				+"WHERE DefNum = "+POut.Long(defNum);
 			List<Def> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Def object from the database using a query.</summary>
-		internal static Def SelectOne(string command){
+		public static Def SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Def objects from the database using a query.</summary>
-		internal static List<Def> SelectMany(string command){
+		public static List<Def> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Def> TableToList(DataTable table){
+		public static List<Def> TableToList(DataTable table){
 			List<Def> retVal=new List<Def>();
 			Def def;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Def into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Def def){
+		public static long Insert(Def def){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				def.DefNum=DbHelper.GetNextOracleKey("definition","DefNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Def into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Def def,bool useExistingPK){
+		public static long Insert(Def def,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				def.DefNum=ReplicationServers.GetKey("definition","DefNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Def in the database.</summary>
-		internal static void Update(Def def){
+		public static void Update(Def def){
 			string command="UPDATE definition SET "
 				+"Category =  "+POut.Int   ((int)def.Category)+", "
 				+"ItemOrder=  "+POut.Int   (def.ItemOrder)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Def in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Def def,Def oldDef){
+		public static void Update(Def def,Def oldDef){
 			string command="";
 			if(def.Category != oldDef.Category) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Def from the database.</summary>
-		internal static void Delete(long defNum){
+		public static void Delete(long defNum){
 			string command="DELETE FROM definition "
 				+"WHERE DefNum = "+POut.Long(defNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimFormItemCrud {
+	public class ClaimFormItemCrud {
 		///<summary>Gets one ClaimFormItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimFormItem SelectOne(long claimFormItemNum){
+		public static ClaimFormItem SelectOne(long claimFormItemNum){
 			string command="SELECT * FROM claimformitem "
 				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum);
 			List<ClaimFormItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimFormItem object from the database using a query.</summary>
-		internal static ClaimFormItem SelectOne(string command){
+		public static ClaimFormItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimFormItem objects from the database using a query.</summary>
-		internal static List<ClaimFormItem> SelectMany(string command){
+		public static List<ClaimFormItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimFormItem> TableToList(DataTable table){
+		public static List<ClaimFormItem> TableToList(DataTable table){
 			List<ClaimFormItem> retVal=new List<ClaimFormItem>();
 			ClaimFormItem claimFormItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimFormItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimFormItem claimFormItem){
+		public static long Insert(ClaimFormItem claimFormItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimFormItem.ClaimFormItemNum=DbHelper.GetNextOracleKey("claimformitem","ClaimFormItemNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimFormItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimFormItem claimFormItem,bool useExistingPK){
+		public static long Insert(ClaimFormItem claimFormItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimFormItem.ClaimFormItemNum=ReplicationServers.GetKey("claimformitem","ClaimFormItemNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimFormItem in the database.</summary>
-		internal static void Update(ClaimFormItem claimFormItem){
+		public static void Update(ClaimFormItem claimFormItem){
 			string command="UPDATE claimformitem SET "
 				+"ClaimFormNum    =  "+POut.Long  (claimFormItem.ClaimFormNum)+", "
 				+"ImageFileName   = '"+POut.String(claimFormItem.ImageFileName)+"', "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimFormItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimFormItem claimFormItem,ClaimFormItem oldClaimFormItem){
+		public static void Update(ClaimFormItem claimFormItem,ClaimFormItem oldClaimFormItem){
 			string command="";
 			if(claimFormItem.ClaimFormNum != oldClaimFormItem.ClaimFormNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimFormItem from the database.</summary>
-		internal static void Delete(long claimFormItemNum){
+		public static void Delete(long claimFormItemNum){
 			string command="DELETE FROM claimformitem "
 				+"WHERE ClaimFormItemNum = "+POut.Long(claimFormItemNum);
 			Db.NonQ(command);

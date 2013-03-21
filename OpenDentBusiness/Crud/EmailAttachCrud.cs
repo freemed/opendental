@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EmailAttachCrud {
+	public class EmailAttachCrud {
 		///<summary>Gets one EmailAttach object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EmailAttach SelectOne(long emailAttachNum){
+		public static EmailAttach SelectOne(long emailAttachNum){
 			string command="SELECT * FROM emailattach "
 				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum);
 			List<EmailAttach> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EmailAttach object from the database using a query.</summary>
-		internal static EmailAttach SelectOne(string command){
+		public static EmailAttach SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EmailAttach objects from the database using a query.</summary>
-		internal static List<EmailAttach> SelectMany(string command){
+		public static List<EmailAttach> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EmailAttach> TableToList(DataTable table){
+		public static List<EmailAttach> TableToList(DataTable table){
 			List<EmailAttach> retVal=new List<EmailAttach>();
 			EmailAttach emailAttach;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailAttach into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EmailAttach emailAttach){
+		public static long Insert(EmailAttach emailAttach){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				emailAttach.EmailAttachNum=DbHelper.GetNextOracleKey("emailattach","EmailAttachNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailAttach into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EmailAttach emailAttach,bool useExistingPK){
+		public static long Insert(EmailAttach emailAttach,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				emailAttach.EmailAttachNum=ReplicationServers.GetKey("emailattach","EmailAttachNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailAttach in the database.</summary>
-		internal static void Update(EmailAttach emailAttach){
+		public static void Update(EmailAttach emailAttach){
 			string command="UPDATE emailattach SET "
 				+"EmailMessageNum  =  "+POut.Long  (emailAttach.EmailMessageNum)+", "
 				+"DisplayedFileName= '"+POut.String(emailAttach.DisplayedFileName)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailAttach in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EmailAttach emailAttach,EmailAttach oldEmailAttach){
+		public static void Update(EmailAttach emailAttach,EmailAttach oldEmailAttach){
 			string command="";
 			if(emailAttach.EmailMessageNum != oldEmailAttach.EmailMessageNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EmailAttach from the database.</summary>
-		internal static void Delete(long emailAttachNum){
+		public static void Delete(long emailAttachNum){
 			string command="DELETE FROM emailattach "
 				+"WHERE EmailAttachNum = "+POut.Long(emailAttachNum);
 			Db.NonQ(command);

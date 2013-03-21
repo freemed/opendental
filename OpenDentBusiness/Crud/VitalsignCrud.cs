@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class VitalsignCrud {
+	public class VitalsignCrud {
 		///<summary>Gets one Vitalsign object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Vitalsign SelectOne(long vitalsignNum){
+		public static Vitalsign SelectOne(long vitalsignNum){
 			string command="SELECT * FROM vitalsign "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsignNum);
 			List<Vitalsign> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Vitalsign object from the database using a query.</summary>
-		internal static Vitalsign SelectOne(string command){
+		public static Vitalsign SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Vitalsign objects from the database using a query.</summary>
-		internal static List<Vitalsign> SelectMany(string command){
+		public static List<Vitalsign> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Vitalsign> TableToList(DataTable table){
+		public static List<Vitalsign> TableToList(DataTable table){
 			List<Vitalsign> retVal=new List<Vitalsign>();
 			Vitalsign vitalsign;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Vitalsign into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Vitalsign vitalsign){
+		public static long Insert(Vitalsign vitalsign){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				vitalsign.VitalsignNum=DbHelper.GetNextOracleKey("vitalsign","VitalsignNum");
 				int loopcount=0;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Vitalsign into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Vitalsign vitalsign,bool useExistingPK){
+		public static long Insert(Vitalsign vitalsign,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				vitalsign.VitalsignNum=ReplicationServers.GetKey("vitalsign","VitalsignNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Vitalsign in the database.</summary>
-		internal static void Update(Vitalsign vitalsign){
+		public static void Update(Vitalsign vitalsign){
 			string command="UPDATE vitalsign SET "
 				+"PatNum           =  "+POut.Long  (vitalsign.PatNum)+", "
 				+"Height           =  "+POut.Float (vitalsign.Height)+", "
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Vitalsign in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Vitalsign vitalsign,Vitalsign oldVitalsign){
+		public static void Update(Vitalsign vitalsign,Vitalsign oldVitalsign){
 			string command="";
 			if(vitalsign.PatNum != oldVitalsign.PatNum) {
 				if(command!=""){ command+=",";}
@@ -197,7 +197,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Vitalsign from the database.</summary>
-		internal static void Delete(long vitalsignNum){
+		public static void Delete(long vitalsignNum){
 			string command="DELETE FROM vitalsign "
 				+"WHERE VitalsignNum = "+POut.Long(vitalsignNum);
 			Db.NonQ(command);

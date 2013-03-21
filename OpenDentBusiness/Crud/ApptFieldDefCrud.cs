@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ApptFieldDefCrud {
+	public class ApptFieldDefCrud {
 		///<summary>Gets one ApptFieldDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ApptFieldDef SelectOne(long apptFieldDefNum){
+		public static ApptFieldDef SelectOne(long apptFieldDefNum){
 			string command="SELECT * FROM apptfielddef "
 				+"WHERE ApptFieldDefNum = "+POut.Long(apptFieldDefNum);
 			List<ApptFieldDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ApptFieldDef object from the database using a query.</summary>
-		internal static ApptFieldDef SelectOne(string command){
+		public static ApptFieldDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ApptFieldDef objects from the database using a query.</summary>
-		internal static List<ApptFieldDef> SelectMany(string command){
+		public static List<ApptFieldDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ApptFieldDef> TableToList(DataTable table){
+		public static List<ApptFieldDef> TableToList(DataTable table){
 			List<ApptFieldDef> retVal=new List<ApptFieldDef>();
 			ApptFieldDef apptFieldDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptFieldDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ApptFieldDef apptFieldDef){
+		public static long Insert(ApptFieldDef apptFieldDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				apptFieldDef.ApptFieldDefNum=DbHelper.GetNextOracleKey("apptfielddef","ApptFieldDefNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ApptFieldDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ApptFieldDef apptFieldDef,bool useExistingPK){
+		public static long Insert(ApptFieldDef apptFieldDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				apptFieldDef.ApptFieldDefNum=ReplicationServers.GetKey("apptfielddef","ApptFieldDefNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptFieldDef in the database.</summary>
-		internal static void Update(ApptFieldDef apptFieldDef){
+		public static void Update(ApptFieldDef apptFieldDef){
 			string command="UPDATE apptfielddef SET "
 				+"FieldName      = '"+POut.String(apptFieldDef.FieldName)+"', "
 				+"FieldType      =  "+POut.Int   ((int)apptFieldDef.FieldType)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ApptFieldDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ApptFieldDef apptFieldDef,ApptFieldDef oldApptFieldDef){
+		public static void Update(ApptFieldDef apptFieldDef,ApptFieldDef oldApptFieldDef){
 			string command="";
 			if(apptFieldDef.FieldName != oldApptFieldDef.FieldName) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ApptFieldDef from the database.</summary>
-		internal static void Delete(long apptFieldDefNum){
+		public static void Delete(long apptFieldDefNum){
 			string command="DELETE FROM apptfielddef "
 				+"WHERE ApptFieldDefNum = "+POut.Long(apptFieldDefNum);
 			Db.NonQ(command);

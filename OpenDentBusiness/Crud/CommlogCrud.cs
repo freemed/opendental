@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CommlogCrud {
+	public class CommlogCrud {
 		///<summary>Gets one Commlog object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Commlog SelectOne(long commlogNum){
+		public static Commlog SelectOne(long commlogNum){
 			string command="SELECT * FROM commlog "
 				+"WHERE CommlogNum = "+POut.Long(commlogNum);
 			List<Commlog> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Commlog object from the database using a query.</summary>
-		internal static Commlog SelectOne(string command){
+		public static Commlog SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Commlog objects from the database using a query.</summary>
-		internal static List<Commlog> SelectMany(string command){
+		public static List<Commlog> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Commlog> TableToList(DataTable table){
+		public static List<Commlog> TableToList(DataTable table){
 			List<Commlog> retVal=new List<Commlog>();
 			Commlog commlog;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -64,7 +64,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Commlog into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Commlog commlog){
+		public static long Insert(Commlog commlog){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				commlog.CommlogNum=DbHelper.GetNextOracleKey("commlog","CommlogNum");
 				int loopcount=0;
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Commlog into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Commlog commlog,bool useExistingPK){
+		public static long Insert(Commlog commlog,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				commlog.CommlogNum=ReplicationServers.GetKey("commlog","CommlogNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Commlog in the database.</summary>
-		internal static void Update(Commlog commlog){
+		public static void Update(Commlog commlog){
 			string command="UPDATE commlog SET "
 				+"PatNum        =  "+POut.Long  (commlog.PatNum)+", "
 				+"CommDateTime  =  "+POut.DateT (commlog.CommDateTime)+", "
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Commlog in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Commlog commlog,Commlog oldCommlog){
+		public static void Update(Commlog commlog,Commlog oldCommlog){
 			string command="";
 			if(commlog.PatNum != oldCommlog.PatNum) {
 				if(command!=""){ command+=",";}
@@ -194,7 +194,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Commlog from the database.</summary>
-		internal static void Delete(long commlogNum){
+		public static void Delete(long commlogNum){
 			string command="DELETE FROM commlog "
 				+"WHERE CommlogNum = "+POut.Long(commlogNum);
 			Db.NonQ(command);

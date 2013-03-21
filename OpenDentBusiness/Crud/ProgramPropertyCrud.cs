@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProgramPropertyCrud {
+	public class ProgramPropertyCrud {
 		///<summary>Gets one ProgramProperty object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProgramProperty SelectOne(long programPropertyNum){
+		public static ProgramProperty SelectOne(long programPropertyNum){
 			string command="SELECT * FROM programproperty "
 				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum);
 			List<ProgramProperty> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProgramProperty object from the database using a query.</summary>
-		internal static ProgramProperty SelectOne(string command){
+		public static ProgramProperty SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProgramProperty objects from the database using a query.</summary>
-		internal static List<ProgramProperty> SelectMany(string command){
+		public static List<ProgramProperty> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProgramProperty> TableToList(DataTable table){
+		public static List<ProgramProperty> TableToList(DataTable table){
 			List<ProgramProperty> retVal=new List<ProgramProperty>();
 			ProgramProperty programProperty;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProgramProperty into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProgramProperty programProperty){
+		public static long Insert(ProgramProperty programProperty){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				programProperty.ProgramPropertyNum=DbHelper.GetNextOracleKey("programproperty","ProgramPropertyNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProgramProperty into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProgramProperty programProperty,bool useExistingPK){
+		public static long Insert(ProgramProperty programProperty,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				programProperty.ProgramPropertyNum=ReplicationServers.GetKey("programproperty","ProgramPropertyNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProgramProperty in the database.</summary>
-		internal static void Update(ProgramProperty programProperty){
+		public static void Update(ProgramProperty programProperty){
 			string command="UPDATE programproperty SET "
 				+"ProgramNum        =  "+POut.Long  (programProperty.ProgramNum)+", "
 				+"PropertyDesc      = '"+POut.String(programProperty.PropertyDesc)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProgramProperty in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProgramProperty programProperty,ProgramProperty oldProgramProperty){
+		public static void Update(ProgramProperty programProperty,ProgramProperty oldProgramProperty){
 			string command="";
 			if(programProperty.ProgramNum != oldProgramProperty.ProgramNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProgramProperty from the database.</summary>
-		internal static void Delete(long programPropertyNum){
+		public static void Delete(long programPropertyNum){
 			string command="DELETE FROM programproperty "
 				+"WHERE ProgramPropertyNum = "+POut.Long(programPropertyNum);
 			Db.NonQ(command);

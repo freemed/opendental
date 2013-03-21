@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class QuickPasteCatCrud {
+	public class QuickPasteCatCrud {
 		///<summary>Gets one QuickPasteCat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static QuickPasteCat SelectOne(long quickPasteCatNum){
+		public static QuickPasteCat SelectOne(long quickPasteCatNum){
 			string command="SELECT * FROM quickpastecat "
 				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCatNum);
 			List<QuickPasteCat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one QuickPasteCat object from the database using a query.</summary>
-		internal static QuickPasteCat SelectOne(string command){
+		public static QuickPasteCat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of QuickPasteCat objects from the database using a query.</summary>
-		internal static List<QuickPasteCat> SelectMany(string command){
+		public static List<QuickPasteCat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<QuickPasteCat> TableToList(DataTable table){
+		public static List<QuickPasteCat> TableToList(DataTable table){
 			List<QuickPasteCat> retVal=new List<QuickPasteCat>();
 			QuickPasteCat quickPasteCat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuickPasteCat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(QuickPasteCat quickPasteCat){
+		public static long Insert(QuickPasteCat quickPasteCat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				quickPasteCat.QuickPasteCatNum=DbHelper.GetNextOracleKey("quickpastecat","QuickPasteCatNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuickPasteCat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(QuickPasteCat quickPasteCat,bool useExistingPK){
+		public static long Insert(QuickPasteCat quickPasteCat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				quickPasteCat.QuickPasteCatNum=ReplicationServers.GetKey("quickpastecat","QuickPasteCatNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuickPasteCat in the database.</summary>
-		internal static void Update(QuickPasteCat quickPasteCat){
+		public static void Update(QuickPasteCat quickPasteCat){
 			string command="UPDATE quickpastecat SET "
 				+"Description     = '"+POut.String(quickPasteCat.Description)+"', "
 				+"ItemOrder       =  "+POut.Int   (quickPasteCat.ItemOrder)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuickPasteCat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(QuickPasteCat quickPasteCat,QuickPasteCat oldQuickPasteCat){
+		public static void Update(QuickPasteCat quickPasteCat,QuickPasteCat oldQuickPasteCat){
 			string command="";
 			if(quickPasteCat.Description != oldQuickPasteCat.Description) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one QuickPasteCat from the database.</summary>
-		internal static void Delete(long quickPasteCatNum){
+		public static void Delete(long quickPasteCatNum){
 			string command="DELETE FROM quickpastecat "
 				+"WHERE QuickPasteCatNum = "+POut.Long(quickPasteCatNum);
 			Db.NonQ(command);

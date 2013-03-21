@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SchoolClassCrud {
+	public class SchoolClassCrud {
 		///<summary>Gets one SchoolClass object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SchoolClass SelectOne(long schoolClassNum){
+		public static SchoolClass SelectOne(long schoolClassNum){
 			string command="SELECT * FROM schoolclass "
 				+"WHERE SchoolClassNum = "+POut.Long(schoolClassNum);
 			List<SchoolClass> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SchoolClass object from the database using a query.</summary>
-		internal static SchoolClass SelectOne(string command){
+		public static SchoolClass SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SchoolClass objects from the database using a query.</summary>
-		internal static List<SchoolClass> SelectMany(string command){
+		public static List<SchoolClass> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SchoolClass> TableToList(DataTable table){
+		public static List<SchoolClass> TableToList(DataTable table){
 			List<SchoolClass> retVal=new List<SchoolClass>();
 			SchoolClass schoolClass;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SchoolClass into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SchoolClass schoolClass){
+		public static long Insert(SchoolClass schoolClass){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				schoolClass.SchoolClassNum=DbHelper.GetNextOracleKey("schoolclass","SchoolClassNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SchoolClass into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SchoolClass schoolClass,bool useExistingPK){
+		public static long Insert(SchoolClass schoolClass,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				schoolClass.SchoolClassNum=ReplicationServers.GetKey("schoolclass","SchoolClassNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SchoolClass in the database.</summary>
-		internal static void Update(SchoolClass schoolClass){
+		public static void Update(SchoolClass schoolClass){
 			string command="UPDATE schoolclass SET "
 				+"GradYear      =  "+POut.Int   (schoolClass.GradYear)+", "
 				+"Descript      = '"+POut.String(schoolClass.Descript)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SchoolClass in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SchoolClass schoolClass,SchoolClass oldSchoolClass){
+		public static void Update(SchoolClass schoolClass,SchoolClass oldSchoolClass){
 			string command="";
 			if(schoolClass.GradYear != oldSchoolClass.GradYear) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SchoolClass from the database.</summary>
-		internal static void Delete(long schoolClassNum){
+		public static void Delete(long schoolClassNum){
 			string command="DELETE FROM schoolclass "
 				+"WHERE SchoolClassNum = "+POut.Long(schoolClassNum);
 			Db.NonQ(command);

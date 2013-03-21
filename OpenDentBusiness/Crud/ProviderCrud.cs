@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProviderCrud {
+	public class ProviderCrud {
 		///<summary>Gets one Provider object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Provider SelectOne(long provNum){
+		public static Provider SelectOne(long provNum){
 			string command="SELECT * FROM provider "
 				+"WHERE ProvNum = "+POut.Long(provNum);
 			List<Provider> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Provider object from the database using a query.</summary>
-		internal static Provider SelectOne(string command){
+		public static Provider SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Provider objects from the database using a query.</summary>
-		internal static List<Provider> SelectMany(string command){
+		public static List<Provider> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Provider> TableToList(DataTable table){
+		public static List<Provider> TableToList(DataTable table){
 			List<Provider> retVal=new List<Provider>();
 			Provider provider;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Provider into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Provider provider){
+		public static long Insert(Provider provider){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				provider.ProvNum=DbHelper.GetNextOracleKey("provider","ProvNum");
 				int loopcount=0;
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Provider into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Provider provider,bool useExistingPK){
+		public static long Insert(Provider provider,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				provider.ProvNum=ReplicationServers.GetKey("provider","ProvNum");
 			}
@@ -166,7 +166,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Provider in the database.</summary>
-		internal static void Update(Provider provider){
+		public static void Update(Provider provider){
 			string command="UPDATE provider SET "
 				+"Abbr                = '"+POut.String(provider.Abbr)+"', "
 				+"ItemOrder           =  "+POut.Int   (provider.ItemOrder)+", "
@@ -205,7 +205,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Provider in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Provider provider,Provider oldProvider){
+		public static void Update(Provider provider,Provider oldProvider){
 			string command="";
 			if(provider.Abbr != oldProvider.Abbr) {
 				if(command!=""){ command+=",";}
@@ -341,7 +341,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Provider from the database.</summary>
-		internal static void Delete(long provNum){
+		public static void Delete(long provNum){
 			string command="DELETE FROM provider "
 				+"WHERE ProvNum = "+POut.Long(provNum);
 			Db.NonQ(command);

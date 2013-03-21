@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClaimCondCodeLogCrud {
+	public class ClaimCondCodeLogCrud {
 		///<summary>Gets one ClaimCondCodeLog object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClaimCondCodeLog SelectOne(long claimCondCodeLogNum){
+		public static ClaimCondCodeLog SelectOne(long claimCondCodeLogNum){
 			string command="SELECT * FROM claimcondcodelog "
 				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum);
 			List<ClaimCondCodeLog> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClaimCondCodeLog object from the database using a query.</summary>
-		internal static ClaimCondCodeLog SelectOne(string command){
+		public static ClaimCondCodeLog SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClaimCondCodeLog objects from the database using a query.</summary>
-		internal static List<ClaimCondCodeLog> SelectMany(string command){
+		public static List<ClaimCondCodeLog> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClaimCondCodeLog> TableToList(DataTable table){
+		public static List<ClaimCondCodeLog> TableToList(DataTable table){
 			List<ClaimCondCodeLog> retVal=new List<ClaimCondCodeLog>();
 			ClaimCondCodeLog claimCondCodeLog;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,7 +65,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimCondCodeLog into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClaimCondCodeLog claimCondCodeLog){
+		public static long Insert(ClaimCondCodeLog claimCondCodeLog){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				claimCondCodeLog.ClaimCondCodeLogNum=DbHelper.GetNextOracleKey("claimcondcodelog","ClaimCondCodeLogNum");
 				int loopcount=0;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClaimCondCodeLog into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClaimCondCodeLog claimCondCodeLog,bool useExistingPK){
+		public static long Insert(ClaimCondCodeLog claimCondCodeLog,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				claimCondCodeLog.ClaimCondCodeLogNum=ReplicationServers.GetKey("claimcondcodelog","ClaimCondCodeLogNum");
 			}
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimCondCodeLog in the database.</summary>
-		internal static void Update(ClaimCondCodeLog claimCondCodeLog){
+		public static void Update(ClaimCondCodeLog claimCondCodeLog){
 			string command="UPDATE claimcondcodelog SET "
 				+"ClaimNum           =  "+POut.Long  (claimCondCodeLog.ClaimNum)+", "
 				+"Code0              = '"+POut.String(claimCondCodeLog.Code0)+"', "
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClaimCondCodeLog in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClaimCondCodeLog claimCondCodeLog,ClaimCondCodeLog oldClaimCondCodeLog){
+		public static void Update(ClaimCondCodeLog claimCondCodeLog,ClaimCondCodeLog oldClaimCondCodeLog){
 			string command="";
 			if(claimCondCodeLog.ClaimNum != oldClaimCondCodeLog.ClaimNum) {
 				if(command!=""){ command+=",";}
@@ -204,7 +204,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClaimCondCodeLog from the database.</summary>
-		internal static void Delete(long claimCondCodeLogNum){
+		public static void Delete(long claimCondCodeLogNum){
 			string command="DELETE FROM claimcondcodelog "
 				+"WHERE ClaimCondCodeLogNum = "+POut.Long(claimCondCodeLogNum);
 			Db.NonQ(command);

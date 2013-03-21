@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PatFieldCrud {
+	public class PatFieldCrud {
 		///<summary>Gets one PatField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PatField SelectOne(long patFieldNum){
+		public static PatField SelectOne(long patFieldNum){
 			string command="SELECT * FROM patfield "
 				+"WHERE PatFieldNum = "+POut.Long(patFieldNum);
 			List<PatField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PatField object from the database using a query.</summary>
-		internal static PatField SelectOne(string command){
+		public static PatField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PatField objects from the database using a query.</summary>
-		internal static List<PatField> SelectMany(string command){
+		public static List<PatField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PatField> TableToList(DataTable table){
+		public static List<PatField> TableToList(DataTable table){
 			List<PatField> retVal=new List<PatField>();
 			PatField patField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PatField patField){
+		public static long Insert(PatField patField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				patField.PatFieldNum=DbHelper.GetNextOracleKey("patfield","PatFieldNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PatField patField,bool useExistingPK){
+		public static long Insert(PatField patField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				patField.PatFieldNum=ReplicationServers.GetKey("patfield","PatFieldNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatField in the database.</summary>
-		internal static void Update(PatField patField){
+		public static void Update(PatField patField){
 			string command="UPDATE patfield SET "
 				+"PatNum     =  "+POut.Long  (patField.PatNum)+", "
 				+"FieldName  = '"+POut.String(patField.FieldName)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PatField patField,PatField oldPatField){
+		public static void Update(PatField patField,PatField oldPatField){
 			string command="";
 			if(patField.PatNum != oldPatField.PatNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PatField from the database.</summary>
-		internal static void Delete(long patFieldNum){
+		public static void Delete(long patFieldNum){
 			string command="DELETE FROM patfield "
 				+"WHERE PatFieldNum = "+POut.Long(patFieldNum);
 			Db.NonQ(command);

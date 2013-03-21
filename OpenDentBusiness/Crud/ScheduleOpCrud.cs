@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ScheduleOpCrud {
+	public class ScheduleOpCrud {
 		///<summary>Gets one ScheduleOp object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ScheduleOp SelectOne(long scheduleOpNum){
+		public static ScheduleOp SelectOne(long scheduleOpNum){
 			string command="SELECT * FROM scheduleop "
 				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOpNum);
 			List<ScheduleOp> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ScheduleOp object from the database using a query.</summary>
-		internal static ScheduleOp SelectOne(string command){
+		public static ScheduleOp SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ScheduleOp objects from the database using a query.</summary>
-		internal static List<ScheduleOp> SelectMany(string command){
+		public static List<ScheduleOp> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ScheduleOp> TableToList(DataTable table){
+		public static List<ScheduleOp> TableToList(DataTable table){
 			List<ScheduleOp> retVal=new List<ScheduleOp>();
 			ScheduleOp scheduleOp;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScheduleOp into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ScheduleOp scheduleOp){
+		public static long Insert(ScheduleOp scheduleOp){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				scheduleOp.ScheduleOpNum=DbHelper.GetNextOracleKey("scheduleop","ScheduleOpNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ScheduleOp into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ScheduleOp scheduleOp,bool useExistingPK){
+		public static long Insert(ScheduleOp scheduleOp,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				scheduleOp.ScheduleOpNum=ReplicationServers.GetKey("scheduleop","ScheduleOpNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScheduleOp in the database.</summary>
-		internal static void Update(ScheduleOp scheduleOp){
+		public static void Update(ScheduleOp scheduleOp){
 			string command="UPDATE scheduleop SET "
 				+"ScheduleNum  =  "+POut.Long  (scheduleOp.ScheduleNum)+", "
 				+"OperatoryNum =  "+POut.Long  (scheduleOp.OperatoryNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ScheduleOp in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ScheduleOp scheduleOp,ScheduleOp oldScheduleOp){
+		public static void Update(ScheduleOp scheduleOp,ScheduleOp oldScheduleOp){
 			string command="";
 			if(scheduleOp.ScheduleNum != oldScheduleOp.ScheduleNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ScheduleOp from the database.</summary>
-		internal static void Delete(long scheduleOpNum){
+		public static void Delete(long scheduleOpNum){
 			string command="DELETE FROM scheduleop "
 				+"WHERE ScheduleOpNum = "+POut.Long(scheduleOpNum);
 			Db.NonQ(command);

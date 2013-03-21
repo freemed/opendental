@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CovCatCrud {
+	public class CovCatCrud {
 		///<summary>Gets one CovCat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CovCat SelectOne(long covCatNum){
+		public static CovCat SelectOne(long covCatNum){
 			string command="SELECT * FROM covcat "
 				+"WHERE CovCatNum = "+POut.Long(covCatNum);
 			List<CovCat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CovCat object from the database using a query.</summary>
-		internal static CovCat SelectOne(string command){
+		public static CovCat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CovCat objects from the database using a query.</summary>
-		internal static List<CovCat> SelectMany(string command){
+		public static List<CovCat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CovCat> TableToList(DataTable table){
+		public static List<CovCat> TableToList(DataTable table){
 			List<CovCat> retVal=new List<CovCat>();
 			CovCat covCat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CovCat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CovCat covCat){
+		public static long Insert(CovCat covCat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				covCat.CovCatNum=DbHelper.GetNextOracleKey("covcat","CovCatNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CovCat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CovCat covCat,bool useExistingPK){
+		public static long Insert(CovCat covCat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				covCat.CovCatNum=ReplicationServers.GetKey("covcat","CovCatNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CovCat in the database.</summary>
-		internal static void Update(CovCat covCat){
+		public static void Update(CovCat covCat){
 			string command="UPDATE covcat SET "
 				+"Description   = '"+POut.String(covCat.Description)+"', "
 				+"DefaultPercent=  "+POut.Int   (covCat.DefaultPercent)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CovCat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CovCat covCat,CovCat oldCovCat){
+		public static void Update(CovCat covCat,CovCat oldCovCat){
 			string command="";
 			if(covCat.Description != oldCovCat.Description) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CovCat from the database.</summary>
-		internal static void Delete(long covCatNum){
+		public static void Delete(long covCatNum){
 			string command="DELETE FROM covcat "
 				+"WHERE CovCatNum = "+POut.Long(covCatNum);
 			Db.NonQ(command);

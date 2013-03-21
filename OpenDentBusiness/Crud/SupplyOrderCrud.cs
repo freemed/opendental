@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SupplyOrderCrud {
+	public class SupplyOrderCrud {
 		///<summary>Gets one SupplyOrder object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SupplyOrder SelectOne(long supplyOrderNum){
+		public static SupplyOrder SelectOne(long supplyOrderNum){
 			string command="SELECT * FROM supplyorder "
 				+"WHERE SupplyOrderNum = "+POut.Long(supplyOrderNum);
 			List<SupplyOrder> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SupplyOrder object from the database using a query.</summary>
-		internal static SupplyOrder SelectOne(string command){
+		public static SupplyOrder SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SupplyOrder objects from the database using a query.</summary>
-		internal static List<SupplyOrder> SelectMany(string command){
+		public static List<SupplyOrder> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SupplyOrder> TableToList(DataTable table){
+		public static List<SupplyOrder> TableToList(DataTable table){
 			List<SupplyOrder> retVal=new List<SupplyOrder>();
 			SupplyOrder supplyOrder;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SupplyOrder into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SupplyOrder supplyOrder){
+		public static long Insert(SupplyOrder supplyOrder){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				supplyOrder.SupplyOrderNum=DbHelper.GetNextOracleKey("supplyorder","SupplyOrderNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SupplyOrder into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SupplyOrder supplyOrder,bool useExistingPK){
+		public static long Insert(SupplyOrder supplyOrder,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				supplyOrder.SupplyOrderNum=ReplicationServers.GetKey("supplyorder","SupplyOrderNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SupplyOrder in the database.</summary>
-		internal static void Update(SupplyOrder supplyOrder){
+		public static void Update(SupplyOrder supplyOrder){
 			string command="UPDATE supplyorder SET "
 				+"SupplierNum   =  "+POut.Long  (supplyOrder.SupplierNum)+", "
 				+"DatePlaced    =  "+POut.Date  (supplyOrder.DatePlaced)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SupplyOrder in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SupplyOrder supplyOrder,SupplyOrder oldSupplyOrder){
+		public static void Update(SupplyOrder supplyOrder,SupplyOrder oldSupplyOrder){
 			string command="";
 			if(supplyOrder.SupplierNum != oldSupplyOrder.SupplierNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SupplyOrder from the database.</summary>
-		internal static void Delete(long supplyOrderNum){
+		public static void Delete(long supplyOrderNum){
 			string command="DELETE FROM supplyorder "
 				+"WHERE SupplyOrderNum = "+POut.Long(supplyOrderNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EobAttachCrud {
+	public class EobAttachCrud {
 		///<summary>Gets one EobAttach object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EobAttach SelectOne(long eobAttachNum){
+		public static EobAttach SelectOne(long eobAttachNum){
 			string command="SELECT * FROM eobattach "
 				+"WHERE EobAttachNum = "+POut.Long(eobAttachNum);
 			List<EobAttach> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EobAttach object from the database using a query.</summary>
-		internal static EobAttach SelectOne(string command){
+		public static EobAttach SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EobAttach objects from the database using a query.</summary>
-		internal static List<EobAttach> SelectMany(string command){
+		public static List<EobAttach> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EobAttach> TableToList(DataTable table){
+		public static List<EobAttach> TableToList(DataTable table){
 			List<EobAttach> retVal=new List<EobAttach>();
 			EobAttach eobAttach;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EobAttach into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EobAttach eobAttach){
+		public static long Insert(EobAttach eobAttach){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				eobAttach.EobAttachNum=DbHelper.GetNextOracleKey("eobattach","EobAttachNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EobAttach into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EobAttach eobAttach,bool useExistingPK){
+		public static long Insert(EobAttach eobAttach,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				eobAttach.EobAttachNum=ReplicationServers.GetKey("eobattach","EobAttachNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EobAttach in the database.</summary>
-		internal static void Update(EobAttach eobAttach){
+		public static void Update(EobAttach eobAttach){
 			string command="UPDATE eobattach SET "
 				+"ClaimPaymentNum=  "+POut.Long  (eobAttach.ClaimPaymentNum)+", "
 				+"DateTCreated   =  "+POut.DateT (eobAttach.DateTCreated)+", "
@@ -129,7 +129,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EobAttach in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EobAttach eobAttach,EobAttach oldEobAttach){
+		public static void Update(EobAttach eobAttach,EobAttach oldEobAttach){
 			string command="";
 			if(eobAttach.ClaimPaymentNum != oldEobAttach.ClaimPaymentNum) {
 				if(command!=""){ command+=",";}
@@ -160,7 +160,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EobAttach from the database.</summary>
-		internal static void Delete(long eobAttachNum){
+		public static void Delete(long eobAttachNum){
 			string command="DELETE FROM eobattach "
 				+"WHERE EobAttachNum = "+POut.Long(eobAttachNum);
 			Db.NonQ(command);

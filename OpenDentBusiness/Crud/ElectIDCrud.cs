@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ElectIDCrud {
+	public class ElectIDCrud {
 		///<summary>Gets one ElectID object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ElectID SelectOne(long electIDNum){
+		public static ElectID SelectOne(long electIDNum){
 			string command="SELECT * FROM electid "
 				+"WHERE ElectIDNum = "+POut.Long(electIDNum);
 			List<ElectID> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ElectID object from the database using a query.</summary>
-		internal static ElectID SelectOne(string command){
+		public static ElectID SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ElectID objects from the database using a query.</summary>
-		internal static List<ElectID> SelectMany(string command){
+		public static List<ElectID> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ElectID> TableToList(DataTable table){
+		public static List<ElectID> TableToList(DataTable table){
 			List<ElectID> retVal=new List<ElectID>();
 			ElectID electID;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ElectID into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ElectID electID){
+		public static long Insert(ElectID electID){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				electID.ElectIDNum=DbHelper.GetNextOracleKey("electid","ElectIDNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ElectID into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ElectID electID,bool useExistingPK){
+		public static long Insert(ElectID electID,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				electID.ElectIDNum=ReplicationServers.GetKey("electid","ElectIDNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ElectID in the database.</summary>
-		internal static void Update(ElectID electID){
+		public static void Update(ElectID electID){
 			string command="UPDATE electid SET "
 				+"PayorID      = '"+POut.String(electID.PayorID)+"', "
 				+"CarrierName  = '"+POut.String(electID.CarrierName)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ElectID in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ElectID electID,ElectID oldElectID){
+		public static void Update(ElectID electID,ElectID oldElectID){
 			string command="";
 			if(electID.PayorID != oldElectID.PayorID) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ElectID from the database.</summary>
-		internal static void Delete(long electIDNum){
+		public static void Delete(long electIDNum){
 			string command="DELETE FROM electid "
 				+"WHERE ElectIDNum = "+POut.Long(electIDNum);
 			Db.NonQ(command);

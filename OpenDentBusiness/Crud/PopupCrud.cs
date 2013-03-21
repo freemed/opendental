@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PopupCrud {
+	public class PopupCrud {
 		///<summary>Gets one Popup object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Popup SelectOne(long popupNum){
+		public static Popup SelectOne(long popupNum){
 			string command="SELECT * FROM popup "
 				+"WHERE PopupNum = "+POut.Long(popupNum);
 			List<Popup> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Popup object from the database using a query.</summary>
-		internal static Popup SelectOne(string command){
+		public static Popup SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Popup objects from the database using a query.</summary>
-		internal static List<Popup> SelectMany(string command){
+		public static List<Popup> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Popup> TableToList(DataTable table){
+		public static List<Popup> TableToList(DataTable table){
 			List<Popup> retVal=new List<Popup>();
 			Popup popup;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Popup into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Popup popup){
+		public static long Insert(Popup popup){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				popup.PopupNum=DbHelper.GetNextOracleKey("popup","PopupNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Popup into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Popup popup,bool useExistingPK){
+		public static long Insert(Popup popup,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				popup.PopupNum=ReplicationServers.GetKey("popup","PopupNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Popup in the database.</summary>
-		internal static void Update(Popup popup){
+		public static void Update(Popup popup){
 			string command="UPDATE popup SET "
 				+"PatNum     =  "+POut.Long  (popup.PatNum)+", "
 				+"Description= '"+POut.String(popup.Description)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Popup in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Popup popup,Popup oldPopup){
+		public static void Update(Popup popup,Popup oldPopup){
 			string command="";
 			if(popup.PatNum != oldPopup.PatNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Popup from the database.</summary>
-		internal static void Delete(long popupNum){
+		public static void Delete(long popupNum){
 			string command="DELETE FROM popup "
 				+"WHERE PopupNum = "+POut.Long(popupNum);
 			Db.NonQ(command);

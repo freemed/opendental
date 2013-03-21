@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AccountCrud {
+	public class AccountCrud {
 		///<summary>Gets one Account object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Account SelectOne(long accountNum){
+		public static Account SelectOne(long accountNum){
 			string command="SELECT * FROM account "
 				+"WHERE AccountNum = "+POut.Long(accountNum);
 			List<Account> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Account object from the database using a query.</summary>
-		internal static Account SelectOne(string command){
+		public static Account SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Account objects from the database using a query.</summary>
-		internal static List<Account> SelectMany(string command){
+		public static List<Account> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Account> TableToList(DataTable table){
+		public static List<Account> TableToList(DataTable table){
 			List<Account> retVal=new List<Account>();
 			Account account;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Account into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Account account){
+		public static long Insert(Account account){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				account.AccountNum=DbHelper.GetNextOracleKey("account","AccountNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Account into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Account account,bool useExistingPK){
+		public static long Insert(Account account,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				account.AccountNum=ReplicationServers.GetKey("account","AccountNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Account in the database.</summary>
-		internal static void Update(Account account){
+		public static void Update(Account account){
 			string command="UPDATE account SET "
 				+"Description = '"+POut.String(account.Description)+"', "
 				+"AcctType    =  "+POut.Int   ((int)account.AcctType)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Account in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Account account,Account oldAccount){
+		public static void Update(Account account,Account oldAccount){
 			string command="";
 			if(account.Description != oldAccount.Description) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Account from the database.</summary>
-		internal static void Delete(long accountNum){
+		public static void Delete(long accountNum){
 			string command="DELETE FROM account "
 				+"WHERE AccountNum = "+POut.Long(accountNum);
 			Db.NonQ(command);

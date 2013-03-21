@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CountyCrud {
+	public class CountyCrud {
 		///<summary>Gets one County object from the database using the primary key.  Returns null if not found.</summary>
-		internal static County SelectOne(long countyNum){
+		public static County SelectOne(long countyNum){
 			string command="SELECT * FROM county "
 				+"WHERE CountyNum = "+POut.Long(countyNum);
 			List<County> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one County object from the database using a query.</summary>
-		internal static County SelectOne(string command){
+		public static County SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of County objects from the database using a query.</summary>
-		internal static List<County> SelectMany(string command){
+		public static List<County> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<County> TableToList(DataTable table){
+		public static List<County> TableToList(DataTable table){
 			List<County> retVal=new List<County>();
 			County county;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one County into the database.  Returns the new priKey.</summary>
-		internal static long Insert(County county){
+		public static long Insert(County county){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				county.CountyNum=DbHelper.GetNextOracleKey("county","CountyNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one County into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(County county,bool useExistingPK){
+		public static long Insert(County county,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				county.CountyNum=ReplicationServers.GetKey("county","CountyNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one County in the database.</summary>
-		internal static void Update(County county){
+		public static void Update(County county){
 			string command="UPDATE county SET "
 				+"CountyName= '"+POut.String(county.CountyName)+"', "
 				+"CountyCode= '"+POut.String(county.CountyCode)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one County in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(County county,County oldCounty){
+		public static void Update(County county,County oldCounty){
 			string command="";
 			if(county.CountyName != oldCounty.CountyName) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one County from the database.</summary>
-		internal static void Delete(long countyNum){
+		public static void Delete(long countyNum){
 			string command="DELETE FROM county "
 				+"WHERE CountyNum = "+POut.Long(countyNum);
 			Db.NonQ(command);

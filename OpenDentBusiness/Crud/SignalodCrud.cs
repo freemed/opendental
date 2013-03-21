@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SignalodCrud {
+	public class SignalodCrud {
 		///<summary>Gets one Signalod object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Signalod SelectOne(long signalNum){
+		public static Signalod SelectOne(long signalNum){
 			string command="SELECT * FROM signalod "
 				+"WHERE SignalNum = "+POut.Long(signalNum);
 			List<Signalod> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Signalod object from the database using a query.</summary>
-		internal static Signalod SelectOne(string command){
+		public static Signalod SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Signalod objects from the database using a query.</summary>
-		internal static List<Signalod> SelectMany(string command){
+		public static List<Signalod> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Signalod> TableToList(DataTable table){
+		public static List<Signalod> TableToList(DataTable table){
 			List<Signalod> retVal=new List<Signalod>();
 			Signalod signalod;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Signalod into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Signalod signalod){
+		public static long Insert(Signalod signalod){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				signalod.SignalNum=DbHelper.GetNextOracleKey("signalod","SignalNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Signalod into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Signalod signalod,bool useExistingPK){
+		public static long Insert(Signalod signalod,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				signalod.SignalNum=ReplicationServers.GetKey("signalod","SignalNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Signalod in the database.</summary>
-		internal static void Update(Signalod signalod){
+		public static void Update(Signalod signalod){
 			string command="UPDATE signalod SET "
 				+"FromUser   = '"+POut.String(signalod.FromUser)+"', "
 				+"ITypes     = '"+POut.String(signalod.ITypes)+"', "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Signalod in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Signalod signalod,Signalod oldSignalod){
+		public static void Update(Signalod signalod,Signalod oldSignalod){
 			string command="";
 			if(signalod.FromUser != oldSignalod.FromUser) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Signalod from the database.</summary>
-		internal static void Delete(long signalNum){
+		public static void Delete(long signalNum){
 			string command="DELETE FROM signalod "
 				+"WHERE SignalNum = "+POut.Long(signalNum);
 			Db.NonQ(command);

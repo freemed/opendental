@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DocumentMiscCrud {
+	public class DocumentMiscCrud {
 		///<summary>Gets one DocumentMisc object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DocumentMisc SelectOne(long docMiscNum){
+		public static DocumentMisc SelectOne(long docMiscNum){
 			string command="SELECT * FROM documentmisc "
 				+"WHERE DocMiscNum = "+POut.Long(docMiscNum);
 			List<DocumentMisc> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DocumentMisc object from the database using a query.</summary>
-		internal static DocumentMisc SelectOne(string command){
+		public static DocumentMisc SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DocumentMisc objects from the database using a query.</summary>
-		internal static List<DocumentMisc> SelectMany(string command){
+		public static List<DocumentMisc> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DocumentMisc> TableToList(DataTable table){
+		public static List<DocumentMisc> TableToList(DataTable table){
 			List<DocumentMisc> retVal=new List<DocumentMisc>();
 			DocumentMisc documentMisc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DocumentMisc into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DocumentMisc documentMisc){
+		public static long Insert(DocumentMisc documentMisc){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				documentMisc.DocMiscNum=DbHelper.GetNextOracleKey("documentmisc","DocMiscNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DocumentMisc into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DocumentMisc documentMisc,bool useExistingPK){
+		public static long Insert(DocumentMisc documentMisc,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				documentMisc.DocMiscNum=ReplicationServers.GetKey("documentmisc","DocMiscNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DocumentMisc in the database.</summary>
-		internal static void Update(DocumentMisc documentMisc){
+		public static void Update(DocumentMisc documentMisc){
 			string command="UPDATE documentmisc SET "
 				+"DateCreated=  "+POut.Date  (documentMisc.DateCreated)+", "
 				+"FileName   = '"+POut.String(documentMisc.FileName)+"', "
@@ -129,7 +129,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DocumentMisc in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DocumentMisc documentMisc,DocumentMisc oldDocumentMisc){
+		public static void Update(DocumentMisc documentMisc,DocumentMisc oldDocumentMisc){
 			string command="";
 			if(documentMisc.DateCreated != oldDocumentMisc.DateCreated) {
 				if(command!=""){ command+=",";}
@@ -160,7 +160,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DocumentMisc from the database.</summary>
-		internal static void Delete(long docMiscNum){
+		public static void Delete(long docMiscNum){
 			string command="DELETE FROM documentmisc "
 				+"WHERE DocMiscNum = "+POut.Long(docMiscNum);
 			Db.NonQ(command);

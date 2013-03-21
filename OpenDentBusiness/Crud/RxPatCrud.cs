@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RxPatCrud {
+	public class RxPatCrud {
 		///<summary>Gets one RxPat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RxPat SelectOne(long rxNum){
+		public static RxPat SelectOne(long rxNum){
 			string command="SELECT * FROM rxpat "
 				+"WHERE RxNum = "+POut.Long(rxNum);
 			List<RxPat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RxPat object from the database using a query.</summary>
-		internal static RxPat SelectOne(string command){
+		public static RxPat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RxPat objects from the database using a query.</summary>
-		internal static List<RxPat> SelectMany(string command){
+		public static List<RxPat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RxPat> TableToList(DataTable table){
+		public static List<RxPat> TableToList(DataTable table){
 			List<RxPat> retVal=new List<RxPat>();
 			RxPat rxPat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -68,7 +68,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxPat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RxPat rxPat){
+		public static long Insert(RxPat rxPat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				rxPat.RxNum=DbHelper.GetNextOracleKey("rxpat","RxNum");
 				int loopcount=0;
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxPat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RxPat rxPat,bool useExistingPK){
+		public static long Insert(RxPat rxPat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				rxPat.RxNum=ReplicationServers.GetKey("rxpat","RxNum");
 			}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxPat in the database.</summary>
-		internal static void Update(RxPat rxPat){
+		public static void Update(RxPat rxPat){
 			string command="UPDATE rxpat SET "
 				+"PatNum      =  "+POut.Long  (rxPat.PatNum)+", "
 				+"RxDate      =  "+POut.Date  (rxPat.RxDate)+", "
@@ -154,7 +154,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxPat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RxPat rxPat,RxPat oldRxPat){
+		public static void Update(RxPat rxPat,RxPat oldRxPat){
 			string command="";
 			if(rxPat.PatNum != oldRxPat.PatNum) {
 				if(command!=""){ command+=",";}
@@ -222,7 +222,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RxPat from the database.</summary>
-		internal static void Delete(long rxNum){
+		public static void Delete(long rxNum){
 			string command="DELETE FROM rxpat "
 				+"WHERE RxNum = "+POut.Long(rxNum);
 			Db.NonQ(command);

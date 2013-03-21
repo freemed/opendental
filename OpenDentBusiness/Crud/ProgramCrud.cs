@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProgramCrud {
+	public class ProgramCrud {
 		///<summary>Gets one Program object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Program SelectOne(long programNum){
+		public static Program SelectOne(long programNum){
 			string command="SELECT * FROM program "
 				+"WHERE ProgramNum = "+POut.Long(programNum);
 			List<Program> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Program object from the database using a query.</summary>
-		internal static Program SelectOne(string command){
+		public static Program SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Program objects from the database using a query.</summary>
-		internal static List<Program> SelectMany(string command){
+		public static List<Program> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Program> TableToList(DataTable table){
+		public static List<Program> TableToList(DataTable table){
 			List<Program> retVal=new List<Program>();
 			Program program;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Program into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Program program){
+		public static long Insert(Program program){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				program.ProgramNum=DbHelper.GetNextOracleKey("program","ProgramNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Program into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Program program,bool useExistingPK){
+		public static long Insert(Program program,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				program.ProgramNum=ReplicationServers.GetKey("program","ProgramNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Program in the database.</summary>
-		internal static void Update(Program program){
+		public static void Update(Program program){
 			string command="UPDATE program SET "
 				+"ProgName     = '"+POut.String(program.ProgName)+"', "
 				+"ProgDesc     = '"+POut.String(program.ProgDesc)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Program in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Program program,Program oldProgram){
+		public static void Update(Program program,Program oldProgram){
 			string command="";
 			if(program.ProgName != oldProgram.ProgName) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Program from the database.</summary>
-		internal static void Delete(long programNum){
+		public static void Delete(long programNum){
 			string command="DELETE FROM program "
 				+"WHERE ProgramNum = "+POut.Long(programNum);
 			Db.NonQ(command);

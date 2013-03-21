@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClearinghouseCrud {
+	public class ClearinghouseCrud {
 		///<summary>Gets one Clearinghouse object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Clearinghouse SelectOne(long clearinghouseNum){
+		public static Clearinghouse SelectOne(long clearinghouseNum){
 			string command="SELECT * FROM clearinghouse "
 				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
 			List<Clearinghouse> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Clearinghouse object from the database using a query.</summary>
-		internal static Clearinghouse SelectOne(string command){
+		public static Clearinghouse SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Clearinghouse objects from the database using a query.</summary>
-		internal static List<Clearinghouse> SelectMany(string command){
+		public static List<Clearinghouse> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Clearinghouse> TableToList(DataTable table){
+		public static List<Clearinghouse> TableToList(DataTable table){
 			List<Clearinghouse> retVal=new List<Clearinghouse>();
 			Clearinghouse clearinghouse;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -77,7 +77,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Clearinghouse into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Clearinghouse clearinghouse){
+		public static long Insert(Clearinghouse clearinghouse){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				clearinghouse.ClearinghouseNum=DbHelper.GetNextOracleKey("clearinghouse","ClearinghouseNum");
 				int loopcount=0;
@@ -103,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Clearinghouse into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Clearinghouse clearinghouse,bool useExistingPK){
+		public static long Insert(Clearinghouse clearinghouse,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				clearinghouse.ClearinghouseNum=ReplicationServers.GetKey("clearinghouse","ClearinghouseNum");
 			}
@@ -150,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Clearinghouse in the database.</summary>
-		internal static void Update(Clearinghouse clearinghouse){
+		public static void Update(Clearinghouse clearinghouse){
 			string command="UPDATE clearinghouse SET "
 				+"Description     = '"+POut.String(clearinghouse.Description)+"', "
 				+"ExportPath      = '"+POut.String(clearinghouse.ExportPath)+"', "
@@ -181,7 +181,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Clearinghouse in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Clearinghouse clearinghouse,Clearinghouse oldClearinghouse){
+		public static void Update(Clearinghouse clearinghouse,Clearinghouse oldClearinghouse){
 			string command="";
 			if(clearinghouse.Description != oldClearinghouse.Description) {
 				if(command!=""){ command+=",";}
@@ -285,7 +285,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Clearinghouse from the database.</summary>
-		internal static void Delete(long clearinghouseNum){
+		public static void Delete(long clearinghouseNum){
 			string command="DELETE FROM clearinghouse "
 				+"WHERE ClearinghouseNum = "+POut.Long(clearinghouseNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SheetDefCrud {
+	public class SheetDefCrud {
 		///<summary>Gets one SheetDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SheetDef SelectOne(long sheetDefNum){
+		public static SheetDef SelectOne(long sheetDefNum){
 			string command="SELECT * FROM sheetdef "
 				+"WHERE SheetDefNum = "+POut.Long(sheetDefNum);
 			List<SheetDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SheetDef object from the database using a query.</summary>
-		internal static SheetDef SelectOne(string command){
+		public static SheetDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SheetDef objects from the database using a query.</summary>
-		internal static List<SheetDef> SelectMany(string command){
+		public static List<SheetDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SheetDef> TableToList(DataTable table){
+		public static List<SheetDef> TableToList(DataTable table){
 			List<SheetDef> retVal=new List<SheetDef>();
 			SheetDef sheetDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SheetDef sheetDef){
+		public static long Insert(SheetDef sheetDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sheetDef.SheetDefNum=DbHelper.GetNextOracleKey("sheetdef","SheetDefNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SheetDef sheetDef,bool useExistingPK){
+		public static long Insert(SheetDef sheetDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sheetDef.SheetDefNum=ReplicationServers.GetKey("sheetdef","SheetDefNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetDef in the database.</summary>
-		internal static void Update(SheetDef sheetDef){
+		public static void Update(SheetDef sheetDef){
 			string command="UPDATE sheetdef SET "
 				+"Description= '"+POut.String(sheetDef.Description)+"', "
 				+"SheetType  =  "+POut.Int   ((int)sheetDef.SheetType)+", "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SheetDef sheetDef,SheetDef oldSheetDef){
+		public static void Update(SheetDef sheetDef,SheetDef oldSheetDef){
 			string command="";
 			if(sheetDef.Description != oldSheetDef.Description) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SheetDef from the database.</summary>
-		internal static void Delete(long sheetDefNum){
+		public static void Delete(long sheetDefNum){
 			string command="DELETE FROM sheetdef "
 				+"WHERE SheetDefNum = "+POut.Long(sheetDefNum);
 			Db.NonQ(command);

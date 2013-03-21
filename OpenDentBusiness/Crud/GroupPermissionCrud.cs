@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class GroupPermissionCrud {
+	public class GroupPermissionCrud {
 		///<summary>Gets one GroupPermission object from the database using the primary key.  Returns null if not found.</summary>
-		internal static GroupPermission SelectOne(long groupPermNum){
+		public static GroupPermission SelectOne(long groupPermNum){
 			string command="SELECT * FROM grouppermission "
 				+"WHERE GroupPermNum = "+POut.Long(groupPermNum);
 			List<GroupPermission> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one GroupPermission object from the database using a query.</summary>
-		internal static GroupPermission SelectOne(string command){
+		public static GroupPermission SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of GroupPermission objects from the database using a query.</summary>
-		internal static List<GroupPermission> SelectMany(string command){
+		public static List<GroupPermission> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<GroupPermission> TableToList(DataTable table){
+		public static List<GroupPermission> TableToList(DataTable table){
 			List<GroupPermission> retVal=new List<GroupPermission>();
 			GroupPermission groupPermission;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one GroupPermission into the database.  Returns the new priKey.</summary>
-		internal static long Insert(GroupPermission groupPermission){
+		public static long Insert(GroupPermission groupPermission){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				groupPermission.GroupPermNum=DbHelper.GetNextOracleKey("grouppermission","GroupPermNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one GroupPermission into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(GroupPermission groupPermission,bool useExistingPK){
+		public static long Insert(GroupPermission groupPermission,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				groupPermission.GroupPermNum=ReplicationServers.GetKey("grouppermission","GroupPermNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one GroupPermission in the database.</summary>
-		internal static void Update(GroupPermission groupPermission){
+		public static void Update(GroupPermission groupPermission){
 			string command="UPDATE grouppermission SET "
 				+"NewerDate   =  "+POut.Date  (groupPermission.NewerDate)+", "
 				+"NewerDays   =  "+POut.Int   (groupPermission.NewerDays)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one GroupPermission in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(GroupPermission groupPermission,GroupPermission oldGroupPermission){
+		public static void Update(GroupPermission groupPermission,GroupPermission oldGroupPermission){
 			string command="";
 			if(groupPermission.NewerDate != oldGroupPermission.NewerDate) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one GroupPermission from the database.</summary>
-		internal static void Delete(long groupPermNum){
+		public static void Delete(long groupPermNum){
 			string command="DELETE FROM grouppermission "
 				+"WHERE GroupPermNum = "+POut.Long(groupPermNum);
 			Db.NonQ(command);

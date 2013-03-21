@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskNoteCrud {
+	public class TaskNoteCrud {
 		///<summary>Gets one TaskNote object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TaskNote SelectOne(long taskNoteNum){
+		public static TaskNote SelectOne(long taskNoteNum){
 			string command="SELECT * FROM tasknote "
 				+"WHERE TaskNoteNum = "+POut.Long(taskNoteNum);
 			List<TaskNote> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TaskNote object from the database using a query.</summary>
-		internal static TaskNote SelectOne(string command){
+		public static TaskNote SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TaskNote objects from the database using a query.</summary>
-		internal static List<TaskNote> SelectMany(string command){
+		public static List<TaskNote> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TaskNote> TableToList(DataTable table){
+		public static List<TaskNote> TableToList(DataTable table){
 			List<TaskNote> retVal=new List<TaskNote>();
 			TaskNote taskNote;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskNote into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TaskNote taskNote){
+		public static long Insert(TaskNote taskNote){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				taskNote.TaskNoteNum=DbHelper.GetNextOracleKey("tasknote","TaskNoteNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskNote into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TaskNote taskNote,bool useExistingPK){
+		public static long Insert(TaskNote taskNote,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				taskNote.TaskNoteNum=ReplicationServers.GetKey("tasknote","TaskNoteNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskNote in the database.</summary>
-		internal static void Update(TaskNote taskNote){
+		public static void Update(TaskNote taskNote){
 			string command="UPDATE tasknote SET "
 				+"TaskNum     =  "+POut.Long  (taskNote.TaskNum)+", "
 				+"UserNum     =  "+POut.Long  (taskNote.UserNum)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TaskNote taskNote,TaskNote oldTaskNote){
+		public static void Update(TaskNote taskNote,TaskNote oldTaskNote){
 			string command="";
 			if(taskNote.TaskNum != oldTaskNote.TaskNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TaskNote from the database.</summary>
-		internal static void Delete(long taskNoteNum){
+		public static void Delete(long taskNoteNum){
 			string command="DELETE FROM tasknote "
 				+"WHERE TaskNoteNum = "+POut.Long(taskNoteNum);
 			Db.NonQ(command);

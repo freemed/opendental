@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class FormPatCrud {
+	public class FormPatCrud {
 		///<summary>Gets one FormPat object from the database using the primary key.  Returns null if not found.</summary>
-		internal static FormPat SelectOne(long formPatNum){
+		public static FormPat SelectOne(long formPatNum){
 			string command="SELECT * FROM formpat "
 				+"WHERE FormPatNum = "+POut.Long(formPatNum);
 			List<FormPat> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one FormPat object from the database using a query.</summary>
-		internal static FormPat SelectOne(string command){
+		public static FormPat SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of FormPat objects from the database using a query.</summary>
-		internal static List<FormPat> SelectMany(string command){
+		public static List<FormPat> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<FormPat> TableToList(DataTable table){
+		public static List<FormPat> TableToList(DataTable table){
 			List<FormPat> retVal=new List<FormPat>();
 			FormPat formPat;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one FormPat into the database.  Returns the new priKey.</summary>
-		internal static long Insert(FormPat formPat){
+		public static long Insert(FormPat formPat){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				formPat.FormPatNum=DbHelper.GetNextOracleKey("formpat","FormPatNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one FormPat into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(FormPat formPat,bool useExistingPK){
+		public static long Insert(FormPat formPat,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				formPat.FormPatNum=ReplicationServers.GetKey("formpat","FormPatNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one FormPat in the database.</summary>
-		internal static void Update(FormPat formPat){
+		public static void Update(FormPat formPat){
 			string command="UPDATE formpat SET "
 				+"PatNum      =  "+POut.Long  (formPat.PatNum)+", "
 				+"FormDateTime=  "+POut.DateT (formPat.FormDateTime)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one FormPat in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(FormPat formPat,FormPat oldFormPat){
+		public static void Update(FormPat formPat,FormPat oldFormPat){
 			string command="";
 			if(formPat.PatNum != oldFormPat.PatNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one FormPat from the database.</summary>
-		internal static void Delete(long formPatNum){
+		public static void Delete(long formPatNum){
 			string command="DELETE FROM formpat "
 				+"WHERE FormPatNum = "+POut.Long(formPatNum);
 			Db.NonQ(command);

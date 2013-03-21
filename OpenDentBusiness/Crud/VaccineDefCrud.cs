@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class VaccineDefCrud {
+	public class VaccineDefCrud {
 		///<summary>Gets one VaccineDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static VaccineDef SelectOne(long vaccineDefNum){
+		public static VaccineDef SelectOne(long vaccineDefNum){
 			string command="SELECT * FROM vaccinedef "
 				+"WHERE VaccineDefNum = "+POut.Long(vaccineDefNum);
 			List<VaccineDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one VaccineDef object from the database using a query.</summary>
-		internal static VaccineDef SelectOne(string command){
+		public static VaccineDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of VaccineDef objects from the database using a query.</summary>
-		internal static List<VaccineDef> SelectMany(string command){
+		public static List<VaccineDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<VaccineDef> TableToList(DataTable table){
+		public static List<VaccineDef> TableToList(DataTable table){
 			List<VaccineDef> retVal=new List<VaccineDef>();
 			VaccineDef vaccineDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one VaccineDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(VaccineDef vaccineDef){
+		public static long Insert(VaccineDef vaccineDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				vaccineDef.VaccineDefNum=DbHelper.GetNextOracleKey("vaccinedef","VaccineDefNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one VaccineDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(VaccineDef vaccineDef,bool useExistingPK){
+		public static long Insert(VaccineDef vaccineDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				vaccineDef.VaccineDefNum=ReplicationServers.GetKey("vaccinedef","VaccineDefNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one VaccineDef in the database.</summary>
-		internal static void Update(VaccineDef vaccineDef){
+		public static void Update(VaccineDef vaccineDef){
 			string command="UPDATE vaccinedef SET "
 				+"CVXCode            = '"+POut.String(vaccineDef.CVXCode)+"', "
 				+"VaccineName        = '"+POut.String(vaccineDef.VaccineName)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one VaccineDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(VaccineDef vaccineDef,VaccineDef oldVaccineDef){
+		public static void Update(VaccineDef vaccineDef,VaccineDef oldVaccineDef){
 			string command="";
 			if(vaccineDef.CVXCode != oldVaccineDef.CVXCode) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one VaccineDef from the database.</summary>
-		internal static void Delete(long vaccineDefNum){
+		public static void Delete(long vaccineDefNum){
 			string command="DELETE FROM vaccinedef "
 				+"WHERE VaccineDefNum = "+POut.Long(vaccineDefNum);
 			Db.NonQ(command);

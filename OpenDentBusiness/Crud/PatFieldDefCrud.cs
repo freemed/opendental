@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PatFieldDefCrud {
+	public class PatFieldDefCrud {
 		///<summary>Gets one PatFieldDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PatFieldDef SelectOne(long patFieldDefNum){
+		public static PatFieldDef SelectOne(long patFieldDefNum){
 			string command="SELECT * FROM patfielddef "
 				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDefNum);
 			List<PatFieldDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PatFieldDef object from the database using a query.</summary>
-		internal static PatFieldDef SelectOne(string command){
+		public static PatFieldDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PatFieldDef objects from the database using a query.</summary>
-		internal static List<PatFieldDef> SelectMany(string command){
+		public static List<PatFieldDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PatFieldDef> TableToList(DataTable table){
+		public static List<PatFieldDef> TableToList(DataTable table){
 			List<PatFieldDef> retVal=new List<PatFieldDef>();
 			PatFieldDef patFieldDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatFieldDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PatFieldDef patFieldDef){
+		public static long Insert(PatFieldDef patFieldDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				patFieldDef.PatFieldDefNum=DbHelper.GetNextOracleKey("patfielddef","PatFieldDefNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PatFieldDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PatFieldDef patFieldDef,bool useExistingPK){
+		public static long Insert(PatFieldDef patFieldDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				patFieldDef.PatFieldDefNum=ReplicationServers.GetKey("patfielddef","PatFieldDefNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatFieldDef in the database.</summary>
-		internal static void Update(PatFieldDef patFieldDef){
+		public static void Update(PatFieldDef patFieldDef){
 			string command="UPDATE patfielddef SET "
 				+"FieldName     = '"+POut.String(patFieldDef.FieldName)+"', "
 				+"FieldType     =  "+POut.Int   ((int)patFieldDef.FieldType)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PatFieldDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PatFieldDef patFieldDef,PatFieldDef oldPatFieldDef){
+		public static void Update(PatFieldDef patFieldDef,PatFieldDef oldPatFieldDef){
 			string command="";
 			if(patFieldDef.FieldName != oldPatFieldDef.FieldName) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PatFieldDef from the database.</summary>
-		internal static void Delete(long patFieldDefNum){
+		public static void Delete(long patFieldDefNum){
 			string command="DELETE FROM patfielddef "
 				+"WHERE PatFieldDefNum = "+POut.Long(patFieldDefNum);
 			Db.NonQ(command);

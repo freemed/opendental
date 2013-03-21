@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcCodeNoteCrud {
+	public class ProcCodeNoteCrud {
 		///<summary>Gets one ProcCodeNote object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcCodeNote SelectOne(long procCodeNoteNum){
+		public static ProcCodeNote SelectOne(long procCodeNoteNum){
 			string command="SELECT * FROM proccodenote "
 				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum);
 			List<ProcCodeNote> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcCodeNote object from the database using a query.</summary>
-		internal static ProcCodeNote SelectOne(string command){
+		public static ProcCodeNote SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcCodeNote objects from the database using a query.</summary>
-		internal static List<ProcCodeNote> SelectMany(string command){
+		public static List<ProcCodeNote> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcCodeNote> TableToList(DataTable table){
+		public static List<ProcCodeNote> TableToList(DataTable table){
 			List<ProcCodeNote> retVal=new List<ProcCodeNote>();
 			ProcCodeNote procCodeNote;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcCodeNote into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcCodeNote procCodeNote){
+		public static long Insert(ProcCodeNote procCodeNote){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procCodeNote.ProcCodeNoteNum=DbHelper.GetNextOracleKey("proccodenote","ProcCodeNoteNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcCodeNote into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcCodeNote procCodeNote,bool useExistingPK){
+		public static long Insert(ProcCodeNote procCodeNote,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procCodeNote.ProcCodeNoteNum=ReplicationServers.GetKey("proccodenote","ProcCodeNoteNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcCodeNote in the database.</summary>
-		internal static void Update(ProcCodeNote procCodeNote){
+		public static void Update(ProcCodeNote procCodeNote){
 			string command="UPDATE proccodenote SET "
 				+"CodeNum        =  "+POut.Long  (procCodeNote.CodeNum)+", "
 				+"ProvNum        =  "+POut.Long  (procCodeNote.ProvNum)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcCodeNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcCodeNote procCodeNote,ProcCodeNote oldProcCodeNote){
+		public static void Update(ProcCodeNote procCodeNote,ProcCodeNote oldProcCodeNote){
 			string command="";
 			if(procCodeNote.CodeNum != oldProcCodeNote.CodeNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcCodeNote from the database.</summary>
-		internal static void Delete(long procCodeNoteNum){
+		public static void Delete(long procCodeNoteNum){
 			string command="DELETE FROM proccodenote "
 				+"WHERE ProcCodeNoteNum = "+POut.Long(procCodeNoteNum);
 			Db.NonQ(command);

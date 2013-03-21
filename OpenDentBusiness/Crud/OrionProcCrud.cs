@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class OrionProcCrud {
+	public class OrionProcCrud {
 		///<summary>Gets one OrionProc object from the database using the primary key.  Returns null if not found.</summary>
-		internal static OrionProc SelectOne(long orionProcNum){
+		public static OrionProc SelectOne(long orionProcNum){
 			string command="SELECT * FROM orionproc "
 				+"WHERE OrionProcNum = "+POut.Long(orionProcNum);
 			List<OrionProc> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one OrionProc object from the database using a query.</summary>
-		internal static OrionProc SelectOne(string command){
+		public static OrionProc SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of OrionProc objects from the database using a query.</summary>
-		internal static List<OrionProc> SelectMany(string command){
+		public static List<OrionProc> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<OrionProc> TableToList(DataTable table){
+		public static List<OrionProc> TableToList(DataTable table){
 			List<OrionProc> retVal=new List<OrionProc>();
 			OrionProc orionProc;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one OrionProc into the database.  Returns the new priKey.</summary>
-		internal static long Insert(OrionProc orionProc){
+		public static long Insert(OrionProc orionProc){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				orionProc.OrionProcNum=DbHelper.GetNextOracleKey("orionproc","OrionProcNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one OrionProc into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(OrionProc orionProc,bool useExistingPK){
+		public static long Insert(OrionProc orionProc,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				orionProc.OrionProcNum=ReplicationServers.GetKey("orionproc","OrionProcNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one OrionProc in the database.</summary>
-		internal static void Update(OrionProc orionProc){
+		public static void Update(OrionProc orionProc){
 			string command="UPDATE orionproc SET "
 				+"ProcNum        =  "+POut.Long  (orionProc.ProcNum)+", "
 				+"DPC            =  "+POut.Int   ((int)orionProc.DPC)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one OrionProc in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(OrionProc orionProc,OrionProc oldOrionProc){
+		public static void Update(OrionProc orionProc,OrionProc oldOrionProc){
 			string command="";
 			if(orionProc.ProcNum != oldOrionProc.ProcNum) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one OrionProc from the database.</summary>
-		internal static void Delete(long orionProcNum){
+		public static void Delete(long orionProcNum){
 			string command="DELETE FROM orionproc "
 				+"WHERE OrionProcNum = "+POut.Long(orionProcNum);
 			Db.NonQ(command);

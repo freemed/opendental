@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PhoneMetricCrud {
+	public class PhoneMetricCrud {
 		///<summary>Gets one PhoneMetric object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PhoneMetric SelectOne(long phoneMetricNum){
+		public static PhoneMetric SelectOne(long phoneMetricNum){
 			string command="SELECT * FROM phonemetric "
 				+"WHERE PhoneMetricNum = "+POut.Long(phoneMetricNum);
 			List<PhoneMetric> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PhoneMetric object from the database using a query.</summary>
-		internal static PhoneMetric SelectOne(string command){
+		public static PhoneMetric SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PhoneMetric objects from the database using a query.</summary>
-		internal static List<PhoneMetric> SelectMany(string command){
+		public static List<PhoneMetric> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PhoneMetric> TableToList(DataTable table){
+		public static List<PhoneMetric> TableToList(DataTable table){
 			List<PhoneMetric> retVal=new List<PhoneMetric>();
 			PhoneMetric phoneMetric;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneMetric into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PhoneMetric phoneMetric){
+		public static long Insert(PhoneMetric phoneMetric){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				phoneMetric.PhoneMetricNum=DbHelper.GetNextOracleKey("phonemetric","PhoneMetricNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneMetric into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PhoneMetric phoneMetric,bool useExistingPK){
+		public static long Insert(PhoneMetric phoneMetric,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				phoneMetric.PhoneMetricNum=ReplicationServers.GetKey("phonemetric","PhoneMetricNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PhoneMetric in the database.</summary>
-		internal static void Update(PhoneMetric phoneMetric){
+		public static void Update(PhoneMetric phoneMetric){
 			string command="UPDATE phonemetric SET "
 				+"DateTimeEntry =  "+POut.DateT (phoneMetric.DateTimeEntry)+", "
 				+"VoiceMails    =  "+POut.Int   (phoneMetric.VoiceMails)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PhoneMetric in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PhoneMetric phoneMetric,PhoneMetric oldPhoneMetric){
+		public static void Update(PhoneMetric phoneMetric,PhoneMetric oldPhoneMetric){
 			string command="";
 			if(phoneMetric.DateTimeEntry != oldPhoneMetric.DateTimeEntry) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PhoneMetric from the database.</summary>
-		internal static void Delete(long phoneMetricNum){
+		public static void Delete(long phoneMetricNum){
 			string command="DELETE FROM phonemetric "
 				+"WHERE PhoneMetricNum = "+POut.Long(phoneMetricNum);
 			Db.NonQ(command);

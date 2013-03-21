@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class CovSpanCrud {
+	public class CovSpanCrud {
 		///<summary>Gets one CovSpan object from the database using the primary key.  Returns null if not found.</summary>
-		internal static CovSpan SelectOne(long covSpanNum){
+		public static CovSpan SelectOne(long covSpanNum){
 			string command="SELECT * FROM covspan "
 				+"WHERE CovSpanNum = "+POut.Long(covSpanNum);
 			List<CovSpan> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one CovSpan object from the database using a query.</summary>
-		internal static CovSpan SelectOne(string command){
+		public static CovSpan SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of CovSpan objects from the database using a query.</summary>
-		internal static List<CovSpan> SelectMany(string command){
+		public static List<CovSpan> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<CovSpan> TableToList(DataTable table){
+		public static List<CovSpan> TableToList(DataTable table){
 			List<CovSpan> retVal=new List<CovSpan>();
 			CovSpan covSpan;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CovSpan into the database.  Returns the new priKey.</summary>
-		internal static long Insert(CovSpan covSpan){
+		public static long Insert(CovSpan covSpan){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				covSpan.CovSpanNum=DbHelper.GetNextOracleKey("covspan","CovSpanNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one CovSpan into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(CovSpan covSpan,bool useExistingPK){
+		public static long Insert(CovSpan covSpan,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				covSpan.CovSpanNum=ReplicationServers.GetKey("covspan","CovSpanNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CovSpan in the database.</summary>
-		internal static void Update(CovSpan covSpan){
+		public static void Update(CovSpan covSpan){
 			string command="UPDATE covspan SET "
 				+"CovCatNum =  "+POut.Long  (covSpan.CovCatNum)+", "
 				+"FromCode  = '"+POut.String(covSpan.FromCode)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one CovSpan in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(CovSpan covSpan,CovSpan oldCovSpan){
+		public static void Update(CovSpan covSpan,CovSpan oldCovSpan){
 			string command="";
 			if(covSpan.CovCatNum != oldCovSpan.CovCatNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one CovSpan from the database.</summary>
-		internal static void Delete(long covSpanNum){
+		public static void Delete(long covSpanNum){
 			string command="DELETE FROM covspan "
 				+"WHERE CovSpanNum = "+POut.Long(covSpanNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class OperatoryCrud {
+	public class OperatoryCrud {
 		///<summary>Gets one Operatory object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Operatory SelectOne(long operatoryNum){
+		public static Operatory SelectOne(long operatoryNum){
 			string command="SELECT * FROM operatory "
 				+"WHERE OperatoryNum = "+POut.Long(operatoryNum);
 			List<Operatory> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Operatory object from the database using a query.</summary>
-		internal static Operatory SelectOne(string command){
+		public static Operatory SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Operatory objects from the database using a query.</summary>
-		internal static List<Operatory> SelectMany(string command){
+		public static List<Operatory> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Operatory> TableToList(DataTable table){
+		public static List<Operatory> TableToList(DataTable table){
 			List<Operatory> retVal=new List<Operatory>();
 			Operatory operatory;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Operatory into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Operatory operatory){
+		public static long Insert(Operatory operatory){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				operatory.OperatoryNum=DbHelper.GetNextOracleKey("operatory","OperatoryNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Operatory into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Operatory operatory,bool useExistingPK){
+		public static long Insert(Operatory operatory,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				operatory.OperatoryNum=ReplicationServers.GetKey("operatory","OperatoryNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Operatory in the database.</summary>
-		internal static void Update(Operatory operatory){
+		public static void Update(Operatory operatory){
 			string command="UPDATE operatory SET "
 				+"OpName        = '"+POut.String(operatory.OpName)+"', "
 				+"Abbrev        = '"+POut.String(operatory.Abbrev)+"', "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Operatory in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Operatory operatory,Operatory oldOperatory){
+		public static void Update(Operatory operatory,Operatory oldOperatory){
 			string command="";
 			if(operatory.OpName != oldOperatory.OpName) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Operatory from the database.</summary>
-		internal static void Delete(long operatoryNum){
+		public static void Delete(long operatoryNum){
 			string command="DELETE FROM operatory "
 				+"WHERE OperatoryNum = "+POut.Long(operatoryNum);
 			Db.NonQ(command);

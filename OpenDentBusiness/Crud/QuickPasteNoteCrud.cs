@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class QuickPasteNoteCrud {
+	public class QuickPasteNoteCrud {
 		///<summary>Gets one QuickPasteNote object from the database using the primary key.  Returns null if not found.</summary>
-		internal static QuickPasteNote SelectOne(long quickPasteNoteNum){
+		public static QuickPasteNote SelectOne(long quickPasteNoteNum){
 			string command="SELECT * FROM quickpastenote "
 				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum);
 			List<QuickPasteNote> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one QuickPasteNote object from the database using a query.</summary>
-		internal static QuickPasteNote SelectOne(string command){
+		public static QuickPasteNote SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of QuickPasteNote objects from the database using a query.</summary>
-		internal static List<QuickPasteNote> SelectMany(string command){
+		public static List<QuickPasteNote> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<QuickPasteNote> TableToList(DataTable table){
+		public static List<QuickPasteNote> TableToList(DataTable table){
 			List<QuickPasteNote> retVal=new List<QuickPasteNote>();
 			QuickPasteNote quickPasteNote;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuickPasteNote into the database.  Returns the new priKey.</summary>
-		internal static long Insert(QuickPasteNote quickPasteNote){
+		public static long Insert(QuickPasteNote quickPasteNote){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				quickPasteNote.QuickPasteNoteNum=DbHelper.GetNextOracleKey("quickpastenote","QuickPasteNoteNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one QuickPasteNote into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(QuickPasteNote quickPasteNote,bool useExistingPK){
+		public static long Insert(QuickPasteNote quickPasteNote,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				quickPasteNote.QuickPasteNoteNum=ReplicationServers.GetKey("quickpastenote","QuickPasteNoteNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuickPasteNote in the database.</summary>
-		internal static void Update(QuickPasteNote quickPasteNote){
+		public static void Update(QuickPasteNote quickPasteNote){
 			string command="UPDATE quickpastenote SET "
 				+"QuickPasteCatNum =  "+POut.Long  (quickPasteNote.QuickPasteCatNum)+", "
 				+"ItemOrder        =  "+POut.Int   (quickPasteNote.ItemOrder)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one QuickPasteNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(QuickPasteNote quickPasteNote,QuickPasteNote oldQuickPasteNote){
+		public static void Update(QuickPasteNote quickPasteNote,QuickPasteNote oldQuickPasteNote){
 			string command="";
 			if(quickPasteNote.QuickPasteCatNum != oldQuickPasteNote.QuickPasteCatNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one QuickPasteNote from the database.</summary>
-		internal static void Delete(long quickPasteNoteNum){
+		public static void Delete(long quickPasteNoteNum){
 			string command="DELETE FROM quickpastenote "
 				+"WHERE QuickPasteNoteNum = "+POut.Long(quickPasteNoteNum);
 			Db.NonQ(command);

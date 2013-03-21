@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutoCodeItemCrud {
+	public class AutoCodeItemCrud {
 		///<summary>Gets one AutoCodeItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutoCodeItem SelectOne(long autoCodeItemNum){
+		public static AutoCodeItem SelectOne(long autoCodeItemNum){
 			string command="SELECT * FROM autocodeitem "
 				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
 			List<AutoCodeItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutoCodeItem object from the database using a query.</summary>
-		internal static AutoCodeItem SelectOne(string command){
+		public static AutoCodeItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutoCodeItem objects from the database using a query.</summary>
-		internal static List<AutoCodeItem> SelectMany(string command){
+		public static List<AutoCodeItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutoCodeItem> TableToList(DataTable table){
+		public static List<AutoCodeItem> TableToList(DataTable table){
 			List<AutoCodeItem> retVal=new List<AutoCodeItem>();
 			AutoCodeItem autoCodeItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCodeItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutoCodeItem autoCodeItem){
+		public static long Insert(AutoCodeItem autoCodeItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				autoCodeItem.AutoCodeItemNum=DbHelper.GetNextOracleKey("autocodeitem","AutoCodeItemNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCodeItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutoCodeItem autoCodeItem,bool useExistingPK){
+		public static long Insert(AutoCodeItem autoCodeItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				autoCodeItem.AutoCodeItemNum=ReplicationServers.GetKey("autocodeitem","AutoCodeItemNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCodeItem in the database.</summary>
-		internal static void Update(AutoCodeItem autoCodeItem){
+		public static void Update(AutoCodeItem autoCodeItem){
 			string command="UPDATE autocodeitem SET "
 				+"AutoCodeNum    =  "+POut.Long  (autoCodeItem.AutoCodeNum)+", "
 				+"OldCode        = '"+POut.String(autoCodeItem.OldCode)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCodeItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutoCodeItem autoCodeItem,AutoCodeItem oldAutoCodeItem){
+		public static void Update(AutoCodeItem autoCodeItem,AutoCodeItem oldAutoCodeItem){
 			string command="";
 			if(autoCodeItem.AutoCodeNum != oldAutoCodeItem.AutoCodeNum) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutoCodeItem from the database.</summary>
-		internal static void Delete(long autoCodeItemNum){
+		public static void Delete(long autoCodeItemNum){
 			string command="DELETE FROM autocodeitem "
 				+"WHERE AutoCodeItemNum = "+POut.Long(autoCodeItemNum);
 			Db.NonQ(command);

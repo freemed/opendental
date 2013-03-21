@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutoNoteCrud {
+	public class AutoNoteCrud {
 		///<summary>Gets one AutoNote object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutoNote SelectOne(long autoNoteNum){
+		public static AutoNote SelectOne(long autoNoteNum){
 			string command="SELECT * FROM autonote "
 				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum);
 			List<AutoNote> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutoNote object from the database using a query.</summary>
-		internal static AutoNote SelectOne(string command){
+		public static AutoNote SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutoNote objects from the database using a query.</summary>
-		internal static List<AutoNote> SelectMany(string command){
+		public static List<AutoNote> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutoNote> TableToList(DataTable table){
+		public static List<AutoNote> TableToList(DataTable table){
 			List<AutoNote> retVal=new List<AutoNote>();
 			AutoNote autoNote;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoNote into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutoNote autoNote){
+		public static long Insert(AutoNote autoNote){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				autoNote.AutoNoteNum=DbHelper.GetNextOracleKey("autonote","AutoNoteNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoNote into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutoNote autoNote,bool useExistingPK){
+		public static long Insert(AutoNote autoNote,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				autoNote.AutoNoteNum=ReplicationServers.GetKey("autonote","AutoNoteNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoNote in the database.</summary>
-		internal static void Update(AutoNote autoNote){
+		public static void Update(AutoNote autoNote){
 			string command="UPDATE autonote SET "
 				+"AutoNoteName= '"+POut.String(autoNote.AutoNoteName)+"', "
 				+"MainText    = '"+POut.String(autoNote.MainText)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoNote in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutoNote autoNote,AutoNote oldAutoNote){
+		public static void Update(AutoNote autoNote,AutoNote oldAutoNote){
 			string command="";
 			if(autoNote.AutoNoteName != oldAutoNote.AutoNoteName) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutoNote from the database.</summary>
-		internal static void Delete(long autoNoteNum){
+		public static void Delete(long autoNoteNum){
 			string command="DELETE FROM autonote "
 				+"WHERE AutoNoteNum = "+POut.Long(autoNoteNum);
 			Db.NonQ(command);

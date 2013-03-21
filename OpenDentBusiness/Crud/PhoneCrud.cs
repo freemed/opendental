@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PhoneCrud {
+	public class PhoneCrud {
 		///<summary>Gets one Phone object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Phone SelectOne(long phoneNum){
+		public static Phone SelectOne(long phoneNum){
 			string command="SELECT * FROM phone "
 				+"WHERE PhoneNum = "+POut.Long(phoneNum);
 			List<Phone> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Phone object from the database using a query.</summary>
-		internal static Phone SelectOne(string command){
+		public static Phone SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Phone objects from the database using a query.</summary>
-		internal static List<Phone> SelectMany(string command){
+		public static List<Phone> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Phone> TableToList(DataTable table){
+		public static List<Phone> TableToList(DataTable table){
 			List<Phone> retVal=new List<Phone>();
 			Phone phone;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -78,7 +78,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Phone into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Phone phone){
+		public static long Insert(Phone phone){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				phone.PhoneNum=DbHelper.GetNextOracleKey("phone","PhoneNum");
 				int loopcount=0;
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Phone into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Phone phone,bool useExistingPK){
+		public static long Insert(Phone phone,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				phone.PhoneNum=ReplicationServers.GetKey("phone","PhoneNum");
 			}
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Phone in the database.</summary>
-		internal static void Update(Phone phone){
+		public static void Update(Phone phone){
 			string command="UPDATE phone SET "
 				+"Extension        =  "+POut.Int   (phone.Extension)+", "
 				+"EmployeeName     = '"+POut.String(phone.EmployeeName)+"', "
@@ -166,7 +166,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Phone in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Phone phone,Phone oldPhone){
+		public static void Update(Phone phone,Phone oldPhone){
 			string command="";
 			if(phone.Extension != oldPhone.Extension) {
 				if(command!=""){ command+=",";}
@@ -241,7 +241,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Phone from the database.</summary>
-		internal static void Delete(long phoneNum){
+		public static void Delete(long phoneNum){
 			string command="DELETE FROM phone "
 				+"WHERE PhoneNum = "+POut.Long(phoneNum);
 			Db.NonQ(command);

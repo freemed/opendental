@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class InsSubCrud {
+	public class InsSubCrud {
 		///<summary>Gets one InsSub object from the database using the primary key.  Returns null if not found.</summary>
-		internal static InsSub SelectOne(long insSubNum){
+		public static InsSub SelectOne(long insSubNum){
 			string command="SELECT * FROM inssub "
 				+"WHERE InsSubNum = "+POut.Long(insSubNum);
 			List<InsSub> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one InsSub object from the database using a query.</summary>
-		internal static InsSub SelectOne(string command){
+		public static InsSub SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of InsSub objects from the database using a query.</summary>
-		internal static List<InsSub> SelectMany(string command){
+		public static List<InsSub> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<InsSub> TableToList(DataTable table){
+		public static List<InsSub> TableToList(DataTable table){
 			List<InsSub> retVal=new List<InsSub>();
 			InsSub insSub;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsSub into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InsSub insSub){
+		public static long Insert(InsSub insSub){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				insSub.InsSubNum=DbHelper.GetNextOracleKey("inssub","InsSubNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsSub into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(InsSub insSub,bool useExistingPK){
+		public static long Insert(InsSub insSub,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				insSub.InsSubNum=ReplicationServers.GetKey("inssub","InsSubNum");
 			}
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsSub in the database.</summary>
-		internal static void Update(InsSub insSub){
+		public static void Update(InsSub insSub){
 			string command="UPDATE inssub SET "
 				+"PlanNum      =  "+POut.Long  (insSub.PlanNum)+", "
 				+"Subscriber   =  "+POut.Long  (insSub.Subscriber)+", "
@@ -144,7 +144,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsSub in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(InsSub insSub,InsSub oldInsSub){
+		public static void Update(InsSub insSub,InsSub oldInsSub){
 			string command="";
 			if(insSub.PlanNum != oldInsSub.PlanNum) {
 				if(command!=""){ command+=",";}
@@ -195,7 +195,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one InsSub from the database.</summary>
-		internal static void Delete(long insSubNum){
+		public static void Delete(long insSubNum){
 			string command="DELETE FROM inssub "
 				+"WHERE InsSubNum = "+POut.Long(insSubNum);
 			Db.NonQ(command);

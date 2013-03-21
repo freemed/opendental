@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LetterMergeCrud {
+	public class LetterMergeCrud {
 		///<summary>Gets one LetterMerge object from the database using the primary key.  Returns null if not found.</summary>
-		internal static LetterMerge SelectOne(long letterMergeNum){
+		public static LetterMerge SelectOne(long letterMergeNum){
 			string command="SELECT * FROM lettermerge "
 				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum);
 			List<LetterMerge> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one LetterMerge object from the database using a query.</summary>
-		internal static LetterMerge SelectOne(string command){
+		public static LetterMerge SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of LetterMerge objects from the database using a query.</summary>
-		internal static List<LetterMerge> SelectMany(string command){
+		public static List<LetterMerge> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<LetterMerge> TableToList(DataTable table){
+		public static List<LetterMerge> TableToList(DataTable table){
 			List<LetterMerge> retVal=new List<LetterMerge>();
 			LetterMerge letterMerge;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LetterMerge into the database.  Returns the new priKey.</summary>
-		internal static long Insert(LetterMerge letterMerge){
+		public static long Insert(LetterMerge letterMerge){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				letterMerge.LetterMergeNum=DbHelper.GetNextOracleKey("lettermerge","LetterMergeNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LetterMerge into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(LetterMerge letterMerge,bool useExistingPK){
+		public static long Insert(LetterMerge letterMerge,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				letterMerge.LetterMergeNum=ReplicationServers.GetKey("lettermerge","LetterMergeNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LetterMerge in the database.</summary>
-		internal static void Update(LetterMerge letterMerge){
+		public static void Update(LetterMerge letterMerge){
 			string command="UPDATE lettermerge SET "
 				+"Description   = '"+POut.String(letterMerge.Description)+"', "
 				+"TemplateName  = '"+POut.String(letterMerge.TemplateName)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LetterMerge in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(LetterMerge letterMerge,LetterMerge oldLetterMerge){
+		public static void Update(LetterMerge letterMerge,LetterMerge oldLetterMerge){
 			string command="";
 			if(letterMerge.Description != oldLetterMerge.Description) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one LetterMerge from the database.</summary>
-		internal static void Delete(long letterMergeNum){
+		public static void Delete(long letterMergeNum){
 			string command="DELETE FROM lettermerge "
 				+"WHERE LetterMergeNum = "+POut.Long(letterMergeNum);
 			Db.NonQ(command);

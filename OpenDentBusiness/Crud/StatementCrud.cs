@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class StatementCrud {
+	public class StatementCrud {
 		///<summary>Gets one Statement object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Statement SelectOne(long statementNum){
+		public static Statement SelectOne(long statementNum){
 			string command="SELECT * FROM statement "
 				+"WHERE StatementNum = "+POut.Long(statementNum);
 			List<Statement> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Statement object from the database using a query.</summary>
-		internal static Statement SelectOne(string command){
+		public static Statement SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Statement objects from the database using a query.</summary>
-		internal static List<Statement> SelectMany(string command){
+		public static List<Statement> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Statement> TableToList(DataTable table){
+		public static List<Statement> TableToList(DataTable table){
 			List<Statement> retVal=new List<Statement>();
 			Statement statement;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -69,7 +69,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Statement into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Statement statement){
+		public static long Insert(Statement statement){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				statement.StatementNum=DbHelper.GetNextOracleKey("statement","StatementNum");
 				int loopcount=0;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Statement into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Statement statement,bool useExistingPK){
+		public static long Insert(Statement statement,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				statement.StatementNum=ReplicationServers.GetKey("statement","StatementNum");
 			}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Statement in the database.</summary>
-		internal static void Update(Statement statement){
+		public static void Update(Statement statement){
 			string command="UPDATE statement SET "
 				+"PatNum       =  "+POut.Long  (statement.PatNum)+", "
 				+"DateSent     =  "+POut.Date  (statement.DateSent)+", "
@@ -157,7 +157,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Statement in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Statement statement,Statement oldStatement){
+		public static void Update(Statement statement,Statement oldStatement){
 			string command="";
 			if(statement.PatNum != oldStatement.PatNum) {
 				if(command!=""){ command+=",";}
@@ -229,7 +229,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Statement from the database.</summary>
-		internal static void Delete(long statementNum){
+		public static void Delete(long statementNum){
 			string command="DELETE FROM statement "
 				+"WHERE StatementNum = "+POut.Long(statementNum);
 			Db.NonQ(command);

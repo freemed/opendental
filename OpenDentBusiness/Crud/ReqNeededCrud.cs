@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReqNeededCrud {
+	public class ReqNeededCrud {
 		///<summary>Gets one ReqNeeded object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ReqNeeded SelectOne(long reqNeededNum){
+		public static ReqNeeded SelectOne(long reqNeededNum){
 			string command="SELECT * FROM reqneeded "
 				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum);
 			List<ReqNeeded> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ReqNeeded object from the database using a query.</summary>
-		internal static ReqNeeded SelectOne(string command){
+		public static ReqNeeded SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ReqNeeded objects from the database using a query.</summary>
-		internal static List<ReqNeeded> SelectMany(string command){
+		public static List<ReqNeeded> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ReqNeeded> TableToList(DataTable table){
+		public static List<ReqNeeded> TableToList(DataTable table){
 			List<ReqNeeded> retVal=new List<ReqNeeded>();
 			ReqNeeded reqNeeded;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReqNeeded into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ReqNeeded reqNeeded){
+		public static long Insert(ReqNeeded reqNeeded){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				reqNeeded.ReqNeededNum=DbHelper.GetNextOracleKey("reqneeded","ReqNeededNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReqNeeded into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ReqNeeded reqNeeded,bool useExistingPK){
+		public static long Insert(ReqNeeded reqNeeded,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				reqNeeded.ReqNeededNum=ReplicationServers.GetKey("reqneeded","ReqNeededNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReqNeeded in the database.</summary>
-		internal static void Update(ReqNeeded reqNeeded){
+		public static void Update(ReqNeeded reqNeeded){
 			string command="UPDATE reqneeded SET "
 				+"Descript       = '"+POut.String(reqNeeded.Descript)+"', "
 				+"SchoolCourseNum=  "+POut.Long  (reqNeeded.SchoolCourseNum)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReqNeeded in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ReqNeeded reqNeeded,ReqNeeded oldReqNeeded){
+		public static void Update(ReqNeeded reqNeeded,ReqNeeded oldReqNeeded){
 			string command="";
 			if(reqNeeded.Descript != oldReqNeeded.Descript) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ReqNeeded from the database.</summary>
-		internal static void Delete(long reqNeededNum){
+		public static void Delete(long reqNeededNum){
 			string command="DELETE FROM reqneeded "
 				+"WHERE ReqNeededNum = "+POut.Long(reqNeededNum);
 			Db.NonQ(command);

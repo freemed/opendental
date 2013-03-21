@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskAncestorCrud {
+	public class TaskAncestorCrud {
 		///<summary>Gets one TaskAncestor object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TaskAncestor SelectOne(long taskAncestorNum){
+		public static TaskAncestor SelectOne(long taskAncestorNum){
 			string command="SELECT * FROM taskancestor "
 				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
 			List<TaskAncestor> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TaskAncestor object from the database using a query.</summary>
-		internal static TaskAncestor SelectOne(string command){
+		public static TaskAncestor SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TaskAncestor objects from the database using a query.</summary>
-		internal static List<TaskAncestor> SelectMany(string command){
+		public static List<TaskAncestor> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TaskAncestor> TableToList(DataTable table){
+		public static List<TaskAncestor> TableToList(DataTable table){
 			List<TaskAncestor> retVal=new List<TaskAncestor>();
 			TaskAncestor taskAncestor;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskAncestor into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TaskAncestor taskAncestor){
+		public static long Insert(TaskAncestor taskAncestor){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				taskAncestor.TaskAncestorNum=DbHelper.GetNextOracleKey("taskancestor","TaskAncestorNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskAncestor into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TaskAncestor taskAncestor,bool useExistingPK){
+		public static long Insert(TaskAncestor taskAncestor,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				taskAncestor.TaskAncestorNum=ReplicationServers.GetKey("taskancestor","TaskAncestorNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskAncestor in the database.</summary>
-		internal static void Update(TaskAncestor taskAncestor){
+		public static void Update(TaskAncestor taskAncestor){
 			string command="UPDATE taskancestor SET "
 				+"TaskNum        =  "+POut.Long  (taskAncestor.TaskNum)+", "
 				+"TaskListNum    =  "+POut.Long  (taskAncestor.TaskListNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskAncestor in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TaskAncestor taskAncestor,TaskAncestor oldTaskAncestor){
+		public static void Update(TaskAncestor taskAncestor,TaskAncestor oldTaskAncestor){
 			string command="";
 			if(taskAncestor.TaskNum != oldTaskAncestor.TaskNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TaskAncestor from the database.</summary>
-		internal static void Delete(long taskAncestorNum){
+		public static void Delete(long taskAncestorNum){
 			string command="DELETE FROM taskancestor "
 				+"WHERE TaskAncestorNum = "+POut.Long(taskAncestorNum);
 			Db.NonQ(command);

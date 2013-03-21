@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PhoneEmpDefaultCrud {
+	public class PhoneEmpDefaultCrud {
 		///<summary>Gets one PhoneEmpDefault object from the database using the primary key.  Returns null if not found.</summary>
-		internal static PhoneEmpDefault SelectOne(long employeeNum){
+		public static PhoneEmpDefault SelectOne(long employeeNum){
 			string command="SELECT * FROM phoneempdefault "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			List<PhoneEmpDefault> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one PhoneEmpDefault object from the database using a query.</summary>
-		internal static PhoneEmpDefault SelectOne(string command){
+		public static PhoneEmpDefault SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of PhoneEmpDefault objects from the database using a query.</summary>
-		internal static List<PhoneEmpDefault> SelectMany(string command){
+		public static List<PhoneEmpDefault> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<PhoneEmpDefault> TableToList(DataTable table){
+		public static List<PhoneEmpDefault> TableToList(DataTable table){
 			List<PhoneEmpDefault> retVal=new List<PhoneEmpDefault>();
 			PhoneEmpDefault phoneEmpDefault;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -63,7 +63,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneEmpDefault into the database.  Returns the new priKey.</summary>
-		internal static long Insert(PhoneEmpDefault phoneEmpDefault){
+		public static long Insert(PhoneEmpDefault phoneEmpDefault){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				phoneEmpDefault.EmployeeNum=DbHelper.GetNextOracleKey("phoneempdefault","EmployeeNum");
 				int loopcount=0;
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one PhoneEmpDefault into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(PhoneEmpDefault phoneEmpDefault,bool useExistingPK){
+		public static long Insert(PhoneEmpDefault phoneEmpDefault,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				phoneEmpDefault.EmployeeNum=ReplicationServers.GetKey("phoneempdefault","EmployeeNum");
 			}
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PhoneEmpDefault in the database.</summary>
-		internal static void Update(PhoneEmpDefault phoneEmpDefault){
+		public static void Update(PhoneEmpDefault phoneEmpDefault){
 			string command="UPDATE phoneempdefault SET "
 				+"NoGraph         =  "+POut.Bool  (phoneEmpDefault.NoGraph)+", "
 				+"NoColor         =  "+POut.Bool  (phoneEmpDefault.NoColor)+", "
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one PhoneEmpDefault in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(PhoneEmpDefault phoneEmpDefault,PhoneEmpDefault oldPhoneEmpDefault){
+		public static void Update(PhoneEmpDefault phoneEmpDefault,PhoneEmpDefault oldPhoneEmpDefault){
 			string command="";
 			if(phoneEmpDefault.NoGraph != oldPhoneEmpDefault.NoGraph) {
 				if(command!=""){ command+=",";}
@@ -190,7 +190,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one PhoneEmpDefault from the database.</summary>
-		internal static void Delete(long employeeNum){
+		public static void Delete(long employeeNum){
 			string command="DELETE FROM phoneempdefault "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);

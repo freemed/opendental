@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LanguageForeignCrud {
+	public class LanguageForeignCrud {
 		///<summary>Gets one LanguageForeign object from the database using the primary key.  Returns null if not found.</summary>
-		internal static LanguageForeign SelectOne(long languageForeignNum){
+		public static LanguageForeign SelectOne(long languageForeignNum){
 			string command="SELECT * FROM languageforeign "
 				+"WHERE LanguageForeignNum = "+POut.Long(languageForeignNum);
 			List<LanguageForeign> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one LanguageForeign object from the database using a query.</summary>
-		internal static LanguageForeign SelectOne(string command){
+		public static LanguageForeign SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of LanguageForeign objects from the database using a query.</summary>
-		internal static List<LanguageForeign> SelectMany(string command){
+		public static List<LanguageForeign> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<LanguageForeign> TableToList(DataTable table){
+		public static List<LanguageForeign> TableToList(DataTable table){
 			List<LanguageForeign> retVal=new List<LanguageForeign>();
 			LanguageForeign languageForeign;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LanguageForeign into the database.  Returns the new priKey.</summary>
-		internal static long Insert(LanguageForeign languageForeign){
+		public static long Insert(LanguageForeign languageForeign){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				languageForeign.LanguageForeignNum=DbHelper.GetNextOracleKey("languageforeign","LanguageForeignNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LanguageForeign into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(LanguageForeign languageForeign,bool useExistingPK){
+		public static long Insert(LanguageForeign languageForeign,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				languageForeign.LanguageForeignNum=ReplicationServers.GetKey("languageforeign","LanguageForeignNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LanguageForeign in the database.</summary>
-		internal static void Update(LanguageForeign languageForeign){
+		public static void Update(LanguageForeign languageForeign){
 			string command="UPDATE languageforeign SET "
 				+"ClassType         = '"+POut.String(languageForeign.ClassType)+"', "
 				+"English           = '"+POut.String(languageForeign.English)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LanguageForeign in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(LanguageForeign languageForeign,LanguageForeign oldLanguageForeign){
+		public static void Update(LanguageForeign languageForeign,LanguageForeign oldLanguageForeign){
 			string command="";
 			if(languageForeign.ClassType != oldLanguageForeign.ClassType) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one LanguageForeign from the database.</summary>
-		internal static void Delete(long languageForeignNum){
+		public static void Delete(long languageForeignNum){
 			string command="DELETE FROM languageforeign "
 				+"WHERE LanguageForeignNum = "+POut.Long(languageForeignNum);
 			Db.NonQ(command);

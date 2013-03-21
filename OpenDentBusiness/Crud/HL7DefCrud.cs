@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class HL7DefCrud {
+	public class HL7DefCrud {
 		///<summary>Gets one HL7Def object from the database using the primary key.  Returns null if not found.</summary>
-		internal static HL7Def SelectOne(long hL7DefNum){
+		public static HL7Def SelectOne(long hL7DefNum){
 			string command="SELECT * FROM hl7def "
 				+"WHERE HL7DefNum = "+POut.Long(hL7DefNum);
 			List<HL7Def> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one HL7Def object from the database using a query.</summary>
-		internal static HL7Def SelectOne(string command){
+		public static HL7Def SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of HL7Def objects from the database using a query.</summary>
-		internal static List<HL7Def> SelectMany(string command){
+		public static List<HL7Def> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<HL7Def> TableToList(DataTable table){
+		public static List<HL7Def> TableToList(DataTable table){
 			List<HL7Def> retVal=new List<HL7Def>();
 			HL7Def hL7Def;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -74,7 +74,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7Def into the database.  Returns the new priKey.</summary>
-		internal static long Insert(HL7Def hL7Def){
+		public static long Insert(HL7Def hL7Def){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				hL7Def.HL7DefNum=DbHelper.GetNextOracleKey("hl7def","HL7DefNum");
 				int loopcount=0;
@@ -100,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one HL7Def into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(HL7Def hL7Def,bool useExistingPK){
+		public static long Insert(HL7Def hL7Def,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				hL7Def.HL7DefNum=ReplicationServers.GetKey("hl7def","HL7DefNum");
 			}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7Def in the database.</summary>
-		internal static void Update(HL7Def hL7Def){
+		public static void Update(HL7Def hL7Def){
 			string command="UPDATE hl7def SET "
 				+"Description          = '"+POut.String(hL7Def.Description)+"', "
 				+"ModeTx               =  "+POut.Int   ((int)hL7Def.ModeTx)+", "
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one HL7Def in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(HL7Def hL7Def,HL7Def oldHL7Def){
+		public static void Update(HL7Def hL7Def,HL7Def oldHL7Def){
 			string command="";
 			if(hL7Def.Description != oldHL7Def.Description) {
 				if(command!=""){ command+=",";}
@@ -279,7 +279,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one HL7Def from the database.</summary>
-		internal static void Delete(long hL7DefNum){
+		public static void Delete(long hL7DefNum){
 			string command="DELETE FROM hl7def "
 				+"WHERE HL7DefNum = "+POut.Long(hL7DefNum);
 			Db.NonQ(command);

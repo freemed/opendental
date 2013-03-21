@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ZipCodeCrud {
+	public class ZipCodeCrud {
 		///<summary>Gets one ZipCode object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ZipCode SelectOne(long zipCodeNum){
+		public static ZipCode SelectOne(long zipCodeNum){
 			string command="SELECT * FROM zipcode "
 				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum);
 			List<ZipCode> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ZipCode object from the database using a query.</summary>
-		internal static ZipCode SelectOne(string command){
+		public static ZipCode SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ZipCode objects from the database using a query.</summary>
-		internal static List<ZipCode> SelectMany(string command){
+		public static List<ZipCode> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ZipCode> TableToList(DataTable table){
+		public static List<ZipCode> TableToList(DataTable table){
 			List<ZipCode> retVal=new List<ZipCode>();
 			ZipCode zipCode;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ZipCode into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ZipCode zipCode){
+		public static long Insert(ZipCode zipCode){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				zipCode.ZipCodeNum=DbHelper.GetNextOracleKey("zipcode","ZipCodeNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ZipCode into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ZipCode zipCode,bool useExistingPK){
+		public static long Insert(ZipCode zipCode,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				zipCode.ZipCodeNum=ReplicationServers.GetKey("zipcode","ZipCodeNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ZipCode in the database.</summary>
-		internal static void Update(ZipCode zipCode){
+		public static void Update(ZipCode zipCode){
 			string command="UPDATE zipcode SET "
 				+"ZipCodeDigits= '"+POut.String(zipCode.ZipCodeDigits)+"', "
 				+"City         = '"+POut.String(zipCode.City)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ZipCode in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ZipCode zipCode,ZipCode oldZipCode){
+		public static void Update(ZipCode zipCode,ZipCode oldZipCode){
 			string command="";
 			if(zipCode.ZipCodeDigits != oldZipCode.ZipCodeDigits) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ZipCode from the database.</summary>
-		internal static void Delete(long zipCodeNum){
+		public static void Delete(long zipCodeNum){
 			string command="DELETE FROM zipcode "
 				+"WHERE ZipCodeNum = "+POut.Long(zipCodeNum);
 			Db.NonQ(command);

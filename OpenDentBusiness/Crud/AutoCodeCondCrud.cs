@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutoCodeCondCrud {
+	public class AutoCodeCondCrud {
 		///<summary>Gets one AutoCodeCond object from the database using the primary key.  Returns null if not found.</summary>
-		internal static AutoCodeCond SelectOne(long autoCodeCondNum){
+		public static AutoCodeCond SelectOne(long autoCodeCondNum){
 			string command="SELECT * FROM autocodecond "
 				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum);
 			List<AutoCodeCond> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one AutoCodeCond object from the database using a query.</summary>
-		internal static AutoCodeCond SelectOne(string command){
+		public static AutoCodeCond SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of AutoCodeCond objects from the database using a query.</summary>
-		internal static List<AutoCodeCond> SelectMany(string command){
+		public static List<AutoCodeCond> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<AutoCodeCond> TableToList(DataTable table){
+		public static List<AutoCodeCond> TableToList(DataTable table){
 			List<AutoCodeCond> retVal=new List<AutoCodeCond>();
 			AutoCodeCond autoCodeCond;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCodeCond into the database.  Returns the new priKey.</summary>
-		internal static long Insert(AutoCodeCond autoCodeCond){
+		public static long Insert(AutoCodeCond autoCodeCond){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				autoCodeCond.AutoCodeCondNum=DbHelper.GetNextOracleKey("autocodecond","AutoCodeCondNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one AutoCodeCond into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(AutoCodeCond autoCodeCond,bool useExistingPK){
+		public static long Insert(AutoCodeCond autoCodeCond,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				autoCodeCond.AutoCodeCondNum=ReplicationServers.GetKey("autocodecond","AutoCodeCondNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCodeCond in the database.</summary>
-		internal static void Update(AutoCodeCond autoCodeCond){
+		public static void Update(AutoCodeCond autoCodeCond){
 			string command="UPDATE autocodecond SET "
 				+"AutoCodeItemNum=  "+POut.Long  (autoCodeCond.AutoCodeItemNum)+", "
 				+"Cond           =  "+POut.Int   ((int)autoCodeCond.Cond)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one AutoCodeCond in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(AutoCodeCond autoCodeCond,AutoCodeCond oldAutoCodeCond){
+		public static void Update(AutoCodeCond autoCodeCond,AutoCodeCond oldAutoCodeCond){
 			string command="";
 			if(autoCodeCond.AutoCodeItemNum != oldAutoCodeCond.AutoCodeItemNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one AutoCodeCond from the database.</summary>
-		internal static void Delete(long autoCodeCondNum){
+		public static void Delete(long autoCodeCondNum){
 			string command="DELETE FROM autocodecond "
 				+"WHERE AutoCodeCondNum = "+POut.Long(autoCodeCondNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class UserGroupCrud {
+	public class UserGroupCrud {
 		///<summary>Gets one UserGroup object from the database using the primary key.  Returns null if not found.</summary>
-		internal static UserGroup SelectOne(long userGroupNum){
+		public static UserGroup SelectOne(long userGroupNum){
 			string command="SELECT * FROM usergroup "
 				+"WHERE UserGroupNum = "+POut.Long(userGroupNum);
 			List<UserGroup> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one UserGroup object from the database using a query.</summary>
-		internal static UserGroup SelectOne(string command){
+		public static UserGroup SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of UserGroup objects from the database using a query.</summary>
-		internal static List<UserGroup> SelectMany(string command){
+		public static List<UserGroup> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<UserGroup> TableToList(DataTable table){
+		public static List<UserGroup> TableToList(DataTable table){
 			List<UserGroup> retVal=new List<UserGroup>();
 			UserGroup userGroup;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -54,7 +54,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UserGroup into the database.  Returns the new priKey.</summary>
-		internal static long Insert(UserGroup userGroup){
+		public static long Insert(UserGroup userGroup){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				userGroup.UserGroupNum=DbHelper.GetNextOracleKey("usergroup","UserGroupNum");
 				int loopcount=0;
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one UserGroup into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(UserGroup userGroup,bool useExistingPK){
+		public static long Insert(UserGroup userGroup,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				userGroup.UserGroupNum=ReplicationServers.GetKey("usergroup","UserGroupNum");
 			}
@@ -104,7 +104,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one UserGroup in the database.</summary>
-		internal static void Update(UserGroup userGroup){
+		public static void Update(UserGroup userGroup){
 			string command="UPDATE usergroup SET "
 				+"Description = '"+POut.String(userGroup.Description)+"' "
 				+"WHERE UserGroupNum = "+POut.Long(userGroup.UserGroupNum);
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one UserGroup in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(UserGroup userGroup,UserGroup oldUserGroup){
+		public static void Update(UserGroup userGroup,UserGroup oldUserGroup){
 			string command="";
 			if(userGroup.Description != oldUserGroup.Description) {
 				if(command!=""){ command+=",";}
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one UserGroup from the database.</summary>
-		internal static void Delete(long userGroupNum){
+		public static void Delete(long userGroupNum){
 			string command="DELETE FROM usergroup "
 				+"WHERE UserGroupNum = "+POut.Long(userGroupNum);
 			Db.NonQ(command);

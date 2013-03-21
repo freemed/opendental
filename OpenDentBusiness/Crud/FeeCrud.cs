@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class FeeCrud {
+	public class FeeCrud {
 		///<summary>Gets one Fee object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Fee SelectOne(long feeNum){
+		public static Fee SelectOne(long feeNum){
 			string command="SELECT * FROM fee "
 				+"WHERE FeeNum = "+POut.Long(feeNum);
 			List<Fee> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Fee object from the database using a query.</summary>
-		internal static Fee SelectOne(string command){
+		public static Fee SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Fee objects from the database using a query.</summary>
-		internal static List<Fee> SelectMany(string command){
+		public static List<Fee> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Fee> TableToList(DataTable table){
+		public static List<Fee> TableToList(DataTable table){
 			List<Fee> retVal=new List<Fee>();
 			Fee fee;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Fee into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Fee fee){
+		public static long Insert(Fee fee){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				fee.FeeNum=DbHelper.GetNextOracleKey("fee","FeeNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Fee into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Fee fee,bool useExistingPK){
+		public static long Insert(Fee fee,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				fee.FeeNum=ReplicationServers.GetKey("fee","FeeNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Fee in the database.</summary>
-		internal static void Update(Fee fee){
+		public static void Update(Fee fee){
 			string command="UPDATE fee SET "
 				+"Amount       = '"+POut.Double(fee.Amount)+"', "
 				+"OldCode      = '"+POut.String(fee.OldCode)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Fee in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Fee fee,Fee oldFee){
+		public static void Update(Fee fee,Fee oldFee){
 			string command="";
 			if(fee.Amount != oldFee.Amount) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Fee from the database.</summary>
-		internal static void Delete(long feeNum){
+		public static void Delete(long feeNum){
 			string command="DELETE FROM fee "
 				+"WHERE FeeNum = "+POut.Long(feeNum);
 			Db.NonQ(command);

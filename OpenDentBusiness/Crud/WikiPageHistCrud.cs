@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class WikiPageHistCrud {
+	public class WikiPageHistCrud {
 		///<summary>Gets one WikiPageHist object from the database using the primary key.  Returns null if not found.</summary>
-		internal static WikiPageHist SelectOne(long wikiPageNum){
+		public static WikiPageHist SelectOne(long wikiPageNum){
 			string command="SELECT * FROM wikipagehist "
 				+"WHERE WikiPageNum = "+POut.Long(wikiPageNum);
 			List<WikiPageHist> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one WikiPageHist object from the database using a query.</summary>
-		internal static WikiPageHist SelectOne(string command){
+		public static WikiPageHist SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of WikiPageHist objects from the database using a query.</summary>
-		internal static List<WikiPageHist> SelectMany(string command){
+		public static List<WikiPageHist> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<WikiPageHist> TableToList(DataTable table){
+		public static List<WikiPageHist> TableToList(DataTable table){
 			List<WikiPageHist> retVal=new List<WikiPageHist>();
 			WikiPageHist wikiPageHist;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one WikiPageHist into the database.  Returns the new priKey.</summary>
-		internal static long Insert(WikiPageHist wikiPageHist){
+		public static long Insert(WikiPageHist wikiPageHist){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				wikiPageHist.WikiPageNum=DbHelper.GetNextOracleKey("wikipagehist","WikiPageNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one WikiPageHist into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(WikiPageHist wikiPageHist,bool useExistingPK){
+		public static long Insert(WikiPageHist wikiPageHist,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				wikiPageHist.WikiPageNum=ReplicationServers.GetKey("wikipagehist","WikiPageNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one WikiPageHist in the database.</summary>
-		internal static void Update(WikiPageHist wikiPageHist){
+		public static void Update(WikiPageHist wikiPageHist){
 			string command="UPDATE wikipagehist SET "
 				+"UserNum      =  "+POut.Long  (wikiPageHist.UserNum)+", "
 				+"PageTitle    = '"+POut.String(wikiPageHist.PageTitle)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one WikiPageHist in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(WikiPageHist wikiPageHist,WikiPageHist oldWikiPageHist){
+		public static void Update(WikiPageHist wikiPageHist,WikiPageHist oldWikiPageHist){
 			string command="";
 			if(wikiPageHist.UserNum != oldWikiPageHist.UserNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one WikiPageHist from the database.</summary>
-		internal static void Delete(long wikiPageNum){
+		public static void Delete(long wikiPageNum){
 			string command="DELETE FROM wikipagehist "
 				+"WHERE WikiPageNum = "+POut.Long(wikiPageNum);
 			Db.NonQ(command);

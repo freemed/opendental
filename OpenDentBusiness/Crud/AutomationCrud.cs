@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class AutomationCrud {
+	public class AutomationCrud {
 		///<summary>Gets one Automation object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Automation SelectOne(long automationNum){
+		public static Automation SelectOne(long automationNum){
 			string command="SELECT * FROM automation "
 				+"WHERE AutomationNum = "+POut.Long(automationNum);
 			List<Automation> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Automation object from the database using a query.</summary>
-		internal static Automation SelectOne(string command){
+		public static Automation SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Automation objects from the database using a query.</summary>
-		internal static List<Automation> SelectMany(string command){
+		public static List<Automation> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Automation> TableToList(DataTable table){
+		public static List<Automation> TableToList(DataTable table){
 			List<Automation> retVal=new List<Automation>();
 			Automation automation;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Automation into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Automation automation){
+		public static long Insert(Automation automation){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				automation.AutomationNum=DbHelper.GetNextOracleKey("automation","AutomationNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Automation into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Automation automation,bool useExistingPK){
+		public static long Insert(Automation automation,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				automation.AutomationNum=ReplicationServers.GetKey("automation","AutomationNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Automation in the database.</summary>
-		internal static void Update(Automation automation){
+		public static void Update(Automation automation){
 			string command="UPDATE automation SET "
 				+"Description   = '"+POut.String(automation.Description)+"', "
 				+"Autotrigger   =  "+POut.Int   ((int)automation.Autotrigger)+", "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Automation in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Automation automation,Automation oldAutomation){
+		public static void Update(Automation automation,Automation oldAutomation){
 			string command="";
 			if(automation.Description != oldAutomation.Description) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Automation from the database.</summary>
-		internal static void Delete(long automationNum){
+		public static void Delete(long automationNum){
 			string command="DELETE FROM automation "
 				+"WHERE AutomationNum = "+POut.Long(automationNum);
 			Db.NonQ(command);

@@ -158,19 +158,19 @@ using System.Drawing;"+rn);
 			else{
 				strb.Append(rn+"namespace OpenDentBusiness.Crud{");
 			}
-			strb.Append(rn+t+"internal class "+className+" {");
+			strb.Append(rn+t+"public class "+className+" {");
 			#endregion class header
 			#region SelectOne
 			//SelectOne------------------------------------------------------------------------------------------
 			if(isMobile) {
 				strb.Append(rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using primaryKey1(CustomerNum) and primaryKey2.  Returns null if not found.</summary>");
-				strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(long "+priKeyParam1+",long "+priKeyParam2+"){");
+				strb.Append(rn+t2+"public static "+typeClass.Name+" SelectOne(long "+priKeyParam1+",long "+priKeyParam2+"){");
 				strb.Append(rn+t3+"string command=\"SELECT * FROM "+tablename+" \"");
 				strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+");");
 			}
 			else {
 				strb.Append(rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using the primary key.  Returns null if not found.</summary>");
-				strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(long "+priKeyParam+"){");
+				strb.Append(rn+t2+"public static "+typeClass.Name+" SelectOne(long "+priKeyParam+"){");
 				strb.Append(rn+t3+"string command=\"SELECT * FROM "+tablename+" \"");
 				strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
 			}
@@ -184,7 +184,7 @@ using System.Drawing;"+rn);
 			#region SelectOne(command)
 			//SelectOne(string command)--------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Gets one "+typeClass.Name+" object from the database using a query.</summary>");
-			strb.Append(rn+t2+"internal static "+typeClass.Name+" SelectOne(string command){");
+			strb.Append(rn+t2+"public static "+typeClass.Name+" SelectOne(string command){");
 			strb.Append(rn+t3+@"if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException(""Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n""+command);
 			}");
@@ -198,7 +198,7 @@ using System.Drawing;"+rn);
 			#region SelectMany
 			//SelectMany-----------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Gets a list of "+typeClass.Name+" objects from the database using a query.</summary>");
-			strb.Append(rn+t2+"internal static List<"+typeClass.Name+"> SelectMany(string command){");
+			strb.Append(rn+t2+"public static List<"+typeClass.Name+"> SelectMany(string command){");
 			strb.Append(rn+t3+@"if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException(""Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n""+command);
 			}");
@@ -209,7 +209,7 @@ using System.Drawing;"+rn);
 			#region TableToList
 			//TableToList----------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Converts a DataTable to a list of objects.</summary>");
-			strb.Append(rn+t2+"internal static List<"+typeClass.Name+"> TableToList(DataTable table){");
+			strb.Append(rn+t2+"public static List<"+typeClass.Name+"> TableToList(DataTable table){");
 			strb.Append(rn+t3+"List<"+typeClass.Name+"> retVal=new List<"+typeClass.Name+">();");
 			strb.Append(rn+t3+typeClass.Name+" "+obj+";");
 			strb.Append(rn+t3+"for(int i=0;i<table.Rows.Count;i++) {");
@@ -319,7 +319,7 @@ using System.Drawing;"+rn);
 				//first override not used for mobile.
 				//second override
 				strb.Append(rn+rn+t2+"///<summary>Usually set useExistingPK=true.  Inserts one "+typeClass.Name+" into the database.</summary>");
-				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
+				strb.Append(rn+t2+"public static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
 				strb.Append(rn+t3+"if(!useExistingPK) {");// && PrefC.RandomKeys) {");PrefC.RandomKeys is always true for mobile, since autoincr is just not possible.
 //Todo: ReplicationServers.GetKey() needs to work for mobile.  Not needed until we start inserting records from mobile.
 				strb.Append(rn+t4+obj+"."+priKey2.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey2.Name+"\");");
@@ -347,7 +347,7 @@ using System.Drawing;"+rn);
 			else {
 				fieldsExceptPri=CrudGenHelper.GetFieldsExceptPriKey(fields,priKey);
 				strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Returns the new priKey.</summary>");
-				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+"){");
+				strb.Append(rn+t2+"public static long Insert("+typeClass.Name+" "+obj+"){");
 				strb.Append(rn+t3+"if(DataConnection.DBtype==DatabaseType.Oracle) {");
 				strb.Append(rn+t4+obj+"."+priKey.Name+"=DbHelper.GetNextOracleKey(\""+tablename+"\",\""+priKey.Name+"\");");
 				strb.Append(rn+t4+"int loopcount=0;");
@@ -373,7 +373,7 @@ using System.Drawing;"+rn);
 				strb.Append(rn+t2+"}");
 				//second override
 				strb.Append(rn+rn+t2+"///<summary>Inserts one "+typeClass.Name+" into the database.  Provides option to use the existing priKey.</summary>");
-				strb.Append(rn+t2+"internal static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
+				strb.Append(rn+t2+"public static long Insert("+typeClass.Name+" "+obj+",bool useExistingPK){");
 				strb.Append(rn+t3+"if(!useExistingPK && PrefC.RandomKeys) {");
 				strb.Append(rn+t4+obj+"."+priKey.Name+"=ReplicationServers.GetKey(\""+tablename+"\",\""+priKey.Name+"\");");
 				strb.Append(rn+t3+"}");
@@ -520,7 +520,7 @@ using System.Drawing;"+rn);
 			#region Update
 			//Update---------------------------------------------------------------------------------------------
 			strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.</summary>");
-			strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+"){");
+			strb.Append(rn+t2+"public static void Update("+typeClass.Name+" "+obj+"){");
 			strb.Append(rn+t3+"string command=\"UPDATE "+tablename+" SET \"");
 			for(int f=0;f<fieldsExceptPri.Count;f++) {
 				if(isMobile && fieldsExceptPri[f]==priKey1) {//2 already skipped
@@ -637,7 +637,7 @@ using System.Drawing;"+rn);
 			//Update, 2nd override-------------------------------------------------------------------------------
 			if(!isMobile) {
 				strb.Append(rn+rn+t2+"///<summary>Updates one "+typeClass.Name+" in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>");
-				strb.Append(rn+t2+"internal static void Update("+typeClass.Name+" "+obj+","+typeClass.Name+" "+oldObj+"){");
+				strb.Append(rn+t2+"public static void Update("+typeClass.Name+" "+obj+","+typeClass.Name+" "+oldObj+"){");
 				strb.Append(rn+t3+"string command=\"\";");
 				for(int f=0;f<fieldsExceptPri.Count;f++) {
 					//if(isMobile && fieldsExceptPri[f]==priKey1) {//2 already skipped
@@ -748,19 +748,19 @@ using System.Drawing;"+rn);
 			//Delete---------------------------------------------------------------------------------------------
 			if(CrudGenHelper.IsDeleteForbidden(typeClass)) {
 				strb.Append(rn+rn+t2+"//Delete not allowed for this table");
-				strb.Append(rn+t2+"//internal static void Delete(long "+priKeyParam+"){");
+				strb.Append(rn+t2+"//public static void Delete(long "+priKeyParam+"){");
 				strb.Append(rn+t2+"//");
 				strb.Append(rn+t2+"//}");
 			}
 			else {
 				strb.Append(rn+rn+t2+"///<summary>Deletes one "+typeClass.Name+" from the database.</summary>");
 				if(isMobile) {
-					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam1+",long "+priKeyParam2+"){");
+					strb.Append(rn+t2+"public static void Delete(long "+priKeyParam1+",long "+priKeyParam2+"){");
 					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
 					strb.Append(rn+t4+"+\"WHERE "+priKey1.Name+" = \"+POut.Long("+priKeyParam1+")+\" AND "+priKey2.Name+" = \"+POut.Long("+priKeyParam2+");");
 				}
 				else {
-					strb.Append(rn+t2+"internal static void Delete(long "+priKeyParam+"){");
+					strb.Append(rn+t2+"public static void Delete(long "+priKeyParam+"){");
 					strb.Append(rn+t3+"string command=\"DELETE FROM "+tablename+" \"");
 					strb.Append(rn+t4+"+\"WHERE "+priKey.Name+" = \"+POut.Long("+priKeyParam+");");
 				}
@@ -781,7 +781,7 @@ using System.Drawing;"+rn);
 					FieldInfo[] fieldsReg=typeClassReg.GetFields();//We can't assume they are in the correct order.
 					List<FieldInfo> fieldsInDbReg=CrudGenHelper.GetFieldsExceptNotDb(fieldsReg);
 					strb.Append(rn+rn+t2+"///<summary>Converts one "+typeClassReg.Name+" object to its mobile equivalent.  Warning! CustomerNum will always be 0.</summary>");
-					strb.Append(rn+t2+"internal static "+typeClass.Name+" ConvertToM("+typeClassReg.Name+" "+objReg+"){");
+					strb.Append(rn+t2+"public static "+typeClass.Name+" ConvertToM("+typeClassReg.Name+" "+objReg+"){");
 					strb.Append(rn+t3+typeClass.Name+" "+obj+"=new "+typeClass.Name+"();");
 					for(int f=0;f<fieldsInDb.Count;f++) {
 						if(fieldsInDb[f].Name=="CustomerNum") {

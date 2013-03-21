@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ErxLogCrud {
+	public class ErxLogCrud {
 		///<summary>Gets one ErxLog object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ErxLog SelectOne(long erxLogNum){
+		public static ErxLog SelectOne(long erxLogNum){
 			string command="SELECT * FROM erxlog "
 				+"WHERE ErxLogNum = "+POut.Long(erxLogNum);
 			List<ErxLog> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ErxLog object from the database using a query.</summary>
-		internal static ErxLog SelectOne(string command){
+		public static ErxLog SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ErxLog objects from the database using a query.</summary>
-		internal static List<ErxLog> SelectMany(string command){
+		public static List<ErxLog> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ErxLog> TableToList(DataTable table){
+		public static List<ErxLog> TableToList(DataTable table){
 			List<ErxLog> retVal=new List<ErxLog>();
 			ErxLog erxLog;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ErxLog into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ErxLog erxLog){
+		public static long Insert(ErxLog erxLog){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				erxLog.ErxLogNum=DbHelper.GetNextOracleKey("erxlog","ErxLogNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ErxLog into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ErxLog erxLog,bool useExistingPK){
+		public static long Insert(ErxLog erxLog,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				erxLog.ErxLogNum=ReplicationServers.GetKey("erxlog","ErxLogNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ErxLog in the database.</summary>
-		internal static void Update(ErxLog erxLog){
+		public static void Update(ErxLog erxLog){
 			string command="UPDATE erxlog SET "
 				+"PatNum    =  "+POut.Long  (erxLog.PatNum)+", "
 				+"MsgText   =  "+DbHelper.ParamChar+"paramMsgText "
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ErxLog in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ErxLog erxLog,ErxLog oldErxLog){
+		public static void Update(ErxLog erxLog,ErxLog oldErxLog){
 			string command="";
 			if(erxLog.PatNum != oldErxLog.PatNum) {
 				if(command!=""){ command+=",";}
@@ -150,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ErxLog from the database.</summary>
-		internal static void Delete(long erxLogNum){
+		public static void Delete(long erxLogNum){
 			string command="DELETE FROM erxlog "
 				+"WHERE ErxLogNum = "+POut.Long(erxLogNum);
 			Db.NonQ(command);

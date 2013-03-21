@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RxAlertCrud {
+	public class RxAlertCrud {
 		///<summary>Gets one RxAlert object from the database using the primary key.  Returns null if not found.</summary>
-		internal static RxAlert SelectOne(long rxAlertNum){
+		public static RxAlert SelectOne(long rxAlertNum){
 			string command="SELECT * FROM rxalert "
 				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum);
 			List<RxAlert> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one RxAlert object from the database using a query.</summary>
-		internal static RxAlert SelectOne(string command){
+		public static RxAlert SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of RxAlert objects from the database using a query.</summary>
-		internal static List<RxAlert> SelectMany(string command){
+		public static List<RxAlert> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<RxAlert> TableToList(DataTable table){
+		public static List<RxAlert> TableToList(DataTable table){
 			List<RxAlert> retVal=new List<RxAlert>();
 			RxAlert rxAlert;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxAlert into the database.  Returns the new priKey.</summary>
-		internal static long Insert(RxAlert rxAlert){
+		public static long Insert(RxAlert rxAlert){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				rxAlert.RxAlertNum=DbHelper.GetNextOracleKey("rxalert","RxAlertNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one RxAlert into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(RxAlert rxAlert,bool useExistingPK){
+		public static long Insert(RxAlert rxAlert,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				rxAlert.RxAlertNum=ReplicationServers.GetKey("rxalert","RxAlertNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxAlert in the database.</summary>
-		internal static void Update(RxAlert rxAlert){
+		public static void Update(RxAlert rxAlert){
 			string command="UPDATE rxalert SET "
 				+"RxDefNum       =  "+POut.Long  (rxAlert.RxDefNum)+", "
 				+"DiseaseDefNum  =  "+POut.Long  (rxAlert.DiseaseDefNum)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one RxAlert in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(RxAlert rxAlert,RxAlert oldRxAlert){
+		public static void Update(RxAlert rxAlert,RxAlert oldRxAlert){
 			string command="";
 			if(rxAlert.RxDefNum != oldRxAlert.RxDefNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one RxAlert from the database.</summary>
-		internal static void Delete(long rxAlertNum){
+		public static void Delete(long rxAlertNum){
 			string command="DELETE FROM rxalert "
 				+"WHERE RxAlertNum = "+POut.Long(rxAlertNum);
 			Db.NonQ(command);

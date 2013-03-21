@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ChartViewCrud {
+	public class ChartViewCrud {
 		///<summary>Gets one ChartView object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ChartView SelectOne(long chartViewNum){
+		public static ChartView SelectOne(long chartViewNum){
 			string command="SELECT * FROM chartview "
 				+"WHERE ChartViewNum = "+POut.Long(chartViewNum);
 			List<ChartView> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ChartView object from the database using a query.</summary>
-		internal static ChartView SelectOne(string command){
+		public static ChartView SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ChartView objects from the database using a query.</summary>
-		internal static List<ChartView> SelectMany(string command){
+		public static List<ChartView> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ChartView> TableToList(DataTable table){
+		public static List<ChartView> TableToList(DataTable table){
 			List<ChartView> retVal=new List<ChartView>();
 			ChartView chartView;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -62,7 +62,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ChartView into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ChartView chartView){
+		public static long Insert(ChartView chartView){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				chartView.ChartViewNum=DbHelper.GetNextOracleKey("chartview","ChartViewNum");
 				int loopcount=0;
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ChartView into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ChartView chartView,bool useExistingPK){
+		public static long Insert(ChartView chartView,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				chartView.ChartViewNum=ReplicationServers.GetKey("chartview","ChartViewNum");
 			}
@@ -120,7 +120,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ChartView in the database.</summary>
-		internal static void Update(ChartView chartView){
+		public static void Update(ChartView chartView){
 			string command="UPDATE chartview SET "
 				+"Description      = '"+POut.String(chartView.Description)+"', "
 				+"ItemOrder        =  "+POut.Int   (chartView.ItemOrder)+", "
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ChartView in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ChartView chartView,ChartView oldChartView){
+		public static void Update(ChartView chartView,ChartView oldChartView){
 			string command="";
 			if(chartView.Description != oldChartView.Description) {
 				if(command!=""){ command+=",";}
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ChartView from the database.</summary>
-		internal static void Delete(long chartViewNum){
+		public static void Delete(long chartViewNum){
 			string command="DELETE FROM chartview "
 				+"WHERE ChartViewNum = "+POut.Long(chartViewNum);
 			Db.NonQ(command);

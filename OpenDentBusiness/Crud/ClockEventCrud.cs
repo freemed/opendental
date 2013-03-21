@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ClockEventCrud {
+	public class ClockEventCrud {
 		///<summary>Gets one ClockEvent object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ClockEvent SelectOne(long clockEventNum){
+		public static ClockEvent SelectOne(long clockEventNum){
 			string command="SELECT * FROM clockevent "
 				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
 			List<ClockEvent> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ClockEvent object from the database using a query.</summary>
-		internal static ClockEvent SelectOne(string command){
+		public static ClockEvent SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ClockEvent objects from the database using a query.</summary>
-		internal static List<ClockEvent> SelectMany(string command){
+		public static List<ClockEvent> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ClockEvent> TableToList(DataTable table){
+		public static List<ClockEvent> TableToList(DataTable table){
 			List<ClockEvent> retVal=new List<ClockEvent>();
 			ClockEvent clockEvent;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -67,7 +67,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClockEvent into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ClockEvent clockEvent){
+		public static long Insert(ClockEvent clockEvent){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				clockEvent.ClockEventNum=DbHelper.GetNextOracleKey("clockevent","ClockEventNum");
 				int loopcount=0;
@@ -93,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ClockEvent into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ClockEvent clockEvent,bool useExistingPK){
+		public static long Insert(ClockEvent clockEvent,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				clockEvent.ClockEventNum=ReplicationServers.GetKey("clockevent","ClockEventNum");
 			}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClockEvent in the database.</summary>
-		internal static void Update(ClockEvent clockEvent){
+		public static void Update(ClockEvent clockEvent){
 			string command="UPDATE clockevent SET "
 				+"EmployeeNum       =  "+POut.Long  (clockEvent.EmployeeNum)+", "
 				//TimeEntered1 not allowed to change
@@ -151,7 +151,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ClockEvent in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ClockEvent clockEvent,ClockEvent oldClockEvent){
+		public static void Update(ClockEvent clockEvent,ClockEvent oldClockEvent){
 			string command="";
 			if(clockEvent.EmployeeNum != oldClockEvent.EmployeeNum) {
 				if(command!=""){ command+=",";}
@@ -215,7 +215,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ClockEvent from the database.</summary>
-		internal static void Delete(long clockEventNum){
+		public static void Delete(long clockEventNum){
 			string command="DELETE FROM clockevent "
 				+"WHERE ClockEventNum = "+POut.Long(clockEventNum);
 			Db.NonQ(command);

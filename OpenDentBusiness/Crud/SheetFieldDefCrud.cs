@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class SheetFieldDefCrud {
+	public class SheetFieldDefCrud {
 		///<summary>Gets one SheetFieldDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static SheetFieldDef SelectOne(long sheetFieldDefNum){
+		public static SheetFieldDef SelectOne(long sheetFieldDefNum){
 			string command="SELECT * FROM sheetfielddef "
 				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum);
 			List<SheetFieldDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one SheetFieldDef object from the database using a query.</summary>
-		internal static SheetFieldDef SelectOne(string command){
+		public static SheetFieldDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of SheetFieldDef objects from the database using a query.</summary>
-		internal static List<SheetFieldDef> SelectMany(string command){
+		public static List<SheetFieldDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<SheetFieldDef> TableToList(DataTable table){
+		public static List<SheetFieldDef> TableToList(DataTable table){
 			List<SheetFieldDef> retVal=new List<SheetFieldDef>();
 			SheetFieldDef sheetFieldDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -70,7 +70,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetFieldDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(SheetFieldDef sheetFieldDef){
+		public static long Insert(SheetFieldDef sheetFieldDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				sheetFieldDef.SheetFieldDefNum=DbHelper.GetNextOracleKey("sheetfielddef","SheetFieldDefNum");
 				int loopcount=0;
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one SheetFieldDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(SheetFieldDef sheetFieldDef,bool useExistingPK){
+		public static long Insert(SheetFieldDef sheetFieldDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				sheetFieldDef.SheetFieldDefNum=ReplicationServers.GetKey("sheetfielddef","SheetFieldDefNum");
 			}
@@ -140,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetFieldDef in the database.</summary>
-		internal static void Update(SheetFieldDef sheetFieldDef){
+		public static void Update(SheetFieldDef sheetFieldDef){
 			string command="UPDATE sheetfielddef SET "
 				+"SheetDefNum     =  "+POut.Long  (sheetFieldDef.SheetDefNum)+", "
 				+"FieldType       =  "+POut.Int   ((int)sheetFieldDef.FieldType)+", "
@@ -168,7 +168,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one SheetFieldDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(SheetFieldDef sheetFieldDef,SheetFieldDef oldSheetFieldDef){
+		public static void Update(SheetFieldDef sheetFieldDef,SheetFieldDef oldSheetFieldDef){
 			string command="";
 			if(sheetFieldDef.SheetDefNum != oldSheetFieldDef.SheetDefNum) {
 				if(command!=""){ command+=",";}
@@ -251,7 +251,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one SheetFieldDef from the database.</summary>
-		internal static void Delete(long sheetFieldDefNum){
+		public static void Delete(long sheetFieldDefNum){
 			string command="DELETE FROM sheetfielddef "
 				+"WHERE SheetFieldDefNum = "+POut.Long(sheetFieldDefNum);
 			Db.NonQ(command);

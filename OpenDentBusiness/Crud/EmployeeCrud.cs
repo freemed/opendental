@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EmployeeCrud {
+	public class EmployeeCrud {
 		///<summary>Gets one Employee object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Employee SelectOne(long employeeNum){
+		public static Employee SelectOne(long employeeNum){
 			string command="SELECT * FROM employee "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			List<Employee> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Employee object from the database using a query.</summary>
-		internal static Employee SelectOne(string command){
+		public static Employee SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Employee objects from the database using a query.</summary>
-		internal static List<Employee> SelectMany(string command){
+		public static List<Employee> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Employee> TableToList(DataTable table){
+		public static List<Employee> TableToList(DataTable table){
 			List<Employee> retVal=new List<Employee>();
 			Employee employee;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Employee into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Employee employee){
+		public static long Insert(Employee employee){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				employee.EmployeeNum=DbHelper.GetNextOracleKey("employee","EmployeeNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Employee into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Employee employee,bool useExistingPK){
+		public static long Insert(Employee employee,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				employee.EmployeeNum=ReplicationServers.GetKey("employee","EmployeeNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Employee in the database.</summary>
-		internal static void Update(Employee employee){
+		public static void Update(Employee employee){
 			string command="UPDATE employee SET "
 				+"LName      = '"+POut.String(employee.LName)+"', "
 				+"FName      = '"+POut.String(employee.FName)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Employee in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Employee employee,Employee oldEmployee){
+		public static void Update(Employee employee,Employee oldEmployee){
 			string command="";
 			if(employee.LName != oldEmployee.LName) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Employee from the database.</summary>
-		internal static void Delete(long employeeNum){
+		public static void Delete(long employeeNum){
 			string command="DELETE FROM employee "
 				+"WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);

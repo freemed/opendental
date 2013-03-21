@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class InsFilingCodeCrud {
+	public class InsFilingCodeCrud {
 		///<summary>Gets one InsFilingCode object from the database using the primary key.  Returns null if not found.</summary>
-		internal static InsFilingCode SelectOne(long insFilingCodeNum){
+		public static InsFilingCode SelectOne(long insFilingCodeNum){
 			string command="SELECT * FROM insfilingcode "
 				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
 			List<InsFilingCode> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one InsFilingCode object from the database using a query.</summary>
-		internal static InsFilingCode SelectOne(string command){
+		public static InsFilingCode SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of InsFilingCode objects from the database using a query.</summary>
-		internal static List<InsFilingCode> SelectMany(string command){
+		public static List<InsFilingCode> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<InsFilingCode> TableToList(DataTable table){
+		public static List<InsFilingCode> TableToList(DataTable table){
 			List<InsFilingCode> retVal=new List<InsFilingCode>();
 			InsFilingCode insFilingCode;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsFilingCode into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InsFilingCode insFilingCode){
+		public static long Insert(InsFilingCode insFilingCode){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				insFilingCode.InsFilingCodeNum=DbHelper.GetNextOracleKey("insfilingcode","InsFilingCodeNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsFilingCode into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(InsFilingCode insFilingCode,bool useExistingPK){
+		public static long Insert(InsFilingCode insFilingCode,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				insFilingCode.InsFilingCodeNum=ReplicationServers.GetKey("insfilingcode","InsFilingCodeNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsFilingCode in the database.</summary>
-		internal static void Update(InsFilingCode insFilingCode){
+		public static void Update(InsFilingCode insFilingCode){
 			string command="UPDATE insfilingcode SET "
 				+"Descript        = '"+POut.String(insFilingCode.Descript)+"', "
 				+"EclaimCode      = '"+POut.String(insFilingCode.EclaimCode)+"', "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsFilingCode in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(InsFilingCode insFilingCode,InsFilingCode oldInsFilingCode){
+		public static void Update(InsFilingCode insFilingCode,InsFilingCode oldInsFilingCode){
 			string command="";
 			if(insFilingCode.Descript != oldInsFilingCode.Descript) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one InsFilingCode from the database.</summary>
-		internal static void Delete(long insFilingCodeNum){
+		public static void Delete(long insFilingCodeNum){
 			string command="DELETE FROM insfilingcode "
 				+"WHERE InsFilingCodeNum = "+POut.Long(insFilingCodeNum);
 			Db.NonQ(command);

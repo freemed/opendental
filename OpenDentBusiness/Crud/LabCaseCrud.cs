@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LabCaseCrud {
+	public class LabCaseCrud {
 		///<summary>Gets one LabCase object from the database using the primary key.  Returns null if not found.</summary>
-		internal static LabCase SelectOne(long labCaseNum){
+		public static LabCase SelectOne(long labCaseNum){
 			string command="SELECT * FROM labcase "
 				+"WHERE LabCaseNum = "+POut.Long(labCaseNum);
 			List<LabCase> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one LabCase object from the database using a query.</summary>
-		internal static LabCase SelectOne(string command){
+		public static LabCase SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of LabCase objects from the database using a query.</summary>
-		internal static List<LabCase> SelectMany(string command){
+		public static List<LabCase> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<LabCase> TableToList(DataTable table){
+		public static List<LabCase> TableToList(DataTable table){
 			List<LabCase> retVal=new List<LabCase>();
 			LabCase labCase;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -65,7 +65,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LabCase into the database.  Returns the new priKey.</summary>
-		internal static long Insert(LabCase labCase){
+		public static long Insert(LabCase labCase){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				labCase.LabCaseNum=DbHelper.GetNextOracleKey("labcase","LabCaseNum");
 				int loopcount=0;
@@ -91,7 +91,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LabCase into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(LabCase labCase,bool useExistingPK){
+		public static long Insert(LabCase labCase,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				labCase.LabCaseNum=ReplicationServers.GetKey("labcase","LabCaseNum");
 			}
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LabCase in the database.</summary>
-		internal static void Update(LabCase labCase){
+		public static void Update(LabCase labCase){
 			string command="UPDATE labcase SET "
 				+"PatNum         =  "+POut.Long  (labCase.PatNum)+", "
 				+"LaboratoryNum  =  "+POut.Long  (labCase.LaboratoryNum)+", "
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LabCase in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(LabCase labCase,LabCase oldLabCase){
+		public static void Update(LabCase labCase,LabCase oldLabCase){
 			string command="";
 			if(labCase.PatNum != oldLabCase.PatNum) {
 				if(command!=""){ command+=",";}
@@ -204,7 +204,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one LabCase from the database.</summary>
-		internal static void Delete(long labCaseNum){
+		public static void Delete(long labCaseNum){
 			string command="DELETE FROM labcase "
 				+"WHERE LabCaseNum = "+POut.Long(labCaseNum);
 			Db.NonQ(command);

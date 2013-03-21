@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProcGroupItemCrud {
+	public class ProcGroupItemCrud {
 		///<summary>Gets one ProcGroupItem object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProcGroupItem SelectOne(long procGroupItemNum){
+		public static ProcGroupItem SelectOne(long procGroupItemNum){
 			string command="SELECT * FROM procgroupitem "
 				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum);
 			List<ProcGroupItem> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProcGroupItem object from the database using a query.</summary>
-		internal static ProcGroupItem SelectOne(string command){
+		public static ProcGroupItem SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProcGroupItem objects from the database using a query.</summary>
-		internal static List<ProcGroupItem> SelectMany(string command){
+		public static List<ProcGroupItem> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProcGroupItem> TableToList(DataTable table){
+		public static List<ProcGroupItem> TableToList(DataTable table){
 			List<ProcGroupItem> retVal=new List<ProcGroupItem>();
 			ProcGroupItem procGroupItem;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcGroupItem into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProcGroupItem procGroupItem){
+		public static long Insert(ProcGroupItem procGroupItem){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				procGroupItem.ProcGroupItemNum=DbHelper.GetNextOracleKey("procgroupitem","ProcGroupItemNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProcGroupItem into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProcGroupItem procGroupItem,bool useExistingPK){
+		public static long Insert(ProcGroupItem procGroupItem,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				procGroupItem.ProcGroupItemNum=ReplicationServers.GetKey("procgroupitem","ProcGroupItemNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcGroupItem in the database.</summary>
-		internal static void Update(ProcGroupItem procGroupItem){
+		public static void Update(ProcGroupItem procGroupItem){
 			string command="UPDATE procgroupitem SET "
 				+"ProcNum         =  "+POut.Long  (procGroupItem.ProcNum)+", "
 				+"GroupNum        =  "+POut.Long  (procGroupItem.GroupNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProcGroupItem in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProcGroupItem procGroupItem,ProcGroupItem oldProcGroupItem){
+		public static void Update(ProcGroupItem procGroupItem,ProcGroupItem oldProcGroupItem){
 			string command="";
 			if(procGroupItem.ProcNum != oldProcGroupItem.ProcNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProcGroupItem from the database.</summary>
-		internal static void Delete(long procGroupItemNum){
+		public static void Delete(long procGroupItemNum){
 			string command="DELETE FROM procgroupitem "
 				+"WHERE ProcGroupItemNum = "+POut.Long(procGroupItemNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ICD9Crud {
+	public class ICD9Crud {
 		///<summary>Gets one ICD9 object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ICD9 SelectOne(long iCD9Num){
+		public static ICD9 SelectOne(long iCD9Num){
 			string command="SELECT * FROM icd9 "
 				+"WHERE ICD9Num = "+POut.Long(iCD9Num);
 			List<ICD9> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ICD9 object from the database using a query.</summary>
-		internal static ICD9 SelectOne(string command){
+		public static ICD9 SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ICD9 objects from the database using a query.</summary>
-		internal static List<ICD9> SelectMany(string command){
+		public static List<ICD9> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ICD9> TableToList(DataTable table){
+		public static List<ICD9> TableToList(DataTable table){
 			List<ICD9> retVal=new List<ICD9>();
 			ICD9 iCD9;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ICD9 into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ICD9 iCD9){
+		public static long Insert(ICD9 iCD9){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				iCD9.ICD9Num=DbHelper.GetNextOracleKey("icd9","ICD9Num");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ICD9 into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ICD9 iCD9,bool useExistingPK){
+		public static long Insert(ICD9 iCD9,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				iCD9.ICD9Num=ReplicationServers.GetKey("icd9","ICD9Num");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ICD9 in the database.</summary>
-		internal static void Update(ICD9 iCD9){
+		public static void Update(ICD9 iCD9){
 			string command="UPDATE icd9 SET "
 				+"ICD9Code   = '"+POut.String(iCD9.ICD9Code)+"', "
 				+"Description= '"+POut.String(iCD9.Description)+"' "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ICD9 in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ICD9 iCD9,ICD9 oldICD9){
+		public static void Update(ICD9 iCD9,ICD9 oldICD9){
 			string command="";
 			if(iCD9.ICD9Code != oldICD9.ICD9Code) {
 				if(command!=""){ command+=",";}
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ICD9 from the database.</summary>
-		internal static void Delete(long iCD9Num){
+		public static void Delete(long iCD9Num){
 			string command="DELETE FROM icd9 "
 				+"WHERE ICD9Num = "+POut.Long(iCD9Num);
 			Db.NonQ(command);

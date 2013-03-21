@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TerminalActiveCrud {
+	public class TerminalActiveCrud {
 		///<summary>Gets one TerminalActive object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TerminalActive SelectOne(long terminalActiveNum){
+		public static TerminalActive SelectOne(long terminalActiveNum){
 			string command="SELECT * FROM terminalactive "
 				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum);
 			List<TerminalActive> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TerminalActive object from the database using a query.</summary>
-		internal static TerminalActive SelectOne(string command){
+		public static TerminalActive SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TerminalActive objects from the database using a query.</summary>
-		internal static List<TerminalActive> SelectMany(string command){
+		public static List<TerminalActive> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TerminalActive> TableToList(DataTable table){
+		public static List<TerminalActive> TableToList(DataTable table){
 			List<TerminalActive> retVal=new List<TerminalActive>();
 			TerminalActive terminalActive;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TerminalActive into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TerminalActive terminalActive){
+		public static long Insert(TerminalActive terminalActive){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				terminalActive.TerminalActiveNum=DbHelper.GetNextOracleKey("terminalactive","TerminalActiveNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TerminalActive into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TerminalActive terminalActive,bool useExistingPK){
+		public static long Insert(TerminalActive terminalActive,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				terminalActive.TerminalActiveNum=ReplicationServers.GetKey("terminalactive","TerminalActiveNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TerminalActive in the database.</summary>
-		internal static void Update(TerminalActive terminalActive){
+		public static void Update(TerminalActive terminalActive){
 			string command="UPDATE terminalactive SET "
 				+"ComputerName     = '"+POut.String(terminalActive.ComputerName)+"', "
 				+"TerminalStatus   =  "+POut.Int   ((int)terminalActive.TerminalStatus)+", "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TerminalActive in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TerminalActive terminalActive,TerminalActive oldTerminalActive){
+		public static void Update(TerminalActive terminalActive,TerminalActive oldTerminalActive){
 			string command="";
 			if(terminalActive.ComputerName != oldTerminalActive.ComputerName) {
 				if(command!=""){ command+=",";}
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TerminalActive from the database.</summary>
-		internal static void Delete(long terminalActiveNum){
+		public static void Delete(long terminalActiveNum){
 			string command="DELETE FROM terminalactive "
 				+"WHERE TerminalActiveNum = "+POut.Long(terminalActiveNum);
 			Db.NonQ(command);

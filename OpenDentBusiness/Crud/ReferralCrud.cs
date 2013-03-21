@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReferralCrud {
+	public class ReferralCrud {
 		///<summary>Gets one Referral object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Referral SelectOne(long referralNum){
+		public static Referral SelectOne(long referralNum){
 			string command="SELECT * FROM referral "
 				+"WHERE ReferralNum = "+POut.Long(referralNum);
 			List<Referral> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Referral object from the database using a query.</summary>
-		internal static Referral SelectOne(string command){
+		public static Referral SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Referral objects from the database using a query.</summary>
-		internal static List<Referral> SelectMany(string command){
+		public static List<Referral> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Referral> TableToList(DataTable table){
+		public static List<Referral> TableToList(DataTable table){
 			List<Referral> retVal=new List<Referral>();
 			Referral referral;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -75,7 +75,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Referral into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Referral referral){
+		public static long Insert(Referral referral){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				referral.ReferralNum=DbHelper.GetNextOracleKey("referral","ReferralNum");
 				int loopcount=0;
@@ -101,7 +101,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Referral into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Referral referral,bool useExistingPK){
+		public static long Insert(Referral referral,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				referral.ReferralNum=ReplicationServers.GetKey("referral","ReferralNum");
 			}
@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Referral in the database.</summary>
-		internal static void Update(Referral referral){
+		public static void Update(Referral referral){
 			string command="UPDATE referral SET "
 				+"LName         = '"+POut.String(referral.LName)+"', "
 				+"FName         = '"+POut.String(referral.FName)+"', "
@@ -175,7 +175,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Referral in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Referral referral,Referral oldReferral){
+		public static void Update(Referral referral,Referral oldReferral){
 			string command="";
 			if(referral.LName != oldReferral.LName) {
 				if(command!=""){ command+=",";}
@@ -274,7 +274,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Referral from the database.</summary>
-		internal static void Delete(long referralNum){
+		public static void Delete(long referralNum){
 			string command="DELETE FROM referral "
 				+"WHERE ReferralNum = "+POut.Long(referralNum);
 			Db.NonQ(command);

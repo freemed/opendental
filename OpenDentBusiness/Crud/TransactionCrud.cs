@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TransactionCrud {
+	public class TransactionCrud {
 		///<summary>Gets one Transaction object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Transaction SelectOne(long transactionNum){
+		public static Transaction SelectOne(long transactionNum){
 			string command="SELECT * FROM transaction "
 				+"WHERE TransactionNum = "+POut.Long(transactionNum);
 			List<Transaction> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Transaction object from the database using a query.</summary>
-		internal static Transaction SelectOne(string command){
+		public static Transaction SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Transaction objects from the database using a query.</summary>
-		internal static List<Transaction> SelectMany(string command){
+		public static List<Transaction> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Transaction> TableToList(DataTable table){
+		public static List<Transaction> TableToList(DataTable table){
 			List<Transaction> retVal=new List<Transaction>();
 			Transaction transaction;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Transaction into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Transaction transaction){
+		public static long Insert(Transaction transaction){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				transaction.TransactionNum=DbHelper.GetNextOracleKey("transaction","TransactionNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Transaction into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Transaction transaction,bool useExistingPK){
+		public static long Insert(Transaction transaction,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				transaction.TransactionNum=ReplicationServers.GetKey("transaction","TransactionNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Transaction in the database.</summary>
-		internal static void Update(Transaction transaction){
+		public static void Update(Transaction transaction){
 			string command="UPDATE transaction SET "
 				//DateTimeEntry not allowed to change
 				+"UserNum       =  "+POut.Long  (transaction.UserNum)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Transaction in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Transaction transaction,Transaction oldTransaction){
+		public static void Update(Transaction transaction,Transaction oldTransaction){
 			string command="";
 			//DateTimeEntry not allowed to change
 			if(transaction.UserNum != oldTransaction.UserNum) {
@@ -145,7 +145,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Transaction from the database.</summary>
-		internal static void Delete(long transactionNum){
+		public static void Delete(long transactionNum){
 			string command="DELETE FROM transaction "
 				+"WHERE TransactionNum = "+POut.Long(transactionNum);
 			Db.NonQ(command);

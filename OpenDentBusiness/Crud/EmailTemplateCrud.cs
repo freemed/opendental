@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EmailTemplateCrud {
+	public class EmailTemplateCrud {
 		///<summary>Gets one EmailTemplate object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EmailTemplate SelectOne(long emailTemplateNum){
+		public static EmailTemplate SelectOne(long emailTemplateNum){
 			string command="SELECT * FROM emailtemplate "
 				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum);
 			List<EmailTemplate> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EmailTemplate object from the database using a query.</summary>
-		internal static EmailTemplate SelectOne(string command){
+		public static EmailTemplate SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EmailTemplate objects from the database using a query.</summary>
-		internal static List<EmailTemplate> SelectMany(string command){
+		public static List<EmailTemplate> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EmailTemplate> TableToList(DataTable table){
+		public static List<EmailTemplate> TableToList(DataTable table){
 			List<EmailTemplate> retVal=new List<EmailTemplate>();
 			EmailTemplate emailTemplate;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailTemplate into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EmailTemplate emailTemplate){
+		public static long Insert(EmailTemplate emailTemplate){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				emailTemplate.EmailTemplateNum=DbHelper.GetNextOracleKey("emailtemplate","EmailTemplateNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailTemplate into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EmailTemplate emailTemplate,bool useExistingPK){
+		public static long Insert(EmailTemplate emailTemplate,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				emailTemplate.EmailTemplateNum=ReplicationServers.GetKey("emailtemplate","EmailTemplateNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailTemplate in the database.</summary>
-		internal static void Update(EmailTemplate emailTemplate){
+		public static void Update(EmailTemplate emailTemplate){
 			string command="UPDATE emailtemplate SET "
 				+"Subject         = '"+POut.String(emailTemplate.Subject)+"', "
 				+"BodyText        = '"+POut.String(emailTemplate.BodyText)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailTemplate in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EmailTemplate emailTemplate,EmailTemplate oldEmailTemplate){
+		public static void Update(EmailTemplate emailTemplate,EmailTemplate oldEmailTemplate){
 			string command="";
 			if(emailTemplate.Subject != oldEmailTemplate.Subject) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EmailTemplate from the database.</summary>
-		internal static void Delete(long emailTemplateNum){
+		public static void Delete(long emailTemplateNum){
 			string command="DELETE FROM emailtemplate "
 				+"WHERE EmailTemplateNum = "+POut.Long(emailTemplateNum);
 			Db.NonQ(command);

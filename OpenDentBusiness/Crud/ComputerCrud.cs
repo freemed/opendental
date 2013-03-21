@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ComputerCrud {
+	public class ComputerCrud {
 		///<summary>Gets one Computer object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Computer SelectOne(long computerNum){
+		public static Computer SelectOne(long computerNum){
 			string command="SELECT * FROM computer "
 				+"WHERE ComputerNum = "+POut.Long(computerNum);
 			List<Computer> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Computer object from the database using a query.</summary>
-		internal static Computer SelectOne(string command){
+		public static Computer SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Computer objects from the database using a query.</summary>
-		internal static List<Computer> SelectMany(string command){
+		public static List<Computer> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Computer> TableToList(DataTable table){
+		public static List<Computer> TableToList(DataTable table){
 			List<Computer> retVal=new List<Computer>();
 			Computer computer;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Computer into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Computer computer){
+		public static long Insert(Computer computer){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				computer.ComputerNum=DbHelper.GetNextOracleKey("computer","ComputerNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Computer into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Computer computer,bool useExistingPK){
+		public static long Insert(Computer computer,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				computer.ComputerNum=ReplicationServers.GetKey("computer","ComputerNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Computer in the database.</summary>
-		internal static void Update(Computer computer){
+		public static void Update(Computer computer){
 			string command="UPDATE computer SET "
 				+"CompName     = '"+POut.String(computer.CompName)+"', "
 				+"LastHeartBeat=  "+POut.DateT (computer.LastHeartBeat)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Computer in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Computer computer,Computer oldComputer){
+		public static void Update(Computer computer,Computer oldComputer){
 			string command="";
 			if(computer.CompName != oldComputer.CompName) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Computer from the database.</summary>
-		internal static void Delete(long computerNum){
+		public static void Delete(long computerNum){
 			string command="DELETE FROM computer "
 				+"WHERE ComputerNum = "+POut.Long(computerNum);
 			Db.NonQ(command);

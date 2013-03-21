@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TaskUnreadCrud {
+	public class TaskUnreadCrud {
 		///<summary>Gets one TaskUnread object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TaskUnread SelectOne(long taskUnreadNum){
+		public static TaskUnread SelectOne(long taskUnreadNum){
 			string command="SELECT * FROM taskunread "
 				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
 			List<TaskUnread> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TaskUnread object from the database using a query.</summary>
-		internal static TaskUnread SelectOne(string command){
+		public static TaskUnread SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TaskUnread objects from the database using a query.</summary>
-		internal static List<TaskUnread> SelectMany(string command){
+		public static List<TaskUnread> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TaskUnread> TableToList(DataTable table){
+		public static List<TaskUnread> TableToList(DataTable table){
 			List<TaskUnread> retVal=new List<TaskUnread>();
 			TaskUnread taskUnread;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskUnread into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TaskUnread taskUnread){
+		public static long Insert(TaskUnread taskUnread){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				taskUnread.TaskUnreadNum=DbHelper.GetNextOracleKey("taskunread","TaskUnreadNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TaskUnread into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TaskUnread taskUnread,bool useExistingPK){
+		public static long Insert(TaskUnread taskUnread,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				taskUnread.TaskUnreadNum=ReplicationServers.GetKey("taskunread","TaskUnreadNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskUnread in the database.</summary>
-		internal static void Update(TaskUnread taskUnread){
+		public static void Update(TaskUnread taskUnread){
 			string command="UPDATE taskunread SET "
 				+"TaskNum      =  "+POut.Long  (taskUnread.TaskNum)+", "
 				+"UserNum      =  "+POut.Long  (taskUnread.UserNum)+" "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TaskUnread in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TaskUnread taskUnread,TaskUnread oldTaskUnread){
+		public static void Update(TaskUnread taskUnread,TaskUnread oldTaskUnread){
 			string command="";
 			if(taskUnread.TaskNum != oldTaskUnread.TaskNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TaskUnread from the database.</summary>
-		internal static void Delete(long taskUnreadNum){
+		public static void Delete(long taskUnreadNum){
 			string command="DELETE FROM taskunread "
 				+"WHERE TaskUnreadNum = "+POut.Long(taskUnreadNum);
 			Db.NonQ(command);

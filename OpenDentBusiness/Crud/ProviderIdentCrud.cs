@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ProviderIdentCrud {
+	public class ProviderIdentCrud {
 		///<summary>Gets one ProviderIdent object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ProviderIdent SelectOne(long providerIdentNum){
+		public static ProviderIdent SelectOne(long providerIdentNum){
 			string command="SELECT * FROM providerident "
 				+"WHERE ProviderIdentNum = "+POut.Long(providerIdentNum);
 			List<ProviderIdent> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ProviderIdent object from the database using a query.</summary>
-		internal static ProviderIdent SelectOne(string command){
+		public static ProviderIdent SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ProviderIdent objects from the database using a query.</summary>
-		internal static List<ProviderIdent> SelectMany(string command){
+		public static List<ProviderIdent> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ProviderIdent> TableToList(DataTable table){
+		public static List<ProviderIdent> TableToList(DataTable table){
 			List<ProviderIdent> retVal=new List<ProviderIdent>();
 			ProviderIdent providerIdent;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProviderIdent into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ProviderIdent providerIdent){
+		public static long Insert(ProviderIdent providerIdent){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				providerIdent.ProviderIdentNum=DbHelper.GetNextOracleKey("providerident","ProviderIdentNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ProviderIdent into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ProviderIdent providerIdent,bool useExistingPK){
+		public static long Insert(ProviderIdent providerIdent,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				providerIdent.ProviderIdentNum=ReplicationServers.GetKey("providerident","ProviderIdentNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProviderIdent in the database.</summary>
-		internal static void Update(ProviderIdent providerIdent){
+		public static void Update(ProviderIdent providerIdent){
 			string command="UPDATE providerident SET "
 				+"ProvNum         =  "+POut.Long  (providerIdent.ProvNum)+", "
 				+"PayorID         = '"+POut.String(providerIdent.PayorID)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ProviderIdent in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ProviderIdent providerIdent,ProviderIdent oldProviderIdent){
+		public static void Update(ProviderIdent providerIdent,ProviderIdent oldProviderIdent){
 			string command="";
 			if(providerIdent.ProvNum != oldProviderIdent.ProvNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ProviderIdent from the database.</summary>
-		internal static void Delete(long providerIdentNum){
+		public static void Delete(long providerIdentNum){
 			string command="DELETE FROM providerident "
 				+"WHERE ProviderIdentNum = "+POut.Long(providerIdentNum);
 			Db.NonQ(command);

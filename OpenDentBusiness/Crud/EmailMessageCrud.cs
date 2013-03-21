@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class EmailMessageCrud {
+	public class EmailMessageCrud {
 		///<summary>Gets one EmailMessage object from the database using the primary key.  Returns null if not found.</summary>
-		internal static EmailMessage SelectOne(long emailMessageNum){
+		public static EmailMessage SelectOne(long emailMessageNum){
 			string command="SELECT * FROM emailmessage "
 				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum);
 			List<EmailMessage> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one EmailMessage object from the database using a query.</summary>
-		internal static EmailMessage SelectOne(string command){
+		public static EmailMessage SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of EmailMessage objects from the database using a query.</summary>
-		internal static List<EmailMessage> SelectMany(string command){
+		public static List<EmailMessage> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<EmailMessage> TableToList(DataTable table){
+		public static List<EmailMessage> TableToList(DataTable table){
 			List<EmailMessage> retVal=new List<EmailMessage>();
 			EmailMessage emailMessage;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailMessage into the database.  Returns the new priKey.</summary>
-		internal static long Insert(EmailMessage emailMessage){
+		public static long Insert(EmailMessage emailMessage){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				emailMessage.EmailMessageNum=DbHelper.GetNextOracleKey("emailmessage","EmailMessageNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one EmailMessage into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(EmailMessage emailMessage,bool useExistingPK){
+		public static long Insert(EmailMessage emailMessage,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				emailMessage.EmailMessageNum=ReplicationServers.GetKey("emailmessage","EmailMessageNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailMessage in the database.</summary>
-		internal static void Update(EmailMessage emailMessage){
+		public static void Update(EmailMessage emailMessage){
 			string command="UPDATE emailmessage SET "
 				+"PatNum         =  "+POut.Long  (emailMessage.PatNum)+", "
 				+"ToAddress      = '"+POut.String(emailMessage.ToAddress)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one EmailMessage in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(EmailMessage emailMessage,EmailMessage oldEmailMessage){
+		public static void Update(EmailMessage emailMessage,EmailMessage oldEmailMessage){
 			string command="";
 			if(emailMessage.PatNum != oldEmailMessage.PatNum) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one EmailMessage from the database.</summary>
-		internal static void Delete(long emailMessageNum){
+		public static void Delete(long emailMessageNum){
 			string command="DELETE FROM emailmessage "
 				+"WHERE EmailMessageNum = "+POut.Long(emailMessageNum);
 			Db.NonQ(command);

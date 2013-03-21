@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReqStudentCrud {
+	public class ReqStudentCrud {
 		///<summary>Gets one ReqStudent object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ReqStudent SelectOne(long reqStudentNum){
+		public static ReqStudent SelectOne(long reqStudentNum){
 			string command="SELECT * FROM reqstudent "
 				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum);
 			List<ReqStudent> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ReqStudent object from the database using a query.</summary>
-		internal static ReqStudent SelectOne(string command){
+		public static ReqStudent SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ReqStudent objects from the database using a query.</summary>
-		internal static List<ReqStudent> SelectMany(string command){
+		public static List<ReqStudent> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ReqStudent> TableToList(DataTable table){
+		public static List<ReqStudent> TableToList(DataTable table){
 			List<ReqStudent> retVal=new List<ReqStudent>();
 			ReqStudent reqStudent;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -61,7 +61,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReqStudent into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ReqStudent reqStudent){
+		public static long Insert(ReqStudent reqStudent){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				reqStudent.ReqStudentNum=DbHelper.GetNextOracleKey("reqstudent","ReqStudentNum");
 				int loopcount=0;
@@ -87,7 +87,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ReqStudent into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ReqStudent reqStudent,bool useExistingPK){
+		public static long Insert(ReqStudent reqStudent,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				reqStudent.ReqStudentNum=ReplicationServers.GetKey("reqstudent","ReqStudentNum");
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReqStudent in the database.</summary>
-		internal static void Update(ReqStudent reqStudent){
+		public static void Update(ReqStudent reqStudent){
 			string command="UPDATE reqstudent SET "
 				+"ReqNeededNum   =  "+POut.Long  (reqStudent.ReqNeededNum)+", "
 				+"Descript       = '"+POut.String(reqStudent.Descript)+"', "
@@ -133,7 +133,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ReqStudent in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ReqStudent reqStudent,ReqStudent oldReqStudent){
+		public static void Update(ReqStudent reqStudent,ReqStudent oldReqStudent){
 			string command="";
 			if(reqStudent.ReqNeededNum != oldReqStudent.ReqNeededNum) {
 				if(command!=""){ command+=",";}
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ReqStudent from the database.</summary>
-		internal static void Delete(long reqStudentNum){
+		public static void Delete(long reqStudentNum){
 			string command="DELETE FROM reqstudent "
 				+"WHERE ReqStudentNum = "+POut.Long(reqStudentNum);
 			Db.NonQ(command);

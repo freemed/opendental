@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DeletedObjectCrud {
+	public class DeletedObjectCrud {
 		///<summary>Gets one DeletedObject object from the database using the primary key.  Returns null if not found.</summary>
-		internal static DeletedObject SelectOne(long deletedObjectNum){
+		public static DeletedObject SelectOne(long deletedObjectNum){
 			string command="SELECT * FROM deletedobject "
 				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
 			List<DeletedObject> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one DeletedObject object from the database using a query.</summary>
-		internal static DeletedObject SelectOne(string command){
+		public static DeletedObject SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of DeletedObject objects from the database using a query.</summary>
-		internal static List<DeletedObject> SelectMany(string command){
+		public static List<DeletedObject> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<DeletedObject> TableToList(DataTable table){
+		public static List<DeletedObject> TableToList(DataTable table){
 			List<DeletedObject> retVal=new List<DeletedObject>();
 			DeletedObject deletedObject;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -56,7 +56,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DeletedObject into the database.  Returns the new priKey.</summary>
-		internal static long Insert(DeletedObject deletedObject){
+		public static long Insert(DeletedObject deletedObject){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				deletedObject.DeletedObjectNum=DbHelper.GetNextOracleKey("deletedobject","DeletedObjectNum");
 				int loopcount=0;
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one DeletedObject into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(DeletedObject deletedObject,bool useExistingPK){
+		public static long Insert(DeletedObject deletedObject,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				deletedObject.DeletedObjectNum=ReplicationServers.GetKey("deletedobject","DeletedObjectNum");
 			}
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DeletedObject in the database.</summary>
-		internal static void Update(DeletedObject deletedObject){
+		public static void Update(DeletedObject deletedObject){
 			string command="UPDATE deletedobject SET "
 				+"ObjectNum       =  "+POut.Long  (deletedObject.ObjectNum)+", "
 				+"ObjectType      =  "+POut.Int   ((int)deletedObject.ObjectType)+" "
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one DeletedObject in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(DeletedObject deletedObject,DeletedObject oldDeletedObject){
+		public static void Update(DeletedObject deletedObject,DeletedObject oldDeletedObject){
 			string command="";
 			if(deletedObject.ObjectNum != oldDeletedObject.ObjectNum) {
 				if(command!=""){ command+=",";}
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one DeletedObject from the database.</summary>
-		internal static void Delete(long deletedObjectNum){
+		public static void Delete(long deletedObjectNum){
 			string command="DELETE FROM deletedobject "
 				+"WHERE DeletedObjectNum = "+POut.Long(deletedObjectNum);
 			Db.NonQ(command);

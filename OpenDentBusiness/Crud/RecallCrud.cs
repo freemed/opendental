@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class RecallCrud {
+	public class RecallCrud {
 		///<summary>Gets one Recall object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Recall SelectOne(long recallNum){
+		public static Recall SelectOne(long recallNum){
 			string command="SELECT * FROM recall "
 				+"WHERE RecallNum = "+POut.Long(recallNum);
 			List<Recall> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Recall object from the database using a query.</summary>
-		internal static Recall SelectOne(string command){
+		public static Recall SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Recall objects from the database using a query.</summary>
-		internal static List<Recall> SelectMany(string command){
+		public static List<Recall> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Recall> TableToList(DataTable table){
+		public static List<Recall> TableToList(DataTable table){
 			List<Recall> retVal=new List<Recall>();
 			Recall recall;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -66,7 +66,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Recall into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Recall recall){
+		public static long Insert(Recall recall){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				recall.RecallNum=DbHelper.GetNextOracleKey("recall","RecallNum");
 				int loopcount=0;
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Recall into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Recall recall,bool useExistingPK){
+		public static long Insert(Recall recall,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				recall.RecallNum=ReplicationServers.GetKey("recall","RecallNum");
 			}
@@ -128,7 +128,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Recall in the database.</summary>
-		internal static void Update(Recall recall){
+		public static void Update(Recall recall){
 			string command="UPDATE recall SET "
 				+"PatNum             =  "+POut.Long  (recall.PatNum)+", "
 				+"DateDueCalc        =  "+POut.Date  (recall.DateDueCalc)+", "
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Recall in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Recall recall,Recall oldRecall){
+		public static void Update(Recall recall,Recall oldRecall){
 			string command="";
 			if(recall.PatNum != oldRecall.PatNum) {
 				if(command!=""){ command+=",";}
@@ -208,7 +208,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Recall from the database.</summary>
-		internal static void Delete(long recallNum){
+		public static void Delete(long recallNum){
 			string command="DELETE FROM recall "
 				+"WHERE RecallNum = "+POut.Long(recallNum);
 			Db.NonQ(command);

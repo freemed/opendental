@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ReconcileCrud {
+	public class ReconcileCrud {
 		///<summary>Gets one Reconcile object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Reconcile SelectOne(long reconcileNum){
+		public static Reconcile SelectOne(long reconcileNum){
 			string command="SELECT * FROM reconcile "
 				+"WHERE ReconcileNum = "+POut.Long(reconcileNum);
 			List<Reconcile> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Reconcile object from the database using a query.</summary>
-		internal static Reconcile SelectOne(string command){
+		public static Reconcile SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Reconcile objects from the database using a query.</summary>
-		internal static List<Reconcile> SelectMany(string command){
+		public static List<Reconcile> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Reconcile> TableToList(DataTable table){
+		public static List<Reconcile> TableToList(DataTable table){
 			List<Reconcile> retVal=new List<Reconcile>();
 			Reconcile reconcile;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Reconcile into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Reconcile reconcile){
+		public static long Insert(Reconcile reconcile){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				reconcile.ReconcileNum=DbHelper.GetNextOracleKey("reconcile","ReconcileNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Reconcile into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Reconcile reconcile,bool useExistingPK){
+		public static long Insert(Reconcile reconcile,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				reconcile.ReconcileNum=ReplicationServers.GetKey("reconcile","ReconcileNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Reconcile in the database.</summary>
-		internal static void Update(Reconcile reconcile){
+		public static void Update(Reconcile reconcile){
 			string command="UPDATE reconcile SET "
 				+"AccountNum   =  "+POut.Long  (reconcile.AccountNum)+", "
 				+"StartingBal  = '"+POut.Double(reconcile.StartingBal)+"', "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Reconcile in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Reconcile reconcile,Reconcile oldReconcile){
+		public static void Update(Reconcile reconcile,Reconcile oldReconcile){
 			string command="";
 			if(reconcile.AccountNum != oldReconcile.AccountNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Reconcile from the database.</summary>
-		internal static void Delete(long reconcileNum){
+		public static void Delete(long reconcileNum){
 			string command="DELETE FROM reconcile "
 				+"WHERE ReconcileNum = "+POut.Long(reconcileNum);
 			Db.NonQ(command);

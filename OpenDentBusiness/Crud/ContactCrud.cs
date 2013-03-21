@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ContactCrud {
+	public class ContactCrud {
 		///<summary>Gets one Contact object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Contact SelectOne(long contactNum){
+		public static Contact SelectOne(long contactNum){
 			string command="SELECT * FROM contact "
 				+"WHERE ContactNum = "+POut.Long(contactNum);
 			List<Contact> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Contact object from the database using a query.</summary>
-		internal static Contact SelectOne(string command){
+		public static Contact SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Contact objects from the database using a query.</summary>
-		internal static List<Contact> SelectMany(string command){
+		public static List<Contact> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Contact> TableToList(DataTable table){
+		public static List<Contact> TableToList(DataTable table){
 			List<Contact> retVal=new List<Contact>();
 			Contact contact;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Contact into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Contact contact){
+		public static long Insert(Contact contact){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				contact.ContactNum=DbHelper.GetNextOracleKey("contact","ContactNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Contact into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Contact contact,bool useExistingPK){
+		public static long Insert(Contact contact,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				contact.ContactNum=ReplicationServers.GetKey("contact","ContactNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Contact in the database.</summary>
-		internal static void Update(Contact contact){
+		public static void Update(Contact contact){
 			string command="UPDATE contact SET "
 				+"LName     = '"+POut.String(contact.LName)+"', "
 				+"FName     = '"+POut.String(contact.FName)+"', "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Contact in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Contact contact,Contact oldContact){
+		public static void Update(Contact contact,Contact oldContact){
 			string command="";
 			if(contact.LName != oldContact.LName) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Contact from the database.</summary>
-		internal static void Delete(long contactNum){
+		public static void Delete(long contactNum){
 			string command="DELETE FROM contact "
 				+"WHERE ContactNum = "+POut.Long(contactNum);
 			Db.NonQ(command);

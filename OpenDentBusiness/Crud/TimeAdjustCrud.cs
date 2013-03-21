@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class TimeAdjustCrud {
+	public class TimeAdjustCrud {
 		///<summary>Gets one TimeAdjust object from the database using the primary key.  Returns null if not found.</summary>
-		internal static TimeAdjust SelectOne(long timeAdjustNum){
+		public static TimeAdjust SelectOne(long timeAdjustNum){
 			string command="SELECT * FROM timeadjust "
 				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum);
 			List<TimeAdjust> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one TimeAdjust object from the database using a query.</summary>
-		internal static TimeAdjust SelectOne(string command){
+		public static TimeAdjust SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of TimeAdjust objects from the database using a query.</summary>
-		internal static List<TimeAdjust> SelectMany(string command){
+		public static List<TimeAdjust> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<TimeAdjust> TableToList(DataTable table){
+		public static List<TimeAdjust> TableToList(DataTable table){
 			List<TimeAdjust> retVal=new List<TimeAdjust>();
 			TimeAdjust timeAdjust;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -59,7 +59,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TimeAdjust into the database.  Returns the new priKey.</summary>
-		internal static long Insert(TimeAdjust timeAdjust){
+		public static long Insert(TimeAdjust timeAdjust){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				timeAdjust.TimeAdjustNum=DbHelper.GetNextOracleKey("timeadjust","TimeAdjustNum");
 				int loopcount=0;
@@ -85,7 +85,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one TimeAdjust into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(TimeAdjust timeAdjust,bool useExistingPK){
+		public static long Insert(TimeAdjust timeAdjust,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				timeAdjust.TimeAdjustNum=ReplicationServers.GetKey("timeadjust","TimeAdjustNum");
 			}
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TimeAdjust in the database.</summary>
-		internal static void Update(TimeAdjust timeAdjust){
+		public static void Update(TimeAdjust timeAdjust){
 			string command="UPDATE timeadjust SET "
 				+"EmployeeNum  =  "+POut.Long  (timeAdjust.EmployeeNum)+", "
 				+"TimeEntry    =  "+POut.DateT (timeAdjust.TimeEntry)+", "
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one TimeAdjust in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(TimeAdjust timeAdjust,TimeAdjust oldTimeAdjust){
+		public static void Update(TimeAdjust timeAdjust,TimeAdjust oldTimeAdjust){
 			string command="";
 			if(timeAdjust.EmployeeNum != oldTimeAdjust.EmployeeNum) {
 				if(command!=""){ command+=",";}
@@ -162,7 +162,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one TimeAdjust from the database.</summary>
-		internal static void Delete(long timeAdjustNum){
+		public static void Delete(long timeAdjustNum){
 			string command="DELETE FROM timeadjust "
 				+"WHERE TimeAdjustNum = "+POut.Long(timeAdjustNum);
 			Db.NonQ(command);

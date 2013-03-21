@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class MountItemDefCrud {
+	public class MountItemDefCrud {
 		///<summary>Gets one MountItemDef object from the database using the primary key.  Returns null if not found.</summary>
-		internal static MountItemDef SelectOne(long mountItemDefNum){
+		public static MountItemDef SelectOne(long mountItemDefNum){
 			string command="SELECT * FROM mountitemdef "
 				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum);
 			List<MountItemDef> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one MountItemDef object from the database using a query.</summary>
-		internal static MountItemDef SelectOne(string command){
+		public static MountItemDef SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of MountItemDef objects from the database using a query.</summary>
-		internal static List<MountItemDef> SelectMany(string command){
+		public static List<MountItemDef> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<MountItemDef> TableToList(DataTable table){
+		public static List<MountItemDef> TableToList(DataTable table){
 			List<MountItemDef> retVal=new List<MountItemDef>();
 			MountItemDef mountItemDef;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -58,7 +58,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MountItemDef into the database.  Returns the new priKey.</summary>
-		internal static long Insert(MountItemDef mountItemDef){
+		public static long Insert(MountItemDef mountItemDef){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				mountItemDef.MountItemDefNum=DbHelper.GetNextOracleKey("mountitemdef","MountItemDefNum");
 				int loopcount=0;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one MountItemDef into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(MountItemDef mountItemDef,bool useExistingPK){
+		public static long Insert(MountItemDef mountItemDef,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				mountItemDef.MountItemDefNum=ReplicationServers.GetKey("mountitemdef","MountItemDefNum");
 			}
@@ -112,7 +112,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MountItemDef in the database.</summary>
-		internal static void Update(MountItemDef mountItemDef){
+		public static void Update(MountItemDef mountItemDef){
 			string command="UPDATE mountitemdef SET "
 				+"MountDefNum    =  "+POut.Long  (mountItemDef.MountDefNum)+", "
 				+"Xpos           =  "+POut.Int   (mountItemDef.Xpos)+", "
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one MountItemDef in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(MountItemDef mountItemDef,MountItemDef oldMountItemDef){
+		public static void Update(MountItemDef mountItemDef,MountItemDef oldMountItemDef){
 			string command="";
 			if(mountItemDef.MountDefNum != oldMountItemDef.MountDefNum) {
 				if(command!=""){ command+=",";}
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one MountItemDef from the database.</summary>
-		internal static void Delete(long mountItemDefNum){
+		public static void Delete(long mountItemDefNum){
 			string command="DELETE FROM mountitemdef "
 				+"WHERE MountItemDefNum = "+POut.Long(mountItemDefNum);
 			Db.NonQ(command);

@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class InsFilingCodeSubtypeCrud {
+	public class InsFilingCodeSubtypeCrud {
 		///<summary>Gets one InsFilingCodeSubtype object from the database using the primary key.  Returns null if not found.</summary>
-		internal static InsFilingCodeSubtype SelectOne(long insFilingCodeSubtypeNum){
+		public static InsFilingCodeSubtype SelectOne(long insFilingCodeSubtypeNum){
 			string command="SELECT * FROM insfilingcodesubtype "
 				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
 			List<InsFilingCodeSubtype> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one InsFilingCodeSubtype object from the database using a query.</summary>
-		internal static InsFilingCodeSubtype SelectOne(string command){
+		public static InsFilingCodeSubtype SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of InsFilingCodeSubtype objects from the database using a query.</summary>
-		internal static List<InsFilingCodeSubtype> SelectMany(string command){
+		public static List<InsFilingCodeSubtype> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<InsFilingCodeSubtype> TableToList(DataTable table){
+		public static List<InsFilingCodeSubtype> TableToList(DataTable table){
 			List<InsFilingCodeSubtype> retVal=new List<InsFilingCodeSubtype>();
 			InsFilingCodeSubtype insFilingCodeSubtype;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsFilingCodeSubtype into the database.  Returns the new priKey.</summary>
-		internal static long Insert(InsFilingCodeSubtype insFilingCodeSubtype){
+		public static long Insert(InsFilingCodeSubtype insFilingCodeSubtype){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				insFilingCodeSubtype.InsFilingCodeSubtypeNum=DbHelper.GetNextOracleKey("insfilingcodesubtype","InsFilingCodeSubtypeNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one InsFilingCodeSubtype into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(InsFilingCodeSubtype insFilingCodeSubtype,bool useExistingPK){
+		public static long Insert(InsFilingCodeSubtype insFilingCodeSubtype,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				insFilingCodeSubtype.InsFilingCodeSubtypeNum=ReplicationServers.GetKey("insfilingcodesubtype","InsFilingCodeSubtypeNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsFilingCodeSubtype in the database.</summary>
-		internal static void Update(InsFilingCodeSubtype insFilingCodeSubtype){
+		public static void Update(InsFilingCodeSubtype insFilingCodeSubtype){
 			string command="UPDATE insfilingcodesubtype SET "
 				+"InsFilingCodeNum       =  "+POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+", "
 				+"Descript               = '"+POut.String(insFilingCodeSubtype.Descript)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one InsFilingCodeSubtype in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(InsFilingCodeSubtype insFilingCodeSubtype,InsFilingCodeSubtype oldInsFilingCodeSubtype){
+		public static void Update(InsFilingCodeSubtype insFilingCodeSubtype,InsFilingCodeSubtype oldInsFilingCodeSubtype){
 			string command="";
 			if(insFilingCodeSubtype.InsFilingCodeNum != oldInsFilingCodeSubtype.InsFilingCodeNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one InsFilingCodeSubtype from the database.</summary>
-		internal static void Delete(long insFilingCodeSubtypeNum){
+		public static void Delete(long insFilingCodeSubtypeNum){
 			string command="DELETE FROM insfilingcodesubtype "
 				+"WHERE InsFilingCodeSubtypeNum = "+POut.Long(insFilingCodeSubtypeNum);
 			Db.NonQ(command);

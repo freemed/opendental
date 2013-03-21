@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class DepositCrud {
+	public class DepositCrud {
 		///<summary>Gets one Deposit object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Deposit SelectOne(long depositNum){
+		public static Deposit SelectOne(long depositNum){
 			string command="SELECT * FROM deposit "
 				+"WHERE DepositNum = "+POut.Long(depositNum);
 			List<Deposit> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Deposit object from the database using a query.</summary>
-		internal static Deposit SelectOne(string command){
+		public static Deposit SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Deposit objects from the database using a query.</summary>
-		internal static List<Deposit> SelectMany(string command){
+		public static List<Deposit> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Deposit> TableToList(DataTable table){
+		public static List<Deposit> TableToList(DataTable table){
 			List<Deposit> retVal=new List<Deposit>();
 			Deposit deposit;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Deposit into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Deposit deposit){
+		public static long Insert(Deposit deposit){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				deposit.DepositNum=DbHelper.GetNextOracleKey("deposit","DepositNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Deposit into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Deposit deposit,bool useExistingPK){
+		public static long Insert(Deposit deposit,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				deposit.DepositNum=ReplicationServers.GetKey("deposit","DepositNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Deposit in the database.</summary>
-		internal static void Update(Deposit deposit){
+		public static void Update(Deposit deposit){
 			string command="UPDATE deposit SET "
 				+"DateDeposit    =  "+POut.Date  (deposit.DateDeposit)+", "
 				+"BankAccountInfo= '"+POut.String(deposit.BankAccountInfo)+"', "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Deposit in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Deposit deposit,Deposit oldDeposit){
+		public static void Update(Deposit deposit,Deposit oldDeposit){
 			string command="";
 			if(deposit.DateDeposit != oldDeposit.DateDeposit) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Deposit from the database.</summary>
-		internal static void Delete(long depositNum){
+		public static void Delete(long depositNum){
 			string command="DELETE FROM deposit "
 				+"WHERE DepositNum = "+POut.Long(depositNum);
 			Db.NonQ(command);

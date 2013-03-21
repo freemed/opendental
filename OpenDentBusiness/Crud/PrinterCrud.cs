@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class PrinterCrud {
+	public class PrinterCrud {
 		///<summary>Gets one Printer object from the database using the primary key.  Returns null if not found.</summary>
-		internal static Printer SelectOne(long printerNum){
+		public static Printer SelectOne(long printerNum){
 			string command="SELECT * FROM printer "
 				+"WHERE PrinterNum = "+POut.Long(printerNum);
 			List<Printer> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one Printer object from the database using a query.</summary>
-		internal static Printer SelectOne(string command){
+		public static Printer SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of Printer objects from the database using a query.</summary>
-		internal static List<Printer> SelectMany(string command){
+		public static List<Printer> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<Printer> TableToList(DataTable table){
+		public static List<Printer> TableToList(DataTable table){
 			List<Printer> retVal=new List<Printer>();
 			Printer printer;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -57,7 +57,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Printer into the database.  Returns the new priKey.</summary>
-		internal static long Insert(Printer printer){
+		public static long Insert(Printer printer){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				printer.PrinterNum=DbHelper.GetNextOracleKey("printer","PrinterNum");
 				int loopcount=0;
@@ -83,7 +83,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Printer into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(Printer printer,bool useExistingPK){
+		public static long Insert(Printer printer,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				printer.PrinterNum=ReplicationServers.GetKey("printer","PrinterNum");
 			}
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Printer in the database.</summary>
-		internal static void Update(Printer printer){
+		public static void Update(Printer printer){
 			string command="UPDATE printer SET "
 				+"ComputerNum  =  "+POut.Long  (printer.ComputerNum)+", "
 				+"PrintSit     =  "+POut.Int   ((int)printer.PrintSit)+", "
@@ -121,7 +121,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Printer in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(Printer printer,Printer oldPrinter){
+		public static void Update(Printer printer,Printer oldPrinter){
 			string command="";
 			if(printer.ComputerNum != oldPrinter.ComputerNum) {
 				if(command!=""){ command+=",";}
@@ -148,7 +148,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one Printer from the database.</summary>
-		internal static void Delete(long printerNum){
+		public static void Delete(long printerNum){
 			string command="DELETE FROM printer "
 				+"WHERE PrinterNum = "+POut.Long(printerNum);
 			Db.NonQ(command);

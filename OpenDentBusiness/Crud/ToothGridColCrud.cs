@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class ToothGridColCrud {
+	public class ToothGridColCrud {
 		///<summary>Gets one ToothGridCol object from the database using the primary key.  Returns null if not found.</summary>
-		internal static ToothGridCol SelectOne(long toothGridColNum){
+		public static ToothGridCol SelectOne(long toothGridColNum){
 			string command="SELECT * FROM toothgridcol "
 				+"WHERE ToothGridColNum = "+POut.Long(toothGridColNum);
 			List<ToothGridCol> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one ToothGridCol object from the database using a query.</summary>
-		internal static ToothGridCol SelectOne(string command){
+		public static ToothGridCol SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of ToothGridCol objects from the database using a query.</summary>
-		internal static List<ToothGridCol> SelectMany(string command){
+		public static List<ToothGridCol> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<ToothGridCol> TableToList(DataTable table){
+		public static List<ToothGridCol> TableToList(DataTable table){
 			List<ToothGridCol> retVal=new List<ToothGridCol>();
 			ToothGridCol toothGridCol;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothGridCol into the database.  Returns the new priKey.</summary>
-		internal static long Insert(ToothGridCol toothGridCol){
+		public static long Insert(ToothGridCol toothGridCol){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				toothGridCol.ToothGridColNum=DbHelper.GetNextOracleKey("toothgridcol","ToothGridColNum");
 				int loopcount=0;
@@ -86,7 +86,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one ToothGridCol into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(ToothGridCol toothGridCol,bool useExistingPK){
+		public static long Insert(ToothGridCol toothGridCol,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				toothGridCol.ToothGridColNum=ReplicationServers.GetKey("toothgridcol","ToothGridColNum");
 			}
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothGridCol in the database.</summary>
-		internal static void Update(ToothGridCol toothGridCol){
+		public static void Update(ToothGridCol toothGridCol){
 			string command="UPDATE toothgridcol SET "
 				+"SheetFieldNum  =  "+POut.Long  (toothGridCol.SheetFieldNum)+", "
 				+"NameItem       = '"+POut.String(toothGridCol.NameItem)+"', "
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one ToothGridCol in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(ToothGridCol toothGridCol,ToothGridCol oldToothGridCol){
+		public static void Update(ToothGridCol toothGridCol,ToothGridCol oldToothGridCol){
 			string command="";
 			if(toothGridCol.SheetFieldNum != oldToothGridCol.SheetFieldNum) {
 				if(command!=""){ command+=",";}
@@ -169,7 +169,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one ToothGridCol from the database.</summary>
-		internal static void Delete(long toothGridColNum){
+		public static void Delete(long toothGridColNum){
 			string command="DELETE FROM toothgridcol "
 				+"WHERE ToothGridColNum = "+POut.Long(toothGridColNum);
 			Db.NonQ(command);

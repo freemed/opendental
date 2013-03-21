@@ -7,9 +7,9 @@ using System.Data;
 using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
-	internal class LetterMergeFieldCrud {
+	public class LetterMergeFieldCrud {
 		///<summary>Gets one LetterMergeField object from the database using the primary key.  Returns null if not found.</summary>
-		internal static LetterMergeField SelectOne(long fieldNum){
+		public static LetterMergeField SelectOne(long fieldNum){
 			string command="SELECT * FROM lettermergefield "
 				+"WHERE FieldNum = "+POut.Long(fieldNum);
 			List<LetterMergeField> list=TableToList(Db.GetTable(command));
@@ -20,7 +20,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets one LetterMergeField object from the database using a query.</summary>
-		internal static LetterMergeField SelectOne(string command){
+		public static LetterMergeField SelectOne(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Gets a list of LetterMergeField objects from the database using a query.</summary>
-		internal static List<LetterMergeField> SelectMany(string command){
+		public static List<LetterMergeField> SelectMany(string command){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
 			}
@@ -41,7 +41,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		internal static List<LetterMergeField> TableToList(DataTable table){
+		public static List<LetterMergeField> TableToList(DataTable table){
 			List<LetterMergeField> retVal=new List<LetterMergeField>();
 			LetterMergeField letterMergeField;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -55,7 +55,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LetterMergeField into the database.  Returns the new priKey.</summary>
-		internal static long Insert(LetterMergeField letterMergeField){
+		public static long Insert(LetterMergeField letterMergeField){
 			if(DataConnection.DBtype==DatabaseType.Oracle) {
 				letterMergeField.FieldNum=DbHelper.GetNextOracleKey("lettermergefield","FieldNum");
 				int loopcount=0;
@@ -81,7 +81,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one LetterMergeField into the database.  Provides option to use the existing priKey.</summary>
-		internal static long Insert(LetterMergeField letterMergeField,bool useExistingPK){
+		public static long Insert(LetterMergeField letterMergeField,bool useExistingPK){
 			if(!useExistingPK && PrefC.RandomKeys) {
 				letterMergeField.FieldNum=ReplicationServers.GetKey("lettermergefield","FieldNum");
 			}
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LetterMergeField in the database.</summary>
-		internal static void Update(LetterMergeField letterMergeField){
+		public static void Update(LetterMergeField letterMergeField){
 			string command="UPDATE lettermergefield SET "
 				+"LetterMergeNum=  "+POut.Long  (letterMergeField.LetterMergeNum)+", "
 				+"FieldName     = '"+POut.String(letterMergeField.FieldName)+"' "
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one LetterMergeField in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.</summary>
-		internal static void Update(LetterMergeField letterMergeField,LetterMergeField oldLetterMergeField){
+		public static void Update(LetterMergeField letterMergeField,LetterMergeField oldLetterMergeField){
 			string command="";
 			if(letterMergeField.LetterMergeNum != oldLetterMergeField.LetterMergeNum) {
 				if(command!=""){ command+=",";}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Deletes one LetterMergeField from the database.</summary>
-		internal static void Delete(long fieldNum){
+		public static void Delete(long fieldNum){
 			string command="DELETE FROM lettermergefield "
 				+"WHERE FieldNum = "+POut.Long(fieldNum);
 			Db.NonQ(command);
