@@ -11,6 +11,10 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		public static string Serialize(OpenDentBusiness.Allergy allergy) {
 			StringBuilder sb=new StringBuilder();
+			if(allergy==null) {
+				sb.Append("<null />");
+				return sb.ToString();
+			}
 			sb.Append("<Allergy>");
 			sb.Append("<AllergyNum>").Append(allergy.AllergyNum).Append("</AllergyNum>");
 			sb.Append("<AllergyDefNum>").Append(allergy.AllergyDefNum).Append("</AllergyDefNum>");

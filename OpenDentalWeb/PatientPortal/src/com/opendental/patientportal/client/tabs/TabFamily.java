@@ -47,11 +47,10 @@ public class TabFamily extends Composite {
 		
 		public void onError(String error) {
 			MsgBox.show(error);
-		}
-		
+		}		
 	}
 
-	/** This gets called whenever the results from the database come back.  This happens very quickly and I think it will be fine that it loads slightly slower than the rest.  */
+	/** This gets called whenever the results from the database come back asynchronously.  This happens very quickly and I think it will be fine that it loads slightly slower than the rest.  */
 	private void fillFamily(ArrayList<Patient> family) {
 		int famCount=family.size();
 		if(famCount==0) {
@@ -60,32 +59,38 @@ public class TabFamily extends Composite {
 		int rows=famCount+1;//+1 is for the column headers.
 		int columns=5;
 		gridFamily.resize(rows, columns);
-		for(int r=0;r<rows+1;r++) {
-			if(r==0) {//If the first row.
+		for(int i=0;i<rows;i++) {
+			if(i==0) {//If the first row.
 				//Add the column headers.
-				gridFamily.setText(r, 0, "Name");
-				gridFamily.setText(r, 1, "Position");
-				gridFamily.setText(r, 2, "Gender");
-				gridFamily.setText(r, 3, "Status");
-				gridFamily.setText(r, 4, "Age");
+				gridFamily.setText(i, 0, "Name");
+				gridFamily.setText(i, 1, "Position");
+				gridFamily.setText(i, 2, "Gender");
+				gridFamily.setText(i, 3, "Status");
+				gridFamily.setText(i, 4, "Age");
 				continue;
 			}
-			for(int c=0;c<columns;c++) {
-				switch(c) {
+			for(int j=0;j<columns;j++) {
+				switch(j) {
 					case 0://Name
-						gridFamily.setText(r, c, family.get(r-1).LName+", "+family.get(r-1).FName);
+						gridFamily.setText(i, j, family.get(i-1).LName+", "+family.get(i-1).FName);
 						break;
 					case 1://Position
-						gridFamily.setText(r, c, family.get(r-1).Position.toString());
+						if(family.get(i-1).Position!=null) {
+							gridFamily.setText(i, j, family.get(i-1).Position.toString());
+						}
 						break;
 					case 2://Gender
-						gridFamily.setText(r, c, family.get(r-1).Gender.toString());
+						if(family.get(i-1).Gender!=null) {
+							gridFamily.setText(i, j, family.get(i-1).Gender.toString());							
+						}
 						break;
 					case 3://Status
-						gridFamily.setText(r, c, family.get(r-1).PatStatus.toString());
+						if(family.get(i-1).PatStatus!=null) {
+							gridFamily.setText(i, j, family.get(i-1).PatStatus.toString());
+						}
 						break;
 					case 4://Age
-						gridFamily.setText(r, c, Integer.toString(family.get(r-1).Age));
+						gridFamily.setText(i, j, Integer.toString(family.get(i-1).Age));
 						break;
 				}
 			}

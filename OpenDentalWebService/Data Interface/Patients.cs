@@ -37,12 +37,12 @@ namespace OpenDentalWebService {
 
 		///<summary>Gets all family members of the patient passed in.</summary>
 		public static List<OpenDentBusiness.Patient> GetFamilyPatientPortal(long patNum) {
-			OpenDentBusiness.Family family=OpenDentBusiness.Patients.GetFamily(patNum);
-			List<OpenDentBusiness.Patient> famList=new List<OpenDentBusiness.Patient>();
-			foreach(OpenDentBusiness.Patient pat in family.ListPats) {
-				famList.Add(pat);
+			string command="SELECT * FROM patient WHERE guarantor in (SELECT guarantor FROM patient WHERE PatNum ="+OpenDentBusiness.POut.Long(patNum)+")";
+			List<OpenDentBusiness.Patient> listFam=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
+			for(int i=0;i<listFam.Count;i++) {
+				listFam[i].Age=OpenDentBusiness.Patients.DateToAge(listFam[i].Birthdate);
 			}
-			return famList;
+			return listFam;
 		}
 
 		#endregion

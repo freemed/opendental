@@ -47,7 +47,7 @@ namespace xCrudGeneratorWebService {
 					if(IsMobile(typeClass)) {
 						continue;
 					}
-					//The mobile app will only contain table types for classes that it explicitly uses to save on loading time.
+					//The mobile app will only contain table types for classes that it explicitly uses. This saves on loading time.  If you need to use a table type that does not exist, add it to this method's list.
 					if(!IsWebClass(typeClass)) {
 						continue;
 					}
@@ -57,11 +57,16 @@ namespace xCrudGeneratorWebService {
 			TableTypes.Sort(CompareTypesByName);
 		}
 
-		///<summary>Returns true if the table type is a web class and needs to be added to the TableTypes array so that the class files are created.  Add classes to this function that will be needed in the web version.</summary>
+		///<summary>Returns true if the table type is a web class and needs to be added to the TableTypes array so that the class files are created.  Add classes to this function that will be needed in the web version.  This includes the Patient Portal as well.</summary>
 		private bool IsWebClass(Type typeClass) {
-			if(typeClass==typeof(Appointment)
+			if(typeClass==typeof(Allergy)
+				|| typeClass==typeof(Appointment)
+				|| typeClass==typeof(Disease)
+				|| typeClass==typeof(LabPanel)
+				|| typeClass==typeof(Medication)
 				|| typeClass==typeof(Patient)
 				|| typeClass==typeof(Pref)
+				|| typeClass==typeof(Statement)
 				|| typeClass==typeof(Userod)) 
 			{
 				return true;

@@ -70,7 +70,7 @@ public class WindowPatientPortal extends Composite {
 					}
 					public void onSuccess() {
 						if(tabAccount==null) {
-							tabAccount=new TabAccount();
+							tabAccount=new TabAccount(patCur);
 						}
 						panelAccount.setWidget(tabAccount);
 					}
@@ -83,7 +83,7 @@ public class WindowPatientPortal extends Composite {
 					}
 					public void onSuccess() {
 						if(tabMedical==null) {
-							tabMedical=new TabMedical();
+							tabMedical=new TabMedical(patCur);
 						}
 						panelMedical.setWidget(tabMedical);
 					}

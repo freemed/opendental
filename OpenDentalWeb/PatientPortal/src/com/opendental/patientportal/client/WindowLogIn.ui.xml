@@ -4,7 +4,7 @@
   xmlns:g="urn:import:com.google.gwt.user.client.ui" >
   
   <g:SimpleLayoutPanel>
-  	<g:VerticalPanel>
+  	<g:VerticalPanel ui:field="panelContainer">
   		<g:Label>Log In</g:Label>
   		<g:DecoratorPanel>
   			<g:VerticalPanel>
@@ -18,10 +18,10 @@
   					<g:PasswordTextBox ui:field="textPassword" />
   					<g:Label ui:field="labelPassword" visible="false">The Password field is required.</g:Label>
   				</g:HorizontalPanel>
-  				<g:Label ui:field="labelLogIn" visible="false">Login failed, please try again.</g:Label>
   				<g:Button ui:field="butLogIn">Log In</g:Button>
   			</g:VerticalPanel>
   		</g:DecoratorPanel>
+  		<g:Label ui:field="labelLogIn" visible="false">Login failed, please try again.</g:Label>
   	</g:VerticalPanel>
   </g:SimpleLayoutPanel>
   

@@ -5,8 +5,6 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.opendental.opendentbusiness.remoting.RemotingClient;
 import com.opendental.opendentbusiness.remoting.Serializing;
 import com.opendental.opendentbusiness.remoting.Serializing.DeserializeCallbackResult;
@@ -18,24 +16,6 @@ public class RequestHelper {
 	/** This is a callback that will call the RequestCallback.  Sounds redundant but it is necessary because deserializing might take a while and so we need to use a RepeatingCommand.
 	 *  We have to use a repeating command within the Serialize class due to computation that has the possibility to tie up the main thread for more than 10 seconds.  */
 	private static DeserializeCallbackResult DeserializeCallback;
-	/** Simple popup that will have a loading bar so the user knows the program hasn't frozen on them. */
-	private static PopupPanel Popup;
-	
-	/** Simple popup panel showing a loading bar.  The loading spinner was too jittery when deserializing so I went with the bar. */
-	private static void showLoading() {
-		Popup=new PopupPanel();
-		Popup.add(new Image("images/loadingSpinner.gif"));
-		Popup.setGlassEnabled(true);
-		Popup.center();
-		Popup.show();
-	}
-	
-	private static void hideLoading() {
-		if(Popup!=null) {
-			Popup.hide();
-			Popup=null;
-		}
-	}
 	
 	/** Every call to the database calls this method.  It will pack up the passed in dto request into a RequestBuilder and send it off to the server.
 	 *  If the response from the server is successful, it will call the onSuccess method in the RequestCallbackResult. 
@@ -53,7 +33,6 @@ public class RequestHelper {
 		public void onResponseReceived(Request request, Response response) {
 			if(response.getStatusCode()==200) {
 				try {
-					showLoading();
 					Serializing.getDeserializedObject(response.getText(),DeserializeCallback);
 				}
 				catch (Exception e) {
@@ -75,12 +54,10 @@ public class RequestHelper {
 	/** Hides the loading bar and calls the request callback's onSuccess method. */
 	private static class Deserialize_Callback implements DeserializeCallbackResult {
 		public void onComplete(Object obj) {
-			hideLoading();
 			RequestCallback.onSuccess(obj);
 		}
 
 		public void onError(String error) {
-			hideLoading();
 			RequestCallback.onError(error);
 		}		
 	}

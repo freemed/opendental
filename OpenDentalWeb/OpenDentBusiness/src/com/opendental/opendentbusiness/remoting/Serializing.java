@@ -115,14 +115,29 @@ public class Serializing {
 		//int[]     "[I"
 		//String[]  "[Ljava.lang.String;"
 		//Open Dental Objects-----------------------------------------------------------------------------------------------
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Allergy")) {
+			return ((Allergy)obj).serialize();
+		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Appointment")) {
 			return ((Appointment)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Disease")) {
+			return ((Disease)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.LabPanel")) {
+			return ((LabPanel)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Medication")) {
+			return ((Medication)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Patient")) {
 			return ((Patient)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Pref")) {
 			return ((Pref)obj).serialize();
+		}
+		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Statement")) {
+			return ((Statement)obj).serialize();
 		}
 		if(qualifiedName.equals("com.opendental.odweb.client.tabletypes.Userod")) {
 			return ((Userod)obj).serialize();
@@ -214,10 +229,30 @@ public class Serializing {
 
 	/** Pass in the type and just the xml for that object.  Returns null if no match found. */
 	private static Object deserializeOpenDentalObject(String type,Document doc) throws Exception {
+		if(type.equals("Allergy")) {
+			Allergy allergy=new Allergy();
+			allergy.deserialize(doc);
+			return allergy;
+		}
 		if(type.equals("Appointment")) {
 			Appointment appointment=new Appointment();
 			appointment.deserialize(doc);
 			return appointment;
+		}
+		if(type.equals("Disease")) {
+			Disease disease=new Disease();
+			disease.deserialize(doc);
+			return disease;
+		}
+		if(type.equals("LabPanel")) {
+			LabPanel labpanel=new LabPanel();
+			labpanel.deserialize(doc);
+			return labpanel;
+		}
+		if(type.equals("Medication")) {
+			Medication medication=new Medication();
+			medication.deserialize(doc);
+			return medication;
 		}
 		if(type.equals("Patient")) {
 			Patient patient=new Patient();
@@ -228,6 +263,11 @@ public class Serializing {
 			Pref pref=new Pref();
 			pref.deserialize(doc);
 			return pref;
+		}
+		if(type.equals("Statement")) {
+			Statement statement=new Statement();
+			statement.deserialize(doc);
+			return statement;
 		}
 		if(type.equals("Userod")) {
 			Userod userod=new Userod();

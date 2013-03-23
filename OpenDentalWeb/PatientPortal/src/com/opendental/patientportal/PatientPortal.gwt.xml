@@ -5,6 +5,7 @@
 -->
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
   "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+  
 <module rename-to='patientportal'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
@@ -26,5 +27,4 @@
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.opendental.patientportal.client.ProgramEntry'/>
-
 </module>

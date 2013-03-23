@@ -46,14 +46,29 @@ namespace OpenDentalWebService {
 			}
 			#endregion
 			#region Open Dental Classes
+			if(objectType=="OpenDentBusiness.Allergy") {
+				return Allergy.Serialize((OpenDentBusiness.Allergy)obj);
+			}
 			if(objectType=="OpenDentBusiness.Appointment") {
 				return Appointment.Serialize((OpenDentBusiness.Appointment)obj);
+			}
+			if(objectType=="OpenDentBusiness.Disease") {
+				return Disease.Serialize((OpenDentBusiness.Disease)obj);
+			}
+			if(objectType=="OpenDentBusiness.LabPanel") {
+				return LabPanel.Serialize((OpenDentBusiness.LabPanel)obj);
+			}
+			if(objectType=="OpenDentBusiness.Medication") {
+				return Medication.Serialize((OpenDentBusiness.Medication)obj);
 			}
 			if(objectType=="OpenDentBusiness.Patient") {
 				return Patient.Serialize((OpenDentBusiness.Patient)obj);
 			}
 			if(objectType=="OpenDentBusiness.Pref") {
 				return Pref.Serialize((OpenDentBusiness.Pref)obj);
+			}
+			if(objectType=="OpenDentBusiness.Statement") {
+				return Statement.Serialize((OpenDentBusiness.Statement)obj);
 			}
 			if(objectType=="OpenDentBusiness.Userod") {
 				return Userod.Serialize((OpenDentBusiness.Userod)obj);
@@ -84,14 +99,29 @@ namespace OpenDentalWebService {
 			}
 			#endregion
 			#region Open Dental Classes
+			if(typeName=="Allergy") {
+				return Allergy.Deserialize(xml);
+			}
 			if(typeName=="Appointment") {
 				return Appointment.Deserialize(xml);
+			}
+			if(typeName=="Disease") {
+				return Disease.Deserialize(xml);
+			}
+			if(typeName=="LabPanel") {
+				return LabPanel.Deserialize(xml);
+			}
+			if(typeName=="Medication") {
+				return Medication.Deserialize(xml);
 			}
 			if(typeName=="Patient") {
 				return Patient.Deserialize(xml);
 			}
 			if(typeName=="Pref") {
 				return Pref.Deserialize(xml);
+			}
+			if(typeName=="Statement") {
+				return Statement.Deserialize(xml);
 			}
 			if(typeName=="Userod") {
 				return Userod.Deserialize(xml);
@@ -105,14 +135,29 @@ namespace OpenDentalWebService {
 			string className=classAndMethod.Split('.')[0];
 			string methodName=classAndMethod.Split('.')[1];
 			#region SClasses
+			if(className=="Allergies") {
+				return MethodAllergies(methodName,parameters);
+			}
 			if(className=="Appointments") {
 				return MethodAppointments(methodName,parameters);
+			}
+			if(className=="Diseases") {
+				return MethodDiseases(methodName,parameters);
+			}
+			if(className=="LabPanels") {
+				return MethodLabPanels(methodName,parameters);
+			}
+			if(className=="Medications") {
+				return MethodMedications(methodName,parameters);
 			}
 			if(className=="Patients") {
 				return MethodPatients(methodName,parameters);
 			}
 			if(className=="Prefs") {
 				return MethodPrefs(methodName,parameters);
+			}
+			if(className=="Statements") {
+				return MethodStatements(methodName,parameters);
 			}
 			if(className=="Userods") {
 				return MethodUserods(methodName,parameters);
@@ -124,6 +169,15 @@ namespace OpenDentalWebService {
 		#region Method Calls
 
 		///<summary></summary>
+		private static object MethodAllergies(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="GetActiveAllergiesPatientPortal") {
+				return Allergies.GetActiveAllergiesPatientPortal(Convert.ToInt64(parameters[0]));
+			}
+			throw new NotSupportedException("MethodAllergies, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
 		private static object MethodAppointments(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
 			if(methodName=="RefreshASAP") {
@@ -133,6 +187,33 @@ namespace OpenDentalWebService {
 				return Appointments.GetScheduleAsImage((System.DateTime)parameters[0]);
 			}
 			throw new NotSupportedException("MethodAppointments, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodDiseases(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="GetActiveDiseasesPatientPortal") {
+				return Diseases.GetActiveDiseasesPatientPortal(Convert.ToInt64(parameters[0]));
+			}
+			throw new NotSupportedException("MethodDiseases, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodLabPanels(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="GetAllPatientPortal") {
+				return LabPanels.GetAllPatientPortal(Convert.ToInt64(parameters[0]));
+			}
+			throw new NotSupportedException("MethodLabPanels, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodMedications(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="GetAllMedNamesPatientPortal") {
+				return Medications.GetAllMedNamesPatientPortal(Convert.ToInt64(parameters[0]));
+			}
+			throw new NotSupportedException("MethodMedications, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
@@ -160,6 +241,12 @@ namespace OpenDentalWebService {
 				return Prefs.RefreshCache();
 			}
 			throw new NotSupportedException("MethodPrefs, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodStatements(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			throw new NotSupportedException("MethodStatements, unknown method: "+methodName);
 		}
 
 		///<summary></summary>
