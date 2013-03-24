@@ -80,16 +80,19 @@
 				}
 			}
 		}
+
 	</script>
 </head>
 <body id="bodytag" runat="server">
-<form id="form1" runat="server">
+<form id="form1" runat="server" defaultbutton="ButtonDisableEnterKey">
 <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" EnableScriptGlobalization="true"/>
 <asp:Panel ID="Panel1" runat="server">
 <div>
-
+	<%--This button is used as a dummy, invisible, default button of form1 so that when 
+	the user hits the "Enter" key the form is not submitted. This button does nothing when 
+	it is clicked or more acurately when the click is called when the "Enter" key is hit--%>
+	<asp:Button ID="ButtonDisableEnterKey" runat="server" Text="" style="display:none" />
 	<asp:Button ID="Button1" runat="server" Text="Submit" onclick="Button1_Click" />
-
 </div>
 <asp:Panel ID="Panel3" Height="50px" runat="server" style="position:relative">&nbsp;
 <%--This panel is only to give some space below the button an the edge of the page.--%>
