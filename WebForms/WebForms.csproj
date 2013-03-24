@@ -95,6 +95,7 @@
     <Content Include="app_offlineRemoveThisSuffix.htm" />
     <Content Include="App_Themes\Theme1\Stylesheet1.css" />
     <Content Include="db\sheetsdb.sql" />
+    <Content Include="README.txt" />
     <Content Include="Sheets.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
