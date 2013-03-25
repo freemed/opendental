@@ -421,23 +421,42 @@ namespace OpenDental {
 			//ColsNeeded = number of columns needed
 			//rowsNeeded = number of rows needed
 			//access data as tableBuilder[Y][X], tableBuilder contains all of the table data in a potentially uneven array (technically a list), 
-
-			if(startingPoint.X + ColsNeeded > gridMain.Columns.Count) {
+			//Check for enough columns---------------------------------------------------------------------------------------------------------
+			if(startingPoint.X + ColsNeeded > Table.Columns.Count) {
 				MessageBox.Show(this,Lan.g(this,"Additional columns required to paste")+": "+(startingPoint.X+ColsNeeded-gridMain.Columns.Count));
 				return;
 			}
-			if(gridMain.Rows.Count< startingPoint.Y+RowsNeeded) {
-				//TODO: add rows
-				MessageBox.Show(this,Lan.g(this,"Additional rows required."));
-				return;
-			}
-			//TODO: check for existing content
-			for(int i=0;i<tableBuilder.Count;i++) {
-				for(int j=0;j<tableBuilder[i].Count;j++) {
-					gridMain.Rows[startingPoint.Y+i].Cells[startingPoint.X+j].Text=tableBuilder[i][j];
+			//Check for Content----------------------------------------------------------------------------------------------------------------
+			bool ContentExists=false;
+			for(int x=0;x+startingPoint.X<Table.Columns.Count;x++) {
+				for(int y=0;y+startingPoint.Y<Table.Rows.Count;y++) {
+					ContentExists=ContentExists||!Table.Rows[startingPoint.Y+y][startingPoint.X+x].ToString().Equals("");
 				}
 			}
-			//done
+			if(ContentExists) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue and overwrite existing content?")){
+					return;
+				}
+			}
+			//Add New Rows---------------------------------------------------------------------------------------------------------------------
+			//Must be after check for existing content, otherwise you will add rows when they are not necessary.
+			if(Table.Rows.Count < startingPoint.Y + RowsNeeded) {
+				int NewRowsNeededCount=(startingPoint.Y+RowsNeeded)-Table.Rows.Count;
+				for(int i=0;i<NewRowsNeededCount;i++) {
+					Table.Rows.Add(Table.NewRow());
+				}
+			}
+			//Paste new data into data Table---------------------------------------------------------------------------------------------------
+			for(int i=0;i<tableBuilder.Count;i++) {
+				for(int j=0;j<tableBuilder[i].Count;j++) {
+					//gridMain.Rows[startingPoint.Y+i].Cells[startingPoint.X+j].Text=tableBuilder[i][j];
+					Table.Rows[startingPoint.Y+i][startingPoint.X+j]=tableBuilder[i][j];
+				}
+			}
+			//Redraw Grid
+			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
+			FillGrid();//gridMain.SelectedCell gets cleared.
+			gridMain.SetSelected(newCellSelected);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

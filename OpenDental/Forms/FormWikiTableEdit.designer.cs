@@ -24,17 +24,17 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.groupRow = new System.Windows.Forms.GroupBox();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butRowDelete = new OpenDental.UI.Button();
-			this.butRowInsert = new OpenDental.UI.Button();
-			this.butRowDown = new OpenDental.UI.Button();
-			this.butRowUp = new OpenDental.UI.Button();
 			this.butColumnDelete = new OpenDental.UI.Button();
 			this.butHeaders = new OpenDental.UI.Button();
 			this.butColumnInsert = new OpenDental.UI.Button();
 			this.butColumnRight = new OpenDental.UI.Button();
 			this.butColumnLeft = new OpenDental.UI.Button();
+			this.groupRow = new System.Windows.Forms.GroupBox();
+			this.butRowDelete = new OpenDental.UI.Button();
+			this.butRowInsert = new OpenDental.UI.Button();
+			this.butRowDown = new OpenDental.UI.Button();
+			this.butRowUp = new OpenDental.UI.Button();
+			this.butDelete = new OpenDental.UI.Button();
 			this.butManEdit = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butOK = new OpenDental.UI.Button();
@@ -58,93 +58,6 @@ namespace OpenDental{
 			this.groupBox1.TabIndex = 28;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Column";
-			// 
-			// groupRow
-			// 
-			this.groupRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupRow.Controls.Add(this.butRowDelete);
-			this.groupRow.Controls.Add(this.butRowInsert);
-			this.groupRow.Controls.Add(this.butRowDown);
-			this.groupRow.Controls.Add(this.butRowUp);
-			this.groupRow.Location = new System.Drawing.Point(861, 214);
-			this.groupRow.Name = "groupRow";
-			this.groupRow.Size = new System.Drawing.Size(88, 141);
-			this.groupRow.TabIndex = 32;
-			this.groupRow.TabStop = false;
-			this.groupRow.Text = "Row";
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 589);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 24);
-			this.butDelete.TabIndex = 36;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butRowDelete
-			// 
-			this.butRowDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowDelete.Autosize = true;
-			this.butRowDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowDelete.CornerRadius = 4F;
-			this.butRowDelete.Location = new System.Drawing.Point(8, 109);
-			this.butRowDelete.Name = "butRowDelete";
-			this.butRowDelete.Size = new System.Drawing.Size(71, 24);
-			this.butRowDelete.TabIndex = 32;
-			this.butRowDelete.Text = "Delete";
-			this.butRowDelete.Click += new System.EventHandler(this.butRowDelete_Click);
-			// 
-			// butRowInsert
-			// 
-			this.butRowInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowInsert.Autosize = true;
-			this.butRowInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowInsert.CornerRadius = 4F;
-			this.butRowInsert.Location = new System.Drawing.Point(8, 79);
-			this.butRowInsert.Name = "butRowInsert";
-			this.butRowInsert.Size = new System.Drawing.Size(71, 24);
-			this.butRowInsert.TabIndex = 31;
-			this.butRowInsert.Text = "Add Row";
-			this.butRowInsert.Click += new System.EventHandler(this.butRowAdd_Click);
-			// 
-			// butRowDown
-			// 
-			this.butRowDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowDown.Autosize = true;
-			this.butRowDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowDown.CornerRadius = 4F;
-			this.butRowDown.Location = new System.Drawing.Point(8, 49);
-			this.butRowDown.Name = "butRowDown";
-			this.butRowDown.Size = new System.Drawing.Size(44, 24);
-			this.butRowDown.TabIndex = 30;
-			this.butRowDown.Text = "Down";
-			this.butRowDown.Click += new System.EventHandler(this.butRowDown_Click);
-			// 
-			// butRowUp
-			// 
-			this.butRowUp.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowUp.Autosize = true;
-			this.butRowUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowUp.CornerRadius = 4F;
-			this.butRowUp.Location = new System.Drawing.Point(8, 19);
-			this.butRowUp.Name = "butRowUp";
-			this.butRowUp.Size = new System.Drawing.Size(44, 24);
-			this.butRowUp.TabIndex = 29;
-			this.butRowUp.Text = "Up";
-			this.butRowUp.Click += new System.EventHandler(this.butRowUp_Click);
 			// 
 			// butColumnDelete
 			// 
@@ -215,6 +128,93 @@ namespace OpenDental{
 			this.butColumnLeft.TabIndex = 29;
 			this.butColumnLeft.Text = "L";
 			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
+			// 
+			// groupRow
+			// 
+			this.groupRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupRow.Controls.Add(this.butRowDelete);
+			this.groupRow.Controls.Add(this.butRowInsert);
+			this.groupRow.Controls.Add(this.butRowDown);
+			this.groupRow.Controls.Add(this.butRowUp);
+			this.groupRow.Location = new System.Drawing.Point(861, 214);
+			this.groupRow.Name = "groupRow";
+			this.groupRow.Size = new System.Drawing.Size(88, 141);
+			this.groupRow.TabIndex = 32;
+			this.groupRow.TabStop = false;
+			this.groupRow.Text = "Row";
+			// 
+			// butRowDelete
+			// 
+			this.butRowDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRowDelete.Autosize = true;
+			this.butRowDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRowDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRowDelete.CornerRadius = 4F;
+			this.butRowDelete.Location = new System.Drawing.Point(8, 109);
+			this.butRowDelete.Name = "butRowDelete";
+			this.butRowDelete.Size = new System.Drawing.Size(71, 24);
+			this.butRowDelete.TabIndex = 32;
+			this.butRowDelete.Text = "Delete";
+			this.butRowDelete.Click += new System.EventHandler(this.butRowDelete_Click);
+			// 
+			// butRowInsert
+			// 
+			this.butRowInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRowInsert.Autosize = true;
+			this.butRowInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRowInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRowInsert.CornerRadius = 4F;
+			this.butRowInsert.Location = new System.Drawing.Point(8, 79);
+			this.butRowInsert.Name = "butRowInsert";
+			this.butRowInsert.Size = new System.Drawing.Size(71, 24);
+			this.butRowInsert.TabIndex = 31;
+			this.butRowInsert.Text = "Add Row";
+			this.butRowInsert.Click += new System.EventHandler(this.butRowAdd_Click);
+			// 
+			// butRowDown
+			// 
+			this.butRowDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRowDown.Autosize = true;
+			this.butRowDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRowDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRowDown.CornerRadius = 4F;
+			this.butRowDown.Location = new System.Drawing.Point(8, 49);
+			this.butRowDown.Name = "butRowDown";
+			this.butRowDown.Size = new System.Drawing.Size(44, 24);
+			this.butRowDown.TabIndex = 30;
+			this.butRowDown.Text = "Down";
+			this.butRowDown.Click += new System.EventHandler(this.butRowDown_Click);
+			// 
+			// butRowUp
+			// 
+			this.butRowUp.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRowUp.Autosize = true;
+			this.butRowUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butRowUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRowUp.CornerRadius = 4F;
+			this.butRowUp.Location = new System.Drawing.Point(8, 19);
+			this.butRowUp.Name = "butRowUp";
+			this.butRowUp.Size = new System.Drawing.Size(44, 24);
+			this.butRowUp.TabIndex = 29;
+			this.butRowUp.Text = "Up";
+			this.butRowUp.Click += new System.EventHandler(this.butRowUp_Click);
+			// 
+			// butDelete
+			// 
+			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butDelete.Autosize = true;
+			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.CornerRadius = 4F;
+			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
+			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDelete.Location = new System.Drawing.Point(12, 589);
+			this.butDelete.Name = "butDelete";
+			this.butDelete.Size = new System.Drawing.Size(75, 24);
+			this.butDelete.TabIndex = 36;
+			this.butDelete.Text = "Delete";
+			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
 			// butManEdit
 			// 
@@ -290,7 +290,7 @@ namespace OpenDental{
 			this.butPaste.Name = "butPaste";
 			this.butPaste.Size = new System.Drawing.Size(88, 24);
 			this.butPaste.TabIndex = 37;
-			this.butPaste.Text = "Paste";
+			this.butPaste.Text = "Paste Cells";
 			this.butPaste.Click += new System.EventHandler(this.butPaste_Click);
 			// 
 			// FormWikiTableEdit

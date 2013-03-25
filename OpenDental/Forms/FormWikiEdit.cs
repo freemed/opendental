@@ -644,47 +644,42 @@ namespace OpenDental {
 			//Although this is rarely needed, it might still come in handy in certain cases, like paste, or when user doesn't add the |} until later, and other hacks.
 			matches=Regex.Matches(s,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
 			foreach(Match match in matches) {
-				lines=match.Value.Split(new string[] {"\r\n"},StringSplitOptions.None);
-				if(lines[0]!="{|") {
+				lines=match.Value.Split(new string[] {"{|","|-","|}"},StringSplitOptions.RemoveEmptyEntries);
+				for(int i=0;i<lines.Length;i++){
+					lines[i]=lines[i].Trim();//remove carriage returns
+				}
+				if(!match.Value.StartsWith("{|")) {
 					MsgBox.Show(this,"The first line of a table markup section must be exactly {|, with no additional characters.");
 					return false;
 				}
-				if(!lines[1].StartsWith("!")) {
+				if(!lines[0].StartsWith("!")) {
 					MsgBox.Show(this,"The second line of a table markup section must start with ! to indicate column headers.");
 					return false;
 				}
-				if(lines[1].StartsWith("! ")) {
+				if(lines[0].StartsWith("! ")) {
 					MsgBox.Show(this,"In the table, at line 2, there cannot be a space after the first !");
 					return false;
 				}
-				string[] cells=lines[1].Substring(1).Split(new string[] { "!!" },StringSplitOptions.None);//this also strips off the leading !
+				string[] cells=lines[0].Substring(1).Split(new string[] { "!!" },StringSplitOptions.None);//this also strips off the leading !
 				for(int c=0;c<cells.Length;c++) {
 					if(!Regex.IsMatch(cells[c],@"^(Width="")\d+""\|")) {//e.g. Width="90"| 
 						MsgBox.Show(this,"In the table markup, each header must be formatted like this: Width=\"#\"|...");
 						return false;
 					}
 				}
-				for(int i=2;i<lines.Length-1;i++) {//loop through the lines after the header
-					if((i % 2)==0) {//even row
-						if(lines[i]!="|-") {
-							MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", |- was expected, but this was found instead:")+lines[i]);
-							return false;
-						}
-					}
-					else {//odd row
-						if(!lines[i].StartsWith("|")) {
+				for(int i=1;i<lines.Length;i++) {//loop through the lines after the header
+					if(!lines[i].StartsWith("|")) {
 							MessageBox.Show(Lan.g(this,"Table rows must start with |.  At line ")+(i+1).ToString()+Lan.g(this,", this was found instead:")+lines[i]);
 							return false;
-						}
+					}
 						//if(lines[i].StartsWith("| ")) {
 						//	MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", there cannot be a space after the first |."));
 						//	return false;
 						//}
 						//lines[i].in
 						//I guess we don't really care what they put in a row.  We can just interpret garbage as a single cell.
-					}
 				}
-				if(lines[lines.Length-1]!="|}") {
+				if(!match.Value.EndsWith("\r\n|}")) {
 					MsgBox.Show(this,"The last line of a table markup section must be exactly |}, with no additional characters.");//this doesn't work since the match stops after |}.
 					return false;
 				}
