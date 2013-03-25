@@ -114,7 +114,7 @@ namespace OpenDental.Eclaims{
 			Fill(74,"PlaceIsOffice");
 			Fill(75,"PlaceIsHospADA2002");
 			Fill(76,"PlaceIsExtCareFacilityADA2002");
-			Fill(77,"PlaceIsOtherADA2002");
+			Fill(77,"PlaceNumericCode");//Previously they only accepted 'X' or blank, but as of 03/25/2013 they accept place of service code too.
 			Fill(78,"PayToDentistCity");
 			Fill(79,"PayToDentistST");
 			Fill(80,"PayToDentistZip");
