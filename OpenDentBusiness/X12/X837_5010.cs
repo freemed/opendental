@@ -1139,8 +1139,16 @@ namespace OpenDentBusiness
 					WriteNM1_DN(sw,claim.ReferringProv);
 					//2310A PRV: (dental) Referring Provider Specialty Information. Situational.
 					//2310A REF: G2 (dental) Referring Provider Secondary Identification. Situational.
-					if(claim.ProvTreat!=claim.ProvBill) {
-						//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider. Emdeon will reject the claim if this segment is the same as the billing provider for all claims in the batch.
+					bool sendClaimTreatProv=false;
+					if(claim.ProvTreat!=claim.ProvBill) { //Emdeon will reject the claim if this segment is the same as the billing provider for all claims in the batch.
+						sendClaimTreatProv=true;//Standard X12 behavior to only include the treating provider if it is different than the billing provider.
+					}
+					//The following clearinghouses always want the claim treating provider, even if it is the same as the billing provider.
+					if(IsOfficeAlly(clearhouse)) {
+						sendClaimTreatProv=true;
+					}
+					if(sendClaimTreatProv) {
+						//2310B NM1: 82 (dental) Rendering Provider Name. Situational. Only required if different from the billing provider.
 						WriteNM1Provider("82",sw,provTreat);
 						//2310B PRV: PE (dental) Rendering Provider Specialty Information.
 						WritePRV_PE(sw,provTreat);
