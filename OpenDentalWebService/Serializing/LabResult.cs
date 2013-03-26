@@ -11,6 +11,10 @@ namespace OpenDentalWebService {
 		///<summary></summary>
 		public static string Serialize(OpenDentBusiness.LabResult labresult) {
 			StringBuilder sb=new StringBuilder();
+			if(labresult==null) {
+				sb.Append("<null />");
+				return sb.ToString();
+			}
 			sb.Append("<LabResult>");
 			sb.Append("<LabResultNum>").Append(labresult.LabResultNum).Append("</LabResultNum>");
 			sb.Append("<LabPanelNum>").Append(labresult.LabPanelNum).Append("</LabPanelNum>");

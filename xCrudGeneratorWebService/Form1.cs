@@ -63,6 +63,7 @@ namespace xCrudGeneratorWebService {
 				|| typeClass==typeof(Appointment)
 				|| typeClass==typeof(Disease)
 				|| typeClass==typeof(LabPanel)
+				|| typeClass==typeof(LabResult)
 				|| typeClass==typeof(Medication)
 				|| typeClass==typeof(Patient)
 				|| typeClass==typeof(Pref)
@@ -266,9 +267,11 @@ namespace xCrudGeneratorWebService {
 		private void StartJavaSerial(StringBuilder strb) {
 			#region JavaSerializing header
 			strb.Append("package com.opendental.opendentbusiness.remoting;"+rn+rn
-				+"import java.util.ArrayList;"+rn+rn
+				+"import java.util.ArrayList;"+rn
+				+"import java.util.Date;"+rn+rn
 				+"import com.google.gwt.core.client.Scheduler;"+rn
 				+"import com.google.gwt.core.client.Scheduler.RepeatingCommand;"+rn
+				+"import com.google.gwt.i18n.client.DateTimeFormat;"+rn
 				+"import com.google.gwt.xml.client.Document;"+rn
 				+"import com.google.gwt.xml.client.Element;"+rn
 				+"import com.google.gwt.xml.client.Node;"+rn
@@ -369,12 +372,17 @@ namespace xCrudGeneratorWebService {
 					+t2+"if(qualifiedName.equals(\"D\") || qualifiedName.equals(\"java.lang.Double\")) {//double  \"D\""+rn
 						+t3+"return \"<double>\"+(Double)obj+\"</double>\";"+rn
 					+t2+"}"+rn
-					+t2+"if(qualifiedName.equals(\"java.lang.String\")) {//String  \"java.lang.String\""+rn
+					+t2+"if(qualifiedName.equals(\"java.lang.String\")) {//String"+rn
 						+t3+"return \"<string>\"+(String)obj+\"</string>\";"+rn
 					+t2+"}"+rn
-					+t2+"if(qualifiedName.equals(\"java.util.Date\")) {//Date  \"java.util.Date\""+rn
-						+t3+"// TODO Enhance serializer to handle Date objects."+rn
-						+t3+"return \"<DateTime>0001-01-01</DateTime>\";"+rn
+					+t2+"if(qualifiedName.equals(\"java.util.Date\")) {//Date"+rn
+						+t3+"return \"<DateTime>\"+DateTimeFormat.getFormat(\"yyyyMMddHHmmss\").format((Date)obj)+\"</DateTime>\";"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"java.util.ArrayList\")) {//ArrayList<T>"+rn
+						+t3+"return getSerializedArrayList(obj);"+rn
+					+t2+"}"+rn
+					+t2+"if(qualifiedName.equals(\"com.opendental.opendentbusiness.data.DataTable\")) {//ArrayList<T>"+rn
+						+t3+"// TODO Enhance web service to handle DataTable's as parameters."+rn
 					+t2+"}"+rn
 					+t2+"//Arrays------------------------------------------------------------------------------------------------------------"+rn
 					+t2+"//Multidimensional arrays have equal number of brackets. Ex: Account[][] = [[L..."+rn
@@ -389,6 +397,18 @@ namespace xCrudGeneratorWebService {
 		private void MiddleJavaSerial(StringBuilder strb) {
 			#region GetSerializedObject footer
 			strb.Append(t2+"throw new Exception(\"getSerializedObject, unsupported type: \"+qualifiedName);"+rn
+				+t+"}"+rn+rn);
+			#endregion
+			#region GetSerializedArrayList
+			strb.Append(t+"@SuppressWarnings(\"unchecked\")"+rn
+				+t+"private static String getSerializedArrayList(Object obj) throws Exception {"+rn
+					+t2+"String result=\"<List>\";"+rn
+					+t2+"ArrayList<Object> listObjs=(ArrayList<Object>)obj;"+rn
+					+t2+"for(int i=0;i<listObjs.size();i++) {"+rn
+						+t3+"result+=getSerializedObject(listObjs.get(i));"+rn
+					+t2+"}"+rn
+					+t2+"result+=\"</List>\";"+rn
+					+t2+"return result;"+rn
 				+t+"}"+rn+rn);
 			#endregion
 			#region GetDeserializedObject
@@ -1112,53 +1132,56 @@ namespace xCrudGeneratorWebService {
 		///<summary>All of the primitive/general types handled by serialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
 		private void GetPrimGenSerializerTypes(StringBuilder strb) {
 			strb.Append(t3+"switch(objectType) {"+rn
-				+t4+@"case ""int"":"+rn
-				+t4+@"case ""System.Int32"":"+rn
-				+t4+@"case ""long"":"+rn
-				+t4+@"case ""System.Int64"":"+rn     //long
-				+t4+@"case ""bool"":"+rn
-				+t4+@"case ""System.Boolean"":"+rn
-				+t4+@"case ""string"":"+rn
-				+t4+@"case ""System.String"":"+rn
-				+t4+@"case ""char"":"+rn
-				+t4+@"case ""System.Char"":"+rn
-				+t4+@"case ""Single"":"+rn
-				+t4+@"case ""System.Single"":"+rn    //float
-				+t4+@"case ""byte"":"+rn
-				+t4+@"case ""System.Byte"":"+rn
-				+t4+@"case ""double"":"+rn
-				+t4+@"case ""System.Double"":"+rn
-				+t4+@"case ""DataTable"":"+rn
-				+t5+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
+					+t4+@"case ""int"":"+rn
+					+t4+@"case ""System.Int32"":"+rn
+					+t4+@"case ""long"":"+rn
+					+t4+@"case ""System.Int64"":"+rn     //long
+					+t4+@"case ""bool"":"+rn
+					+t4+@"case ""System.Boolean"":"+rn
+					+t4+@"case ""string"":"+rn
+					+t4+@"case ""System.String"":"+rn
+					+t4+@"case ""char"":"+rn
+					+t4+@"case ""System.Char"":"+rn
+					+t4+@"case ""Single"":"+rn
+					+t4+@"case ""System.Single"":"+rn    //float
+					+t4+@"case ""byte"":"+rn
+					+t4+@"case ""System.Byte"":"+rn
+					+t4+@"case ""double"":"+rn
+					+t4+@"case ""System.Double"":"+rn
+					+t4+@"case ""DataTable"":"+rn
+						+t5+"return aaGeneralTypes.Serialize(objectType,obj);"+rn
 				+t3+"}"+rn);
 			//Lists.
 			strb.Append(t3+"if(objectType.StartsWith(\"List\")) {//Lists."+rn
-				+t4+"return aaGeneralTypes.SerializeList(objectType,obj);"+rn
+					+t4+"return aaGeneralTypes.SerializeList(objectType,obj);"+rn
 				+t3+"}"+rn);
 			//Arrays.
 			strb.Append(t3+"if(objectType.Contains(\"[\")) {//Arrays."+rn
-				+t4+"return aaGeneralTypes.SerializeArray(objectType,obj);"+rn
+					+t4+"return aaGeneralTypes.SerializeArray(objectType,obj);"+rn
 				+t3+"}"+rn);
 		}
 
 		///<summary>All of the primitive/general types handled by deserialization.  Any new primitive/general class should be manually added to this section of the crud.</summary>
 		private void GetPrimGenDeserializerTypes(StringBuilder strb) {
 			strb.Append(t3+"switch(typeName) {"+rn
-				+t4+@"case ""int"":"+rn
-				+t4+@"case ""long"":"+rn
-				+t4+@"case ""bool"":"+rn
-				+t4+@"case ""string"":"+rn
-				+t4+@"case ""char"":"+rn
-				+t4+@"case ""float"":"+rn
-				+t4+@"case ""byte"":"+rn
-				+t4+@"case ""double"":"+rn
-				+t4+@"case ""DateTime"":"+rn
-				+t4+@"case ""List&lt;"":"+rn
-				+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
+					+t4+@"case ""int"":"+rn
+					+t4+@"case ""long"":"+rn
+					+t4+@"case ""bool"":"+rn
+					+t4+@"case ""string"":"+rn
+					+t4+@"case ""char"":"+rn
+					+t4+@"case ""float"":"+rn
+					+t4+@"case ""byte"":"+rn
+					+t4+@"case ""double"":"+rn
+					+t4+@"case ""DateTime"":"+rn
+						+t5+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
+				+t3+"}"+rn);
+			//Lists.
+				strb.Append(t3+"if(typeName.StartsWith(\"List%3C\")) {//Lists"+rn
+					+t4+"return aaGeneralTypes.DeserializeList(xml);"+rn
 				+t3+"}"+rn);
 			//Arrays.
 			strb.Append(t3+"if(typeName.Contains(\"[\")) {//Arrays."+rn
-				+t4+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
+					+t4+"return aaGeneralTypes.Deserialize(typeName,xml);"+rn
 				+t3+"}"+rn);
 		}
 

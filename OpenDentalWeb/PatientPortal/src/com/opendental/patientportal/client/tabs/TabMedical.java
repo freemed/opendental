@@ -3,6 +3,7 @@ package com.opendental.patientportal.client.tabs;
 import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -13,11 +14,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.opendental.opendentbusiness.data.DataTable;
 import com.opendental.opendentbusiness.remoting.RequestHelper.RequestCallbackResult;
 import com.opendental.opendentbusiness.tabletypes.LabPanel;
+import com.opendental.opendentbusiness.tabletypes.LabResult;
 import com.opendental.opendentbusiness.tabletypes.Patient;
 import com.opendental.patientportal.client.MsgBox;
 import com.opendental.patientportal.client.datainterface.Allergies;
 import com.opendental.patientportal.client.datainterface.Diseases;
 import com.opendental.patientportal.client.datainterface.LabPanels;
+import com.opendental.patientportal.client.datainterface.LabResults;
 import com.opendental.patientportal.client.datainterface.Medications;
 
 public class TabMedical extends Composite {
@@ -35,15 +38,14 @@ public class TabMedical extends Composite {
 	@UiField Label labelProblems;
 	@UiField Label labelAllergies;
 	private Patient patCur;
+	private ArrayList<LabPanel> listPanels;
+	private ArrayList<LabResult> listResults;
 	
 	public TabMedical(Patient pat) {
 		patCur=pat;
 		//Initialize the UI binder.
 		uiBinder.createAndBindUi(this);
 		getLabPanels();
-		getMedications();
-		getProblems();
-		getAllergies();
 		initWidget(panelContainer);
 	}
 
@@ -54,7 +56,31 @@ public class TabMedical extends Composite {
 	private class getLabPanels_Callback implements RequestCallbackResult {
 		@SuppressWarnings("unchecked")
 		public void onSuccess(Object obj) {
-			fillLabPanels((ArrayList<LabPanel>)obj);
+			listPanels=(ArrayList<LabPanel>)obj;
+			getLabResults();
+		}
+		
+		public void onError(String error) {
+			MsgBox.show(error);
+		}		
+	}
+	
+	private void getLabResults() {
+		ArrayList<Integer> panelNums=new ArrayList<Integer>();
+		if(listPanels!=null) {//If there are lab panels, get the results.
+			for(int i=0;i<listPanels.size();i++) {
+				panelNums.add(listPanels.get(i).LabPanelNum);
+			}
+		}
+		LabResults.getResultsFromPanelsPatientPortal(panelNums, new getLabResults_Callback());
+	}
+	
+	private class getLabResults_Callback implements RequestCallbackResult {
+		@SuppressWarnings("unchecked")
+		public void onSuccess(Object obj) {
+			listResults=(ArrayList<LabResult>) obj;
+			fillLabPanels();
+			getMedications();
 		}
 		
 		public void onError(String error) {
@@ -62,8 +88,11 @@ public class TabMedical extends Composite {
 		}		
 	}
 
-	private void fillLabPanels(ArrayList<LabPanel> labPanels) {
-		int labPanelCount=labPanels.size();
+	private void fillLabPanels() {
+		if(listPanels==null) {
+			return;
+		}
+		int labPanelCount=listPanels.size();
 		if(labPanelCount==0) {
 			return;
 		}
@@ -74,24 +103,42 @@ public class TabMedical extends Composite {
 		gridPanels.setText(0, 0, "Lab Name & Address");
 		gridPanels.setText(0, 1, "Lab Results");
 		for(int i=0;i<labPanelCount;i++) {
-			gridPanels.setText(i+1, 0, "Lab 1 Name and Address");
-			if(true) {// TODO Enhance to determine if results exist for the related lab.
-				Grid gridResults=new Grid(4,3);// TODO Dynamically determine the number of rows.
-				for(int j=0;j<4;j++) {
-					if(j==0) {
-						//Set the headers.
-						gridResults.setText(0, 0, "Date Time");
-						gridResults.setText(0, 1, "Test Name");
-						gridResults.setText(0, 2, "Observed Value");
-						continue;
-					}
-					gridResults.setText(j, 0, "3/19/2013 1:37:29 PM");
-					gridResults.setText(j, 1, "Performed Name");
-					gridResults.setText(j, 2, "Result Value");
-				}
-				gridPanels.setWidget(i+1, 1, gridResults);
+			gridPanels.setText(i+1, 0, listPanels.get(i).LabNameAddress);
+			gridPanels.setWidget(i+1, 1, getGridResultsForPanel(listPanels.get(i).LabPanelNum));
+		}
+	}
+	
+	/** Gets a grid of lab results for the panel passed in.  Only used for display purposes. */
+	@SuppressWarnings("deprecation")
+	private Grid getGridResultsForPanel(int panelNum) {
+		Grid gridResults=new Grid();
+		if(listResults==null) {
+			return gridResults;
+		}
+		ArrayList<LabResult> listResultMatches=new ArrayList<LabResult>();
+		//Loop through all of the results from the database and see if any results exist for the panel.
+		for(int i=0;i<listResults.size();i++) {
+			if(listResults.get(i).LabPanelNum==panelNum) {
+				listResultMatches.add(listResults.get(i));
 			}
 		}
+		int rows=listResultMatches.size()+1;//+1 for the column headers.
+		int columns=3;
+		gridResults.resize(rows, columns);
+		//Set the headers.
+		gridResults.setText(0, 0, "Date Time");
+		gridResults.setText(0, 1, "Test Name");
+		gridResults.setText(0, 2, "Observed Value");
+		for(int i=0;i<listResultMatches.size();i++) {
+			String dateTimeTest="";
+			if(listResultMatches.get(i).DateTimeTest.getYear()>-20) {//If patient was born after 1880.  1880-1900 = -20
+				dateTimeTest=DateTimeFormat.getFormat("MM/dd/yyyy hh:mm:ss a").format(listResultMatches.get(i).DateTimeTest);
+			}
+			gridResults.setText(i+1, 0, dateTimeTest);
+			gridResults.setText(i+1, 1, listResultMatches.get(i).TestName);
+			gridResults.setText(i+1, 2, listResultMatches.get(i).ObsValue);
+		}
+		return gridResults;
 	}
 
 	private void getMedications() {
@@ -106,6 +153,7 @@ public class TabMedical extends Composite {
 				medNames.add(table.getCellText(i, "MedName"));
 			}
 			fillMedications(medNames);
+			getProblems();
 		}
 		
 		public void onError(String error) {
@@ -140,6 +188,7 @@ public class TabMedical extends Composite {
 				problems.add(table.getCellText(i, "Description"));
 			}
 			fillProblems(problems);
+			getAllergies();
 		}
 		
 		public void onError(String error) {

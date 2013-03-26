@@ -58,6 +58,9 @@ namespace OpenDentalWebService {
 			if(objectType=="OpenDentBusiness.LabPanel") {
 				return LabPanel.Serialize((OpenDentBusiness.LabPanel)obj);
 			}
+			if(objectType=="OpenDentBusiness.LabResult") {
+				return LabResult.Serialize((OpenDentBusiness.LabResult)obj);
+			}
 			if(objectType=="OpenDentBusiness.Medication") {
 				return Medication.Serialize((OpenDentBusiness.Medication)obj);
 			}
@@ -91,8 +94,10 @@ namespace OpenDentalWebService {
 				case "byte":
 				case "double":
 				case "DateTime":
-				case "List&lt;":
 					return aaGeneralTypes.Deserialize(typeName,xml);
+			}
+			if(typeName.StartsWith("List%3C")) {//Lists
+				return aaGeneralTypes.DeserializeList(xml);
 			}
 			if(typeName.Contains("[")) {//Arrays.
 				return aaGeneralTypes.Deserialize(typeName,xml);
@@ -110,6 +115,9 @@ namespace OpenDentalWebService {
 			}
 			if(typeName=="LabPanel") {
 				return LabPanel.Deserialize(xml);
+			}
+			if(typeName=="LabResult") {
+				return LabResult.Deserialize(xml);
 			}
 			if(typeName=="Medication") {
 				return Medication.Deserialize(xml);
@@ -146,6 +154,9 @@ namespace OpenDentalWebService {
 			}
 			if(className=="LabPanels") {
 				return MethodLabPanels(methodName,parameters);
+			}
+			if(className=="LabResults") {
+				return MethodLabResults(methodName,parameters);
 			}
 			if(className=="Medications") {
 				return MethodMedications(methodName,parameters);
@@ -205,6 +216,15 @@ namespace OpenDentalWebService {
 				return LabPanels.GetAllPatientPortal(Convert.ToInt64(parameters[0]));
 			}
 			throw new NotSupportedException("MethodLabPanels, unknown method: "+methodName);
+		}
+
+		///<summary></summary>
+		private static object MethodLabResults(string methodName,List<object> parameters) {
+			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
+			if(methodName=="GetResultsFromPanelsPatientPortal") {
+				return LabResults.GetResultsFromPanelsPatientPortal(((List<object>)parameters[0]).ConvertAll<int>(i=>(int)i).ConvertAll<long>(i=>(long)i));
+			}
+			throw new NotSupportedException("MethodLabResults, unknown method: "+methodName);
 		}
 
 		///<summary></summary>

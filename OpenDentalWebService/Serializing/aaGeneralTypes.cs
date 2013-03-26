@@ -75,13 +75,9 @@ namespace OpenDentalWebService {
 							case "DateTime":
 								return OpenDentBusiness.PIn.DateT(reader.ReadString());
 						}
-						//List<?>-----------------------------------------------------------------------
-						if(typeName.StartsWith("List&lt;")) {
-							return "";//Not sure how to handle lists of objects without reflection just yet...
-						}
 						//Arrays------------------------------------------------------------------------
 						if(typeName.Contains("[")) {
-							return "";//TODO: This will need to be enhanced to handle simple and possibly multidimensional arrays.
+							//TODO: This will need to be enhanced to handle simple and possibly multidimensional arrays.
 						}
 					}
 				}
@@ -145,6 +141,27 @@ namespace OpenDentalWebService {
 			}
 			result.Append("</List>");
 			return result.ToString();
+		}
+
+		///<summary>Pass in the type of list and the list object and this method will serialize it.  The object within the list must be fully qualified.</summary>
+		public static List<object> DeserializeList(string xml) {
+			List<object> listObject=new List<object>();
+			string typeName="";
+			//Find out what type of list this is.
+			using(XmlReader reader=XmlReader.Create(new StringReader(xml))) {
+				reader.MoveToContent();//Moves to root node, <List>.
+				reader.Read();//Moves to first objects node, this will be the type of the object list.
+				typeName=reader.Name;
+			}
+			//Now that we know the type of list, loop through all of the sibling nodes to fill the object list.
+			using(XmlReader reader=XmlReader.Create(new StringReader(xml))) {
+				if(reader.ReadToDescendant(typeName)) {
+					do {
+						listObject.Add(DtoMethods.CallClassDeserializer(typeName,reader.ReadOuterXml()));
+					} while(reader.ReadToNextSibling(typeName));
+				}
+			}
+			return listObject;
 		}
 
 		///<summary>Helper function that will serialize any array.</summary>

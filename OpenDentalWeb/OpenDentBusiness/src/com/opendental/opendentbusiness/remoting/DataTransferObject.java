@@ -38,7 +38,7 @@ public class DataTransferObject {
 		xml.append("<Params>");
 		for(int i=0;i<Params.length;i++) {//Loop through all the dto objects.
 			xml.append("<DtoObject>");
-			xml.append("<TypeName>"+Serializing.escapeForXml(Params[i].TypeName)+"</TypeName>");
+			xml.append("<TypeName>"+Serializing.escapeForURL(Params[i].TypeName)+"</TypeName>");
 			xml.append("<Obj>");
 			xml.append(Params[i].ObjSerialized);//Already valid XML that does not need escaping.
 			xml.append("</Obj>");
