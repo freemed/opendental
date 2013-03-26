@@ -134,6 +134,7 @@ namespace OpenDental{
 			// 
 			this.menuWebFormsRight.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemViewAllSheets});
+			this.menuWebFormsRight.Popup += new System.EventHandler(this.menuWebFormsRight_Popup);
 			// 
 			// menuItemViewAllSheets
 			// 

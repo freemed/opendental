@@ -505,6 +505,15 @@ namespace OpenDental {
 			formSI.ShowDialog();
 		}*/
 
+		private void menuWebFormsRight_Popup(object sender,EventArgs e) {
+			if(gridMain.SelectedIndices.Length==0) {
+				menuItemViewAllSheets.Visible=false;
+			}
+			else {
+				menuItemViewAllSheets.Visible=true;
+			}
+		}
+
 		private void menuItemViewAllSheets_Click(object sender,EventArgs e) {
 			long sheetNum=(long)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
 			Sheet sheet=Sheets.GetSheet(sheetNum);
