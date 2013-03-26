@@ -644,10 +644,7 @@ namespace OpenDental {
 			//Although this is rarely needed, it might still come in handy in certain cases, like paste, or when user doesn't add the |} until later, and other hacks.
 			matches=Regex.Matches(s,@"\{\|(.+?)\|\}",RegexOptions.Singleline);
 			foreach(Match match in matches) {
-				lines=match.Value.Split(new string[] {"{|","|-","|}"},StringSplitOptions.RemoveEmptyEntries);
-				for(int i=0;i<lines.Length;i++){
-					lines[i]=lines[i].Trim();//remove carriage returns
-				}
+				lines=match.Value.Split(new string[] { "{|\r\n","\r\n|-\r\n","\r\n|}" },StringSplitOptions.RemoveEmptyEntries);
 				if(!match.Value.StartsWith("{|")) {
 					MsgBox.Show(this,"The first line of a table markup section must be exactly {|, with no additional characters.");
 					return false;
@@ -669,15 +666,15 @@ namespace OpenDental {
 				}
 				for(int i=1;i<lines.Length;i++) {//loop through the lines after the header
 					if(!lines[i].StartsWith("|")) {
-							MessageBox.Show(Lan.g(this,"Table rows must start with |.  At line ")+(i+1).ToString()+Lan.g(this,", this was found instead:")+lines[i]);
-							return false;
+						MessageBox.Show(Lan.g(this,"Table rows must start with |.  At line ")+(i+1).ToString()+Lan.g(this,", this was found instead:")+lines[i]);
+						return false;
 					}
-						//if(lines[i].StartsWith("| ")) {
-						//	MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", there cannot be a space after the first |."));
-						//	return false;
-						//}
-						//lines[i].in
-						//I guess we don't really care what they put in a row.  We can just interpret garbage as a single cell.
+					//if(lines[i].StartsWith("| ")) {
+					//	MessageBox.Show(Lan.g(this,"In the table, at line ")+(i+1).ToString()+Lan.g(this,", there cannot be a space after the first |."));
+					//	return false;
+					//}
+					//lines[i].in
+					//I guess we don't really care what they put in a row.  We can just interpret garbage as a single cell.
 				}
 				if(!match.Value.EndsWith("\r\n|}")) {
 					MsgBox.Show(this,"The last line of a table markup section must be exactly |}, with no additional characters.");//this doesn't work since the match stops after |}.

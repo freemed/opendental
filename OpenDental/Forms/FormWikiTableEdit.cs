@@ -51,10 +51,7 @@ namespace OpenDental {
 			ColWidths=new List<int>();
 			DataRow row;
 			string[] cells;
-			string[] lines=Markup.Split(new string[] { "{|","|-","|}" },StringSplitOptions.RemoveEmptyEntries);
-			for(int i=0;i<lines.Length;i++) {
-				lines[i]=lines[i].Trim();
-			}
+			string[] lines=Markup.Split(new string[] { "{|\r\n","\r\n|-\r\n","\r\n|}" },StringSplitOptions.RemoveEmptyEntries);
 			for(int i=0;i<lines.Length;i++) {
 				if(lines[i].StartsWith("!")) {//header
 					lines[i]=lines[i].Substring(1);//strips off the leading !
