@@ -690,6 +690,15 @@ namespace OpenDental {
 		///<summary>Recursive.</summary>
 		private void ValidateNodes(XmlNodeList nodes) {
 			foreach(XmlNode node in nodes) {
+				if(node.NodeType==XmlNodeType.Comment) {
+					throw new ApplicationException("The comment tag <!-- --> "+node.Name+" is not allowed.");
+				}
+				if(node.NodeType==XmlNodeType.ProcessingInstruction) {
+					throw new ApplicationException("The XML processing instruction <?xml ?> "+node.Name+" is not allowed.");
+				}
+				if(node.NodeType==XmlNodeType.XmlDeclaration) {
+					throw new ApplicationException("XML declarations like <?xml ?> "+node.Name+"> are not allowed.");
+				}
 				if(node.NodeType!=XmlNodeType.Element){
 					continue;
 				}
