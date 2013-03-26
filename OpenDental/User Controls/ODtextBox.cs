@@ -160,7 +160,9 @@ namespace OpenDental
 				contextMenu.MenuItems[12].Enabled=true;
 				contextMenu.MenuItems[13].Enabled=true;
 			}
-			if(!IsOnMisspelled(PositionOfClick) || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//did not click on a misspelled word OR spell check is disabled
+			if(!this.spellCheckIsEnabled
+			  || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)
+			  || !IsOnMisspelled(PositionOfClick)) {//did not click on a misspelled word OR spell check is disabled
 				contextMenu.MenuItems[0].Visible=false;//suggestion 1
 				contextMenu.MenuItems[1].Visible=false;//suggestion 2
 				contextMenu.MenuItems[2].Visible=false;//suggestion 3
@@ -171,7 +173,9 @@ namespace OpenDental
 				contextMenu.MenuItems[7].Visible=false;//Disable Spell Check
 				contextMenu.MenuItems[8].Visible=false;//separator
 			}
-			else if(IsOnMisspelled(PositionOfClick) && PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//clicked on or near a misspelled word AND spell check is enabled
+			else if(this.spellCheckIsEnabled
+			  && PrefC.GetBool(PrefName.SpellCheckIsEnabled)
+			  && IsOnMisspelled(PositionOfClick)) {//clicked on or near a misspelled word AND spell check is enabled
 				List<string> suggestions=SpellSuggest();
 				if(suggestions.Count==0) {//no suggestions
 					contextMenu.MenuItems[0].Text=Lan.g(this,"No Spelling Suggestions");
@@ -182,7 +186,7 @@ namespace OpenDental
 					contextMenu.MenuItems[3].Visible=false;//suggestion 4
 					contextMenu.MenuItems[4].Visible=false;//suggestion 5
 				}
-				else {
+				else {//must be on misspelled word and spell check is enabled globally and locally
 					for(int i=0;i<5;i++) {//Only display first 5 suggestions if available
 						if(i>=suggestions.Count) {
 							contextMenu.MenuItems[i].Visible=false;
@@ -251,7 +255,7 @@ namespace OpenDental
 			if(ReplWord==null) {
 				return false;
 			}
-			if(ListIncorrect.Contains(ReplWord.Value.ToLower())) {
+			if(ListIncorrect.Contains(ReplWord.Value)) {
 				return true;
 			}
 			return false;
@@ -277,6 +281,9 @@ namespace OpenDental
 				case 2:
 				case 3:
 				case 4:
+					if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since the suggested words won't show if spell check disabled
+						break;
+					}
 					int originalCaret=this.SelectionStart;
 					this.Text=this.Text.Remove(ReplWord.StartIndex,ReplWord.Value.Length);
 					this.Text=this.Text.Insert(ReplWord.StartIndex,contextMenu.MenuItems[contextMenu.MenuItems.IndexOf((MenuItem)sender)].Text);
@@ -290,14 +297,17 @@ namespace OpenDental
 					break;
 				//case 5 is separator
 				case 6://Add to dict
+					if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since Add to Dict won't show if spell check disabled
+						break;
+					}
 					string newWord=ReplWord.Value;
 					//guaranteed to not already exist in custom dictionary, or it wouldn't be underlined.
 					DictCustom word=new DictCustom();
 					word.WordText=newWord;
 					DictCustoms.Insert(word);
 					DataValid.SetInvalid(InvalidType.DictCustoms);
-					ListIncorrect.Remove(ReplWord.Value.ToLower());
-					ListCorrect.Add(ReplWord.Value.ToLower());
+					ListIncorrect.Remove(ReplWord.Value);
+					ListCorrect.Add(ReplWord.Value);
 					timer1.Start();
 					break;
 				case 7://Disable spell check
@@ -332,8 +342,8 @@ namespace OpenDental
 					  break;
 					}
 					int caret=SelectionStart;
-					IDataObject iData=Clipboard.GetDataObject();					
-					if(SelectionLength>0){
+					IDataObject iData=Clipboard.GetDataObject();
+					if(SelectionLength>0) {
 						Text=Text.Remove(SelectionStart,SelectionLength);
 						SelectionLength=0;
 					}
@@ -349,20 +359,26 @@ namespace OpenDental
 		}
 
 		private void timer1_Tick(object sender,EventArgs e) {
+			if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+				return;
+			}
 			timer1.Stop();
 			SpellCheck();
 		}
 
 		private void ODtextBox_VScroll(object sender,EventArgs e) {
+			if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+				return;
+			}
 			timer1.Stop();
 			timer1.Start();
 		}
 
 		protected override void OnKeyDown(KeyEventArgs e) {
 			base.OnKeyDown(e);
-			if(!PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+			if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
 				return;
-			}	
+			}
 			//The lines were shifted due to new input. This causes the location of the red wavy underline to shift down as well, so clear them.
 			if(e.KeyCode==Keys.Enter) {
 				ClearWavyLines();
@@ -371,6 +387,9 @@ namespace OpenDental
 
 		///<summary>When the contents of the text box is resized, e.g. when word wrap creates a new line, clear red wavy lines so they don't shift down.</summary>
 		private void ODtextBox_ContentsResized(object sender,ContentsResizedEventArgs e) {
+			if(DesignMode || !this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+				return;
+			}
 			Point textEndPointCur=this.GetPositionFromCharIndex(Text.Length-1);
 			if(textEndPoint==new Point(0,0)) {
 				textEndPoint=textEndPointCur;
@@ -385,7 +404,9 @@ namespace OpenDental
 		///<summary></summary>
 		protected override void OnKeyUp(KeyEventArgs e) {
 			base.OnKeyUp(e);
-			timer1.Stop();
+			if(this.spellCheckIsEnabled && PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+				timer1.Stop();
+			}
 			int originalLength=base.Text.Length;
 			int originalCaret=base.SelectionStart;
 			string newText=QuickPasteNotes.Substitute(Text,quickPasteType);
@@ -397,7 +418,9 @@ namespace OpenDental
 			if(e.KeyCode==Keys.Q && e.Modifiers==Keys.Control) {
 				ShowFullDialog();
 			}
-			timer1.Start();
+			if(this.spellCheckIsEnabled && PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+				timer1.Start();
+			}
 		}
 
 		private void ClearWavyLines() {
@@ -478,7 +501,7 @@ namespace OpenDental
 
 		///<summary>Performs spell checking against indiviudal words against the English USA dictionary.</summary>
 		private void SpellCheck() {
-			if(!PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+			if(!this.spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
 				return;
 			}
 			ClearWavyLines();
@@ -536,15 +559,35 @@ namespace OpenDental
 				if(this.GetPositionFromCharIndex(words[i].StartIndex).Y>=this.Height) {
 					break;//stop spell checking once we go beyond visible area
 				}
-				if(ListCorrect.Contains(words[i].Value.ToLower())) {
-					continue;//Spelled correctly
+				if(ListCorrect.Contains(words[i].Value)) {
+					continue;
+				}
+				if(ListCorrect.Contains(words[i].Value.ToLower())) {//word as they typed it was not in the correct list, but lower case version is, see if the casing as they typed it is correct by Hunspell (google is incorrect but Google is not)
+					if(HunspellGlobal.Spell(words[i].Value)) {
+						ListCorrect.Add(words[i].Value);//add to appropriate list with the casing as typed this time
+						continue;
+					}
+					else {
+						ListIncorrect.Add(words[i].Value);
+					}
 				}
 				bool correct=false;
 				int startIndex=words[i].StartIndex;//words[i].StartIndex is relative to Text.
 				int endIndex=startIndex+words[i].Value.Length;//One spot past the end of the word, because DrawWave() draws to the beginning of the character of the endIndex.
-				if(ListIncorrect.Contains(words[i].Value.ToLower())) {
+				if(ListIncorrect.Contains(words[i].Value)) {
 					DrawWave(startIndex,endIndex);
-					continue;//Spelled incorrectly
+					continue;
+				}
+				if(ListIncorrect.Contains(words[i].Value.ToLower())) {//word as typed is not in incorrect list, but lower-case version is, see if this casing is correct
+					if(HunspellGlobal.Spell(words[i].Value)) {
+						ListCorrect.Add(words[i].Value);//add to approriate list with casing this time
+						continue;
+					}
+					else {
+						ListIncorrect.Add(words[i].Value);
+						DrawWave(startIndex,endIndex);
+						continue;
+					}
 				}
 				for(int j=0;j<DictCustoms.Listt.Count;j++) {//compare to custom word list
 					if(DictCustoms.Listt[j].WordText.ToLower()==words[i].Value.ToLower()) {//convert to lower case before comparing
@@ -557,10 +600,10 @@ namespace OpenDental
 				}
 				if(!correct) {
 					DrawWave(startIndex,endIndex);
-					ListIncorrect.Add(words[i].Value.ToLower());
+					ListIncorrect.Add(words[i].Value);
 				}
 				else {//if it gets here, the word was spelled correctly, determined by comparing to the custom word list and/or the hunspell dict
-					ListCorrect.Add(words[i].Value.ToLower());
+					ListCorrect.Add(words[i].Value);
 				}
 			}
 			Graphics graphicsTextBox=Graphics.FromHwnd(this.Handle);
