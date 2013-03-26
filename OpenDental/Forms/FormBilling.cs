@@ -908,18 +908,27 @@ namespace OpenDental{
 						skippedElect++;
 						continue;
 					}
-					stateNumsElect.Add(stmt.StatementNum);
+					bool statementWritten=true;
 					if(PrefC.GetString(PrefName.BillingUseElectronic)=="1") {
-						OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+						try {
+							OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
+						}
+						catch(Exception ex){
+							MessageBox.Show(Lan.g(this,"Error sending statement")+": "+Environment.NewLine+ex.ToString());
+							statementWritten=false;
+						}
 					}
 					else if(PrefC.GetString(PrefName.BillingUseElectronic)=="2") {
 						OpenDental.Bridges.POS_statements.GenerateOneStatement(writerElect,stmt,pat,fam,dataSet);
 					}
-					sentelect++;
-					labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
-					Application.DoEvents();
-					//do this later:
-					//Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
+					if(statementWritten) {
+						stateNumsElect.Add(stmt.StatementNum);
+						sentelect++;
+						labelSentElect.Text=Lan.g(this,"SentElect=")+sentelect.ToString();
+						Application.DoEvents();
+						//do this later:
+						//Statements.MarkSent(stmt.StatementNum,stmt.DateSent);
+					}
 				}
 			}
 			//now print-------------------------------------------------------------------------------------

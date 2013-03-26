@@ -221,7 +221,9 @@ namespace OpenDental.Bridges {
 						writer.WriteElementString("Date","");
 						writer.WriteElementString("PatientName","");
 					}
-					writer.WriteElementString("Description",Tidy(lines[li],40));//Jessica at DentalXchange says limit is 120.  Docs say limit is 30.
+					writer.WriteStartElement("Description");
+					writer.WriteCData(Tidy(lines[li],40));//Jessica at DentalXchange says limit is 120.  Docs say limit is 30. CData to allow any string.
+					writer.WriteEndElement();//Description
 					if(li==0) {
 						writer.WriteElementString("Charges",tableAccount.Rows[i]["charges"].ToString());
 						writer.WriteElementString("Credits",tableAccount.Rows[i]["credits"].ToString());
