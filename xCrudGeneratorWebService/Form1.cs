@@ -843,6 +843,16 @@ namespace xCrudGeneratorWebService {
 
 		///<summary>Helper function mainly for primitive casting.  A typical result will look like this: "(OpenDentBusiness.Account)parameters[1]"</summary>
 		private string GetParameterStringForMethodCall(Type type,int i) {
+			//Check if the type is a List.
+			if(type.IsGenericType) {
+				Type listType=type.GetGenericArguments()[0];//Get the what the type of list the object list should be converted to.
+				if(listType==typeof(long)) {//Objects cannot be cast as longs.  Must case as integers first and then to longs.
+					return "((List<object>)parameters["+i+"]).ConvertAll<int>(i=>(int)i).ConvertAll<"+listType.FullName+">(i=>("+listType.FullName+")i)";
+				}
+				else {//Simply cast the objects to whatever type they need to be.  This needs to be tested in more detail but should always compile.
+					return "((List<object>)parameters["+i+"]).ConvertAll<"+listType.FullName+">(i=>("+listType.FullName+")i)";
+				}
+			}
 			string fullName=type.FullName.ToString();
 			switch(fullName) {
 				case "System.Boolean":

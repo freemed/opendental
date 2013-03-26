@@ -222,7 +222,7 @@ namespace OpenDentalWebService {
 		private static object MethodLabResults(string methodName,List<object> parameters) {
 			//These Method[class] methods will be auto generated based on the methods in the classes within the OpenDentalWebService > Data Interface > S classes.
 			if(methodName=="GetResultsFromPanelsPatientPortal") {
-				return LabResults.GetResultsFromPanelsPatientPortal(((List<object>)parameters[0]).ConvertAll<int>(i=>(int)i).ConvertAll<long>(i=>(long)i));
+				return LabResults.GetResultsFromPanelsPatientPortal(((List<object>)parameters[0]).ConvertAll<int>(i=>(int)i).ConvertAll<System.Int64>(i=>(System.Int64)i));
 			}
 			throw new NotSupportedException("MethodLabResults, unknown method: "+methodName);
 		}
