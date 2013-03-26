@@ -81,30 +81,30 @@ namespace OpenDental{
 			this.listFeeSched = new System.Windows.Forms.ListBox();
 			this.labelFeeSched = new System.Windows.Forms.Label();
 			this.groupFeeScheds = new System.Windows.Forms.GroupBox();
-			this.butTools = new OpenDental.UI.Button();
-			this.butEditFeeSched = new OpenDental.UI.Button();
 			this.listCategories = new System.Windows.Forms.ListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butShowHiddenDefault = new OpenDental.UI.Button();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.textAbbreviation = new System.Windows.Forms.TextBox();
 			this.textCode = new System.Windows.Forms.TextBox();
-			this.butAll = new OpenDental.UI.Button();
 			this.label4 = new System.Windows.Forms.Label();
 			this.checkShowHidden = new System.Windows.Forms.CheckBox();
-			this.butEditCategories = new OpenDental.UI.Button();
 			this.label3 = new System.Windows.Forms.Label();
 			this.comboCompare1 = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.comboCompare2 = new System.Windows.Forms.ComboBox();
 			this.groupProcCodeSetup = new System.Windows.Forms.GroupBox();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butProcTools = new OpenDental.UI.Button();
 			this.butImport = new OpenDental.UI.Button();
 			this.butExport = new OpenDental.UI.Button();
 			this.butNew = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butShowHiddenDefault = new OpenDental.UI.Button();
+			this.butAll = new OpenDental.UI.Button();
+			this.butEditCategories = new OpenDental.UI.Button();
+			this.butTools = new OpenDental.UI.Button();
+			this.butEditFeeSched = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.groupFeeScheds.SuspendLayout();
@@ -114,17 +114,18 @@ namespace OpenDental{
 			// 
 			// listFeeSched
 			// 
-			this.listFeeSched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.listFeeSched.Location = new System.Drawing.Point(747,24);
+			this.listFeeSched.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.listFeeSched.Location = new System.Drawing.Point(778,24);
 			this.listFeeSched.Name = "listFeeSched";
-			this.listFeeSched.Size = new System.Drawing.Size(200,498);
+			this.listFeeSched.Size = new System.Drawing.Size(200,511);
 			this.listFeeSched.TabIndex = 6;
 			this.listFeeSched.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listFeeSched_MouseDown);
 			// 
 			// labelFeeSched
 			// 
 			this.labelFeeSched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelFeeSched.Location = new System.Drawing.Point(745,4);
+			this.labelFeeSched.Location = new System.Drawing.Point(774,4);
 			this.labelFeeSched.Name = "labelFeeSched";
 			this.labelFeeSched.Size = new System.Drawing.Size(132,17);
 			this.labelFeeSched.TabIndex = 12;
@@ -133,15 +134,291 @@ namespace OpenDental{
 			// 
 			// groupFeeScheds
 			// 
-			this.groupFeeScheds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupFeeScheds.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupFeeScheds.Controls.Add(this.butTools);
 			this.groupFeeScheds.Controls.Add(this.butEditFeeSched);
 			this.groupFeeScheds.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupFeeScheds.Location = new System.Drawing.Point(747,591);
+			this.groupFeeScheds.Location = new System.Drawing.Point(778,603);
 			this.groupFeeScheds.Name = "groupFeeScheds";
 			this.groupFeeScheds.Size = new System.Drawing.Size(200,51);
 			this.groupFeeScheds.TabIndex = 14;
 			this.groupFeeScheds.TabStop = false;
+			// 
+			// listCategories
+			// 
+			this.listCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.listCategories.FormattingEnabled = true;
+			this.listCategories.Location = new System.Drawing.Point(10,126);
+			this.listCategories.Name = "listCategories";
+			this.listCategories.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+			this.listCategories.Size = new System.Drawing.Size(145,368);
+			this.listCategories.TabIndex = 15;
+			this.listCategories.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listCategories_MouseUp);
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(7,100);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(80,23);
+			this.label1.TabIndex = 16;
+			this.label1.Text = "By Category";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(3,42);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79,20);
+			this.label2.TabIndex = 17;
+			this.label2.Text = "By Descript";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupBox1.Controls.Add(this.butShowHiddenDefault);
+			this.groupBox1.Controls.Add(this.textDescription);
+			this.groupBox1.Controls.Add(this.textAbbreviation);
+			this.groupBox1.Controls.Add(this.textCode);
+			this.groupBox1.Controls.Add(this.butAll);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.checkShowHidden);
+			this.groupBox1.Controls.Add(this.butEditCategories);
+			this.groupBox1.Controls.Add(this.label1);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Controls.Add(this.listCategories);
+			this.groupBox1.Controls.Add(this.label2);
+			this.groupBox1.Location = new System.Drawing.Point(2,16);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(165,568);
+			this.groupBox1.TabIndex = 0;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Search";
+			// 
+			// textDescription
+			// 
+			this.textDescription.Location = new System.Drawing.Point(82,43);
+			this.textDescription.Name = "textDescription";
+			this.textDescription.Size = new System.Drawing.Size(73,20);
+			this.textDescription.TabIndex = 0;
+			this.textDescription.TextChanged += new System.EventHandler(this.textDescription_TextChanged);
+			// 
+			// textAbbreviation
+			// 
+			this.textAbbreviation.Location = new System.Drawing.Point(82,17);
+			this.textAbbreviation.Name = "textAbbreviation";
+			this.textAbbreviation.Size = new System.Drawing.Size(73,20);
+			this.textAbbreviation.TabIndex = 3;
+			this.textAbbreviation.TextChanged += new System.EventHandler(this.textAbbreviation_TextChanged);
+			// 
+			// textCode
+			// 
+			this.textCode.Location = new System.Drawing.Point(82,69);
+			this.textCode.Name = "textCode";
+			this.textCode.Size = new System.Drawing.Size(73,20);
+			this.textCode.TabIndex = 1;
+			this.textCode.TextChanged += new System.EventHandler(this.textCode_TextChanged);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(3,16);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(79,20);
+			this.label4.TabIndex = 22;
+			this.label4.Text = "By Abbrev";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// checkShowHidden
+			// 
+			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.checkShowHidden.Location = new System.Drawing.Point(10,545);
+			this.checkShowHidden.Name = "checkShowHidden";
+			this.checkShowHidden.Size = new System.Drawing.Size(90,17);
+			this.checkShowHidden.TabIndex = 20;
+			this.checkShowHidden.Text = "Show Hidden";
+			this.checkShowHidden.UseVisualStyleBackColor = true;
+			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(3,68);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(79,20);
+			this.label3.TabIndex = 19;
+			this.label3.Text = "By Code";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboCompare1
+			// 
+			this.comboCompare1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboCompare1.FormattingEnabled = true;
+			this.comboCompare1.Location = new System.Drawing.Point(778,554);
+			this.comboCompare1.Name = "comboCompare1";
+			this.comboCompare1.Size = new System.Drawing.Size(200,21);
+			this.comboCompare1.TabIndex = 20;
+			this.comboCompare1.SelectionChangeCommitted += new System.EventHandler(this.comboCompare1_SelectionChangeCommitted);
+			// 
+			// label5
+			// 
+			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.label5.Location = new System.Drawing.Point(776,534);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(199,17);
+			this.label5.TabIndex = 21;
+			this.label5.Text = "Compare Fee Schedules";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// comboCompare2
+			// 
+			this.comboCompare2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.comboCompare2.FormattingEnabled = true;
+			this.comboCompare2.Location = new System.Drawing.Point(778,577);
+			this.comboCompare2.Name = "comboCompare2";
+			this.comboCompare2.Size = new System.Drawing.Size(200,21);
+			this.comboCompare2.TabIndex = 22;
+			this.comboCompare2.SelectionChangeCommitted += new System.EventHandler(this.comboCompare2_SelectionChangeCommitted);
+			// 
+			// groupProcCodeSetup
+			// 
+			this.groupProcCodeSetup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.groupProcCodeSetup.Controls.Add(this.butProcTools);
+			this.groupProcCodeSetup.Controls.Add(this.butImport);
+			this.groupProcCodeSetup.Controls.Add(this.butExport);
+			this.groupProcCodeSetup.Controls.Add(this.butNew);
+			this.groupProcCodeSetup.Location = new System.Drawing.Point(2,603);
+			this.groupProcCodeSetup.Name = "groupProcCodeSetup";
+			this.groupProcCodeSetup.Size = new System.Drawing.Size(165,91);
+			this.groupProcCodeSetup.TabIndex = 26;
+			this.groupProcCodeSetup.TabStop = false;
+			this.groupProcCodeSetup.Text = "Procedure Codes";
+			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(170,8);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.Size = new System.Drawing.Size(604,686);
+			this.gridMain.TabIndex = 19;
+			this.gridMain.Title = "Procedures";
+			this.gridMain.TranslationName = "TableProcedures";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
+			// 
+			// butProcTools
+			// 
+			this.butProcTools.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butProcTools.Autosize = true;
+			this.butProcTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butProcTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProcTools.CornerRadius = 4F;
+			this.butProcTools.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butProcTools.Location = new System.Drawing.Point(6,57);
+			this.butProcTools.Name = "butProcTools";
+			this.butProcTools.Size = new System.Drawing.Size(75,26);
+			this.butProcTools.TabIndex = 25;
+			this.butProcTools.Text = "Tools";
+			this.butProcTools.Click += new System.EventHandler(this.butProcTools_Click);
+			// 
+			// butImport
+			// 
+			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butImport.Autosize = true;
+			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.CornerRadius = 4F;
+			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butImport.Location = new System.Drawing.Point(6,19);
+			this.butImport.Name = "butImport";
+			this.butImport.Size = new System.Drawing.Size(75,26);
+			this.butImport.TabIndex = 23;
+			this.butImport.Text = "Import";
+			this.butImport.Click += new System.EventHandler(this.butImport_Click);
+			// 
+			// butExport
+			// 
+			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butExport.Autosize = true;
+			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExport.CornerRadius = 4F;
+			this.butExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butExport.Location = new System.Drawing.Point(85,19);
+			this.butExport.Name = "butExport";
+			this.butExport.Size = new System.Drawing.Size(75,26);
+			this.butExport.TabIndex = 24;
+			this.butExport.Text = "Export";
+			this.butExport.Click += new System.EventHandler(this.butExport_Click);
+			// 
+			// butNew
+			// 
+			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butNew.Autosize = true;
+			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNew.CornerRadius = 4F;
+			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
+			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butNew.Location = new System.Drawing.Point(85,57);
+			this.butNew.Name = "butNew";
+			this.butNew.Size = new System.Drawing.Size(75,26);
+			this.butNew.TabIndex = 22;
+			this.butNew.Text = "&New";
+			this.butNew.Click += new System.EventHandler(this.butNew_Click);
+			// 
+			// butShowHiddenDefault
+			// 
+			this.butShowHiddenDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butShowHiddenDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butShowHiddenDefault.Autosize = true;
+			this.butShowHiddenDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butShowHiddenDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butShowHiddenDefault.CornerRadius = 4F;
+			this.butShowHiddenDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butShowHiddenDefault.Location = new System.Drawing.Point(100,542);
+			this.butShowHiddenDefault.Name = "butShowHiddenDefault";
+			this.butShowHiddenDefault.Size = new System.Drawing.Size(56,20);
+			this.butShowHiddenDefault.TabIndex = 25;
+			this.butShowHiddenDefault.Text = "default";
+			this.butShowHiddenDefault.Click += new System.EventHandler(this.butShowHiddenDefault_Click);
+			// 
+			// butAll
+			// 
+			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butAll.Autosize = true;
+			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAll.CornerRadius = 4F;
+			this.butAll.Location = new System.Drawing.Point(93,100);
+			this.butAll.Name = "butAll";
+			this.butAll.Size = new System.Drawing.Size(62,25);
+			this.butAll.TabIndex = 7;
+			this.butAll.Text = "All";
+			this.butAll.Click += new System.EventHandler(this.butAll_Click);
+			// 
+			// butEditCategories
+			// 
+			this.butEditCategories.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butEditCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.butEditCategories.Autosize = true;
+			this.butEditCategories.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butEditCategories.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditCategories.CornerRadius = 4F;
+			this.butEditCategories.Location = new System.Drawing.Point(10,513);
+			this.butEditCategories.Name = "butEditCategories";
+			this.butEditCategories.Size = new System.Drawing.Size(94,26);
+			this.butEditCategories.TabIndex = 21;
+			this.butEditCategories.Text = "Edit Categories";
+			this.butEditCategories.Click += new System.EventHandler(this.butEditCategories_Click);
 			// 
 			// butTools
 			// 
@@ -171,274 +448,6 @@ namespace OpenDental{
 			this.butEditFeeSched.Text = "Fee Scheds";
 			this.butEditFeeSched.Click += new System.EventHandler(this.butEditFeeSched_Click);
 			// 
-			// listCategories
-			// 
-			this.listCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.listCategories.FormattingEnabled = true;
-			this.listCategories.Location = new System.Drawing.Point(10,126);
-			this.listCategories.Name = "listCategories";
-			this.listCategories.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listCategories.Size = new System.Drawing.Size(155,368);
-			this.listCategories.TabIndex = 15;
-			this.listCategories.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listCategories_MouseUp);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(7,100);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(108,23);
-			this.label1.TabIndex = 16;
-			this.label1.Text = "By Category";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(1,42);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(91,20);
-			this.label2.TabIndex = 17;
-			this.label2.Text = "By Description";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.butShowHiddenDefault);
-			this.groupBox1.Controls.Add(this.textDescription);
-			this.groupBox1.Controls.Add(this.textAbbreviation);
-			this.groupBox1.Controls.Add(this.textCode);
-			this.groupBox1.Controls.Add(this.butAll);
-			this.groupBox1.Controls.Add(this.label4);
-			this.groupBox1.Controls.Add(this.checkShowHidden);
-			this.groupBox1.Controls.Add(this.butEditCategories);
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.label3);
-			this.groupBox1.Controls.Add(this.listCategories);
-			this.groupBox1.Controls.Add(this.label2);
-			this.groupBox1.Location = new System.Drawing.Point(6,16);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(175,556);
-			this.groupBox1.TabIndex = 0;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Search";
-			// 
-			// butShowHiddenDefault
-			// 
-			this.butShowHiddenDefault.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butShowHiddenDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butShowHiddenDefault.Autosize = true;
-			this.butShowHiddenDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butShowHiddenDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butShowHiddenDefault.CornerRadius = 4F;
-			this.butShowHiddenDefault.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butShowHiddenDefault.Location = new System.Drawing.Point(100,530);
-			this.butShowHiddenDefault.Name = "butShowHiddenDefault";
-			this.butShowHiddenDefault.Size = new System.Drawing.Size(65,20);
-			this.butShowHiddenDefault.TabIndex = 25;
-			this.butShowHiddenDefault.Text = "set default";
-			this.butShowHiddenDefault.Click += new System.EventHandler(this.butShowHiddenDefault_Click);
-			// 
-			// textDescription
-			// 
-			this.textDescription.Location = new System.Drawing.Point(92,43);
-			this.textDescription.Name = "textDescription";
-			this.textDescription.Size = new System.Drawing.Size(73,20);
-			this.textDescription.TabIndex = 0;
-			this.textDescription.TextChanged += new System.EventHandler(this.textDescription_TextChanged);
-			// 
-			// textAbbreviation
-			// 
-			this.textAbbreviation.Location = new System.Drawing.Point(92,17);
-			this.textAbbreviation.Name = "textAbbreviation";
-			this.textAbbreviation.Size = new System.Drawing.Size(73,20);
-			this.textAbbreviation.TabIndex = 3;
-			this.textAbbreviation.TextChanged += new System.EventHandler(this.textAbbreviation_TextChanged);
-			// 
-			// textCode
-			// 
-			this.textCode.Location = new System.Drawing.Point(92,69);
-			this.textCode.Name = "textCode";
-			this.textCode.Size = new System.Drawing.Size(73,20);
-			this.textCode.TabIndex = 1;
-			this.textCode.TextChanged += new System.EventHandler(this.textCode_TextChanged);
-			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(103,100);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(62,25);
-			this.butAll.TabIndex = 7;
-			this.butAll.Text = "All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(1,16);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(91,20);
-			this.label4.TabIndex = 22;
-			this.label4.Text = "By Abbreviation";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkShowHidden
-			// 
-			this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkShowHidden.Location = new System.Drawing.Point(10,533);
-			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(90,17);
-			this.checkShowHidden.TabIndex = 20;
-			this.checkShowHidden.Text = "Show Hidden";
-			this.checkShowHidden.UseVisualStyleBackColor = true;
-			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
-			// 
-			// butEditCategories
-			// 
-			this.butEditCategories.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butEditCategories.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butEditCategories.Autosize = true;
-			this.butEditCategories.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditCategories.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEditCategories.CornerRadius = 4F;
-			this.butEditCategories.Location = new System.Drawing.Point(10,501);
-			this.butEditCategories.Name = "butEditCategories";
-			this.butEditCategories.Size = new System.Drawing.Size(94,26);
-			this.butEditCategories.TabIndex = 21;
-			this.butEditCategories.Text = "Edit Categories";
-			this.butEditCategories.Click += new System.EventHandler(this.butEditCategories_Click);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(1,68);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(91,20);
-			this.label3.TabIndex = 19;
-			this.label3.Text = "By Code";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboCompare1
-			// 
-			this.comboCompare1.FormattingEnabled = true;
-			this.comboCompare1.Location = new System.Drawing.Point(747,542);
-			this.comboCompare1.Name = "comboCompare1";
-			this.comboCompare1.Size = new System.Drawing.Size(200,21);
-			this.comboCompare1.TabIndex = 20;
-			this.comboCompare1.SelectionChangeCommitted += new System.EventHandler(this.comboCompare1_SelectionChangeCommitted);
-			// 
-			// label5
-			// 
-			this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label5.Location = new System.Drawing.Point(745,522);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(199,17);
-			this.label5.TabIndex = 21;
-			this.label5.Text = "Compare Fee Schedules";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// comboCompare2
-			// 
-			this.comboCompare2.FormattingEnabled = true;
-			this.comboCompare2.Location = new System.Drawing.Point(747,565);
-			this.comboCompare2.Name = "comboCompare2";
-			this.comboCompare2.Size = new System.Drawing.Size(200,21);
-			this.comboCompare2.TabIndex = 22;
-			this.comboCompare2.SelectionChangeCommitted += new System.EventHandler(this.comboCompare2_SelectionChangeCommitted);
-			// 
-			// groupProcCodeSetup
-			// 
-			this.groupProcCodeSetup.Controls.Add(this.butProcTools);
-			this.groupProcCodeSetup.Controls.Add(this.butImport);
-			this.groupProcCodeSetup.Controls.Add(this.butExport);
-			this.groupProcCodeSetup.Controls.Add(this.butNew);
-			this.groupProcCodeSetup.Location = new System.Drawing.Point(6,591);
-			this.groupProcCodeSetup.Name = "groupProcCodeSetup";
-			this.groupProcCodeSetup.Size = new System.Drawing.Size(175,91);
-			this.groupProcCodeSetup.TabIndex = 26;
-			this.groupProcCodeSetup.TabStop = false;
-			this.groupProcCodeSetup.Text = "Procedure Codes";
-			// 
-			// butProcTools
-			// 
-			this.butProcTools.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butProcTools.Autosize = true;
-			this.butProcTools.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProcTools.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProcTools.CornerRadius = 4F;
-			this.butProcTools.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butProcTools.Location = new System.Drawing.Point(6,57);
-			this.butProcTools.Name = "butProcTools";
-			this.butProcTools.Size = new System.Drawing.Size(80,26);
-			this.butProcTools.TabIndex = 25;
-			this.butProcTools.Text = "Tools";
-			this.butProcTools.Click += new System.EventHandler(this.butProcTools_Click);
-			// 
-			// butImport
-			// 
-			this.butImport.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butImport.CornerRadius = 4F;
-			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butImport.Location = new System.Drawing.Point(6,19);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(80,26);
-			this.butImport.TabIndex = 23;
-			this.butImport.Text = "Import";
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
-			// butExport
-			// 
-			this.butExport.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butExport.Autosize = true;
-			this.butExport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butExport.CornerRadius = 4F;
-			this.butExport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butExport.Location = new System.Drawing.Point(90,19);
-			this.butExport.Name = "butExport";
-			this.butExport.Size = new System.Drawing.Size(80,26);
-			this.butExport.TabIndex = 24;
-			this.butExport.Text = "Export";
-			this.butExport.Click += new System.EventHandler(this.butExport_Click);
-			// 
-			// butNew
-			// 
-			this.butNew.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butNew.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butNew.Autosize = true;
-			this.butNew.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNew.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNew.CornerRadius = 4F;
-			this.butNew.Image = global::OpenDental.Properties.Resources.Add;
-			this.butNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butNew.Location = new System.Drawing.Point(90,57);
-			this.butNew.Name = "butNew";
-			this.butNew.Size = new System.Drawing.Size(80,26);
-			this.butNew.TabIndex = 22;
-			this.butNew.Text = "&New";
-			this.butNew.Click += new System.EventHandler(this.butNew_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(187,8);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(553,674);
-			this.gridMain.TabIndex = 19;
-			this.gridMain.Title = "Procedures";
-			this.gridMain.TranslationName = "TableProcedures";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
-			// 
 			// butCancel
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
@@ -447,7 +456,7 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(858,656);
+			this.butCancel.Location = new System.Drawing.Point(889,668);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,26);
 			this.butCancel.TabIndex = 5;
@@ -462,7 +471,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(763,656);
+			this.butOK.Location = new System.Drawing.Point(794,668);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,26);
 			this.butOK.TabIndex = 4;
@@ -472,7 +481,7 @@ namespace OpenDental{
 			// FormProcCodes
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(956,695);
+			this.ClientSize = new System.Drawing.Size(982,707);
 			this.Controls.Add(this.groupProcCodeSetup);
 			this.Controls.Add(this.listFeeSched);
 			this.Controls.Add(this.comboCompare2);
@@ -485,6 +494,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Controls.Add(this.butOK);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MinimumSize = new System.Drawing.Size(990,734);
 			this.Name = "FormProcCodes";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -605,7 +615,7 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProcedures","Category"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProcedures","Description"),150);
+			col=new ODGridColumn(Lan.g("TableProcedures","Description"),206);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcedures","Abbr"),90);
 			gridMain.Columns.Add(col);
