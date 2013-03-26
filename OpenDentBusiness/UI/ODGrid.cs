@@ -483,7 +483,8 @@ namespace OpenDental.UI {
 							//find the tallest col
 							for(int j=0;j<rows[i].Cells.Count;j++) {
 								if(HasEditableColumn) {
-									cellH=(int)((1.03)*(float)(g.MeasureString(rows[i].Cells[j].Text,cellFont,columns[j].ColWidth).Height))+4;//because textbox will be bigger
+									//doesn't seem to calculate right when it ends in a "\r\n". It doesn't make room for the new line. Make it, by adding another one for calculations.
+									cellH=(int)((1.03)*(float)(g.MeasureString(rows[i].Cells[j].Text+"\r\n",cellFont,columns[j].ColWidth).Height))+4;//because textbox will be bigger
 									if(cellH < EDITABLE_ROW_HEIGHT) {
 										cellH=EDITABLE_ROW_HEIGHT;//only used for single line text
 									}
@@ -1768,35 +1769,63 @@ namespace OpenDental.UI {
 		}
 
 		void editBox_KeyUp(object sender,KeyEventArgs e) {
-			//this probably belongs in KeyUp so that we have the text in the box
-			//test editBox.Text.
-			//==Michael - This doesn't work yet. It is supposed to refresh the size of the grid and textbox while you are typing if you need to grow or shrink your editBox vertically.
-			//if(editBox==null) {
-			//  return;
-			//}	
-			//if(editBox.Text==""){
-			//  return;
-			//}
-			//Graphics g=CreateGraphics();
-			//Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
-			//int cellH=(int)((1.03)*(float)(g.MeasureString(editBox.Text,cellFont,editBox.Width).Height))+4;
-			//if(cellH < EDITABLE_ROW_HEIGHT) {
-			//  cellH=EDITABLE_ROW_HEIGHT;//only used for single line text
-			//}
-			////If cellH doesn't match, then do a redraw:
-			////   This will involve a grid redraw.
-			////   Then, try to reselect cell, get the cursor to the right spot, etc.
-			//if(cellH>editBox.Height) {
-			//  //get caret position
-			//  int caret=editBox.SelectionStart;
-			//  editBox.Dispose();
-			//  editBox=null;
-			//  selectedCell=new Point(selectedCell.X,selectedCell.Y);
-			//  CreateEditBox();
-			//  if(editBox!=null) {
-			//    editBox.SelectionStart=caret;
-			//  }
-			//}
+			if(editBox==null) {
+				return;
+			}
+			if(editBox.Text=="") {
+				return;
+			}
+			Graphics g=CreateGraphics();
+			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			int cellH=(int)((1.03)*(float)(g.MeasureString(editBox.Text+"\r\n",cellFont,editBox.Width).Height))+4;
+			if(cellH < EDITABLE_ROW_HEIGHT) {//if it's less than one line
+			  cellH=EDITABLE_ROW_HEIGHT;//set it to one line
+			}
+			if(cellH>editBox.Height || cellH<editBox.Height-13) {//it needs to grow or shrink, so redraw it.
+				Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
+				Point cellSelected=new Point(selectedCell.X,selectedCell.Y);
+				int selectionStart=editBox.SelectionStart;
+				List<ODGridColumn> listCols=new List<ODGridColumn>();
+				for(int i=0;i<columns.Count;i++) {
+					listCols.Add(new ODGridColumn(columns[i].Heading,columns[i].ColWidth,columns[i].IsEditable));
+				}
+				List<ODGridRow> listRows=new List<ODGridRow>();
+				ODGridRow row;
+				for(int i=0;i<rows.Count;i++) {
+					row=new ODGridRow();
+					for(int j=0;j<rows[i].Cells.Count;j++) {
+						row.Cells.Add(new ODGridCell(rows[i].Cells[j].Text));
+					}
+					listRows.Add(row);
+				}
+				BeginUpdate();
+				columns.Clear();
+				ODGridColumn col;
+				for(int c=0;c<listCols.Count;c++) {
+					col=new ODGridColumn(listCols[c].Heading,listCols[c].ColWidth,listCols[c].IsEditable);
+					columns.Add(col);
+				}
+				rows.Clear();
+				for(int i=0;i<listRows.Count;i++) {
+					row=new ODGridRow();
+					for(int j=0;j<listRows[i].Cells.Count;j++) {
+						row.Cells.Add(listRows[i].Cells[j].Text);
+					}
+					Rows.Add(row);
+				}
+				EndUpdate();
+				if(editBox!=null) {
+					editBox.Dispose();
+				}
+				selectedCell=cellSelected;
+				CreateEditBox();
+				if(editBox!=null) {
+					editBox.SelectionStart=selectionStart;
+					editBox.SelectionLength=0;
+				}
+			}
+			g.Dispose();
+			cellFont.Dispose();
 		}
 
 		void editBox_TextChanged(object sender,EventArgs e) {
