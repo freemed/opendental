@@ -59,8 +59,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),clockStatus,extens,employeeNum);
 				return;
 			}
-			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName, "
-				+"NoColor "
+			string command=@"SELECT phoneempdefault.EmployeeNum,Description,phoneempdefault.EmpName,NoColor,phone.ClockStatus "
 				+"FROM phone "
 				+"LEFT JOIN phoneempdefault ON phone.Extension=phoneempdefault.PhoneExt "
 				+"WHERE phone.Extension="+POut.Long(extens);
@@ -87,12 +86,36 @@ namespace OpenDentBusiness {
 			if(tablePhone.Rows[0]["Description"].ToString()=="In use") {
 				isInUse=true;
 			}
+			#region DateTimeStart
+			//When a user shows up as a color on the phone panel, we want a timer to be constantly going to show how long they've been off the phone.
+			string dateTimeStart="";
+			//User is going to a status of Home, Break, or Lunch.  Always clear the DateTimeStart column no matter what.
+			if(isDefaultNoColor  //User does not show as a color on the phone panels.  Always clear out the time just in case.
+				|| clockStatus==ClockStatusEnum.Home
+				|| clockStatus==ClockStatusEnum.Lunch
+				|| clockStatus==ClockStatusEnum.Break) {
+				//The user is going home or on break.  Simply clear the DateTimeStart column.
+				dateTimeStart="DateTimeStart='0001-01-01', ";
+			}
+			else {//User shows as a color on big phones and is not going to a status of Home, Lunch, or Break.  Example: Available, Training etc.
+				//Get the current clock status from the database.
+				ClockStatusEnum clockStatusCur=(ClockStatusEnum)Enum.Parse(typeof(ClockStatusEnum),tablePhone.Rows[0]["ClockStatus"].ToString());
+				//Start the clock if the user is going from a break status to any other non-break status.
+				if(clockStatusCur==ClockStatusEnum.Home
+					|| clockStatusCur==ClockStatusEnum.Lunch
+					|| clockStatusCur==ClockStatusEnum.Break) {
+					//The user is clocking in from home, lunch, or break.  Start the timer up.
+					dateTimeStart="DateTimeStart=NOW(), ";
+				}
+			}
+			#endregion
 			Color colorBar=GetColorBar(clockStatus,empNum,isInUse,isDefaultNoColor);
 			string clockStatusStr=clockStatus.ToString();
 			if(clockStatus==ClockStatusEnum.None) {
 				clockStatusStr="";
 			}
 			command="UPDATE phone SET ClockStatus='"+POut.String(clockStatusStr)+"', "
+				+dateTimeStart
 				+"ColorBar="+colorBar.ToArgb().ToString()+", "
 				+"EmployeeNum="+POut.Long(empNum)+", "
 				+"EmployeeName='"+POut.String(empName)+"' "
