@@ -740,7 +740,9 @@ namespace OpenDental {
 				GotoKeyNum=FormT.GotoKeyNum;
 				OnGoToChanged();
 			}
-			FillGrid();
+			if(!this.IsDisposed) {
+				FillGrid();
+			}
 		}
 
 		private void Block_Clicked() {
