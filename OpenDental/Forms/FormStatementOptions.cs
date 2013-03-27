@@ -835,7 +835,8 @@ namespace OpenDental{
 				butEmail.Enabled=false;
 				butPrint.Enabled=false;
 				butPreview.Enabled=false;
-			}
+			} 
+			Plugins.HookAddCode(this,"FormStatementOptions_Load_end");
 		}
 
 		private void butToday_Click(object sender,EventArgs e) {

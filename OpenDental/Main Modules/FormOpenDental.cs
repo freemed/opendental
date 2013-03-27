@@ -2303,6 +2303,9 @@ namespace OpenDental{
 			if(!patChanged){
 				return;
 			}
+			if(Plugins.HookMethod(this,"FormOpenDental.FillPatientButton_popups",pat,PopupEventList)) {
+				return;
+			}
 			//New patient selected.  Everything below here is for popups.
 			//First, remove all expired popups from the event list.
 			for(int i=PopupEventList.Count-1;i>=0;i--){//go backwards
