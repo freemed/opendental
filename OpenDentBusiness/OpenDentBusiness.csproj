@@ -360,6 +360,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
     <Compile Include="Data Interface\CustRefEntries.cs" />
     <Compile Include="Data Interface\CustReferences.cs" />

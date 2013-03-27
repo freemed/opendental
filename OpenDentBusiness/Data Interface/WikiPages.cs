@@ -11,11 +11,7 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class WikiPages{
 		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
-
-		///<summary></summary>
+		///<summary>The only wiki page that gets cached is the master page.</summary>
 		private static WikiPage masterPage;
 
 		///<summary></summary>
@@ -288,6 +284,11 @@ namespace OpenDentBusiness{
 				string folderName=match.Value.Replace("[[folder:","").TrimEnd(']');
 				s=s.Replace(match.Value,"<a href=\"folder:"+folderName+"\">folder:"+folderName+"</a>");
 			}
+			//[[list:listname]]------------------------------------------------------------------------------------------------
+			//matches=Regex.Matches(s,@"\[\[(list:).*?\]\]");
+			//foreach(Match match in matches) {
+			//	s=s.Replace(match.Value,WikiLists.TranslateToHTML(match.Value.Substring(7).Trim(']')));
+			//}
 			//[[color:red|text]]----------------------------------------------------------------------------------------------------------------
 			matches = Regex.Matches(s,@"\[\[(color:).*?\]\]");//.*? matches as few as possible.
 			foreach(Match match in matches) {

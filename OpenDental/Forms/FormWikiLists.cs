@@ -9,9 +9,42 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormWikiLists:Form {
+		private List<string> wikiLists;
+
 		public FormWikiLists() {
 			InitializeComponent();
 			Lan.F(this);
+		}
+
+		private void FormWikiLists_Load(object sender,EventArgs e) {
+			FillList();
+		}
+
+		private void FillList() {
+			listBox1.Items.Clear();
+			wikiLists = WikiLists.GetAllLists();
+			foreach(string list in wikiLists) {
+				listBox1.Items.Add(list.Substring(9));
+			}
+		}
+
+		private void listBox1_DoubleClick(object sender,EventArgs e) {
+			if(listBox1.SelectedIndices.Count<1) {
+				return;
+			}
+			FormWikiListEdit FormWLE = new FormWikiListEdit();
+			FormWLE.WikiListCur=wikiLists[listBox1.SelectedIndex].Substring(9);
+			FormWLE.ShowDialog();
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			InputBox inputListName = new InputBox("New List Name");
+			inputListName.ShowDialog();
+			FormWikiListEdit FormWLE = new FormWikiListEdit();
+			FormWLE.WikiListCur = inputListName.textResult.Text.ToLower().Replace(" ","");
+			//FormWLE.IsNew=true;//set within the form.
+			FormWLE.ShowDialog();
+			FillList();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -20,10 +53,6 @@ namespace OpenDental {
 
 		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
-		}
-
-		private void FormWikiLists_Load(object sender,EventArgs e) {
-
 		}
 	}
 }

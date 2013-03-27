@@ -23,10 +23,37 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.listBox1 = new System.Windows.Forms.ListBox();
+			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.listBox1 = new System.Windows.Forms.ListBox();
 			this.SuspendLayout();
+			// 
+			// listBox1
+			// 
+			this.listBox1.FormattingEnabled = true;
+			this.listBox1.Location = new System.Drawing.Point(12, 12);
+			this.listBox1.Name = "listBox1";
+			this.listBox1.Size = new System.Drawing.Size(197, 511);
+			this.listBox1.TabIndex = 4;
+			this.listBox1.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(215, 12);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 24);
+			this.butAdd.TabIndex = 5;
+			this.butAdd.Text = "Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// butOK
 			// 
@@ -36,7 +63,7 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(323, 469);
+			this.butOK.Location = new System.Drawing.Point(215, 469);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 24);
 			this.butOK.TabIndex = 3;
@@ -51,25 +78,18 @@ namespace OpenDental{
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(323, 499);
+			this.butCancel.Location = new System.Drawing.Point(215, 499);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 24);
 			this.butCancel.TabIndex = 2;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
-			// listBox1
-			// 
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.Location = new System.Drawing.Point(12, 12);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(297, 511);
-			this.listBox1.TabIndex = 4;
-			// 
 			// FormWikiLists
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(410, 534);
+			this.ClientSize = new System.Drawing.Size(302, 534);
+			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.listBox1);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
@@ -85,5 +105,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butOK;
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.ListBox listBox1;
+		private UI.Button butAdd;
 	}
 }

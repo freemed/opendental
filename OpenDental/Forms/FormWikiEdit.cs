@@ -310,6 +310,7 @@ namespace OpenDental {
 					|| match.Value.StartsWith("[[keywords:")
 					|| match.Value.StartsWith("[[file:")
 					|| match.Value.StartsWith("[[folder:")
+					|| match.Value.StartsWith("[[list:")
 					|| match.Value.StartsWith("[[color:")) 
 				{
 					continue;//we don't care about these.  We are only checking internal links
@@ -582,6 +583,14 @@ namespace OpenDental {
 					}
 				}
 			}
+			//List validation-----------------------------------------------------------------------------------------------------
+			matches=Regex.Matches(textContent.Text,@"\[\[(list:).*?\]\]");// [[list:CustomList]]
+			foreach(Match match in matches) {
+				if(!WikiLists.CheckExists(match.Value.Substring(7).Trim(']'))) {
+					MessageBox.Show(Lan.g(this,"Wiki list does not exist in database")+" : "+match.Value.Substring(7).Trim(']'));
+					return false;
+				}
+			}
 			//spacing around bullets-----------------------------------------------------------------------------------------------
 			string[] lines=textContent.Text.Split(new string[] { "\r\n" },StringSplitOptions.None);
 			for(int i=0;i<lines.Length;i++) {
@@ -622,6 +631,7 @@ namespace OpenDental {
 					|| match.Value.StartsWith("[[keywords:")
 					|| match.Value.StartsWith("[[file:")
 					|| match.Value.StartsWith("[[folder:")
+					|| match.Value.StartsWith("[[list:")
 					|| match.Value.StartsWith("[[color:")) 
 				{
 					//other tags
