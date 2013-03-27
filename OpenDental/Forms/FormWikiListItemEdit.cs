@@ -13,58 +13,38 @@ using CodeBase;
 using System.Text.RegularExpressions;
 
 namespace OpenDental {
-	public partial class FormWikiListEdit:Form {
-		///<summary>Name of the wiki list being manipulated. This does not include the "wikilist" prefix. i.e. "networkdevices" not "wikilistnetworkdevices"</summary>
-		public string WikiListCur;
+	public partial class FormWikiListItemEdit:Form {
+		///<summary>By passing in the whole table we preserve the column names and positions even though this table should only have one row in it.</summary>
+		public DataTable Item;
 		public bool IsNew;
-		private DataTable Table;
 
-		public FormWikiListEdit() {
+		public FormWikiListItemEdit() {
 			InitializeComponent();
 			Lan.F(this);
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
-			if(WikiLists.CheckExists(WikiListCur)) {
-				Table = WikiLists.GetByName(WikiListCur);
-				IsNew=false;
-			}
-			else {
-				Table = new DataTable();
-				IsNew=true;
-				Table.Columns.Add(WikiListCur.ToUpper()[0]+WikiListCur.ToLower().Substring(1)+"Num");//Add PK
-			}
-			Table.Columns[0].AutoIncrement=true;//Auto increment PK.
 			FillGrid();
-		}
-
-		private void ManuallyEdit() {
-			
 		}
 
 		/// <summary></summary>
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col;
-			for(int c=0;c<Table.Columns.Count;c++){
-				col=new ODGridColumn(Table.Columns[c].ColumnName,100,false);
-				if(c==0) {
-					col.IsEditable=false;//uneditable PK.
-				}
-				gridMain.Columns.Add(col);
-			}
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Column"),75);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Value"),110);;
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<Table.Rows.Count;i++){
+			for(int i=0;i<Item.Columns.Count;i++){
 				row=new ODGridRow();
-				for(int c=0;c<Table.Columns.Count;c++) {
-					row.Cells.Add(Table.Rows[i][c].ToString());
-				}
+				row.Cells.Add(Item.Columns[i].ColumnName);
+				row.Cells.Add(Item.Rows[0][i].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			gridMain.Title="List : "+WikiListCur;
+			gridMain.Title="Edit List Item";
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
@@ -76,10 +56,10 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
-			Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
-			Point cellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(cellSelected);
+			//Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			//Point cellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
+			//FillGrid();//gridMain.SelectedCell gets cleared.
+			//gridMain.SetSelected(cellSelected);
 		}
 
 		/*No longer necessary because gridMain_CellLeave does this as text is changed.
