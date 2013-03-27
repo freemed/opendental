@@ -2898,8 +2898,8 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew) {
-				SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,pat.PatNum,
-					AptCur.AptDateTime.ToString()+", "+AptCur.ProcDescript,
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
+					"Create complete for date/time: "+AptCur.AptDateTime.ToString(),
 					AptCur.AptNum);
 			}
 			else {
@@ -2931,6 +2931,9 @@ namespace OpenDental{
 		private void FormApptEdit_FormClosing(object sender,FormClosingEventArgs e) {
 			if(DialogResult!=DialogResult.OK) {
 				if(IsNew) {
+					SecurityLogs.MakeLogEntry(Permissions.AppointmentEdit,pat.PatNum,
+						"Create cancel for date/time: "+AptCur.AptDateTime.ToString(),
+						AptCur.AptNum);
 					Appointments.Delete(AptCur.AptNum);
 				}
 			}

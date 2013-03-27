@@ -924,6 +924,9 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
+			SecurityLogs.MakeLogEntry(Permissions.AppointmentCreate,AptCur.PatNum,
+				AptCur.AptDateTime.ToString()+", "+AptCur.ProcDescript,
+				AptCur.AptNum);
 			FormApptEdit FormApptEdit2=new FormApptEdit(AptCur.AptNum);
 			FormApptEdit2.IsNew=true;
 			FormApptEdit2.ShowDialog();
