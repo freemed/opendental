@@ -29,16 +29,11 @@ namespace OpenDental{
 			this.butColumnInsert = new OpenDental.UI.Button();
 			this.butColumnRight = new OpenDental.UI.Button();
 			this.butColumnLeft = new OpenDental.UI.Button();
-			this.groupRow = new System.Windows.Forms.GroupBox();
-			this.butRowDelete = new OpenDental.UI.Button();
 			this.butRowInsert = new OpenDental.UI.Button();
-			this.butRowDown = new OpenDental.UI.Button();
-			this.butRowUp = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.butClose = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox1.SuspendLayout();
-			this.groupRow.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// groupBox1
@@ -54,7 +49,7 @@ namespace OpenDental{
 			this.groupBox1.Size = new System.Drawing.Size(88, 141);
 			this.groupBox1.TabIndex = 28;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Column";
+			this.groupBox1.Text = "Columns";
 			// 
 			// butColumnDelete
 			// 
@@ -81,7 +76,7 @@ namespace OpenDental{
 			this.butHeaders.Name = "butHeaders";
 			this.butHeaders.Size = new System.Drawing.Size(71, 24);
 			this.butHeaders.TabIndex = 31;
-			this.butHeaders.Text = "Col Name";
+			this.butHeaders.Text = "Col Edit";
 			this.butHeaders.Click += new System.EventHandler(this.butHeaders_Click);
 			// 
 			// butColumnInsert
@@ -126,94 +121,20 @@ namespace OpenDental{
 			this.butColumnLeft.Text = "L";
 			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
 			// 
-			// groupRow
-			// 
-			this.groupRow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupRow.Controls.Add(this.butRowDelete);
-			this.groupRow.Controls.Add(this.butRowInsert);
-			this.groupRow.Controls.Add(this.butRowDown);
-			this.groupRow.Controls.Add(this.butRowUp);
-			this.groupRow.Location = new System.Drawing.Point(861, 214);
-			this.groupRow.Name = "groupRow";
-			this.groupRow.Size = new System.Drawing.Size(88, 141);
-			this.groupRow.TabIndex = 32;
-			this.groupRow.TabStop = false;
-			this.groupRow.Text = "Row";
-			// 
-			// butRowDelete
-			// 
-			this.butRowDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowDelete.Autosize = true;
-			this.butRowDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowDelete.CornerRadius = 4F;
-			this.butRowDelete.Location = new System.Drawing.Point(8, 109);
-			this.butRowDelete.Name = "butRowDelete";
-			this.butRowDelete.Size = new System.Drawing.Size(71, 24);
-			this.butRowDelete.TabIndex = 32;
-			this.butRowDelete.Text = "Delete";
-			this.butRowDelete.Click += new System.EventHandler(this.butRowDelete_Click);
-			// 
 			// butRowInsert
 			// 
 			this.butRowInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butRowInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRowInsert.Autosize = true;
 			this.butRowInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butRowInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butRowInsert.CornerRadius = 4F;
-			this.butRowInsert.Location = new System.Drawing.Point(8, 79);
+			this.butRowInsert.Location = new System.Drawing.Point(869, 213);
 			this.butRowInsert.Name = "butRowInsert";
 			this.butRowInsert.Size = new System.Drawing.Size(71, 24);
 			this.butRowInsert.TabIndex = 31;
-			this.butRowInsert.Text = "Add Row";
+			this.butRowInsert.Text = "Add Item";
 			this.butRowInsert.Click += new System.EventHandler(this.butRowAdd_Click);
-			// 
-			// butRowDown
-			// 
-			this.butRowDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowDown.Autosize = true;
-			this.butRowDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowDown.CornerRadius = 4F;
-			this.butRowDown.Location = new System.Drawing.Point(8, 49);
-			this.butRowDown.Name = "butRowDown";
-			this.butRowDown.Size = new System.Drawing.Size(44, 24);
-			this.butRowDown.TabIndex = 30;
-			this.butRowDown.Text = "Down";
-			this.butRowDown.Click += new System.EventHandler(this.butRowDown_Click);
-			// 
-			// butRowUp
-			// 
-			this.butRowUp.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowUp.Autosize = true;
-			this.butRowUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowUp.CornerRadius = 4F;
-			this.butRowUp.Location = new System.Drawing.Point(8, 19);
-			this.butRowUp.Name = "butRowUp";
-			this.butRowUp.Size = new System.Drawing.Size(44, 24);
-			this.butRowUp.TabIndex = 29;
-			this.butRowUp.Text = "Up";
-			this.butRowUp.Click += new System.EventHandler(this.butRowUp_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.EditableAcceptsCR = true;
-			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(842, 574);
-			this.gridMain.TabIndex = 26;
-			this.gridMain.Title = "";
-			this.gridMain.TranslationName = "";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
-			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
 			// 
 			// butClose
 			// 
@@ -247,21 +168,40 @@ namespace OpenDental{
 			this.butDelete.Text = "Delete";
 			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.EditableAcceptsCR = true;
+			this.gridMain.HScrollVisible = true;
+			this.gridMain.Location = new System.Drawing.Point(12, 12);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.Size = new System.Drawing.Size(842, 574);
+			this.gridMain.TabIndex = 26;
+			this.gridMain.Title = "";
+			this.gridMain.TranslationName = "";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
+			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
+			// 
 			// FormWikiListEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(952, 613);
+			this.Controls.Add(this.butRowInsert);
 			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.groupRow);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butClose);
 			this.Name = "FormWikiListEdit";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Wiki List";
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.FormWikiListEdit_Load);
 			this.groupBox1.ResumeLayout(false);
-			this.groupRow.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -274,11 +214,7 @@ namespace OpenDental{
 		private UI.Button butHeaders;
 		private UI.Button butColumnRight;
 		private UI.Button butColumnLeft;
-		private System.Windows.Forms.GroupBox groupRow;
-		private UI.Button butRowDelete;
 		private UI.Button butRowInsert;
-		private UI.Button butRowDown;
-		private UI.Button butRowUp;
 		private UI.Button butColumnDelete;
 		private UI.Button butColumnInsert;
 		private UI.Button butDelete;

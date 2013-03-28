@@ -25,16 +25,11 @@ namespace OpenDental {
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
-			if(WikiLists.CheckExists(WikiListCur)) {
-				Table = WikiLists.GetByName(WikiListCur);
-				IsNew=false;
-			}
-			else {
-				Table = new DataTable();
+			if(!WikiLists.CheckExists(WikiListCur)) {
 				IsNew=true;
-				Table.Columns.Add(WikiListCur.ToUpper()[0]+WikiListCur.ToLower().Substring(1)+"Num");//Add PK
+				WikiLists.CreateNewWikiList(WikiListCur);
 			}
-			Table.Columns[0].AutoIncrement=true;//Auto increment PK.
+			Table=WikiLists.GetByName(WikiListCur);
 			FillGrid();
 		}
 
@@ -68,7 +63,16 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			//new big window to edit row
+			FormWikiListItemEdit FormWLIE = new FormWikiListItemEdit();
+			FormWLIE.WikiListCur=WikiListCur;
+			FormWLIE.ItemNum=long.Parse(Table.Rows[e.Row][0].ToString());
+			FormWLIE.ShowDialog();
+			//saving occurs from within the form.
+			if(FormWLIE.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Table=WikiLists.GetByName(WikiListCur);
+			FillGrid();
 		}
 
 		private void gridMain_CellTextChanged(object sender,EventArgs e) {
@@ -108,23 +112,8 @@ namespace OpenDental {
 		}
 
 		private void butColumnAdd_Click(object sender,EventArgs e) {
-			InputBox newColumnInput = new InputBox("New Column Name");
-			if(newColumnInput.ShowDialog()!=DialogResult.OK) {
-				return;
-			}
-			//Format New column name------------------------------------------------------------------------------
-			string tempColumnName = newColumnInput.textResult.Text;
-			tempColumnName=tempColumnName.Replace(" ","");
-			tempColumnName=tempColumnName.ToUpper()[0]+tempColumnName.ToLower().Substring(1);
-			//Validate New column name----------------------------------------------------------------------------
-			foreach(DataColumn column in Table.Columns) {
-				if(column.ColumnName==tempColumnName){
-					MsgBox.Show(this,"Column name already exists.");
-					return;
-				}
-			}
-			//Add New Column--------------------------------------------------------------------------------------
-			Table.Columns.Add(tempColumnName);
+			WikiLists.AddColumn(WikiListCur);
+			Table=WikiLists.GetByName(WikiListCur);
 			FillGrid();
 		}
 
@@ -173,19 +162,9 @@ namespace OpenDental {
 		}
 
 		private void butRowAdd_Click(object sender,EventArgs e) {
-			Point selectedCell;
-			if(gridMain.SelectedCell.Y==-1) {
-				selectedCell=new Point(0,Table.Rows.Count-1);
-			}
-			else {
-				selectedCell=gridMain.SelectedCell;
-			}
-			//DataRow row=Table.NewRow();
-			//row.ItemArray[0]=Table.Columns[0].
-			Table.Rows.Add(Table.NewRow());//InsertAt(row,selectedCell.Y+1);
-			Point newCellSelected=new Point(selectedCell.X,selectedCell.Y+1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
+			WikiLists.AddItem(WikiListCur);
+			Table=WikiLists.GetByName(WikiListCur);
+			FillGrid();
 		}
 
 		private void butRowDelete_Click(object sender,EventArgs e) {

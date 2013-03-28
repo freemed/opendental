@@ -14,9 +14,12 @@ using System.Text.RegularExpressions;
 
 namespace OpenDental {
 	public partial class FormWikiListItemEdit:Form {
-		///<summary>By passing in the whole table we preserve the column names and positions even though this table should only have one row in it.</summary>
-		public DataTable Item;
+		///<summary>Name of the wiki list.</summary>
+		public string WikiListCur;
+		public long ItemNum;
 		public bool IsNew;
+		///<summary>Creating a data table containing only one item allows us to use column names.</summary>
+		DataTable ItemTable;
 
 		public FormWikiListItemEdit() {
 			InitializeComponent();
@@ -24,6 +27,7 @@ namespace OpenDental {
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
+			ItemTable = WikiLists.GetItem(WikiListCur,ItemNum);
 			FillGrid();
 		}
 
@@ -31,16 +35,20 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Column"),75);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Column"),200);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Value"),110);;
+			col=new ODGridColumn(Lan.g(this,"Value"),400);
+			col.IsEditable=true;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<Item.Columns.Count;i++){
+			for(int i=0;i<ItemTable.Columns.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Item.Columns[i].ColumnName);
-				row.Cells.Add(Item.Rows[0][i].ToString());
+				row.Cells.Add(ItemTable.Columns[i].ColumnName);
+				row.Cells.Add(ItemTable.Rows[0][i].ToString());
+				if(i==0) {
+					row.ColorBackG=Color.Gray;
+				}
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -56,10 +64,12 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
-			//Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
-			//Point cellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
-			//FillGrid();//gridMain.SelectedCell gets cleared.
-			//gridMain.SetSelected(cellSelected);
+			//update all cells. No call to DB, so this should be safe.
+			for(int i=1;i<gridMain.Rows.Count;i++) {//start at one, because we should never change the PK.
+				ItemTable.Rows[0][i]=gridMain.Rows[i].Cells[1].Text;
+			}
+			//not entirely neccesary, but will "undo" changes made to PK.
+			FillGrid();
 		}
 
 		/*No longer necessary because gridMain_CellLeave does this as text is changed.
@@ -78,136 +88,21 @@ namespace OpenDental {
 			}
 		}*/
 
-		private void butColumnLeft_Click(object sender,EventArgs e) {
-		}
-
-		private void butColumnRight_Click(object sender,EventArgs e) {
-		}
-
-		private void butHeaders_Click(object sender,EventArgs e) {
-		}
-
-		private void butColumnAdd_Click(object sender,EventArgs e) {
-			InputBox newColumnInput = new InputBox("New Column Name");
-			if(newColumnInput.ShowDialog()!=DialogResult.OK) {
-				return;
-			}
-			//Format New column name------------------------------------------------------------------------------
-			string tempColumnName = newColumnInput.textResult.Text;
-			tempColumnName=tempColumnName.Replace(" ","");
-			tempColumnName=tempColumnName.ToUpper()[0]+tempColumnName.ToLower().Substring(1);
-			//Validate New column name----------------------------------------------------------------------------
-			foreach(DataColumn column in Table.Columns) {
-				if(column.ColumnName==tempColumnName){
-					MsgBox.Show(this,"Column name already exists.");
-					return;
-				}
-			}
-			//Add New Column--------------------------------------------------------------------------------------
-			Table.Columns.Add(tempColumnName);
-			FillGrid();
-		}
-
-		private void butColumnDelete_Click(object sender,EventArgs e) {
-		}
-
-		private void butRowUp_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.SelectedCell.Y==0) {
-				return;//Row is already at the top.
-			}
-			DataRow row=Table.NewRow();
-			for(int i=0;i<Table.Columns.Count;i++) {
-				row[i]=Table.Rows[gridMain.SelectedCell.Y][i];
-			}
-			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y-1);
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+1);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y-1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
-		}
-
-		private void butRowDown_Click(object sender,EventArgs e) {
-			//Table.Rows.InsertAt
-			//DataRow row=Table.Rows[i];
-			//Table.Rows.RemoveAt
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.SelectedCell.Y==Table.Rows.Count-1) {
-				return;//Row is already at the bottom.
-			}
-			DataRow row=Table.NewRow();
-			for(int i=0;i<Table.Columns.Count;i++) {
-				row[i]=Table.Rows[gridMain.SelectedCell.Y+1][i];
-			}
-			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y);
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+2);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y+1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
-		}
-
-		private void butRowAdd_Click(object sender,EventArgs e) {
-			Point selectedCell;
-			if(gridMain.SelectedCell.Y==-1) {
-				selectedCell=new Point(0,Table.Rows.Count-1);
-			}
-			else {
-				selectedCell=gridMain.SelectedCell;
-			}
-			//DataRow row=Table.NewRow();
-			//row.ItemArray[0]=Table.Columns[0].
-			Table.Rows.Add(Table.NewRow());//InsertAt(row,selectedCell.Y+1);
-			Point newCellSelected=new Point(selectedCell.X,selectedCell.Y+1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
-		}
-
-		private void butRowDelete_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.Rows.Count==1) {
-				MsgBox.Show(this,"Cannot delete last row.");
-				return;
-			}
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,Math.Max(gridMain.SelectedCell.Y-1,0));
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			if(newCellSelected.X>-1 && newCellSelected.Y >-1) {
-				gridMain.SetSelected(newCellSelected);
-			}
-		}
-
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this list item and all references to it?")) {
 				return;
 			}
-			//TODO: delete table from DB.
-			//TODO: update all wikipages and remove links to data that was contained in the table.
-			DialogResult=DialogResult.Cancel;
+			WikiLists.DeleteItem(WikiListCur,ItemNum);
+			DialogResult=DialogResult.OK;
 		}
 
-		//private void butOK_Click(object sender,EventArgs e) {
-		//  //if(IsNew) {
-		//  //  List<string> columnNames = new List<string>();
-		//  //  foreach(DataColumn column in Table.Columns) {
-		//  //    //TODO: validate and clean column names.
-		//  //    columnNames.Add(column.ColumnName);
-		//  //  }
-		//  //  WikiLists.CreateNewWikiList(WikiListCur,columnNames);
-		//  //}
-		//  WikiLists.UpdateList(WikiListCur,Table);
-		//  DialogResult=DialogResult.OK;
-		//}
+		private void butOK_Click(object sender,EventArgs e) {
+			WikiLists.UpdateItem(WikiListCur,ItemTable);
+			DialogResult=DialogResult.OK;
+			//TODO:refresh list data from the form that called this one.
+		}
 
-		private void butClose_Click(object sender,EventArgs e) {
+		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 
