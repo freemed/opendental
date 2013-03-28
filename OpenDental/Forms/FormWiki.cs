@@ -420,7 +420,7 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
-			else if(e.Url.ToString().StartsWith("http://")) {//navigating outside of wiki by clicking a link
+			else if(e.Url.ToString().StartsWith("http")) {//navigating outside of wiki by clicking a link
 				try {
 					System.Diagnostics.Process.Start(e.Url.ToString());
 				}
