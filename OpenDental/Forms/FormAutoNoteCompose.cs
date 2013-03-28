@@ -113,6 +113,9 @@ namespace OpenDental {
 					resultstr+=textMain.Text.Substring(matchloc+matches[i].Value.Length);
 				}
 				textMain.Text=resultstr;
+				textMain.SelectAll();
+				textMain.SelectionBackColor=Color.White;
+				textMain.Select(textMain.Text.Length,0);
 				Application.DoEvents();//refresh the textbox
 			}
 			textMain.SelectAll();
