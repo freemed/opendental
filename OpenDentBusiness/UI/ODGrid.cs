@@ -1614,11 +1614,11 @@ namespace OpenDental.UI {
 				case GridSelectionMode.OneCell:
 					selectedIndices.Clear();
 					//Point oldSelectedCell=selectedCell;
-					selectedCell=new Point(MouseDownCol,MouseDownRow);
 					//if(oldSelectedCell.X!=selectedCell.X || oldSelectedCell.Y!=selectedCell.Y){
 					if(editBox!=null) {
-						editBox.Dispose();
+						editBox.Dispose();//a lot happens right here, including a FillGrid() which sets selectedCell to -1,-1
 					}
+					selectedCell=new Point(MouseDownCol,MouseDownRow);
 					if(Columns[selectedCell.X].IsEditable) {
 						CreateEditBox();
 					}

@@ -56,20 +56,22 @@ namespace OpenDentBusiness{
 
 		public static DataTable GetByName(string listName) {
 			DataTable tableDescript = Db.GetTable("DESCRIBE wikilist_"+listName);
-			string orderBy;
+			string command = "SELECT * FROM wikilist_"+listName;
 			switch(tableDescript.Rows.Count) {
-				case 0:
-					orderBy="";//no order by
+				case 0://should never happen
 					break;
 				case 1:
-					orderBy=" ORDER BY 1";//order by PK
+					command+=" ORDER BY "+listName+"Num";//order by PK
 					break;
 				default:
-					orderBy=" ORDER BY 2,1";//order by second column and then PK
+					command+=" ORDER BY "+tableDescript.Rows[1].ItemArray[0];
+					//Order by the second column and then the PK. Also, reorder list so that empty items go on the bottom.
+					//command+=" WHERE "+tableDescript.Rows[1].ItemArray[0]+" IS NOT NULL ORDER BY "+tableDescript.Rows[1].ItemArray[0]+","+listName+"Num) "
+					//  +"UNION "
+					//  +"(SELECT * FROM wikilist_"+listName
+					//  +" WHERE "+tableDescript.Rows[1].ItemArray[0]+" IS NULL ORDER BY "+tableDescript.Rows[1].ItemArray[0]+","+listName+"Num)";
 					break;
 			}
-			string command = "SELECT * FROM wikilist_"+listName+orderBy;
-
 			return Db.GetTable(command);
 		}
 
@@ -102,8 +104,19 @@ namespace OpenDentBusiness{
 				throw new ApplicationException("Could not create valid column name.");
 			}
 			//Add new column name--------------------------------------------------------------------------------------------
-			string newColName = "Column"+columnNames.Rows.Count;//i.e. Column1
-			string command = "ALTER TABLE wikilist_"+listName+" ADD COLUMN Column"+Db.GetTable("DESCRIBE wikilist_"+listName).Rows.Count+" TEXT";
+			string command = "ALTER TABLE wikilist_"+listName+" ADD COLUMN "+newColumnName+" TEXT NOT NULL";
+			Db.NonQ(command);
+		}
+
+		///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
+		public static bool CheckColumnEmpty(string listName,string colName) {
+			string command = "SELECT COUNT(*) FROM wikilist_"+listName+" WHERE "+colName+"!=''";
+			return Db.GetCount(command).Equals("0");
+		}
+
+		///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
+		public static void DeleteColumn(string listName,string colName) {
+			string command = "ALTER TABLE wikilist_"+listName+" DROP "+colName;
 			Db.NonQ(command);
 		}
 
@@ -140,41 +153,6 @@ namespace OpenDentBusiness{
 			string command = "DELETE FROM wikilist_"+listName+" WHERE "+listName+"Num = "+itemNum;
 			Db.NonQ(command);
 		}
-
-		/////<summary>Lazy method, possibly dangerous to list data, drops table if exists and re-inserts. This takes care of all new and/or rearranged columns and values.
-		/////Column Names should already be formatted in the Data Table.</summary>
-		//public static void UpdateList(string listName, DataTable listData) {
-		//  //Drop existing Table-------------------------------------------------------------------------------------
-		//  string command = "DROP TABLE IF EXISTS wikilist_"+listName;
-		//  Db.NonQ(command);
-		//  //Drop Re-Define Table------------------------------------------------------------------------------------
-		//  command = "CREATE TABLE wikilist_"+PIn.String(listName)+" (";
-		//  for(int i=0;i<listData.Columns.Count;i++) {//string columnName in columnNames) {
-		//    if(i==0) {//First Column is ALWAYS primary key, or at least should be.
-		//      command+=PIn.String(listData.Columns[i].ColumnName)+" BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY ";//capitalize PK
-		//      continue;
-		//    }
-		//    command+=", "+PIn.String(listData.Columns[i].ColumnName)+" TEXT";//Capitalize each column name.
-		//  }
-		//  command+=")";
-		//  Db.NonQ(command);
-		//  //Insert New Data-------------------------------------------------------------------------------------
-		//  //"INSERT INTO <tablename> (<colNames>) VALUES (<data>);
-		//  string commandBase="INSERT INTO wikilist_"+listName+" (";
-		//  foreach(DataColumn column in listData.Columns) {
-		//    commandBase+=column.ColumnName+",";
-		//  }
-		//  commandBase=commandBase.Trim(',')+ ") VALUES (";
-		//  foreach(DataRow row in listData.Rows) {
-		//    command=commandBase;
-		//    foreach(object item in row.ItemArray) {
-		//      command+="'"+item.ToString()+"', ";
-		//    }
-		//    command=command.Trim(',')+")";
-		//    Db.NonQ(command);
-		//  }
-		//  //done
-		//}
 
 		public static List<string> GetAllLists() {
 			List<string> retVal = new List<string>();

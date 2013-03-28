@@ -56,7 +56,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
-			//new big window to edit row
+			//remove this
 		}
 
 		private void gridMain_CellTextChanged(object sender,EventArgs e) {
@@ -68,27 +68,15 @@ namespace OpenDental {
 			for(int i=1;i<gridMain.Rows.Count;i++) {//start at one, because we should never change the PK.
 				ItemTable.Rows[0][i]=gridMain.Rows[i].Cells[1].Text;
 			}
-			//not entirely neccesary, but will "undo" changes made to PK.
+			//to undo changes made to PK.
 			FillGrid();
 		}
 
-		/*No longer necessary because gridMain_CellLeave does this as text is changed.
-		///<summary>This is done before generating markup, when adding or removing rows or columns, and when changing from "none" view to another view.  FillGrid can't be done until this is done.</summary>
-		private void PumpGridIntoTable() {
-			//table and grid will only have the same numbers of rows and columns if the view is none.
-			//Otherwise, table may have more columns
-			//So this is only allowed when switching from the none view to some other view.
-			if(ViewShowing!=0) {
+		private void butDelete_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Setup)) {//might want to implement a new security permission.
 				return;
 			}
-			for(int i=0;i<Table.Rows.Count;i++) {
-				for(int c=0;c<Table.Columns.Count;c++) {
-					Table.Rows[i][c]=gridMain.Rows[i].Cells[c].Text;
-				}
-			}
-		}*/
-
-		private void butDelete_Click(object sender,EventArgs e) {
+			//maybe require all empty or admin priv
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this list item and all references to it?")) {
 				return;
 			}
@@ -99,7 +87,6 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			WikiLists.UpdateItem(WikiListCur,ItemTable);
 			DialogResult=DialogResult.OK;
-			//TODO:refresh list data from the form that called this one.
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

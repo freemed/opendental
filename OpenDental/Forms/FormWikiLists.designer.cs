@@ -95,6 +95,7 @@ namespace OpenDental{
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormWikiLists";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "WikiLists";
 			this.Load += new System.EventHandler(this.FormWikiLists_Load);
 			this.ResumeLayout(false);
 

@@ -15,7 +15,7 @@ using System.Text.RegularExpressions;
 namespace OpenDental {
 	public partial class FormWikiListEdit:Form {
 		///<summary>Name of the wiki list being manipulated. This does not include the "wikilist" prefix. i.e. "networkdevices" not "wikilistnetworkdevices"</summary>
-		public string WikiListCur;
+		public string WikiListCurName;
 		public bool IsNew;
 		private DataTable Table;
 
@@ -25,11 +25,11 @@ namespace OpenDental {
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
-			if(!WikiLists.CheckExists(WikiListCur)) {
+			if(!WikiLists.CheckExists(WikiListCurName)) {
 				IsNew=true;
-				WikiLists.CreateNewWikiList(WikiListCur);
+				WikiLists.CreateNewWikiList(WikiListCurName);
 			}
-			Table=WikiLists.GetByName(WikiListCur);
+			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 		}
 
@@ -44,9 +44,6 @@ namespace OpenDental {
 			ODGridColumn col;
 			for(int c=0;c<Table.Columns.Count;c++){
 				col=new ODGridColumn(Table.Columns[c].ColumnName,100,false);
-				if(c==0) {
-					col.IsEditable=false;//uneditable PK.
-				}
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -59,19 +56,19 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			gridMain.Title="List : "+WikiListCur;
+			gridMain.Title=WikiListCurName;
 		}
 
 		private void gridMain_CellDoubleClick(object sender,OpenDental.UI.ODGridClickEventArgs e) {
 			FormWikiListItemEdit FormWLIE = new FormWikiListItemEdit();
-			FormWLIE.WikiListCur=WikiListCur;
-			FormWLIE.ItemNum=long.Parse(Table.Rows[e.Row][0].ToString());
+			FormWLIE.WikiListCur=WikiListCurName;
+			FormWLIE.ItemNum=PIn.Long(Table.Rows[e.Row][0].ToString());
 			FormWLIE.ShowDialog();
 			//saving occurs from within the form.
 			if(FormWLIE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Table=WikiLists.GetByName(WikiListCur);
+			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 		}
 
@@ -80,10 +77,11 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
+			/*
 			Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
 			Point cellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y);
 			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(cellSelected);
+			gridMain.SetSelected(cellSelected);*/
 		}
 
 		/*No longer necessary because gridMain_CellLeave does this as text is changed.
@@ -112,82 +110,36 @@ namespace OpenDental {
 		}
 
 		private void butColumnAdd_Click(object sender,EventArgs e) {
-			WikiLists.AddColumn(WikiListCur);
-			Table=WikiLists.GetByName(WikiListCur);
+			WikiLists.AddColumn(WikiListCurName);
+			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 		}
 
 		private void butColumnDelete_Click(object sender,EventArgs e) {
-		}
-
-		private void butRowUp_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
+			if(gridMain.SelectedCell.X==-1) {
+				MsgBox.Show(this,"Select cell in column to be deleted first.");
 				return;
 			}
-			if(gridMain.SelectedCell.Y==0) {
-				return;//Row is already at the top.
-			}
-			DataRow row=Table.NewRow();
-			for(int i=0;i<Table.Columns.Count;i++) {
-				row[i]=Table.Rows[gridMain.SelectedCell.Y][i];
-			}
-			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y-1);
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+1);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y-1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
-		}
-
-		private void butRowDown_Click(object sender,EventArgs e) {
-			//Table.Rows.InsertAt
-			//DataRow row=Table.Rows[i];
-			//Table.Rows.RemoveAt
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
+			if(!WikiLists.CheckColumnEmpty(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName)){
+				MsgBox.Show(this,"Column cannot be deleted because it conatins data.");
 				return;
 			}
-			if(gridMain.SelectedCell.Y==Table.Rows.Count-1) {
-				return;//Row is already at the bottom.
-			}
-			DataRow row=Table.NewRow();
-			for(int i=0;i<Table.Columns.Count;i++) {
-				row[i]=Table.Rows[gridMain.SelectedCell.Y+1][i];
-			}
-			Table.Rows.InsertAt(row,gridMain.SelectedCell.Y);
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y+2);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,gridMain.SelectedCell.Y+1);
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			gridMain.SetSelected(newCellSelected);
-		}
-
-		private void butRowAdd_Click(object sender,EventArgs e) {
-			WikiLists.AddItem(WikiListCur);
-			Table=WikiLists.GetByName(WikiListCur);
+			WikiLists.DeleteColumn(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName);
+			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 		}
 
-		private void butRowDelete_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedCell.Y==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.Rows.Count==1) {
-				MsgBox.Show(this,"Cannot delete last row.");
-				return;
-			}
-			Table.Rows.RemoveAt(gridMain.SelectedCell.Y);
-			Point newCellSelected=new Point(gridMain.SelectedCell.X,Math.Max(gridMain.SelectedCell.Y-1,0));
-			FillGrid();//gridMain.SelectedCell gets cleared.
-			if(newCellSelected.X>-1 && newCellSelected.Y >-1) {
-				gridMain.SetSelected(newCellSelected);
-			}
+		private void butAddItem_Click(object sender,EventArgs e) {
+			WikiLists.AddItem(WikiListCurName);
+			Table=WikiLists.GetByName(WikiListCurName);
+			FillGrid();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
 				return;
 			}
+			//TODO: require admin of some sort
 			//TODO: delete table from DB.
 			//TODO: update all wikipages and remove links to data that was contained in the table.
 			DialogResult=DialogResult.Cancel;

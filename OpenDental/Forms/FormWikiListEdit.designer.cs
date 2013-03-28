@@ -29,10 +29,10 @@ namespace OpenDental{
 			this.butColumnInsert = new OpenDental.UI.Button();
 			this.butColumnRight = new OpenDental.UI.Button();
 			this.butColumnLeft = new OpenDental.UI.Button();
-			this.butRowInsert = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
+			this.butAddItem = new OpenDental.UI.Button();
 			this.butDelete = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butClose = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -72,6 +72,7 @@ namespace OpenDental{
 			this.butHeaders.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHeaders.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHeaders.CornerRadius = 4F;
+			this.butHeaders.Enabled = false;
 			this.butHeaders.Location = new System.Drawing.Point(8, 49);
 			this.butHeaders.Name = "butHeaders";
 			this.butHeaders.Size = new System.Drawing.Size(71, 24);
@@ -100,6 +101,7 @@ namespace OpenDental{
 			this.butColumnRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnRight.CornerRadius = 4F;
+			this.butColumnRight.Enabled = false;
 			this.butColumnRight.Location = new System.Drawing.Point(49, 19);
 			this.butColumnRight.Name = "butColumnRight";
 			this.butColumnRight.Size = new System.Drawing.Size(30, 24);
@@ -114,6 +116,7 @@ namespace OpenDental{
 			this.butColumnLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnLeft.CornerRadius = 4F;
+			this.butColumnLeft.Enabled = false;
 			this.butColumnLeft.Location = new System.Drawing.Point(8, 19);
 			this.butColumnLeft.Name = "butColumnLeft";
 			this.butColumnLeft.Size = new System.Drawing.Size(30, 24);
@@ -121,35 +124,20 @@ namespace OpenDental{
 			this.butColumnLeft.Text = "L";
 			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
 			// 
-			// butRowInsert
+			// butAddItem
 			// 
-			this.butRowInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRowInsert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRowInsert.Autosize = true;
-			this.butRowInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRowInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRowInsert.CornerRadius = 4F;
-			this.butRowInsert.Location = new System.Drawing.Point(869, 213);
-			this.butRowInsert.Name = "butRowInsert";
-			this.butRowInsert.Size = new System.Drawing.Size(71, 24);
-			this.butRowInsert.TabIndex = 31;
-			this.butRowInsert.Text = "Add Item";
-			this.butRowInsert.Click += new System.EventHandler(this.butRowAdd_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(865, 589);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 20;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			this.butAddItem.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAddItem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAddItem.Autosize = true;
+			this.butAddItem.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAddItem.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddItem.CornerRadius = 4F;
+			this.butAddItem.Location = new System.Drawing.Point(869, 213);
+			this.butAddItem.Name = "butAddItem";
+			this.butAddItem.Size = new System.Drawing.Size(71, 24);
+			this.butAddItem.TabIndex = 31;
+			this.butAddItem.Text = "Add Item";
+			this.butAddItem.Click += new System.EventHandler(this.butAddItem_Click);
 			// 
 			// butDelete
 			// 
@@ -187,11 +175,26 @@ namespace OpenDental{
 			this.gridMain.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
 			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
 			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(865, 589);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 20;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
 			// FormWikiListEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(952, 613);
-			this.Controls.Add(this.butRowInsert);
+			this.Controls.Add(this.butAddItem);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
@@ -214,7 +217,7 @@ namespace OpenDental{
 		private UI.Button butHeaders;
 		private UI.Button butColumnRight;
 		private UI.Button butColumnLeft;
-		private UI.Button butRowInsert;
+		private UI.Button butAddItem;
 		private UI.Button butColumnDelete;
 		private UI.Button butColumnInsert;
 		private UI.Button butDelete;

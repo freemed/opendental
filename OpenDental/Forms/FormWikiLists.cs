@@ -33,7 +33,7 @@ namespace OpenDental {
 				return;
 			}
 			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			FormWLE.WikiListCur=wikiLists[listBox1.SelectedIndex].Substring(9);
+			FormWLE.WikiListCurName=wikiLists[listBox1.SelectedIndex].Substring(9);
 			FormWLE.ShowDialog();
 		}
 
@@ -41,7 +41,7 @@ namespace OpenDental {
 			InputBox inputListName = new InputBox("New List Name");
 			inputListName.ShowDialog();
 			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			FormWLE.WikiListCur = inputListName.textResult.Text.ToLower().Replace(" ","");
+			FormWLE.WikiListCurName = inputListName.textResult.Text.ToLower().Replace(" ","");
 			//FormWLE.IsNew=true;//set within the form.
 			FormWLE.ShowDialog();
 			FillList();
