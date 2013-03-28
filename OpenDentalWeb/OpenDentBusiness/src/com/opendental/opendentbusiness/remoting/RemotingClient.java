@@ -27,8 +27,9 @@ public class RemotingClient {
 		ServerURI=Window.Location.getProtocol()+"//";
 		//Get the URL's host and port name.
 		ServerURI+=Window.Location.getHost();
+		// TODO Create a better way of determining where the ServiceMain.asmx is located.
 		//Now that we have the full URL, we need to tell it to send requests to ServiceMain.asmx
-		ServerURI+="/ServiceMain.asmx";
+		ServerURI+="/OpenDentalWebService/ServiceMain.asmx";
 	}
 	
 }

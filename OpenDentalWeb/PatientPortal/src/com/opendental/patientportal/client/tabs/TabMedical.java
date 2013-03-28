@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
@@ -28,6 +29,10 @@ public class TabMedical extends Composite {
 	interface TabMedicalUiBinder extends UiBinder<Widget, TabMedical> {
 	}
 	
+	interface GridStyle extends CssResource {
+		String grid();
+	}
+	
 	@UiField VerticalPanel panelContainer;
 	@UiField Grid gridPanels;
 	@UiField Grid gridMedications;
@@ -40,6 +45,7 @@ public class TabMedical extends Composite {
 	private Patient patCur;
 	private ArrayList<LabPanel> listPanels;
 	private ArrayList<LabResult> listResults;
+	@UiField GridStyle style;
 	
 	public TabMedical(Patient pat) {
 		patCur=pat;
@@ -115,6 +121,8 @@ public class TabMedical extends Composite {
 		if(listResults==null) {
 			return gridResults;
 		}
+		//Set the style of the table to the same as all the other tables.
+		gridResults.setStyleName(style.grid());
 		ArrayList<LabResult> listResultMatches=new ArrayList<LabResult>();
 		//Loop through all of the results from the database and see if any results exist for the panel.
 		for(int i=0;i<listResults.size();i++) {
