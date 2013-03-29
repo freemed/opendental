@@ -366,6 +366,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormWikiListHeaders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormWikiListHeaders.designer.cs">
+      <DependentUpon>FormWikiListHeaders.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWikiListItemEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2733,6 +2739,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWikiListHeaders.resx">
+      <DependentUpon>FormWikiListHeaders.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormWikiListItemEdit.resx">
       <DependentUpon>FormWikiListItemEdit.cs</DependentUpon>
