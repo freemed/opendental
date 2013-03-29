@@ -1781,13 +1781,14 @@ namespace OpenDental.UI {
 			if(cellH < EDITABLE_ROW_HEIGHT) {//if it's less than one line
 			  cellH=EDITABLE_ROW_HEIGHT;//set it to one line
 			}
-			if(cellH>editBox.Height || cellH<editBox.Height-13) {//it needs to grow or shrink, so redraw it.
+			if(cellH>editBox.Height) {//it needs to grow so redraw it.
 				Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
 				Point cellSelected=new Point(selectedCell.X,selectedCell.Y);
 				int selectionStart=editBox.SelectionStart;
 				List<ODGridColumn> listCols=new List<ODGridColumn>();
 				for(int i=0;i<columns.Count;i++) {
 					listCols.Add(new ODGridColumn(columns[i].Heading,columns[i].ColWidth,columns[i].IsEditable));
+					listCols[i].TextAlign=columns[i].TextAlign;
 				}
 				List<ODGridRow> listRows=new List<ODGridRow>();
 				ODGridRow row;
@@ -1803,6 +1804,7 @@ namespace OpenDental.UI {
 				ODGridColumn col;
 				for(int c=0;c<listCols.Count;c++) {
 					col=new ODGridColumn(listCols[c].Heading,listCols[c].ColWidth,listCols[c].IsEditable);
+					col.TextAlign=listCols[c].TextAlign;
 					columns.Add(col);
 				}
 				rows.Clear();
@@ -1811,7 +1813,7 @@ namespace OpenDental.UI {
 					for(int j=0;j<listRows[i].Cells.Count;j++) {
 						row.Cells.Add(listRows[i].Cells[j].Text);
 					}
-					Rows.Add(row);
+					rows.Add(row);
 				}
 				EndUpdate();
 				if(editBox!=null) {
