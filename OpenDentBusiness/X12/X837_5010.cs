@@ -582,7 +582,7 @@ namespace OpenDentBusiness
 				//2300 CLM: (medical,institutional,dental) Claim Information.
 				string clm01=claim.ClaimIdentifier;//Typically PatNum/ClaimNum. Check for uniqueness is performed in UI.
 				if(IsDentiCal(clearhouse)) {
-					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here.
+					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here. This field is what Denti-Cal refers to as the PDCN.
 				}
 				string claimFrequencyTypeCode="1";
 				if(claim.CorrectionType==ClaimCorrectionType.Original) {
@@ -677,8 +677,8 @@ namespace OpenDentBusiness
 					//2300 DTP: 314,360,361 (medical) Disability Dates. Situational. We do not use.
 					//2300 DTP: 297 (medical) Date Last Worked. Situational. We do not use.
 					//2300 DTP: 296 (medical) Date Authorized Return to Work. Situational. We do not use.
-					//2300 DTP: 435 (medical) Date Admission. Situational. We do not use.
-					//2300 DTP: 096 (medical) Date Discharge. Situational. We do not use.
+					//2300 DTP: 435 (medical) Date Admission. Situational. We do not use. Inpatient.
+					//2300 DTP: 096 (medical) Date Discharge. Situational. We do not use. Inpatient.
 					//2300 DTP: 090 (medical) Date Assumed and Relinquished Care Dates. Situational. We do not use.
 					//2300 DTP: 444 (medical) Date Property and Casualty Date of First Contact. Situational. We do not use.
 					//2300 DTP: 050 (medical) Repricer Received Date. Situational. We do not use.
