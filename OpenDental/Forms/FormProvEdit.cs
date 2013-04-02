@@ -260,11 +260,11 @@ namespace OpenDental{
 			// 
 			// label9
 			// 
-			this.label9.Location = new System.Drawing.Point(5,110);
+			this.label9.Location = new System.Drawing.Point(-1,110);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(130,14);
+			this.label9.Size = new System.Drawing.Size(136,14);
 			this.label9.TabIndex = 20;
-			this.label9.Text = "Suffix (DMD,DDS)";
+			this.label9.Text = "Suffix (DMD,DDS,Jr,etc)";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// label10

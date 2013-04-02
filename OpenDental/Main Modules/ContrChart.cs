@@ -4270,10 +4270,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Provider last name can only contain letters and dashes.  Use the suffix box for I, II, III, Jr, or Sr")+": "+prov.Abbr);
 				return;
 			}
-			if(prov.Suffix!="" && prov.Suffix!="I" && prov.Suffix!="II" && prov.Suffix!="III" && prov.Suffix!="Jr." && prov.Suffix!="Jr" && prov.Suffix!="Sr." && prov.Suffix!="Sr") {
-				MessageBox.Show(Lan.g(this,"Provider suffix must be blank or I, II, III, Jr., Jr, Sr., or Sr")+": "+prov.Abbr);
-				return;
-			}
+			//prov.Suffix is not validated here. In ErxXml.cs, the suffix is converted to the appropriate suffix enumeration value, or defaults to DDS if the suffix does not make sense.
 			if(prov.DEANum.ToLower()!="none" && !Regex.IsMatch(prov.DEANum,"^[A-Za-z]{2}[0-9]{7}$")) {
 				MessageBox.Show(Lan.g(this,"Provider DEA Number must be 2 letters followed by 7 digits.  If no DEA Number, enter NONE.")+": "+prov.Abbr);
 				return;

@@ -141,21 +141,29 @@ namespace OpenDentBusiness {
 			ncScript.LicensedPrescriber.LicensedPrescriberName.last=prov.LName.Trim();//Cannot be blank.
 			ncScript.LicensedPrescriber.LicensedPrescriberName.first=prov.FName.Trim();//Cannot be blank.
 			ncScript.LicensedPrescriber.LicensedPrescriberName.middle=prov.MI;//May be blank.
-			//Suffix is validated in the chart to be blank or exactly one of the following: I,II,III,Jr.,Jr,Sr.,Sr
-			if(prov.Suffix=="I") {
-				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.I;
-			}
-			else if(prov.Suffix=="II") {
-				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.II;
-			}
-			else if(prov.Suffix=="III") {
-				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.III;
-			}
-			else if(prov.Suffix=="Jr." || prov.Suffix=="Jr") {
-				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Jr;
-			}
-			else if(prov.Suffix=="Sr." || prov.Suffix=="Sr") {
-				ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Sr;
+			ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.DDS;//There is no blank or none option, so we have to pick a default value. DDS=0, so would be default anyway.
+			string[] suffixes=prov.Suffix.ToUpper().Split(' ','.');
+			for(int i=0;i<suffixes.Length;i++) {
+				if(suffixes[i]=="I") {
+					ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.I;
+					break;
+				}
+				else if(suffixes[i]=="II") {
+					ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.II;
+					break;
+				}
+				else if(suffixes[i]=="III") {
+					ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.III;
+					break;
+				}
+				else if(suffixes[i]=="JR") {
+					ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Jr;
+					break;
+				}
+				else if(suffixes[i]=="SR") {
+					ncScript.LicensedPrescriber.LicensedPrescriberName.suffix=PersonNameSuffix.Sr;
+					break;
+				}
 			}
 			if(prov.DEANum.ToLower()=="none") {
 				ncScript.LicensedPrescriber.dea="NONE";
