@@ -45,6 +45,9 @@ namespace OpenDentBusiness{
 		}*/
 
 		public static bool CheckExists(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),listName);
+			}
 			string command = "SHOW TABLES LIKE 'wikilist\\_"+listName+"'";
 			if(Db.GetTable(command).Rows.Count==1) {
 				//found exacty one table with that name
@@ -55,6 +58,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable GetByName(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),listName);
+			}
 			DataTable tableDescript = Db.GetTable("DESCRIBE wikilist_"+listName);
 			string command = "SELECT * FROM wikilist_"+listName;
 			switch(tableDescript.Rows.Count) {
@@ -77,13 +83,26 @@ namespace OpenDentBusiness{
 
 		/// <summary>Creates empty table with a single column for PK. List name must be formatted correctly before being passed here. Ie. no spaces, all lowercase.</summary>
 		public static void CreateNewWikiList(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName);
+				return;
+			}
 			//TODO: should we recheck/check that the list name is properly formed.
 			string command = "CREATE TABLE wikilist_"+PIn.String(listName)+" ("+PIn.String(listName)+"Num BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY )";
 			Db.NonQ(command);
+			WikiListHeaderWidth newPKCol = new WikiListHeaderWidth();
+			newPKCol.ColName=PIn.String(listName)+"Num";
+			newPKCol.ColWidth=100;
+			newPKCol.ListName=listName;
+			WikiListHeaderWidths.InsertNew(newPKCol);
 		}
 
 		///<summary>Column is automatically named "Column#" where # is the number of columns+1.</summary>
 		public static void AddColumn(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName);
+				return;
+			}
 			//Find Valid column name-----------------------------------------------------------------------------------------
 			DataTable columnNames = Db.GetTable("DESCRIBE wikilist_"+listName);
 			string newColumnName="Column1";//default in case table has no columns. Should never happen.
@@ -106,30 +125,51 @@ namespace OpenDentBusiness{
 			//Add new column name--------------------------------------------------------------------------------------------
 			string command = "ALTER TABLE wikilist_"+listName+" ADD COLUMN "+newColumnName+" TEXT NOT NULL";
 			Db.NonQ(command);
+			//Add column widths to wikiListHeaderWidth Table-----------------------------------------------------------------
+			WikiListHeaderWidth newWidth = new WikiListHeaderWidth();
+			newWidth.ColName=newColumnName;
+			newWidth.ListName=listName;
+			newWidth.ColWidth=100;
+			WikiListHeaderWidths.InsertNew(newWidth);
 		}
 
 		///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
 		public static bool CheckColumnEmpty(string listName,string colName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetBool(MethodBase.GetCurrentMethod(),listName,colName);
+			}
 			string command = "SELECT COUNT(*) FROM wikilist_"+listName+" WHERE "+colName+"!=''";
 			return Db.GetCount(command).Equals("0");
 		}
 
 		///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
 		public static void DeleteColumn(string listName,string colName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetBool(MethodBase.GetCurrentMethod(),listName,colName);
+				return;
+			}
 			string command = "ALTER TABLE wikilist_"+listName+" DROP "+colName;
 			Db.NonQ(command);
+			WikiListHeaderWidths.Delete(listName,colName);
 		}
 
 		///<summary>Column is automatically named "Column#" where # is the number of columns+1.</summary>
 		public static void AddItem(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName);
+				return;
+			}
 			string command = "INSERT INTO wikilist_"+listName+" VALUES ()";//inserts empty row with auto generated PK.
 			Db.NonQ(command);
 		}
 
 		/// <summary></summary>
-		/// <param name="listName"></param>
 		/// <param name="Item">Should be a DataTable object with a single DataRow containing the item.</param>
-		public static void UpdateItem(string listName, DataTable ItemTable) {
+		public static void UpdateItem(string listName,DataTable ItemTable) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName,ItemTable);
+				return;
+			}
 			if(ItemTable.Columns.Count<2) {
 				//if the table contains only a PK column.
 				return;
@@ -143,6 +183,9 @@ namespace OpenDentBusiness{
 		}
 
 		public static DataTable GetItem(string listName,long itemNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),listName,itemNum);
+			}
 			DataTable retVal = new DataTable();
 			string command = "SELECT * FROM wikilist_"+listName+" WHERE "+listName+"Num = "+itemNum;
 			retVal=Db.GetTable(command);
@@ -150,11 +193,18 @@ namespace OpenDentBusiness{
 		}
 
 		public static void DeleteItem(string listName,long itemNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod(),listName,itemNum);
+				return;
+			}
 			string command = "DELETE FROM wikilist_"+listName+" WHERE "+listName+"Num = "+itemNum;
 			Db.NonQ(command);
 		}
 
 		public static List<string> GetAllLists() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod());
+			}
 			List<string> retVal = new List<string>();
 			string command = "SHOW TABLES LIKE 'wikilist\\_%'";
 			DataTable Table = Db.GetTable(command);

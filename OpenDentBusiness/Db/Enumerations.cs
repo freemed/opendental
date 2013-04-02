@@ -285,8 +285,8 @@ namespace OpenDentBusiness{
 		HL7Defs,
 		///<summary>54</summary>
 		DictCustoms,
-		///<summary>55</summary>
-		WikiMaster
+		///<summary>55. Caches the wiki master page and the wikiListHeaderWidths</summary>
+		Wiki
 	}
 	//<summary></summary>
 	/*public enum ButtonType{

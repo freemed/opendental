@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.Name = "FormWikiListHeaders";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Edit Wiki List Headers";
-			this.Load += new System.EventHandler(this.FormWikiTableHeaders_Load);
+			this.Load += new System.EventHandler(this.FormWikiListHeaders_Load);
 			this.ResumeLayout(false);
 
 		}

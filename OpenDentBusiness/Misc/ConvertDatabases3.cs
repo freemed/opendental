@@ -42,17 +42,17 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				else {//oracle
-					//WikiLists Not Supported in Oracle.
-//          command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE wikilistheaderwidth'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-//          Db.NonQ(command);
-//          command=@"CREATE TABLE wikilistheaderwidth (
-//						WikiListHeaderWidthNum number(20) NOT NULL,
-//						ListName varchar2(255),
-//						ColName varchar2(255),
-//						ColWidth number(11) NOT NULL,
-//						CONSTRAINT wikilistheaderwidth_WikiListHe PRIMARY KEY (WikiListHeaderWidthNum)
-//						)";
-//          Db.NonQ(command);
+					//WikiLists Not Supported in Oracle. but we're still adding this table here for consistency of the schema.  Also, we might turn on this feature for Oracle some day.
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE wikilistheaderwidth'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE wikilistheaderwidth (
+						WikiListHeaderWidthNum number(20) NOT NULL,
+						ListName varchar2(255),
+						ColName varchar2(255),
+						ColWidth number(11) NOT NULL,
+						CONSTRAINT wikilistheaderwidth_WikiListHe PRIMARY KEY (WikiListHeaderWidthNum)
+						)";
+					Db.NonQ(command);
 				}
 
 

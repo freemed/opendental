@@ -39,11 +39,19 @@ namespace OpenDental {
 
 		/// <summary></summary>
 		private void FillGrid() {
+			List<WikiListHeaderWidth> colHeaderWidths = WikiListHeaderWidths.GetForList(WikiListCurName);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			for(int c=0;c<Table.Columns.Count;c++){
-				col=new ODGridColumn(Table.Columns[c].ColumnName,100,false);
+				int colWidth = 100;//100 = default value in case something is malformed in the database.
+				foreach(WikiListHeaderWidth colHead in colHeaderWidths) {
+					if(colHead.ColName==Table.Columns[c].ColumnName) {
+						colWidth=colHead.ColWidth;
+						break;
+					}
+				}
+				col=new ODGridColumn(Table.Columns[c].ColumnName,colWidth,false);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -107,6 +115,14 @@ namespace OpenDental {
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
+			FormWikiListHeaders FormWLH = new FormWikiListHeaders();
+			FormWLH.WikiListCurName=WikiListCurName;
+			FormWLH.ShowDialog();
+			if(FormWLH.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			Table=WikiLists.GetByName(WikiListCurName);
+			FillGrid();
 		}
 
 		private void butColumnAdd_Click(object sender,EventArgs e) {
