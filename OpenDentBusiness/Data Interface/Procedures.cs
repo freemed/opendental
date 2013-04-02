@@ -1056,11 +1056,29 @@ namespace OpenDentBusiness {
 				//don't automatically create an estimate for completed procedures
 				//especially if they are older than today
 				//Very important after a conversion from another software.
-				//This may need to be relaxed a little for offices that enter treatment a few days after it's done.
 				isHistorical=true;
 				for(int i=0;i<PlanList.Count;i++) {
-					if(PlanList[i].PlanType=="c") {//11/19/12 js We had a specific complaint where changing plan type to capitation automatically added WOs to historical procs.
-						return;
+					//Special logic in place only for capitation plans.
+					if(PlanList[i].PlanType=="c") {//11/19/2012 js We had a specific complaint where changing plan type to capitation automatically added WOs to historical procs.
+						//04/02/2013 Jason- To relax this filter for offices that enter treatment a few days after it's done, we will loop through all the claimprocs and see if any capitation statuses exist.
+						bool hasCapClaimProcs=false;
+						//Loop through all the claimprocs to see if any are capitation.
+						for(int j=0;j<claimProcs.Count;j++) {
+							if(claimProcs[j].ProcNum!=proc.ProcNum) {
+								continue;
+							}
+							//Check if this claimproc is capitation.
+							if(claimProcs[j].Status==ClaimProcStatus.CapClaim
+								|| claimProcs[j].Status==ClaimProcStatus.CapComplete
+								|| claimProcs[j].Status==ClaimProcStatus.CapEstimate) 
+							{
+								hasCapClaimProcs=true;
+								break;
+							}
+						}
+						if(!hasCapClaimProcs) {//There are no capitation claimprocs for this procedure, therefore we want to return.
+							return;
+						}
 					}
 				}
 			}
