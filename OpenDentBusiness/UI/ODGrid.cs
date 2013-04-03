@@ -393,7 +393,7 @@ namespace OpenDental.UI {
 			}
 		}
 
-		///<summary>Set true to allow control to accept carriage returns.</summary>
+		///<summary>Only affects grids with editable columns. True allows carriage returns within cells. Falses causes carriage returns to go to the next editable cell.</summary>
 		[Category("Behavior"),Description("Set true to allow editable cells to accept carriage returns.")]
 		[DefaultValue(false)]
 		public bool EditableAcceptsCR {
@@ -1781,8 +1781,8 @@ namespace OpenDental.UI {
 			if(cellH < EDITABLE_ROW_HEIGHT) {//if it's less than one line
 			  cellH=EDITABLE_ROW_HEIGHT;//set it to one line
 			}
-			if(cellH>editBox.Height) {//it needs to grow so redraw it.
-				Rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
+			if(cellH>editBox.Height) {//it needs to grow so redraw it. Only measures the text of this one cell so checking here for shrinking would cause unnecessary redraws and other bugs.
+				rows[selectedCell.Y].Cells[selectedCell.X].Text=editBox.Text;
 				Point cellSelected=new Point(selectedCell.X,selectedCell.Y);
 				int selectionStart=editBox.SelectionStart;
 				List<ODGridColumn> listCols=new List<ODGridColumn>();
@@ -1801,11 +1801,9 @@ namespace OpenDental.UI {
 				}
 				BeginUpdate();
 				columns.Clear();
-				ODGridColumn col;
-				for(int c=0;c<listCols.Count;c++) {
-					col=new ODGridColumn(listCols[c].Heading,listCols[c].ColWidth,listCols[c].IsEditable);
-					col.TextAlign=listCols[c].TextAlign;
-					columns.Add(col);
+				for(int i=0;i<listCols.Count;i++) {
+					columns.Add(new ODGridColumn(listCols[i].Heading,listCols[i].ColWidth,listCols[i].IsEditable));
+					columns[i].TextAlign=listCols[i].TextAlign;
 				}
 				rows.Clear();
 				for(int i=0;i<listRows.Count;i++) {
