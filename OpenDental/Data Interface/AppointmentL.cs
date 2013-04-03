@@ -335,7 +335,7 @@ namespace OpenDental{
 			if(recallCur==null){// || recallCur.DateDue.Year<1880){
 				throw new ApplicationException(Lan.g("AppointmentL","No recall is due."));//should never happen because everyone has a recall.
 			}
-			if(recallCur.DateScheduled.Date>=DateTime.Now.Date) {
+			if(recallCur.DateScheduled.Date>DateTime.Today) {
 				throw new ApplicationException(Lan.g("AppointmentL","Recall has already been scheduled for ")+recallCur.DateScheduled.ToShortDateString());
 			}
 			Appointment AptCur=new Appointment();
