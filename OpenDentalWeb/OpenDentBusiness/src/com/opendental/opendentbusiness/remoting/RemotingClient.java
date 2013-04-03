@@ -23,13 +23,17 @@ public class RemotingClient {
 
 	/** Dynamically sets the ServerURI with the path that the web service is running on by using the host URL and port. */
 	private static void setServerURI() {
-		//Get the URL's protocol.
+		//Get the URL's protocol.  https:
 		ServerURI=Window.Location.getProtocol()+"//";
-		//Get the URL's host and port name.
+		//Get the URL's host and port name.  opendental.com:123456
 		ServerURI+=Window.Location.getHost();
-		// TODO Create a better way of determining where the ServiceMain.asmx is located.
-		//Now that we have the full URL, we need to tell it to send requests to ServiceMain.asmx
-		ServerURI+="/OpenDentalWebService/ServiceMain.asmx";
+		//Get the current Path.  /OpenDentalWebService/GWT/OpenDental/OpenDentalWeb.html
+		String path=Window.Location.getPath();
+		//The base directory where ServiceMain.asmx should live is where the GWT folder is located.  Strip everything off of the path from the GWT folder forward.
+		int gwtIndex=path.indexOf("GWT");
+		ServerURI+=path.substring(0, gwtIndex);
+		//Now that we have the base URL, we need to tell it to send requests to ServiceMain.asmx
+		ServerURI+="ServiceMain.asmx";
 	}
 	
 }
