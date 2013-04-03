@@ -216,6 +216,9 @@ namespace OpenDental
 			  return false;
 			}
 			List<MatchOD> words=GetWords();
+			if(words.Count==0) {
+				return false;
+			}
 			int ind=0;
 			#region Binary search to find first word in visible area
 			int minIndex=0;
