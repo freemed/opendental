@@ -665,13 +665,13 @@ namespace OpenDental{
 		}
 
 		private bool SaveToDb() {
+			if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select a default user group first.");
+				return false;
+			}
 			if(checkEnabled.Checked) {
 				if(textProgDesc.Text=="") {
 					MsgBox.Show(this,"Description may not be blank.");
-					return false;
-				}
-				if((radioModeTight.Checked || radioModeFull.Checked) && comboDefaultUserGroup.SelectedIndex==-1) {
-					MsgBox.Show(this,"Please select a default user group first.");
 					return false;
 				}
 				if(!HL7Defs.IsExistingHL7Enabled()) {
