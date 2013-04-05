@@ -426,8 +426,8 @@ namespace xCrudGeneratorWebService {
 					+t2+"}"+rn
 					+t2+"//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>"+rn
 					+t2+"String type=element.getNodeName();"+rn
-					+t2+"//Void method calls will simply return an empty void node:  <void />"+rn
-					+t2+"if(type.equals(\"void\")) {"+rn
+					+t2+"//Void method calls will simply return an empty ack node:  <ack />"+rn
+					+t2+"if(type.equals(\"ack\")) {"+rn
 						+t3+"deserializeCallback.onComplete(null);"+rn
 						+t3+"return;"+rn
 					+t2+"}"+rn

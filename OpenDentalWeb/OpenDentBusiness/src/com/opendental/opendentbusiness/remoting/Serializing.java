@@ -181,8 +181,8 @@ public class Serializing {
 		}
 		//Figure out the response type.  Response examples: <long>4</long> OR <DtoException><msg>Error</msg></DtoException>
 		String type=element.getNodeName();
-		//Void method calls will simply return an empty void node:  <void />
-		if(type.equals("void")) {
+		//Void method calls will simply return an empty ack node:  <ack />
+		if(type.equals("ack")) {
 			deserializeCallback.onComplete(null);
 			return;
 		}
