@@ -1693,7 +1693,12 @@ namespace OpenDental.UI {
 				editBox.TextAlign=HorizontalAlignment.Right;
 			}
 			this.Controls.Add(editBox);
-			editBox.SelectAll();
+			if(editableAcceptsCR) {//Allow the edit box to handle carriage returns/multiline text.
+				editBox.AcceptsReturn=true;
+			}
+			else {
+				editBox.SelectAll();//Only select all when not multiline (editableAcceptsCR) i.e. proc list for editing fees selects all for easy overwriting.
+			}
 			editBox.Focus();
 			//Set the cell of the current editBox so that the value of that cell is saved when it looses focus (used for mouse click).
 			oldSelectedCell=new Point(selectedCell.X,selectedCell.Y);
@@ -1714,7 +1719,7 @@ namespace OpenDental.UI {
 				return;
 			}
 			if(e.KeyCode==Keys.Enter) {//usually move to the next cell
-				if(editableAcceptsCR) {
+				if(editableAcceptsCR) {//When multiline it inserts a carriage return instead of moving to the next cell.
 					return;
 				}
 				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
@@ -1749,6 +1754,9 @@ namespace OpenDental.UI {
 				CreateEditBox();
 			}
 			if(e.KeyCode==Keys.Down) {
+				if(editableAcceptsCR) {//When multiline it moves down inside the text instead of down to the next cell.
+					return;
+				}
 				if(selectedCell.Y<rows.Count-1) {
 					editBox.Dispose();
 					editBox=null;
@@ -1758,6 +1766,9 @@ namespace OpenDental.UI {
 				}
 			}
 			if(e.KeyCode==Keys.Up) {
+				if(editableAcceptsCR) {//When multiline it moves up inside the text instead of up to the next cell.
+					return;
+				}
 				if(selectedCell.Y>0) {
 					editBox.Dispose();
 					editBox=null;
