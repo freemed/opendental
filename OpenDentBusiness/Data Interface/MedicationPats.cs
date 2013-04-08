@@ -7,14 +7,18 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class MedicationPats{
-		///<summary></summary>
+		///<summary>Normally, includeDiscontinued is false.  User needs to check a box to include discontinued.</summary>
 		public static List<MedicationPat> Refresh(long patNum,bool includeDiscontinued) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<MedicationPat>>(MethodBase.GetCurrentMethod(),patNum,includeDiscontinued);
 			}
 			string command ="SELECT * FROM medicationpat WHERE PatNum = "+POut.Long(patNum);
-			if(!includeDiscontinued) {
-				command+=" AND DateStop < "+POut.Date(new DateTime(1880,1,1));
+			if(includeDiscontinued) {//this only happens when user checks box to show discontinued or for MU.
+				//no restriction on DateStop
+			}
+			else {//exclude discontinued.  This is the default.
+				command+=" AND (DateStop < "+POut.Date(new DateTime(1880,1,1))//include all the meds that are not discontinued.
+					+" OR DateStop >= CURDATE())";//Show medications that are today or a future stopdate - they are not yet discontinued.
 			}
 			return Crud.MedicationPatCrud.SelectMany(command);
 		}
