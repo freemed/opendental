@@ -2300,10 +2300,10 @@ namespace OpenDental{
 			if(PopupEventList==null){
 				PopupEventList=new List<PopupEvent>();
 			}
-			if(!patChanged){
+			if(Plugins.HookMethod(this,"FormOpenDental.FillPatientButton_popups",pat,PopupEventList,patChanged)) {
 				return;
 			}
-			if(Plugins.HookMethod(this,"FormOpenDental.FillPatientButton_popups",pat,PopupEventList)) {
+			if(!patChanged) {
 				return;
 			}
 			//New patient selected.  Everything below here is for popups.
