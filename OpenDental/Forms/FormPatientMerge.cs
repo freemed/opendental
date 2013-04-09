@@ -59,11 +59,10 @@ namespace OpenDental {
 			if(patientFrom.FName.Trim().ToLower()!=patientTo.FName.Trim().ToLower() ||
 				patientFrom.LName.Trim().ToLower()!=patientTo.LName.Trim().ToLower() ||
 				patientFrom.Birthdate!=patientTo.Birthdate){
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"WARNING: The two selected patients either have different "
-					+"names or different birthdates. Continue merging the patient at the bottom into the patient shown at the top?")) {
-					return;//The user chose not to merge.
-				}
-			}else{
+				MsgBox.Show(this,"The two selected patients do not have the same first name, last name, and date of birth.  You must set all of those the same before merge is allowed.");
+				return;//Do not merge.
+			}
+			else{
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Merge the patient at the bottom into the patient shown at the top?")) {
 					return;//The user chose not to merge.
 				}
