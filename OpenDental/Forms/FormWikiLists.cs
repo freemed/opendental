@@ -41,6 +41,9 @@ namespace OpenDental {
 			InputBox inputListName = new InputBox("New List Name");
 			inputListName.ShowDialog();
 			FormWikiListEdit FormWLE = new FormWikiListEdit();
+			if(FormWLE.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			FormWLE.WikiListCurName = inputListName.textResult.Text.ToLower().Replace(" ","");
 			//FormWLE.IsNew=true;//set within the form.
 			FormWLE.ShowDialog();
