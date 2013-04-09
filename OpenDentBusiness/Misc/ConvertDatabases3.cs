@@ -31,13 +31,23 @@ namespace OpenDentBusiness {
 					}
 				}
 				//add WikiListSetup permissions for users that have security admin------------------------------------------------------
-				command="SELECT UserGroupNum FROM grouppermission WHERE PermType="+Permissions.SecurityAdmin;
+				command="SELECT UserGroupNum FROM grouppermission WHERE PermType="+POut.Int((int)Permissions.SecurityAdmin);
 				table=Db.GetTable(command);
-				for(int i=0;i<table.Rows.Count;i++) {
-					groupNum=PIn.Int(table.Rows[i][0].ToString());
-					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Long((int)Permissions.WikiListSetup)+")";
-					Db.NonQ32(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						Db.NonQ32(command);
+					}
+				}
+				else {//oracle
+					for(int i=0;i<table.Rows.Count;i++) {
+						groupNum=PIn.Long(table.Rows[i][0].ToString());
+						command="INSERT INTO grouppermission (GroupPermNum,NewerDate,UserGroupNum,PermType) "
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						Db.NonQ32(command);
+					}
 				}
 		
 
