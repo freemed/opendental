@@ -91,7 +91,7 @@ namespace xCrudGenerator {
 					File.WriteAllText(Path.Combine(crudDir,className+".cs"),strb.ToString());
 					CrudQueries.Write(convertDbFile,tableTypes[i],textDb.Text,false);
 					CrudGenDataInterface.Create(convertDbFile,tableTypes[i],textDb.Text,false);
-					CrudGenDataInterfaceWebService.Create(tableTypes[i]);
+					//CrudGenDataInterfaceWebService.Create(tableTypes[i]);
 					Application.DoEvents();
 				}
 			}

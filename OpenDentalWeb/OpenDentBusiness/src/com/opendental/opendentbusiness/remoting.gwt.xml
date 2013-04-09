@@ -1,8 +1,0 @@
-<!-- To use this package in a different project,         -->
-<!-- add this line to the gwt.xml file:                  -->
-<!-- <inherits name="com.opendental.dbconn.remoting"/>       -->
-
-<module>
-	<inherits name='com.google.gwt.user.User' />
-	<source path="remoting"></source>
-</module>
