@@ -398,7 +398,7 @@ namespace OpenDental {
 				Lan.g(this,"Routing Slips")
 			});
 			listMonthly.Items.AddRange(new string[] {
-				Lan.g(this,"Aging Report"),
+				Lan.g(this,"Aging of A/R"),
 				Lan.g(this,"Claims Not Sent"),
 				Lan.g(this,"Capitation Utilization"),
 				Lan.g(this,"Finance Charge Report"),
@@ -593,13 +593,13 @@ namespace OpenDental {
 				return;
 			}
 			switch(selected) {
-				case 0://Aging Report
+				case 0://Aging of Accounts Receivable Report
 					if(!Security.IsAuthorized(Permissions.ReportProdInc)) {
 						return;
 					}
 					FormRpAging FormA=new FormRpAging();
 					FormA.ShowDialog();
-					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Aging");
+					SecurityLogs.MakeLogEntry(Permissions.Reports,0,"Aging of A/R");
 					break;
 				case 1://Claims Not Sent
 					FormRpClaimNotSent FormClaim=new FormRpClaimNotSent();
