@@ -38,15 +38,21 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			InputBox inputListName = new InputBox("New List Name");
-			inputListName.ShowDialog();
-			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			if(FormWLE.DialogResult!=DialogResult.OK) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {
 				return;
 			}
+			InputBox inputListName = new InputBox("New List Name");
+			inputListName.ShowDialog();
+			if(inputListName.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			FormWikiListEdit FormWLE = new FormWikiListEdit();
 			FormWLE.WikiListCurName = inputListName.textResult.Text.ToLower().Replace(" ","");
 			//FormWLE.IsNew=true;//set within the form.
 			FormWLE.ShowDialog();
+			if(FormWLE.DialogResult!=DialogResult.OK) {
+				return;
+			}
 			FillList();
 		}
 

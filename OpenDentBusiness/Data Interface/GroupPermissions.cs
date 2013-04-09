@@ -227,6 +227,8 @@ namespace OpenDentBusiness{
 					return Lans.g("enumPermissions","Reports - Dashboard");
 				case Permissions.TaskEdit:
 					return Lans.g("enumPermissions","Task Edit");
+				case Permissions.WikiListSetup:
+					return Lans.g("enumPermissions","Wiki List Setup");
 			}
 			return "";//should never happen
 		}

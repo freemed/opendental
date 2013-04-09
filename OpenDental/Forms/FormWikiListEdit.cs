@@ -109,12 +109,21 @@ namespace OpenDental {
 		}*/
 
 		private void butColumnLeft_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
 			FormWikiListHeaders FormWLH = new FormWikiListHeaders();
 			FormWLH.WikiListCurName=WikiListCurName;
 			FormWLH.ShowDialog();
@@ -126,12 +135,18 @@ namespace OpenDental {
 		}
 
 		private void butColumnAdd_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
 			WikiLists.AddColumn(WikiListCurName);
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
 		}
 
 		private void butColumnDelete_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
+				return;
+			}
 			if(gridMain.SelectedCell.X==-1) {
 				MsgBox.Show(this,"Select cell in column to be deleted first.");
 				return;
@@ -152,9 +167,12 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
 				return;
 			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
+				return;
+			} 
 			//TODO: require admin of some sort
 			//TODO: delete table from DB.
 			//TODO: update all wikipages and remove links to data that was contained in the table.

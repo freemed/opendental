@@ -30,6 +30,15 @@ namespace OpenDentBusiness {
 						Db.NonQ(command);
 					}
 				}
+				//add WikiListSetup permissions for users that have security admin------------------------------------------------------
+				command="SELECT UserGroupNum FROM grouppermission WHERE PermType="+Permissions.SecurityAdmin;
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					groupNum=PIn.Int(table.Rows[i][0].ToString());
+					command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Long((int)Permissions.WikiListSetup)+")";
+					Db.NonQ32(command);
+				}
 		
 
 

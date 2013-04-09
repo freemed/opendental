@@ -483,6 +483,8 @@ namespace OpenDental{
 					node.Nodes.Add(node2);
 				node2=SetNode(Permissions.AutoNoteQuickNoteEdit);
 					node.Nodes.Add(node2);
+				node2=SetNode(Permissions.WikiListSetup);
+					node.Nodes.Add(node2);
 				treePermissions.Nodes.Add(node);
 			node=SetNode("Main Toolbar");
 				node2=SetNode(Permissions.CommlogEdit);
