@@ -11970,14 +11970,17 @@ a.PageNotExists:hover {
 		private static void To13_1_19() {
 			if(FromVersion<new Version("13.1.19.0")) {
 				string command;
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE adjustment ADD INDEX (ProcNum)";
-					Db.NonQ(command);
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE adjustment ADD INDEX (ProcNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX adjustment_ProcNum ON adjustment (ProcNum)";
+						Db.NonQ(command);
+					}
 				}
-				else {//oracle
-					command=@"CREATE INDEX adjustment_ProcNum ON adjustment (ProcNum)";
-					Db.NonQ(command);
-				}
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS wikilistheaderwidth";
 					Db.NonQ(command);
