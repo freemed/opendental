@@ -42,7 +42,7 @@ namespace OpenDental {
 			for(int i=0;i<loopCount;i++) {
 				watch.Reset();
 				watch.Start();
-				Prefs.RefreshCache();
+				MiscData.GetMySqlVersion();//a nice short query and small dataset.
 				watch.Stop();
 				total+=watch.ElapsedMilliseconds;
 				if(min>watch.ElapsedMilliseconds) {

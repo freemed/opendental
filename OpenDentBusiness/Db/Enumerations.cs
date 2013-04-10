@@ -805,7 +805,7 @@ namespace OpenDentBusiness{
 		x837_5010_med_inst
 	}
 
-	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.</summary>
+	///<summary>Used when submitting e-claims to some carriers who require extra provider identifiers.  Usage varies by company.  Only used as needed.  SiteNumber is the only one that is still used on 5010s.  The other 3 have been deprecated and replaced by NPI.</summary>
 	public enum ProviderSupplementalID{
 		///<summary>0</summary>
 		BlueCross,
