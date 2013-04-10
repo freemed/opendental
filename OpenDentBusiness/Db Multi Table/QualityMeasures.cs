@@ -321,8 +321,9 @@ namespace OpenDentBusiness {
 						+"AND procedurelog.ProcStatus=2 "//complete
 						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
 						+"LEFT JOIN disease ON disease.PatNum=patient.PatNum "
+						+"AND disease.ICD9Num IN (SELECT ICD9Num FROM icd9 WHERE ICD9Code REGEXP '^40[1-4]') "//starts with 401 through 404
 						+"LEFT JOIN icd9 ON icd9.ICD9Num=disease.ICD9Num "
-						+"AND icd9.ICD9Code REGEXP '^40[1-4]' "//starts with 401 through 404
+						//+"AND icd9.ICD9Code REGEXP '^40[1-4]' "//starts with 401 through 404
 						+"WHERE Birthdate <= "+POut.Date(DateTime.Today.AddYears(-18))+" "//18+
 						+"GROUP BY patient.PatNum";
 					Db.NonQ(command);
