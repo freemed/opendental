@@ -12005,6 +12005,19 @@ a.PageNotExists:hover {
 						)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT ProgramNum FROM program WHERE ProgName='eClinicalWorks'";
+					int programNum=PIn.Int(Db.GetScalar(command));
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+							+") VALUES("
+							+"'"+POut.Long(programNum)+"', "
+							+"'MedicalPanelUrl', "
+							+"'')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					//eCW will never use Oracle.
+				}
 				command="UPDATE preference SET ValueString = '13.1.19.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
