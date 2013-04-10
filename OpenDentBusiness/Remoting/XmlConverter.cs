@@ -117,7 +117,8 @@ namespace OpenDentBusiness {
 			reader.Close();
 			return retVal;
 		}
-	
+
+		/*
 		public static string TableToXml(DataTable table){
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter xmlWriter=XmlWriter.Create(strBuild);
@@ -128,16 +129,89 @@ namespace OpenDentBusiness {
 			table.WriteXml(xmlWriter,XmlWriteMode.WriteSchema);
 			xmlWriter.Close();
 			return strBuild.ToString();
+		}*/
+
+
+		///<summary>Serializes a DataTable by looping through the rows and columns.</summary>
+		public static string TableToXml(DataTable table) {
+			StringBuilder result=new StringBuilder();
+			result.Append("<DataTable>");
+			//Table name.
+			result.Append("<Name>").Append(table.TableName).Append("</Name>");
+			//Column names.
+			result.Append("<Cols>");
+			for(int i=0;i<table.Columns.Count;i++) {
+				result.Append("<Col>").Append(table.Columns[i].ColumnName).Append("</Col>");
+			}
+			result.Append("</Cols>");
+			//Set each cell by looping through each column row by row.
+			result.Append("<Cells>");
+			for(int i=0;i<table.Rows.Count;i++) {//Row loop.
+				result.Append("<y>");
+				for(int j=0;j<table.Columns.Count;j++) {//Column loop.
+					string content=table.Rows[i][j].ToString();
+					if(content.Trim()=="") {//Test if the element will be empty, this will save space on big DataTables.
+						result.Append("<x/>");
+					}
+					else {
+						//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
+						result.Append("<x>").Append(EscapeForXml(table.Rows[i][j].ToString())).Append("</x>");
+					}
+				}
+				result.Append("</y>");
+			}
+			result.Append("</Cells>");
+			result.Append("</DataTable>");
+			return result.ToString();
 		}
 
-		public static string DsToXml(DataSet ds){
+		/*public static string DsToXml(DataSet ds) {
 			StringBuilder strBuild=new StringBuilder();
 			XmlWriter xmlWriter=XmlWriter.Create(strBuild);
 			ds.WriteXml(xmlWriter,XmlWriteMode.WriteSchema);
 			xmlWriter.Close();
 			return strBuild.ToString();
+		}*/
+
+		public static string DsToXml(DataSet ds) {
+			StringBuilder strb=new StringBuilder();
+			strb.Append("<DataSet>");
+			strb.Append("<DataTables>");
+			for(int i=0;i<ds.Tables.Count;i++) {
+				strb.Append(TableToXml(ds.Tables[i]));
+			}
+			strb.Append("</DataTables>");
+			strb.Append("</DataSet>");
+			return strb.ToString();
 		}
 
+
+		/// <summary></summary>
+		public static DataTable XmlToTable(string xmlData) {
+			DataTable table=new DataTable();
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(xmlData);
+			//<DataTable><Name></Name><Cols><Col>cell00</Col></Cols><Cells><y><x>cell00</x></y></Cells></DataTable>
+			XmlNode nodeName=doc.SelectSingleNode("//Name");
+			table.TableName=nodeName.InnerText;
+			XmlNode nodeCols=doc.SelectSingleNode("//Cols");
+			for(int i=0;i<nodeCols.ChildNodes.Count;i++) {
+				DataColumn col=new DataColumn(nodeCols.ChildNodes[i].InnerText);
+				table.Columns.Add(col);
+			}
+			XmlNodeList nodeListY=doc.SelectSingleNode("//Cells").ChildNodes;
+			for(int y=0;y<nodeListY.Count;y++) {//loop y rows
+				DataRow row=table.NewRow();
+				XmlNodeList nodeListX=nodeListY[y].ChildNodes;
+				for(int x=0;x<nodeListX.Count;x++) {//loop x cells 
+					row[x]=nodeListX[x].InnerText;
+				}
+				table.Rows.Add(row);
+			}
+			return table;
+		}
+
+		/*
 		public static DataTable XmlToTable(string xmlData) {
 			DataTable table=new DataTable();
 			//XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
@@ -145,17 +219,60 @@ namespace OpenDentBusiness {
 			table.ReadXml(xmlReader);
 			xmlReader.Close();
 			return table;
-		}
+		}*/
 
-		public static DataSet XmlToDs(string xmlData) {
+		/*public static DataSet XmlToDs(string xmlData) {
 			DataSet ds=new DataSet();
 			//XmlReader xmlReader=XmlReader.Create(new StringReader(xmlData));
 			XmlTextReader xmlReader=new XmlTextReader(new StringReader(xmlData));
 			ds.ReadXml(xmlReader);
 			xmlReader.Close();
 			return ds;
+		}*/
+
+		public static DataSet XmlToDs(string xmlData) {
+			DataSet ds=new DataSet();
+			XmlDocument doc=new XmlDocument();
+			doc.LoadXml(xmlData);
+			//<DataSet><DataTables><DataTable><Name>table0</Name><Cols><Col>cell00</Col></Cols><Cells><y><x>cell00</x></y></Cells></DataTable></DataTables></DataSet>
+			XmlNode nodeTables=doc.SelectSingleNode("//DataTables");
+			for(int t=0;t<nodeTables.ChildNodes.Count;t++) {
+				ds.Tables.Add(XmlToTable(nodeTables.ChildNodes[t].OuterXml));//<DataTable>....</DataTable>
+			}
+			return ds;
 		}
-		
+
+		///<summary>Escapes common characters used in XML from the passed in String.</summary>
+		public static string EscapeForXml(string myString) {
+			StringBuilder strBuild=new StringBuilder();
+			int length=myString.Length;
+			for(int i=0;i<length;i++) {
+				String character=myString.Substring(i,1);
+				if(character.Equals("<")) {
+					strBuild.Append("&lt;");
+					continue;
+				}
+				else if(character.Equals(">")) {
+					strBuild.Append("&gt;");
+					continue;
+				}
+				else if(character.Equals("\"")) {
+					strBuild.Append("&quot;");
+					continue;
+				}
+				else if(character.Equals("\'")) {
+					strBuild.Append("&#039;");
+					continue;
+				}
+				else if(character.Equals("&")) {
+					strBuild.Append("&amp;");
+					continue;
+				}
+				strBuild.Append(character);
+			}
+			return strBuild.ToString();
+		}
+
 
 	}
 }
