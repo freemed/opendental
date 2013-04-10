@@ -3682,25 +3682,49 @@ namespace OpenDental{
 							labelECWerror.Visible=true;
 						}
 						else {
-							//strAppServer=VBbridges.Ecw.GetAppServer((int)Bridges.ECW.UserId,Bridges.ECW.EcwConfigPath);
-							XmlTextReader reader=new XmlTextReader(Bridges.ECW.EcwConfigPath);
-							while(reader.Read()){
-								if(reader.Name.ToString()=="server") {
-									strAppServer=reader.ReadString().Trim();
+							string uristring=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.eClinicalWorks),"MedicalPanelUrl");
+							string path="";
+							if(uristring=="") {
+								XmlTextReader reader=new XmlTextReader(Bridges.ECW.EcwConfigPath);
+								while(reader.Read()) {
+									if(reader.Name.ToString()=="server") {
+										strAppServer=reader.ReadString().Trim();
+									}
+								}
+								path="http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp"
+									+"?ptId="+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+									+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString();
+								//set cookie
+								if(!String.IsNullOrEmpty(Bridges.ECW.JSessionId)) {
+									InternetSetCookie("http://"+strAppServer,null,"JSESSIONID = "+Bridges.ECW.JSessionId);
+								}
+								if(!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO)) {
+									InternetSetCookie("http://"+strAppServer,null,"JSESSIONIDSSO = "+Bridges.ECW.JSessionIdSSO);
+								}
+								if(!String.IsNullOrEmpty(Bridges.ECW.LBSessionId)) {
+									InternetSetCookie("http://"+strAppServer,null,"LBSESSIONID = "+Bridges.ECW.LBSessionId);
 								}
 							}
-							string path="http://"+strAppServer+"/mobiledoc/jsp/dashboard/Overview.jsp?ptId="
-								+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
-								+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString();
-							//set cookie
-							if(!String.IsNullOrEmpty(Bridges.ECW.JSessionId)) {
-								InternetSetCookie("http://"+strAppServer,null,"JSESSIONID = "+Bridges.ECW.JSessionId);
-							}
-							if(!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO)) {
-								InternetSetCookie("http://"+strAppServer,null,"JSESSIONIDSSO = "+Bridges.ECW.JSessionIdSSO);
-							}
-							if(!String.IsNullOrEmpty(Bridges.ECW.LBSessionId)) {
-								InternetSetCookie("http://"+strAppServer,null,"LBSESSIONID = "+Bridges.ECW.LBSessionId);
+							else {
+								path=uristring
+									+"?ptId="+PatCur.PatNum.ToString()+"&panelName=overview&pnencid="
+									+Bridges.ECW.AptNum.ToString()+"&context=progressnotes&TrUserId="+Bridges.ECW.UserId.ToString();
+								//parse out with regex: uristring
+								Match match=Regex.Match(uristring,@"\b([^:]+://[^/]+)/");//http://servername
+								if(!match.Success || match.Groups.Count<2) {//if no match, or match but no group 1 to grab
+									throw new Exception("Invalid URL saved in the Medical Panel URL field of the eClinicalWorks program link.");
+								}
+								string cookieUrl=match.Groups[1].Value;
+								//set cookie
+								if(!String.IsNullOrEmpty(Bridges.ECW.JSessionId)) {
+									InternetSetCookie(cookieUrl,null,"JSESSIONID = "+Bridges.ECW.JSessionId);
+								}
+								if(!String.IsNullOrEmpty(Bridges.ECW.JSessionIdSSO)) {
+									InternetSetCookie(cookieUrl,null,"JSESSIONIDSSO = "+Bridges.ECW.JSessionIdSSO);
+								}
+								if(!String.IsNullOrEmpty(Bridges.ECW.LBSessionId)) {
+									InternetSetCookie(cookieUrl,null,"LBSESSIONID = "+Bridges.ECW.LBSessionId);
+								}
 							}
 							//navigate
 							webBrowserEcw.Navigate(path); 
