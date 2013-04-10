@@ -16,45 +16,31 @@ namespace OpenDental {
 		}
 
 		private void FormTestLatency_Load(object sender,EventArgs e) {
-			textTests.Text="50";
+			
 		}
 
-		private void butRun_Click(object sender,EventArgs e) {
-			long loopCount;
-			try {
-				loopCount=long.Parse(textTests.Text);
-			}
-			catch {
-				MsgBox.Show(this,Lan.g(this,"Unrecognized number, running 50 tests by default."));
-				textTests.Text="50";
-				loopCount=50;
-			}
-			if(loopCount>1000) {
-				MsgBox.Show(this,Lan.g(this,"Maximum tests allowed is 1000."));
-				textTests.Text="1000";
-				loopCount=1000;
-			}
+		private void butLatency_Click(object sender,EventArgs e) {
 			Stopwatch watch = new Stopwatch();
-			long min=long.MaxValue;
-			long max=-1;
-			long total = 0;
 			Cursor=Cursors.WaitCursor;
-			for(int i=0;i<loopCount;i++) {
-				watch.Reset();
-				watch.Start();
-				MiscData.GetMySqlVersion();//a nice short query and small dataset.
-				watch.Stop();
-				total+=watch.ElapsedMilliseconds;
-				if(min>watch.ElapsedMilliseconds) {
-					min=watch.ElapsedMilliseconds;
-				}
-				if(max<watch.ElapsedMilliseconds) {
-					max=watch.ElapsedMilliseconds;
-				}
-			}
-			textMin.Text=min.ToString();
-			textAverage.Text=((float)total/(float)loopCount).ToString();
-			textMax.Text=max.ToString();
+			watch.Start();
+			MiscData.GetMySqlVersion();//a nice short query and small dataset.
+			watch.Stop();
+			textLatency.Text=watch.ElapsedMilliseconds.ToString();
+			Cursor=Cursors.Default;
+		}
+
+		private void butSpeed_Click(object sender, EventArgs e){
+			Stopwatch watch = new Stopwatch();
+			Cursor=Cursors.WaitCursor;
+			watch.Start();
+			MiscData.GetMySqlVersion();//a nice short query and small dataset.
+			watch.Stop();
+			long latency=watch.ElapsedMilliseconds;
+			watch.Restart();
+			Prefs.RefreshCache();
+			watch.Stop();
+			long speed=watch.ElapsedMilliseconds-latency;
+			textSpeed.Text=speed.ToString();
 			Cursor=Cursors.Default;
 		}
 
@@ -62,6 +48,6 @@ namespace OpenDental {
 			Close();
 		}
 
-
+	
 	}
 }
