@@ -252,7 +252,7 @@ namespace OpenDentBusiness{
 				Userod user=Userods.CheckUserAndPassword(oduser,odpass,usingEcw);
 				#if DEBUG
 					//if(oduser=="Admin"){
-					//	user=Userods.GetUserByName("Admin");//without checking password.  Makes debugging faster.
+					//	user=Userods.GetUserByName("Admin",usingEcw);//without checking password.  Makes debugging faster.
 					//}
 				#endif
 				if(user==null) {
