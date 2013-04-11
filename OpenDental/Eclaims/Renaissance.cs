@@ -348,6 +348,8 @@ namespace OpenDental.Eclaims{
 
 		///<summary>Returns a string describing all missing data on this claim.  Claim will not be allowed to be sent electronically unless this string comes back empty.</summary>
 		public static string GetMissingData(ClaimSendQueueItem queueItem){
+			//Our support for Renaissance is minimal, because they do not use the X12 format and we do not recommend that our customers use it.
+			//Thus, we do not perform validation.
 			return "";
 		}
 
