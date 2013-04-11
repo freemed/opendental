@@ -7464,6 +7464,11 @@ namespace OpenDental{
 				textProcCode.SelectionStart=textProcCode.Text.Length;
 				return;
 			}
+			if(DefC.GetHidden(DefCat.ProcCodeCats,ProcedureCodes.GetProcCode(textProcCode.Text).ProcCat)) {//if the category is hidden
+				MessageBox.Show(Lan.g(this,"Code is in a hidden category and cannot be added from here."));
+				textProcCode.SelectionStart=textProcCode.Text.Length;
+				return;
+			}
 			List<string> procCodes=new List<string>();
 			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
 			TreatmentArea tArea;
