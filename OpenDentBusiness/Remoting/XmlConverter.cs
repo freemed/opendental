@@ -137,11 +137,22 @@ namespace OpenDentBusiness {
 			StringBuilder result=new StringBuilder();
 			result.Append("<DataTable>");
 			//Table name.
-			result.Append("<Name>").Append(table.TableName).Append("</Name>");
+			result.Append("<Name>").Append(EscapeForXml(table.TableName)).Append("</Name>");
 			//Column names.
 			result.Append("<Cols>");
 			for(int i=0;i<table.Columns.Count;i++) {
-				result.Append("<Col>").Append(table.Columns[i].ColumnName).Append("</Col>");
+				//result.Append("<Col>").Append(EscapeForXml(table.Columns[i].ColumnName)).Append("</Col>");
+				//We escape column names just in case.
+				result.Append("<Col");
+				if(table.Columns[i].DataType==typeof(decimal)) {
+					result.Append(" DataType=\"decimal\"");
+				}
+				else if(table.Columns[i].DataType==typeof(DateTime)) {
+					result.Append(" DataType=\"DateTime\"");
+				}
+				result.Append(">");
+				result.Append(EscapeForXml(table.Columns[i].ColumnName));
+				result.Append("</Col>");
 			}
 			result.Append("</Cols>");
 			//Set each cell by looping through each column row by row.
@@ -149,6 +160,10 @@ namespace OpenDentBusiness {
 			for(int i=0;i<table.Rows.Count;i++) {//Row loop.
 				result.Append("<y>");
 				for(int j=0;j<table.Columns.Count;j++) {//Column loop.
+					//old way: <x>cell0</x><x>cell1</x><x>cellwith|pipe</x>
+					//new way: cell0|cell1|cellwith\|pipe
+					//strategy for deserialize: convert \| to &#124;
+					//then, split by |.  Then convert &#124; back to |.
 					string content=table.Rows[i][j].ToString();
 					if(content.Trim()=="") {//Test if the element will be empty, this will save space on big DataTables.
 						result.Append("<x/>");
@@ -157,6 +172,17 @@ namespace OpenDentBusiness {
 						//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
 						result.Append("<x>").Append(EscapeForXml(table.Rows[i][j].ToString())).Append("</x>");
 					}
+					/*
+					if(content.Trim()=="") {//Test if the element will be empty, this will save space on big DataTables.
+						result.Append("|");
+					}
+					else {
+						//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
+						result.Append(EscapeForXml(table.Rows[i][j].ToString()));
+						if(j<table.Columns.Count-1) {//append | only if not last column
+							result.Append("|");
+						}
+					}*/
 				}
 				result.Append("</y>");
 			}
@@ -197,6 +223,15 @@ namespace OpenDentBusiness {
 			XmlNode nodeCols=doc.SelectSingleNode("//Cols");
 			for(int i=0;i<nodeCols.ChildNodes.Count;i++) {
 				DataColumn col=new DataColumn(nodeCols.ChildNodes[i].InnerText);
+				if(nodeCols.ChildNodes[i].Attributes.Count>0) {//if attribute is set for column
+					string dataType=nodeCols.ChildNodes[i].Attributes["DataType"].InnerText;//this is safe because we created the xml
+					if(dataType=="decimal") {
+						col.DataType=typeof(decimal);
+					}
+					else if(dataType=="DateTime") {
+						col.DataType=typeof(DateTime);
+					}
+				}
 				table.Columns.Add(col);
 			}
 			XmlNodeList nodeListY=doc.SelectSingleNode("//Cells").ChildNodes;
@@ -207,6 +242,15 @@ namespace OpenDentBusiness {
 					row[x]=nodeListX[x].InnerText;
 				}
 				table.Rows.Add(row);
+				//XmlNodeList nodeListX=nodeListY[y].ChildNodes;//should only be one child node of cells separated by pipes
+				////we replace \| here before splitting by | but the &#124; is not part of the serialization
+				//string cellxml=nodeListX[0].InnerXml;
+				//string cellText=nodeListX[0].InnerText.Replace(@"\|","&#124;");
+				//string[] cells=cellText.Split('|');
+				//for(int x=0;x<cells.Length;x++) {//loop x cells
+				//  row[x]=cells[x].Replace("&#124;","|");
+				//}
+				//table.Rows.Add(row);
 			}
 			return table;
 		}
@@ -268,6 +312,15 @@ namespace OpenDentBusiness {
 					strBuild.Append("&amp;");
 					continue;
 				}
+				//else if(character.Equals("|")) {
+				//  strBuild.Append("\\|");
+				//  continue;
+				//}
+				////if last char is a '\' we must replace it with &#92; but only for last char in cell so we don't bloat the xml
+				//else if(i==length-1 && character.Equals("\\")) {
+				//  strBuild.Append("&#92;");
+				//  continue;
+				//}
 				strBuild.Append(character);
 			}
 			return strBuild.ToString();
