@@ -225,7 +225,14 @@ namespace OpenDentBusiness
 				//billProv=ProviderC.ListLong[Providers.GetIndexLong(claimItems[i].ProvBill1)];
 				billProv=Providers.GetProv(claim.ProvBill);
 				//2000A PRV: BI (medical,institutional,dental) Billing Provider Specialty Information. Situational. Required when billing provider is treating provider.
+				bool usePrvBilling=false;
 				if(claim.ProvBill==claim.ProvTreat) {
+					usePrvBilling=true;
+				}
+				if(IsWashingtonMedicaid(clearhouse,carrier)) {
+					usePrvBilling=true;
+				}
+				if(usePrvBilling) {
 					sw.Write("PRV"+s
 						+"BI"+s//PRV01 1/3 Provider Code: BI=Billing.
 						+"PXC"+s//PRV02 2/3 Reference Identification Qualifier: PXC=Health Care Provider Taxonomy Code.
@@ -312,7 +319,10 @@ namespace OpenDentBusiness
 					+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
 					+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
 					+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-				if(clinic==null){
+				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
+				}
+				else if(clinic==null){
 					sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
 				}
 				else{
@@ -677,8 +687,8 @@ namespace OpenDentBusiness
 					//2300 DTP: 314,360,361 (medical) Disability Dates. Situational. We do not use.
 					//2300 DTP: 297 (medical) Date Last Worked. Situational. We do not use.
 					//2300 DTP: 296 (medical) Date Authorized Return to Work. Situational. We do not use.
-					//2300 DTP: 435 (medical) Date Admission. Situational. We do not use. Inpatient.
-					//2300 DTP: 096 (medical) Date Discharge. Situational. We do not use. Inpatient.
+					//2300 DTP: 435 (medical) Date Admission. Situational. We do not use. Inpatient. Request #2843.
+					//2300 DTP: 096 (medical) Date Discharge. Situational. We do not use. Inpatient. Request #2843.
 					//2300 DTP: 090 (medical) Date Assumed and Relinquished Care Dates. Situational. We do not use.
 					//2300 DTP: 444 (medical) Date Property and Casualty Date of First Contact. Situational. We do not use.
 					//2300 DTP: 050 (medical) Repricer Received Date. Situational. We do not use.
@@ -1532,20 +1542,26 @@ namespace OpenDentBusiness
 							placeService=GetPlaceService(proc.PlaceService);
 						}
 						string area=GetArea(proc,procCode);
-						if(placeService!="" || area!="" || proc.Prosthesis!="" || proc.UnitQty>1) {
+						int unitQty=Math.Max(proc.UnitQty,1);//Minimum of 1
+						bool includeUnits=false;
+						if(unitQty>=2) {//Standard behavior based on the X12 guide.
+							includeUnits=true;
+						}
+						//The following carriers always want to see the unit quantity, even if it is only 1.
+						if(IsColoradoMedicaid(clearhouse) || IsWashingtonMedicaid(clearhouse,carrier)) {
+							includeUnits=true;
+						}
+						if(placeService!="" || area!="" || proc.Prosthesis!="" || includeUnits) {
 							sw.Write(s+placeService);//SV303 1/2 Facility Code Value: Location Code if different from claim.
 						}
-						if(area!="" || proc.Prosthesis!="" || proc.UnitQty>1) {
+						if(area!="" || proc.Prosthesis!="" || includeUnits) {
 							sw.Write(s+area);//SV304 Oral Cavity Designation: SV304-1 1/3 Oral Cavity Designation Code: Area. SV304-2 through SV304-5 are situational and we do not use.
 						}
-						if(proc.Prosthesis!="" || proc.UnitQty>1) {
+						if(proc.Prosthesis!="" || includeUnits) {
 							sw.Write(s+proc.Prosthesis);//SV305 1/1 Prothesis, Crown or Inlay Code: I=Initial Placement. R=Replacement.
 						}
-						if(proc.UnitQty>1) {
-							sw.Write(s+proc.UnitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
-						}
-						else if(IsColoradoMedicaid(clearhouse)) { //These clearinghouses always wants us to report the procedure count even if it is 1, although the guide says not to send this value if less than 2.
-							sw.Write(s+"1");//SV306 1/15 Quantity: Situational. Procedure count.
+						if(includeUnits) {
+							sw.Write(s+unitQty.ToString());//SV306 1/15 Quantity: Situational. Procedure count.
 						}
 						EndSegment(sw);//SV307 throug SV311 are either not used or are situational and we do not use.
 						//2400 TOO: Tooth Information. Number/Surface. Multiple iterations of the TOO segment are allowed only when the quantity reported in Loop ID-2400 SV306 is equal to one.
@@ -1873,6 +1889,10 @@ namespace OpenDentBusiness
 
 		private static bool IsTesia(Clearinghouse clearinghouse) {
 			return (clearinghouse.ISA08=="113504607");
+		}
+
+		private static bool IsWashingtonMedicaid(Clearinghouse clearinghouse,Carrier carrier) {
+			return ((clearinghouse.ISA08=="77045" && clearinghouse.ISA02=="00") || carrier.ElectID=="CKWA1" || carrier.ElectID=="77045");
 		}
 
 		///<summary>Sometimes writes the name information for Open Dental. Sometimes it writes practice info.</summary>
