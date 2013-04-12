@@ -3483,7 +3483,7 @@ namespace OpenDental {
 			stmt.HidePayment=false;
 			stmt.SinglePatient=false;
 			stmt.Intermingled=false;
-			stmt.IsReceipt=true;
+			stmt.IsReceipt=false;
 			if(PrefC.GetBool(PrefName.IntermingleFamilyDefault)){
 				stmt.Intermingled=true;
 			}
@@ -3501,6 +3501,7 @@ namespace OpenDental {
 			}
 			stmt.Note="";
 			stmt.NoteBold="";
+			//It's pointless to give the user the window to select statement options, because they could just as easily have hit the More Options dropdown, then Email from there.
 			PrintStatement(stmt);
 			ModuleSelected(PatCur.PatNum);
 		}
