@@ -1922,6 +1922,12 @@ namespace OpenDentBusiness
 					}
 					strb.Append(procCode.AbbrDesc+" tooth number");
 				}
+				if(procCode.TreatArea==TreatmentArea.Surf && proc.Surf=="") {
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append(procCode.AbbrDesc+" surface missing");
+				}
 				if(procCode.IsProsth) {
 					if(proc.Prosthesis=="") {//they didn't enter whether Initial or Replacement
 						if(strb.Length!=0) {
@@ -1936,6 +1942,12 @@ namespace OpenDentBusiness
 						}
 						strb.Append(procCode.AbbrDesc+" Prosth Date");
 					}
+				}
+				if(proc.PlaceService!=claim.PlaceService) {
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Proc place of service does not match claim "+procCode.ProcCode);
 				}
 				if(insPlan.IsMedical) {
 					if(proc.DiagnosticCode=="") {
