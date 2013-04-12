@@ -53,6 +53,16 @@ namespace OpenDental.Bridges {
 			}
 		}
 
+		///<summary>Returns the value of x^y. We cannot use Math.Pow(), because Math.Pow() uses doubles only, which it has rounding errors with large numbers.
+		///We need our result to be a perfect integer. We assume y>=0.</summary>
+		private static long Pow(long x,long y) {
+			long result=1;
+			for(int p=0;p<y;p++) {
+				result=result*x;
+			}
+			return result;
+		}
+
 		///<summary>This function will translate the Base10 Dentrix ID to the Base41 VixWin ID.</summary>
 		private static string ConvertToBase41(long intPatNum) {
 			string retVal = "";
@@ -61,16 +71,16 @@ namespace OpenDental.Bridges {
 			long intTemp = 0;
 			long intMultiplier = 0;
 			for(int i=5;i>=0;i--) {
-				intMultiplier = (long)Math.Pow(41,i);
+				intMultiplier = Pow(41,i);
 				intTemp = 0;
 				if(intID >= intMultiplier) {
-					intTemp = intID/intMultiplier;//resulting float is trunkated intentionally
+					intTemp = intID/intMultiplier;//resulting float is truncated intentionally
 				}
 				intID = intID-intTemp*intMultiplier;
 				retVal = retVal + base41Array[(int)intTemp];
 			}
 			return retVal;
-		} 
+		}
 
 	}
 }
