@@ -165,24 +165,11 @@ namespace OpenDentBusiness {
 					//strategy for deserialize: convert \| to &#124;
 					//then, split by |.  Then convert &#124; back to |.
 					string content=table.Rows[i][j].ToString();
-					if(content.Trim()=="") {//Test if the element will be empty, this will save space on big DataTables.
-						result.Append("<x/>");
-					}
-					else {
-						//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
-						result.Append("<x>").Append(EscapeForXml(table.Rows[i][j].ToString())).Append("</x>");
-					}
-					/*
-					if(content.Trim()=="") {//Test if the element will be empty, this will save space on big DataTables.
+					//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
+					result.Append(EscapeForXml(table.Rows[i][j].ToString()));
+					if(j<table.Columns.Count-1) {//append | only if not last column
 						result.Append("|");
 					}
-					else {
-						//this step is probably too slow.  The only solution might be to rewrite the entire method to use an XmlWriter.
-						result.Append(EscapeForXml(table.Rows[i][j].ToString()));
-						if(j<table.Columns.Count-1) {//append | only if not last column
-							result.Append("|");
-						}
-					}*/
 				}
 				result.Append("</y>");
 			}
@@ -237,20 +224,15 @@ namespace OpenDentBusiness {
 			XmlNodeList nodeListY=doc.SelectSingleNode("//Cells").ChildNodes;
 			for(int y=0;y<nodeListY.Count;y++) {//loop y rows
 				DataRow row=table.NewRow();
-				XmlNodeList nodeListX=nodeListY[y].ChildNodes;
-				for(int x=0;x<nodeListX.Count;x++) {//loop x cells 
-					row[x]=nodeListX[x].InnerText;
+				XmlNodeList nodeListX=nodeListY[y].ChildNodes;//should only be one child node of cells separated by pipes
+				//we replace \| here before splitting by | but the &#124; is not part of the serialization
+				string cellxml=nodeListX[0].InnerXml;
+				string cellText=nodeListX[0].InnerText.Replace(@"\|","&#124;");
+				string[] cells=cellText.Split('|');
+				for(int x=0;x<cells.Length;x++) {//loop x cells
+					row[x]=cells[x].Replace("&#124;","|").Replace("#92;","\\");
 				}
 				table.Rows.Add(row);
-				//XmlNodeList nodeListX=nodeListY[y].ChildNodes;//should only be one child node of cells separated by pipes
-				////we replace \| here before splitting by | but the &#124; is not part of the serialization
-				//string cellxml=nodeListX[0].InnerXml;
-				//string cellText=nodeListX[0].InnerText.Replace(@"\|","&#124;");
-				//string[] cells=cellText.Split('|');
-				//for(int x=0;x<cells.Length;x++) {//loop x cells
-				//  row[x]=cells[x].Replace("&#124;","|");
-				//}
-				//table.Rows.Add(row);
 			}
 			return table;
 		}
@@ -312,15 +294,15 @@ namespace OpenDentBusiness {
 					strBuild.Append("&amp;");
 					continue;
 				}
-				//else if(character.Equals("|")) {
-				//  strBuild.Append("\\|");
-				//  continue;
-				//}
-				////if last char is a '\' we must replace it with &#92; but only for last char in cell so we don't bloat the xml
-				//else if(i==length-1 && character.Equals("\\")) {
-				//  strBuild.Append("&#92;");
-				//  continue;
-				//}
+				else if(character.Equals("|")) {
+					strBuild.Append(@"\|");
+					continue;
+				}
+				//if last char is a '\' we must replace it with &#92; but only for last char in cell so we don't bloat the xml
+				else if(i==length-1 && character.Equals(@"\")) {
+					strBuild.Append("#92;");
+					continue;
+				}
 				strBuild.Append(character);
 			}
 			return strBuild.ToString();

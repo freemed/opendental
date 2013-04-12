@@ -2104,7 +2104,7 @@ FROM insplan";
 		///<summary>Returns a list of patients belonging to the SuperFamily</summary>
 		public static List<Patient> GetBySuperFamily(long SuperFamilyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
 			}
 			if(SuperFamilyNum==0) {
 				return new List<Patient>();//return empty list
@@ -2116,7 +2116,7 @@ FROM insplan";
 		///<summary>Returns a list of patients that are the guarantors for the patients in the Super Family</summary>
 		public static List<Patient> GetSuperFamilyGuarantors(long SuperFamilyNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),SuperFamilyNum);
 			}
 			if(SuperFamilyNum==0) {
 				return new List<Patient>();//return empty list
@@ -2159,7 +2159,7 @@ FROM insplan";
 
 		public static List<Patient> GetPatsForScreenGroup(long screenGroupNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),screenGroupNum);
+				return Meth.GetObject<List<Patient>>(MethodBase.GetCurrentMethod(),screenGroupNum);
 			}
 			if(screenGroupNum==0) {
 				return new List<Patient>();
