@@ -470,11 +470,13 @@ namespace OpenDental{
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(36, 30);
+			this.label5.Location = new System.Drawing.Point(14, 26);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(465, 37);
+			this.label5.Size = new System.Drawing.Size(418, 48);
 			this.label5.TabIndex = 5;
-			this.label5.Text = resources.GetString("label5.Text");
+			this.label5.Text = "Automatically used if a Prophy patient is under the age limit set below.  Does no" +
+    "t include triggers or interval since the triggers and interval from the Prophy t" +
+    "ype are used instead.";
 			// 
 			// groupAgeLimit
 			// 
@@ -885,6 +887,8 @@ namespace OpenDental{
 		private void butCancel_Click(object sender, System.EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
+	
 
 		
 
