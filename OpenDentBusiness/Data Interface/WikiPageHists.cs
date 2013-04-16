@@ -25,10 +25,13 @@ namespace OpenDentBusiness{
 			}
 			List<string> retVal=new List<string>();
 			DataTable tableResults=new DataTable();
+			DataTable tableNewestDateTimes=new DataTable();
 			string[] searchTokens = searchText.Split(' ');
 			string command="";
+			command="SELECT PageTitle, MAX(DateTimeSaved) AS DateTimeSaved FROM wikipagehist GROUP BY PageTitle";
+			tableNewestDateTimes=Db.GetTable(command);
 			command=
-				"SELECT PageTitle FROM wikiPageHist "
+				"SELECT PageTitle,DateTimeSaved FROM wikipagehist "
 				// \_ represents a literal _ because _ has a special meaning in LIKE clauses.
 				//The second \ is just to escape the first \.  The other option would be to pass the \ through POut.String.
 				+"WHERE PageTitle NOT LIKE '\\_%' ";
@@ -36,35 +39,59 @@ namespace OpenDentBusiness{
 				command+="AND PageTitle LIKE '%"+POut.String(searchTokens[i])+"%' ";
 			}
 			command+=
-				"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that were re-added after they were deleted
+				"AND PageTitle NOT IN (SELECT PageTitle FROM wikipage) "//ignore pages that were re-added after they were deleted
 				+"AND IsDeleted=1 "
-				//only the newest deleted version if there are multiple:
-				+"AND DateTimeSaved = (SELECT MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
 				+"ORDER BY PageTitle";
 			tableResults=Db.GetTable(command);
 			for(int i=0;i<tableResults.Rows.Count;i++) {
-				if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+				if(retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+					//already found this page
+					continue;
+				}
+				for(int j=0;j<tableNewestDateTimes.Rows.Count;j++) {
+					if(tableNewestDateTimes.Rows[j]["PageTitle"].ToString()!=tableResults.Rows[i]["PageTitle"].ToString()) {
+						//not the right page
+						continue;
+					}
+					if(tableNewestDateTimes.Rows[j]["DateTimeSaved"].ToString()!=tableResults.Rows[i]["DateTimeSaved"].ToString()) {
+						//not the right DateTimeSaved
+						continue;
+					}
+					//This page is both deleted and there are no newer revisions of the page exist
 					retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+					break;
 				}
 			}
 			//Match Content Second-----------------------------------------------------------------------------------
 			if(!ignoreContent) {
 				command=
-					"SELECT PageTitle FROM wikiPageHist "
+					"SELECT PageTitle,DateTimeSaved FROM wikipagehist "
 					+"WHERE PageTitle NOT LIKE '\\_%' ";
 				for(int i=0;i<searchTokens.Length;i++) {
 					command+="AND PageContent LIKE '%"+POut.String(searchTokens[i])+"%' ";
 				}
 				command+=
-					"AND PageTitle NOT IN (SELECT PageTitle FROM WikiPage) "//ignore pages that exist again...
+					"AND PageTitle NOT IN (SELECT PageTitle FROM wikipage) "//ignore pages that exist again...
 					+"AND IsDeleted=1 "
-					+"AND DateTimeSaved = (Select MAX(DateTimeSaved) FROM wikiPageHist WHERE PageTitle NOT LIKE '\\_%' AND IsDeleted=1) "
-					//+"GROUP BY PageTitle "
 					+"ORDER BY PageTitle";
 				tableResults=Db.GetTable(command);
 				for(int i=0;i<tableResults.Rows.Count;i++) {
-					if(!retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+					if(retVal.Contains(tableResults.Rows[i]["PageTitle"].ToString())) {
+						//already found this page
+						continue;
+					}
+					for(int j=0;j<tableNewestDateTimes.Rows.Count;j++) {
+						if(tableNewestDateTimes.Rows[j]["PageTitle"].ToString()!=tableResults.Rows[i]["PageTitle"].ToString()) {
+							//not the right page
+							continue;
+						}
+						if(tableNewestDateTimes.Rows[j]["DateTimeSaved"].ToString()!=tableResults.Rows[i]["DateTimeSaved"].ToString()) {
+							//not the right DateTimeSaved
+							continue;
+						}
+						//This page is both deleted and there are no newer revisions of the page exist
 						retVal.Add(tableResults.Rows[i]["PageTitle"].ToString());
+						break;
 					}
 				}
 			}
