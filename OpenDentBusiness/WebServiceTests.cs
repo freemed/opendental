@@ -90,15 +90,45 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
-			string command=
-				
-				
-				"SELECT '"+POut.String("cell\r\n00")+"'";
+			string command="SELECT '"+POut.String("cell00")+"','"+POut.String("cell01")+"' "
+				+"UNION ALL "
+				+"SELECT '"+POut.String("cell10")+"','"+POut.String("cell11")+"' "
+				+"UNION ALL "
+				+"SELECT '"+POut.String("cell20")+"','"+POut.String("cell21")+"'";
 			DataTable table=Db.GetTable(command);
 			return table;
 		}
 
 		//also table with special chars: |, <, >, &, ', ", and \
+		public static DataTable GetTableSpecialChars() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			//Special characters in the columns as well as in the column names
+			string command="SELECT '"+POut.String("cell00|")+"' AS '|<>','"+POut.String("cell01<")+"' AS '&\\'\"\\\\' "
+				+"UNION ALL "
+				+"SELECT '"+POut.String("cell10>")+"','"+POut.String("cell11&")+"' "
+				+"UNION ALL "
+				+"SELECT '"+POut.String("cell20\'")+"','"+POut.String("cell21\"")+"' "
+				+"UNION ALL "
+				+"SELECT '"+POut.String("cell30\\")+"','"+POut.String("cell31/")+"'";
+			DataTable table=Db.GetTable(command);
+			table.TableName="Table|<>&'\"\\";
+			return table;
+		}
+
+		public static DataTable GetTableDataTypes() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="DROP TABLE IF EXISTS tempdt;"
+				+"CREATE TABLE tempdt (TString VARCHAR(50),TDecimal DECIMAL(10,2),TDateTime DATETIME);"
+				+"INSERT INTO tempdt (TString,TDecimal,TDateTime) VALUES ('string',123.45,DATE('2013-04-11'));";
+			Db.NonQ(command);
+			command="SELECT * FROM tempdt;";
+			DataTable table=Db.GetTable(command);
+			return table;
+		}
 
 		public static DataSet GetDataSet() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

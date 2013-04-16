@@ -68,6 +68,39 @@ namespace UnitTests {
 				throw new Exception("Should be cell\r\n00");
 			}
 			retVal+="GetTableCarriageReturn: Passed.\r\n";
+			//Get2by3
+			table=WebServiceTests.GetTable2by3();
+			for(int i=0;i<table.Rows.Count;i++) {
+				for(int j=0;j<table.Columns.Count;j++) {
+					if(table.Rows[i][j].ToString()!="cell"+i.ToString()+j.ToString()) {
+						throw new Exception("Should be cell"+i.ToString()+j.ToString());
+					}
+				}
+			}
+			retVal+="GetTable2by3: Passed.\r\n";
+			//GetSpecialChars
+			table=WebServiceTests.GetTableSpecialChars();
+			char[] chars={'|','<','>','&','\'','"','\\','/'};
+			for(int i=0;i<table.Rows.Count;i++) {
+				for(int j=0;j<table.Columns.Count;j++) {
+					if(table.Rows[i][j].ToString()!="cell"+i.ToString()+j.ToString()+chars[i*2+j].ToString()) {
+						throw new Exception("Should be cell"+i.ToString()+j.ToString()+chars[i*2+j].ToString());
+					}
+				}
+			}
+			retVal+="GetTableSpecialChars: Passed.\r\n";
+			//GetDataTypes
+			table=WebServiceTests.GetTableDataTypes();
+			if(table.Rows[0][0].GetType()!=typeof(string)) {
+				throw new Exception("Should be "+typeof(string).ToString());
+			}
+			if(table.Rows[0][1].GetType()!=typeof(decimal)) {
+				throw new Exception("Should be "+typeof(decimal).ToString());
+			}
+			if(table.Rows[0][2].GetType()!=typeof(DateTime)) {
+				throw new Exception("Should be "+typeof(DateTime).ToString());
+			}
+			retVal+="GetTableDataTypes: Passed.\r\n";
 			//GetDataSet
 			DataSet ds=WebServiceTests.GetDataSet();
 			if(ds.Tables[0].TableName!="table0"){
