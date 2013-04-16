@@ -30,6 +30,10 @@ namespace OpenDental {
 		}
 
 		private void FormEtrans277Edit_Resize(object sender,EventArgs e) {
+			//This funciton is called before FormEtrans277Edit_Load() when using ShowDialog(). Therefore, x277 is null the first time FormEtrans277Edit_Resize() is called.
+			if(x277==null) {
+				return;
+			}
 			FillGrid();
 		}
 
