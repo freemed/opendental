@@ -87,7 +87,9 @@ namespace OpenDental {
 		private void FillGridQ(){
 			gridQ.BeginUpdate();
 			gridQ.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Year"),40);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Practice Title"),120);
+			gridQ.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Year"),40);
 			gridQ.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Quarter"),50);
 			gridQ.Columns.Add(col);
@@ -100,6 +102,7 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<listKeysQuart.Count;i++) {
 				row=new ODGridRow();
+				row.Cells.Add(listKeysQuart[i].PracticeName);
 				row.Cells.Add(listKeysQuart[i].YearValue.ToString());
 				row.Cells.Add(listKeysQuart[i].QuarterValue.ToString());
 				row.Cells.Add(listKeysQuart[i].KeyValue);

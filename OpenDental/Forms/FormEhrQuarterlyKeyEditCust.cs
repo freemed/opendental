@@ -110,6 +110,7 @@ namespace OpenDental {
 			KeyCur.QuarterValue=PIn.Int(textQuarter.Text);
 			KeyCur.PracticeName=textPracticeTitle.Text;
 			KeyCur.KeyValue=textEhrKey.Text;
+			KeyCur.Notes=textNotes.Text;
 			if(KeyCur.IsNew) {
 				EhrQuarterlyKeys.Insert(KeyCur);
 			}
