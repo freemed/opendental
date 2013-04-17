@@ -5145,6 +5145,15 @@ namespace OpenDental{
 							continue;//do not allow this row to be added if there is no data to in the row.
 						}
 						break;
+					case "Patient Portal":
+						row.Tag="Patient Portal";
+						if(PatCur.OnlinePassword=="") {
+							row.Cells.Add("No access");
+						}
+						else {
+							row.Cells.Add("Online");
+						}
+						break;
 					case "References":
 						List<CustRefEntry> custREList=CustRefEntries.GetEntryListForCustomer(PatCur.PatNum);
 						if(custREList.Count==0) {
@@ -8629,6 +8638,15 @@ namespace OpenDental{
 						CustRefEntries.Insert(custEntry);
 					}
 					FillPtInfo();
+					return;
+				}
+				if(gridPtInfo.Rows[e.Row].Tag.ToString()=="Patient Portal") {
+					FormPatientPortal FormPP=new FormPatientPortal();
+					FormPP.PatCur=PatCur;
+					FormPP.ShowDialog();
+					if(FormPP.DialogResult==DialogResult.OK) {
+						FillPtInfo();
+					}
 					return;
 				}
 				if(gridPtInfo.Rows[e.Row].Tag.GetType()==typeof(CustRefEntry)) {

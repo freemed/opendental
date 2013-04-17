@@ -333,7 +333,7 @@ namespace OpenDental {
 				if(!PasswordIsValid()) {
 					return;
 				}
-				if(!WasPrinted && MsgBox.Show(this,MsgBoxButtons.YesNo,"Online Password changed but was not printed.  It will never be visible again.\r\nContinue anyway?")) {
+				if(!WasPrinted && !MsgBox.Show(this,MsgBoxButtons.YesNo,"Online Password changed but was not printed.  It will never be visible again.\r\nContinue anyway?")) {
 					return;
 				}
 				PatCur.OnlinePassword=Userods.EncryptPassword(textOnlinePassword.Text,false);
