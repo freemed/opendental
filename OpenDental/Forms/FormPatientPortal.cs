@@ -5,25 +5,24 @@ using System.Data;
 using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDental {
-	public partial class FormEhrOnlineAccess:Form {
+	public partial class FormPatientPortal:Form {
 		public Patient PatCur;
 		///<summary>A copy of the original patient object, as it was when this form was first opened.</summary>
 		private Patient PatOld;
 		private MobileWeb.Mobile mb;
 
-		public FormEhrOnlineAccess() {
+		public FormPatientPortal() {
 			InitializeComponent();
 			mb=new MobileWeb.Mobile();
 		}
 
-		private void FormOnlineAccess_Load(object sender,EventArgs e) {
+		private void FormPatientPortal_Load(object sender,EventArgs e) {
 			PatOld=PatCur.Copy();
 			textOnlineUsername.Text=PatCur.FName+PatCur.PatNum;//if patient's first name changes, they will need a new link.
 			textOnlinePassword.Text=PatCur.OnlinePassword;

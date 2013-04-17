@@ -4588,9 +4588,9 @@ namespace OpenDental{
 					Tool_EHR_Click(false);
 				}
 				else if(((EhrFormResult)type.InvokeMember("ResultOnClosing",System.Reflection.BindingFlags.GetField,null,FormOpenDental.FormEHR,null))==EhrFormResult.Online) {
-					FormEhrOnlineAccess formO=new FormEhrOnlineAccess();
-					formO.PatCur=PatCur;
-					formO.ShowDialog();
+					FormPatientPortal formPP=new FormPatientPortal();
+					formPP.PatCur=PatCur;
+					formPP.ShowDialog();
 					ModuleSelected(PatCur.PatNum);
 					Tool_EHR_Click(false);
 				}
