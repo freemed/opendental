@@ -23,6 +23,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatientPortal));
 			this.butGiveAccess = new System.Windows.Forms.Button();
 			this.textOnlineUsername = new System.Windows.Forms.TextBox();
@@ -40,6 +41,8 @@
 			this.butSynch = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
+			this.menuItemSetup = new System.Windows.Forms.MenuItem();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -196,6 +199,17 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Force Synch";
 			// 
+			// mainMenu
+			// 
+			this.mainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItemSetup});
+			// 
+			// menuItemSetup
+			// 
+			this.menuItemSetup.Index = 0;
+			this.menuItemSetup.Text = "Setup";
+			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+			// 
 			// FormPatientPortal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -215,6 +229,7 @@
 			this.Controls.Add(this.textOnlineLink);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label4);
+			this.Menu = this.mainMenu;
 			this.Name = "FormPatientPortal";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Patient Portal";
@@ -243,6 +258,8 @@
 		private System.Windows.Forms.Button butSynch;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.MainMenu mainMenu;
+		private System.Windows.Forms.MenuItem menuItemSetup;
 
 	}
 }

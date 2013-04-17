@@ -32,6 +32,11 @@ namespace OpenDental {
 			}
 		}
 
+		private void menuItemSetup_Click(object sender,EventArgs e) {
+			FormPatientPortalSetup formPPS=new FormPatientPortalSetup();
+			formPPS.ShowDialog();
+		}
+
 		private void butGiveAccess_Click(object sender,EventArgs e) {
 			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
 			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
