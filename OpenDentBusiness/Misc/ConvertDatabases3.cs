@@ -49,6 +49,14 @@ namespace OpenDentBusiness {
 						Db.NonQ32(command);
 					}
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('PatientPortalURL','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientPortalURL','')";
+					Db.NonQ(command);
+				}
 		
 
 

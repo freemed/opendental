@@ -24,11 +24,10 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPatientPortal));
 			this.butGiveAccess = new System.Windows.Forms.Button();
 			this.textOnlineUsername = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textOnlineLink = new System.Windows.Forms.TextBox();
+			this.textPatientPortalURL = new System.Windows.Forms.TextBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.butCancel = new System.Windows.Forms.Button();
@@ -37,13 +36,8 @@
 			this.butOK = new System.Windows.Forms.Button();
 			this.butOpen = new System.Windows.Forms.Button();
 			this.butPrint = new System.Windows.Forms.Button();
-			this.butGetLink = new System.Windows.Forms.Button();
-			this.butSynch = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butGiveAccess
@@ -70,16 +64,16 @@
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100, 17);
 			this.label5.TabIndex = 29;
-			this.label5.Text = "Online Access Link";
+			this.label5.Text = "Patient Portal URL";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
-			// textOnlineLink
+			// textPatientPortalURL
 			// 
-			this.textOnlineLink.Location = new System.Drawing.Point(140, 54);
-			this.textOnlineLink.Name = "textOnlineLink";
-			this.textOnlineLink.ReadOnly = true;
-			this.textOnlineLink.Size = new System.Drawing.Size(561, 20);
-			this.textOnlineLink.TabIndex = 28;
+			this.textPatientPortalURL.Location = new System.Drawing.Point(140, 54);
+			this.textPatientPortalURL.Name = "textPatientPortalURL";
+			this.textPatientPortalURL.ReadOnly = true;
+			this.textPatientPortalURL.Size = new System.Drawing.Size(561, 20);
+			this.textPatientPortalURL.TabIndex = 28;
 			// 
 			// label2
 			// 
@@ -102,7 +96,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(780, 310);
+			this.butCancel.Location = new System.Drawing.Point(702, 155);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 1;
@@ -131,7 +125,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(699, 310);
+			this.butOK.Location = new System.Drawing.Point(621, 155);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 0;
@@ -141,7 +135,8 @@
 			// 
 			// butOpen
 			// 
-			this.butOpen.Location = new System.Drawing.Point(783, 52);
+			this.butOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOpen.Location = new System.Drawing.Point(705, 52);
 			this.butOpen.Name = "butOpen";
 			this.butOpen.Size = new System.Drawing.Size(70, 23);
 			this.butOpen.TabIndex = 36;
@@ -152,52 +147,13 @@
 			// butPrint
 			// 
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Location = new System.Drawing.Point(341, 310);
+			this.butPrint.Location = new System.Drawing.Point(140, 155);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(75, 23);
 			this.butPrint.TabIndex = 37;
 			this.butPrint.Text = "Print";
 			this.butPrint.UseVisualStyleBackColor = true;
 			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
-			// butGetLink
-			// 
-			this.butGetLink.Location = new System.Drawing.Point(707, 52);
-			this.butGetLink.Name = "butGetLink";
-			this.butGetLink.Size = new System.Drawing.Size(70, 23);
-			this.butGetLink.TabIndex = 38;
-			this.butGetLink.Text = "Get Link";
-			this.butGetLink.UseVisualStyleBackColor = true;
-			this.butGetLink.Click += new System.EventHandler(this.butGetLink_Click);
-			// 
-			// butSynch
-			// 
-			this.butSynch.Location = new System.Drawing.Point(6, 19);
-			this.butSynch.Name = "butSynch";
-			this.butSynch.Size = new System.Drawing.Size(73, 23);
-			this.butSynch.TabIndex = 39;
-			this.butSynch.Text = "Synch";
-			this.butSynch.UseVisualStyleBackColor = true;
-			this.butSynch.Click += new System.EventHandler(this.butSynch_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(8, 48);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(301, 61);
-			this.label1.TabIndex = 40;
-			this.label1.Text = resources.GetString("label1.Text");
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.label1);
-			this.groupBox1.Controls.Add(this.butSynch);
-			this.groupBox1.Location = new System.Drawing.Point(39, 148);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(351, 120);
-			this.groupBox1.TabIndex = 41;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Force Synch";
 			// 
 			// mainMenu
 			// 
@@ -214,9 +170,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(867, 345);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.butGetLink);
+			this.ClientSize = new System.Drawing.Size(789, 190);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butOpen);
 			this.Controls.Add(this.butOK);
@@ -226,7 +180,7 @@
 			this.Controls.Add(this.butGiveAccess);
 			this.Controls.Add(this.textOnlineUsername);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textOnlineLink);
+			this.Controls.Add(this.textPatientPortalURL);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label4);
 			this.Menu = this.mainMenu;
@@ -234,7 +188,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Patient Portal";
 			this.Load += new System.EventHandler(this.FormPatientPortal_Load);
-			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -245,7 +198,7 @@
 		private System.Windows.Forms.Button butGiveAccess;
 		private System.Windows.Forms.TextBox textOnlineUsername;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox textOnlineLink;
+		private System.Windows.Forms.TextBox textPatientPortalURL;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button butCancel;
@@ -254,10 +207,6 @@
 		private System.Windows.Forms.Button butOK;
 		private System.Windows.Forms.Button butOpen;
 		private System.Windows.Forms.Button butPrint;
-		private System.Windows.Forms.Button butGetLink;
-		private System.Windows.Forms.Button butSynch;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.MainMenu mainMenu;
 		private System.Windows.Forms.MenuItem menuItemSetup;
 

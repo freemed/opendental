@@ -15,10 +15,15 @@ namespace OpenDental {
 		}
 
 		private void FormPatientPortalSetup_Load(object sender,EventArgs e) {
-
+			textPatientPortalURL.Text=PrefC.GetString(PrefName.PatientPortalURL);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(!textPatientPortalURL.Text.ToUpper().StartsWith("HTTPS")) {
+				MsgBox.Show(this,"Patient Portal URL must start with HTTPS.");
+				return;
+			}
+			Prefs.UpdateString(PrefName.PatientPortalURL,textPatientPortalURL.Text);
 			DialogResult=DialogResult.OK;
 		}
 

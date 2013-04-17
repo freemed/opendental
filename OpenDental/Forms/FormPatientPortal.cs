@@ -15,76 +15,55 @@ namespace OpenDental {
 		public Patient PatCur;
 		///<summary>A copy of the original patient object, as it was when this form was first opened.</summary>
 		private Patient PatOld;
-		private MobileWeb.Mobile mb;
+		///<summary>Keeps track if the user printed that patient's information out.  If the password changed and the user didn't print, a reminder will show.</summary>
+		private bool WasPrinted;
 
 		public FormPatientPortal() {
 			InitializeComponent();
-			mb=new MobileWeb.Mobile();
 		}
 
 		private void FormPatientPortal_Load(object sender,EventArgs e) {
 			PatOld=PatCur.Copy();
-			textOnlineUsername.Text=PatCur.FName+PatCur.PatNum;//if patient's first name changes, they will need a new link.
-			textOnlinePassword.Text=PatCur.OnlinePassword;
+			textOnlineUsername.Text=PatCur.FName+PatCur.PatNum;
+			textOnlinePassword.Text="";
 			if(PatCur.OnlinePassword!="") {//if a password was already filled in
 				butGiveAccess.Text="Remove Online Access";
+				//We do not want to show the password hash that is stored in the database so we will leave the password box blank but editable.
 				textOnlinePassword.ReadOnly=false;
 			}
+			textPatientPortalURL.Text=PrefC.GetString(PrefName.PatientPortalURL);
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			FormPatientPortalSetup formPPS=new FormPatientPortalSetup();
 			formPPS.ShowDialog();
+			if(formPPS.DialogResult==DialogResult.OK) {
+				textPatientPortalURL.Text=PrefC.GetString(PrefName.PatientPortalURL);
+			}
 		}
 
 		private void butGiveAccess_Click(object sender,EventArgs e) {
-			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
-				MessageBox.Show("Synch must be setup first from the Tools menu, Mobile and Patient Portal Synch.  Interval must not be blank or zero.");
-				return;
-			}
-			//we won't check PrefName.MobileSyncWorkstationName because we are forcing the synch
-			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,
-					"Warning.  Workstation is not entered in the Tools menu, Mobile and Patient Portal Synch.  No automatic synch is taking place.  Continue anyway?")) 
-				{
-					return;
-				}
-			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				MessageBox.Show("Full Synch must be run first first from the Tools menu, Mobile and Patient Portal Synch.");
-				return;
-			}
 			if(butGiveAccess.Text=="Provide Online Access") {//When form open opens with a blank password
 				Cursor=Cursors.WaitCursor;
 				//1. Fill password.
-				textOnlinePassword.Text=GenerateRandomPassword(8,10);//won't save until OK or Print
-				//2. Fill link.
-				textOnlineLink.Text=GetPatientPortalLink();
-				//3. Reset timestamps for this patient to trigger all their objects to upload with the next synch
-				LabPanels.ResetTimeStamps(PatCur.PatNum);
-				Diseases.ResetTimeStamps(PatCur.PatNum);
-				Allergies.ResetTimeStamps(PatCur.PatNum);
-				MedicationPats.ResetTimeStamps(PatCur.PatNum);
-				Statements.ResetTimeStamps(PatCur.PatNum);
-				Documents.ResetTimeStamps(PatCur.PatNum);
-				//4. Make the password editable in case they want to change it.
+				string passwordGenerated=GenerateRandomPassword(8,10);
+				textOnlinePassword.Text=passwordGenerated;
+				//2. Make the password editable in case they want to change it.
 				textOnlinePassword.ReadOnly=false;
-				//5. Save password to db
-				PatCur.OnlinePassword=textOnlinePassword.Text;
+				//3. Save password to db.
+				// We only save the hash of the generated password.
+				string passwordHashed=Userods.EncryptPassword(passwordGenerated,false);
+				PatCur.OnlinePassword=passwordHashed;
 				Patients.Update(PatCur,PatOld);
-				PatOld.OnlinePassword=textOnlinePassword.Text;//so that subsequent Updates will work.
-				//6. Force a synch
-				FormMobile.SynchFromMain(true);
-				//7. Insert EhrMeasureEvent
+				PatOld.OnlinePassword=passwordHashed;//Update PatOld in case the user changes password manually.
+				//4. Insert EhrMeasureEvent
 				EhrMeasureEvent newMeasureEvent = new EhrMeasureEvent();
 				newMeasureEvent.DateTEvent=DateTime.Now;
 				newMeasureEvent.EventType=EhrMeasureEventType.OnlineAccessProvided;
 				newMeasureEvent.PatNum=PatCur.PatNum;
 				newMeasureEvent.MoreInfo="";
 				EhrMeasureEvents.Insert(newMeasureEvent);
-				//8. Rename button
+				//5. Rename button
 				butGiveAccess.Text="Remove Online Access";
 				Cursor=Cursors.Default;
 			}
@@ -97,53 +76,23 @@ namespace OpenDental {
 				//3. Save password to db
 				PatCur.OnlinePassword=textOnlinePassword.Text;
 				Patients.Update(PatCur,PatOld);
-				PatOld.OnlinePassword=textOnlinePassword.Text;
-				//5. Force a synch
-				FormMobile.SynchFromMain(true);
-				//no event to insert
-				//6. Rename button
+				PatOld.OnlinePassword=textOnlinePassword.Text;//Update PatOld in case the user changes password manually.
+				//4. Rename button
 				butGiveAccess.Text="Provide Online Access";
 				Cursor=Cursors.Default;
 			}
 		}
 
-		private void butGetLink_Click(object sender,EventArgs e) {
-			if(textOnlinePassword.ReadOnly) {
-				MessageBox.Show("Please use the Provide Online Access button first.");
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			textOnlineLink.Text=GetPatientPortalLink();
-			Cursor=Cursors.Default;
-		}
-
 		private void butOpen_Click(object sender,EventArgs e) {
-			if(textOnlineLink.Text=="") {
-				MessageBox.Show("Please use Get Link first.");
+			if(textPatientPortalURL.Text=="") {
+				MessageBox.Show("Please use Setup to set the Online Access Link first.");
 				return;
 			}
-			//No reason to force a synch to server.
 			try {
-				System.Diagnostics.Process.Start(textOnlineLink.Text);
+				System.Diagnostics.Process.Start(textPatientPortalURL.Text);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
-			}
-		}
-
-		///<summary>This takes about 3-5 seconds to run, so we don't run it automatically when first opening the form.</summary>
-		private string GetPatientPortalLink() {
-			mb.Url=PrefC.GetString(PrefName.MobileSyncServerURL);
-			if(!mb.ServiceExists()) {
-				return "";
-			}
-			try {
-				long customerNum=mb.GetCustomerNum(PrefC.GetString(PrefName.RegistrationKey));
-				string patientPortalLink=mb.GetPatientPortalAddress(PrefC.GetString(PrefName.RegistrationKey))+"?DentalOfficeID="+customerNum;
-				return patientPortalLink;
-			}
-			catch {
-				return "";
 			}
 		}
 		
@@ -153,62 +102,14 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			textOnlinePassword.Text=GenerateRandomPassword(8,10);
-			PatCur.OnlinePassword=textOnlinePassword.Text;
+			string passwordGenerated=GenerateRandomPassword(8,10);
+			textOnlinePassword.Text=passwordGenerated;
+			// We only save the hash of the generated password.
+			string passwordHashed=Userods.EncryptPassword(passwordGenerated,false);
+			PatCur.OnlinePassword=passwordHashed;
 			Patients.Update(PatCur,PatOld);
-			PatOld.OnlinePassword=textOnlinePassword.Text;//so that subsequent Updates will work.
-			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
-				Cursor=Cursors.Default;
-				MessageBox.Show("Synch must be setup first from the Tools menu, Mobile and Patient Portal Synch.");
-				return;
-			}
-			//we won't check PrefName.MobileSyncWorkstationName because we are forcing the synch
-			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				Cursor=Cursors.Default;
-				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,
-					"Warning.  Workstation is not entered in the Tools menu, Mobile and Patient Portal Synch.  No automatic synch is taking place.  Continue anyway?")) {
-					return;
-				}
-			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				Cursor=Cursors.Default;
-				MessageBox.Show("Full Synch must be run first first from the Tools menu, Mobile and Patient Portal Synch.");
-				return;
-			}
-			FormMobile.SynchFromMain(true); 
+			PatOld.OnlinePassword=passwordHashed;//Update PatOld in case the user changes password manually.
 			Cursor=Cursors.Default;
-		}
-
-		private void butSynch_Click(object sender,EventArgs e) {
-			//The only other places on this form where a synch happens is when the 'Provide Online Access' or 'Generate New' buttons are clicked.
-			if(textOnlinePassword.Text!="") {
-				if(!PasswordIsValid()) {
-					return;
-				}
-			}
-			PatCur.OnlinePassword=textOnlinePassword.Text;
-			Patients.Update(PatCur,PatOld);
-			PatOld.OnlinePassword=textOnlinePassword.Text;//so that subsequent Updates will work.
-			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
-				MessageBox.Show("Synch must be setup first from the Tools menu, Mobile and Patient Portal Synch.");
-				return;
-			}
-			//we won't check PrefName.MobileSyncWorkstationName because we are forcing the synch
-			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
-				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,
-					"Warning.  Workstation is not entered in the Tools menu, Mobile and Patient Portal Synch.  No automatic synch is taking place.  Continue anyway?")) {
-					return;
-				}
-			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				MessageBox.Show("Full Synch must be run first first from the Tools menu, Mobile and Patient Portal Synch.");
-				return;
-			}
-			FormMobile.SynchFromMain(true);
 		}
 
 		///<summary>Should generate a reasonably random password at least 8 char long and containing at least one uppercase, one lowercase, and one number.</summary>
@@ -347,8 +248,8 @@ namespace OpenDental {
 		}
 
 		private void butPrint_Click(object sender,EventArgs e) {
-			if(textOnlineLink.Text=="") {
-				MsgBox.Show(this,"Online Access Link required. Please press Get Link.");
+			if(textPatientPortalURL.Text=="") {
+				MsgBox.Show(this,"Online Access Link required. Please use Setup to set the Online Access Link first.");
 				return;
 			}
 			if(textOnlinePassword.Text==""){
@@ -358,6 +259,7 @@ namespace OpenDental {
 			if(!PasswordIsValid()) {//this gives a messagebox if invalid
 				return;
 			}
+			WasPrinted=true;
 			//Then, print the info that the patient will be given in order for them to log in online.
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
@@ -393,7 +295,7 @@ namespace OpenDental {
 			text="Online Access";
 			g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,font).Width/2,yPos);
 			yPos+=50;
-			text="Website: "+textOnlineLink.Text;
+			text="Website: "+textPatientPortalURL.Text;
 			g.DrawString(text,font,Brushes.Black,bounds.Left+100,yPos);
 			yPos+=25;
 			text="Username: "+textOnlineUsername.Text;
@@ -431,10 +333,12 @@ namespace OpenDental {
 				if(!PasswordIsValid()) {
 					return;
 				}
+				if(!WasPrinted && MsgBox.Show(this,MsgBoxButtons.YesNo,"Online Password changed but was not printed.  It will never be visible again.\r\nContinue anyway?")) {
+					return;
+				}
+				PatCur.OnlinePassword=Userods.EncryptPassword(textOnlinePassword.Text,false);
+				Patients.Update(PatCur,PatOld);
 			}
-			PatCur.OnlinePassword=textOnlinePassword.Text;//already saved if used the Provide Online Access button, Generate New button, or Synch button.  This is just in case they subsequently changed it or removed it.
-			//Do not force synch to server.  User has been informed to synch manually if they change the password.
-			Patients.Update(PatCur,PatOld);
 			DialogResult=DialogResult.OK;
 		}
 

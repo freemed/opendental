@@ -26,7 +26,7 @@ namespace OpenDental{
 			this.butOK = new System.Windows.Forms.Button();
 			this.butCancel = new System.Windows.Forms.Button();
 			this.label5 = new System.Windows.Forms.Label();
-			this.textOnlineLink = new System.Windows.Forms.TextBox();
+			this.textPatientPortalURL = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -57,22 +57,22 @@ namespace OpenDental{
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100, 17);
 			this.label5.TabIndex = 31;
-			this.label5.Text = "Online Access Link";
+			this.label5.Text = "Patient Portal URL";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textOnlineLink
 			// 
-			this.textOnlineLink.Location = new System.Drawing.Point(129, 33);
-			this.textOnlineLink.Name = "textOnlineLink";
-			this.textOnlineLink.Size = new System.Drawing.Size(561, 20);
-			this.textOnlineLink.TabIndex = 30;
+			this.textPatientPortalURL.Location = new System.Drawing.Point(129, 33);
+			this.textPatientPortalURL.Name = "textOnlineLink";
+			this.textPatientPortalURL.Size = new System.Drawing.Size(561, 20);
+			this.textPatientPortalURL.TabIndex = 30;
 			// 
 			// FormPatientPortalSetup
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(712, 154);
 			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textOnlineLink);
+			this.Controls.Add(this.textPatientPortalURL);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butCancel);
 			this.Name = "FormPatientPortalSetup";
@@ -89,7 +89,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Button butOK;
 		private System.Windows.Forms.Button butCancel;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox textOnlineLink;
+		private System.Windows.Forms.TextBox textPatientPortalURL;
 
 	}
 }
