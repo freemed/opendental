@@ -1809,6 +1809,7 @@ namespace OpenDental.UI {
 					for(int j=0;j<rows[i].Cells.Count;j++) {
 						row.Cells.Add(new ODGridCell(rows[i].Cells[j].Text));
 					}
+					row.Tag=rows[i].Tag;
 					listRows.Add(row);
 				}
 				BeginUpdate();
@@ -1823,6 +1824,7 @@ namespace OpenDental.UI {
 					for(int j=0;j<listRows[i].Cells.Count;j++) {
 						row.Cells.Add(listRows[i].Cells[j].Text);
 					}
+					row.Tag=listRows[i].Tag;
 					rows.Add(row);
 				}
 				EndUpdate();
