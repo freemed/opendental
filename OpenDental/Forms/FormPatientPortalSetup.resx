@@ -119,13 +119,13 @@
   </resheader>
   <data name="label1.Text" xml:space="preserve">
     <value>This will be the link that patient's will use to reach your office's patient portal that you are hosting.
-Example: https://www.opendental.com/PatientPortal/PatientPortal.html
+Example: https://93.24.120.12/GWT/PatientPortal/PatientPortal.html
 
-- A certificate will need to be installed so that patient's will not get an untrusted site error.
-- A port on your router will need to be forwarded so that patient's can access this page from outside the dental office.
+- A certificate will need to be installed so that patients will not get an untrusted site error.
+- A port on your router will need to be forwarded so that patients can access this page from outside the dental office.
 - Some offices might use a shorter URL that redirects traffic to the PatientPortal.html page. 
-Example: https://www.opendental.com/login.html
+Example: https://www.myoffice.com/login.html
 
-For more information, see our online manual: http://opendental.com/manual/PatientPortal.html</value>
+For more information, see our online manual.</value>
   </data>
 </root>
