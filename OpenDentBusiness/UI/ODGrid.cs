@@ -1695,7 +1695,6 @@ namespace OpenDental.UI {
 			this.Controls.Add(editBox);
 			if(editableAcceptsCR) {//Allow the edit box to handle carriage returns/multiline text.
 				editBox.AcceptsReturn=true;
-				editBox.AcceptsTab=true;
 			}
 			else {
 				editBox.SelectAll();//Only select all when not multiline (editableAcceptsCR) i.e. proc list for editing fees selects all for easy overwriting.
@@ -1723,6 +1722,7 @@ namespace OpenDental.UI {
 				if(editableAcceptsCR) {//When multiline it inserts a carriage return instead of moving to the next cell.
 					return;
 				}
+				//move to the next cell
 				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
 				editBox=null;
 				//OnCellLeave(selectedCell.X,selectedCell.Y);
@@ -1778,44 +1778,6 @@ namespace OpenDental.UI {
 					CreateEditBox();
 				}
 			}
-			if(e.KeyCode==Keys.Tab) {
-				editBox_ToNextCell();
-				return;
-			}
-		}
-
-		private void editBox_ToNextCell() {
-			//this code was copied from below "if(editableAcceptsCR) {return;}" inside the if(e.KeyCode==Keys.Enter) {} block above in editBox_KeyDown(). None of it is original.
-			editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
-			editBox=null;
-			//OnCellLeave(selectedCell.X,selectedCell.Y);
-			//find the next editable cell to the right.
-			int nextCellToRight=-1;
-			for(int i=selectedCell.X+1;i<columns.Count;i++) {
-				if(columns[i].IsEditable) {
-					nextCellToRight=i;
-					break;
-				}
-			}
-			if(nextCellToRight!=-1) {
-				selectedCell=new Point(nextCellToRight,selectedCell.Y);
-				CreateEditBox();
-				return;
-			}
-			//can't move to the right, so attempt to move down.
-			if(selectedCell.Y==rows.Count-1) {
-				return;//can't move down
-			}
-			nextCellToRight=-1;
-			for(int i=0;i<columns.Count;i++) {
-				if(columns[i].IsEditable) {
-					nextCellToRight=i;
-					break;
-				}
-			}
-			//guaranteed to have a value
-			selectedCell=new Point(nextCellToRight,selectedCell.Y+1);
-			CreateEditBox();
 		}
 
 		void editBox_KeyUp(object sender,KeyEventArgs e) {
@@ -1847,7 +1809,6 @@ namespace OpenDental.UI {
 					for(int j=0;j<rows[i].Cells.Count;j++) {
 						row.Cells.Add(new ODGridCell(rows[i].Cells[j].Text));
 					}
-					row.Tag=rows[i].Tag;
 					listRows.Add(row);
 				}
 				BeginUpdate();
@@ -1862,7 +1823,6 @@ namespace OpenDental.UI {
 					for(int j=0;j<listRows[i].Cells.Count;j++) {
 						row.Cells.Add(listRows[i].Cells[j].Text);
 					}
-					row.Tag=listRows[i].Tag;
 					rows.Add(row);
 				}
 				EndUpdate();
@@ -2000,10 +1960,6 @@ namespace OpenDental.UI {
 		#region KeyEvents
 		///<summary></summary>
 		protected override void OnKeyDown(KeyEventArgs e) {
-			if(e.KeyCode==Keys.Tab) {
-				editBox_ToNextCell();
-				return;
-			}
 			base.OnKeyDown(e);
 			if(e.KeyCode==Keys.ControlKey) {
 				ControlIsDown=true;
