@@ -3348,10 +3348,13 @@ namespace OpenDental{
 
 		private void ContrChart_Layout(object sender, System.Windows.Forms.LayoutEventArgs e){
 			gridProg.Height=ClientSize.Height-tabControlImages.Height-gridProg.Location.Y+1;
-			if(panelImages.Visible){
+			gridPtInfo.Height=tabControlImages.Top-gridPtInfo.Top;
+			if(panelImages.Visible) {
 				gridProg.Height-=(panelImages.Height+2);
+				gridPtInfo.Height-=(panelImages.Height+2);
 			}
 			gridProg.Invalidate();
+			gridPtInfo.Invalidate();
 		}
 
 		private void ContrChart_Resize(object sender,EventArgs e) {
@@ -5148,10 +5151,10 @@ namespace OpenDental{
 					case "Patient Portal":
 						row.Tag="Patient Portal";
 						if(PatCur.OnlinePassword=="") {
-							row.Cells.Add("No access");
+							row.Cells.Add(Lan.g(this,"No access"));
 						}
 						else {
-							row.Cells.Add("Online");
+							row.Cells.Add(Lan.g(this,"Online"));
 						}
 						break;
 					case "References":
