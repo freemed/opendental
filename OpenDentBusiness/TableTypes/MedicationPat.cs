@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public DateTime DateTStamp;
 		///<summary>Date that the medication was started.  Can be minval if unknown.</summary>
 		public DateTime DateStart;
-		///<summary>Date that the medication was stopped.  Can be minval if unknown.  If not minval, then this medication is "discontinued".</summary>
+		///<summary>Date that the medication was stopped.  Can be minval if unknown.  If minval, then the medication is not "discontinued".  If prior to today, then the medication is "discontinued".  If today or a future date, then not discontinued yet.</summary>
 		public DateTime DateStop;
 		///<summary>FK to provider.ProvNum. Can be 0. Gets set to the patient's primary provider when adding a new med.  If adding the med from EHR, gets set to the ProvNum of the logged-in user.</summary>
 		public long ProvNum;
