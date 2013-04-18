@@ -15,7 +15,7 @@ namespace OpenDental {
 		public Patient PatCur;
 		///<summary>A copy of the original patient object, as it was when this form was first opened.</summary>
 		private Patient PatOld;
-		///<summary>Keeps track if the user printed that patient's information out.  If the password changed and the user didn't print, a reminder will show.</summary>
+		///<summary>Keeps track if the user printed the patient's information.  Mainly used to show a reminder when the password changes and the user didn't print.</summary>
 		private bool WasPrinted;
 
 		public FormPatientPortal() {
@@ -28,7 +28,8 @@ namespace OpenDental {
 			textOnlinePassword.Text="";
 			if(PatCur.OnlinePassword!="") {//if a password was already filled in
 				butGiveAccess.Text="Remove Online Access";
-				//We do not want to show the password hash that is stored in the database so we will leave the password box blank but editable.
+				//We do not want to show the password hash that is stored in the database so we will fill the online password with asterisks.
+				textOnlinePassword.Text="********";
 				textOnlinePassword.ReadOnly=false;
 			}
 			textPatientPortalURL.Text=PrefC.GetString(PrefName.PatientPortalURL);
@@ -252,7 +253,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Online Access Link required. Please use Setup to set the Online Access Link first.");
 				return;
 			}
-			if(textOnlinePassword.Text==""){
+			if(textOnlinePassword.Text=="" || textOnlinePassword.Text=="********") {
 				MessageBox.Show("Password required. Please generate a new password.");
 				return;
 			}
@@ -261,6 +262,10 @@ namespace OpenDental {
 			}
 			WasPrinted=true;
 			//Then, print the info that the patient will be given in order for them to log in online.
+			PrintPatientInfo();
+		}
+
+		private void PrintPatientInfo() {
 			PrintDocument pd=new PrintDocument();
 			pd.PrintPage += new PrintPageEventHandler(this.pd_PrintPage);
 			pd.DefaultPageSettings.Margins=new Margins(25,25,40,40);
@@ -269,9 +274,9 @@ namespace OpenDental {
 			}
 			try {
 				#if DEBUG
-					FormRpPrintPreview pView = new FormRpPrintPreview();
-					pView.printPreviewControl2.Document=pd;
-					pView.ShowDialog();
+				FormRpPrintPreview pView = new FormRpPrintPreview();
+				pView.printPreviewControl2.Document=pd;
+				pView.ShowDialog();
 				#else
 						if(PrinterL.SetPrinter(pd,PrintSituation.Default)) {
 							pd.Print();
@@ -329,12 +334,22 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(textOnlinePassword.Text!="") {
+			if(textOnlinePassword.Text!="" && textOnlinePassword.Text!="********") {
 				if(!PasswordIsValid()) {
 					return;
 				}
-				if(!WasPrinted && !MsgBox.Show(this,MsgBoxButtons.YesNo,"Online Password changed but was not printed.  It will never be visible again.\r\nContinue anyway?")) {
-					return;
+				if(!WasPrinted) {
+					DialogResult result=MessageBox.Show(Lan.g(this,"Online Password changed but was not printed, would you like to print?"),Lan.g(this,"Print Patient Info"),MessageBoxButtons.YesNoCancel);
+					if(result==DialogResult.Yes) {
+						//Print the showing information.
+						PrintPatientInfo();
+					}
+					else if(result==DialogResult.No) {
+						//User does not want to print.  Do nothing.
+					}
+					else if(result==DialogResult.Cancel) {
+						return;
+					}
 				}
 				PatCur.OnlinePassword=Userods.EncryptPassword(textOnlinePassword.Text,false);
 				Patients.Update(PatCur,PatOld);

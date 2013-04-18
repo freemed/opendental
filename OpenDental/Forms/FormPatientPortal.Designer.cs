@@ -38,6 +38,7 @@
 			this.butPrint = new System.Windows.Forms.Button();
 			this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
 			this.menuItemSetup = new System.Windows.Forms.MenuItem();
+			this.label1 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// butGiveAccess
@@ -96,7 +97,7 @@
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(702, 155);
+			this.butCancel.Location = new System.Drawing.Point(702, 168);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75, 23);
 			this.butCancel.TabIndex = 1;
@@ -125,7 +126,7 @@
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(621, 155);
+			this.butOK.Location = new System.Drawing.Point(621, 168);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75, 23);
 			this.butOK.TabIndex = 0;
@@ -147,7 +148,7 @@
 			// butPrint
 			// 
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butPrint.Location = new System.Drawing.Point(140, 155);
+			this.butPrint.Location = new System.Drawing.Point(140, 168);
 			this.butPrint.Name = "butPrint";
 			this.butPrint.Size = new System.Drawing.Size(75, 23);
 			this.butPrint.TabIndex = 37;
@@ -166,11 +167,21 @@
 			this.menuItemSetup.Text = "Setup";
 			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
 			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(137, 130);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(302, 17);
+			this.label1.TabIndex = 38;
+			this.label1.Text = "Existing passwords will show as asterisks.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// FormPatientPortal
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(789, 190);
+			this.ClientSize = new System.Drawing.Size(789, 203);
+			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butPrint);
 			this.Controls.Add(this.butOpen);
 			this.Controls.Add(this.butOK);
@@ -209,6 +220,7 @@
 		private System.Windows.Forms.Button butPrint;
 		private System.Windows.Forms.MainMenu mainMenu;
 		private System.Windows.Forms.MenuItem menuItemSetup;
+		private System.Windows.Forms.Label label1;
 
 	}
 }
