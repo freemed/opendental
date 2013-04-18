@@ -1692,11 +1692,12 @@ namespace OpenDental.UI {
 			if(Columns[selectedCell.X].TextAlign==HorizontalAlignment.Right) {
 				editBox.TextAlign=HorizontalAlignment.Right;
 			}
-			this.Controls.Add(editBox);
+			editBox.AcceptsTab=true;//Allow tab navigation in the ODGrid. Necessary when enter and up/down keys navigate within a cell (EditableAcceptsCR).
 			if(editableAcceptsCR) {//Allow the edit box to handle carriage returns/multiline text.
 				editBox.AcceptsReturn=true;
 			}
-			else {
+			this.Controls.Add(editBox);
+			if(!editableAcceptsCR) {
 				editBox.SelectAll();//Only select all when not multiline (editableAcceptsCR) i.e. proc list for editing fees selects all for easy overwriting.
 			}
 			editBox.Focus();
@@ -1722,37 +1723,7 @@ namespace OpenDental.UI {
 				if(editableAcceptsCR) {//When multiline it inserts a carriage return instead of moving to the next cell.
 					return;
 				}
-				//move to the next cell
-				editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
-				editBox=null;
-				//OnCellLeave(selectedCell.X,selectedCell.Y);
-				//find the next editable cell to the right.
-				int nextCellToRight=-1;
-				for(int i=selectedCell.X+1;i<columns.Count;i++) {
-					if(columns[i].IsEditable) {
-						nextCellToRight=i;
-						break;
-					}
-				}
-				if(nextCellToRight!=-1) {
-					selectedCell=new Point(nextCellToRight,selectedCell.Y);
-					CreateEditBox();
-					return;
-				}
-				//can't move to the right, so attempt to move down.
-				if(selectedCell.Y==rows.Count-1) {
-					return;//can't move down
-				}
-				nextCellToRight=-1;
-				for(int i=0;i<columns.Count;i++) {
-					if(columns[i].IsEditable) {
-						nextCellToRight=i;
-						break;
-					}
-				}
-				//guaranteed to have a value
-				selectedCell=new Point(nextCellToRight,selectedCell.Y+1);
-				CreateEditBox();
+				editBox_NextCell();
 			}
 			if(e.KeyCode==Keys.Down) {
 				if(editableAcceptsCR) {//When multiline it moves down inside the text instead of down to the next cell.
@@ -1778,8 +1749,44 @@ namespace OpenDental.UI {
 					CreateEditBox();
 				}
 			}
+			if(e.KeyCode==Keys.Tab) {
+				editBox_NextCell();
+			}
 		}
-
+		
+		private void editBox_NextCell() {
+			editBox.Dispose();//This fires editBox_LostFocus, which is where we call OnCellLeave.
+			editBox=null;
+			//OnCellLeave(selectedCell.X,selectedCell.Y);
+			//find the next editable cell to the right.
+			int nextCellToRight=-1;
+			for(int i=selectedCell.X+1;i<columns.Count;i++) {
+				if(columns[i].IsEditable) {
+					nextCellToRight=i;
+					break;
+				}
+			}
+			if(nextCellToRight!=-1) {
+				selectedCell=new Point(nextCellToRight,selectedCell.Y);
+				CreateEditBox();
+				return;
+			}
+			//can't move to the right, so attempt to move down.
+			if(selectedCell.Y==rows.Count-1) {
+				return;//can't move down
+			}
+			nextCellToRight=-1;
+			for(int i=0;i<columns.Count;i++) {
+				if(columns[i].IsEditable) {
+					nextCellToRight=i;
+					break;
+				}
+			}
+			//guaranteed to have a value
+			selectedCell=new Point(nextCellToRight,selectedCell.Y+1);
+			CreateEditBox();
+		}
+		
 		void editBox_KeyUp(object sender,KeyEventArgs e) {
 			if(editBox==null) {
 				return;
