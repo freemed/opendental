@@ -79,6 +79,34 @@ namespace OpenDentBusiness
 			}
 		}
 
+		///<summary>Example of values returned: 004010X097A1 (4010 dental), 005010X222A1 (5010 medical), 005010X223A2 (5010 institutional), 005010X224A2 (5010 dental)</summary>
+		public string GetFormat() {
+			for(int i=0;i<Segments.Count;i++) {
+				if(Segments[i].SegmentID=="GS") {
+					return Segments[i].Get(8);
+				}
+			}
+			return "";
+		}
+
+		///<summary>Returns true if the X12 object is in 4010 format.</summary>
+		public bool IsFormat4010() {
+			string format=GetFormat();
+			if(format.Length>=6) {
+				return (format.Substring(2,4)=="4010");
+			}
+			return false;
+		}
+
+		///<summary>Returns true if the X12 object is in 5010 format.</summary>
+		public bool IsFormat5010() {
+			string format=GetFormat();
+			if(format.Length>=6) {
+				return (format.Substring(2,4)=="5010");
+			}
+			return false;
+		}
+
 		public bool Is997() {
 			//There is only one transaction set (ST/SE) per functional group (GS/GE), but I think there can be multiple functional groups
 			//if acking multiple 

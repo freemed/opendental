@@ -594,6 +594,9 @@ namespace OpenDentBusiness
 				if(IsDentiCal(clearhouse)) {
 					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here. This field is what Denti-Cal refers to as the PDCN.
 				}
+				else if(IsEmdeonMedical(clearhouse)) {
+					clm01.Replace('/','-');//Emdeon Medical only allows letters, numbers, dashes, periods, spaces and asterisks.
+				}
 				string claimFrequencyTypeCode="1";
 				if(claim.CorrectionType==ClaimCorrectionType.Original) {
 					claimFrequencyTypeCode="1";
@@ -1934,8 +1937,9 @@ namespace OpenDentBusiness
 			}
 			sw.Write("PER"+s
 				+"IC"+s);//PER01 2/2 Contact Function Code: IC=Information Contact.
-			if(IsClaimConnect(clearhouse)) {
-				sw.Write(Sout(name,60)+s);//PER02 1/60 Name: Situational. For some reason ClaimConnect always wants this box filled in, even though the X12 speficiation says not to send if same as NM103 of loop 1000A.
+			//The following clearinghouses always want PER02, even though the X12 speficiation says not to send if same as NM103 of loop 1000A. They don't seem to care if the value is the same as NM103.
+			if(IsClaimConnect(clearhouse) || IsEmdeonMedical(clearhouse)) {
+				sw.Write(Sout(name,60)+s);//PER02 1/60 Name: Situational.
 			}
 			else {
 				sw.Write(s);//PER02 1/60 Name: Situational. Do not send since same as NM103 for loop 1000A.
@@ -2392,6 +2396,20 @@ namespace OpenDentBusiness
 			if(billProv.FName=="" && !billProv.IsNotPerson) {//if is a person, first name cannot be blank.
 				Comma(strb);
 				strb.Append("Billing Prov FName");
+			}
+			if(IsEmdeonMedical(clearhouse)) {
+				if(!Regex.IsMatch(billProv.FName,"^[A-Za-z ']+$")) {
+					Comma(strb);
+					strb.Append("Billing Prov FName may contain letters spaces and apostrophes only");
+				}
+				if(!Regex.IsMatch(billProv.LName,"^[A-Za-z ']+$")) {
+					Comma(strb);
+					strb.Append("Billing Prov LName may contain letters spaces and apostrophes only");
+				}
+				if(!Regex.IsMatch(billProv.MI,"^[A-Za-z ']+$")) {
+					Comma(strb);
+					strb.Append("Billing Prov Middle Name may contain letters spaces and apostrophes only");
+				}
 			}
 			if(billProv.NationalProvID.Length<2) {
 				Comma(strb);
@@ -2860,33 +2878,34 @@ namespace OpenDentBusiness
 			}
 		}
 		
-		///<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
-		public int GetTransNum(long claimNum) {
-			string curTransNumStr="";
-			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID=="ST"){
-					curTransNumStr=Segments[i].Get(2);
-				}
-				if(Segments[i].SegmentID=="CLM"){
-					if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
-						try {
-							return PIn.Int(curTransNumStr);
-						}
-						catch {
-							return 0;
-						}
-					}
-				}
-			}
-			return 0;
-		}
+		/////<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
+		//public int GetTransNum(long claimNum) {
+		//  string curTransNumStr="";
+		//  for(int i=0;i<Segments.Count;i++) {
+		//    if(Segments[i].SegmentID=="ST"){
+		//      curTransNumStr=Segments[i].Get(2);
+		//    }
+		//    if(Segments[i].SegmentID=="CLM"){
+		//      if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
+		//        try {
+		//          return PIn.Int(curTransNumStr);
+		//        }
+		//        catch {
+		//          return 0;
+		//        }
+		//      }
+		//    }
+		//  }
+		//  return 0;
+		//}
 
 		///<summary>Loops through the 837 to see if attachments were sent.</summary>
 		public bool AttachmentsWereSent(long claimNum) {
 			bool isCurrentClaim=false;
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].SegmentID=="CLM") {
-					if(Segments[i].Get(1).TrimStart(new char[] { '0' })==claimNum.ToString()) {//if for specified claim
+					//The following check is currently broken, because we need to compare the claimNum to the portion of the CLM01 which is after the separator (/ or -). CLM01 is typically formatted like PatNum/ClaimNum
+					if(Segments[i].Get(1).TrimStart(new char[] { '0' })==claimNum.ToString()) {//if for specified claim.
 						isCurrentClaim=true;
 					}
 					else{

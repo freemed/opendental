@@ -94,6 +94,7 @@ namespace OpenDental{
 			this.label6 = new System.Windows.Forms.Label();
 			this.textNote = new System.Windows.Forms.TextBox();
 			this.groupAck = new System.Windows.Forms.GroupBox();
+			this.butPrintAck = new OpenDental.UI.Button();
 			this.label9 = new System.Windows.Forms.Label();
 			this.textAckDateTime = new System.Windows.Forms.TextBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -104,7 +105,6 @@ namespace OpenDental{
 			this.butPrint = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
-			this.butPrintAck = new OpenDental.UI.Button();
 			this.groupAck.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -227,6 +227,23 @@ namespace OpenDental{
 			this.groupAck.TabStop = false;
 			this.groupAck.Text = "Acknowledgement 997";
 			// 
+			// butPrintAck
+			// 
+			this.butPrintAck.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butPrintAck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butPrintAck.Autosize = true;
+			this.butPrintAck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butPrintAck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintAck.CornerRadius = 4F;
+			this.butPrintAck.Image = global::OpenDental.Properties.Resources.butPrint;
+			this.butPrintAck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butPrintAck.Location = new System.Drawing.Point(317,425);
+			this.butPrintAck.Name = "butPrintAck";
+			this.butPrintAck.Size = new System.Drawing.Size(81,24);
+			this.butPrintAck.TabIndex = 19;
+			this.butPrintAck.Text = "Print";
+			this.butPrintAck.Click += new System.EventHandler(this.butPrintAck_Click);
+			// 
 			// label9
 			// 
 			this.label9.Location = new System.Drawing.Point(15,423);
@@ -283,6 +300,7 @@ namespace OpenDental{
 			// checkAttachments
 			// 
 			this.checkAttachments.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkAttachments.Enabled = false;
 			this.checkAttachments.Location = new System.Drawing.Point(1,569);
 			this.checkAttachments.Name = "checkAttachments";
 			this.checkAttachments.Size = new System.Drawing.Size(125,18);
@@ -290,6 +308,7 @@ namespace OpenDental{
 			this.checkAttachments.Text = "Attachments Sent";
 			this.checkAttachments.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkAttachments.UseVisualStyleBackColor = true;
+			this.checkAttachments.Visible = false;
 			// 
 			// butPrint
 			// 
@@ -337,23 +356,6 @@ namespace OpenDental{
 			this.butCancel.TabIndex = 0;
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPrintAck
-			// 
-			this.butPrintAck.AdjustImageLocation = new System.Drawing.Point(0,0);
-			this.butPrintAck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrintAck.Autosize = true;
-			this.butPrintAck.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrintAck.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrintAck.CornerRadius = 4F;
-			this.butPrintAck.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrintAck.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrintAck.Location = new System.Drawing.Point(317,425);
-			this.butPrintAck.Name = "butPrintAck";
-			this.butPrintAck.Size = new System.Drawing.Size(81,24);
-			this.butPrintAck.TabIndex = 19;
-			this.butPrintAck.Text = "Print";
-			this.butPrintAck.Click += new System.EventHandler(this.butPrintAck_Click);
 			// 
 			// FormEtransEdit
 			// 
@@ -405,9 +407,15 @@ namespace OpenDental{
 			textNote.Text=EtransCur.Note;
 			if(EtransCur.Etype==EtransType.ClaimSent){
 				if(X12object.IsX12(MessageText)) {
-					//TODO: we need to do something different here for 5010s.
-					X837_4010 x837=new X837_4010(MessageText);
-					checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);
+					X12object x12obj=new X12object(MessageText);
+					if(x12obj.IsFormat4010()) {
+						X837_4010 x837=new X837_4010(MessageText);
+						checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);//This function does not currently work, so the corresponding checkbox is hidden on the form as well.
+					}
+					else if(x12obj.IsFormat5010()) {
+						X837_5010 x837=new X837_5010(MessageText);
+						checkAttachments.Checked=x837.AttachmentsWereSent(EtransCur.ClaimNum);//This function does not currently work, so the corresponding checkbox is hidden on the form as well.
+					}
 				}
 			}
 			if(EtransCur.AckEtransNum>0){

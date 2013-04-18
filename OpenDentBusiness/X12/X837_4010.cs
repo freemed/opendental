@@ -2016,32 +2016,33 @@ namespace OpenDentBusiness
 			queueItem.MissingData=strb.ToString();
 		}
 		
-		///<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
-		public int GetTransNum(long claimNum) {
-			string curTransNumStr="";
-			for(int i=0;i<Segments.Count;i++) {
-				if(Segments[i].SegmentID=="ST"){
-					curTransNumStr=Segments[i].Get(2);
-				}
-				if(Segments[i].SegmentID=="CLM"){
-					if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
-						try {
-							return PIn.Int(curTransNumStr);
-						}
-						catch {
-							return 0;
-						}
-					}
-				}
-			}
-			return 0;
-		}
+		/////<summary>Loops through the 837 to find the transaction number for the specified claim. Will return 0 if can't find.</summary>
+		//public int GetTransNum(long claimNum) {
+		//  string curTransNumStr="";
+		//  for(int i=0;i<Segments.Count;i++) {
+		//    if(Segments[i].SegmentID=="ST"){
+		//      curTransNumStr=Segments[i].Get(2);
+		//    }
+		//    if(Segments[i].SegmentID=="CLM"){
+		//      if(Segments[i].Get(1).TrimStart(new char[] {'0'})==claimNum.ToString()){//if for specified claim
+		//        try {
+		//          return PIn.Int(curTransNumStr);
+		//        }
+		//        catch {
+		//          return 0;
+		//        }
+		//      }
+		//    }
+		//  }
+		//  return 0;
+		//}
 
 		///<summary>Loops through the 837 to see if attachments were sent.</summary>
 		public bool AttachmentsWereSent(long claimNum) {
 			bool isCurrentClaim=false;
 			for(int i=0;i<Segments.Count;i++) {
 				if(Segments[i].SegmentID=="CLM") {
+					//The following check is currently broken, because we need to compare the claimNum to the portion of the CLM01 which is after the separator (/ or -). CLM01 is typically formatted like PatNum/ClaimNum
 					if(Segments[i].Get(1).TrimStart(new char[] { '0' })==claimNum.ToString()) {//if for specified claim
 						isCurrentClaim=true;
 					}
