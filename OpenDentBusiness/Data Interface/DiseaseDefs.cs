@@ -85,6 +85,7 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),def);
 				return;
 			}
+			//Validate patient attached
 			string command="SELECT LName,FName,patient.PatNum FROM patient,disease WHERE "
 				+"patient.PatNum=disease.PatNum "
 				+"AND disease.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"' "
@@ -101,6 +102,14 @@ namespace OpenDentBusiness {
 				}
 				throw new ApplicationException(s);
 			}
+			//Validate edu resource attached
+			command="SELECT COUNT(*) FROM eduresource WHERE eduresource.DiseaseDefNum='"+POut.Long(def.DiseaseDefNum)+"'";
+			int num=PIn.Int(Db.GetCount(command));
+			if(num>0) {
+				string s=Lans.g("DiseaseDef","Not allowed to delete.  Already attached to an EHR educational resource.");
+				throw new ApplicationException(s);
+			}
+			//End of validation
 			command="DELETE FROM diseasedef WHERE DiseaseDefNum ="+POut.Long(def.DiseaseDefNum);
 			Db.NonQ(command);
 			DeletedObjects.SetDeleted(DeletedObjectType.DiseaseDef,def.DiseaseDefNum);

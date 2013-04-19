@@ -1553,6 +1553,33 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string EduResourceInvalidDiseaseDefNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			command="SELECT EduResourceNum FROM eduresource WHERE DiseaseDefNum NOT IN (SELECT DiseaseDefNum FROM diseasedef)";
+			table=Db.GetTable(command);
+			if(isCheck) {
+				if(table.Rows.Count>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","EHR Educational Resources with invalid problem found: ")+table.Rows.Count+"\r\n";
+				}
+			}
+			else {
+				command="SELECT DiseaseDefNum FROM diseasedef WHERE ItemOrder=(SELECT MIN(ItemOrder) FROM diseasedef WHERE IsHidden=0)";
+				long defNum=PIn.Long(Db.GetScalar(command));
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="UPDATE eduresource SET DiseaseDefNum='"+defNum+"' WHERE EduResourceNum='"+table.Rows[i][0].ToString()+"'";
+					Db.NonQ(command);
+				}
+				int numberFixed=table.Rows.Count;
+				if(numberFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","EHR Educational Resources with invalid problem fixed: ")+numberFixed.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string FeeDeleteDuplicates(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
