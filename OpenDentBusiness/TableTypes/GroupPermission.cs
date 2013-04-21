@@ -101,7 +101,7 @@ namespace OpenDentBusiness{
 		AnesthesiaControlMeds,
 		///<summary>36</summary>
 		InsPayCreate,
-		///<summary>37. Uses date restrictions. Also includes completed claimprocs even if unattached to an insurance check.  However, it's not actually enforced when creating a check because it would be very complex.</summary>
+		///<summary>37. Uses date restrictions. Edit Batch Insurance Payment.</summary>
 		InsPayEdit,
 		///<summary>38. Uses date restrictions.</summary>
 		TreatPlanEdit,
@@ -159,9 +159,9 @@ namespace OpenDentBusiness{
 		ProcFeeEdit,
 		///<summary>65- There is no user interface in the security window for this permission.  It is only used for tracking.  Only tracks changes to carriername, not any other carrier info.  FK to PlanNum for tracking.</summary>
 		InsPlanChangeCarrierName,
-		///<summary>66- If user does not have this permission, then they can't delete, edit original description, or double click on note rows.</summary>
+		///<summary>66- Delete task, edit original description, or double click on note rows.</summary>
 		TaskEdit,
-		///<summary>67- If user does not have this permission, then they can't add or delete lists and list columns..</summary>
+		///<summary>67- Add or delete lists and list columns..</summary>
 		WikiListSetup
 	}
 
