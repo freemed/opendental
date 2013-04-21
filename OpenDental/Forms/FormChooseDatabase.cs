@@ -791,8 +791,28 @@ namespace OpenDental{
 			}
 		}
 
+		///<summary>If MiddleTierProxyConfix.xml is present, this loads the three variables from that file into memory.</summary>
+		private static void LoadMiddleTierProxySettings() {
+			string xmlPath=ODFileUtils.CombinePaths(Application.StartupPath,"MiddleTierProxyConfig.xml");
+			if(!File.Exists(xmlPath)) {
+				return;
+			}
+			XmlDocument doc=new XmlDocument();
+			try{
+				doc.Load(xmlPath);
+				RemotingClient.MidTierProxyAddress=doc.SelectSingleNode("//Address").InnerText;
+				RemotingClient.MidTierProxyUserName=doc.SelectSingleNode("//UserName").InnerText;
+				RemotingClient.MidTierProxyPassword=doc.SelectSingleNode("//Password").InnerText;
+			}
+			catch(Exception ex) {
+				//Common error: root element is missing
+				MessageBox.Show(ex.Message);
+			}
+		}
+
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkConnectServer.Checked){
+				LoadMiddleTierProxySettings();
 				string originalURI=RemotingClient.ServerURI;
 				RemotingClient.ServerURI=textURI.Text;
 				bool useEcwAlgorithm=checkUsingEcw.Checked;

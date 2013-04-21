@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,10 +12,17 @@ using System.Xml.Serialization;
 using OpenDentBusiness;
 
 namespace OpenDentBusiness {
-		public class RemotingClient {
-			///<summary>This dll will be in one of these three roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
+	public class RemotingClient {
+		///<summary>This dll will be in one of these three roles.  There can be a dll on the client and a dll on the server, both involved in the logic.  This keeps track of which one is which.</summary>
 		public static RemotingRole RemotingRole;
+		///<summary>If ClientWeb, then this is the URL to the server.</summary>
 		public static string ServerURI;
+		///<summary>If ClientWeb (middle tier user), proxy settings can be picked up from MiddleTierProxyConfig.xml.</summary>
+		public static string MidTierProxyAddress;
+		///<summary>If ClientWeb (middle tier user), proxy settings can be picked up from MiddleTierProxyConfig.xml.</summary>
+		public static string MidTierProxyUserName;
+		///<summary>If ClientWeb (middle tier user), proxy settings can be picked up from MiddleTierProxyConfig.xml.</summary>
+		public static string MidTierProxyPassword;
 
 		public static DataTable ProcessGetTable(DtoGetTable dto) {
 			string result=SendAndReceive(dto);
@@ -138,6 +146,12 @@ namespace OpenDentBusiness {
 			string dtoString=dto.Serialize();
 			OpenDentalServer.ServiceMain service=new OpenDentBusiness.OpenDentalServer.ServiceMain();
 			service.Url=ServerURI;
+			if(MidTierProxyAddress!=null && MidTierProxyAddress!="") {
+				IWebProxy proxy = new WebProxy(MidTierProxyAddress);
+				ICredentials cred=new NetworkCredential(MidTierProxyUserName,MidTierProxyPassword);
+				proxy.Credentials=cred;
+				service.Proxy=proxy;
+			}
 			string result=service.ProcessRequest(dtoString);
 			//The web service (xml) serializer/deserializer is removing the '\r' portion of our newlines during the data transfer. 
 			//Replacing the string is not the best solution but it works for now. The replacing happens inside ProcessRequest() (server side) and here (client side).
