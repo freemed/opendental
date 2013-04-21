@@ -391,6 +391,7 @@ namespace OpenDentBusiness {
 		TimeCardsUseDecimalInsteadOfColon,
 		TimecardUsersDontEditOwnCard,
 		TitleBarShowSite,
+		///<summary>Deprecated.  Not used anywhere.</summary>
 		ToothChartMoveMenuToRight,
 		TreatmentPlanNote,
 		TreatPlanPriorityForDeclined,

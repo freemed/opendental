@@ -20,7 +20,7 @@ namespace OpenDental{
 		private System.Windows.Forms.CheckBox checkBalancesDontSubtractIns;
 		private System.Windows.Forms.CheckBox checkInsurancePlansShared;
 		private CheckBox checkMedicalEclaimsEnabled;
-    private CheckBox checkSolidBlockouts;
+		private CheckBox checkSolidBlockouts;
 		private CheckBox checkAgingMonthly;
 		private CheckBox checkBrokenApptNote;
 		private ToolTip toolTip1;
@@ -58,7 +58,6 @@ namespace OpenDental{
 		private CheckBox checkCoPayFeeScheduleBlankLikeZero;
 		private CheckBox checkClaimsValidateACN;
 		private CheckBox checkInsDefaultShowUCRonClaims;
-		private CheckBox checkToothChartMoveMenuToRight;
 		private CheckBox checkImagesModuleTreeIsCollapsed;
 		private CheckBox checkRxSendNewToQueue;
 		private TabControl tabControl1;
@@ -170,7 +169,6 @@ namespace OpenDental{
 			this.checkApptBubbleDelay = new System.Windows.Forms.CheckBox();
 			this.checkAppointmentBubblesDisabled = new System.Windows.Forms.CheckBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.checkToothChartMoveMenuToRight = new System.Windows.Forms.CheckBox();
 			this.checkChartQuickAddHideAmalgam = new System.Windows.Forms.CheckBox();
 			this.label11 = new System.Windows.Forms.Label();
 			this.checkAllowSettingProcsComplete = new System.Windows.Forms.CheckBox();
@@ -614,18 +612,6 @@ namespace OpenDental{
 			this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
 			this.toolTip1.ToolTipTitle = "Help";
 			// 
-			// checkToothChartMoveMenuToRight
-			// 
-			this.checkToothChartMoveMenuToRight.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkToothChartMoveMenuToRight.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkToothChartMoveMenuToRight.Location = new System.Drawing.Point(59, 89);
-			this.checkToothChartMoveMenuToRight.Name = "checkToothChartMoveMenuToRight";
-			this.checkToothChartMoveMenuToRight.Size = new System.Drawing.Size(381, 15);
-			this.checkToothChartMoveMenuToRight.TabIndex = 196;
-			this.checkToothChartMoveMenuToRight.Text = "Button for tooth chart, move to the right to prevent overlap when saving";
-			this.checkToothChartMoveMenuToRight.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkToothChartMoveMenuToRight.UseVisualStyleBackColor = true;
-			// 
 			// checkChartQuickAddHideAmalgam
 			// 
 			this.checkChartQuickAddHideAmalgam.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -978,7 +964,6 @@ namespace OpenDental{
 			this.tabChart.Controls.Add(this.butProblemsIndicateNone);
 			this.tabChart.Controls.Add(this.textProblemsIndicateNone);
 			this.tabChart.Controls.Add(this.label8);
-			this.tabChart.Controls.Add(this.checkToothChartMoveMenuToRight);
 			this.tabChart.Controls.Add(this.checkAutoClearEntryStatus);
 			this.tabChart.Controls.Add(this.checkChartQuickAddHideAmalgam);
 			this.tabChart.Controls.Add(this.comboToothNomenclature);
@@ -1511,7 +1496,7 @@ namespace OpenDental{
 			checkAutoClearEntryStatus.Checked=PrefC.GetBool(PrefName.AutoResetTPEntryStatus);
 			checkAllowSettingProcsComplete.Checked=PrefC.GetBool(PrefName.AllowSettingProcsComplete);
 			checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam);
-			checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
+			//checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
 			textProblemsIndicateNone.Text=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone));
 			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone));
 			textAllergiesIndicateNone.Text=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone));
@@ -1715,7 +1700,7 @@ namespace OpenDental{
 				| Prefs.UpdateBool(PrefName.ClaimsValidateACN,checkClaimsValidateACN.Checked)
 				| Prefs.UpdateBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical,checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked)
 				| Prefs.UpdateBool(PrefName.AccountShowPaymentNums,checkAccountShowPaymentNums.Checked)
-				| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
+				//| Prefs.UpdateBool(PrefName.ToothChartMoveMenuToRight,checkToothChartMoveMenuToRight.Checked)
 				| Prefs.UpdateBool(PrefName.ImagesModuleTreeIsCollapsed,checkImagesModuleTreeIsCollapsed.Checked)
 				| Prefs.UpdateBool(PrefName.RxSendNewToQueue,checkRxSendNewToQueue.Checked)
 				| Prefs.UpdateInt(PrefName.AppointmentSearchBehavior,comboSearchBehavior.SelectedIndex)

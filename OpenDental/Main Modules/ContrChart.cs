@@ -3508,9 +3508,9 @@ namespace OpenDental{
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuConsent;
 			ToolBarMain.Buttons.Add(button);
-			if(PrefC.GetBool(PrefName.ToothChartMoveMenuToRight)) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton("                                .",-1,"",""));
-			}
+			//if(PrefC.GetBool(PrefName.ToothChartMoveMenuToRight)) {
+			//	ToolBarMain.Buttons.Add(new ODToolBarButton("                   .",-1,"",""));
+			//}
 			button=new ODToolBarButton(Lan.g(this,"Tooth Chart"),-1,"","ToothChart");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=menuToothChart;
