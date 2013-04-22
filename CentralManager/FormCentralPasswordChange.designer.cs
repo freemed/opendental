@@ -35,7 +35,7 @@ namespace CentralManager{
 			// butOK
 			// 
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Location = new System.Drawing.Point(272,166);
+			this.butOK.Location = new System.Drawing.Point(280,177);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(75,24);
 			this.butOK.TabIndex = 3;
@@ -45,7 +45,7 @@ namespace CentralManager{
 			// butCancel
 			// 
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Location = new System.Drawing.Point(353,166);
+			this.butCancel.Location = new System.Drawing.Point(361,177);
 			this.butCancel.Name = "butCancel";
 			this.butCancel.Size = new System.Drawing.Size(75,24);
 			this.butCancel.TabIndex = 2;
@@ -101,7 +101,7 @@ namespace CentralManager{
 			// FormCentralPasswordChange
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(440,202);
+			this.ClientSize = new System.Drawing.Size(448,213);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.textAccessCode);
 			this.Controls.Add(this.label1);
