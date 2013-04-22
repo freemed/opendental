@@ -525,13 +525,32 @@ namespace OpenDental.Eclaims {
 					format="A";
 					lengthRequirement=new ConstLengthRequirement(2);
 					//Includes US states and Canadian provinces.
+					//http://www.nrcan.gc.ca/earth-sciences/geography-boundary/geographical-name/translators/5782
 					valueRequirements.Add(new DiscreteValueRequirement(new string [] {
-																					"NF","LB","PE","NS","NB","PQ","ON","MB","SK","AB","BC","NT","YT",//Canadian province codes.
-																					"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",//US state codes.
-																					"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
-																					"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
-																					"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
-																					"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY"}));
+						//Canadian province codes.
+						"AB",//Alberta
+						"BC",//Britich Columbia
+						"MB",//Manitoba
+						"NB",//New Brunswick
+						"NL",//Newfoundland and Labrador
+						"NS",//Nova Scotia
+						"NT",//Northwest Territories
+						"NU",//Nunavut
+						"ON",//Ontario
+						"PE",//Prince Edward Island
+						"QC",//Quebec
+						"SK",//Saskatchewan
+						"YT", //Yukon
+						//Traditional Canadian province codes which somehow made it into our application, but we are going to leave them because they are probably harmless.
+						"LB",//Newfoundland and Labrador - This appeared in Canada Post publications (e.g., The Canadian Postal Code Directory) for the mainland section of the province of Newfoundland and Labrador.
+						"NF",//Newfoundland and Labrador - Nfld. and later NF (the two-letter abbreviation used before the province's name changed to Newfoundland and Labrador) and T.-N. (French version, for Terre-Neuve)
+						"PQ",//Quebec	- Que. and P.Q. (French version, for Province du Québec); later, PQ evolved from P.Q. as the first two-letter non-punctuated abbreviation.
+						//US state codes.
+						"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",
+						"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
+						"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
+						"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
+						"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY"}));
 					break;
 				case "D09":
 					fieldName="Subscriber's Postal/ZIP Code";
@@ -881,12 +900,32 @@ namespace OpenDental.Eclaims {
 
 		private void SetValuesUsingFieldId_v4(string pFieldId){
 			//Includes US states and Canadian provinces.
-			string[] stateCodes=new string [] {	"NL","PE","NB","QC","ON","MB","SK","AB","BC","YT","NU",//Canadian province codes.
-																					"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",//US state codes.
-																					"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
-																					"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
-																					"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
-																					"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY"};
+			//http://www.nrcan.gc.ca/earth-sciences/geography-boundary/geographical-name/translators/5782
+			string[] stateCodes=new string [] {	
+				//Canadian province codes.
+				"AB",//Alberta
+				"BC",//Britich Columbia
+				"MB",//Manitoba
+				"NB",//New Brunswick
+				"NL",//Newfoundland and Labrador
+				"NS",//Nova Scotia
+				"NT",//Northwest Territories
+				"NU",//Nunavut
+				"ON",//Ontario
+				"PE",//Prince Edward Island
+				"QC",//Quebec
+				"SK",//Saskatchewan
+				"YT", //Yukon
+				//Traditional Canadian province codes which somehow made it into our application, but we are going to leave them because they are probably harmless.
+				"LB",//Newfoundland and Labrador - This appeared in Canada Post publications (e.g., The Canadian Postal Code Directory) for the mainland section of the province of Newfoundland and Labrador.
+				"NF",//Newfoundland and Labrador - Nfld. and later NF (the two-letter abbreviation used before the province's name changed to Newfoundland and Labrador) and T.-N. (French version, for Terre-Neuve)
+				"PQ",//Quebec	- Que. and P.Q. (French version, for Province du Québec); later, PQ evolved from P.Q. as the first two-letter non-punctuated abbreviation.
+				//US state codes.
+				"AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL",
+				"GA","HI","IA","ID","IL","IN","KS","KY","LA","MA",
+				"MD","ME","MI","MN","MO","MS","MT","NC","ND","NE",
+				"NH","NJ","NM","NV","NY","OH","OK","OR","PA","RI",
+				"SC","SD","TX","UT","VA","VT","WA","WI","WV","WY"};
 			string[] languageCodes=new string[] {"A","E","F"};
 			ValueMap valueMap;
 			//Values in the following table were taken from the data dictionary of the CCD doc (about page 70).
