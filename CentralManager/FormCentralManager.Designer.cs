@@ -50,7 +50,7 @@
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(613,398);
+			this.gridMain.Size = new System.Drawing.Size(760,623);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Connections - double click to launch";
 			this.gridMain.TranslationName = "";
@@ -81,7 +81,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(637,482);
+			this.ClientSize = new System.Drawing.Size(784,707);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Name = "FormCentralManager";

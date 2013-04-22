@@ -19,6 +19,10 @@ namespace CentralManager {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
+			if(textAccessCode.Text!="I'm admin") {
+				MessageBox.Show("Access code is incorrect.");
+				return;
+			}
 			Prefs.UpdateString(PrefName.CentralManagerPassHash,Userods.EncryptPassword(textPassword.Text));
 			Prefs.RefreshCache();
 			DialogResult=DialogResult.OK;
