@@ -24,9 +24,11 @@
 		/// </summary>
 		private void InitializeComponent() {
 			this.butConSetup = new System.Windows.Forms.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.butPassword = new System.Windows.Forms.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.label2 = new System.Windows.Forms.Label();
+			this.textSearch = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -39,22 +41,6 @@
 			this.butConSetup.Text = "Connections";
 			this.butConSetup.UseVisualStyleBackColor = true;
 			this.butConSetup.Click += new System.EventHandler(this.butConSetup_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(11,72);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(760,623);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "Connections - double click to launch";
-			this.gridMain.TranslationName = "";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// groupBox1
 			// 
@@ -77,11 +63,47 @@
 			this.butPassword.UseVisualStyleBackColor = true;
 			this.butPassword.Click += new System.EventHandler(this.butPassword_Click);
 			// 
+			// gridMain
+			// 
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(11,72);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.Size = new System.Drawing.Size(760,623);
+			this.gridMain.TabIndex = 5;
+			this.gridMain.Title = "Connections - double click to launch";
+			this.gridMain.TranslationName = "";
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			// 
+			// label2
+			// 
+			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.label2.Location = new System.Drawing.Point(237,35);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(111,17);
+			this.label2.TabIndex = 212;
+			this.label2.Text = "Search";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textSearch
+			// 
+			this.textSearch.Location = new System.Drawing.Point(351,32);
+			this.textSearch.Name = "textSearch";
+			this.textSearch.Size = new System.Drawing.Size(190,20);
+			this.textSearch.TabIndex = 211;
+			this.textSearch.TextChanged += new System.EventHandler(this.textSearch_TextChanged);
+			// 
 			// FormCentralManager
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F,13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(784,707);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.textSearch);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.gridMain);
 			this.Name = "FormCentralManager";
@@ -90,6 +112,7 @@
 			this.Load += new System.EventHandler(this.FormCentralManager_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
@@ -99,6 +122,8 @@
 		private OpenDental.UI.ODGrid gridMain;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Button butPassword;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.TextBox textSearch;
 	}
 }
 

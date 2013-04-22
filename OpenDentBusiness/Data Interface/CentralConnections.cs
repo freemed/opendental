@@ -10,11 +10,15 @@ namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CentralConnections{
 		///<summary></summary>
-		public static List<CentralConnection> Refresh(){
+		public static List<CentralConnection> Refresh(string searchString){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CentralConnection>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<CentralConnection>>(MethodBase.GetCurrentMethod(),searchString);
 			}
-			string command="SELECT * FROM centralconnection ORDER BY ItemOrder";
+			string command="SELECT * FROM centralconnection "
+				+"WHERE ServiceURI LIKE '%"+POut.String(searchString)+"%' "
+				+"OR ServerName LIKE '%"+POut.String(searchString)+"%' "
+				+"OR DatabaseName LIKE '%"+POut.String(searchString)+"%' "
+				+"ORDER BY ItemOrder";
 			return Crud.CentralConnectionCrud.SelectMany(command);
 		}
 

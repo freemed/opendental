@@ -21,7 +21,7 @@ namespace CentralManager {
 		}
 
 		private void FillGrid() {
-			ConnList=CentralConnections.Refresh();
+			ConnList=CentralConnections.Refresh("");
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;

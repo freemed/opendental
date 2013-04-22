@@ -17,6 +17,7 @@ namespace CentralManager {
 	public partial class FormCentralManager:Form {
 		public static byte[] EncryptionKey;
 		private List<CentralConnection> ConnList;
+		private bool IsStartingUp;
 
 		public FormCentralManager() {
 			InitializeComponent();
@@ -25,6 +26,7 @@ namespace CentralManager {
 		}
 
 		private void FormCentralManager_Load(object sender,EventArgs e) {
+			IsStartingUp=true;
 			if(!GetConfigAndConnect()){
 				return;
 			}
@@ -47,6 +49,7 @@ namespace CentralManager {
 				}
 			}
 			FillGrid();
+			IsStartingUp=false;
 		}
 
 		///<summary>Gets the settings from the config file and attempts to connect.</summary>
@@ -111,8 +114,15 @@ namespace CentralManager {
 			FillGrid();
 		}
 
+		private void textSearch_TextChanged(object sender,EventArgs e) {
+			if(IsStartingUp) {
+				return;
+			}
+			FillGrid();
+		}
+
 		private void FillGrid() {
-			ConnList=CentralConnections.Refresh();
+			ConnList=CentralConnections.Refresh(textSearch.Text);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
@@ -173,6 +183,11 @@ namespace CentralManager {
 				Process.Start("OpenDental.exe",args);
 			#endif
 		}
+
+		
+
+
+	
 
 		
 
