@@ -34,19 +34,17 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
-		private void butGenerateNew_Click(object sender,EventArgs e) {
-			if(textPassword.Text!="" && !MsgBox.Show(this,MsgBoxButtons.YesNo,"This will reset the reseller's online password immediately.\r\n Are you sure you want to reset their password?")) {
-				return;
-			}
-			//TODO: Generate a new password and possibly a new user name for the reseller.
-			//TODO: Instantly update the db.
-		}
-
 		private void butDelete_Click(object sender,EventArgs e) {
 			//TODO: Do not let the reseller be deleted if they have customers in their list.
 		}
 
-		private void butClose_Click(object sender,EventArgs e) {
+		private void butOK_Click(object sender,EventArgs e) {
+			//TODO: Check if the username is already in use.
+			//TODO: Update the username and password to the database.  Keep as plain text.
+			DialogResult=DialogResult.OK;
+		}
+
+		private void butCancel_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
 

@@ -45,6 +45,7 @@ namespace OpenDental{
 			this.label3 = new System.Windows.Forms.Label();
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -283,10 +284,20 @@ namespace OpenDental{
 			this.label1.Text = "Last Name";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(647, 260);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(237, 18);
+			this.label2.TabIndex = 40;
+			this.label2.Text = "(Add as a customer first)";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormResellers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(890, 496);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
@@ -326,5 +337,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.TextBox textLName;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label label2;
 	}
 }

@@ -32,6 +32,8 @@ namespace OpenDental{
 			this.textPassword = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.butOK = new OpenDental.UI.Button();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -45,10 +47,10 @@ namespace OpenDental{
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(557, 458);
 			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(85, 24);
+			this.butClose.Size = new System.Drawing.Size(75, 24);
 			this.butClose.TabIndex = 3;
 			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			this.butClose.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// gridMain
 			// 
@@ -125,21 +127,46 @@ namespace OpenDental{
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label4);
 			this.groupBox1.Controls.Add(this.label5);
 			this.groupBox1.Controls.Add(this.textUserName);
 			this.groupBox1.Controls.Add(this.textPassword);
 			this.groupBox1.Location = new System.Drawing.Point(113, 8);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(400, 94);
+			this.groupBox1.Size = new System.Drawing.Size(400, 99);
 			this.groupBox1.TabIndex = 250;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Credentials";
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(104, 77);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(247, 18);
+			this.label2.TabIndex = 249;
+			this.label2.Text = "Any user name and password will work.";
+			// 
+			// butOK
+			// 
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butOK.Autosize = true;
+			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.CornerRadius = 4F;
+			this.butOK.Location = new System.Drawing.Point(462, 458);
+			this.butOK.Name = "butOK";
+			this.butOK.Size = new System.Drawing.Size(75, 24);
+			this.butOK.TabIndex = 251;
+			this.butOK.Text = "&OK";
+			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// FormResellerEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(654, 494);
+			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.butDelete);
 			this.Controls.Add(this.label6);
@@ -166,5 +193,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textPassword;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.Label label2;
+		private UI.Button butOK;
 	}
 }

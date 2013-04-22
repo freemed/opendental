@@ -301,6 +301,8 @@
     <Compile Include="Crud\ReplicationServerCrud.cs" />
     <Compile Include="Crud\ReqNeededCrud.cs" />
     <Compile Include="Crud\ReqStudentCrud.cs" />
+    <Compile Include="Crud\ResellerCrud.cs" />
+    <Compile Include="Crud\ResellerServiceCrud.cs" />
     <Compile Include="Crud\RxAlertCrud.cs" />
     <Compile Include="Crud\RxDefCrud.cs" />
     <Compile Include="Crud\RxNormCrud.cs" />
@@ -363,6 +365,8 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\Resellers.cs" />
+    <Compile Include="Data Interface\ResellerServices.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
     <Compile Include="Data Interface\WikiLists.cs" />
     <Compile Include="Data Interface\CreditCards.cs" />
@@ -754,6 +758,8 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\ResellerService.cs" />
+    <Compile Include="TableTypes\Reseller.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />
     <Compile Include="TableTypes\EvaluationCriterion.cs" />
     <Compile Include="TableTypes\GradingScaleItem.cs" />

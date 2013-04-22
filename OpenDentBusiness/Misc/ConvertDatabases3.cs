@@ -57,7 +57,63 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'PatientPortalURL','')";
 					Db.NonQ(command);
 				}
-		
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS reseller";
+					Db.NonQ(command);
+					command=@"CREATE TABLE reseller (
+						ResellerNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						UserName varchar(255) NOT NULL,
+						ResellerPassword varchar(255) NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE reseller'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE reseller (
+						ResellerNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						UserName varchar2(255),
+						ResellerPassword varchar2(255),
+						CONSTRAINT reseller_ResellerNum PRIMARY KEY (ResellerNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX reseller_PatNum ON reseller (PatNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS resellerservice";
+					Db.NonQ(command);
+					command=@"CREATE TABLE resellerservice (
+						ResellerServiceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						ResellerNum bigint NOT NULL,
+						CodeNum bigint NOT NULL,
+						Fee double NOT NULL,
+						INDEX(ResellerNum),
+						INDEX(CodeNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE resellerservice'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE resellerservice (
+						ResellerServiceNum number(20) NOT NULL,
+						ResellerNum number(20) NOT NULL,
+						CodeNum number(20) NOT NULL,
+						Fee number(38,8) NOT NULL,
+						CONSTRAINT resellerservice_ResellerServic PRIMARY KEY (ResellerServiceNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX resellerservice_ResellerNum ON resellerservice (ResellerNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX resellerservice_CodeNum ON resellerservice (CodeNum)";
+					Db.NonQ(command);
+				}
+
+
 
 
 
@@ -76,3 +132,6 @@ namespace OpenDentBusiness {
 
 
 
+
+
+				
