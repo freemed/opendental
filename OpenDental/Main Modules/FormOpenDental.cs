@@ -254,6 +254,7 @@ namespace OpenDental{
 		private MenuItem menuItemNewCropBilling;
 		private MenuItem menuItemSpellCheck;
 		private FormWiki FormMyWiki;
+		private MenuItem menuItemResellers;
 		private FormCreditRecurringCharges FormCRC;
 
 		///<summary></summary>
@@ -419,6 +420,7 @@ namespace OpenDental{
 			this.menuItemSecurity = new System.Windows.Forms.MenuItem();
 			this.menuItemSheets = new System.Windows.Forms.MenuItem();
 			this.menuItemEasy = new System.Windows.Forms.MenuItem();
+			this.menuItemSpellCheck = new System.Windows.Forms.MenuItem();
 			this.menuItemTimeCards = new System.Windows.Forms.MenuItem();
 			this.menuItemLists = new System.Windows.Forms.MenuItem();
 			this.menuItemProcCodes = new System.Windows.Forms.MenuItem();
@@ -467,6 +469,7 @@ namespace OpenDental{
 			this.menuItemNewCropBilling = new System.Windows.Forms.MenuItem();
 			this.menuItemScreening = new System.Windows.Forms.MenuItem();
 			this.menuItemRepeatingCharges = new System.Windows.Forms.MenuItem();
+			this.menuItemResellers = new System.Windows.Forms.MenuItem();
 			this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
 			this.menuItemWebForms = new System.Windows.Forms.MenuItem();
 			this.menuItemWiki = new System.Windows.Forms.MenuItem();
@@ -501,7 +504,6 @@ namespace OpenDental{
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
-			this.menuItemSpellCheck = new System.Windows.Forms.MenuItem();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -885,6 +887,12 @@ namespace OpenDental{
 			this.menuItemEasy.Text = "Show Features";
 			this.menuItemEasy.Click += new System.EventHandler(this.menuItemEasy_Click);
 			// 
+			// menuItemSpellCheck
+			// 
+			this.menuItemSpellCheck.Index = 41;
+			this.menuItemSpellCheck.Text = "Spell Check";
+			this.menuItemSpellCheck.Click += new System.EventHandler(this.menuItemSpellCheck_Click);
+			// 
 			// menuItemTimeCards
 			// 
 			this.menuItemTimeCards.Index = 42;
@@ -1064,6 +1072,7 @@ namespace OpenDental{
             this.menuItemNewCropBilling,
             this.menuItemScreening,
             this.menuItemRepeatingCharges,
+            this.menuItemResellers,
             this.menuItemReqStudents,
             this.menuItemWebForms,
             this.menuItemWiki});
@@ -1221,21 +1230,28 @@ namespace OpenDental{
 			this.menuItemRepeatingCharges.Text = "Repeating Charges";
 			this.menuItemRepeatingCharges.Click += new System.EventHandler(this.menuItemRepeatingCharges_Click);
 			// 
+			// menuItemResellers
+			// 
+			this.menuItemResellers.Index = 16;
+			this.menuItemResellers.Text = "Resellers";
+			this.menuItemResellers.Visible = false;
+			this.menuItemResellers.Click += new System.EventHandler(this.menuItemResellers_Click);
+			// 
 			// menuItemReqStudents
 			// 
-			this.menuItemReqStudents.Index = 16;
+			this.menuItemReqStudents.Index = 17;
 			this.menuItemReqStudents.Text = "Student Requirements";
 			this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
 			// 
 			// menuItemWebForms
 			// 
-			this.menuItemWebForms.Index = 17;
+			this.menuItemWebForms.Index = 18;
 			this.menuItemWebForms.Text = "WebForms";
 			this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
 			// 
 			// menuItemWiki
 			// 
-			this.menuItemWiki.Index = 18;
+			this.menuItemWiki.Index = 19;
 			this.menuItemWiki.Text = "Wiki";
 			this.menuItemWiki.Click += new System.EventHandler(this.menuItemWiki_Click);
 			// 
@@ -1475,12 +1491,6 @@ namespace OpenDental{
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
-			// 
-			// menuItemSpellCheck
-			// 
-			this.menuItemSpellCheck.Index = 41;
-			this.menuItemSpellCheck.Text = "Spell Check";
-			this.menuItemSpellCheck.Click += new System.EventHandler(this.menuItemSpellCheck_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -1767,7 +1777,8 @@ namespace OpenDental{
 			Bridges.Trojan.StartupCheck();
 			FormUAppoint.StartThreadIfEnabled();
 			Bridges.ICat.StartFileWatcher();
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				menuItemResellers.Visible=true;
 				#if !DEBUG
 					if(Process.GetProcessesByName("WebCamOD").Length==0) {
 						try {
@@ -4712,6 +4723,11 @@ namespace OpenDental{
 
 		private void menuItemRepeatingCharges_Click(object sender, System.EventArgs e) {
 			FormRepeatChargesUpdate FormR=new FormRepeatChargesUpdate();
+			FormR.ShowDialog();
+		}
+
+		private void menuItemResellers_Click(object sender,EventArgs e) {
+			FormResellers FormR=new FormResellers();
 			FormR.ShowDialog();
 		}
 
