@@ -58,6 +58,7 @@ namespace OpenDentBusiness.Crud{
 				registrationKey.IsFreeVersion     = PIn.Bool  (table.Rows[i]["IsFreeVersion"].ToString());
 				registrationKey.IsOnlyForTesting  = PIn.Bool  (table.Rows[i]["IsOnlyForTesting"].ToString());
 				registrationKey.VotesAllotted     = PIn.Int   (table.Rows[i]["VotesAllotted"].ToString());
+				registrationKey.IsReseller        = PIn.Bool  (table.Rows[i]["IsReseller"].ToString());
 				retVal.Add(registrationKey);
 			}
 			return retVal;
@@ -98,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RegistrationKeyNum,";
 			}
-			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted) VALUES(";
+			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted,IsReseller) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(registrationKey.RegistrationKeyNum)+",";
 			}
@@ -113,7 +114,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (registrationKey.UsesServerVersion)+","
 				+    POut.Bool  (registrationKey.IsFreeVersion)+","
 				+    POut.Bool  (registrationKey.IsOnlyForTesting)+","
-				+    POut.Int   (registrationKey.VotesAllotted)+")";
+				+    POut.Int   (registrationKey.VotesAllotted)+","
+				+    POut.Bool  (registrationKey.IsReseller)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -136,7 +138,8 @@ namespace OpenDentBusiness.Crud{
 				+"UsesServerVersion =  "+POut.Bool  (registrationKey.UsesServerVersion)+", "
 				+"IsFreeVersion     =  "+POut.Bool  (registrationKey.IsFreeVersion)+", "
 				+"IsOnlyForTesting  =  "+POut.Bool  (registrationKey.IsOnlyForTesting)+", "
-				+"VotesAllotted     =  "+POut.Int   (registrationKey.VotesAllotted)+" "
+				+"VotesAllotted     =  "+POut.Int   (registrationKey.VotesAllotted)+", "
+				+"IsReseller        =  "+POut.Bool  (registrationKey.IsReseller)+" "
 				+"WHERE RegistrationKeyNum = "+POut.Long(registrationKey.RegistrationKeyNum);
 			Db.NonQ(command);
 		}
@@ -187,6 +190,10 @@ namespace OpenDentBusiness.Crud{
 			if(registrationKey.VotesAllotted != oldRegistrationKey.VotesAllotted) {
 				if(command!=""){ command+=",";}
 				command+="VotesAllotted = "+POut.Int(registrationKey.VotesAllotted)+"";
+			}
+			if(registrationKey.IsReseller != oldRegistrationKey.IsReseller) {
+				if(command!=""){ command+=",";}
+				command+="IsReseller = "+POut.Bool(registrationKey.IsReseller)+"";
 			}
 			if(command==""){
 				return;

@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness {
 
-	///<summary>Attaches a reseller to a patient and holds their credentials for the reseller portal.</summary>
+	///<summary>Only used at HQ.  If a row is present in this table, then this customer is a reseller.  Also holds their credentials for the reseller portal.</summary>
 	[Serializable]
 	public class Reseller:TableBase {
 		///<summary>Primary key.</summary>

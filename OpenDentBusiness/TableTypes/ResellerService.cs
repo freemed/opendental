@@ -2,7 +2,7 @@ using System;
 
 namespace OpenDentBusiness {
 
-	///<summary>An entry in a list of services for a specific reseller to pick from.</summary>
+	///<summary>An entry in a list of services for a specific reseller to pick from.  To determine which services a certain customer has access to, check the repeating charges table.</summary>
 	[Serializable]
 	public class ResellerService:TableBase {
 		///<summary>Primary key.</summary>

@@ -31,6 +31,9 @@ namespace OpenDentBusiness {
 		public bool IsOnlyForTesting;
 		///<summary>Typically 100, although it can be more for multilocation offices.</summary>
 		public int VotesAllotted;
+		///<summary>This is a customer of a reseller, so this customer will not have full access to all our services.</summary>
+		public bool IsResellerCustomer;
+
 
 		public RegistrationKey Copy(){
 			return (RegistrationKey)this.MemberwiseClone();

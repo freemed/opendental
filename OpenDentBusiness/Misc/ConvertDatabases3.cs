@@ -58,6 +58,30 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD BillingNote varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD BillingNote varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD RepeatChargeNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (RepeatChargeNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD RepeatChargeNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET RepeatChargeNum = 0 WHERE RepeatChargeNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY RepeatChargeNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX procedurelog_RepeatChargeNum ON procedurelog (RepeatChargeNum)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS reseller";
 					Db.NonQ(command);
 					command=@"CREATE TABLE reseller (
@@ -113,30 +137,17 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE procedurelog ADD BillingNote varchar(255) NOT NULL";
+					command="ALTER TABLE registrationkey ADD IsResellerCustomer tinyint NOT NULL";
 					Db.NonQ(command);
 				}
 				else {//oracle
-					command="ALTER TABLE procedurelog ADD BillingNote varchar2(255)";
+					command="ALTER TABLE registrationkey ADD IsResellerCustomer number(3)";
+					Db.NonQ(command);
+					command="UPDATE registrationkey SET IsResellerCustomer = 0 WHERE IsResellerCustomer IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE registrationkey MODIFY IsResellerCustomer NOT NULL";
 					Db.NonQ(command);
 				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="ALTER TABLE procedurelog ADD RepeatChargeNum bigint NOT NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE procedurelog ADD INDEX (RepeatChargeNum)";
-					Db.NonQ(command);
-				}
-				else {//oracle
-					command="ALTER TABLE procedurelog ADD RepeatChargeNum number(20)";
-					Db.NonQ(command);
-					command="UPDATE procedurelog SET RepeatChargeNum = 0 WHERE RepeatChargeNum IS NULL";
-					Db.NonQ(command);
-					command="ALTER TABLE procedurelog MODIFY RepeatChargeNum NOT NULL";
-					Db.NonQ(command);
-					command=@"CREATE INDEX procedurelog_RepeatChargeNum ON procedurelog (RepeatChargeNum)";
-					Db.NonQ(command);
-				}
-
 
 
 
@@ -156,6 +167,9 @@ namespace OpenDentBusiness {
 
 
 
+
+
+				
 
 
 				
