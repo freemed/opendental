@@ -155,7 +155,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "NewCrop Billing";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormBillingList_Load);
 			this.Resize += new System.EventHandler(this.FormBillingList_Resize);
 			this.ResumeLayout(false);
 			this.PerformLayout();
