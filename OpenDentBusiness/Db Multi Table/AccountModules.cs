@@ -560,7 +560,7 @@ namespace OpenDentBusiness {
 				+"(SELECT SUM(AdjAmt) FROM adjustment WHERE procedurelog.ProcNum=adjustment.ProcNum "
 				+"AND adjustment.PatNum IN ("+familyPatNums+")"
 				+") adj_, "
-				+"procedurelog.BaseUnits,procedurelog.ClinicNum,procedurecode.CodeNum,Descript,"
+				+"procedurelog.BaseUnits,procedurelog.BillingNote,procedurelog.ClinicNum,procedurecode.CodeNum,Descript,"
 				+"(SELECT SUM(InsPayAmt) FROM claimproc cp5 WHERE procedurelog.ProcNum=cp5.ProcNum "
 				+"AND cp5.PatNum IN ("+familyPatNums+")"
 				+") insPayAmt_,"
@@ -703,7 +703,13 @@ namespace OpenDentBusiness {
 					extraDetail+=Lans.g("AccountModule","Pat Port: ")+patPort.ToString("c");
 				}
 				if(showProcBreakdown) {
-					row["description"]+="\r\n"+extraDetail;
+					if(extraDetail!="") {
+						row["description"]+="\r\n"+extraDetail;
+					}
+				}
+				string billingNote=PIn.String(rawProc.Rows[i]["BillingNote"].ToString());
+				if(billingNote!="") {
+					row["description"]+="\r\n"+billingNote;
 				}
 				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawProc.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();

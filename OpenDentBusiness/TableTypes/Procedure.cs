@@ -111,6 +111,11 @@ namespace OpenDentBusiness {
 		public long StatementNum;
 		///<summary>If this flag is set, then the proc is locked down tight.  No changes at all can be made except to append, sign, or invalidate. Invalidate really just sets the proc to status 'deleted'.  An invalidated proc retains its IsLocked status.  All locked procs will be status of C or D.  Locked group notes will be status of EC or D.</summary>
 		public bool IsLocked;
+		///<summary>A note that will show directly in the Account module.  Also used for repeating charges. Helps distinguish between charges for the same proccode in the same month.</summary>
+		public string BillingNote;
+		///<summary>FK to repeatcharge.RepeatChargeNum.  Used in repeating charges to determine which procedures belong to each repeating charge. This column
+		///makes is possible to have two or more repeating charges for the same exact procedure code.</summary>
+		public long RepeatChargeNum;
 
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>

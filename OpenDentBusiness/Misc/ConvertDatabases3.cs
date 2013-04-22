@@ -112,6 +112,30 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX resellerservice_CodeNum ON resellerservice (CodeNum)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD BillingNote varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD BillingNote varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE procedurelog ADD RepeatChargeNum bigint NOT NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog ADD INDEX (RepeatChargeNum)";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE procedurelog ADD RepeatChargeNum number(20)";
+					Db.NonQ(command);
+					command="UPDATE procedurelog SET RepeatChargeNum = 0 WHERE RepeatChargeNum IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE procedurelog MODIFY RepeatChargeNum NOT NULL";
+					Db.NonQ(command);
+					command=@"CREATE INDEX procedurelog_RepeatChargeNum ON procedurelog (RepeatChargeNum)";
+					Db.NonQ(command);
+				}
 
 
 
