@@ -23,6 +23,7 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
@@ -46,7 +47,10 @@ namespace OpenDental{
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
+			this.menuRightReferences = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.menuItemAccount = new System.Windows.Forms.ToolStripMenuItem();
 			this.groupBox2.SuspendLayout();
+			this.menuRightReferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// butOK
@@ -293,6 +297,20 @@ namespace OpenDental{
 			this.label2.Text = "(Add as a customer first)";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
+			// menuRightReferences
+			// 
+			this.menuRightReferences.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemAccount});
+			this.menuRightReferences.Name = "menuRightReferences";
+			this.menuRightReferences.Size = new System.Drawing.Size(154, 48);
+			// 
+			// menuItemAccount
+			// 
+			this.menuItemAccount.Name = "menuItemAccount";
+			this.menuItemAccount.Size = new System.Drawing.Size(153, 22);
+			this.menuItemAccount.Text = "Go to Account";
+			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
+			// 
 			// FormResellers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -309,6 +327,7 @@ namespace OpenDental{
 			this.Load += new System.EventHandler(this.FormResellers_Load);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
+			this.menuRightReferences.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -338,5 +357,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textLName;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.ContextMenuStrip menuRightReferences;
+		private System.Windows.Forms.ToolStripMenuItem menuItemAccount;
 	}
 }

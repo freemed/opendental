@@ -4,70 +4,40 @@ using System.Data;
 using System.Reflection;
 using System.Text;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness {
 	///<summary></summary>
-	public class Resellers{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
+	public class Resellers {
 
-		///<summary>A list of all Resellers.</summary>
-		private static List<Reseller> listt;
-
-		///<summary>A list of all Resellers.</summary>
-		public static List<Reseller> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM reseller ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="Reseller";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.ResellerCrud.TableToList(table);
-		}
-		#endregion
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<Reseller> Refresh(long patNum){
+		///<summary>Gets a list of resellers and their patient information based on the criteria passed in.  Only used from FormResellers to fill the grid.</summary>
+		public static DataTable GetResellerList(string lName,string fName,string phone,string address,string city,string state,string patNum,string email) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Reseller>>(MethodBase.GetCurrentMethod(),patNum);
+				return Meth.GetTable(MethodBase.GetCurrentMethod(),lName,fName,phone,address,city,state,patNum,email);
 			}
-			string command="SELECT * FROM reseller WHERE PatNum = "+POut.Long(patNum);
-			return Crud.ResellerCrud.SelectMany(command);
+			string command="SELECT * FROM reseller WHERE ";
+			//TODO: Enhance where clause to include the search filters.
+			return Db.GetTable(command);
+		}
+
+		///<summary>Gets all of the customers of the reseller.  Only used from FormResellerEdit to fill the grid.</summary>
+		public static DataTable GetResellerCustomersList() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
+			}
+			string command="SELECT * FROM reseller WHERE ";//TODO: Enhance to get all the customers attached to this reseller and their services.
+			return Db.GetTable(command);
 		}
 
 		///<summary>Gets one Reseller from the db.</summary>
-		public static Reseller GetOne(long resellerNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		public static Reseller GetOne(long resellerNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Reseller>(MethodBase.GetCurrentMethod(),resellerNum);
 			}
 			return Crud.ResellerCrud.SelectOne(resellerNum);
 		}
 
 		///<summary></summary>
-		public static long Insert(Reseller reseller){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		public static long Insert(Reseller reseller) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				reseller.ResellerNum=Meth.GetLong(MethodBase.GetCurrentMethod(),reseller);
 				return reseller.ResellerNum;
 			}
@@ -75,15 +45,15 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static void Update(Reseller reseller){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		public static void Update(Reseller reseller) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),reseller);
 				return;
 			}
 			Crud.ResellerCrud.Update(reseller);
 		}
 
-		///<summary></summary>
+		///<summary>Make sure to check that the reseller does not have any customers before deleting them.</summary>
 		public static void Delete(long resellerNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),resellerNum);
@@ -92,7 +62,6 @@ namespace OpenDentBusiness{
 			string command= "DELETE FROM reseller WHERE ResellerNum = "+POut.Long(resellerNum);
 			Db.NonQ(command);
 		}
-		*/
 
 
 

@@ -10,8 +10,7 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormResellers:Form {
-		//TODO: Uncomment this list after the table Reseller has been added to the db.
-		//private List<Reseller> ListResellers;
+		private DataTable TableResellers;
 
 		public FormResellers() {
 			InitializeComponent();
@@ -23,13 +22,35 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			//TODO: Fill the list of resellers using the values in the text boxes.
+			TableResellers=Resellers.GetResellerList(textLName.Text,textFName.Text,textHmPhone.Text,textAddress.Text,textCity.Text,textState.Text,textPatNum.Text,textEmail.Text);
 			gridMain.BeginUpdate();
+			ODGridColumn col=new ODGridColumn("PatNum",500);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Customer",500);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("WkPhone",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Address",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("City",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("State",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Email",500);
+			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			//TODO: Loop through the list of resellers and set each column accordingly.
-			row=new ODGridRow();
-			gridMain.Rows.Add(row);
+			for(int i=0;i<TableResellers.Rows.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add("");
+				row.Cells.Add("");
+				row.Cells.Add("");
+				row.Cells.Add("");
+				row.Cells.Add("");
+				row.Cells.Add("");
+				row.Cells.Add("");
+				gridMain.Rows.Add(row);
+			}
 			gridMain.EndUpdate();
 			gridMain.SetSelected(0,true);
 		}
@@ -71,15 +92,27 @@ namespace OpenDental {
 		#endregion TextChanged
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			//TODO: Create a reseller object and set it to the reseller with the matching index in the reseller list.  Reminder: [e.Row]
+			Reseller reseller=Resellers.GetOne(PIn.Long(TableResellers.Rows[e.Row]["ResellerNum"].ToString()));
+			FormResellerEdit FormRE=new FormResellerEdit(reseller);
+			FormRE.ShowDialog();
+			FillGrid();//Could have deleted the reseller.
+		}
+
+		private void menuItemAccount_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()<0) {
+				MsgBox.Show(this,"Please select a reseller first.");
+				return;
+			}
+			GotoModule.GotoAccount(PIn.Long(TableResellers.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString()));
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormPatientSelect formPS=new FormPatientSelect();
 			formPS.ShowDialog();
 			if(formPS.DialogResult==DialogResult.OK) {
-				long selectedPatNum=formPS.SelectedPatNum;
-				//TODO: Create a new entry in the resellers table linked to this patient.
+				Reseller reseller=new Reseller();
+				reseller.PatNum=formPS.SelectedPatNum;
+				Resellers.Insert(reseller);
 				FillGrid();
 			}
 		}
