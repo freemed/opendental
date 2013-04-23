@@ -445,23 +445,23 @@ namespace OpenDental{
 			List<PlannedAppt> plannedList=PlannedAppts.Refresh(PatCur.PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("FormChartView","Appt Status"),100);
+			ODGridColumn col=new ODGridColumn(Lan.g("FormApptsOther","Appt Status"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormChartView","Prov"),50);
+			col=new ODGridColumn(Lan.g("FormApptsOther","Prov"),50);
 			gridMain.Columns.Add(col);
 			if(!PrefC.GetBool(PrefName.EasyNoClinics)) {
-				col=new ODGridColumn(Lan.g("FormChartView","Clinic"),80);
+				col=new ODGridColumn(Lan.g("FormApptsOther","Clinic"),80);
 				gridMain.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g("FormChartView","Date"),70);//If the order changes, reflect the change for dateIndex below.
+			col=new ODGridColumn(Lan.g("FormApptsOther","Date"),70);//If the order changes, reflect the change for dateIndex below.
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormChartView","Time"),70);//Must immediately follow Date column.
+			col=new ODGridColumn(Lan.g("FormApptsOther","Time"),70);//Must immediately follow Date column.
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormChartView","Min"),40);
+			col=new ODGridColumn(Lan.g("FormApptsOther","Min"),40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormChartView","Procedures"),150);
+			col=new ODGridColumn(Lan.g("FormApptsOther","Procedures"),150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("FormChartView","Notes"),320);
+			col=new ODGridColumn(Lan.g("FormApptsOther","Notes"),320);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
