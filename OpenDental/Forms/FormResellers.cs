@@ -15,6 +15,7 @@ namespace OpenDental {
 		public FormResellers() {
 			InitializeComponent();
 			Lan.F(this);
+			gridMain.ContextMenu=menuRightClick;
 		}
 
 		private void FormResellers_Load(object sender,EventArgs e) {
@@ -22,37 +23,55 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			TableResellers=Resellers.GetResellerList(textLName.Text,textFName.Text,textHmPhone.Text,textAddress.Text,textCity.Text,textState.Text,textPatNum.Text,textEmail.Text);
+			TableResellers=Resellers.GetResellerList(textLName.Text,textFName.Text,textHmPhone.Text,textAddress.Text,textCity.Text,textState.Text,textPatNum.Text,textEmail.Text,checkShowInactive.Checked);
 			gridMain.BeginUpdate();
-			ODGridColumn col=new ODGridColumn("PatNum",500);
+			gridMain.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("PatNum",80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Customer",500);
+			col=new ODGridColumn("LName",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("FName",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Preferred",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("HmPhone",100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("WkPhone",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Address",100);
+			col=new ODGridColumn("WirelessPhone",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("PhoneNumberVal",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Address",200);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("City",100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("State",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Email",500);
+			col=new ODGridColumn("Email",200);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("PatStatus",100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<TableResellers.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
+				row.Cells.Add(TableResellers.Rows[i]["PatNum"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["LName"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["FName"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["Preferred"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["HmPhone"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["WkPhone"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["WirelessPhone"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["PhoneNumberVal"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["Address"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["City"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["State"].ToString());
+				row.Cells.Add(TableResellers.Rows[i]["Email"].ToString());
+				row.Cells.Add(((PatientStatus)PIn.Int(TableResellers.Rows[i]["PatStatus"].ToString())).ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
-			gridMain.SetSelected(0,true);
 		}
 
 		#region TextChanged
@@ -89,6 +108,10 @@ namespace OpenDental {
 			FillGrid();
 		}
 
+		private void checkShowInactive_CheckedChanged(object sender,EventArgs e) {
+			FillGrid();
+		}
+
 		#endregion TextChanged
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
@@ -117,12 +140,8 @@ namespace OpenDental {
 			}
 		}
 
-		private void butOK_Click(object sender,EventArgs e) {
+		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.OK;
-		}
-
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
 		}
 	}
 }

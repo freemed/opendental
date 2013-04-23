@@ -17,6 +17,7 @@ namespace OpenDental {
 			ResellerCur=reseller;
 			InitializeComponent();
 			Lan.F(this);
+			gridMain.ContextMenu=menuRightClick;
 		}
 
 		private void FormResellerEdit_Load(object sender,EventArgs e) {
@@ -26,39 +27,78 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			TableCustomers=Resellers.GetResellerCustomersList();
+			TableCustomers=Resellers.GetResellerCustomersList(ResellerCur.PatNum);
 			gridMain.BeginUpdate();
-			ODGridColumn col=new ODGridColumn("Customer",500);
+			ODGridColumn col=new ODGridColumn("PatNum",80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("RegKey",100);
+			col=new ODGridColumn("RegKey",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Services",100);
+			col=new ODGridColumn("ProcCode",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Descript",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Fee",80);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("DateStart",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("DateStop",100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn("Note",100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			for(int i=0;i<TableCustomers.Rows.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add("");
-				row.Cells.Add("");
-				row.Cells.Add("");
+				row.Cells.Add(TableCustomers.Rows[i]["PatNum"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["RegKey"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["ProcCode"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["Descript"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["Fee"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["DateStart"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["DateStop"].ToString());
+				row.Cells.Add(TableCustomers.Rows[i]["Note"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
 		}
 
+		private void menuItemAccount_Click(object sender,EventArgs e) {
+			if(gridMain.GetSelectedIndex()<0) {
+				MsgBox.Show(this,"Please select a customer first.");
+				return;
+			}
+			GotoModule.GotoAccount(PIn.Long(TableCustomers.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString()));
+		}
+
 		private void butDelete_Click(object sender,EventArgs e) {
 			//Do not let the reseller be deleted if they have customers in their list.
 			if(TableCustomers.Rows.Count>0) {
-				MsgBox.Show(this,"This reseller cannot be deleted until they remove our services from this customer in their reseller portal.");
+				MsgBox.Show(this,"This reseller cannot be deleted until they remove our services from this customer form the reseller portal.");
 				return;
 			}
-			//TODO: Enhance to update the resellers status to "inactive".
+			Patient patOld=Patients.GetPat(ResellerCur.PatNum);
+			Patient patCur=patOld.Copy();
+			patCur.PatStatus=PatientStatus.Inactive;
+			Patients.Update(patCur,patOld);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			//TODO: Check if the username is already in use.
-			//TODO: Update the username and password to the database.  Keep as plain text.
+			if(textPassword.Text!="" && textUserName.Text.Trim()=="") {
+				MsgBox.Show(this,"User Name cannot be blank.");
+				return;
+			}
+			if(textUserName.Text!="" && textPassword.Text.Trim()=="") {
+				MsgBox.Show(this,"Password cannot be blank.");
+				return;
+			}
+			if(textUserName.Text!="" && Resellers.IsUserNameInUse(ResellerCur.PatNum,textUserName.Text)) {
+				MsgBox.Show(this,"User Name already in use.");
+				return;
+			}
+			ResellerCur.UserName=textUserName.Text;
+			ResellerCur.ResellerPassword=textPassword.Text;
+			Resellers.Update(ResellerCur);
 			DialogResult=DialogResult.OK;
 		}
 

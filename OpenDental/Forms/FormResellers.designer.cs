@@ -23,12 +23,11 @@ namespace OpenDental{
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.checkShowInactive = new System.Windows.Forms.CheckBox();
 			this.textEmail = new System.Windows.Forms.TextBox();
 			this.labelEmail = new System.Windows.Forms.Label();
 			this.textPatNum = new System.Windows.Forms.TextBox();
@@ -47,41 +46,25 @@ namespace OpenDental{
 			this.textLName = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
-			this.menuRightReferences = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.menuItemAccount = new System.Windows.Forms.ToolStripMenuItem();
+			this.menuRightClick = new System.Windows.Forms.ContextMenu();
+			this.menuItemAccount = new System.Windows.Forms.MenuItem();
 			this.groupBox2.SuspendLayout();
-			this.menuRightReferences.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// butOK
+			// butClose
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(711, 460);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(803, 460);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(960, 460);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 3;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// butAdd
 			// 
@@ -93,11 +76,11 @@ namespace OpenDental{
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(791, 231);
+			this.butAdd.Location = new System.Drawing.Point(960, 270);
 			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(87, 26);
+			this.butAdd.Size = new System.Drawing.Size(75, 26);
 			this.butAdd.TabIndex = 35;
-			this.butAdd.Text = "Add";
+			this.butAdd.Text = "&Add";
 			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// gridMain
@@ -105,11 +88,11 @@ namespace OpenDental{
 			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HScrollVisible = false;
+			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(12, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(623, 472);
+			this.gridMain.Size = new System.Drawing.Size(780, 472);
 			this.gridMain.TabIndex = 38;
 			this.gridMain.Title = "Resellers";
 			this.gridMain.TranslationName = "FormMedications";
@@ -118,6 +101,7 @@ namespace OpenDental{
 			// groupBox2
 			// 
 			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox2.Controls.Add(this.checkShowInactive);
 			this.groupBox2.Controls.Add(this.textEmail);
 			this.groupBox2.Controls.Add(this.labelEmail);
 			this.groupBox2.Controls.Add(this.textPatNum);
@@ -136,12 +120,22 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.textLName);
 			this.groupBox2.Controls.Add(this.label1);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(641, 12);
+			this.groupBox2.Location = new System.Drawing.Point(798, 12);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(237, 213);
+			this.groupBox2.Size = new System.Drawing.Size(237, 232);
 			this.groupBox2.TabIndex = 39;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Search by:";
+			// 
+			// checkShowInactive
+			// 
+			this.checkShowInactive.FlatStyle = System.Windows.Forms.FlatStyle.System;
+			this.checkShowInactive.Location = new System.Drawing.Point(14, 206);
+			this.checkShowInactive.Name = "checkShowInactive";
+			this.checkShowInactive.Size = new System.Drawing.Size(161, 17);
+			this.checkShowInactive.TabIndex = 45;
+			this.checkShowInactive.Text = "Show Inactive Resellers";
+			this.checkShowInactive.CheckedChanged += new System.EventHandler(this.checkShowInactive_CheckedChanged);
 			// 
 			// textEmail
 			// 
@@ -290,52 +284,47 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(647, 260);
+			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.label2.Location = new System.Drawing.Point(868, 299);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(237, 18);
+			this.label2.Size = new System.Drawing.Size(173, 18);
 			this.label2.TabIndex = 40;
 			this.label2.Text = "(Add as a customer first)";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
-			// menuRightReferences
+			// menuRightClick
 			// 
-			this.menuRightReferences.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.menuRightClick.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemAccount});
-			this.menuRightReferences.Name = "menuRightReferences";
-			this.menuRightReferences.Size = new System.Drawing.Size(154, 48);
 			// 
 			// menuItemAccount
 			// 
-			this.menuItemAccount.Name = "menuItemAccount";
-			this.menuItemAccount.Size = new System.Drawing.Size(153, 22);
+			this.menuItemAccount.Index = 0;
 			this.menuItemAccount.Text = "Go to Account";
 			this.menuItemAccount.Click += new System.EventHandler(this.menuItemAccount_Click);
 			// 
 			// FormResellers
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(890, 496);
-			this.Controls.Add(this.label2);
+			this.ClientSize = new System.Drawing.Size(1047, 496);
 			this.Controls.Add(this.groupBox2);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
+			this.Controls.Add(this.butClose);
 			this.Name = "FormResellers";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Resellers";
 			this.Load += new System.EventHandler(this.FormResellers_Load);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
-			this.menuRightReferences.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
+		private OpenDental.UI.Button butClose;
 		private UI.Button butAdd;
 		private UI.ODGrid gridMain;
 		private System.Windows.Forms.GroupBox groupBox2;
@@ -357,7 +346,8 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textLName;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ContextMenuStrip menuRightReferences;
-		private System.Windows.Forms.ToolStripMenuItem menuItemAccount;
+		private System.Windows.Forms.CheckBox checkShowInactive;
+		private System.Windows.Forms.ContextMenu menuRightClick;
+		private System.Windows.Forms.MenuItem menuItemAccount;
 	}
 }
