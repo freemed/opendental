@@ -69,7 +69,8 @@ namespace OpenDentBusiness {
 			else {
 				success=false;//no other checks should be done until we can successfully get past this.
 				if(!isCheck) {
-					log+=Lans.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n";
+					log+=Lans.g("FormDatabaseMaintenance","Corrupted files probably fixed.  Look closely at the log.  Also, run again to be sure they were really fixed.")+"\r\n"
+						+Lans.g("FormDatabaseMaintenance","Done.");
 				}
 			}
 			return log;
