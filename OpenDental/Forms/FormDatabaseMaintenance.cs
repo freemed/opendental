@@ -629,6 +629,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.TimeCardRuleEmployeeNumInvalid(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.UserodDuplicateUser(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.UserodInvalidClinicNum(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.UserodInvalidUserGroupNum(verbose,isCheck);

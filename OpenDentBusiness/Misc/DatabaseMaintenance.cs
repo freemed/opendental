@@ -3575,6 +3575,32 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		/// <summary>Only one user of a given UserName may be unhidden at a time. Warn the user and instruct them to hide extras.</summary>
+		public static string UserodDuplicateUser(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			//check and fix are currently identical
+			if(isCheck) {//Give them a warning to hide all but one of these users.
+				command="SELECT UserName FROM userod WHERE IsHidden=0 GROUP BY UserName HAVING Count(*)>1;";
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					log+=Lans.g("FormDatabaseMaintenance","Warning! User ")+table.Rows[i]["UserName"].ToString()
+						+" has duplicates. Please go to Setup | Security and hide all but one of these users.\r\n";
+				}
+			}
+			else {//Give them a warning to hide all but one of these users.
+				command="SELECT UserName FROM userod WHERE IsHidden=0 GROUP BY UserName HAVING Count(*)>1;";
+				DataTable table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++){
+					log+=Lans.g("FormDatabaseMaintenance","Warning! User ")+table.Rows[i]["UserName"].ToString()
+						+" has duplicates. Please go to Setup | Security and hide all but one of these users.\r\n";
+				}
+			}
+			return log;
+		}
+		
 		public static string UserodInvalidClinicNum(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
