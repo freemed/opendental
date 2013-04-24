@@ -20,7 +20,9 @@ namespace OpenDentBusiness{
 		///<summary>The last date on which a charge is allowed.  So if you want 12 charges, and the start date is 8/1/05, then the stop date should be 7/1/05, not 8/1/05.  Can be blank (0001-01-01) to represent a perpetual repeating charge.</summary>
 		public DateTime DateStop;
 		///<summary>Any note for internal use.</summary>
-		public string Note;	
+		public string Note;
+		///<summary>Indicates that the note should be copied to the corresponding procedure billing note.</summary>
+		public bool CopyNoteToProc;
 
 		///<summary></summary>
 		public RepeatCharge Copy(){

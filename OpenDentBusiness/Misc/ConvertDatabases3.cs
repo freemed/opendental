@@ -148,6 +148,18 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE registrationkey MODIFY IsResellerCustomer NOT NULL";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE repeatcharge ADD CopyNoteToProc tinyint NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE repeatcharge ADD CopyNoteToProc number(3)";
+					Db.NonQ(command);
+					command="UPDATE repeatcharge SET CopyNoteToProc = 0 WHERE CopyNoteToProc IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE repeatcharge MODIFY CopyNoteToProc NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 
@@ -171,5 +183,7 @@ namespace OpenDentBusiness {
 
 				
 
+
+				
 
 				

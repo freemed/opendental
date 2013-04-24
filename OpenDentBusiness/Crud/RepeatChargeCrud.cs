@@ -53,6 +53,7 @@ namespace OpenDentBusiness.Crud{
 				repeatCharge.DateStart      = PIn.Date  (table.Rows[i]["DateStart"].ToString());
 				repeatCharge.DateStop       = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				repeatCharge.Note           = PIn.String(table.Rows[i]["Note"].ToString());
+				repeatCharge.CopyNoteToProc = PIn.Bool  (table.Rows[i]["CopyNoteToProc"].ToString());
 				retVal.Add(repeatCharge);
 			}
 			return retVal;
@@ -93,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RepeatChargeNum,";
 			}
-			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note) VALUES(";
+			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note,CopyNoteToProc) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(repeatCharge.RepeatChargeNum)+",";
 			}
@@ -103,7 +104,8 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(repeatCharge.ChargeAmt)+"',"
 				+    POut.Date  (repeatCharge.DateStart)+","
 				+    POut.Date  (repeatCharge.DateStop)+","
-				+"'"+POut.String(repeatCharge.Note)+"')";
+				+"'"+POut.String(repeatCharge.Note)+"',"
+				+    POut.Bool  (repeatCharge.CopyNoteToProc)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -121,7 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+"ChargeAmt      = '"+POut.Double(repeatCharge.ChargeAmt)+"', "
 				+"DateStart      =  "+POut.Date  (repeatCharge.DateStart)+", "
 				+"DateStop       =  "+POut.Date  (repeatCharge.DateStop)+", "
-				+"Note           = '"+POut.String(repeatCharge.Note)+"' "
+				+"Note           = '"+POut.String(repeatCharge.Note)+"', "
+				+"CopyNoteToProc =  "+POut.Bool  (repeatCharge.CopyNoteToProc)+" "
 				+"WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +155,10 @@ namespace OpenDentBusiness.Crud{
 			if(repeatCharge.Note != oldRepeatCharge.Note) {
 				if(command!=""){ command+=",";}
 				command+="Note = '"+POut.String(repeatCharge.Note)+"'";
+			}
+			if(repeatCharge.CopyNoteToProc != oldRepeatCharge.CopyNoteToProc) {
+				if(command!=""){ command+=",";}
+				command+="CopyNoteToProc = "+POut.Bool(repeatCharge.CopyNoteToProc)+"";
 			}
 			if(command==""){
 				return;
