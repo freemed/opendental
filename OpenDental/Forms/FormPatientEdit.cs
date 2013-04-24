@@ -2852,6 +2852,14 @@ namespace OpenDental{
 					return;
 				}
 			}
+			//If HQ and this is a patient in a reseller family, do not allow the changing of the patient status.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) 
+				&& Resellers.IsResellerFamily(PatCur.Guarantor)
+				&& PatOld.PatStatus!=(PatientStatus)listStatus.SelectedIndex) 
+			{
+				MsgBox.Show(this,"Cannot change the status of a patient in a reseller family.");
+				return;
+			}
 			PatCur.LName=textLName.Text;
 			PatCur.FName=textFName.Text;
 			PatCur.MiddleI=textMiddleI.Text;

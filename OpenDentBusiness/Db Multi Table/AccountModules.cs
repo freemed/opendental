@@ -461,6 +461,11 @@ namespace OpenDentBusiness {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,fromDate,toDate,intermingled,singlePatient,statementNum,showProcBreakdown,showPayNotes,isInvoice,showAdjNotes);
 				return;
 			}
+			bool isReseller=false;//Used to display data in the account module differently when patient is a reseller.
+			//HQ only, find out if this patient is a reseller.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && Resellers.IsResellerFamily(fam.ListPats[0].PatNum)) {
+				isReseller=true;
+			}
 			DataConnection dcon=new DataConnection();
 			DataTable table=new DataTable("account");
 			//run aging.-------------------------------------------------------
@@ -711,7 +716,11 @@ namespace OpenDentBusiness {
 				if(billingNote!="") {
 					row["description"]+="\r\n"+billingNote;
 				}
-				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawProc.Rows[i]["PatNum"].ToString()));
+				string patname=fam.GetNameInFamFirst(PIn.Long(rawProc.Rows[i]["PatNum"].ToString()));
+				if(isReseller) {
+					patname=fam.GetNameInFamLF(PIn.Long(rawProc.Rows[i]["PatNum"].ToString()));
+				}
+				row["patient"]=patname;
 				row["PatNum"]=rawProc.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
@@ -782,7 +791,11 @@ namespace OpenDentBusiness {
 					//row["extraDetail"] = rawAdj.Rows[i]["AdjNote"].ToString();
 					row["description"]+="\r\n"+rawAdj.Rows[i]["AdjNote"].ToString();
 				}
-				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawAdj.Rows[i]["PatNum"].ToString()));
+				string patname=fam.GetNameInFamFirst(PIn.Long(rawAdj.Rows[i]["PatNum"].ToString()));
+				if(isReseller) {
+					patname=fam.GetNameInFamLF(PIn.Long(rawAdj.Rows[i]["PatNum"].ToString()));
+				}
+				row["patient"]=patname;
 				row["PatNum"]=rawAdj.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
@@ -869,6 +882,11 @@ namespace OpenDentBusiness {
 				if(PrefC.GetBool(PrefName.AccountShowPaymentNums)) {
 					row["description"]+="\r\n"+Lans.g("AccountModule","Payment Number: ")+rawPay.Rows[i]["PayNum"].ToString();
 				}
+				string patname=fam.GetNameInFamFirst(PIn.Long(rawPay.Rows[i]["PatNum"].ToString()));
+				if(isReseller) {
+					patname=fam.GetNameInFamLF(PIn.Long(rawPay.Rows[i]["PatNum"].ToString()));
+				}
+				row["patient"]=patname;
 				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawPay.Rows[i]["PatNum"].ToString()));
 				row["PatNum"]=rawPay.Rows[i]["PatNum"].ToString();
 				row["PayNum"]=rawPay.Rows[i]["PayNum"].ToString();
@@ -1107,7 +1125,11 @@ namespace OpenDentBusiness {
 					//row["description"]+="\r\n"+extraDetail;
 					//I don't think anyone wants to see this clutter.
 				}*/
-				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawState.Rows[i]["PatNum"].ToString()));
+				string patname=fam.GetNameInFamFirst(PIn.Long(rawState.Rows[i]["PatNum"].ToString()));
+				if(isReseller) {
+					patname=fam.GetNameInFamLF(PIn.Long(rawState.Rows[i]["PatNum"].ToString()));
+				}
+				row["patient"]=patname;
 				row["PatNum"]=rawState.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]="0";
@@ -1186,7 +1208,11 @@ namespace OpenDentBusiness {
 						+rawPayPlan.Rows[i]["CarrierName"].ToString();
 				}
 				//row["extraDetail"]="";
-				row["patient"]=fam.GetNameInFamFirst(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
+				string patname=fam.GetNameInFamFirst(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
+				if(isReseller) {
+					patname=fam.GetNameInFamLF(PIn.Long(rawPayPlan.Rows[i]["PatNum"].ToString()));
+				}
+				row["patient"]=patname;
 				row["PatNum"]=rawPayPlan.Rows[i]["PatNum"].ToString();
 				row["PayNum"]="0";
 				row["PayPlanNum"]=rawPayPlan.Rows[i]["PayPlanNum"].ToString();

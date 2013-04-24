@@ -1028,7 +1028,12 @@ namespace OpenDental{
 		}
 
 		//private void butAddPt_Click(object sender, System.EventArgs e) {
-		private void ToolButAdd_Click(){
+		private void ToolButAdd_Click() {
+			//At HQ, we cannot allow users to add patients to reseller families.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && Resellers.IsResellerFamily(PatCur.Guarantor)) {
+				MsgBox.Show(this,"Cannot add patients to a reseller family.");
+				return;
+			}
 			Patient tempPat=new Patient();
 			tempPat.LName      =PatCur.LName;
 			tempPat.PatStatus  =PatientStatus.Patient;
@@ -1184,26 +1189,34 @@ namespace OpenDental{
 		}
 
 		//private void butSetGuar_Click(object sender,System.EventArgs e){
-    private void ToolButGuarantor_Click(){
-			//Patient tempPat=PatCur;
-			if(PatCur.PatNum==PatCur.Guarantor){
-				MessageBox.Show(Lan.g(this
-					,"Patient is already the guarantor.  Please select a different family member."));
+		private void ToolButGuarantor_Click() {
+			if(PatCur.PatNum==PatCur.Guarantor) {
+				MessageBox.Show(Lan.g(this,"Patient is already the guarantor.  Please select a different family member."));
+				return;
 			}
-			else{
-				if(MessageBox.Show(Lan.g(this,"Make the selected patient the guarantor?")
-					,"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-						return;
-				if(PatCur.SuperFamily==PatCur.Guarantor) {//guarantor is also the head of a super family
-					Patients.MoveSuperFamily(PatCur.SuperFamily,PatCur.PatNum);
-				}
-				Patients.ChangeGuarantorToCur(FamCur,PatCur);
+			//At HQ, we cannot allow users to change the guarantor of reseller families.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && Resellers.IsResellerFamily(PatCur.Guarantor)) {
+				MsgBox.Show(this,"Cannot change the guarantor of a reseller family.");
+				return;
 			}
+			if(MessageBox.Show(Lan.g(this,"Make the selected patient the guarantor?")
+				,"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+				return;
+			}
+			if(PatCur.SuperFamily==PatCur.Guarantor) {//guarantor is also the head of a super family
+				Patients.MoveSuperFamily(PatCur.SuperFamily,PatCur.PatNum);
+			}
+			Patients.ChangeGuarantorToCur(FamCur,PatCur);
 			ModuleSelected(PatCur.PatNum);
 		}
 
 		//private void butMovePat_Click(object sender, System.EventArgs e) {
-		private void ToolButMove_Click(){
+		private void ToolButMove_Click() {
+			//At HQ, we cannot allow users to move patients of reseller families.
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && Resellers.IsResellerFamily(PatCur.Guarantor)) {
+				MsgBox.Show(this,"Cannot move patients of a reseller family.");
+				return;
+			}
 			Patient PatOld=PatCur.Copy();
 			//Patient PatCur;
 			if(PatCur.PatNum==PatCur.Guarantor){//if guarantor selected
