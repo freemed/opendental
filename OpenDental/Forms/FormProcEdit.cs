@@ -2448,6 +2448,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcInfo_Load(object sender,System.EventArgs e) {
+			//Set the title bar to show the patient's name much like the main screen does.
+			this.Text+=" - "+PatCur.GetNameLF();
 			//richTextBox1.Text="This is a test of the functions of a rich text box.";
 			//webBrowser1.
 			//richTextBox1.Select(10,4);
