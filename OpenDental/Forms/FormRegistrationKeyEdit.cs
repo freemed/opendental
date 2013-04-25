@@ -368,17 +368,19 @@ namespace OpenDental{
 			// 
 			// label13
 			// 
+			this.label13.Enabled = false;
 			this.label13.Location = new System.Drawing.Point(150, 97);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(655, 16);
 			this.label13.TabIndex = 28;
-			this.label13.Text = "Only for customers of resellers.  Helps keep track of customers that pay us for o" +
-    "ur services but do not pay for full support.";
+			this.label13.Text = "Only for customers of resellers.  Helps keep track of customers that we bill via " +
+    "passthrough to a reseller.";
 			this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// checkResellerCustomer
 			// 
 			this.checkResellerCustomer.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkResellerCustomer.Enabled = false;
 			this.checkResellerCustomer.Location = new System.Drawing.Point(12, 97);
 			this.checkResellerCustomer.Name = "checkResellerCustomer";
 			this.checkResellerCustomer.Size = new System.Drawing.Size(136, 18);
