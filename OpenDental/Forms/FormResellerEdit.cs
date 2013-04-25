@@ -76,10 +76,22 @@ namespace OpenDental {
 				MsgBox.Show(this,"This reseller cannot be deleted until they remove our services from this customer form the reseller portal.");
 				return;
 			}
+			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This will update PatStatus to inactive and set every registartion key's stop date.\r\nContinue?")) {
+				return;
+			}
 			Patient patOld=Patients.GetPat(ResellerCur.PatNum);
 			Patient patCur=patOld.Copy();
 			patCur.PatStatus=PatientStatus.Inactive;
 			Patients.Update(patCur,patOld);
+			RegistrationKey[] regKeys=RegistrationKeys.GetForPatient(patCur.PatNum);
+			for(int i=0;i<regKeys.Length;i++) {
+				DateTime dateTimeNow=MiscData.GetNowDateTime();
+				if(regKeys[i].DateEnded.Year>1880 && regKeys[i].DateEnded<dateTimeNow) {
+					continue;//Key already ended.  Nothing to do.
+				}
+				regKeys[i].DateEnded=MiscData.GetNowDateTime();
+				RegistrationKeys.Update(regKeys[i]);
+			}
 			DialogResult=DialogResult.OK;
 		}
 

@@ -117,6 +117,15 @@ namespace OpenDentBusiness {
 			return false;
 		}
 
+		///<summary>Checks the database to see if the patient is a reseller.</summary>
+		public static bool IsResellerFamily(long guarantor) {
+			string command="SELECT COUNT(*) FROM reseller WHERE PatNum="+POut.Long(guarantor);
+			if(PIn.Int(Db.GetCount(command))>0) {
+				return true;
+			}
+			return false;
+		}
+
 
 
 	}

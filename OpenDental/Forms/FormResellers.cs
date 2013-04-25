@@ -130,14 +130,27 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormPatientSelect formPS=new FormPatientSelect();
-			formPS.ShowDialog();
-			if(formPS.DialogResult==DialogResult.OK) {
-				Reseller reseller=new Reseller();
-				reseller.PatNum=formPS.SelectedPatNum;
-				Resellers.Insert(reseller);
-				FillGrid();
+			//Only Jordan should be able to add resellers.
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
 			}
+			FormPatientSelect FormPS=new FormPatientSelect();
+			FormPS.ShowDialog();
+			if(FormPS.DialogResult!=DialogResult.OK) {
+				return;
+			}
+			if(Patients.GetLim(FormPS.SelectedPatNum).Guarantor!=FormPS.SelectedPatNum) {
+				MsgBox.Show(this,"Customer must be a guarantor before they can be added as a reseller.");
+				return;
+			}
+			if(Resellers.IsResellerFamily(FormPS.SelectedPatNum)) {
+				MsgBox.Show(this,"Customer is already a reseller.  CustomerNum: "+FormPS.SelectedPatNum);
+				return;
+			}
+			Reseller reseller=new Reseller();
+			reseller.PatNum=FormPS.SelectedPatNum;
+			Resellers.Insert(reseller);
+			FillGrid();
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

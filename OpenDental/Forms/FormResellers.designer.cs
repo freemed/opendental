@@ -285,11 +285,11 @@ namespace OpenDental{
 			// label2
 			// 
 			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Location = new System.Drawing.Point(868, 299);
+			this.label2.Location = new System.Drawing.Point(832, 299);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(173, 18);
+			this.label2.Size = new System.Drawing.Size(209, 38);
 			this.label2.TabIndex = 40;
-			this.label2.Text = "(Add as a customer first)";
+			this.label2.Text = "Add as a customer first.\r\nThey must also be the guarantor.";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
 			// 
 			// menuRightClick
