@@ -71,6 +71,10 @@ namespace OpenDental {
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
+			//Only Jordan should be able to delete resellers.
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
+			}
 			//Do not let the reseller be deleted if they have customers in their list.
 			if(TableCustomers.Rows.Count>0) {
 				MsgBox.Show(this,"This reseller cannot be deleted until they remove our services from this customer form the reseller portal.");
