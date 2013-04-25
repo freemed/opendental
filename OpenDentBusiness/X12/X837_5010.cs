@@ -2831,10 +2831,10 @@ namespace OpenDentBusiness
 						}
 					}
 				}
-				if(proc.PlaceService!=claim.PlaceService) {
-					Comma(strb);
-					strb.Append("Proc place of service does not match claim "+procCode.ProcCode);
-				}
+				//if(proc.PlaceService!=claim.PlaceService) {
+				//  Comma(strb);
+				//  strb.Append("Proc place of service does not match claim "+procCode.ProcCode);
+				//}
 				//Providers
 				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 					treatProv=ProviderC.ListLong[Providers.GetIndexLong(proc.ProvNum)];

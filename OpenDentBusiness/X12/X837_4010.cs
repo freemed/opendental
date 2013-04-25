@@ -1943,12 +1943,12 @@ namespace OpenDentBusiness
 						strb.Append(procCode.AbbrDesc+" Prosth Date");
 					}
 				}
-				if(proc.PlaceService!=claim.PlaceService) {
-					if(strb.Length!=0) {
-						strb.Append(",");
-					}
-					strb.Append("Proc place of service does not match claim "+procCode.ProcCode);
-				}
+				//if(proc.PlaceService!=claim.PlaceService) {
+				//  if(strb.Length!=0) {
+				//    strb.Append(",");
+				//  }
+				//  strb.Append("Proc place of service does not match claim "+procCode.ProcCode);
+				//}
 				if(insPlan.IsMedical) {
 					if(proc.DiagnosticCode=="") {
 						if(strb.Length!=0) {
