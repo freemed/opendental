@@ -34,6 +34,7 @@ namespace OpenDentBusiness{
 			r.DateStart=DateStart;
 			r.DateStop=DateStop;
 			r.Note=Note;
+			r.CopyNoteToProc=CopyNoteToProc;
 			return r;
 		}
 

@@ -145,12 +145,13 @@ namespace OpenDental{
 				DateTime possibleDateNew=startDate;
 				int countMonths=0;
 				//start looping through possible dates, beginning with the start date of the repeating charge
-				while(possibleDateNew<=DateTime.Today){
-					if(possibleDateNew<DateTime.Today.AddMonths(-3)){
+				while(possibleDateNew<=DateTime.Today) {
+					//Only allow back dating up to 20 days.
+					if(possibleDateNew<DateTime.Today.AddDays(-20)) {
 						possibleDateOld=possibleDateOld.AddMonths(1);
 						countMonths++;
 						possibleDateNew=startDate.AddMonths(countMonths);
-						continue;//don't go back more than three months
+						continue;//don't go back more than 20 days
 					}
 					//check to see if the possible date is present in the list
 					if(ALdates.Contains(possibleDateNew)
@@ -179,6 +180,10 @@ namespace OpenDental{
 					proc.MedicalCode=ProcedureCodes.GetProcCode(proc.CodeNum).MedicalCode;
 					proc.BaseUnits = ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
 					proc.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+					//Check if the repeating charge has been flagged to copy it's note into the billing note of the procedure.
+					if(chargeList[i].CopyNoteToProc) {
+						proc.BillingNote=chargeList[i].Note;
+					}
 					Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
 					countAdded++;
 					possibleDateOld=possibleDateOld.AddMonths(1);
