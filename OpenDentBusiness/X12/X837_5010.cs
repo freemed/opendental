@@ -595,7 +595,7 @@ namespace OpenDentBusiness
 					clm01=Sout(clm01,17);//Denti-Cal has a maximum of 17 chars here. This field is what Denti-Cal refers to as the PDCN.
 				}
 				else if(IsEmdeonMedical(clearhouse)) {
-					clm01.Replace('/','-');//Emdeon Medical only allows letters, numbers, dashes, periods, spaces and asterisks.
+					clm01=clm01.Replace('/','-');//Emdeon Medical only allows letters, numbers, dashes, periods, spaces and asterisks. The claim identifier will contain / inside the claim edit window still.
 				}
 				string claimFrequencyTypeCode="1";
 				if(claim.CorrectionType==ClaimCorrectionType.Original) {
