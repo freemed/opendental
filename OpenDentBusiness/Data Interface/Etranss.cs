@@ -103,7 +103,7 @@ namespace OpenDentBusiness{
 				+"OR Etype="+POut.Int((int)EtransType.Predeterm_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimReversal_CA)+" "
 				+"OR Etype="+POut.Int((int)EtransType.ClaimSent)+") "
-				+(CultureInfo.CurrentCulture.Name.EndsWith("CA")?"ORDER BY DateTimeTrans DESC":""); //Canadian. en-CA or fr-CA
+				+"ORDER BY DateTimeTrans DESC"; //Because when we want the most recent in the list, we use List[0].
 			return Crud.EtransCrud.SelectMany(command);
 		}
 
