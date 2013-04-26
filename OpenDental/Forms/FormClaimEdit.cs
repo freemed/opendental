@@ -5925,6 +5925,14 @@ namespace OpenDental{
 					ClaimCondCodeLogs.Update(ClaimCondCodeLogCur);
 				}
 			}
+			for(int i=0;i<ClaimProcsForClaim.Count;i++) {
+				Procedure proc=Procedures.GetProcFromList(ProcList,ClaimProcsForClaim[i].ProcNum);
+				if(proc.PlaceService!=ClaimCur.PlaceService) {
+					Procedure oldProc=proc.Copy();
+					proc.PlaceService=ClaimCur.PlaceService;
+					Procedures.Update(proc,oldProc);
+				}
+			}
 			if(wasSentOrReceived){
 				SecurityLogs.MakeLogEntry(Permissions.ClaimSentEdit,ClaimCur.PatNum,
 					PatCur.GetNameLF()+", "
