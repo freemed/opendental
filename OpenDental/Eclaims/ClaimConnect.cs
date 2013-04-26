@@ -101,7 +101,8 @@ namespace OpenDental.Eclaims
 						//MessageBox.Show("Authentication successful.");
 						break;
 					case "1":
-						throw new Exception("Authentication failed. "+errormsg);
+						throw new Exception("Authentication failure.  Please verify your login ID and password by visiting\r\nSetup | Clearinghouses | ClaimConnect.  "
+							+"These values are probably the same as your dentalxchange log in.  Error message: "+errormsg);
 					case "2":
 						throw new Exception("Cannot authenticate at this time. "+errormsg);
 					case "3":
@@ -190,7 +191,8 @@ namespace OpenDental.Eclaims
 						MessageBox.Show("Upload successful.");
 						break;
 					case "1":
-						throw new Exception("Authentication failed. "+errormsg);
+						throw new Exception("Authentication failure.  Please verify your login ID and password by visiting\r\nSetup | Clearinghouses | ClaimConnect.  "
+							+"These values are probably the same as your dentalxchange log in.  Error message: "+errormsg);
 					case "2":
 						throw new Exception("Cannot upload at this time. "+errormsg);
 				}
