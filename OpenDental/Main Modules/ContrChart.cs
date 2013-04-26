@@ -5054,8 +5054,11 @@ namespace OpenDental{
 								text+="("+Medications.GetMedication(med.GenericNum).MedName+")";
 							}
 							row.Cells.Add(text);
-							text=medList[i].PatNote
-								+"("+Medications.GetGeneric(medList[i].MedicationNum).Notes+")";
+							text=medList[i].PatNote;
+							string noteMedGeneric=Medications.GetGeneric(medList[i].MedicationNum).Notes;
+							if(noteMedGeneric!="") {
+								text+="("+noteMedGeneric+")";
+							}
 							row.Cells.Add(text);
 							row.ColorBackG=DefC.Long[(int)DefCat.MiscColors][3].ItemColor;
 							row.Tag="med";
