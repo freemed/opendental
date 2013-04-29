@@ -1075,7 +1075,7 @@ namespace OpenDental{
 		}
 
 		private void butClockIn_Click(object sender,System.EventArgs e) {
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
 				//Check if the employee set their ext to 0 in the phoneempdefault table.
 				if(PhoneEmpDefaults.GetByExtAndEmp(0,EmployeeCur.EmployeeNum)==null) {
 					MessageBox.Show("Not allowed.  Use the small phone panel or the \"Big\" phone window to clock in.\r\nIf you are trying to clock in as a \"floater\", you need to set your extension to 0 first before using this Clock In button.");
@@ -1092,13 +1092,13 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			//if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-			//	Employees.SetPhoneClockStatus(EmployeeCur.EmployeeNum,ClockStatusEnum.Available);
-			//}
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				Phones.SetPhoneStatus(ClockStatusEnum.Available,Phones.GetExtensionForEmp(EmployeeCur.EmployeeNum),EmployeeCur.EmployeeNum);
+			}
 		}
 
 		private void butClockOut_Click(object sender,System.EventArgs e) {
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll,true)) {
 				//Check if the employee set their ext to 0 in the phoneempdefault table.
 				if(PhoneEmpDefaults.GetByExtAndEmp(0,EmployeeCur.EmployeeNum)==null) {
 					MessageBox.Show("Not allowed.  Use the small phone panel or the \"Big\" phone window to clock out.\r\nIf you are trying to clock out as a \"floater\", you need to set your extension to 0 first before using this Clock Out For: button.");
@@ -1119,9 +1119,9 @@ namespace OpenDental{
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",((TimeClockStatus)listStatus.SelectedIndex).ToString());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);
-			//if(PrefC.GetBool(PrefName.DockPhonePanelShow)){
-			//	Phones.SetPhoneClockStatus(EmployeeCur.EmployeeNum,((TimeClockStatus)listStatus.SelectedIndex).ToString());
-			//}
+			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+				Phones.SetPhoneStatus(Phones.GetClockStatusFromEmp(EmployeeCur.ClockStatus),Phones.GetExtensionForEmp(EmployeeCur.EmployeeNum),EmployeeCur.EmployeeNum);
+			}
 		}
 
 		private void timer1_Tick(object sender, System.EventArgs e) {

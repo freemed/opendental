@@ -178,6 +178,20 @@ namespace OpenDentBusiness {
 			return null;
 		}
 
+		///<summary>Gets the extension for the employee.  Returns 0 if employee cannot be found.</summary>
+		public static int GetExtensionForEmp(long employeeNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetInt(MethodBase.GetCurrentMethod(),employeeNum);
+			}
+			string command="SELECT Extension FROM phone WHERE EmployeeNum="+POut.Long(employeeNum);
+			DataTable table=Db.GetTable(command);
+			int extension=0;
+			if(table.Rows.Count>0){
+				extension=PIn.Int(table.Rows[0]["Extension"].ToString());
+			}
+			return extension;
+		}
+
 		/*
 		///<summary>Gets the phoneNum which is the primary key, not the phone number.</summary>
 		public static long GetPhoneNum(int extension){
