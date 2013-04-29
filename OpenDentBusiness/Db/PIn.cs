@@ -63,13 +63,13 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary></summary>
+		///<summary>Processes dates incoming from db that look like "4/29/2013", and dates from textboxes where users entered and which have usually been validated.</summary>
 		public static DateTime Date(string myString){
 			if(myString=="" || myString==null) {
 				return DateTime.MinValue;
 			}
 			try{
-				return (DateTime.Parse(myString));
+				return (DateTime.Parse(myString));//DateTimeKind.Unspecified, which prevents -7:00, for example, from being tacked onto the end during serialization.
 				//return DateTime.Parse(myString,CultureInfo.InvariantCulture);
 			}
 			catch{

@@ -2607,6 +2607,7 @@
     <Compile Include="Misc\ClassConvertDatabase.cs" />
     <Compile Include="Misc\ClassesShared.cs" />
     <Compile Include="Misc\DataConnectionOld.cs" />
+    <Compile Include="Misc\DateTimeOD.cs" />
     <Compile Include="Misc\EZTwain.cs">
       <SubType>Code</SubType>
     </Compile>

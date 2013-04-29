@@ -36,6 +36,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
+		///<summary>This is not explicitly called by our code.  It's required for the IXmlSerializable interface, which we have defined for this class.  So C# will call this when we call Serialize().</summary>
 		public void WriteXml(XmlWriter writer) {
 			/* we want the result to look like this:
 			<TypeName>Patient</TypeName>

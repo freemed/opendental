@@ -2570,7 +2570,7 @@ namespace OpenDental{
 			}
 			TreatPlan tp=new TreatPlan();
 			tp.Heading=Lan.g(this,"Proposed Treatment Plan");
-			tp.DateTP=DateTime.Today;
+			tp.DateTP=DateTimeOD.Today;
 			tp.PatNum=PatCur.PatNum;
 			tp.Note=PrefC.GetString(PrefName.TreatmentPlanNote);
 			tp.ResponsParty=PatCur.ResponsParty;
