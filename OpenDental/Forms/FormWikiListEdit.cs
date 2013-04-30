@@ -112,12 +112,30 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
 				return;
 			}
+			if(gridMain.SelectedCell.X==-1){
+				return;
+			}
+			Point newSelectedCell=gridMain.SelectedCell;
+			newSelectedCell.X=Math.Max(1,newSelectedCell.X-1);
+			WikiLists.ShiftColumnLeft(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName);
+			Table=WikiLists.GetByName(WikiListCurName);
+			FillGrid();
+			gridMain.SetSelected(newSelectedCell);
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//gives a message box if no permission
 				return;
 			}
+			if(gridMain.SelectedCell.X==-1) {
+				return;
+			}
+			Point newSelectedCell=gridMain.SelectedCell;
+			newSelectedCell.X=Math.Min(gridMain.Columns.Count-1,newSelectedCell.X+1);
+			WikiLists.ShiftColumnRight(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName);
+			Table=WikiLists.GetByName(WikiListCurName);
+			FillGrid();
+			gridMain.SetSelected(newSelectedCell);
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
@@ -172,25 +190,11 @@ namespace OpenDental {
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete this entire list and all references to it?")) {
 				return;
-			} 
-			//TODO: require admin of some sort
-			//TODO: delete table from DB.
-			//TODO: update all wikipages and remove links to data that was contained in the table.
-			DialogResult=DialogResult.Cancel;
+			}
+			WikiLists.DeleteList(WikiListCurName);
+			//TODO: update all wikipages and remove links to data that was contained in the table. if we implement it.
+			DialogResult=DialogResult.OK;
 		}
-
-		//private void butOK_Click(object sender,EventArgs e) {
-		//  //if(IsNew) {
-		//  //  List<string> columnNames = new List<string>();
-		//  //  foreach(DataColumn column in Table.Columns) {
-		//  //    //TODO: validate and clean column names.
-		//  //    columnNames.Add(column.ColumnName);
-		//  //  }
-		//  //  WikiLists.CreateNewWikiList(WikiListCur,columnNames);
-		//  //}
-		//  WikiLists.UpdateList(WikiListCur,Table);
-		//  DialogResult=DialogResult.OK;
-		//}
 
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;

@@ -32,11 +32,11 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			for(int i=1;i<TableHeaders.Count+1;i++) {
+			for(int i=0;i<TableHeaders.Count;i++) {
 				col=new ODGridColumn("",75,true);//blank table-column names. List column names are contained in the cells of the table.
-				if(i==0) {
-					col.IsEditable=false;//primary key
-				}
+				//if(i==0) {
+				//  col.IsEditable=false;//primary key
+				//}
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();
@@ -54,15 +54,15 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			//Validate column names---------------------------------------------------------------------------------
 			foreach(ODGridCell colNameCell in gridMain.Rows[0].Cells){
-				if(!Regex.IsMatch(colNameCell.Text,"^(\\D).*")){
+				if(Regex.IsMatch(colNameCell.Text,@"^\d")){
 					MsgBox.Show(this,"Column cannot start with numbers.");
 					return;
 				}
-				if(colNameCell.Text.Contains(" ")) {
-					MsgBox.Show(this,"Column names must start with a letter and cannot contain spaces.");
+				if(Regex.IsMatch(colNameCell.Text,@"\s")) {
+					MsgBox.Show(this,"Column names cannot contain spaces.");
 					return;
 				}
-				if(!Regex.IsMatch(colNameCell.Text,"(\\w)+")) {
+				if(Regex.IsMatch(colNameCell.Text,@"\W")) {
 					MsgBox.Show(this,"Column names cannot contain special characters.");
 					return;
 				}
@@ -113,8 +113,9 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
-		///<summary>Checks to see if the input string is a reserved word in MySQL 5.5.31</summary>
-		private bool isReservedWordHelper(string input) {
+		///<summary>Returns true if the input string is a reserved word in MySQL 5.5.31.
+		///This is a useful tool and could probably be moved somewhere more publicly accessible.</summary>
+		public static bool isReservedWordHelper(string input) {
 			bool retval;
 			//using a switch statement makes this method run in constant time. (As opposed to linear time with a for loop.)
 			switch(input.ToUpper()) {

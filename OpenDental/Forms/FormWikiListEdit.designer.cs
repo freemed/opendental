@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.butHeaders.Name = "butHeaders";
 			this.butHeaders.Size = new System.Drawing.Size(71, 24);
 			this.butHeaders.TabIndex = 31;
-			this.butHeaders.Text = "Col Edit";
+			this.butHeaders.Text = "Edit Cols";
 			this.butHeaders.Click += new System.EventHandler(this.butHeaders_Click);
 			// 
 			// butColumnInsert
@@ -100,7 +100,6 @@ namespace OpenDental{
 			this.butColumnRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnRight.CornerRadius = 4F;
-			this.butColumnRight.Enabled = false;
 			this.butColumnRight.Location = new System.Drawing.Point(49, 19);
 			this.butColumnRight.Name = "butColumnRight";
 			this.butColumnRight.Size = new System.Drawing.Size(30, 24);
@@ -115,7 +114,6 @@ namespace OpenDental{
 			this.butColumnLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butColumnLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butColumnLeft.CornerRadius = 4F;
-			this.butColumnLeft.Enabled = false;
 			this.butColumnLeft.Location = new System.Drawing.Point(8, 19);
 			this.butColumnLeft.Name = "butColumnLeft";
 			this.butColumnLeft.Size = new System.Drawing.Size(30, 24);

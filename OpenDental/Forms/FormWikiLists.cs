@@ -46,13 +46,27 @@ namespace OpenDental {
 			if(inputListName.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			FormWLE.WikiListCurName = inputListName.textResult.Text.ToLower().Replace(" ","");
-			//FormWLE.IsNew=true;//set within the form.
-			FormWLE.ShowDialog();
-			if(FormWLE.DialogResult!=DialogResult.OK) {
+			//Format input as it would be saved in the database--------------------------------------------
+			inputListName.textResult.Text=inputListName.textResult.Text.ToLower().Replace(" ","");
+			//Validate list name---------------------------------------------------------------------------
+			if(FormWikiListHeaders.isReservedWordHelper(inputListName.textResult.Text)) {
+				//Can become an issue when retrieving column header names.
+				MsgBox.Show(this,"List name is a reserved word in MySQL.");
 				return;
 			}
+			if(inputListName.textResult.Text=="") {
+				MsgBox.Show(this,"List name cannot be blank.");
+				return;
+			}
+			if(WikiLists.CheckExists(inputListName.textResult.Text)) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"List already exists with that name. Would you like to edit existing list?")) {
+					return;
+				}
+			}
+			FormWikiListEdit FormWLE = new FormWikiListEdit();
+			FormWLE.WikiListCurName = inputListName.textResult.Text;
+			//FormWLE.IsNew=true;//set within the form.
+			FormWLE.ShowDialog();
 			FillList();
 		}
 
