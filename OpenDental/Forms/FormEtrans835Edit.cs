@@ -15,7 +15,6 @@ namespace OpenDental {
 
 		public Etrans EtransCur;
 		private string MessageText;
-		//private X277 x277;
 
 		public FormEtrans835Edit() {
 			InitializeComponent();
@@ -24,82 +23,20 @@ namespace OpenDental {
 
 		private void FormEtrans277Edit_Load(object sender,EventArgs e) {
 			MessageText=EtransMessageTexts.GetMessageText(EtransCur.EtransMessageTextNum);
-			//x277=new X277(MessageText);
-			FillHeader();
-			FillGrid();
-		}
+			//837 CLM01 -> 835 CLP01 (even for split claims)
+			//835 TRN = Reassociation Key Segmen. See TRN02 (pg. 19)
+			//835 Table 2 PLB contains claim level adjustments.
+			//835 Table 3 PLB contains the provider/check level adjustments.
+			//SVC02-(CAS03+CAS06+CAS09+CAS12+CAS15+CAS18)=SVC03
+			//When the service payment information loop is not present, then: CLP03-(CAS03+CAS06+CAS09+CAS12+CAS15+CAS18)=CLP04
+			//Otherwise, CAS must also be considered from the service adjustment segment.
+			//Reassociation (pg. 20): Use the trace # in TRN02 and the company ID number in TRN03 to uniquely identify the claim payment/data.
+			//Institutional (pg. 23): CAS reason code 78 requires special handling.
+			//Advance payments (pg. 23): in PLB segment with adjustment reason code PI. Can be yearly or monthly.
+			//Bundled procs (pg. 27): have the original proc listed in SV06.
+			//Line Item Control Number (pg. 28): REF*6B from the 837 is returned when procedures are unbundled.
+			//Predetermination (pg. 28): claim adjustment reason code is 101. Identified by claim status code 25 in CLP02.
 
-		private void FillHeader() {
-			////Set the title of the window to include he reponding entity type and name (i.e. payor delta, clearinghouse emdeon, etc...)
-			//Text+=x277.GetInformationSourceType()+" "+x277.GetInformationSourceName();
-			////Fill the textboxes in the upper portion of the window.
-			//textReceiptDate.Text=x277.GetInformationSourceReceiptDate().ToShortDateString();
-			//textProcessDate.Text=x277.GetInformationSourceProcessDate().ToShortDateString();
-			//textQuantityAccepted.Text=x277.GetQuantityAccepted().ToString();
-			//textQuantityRejected.Text=x277.GetQuantityRejected().ToString();
-			//textAmountAccepted.Text=x277.GetAmountAccepted().ToString("F");
-			//textAmountRejected.Text=x277.GetAmountRejected().ToString("F");
-		}
-
-		private void FillGrid() {
-			//List<string> claimTrackingNumbers=x277.GetClaimTrackingNumbers();
-			////bool showInstBillType=false;
-			//bool showServiceDateRange=false;
-			//for(int i=0;i<claimTrackingNumbers.Count;i++) {
-			//  string[] claimInfo=x277.GetClaimInfo(claimTrackingNumbers[i]);
-			//  //if(claimInfo[5]!="") { //institutional type of bill
-			//  //  showInstBillType=true;
-			//  //}
-			//  if(claimInfo[7]!="") {//service date end
-			//    showServiceDateRange=true;
-			//  }
-			//}
-			//gridMain.BeginUpdate();
-			//gridMain.Columns.Clear();
-			//ODGridColumn col;
-			//if(showServiceDateRange) {
-			//  col=new ODGridColumn(Lan.g(this,"ServDateFrom"),86,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//  col=new ODGridColumn(Lan.g(this,"ServDateTo"),80,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//}
-			//else {
-			//  col=new ODGridColumn(Lan.g(this,"ServiceDate"),80,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//}
-			//col=new ODGridColumn(Lan.g(this,"Status"),54,HorizontalAlignment.Center);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"LName"),showServiceDateRange?110:153);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"FName"),showServiceDateRange?110:153);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),140);
-			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"PayorControlNum"),0);
-			//gridMain.Columns.Add(col);
-			//gridMain.Rows.Clear();
-			//for(int i=0;i<claimTrackingNumbers.Count;i++) {
-			//  string[] claimInfo=x277.GetClaimInfo(claimTrackingNumbers[i]);
-			//  ODGridRow row=new ODGridRow();
-			//  row.Cells.Add(new ODGridCell(claimInfo[6]));//service date start
-			//  if(showServiceDateRange) {					
-			//    row.Cells.Add(new ODGridCell(claimInfo[7]));//service date end
-			//  }
-			//  string claimStatus="";
-			//  if(claimInfo[3]=="A") {
-			//    claimStatus="Accepted";
-			//  }
-			//  else if(claimInfo[3]=="R") {
-			//    claimStatus="Rejected";
-			//  }
-			//  row.Cells.Add(new ODGridCell(claimStatus));//status
-			//  row.Cells.Add(new ODGridCell(claimInfo[0]));//lname
-			//  row.Cells.Add(new ODGridCell(claimInfo[1]));//fname
-			//  row.Cells.Add(new ODGridCell(claimTrackingNumbers[i]));//claim identifier
-			//  row.Cells.Add(new ODGridCell(claimInfo[4]));//payor control number
-			//  gridMain.Rows.Add(row);
-			//}			
-			//gridMain.EndUpdate();
 		}
 
 		private void butRawMessage_Click(object sender,EventArgs e) {
