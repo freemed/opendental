@@ -102,7 +102,13 @@ namespace SparksToothChart {
 					pp.PresentFlag=PresentFlag.None;
 					pp.SwapEffect=SwapEffect.Discard;//Required to be set to discard for anti-aliasing.
 					pp.Windowed=true;//Must be set to true for controls.
-					Device dev=new Device(adapter.Adapter,deviceType,control,createFlags,pp);
+					//When a Device object is created, the common language runtime will change the floating-point unit (FPU) to single precision to maintain better performance. 
+					//This was causing extensive rounding errors throughout OD.
+					//To maintain the default double precision FPU, which is default for the common language runtime, we use the CreateFlags.FpuPreserve flag in the constructor.
+					//HardwareVertexProcessing, MixedVertexProcessing, and SoftwareVertexProcessing constants (CreateFlags) are mutually exclusive.
+					//One of them must be specified during creation of a "device".
+					//Therefore, we pass in our variable createFlags (typically SoftwareVertexProcessing) along with FpuPreserve to maintain double precision.
+					Device dev=new Device(adapter.Adapter,deviceType,control,createFlags | CreateFlags.FpuPreserve,pp);
 					return dev;
 				} catch {
 				}
@@ -177,6 +183,7 @@ namespace SparksToothChart {
 											format.adapter=adapter;
 											format.deviceType=deviceType;
 											format.createFlags=CreateFlags.SoftwareVertexProcessing;
+											//format.createFlags=CreateFlags.FpuPreserve;
 											format.depthStencilFormat=depthStencilFormat;
 											format.backBufferFormat=backBufferFormat;
 											format.maxMultiSampleType=MultiSampleType.None;
