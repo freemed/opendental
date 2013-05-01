@@ -129,9 +129,6 @@ namespace OpenDental{
 		}
 
 		private void listMain_DoubleClick(object sender,System.EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit)) {
-				return;
-			}
 			if(listMain.SelectedIndex==-1){
 				return;
 			}

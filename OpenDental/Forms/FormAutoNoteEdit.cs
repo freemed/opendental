@@ -25,6 +25,18 @@ namespace OpenDental {
 		}
 
 		private void FormAutoNoteEdit_Load(object sender, EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit,true)) {
+				butAdd.Enabled=false;
+				butDelete.Enabled=false;
+				butOK.Enabled=false;
+				textMain.ReadOnly=true;
+				textMain.BackColor=SystemColors.Window;
+				textBoxAutoNoteName.ReadOnly=true;
+				textBoxAutoNoteName.BackColor=SystemColors.Window;
+			}
+			else {//user has permission to edit auto notes
+				gridMain.CellDoubleClick+=new ODGridClickEventHandler(gridMain_CellDoubleClick);
+			}
 			textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
 			textMain.Text=AutoNoteCur.MainText;
 			FillGrid();

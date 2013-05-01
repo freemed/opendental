@@ -187,6 +187,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormQuickPasteNoteEdit_Load(object sender, System.EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.AutoNoteQuickNoteEdit,true)) {
+				textAbbreviation.ReadOnly=true;
+				textAbbreviation.BackColor=SystemColors.Window;
+				textNote.ReadOnly=true;
+				textNote.BackColor=SystemColors.Window;
+				butDelete.Enabled=false;
+				butOK.Enabled=false;
+			}
 			textAbbreviation.Text=QuickNote.Abbreviation;
 			textNote.Text=QuickNote.Note;
 		}
