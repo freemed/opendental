@@ -21,10 +21,10 @@ namespace OpenDentBusiness
 		private List<int> segNumsClaimTrackingNumberTRN;
 
 		public static bool Is277(X12object xobj) {
-			if(xobj.FunctGroups.Count!=1) {
+			if(xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 277.
 				return false;
 			}
-			if(xobj.FunctGroups[0].Header.Get(1)=="HN") {
+			if(xobj.FunctGroups[0].Header.Get(1)=="HN") {//GS01 (pgs. 139 & 7)
 				return true;
 			}
 			return false;
@@ -32,7 +32,7 @@ namespace OpenDentBusiness
 
 		public X277(string messageText)
 			: base(messageText) {
-			segments=FunctGroups[0].Transactions[0].Segments;
+			segments=FunctGroups[0].Transactions[0].Segments;//The GS segment contains exactly one ST segment below it.
 			segNumInfoSourceNM101=-1;
 			segNumInfoReceiverNM101=-1;
 			segNumsBillingProviderNM1=new List<int>();

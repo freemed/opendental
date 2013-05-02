@@ -5,27 +5,58 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-	///<summary>X12 835 Health Care Claim Payment/Advice. This transaction type is a response to an 837 claim submission. The 835 will always come after a 277 is received and a 277 will always come after a 999. Neither the 277 nor the 999 are required, so it is possible that an 835 will be received directly after the 837.</summary>
+	///<summary>X12 835 Health Care Claim Payment/Advice. This transaction type is a response to an 837 claim submission. The 835 will always come after a 277 is received and a 277 will always come after a 999. Neither the 277 nor the 999 are required, so it is possible that an 835 will be received directly after the 837. The 835 is not required either, so it is possible that none of the 997, 999, 277 or 835 reports will be returned from the carrier.</summary>
 	public class X835:X12object{
 
+		///<summary>All segments within the transaction.</summary>
     private List<X12Segment> segments;
-		///<summary>CLP of loop 2100. Claim payment information.</summary>
+		///<summary>BPR segment (pg. 69). Financial Information segment. Required.</summary>
+		private X12Segment segBPR;
+		///<summary>TRN segment (pg. 77). Reassociation Trace Number segment. Required.</summary>
+		private X12Segment segTRN;
+		///<summary>N1*PR segment of loop 1000A (pg. 87). Payer Identification segment. Required.</summary>
+		private X12Segment segN1_PR;
+		///<summary>N3 segment of loop 1000A (pg. 89). Payer Address. Required.</summary>
+		private X12Segment segN3_PR;
+		///<summary>N4 segment of loop 1000A (pg. 90). Payer City, Sate, Zip code. Required.</summary>
+		private X12Segment segN4_PR;
+		///<summary>PER*BL segment of loop 1000A (pg. 97). Payer technical contact information. Required.</summary>
+		private X12Segment segPER_BL;
+		///<summary>N1*PE segment of loop 1000B (pg. 102). Payee identification. Required. We include this information because it could be helpful for those customers who are using clinics.</summary>
+		private X12Segment segN1_PE;
+		///<summary>CLP of loop 2100 (pg. 123). Claim payment information.</summary>
 		private List<int> segNumsCLP;
-		///<summary>SCC of loop 2110. Service (procedure) payment information.</summary>
+		///<summary>SVC of loop 2110 (pg. 186). Service (procedure) payment information.</summary>
 		private List<int> segNumsSVC;
 
     public static bool Is835(X12object xobj) {
-      if(xobj.FunctGroups.Count!=1) {
+      if(xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 835.
         return false;
       }
-      if(xobj.FunctGroups[0].Header.Get(1)=="HP") {
+      if(xobj.FunctGroups[0].Header.Get(1)=="HP") {//GS01 (pg. 279)
         return true;
       }
       return false;
     }
 
     public X835(string messageText):base(messageText) {
-      segments=FunctGroups[0].Transactions[0].Segments;
+      segments=FunctGroups[0].Transactions[0].Segments;//The GS segment contains exactly one ST segment below it.
+			segBPR=segments[0];//Always present, because required.
+			segTRN=segments[1];//Always present, because required.
+			for(int i=0;i<segments.Count;i++) {
+				X12Segment seg=segments[i];
+				if(seg.SegmentID=="N1" && seg.Get(1)=="PR") {
+					segN1_PR=seg;
+					segN3_PR=segments[i+1];
+					segN4_PR=segments[i+2];
+				}
+				else if(seg.SegmentID=="PER" && seg.Get(1)=="BL") {
+					segPER_BL=seg;
+				}
+				else if(seg.SegmentID=="N1" && seg.Get(1)=="PE") {
+					segN1_PE=seg;
+				}
+			}
 			segNumsCLP=new List<int>();
 			segNumsSVC=new List<int>();
 			for(int i=0;i<segments.Count;i++) { //All segments which have unique names within the 835 format can go inside this loop.
@@ -38,6 +69,176 @@ namespace OpenDentBusiness
 			}
     }
 
+		///<summary>Gets the description for the transaction handling code in Table 1 (Header) BPR01. Required.</summary>
+		public string GetTransactionHandlingCodeDescription() {
+			string transactionHandlingCode=segBPR.Get(1);
+			if(transactionHandlingCode=="C") {
+				return "Payment Accompanies Remittance Advice";
+			}
+			else if(transactionHandlingCode=="D") {
+				return "Make Payment Only";
+			}
+			else if(transactionHandlingCode=="H") {
+				return "Notification Only";
+			}
+			else if(transactionHandlingCode=="I") {
+				return "Remittance Information Only";
+			}
+			else if(transactionHandlingCode=="P") {
+				return "Prenotification of Future Transfers";
+			}
+			else if(transactionHandlingCode=="U") {
+				return "Split Payment and Remittance";
+			}
+			else if(transactionHandlingCode=="X") {
+				return "Handling Party's Option to Split Payment and Remittance";
+			}
+			return "UNKNOWN";
+		}
+
+		///<summary>Gets the payment credit or debit amount in Table 1 (Header) BPR02. Required.</summary>
+		public string GetPaymentAmount() {
+			return segBPR.Get(2);
+		}
+
+		///<summary>Gets the payment credit or debit flag in Table 1 (Header) BPR03. Returns "Credit" or "Debit". Required.</summary>
+		public string GetCreditDebit() {
+			string creditDebitFlag=segBPR.Get(3);
+			if(creditDebitFlag=="C") {
+				return "Credit";
+			}
+			else if(creditDebitFlag=="D") {
+				return "Debit";
+			}
+			return "";
+		}
+
+		///<summary>Gets the description for the payment method in Table 1 (Header) BPR04. Required.</summary>
+		public string GetPaymentMethodDescription() {
+			string paymentMethodCode=segBPR.Get(4);
+			if(paymentMethodCode=="ACH") {
+				return "Automated Clearing House (ACH)";
+			}
+			else if(paymentMethodCode=="BOP") {
+				return "Financial Institution Option";
+			}
+			else if(paymentMethodCode=="CHK") {
+				return "Check";
+			}
+			else if(paymentMethodCode=="FWT") {
+				return "Federal Reserve Funds/Wire Transfer - Nonrepetitive";
+			}
+			else if(paymentMethodCode=="NON") {
+				return "Non-payment Data";
+			}
+			return "UNKNOWN";
+		}
+
+		///<summary>Gets the last 4 digits of the account number for the receiving company (the provider office) in Table 1 (Header) BPR15. Situational. If not present, then returns empty string.</summary>
+		public string GetAccountNumReceivingShort() {
+			string accountNumber=segBPR.Get(15);
+			if(accountNumber.Length<=4) {
+				return accountNumber;
+			}
+			return accountNumber.Substring(accountNumber.Length-4);
+		}
+
+		///<summary>Gets the effective payment date in Table 1 (Header) BPR16. Required.</summary>
+		public DateTime GetDateEffective() {
+			string dateEffectiveStr=segBPR.Get(16);//BPR16 will be blank if the payment is a check.
+			if(dateEffectiveStr.Length<8) {
+				return DateTime.MinValue;
+			}
+			int dateEffectiveYear=int.Parse(dateEffectiveStr.Substring(0,4));
+			int dateEffectiveMonth=int.Parse(dateEffectiveStr.Substring(4,2));
+			int dateEffectiveDay=int.Parse(dateEffectiveStr.Substring(6,2));
+			return new DateTime(dateEffectiveYear,dateEffectiveMonth,dateEffectiveDay);
+		}
+
+		///<summary>Gets the check number or transaction reference number in Table 1 (Header) TRN02. Required.</summary>
+		public string GetTransactionReferenceNumber() {
+			return segTRN.Get(2);
+		}
+
+		///<summary>Gets the payer name in Table 1 (Header) N102. Required.</summary>
+		public string GetPayerName() {
+			return segN1_PR.Get(2);
+		}
+
+		///<summary>Gets the payer electronic ID in Table 1 (Header) N104 of segment N1*PR. Situational. If not present, then returns empty string.</summary>
+		public string GetPayerID() {
+			if(segN1_PR.Elements.Length>=4) {
+				return segN1_PR.Get(4);
+			}
+			return "";
+		}
+
+		///<summary>Gets the payer address line 1 in Table 1 (Header) N301 of segment N1*PR. Required.</summary>
+		public string GetPayerAddress1() {
+			return segN3_PR.Get(1);
+		}
+
+		///<summary>Gets the payer city name in Table 1 (Header) N401 of segment N1*PR. Required.</summary>
+		public string GetPayerCityName() {
+			return segN4_PR.Get(1);
+		}
+
+		///<summary>Gets the payer state in Table 1 (Header) N402 of segment N1*PR. Required when in USA or Canada.</summary>
+		public string GetPayerState() {
+			return segN4_PR.Get(2);
+		}
+
+		///<summary>Gets the payer zip code in Table 1 (Header) N403 of segment N1*PR. Required when in USA or Canada.</summary>
+		public string GetPayerZip() {
+			return segN4_PR.Get(3);
+		}
+
+		///<summary>Gets the contact information from segment PER*BL. Phone/email in PER04 or the contact phone/email in PER06 or both. If neither PER04 nor PER06 are present, then returns empty string.</summary>
+		public string GetPayerContactInfo() {
+			string contact_info="";
+			if(segPER_BL.Elements.Length>=4 && segPER_BL.Get(4)!="") {//Contact number 1.
+				contact_info=segPER_BL.Get(4);
+			}
+			if(segPER_BL.Elements.Length>=6 && segPER_BL.Get(6)!="") {//Contact number 2.
+				if(contact_info!="") {
+					contact_info+=" or ";
+				}
+				contact_info+=segPER_BL.Get(6);
+			}
+			if(segPER_BL.Elements.Length>=8 && segPER_BL.Get(8)!="") {//Telephone extension for contact number 2.
+				if(contact_info!="") {
+					contact_info+=" x";
+				}
+				contact_info+=segPER_BL.Get(8);
+			}
+			return contact_info;
+		}
+
+		///<summary>Gets the payee name in Table 1 (Header) N102 of segment N1*PE. Required.</summary>
+		public string GetPayeeName() {
+			return segN1_PE.Get(2);
+		}
+
+		///<summary>Gets a human readable description for the identifiation code qualifier found in N103 of segment N1*PE. Required.</summary>
+		public string GetPayeeIdType() {
+			string qualifier=segN1_PE.Get(3);
+			if(qualifier=="FI") {
+				return "TIN";
+			}
+			else if(qualifier=="XV") {
+				return "Medicaid ID";
+			}
+			else if(qualifier=="XX") {
+				return "NPI";
+			}
+			return "";
+		}
+
+		///<summary>Gets the payee identification number found in N104 of segment N1*PE. Required. Usually the NPI number.</summary>
+		public string GetPayeeId() {
+			return segN1_PE.Get(4);
+		}
+
 		///<summary>CLP01 in loop 2100. Referred to in this format as a Patient Control Number. Do this first to get a list of all claim tracking numbers that are contained within this 835.  Then, for each claim tracking number, we can later retrieve specific information for that single claim. The claim tracking numbers correspond to CLM01 exactly as submitted in the 837. We refer to CLM01 as the claim identifier on our end. We allow more than just digits in our claim identifiers, so we must return a list of strings.</summary>
 		public List<string> GetClaimTrackingNumbers() {
 			List<string> retVal=new List<string>();
@@ -48,7 +249,7 @@ namespace OpenDentBusiness
 			return retVal;
 		}
 
-//    ///<summary>Result will contain strings in the following order: Claim Status Code (CLP02), Monetary Amount of submitted charges for this claim (CLP03), Monetary Amount paid on this claim (CLP04), Monetary Amount of patient responsibility (CLP05), Payer Claim Control Number (CLP07).</summary>
+		///<summary>Result will contain strings in the following order: Claim Status Code (CLP02), Monetary Amount of submitted charges for this claim (CLP03), Monetary Amount paid on this claim (CLP04), Monetary Amount of patient responsibility (CLP05), Payer Claim Control Number (CLP07).</summary>
     public string[] GetClaimInfo(string trackingNumber) {
       string[] result=new string[5];
       for(int i=0;i<result.Length;i++) {
@@ -69,28 +270,6 @@ namespace OpenDentBusiness
       }
       return result;
     }
-
-//    public string GetHumanReadable() {
-//      string result=
-//        "Claim Status Reponse From "+GetInformationSourceType()+" "+GetInformationSourceName()+Environment.NewLine
-//        +"Receipt Date: "+GetInformationSourceReceiptDate().ToShortDateString()+Environment.NewLine
-//        +"Process Date: "+GetInformationSourceProcessDate().ToShortDateString()+Environment.NewLine
-//        +"Quantity Accepted: "+GetQuantityAccepted()+Environment.NewLine
-//        +"Quantity Rejected: "+GetQuantityRejected()+Environment.NewLine
-//        +"Amount Accepted: "+GetAmountAccepted()+Environment.NewLine
-//        +"Amount Rejected: "+GetAmountRejected()+Environment.NewLine
-//        +"Individual Claim Status List: "+Environment.NewLine
-//        +"Tracking Num  LName  FName  MName  Status  PayorControlNum  InstBillType DateServiceStart  DateServiceEnd";
-//      List <string> claimTrackingNumbers=GetClaimTrackingNumbers();
-//      for(int i=0;i<claimTrackingNumbers.Count;i++) {
-//        string[] claimInfo=GetClaimInfo(claimTrackingNumbers[i]);
-//        for(int j=0;j<claimInfo.Length;j++) {
-//          result+=claimInfo[j]+"\\t";
-//        }
-//        result+=Environment.NewLine;
-//      }
-//      return result;
-//    }
 
   }
 }

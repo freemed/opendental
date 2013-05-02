@@ -156,7 +156,7 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(966,613);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Claim Status and Information";
-			this.gridMain.TranslationName = "FormEtrans270Edit";
+			this.gridMain.TranslationName = "FormEtrans277Edit";
 			// 
 			// butRawMessage
 			// 
