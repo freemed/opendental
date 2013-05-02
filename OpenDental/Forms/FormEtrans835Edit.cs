@@ -41,7 +41,7 @@ namespace OpenDental {
 			//*835 has 3 parts: Table 1 (header), Table 2 (claim level details, one CLP segment for each claim), and Table 3 (PLB: provider/check level details).
 			FillHeader();//Table 1
 			FillClaimDetails();//Table 2
-			FillCheckDetails();//Table 3
+			FillProviderAdjustmentDetails();//Table 3
 			//The following concepts should each be addressed as development progresses.
 			//*837 CLM01 -> 835 CLP01 (even for split claims)
 			//*Reassociation (pg. 19): 835 TRN = Reassociation Key Segment. See TRN02.
@@ -66,6 +66,19 @@ namespace OpenDental {
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 1 (Header).</summary>
 		private void FillHeader() {
+			//Payer information
+			textPayerName.Text=x835.GetPayerName();
+			textPayerID.Text=x835.GetPayerID();
+			textPayerAddress1.Text=x835.GetPayerAddress1();
+			textPayerCity.Text=x835.GetPayerCityName();
+			textPayerState.Text=x835.GetPayerState();
+			textPayerZip.Text=x835.GetPayerZip();
+			textPayerContactInfo.Text=x835.GetPayerContactInfo();
+			//Payee information
+			textPayeeName.Text=x835.GetPayeeName();
+			textPayeeIdType.Text=x835.GetPayeeIdType();
+			textPayeeID.Text=x835.GetPayeeId();
+			//Payment information
 			textTransHandlingDesc.Text=x835.GetTransactionHandlingCodeDescription();
 			textPaymentMethod.Text=x835.GetPaymentMethodDescription();
 			textPaymentAmount.Text=x835.GetPaymentAmount();
@@ -75,19 +88,7 @@ namespace OpenDental {
 			if(dateEffective.Year>1880) {
 				textDateEffective.Text=dateEffective.ToShortDateString();
 			}
-			textCheckNumOrRefNum.Text=x835.GetTransactionReferenceNumber();
-
-			textPayerName.Text=x835.GetPayerName();
-			textPayerID.Text=x835.GetPayerID();
-			textPayerAddress1.Text=x835.GetPayerAddress1();
-			textPayerCity.Text=x835.GetPayerCityName();
-			textPayerState.Text=x835.GetPayerState();
-			textPayerZip.Text=x835.GetPayerZip();
-			textPayerContactInfo.Text=x835.GetPayerContactInfo();
-
-			textPayeeName.Text=x835.GetPayeeName();
-			textPayeeIdType.Text=x835.GetPayeeIdType();
-			textPayeeID.Text=x835.GetPayeeId();
+			textCheckNumOrRefNum.Text=x835.GetTransactionReferenceNumber();			
 		}
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 2 (Detail).</summary>
@@ -95,7 +96,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 3 (Summary).</summary>
-		private void FillCheckDetails() {
+		private void FillProviderAdjustmentDetails() {
 		}
 
 		private void butRawMessage_Click(object sender,EventArgs e) {
