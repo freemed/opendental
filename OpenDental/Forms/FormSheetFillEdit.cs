@@ -550,8 +550,14 @@ namespace OpenDental {
 				}
 				else if(pat.Email!="") {
 					FormS.EmailPatOrLabAddress=pat.Email;
-					FormS.EmailPatOrLab=true;
-					FormS.PaperCopies--;
+					//No need to email to a patient for sheet types: LabelPatient (0), LabelCarrier (1), LabelReferral (2), ReferralSlip (3), LabelAppointment (4), Rx (5), Consent (6), ReferralLetter (8), ExamSheet (13), DepositSlip (14)
+					//The data is too private to email unencrypted for sheet types: PatientForm (9), RoutingSlip (10), MedicalHistory (11), LabSlip (12)
+					//A patient might want email for the following sheet types and the data is not very private: PatientLetter (7)
+					if(SheetCur.SheetType==SheetTypeEnum.PatientLetter) {
+						//This just defines the default selection. The user can manually change selections in FormSheetOutputFormat.
+						FormS.EmailPatOrLab=true;
+						FormS.PaperCopies--;
+					}
 				}
 			}
 			Referral referral=null;

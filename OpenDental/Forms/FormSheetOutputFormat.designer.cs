@@ -46,32 +46,32 @@ namespace OpenDental{
 			// 
 			this.checkEmailPat.Location = new System.Drawing.Point(62,65);
 			this.checkEmailPat.Name = "checkEmailPat";
-			this.checkEmailPat.Size = new System.Drawing.Size(185,20);
+			this.checkEmailPat.Size = new System.Drawing.Size(314,20);
 			this.checkEmailPat.TabIndex = 85;
-			this.checkEmailPat.Text = "E-mail to patient:";
+			this.checkEmailPat.Text = "E-mail to patient (not recommended for sensitive information):";
 			this.checkEmailPat.UseVisualStyleBackColor = true;
 			// 
 			// textEmailPat
 			// 
 			this.textEmailPat.Location = new System.Drawing.Point(81,84);
 			this.textEmailPat.Name = "textEmailPat";
-			this.textEmailPat.Size = new System.Drawing.Size(272,20);
+			this.textEmailPat.Size = new System.Drawing.Size(295,20);
 			this.textEmailPat.TabIndex = 86;
 			// 
 			// textEmail2
 			// 
 			this.textEmail2.Location = new System.Drawing.Point(81,140);
 			this.textEmail2.Name = "textEmail2";
-			this.textEmail2.Size = new System.Drawing.Size(272,20);
+			this.textEmail2.Size = new System.Drawing.Size(295,20);
 			this.textEmail2.TabIndex = 88;
 			// 
 			// checkEmail2
 			// 
 			this.checkEmail2.Location = new System.Drawing.Point(62,121);
 			this.checkEmail2.Name = "checkEmail2";
-			this.checkEmail2.Size = new System.Drawing.Size(185,20);
+			this.checkEmail2.Size = new System.Drawing.Size(314,20);
 			this.checkEmail2.TabIndex = 87;
-			this.checkEmail2.Text = "E-mail to referral:";
+			this.checkEmail2.Text = "E-mail to referral (not recommended for sensitive information):";
 			this.checkEmail2.UseVisualStyleBackColor = true;
 			// 
 			// textPaperCopies
