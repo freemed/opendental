@@ -141,7 +141,8 @@ SUM((SELECT SUM(claimproc.InsPayAmt + claimproc.Writeoff) FROM claimproc WHERE c
 FROM procedurelog
 LEFT JOIN procedurecode ON procedurelog.CodeNum=procedurecode.CodeNum
 LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum
-WHERE procedurelog.ProcStatus=2/*complete*/";
+WHERE procedurelog.ProcStatus=2/*complete*/
+AND procedurelog.ProcFee > 0";//Negative proc fees should not show up on this report.  We have one office that uses negative proc fees as internal adjustments.
 			if(radioGroupByProc.Checked){
 				report.Query+=@"
 GROUP BY procedurelog.ProcNum";
