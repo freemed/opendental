@@ -3602,7 +3602,7 @@ namespace OpenDental{
 					}
 					return;
 				}
-				Procedures.SetDateFirstVisit(DateTime.Today,2,PatCur);
+				Procedures.SetDateFirstVisit(DateTimeOD.Today,2,PatCur);
 				ProcCur.ProcStatus=ProcStat.C;
 			}
 			if(comboProcStatus.SelectedIndex==2) {
@@ -3640,7 +3640,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
 				return;
 			}
-			Procedures.SetDateFirstVisit(DateTime.Today,2,PatCur);
+			Procedures.SetDateFirstVisit(DateTimeOD.Today,2,PatCur);
 			if(ProcCur.AptNum!=0){//if attached to an appointment
 				Appointment apt=Appointments.GetOneApt(ProcCur.AptNum);
 				if(apt.AptDateTime.Date > MiscData.GetNowDateTime().Date){//if appointment is in the future

@@ -274,7 +274,7 @@ namespace OpenDental{
 			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
 			refattach.PatNum=PatNum;
 			refattach.IsFrom=true;
-			refattach.RefDate=DateTime.Today;
+			refattach.RefDate=DateTimeOD.Today;
 			if(FormRS.SelectedReferral.IsDoctor) {//whether using ehr or not
 				//we're not going to ask.  That's stupid.
 				//if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Is this an incoming transition of care from another provider?")){
@@ -311,7 +311,7 @@ namespace OpenDental{
 			refattach.ReferralNum=FormRS.SelectedReferral.ReferralNum;
 			refattach.PatNum=PatNum;
 			refattach.IsFrom=false;
-			refattach.RefDate=DateTime.Today;
+			refattach.RefDate=DateTimeOD.Today;
 			if(FormRS.SelectedReferral.IsDoctor) {
 				refattach.IsTransitionOfCare=true;
 			}

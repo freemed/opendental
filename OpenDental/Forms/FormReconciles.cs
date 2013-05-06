@@ -159,7 +159,7 @@ namespace OpenDental{
 		///<summary></summary>
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Reconcile rec=new Reconcile();
-			rec.DateReconcile=DateTime.Today;
+			rec.DateReconcile=DateTimeOD.Today;
 			rec.AccountNum=AccountNum;
 			Reconciles.Insert(rec);
 			FormReconcileEdit FormR=new FormReconcileEdit(rec);

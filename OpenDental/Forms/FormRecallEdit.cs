@@ -543,7 +543,7 @@ namespace OpenDental{
 			textDays.Text=iv.Days.ToString();
 			List<RecallTrigger> triggerList=RecallTriggers.GetForType(RecallTypeC.Listt[comboType.SelectedIndex].RecallTypeNum);
 			if(triggerList.Count==0) {//if no triggers, then it's a manual type
-				RecallCur.DatePrevious=DateTime.Today;
+				RecallCur.DatePrevious=DateTimeOD.Today;
 				//textDatePrevious.Text=DateTime.Today.ToShortDateString();
 				DateTime dueDate=DateTime.Today+iv;
 				textDateDue.Text=dueDate.ToShortDateString();
