@@ -2355,7 +2355,7 @@ namespace OpenDental {
 							ra.IsFrom=true;
 							ra.ItemOrder=1;
 							ra.PatNum=PatCur.PatNum;
-							ra.RefDate=DateTime.Today;
+							ra.RefDate=DateTimeOD.Today;
 							ra.ReferralNum=((Referral)Rows[i].ImpValObj).ReferralNum;
 							RefAttaches.Insert(ra);//no security to block this action.
 							SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatCur.PatNum,"Referred From "+Referrals.GetNameFL(ra.ReferralNum));

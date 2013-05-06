@@ -441,7 +441,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTimeCard_Load(object sender, System.EventArgs e){
-			Initialize(DateTime.Today);
+			Initialize(DateTimeOD.Today);
 		}
 
 		public void Initialize(DateTime dateInitial){

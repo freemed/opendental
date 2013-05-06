@@ -36,8 +36,8 @@ namespace OpenDental {
 		/// <summary>
 		/// </summary>
 		private void FillGrid() {
-			DateTime dateFrom=DateTime.Today;
-			DateTime dateTo=DateTime.Today;
+			DateTime dateFrom=DateTimeOD.Today;
+			DateTime dateTo=DateTimeOD.Today;
 			try {
 				dateFrom=PIn.Date(textDateStart.Text);//handles blank
 				if(textDateEnd.Text!=""){//if it is blank, default to today

@@ -170,7 +170,7 @@ namespace OpenDental{
 					//otherwise, insert a procedure to db
 					proc=new Procedure();
 					proc.CodeNum=ProcedureCodes.GetCodeNum(chargeList[i].ProcCode);
-					proc.DateEntryC=DateTime.Today;
+					proc.DateEntryC=DateTimeOD.Today;
 					proc.PatNum=chargeList[i].PatNum;
 					proc.ProcDate=possibleDateNew;
 					proc.DateTP=possibleDateNew;
