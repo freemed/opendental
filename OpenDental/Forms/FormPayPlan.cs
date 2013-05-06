@@ -1129,7 +1129,7 @@ namespace OpenDental{
 				ppCharge.PayPlanNum=PayPlanCur.PayPlanNum;
 				ppCharge.Guarantor=PayPlanCur.Guarantor;
 				ppCharge.PatNum=PayPlanCur.PatNum;
-				ppCharge.ChargeDate=DateTime.Today;
+				ppCharge.ChargeDate=DateTimeOD.Today;
 				ppCharge.Interest=0;
 				ppCharge.Principal=downpayment;
 				ppCharge.Note=Lan.g(this,"Downpayment");

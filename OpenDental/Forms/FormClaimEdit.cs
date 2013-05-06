@@ -4558,7 +4558,7 @@ namespace OpenDental{
 			//ClaimProcs.Cur.ClaimPaymentNum
 			ClaimProcCur.PlanNum=ClaimCur.PlanNum;
 			ClaimProcCur.InsSubNum=ClaimCur.InsSubNum;
-			ClaimProcCur.DateCP=DateTime.Today;
+			ClaimProcCur.DateCP=DateTimeOD.Today;
 			ClaimProcCur.ProcDate=ClaimCur.DateService;
 			ClaimProcCur.DateEntry=DateTime.Now;//will get set anyway
 			ClaimProcCur.ClinicNum=ClaimCur.ClinicNum;
@@ -4663,7 +4663,7 @@ namespace OpenDental{
 					cpList[i].DateEntry=DateTime.Now;//date is was set rec'd
 					cpList[i].InsPayAmt=cpList[i].InsPayEst;
 				}
-				cpList[i].DateCP=DateTime.Today;
+				cpList[i].DateCP=DateTimeOD.Today;
 			}
 			if(ClaimCur.ClaimType=="PreAuth") {
 				FormClaimPayPreAuth FormCPP=new FormClaimPayPreAuth(PatCur,FamCur,PlanList,PatPlanList,SubList);
@@ -4728,8 +4728,8 @@ namespace OpenDental{
 				ClaimProcCur.Remarks="";
 				ClaimProcCur.Status=ClaimProcStatus.Supplemental;
 				ClaimProcCur.WriteOff=0;
-				ClaimProcCur.DateCP=DateTime.Today;
-				ClaimProcCur.DateEntry=DateTime.Today;
+				ClaimProcCur.DateCP=DateTimeOD.Today;
+				ClaimProcCur.DateEntry=DateTimeOD.Today;
 				ClaimProcs.Insert(ClaimProcCur);//this inserts a copy of the original with the changes as above.
 				cpList.Add(ClaimProcCur);
 			}
@@ -5400,11 +5400,11 @@ namespace OpenDental{
 			if(comboClaimStatus.SelectedIndex==5){//Received
 				if(PrefC.GetBool(PrefName.ProviderIncomeTransferShows)){
 					Payment PaymentCur=new Payment();
-					PaymentCur.PayDate=DateTime.Today;
+					PaymentCur.PayDate=DateTimeOD.Today;
 					PaymentCur.PatNum=PatCur.PatNum;
 					PaymentCur.ClinicNum=PatCur.ClinicNum;
 					PaymentCur.PayType=0;//txfr
-					PaymentCur.DateEntry=DateTime.Today;//So that it will show properly in the new window.
+					PaymentCur.DateEntry=DateTimeOD.Today;//So that it will show properly in the new window.
 					Payments.Insert(PaymentCur);
 					FormPayment Formp=new FormPayment(PatCur,FamCur,PaymentCur);
 					Formp.IsNew=true;

@@ -266,7 +266,7 @@ namespace OpenDental{
 			}
 			str.Append("\r\n\r\n\r\n\r\n");
 			//date
-			str.Append(DateTime.Today.ToLongDateString() + "\r\n");
+			str.Append(DateTimeOD.Today.ToLongDateString() + "\r\n");
 			//referral RE
 			if (ReferralCur != null) {
 				str.Append(Lan.g(this, "RE Patient: ") + PatCur.GetNameFL() + "\r\n");

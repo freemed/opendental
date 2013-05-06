@@ -1361,7 +1361,7 @@ namespace OpenDental {
 				//Now we will always have a valid referral to attach.  We will use it again for the other family members.
 				refAttach=new RefAttach();
 				refAttach.IsFrom=true;
-				refAttach.RefDate=DateTime.Today;
+				refAttach.RefDate=DateTimeOD.Today;
 				refAttach.ReferralNum=selectedReferral.ReferralNum;
 				refAttach.PatNum=guar.PatNum;
 				RefAttaches.Insert(refAttach);
@@ -1409,7 +1409,7 @@ namespace OpenDental {
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
 					refAttach.IsFrom=true;
-					refAttach.RefDate=DateTime.Today;
+					refAttach.RefDate=DateTimeOD.Today;
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat2.PatNum;
 					RefAttaches.Insert(refAttach);
@@ -1453,7 +1453,7 @@ namespace OpenDental {
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
 					refAttach.IsFrom=true;
-					refAttach.RefDate=DateTime.Today;
+					refAttach.RefDate=DateTimeOD.Today;
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat3.PatNum;
 					RefAttaches.Insert(refAttach);
@@ -1497,7 +1497,7 @@ namespace OpenDental {
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
 					refAttach.IsFrom=true;
-					refAttach.RefDate=DateTime.Today;
+					refAttach.RefDate=DateTimeOD.Today;
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat4.PatNum;
 					RefAttaches.Insert(refAttach);
@@ -1541,7 +1541,7 @@ namespace OpenDental {
 					//selectedReferral will already have been set in the guarantor loop
 					refAttach=new RefAttach();
 					refAttach.IsFrom=true;
-					refAttach.RefDate=DateTime.Today;
+					refAttach.RefDate=DateTimeOD.Today;
 					refAttach.ReferralNum=selectedReferral.ReferralNum;
 					refAttach.PatNum=pat5.PatNum;
 					RefAttaches.Insert(refAttach);

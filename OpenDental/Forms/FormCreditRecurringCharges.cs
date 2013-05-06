@@ -388,7 +388,7 @@ namespace OpenDental {
 						Ledgers.ComputeAging(patCur.Guarantor,PrefC.GetDate(PrefName.DateLastAging),false);
 					}
 					else {
-						Ledgers.ComputeAging(patCur.Guarantor,DateTime.Today,false);
+						Ledgers.ComputeAging(patCur.Guarantor,DateTimeOD.Today,false);
 						if(PrefC.GetDate(PrefName.DateLastAging) != DateTime.Today) {
 							Prefs.UpdateString(PrefName.DateLastAging,POut.Date(DateTime.Today,false));
 							//Since this is always called from UI, the above line works fine to keep the prefs cache current.
