@@ -2695,7 +2695,7 @@ namespace OpenDental{
 				if(nodeId.NodeType!=ImageNodeType.Mount) {//No mount is currently selected.
 					//Show the user that they are performing an image capture by generating a new mount.
 					Mount mount=new Mount();
-					mount.DateCreated=DateTime.Today;
+					mount.DateCreated=DateTimeOD.Today;
 					mount.Description="unnamed capture";
 					mount.DocCategory=GetCurrentCategory();
 					mount.ImgType=ImageType.Mount;

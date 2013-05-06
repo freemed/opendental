@@ -294,13 +294,13 @@ namespace OpenDental {
 				dateMin=DateTime.MinValue;
 			}
 			else {
-				dateMin = DateTime.Today.AddDays(-1 * PIn.Int(textDaysOldMin.Text));
+				dateMin = DateTimeOD.Today.AddDays(-1 * PIn.Int(textDaysOldMin.Text));
 			}
 			if(textDaysOldMax.Text.Trim()=="" || PIn.Double(textDaysOldMax.Text)==0) {
 				dateMax=DateTime.MinValue;
 			}
 			else {
-				dateMax = DateTime.Today.AddDays(-1 * PIn.Int(textDaysOldMax.Text));
+				dateMax = DateTimeOD.Today.AddDays(-1 * PIn.Int(textDaysOldMax.Text));
 			}
 			if(comboBoxMultiProv.SelectedIndices[0].ToString()=="0") {
 				isAllProv=true;

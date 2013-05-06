@@ -2440,7 +2440,7 @@ namespace OpenDental {
 			List<PatPlan> PatPlanList=PatPlans.Refresh(PatCur.PatNum);
 			List<Benefit> BenefitList=Benefits.Refresh(PatPlanList,subList);
 			List<Claim> ClaimList=Claims.Refresh(PatCur.PatNum);
-			List<ClaimProcHist> HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today,subList);
+			List<ClaimProcHist> HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTimeOD.Today,subList);
 			if(PatPlanList.Count>0) {
 				SubCur=InsSubs.GetSub(PatPlanList[0].InsSubNum,subList);
 				PlanCur=InsPlans.GetPlan(SubCur.PlanNum,InsPlanList);
@@ -2705,10 +2705,10 @@ namespace OpenDental {
 
 		private void toolBarButPay_Click() {
 			Payment PaymentCur=new Payment();
-			PaymentCur.PayDate=DateTime.Today;
+			PaymentCur.PayDate=DateTimeOD.Today;
 			PaymentCur.PatNum=PatCur.PatNum;
 			PaymentCur.ClinicNum=PatCur.ClinicNum;
-			PaymentCur.DateEntry=DateTime.Today;//So that it will show properly in the new window.
+			PaymentCur.DateEntry=DateTimeOD.Today;//So that it will show properly in the new window.
 			if(DefC.Short[(int)DefCat.PaymentTypes].Length>0){
 				PaymentCur.PayType=DefC.Short[(int)DefCat.PaymentTypes][0].DefNum;
 			}
@@ -2820,7 +2820,7 @@ namespace OpenDental {
 				return;
 			}
 			ClaimCur.ClaimStatus="W";
-			ClaimCur.DateSent=DateTime.Today;
+			ClaimCur.DateSent=DateTimeOD.Today;
 			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age,SubList);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -3187,7 +3187,7 @@ namespace OpenDental {
 				return;
 			}
 			ClaimCur.ClaimStatus="W";
-			ClaimCur.DateSent=DateTime.Today;
+			ClaimCur.DateSent=DateTimeOD.Today;
 			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age,SubList);
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
 			FormCE.IsNew=true;//this causes it to delete the claim if cancelling.
@@ -3257,7 +3257,7 @@ namespace OpenDental {
 				return;
 			}
 			ClaimCur.ClaimStatus="W";
-			ClaimCur.DateSent=DateTime.Today;
+			ClaimCur.DateSent=DateTimeOD.Today;
 			ClaimL.CalculateAndUpdate(procsForPat,InsPlanList,ClaimCur,PatPlanList,BenefitList,PatCur.Age,SubList);
 			//still have not saved some changes to the claim at this point
 			FormClaimEdit FormCE=new FormClaimEdit(ClaimCur,PatCur,FamCur);
@@ -3308,7 +3308,7 @@ namespace OpenDental {
 			PayPlan payPlan=new PayPlan();
 			payPlan.PatNum=PatCur.PatNum;
 			payPlan.Guarantor=PatCur.Guarantor;
-			payPlan.PayPlanDate=DateTime.Today;
+			payPlan.PayPlanDate=DateTimeOD.Today;
 			payPlan.CompletedAmt=PatCur.EstBalance;
 			PayPlans.Insert(payPlan);
 			FormPayPlan FormPP=new FormPayPlan(PatCur,payPlan);
@@ -3358,14 +3358,14 @@ namespace OpenDental {
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=149;
-			repeat.DateStart=DateTime.Today;
-			repeat.DateStop=DateTime.Today.AddMonths(11);
+			repeat.DateStart=DateTimeOD.Today;
+			repeat.DateStop=DateTimeOD.Today.AddMonths(11);
 			RepeatCharges.Insert(repeat);
 			repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=99;
-			repeat.DateStart=DateTime.Today.AddYears(1);
+			repeat.DateStart=DateTimeOD.Today.AddYears(1);
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3378,7 +3378,7 @@ namespace OpenDental {
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="008";
 			repeat.ChargeAmt=89;
-			repeat.DateStart=DateTime.Today;
+			repeat.DateStart=DateTimeOD.Today;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3391,7 +3391,7 @@ namespace OpenDental {
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="027";
 			repeat.ChargeAmt=10;
-			repeat.DateStart=DateTime.Today;
+			repeat.DateStart=DateTimeOD.Today;
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3404,14 +3404,14 @@ namespace OpenDental {
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=129;
-			repeat.DateStart=DateTime.Today;
-			repeat.DateStop=DateTime.Today.AddMonths(11);
+			repeat.DateStart=DateTimeOD.Today;
+			repeat.DateStop=DateTimeOD.Today.AddMonths(11);
 			RepeatCharges.Insert(repeat);
 			repeat=new RepeatCharge();
 			repeat.PatNum=PatCur.PatNum;
 			repeat.ProcCode="001";
 			repeat.ChargeAmt=99;
-			repeat.DateStart=DateTime.Today.AddYears(1);
+			repeat.DateStart=DateTimeOD.Today.AddYears(1);
 			RepeatCharges.Insert(repeat);
 			ModuleSelected(PatCur.PatNum);
 		}
@@ -3419,7 +3419,7 @@ namespace OpenDental {
 		private void toolBarButStatement_Click() {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.Guarantor;
-			stmt.DateSent=DateTime.Today;
+			stmt.DateSent=DateTimeOD.Today;
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=false;
@@ -3440,7 +3440,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			stmt.DateRangeTo = DateTime.Today;//This is needed for payment plan accuracy.//new DateTime(2200,1,1);
+			stmt.DateRangeTo = DateTimeOD.Today;//This is needed for payment plan accuracy.//new DateTime(2200,1,1);
 			if (textDateEnd.errorProvider1.GetError(textDateEnd) == "") {
 				if (textDateEnd.Text != "") {
 					stmt.DateRangeTo = PIn.Date(textDateEnd.Text);
@@ -3455,7 +3455,7 @@ namespace OpenDental {
 		private void menuItemStatementWalkout_Click(object sender, System.EventArgs e) {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.PatNum;
-			stmt.DateSent=DateTime.Today;
+			stmt.DateSent=DateTimeOD.Today;
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=true;
@@ -3466,8 +3466,8 @@ namespace OpenDental {
 				stmt.Intermingled = true;
 				stmt.SinglePatient=false;
 			}
-			stmt.DateRangeFrom=DateTime.Today;
-			stmt.DateRangeTo=DateTime.Today;
+			stmt.DateRangeFrom=DateTimeOD.Today;
+			stmt.DateRangeTo=DateTimeOD.Today;
 			stmt.Note="";
 			stmt.NoteBold="";
 			PrintStatement(stmt);
@@ -3477,7 +3477,7 @@ namespace OpenDental {
 		private void menuItemStatementEmail_Click(object sender,EventArgs e) {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.Guarantor;
-			stmt.DateSent=DateTime.Today;
+			stmt.DateSent=DateTimeOD.Today;
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.Email;
 			stmt.HidePayment=false;
@@ -3509,7 +3509,7 @@ namespace OpenDental {
 		private void menuItemReceipt_Click(object sender,EventArgs e) {
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.PatNum;
-			stmt.DateSent=DateTime.Today;
+			stmt.DateSent=DateTimeOD.Today;
 			stmt.IsSent=true;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=true;
@@ -3520,8 +3520,8 @@ namespace OpenDental {
 				stmt.Intermingled = true;
 				stmt.SinglePatient=false;
 			}
-			stmt.DateRangeFrom=DateTime.Today;
-			stmt.DateRangeTo=DateTime.Today;
+			stmt.DateRangeFrom=DateTimeOD.Today;
+			stmt.DateRangeTo=DateTimeOD.Today;
 			stmt.Note="";
 			stmt.NoteBold="";
 			PrintStatement(stmt);
@@ -3602,7 +3602,7 @@ namespace OpenDental {
 			//At this point, all selected items are procedures or adjustments, and are not already attached, and are for a single patient.
 			Statement stmt=new Statement();
 			stmt.PatNum=PatCur.PatNum;
-			stmt.DateSent=DateTime.Today;
+			stmt.DateSent=DateTimeOD.Today;
 			stmt.IsSent=false;
 			stmt.Mode_=StatementMode.InPerson;
 			stmt.HidePayment=true;
@@ -3611,7 +3611,7 @@ namespace OpenDental {
 			stmt.IsReceipt=false;
 			stmt.IsInvoice=true;
 			stmt.DateRangeFrom=DateTime.MinValue;
-			stmt.DateRangeTo=DateTime.Today;
+			stmt.DateRangeTo=DateTimeOD.Today;
 			stmt.Note=PrefC.GetString(PrefName.BillingDefaultsInvoiceNote);
 			stmt.NoteBold="";
 			Statements.Insert(stmt);

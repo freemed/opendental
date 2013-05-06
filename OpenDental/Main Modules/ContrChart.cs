@@ -6639,7 +6639,7 @@ namespace OpenDental{
 				ProcCur.ProcDate=DateTime.MinValue;
 			}
 			else if(textDate.errorProvider1.GetError(textDate)!=""){
-				ProcCur.ProcDate=DateTime.Today;
+				ProcCur.ProcDate=DateTimeOD.Today;
 			}
 			else{
 				ProcCur.ProcDate=PIn.Date(textDate.Text);
@@ -6787,7 +6787,7 @@ namespace OpenDental{
 				ProcCur.ProcDate=DateTime.MinValue;
 			}
 			else if(textDate.errorProvider1.GetError(textDate)!=""){
-				ProcCur.ProcDate=DateTime.Today;
+				ProcCur.ProcDate=DateTimeOD.Today;
 			}
 			else{
 				ProcCur.ProcDate=PIn.Date(textDate.Text);
@@ -6941,7 +6941,7 @@ namespace OpenDental{
 				return;
 			}
 			List<string> procCodes=new List<string>();
-			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
+			Procedures.SetDateFirstVisit(DateTimeOD.Today,1,PatCur);
 			Procedure ProcCur;
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {
 				isValid=true;
@@ -7183,7 +7183,7 @@ namespace OpenDental{
 					return;
 				}
 			#endif 
-			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
+			Procedures.SetDateFirstVisit(DateTimeOD.Today,1,PatCur);
 			bool isValid;
 			TreatmentArea tArea;
 			int quadCount=0;//automates quadrant codes.
@@ -7485,7 +7485,7 @@ namespace OpenDental{
 				return;
 			}
 			List<string> procCodes=new List<string>();
-			Procedures.SetDateFirstVisit(DateTime.Today,1,PatCur);
+			Procedures.SetDateFirstVisit(DateTimeOD.Today,1,PatCur);
 			TreatmentArea tArea;
 			Procedure ProcCur;
 			for(int n=0;n==0 || n<toothChart.SelectedTeeth.Count;n++) {//always loops at least once.
@@ -8079,7 +8079,7 @@ namespace OpenDental{
 			AptCur.ProvNum=PatCur.PriProv;
 			AptCur.ClinicNum=PatCur.ClinicNum;
 			AptCur.AptStatus=ApptStatus.Planned;
-			AptCur.AptDateTime=DateTime.Today;
+			AptCur.AptDateTime=DateTimeOD.Today;
 			AptCur.Pattern="/X/";
 			AptCur.TimeLocked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
 			Appointments.Insert(AptCur);
@@ -9972,7 +9972,7 @@ namespace OpenDental{
 			//Simply add the procedure to the customers account.
 			Procedure proc=new Procedure();
 			proc.CodeNum=ProcedureCodes.GetCodeNum(procCode);
-			proc.DateEntryC=DateTime.Today;
+			proc.DateEntryC=DateTimeOD.Today;
 			proc.PatNum=PatCur.PatNum;
 			proc.ProcDate=DateTime.Now;
 			proc.DateTP=DateTime.Now;

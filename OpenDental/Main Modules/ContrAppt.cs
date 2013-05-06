@@ -1893,7 +1893,7 @@ namespace OpenDental {
 
 		///<summary>Clicked today.</summary>
 		private void butToday_Click(object sender,System.EventArgs e) {
-			AppointmentL.DateSelected=DateTime.Today;
+			AppointmentL.DateSelected=DateTimeOD.Today;
 			SetWeeklyView(radioWeek.Checked);
 		}
 
