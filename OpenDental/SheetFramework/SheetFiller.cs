@@ -292,7 +292,7 @@ namespace OpenDental{
 				}
 				Carrier carrier=null;
 				List<Benefit> benefitList=Benefits.Refresh(patPlanList,subList);
-				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTime.Today,subList);
+				List<ClaimProcHist> histList=ClaimProcs.GetHistList(pat.PatNum,benefitList,patPlanList,planList,DateTimeOD.Today,subList);
 				double doubAnnualMax;
 				double doubDeductible;
 				double doubDeductibleUsed;

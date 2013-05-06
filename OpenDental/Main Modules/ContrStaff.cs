@@ -1191,7 +1191,7 @@ namespace OpenDental{
 
 		///<summary>Gets all new data from the database for the text messages.  Not sure yet if this will also reset the lights along the left.</summary>
 		private void RefreshFullMessages(){
-			SignalList=Signalods.RefreshFullText(DateTime.Today);//since midnight this morning.
+			SignalList=Signalods.RefreshFullText(DateTimeOD.Today);//since midnight this morning.
 			FillMessages();
 		}
 
@@ -1421,7 +1421,7 @@ namespace OpenDental{
 			else{
 				labelDays.Visible=false;
 				textDays.Visible=false;
-				SignalList=Signalods.RefreshFullText(DateTime.Today);//since midnight this morning.
+				SignalList=Signalods.RefreshFullText(DateTimeOD.Today);//since midnight this morning.
 			}
 			FillMessages();
 		}
@@ -1434,7 +1434,7 @@ namespace OpenDental{
 			try{
 				int days=int.Parse(textDays.Text);
 				errorProvider1.SetError(textDays,"");
-				SignalList=Signalods.RefreshFullText(DateTime.Today.AddDays(-days));
+				SignalList=Signalods.RefreshFullText(DateTimeOD.Today.AddDays(-days));
 				FillMessages();
 			}
 			catch{

@@ -1796,7 +1796,7 @@ namespace OpenDental{
 					FormBackupReminder FormBR=new FormBackupReminder();
 					FormBR.ShowDialog();
 					if(FormBR.DialogResult==DialogResult.OK){
-						Prefs.UpdateDateT(PrefName.BackupReminderLastDateRun,DateTime.Today);
+						Prefs.UpdateDateT(PrefName.BackupReminderLastDateRun,DateTimeOD.Today);
 					}
 					else{
 						Application.Exit();

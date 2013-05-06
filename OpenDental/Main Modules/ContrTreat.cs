@@ -853,7 +853,7 @@ namespace OpenDental{
 				PatPlanList=PatPlans.Refresh(patNum);
 				BenefitList=Benefits.Refresh(PatPlanList,SubList);
 				ClaimList=Claims.Refresh(PatCur.PatNum);
-				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTime.Today,SubList);
+				HistList=ClaimProcs.GetHistList(PatCur.PatNum,BenefitList,PatPlanList,InsPlanList,DateTimeOD.Today,SubList);
 			}
 		}
 
@@ -2770,7 +2770,7 @@ namespace OpenDental{
 			}
 			ClaimCur.PatNum=PatCur.PatNum;
 			ClaimCur.ClaimStatus="W";
-			ClaimCur.DateSent=DateTime.Today;
+			ClaimCur.DateSent=DateTimeOD.Today;
 			ClaimCur.PlanNum=FormIPS.SelectedPlan.PlanNum;
 			ClaimCur.InsSubNum=FormIPS.SelectedSub.InsSubNum;
 			ClaimCur.ProvTreat=0;

@@ -79,7 +79,7 @@ namespace OpenDental {
 			LayoutToolBar();
 			if(Tasks.LastOpenList==null) {//first time openning
 				TreeHistory=new List<TaskList>();
-				cal.SelectionStart=DateTime.Today;
+				cal.SelectionStart=DateTimeOD.Today;
 			}
 			else {//reopening
 				tabContr.SelectedIndex=Tasks.LastOpenGroup;
@@ -553,7 +553,7 @@ namespace OpenDental {
 					startDate=PIn.Date(textStartDate.Text);
 				}
 				else{//invalid date
-					startDate=DateTime.Today.AddDays(-7);
+					startDate=DateTimeOD.Today.AddDays(-7);
 				}
 			}
 			if(this.DesignMode){
