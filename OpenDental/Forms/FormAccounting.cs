@@ -316,7 +316,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			if(textDate.errorProvider1.GetError(textDate) != ""){//error
-				table=Accounts.GetFullList(DateTime.Today,checkInactive.Checked);
+				table=Accounts.GetFullList(DateTimeOD.Today,checkInactive.Checked);
 			}
 			else{
 				table=Accounts.GetFullList(PIn.Date(textDate.Text),checkInactive.Checked);

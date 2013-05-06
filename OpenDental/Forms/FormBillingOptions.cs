@@ -868,7 +868,7 @@ namespace OpenDental{
 			}
 			DateTime lastStatement=PIn.Date(textLastStatement.Text);
 			if(textLastStatement.Text=="") {
-				lastStatement=DateTime.Today;
+				lastStatement=DateTimeOD.Today;
 			}
 			string getAge="";
 			if(comboAge.SelectedIndex==1) getAge="30";
@@ -892,7 +892,7 @@ namespace OpenDental{
 				checkExcludeInactive.Checked,checkIncludeChanged.Checked,checkExcludeInsPending.Checked,
 				checkExcludeIfProcs.Checked,checkIgnoreInPerson.Checked,ClinicNum);
 			DateTime dateRangeFrom=DateTime.MinValue;
-			DateTime dateRangeTo=DateTime.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
+			DateTime dateRangeTo=DateTimeOD.Today;//Needed for payplan accuracy.//new DateTime(2200,1,1);
 			if(textDateStart.Text!=""){
 				dateRangeFrom=PIn.Date(textDateStart.Text);
 			}
@@ -914,7 +914,7 @@ namespace OpenDental{
 				stmt=new Statement();
 				stmt.DateRangeFrom=dateRangeFrom;
 				stmt.DateRangeTo=dateRangeTo;
-				stmt.DateSent=DateTime.Today;
+				stmt.DateSent=DateTimeOD.Today;
 				stmt.DocNum=0;
 				stmt.HidePayment=false;
 				stmt.Intermingled=checkIntermingled.Checked;

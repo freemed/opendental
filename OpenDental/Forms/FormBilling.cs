@@ -830,7 +830,7 @@ namespace OpenDental{
 					}
 				}
 				stmt.IsSent=true;
-				stmt.DateSent=DateTime.Today;
+				stmt.DateSent=DateTimeOD.Today;
 				FormST.CreateStatementPdf(stmt,pat,fam,dataSet);
 				if(stmt.DocNum==0){
 					MsgBox.Show(this,"Failed to save PDF.  In Setup, DataPaths, please make sure the top radio button is checked.");
@@ -955,7 +955,7 @@ namespace OpenDental{
 						//msgbox.ShowDialog();
 						//loop through all statements and mark sent
 						for(int i=0;i<stateNumsElect.Count;i++) {
-							Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+							Statements.MarkSent(stateNumsElect[i],DateTimeOD.Today);
 						}
 					}
 					catch(Exception ex) {
@@ -977,7 +977,7 @@ namespace OpenDental{
 					}
 					File.WriteAllText(dlg.FileName,strBuildElect.ToString());
 					for(int i=0;i<stateNumsElect.Count;i++) {
-						Statements.MarkSent(stateNumsElect[i],DateTime.Today);
+						Statements.MarkSent(stateNumsElect[i],DateTimeOD.Today);
 					}
 				}
 			}

@@ -687,8 +687,8 @@ namespace OpenDental {
 			//js I had to add this section in 7.8 to make it compile.  Not tested.
 			if(stmt==null) {
 				stmt.SinglePatient = true;
-				stmt.DateRangeFrom = System.DateTime.Today;
-				stmt.DateRangeTo = System.DateTime.Today;
+				stmt.DateRangeFrom = DateTimeOD.Today;
+				stmt.DateRangeTo = DateTimeOD.Today;
 				stmt.Intermingled = true;
 				stmt.PatNum=(long)PatientID;
 			}

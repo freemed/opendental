@@ -1266,7 +1266,7 @@ namespace OpenDental{
 			}
 			PerioExamCur=new PerioExam();
 			PerioExamCur.PatNum=PatCur.PatNum;
-			PerioExamCur.ExamDate=DateTime.Today;
+			PerioExamCur.ExamDate=DateTimeOD.Today;
 			PerioExamCur.ProvNum=PatCur.PriProv;
 			PerioExams.Insert(PerioExamCur);
 			List<int> skippedTeeth=new List<int>();//int 1-32
