@@ -97,6 +97,33 @@ namespace OpenDental {
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 3 (Summary).</summary>
 		private void FillProviderAdjustmentDetails() {
+			string provAdjNPI=x835.GetProviderLevelAdjustmentNPI();
+			DateTime dateFiscalPeriod=x835.GetProviderLevelAdjustmentFiscalPeriodDate();
+			if(provAdjNPI!="") {
+				gridProviderAdjustments.Title="Provider Adjustments for NPI: "+provAdjNPI+" Fiscal Period: "+dateFiscalPeriod.ToShortDateString();
+			}
+			else {
+				gridProviderAdjustments.Title="Provider Adjustments (none)";
+			}
+			gridProviderAdjustments.BeginUpdate();
+			gridProviderAdjustments.Columns.Clear();
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("ReasonCode",80));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("RefIdent",100));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("Description",220));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("Amount",100));
+			gridProviderAdjustments.EndUpdate();
+			gridProviderAdjustments.BeginUpdate();
+			gridProviderAdjustments.Rows.Clear();
+			List<string[]> providerAdjustments=x835.GetProviderLevelAdjustments();
+			for(int i=0;i<providerAdjustments.Count;i++) {
+				ODGridRow row=new ODGridRow();
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][0]));//ReasonCode
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][1]));//RefIdent
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][2]));//Description
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][3]));//Amount
+				gridProviderAdjustments.Rows.Add(row);
+			}
+			gridProviderAdjustments.EndUpdate();
 		}
 
 		private void butRawMessage_Click(object sender,EventArgs e) {

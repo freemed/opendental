@@ -28,6 +28,8 @@ namespace OpenDentBusiness
 		private List<int> segNumsCLP;
 		///<summary>SVC of loop 2110 (pg. 186). Service (procedure) payment information.</summary>
 		private List<int> segNumsSVC;
+		///<summary>PLB segment (pg.217). Provider Adjustment. Situational. Zero or one instance in the entire message. This is the footer and table 3 if pesent.</summary>
+		private X12Segment segPLB;
 
     public static bool Is835(X12object xobj) {
       if(xobj.FunctGroups.Count!=1) {//Exactly 1 GS segment in each 835.
@@ -55,6 +57,9 @@ namespace OpenDentBusiness
 				}
 				else if(seg.SegmentID=="N1" && seg.Get(1)=="PE") {
 					segN1_PE=seg;
+				}
+				else if(seg.SegmentID=="PLB") {
+					segPLB=seg;
 				}
 			}
 			segNumsCLP=new List<int>();
@@ -270,6 +275,179 @@ namespace OpenDentBusiness
       }
       return result;
     }
+
+		///<summary>Gets the NPI required in PLB01 if a PLB segment is present. Returns empty string if no PLB segment is present.</summary>
+		public string GetProviderLevelAdjustmentNPI() {
+			if(segPLB==null) {
+				return "";
+			}
+			return segPLB.Get(1);
+		}
+
+		///<summary>Gets the fiscal period date required in PLB02 if a PLB segment is present. Returns 01/01/0001 if no PLB segment is present.</summary>
+		public DateTime GetProviderLevelAdjustmentFiscalPeriodDate() {
+			if(segPLB==null) {
+				return DateTime.MinValue;
+			}
+			string dateFiscalPeriod=segPLB.Get(2);
+			if(dateFiscalPeriod.Length<8) {
+				return DateTime.MinValue;
+			}
+			int dateEffectiveYear=int.Parse(dateFiscalPeriod.Substring(0,4));
+			int dateEffectiveMonth=int.Parse(dateFiscalPeriod.Substring(4,2));
+			int dateEffectiveDay=int.Parse(dateFiscalPeriod.Substring(6,2));
+			return new DateTime(dateEffectiveYear,dateEffectiveMonth,dateEffectiveDay);
+		}
+
+		///<summary>Each item returned contains a string[] with values ReasonCode (2/2), ReferenceIdentification (1/50), ReasonDescription, Amount (1/18).</summary>
+		public List<string[]> GetProviderLevelAdjustments() {
+			List<string[]> result=new List<string[]>();
+			if(segPLB==null) {
+				return result;
+			}
+			//PLB03 is required.
+			int segNumAdjCode=3;
+			while(segNumAdjCode<segPLB.Elements.Length) {
+				string reasonCode=segPLB.Get(segNumAdjCode,1);
+				//For each adjustment reason code, the reference identification is optional.
+				string referenceIdentification="";
+				if(segPLB.Get(3).Length>reasonCode.Length) {
+					referenceIdentification=segPLB.Get(3,2);
+				}
+				//For each adjustment reason code, an amount is required.
+				string amount=segPLB.Get(segNumAdjCode+1);
+				result.Add(new string[] { reasonCode, referenceIdentification, GetAdjustmentReasonDescriptionForCode(reasonCode), amount});
+			}
+			return result;
+		}
+
+		private string GetAdjustmentReasonDescriptionForCode(string adjReasonCode) {
+			if(adjReasonCode=="50") {
+				return "Late Charge";
+			}
+			if(adjReasonCode=="51") {
+				return "Interest Penalty Charge";
+			}
+			if(adjReasonCode=="72") {
+				return "Authorized Return";
+			}
+			if(adjReasonCode=="90") {
+				return "Early Payment Allowance";
+			}
+			if(adjReasonCode=="AH") {
+				return "Origination Fee";
+			}
+			if(adjReasonCode=="AM") {
+				return "Applied to Borrower's Account";
+			}
+			if(adjReasonCode=="AP") {
+				return "Acceleration of Benefits";
+			}
+			if(adjReasonCode=="B2") {
+				return "Rebate";
+			}
+			if(adjReasonCode=="B3") {
+				return "Recovery Allowance";
+			}
+			if(adjReasonCode=="BD") {
+				return "Bad Debt Adjustment";
+			}
+			if(adjReasonCode=="BN") {
+				return "Bonus";
+			}
+			if(adjReasonCode=="C5") {
+				return "Temporary Allowance";
+			}
+			if(adjReasonCode=="CR") {
+				return "Capitation Interest";
+			}
+			if(adjReasonCode=="CS") {
+				return "Adjustment";
+			}
+			if(adjReasonCode=="CT") {
+				return "Capitation Payment";
+			}
+			if(adjReasonCode=="CV") {
+				return "Capital Passthru";
+			}
+			if(adjReasonCode=="CW") {
+				return "Certified Registered Nurse Anesthetist Passthru";
+			}
+			if(adjReasonCode=="DM") {
+				return "Direct Medical Education Passthru";
+			}
+			if(adjReasonCode=="E3") {
+				return "Withholding";
+			}
+			if(adjReasonCode=="FB") {
+				return "Forwarding Balance";
+			}
+			if(adjReasonCode=="FC") {
+				return "Fund Allocation";
+			}
+			if(adjReasonCode=="GO") {
+				return "Graduate Medical Education Passthru";
+			}
+			if(adjReasonCode=="HM") {
+				return "Hemophilia Clotting Factor Supplement";
+			}
+			if(adjReasonCode=="IP") {
+				return "Incentive Premium Payment";
+			}
+			if(adjReasonCode=="IR") {
+				return "Internal Revenue Service Withholding";
+			}
+			if(adjReasonCode=="IS") {
+				return "Interim Settlement";
+			}
+			if(adjReasonCode=="J1") {
+				return "Nonreimbursable";
+			}
+			if(adjReasonCode=="L3") {
+				return "Penalty";
+			}
+			if(adjReasonCode=="L6") {
+				return "Interest Owed";
+			}
+			if(adjReasonCode=="LE") {
+				return "Levy";
+			}
+			if(adjReasonCode=="LS") {
+				return "Lump Sum";
+			}
+			if(adjReasonCode=="OA") {
+				return "Organ Acquisition Passthru";
+			}
+			if(adjReasonCode=="OB") {
+				return "Offset for Affiliated Providers";
+			}
+			if(adjReasonCode=="PI") {
+				return "Periodic Interim Payment";
+			}
+			if(adjReasonCode=="PL") {
+				return "Payment Final";
+			}
+			if(adjReasonCode=="RA") {
+				return "Retro-activity Adjustment";
+			}
+			if(adjReasonCode=="RE") {
+				return "Return on Equity";
+			}
+			if(adjReasonCode=="SL") {
+				return "Student Loan Repayment";
+			}
+			if(adjReasonCode=="TL") {
+				return "Third Party Liability";
+			}
+			if(adjReasonCode=="WO") {
+				return "Overpayment Recovery";
+			}
+			if(adjReasonCode=="WU") {
+				return "Unspecified Recovery";
+			}
+			return "UNKNOWN";
+		}
+			
 
   }
 }
