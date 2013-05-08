@@ -203,6 +203,7 @@ namespace OpenDental{
 			RxPatCur.Sig=RxDefCur.Sig;
 			RxPatCur.Disp=RxDefCur.Disp;
 			RxPatCur.Refills=RxDefCur.Refills;
+			RxPatCur.RxCui=RxDefCur.RxCui;
 			if(PrefC.GetBool(PrefName.RxSendNewToQueue)) {
 				RxPatCur.SendStatus=RxSendStatus.InElectQueue;
 			}
