@@ -1787,7 +1787,9 @@ namespace OpenDental {
 				butBackWeek,
 				butBackMonth,
 				butFwdWeek,
-				butFwdMonth
+				butFwdMonth,
+				gridEmpSched,
+				gridWaiting
 				});
 			LayoutToolBar();
 			//Appointment action buttons

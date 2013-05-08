@@ -24,7 +24,7 @@ namespace OpenDental {
 			textGuardian.Text=Fam.GetNameInFamFL(GuardianCur.PatNumGuardian);
 			string[] relationshipNames=Enum.GetNames(typeof(GuardianRelationship));
 			for(int i=0;i<relationshipNames.Length;i++){
-				listRelationship.Items.Add(relationshipNames[i]);
+				listRelationship.Items.Add(Lan.g("enumGuardianRelationship",relationshipNames[i]));
 			}
 			listRelationship.SelectedIndex=(int)GuardianCur.Relationship;
 		}

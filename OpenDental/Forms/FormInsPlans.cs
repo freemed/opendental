@@ -103,9 +103,9 @@ namespace OpenDental{
 			this.groupBox2.Controls.Add(this.radioOrderCarrier);
 			this.groupBox2.Controls.Add(this.radioOrderEmp);
 			this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.groupBox2.Location = new System.Drawing.Point(740,3);
+			this.groupBox2.Location = new System.Drawing.Point(740, 3);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(207,33);
+			this.groupBox2.Size = new System.Drawing.Size(207, 33);
 			this.groupBox2.TabIndex = 2;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Order By";
@@ -113,9 +113,9 @@ namespace OpenDental{
 			// radioOrderCarrier
 			// 
 			this.radioOrderCarrier.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioOrderCarrier.Location = new System.Drawing.Point(98,13);
+			this.radioOrderCarrier.Location = new System.Drawing.Point(98, 13);
 			this.radioOrderCarrier.Name = "radioOrderCarrier";
-			this.radioOrderCarrier.Size = new System.Drawing.Size(84,16);
+			this.radioOrderCarrier.Size = new System.Drawing.Size(84, 16);
 			this.radioOrderCarrier.TabIndex = 1;
 			this.radioOrderCarrier.Text = "Carrier";
 			this.radioOrderCarrier.Click += new System.EventHandler(this.radioOrderCarrier_Click);
@@ -124,9 +124,9 @@ namespace OpenDental{
 			// 
 			this.radioOrderEmp.Checked = true;
 			this.radioOrderEmp.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.radioOrderEmp.Location = new System.Drawing.Point(9,13);
+			this.radioOrderEmp.Location = new System.Drawing.Point(9, 13);
 			this.radioOrderEmp.Name = "radioOrderEmp";
-			this.radioOrderEmp.Size = new System.Drawing.Size(83,16);
+			this.radioOrderEmp.Size = new System.Drawing.Size(83, 16);
 			this.radioOrderEmp.TabIndex = 0;
 			this.radioOrderEmp.TabStop = true;
 			this.radioOrderEmp.Text = "Employer";
@@ -135,89 +135,89 @@ namespace OpenDental{
 			// label1
 			// 
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label1.Location = new System.Drawing.Point(7,7);
+			this.label1.Location = new System.Drawing.Point(7, 7);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100,17);
+			this.label1.Size = new System.Drawing.Size(100, 17);
 			this.label1.TabIndex = 15;
 			this.label1.Text = "Employer";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textEmployer
 			// 
-			this.textEmployer.Location = new System.Drawing.Point(113,4);
+			this.textEmployer.Location = new System.Drawing.Point(113, 4);
 			this.textEmployer.Name = "textEmployer";
-			this.textEmployer.Size = new System.Drawing.Size(140,20);
+			this.textEmployer.Size = new System.Drawing.Size(140, 20);
 			this.textEmployer.TabIndex = 1;
 			this.textEmployer.TextChanged += new System.EventHandler(this.textEmployer_TextChanged);
 			// 
 			// textCarrier
 			// 
-			this.textCarrier.Location = new System.Drawing.Point(113,25);
+			this.textCarrier.Location = new System.Drawing.Point(113, 25);
 			this.textCarrier.Name = "textCarrier";
-			this.textCarrier.Size = new System.Drawing.Size(140,20);
+			this.textCarrier.Size = new System.Drawing.Size(140, 20);
 			this.textCarrier.TabIndex = 0;
 			this.textCarrier.TextChanged += new System.EventHandler(this.textCarrier_TextChanged);
 			// 
 			// label2
 			// 
 			this.label2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label2.Location = new System.Drawing.Point(7,28);
+			this.label2.Location = new System.Drawing.Point(7, 28);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100,17);
+			this.label2.Size = new System.Drawing.Size(100, 17);
 			this.label2.TabIndex = 17;
 			this.label2.Text = "Carrier";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textGroupNum
 			// 
-			this.textGroupNum.Location = new System.Drawing.Point(372,25);
+			this.textGroupNum.Location = new System.Drawing.Point(372, 25);
 			this.textGroupNum.Name = "textGroupNum";
-			this.textGroupNum.Size = new System.Drawing.Size(140,20);
+			this.textGroupNum.Size = new System.Drawing.Size(140, 20);
 			this.textGroupNum.TabIndex = 20;
 			this.textGroupNum.TextChanged += new System.EventHandler(this.textGroupNum_TextChanged);
 			// 
 			// label3
 			// 
 			this.label3.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label3.Location = new System.Drawing.Point(266,28);
+			this.label3.Location = new System.Drawing.Point(266, 28);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(100,17);
+			this.label3.Size = new System.Drawing.Size(100, 17);
 			this.label3.TabIndex = 23;
 			this.label3.Text = "Group Num";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textGroupName
 			// 
-			this.textGroupName.Location = new System.Drawing.Point(372,4);
+			this.textGroupName.Location = new System.Drawing.Point(372, 4);
 			this.textGroupName.Name = "textGroupName";
-			this.textGroupName.Size = new System.Drawing.Size(140,20);
+			this.textGroupName.Size = new System.Drawing.Size(140, 20);
 			this.textGroupName.TabIndex = 21;
 			this.textGroupName.TextChanged += new System.EventHandler(this.textGroupName_TextChanged);
 			// 
 			// label4
 			// 
 			this.label4.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label4.Location = new System.Drawing.Point(266,7);
+			this.label4.Location = new System.Drawing.Point(266, 7);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100,17);
+			this.label4.Size = new System.Drawing.Size(100, 17);
 			this.label4.TabIndex = 22;
 			this.label4.Text = "Group Name";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textTrojanID
 			// 
-			this.textTrojanID.Location = new System.Drawing.Point(616,4);
+			this.textTrojanID.Location = new System.Drawing.Point(616, 4);
 			this.textTrojanID.Name = "textTrojanID";
-			this.textTrojanID.Size = new System.Drawing.Size(95,20);
+			this.textTrojanID.Size = new System.Drawing.Size(95, 20);
 			this.textTrojanID.TabIndex = 25;
 			this.textTrojanID.TextChanged += new System.EventHandler(this.textTrojanID_TextChanged);
 			// 
 			// labelTrojanID
 			// 
 			this.labelTrojanID.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.labelTrojanID.Location = new System.Drawing.Point(536,7);
+			this.labelTrojanID.Location = new System.Drawing.Point(536, 7);
 			this.labelTrojanID.Name = "labelTrojanID";
-			this.labelTrojanID.Size = new System.Drawing.Size(74,17);
+			this.labelTrojanID.Size = new System.Drawing.Size(74, 17);
 			this.labelTrojanID.TabIndex = 26;
 			this.labelTrojanID.Text = "Trojan ID";
 			this.labelTrojanID.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -225,9 +225,9 @@ namespace OpenDental{
 			// checkShowHidden
 			// 
 			this.checkShowHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShowHidden.Location = new System.Drawing.Point(526,28);
+			this.checkShowHidden.Location = new System.Drawing.Point(526, 28);
 			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(104,20);
+			this.checkShowHidden.Size = new System.Drawing.Size(104, 20);
 			this.checkShowHidden.TabIndex = 27;
 			this.checkShowHidden.Text = "Show Hidden";
 			this.checkShowHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -236,16 +236,16 @@ namespace OpenDental{
 			// 
 			// butMerge
 			// 
-			this.butMerge.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMerge.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butMerge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butMerge.Autosize = true;
 			this.butMerge.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butMerge.CornerRadius = 4F;
 			this.butMerge.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butMerge.Location = new System.Drawing.Point(11,637);
+			this.butMerge.Location = new System.Drawing.Point(11, 637);
 			this.butMerge.Name = "butMerge";
-			this.butMerge.Size = new System.Drawing.Size(74,24);
+			this.butMerge.Size = new System.Drawing.Size(74, 24);
 			this.butMerge.TabIndex = 24;
 			this.butMerge.Text = "Combine";
 			this.butMerge.Click += new System.EventHandler(this.butMerge_Click);
@@ -256,43 +256,43 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(11,51);
+			this.gridMain.Location = new System.Drawing.Point(11, 51);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(936,579);
+			this.gridMain.Size = new System.Drawing.Size(936, 579);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "Insurance Plans";
-			this.gridMain.TranslationName = "TableTemplates";
+			this.gridMain.TranslationName = "TableInsurancePlans";
 			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(774,637);
+			this.butOK.Location = new System.Drawing.Point(774, 637);
 			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(78,24);
+			this.butOK.Size = new System.Drawing.Size(78, 24);
 			this.butOK.TabIndex = 4;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
 			// butBlank
 			// 
-			this.butBlank.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butBlank.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBlank.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butBlank.Autosize = true;
 			this.butBlank.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butBlank.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butBlank.CornerRadius = 4F;
 			this.butBlank.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butBlank.Location = new System.Drawing.Point(427,637);
+			this.butBlank.Location = new System.Drawing.Point(427, 637);
 			this.butBlank.Name = "butBlank";
-			this.butBlank.Size = new System.Drawing.Size(87,24);
+			this.butBlank.Size = new System.Drawing.Size(87, 24);
 			this.butBlank.TabIndex = 3;
 			this.butBlank.Text = "Blank Plan";
 			this.butBlank.Visible = false;
@@ -300,40 +300,40 @@ namespace OpenDental{
 			// 
 			// butCancel
 			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
 			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(869,637);
+			this.butCancel.Location = new System.Drawing.Point(869, 637);
 			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(78,24);
+			this.butCancel.Size = new System.Drawing.Size(78, 24);
 			this.butCancel.TabIndex = 5;
 			this.butCancel.Text = "Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
 			// butHide
 			// 
-			this.butHide.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butHide.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butHide.Autosize = true;
 			this.butHide.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butHide.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butHide.CornerRadius = 4F;
 			this.butHide.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butHide.Location = new System.Drawing.Point(104,637);
+			this.butHide.Location = new System.Drawing.Point(104, 637);
 			this.butHide.Name = "butHide";
-			this.butHide.Size = new System.Drawing.Size(84,24);
+			this.butHide.Size = new System.Drawing.Size(84, 24);
 			this.butHide.TabIndex = 28;
 			this.butHide.Text = "Hide Unused";
 			this.butHide.Click += new System.EventHandler(this.butHide_Click);
 			// 
 			// FormInsPlans
 			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
-			this.ClientSize = new System.Drawing.Size(962,669);
+			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+			this.ClientSize = new System.Drawing.Size(962, 669);
 			this.Controls.Add(this.butHide);
 			this.Controls.Add(this.checkShowHidden);
 			this.Controls.Add(this.textTrojanID);
@@ -401,32 +401,32 @@ namespace OpenDental{
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Employer",140);
+			ODGridColumn col=new ODGridColumn(Lans.g("TableInsurancePlans","Employer"),140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Carrier",140);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Carrier"),140);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Phone",82);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Phone"),82);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Address",120);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Address"),120);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("City",80);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","City"),80);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("ST",25);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","ST"),25);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Zip",50);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Zip"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Group#",70);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Group#"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Group Name",90);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Group Name"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("noE",35);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","noE"),35);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("ElectID",45);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","ElectID"),45);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Subs",40);
+			col=new ODGridColumn(Lans.g("TableInsurancePlans","Subs"),40);
 			gridMain.Columns.Add(col);
 			if(trojan){
-				col=new ODGridColumn("TrojanID",60);
+				col=new ODGridColumn(Lans.g("TableInsurancePlans","TrojanID"),60);
 				gridMain.Columns.Add(col);
 			}
 			//PlanNote not shown
