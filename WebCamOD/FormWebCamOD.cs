@@ -122,7 +122,7 @@ namespace WebCamOD {
 			if(extension==0) {//if this person is on break
 				return;//don't save a screenshot
 			}
-			string folder=@"\\10.10.1.189\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
+			string folder=@"\\serverfiles\storage\My\Jordan\ScreenshotsByWorkstation\"+Environment.MachineName;
 			if(!Directory.Exists(folder)) {
 				Directory.CreateDirectory(folder);
 			}
