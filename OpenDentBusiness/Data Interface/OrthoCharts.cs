@@ -20,9 +20,9 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static List<OrthoChart> GetAllForPatient(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<OrthoChart>>(MethodBase.GetCurrentMethod());
+				return Meth.GetObject<List<OrthoChart>>(MethodBase.GetCurrentMethod(),patNum);
 			}
-			string command="SELECT * FROM orthochart where patnum ="+patNum.ToString();
+			string command="SELECT * FROM orthochart WHERE PatNum ="+POut.Long(patNum);
 			return Crud.OrthoChartCrud.SelectMany(command);
 		}
 
