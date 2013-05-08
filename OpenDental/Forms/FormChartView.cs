@@ -1137,6 +1137,7 @@ namespace OpenDental{
 				ChartViews.Insert(ChartViewCur);
 			}
 			DisplayFields.SaveListForChartView(ListShowing,ChartViewCur.ChartViewNum);
+			DisplayFields.RefreshCache();
 			DialogResult=DialogResult.OK;
 		}
 
