@@ -23,7 +23,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			TableResellers=Resellers.GetResellerList(textLName.Text,textFName.Text,textHmPhone.Text,textAddress.Text,textCity.Text,textState.Text,textPatNum.Text,textEmail.Text,checkShowInactive.Checked);
+			TableResellers=Resellers.GetResellerList();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("PatNum",80);
@@ -33,8 +33,6 @@ namespace OpenDental {
 			col=new ODGridColumn("FName",100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Preferred",100);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("HmPhone",100);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("WkPhone",100);
 			gridMain.Columns.Add(col);
@@ -60,7 +58,6 @@ namespace OpenDental {
 				row.Cells.Add(TableResellers.Rows[i]["LName"].ToString());
 				row.Cells.Add(TableResellers.Rows[i]["FName"].ToString());
 				row.Cells.Add(TableResellers.Rows[i]["Preferred"].ToString());
-				row.Cells.Add(TableResellers.Rows[i]["HmPhone"].ToString());
 				row.Cells.Add(TableResellers.Rows[i]["WkPhone"].ToString());
 				row.Cells.Add(TableResellers.Rows[i]["WirelessPhone"].ToString());
 				row.Cells.Add(TableResellers.Rows[i]["PhoneNumberVal"].ToString());
@@ -73,46 +70,6 @@ namespace OpenDental {
 			}
 			gridMain.EndUpdate();
 		}
-
-		#region TextChanged
-
-		private void textLName_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textFName_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textHmPhone_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textAddress_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textCity_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textState_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textPatNum_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void textEmail_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		private void checkShowInactive_CheckedChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
-
-		#endregion TextChanged
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			Reseller reseller=Resellers.GetOne(PIn.Long(TableResellers.Rows[e.Row]["ResellerNum"].ToString()));

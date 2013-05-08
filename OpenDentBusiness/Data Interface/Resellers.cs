@@ -45,48 +45,15 @@ namespace OpenDentBusiness {
 			Db.NonQ(command);
 		}
 
-		///<summary>Gets a list of resellers and their patient information based on the criteria passed in.  Only used from FormResellers to fill the grid.</summary>
-		public static DataTable GetResellerList(string lname,string fname,string phone,string address,string city,string state,string patNum,string email,bool showInactive) {
+		///<summary>Gets a list of resellers and some of their information.  Only used from FormResellers to fill the grid.</summary>
+		public static DataTable GetResellerList() {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),lname,fname,phone,address,city,state,patNum,email,showInactive);
+				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
-			string phonedigits="";
-			for(int i=0;i<phone.Length;i++) {
-				if(Regex.IsMatch(phone[i].ToString(),"[0-9]")) {
-					phonedigits=phonedigits+phone[i];
-				}
-			}
-			string regexp="";
-			for(int i=0;i<phonedigits.Length;i++) {
-				if(i!=0) {
-					regexp+="[^0-9]*";//zero or more intervening digits that are not numbers
-				}
-				regexp+=phonedigits[i];
-			}
-			string command="SELECT ResellerNum,patient.PatNum,LName,FName,Preferred,HmPhone,WkPhone,WirelessPhone,PhoneNumberVal,Address,City,State,Email,PatStatus "
+			string command="SELECT ResellerNum,patient.PatNum,LName,FName,Preferred,WkPhone,WirelessPhone,PhoneNumberVal,Address,City,State,Email,PatStatus "
 				+"FROM reseller "
 				+"LEFT JOIN patient ON reseller.PatNum=patient.PatNum "
 				+"LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
-			if(regexp!="") {
-				command+="AND phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
-			}
-			command+="WHERE PatStatus!='"+POut.Int((int)PatientStatus.Deleted)+"' ";
-			if(!showInactive) {
-				command+="AND PatStatus!='"+POut.Int((int)PatientStatus.Inactive)+"' ";
-			}
-			command+="AND (LName LIKE '"+POut.String(lname)+"%' OR Preferred LIKE '"+POut.String(lname)+"%') "
-				+"AND (FName LIKE '"+POut.String(fname)+"%' OR Preferred LIKE '"+POut.String(fname)+"%') ";
-			if(regexp!="") {
-				command+="AND (HmPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR WkPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR WirelessPhone REGEXP '"+POut.String(regexp)+"' "
-					+"OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"') ";
-			}
-			command+=(address.Length>0?"AND Address LIKE '%"+POut.String(address)+"%' ":"")
-					+(city.Length>0?"AND City LIKE '"+POut.String(city)+"%' ":"")
-					+(state.Length>0?"AND State LIKE '"+POut.String(state)+"%' ":"")
-					+(patNum.Length>0?"AND patient.PatNum LIKE '"+POut.String(patNum)+"%' ":"")
-					+(email.Length>0?"AND Email LIKE '%"+POut.String(email)+"%' ":"");
 			return Db.GetTable(command);
 		}
 
