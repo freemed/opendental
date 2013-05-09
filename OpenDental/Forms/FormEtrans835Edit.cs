@@ -93,34 +93,68 @@ namespace OpenDental {
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 2 (Detail).</summary>
 		private void FillClaimDetails() {
+			//if(showServiceDateRange) {
+			//  const int serviceDateFromWidth=86;
+			//  col=new ODGridColumn(Lan.g(this,"ServDateFrom"),serviceDateFromWidth,HorizontalAlignment.Center);
+			//  gridMain.Columns.Add(col);
+			//  variableWidth-=serviceDateFromWidth;
+			//  const int serviceDateToWidth=80;
+			//  col=new ODGridColumn(Lan.g(this,"ServDateTo"),serviceDateToWidth,HorizontalAlignment.Center);
+			//  gridMain.Columns.Add(col);
+			//  variableWidth-=serviceDateToWidth;
+			//}
+			//else {
+			//  const int serviceDateWidth=80;
+			//  col=new ODGridColumn(Lan.g(this,"ServiceDate"),serviceDateWidth,HorizontalAlignment.Center);
+			//  gridMain.Columns.Add(col);
+			//  variableWidth-=serviceDateWidth;
+			//}
+			//const int amountWidth=80;
+			//col=new ODGridColumn(Lan.g(this,"Amount"),amountWidth,HorizontalAlignment.Center);
+			//gridMain.Columns.Add(col);
+			//variableWidth-=amountWidth;
+			//const int statusWidth=54;
+			//col=new ODGridColumn(Lan.g(this,"Status"),statusWidth,HorizontalAlignment.Center);
+			//gridMain.Columns.Add(col);
+			//variableWidth-=statusWidth;
+			//const int lnameWidth=150;
+			//const int fnameWidth=100;
+			//const int claimIdWidth=100;
+			//const int payorControlNumWidth=126;
+			//variableWidth+=-lnameWidth-fnameWidth-claimIdWidth-payorControlNumWidth;
+			//col=new ODGridColumn(Lan.g(this,"Reason"),variableWidth);
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"LName"),lnameWidth);
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"FName"),fnameWidth);
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),claimIdWidth);//CLP01
+			//gridMain.Columns.Add(col);
+			//col=new ODGridColumn(Lan.g(this,"PayorControlNum"),payorControlNumWidth);
 		}
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 3 (Summary).</summary>
 		private void FillProviderAdjustmentDetails() {
-			string provAdjNPI=x835.GetProviderLevelAdjustmentNPI();
-			DateTime dateFiscalPeriod=x835.GetProviderLevelAdjustmentFiscalPeriodDate();
-			if(provAdjNPI!="") {
-				gridProviderAdjustments.Title="Provider Adjustments for NPI: "+provAdjNPI+" Fiscal Period: "+dateFiscalPeriod.ToShortDateString();
-			}
-			else {
-				gridProviderAdjustments.Title="Provider Adjustments (none)";
-			}
 			gridProviderAdjustments.BeginUpdate();
 			gridProviderAdjustments.Columns.Clear();
-			gridProviderAdjustments.Columns.Add(new ODGridColumn("ReasonCode",80));
-			gridProviderAdjustments.Columns.Add(new ODGridColumn("RefIdent",100));
-			gridProviderAdjustments.Columns.Add(new ODGridColumn("Description",220));
-			gridProviderAdjustments.Columns.Add(new ODGridColumn("Amount",100));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("NPI",100,HorizontalAlignment.Center));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("FiscalPeriod",100,HorizontalAlignment.Center));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("Reason",440,HorizontalAlignment.Left));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("ReasonCode",100,HorizontalAlignment.Center));
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("RefIdent",100,HorizontalAlignment.Left));			
+			gridProviderAdjustments.Columns.Add(new ODGridColumn("Amount",100,HorizontalAlignment.Right));
 			gridProviderAdjustments.EndUpdate();
 			gridProviderAdjustments.BeginUpdate();
 			gridProviderAdjustments.Rows.Clear();
 			List<string[]> providerAdjustments=x835.GetProviderLevelAdjustments();
 			for(int i=0;i<providerAdjustments.Count;i++) {
 				ODGridRow row=new ODGridRow();
-				row.Cells.Add(new ODGridCell(providerAdjustments[i][0]));//ReasonCode
-				row.Cells.Add(new ODGridCell(providerAdjustments[i][1]));//RefIdent
-				row.Cells.Add(new ODGridCell(providerAdjustments[i][2]));//Description
-				row.Cells.Add(new ODGridCell(providerAdjustments[i][3]));//Amount
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][0]));//NPI
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][1]));//FiscalPeriod
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][2]));//Reason
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][3]));//ReasonCode
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][4]));//RefIdent
+				row.Cells.Add(new ODGridCell(providerAdjustments[i][5]));//Amount
 				gridProviderAdjustments.Rows.Add(row);
 			}
 			gridProviderAdjustments.EndUpdate();
