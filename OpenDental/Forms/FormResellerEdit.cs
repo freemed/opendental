@@ -12,6 +12,7 @@ namespace OpenDental {
 	public partial class FormResellerEdit:Form {
 		private Reseller ResellerCur;
 		private DataTable TableCustomers;
+		private List<ResellerService> ListServices;
 
 		public FormResellerEdit(Reseller reseller) {
 			ResellerCur=reseller;
@@ -23,12 +24,14 @@ namespace OpenDental {
 		private void FormResellerEdit_Load(object sender,EventArgs e) {
 			textUserName.Text=ResellerCur.UserName;
 			textPassword.Text=ResellerCur.ResellerPassword;
-			FillGrid();
+			FillGridMain();
+			FillGridServices();
 		}
 
-		private void FillGrid() {
+		private void FillGridMain() {
 			TableCustomers=Resellers.GetResellerCustomersList(ResellerCur.PatNum);
 			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn("PatNum",80);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("RegKey",150);
@@ -62,12 +65,52 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
+		private void FillGridServices() {
+			ListServices=ResellerServices.GetServicesForReseller(ResellerCur.ResellerNum);
+			gridServices.BeginUpdate();
+			gridServices.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("Description",150);
+			gridServices.Columns.Add(col);
+			col=new ODGridColumn("Fee",0);
+			col.TextAlign=HorizontalAlignment.Right;
+			gridServices.Columns.Add(col);
+			gridServices.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ListServices.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ProcedureCodes.GetLaymanTerm(ListServices[i].CodeNum));
+				row.Cells.Add(ListServices[i].Fee.ToString("F"));
+				gridServices.Rows.Add(row);
+			}
+			gridServices.EndUpdate();
+		}
+
 		private void menuItemAccount_Click(object sender,EventArgs e) {
 			if(gridMain.GetSelectedIndex()<0) {
 				MsgBox.Show(this,"Please select a customer first.");
 				return;
 			}
 			GotoModule.GotoAccount(PIn.Long(TableCustomers.Rows[gridMain.GetSelectedIndex()]["PatNum"].ToString()));
+		}
+
+		private void butAdd_Click(object sender,EventArgs e) {
+			ResellerService resellerService=new ResellerService();
+			resellerService.ResellerNum=ResellerCur.ResellerNum;
+			FormResellerServiceEdit FormRSE=new FormResellerServiceEdit(resellerService);
+			FormRSE.IsNew=true;
+			FormRSE.ShowDialog();
+			if(FormRSE.DialogResult==DialogResult.OK) {
+				FillGridServices();
+			}
+		}
+
+		private void gridServices_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			ResellerService resellerService=ListServices[gridServices.GetSelectedIndex()];
+			FormResellerServiceEdit FormRSE=new FormResellerServiceEdit(resellerService);
+			FormRSE.ShowDialog();
+			if(FormRSE.DialogResult==DialogResult.OK) {
+				FillGridServices();
+			}
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
