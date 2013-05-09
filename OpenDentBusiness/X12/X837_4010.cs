@@ -1739,6 +1739,12 @@ namespace OpenDentBusiness
 			if(claim.PlanNum2>0) {
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
+				if(sub2.SubscriberID.Length<2) {
+					if(strb.Length!=0) {
+						strb.Append(",");
+					}
+					strb.Append("Secondary SubscriberID");
+				}
 				Patient subscriber2=Patients.GetPat(sub2.Subscriber); //Always exists because validated in UI.
 				if(subscriber2.Birthdate.Year<1880) {
 					if(strb.Length!=0) {

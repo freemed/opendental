@@ -1234,19 +1234,24 @@ namespace OpenDentBusiness
 						+s//SBR08 2/2 Employment Status Code: Not Used.
 						+GetFilingCode(otherPlan));//SBR09 1/2 Claim Filing Indicator Code: 12=PPO,17=DMO,BL=BCBS,CI=CommercialIns,FI=FEP,HM=HMO. Will no longer be required when HIPPA National Plan ID is mandated.
 					EndSegment(sw);
-					if(claim.ClaimType!="P") {
-						double claimWriteoff=0;
-						double claimDeductible=0;
-						double claimPaidOtherIns=0;
-						for(int j=0;j<claimProcs.Count;j++) {
-							for(int k=0;k<claimProcList.Count;k++) {
-								if(ClaimProcs.IsValidClaimAdj(claimProcList[k],claimProcs[j].ProcNum,claimProcs[j].InsSubNum)) {
-									claimWriteoff+=claimProcList[k].WriteOff;
-									claimDeductible+=claimProcList[k].DedApplied;
-									claimPaidOtherIns+=claimProcList[k].InsPayAmt;
-								}
+					bool hasAdjForOtherPlans=false;
+					double claimWriteoff=0;
+					double claimDeductible=0;
+					double claimPaidOtherIns=0;
+					for(int j=0;j<claimProcs.Count;j++) {//Claim procs for this claim
+						for(int k=0;k<claimProcList.Count;k++) {//All claim procs for patient
+							if(ClaimProcs.IsValidClaimAdj(claimProcList[k],claimProcs[j].ProcNum,claimProcs[j].InsSubNum)) {//Adjustment due to other insurance plans.
+								hasAdjForOtherPlans=true;
+								claimWriteoff+=claimProcList[k].WriteOff;
+								claimDeductible+=claimProcList[k].DedApplied;
+								claimPaidOtherIns+=claimProcList[k].InsPayAmt;
 							}
 						}
+					}
+					//If sending the primary claim, then hasAdjForOtherPlans will be false, because all claimprocs for any other plans (secondary) will be estimates.
+					//If sending the secondary claim, then hasAdjForOtherPlans will be true, because the primary claimprocs will be received.
+					//This strategy works for dental and medical plans in any combination: D, M, DD, DM, MD, MM
+					if(hasAdjForOtherPlans) {
 						double claimPatientPortion=Math.Max(0,claim.ClaimFee-claimWriteoff-claimDeductible-claimPaidOtherIns);
 						//2320 CAS: (medical,institutional,dental) Claim Level Adjustments. Situational. We use this to show patient responsibility, because the adjustments here plus AMT D below must equal claim amount in CLM02 for Emdeon.
 						//Claim Adjustment Reason Codes can be found on the Washington Publishing Company website at: http://www.wpc-edi.com/reference/codelists/healthcare/claim-adjustment-reason-codes/
@@ -1362,7 +1367,7 @@ namespace OpenDentBusiness
 					//2230B N3: (medical,institutional,dental) Other Payer Address. Situational. We don't support.
 					//2330B N4: (medical,institutional,dental) Other Payer City, State, Zip Code. Situational. We don't support.
 					//2330B DTP: 573 (medical,institutional,dental) Claim Check or Remittance Date. Situational. Claim Paid date.
-					if(claim.ClaimType!="P") {
+					if(hasAdjForOtherPlans) {
 						DateTime datePaidOtherIns=DateTime.Today;
 						DateTime dtThisCP;
 						for(int j=0;j<claimProcs.Count;j++) {
@@ -2551,6 +2556,10 @@ namespace OpenDentBusiness
 			if(claim.PlanNum2>0) {
 				InsPlan insPlan2=InsPlans.GetPlan(claim.PlanNum2,new List<InsPlan>());
 				InsSub sub2=InsSubs.GetSub(claim.InsSubNum2,null);
+				if(sub2.SubscriberID.Length<2) {
+					Comma(strb);
+					strb.Append("Secondary SubscriberID");
+				}
 				Patient subscriber2=Patients.GetPat(sub2.Subscriber); //Always exists because validated in UI.
 				if(subscriber2.PatNum!=patient.PatNum) {//Patient address is validated below, so we only need to check if subscriber is not the patient.
 					X12Validate.Subscriber2(subscriber2,strb);
