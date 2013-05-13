@@ -88,11 +88,11 @@ namespace OpenDentBusiness {
 				tableNames[i]=table.Rows[i][0].ToString();
 			}
 			for(int i=0;i<tableNames.Length;i++) {
-				command="REPAIR TABLE `"+tableNames[i]+"`";
+				command="OPTIMIZE TABLE `"+tableNames[i]+"`";
 				Db.NonQ(command);
 			}
 			for(int i=0;i<tableNames.Length;i++) {
-				command="OPTIMIZE TABLE `"+tableNames[i]+"`";
+				command="REPAIR TABLE `"+tableNames[i]+"`";
 				Db.NonQ(command);
 			}
 		}
