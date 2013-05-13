@@ -159,6 +159,57 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge MODIFY CopyNoteToProc NOT NULL";
 					Db.NonQ(command);
+				} 
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS xchargetransaction";
+					Db.NonQ(command);
+					command=@"CREATE TABLE xchargetransaction (
+						XChargeTransactionNum bigint NOT NULL auto_increment PRIMARY KEY,
+						TransType varchar(255) NOT NULL,
+						Amount double NOT NULL,
+						CCEntry varchar(255) NOT NULL,
+						PatNum bigint NOT NULL,
+						Result varchar(255) NOT NULL,
+						ClerkID varchar(255) NOT NULL,
+						ResultCode varchar(255) NOT NULL,
+						Expiration varchar(255) NOT NULL,
+						CCType varchar(255) NOT NULL,
+						CreditCardNum varchar(255) NOT NULL,
+						BatchNum varchar(255) NOT NULL,
+						ItemNum varchar(255) NOT NULL,
+						ApprCode varchar(255) NOT NULL,
+						TransactionDateTime datetime NOT NULL DEFAULT '0001-01-01 00:00:00',
+						INDEX(PatNum),
+						INDEX(TransactionDateTime)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE xchargetransaction'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE xchargetransaction (
+						XChargeTransactionNum number(20) NOT NULL,
+						TransType varchar2(255),
+						Amount number(38,8) NOT NULL,
+						CCEntry varchar2(255),
+						PatNum number(20) NOT NULL,
+						Result varchar2(255),
+						ClerkID varchar2(255),
+						ResultCode varchar2(255),
+						Expiration varchar2(255),
+						CCType varchar2(255),
+						CreditCardNum varchar2(255),
+						BatchNum varchar2(255),
+						ItemNum varchar2(255),
+						ApprCode varchar2(255),
+						TransactionDateTime date DEFAULT TO_DATE('0001-01-01','YYYY-MM-DD') NOT NULL,
+						CONSTRAINT xchargetransaction_XChargeTran PRIMARY KEY (XChargeTransactionNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX xchargetransaction_PatNum ON xchargetransaction (PatNum)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX xchargetransaction_Transaction ON xchargetransaction (TransactionDateTime)";
+					Db.NonQ(command);
 				}
 
 
@@ -181,9 +232,3 @@ namespace OpenDentBusiness {
 
 
 
-				
-
-
-				
-
-				

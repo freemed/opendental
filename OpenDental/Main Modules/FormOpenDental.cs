@@ -255,6 +255,7 @@ namespace OpenDental{
 		private MenuItem menuItemSpellCheck;
 		private FormWiki FormMyWiki;
 		private MenuItem menuItemResellers;
+		private MenuItem menuItemXChargeReconcile;
 		private FormCreditRecurringCharges FormCRC;
 
 		///<summary></summary>
@@ -504,6 +505,7 @@ namespace OpenDental{
 			this.labelTriage = new System.Windows.Forms.Label();
 			this.labelMsg = new System.Windows.Forms.Label();
 			this.lightSignalGrid1 = new OpenDental.UI.LightSignalGrid();
+			this.menuItemXChargeReconcile = new System.Windows.Forms.MenuItem();
 			this.panelPhoneSmall.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -1096,7 +1098,8 @@ namespace OpenDental{
             this.menuItemProcLockTool,
             this.menuItemShutdown,
             this.menuTelephone,
-            this.menuItemTestLatency});
+            this.menuItemTestLatency,
+            this.menuItemXChargeReconcile});
 			this.menuItem1.Text = "Misc Tools";
 			// 
 			// menuItemDuplicateBlockouts
@@ -1491,6 +1494,12 @@ namespace OpenDental{
 			this.lightSignalGrid1.TabIndex = 20;
 			this.lightSignalGrid1.Text = "lightSignalGrid1";
 			this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
+			// 
+			// menuItemXChargeReconcile
+			// 
+			this.menuItemXChargeReconcile.Index = 8;
+			this.menuItemXChargeReconcile.Text = "X-Charge Reconcile";
+			this.menuItemXChargeReconcile.Click += new System.EventHandler(this.menuItemXChargeReconcile_Click);
 			// 
 			// FormOpenDental
 			// 
@@ -4622,6 +4631,14 @@ namespace OpenDental{
 			FormTestLatency formTL=new FormTestLatency();
 			formTL.ShowDialog();
 		}
+		
+		private void menuItemXChargeReconcile_Click(object sender,EventArgs e) {
+			if(!Security.IsAuthorized(Permissions.Accounting)) {
+				return;
+			}
+			FormXChargeReconcile FormXCR=new FormXChargeReconcile();
+			FormXCR.ShowDialog();
+		}
 
 		//End of MiscTools, resume Tools.
 		private void menuItemAging_Click(object sender, System.EventArgs e) {
@@ -4878,6 +4895,8 @@ namespace OpenDental{
 				TcpClientRec.Close();
 			}
 		}
+
+		
 
 		///<summary></summary>
 		protected delegate void ProcessCommandLineDelegate(string[] args);
