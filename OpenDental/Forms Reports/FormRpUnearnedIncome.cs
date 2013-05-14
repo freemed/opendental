@@ -166,7 +166,7 @@ namespace OpenDental{
 			}
 			else {
 				report.Query="SELECT "+DbHelper.Concat("patient.LName","', '","patient.FName","' '","patient.MiddleI")+",";
-				report.Query+=DbHelper.GroupConcat("ItemName",true);
+				report.Query+=DbHelper.GroupConcat("ItemName",true)+",";
 				report.Query+="SUM(SplitAmt) Amount "
 					+"FROM paysplit,patient,definition "
 					+"WHERE paysplit.PatNum=patient.PatNum "
