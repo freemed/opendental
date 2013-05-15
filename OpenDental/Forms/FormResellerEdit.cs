@@ -122,8 +122,8 @@ namespace OpenDental {
 				return;
 			}
 			//Do not let the reseller be deleted if they have customers in their list.
-			if(TableCustomers.Rows.Count>0) {
-				MsgBox.Show(this,"This reseller cannot be deleted until they remove our services from this customer form the reseller portal.");
+			if(Resellers.HasActiveResellerCustomers(ResellerCur)) {
+				MsgBox.Show(this,"This reseller cannot be deleted until all active services are removed from their customers.  This should be done using the reseller portal.");
 				return;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This will update PatStatus to inactive and set every registartion key's stop date.\r\nContinue?")) {
@@ -142,6 +142,7 @@ namespace OpenDental {
 				regKeys[i].DateEnded=MiscData.GetNowDateTime();
 				RegistrationKeys.Update(regKeys[i]);
 			}
+			Resellers.Delete(ResellerCur.ResellerNum);
 			DialogResult=DialogResult.OK;
 		}
 
