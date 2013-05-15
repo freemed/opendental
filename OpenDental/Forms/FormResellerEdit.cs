@@ -29,18 +29,19 @@ namespace OpenDental {
 		}
 
 		private void FillGridMain() {
+			double total=0;
 			TableCustomers=Resellers.GetResellerCustomersList(ResellerCur.PatNum);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("PatNum",60);
+			ODGridColumn col=new ODGridColumn("PatNum",55);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("RegKey",110);
+			col=new ODGridColumn("RegKey",130);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("ProcCode",60);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Descript",180);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Fee",80);
+			col=new ODGridColumn("Fee",70);
 			col.TextAlign=HorizontalAlignment.Right;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("DateStart",80);
@@ -59,13 +60,16 @@ namespace OpenDental {
 				row.Cells.Add(TableCustomers.Rows[i]["RegKey"].ToString());
 				row.Cells.Add(TableCustomers.Rows[i]["ProcCode"].ToString());
 				row.Cells.Add(TableCustomers.Rows[i]["Descript"].ToString());
-				row.Cells.Add(PIn.Double(TableCustomers.Rows[i]["Fee"].ToString()).ToString("F"));
+				double fee=PIn.Double(TableCustomers.Rows[i]["Fee"].ToString());
+				row.Cells.Add(fee.ToString("F"));
+				total+=fee;
 				row.Cells.Add(PIn.Date(TableCustomers.Rows[i]["DateStart"].ToString()).ToShortDateString());
 				row.Cells.Add(PIn.Date(TableCustomers.Rows[i]["DateStop"].ToString()).ToShortDateString());
 				row.Cells.Add(TableCustomers.Rows[i]["Note"].ToString());
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
+			labelTotal.Text="Total: "+total.ToString("C");
 		}
 
 		private void FillGridServices() {

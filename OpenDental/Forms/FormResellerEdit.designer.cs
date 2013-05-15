@@ -39,6 +39,7 @@ namespace OpenDental{
 			this.gridServices = new OpenDental.UI.ODGrid();
 			this.butAdd = new OpenDental.UI.Button();
 			this.label1 = new System.Windows.Forms.Label();
+			this.labelTotal = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -217,10 +218,21 @@ namespace OpenDental{
 			this.label1.Text = "Delete the reseller.\r\nSets reseller PatStatus to inactive and disables all reg ke" +
     "ys.";
 			// 
+			// labelTotal
+			// 
+			this.labelTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.labelTotal.Location = new System.Drawing.Point(389, 393);
+			this.labelTotal.Name = "labelTotal";
+			this.labelTotal.Size = new System.Drawing.Size(139, 24);
+			this.labelTotal.TabIndex = 255;
+			this.labelTotal.Text = "Total: $0.00";
+			this.labelTotal.TextAlign = System.Drawing.ContentAlignment.TopRight;
+			// 
 			// FormResellerEdit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(804, 494);
+			this.Controls.Add(this.labelTotal);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.butAdd);
 			this.Controls.Add(this.gridServices);
@@ -258,5 +270,6 @@ namespace OpenDental{
 		private UI.ODGrid gridServices;
 		private UI.Button butAdd;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelTotal;
 	}
 }
