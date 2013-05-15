@@ -116,6 +116,7 @@ namespace OpenDental {
 			FormResellerServiceEdit FormRSE=new FormResellerServiceEdit(resellerService);
 			FormRSE.ShowDialog();
 			if(FormRSE.DialogResult==DialogResult.OK) {
+				FillGridMain();
 				FillGridServices();
 			}
 		}
