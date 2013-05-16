@@ -283,6 +283,7 @@ namespace OpenDental{
 			// butPaste
 			// 
 			this.butPaste.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butPaste.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPaste.Autosize = true;
 			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
