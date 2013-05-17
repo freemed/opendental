@@ -571,6 +571,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PaySplitWithInvalidPayNum(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.PaySplitWithInvalidPayPlanNum(verbose,isCheck);
+			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PaySplitAttachedToPayPlan(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.PerioMeasureWithInvalidIntTooth(verbose,isCheck);

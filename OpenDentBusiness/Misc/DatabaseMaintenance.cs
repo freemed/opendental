@@ -2690,6 +2690,31 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		public static string PaySplitWithInvalidPayPlanNum(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM paysplit WHERE paysplit.PayPlanNum!=0 AND paysplit.PayPlanNum NOT IN(SELECT payplan.PayPlanNum FROM payplan)";
+				int numFound=PIn.Int(Db.GetScalar(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Paysplits found with invalid PayPlanNum: ")+numFound+"\r\n";
+				}
+			}
+			else {
+				if(DataConnection.DBtype==DatabaseType.Oracle) {
+					return "";
+				}
+				command="UPDATE paysplit SET paysplit.PayPlanNum=0 WHERE paysplit.PayPlanNum!=0 AND paysplit.PayPlanNum NOT IN(SELECT payplan.PayPlanNum FROM payplan)";
+				long numFixed=Db.NonQ(command);
+				if(numFixed>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Paysplits with invalid PayPlanNums fixed: ")+numFixed+"\r\n";
+				}
+			}
+			return log;
+		}
+
 		public static string PerioMeasureWithInvalidIntTooth(bool verbose,bool isCheck) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
