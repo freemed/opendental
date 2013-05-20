@@ -7,9 +7,11 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
 using OpenDentBusiness;
 using CodeBase;
 
@@ -761,18 +763,101 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;//original wait cursor seems to go away for some reason.
 			Application.DoEvents();
-			string tempFile=Path.GetTempFileName();
-			WebClient myWebClient=new WebClient();
-			try {
-				myWebClient.DownloadFile(formPick.FileUrlChosen,tempFile);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
+			string feeData="";
+			if(formPick.IsFileChosenProtected) {
+				string memberNumberODA="";
+				string memberPasswordODA="";
+				if(formPick.FileChosenName.StartsWith("ON_")) {//Any and all Ontario fee schedules
+					FormFeeSchedPickAuthOntario formAuth=new FormFeeSchedPickAuthOntario();
+					if(formAuth.ShowDialog()!=DialogResult.OK) {
+						Cursor=Cursors.Default;
+						return;
+					}
+					memberNumberODA=formAuth.ODAMemberNumber;
+					memberPasswordODA=formAuth.ODAMemberPassword;
+				}
+				//prepare the xml document to send--------------------------------------------------------------------------------------
+				XmlWriterSettings settings = new XmlWriterSettings();
+				settings.Indent = true;
+				settings.IndentChars = ("    ");
+				StringBuilder strbuild=new StringBuilder();
+				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+					writer.WriteStartElement("RequestFeeSched");
+					writer.WriteStartElement("RegistrationKey");
+					writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+					writer.WriteEndElement();//RegistrationKey
+					writer.WriteStartElement("FeeSchedFileName");
+					writer.WriteString(formPick.FileChosenName);
+					writer.WriteEndElement();//FeeSchedFileName
+					if(memberNumberODA!="") {
+						writer.WriteStartElement("ODAMemberNumber");
+						writer.WriteString(memberNumberODA);
+						writer.WriteEndElement();//ODAMemberNumber
+						writer.WriteStartElement("ODAMemberPassword");
+						writer.WriteString(memberPasswordODA);
+						writer.WriteEndElement();//ODAMemberPassword
+					}
+					writer.WriteEndElement();//RequestFeeSched
+				}
+#if DEBUG
+				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+#else
+				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+#endif
+				//Send the message and get the result-------------------------------------------------------------------------------------
+				string result="";
+				try {
+					result=updateService.RequestFeeSched(strbuild.ToString());
+				}
+				catch(Exception ex) {
+					Cursor=Cursors.Default;
+					MessageBox.Show("Error: "+ex.Message);
+					return;
+				}
 				Cursor=Cursors.Default;
-				return;
+				XmlDocument doc=new XmlDocument();
+				doc.LoadXml(result);
+				//Process errors------------------------------------------------------------------------------------------------------------
+				XmlNode node=doc.SelectSingleNode("//Error");
+				if(node!=null) {
+					MessageBox.Show(node.InnerText,"Error");
+					return;
+				}
+				node=doc.SelectSingleNode("//KeyDisabled");
+				if(node==null) {
+					//no error, and no disabled message
+					if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of three places in the program where this happens.
+						DataValid.SetInvalid(InvalidType.Prefs);
+					}
+				}
+				else {
+					MessageBox.Show(node.InnerText);
+					if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of three places in the program where this happens.
+						DataValid.SetInvalid(InvalidType.Prefs);
+					}
+					return;
+				}
+				//Process a valid return value------------------------------------------------------------------------------------------------
+				node=doc.SelectSingleNode("//ResultCSV64");
+				string feeData64=node.InnerXml;
+				byte[] feeDataBytes=Convert.FromBase64String(feeData64);
+				feeData=Encoding.UTF8.GetString(feeDataBytes);
 			}
-			string feeData=File.ReadAllText(tempFile);
-			File.Delete(tempFile);
+			else {
+				string tempFile=Path.GetTempFileName();
+				WebClient myWebClient=new WebClient();
+				try {
+					myWebClient.DownloadFile(formPick.FileChosenUrl,tempFile);
+				}
+				catch(Exception ex) {
+					MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
+					Cursor=Cursors.Default;
+					return;
+				}
+				feeData=File.ReadAllText(tempFile);
+				File.Delete(tempFile);
+			}
 			string[] feeLines=feeData.Split('\n');
 			double feeAmt;
 			long numImported=0;

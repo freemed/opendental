@@ -16,13 +16,30 @@ namespace OpenDental {
 
 		///<summary>Url must include trailing slash.</summary>
 		public string Url="";
+		private List<string> ListFeeSchedFilesOntario;
 
-		public string FileUrlChosen {
+		///<summary>Returns the full URL of the chosen file.</summary>
+		public string FileChosenUrl {
+			get {				
+				return Url+FileChosenName;
+			}
+		}
+
+		///<summary>Returns just the file name of the chosen file.</summary>
+		public string FileChosenName {
 			get {
 				if(gridFeeSchedFiles.GetSelectedIndex()==-1) {
 					return "";
 				}
-				return Url+gridFeeSchedFiles.Rows[gridFeeSchedFiles.GetSelectedIndex()].Cells[0].Text;
+				return gridFeeSchedFiles.Rows[gridFeeSchedFiles.GetSelectedIndex()].Cells[0].Text;
+			}
+		}
+
+		///<summary>Returns true if the file chosen must be downloaded from the web service. Currently, Ontario fees must be downloaded from the web service.
+		///Otherwise, if false is returned, the file can be downloaded by anyone directly from our website.</summary>
+		public bool IsFileChosenProtected {
+			get {
+				return ListFeeSchedFilesOntario.Contains(FileChosenName);
 			}
 		}
 
@@ -31,14 +48,16 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void FormFeeSchedPickRemote_Load(object sender,EventArgs e) {
+		private void FormFeeSchedPickRemote_Load(object sender,EventArgs e) {			
 			Cursor=Cursors.WaitCursor;
-			gridFeeSchedFiles.BeginUpdate();
-			gridFeeSchedFiles.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",35);
-			gridFeeSchedFiles.Columns.Add(col);
-			gridFeeSchedFiles.Rows.Clear();
-			ODGridRow row;
+			FillListFeeSchedFilesAll();
+			Cursor=Cursors.Default;
+		}
+
+		private void FillListFeeSchedFilesAll() {
+			FillListFeeSchedFilesOntario();
+			List<string> ListFeeSchedFilesAll=new List<string>();
+			ListFeeSchedFilesAll.AddRange(ListFeeSchedFilesOntario);
 			HttpWebRequest request=(HttpWebRequest)WebRequest.Create(Url);
 			using(HttpWebResponse response=(HttpWebResponse)request.GetResponse()) {
 				using(StreamReader reader=new StreamReader(response.GetResponseStream())) {
@@ -48,15 +67,38 @@ namespace OpenDental {
 					string fileListStr=html.Substring(startIndex,bodyLength).Trim();
 					string[] files=fileListStr.Split(new string[] { "\n","\r\n" },StringSplitOptions.RemoveEmptyEntries);
 					for(int i=0;i<files.Length;i++) {
-						row=new ODGridRow();
-						row.Cells.Add(files[i]);
-						gridFeeSchedFiles.Rows.Add(row);
+						if(files[i].ToLower().StartsWith("procedurecodes")) {
+							continue;//Skip any files which contain procedure codes, because we only want to display fee files.
+						}
+						ListFeeSchedFilesAll.Add(files[i]);
 					}
 				}
 			}
+			ListFeeSchedFilesAll.Sort();
+			gridFeeSchedFiles.BeginUpdate();
+			gridFeeSchedFiles.Columns.Clear();
+			ODGridColumn col=new ODGridColumn("",35);
+			gridFeeSchedFiles.Columns.Add(col);
+			gridFeeSchedFiles.Rows.Clear();
+			ODGridRow row;
+			for(int i=0;i<ListFeeSchedFilesAll.Count;i++) {
+				row=new ODGridRow();
+				row.Cells.Add(ListFeeSchedFilesAll[i]);
+				gridFeeSchedFiles.Rows.Add(row);
+			}
 			gridFeeSchedFiles.EndUpdate();
-			Cursor=Cursors.Default;
 		}
+
+		private void FillListFeeSchedFilesOntario() {
+			ListFeeSchedFilesOntario=new List<string>();
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_AN.txt");//Ontario Dental Association 2013 fee schedule for Anaesthesiologists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_EN.txt");//Ontario Dental Association 2013 fee schedule for Endodontists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_GP.txt");//Ontario Dental Association 2013 fee schedule for General Practitioners.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_OS.txt");//Ontario Dental Association 2013 fee schedule for Oral & Maxillofacial Surgeons.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PA.txt");//Ontario Dental Association 2013 fee schedule for Paediatric Dentists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PE.txt");//Ontario Dental Association 2013 fee schedule for Periodontists.
+			ListFeeSchedFilesOntario.Add("ON_ODA_2013_PR.txt");//Ontario Dental Association 2013 fee schedule for Prosthodontists.
+		}		
 
 		private void gridFeeSchedFiles_CellClick(object sender,ODGridClickEventArgs e) {
 			butOK.Enabled=(gridFeeSchedFiles.SelectedIndices.Length>0);

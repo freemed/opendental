@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
+using System.Net;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -238,7 +240,7 @@ namespace OpenDental{
 				checkApptProcsQuickAdd.Enabled=false;
 				checkRecallTypes.Enabled=false;
 				checkRecallTypes.Text="Recall Types - Resets the recall types and triggers to default.  Replaces any T codes with CDA codes.";
-				codeList=new List<ProcedureCode>();//TODO: This will be baked into our source code.  Waiting on a disk from BCDA.
+				codeList=null;//Is only filled when the code tool is run.
 			}
 			else { //USA
 				codeList=CDT.Class1.GetADAcodes();
@@ -257,6 +259,44 @@ namespace OpenDental{
 			checkProcButtons.Checked=false;
 			checkApptProcsQuickAdd.Checked=false;
 			checkRecallTypes.Checked=false;
+		}
+
+		private void CanadaDownloadProcedureCodes() {
+			Cursor=Cursors.WaitCursor;
+			codeList=new List<ProcedureCode>();
+			string url=@"http://www.opendental.com/feescanada/procedurecodes.txt";
+			string tempFile=Path.GetTempFileName();
+			WebClient myWebClient=new WebClient();
+			try {
+				myWebClient.DownloadFile(url,tempFile);
+			}
+			catch(Exception ex) {
+				MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
+				Cursor=Cursors.Default;
+				return;
+			}
+			string codeData=File.ReadAllText(tempFile);
+			File.Delete(tempFile);
+			string[] codeLines=codeData.Split('\n');
+			for(int i=0;i<codeLines.Length;i++) {
+				string[] fields=codeLines[i].Split('\t');
+				if(fields.Length<1) {//Skip blank lines if they exist.
+					continue;
+				}
+				ProcedureCode procCode=new ProcedureCode();
+				procCode.ProcCode=PIn.String(fields[0]);//0 ProcCode
+				procCode.Descript=PIn.String(fields[1]);//1 Description
+				procCode.TreatArea=(TreatmentArea)PIn.Int(fields[2]);//2 TreatArea
+				procCode.NoBillIns=PIn.Bool(fields[3]);//3 NoBillIns
+				procCode.IsProsth=PIn.Bool(fields[4]);//4 IsProsth
+				procCode.IsHygiene=PIn.Bool(fields[5]);//5 IsHygiene
+				procCode.PaintType=(ToothPaintingType)PIn.Int(fields[6]);//6 PaintType
+				procCode.ProcCatDescript=PIn.String(fields[7]);//7 ProcCatDescript
+				procCode.ProcTime=PIn.String(fields[8]);//8 ProcTime
+				procCode.AbbrDesc=PIn.String(fields[9]);//9 AbbrDesc
+				codeList.Add(procCode);
+			}
+			Cursor=Cursors.Default;
 		}
 
 		private void butRun_Click(object sender,EventArgs e) {
@@ -285,6 +325,11 @@ namespace OpenDental{
 			}
 			if(checkDcodes.Checked) {
 				try {
+					if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+						if(codeList==null) {
+							CanadaDownloadProcedureCodes();//Fill codeList with Canadian codes
+						}
+					}
 					rowsInserted+=FormProcCodes.ImportProcCodes("",codeList,"");
 					int descriptionsFixed=ProcedureCodes.ResetADAdescriptions();
 					MessageBox.Show("Procedure code descriptions updated: "+descriptionsFixed.ToString());

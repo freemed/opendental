@@ -110,6 +110,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="RequestFeeSched">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="officeData" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RequestFeeSchedResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RequestFeeSchedResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="EstablishConnectionSoapIn">
@@ -160,6 +174,12 @@
   <wsdl:message name="RequestCustomerIDSoapOut">
     <wsdl:part name="parameters" element="tns:RequestCustomerIDResponse" />
   </wsdl:message>
+  <wsdl:message name="RequestFeeSchedSoapIn">
+    <wsdl:part name="parameters" element="tns:RequestFeeSched" />
+  </wsdl:message>
+  <wsdl:message name="RequestFeeSchedSoapOut">
+    <wsdl:part name="parameters" element="tns:RequestFeeSchedResponse" />
+  </wsdl:message>
   <wsdl:portType name="Service1Soap">
     <wsdl:operation name="EstablishConnection">
       <wsdl:input message="tns:EstablishConnectionSoapIn" />
@@ -192,6 +212,10 @@
     <wsdl:operation name="RequestCustomerID">
       <wsdl:input message="tns:RequestCustomerIDSoapIn" />
       <wsdl:output message="tns:RequestCustomerIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestFeeSched">
+      <wsdl:input message="tns:RequestFeeSchedSoapIn" />
+      <wsdl:output message="tns:RequestFeeSchedSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="Service1Soap" type="tns:Service1Soap">
@@ -268,6 +292,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="RequestFeeSched">
+      <soap:operation soapAction="http://open-dent.com/RequestFeeSched" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="Service1Soap12" type="tns:Service1Soap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -336,6 +369,15 @@
     </wsdl:operation>
     <wsdl:operation name="RequestCustomerID">
       <soap12:operation soapAction="http://open-dent.com/RequestCustomerID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestFeeSched">
+      <soap12:operation soapAction="http://open-dent.com/RequestFeeSched" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

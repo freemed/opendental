@@ -46,7 +46,7 @@ namespace OpenDental.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx")]
         public string OpenDental_customerUpdates_Service1 {
             get {
                 return ((string)(this["OpenDental_customerUpdates_Service1"]));

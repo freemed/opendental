@@ -101,6 +101,10 @@ namespace OpenDentBusiness {
 		BirthdayPostcardMsg,
 		BrokenAppointmentAdjustmentType,
 		BrokenApptCommLogNotAdjustment,
+		///<summary>For Ontario Dental Association fee schedules.</summary>
+		CanadaODAMemberNumber,
+		///<summary>For Ontario Dental Association fee schedules.</summary>
+		CanadaODAMemberPass,
 		///<summary>This is the hash of the password that is needed to open the Central Manager tool.</summary>
 		CentralManagerPassHash,
 		ChartQuickAddHideAmalgam,

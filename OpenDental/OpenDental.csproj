@@ -368,6 +368,12 @@
     <Compile Include="Forms\BasicTemplate.designer.cs">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormFeeSchedPickAuthOntario.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormFeeSchedPickAuthOntario.designer.cs">
+      <DependentUpon>FormFeeSchedPickAuthOntario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormResellerServiceEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2773,6 +2779,9 @@
     <EmbeddedResource Include="Forms\BasicTemplate.resx">
       <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormFeeSchedPickAuthOntario.resx">
+      <DependentUpon>FormFeeSchedPickAuthOntario.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormResellerServiceEdit.resx">
       <DependentUpon>FormResellerServiceEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -5102,6 +5111,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\splashCanada.jpg" />
     <None Include="Web References\NewCrop\Update1.disco" />
     <None Include="Resources\TxtMsg5.gif" />
     <None Include="Resources\TxtMsg2.png" />
@@ -5724,10 +5734,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_PayConnect_MerchantService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx">
+    <WebReferenceUrl Include="http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\customerUpdates\</RelPath>
-      <UpdateFromURL>http://70.90.133.65:1942/WebServiceCustomerUpdates/Service1.asmx</UpdateFromURL>
+      <UpdateFromURL>http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

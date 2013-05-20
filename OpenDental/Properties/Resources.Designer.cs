@@ -463,7 +463,7 @@ namespace OpenDental.Properties {
         ///        &lt;DataSourceName&gt;DS1&lt;/DataSourceName&gt;
         ///        &lt;Timeout&gt;10&lt;/Timeout&gt;
         ///        &lt;CommandText&gt;
-        ///        DR [rest of string was truncated]&quot;;.
+        ///        DRO [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string ReportAccountingGenLedger {
             get {
@@ -474,6 +474,13 @@ namespace OpenDental.Properties {
         internal static System.Drawing.Bitmap Right {
             get {
                 object obj = ResourceManager.GetObject("Right", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap splashCanada {
+            get {
+                object obj = ResourceManager.GetObject("splashCanada", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
