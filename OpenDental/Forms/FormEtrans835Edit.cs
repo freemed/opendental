@@ -93,25 +93,14 @@ namespace OpenDental {
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 2 (Detail).</summary>
 		private void FillClaimDetails() {
-			//if(showServiceDateRange) {
-			//  const int serviceDateFromWidth=86;
-			//  col=new ODGridColumn(Lan.g(this,"ServDateFrom"),serviceDateFromWidth,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//  variableWidth-=serviceDateFromWidth;
-			//  const int serviceDateToWidth=80;
-			//  col=new ODGridColumn(Lan.g(this,"ServDateTo"),serviceDateToWidth,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//  variableWidth-=serviceDateToWidth;
-			//}
-			//else {
-			//  const int serviceDateWidth=80;
-			//  col=new ODGridColumn(Lan.g(this,"ServiceDate"),serviceDateWidth,HorizontalAlignment.Center);
-			//  gridMain.Columns.Add(col);
-			//  variableWidth-=serviceDateWidth;
-			//}
-			//const int amountWidth=80;
-			//col=new ODGridColumn(Lan.g(this,"Amount"),amountWidth,HorizontalAlignment.Center);
-			//gridMain.Columns.Add(col);
+			List<string> claimTrackingNumbers=x835.GetClaimTrackingNumbers();
+			gridClaimDetails.BeginUpdate();
+			gridClaimDetails.Columns.Clear();
+			ODGridColumn col;
+			int variableWidth=this.Width-2*gridClaimDetails.Left;
+			const int amountWidth=80;
+			col=new ODGridColumn(Lan.g(this,"Amount"),amountWidth,HorizontalAlignment.Center);
+			gridClaimDetails.Columns.Add(col);
 			//variableWidth-=amountWidth;
 			//const int statusWidth=54;
 			//col=new ODGridColumn(Lan.g(this,"Status"),statusWidth,HorizontalAlignment.Center);
@@ -128,9 +117,44 @@ namespace OpenDental {
 			//gridMain.Columns.Add(col);
 			//col=new ODGridColumn(Lan.g(this,"FName"),fnameWidth);
 			//gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),claimIdWidth);//CLP01
+			//col=new ODGridColumn(Lan.g(this,"ClaimIdentifier"),claimIdWidth);
 			//gridMain.Columns.Add(col);
 			//col=new ODGridColumn(Lan.g(this,"PayorControlNum"),payorControlNumWidth);
+			//gridMain.Columns.Add(col);
+			//gridMain.Rows.Clear();
+			//for(int i=0;i<claimTrackingNumbers.Count;i++) {
+			//  string[] claimInfo=x277.GetClaimInfo(claimTrackingNumbers[i]);
+			//  ODGridRow row=new ODGridRow();
+			//  row.Cells.Add(new ODGridCell(claimInfo[6]));//service date start
+			//  if(showServiceDateRange) {
+			//    row.Cells.Add(new ODGridCell(claimInfo[7]));//service date end
+			//  }
+			//  string claimStatus="";
+			//  decimal claimAmount=PIn.Decimal(claimInfo[9]);
+			//  if(claimInfo[3]=="A") {
+			//    claimStatus="Accepted";
+			//    numAccepted++;
+			//    amountAccepted+=claimAmount;
+			//  }
+			//  else if(claimInfo[3]=="R") {
+			//    claimStatus="Rejected";
+			//    numRejected++;
+			//    amountRejected+=claimAmount;
+			//  }
+			//  row.Cells.Add(new ODGridCell(claimAmount.ToString("F")));//amount
+			//  row.Cells.Add(new ODGridCell(claimStatus));//status
+			//  row.Cells.Add(new ODGridCell(claimInfo[8]));//reason
+			//  row.Cells.Add(new ODGridCell(claimInfo[0]));//lname
+			//  row.Cells.Add(new ODGridCell(claimInfo[1]));//fname
+			//  row.Cells.Add(new ODGridCell(claimTrackingNumbers[i]));//claim identifier
+			//  row.Cells.Add(new ODGridCell(claimInfo[4]));//payor control number
+			//  gridMain.Rows.Add(row);
+			//}
+			//gridMain.EndUpdate();
+			//textQuantityAccepted.Text=numAccepted.ToString();
+			//textQuantityRejected.Text=numRejected.ToString();
+			//textAmountAccepted.Text=amountAccepted.ToString("F");
+			//textAmountRejected.Text=amountRejected.ToString("F");
 		}
 
 		///<summary>Reads the X12 835 text in the MessageText variable and displays the information from Table 3 (Summary).</summary>
