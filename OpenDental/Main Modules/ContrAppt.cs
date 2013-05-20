@@ -4564,7 +4564,7 @@ namespace OpenDental {
 			}
 			Appointments.SetAptStatus(ContrApptSingle.SelectedAptNum,ApptStatus.Broken);
 			SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,
-				ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", Broke",
+				ContrApptSingle3[thisI].DataRoww["procs"].ToString()+", "+ContrApptSingle3[thisI].DataRoww["AptDateTime"].ToString()+", Broken from the Appts module.",
 				PIn.Long(ContrApptSingle3[thisI].DataRoww["AptNum"].ToString()));
 			long provNum=PIn.Long(ContrApptSingle3[thisI].DataRoww["ProvNum"].ToString());//remember before ModuleSelected
 			ModuleSelected(pat.PatNum);

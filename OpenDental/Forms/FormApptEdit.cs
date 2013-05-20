@@ -2512,6 +2512,37 @@ namespace OpenDental{
 			else{
 				Procedures.SetProvidersInAppointment(AptCur,Procedures.GetProcsForSingle(AptCur.AptNum,false));
 			}
+			//Do the appointment "break" automation for appointments that were just broken.
+			if(AptCur.AptStatus==ApptStatus.Broken && AptOld.AptStatus!=ApptStatus.Broken) {
+				SecurityLogs.MakeLogEntry(Permissions.AppointmentMove,pat.PatNum,AptCur.ProcDescript+", "+AptCur.AptDateTime.ToString()
+					+", Broken by changing the Status in the Edit Appointment window.",AptCur.AptNum);
+				if(PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment)) {
+					Commlog CommlogCur=new Commlog();
+					CommlogCur.PatNum=pat.PatNum;
+					CommlogCur.CommDateTime=DateTime.Now;
+					CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
+					CommlogCur.Note=Lan.g(this,"Appt BROKEN for ")+AptCur.ProcDescript+"  "+AptCur.AptDateTime.ToString();
+					CommlogCur.Mode_=CommItemMode.None;
+					CommlogCur.UserNum=Security.CurUser.UserNum;
+					FormCommItem FormCI=new FormCommItem(CommlogCur);
+					FormCI.IsNew=true;
+					FormCI.ShowDialog();
+				}
+				else {
+					Adjustment AdjustmentCur=new Adjustment();
+					AdjustmentCur.DateEntry=DateTime.Today;
+					AdjustmentCur.AdjDate=DateTime.Today;
+					AdjustmentCur.ProcDate=DateTime.Today;
+					AdjustmentCur.ProvNum=AptCur.ProvNum;
+					AdjustmentCur.PatNum=pat.PatNum;
+					AdjustmentCur.AdjType=PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+					AdjustmentCur.ClinicNum=pat.ClinicNum;
+					FormAdjust FormA=new FormAdjust(pat,AdjustmentCur);
+					FormA.IsNew=true;
+					FormA.ShowDialog();
+				}
+				AutomationL.Trigger(AutomationTrigger.BreakAppointment,null,pat.PatNum);
+			}
 			return true;
 		}
 
