@@ -868,6 +868,7 @@ namespace OpenDental{
 				DocSelected=Documents.GetByNum(nodeId.PriKey);
 				IdxSelectedInMount=0;
 				ImagesCur=ImageStore.OpenImages(new Document[] { DocSelected },PatFolder);
+				bool isExportable=pictureBoxMain.Visible;
 				if(ImagesCur[0]==null) {
 					if(ImageHelper.HasImageExtension(DocSelected.FileName)) {
 						MessageBox.Show(Lan.g(this,"File not found: ") + DocSelected.FileName);
@@ -887,6 +888,7 @@ namespace OpenDental{
 							else {
 								axAcroPDF1.LoadFile(pdfFilePath);//The return status of this function doesn't seem to be helpful.
 								pictureBoxMain.Visible=false;
+								isExportable=true;
 							}
 						}
 						catch {
@@ -898,7 +900,7 @@ namespace OpenDental{
 				}
 				SetBrightnessAndContrast();
 				EnableTreeItemTools(pictureBoxMain.Visible,true,true,pictureBoxMain.Visible,true,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,
-					pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible);
+					pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,pictureBoxMain.Visible,isExportable);
 			}
 			else if(nodeId.NodeType==ImageNodeType.Mount) {
 				//Creates a complete initial mount image. No need to call invalidate until changes are made to the mount later.
