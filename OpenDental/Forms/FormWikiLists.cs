@@ -35,6 +35,7 @@ namespace OpenDental {
 			FormWikiListEdit FormWLE = new FormWikiListEdit();
 			FormWLE.WikiListCurName=wikiLists[listBox1.SelectedIndex].Substring(9);
 			FormWLE.ShowDialog();
+			FillList();
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
@@ -49,7 +50,7 @@ namespace OpenDental {
 			//Format input as it would be saved in the database--------------------------------------------
 			inputListName.textResult.Text=inputListName.textResult.Text.ToLower().Replace(" ","");
 			//Validate list name---------------------------------------------------------------------------
-			if(FormWikiListHeaders.isReservedWordHelper(inputListName.textResult.Text)) {
+			if(DbHelper.isMySQLReservedWord(inputListName.textResult.Text)) {
 				//Can become an issue when retrieving column header names.
 				MsgBox.Show(this,"List name is a reserved word in MySQL.");
 				return;

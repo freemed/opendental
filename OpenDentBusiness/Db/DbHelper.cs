@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	///<summary>This class contains methods used to generate database independent SQL.</summary>
@@ -250,6 +251,253 @@ namespace OpenDentBusiness {
 				result+=expr+" AS CHAR(4000))";
 			}
 			return result;
+		}
+
+		///<summary>Returns true if the input string is a reserved word in MySQL 5.5.31.</summary>
+		public static bool isMySQLReservedWord(string input) {
+			bool retval;
+			//using a switch statement makes this method run in constant time. (As opposed to linear time with a for loop.)
+			switch(input.ToUpper()) {
+				case "ACCESSIBLE":
+				case "ADD":
+				case "ALL":
+				case "ALTER":
+				case "ANALYZE":
+				case "AND":
+				case "AS":
+				case "ASC":
+				case "ASENSITIVE":
+				case "BEFORE":
+				case "BETWEEN":
+				case "BIGINT":
+				case "BINARY":
+				case "BLOB":
+				case "BOTH":
+				case "BY":
+				case "CALL":
+				case "CASCADE":
+				case "CHANGE":
+				case "CHAR":
+				case "CHARACTER":
+				case "CHECK":
+				case "COLLATE":
+				case "COLUMN":
+				case "CONDITION":
+				case "CONSTRAINT":
+				case "CONTINUE":
+				case "CONVERT":
+				case "CREATE":
+				case "CROSS":
+				case "CURRENT_DATE":
+				case "CURRENT_TIME":
+				case "CURRENT_TIMESTAMP":
+				case "CURRENT_USER":
+				case "CURSOR":
+				case "DATABASE":
+				case "DATABASES":
+				case "DAY_HOUR":
+				case "DAY_MICROSECOND":
+				case "DAY_MINUTE":
+				case "DAY_SECOND":
+				case "DEC":
+				case "DECIMAL":
+				case "DECLARE":
+				case "DEFAULT":
+				case "DELAYED":
+				case "DELETE":
+				case "DESC":
+				case "DESCRIBE":
+				case "DETERMINISTIC":
+				case "DISTINCT":
+				case "DISTINCTROW":
+				case "DIV":
+				case "DOUBLE":
+				case "DROP":
+				case "DUAL":
+				case "EACH":
+				case "ELSE":
+				case "ELSEIF":
+				case "ENCLOSED":
+				case "ESCAPED":
+				case "EXISTS":
+				case "EXIT":
+				case "EXPLAIN":
+				case "FALSE":
+				case "FETCH":
+				case "FLOAT":
+				case "FLOAT4":
+				case "FLOAT8":
+				case "FOR":
+				case "FORCE":
+				case "FOREIGN":
+				case "FROM":
+				case "FULLTEXT":
+				case "GRANT":
+				case "GROUP":
+				case "HAVING":
+				case "HIGH_PRIORITY":
+				case "HOUR_MICROSECOND":
+				case "HOUR_MINUTE":
+				case "HOUR_SECOND":
+				case "IF":
+				case "IGNORE":
+				case "IN":
+				case "INDEX":
+				case "INFILE":
+				case "INNER":
+				case "INOUT":
+				case "INSENSITIVE":
+				case "INSERT":
+				case "INT":
+				case "INT1":
+				case "INT2":
+				case "INT3":
+				case "INT4":
+				case "INT8":
+				case "INTEGER":
+				case "INTERVAL":
+				case "INTO":
+				case "IS":
+				case "ITERATE":
+				case "JOIN":
+				case "KEY":
+				case "KEYS":
+				case "KILL":
+				case "LEADING":
+				case "LEAVE":
+				case "LEFT":
+				case "LIKE":
+				case "LIMIT":
+				case "LINEAR":
+				case "LINES":
+				case "LOAD":
+				case "LOCALTIME":
+				case "LOCALTIMESTAMP":
+				case "LOCK":
+				case "LONG":
+				case "LONGBLOB":
+				case "LONGTEXT":
+				case "LOOP":
+				case "LOW_PRIORITY":
+				case "MASTER_SSL_VERIFY_SERVER_CERT":
+				case "MATCH":
+				case "MAXVALUE":
+				case "MEDIUMBLOB":
+				case "MEDIUMINT":
+				case "MEDIUMTEXT":
+				case "MIDDLEINT":
+				case "MINUTE_MICROSECOND":
+				case "MINUTE_SECOND":
+				case "MOD":
+				case "MODIFIES":
+				case "NATURAL":
+				case "NOT":
+				case "NO_WRITE_TO_BINLOG":
+				case "NULL":
+				case "NUMERIC":
+				case "ON":
+				case "OPTIMIZE":
+				case "OPTION":
+				case "OPTIONALLY":
+				case "OR":
+				case "ORDER":
+				case "OUT":
+				case "OUTER":
+				case "OUTFILE":
+				case "PRECISION":
+				case "PRIMARY":
+				case "PROCEDURE":
+				case "PURGE":
+				case "RANGE":
+				case "READ":
+				case "READS":
+				case "READ_WRITE":
+				case "REAL":
+				case "REFERENCES":
+				case "REGEXP":
+				case "RELEASE":
+				case "RENAME":
+				case "REPEAT":
+				case "REPLACE":
+				case "REQUIRE":
+				case "RESIGNAL":
+				case "RESTRICT":
+				case "RETURN":
+				case "REVOKE":
+				case "RIGHT":
+				case "RLIKE":
+				case "SCHEMA":
+				case "SCHEMAS":
+				case "SECOND_MICROSECOND":
+				case "SELECT":
+				case "SENSITIVE":
+				case "SEPARATOR":
+				case "SET":
+				case "SHOW":
+				case "SIGNAL":
+				case "SMALLINT":
+				case "SPATIAL":
+				case "SPECIFIC":
+				case "SQL":
+				case "SQLEXCEPTION":
+				case "SQLSTATE":
+				case "SQLWARNING":
+				case "SQL_BIG_RESULT":
+				case "SQL_CALC_FOUND_ROWS":
+				case "SQL_SMALL_RESULT":
+				case "SSL":
+				case "STARTING":
+				case "STRAIGHT_JOIN":
+				case "TABLE":
+				case "TERMINATED":
+				case "THEN":
+				case "TINYBLOB":
+				case "TINYINT":
+				case "TINYTEXT":
+				case "TO":
+				case "TRAILING":
+				case "TRIGGER":
+				case "TRUE":
+				case "UNDO":
+				case "UNION":
+				case "UNIQUE":
+				case "UNLOCK":
+				case "UNSIGNED":
+				case "UPDATE":
+				case "USAGE":
+				case "USE":
+				case "USING":
+				case "UTC_DATE":
+				case "UTC_TIME":
+				case "UTC_TIMESTAMP":
+				case "VALUES":
+				case "VARBINARY":
+				case "VARCHAR":
+				case "VARCHARACTER":
+				case "VARYING":
+				case "WHEN":
+				case "WHERE":
+				case "WHILE":
+				case "WITH":
+				case "WRITE":
+				case "XOR":
+				case "YEAR_MONTH":
+				case "ZEROFILL":
+				//New as of mysql 5.5
+				case "GENERAL":
+				case "IGNORE_SERVER_IDS":
+				case "MASTER_HEARTBEAT_PERIOD":
+				case "SLOW":
+					retval=true;
+					break;
+				default:
+					retval=false;
+					break;
+			}
+			if(Regex.IsMatch(input,WikiListHeaderWidths.dummyColName)) {
+				retval=true;
+			}
+			return retval;
 		}
 
 		public static string IfNull(string expr,string valWhenNull) {

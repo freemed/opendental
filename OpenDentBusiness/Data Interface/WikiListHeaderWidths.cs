@@ -40,12 +40,12 @@ namespace OpenDentBusiness{
 		///<summary></summary>
 		public static void FillCache(DataTable table){
 			//No need to check RemotingRole; no call to db.
-			listt=Crud.WikiListHeaderWidthCrud.TableToList(table);
+			Listt=Crud.WikiListHeaderWidthCrud.TableToList(table);
 		}
 		#endregion
 
-		///<summary>Returns header widths for list sorted in the same order as the columns appear in the DB.</summary>
-		public static List<WikiListHeaderWidth> GetForList(string listName) {
+		/*///<summary>Returns header widths for list sorted in the same order as the columns appear in the DB. Can be more efficient than using cache.</summary>
+		public static List<WikiListHeaderWidth> GetForListNoCache(string listName) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<WikiListHeaderWidth>>(MethodBase.GetCurrentMethod(),listName);
 			}
@@ -60,6 +60,27 @@ namespace OpenDentBusiness{
 					//Add WikiListHeaderWidth from tempList to retVal if it is the next row in listDescription.
 					if(listDescription.Rows[i][0].ToString()==tempList[j].ColName) {
 						retVal.Add(tempList[j]);
+						break;
+					}
+				}
+				//next description row.
+			}
+			return retVal;
+		}*/
+
+		///<summary>Returns header widths for list sorted in the same order as the columns appear in the DB. Uses cache.</summary>
+		public static List<WikiListHeaderWidth> GetForList(string listName) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List<WikiListHeaderWidth>>(MethodBase.GetCurrentMethod(),listName);
+			}
+			List<WikiListHeaderWidth> retVal = new List<WikiListHeaderWidth>();
+			string command="DESCRIBE wikilist_"+POut.String(listName);
+			DataTable listDescription=Db.GetTable(command);
+			for(int i=0;i<listDescription.Rows.Count;i++) {
+				for(int j=0;j<Listt.Count;j++) {
+					//Add WikiListHeaderWidth from tempList to retVal if it is the next row in listDescription.
+					if(listDescription.Rows[i][0].ToString()==Listt[j].ColName) {
+						retVal.Add(Listt[j]);
 						break;
 					}
 				}
@@ -111,6 +132,7 @@ namespace OpenDentBusiness{
 			command="UPDATE wikiListHeaderWidth SET ColWidth='"+POut.Int(columnDefs[0].ColWidth)+"' "
 			+"WHERE ListName='"+POut.String(listName)+"' AND ColName='"+POut.String(columnDefs[0].ColName)+"'";
 			Db.NonQ(command);
+			RefreshCache();
 		}
 
 		///<summary>No error checking. Only called from WikiLists.</summary>
@@ -120,6 +142,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			Crud.WikiListHeaderWidthCrud.Insert(newWidth);
+			RefreshCache();
 		}
 
 		///<summary>No error checking. Only called from WikiLists after the corresponding column has been dropped from its respective table.</summary>
@@ -130,6 +153,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "DELETE FROM wikilistheaderwidth WHERE ListName='"+POut.String(listName)+"' AND ColName='"+POut.String(colName)+"'";
 			Db.NonQ(command);
+			RefreshCache();
 		}
 
 		public static void DeleteForList(string listName) {
@@ -139,6 +163,7 @@ namespace OpenDentBusiness{
 			}
 			string command = "DELETE FROM wikilistheaderwidth WHERE ListName='"+POut.String(listName)+"'";
 			Db.NonQ(command);
+			RefreshCache();
 		}
 
 

@@ -397,57 +397,58 @@ namespace OpenDental {
 		}
 
 		private void butPaste_Click(object sender,EventArgs e) {
-			Point startingPoint=gridMain.SelectedCell;
-			int ColsNeeded=0;
-			int RowsNeeded=0;
-			List<List<string>> tableBuilder = new List<List<string>>();//tableBuilder[Y][X] to access cell.
-			string CBText = Clipboard.GetText();
-			string[] TableRows = CBText.Split(new string[] {"\r\n"},StringSplitOptions.None);
-			RowsNeeded=TableRows.Length;
-			List<string> currentRow;
-			for(int i=0;i<TableRows.Length;i++) {
-				currentRow = new List<string>();//currentRow[X] to access cell data
-				string[] rowCells = TableRows[i].Split('\t');
+			Point pointStarting=gridMain.SelectedCell;
+			int colsNeeded=0;
+			int rowsNeeded=0;
+			//the incoming text is not necessarily rectangular
+			List<List<string>> listTblBuilder = new List<List<string>>();//tableBuilder[Y][X] to access cell.
+			string clipBoardText = Clipboard.GetText();
+			string[] arrayTableRows = clipBoardText.Split(new string[] {"\r\n"},StringSplitOptions.None);
+			rowsNeeded=arrayTableRows.Length;
+			List<string> listCurrentRow;
+			for(int i=0;i<arrayTableRows.Length;i++) {
+				listCurrentRow = new List<string>();//currentRow[X] to access cell data
+				string[] rowCells = arrayTableRows[i].Split('\t');
 				foreach(string cell in rowCells) {
-					currentRow.Add(cell);
+					listCurrentRow.Add(cell);
 				}
-				tableBuilder.Add(currentRow);
-				ColsNeeded=Math.Max(currentRow.Count,ColsNeeded);
+				listTblBuilder.Add(listCurrentRow);
+				colsNeeded=Math.Max(listCurrentRow.Count,colsNeeded);
 			}
 			//At this point:
-			//ColsNeeded = number of columns needed
+			//colsNeeded = number of columns needed
 			//rowsNeeded = number of rows needed
-			//access data as tableBuilder[Y][X], tableBuilder contains all of the table data in a potentially uneven array (technically a list), 
+			//access data as arrayTblBuilder[Y][X], arrayTblBuilder contains all of the table data in a potentially uneven array (technically a list), 
 			//Check for enough columns---------------------------------------------------------------------------------------------------------
-			if(startingPoint.X + ColsNeeded > Table.Columns.Count) {
-				MessageBox.Show(this,Lan.g(this,"Additional columns required to paste")+": "+(startingPoint.X+ColsNeeded-gridMain.Columns.Count));
+			if(pointStarting.X + colsNeeded > Table.Columns.Count) {
+				MessageBox.Show(this,Lan.g(this,"Additional columns required to paste")+": "+(pointStarting.X+colsNeeded-gridMain.Columns.Count));
 				return;
 			}
 			//Check for Content----------------------------------------------------------------------------------------------------------------
-			bool ContentExists=false;
-			for(int x=0;x+startingPoint.X<Table.Columns.Count;x++) {
-				for(int y=0;y+startingPoint.Y<Table.Rows.Count;y++) {
-					ContentExists=ContentExists||!Table.Rows[startingPoint.Y+y][startingPoint.X+x].ToString().Equals("");
+			bool contentExists=false;
+			for(int x=0;x+pointStarting.X<Table.Columns.Count;x++) {
+				for(int y=0;y+pointStarting.Y<Table.Rows.Count;y++) {
+					contentExists=contentExists||!Table.Rows[pointStarting.Y+y][pointStarting.X+x].ToString().Equals("");
 				}
 			}
-			if(ContentExists) {
+			if(contentExists) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue and overwrite existing content?")){
 					return;
 				}
 			}
 			//Add New Rows---------------------------------------------------------------------------------------------------------------------
 			//Must be after check for existing content, otherwise you will add rows when they are not necessary.
-			if(Table.Rows.Count < startingPoint.Y + RowsNeeded) {
-				int NewRowsNeededCount=(startingPoint.Y+RowsNeeded)-Table.Rows.Count;
-				for(int i=0;i<NewRowsNeededCount;i++) {
+			if(Table.Rows.Count < pointStarting.Y + rowsNeeded) {
+				int newRowsNeededCount=(pointStarting.Y+rowsNeeded)-Table.Rows.Count;
+				for(int i=0;i<newRowsNeededCount;i++) {
 					Table.Rows.Add(Table.NewRow());
 				}
 			}
 			//Paste new data into data Table---------------------------------------------------------------------------------------------------
-			for(int i=0;i<tableBuilder.Count;i++) {
-				for(int j=0;j<tableBuilder[i].Count;j++) {
+			for(int i=0;i<listTblBuilder.Count;i++) {
+				for(int j=0;j<listTblBuilder[i].Count;j++) {
 					//gridMain.Rows[startingPoint.Y+i].Cells[startingPoint.X+j].Text=tableBuilder[i][j];
-					Table.Rows[startingPoint.Y+i][startingPoint.X+j]=tableBuilder[i][j];
+					Table.Rows[pointStarting.Y+i][pointStarting.X+j]=listTblBuilder[i][j];
 				}
 			}
 			//Redraw Grid

@@ -19,7 +19,7 @@ namespace OpenDental {
 		public long ItemNum;
 		public bool IsNew;
 		///<summary>Creating a data table containing only one item allows us to use column names.</summary>
-		DataTable ItemTable;
+		DataTable TableItem;
 
 		public FormWikiListItemEdit() {
 			InitializeComponent();
@@ -27,7 +27,7 @@ namespace OpenDental {
 		}
 
 		private void FormWikiListEdit_Load(object sender,EventArgs e) {
-			ItemTable = WikiLists.GetItem(WikiListCur,ItemNum);
+			TableItem = WikiLists.GetItem(WikiListCur,ItemNum);
 			FillGrid();
 		}
 
@@ -42,12 +42,12 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			for(int i=0;i<ItemTable.Columns.Count;i++){
+			for(int i=0;i<TableItem.Columns.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(ItemTable.Columns[i].ColumnName);
-				row.Cells.Add(ItemTable.Rows[0][i].ToString());
+				row.Cells.Add(TableItem.Columns[i].ColumnName);
+				row.Cells.Add(TableItem.Rows[0][i].ToString());
 				if(i==0) {
-					row.ColorBackG=Color.Gray;
+					row.ColorBackG=Color.Gray;//darken the PK to imply that it cannot be edited.
 				}
 				gridMain.Rows.Add(row);
 			}
@@ -66,14 +66,14 @@ namespace OpenDental {
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
 			//update all cells. No call to DB, so this should be safe.
 			for(int i=1;i<gridMain.Rows.Count;i++) {//start at one, because we should never change the PK.
-				ItemTable.Rows[0][i]=gridMain.Rows[i].Cells[1].Text;
+				TableItem.Rows[0][i]=gridMain.Rows[i].Cells[1].Text;
 			}
 			//to undo changes made to PK.
 			FillGrid();
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.Setup)) {//might want to implement a new security permission.
+			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {//might want to implement a new security permission.
 				return;
 			}
 			//maybe require all empty or admin priv
@@ -85,7 +85,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			WikiLists.UpdateItem(WikiListCur,ItemTable);
+			WikiLists.UpdateItem(WikiListCur,TableItem);
 			DialogResult=DialogResult.OK;
 		}
 

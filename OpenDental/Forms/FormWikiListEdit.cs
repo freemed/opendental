@@ -33,10 +33,6 @@ namespace OpenDental {
 			FillGrid();
 		}
 
-		private void ManuallyEdit() {
-			
-		}
-
 		/// <summary></summary>
 		private void FillGrid() {
 			List<WikiListHeaderWidth> colHeaderWidths = WikiListHeaderWidths.GetForList(WikiListCurName);
@@ -115,12 +111,12 @@ namespace OpenDental {
 			if(gridMain.SelectedCell.X==-1){
 				return;
 			}
-			Point newSelectedCell=gridMain.SelectedCell;
-			newSelectedCell.X=Math.Max(1,newSelectedCell.X-1);
+			Point pointNewSelectedCell=gridMain.SelectedCell;
+			pointNewSelectedCell.X=Math.Max(1,pointNewSelectedCell.X-1);
 			WikiLists.ShiftColumnLeft(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName);
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
-			gridMain.SetSelected(newSelectedCell);
+			gridMain.SetSelected(pointNewSelectedCell);
 		}
 
 		private void butColumnRight_Click(object sender,EventArgs e) {
@@ -130,12 +126,12 @@ namespace OpenDental {
 			if(gridMain.SelectedCell.X==-1) {
 				return;
 			}
-			Point newSelectedCell=gridMain.SelectedCell;
-			newSelectedCell.X=Math.Min(gridMain.Columns.Count-1,newSelectedCell.X+1);
+			Point pointNewSelectedCell=gridMain.SelectedCell;
+			pointNewSelectedCell.X=Math.Min(gridMain.Columns.Count-1,pointNewSelectedCell.X+1);
 			WikiLists.ShiftColumnRight(WikiListCurName,Table.Columns[gridMain.SelectedCell.X].ColumnName);
 			Table=WikiLists.GetByName(WikiListCurName);
 			FillGrid();
-			gridMain.SetSelected(newSelectedCell);
+			gridMain.SetSelected(pointNewSelectedCell);
 		}
 
 		private void butHeaders_Click(object sender,EventArgs e) {
@@ -192,7 +188,7 @@ namespace OpenDental {
 				return;
 			}
 			WikiLists.DeleteList(WikiListCurName);
-			//TODO: update all wikipages and remove links to data that was contained in the table. if we implement it.
+			//Someday, if we have links to lists, then this is where we would update all the wikipages containing those links.  Remove links to data that was contained in the table.
 			DialogResult=DialogResult.OK;
 		}
 
