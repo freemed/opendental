@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness{
 
@@ -21,7 +22,19 @@ namespace OpenDentBusiness{
 		///<summary>Point data for a drawing segment.  The format would look similar to this: 45,68;48,70;49,72;0,0;55,88;etc.  It's simply a sequence of points, separated by semicolons.  Only positive numbers are used.  0,0 is the upper left of the tooth chart at original size.  Stored in pixels as originally drawn.  If we ever change the tooth chart, we will have to also keep an old version as an alternate to display old drawings.</summary>
 		public string DrawingSegment;
 		///<summary>.</summary>
+		[XmlIgnore]
 		public Color ColorDraw;
+
+		///<summary>Used only for serialization purposes</summary>
+		[XmlElement("ColorDraw",typeof(int))]
+		public int ColorDrawXml {
+			get {
+				return ColorDraw.ToArgb();
+			}
+			set {
+				ColorDraw=Color.FromArgb(value);
+			}
+		}
 
 		///<summary></summary>
 		public ToothInitial Copy(){
