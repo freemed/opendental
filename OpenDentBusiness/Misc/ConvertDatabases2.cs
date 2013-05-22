@@ -12023,6 +12023,26 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.19.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_1_32();
+		}
+
+		private static void To13_1_32() {
+			if(FromVersion<new Version("13.1.32.0")) {
+				string command;
+				try {
+					if(DataConnection.DBtype==DatabaseType.MySql) {
+						command="ALTER TABLE medicationpat ADD INDEX (PatNum)";
+						Db.NonQ(command);
+					}
+					else {//oracle
+						command=@"CREATE INDEX medicationpat_PatNum ON medicationpat (PatNum)";
+						Db.NonQ(command);
+					}
+				}
+				catch(Exception ex) { }//ex is needed, or exception won't get caught.
+				command="UPDATE preference SET ValueString = '13.1.32.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_2_0();
 		}
 
