@@ -121,11 +121,11 @@
     <value>17, 17</value>
   </metadata>
   <data name="labelResellerParagraph.Text" xml:space="preserve">
-    <value>Not all resellers will show in this window.  This window is for keeping track of resellers that have customers of their own that do not pay us directly for support but instead the resellers themselves pay us for services that we provide to their customers.  Their customers will never know about Open Dental's involvement.  
+    <value>Not all resellers will show in this window.  This window is for keeping track of resellers that have customers of their own that do not pay us directly for support.  The resellers pay us for services that we provide to their customers.  Their customers will never know about Open Dental's involvement.  
 
-A reseller needs to be added to this list of resellers so that they can access our online reseller portal which is where they will let us know about what customers of theirs are using our services and what those services are exactly.
+Jordan will add resellers to this list.   Then, the reseller can access our online reseller portal.  They will add customers on their own.  They will also add services for those customers.
 
-After a reseller is added, double click on their row to give them their online credentials, indicate which services we offer them, set the price for those services (not all resellers pay the same price for the same service), and to see a current list of all their customers that they have added via the reseller portal.
+After a reseller is added, double click on their row to manage them.
 </value>
   </data>
 </root>

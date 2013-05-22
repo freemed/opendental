@@ -24,52 +24,22 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent() {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormResellers));
-			this.butClose = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label2 = new System.Windows.Forms.Label();
 			this.menuRightClick = new System.Windows.Forms.ContextMenu();
 			this.menuItemAccount = new System.Windows.Forms.MenuItem();
 			this.labelResellerParagraph = new System.Windows.Forms.Label();
+			this.butClose = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(717, 550);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 3;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(717, 142);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 26);
-			this.butAdd.TabIndex = 35;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// gridMain
 			// 
 			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12, 174);
+			this.gridMain.Location = new System.Drawing.Point(12, 165);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(780, 363);
+			this.gridMain.Size = new System.Drawing.Size(780, 372);
 			this.gridMain.TabIndex = 38;
 			this.gridMain.Title = "Resellers";
 			this.gridMain.TranslationName = "FormMedications";
@@ -77,7 +47,7 @@ namespace OpenDental{
 			// 
 			// label2
 			// 
-			this.label2.Location = new System.Drawing.Point(502, 142);
+			this.label2.Location = new System.Drawing.Point(502, 133);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(209, 26);
 			this.label2.TabIndex = 40;
@@ -102,6 +72,36 @@ namespace OpenDental{
 			this.labelResellerParagraph.Size = new System.Drawing.Size(780, 115);
 			this.labelResellerParagraph.TabIndex = 41;
 			this.labelResellerParagraph.Text = resources.GetString("labelResellerParagraph.Text");
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(717, 550);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(75, 24);
+			this.butClose.TabIndex = 3;
+			this.butClose.Text = "&Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(717, 133);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(75, 26);
+			this.butAdd.TabIndex = 35;
+			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
 			// 
 			// FormResellers
 			// 

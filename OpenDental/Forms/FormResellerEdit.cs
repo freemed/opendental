@@ -22,6 +22,12 @@ namespace OpenDental {
 		}
 
 		private void FormResellerEdit_Load(object sender,EventArgs e) {
+			//Only Jordan should be able to alter reseller credentials.
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+				labelCredentials.Text="Only users with Security Admin can edit credentials.";
+				textUserName.ReadOnly=true;
+				textPassword.ReadOnly=true;
+			}
 			textUserName.Text=ResellerCur.UserName;
 			textPassword.Text=ResellerCur.ResellerPassword;
 			FillGridMain();
@@ -101,6 +107,10 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
+			//Only Jordan should be able to add services.
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin)) {
+				return;
+			}
 			ResellerService resellerService=new ResellerService();
 			resellerService.ResellerNum=ResellerCur.ResellerNum;
 			FormResellerServiceEdit FormRSE=new FormResellerServiceEdit(resellerService);
@@ -112,6 +122,10 @@ namespace OpenDental {
 		}
 
 		private void gridServices_CellDoubleClick(object sender,ODGridClickEventArgs e) {
+			//Only Jordan should be able to edit services.
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
+				return;
+			}
 			ResellerService resellerService=ListServices[gridServices.GetSelectedIndex()];
 			FormResellerServiceEdit FormRSE=new FormResellerServiceEdit(resellerService);
 			FormRSE.ShowDialog();
