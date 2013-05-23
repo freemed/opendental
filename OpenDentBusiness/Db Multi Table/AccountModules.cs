@@ -601,7 +601,7 @@ namespace OpenDentBusiness {
 			command+="ORDER BY procDate_";
 			if(isInvoice) {
 				//different query here.  Include all column names.
-				command="SELECT '' AS adj_,procedurelog.BaseUnits,procedurelog.ClinicNum,procedurecode.CodeNum,procedurecode.Descript,"
+				command="SELECT '' AS adj_,procedurelog.BaseUnits,procedurelog.BillingNote,procedurelog.ClinicNum,procedurecode.CodeNum,procedurecode.Descript,"
 					+"'' AS insPayAmt_,'' AS insPayEst_,procedurecode.LaymanTerm,procedurelog.MedicalCode,'' AS noBillIns_,procedurelog.PatNum,"
 					+"'' AS patPay_,procedurecode.ProcCode,"+DbHelper.DateColumn("procedurelog.ProcDate")+" procDate_,procedurelog.ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
 					+"procedurelog.ProvNum,procedurelog.Surf,procedurelog.ToothNum,procedurelog.ToothRange,procedurelog.UnitQty,"
