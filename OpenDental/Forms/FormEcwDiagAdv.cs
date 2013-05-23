@@ -92,6 +92,7 @@ namespace OpenDental {
 		private void fillQueryList() {
 			listQuery.Items.Add("SELECT * FROM itemkeys WHERE NAME IN ('pwd', 'user', 'FtpPath', 'Administrator', 'ClientVersion', 'upgrade_sqlver', 'ReconcilePatientFlag', 'ReconciliationPath', 'InterfaceID', 'GenericResultsPath', 'IsSIUOutboundConfigured', 'IsSIUOutboundVirtualTelConfigured', 'IsADTOutboundConfigured', 'IsADTWithOutHL7Interface', 'DentalEMRAppPath', 'EnableDentalEMR', 'isSaasPractice');");
 			listQuery.Items.Add("SELECT * FROM mobiledoc.pmitemkeys WHERE name LIKE '%_Filter_for_%';/*look at 'value' column. Look for values other than 'no'*/");
+			listQuery.Items.Add("SELECT * FROM mobiledoc.pmitemkeys WHERE value LIKE '%HL7%';/*used to show ecw paths to HL7 folders*/");
 			listQuery.Items.Add("SELECT * FROM mobiledoc.hl7segment_details;/*Look for AIG or PV1 segment in the SIU messages.*/");
 			listQuery.Items.Add("SELECT * FROM mobiledoc.hl7segment_groups;/*Look at group definitions.*/");
 			listQuery.Items.Add("SELECT * FROM mobiledoc.itemkeys WHERE NAME IN ('pwd', 'user', 'FtpPath', 'Administrator', 'ClientVersion', 'upgrade_sqlver', 'ReconcilePatientFlag', 'ReconciliationPath', 'InterfaceID', 'GenericResultsPath', 'IsSIUOutboundConfigured', 'IsSIUOutboundVirtualTelConfigured', 'IsADTOutboundConfigured', 'IsADTWithOutHL7Interface', 'DentalEMRAppPath', 'EnableDentalEMR', 'isSaasPractice');/*General settings that might be useful.*/");
