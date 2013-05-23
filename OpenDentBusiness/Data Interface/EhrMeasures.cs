@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
+using System.Diagnostics;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -14,7 +15,9 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM ehrmeasure ORDER BY MeasureType";
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
+			Stopwatch s=new Stopwatch();
 			for(int i=0;i<retVal.Count;i++) {
+				s.Restart();
 				retVal[i].Objective=GetObjective(retVal[i].MeasureType);
 				retVal[i].Measure=GetMeasure(retVal[i].MeasureType);
 				retVal[i].PercentThreshold=GetThreshold(retVal[i].MeasureType);
@@ -29,6 +32,8 @@ namespace OpenDentBusiness{
 				}
 				retVal[i].NumeratorExplain=GetNumeratorExplain(retVal[i].MeasureType);
 				retVal[i].DenominatorExplain=GetDenominatorExplain(retVal[i].MeasureType);
+				s.Stop();
+				retVal[i].ElapsedTime=s.Elapsed;
 			}
 			return retVal; 
 		}
@@ -168,66 +173,113 @@ namespace OpenDentBusiness{
 			}
 			string command="";
 			DataTable tableRaw=new DataTable();
+			command="SELECT GROUP_CONCAT(provider.ProvNum) FROM provider WHERE provider.EhrKey="
+				+"(SELECT pv.EhrKey FROM provider pv WHERE pv.ProvNum="+POut.Long(provNum)+")";
+			string provs=Db.GetScalar(command);
 			switch(mtype) {
 				case EhrMeasureType.ProblemList:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum AND DiseaseDefNum="
-							+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+") AS problemsNone, "
-						+"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum) AS problemsAll "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum AND DiseaseDefNum="
+					//    +POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+") AS problemsNone, "
+					//  +"(SELECT COUNT(*) FROM disease WHERE PatNum=patient.PatNum) AS problemsAll "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					command="SELECT A.*,COALESCE(problemsNone.Count,0) AS problemsNone,COALESCE(problemsAll.Count,0) AS problemsAll "
+						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum="+POut.Long(PrefC.GetLong(PrefName.ProblemsIndicateNone))+" "
+						+"GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedicationList:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM medicationpat WHERE PatNum=patient.PatNum AND MedicationNum="
-							+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+") AS medsNone, "
-						+"(SELECT COUNT(*) FROM medicationpat WHERE PatNum=patient.PatNum) AS medsAll "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM medicationpat WHERE PatNum=patient.PatNum AND MedicationNum="
+					//    +POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+") AS medsNone, "
+					//  +"(SELECT COUNT(*) FROM medicationpat WHERE PatNum=patient.PatNum) AS medsAll "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					command="SELECT A.*,COALESCE(medsNone.Count,0) AS medsNone,COALESCE(medsAll.Count,0) AS medsAll "
+						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
+						+"WHERE MedicationNum="+POut.Long(PrefC.GetLong(PrefName.MedicationsIndicateNone))+" "
+						+"GROUP BY PatNum) medsNone ON medsNone.PatNum=A.PatNum "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat GROUP BY PatNum) medsAll ON medsAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.AllergyList:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM allergy WHERE PatNum=patient.PatNum AND AllergyDefNum="
-							+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+") AS allergiesNone, "
-						+"(SELECT COUNT(*) FROM allergy WHERE PatNum=patient.PatNum) AS allergiesAll "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM allergy WHERE PatNum=patient.PatNum AND AllergyDefNum="
+					//    +POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+") AS allergiesNone, "
+					//  +"(SELECT COUNT(*) FROM allergy WHERE PatNum=patient.PatNum) AS allergiesAll "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					command="SELECT A.*,COALESCE(allergiesNone.Count,0) AS allergiesNone,COALESCE(allergiesAll.Count,0) AS allergiesAll "
+						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum	AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	"
+						+"WHERE AllergyDefNum="+POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone))+" "
+						+"GROUP BY PatNum) allergiesNone ON allergiesNone.PatNum=A.PatNum "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	GROUP BY PatNum) allergiesAll ON allergiesAll.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Demographics:
 					//language, gender, race, ethnicity, and birthdate
-					command="SELECT PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//command="SELECT PatNum,LName,FName,Birthdate,Gender,Race,Language "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					command="SELECT patient.PatNum,LName,FName,Birthdate,Gender,Race,Language "
 						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Education:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+") AS edCount "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+") AS edCount "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+")";
+					command="SELECT A.*,COALESCE(edCount.Count,0) AS edCount "
+						+"FROM (SELECT patient.PatNum,LName,FName	FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.EducationProvided)+" "
+						+"GROUP BY PatNum) edCount ON edCount.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.TimelyAccess:
@@ -249,7 +301,8 @@ namespace OpenDentBusiness{
 						+"FROM patient,procedurelog "
 						+"WHERE patient.PatNum=procedurelog.PatNum "
 						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						//+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
 						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+" "
 						+"GROUP BY patient.PatNum";
@@ -274,16 +327,26 @@ namespace OpenDentBusiness{
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.ProvOrderEntry:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM medicationpat mp2 WHERE mp2.PatNum=patient.PatNum "
-						+"AND mp2.PatNote != '' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+") AS countOrders "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "//at least one procedure in the period
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
-						+"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM medicationpat mp2 WHERE mp2.PatNum=patient.PatNum "
+					//  +"AND mp2.PatNote != '' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+") AS countOrders "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "//at least one procedure in the period
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+					//  +"AND EXISTS(SELECT * FROM medicationpat WHERE medicationpat.PatNum=patient.PatNum)";//at least one medication
+					command="SELECT A.*,COALESCE(countOrders.Count,0) AS countOrders "
+						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat mp2 "
+						+"WHERE mp2.PatNote!='' AND mp2.DateStart > "+POut.Date(new DateTime(1880,1,1))+" "
+						+"GROUP BY PatNum) countOrders ON countOrders.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Rx:
@@ -291,44 +354,67 @@ namespace OpenDentBusiness{
 						+"FROM rxpat,patient "
 						+"WHERE rxpat.PatNum=patient.PatNum "
 						+"AND IsControlled = 0 "
-						+"AND rxpat.ProvNum="+POut.Long(provNum)+" "
+						//+"AND rxpat.ProvNum="+POut.Long(provNum)+" "
+						+"AND rxpat.ProvNum IN("+POut.String(provs)+")	"
 						+"AND RxDate >= "+POut.Date(dateStart)+" "
 						+"AND RxDate <= "+POut.Date(dateEnd);
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.VitalSigns:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND Height>0 AND Weight>0) AS hwCount, "
-						+"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND BpSystolic>0 AND BpDiastolic>0) AS bpCount "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
-						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND Height>0 AND Weight>0) AS hwCount, "
+					//  +"(SELECT COUNT(*) FROM vitalsign WHERE vitalsign.PatNum=patient.PatNum AND BpSystolic>0 AND BpDiastolic>0) AS bpCount "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2));//2 and older
+					command="SELECT A.*,COALESCE(hwCount.Count,0) AS hwCount,COALESCE(bpCount.Count,0) AS bpCount "
+						+"FROM (SELECT patient.PatNum,LName,FName FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+")	"
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"WHERE patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-2))+" "//2 and older
+						+"GROUP BY patient.PatNum) A "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign	WHERE Height>0 AND Weight>0 GROUP BY PatNum) hwCount ON hwCount.PatNum=A.PatNum "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM vitalsign WHERE BpSystolic>0 AND BpDiastolic>0 GROUP BY PatNum) bpCount ON bpCount.PatNum=A.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Smoking:
-					command="SELECT PatNum,LName,FName,SmokeStatus "
-						+"FROM patient "
-						+"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
-						+"AND procedurelog.ProcStatus=2 "//complete
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
-						+"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
-						+"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
-						+"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
+					//command="SELECT PatNum,LName,FName,SmokeStatus "
+					//  +"FROM patient "
+					//  +"WHERE EXISTS(SELECT * FROM procedurelog WHERE patient.PatNum=procedurelog.PatNum "
+					//  +"AND procedurelog.ProcStatus=2 "//complete
+					//  +"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
+					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
+					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
+					command="SELECT patient.PatNum,LName,FName,SmokeStatus FROM patient "
+						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
+						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"WHERE patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13))+" "//13 and older
+						+"GROUP BY patient.PatNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.Lab:
-					command="SELECT patient.PatNum,LName,FName,DateTimeOrder, "
-						+"(SELECT COUNT(*) FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum) AS panelCount "
-						+"FROM medicalorder,patient "
-						+"WHERE medicalorder.PatNum=patient.PatNum "
+					//command="SELECT patient.PatNum,LName,FName,DateTimeOrder, "
+					//  +"(SELECT COUNT(*) FROM labpanel WHERE labpanel.MedicalOrderNum=medicalorder.MedicalOrderNum) AS panelCount "
+					//  +"FROM medicalorder,patient "
+					//  +"WHERE medicalorder.PatNum=patient.PatNum "
+					//  +"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
+					//  +"AND medicalorder.ProvNum="+POut.Long(provNum)+" "
+					//  +"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
+					//  +"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
+					command="SELECT patient.PatNum,LName,FName,DateTimeOrder,COALESCE(panelCount.Count,0) AS panelCount FROM patient "
+						+"INNER JOIN medicalorder ON patient.PatNum=medicalorder.PatNum "
 						+"AND MedOrderType="+POut.Int((int)MedicalOrderType.Laboratory)+" "
-						+"AND medicalorder.ProvNum="+POut.Long(provNum)+" "
-						+"AND DATE(DateTimeOrder) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(DateTimeOrder) <= "+POut.Date(dateEnd);
+						+"AND medicalorder.ProvNum IN("+POut.String(provs)+") "
+						+"AND DATE(DateTimeOrder) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"LEFT JOIN (SELECT MedicalOrderNum,COUNT(*) AS 'Count' FROM labpanel GROUP BY MedicalOrderNum) "
+						+"panelCount ON panelCount.MedicalOrderNum=medicalorder.MedicalOrderNum";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.ElectronicCopy:
@@ -351,7 +437,8 @@ namespace OpenDentBusiness{
 						+"AND EventType="+POut.Int((int)EhrMeasureEventType.ElectronicCopyRequested)+" "
 						+"AND DATE(DateTEvent) >= "+POut.Date(dateStart)+" "
 						+"AND DATE(DateTEvent) <= "+POut.Date(dateEnd)+" "
-						+"AND patient.PriProv="+POut.Long(provNum);
+						//+"AND patient.PriProv="+POut.Long(provNum);
+						+"AND patient.PriProv IN("+POut.String(provs)+")";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
 						+"SET dateDeadline = ADDDATE(dateRequested, INTERVAL 3 DAY)";
@@ -389,7 +476,8 @@ namespace OpenDentBusiness{
 						+"LEFT JOIN patient ON patient.PatNum=procedurelog.PatNum "
 						+"WHERE ProcDate >= "+POut.Date(dateStart)+" "
 						+"AND ProcDate <= "+POut.Date(dateEnd)+" "
-						+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						//+"AND procedurelog.ProvNum="+POut.Long(provNum)+" "
+						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
 						+"GROUP BY procedurelog.PatNum,ProcDate";
 					Db.NonQ(command);
 					command="UPDATE tempehrmeasure "
@@ -410,17 +498,27 @@ namespace OpenDentBusiness{
 					Db.NonQ(command);
 					break;
 				case EhrMeasureType.Reminders:
-					command="SELECT PatNum,LName,FName, "
-						+"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
-						+"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+" "
-						+") AS reminderCount "
-						+"FROM patient "
+					//command="SELECT PatNum,LName,FName, "
+					//  +"(SELECT COUNT(*) FROM ehrmeasureevent WHERE PatNum=patient.PatNum AND EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
+					//  +"AND DATE(ehrmeasureevent.DateTEvent) >= "+POut.Date(dateStart)+" "
+					//  +"AND DATE(ehrmeasureevent.DateTEvent) <= "+POut.Date(dateEnd)+" "
+					//  +") AS reminderCount "
+					//  +"FROM patient "
+					//  +"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
+					//  +"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
+					//  +"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
+					//  +"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
+					//  +"AND patient.PriProv="+POut.Long(provNum);
+					command="SELECT patient.PatNum,LName,FName,COALESCE(reminderCount.Count,0) AS reminderCount FROM patient "
+						+"LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM ehrmeasureevent "
+						+"WHERE EventType="+POut.Int((int)EhrMeasureEventType.ReminderSent)+" "
+						+"AND DATE(ehrmeasureevent.DateTEvent) BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
+						+"GROUP BY PatNum) reminderCount ON reminderCount.PatNum=patient.PatNum "
 						+"WHERE patient.Birthdate > '1880-01-01' "//a birthdate is entered
 						+"AND (patient.Birthdate > "+POut.Date(DateTime.Today.AddYears(-6))+" "//5 years or younger
 						+"OR patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-65))+") "//65+
 						+"AND patient.PatStatus="+POut.Int((int)PatientStatus.Patient)+" "
-						+"AND patient.PriProv="+POut.Long(provNum);
+						+"AND patient.PriProv IN("+POut.String(provs)+")";
 					tableRaw=Db.GetTable(command);
 					break;
 				case EhrMeasureType.MedReconcile:
@@ -437,7 +535,8 @@ namespace OpenDentBusiness{
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
 						+"FROM refattach,patient "
 						+"WHERE patient.PatNum=refattach.PatNum "
-						+"AND patient.PriProv="+POut.Long(provNum)+" "
+						//+"AND patient.PriProv="+POut.Long(provNum)+" "
+						+"AND patient.PriProv IN("+POut.String(provs)+") "
 						+"AND RefDate >= "+POut.Date(dateStart)+" "
 						+"AND RefDate <= "+POut.Date(dateEnd)+" "
 						+"AND IsFrom=1 AND IsTransitionOfCare=1 "
@@ -468,7 +567,8 @@ namespace OpenDentBusiness{
 					command="INSERT INTO tempehrmeasure (PatNum,LName,FName,RefCount) SELECT patient.PatNum,LName,FName,COUNT(*) "
 						+"FROM refattach,patient "
 						+"WHERE patient.PatNum=refattach.PatNum "
-						+"AND patient.PriProv="+POut.Long(provNum)+" "
+						//+"AND patient.PriProv="+POut.Long(provNum)+" "
+						+"AND patient.PriProv IN("+POut.String(provs)+") "
 						+"AND RefDate >= "+POut.Date(dateStart)+" "
 						+"AND RefDate <= "+POut.Date(dateEnd)+" "
 						+"AND IsFrom=0 AND IsTransitionOfCare=1 "

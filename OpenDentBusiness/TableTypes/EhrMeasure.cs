@@ -30,6 +30,9 @@ namespace OpenDentBusiness {
 		///<summary>Not a database column.  An explanation of which patients qualify for denominator.</summary>
 		[CrudColumn(IsNotDbColumn=true)]
 		public string DenominatorExplain;
+		///<summary>Not a database column.  Used for timing calculation of each measure.</summary>
+		[CrudColumn(IsNotDbColumn=true)]
+		public TimeSpan ElapsedTime;
 
 		///<summary></summary>
 		public EhrMeasure Copy() {
