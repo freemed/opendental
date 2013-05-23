@@ -1716,7 +1716,7 @@ namespace OpenDental{
 				if(ComputerPrefs.LocalComputer.DirectXFormat=="invalid") {
 					//No valid local DirectX format could be found.
 					//Simply revert to OpenGL.
-					ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.OpenGL;
+					ComputerPrefs.LocalComputer.GraphicsSimple=DrawingMode.Simple2D;
 				}
 				ComputerPrefs.Update(ComputerPrefs.LocalComputer);
 				ContrChart2.InitializeOnStartup();
