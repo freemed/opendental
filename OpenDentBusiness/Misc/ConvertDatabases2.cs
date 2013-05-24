@@ -12043,6 +12043,44 @@ a.PageNotExists:hover {
 				command="UPDATE preference SET ValueString = '13.1.32.0' WHERE PrefName = 'DataBaseVersion'";
 				Db.NonQ(command);
 			}
+			To13_1_33();
+		}
+
+		private static void To13_1_33() {
+			if(FromVersion<new Version("13.1.33.0")) {
+				string command;
+				bool isNewCropEnabled=false;
+				command="SELECT ValueString FROM preference WHERE PrefName='NewCropAccountId'";
+				if(Db.GetScalar(command)!="") {
+					isNewCropEnabled=true;
+				}
+				//Insert NewCrop Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+		          +") VALUES("
+		          +"'NewCrop',"
+		          +"'NewCrop electronic Rx',"
+		          +"'"+POut.Bool(isNewCropEnabled)+"',"//The enabled status of the NewCrop bridge is synchronous with the NewCropAccountId preference. If disabled later, then the NewCropAccountId will also be cleared.
+		          +"'',"//No program path.
+		          +"'',"//No command line, because not program path.
+		          +"'NewCrop only works for the United States and its territories, including Puerto Rico.  Disable if you are located elsewhere.')";
+					Db.NonQ(command);//No programproperties, because we only need the Enabled checkbox.
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+		          +") VALUES("
+		          +"(SELECT MAX(ProgramNum)+1 FROM program),"
+		          +"'NewCrop',"
+		          +"'NewCrop electronic Rx',"
+		          +"'"+POut.Bool(isNewCropEnabled)+"',"//The enabled status of the NewCrop bridge is synchronous with the NewCropAccountId preference. If disabled later, then the NewCropAccountId will also be cleared.
+		          +"'',"//No program path.
+		          +"'',"//No command line, because not program path.
+		          +"'NewCrop only works for the United States and its territories, including Puerto Rico.  Disable if you are located elsewhere.')";
+					Db.NonQ(command);//No programproperties, because we only need the Enabled checkbox.
+				}//end NewCrop bridge
+				command="UPDATE preference SET ValueString = '13.1.33.0' WHERE PrefName = 'DataBaseVersion'";
+				Db.NonQ(command);
+			}
 			To13_2_0();
 		}
 

@@ -64,6 +64,8 @@ namespace OpenDentBusiness{
 		MediaDent,
 		MiPACS,
 		Mountainside,
+		///<summary>electronic Rx.</summary>
+		NewCrop,
 		///<summary>Please use Programs.UsingOrion where possible.</summary>
 		Orion,
 		OrthoPlex,

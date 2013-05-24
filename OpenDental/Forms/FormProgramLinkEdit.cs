@@ -474,6 +474,19 @@ namespace OpenDental{
 					return;
 				}
 			}
+			if(ProgramCur.ProgName==ProgramName.NewCrop.ToString()) {
+				string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
+				if(!checkEnabled.Checked && newCropAccountId!="") {
+					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Disabling the NewCrop feature will remove your existing NewCrop account ID.  If you decide to enable later, then a new account ID will be generated. Continue anyway?")) {
+						return;
+					}
+					Prefs.UpdateString(PrefName.NewCropAccountId,"");
+				}
+				else if(checkEnabled.Checked && newCropAccountId=="") {
+					MsgBox.Show(this,"NewCrop cannot be enabled from here. Instead, use the eRx button in the Chart module.");
+					return;
+				}
+			}
 			ProgramCur.ProgName=textProgName.Text;
 			ProgramCur.ProgDesc=textProgDesc.Text;
 			ProgramCur.Enabled=checkEnabled.Checked;

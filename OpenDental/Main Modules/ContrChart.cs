@@ -3913,7 +3913,7 @@ namespace OpenDental{
 				checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+1])*3;
 				checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+2])*5;
 				checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+3])*7;
-				if((checkSum%100).ToString()==newCropAccountId.Substring(newCropAccountId.Length-2)) {
+				if((checkSum%100).ToString().PadLeft(2,'0')==newCropAccountId.Substring(newCropAccountId.Length-2)) {
 					validKey=true;
 				}
 			}
@@ -3982,7 +3982,15 @@ namespace OpenDental{
 			//Send the request to NewCrop. Always returns all current medications, and returns medications between the StartHistory and EndHistory dates if requesting archived medications.
 			//The patientIdType parameter was added for another vendor and is not often used. We do not use this field. We must pass empty string.
 			//The includeSchema parameter is useful for first-time debugging, but in release mode, we should pass N for no.
-			response=wsNewCrop.GetPatientFullMedicationHistory6(credentials,accountRequest,patientRequest,prescriptionHistoryRequest,patientInfoRequester,"","N");
+			try {
+				response=wsNewCrop.GetPatientFullMedicationHistory6(credentials,accountRequest,patientRequest,prescriptionHistoryRequest,patientInfoRequester,"","N");
+			}
+			catch {
+				MsgBox.Show(this,"Failed to communicate with NewCrop. A firewall or antivirus application might be blocking Open Dental, "
+					+"or this computer might not be able to see secure.newcropaccounts.com due to a network name resolution (DNS) issue. "
+					+"If you do not use electronic prescriptions, consider disabling the NewCrop program link in Setup | Program Links.");
+				return false;
+			}
 			//response.Message = Error message if error.
 			//response.RowCount = Number of prescription records returned.
 			//response.Status = Status of request. "OK" = success.
@@ -4086,7 +4094,7 @@ namespace OpenDental{
 		private void Tool_eRx_Click() {
 			string newCropAccountId=PrefC.GetString(PrefName.NewCropAccountId);
 			if(newCropAccountId==""){
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want to enable NewCrop electronic prescriptions? The cost is $15/month for each prescribing provider.")) {
+				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you want to enable NewCrop electronic prescriptions?  The cost is $15/month for each prescribing provider.  NewCrop only works for the United States and its territories, including Puerto Rico.")) {
 					return;
 				}
 				//prepare the xml document to send--------------------------------------------------------------------------------------
@@ -4133,6 +4141,9 @@ namespace OpenDental{
 					checkSum+=Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-')+3])*7;
 					newCropAccountId+=(checkSum%100).ToString().PadLeft(2,'0');
 					Prefs.UpdateString(PrefName.NewCropAccountId,newCropAccountId);
+					Program prog=Programs.GetCur(ProgramName.NewCrop);
+					prog.Enabled=true;
+					Programs.Update(prog);
 				}
 				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
