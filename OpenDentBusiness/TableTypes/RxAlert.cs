@@ -19,6 +19,8 @@ namespace OpenDentBusiness {
 		public long MedicationNum;
 		///<summary>This is typically blank, so a default message will be displayed by OD.  But if this contains a message, then this message will be used instead.</summary>
 		public string NotificationMsg;
+		///<summary>False by default.  Set to true to flag the drug-drug or drug-allergy intervention as high significance.</summary>
+		public bool IsHighSignificance;
 
 		///<summary></summary>
 		public RxAlert Copy() {

@@ -157,6 +157,8 @@ namespace OpenDentBusiness {
 		EHREmailPassword,
 		EHREmailPOPserver,
 		EHREmailPort,
+		///<summary>Boolean.  Initially 0.  Set to 1 to indicate that only high significant Rx alerts will show.  0 to show all significance level Rx alerts.</summary>
+		EhrRxAlertHighSeverity,
 		///<summary>This pref is hidden, so no practical way for user to turn this on.  Only used for ehr testing.</summary>
 		EHREmailToAddress,
 		///<summary>Date when user upgraded to 13.1.14 and started using NewCrop Guids on Rxs.</summary>

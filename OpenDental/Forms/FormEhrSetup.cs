@@ -38,6 +38,11 @@ namespace OpenDental {
 			}
 		}
 
+		private void menuItemSettings_Click(object sender,EventArgs e) {
+			FormEhrSettings FormES=new FormEhrSettings();
+			FormES.ShowDialog();
+		}
+
 		private void butICD9s_Click(object sender,EventArgs e) {
 			FormIcd9s FormE=new FormIcd9s();
 			FormE.ShowDialog();
@@ -108,6 +113,7 @@ namespace OpenDental {
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;
 		}
+
 
 		
 
