@@ -47,6 +47,9 @@ namespace OpenDentBusiness{
 				+"AND Etype!="+POut.Long((int)EtransType.PredetermEOB_CA)+" "//Could be attached to a Predetermination request or an ROT.
 				+"AND Etype!="+POut.Long((int)EtransType.ReverseResponse_CA)+" "//Will always be attached to a Reversal request.
 				+"AND Etype!="+POut.Long((int)EtransType.SummaryResponse_CA)+" "//Will always be attached to a Request for Summary Reconciliation (RSR).
+				//For Canada, when the undo button is used from Manage | Send Claims, the ClaimNum is set to 0 instead of deleting the etrans entry.
+				//For transaction types related to claims where the claimnum=0, we do not want them to show in the history section of Manage | Send Claims because they have been undone.
+				+"AND (ClaimNum<>0 OR Etype NOT IN ("+POut.Long((int)EtransType.Claim_CA)+","+POut.Long((int)EtransType.ClaimCOB_CA)+","+POut.Long((int)EtransType.Predeterm_CA)+","+POut.Long((int)EtransType.ClaimReversal_CA)+")) "
 				+"ORDER BY DateTimeTrans";
 			DataTable table=Db.GetTable(command);
 			DataTable tHist=new DataTable("Table");
@@ -333,9 +336,19 @@ namespace OpenDentBusiness{
 			//Change the claim back to W.
 			command="UPDATE claim SET ClaimStatus='W' WHERE ClaimNum="+POut.Long(claimNum);
 			Db.NonQ(command);
-			//Delete this etrans
-			command="DELETE FROM etrans WHERE EtransNum="+POut.Long(etransNum);
-			Db.NonQ(command);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
+				//We cannot delete etrans entries, because we need to retain the OfficeSequenceNumber in order to prevent reuse.
+				//We used to allow deleting here, but some customers were getting the "invalid dental claim number or office sequence number" error message when sending claims thereafter.
+				//Office sequence numbers must be unique for every request and response, whether related to a claim or not.
+				//Instead of deleting, we simply detach from the claim, so that this historic entry will no longer display within the Manage | Send Claims window.
+				command="UPDATE etrans SET ClaimNum=0 WHERE EtransNum="+POut.Long(etransNum);
+				Db.NonQ(command);
+			}
+			else {
+				//Delete this etrans
+				command="DELETE FROM etrans WHERE EtransNum="+POut.Long(etransNum);
+				Db.NonQ(command);
+			}
 		}
 
 		///<summary>Deletes the etrans entry.  Mostly used when the etrans entry was created, but then the communication with the clearinghouse failed.  So this is just a rollback function.  Will not delete the message associated with the etrans.  That must be done separately.  Will throw exception if the etrans does not exist.</summary>
