@@ -391,7 +391,8 @@ namespace OpenDentBusiness{
 					//  +"AND procedurelog.ProcDate >= "+POut.Date(dateStart)+" "
 					//  +"AND procedurelog.ProcDate <= "+POut.Date(dateEnd)+") "
 					//  +"AND patient.Birthdate <= "+POut.Date(DateTime.Today.AddYears(-13));//13 and older
-					command="SELECT patient.PatNum,LName,FName,SmokeStatus FROM patient "
+					//command="SELECT patient.PatNum,LName,FName,SmokeStatus FROM patient "
+					command="SELECT patient.PatNum,LName,FName,SmokingSnoMed FROM patient "
 						+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum AND procedurelog.ProcStatus=2 "
 						+"AND procedurelog.ProvNum IN("+POut.String(provs)+") "
 						+"AND procedurelog.ProcDate BETWEEN "+POut.Date(dateStart)+" AND "+POut.Date(dateEnd)+" "
@@ -737,7 +738,38 @@ namespace OpenDentBusiness{
 						}
 						break;
 					case EhrMeasureType.Smoking:
-						SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
+						//SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
+						SmokingStatus smokeStatus;
+						switch(PIn.String(tableRaw.Rows[i]["SmokingSnoMed"].ToString())) {
+							//uncomment the two cases when we hear from proctor
+							//case "428061000124105":
+							//  smokeStatus=SmokingStatus.LightSmoker;
+							//  break;
+							case "449868002":
+								smokeStatus=SmokingStatus.CurrentEveryDay_Recode1;
+								break;
+							case "428041000124106":
+								smokeStatus=SmokingStatus.CurrentSomeDay_Recode2;
+								break;
+							case "8517006":
+								smokeStatus=SmokingStatus.FormerSmoker_Recode3;
+								break;
+							case "266919005":
+								smokeStatus=SmokingStatus.NeverSmoked_Recode4;
+								break;
+							case "77176002":
+								smokeStatus=SmokingStatus.SmokerUnknownCurrent_Recode5;
+								break;
+							case "266927001":
+								smokeStatus=SmokingStatus.UnknownIfEver_Recode9;
+								break;
+							//case "428071000124103":
+							//  smokeStatus=SmokingStatus.HeavySmoker;
+							//  break;
+							default:
+								smokeStatus=SmokingStatus.UnknownIfEver_Recode9;
+								break;
+						}
 						if(smokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
 							explanation+="Smoking status not entered.";
 						}
@@ -1138,7 +1170,7 @@ namespace OpenDentBusiness{
 						break;
 					case EhrMeasureType.Smoking:
 						//if(pat.SmokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
-						if(pat.SmokingSnoMed=="266927001") {//SnoMed code for Unknown if ever smoked
+						if(pat.SmokingSnoMed=="266927001" || pat.SmokingSnoMed=="") {//SnoMed code for Unknown if ever smoked or no status entered
 							mu.Details="Smoking status not entered";
 						}
 						else {
