@@ -156,8 +156,9 @@ namespace OpenDentBusiness{
 		public int AskToArriveEarly;
 		///<summary>If this is blank, then the chart info for this patient will not be uploaded.  If this has a value, then this is the password that a patient must use to access their info online.</summary>
 		public string OnlinePassword;
-		///<summary>Enum:SmokingStatus  0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
-		public SmokingStatus SmokeStatus;
+		/////<summary>Enum:SmokingStatus  0=UnknownIfEver,1=SmokerUnkownCurrent,2=NeverSmoked,3=FormerSmoker,4=CurrentSomeDay,5=CurrentEveryDay</summary>
+		//[CrudColumn(IsNotDbColumn=true)]
+		//public SmokingStatus SmokeStatus;
 		///<summary>Enum:ContactMethod  Used for EHR.</summary>
 		public ContactMethod PreferContactConfidential;
 		///<summary>FK to patient.PatNum.  If this is the same as PatNum, then this is a SuperHead.  If zero, then not part of a superfamily.  Synched for entire family.  If family is part of a superfamily, then the guarantor for this family will show in the superfamily list in the Family module for anyone else who is in the superfamily.  Only a guarantor can be a superfamily head.</summary>

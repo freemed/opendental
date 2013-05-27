@@ -1137,7 +1137,8 @@ namespace OpenDentBusiness{
 						mu.Action="Enter vital signs";
 						break;
 					case EhrMeasureType.Smoking:
-						if(pat.SmokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
+						//if(pat.SmokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
+						if(pat.SmokingSnoMed=="266927001") {//SnoMed code for Unknown if ever smoked
 							mu.Details="Smoking status not entered";
 						}
 						else {

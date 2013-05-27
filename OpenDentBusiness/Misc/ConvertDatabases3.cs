@@ -279,7 +279,21 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'EhrRxAlertHighSeverity','0')";
 					Db.NonQ(command);
 				}
-
+				//Oracle compatible
+				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
+				Db.NonQ(command);
+				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
+				Db.NonQ(command);
+				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
+				Db.NonQ(command);
+				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
+				Db.NonQ(command);
+				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
+				Db.NonQ(command);
+				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
+				Db.NonQ(command);
+				command="ALTER TABLE patient DROP COLUMN SmokeStatus";
+				Db.NonQ(command);
 
 
 

@@ -1262,7 +1262,11 @@ namespace OpenDentBusiness{
 		///<summary>4</summary>
 		CurrentSomeDay_Recode2,
 		///<summary>5</summary>
-		CurrentEveryDay_Recode1
+		CurrentEveryDay_Recode1//,//implement when we get answer from proctor
+		/////<summary>6</summary>
+		//LightSmoker,
+		/////<summary>7</summary>
+		//HeavySmoker
 	}
 
 	///<summary>0=Active, 1=Resolved, 2=Inactive</summary>

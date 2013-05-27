@@ -117,7 +117,6 @@ namespace OpenDentBusiness.Crud{
 				patient.CanadianEligibilityCode  = PIn.Byte  (table.Rows[i]["CanadianEligibilityCode"].ToString());
 				patient.AskToArriveEarly         = PIn.Int   (table.Rows[i]["AskToArriveEarly"].ToString());
 				patient.OnlinePassword           = PIn.String(table.Rows[i]["OnlinePassword"].ToString());
-				patient.SmokeStatus              = (SmokingStatus)PIn.Int(table.Rows[i]["SmokeStatus"].ToString());
 				patient.PreferContactConfidential= (ContactMethod)PIn.Int(table.Rows[i]["PreferContactConfidential"].ToString());
 				patient.SuperFamily              = PIn.Long  (table.Rows[i]["SuperFamily"].ToString());
 				patient.TxtMsgOk                 = (YN)PIn.Int(table.Rows[i]["TxtMsgOk"].ToString());
@@ -162,7 +161,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="PatNum,";
 			}
-			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,SmokeStatus,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed) VALUES(";
+			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,Race,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,OnlinePassword,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(patient.PatNum)+",";
 			}
@@ -237,7 +236,6 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (patient.CanadianEligibilityCode)+","
 				+    POut.Int   (patient.AskToArriveEarly)+","
 				+"'"+POut.String(patient.OnlinePassword)+"',"
-				+    POut.Int   ((int)patient.SmokeStatus)+","
 				+    POut.Int   ((int)patient.PreferContactConfidential)+","
 				+    POut.Long  (patient.SuperFamily)+","
 				+    POut.Int   ((int)patient.TxtMsgOk)+","
@@ -324,7 +322,6 @@ namespace OpenDentBusiness.Crud{
 				+"CanadianEligibilityCode  =  "+POut.Byte  (patient.CanadianEligibilityCode)+", "
 				+"AskToArriveEarly         =  "+POut.Int   (patient.AskToArriveEarly)+", "
 				+"OnlinePassword           = '"+POut.String(patient.OnlinePassword)+"', "
-				+"SmokeStatus              =  "+POut.Int   ((int)patient.SmokeStatus)+", "
 				+"PreferContactConfidential=  "+POut.Int   ((int)patient.PreferContactConfidential)+", "
 				+"SuperFamily              =  "+POut.Long  (patient.SuperFamily)+", "
 				+"TxtMsgOk                 =  "+POut.Int   ((int)patient.TxtMsgOk)+", "
@@ -612,10 +609,6 @@ namespace OpenDentBusiness.Crud{
 			if(patient.OnlinePassword != oldPatient.OnlinePassword) {
 				if(command!=""){ command+=",";}
 				command+="OnlinePassword = '"+POut.String(patient.OnlinePassword)+"'";
-			}
-			if(patient.SmokeStatus != oldPatient.SmokeStatus) {
-				if(command!=""){ command+=",";}
-				command+="SmokeStatus = "+POut.Int   ((int)patient.SmokeStatus)+"";
 			}
 			if(patient.PreferContactConfidential != oldPatient.PreferContactConfidential) {
 				if(command!=""){ command+=",";}
