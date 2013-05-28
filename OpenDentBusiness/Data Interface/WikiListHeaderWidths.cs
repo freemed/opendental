@@ -75,11 +75,11 @@ namespace OpenDentBusiness{
 			}
 			List<WikiListHeaderWidth> retVal = new List<WikiListHeaderWidth>();
 			string command="DESCRIBE wikilist_"+POut.String(listName);
-			DataTable listDescription=Db.GetTable(command);
-			for(int i=0;i<listDescription.Rows.Count;i++) {
+			DataTable tableListDescription=Db.GetTable(command);
+			for(int i=0;i<tableListDescription.Rows.Count;i++) {
 				for(int j=0;j<Listt.Count;j++) {
 					//Add WikiListHeaderWidth from tempList to retVal if it is the next row in listDescription.
-					if(listDescription.Rows[i][0].ToString()==Listt[j].ColName) {
+					if(tableListDescription.Rows[i][0].ToString()==Listt[j].ColName) {
 						retVal.Add(Listt[j]);
 						break;
 					}
@@ -96,27 +96,27 @@ namespace OpenDentBusiness{
 				return;
 			}
 			string command="DESCRIBE wikilist_"+POut.String(listName);
-			DataTable listDescription=Db.GetTable(command);
-			if(listDescription.Rows.Count!=columnDefs.Count) {
+			DataTable tableListDescription=Db.GetTable(command);
+			if(tableListDescription.Rows.Count!=columnDefs.Count) {
 				throw new ApplicationException("List schema has been altered. Unable to save changes to list.");
 			}
 			//rename Columns with dummy names in case user is renaming a new column with an old name.---------------------------------------------
-			for(int i=0;i<listDescription.Rows.Count;i++) {
-				if(listDescription.Rows[i][0].ToString().ToLower()==POut.String(listName)+"num") {
+			for(int i=0;i<tableListDescription.Rows.Count;i++) {
+				if(tableListDescription.Rows[i][0].ToString().ToLower()==POut.String(listName)+"num") {
 					//skip primary key
 					continue;
 				}
-				command="ALTER TABLE wikilist_"+POut.String(listName)+" CHANGE "+POut.String(listDescription.Rows[i][0].ToString())+" "+POut.String(dummyColName+i)+" TEXT NOT NULL";
+				command="ALTER TABLE wikilist_"+POut.String(listName)+" CHANGE "+POut.String(tableListDescription.Rows[i][0].ToString())+" "+POut.String(dummyColName+i)+" TEXT NOT NULL";
 				Db.NonQ(command);
 				command=
-				"UPDATE wikiListHeaderWidth SET ColName='"+POut.String(dummyColName+i)+"' "
-				+"WHERE ListName='"+POut.String(listName)+"' "
-				+"AND ColName='"+POut.String(listDescription.Rows[i][0].ToString())+"'";
+					"UPDATE wikiListHeaderWidth SET ColName='"+POut.String(dummyColName+i)+"' "
+					+"WHERE ListName='"+POut.String(listName)+"' "
+					+"AND ColName='"+POut.String(tableListDescription.Rows[i][0].ToString())+"'";
 				Db.NonQ(command);
 			}
 			//rename columns names and widths-------------------------------------------------------------------------------------------------------
-			for(int i=0;i<listDescription.Rows.Count;i++) {
-				if(listDescription.Rows[i][0].ToString().ToLower()==listName+"num") {//not a query, no POut.
+			for(int i=0;i<tableListDescription.Rows.Count;i++) {
+				if(tableListDescription.Rows[i][0].ToString().ToLower()==listName+"num") {
 					//skip primary key
 					continue;
 				}
@@ -130,7 +130,7 @@ namespace OpenDentBusiness{
 			}
 			//handle width of PK seperately because we do not rename the PK column, ever.
 			command="UPDATE wikiListHeaderWidth SET ColWidth='"+POut.Int(columnDefs[0].ColWidth)+"' "
-			+"WHERE ListName='"+POut.String(listName)+"' AND ColName='"+POut.String(columnDefs[0].ColName)+"'";
+				+"WHERE ListName='"+POut.String(listName)+"' AND ColName='"+POut.String(columnDefs[0].ColName)+"'";
 			Db.NonQ(command);
 			RefreshCache();
 		}

@@ -256,7 +256,7 @@ namespace OpenDentBusiness {
 		///<summary>Returns true if the input string is a reserved word in MySQL 5.5.31.</summary>
 		public static bool isMySQLReservedWord(string input) {
 			bool retval;
-			//using a switch statement makes this method run in constant time. (As opposed to linear time with a for loop.)
+			//using a switch statement makes this method run in constant time (faster).
 			switch(input.ToUpper()) {
 				case "ACCESSIBLE":
 				case "ADD":
