@@ -54,6 +54,8 @@ namespace OpenDentBusiness.Crud{
 				repeatCharge.DateStop       = PIn.Date  (table.Rows[i]["DateStop"].ToString());
 				repeatCharge.Note           = PIn.String(table.Rows[i]["Note"].ToString());
 				repeatCharge.CopyNoteToProc = PIn.Bool  (table.Rows[i]["CopyNoteToProc"].ToString());
+				repeatCharge.CreatesClaim   = PIn.Bool  (table.Rows[i]["CreatesClaim"].ToString());
+				repeatCharge.IsEnabled      = PIn.Bool  (table.Rows[i]["IsEnabled"].ToString());
 				retVal.Add(repeatCharge);
 			}
 			return retVal;
@@ -94,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="RepeatChargeNum,";
 			}
-			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note,CopyNoteToProc) VALUES(";
+			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note,CopyNoteToProc,CreatesClaim,IsEnabled) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(repeatCharge.RepeatChargeNum)+",";
 			}
@@ -105,7 +107,9 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (repeatCharge.DateStart)+","
 				+    POut.Date  (repeatCharge.DateStop)+","
 				+"'"+POut.String(repeatCharge.Note)+"',"
-				+    POut.Bool  (repeatCharge.CopyNoteToProc)+")";
+				+    POut.Bool  (repeatCharge.CopyNoteToProc)+","
+				+    POut.Bool  (repeatCharge.CreatesClaim)+","
+				+    POut.Bool  (repeatCharge.IsEnabled)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -124,7 +128,9 @@ namespace OpenDentBusiness.Crud{
 				+"DateStart      =  "+POut.Date  (repeatCharge.DateStart)+", "
 				+"DateStop       =  "+POut.Date  (repeatCharge.DateStop)+", "
 				+"Note           = '"+POut.String(repeatCharge.Note)+"', "
-				+"CopyNoteToProc =  "+POut.Bool  (repeatCharge.CopyNoteToProc)+" "
+				+"CopyNoteToProc =  "+POut.Bool  (repeatCharge.CopyNoteToProc)+", "
+				+"CreatesClaim   =  "+POut.Bool  (repeatCharge.CreatesClaim)+", "
+				+"IsEnabled      =  "+POut.Bool  (repeatCharge.IsEnabled)+" "
 				+"WHERE RepeatChargeNum = "+POut.Long(repeatCharge.RepeatChargeNum);
 			Db.NonQ(command);
 		}
@@ -159,6 +165,14 @@ namespace OpenDentBusiness.Crud{
 			if(repeatCharge.CopyNoteToProc != oldRepeatCharge.CopyNoteToProc) {
 				if(command!=""){ command+=",";}
 				command+="CopyNoteToProc = "+POut.Bool(repeatCharge.CopyNoteToProc)+"";
+			}
+			if(repeatCharge.CreatesClaim != oldRepeatCharge.CreatesClaim) {
+				if(command!=""){ command+=",";}
+				command+="CreatesClaim = "+POut.Bool(repeatCharge.CreatesClaim)+"";
+			}
+			if(repeatCharge.IsEnabled != oldRepeatCharge.IsEnabled) {
+				if(command!=""){ command+=",";}
+				command+="IsEnabled = "+POut.Bool(repeatCharge.IsEnabled)+"";
 			}
 			if(command==""){
 				return;

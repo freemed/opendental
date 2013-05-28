@@ -23,7 +23,10 @@ namespace OpenDentBusiness{
 		public string Note;
 		///<summary>Indicates that the note should be copied to the corresponding procedure billing note.</summary>
 		public bool CopyNoteToProc;
-
+		///<summary>Set to true to have a claim automatically created for the patient with the procedure that is attached to this repeating charge.</summary>
+		public bool CreatesClaim;
+		///<summary>Defaulted to true.  Set to false to disable the repeating charge.  This allows patients to have repeating charges in their history that are not active.  Used mainly for repeating charges with notes that should not be deleted.</summary>
+		public bool IsEnabled;
 		///<summary></summary>
 		public RepeatCharge Copy(){
 			RepeatCharge r=new RepeatCharge();
@@ -35,6 +38,8 @@ namespace OpenDentBusiness{
 			r.DateStop=DateStop;
 			r.Note=Note;
 			r.CopyNoteToProc=CopyNoteToProc;
+			r.CreatesClaim=CreatesClaim;
+			r.IsEnabled=IsEnabled;
 			return r;
 		}
 

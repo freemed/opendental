@@ -2124,7 +2124,7 @@ namespace OpenDental {
 				return;
 			}
 			gridRepeat.Visible=true;
-			gridRepeat.Height=75;
+			gridRepeat.Height=140;
 			gridRepeat.BeginUpdate();
 			gridRepeat.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRepeatCharges","Description"),150);
