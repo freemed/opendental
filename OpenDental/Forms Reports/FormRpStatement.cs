@@ -402,6 +402,7 @@ namespace OpenDental{
 				}
 				else {
 					text=Lan.g(this,"INVOICE");
+					text+=" #"+Stmt.StatementNum.ToString();//Some larger customers of OD need this to show in order to properly pay.
 				}
 			}
 			else if(Stmt.IsReceipt) {
