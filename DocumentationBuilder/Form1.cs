@@ -81,6 +81,7 @@ namespace DocumentationBuilder {
 
 		private void WriteTable(XmlWriter writer,string tableName){
 			if(tableName=="anestheticdata"
+				|| tableName=="anestheticrecord"
 				|| tableName=="anesthmedsgiven"
 				|| tableName=="anesthmedsintake"
 				|| tableName=="anesthmedsinventory"
@@ -88,8 +89,8 @@ namespace DocumentationBuilder {
 				|| tableName=="anesthmedsuppliers"
 				|| tableName=="anesthscore"
 				|| tableName=="anesthvsdata"
-				|| tableName==""
-				|| tableName==""
+				|| tableName=="reseller"
+				|| tableName=="resellerservice"
 				|| tableName=="") {
 				
 				return;
@@ -240,9 +241,11 @@ namespace DocumentationBuilder {
 				case "dashboardar": return "DashboardAR";
 				case "definition": return "Def";
 				case "deletedobject": return "DeletedObject";
+				case "dictcustom": return "DictCustom";
 				case "diseasedef": return "DiseaseDef";
 				case "displayfield": return "DisplayField";
 				case "docattach": return "DocAttach";
+				case "documentmisc": return "DocumentMisc";
 				case "drugmanufacturer": return "DrugManufacturer";
 				case "drugunit": return "DrugUnit";
 				case "eduresource": return "EduResource";
@@ -252,11 +255,13 @@ namespace DocumentationBuilder {
 				case "ehrquarterlykey": return "EhrQuarterlyKey";
 				case "ehrsummaryccd": return "EhrSummaryCcd";
 				case "electid": return "ElectID";
+				case "emailaddress": return "EmailAddress";
 				case "emailattach": return "EmailAttach";
 				case "emailmessage": return "EmailMessage";
 				case "emailtemplate": return "EmailTemplate";
 				case "eobattach": return "EobAttach";
 				case "etransmessagetext": return "EtransMessageText";
+				case "erxlog": return "ErxLog";
 				case "feesched": return "FeeSched";
 				case "formpat": return "FormPat";
 				case "formularymed": return "FormularyMed";
@@ -266,12 +271,17 @@ namespace DocumentationBuilder {
 				case "graphicshape": return "graphicshape Not Used";
 				case "graphictype": return "graphictype Not Used";
 				case "grouppermission": return "GroupPermission";
+				case "hl7def": return "HL7Def";
+				case "hl7deffield": return "HL7DefField";
+				case "hl7defmessage": return "HL7DefMessage";
+				case "hl7defsegment": return "HL7DefSegment";
 				case "hl7msg": return "HL7Msg";
 				case "icd9": return "ICD9";
 				case "insfilingcode": return "InsFilingCode";
 				case "insfilingcodesubtype": return "InsFilingCodeSubtype";
 				case "insplan": return "InsPlan";
 				case "inssub": return "InsSub";
+				case "installmentplan": return "InstallmentPlan";
 				case "journalentry": return "JournalEntry";
 				case "labcase": return "LabCase";
 				case "labpanel": return "LabPanel";
@@ -333,6 +343,7 @@ namespace DocumentationBuilder {
 				case "schoolclass": return "SchoolClass";
 				case "schoolcourse": return "SchoolCourse";
 				case "screengroup": return "ScreenGroup";
+				case "screenpat": return "ScreenPat";
 				case "securitylog": return "SecurityLog";
 				case "sheetdef": return "SheetDef";
 				case "sheetfield": return "SheetField";
@@ -353,12 +364,19 @@ namespace DocumentationBuilder {
 				case "timeadjust": return "TimeAdjust";
 				case "timecardrule": return "TimeCardRule";
 				case "toolbutitem": return "ToolButItem";
+				case "toothgridcell": return "ToothGridCell";
+				case "toothgridcol": return "ToothGridCol";
+				case "toothgriddef": return "ToothGridDef";
 				case "toothinitial": return "ToothInitial";
 				case "treatplan": return "TreatPlan";
 				case "usergroup": return "UserGroup";
 				case "userquery": return "UserQuery";
 				case "vaccinedef": return "VaccineDef";
 				case "vaccinepat": return "VaccinePat";
+				case "wikilistheaderwidth": return "WikiListHeaderWidth";
+				case "wikipage": return "WikiPage";
+				case "wikipagehist": return "WikiPageHist";
+				case "xchargetransaction": return "XChargeTransaction";
 				case "zipcode": return "ZipCode";
 			}
 			/*single cap classes:
