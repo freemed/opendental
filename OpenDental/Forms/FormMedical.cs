@@ -133,37 +133,44 @@ namespace OpenDental{
 			// 
 			// textMedUrgNote
 			// 
+			this.textMedUrgNote.AcceptsTab = true;
+			this.textMedUrgNote.DetectUrls = false;
 			this.textMedUrgNote.Font = new System.Drawing.Font("Microsoft Sans Serif",8.25F,System.Drawing.FontStyle.Bold,System.Drawing.GraphicsUnit.Point,((byte)(0)));
 			this.textMedUrgNote.ForeColor = System.Drawing.Color.Red;
 			this.textMedUrgNote.Location = new System.Drawing.Point(115,447);
-			this.textMedUrgNote.Multiline = true;
+			this.textMedUrgNote.MaxLength = 255;
 			this.textMedUrgNote.Name = "textMedUrgNote";
 			this.textMedUrgNote.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalUrgent;
 			this.textMedUrgNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textMedUrgNote.Size = new System.Drawing.Size(252,33);
 			this.textMedUrgNote.TabIndex = 53;
+			this.textMedUrgNote.Text = "";
 			// 
 			// textService
 			// 
+			this.textService.AcceptsTab = true;
 			this.textService.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+			this.textService.DetectUrls = false;
 			this.textService.Location = new System.Drawing.Point(115,558);
-			this.textService.Multiline = true;
 			this.textService.Name = "textService";
 			this.textService.QuickPasteType = OpenDentBusiness.QuickPasteType.ServiceNotes;
 			this.textService.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textService.Size = new System.Drawing.Size(252,83);
 			this.textService.TabIndex = 52;
+			this.textService.Text = "";
 			// 
 			// textMedical
 			// 
+			this.textMedical.AcceptsTab = true;
+			this.textMedical.DetectUrls = false;
 			this.textMedical.Location = new System.Drawing.Point(115,482);
-			this.textMedical.Multiline = true;
 			this.textMedical.Name = "textMedical";
 			this.textMedical.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalSummary;
 			this.textMedical.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textMedical.Size = new System.Drawing.Size(252,74);
 			this.textMedical.TabIndex = 51;
+			this.textMedical.Text = "";
 			// 
 			// label3
 			// 
@@ -219,16 +226,18 @@ namespace OpenDental{
 			// 
 			// textMedicalComp
 			// 
+			this.textMedicalComp.AcceptsTab = true;
 			this.textMedicalComp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.textMedicalComp.DetectUrls = false;
 			this.textMedicalComp.Location = new System.Drawing.Point(374,262);
-			this.textMedicalComp.Multiline = true;
 			this.textMedicalComp.Name = "textMedicalComp";
 			this.textMedicalComp.QuickPasteType = OpenDentBusiness.QuickPasteType.MedicalHistory;
 			this.textMedicalComp.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
 			this.textMedicalComp.Size = new System.Drawing.Size(585,379);
 			this.textMedicalComp.TabIndex = 54;
+			this.textMedicalComp.Text = "";
 			// 
 			// butAddDisease
 			// 
@@ -432,7 +441,6 @@ namespace OpenDental{
 			this.Text = "Medical";
 			this.Load += new System.EventHandler(this.FormMedical_Load);
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 		#endregion
