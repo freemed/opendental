@@ -58,9 +58,6 @@ namespace OpenDentBusiness{
 		public static Patient GetPat(long patNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Patient>(MethodBase.GetCurrentMethod(),patNum);
 			} 
 			if(patNum==0) {
 				return null;
