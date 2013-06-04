@@ -231,6 +231,80 @@ namespace OpenDentBusiness {
 			return log;
 		}
 
+		//also checks patient.AddrNote
+		public static string SpecialCharactersInNotes(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			if(isCheck) {
+				command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
+				List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
+				List<char> specialCharsFound=new List<char>();
+				int specialCharCount=0;
+				int intC=0;
+				foreach(Appointment apt in apts) {
+					foreach(char c in apt.Note) {
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
+						intC=(int)c;
+						if((intC<126&&intC>31)//31 - 126 are all safe.
+							||intC==9			//"Horizontal Tabulation"
+							||intC==10		//Line Feed
+							||intC==13) {	//carriage return
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+				}
+				command="SELECT * FROM patient WHERE AddrNote REGEXP '[^[:alnum:]^[:space:]]+'";
+				List<Patient> pats=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
+				intC=0;
+				foreach(Patient pat in pats) {
+					foreach(char c in pat.AddrNote) {
+						intC=(int)c;
+						if((intC<126 && intC>31)//31 - 126 are all safe.
+							|| intC==9			//"Horizontal Tabulation"
+							|| intC==10			//Line Feed
+							|| intC==13) {	//carriage return
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+				}
+				foreach(char c in specialCharsFound) {
+					log+=c.ToString()+" doesn't work.\r\n";
+				}
+				if(specialCharCount!=0||verbose) {
+					log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","Total special characters found.  These will cause mobile synch to fail.  If your mobile synch is failing, use the Spec Char button below to fix.")+"\r\n";
+				}
+			}
+			else {
+				//Fix code is in a dedicated button "Spec Char"
+			}
+			return log;
+		}
+
 		//Methods that apply to specific tables----------------------------------------------------------------------------------
 
 		public static string AppointmentsNoPattern(bool verbose,bool isCheck) {
@@ -364,60 +438,6 @@ namespace OpenDentBusiness {
 					}
 					log+=Lans.g("FormDatabaseMaintenance","Planned Appointments created for Appointments with status set to planned and no Planned Appointment: ")+appts.Rows.Count+"\r\n";
 				}
-			}
-			return log;
-		}
-
-		public static string AppointmentSpecialCharactersInNotes(bool verbose,bool isCheck) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
-			}
-			string log="";
-			if(isCheck) {
-				command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
-				List<Appointment> apts=Crud.AppointmentCrud.SelectMany(command);
-				List<char> specialCharsFound=new List<char>();
-				int specialCharCount=0;
-				int intC=0;
-				foreach(Appointment apt in apts) {
-					foreach(char c in apt.Note) {
-						intC=(int)c;
-						if((intC<126&&intC>31)//31 - 126 are all safe.
-							||intC==9			//"Horizontal Tabulation"
-							||intC==10		//Line Feed
-							||intC==13) {	//carriage return
-							continue;
-						}
-						specialCharCount++;
-						if(specialCharsFound.Contains(c)) {
-							continue;
-						}
-						specialCharsFound.Add(c);
-					}
-					foreach(char c in apt.ProcDescript) {//search every character in ProcDescript
-						intC=(int)c;
-						if((intC<126&&intC>31)//31 - 126 are all safe.
-							||intC==9			//"Horizontal Tabulation"
-							||intC==10		//Line Feed
-							||intC==13) {	//carriage return
-							continue;
-						}
-						specialCharCount++;
-						if(specialCharsFound.Contains(c)) {
-							continue;
-						}
-						specialCharsFound.Add(c);
-					}
-				}
-				foreach(char c in specialCharsFound) {
-					log+=c.ToString()+" doesn't work.\r\n";
-				}
-				if(specialCharCount!=0||verbose) {
-					log+=specialCharCount.ToString()+" "+Lans.g("FormDatabaseMaintenance","Total special characters found.  These will cause mobile synch to fail.  If your mobile synch is failing, use the Spec Char button below to fix.")+"\r\n";
-				}
-			}
-			else {
-				//Fix code is in a dedicated button "Spec Char"
 			}
 			return log;
 		}
@@ -3925,8 +3945,12 @@ HAVING cnt>1";
 			return log;
 		}
 
-		///<summary>Removes unsupported unicode characters from appointment.procdescript</summary>
+		///<summary>Removes unsupported unicode characters from appointment.ProcDescript, appointment.Note, and patient.AddrNote</summary>
 		public static void FixSpecialCharacters() {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				Meth.GetVoid(MethodBase.GetCurrentMethod());
+				return;
+			}
 			string command="SELECT * FROM appointment WHERE (ProcDescript REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+') OR (Note REGEXP '[^[:alnum:]^[:space:]^[:punct:]]+')";
 			List<Appointment> apts=OpenDentBusiness.Crud.AppointmentCrud.SelectMany(command);
 			List<char> specialCharsFound=new List<char>();
@@ -3965,6 +3989,33 @@ HAVING cnt>1";
 				}
 				foreach(char c in specialCharsFound) {
 					command="UPDATE appointment SET Note = REPLACE(Note,'"+POut.String(c.ToString())+"',''), ProcDescript = REPLACE(ProcDescript,'"+POut.String(c.ToString())+"','')";
+					Db.NonQ(command);
+				}
+			}
+			command="SELECT * FROM patient WHERE AddrNote REGEXP '[^[:alnum:]^[:space:]]+'";
+			List<Patient> pats=OpenDentBusiness.Crud.PatientCrud.SelectMany(command);
+			specialCharsFound=new List<char>();
+			specialCharCount=0;
+			intC=0;
+			if(pats.Count>0) {
+				foreach(Patient pat in pats) {
+					foreach(char c in pat.AddrNote) {
+						intC=(int)c;
+						if((intC<126 && intC>31)//31 - 126 are all safe.
+							|| intC==9			//"Horizontal Tabulation"
+							|| intC==10			//Line Feed
+							|| intC==13) {	//carriage return
+							continue;
+						}
+						specialCharCount++;
+						if(specialCharsFound.Contains(c)) {
+							continue;
+						}
+						specialCharsFound.Add(c);
+					}
+				}
+				foreach(char c in specialCharsFound) {
+					command="UPDATE patient SET AddrNote=REPLACE(AddrNote,'"+POut.String(c.ToString())+"','')";
 					Db.NonQ(command);
 				}
 			}

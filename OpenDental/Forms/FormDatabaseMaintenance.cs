@@ -446,6 +446,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.DecimalValues(verbose,isCheck);
 			Application.DoEvents();
+			textLog.Text+=DatabaseMaintenance.SpecialCharactersInNotes(verbose,isCheck);
+			Application.DoEvents();
 			//Now, methods that apply to specific tables----------------------------------------------------------------------------
 			textLog.Text+=DatabaseMaintenance.AppointmentsNoPattern(verbose,isCheck);
 			Application.DoEvents();
@@ -454,8 +456,6 @@ namespace OpenDental {
 			textLog.Text+=DatabaseMaintenance.AppointmentsNoPatients(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AppointmentPlannedNoPlannedApt(verbose,isCheck);
-			Application.DoEvents();
-			textLog.Text+=DatabaseMaintenance.AppointmentSpecialCharactersInNotes(verbose,isCheck);
 			Application.DoEvents();
 			textLog.Text+=DatabaseMaintenance.AutoCodesDeleteWithNoItems(verbose,isCheck);
 			Application.DoEvents();
@@ -785,7 +785,7 @@ namespace OpenDental {
 				return;
 			}
 			DatabaseMaintenance.FixSpecialCharacters();
-			MsgBox.Show(this,"Special Characters have been removed from Appointment Notes and Appointment Procedure Descriptions.  Mobile synch should now function properly.");
+			MsgBox.Show(this,"Special Characters have been removed from Appointment Notes, Appointment Procedure Descriptions, Patient Address Notes, and Patient Family Financial Urgent Notes.  Mobile synch should now function properly.");
 		}
 
 		private void butConvertDb_Click(object sender,EventArgs e) {
