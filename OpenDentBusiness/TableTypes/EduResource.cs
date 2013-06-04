@@ -21,8 +21,9 @@ namespace OpenDentBusiness {
 		public string LabResultCompare;
 		///<summary>.</summary>
 		public string ResourceUrl;
-		///<summary>FK to icd9.ICD9Num.</summary>
-		public long Icd9Num;
+		///<summary>FK to icd9.ICD9Num.</summary>//this is now obtained by pointing to a DiseaseDef which has an ICD9
+//todo: get rid of this:
+		public string ICD9Code;
 
 		///<summary></summary>
 		public EduResource Copy() {

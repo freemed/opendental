@@ -18,8 +18,8 @@ namespace OpenDentBusiness {
 		///<summary>The last date and time this row was altered.  Not user editable.  Will be set to NOW by OD if this patient gets an OnlinePassword assigned.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
-		///<summary>FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value.</summary>
-		public long ICD9Num;
+		/////<summary>FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value.</summary>
+		//public long ICD9Num;
 		///<summary>Enum:ProblemStatus Active=0, Resolved=1, Inactive=2.</summary>
 		public ProblemStatus ProbStatus;
 		///<summary>Date that the disease was diagnosed.  Can be minval if unknown.</summary>

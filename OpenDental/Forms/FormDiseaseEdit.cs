@@ -300,12 +300,12 @@ namespace OpenDental{
 
 		private void FormDiseaseEdit_Load(object sender,EventArgs e) {
 			// Fill problem/icd9 - only one will exist (with a value not zero).
-			if(DiseaseCur.DiseaseDefNum!=0) {
+			if(DiseaseDefs.GetItem(DiseaseCur.DiseaseDefNum).ICD9Code=="") {
 				textProblem.Text=DiseaseDefs.GetItem(DiseaseCur.DiseaseDefNum).DiseaseName;
 			}
 			else {
-				textIcd9.Text=ICD9s.GetOne(DiseaseCur.ICD9Num).Description;
-			}
+				textIcd9.Text=DiseaseDefs.GetItem(DiseaseCur.DiseaseDefNum).DiseaseName;
+			}//Todo: confirm that diseasedefnum should never be 0 now
 			comboStatus.Items.Clear();
 			for(int i=0;i<Enum.GetNames(typeof(ProblemStatus)).Length;i++) {
 				comboStatus.Items.Add(Enum.GetNames(typeof(ProblemStatus))[i]);

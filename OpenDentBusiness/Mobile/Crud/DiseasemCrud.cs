@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Mobile.Crud{
 			diseasem.PatNum       =disease.PatNum;
 			diseasem.DiseaseDefNum=disease.DiseaseDefNum;
 			diseasem.PatNote      =disease.PatNote;
-			diseasem.ICD9Num      =disease.ICD9Num;
+			diseasem.ICD9Num      =ICD9s.GetByCode(DiseaseDefs.GetItem(disease.DiseaseDefNum).ICD9Code).ICD9Num;
 			diseasem.ProbStatus   =disease.ProbStatus;
 			diseasem.DateStart    =disease.DateStart;
 			diseasem.DateStop     =disease.DateStop;

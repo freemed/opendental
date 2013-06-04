@@ -112,7 +112,7 @@ namespace OpenDentBusiness{
 						break;
 					case EhrCriterion.ICD9:
 						for(int j=0;j<listProblems.Count;j++) {
-							if(fullListReminders[i].CriterionFK==listProblems[j].ICD9Num) {
+							if(fullListReminders[i].CriterionFK==listProblems[j].DiseaseDefNum) {
 								retVal.Add(fullListReminders[i]);
 								break;
 							}

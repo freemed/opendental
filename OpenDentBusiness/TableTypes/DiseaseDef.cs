@@ -19,6 +19,10 @@ namespace OpenDentBusiness{
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
 		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
+		///<summary>Link to icd9.ICD9Code.</summary>
+		public string ICD9Code;
+		///<summary>SnomedCode.</summary>
+		public string SnomedCode;
 
 		///<summary></summary>
 		public DiseaseDef Copy() {

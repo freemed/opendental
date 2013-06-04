@@ -249,7 +249,16 @@ namespace OpenDentBusiness {
 			List<DiseaseDef> diseaseDefList=new List<DiseaseDef>(multDiseaseDefs);
 			return diseaseDefList;
 		}
-		
+
+		/*public static DiseaseDef GetByICD9Code(string ICD9Code) {///<summary>Returns the diseasedef that has a name exactly matching the specified string. Returns null if no match.  Does not match hidden diseases.</summary>
+			//No need to check RemotingRole; no call to db.
+			for(int i=0;i<List.Length;i++) {
+				if(ICD9Code==List[i].ICD9Code) {
+					return List[i];
+				}
+			}
+			return null;
+		}*/
 	}
 
 		

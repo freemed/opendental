@@ -22,8 +22,8 @@ namespace OpenDental {
 			if(EduResourceCur.DiseaseDefNum!=0) {
 				textProblem.Text=DiseaseDefs.GetName(EduResourceCur.DiseaseDefNum);
 			}
-			else if(EduResourceCur.Icd9Num!=0) {
-				textICD9.Text=ICD9s.GetDescription(EduResourceCur.Icd9Num);
+			else if(EduResourceCur.ICD9Code!="") {
+				textICD9.Text=ICD9s.GetByCode(EduResourceCur.ICD9Code).Description;
 			}
 			else if(EduResourceCur.MedicationNum!=0) {
 				textMedication.Text=Medications.GetDescription(EduResourceCur.MedicationNum);
@@ -44,7 +44,7 @@ namespace OpenDental {
 			textProblem.Text=DiseaseDefs.GetName(FormDD.SelectedDiseaseDefNum);
 			EduResourceCur.DiseaseDefNum=FormDD.SelectedDiseaseDefNum;
 			textICD9.Text="";
-			EduResourceCur.Icd9Num=0;
+			EduResourceCur.ICD9Code="";
 			textMedication.Text="";
 			EduResourceCur.MedicationNum=0;
 			textLabResultsID.Text="";
@@ -61,8 +61,8 @@ namespace OpenDental {
 			}
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
-			textICD9.Text="ICD9: "+ICD9s.GetDescription(FormICD9.SelectedIcd9Num);
-			EduResourceCur.Icd9Num=FormICD9.SelectedIcd9Num;
+			textICD9.Text="ICD9: "+ICD9s.GetByCode(FormICD9.SelectedIcd9Code).Description;
+			EduResourceCur.ICD9Code=FormICD9.SelectedIcd9Code;
 			textMedication.Text="";
 			EduResourceCur.MedicationNum=0;
 			textLabResultsID.Text="";
@@ -80,7 +80,7 @@ namespace OpenDental {
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
-			EduResourceCur.Icd9Num=0;
+			EduResourceCur.ICD9Code="";
 			textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
 			EduResourceCur.MedicationNum=FormM.SelectedMedicationNum;
 			textLabResultsID.Text="";
@@ -93,7 +93,7 @@ namespace OpenDental {
 			textProblem.Text="";
 			EduResourceCur.DiseaseDefNum=0;
 			textICD9.Text="";
-			EduResourceCur.Icd9Num=0;
+			EduResourceCur.ICD9Code="";
 			textMedication.Text="";
 			EduResourceCur.MedicationNum=0;
 		}
@@ -112,11 +112,11 @@ namespace OpenDental {
 
 		private void butOk_Click(object sender,EventArgs e) {
 			//validation
-			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.Icd9Num==0 && EduResourceCur.MedicationNum==0 && textLabResultsID.Text=="" && textLabTestName.Text=="" && textCompareValue.Text=="") {
+			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.ICD9Code=="" && EduResourceCur.MedicationNum==0 && textLabResultsID.Text=="" && textLabTestName.Text=="" && textCompareValue.Text=="") {
 				MessageBox.Show("Please Select a valid problem, medication, or lab result.");
 				return;
 			}
-			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.Icd9Num==0 && EduResourceCur.MedicationNum==0) {
+			if(EduResourceCur.DiseaseDefNum==0 && EduResourceCur.ICD9Code=="" && EduResourceCur.MedicationNum==0) {
 				if(textLabTestName.Text=="") {
 					MessageBox.Show("Invalid test name for lab result.");
 					return;

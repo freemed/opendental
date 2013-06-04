@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 
 	///<summary>EhrCriterion: Problem,Medication,Allergy,Age,Gender,LabResult</summary>
 	public enum EhrCriterion {
-		///<summary>0-Problem (diseaseDef)</summary>
+		///<summary>0-DiseaseDef.  Shows as 'problem' because it needs to be human readable.</summary>
 		Problem,
 		///<summary>1-Medication</summary>
 		Medication,
@@ -40,7 +40,7 @@ namespace OpenDentBusiness{
 		Gender,
 		///<summary>5-LabResult</summary>
 		LabResult,
-		///<summary>6-ICD9</summary>
+		///<summary>6-ICD9</summary>//now handled by Problem(DiseaseDef)
 		ICD9
 	}
 }

@@ -5001,7 +5001,7 @@ namespace OpenDental{
 							}
 							else {
 								row.Cells.Add("");
-								cell=new ODGridCell(ICD9s.GetDescription(DiseaseList[i].ICD9Num));
+								cell=new ODGridCell(DiseaseDefs.GetItem(DiseaseList[i].DiseaseDefNum).DiseaseName);
 								cell.ColorText=Color.Red;
 								cell.Bold=YN.Yes;
 								row.Cells.Add(cell);

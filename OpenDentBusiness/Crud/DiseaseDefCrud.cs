@@ -51,6 +51,8 @@ namespace OpenDentBusiness.Crud{
 				diseaseDef.ItemOrder    = PIn.Int   (table.Rows[i]["ItemOrder"].ToString());
 				diseaseDef.IsHidden     = PIn.Bool  (table.Rows[i]["IsHidden"].ToString());
 				diseaseDef.DateTStamp   = PIn.DateT (table.Rows[i]["DateTStamp"].ToString());
+				diseaseDef.ICD9Code     = PIn.String(table.Rows[i]["ICD9Code"].ToString());
+				diseaseDef.SnomedCode   = PIn.String(table.Rows[i]["SnomedCode"].ToString());
 				retVal.Add(diseaseDef);
 			}
 			return retVal;
@@ -91,15 +93,17 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="DiseaseDefNum,";
 			}
-			command+="DiseaseName,ItemOrder,IsHidden) VALUES(";
+			command+="DiseaseName,ItemOrder,IsHidden,ICD9Code,SnomedCode) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(diseaseDef.DiseaseDefNum)+",";
 			}
 			command+=
 				 "'"+POut.String(diseaseDef.DiseaseName)+"',"
 				+    POut.Int   (diseaseDef.ItemOrder)+","
-				+    POut.Bool  (diseaseDef.IsHidden)+")";
+				+    POut.Bool  (diseaseDef.IsHidden)+","
 				//DateTStamp can only be set by MySQL
+				+"'"+POut.String(diseaseDef.ICD9Code)+"',"
+				+"'"+POut.String(diseaseDef.SnomedCode)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -114,8 +118,10 @@ namespace OpenDentBusiness.Crud{
 			string command="UPDATE diseasedef SET "
 				+"DiseaseName  = '"+POut.String(diseaseDef.DiseaseName)+"', "
 				+"ItemOrder    =  "+POut.Int   (diseaseDef.ItemOrder)+", "
-				+"IsHidden     =  "+POut.Bool  (diseaseDef.IsHidden)+" "
+				+"IsHidden     =  "+POut.Bool  (diseaseDef.IsHidden)+", "
 				//DateTStamp can only be set by MySQL
+				+"ICD9Code     = '"+POut.String(diseaseDef.ICD9Code)+"', "
+				+"SnomedCode   = '"+POut.String(diseaseDef.SnomedCode)+"' "
 				+"WHERE DiseaseDefNum = "+POut.Long(diseaseDef.DiseaseDefNum);
 			Db.NonQ(command);
 		}
@@ -136,6 +142,14 @@ namespace OpenDentBusiness.Crud{
 				command+="IsHidden = "+POut.Bool(diseaseDef.IsHidden)+"";
 			}
 			//DateTStamp can only be set by MySQL
+			if(diseaseDef.ICD9Code != oldDiseaseDef.ICD9Code) {
+				if(command!=""){ command+=",";}
+				command+="ICD9Code = '"+POut.String(diseaseDef.ICD9Code)+"'";
+			}
+			if(diseaseDef.SnomedCode != oldDiseaseDef.SnomedCode) {
+				if(command!=""){ command+=",";}
+				command+="SnomedCode = '"+POut.String(diseaseDef.SnomedCode)+"'";
+			}
 			if(command==""){
 				return;
 			}

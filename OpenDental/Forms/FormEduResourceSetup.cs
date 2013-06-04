@@ -36,8 +36,8 @@ namespace OpenDental {
 				if(eduResourceList[i].DiseaseDefNum!=0) {
 					row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).DiseaseName);
 				}
-				else if(eduResourceList[i].Icd9Num!=0) {
-				  row.Cells.Add("ICD9: "+ICD9s.GetDescription(eduResourceList[i].Icd9Num));
+				else if(eduResourceList[i].ICD9Code!="") {
+					row.Cells.Add("ICD9: "+ICD9s.GetByCode(eduResourceList[i].ICD9Code).Description);
 				}
 				else if(eduResourceList[i].MedicationNum!=0) {
 					row.Cells.Add("Medication: "+Medications.GetDescription(eduResourceList[i].MedicationNum));

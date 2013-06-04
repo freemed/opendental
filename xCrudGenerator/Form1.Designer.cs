@@ -44,6 +44,7 @@
 			this.label9 = new System.Windows.Forms.Label();
 			this.checkRunSchema = new System.Windows.Forms.CheckBox();
 			this.label10 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -186,6 +187,7 @@
 			// 
 			// checkRunM
 			// 
+			this.checkRunM.Enabled = false;
 			this.checkRunM.Location = new System.Drawing.Point(239, 51);
 			this.checkRunM.Name = "checkRunM";
 			this.checkRunM.Size = new System.Drawing.Size(39, 17);
@@ -228,11 +230,21 @@
 			this.label10.Text = "This CrudGenerator project MUST be set to compile each time it\'s run even if chan" +
     "ges were only to OpenDentBusiness.";
 			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(255, 50);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(145, 17);
+			this.label11.TabIndex = 25;
+			this.label11.Text = "see DiseasemCrud, L114";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1161, 910);
+			this.Controls.Add(this.label11);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.checkRunSchema);
 			this.Controls.Add(this.label9);
@@ -284,6 +296,7 @@
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.CheckBox checkRunSchema;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.Label label11;
 	}
 }
 

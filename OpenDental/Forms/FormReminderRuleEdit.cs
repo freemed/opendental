@@ -124,7 +124,7 @@ namespace OpenDental {
 						RuleCur.CriterionFK=-1;
 						return;
 					}
-					RuleCur.CriterionFK=FormICD9Select.SelectedIcd9Num;
+					RuleCur.CriterionFK=ICD9s.GetByCode(FormICD9Select.SelectedIcd9Code).ICD9Num;
 					break;
 				default:
 					MessageBox.Show("You should never see this error message. Something has stopped working properly.");
