@@ -444,6 +444,9 @@ namespace OpenDental.UI {
 
 		///<summary>Called from PrintPage() and EndUpdate().  After adding rows to the grid, this calculates the height of each row because some rows may have text wrap and will take up more than one row.  Also, rows with notes, must be made much larger, because notes start on the second line.  If column images are used, rows will be enlarged to make space for the images.</summary>
 		private void ComputeRows(Graphics g) {
+			//Travis - 06/04/2013: Sometimes ComputeRows() will incorrectly measure the number of rows when the font of the cell will display in bold.  This can cause text that would be on a new line to not display.
+			//This is because all textual measurements use cellFont which is never bold.  A possible solution would be to add another font that is bold to the current using statement.  
+			//Then before any text is measured, check if the cell is bold in order to pass the appropriate font.
 			//using(Graphics g=this.CreateGraphics()) {
 				using(Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize)) {
 					RowHeights=new int[rows.Count];
