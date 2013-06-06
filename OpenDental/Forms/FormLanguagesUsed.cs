@@ -31,6 +31,8 @@ namespace OpenDental{
 		private TextBox textCustom;
 		private Label label4;
 		private UI.Button butAddCustom;
+		private ComboBox comboLanguagesIndicateNone;
+		private Label label5;
 		private List<string> LangsUsed;
 
 		///<summary></summary>
@@ -73,6 +75,8 @@ namespace OpenDental{
 			this.butAdd = new OpenDental.UI.Button();
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
+			this.comboLanguagesIndicateNone = new System.Windows.Forms.ComboBox();
+			this.label5 = new System.Windows.Forms.Label();
 			this.SuspendLayout();
 			// 
 			// listAvailable
@@ -241,10 +245,30 @@ namespace OpenDental{
 			this.butCancel.Text = "&Cancel";
 			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
 			// 
+			// comboLanguagesIndicateNone
+			// 
+			this.comboLanguagesIndicateNone.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboLanguagesIndicateNone.Location = new System.Drawing.Point(445,318);
+			this.comboLanguagesIndicateNone.MaxDropDownItems = 30;
+			this.comboLanguagesIndicateNone.Name = "comboLanguagesIndicateNone";
+			this.comboLanguagesIndicateNone.Size = new System.Drawing.Size(278,21);
+			this.comboLanguagesIndicateNone.TabIndex = 163;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(443,295);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(281,20);
+			this.label5.TabIndex = 164;
+			this.label5.Text = "Indicator that patient has no specified language";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
 			// FormLanguagesUsed
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5,13);
 			this.ClientSize = new System.Drawing.Size(776,580);
+			this.Controls.Add(this.label5);
+			this.Controls.Add(this.comboLanguagesIndicateNone);
 			this.Controls.Add(this.butAddCustom);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.textCustom);
