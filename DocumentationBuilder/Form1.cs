@@ -300,6 +300,7 @@ namespace DocumentationBuilder {
 				case "patfield": return "PatField";
 				case "patfielddef": return "PatFieldDef";
 				case "patientnote": return "PatientNote";
+				case "patientrace": return "PatientRace";
 				case "patplan": return "PatPlan";
 				case "payperiod": return "PayPeriod";
 				case "payplan": return "PayPlan";
