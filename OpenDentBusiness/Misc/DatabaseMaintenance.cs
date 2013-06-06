@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Text;
 using CodeBase;
+using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness {
 	public class DatabaseMaintenance {
@@ -407,6 +408,41 @@ namespace OpenDentBusiness {
 				}
 				if(numfixed>0 || verbose) {
 					log+=Lans.g("FormDatabaseMaintenance","Appointments altered due to no patient: ")+count.ToString()+"\r\n";
+				}
+			}
+			return log;
+		}
+
+		public static string AppoitmentNoteTooManyNewLines(bool verbose,bool isCheck) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetString(MethodBase.GetCurrentMethod(),verbose,isCheck);
+			}
+			string log="";
+			StringBuilder tooManyNewLines=new StringBuilder();
+			for(int i=0;i<30;i++) {
+				tooManyNewLines.Append("\r\n");
+			}
+			if(isCheck) {
+				command="SELECT COUNT(*) FROM appointment WHERE Note LIKE '%"+POut.String(tooManyNewLines.ToString())+"%'";
+				int numFound=PIn.Int(Db.GetCount(command));
+				if(numFound>0 || verbose) {
+					log+=Lans.g("FormDatabaseMaintenance","Appointment notes found with too many new lines: ")+numFound.ToString()+"\r\n";
+				}
+			}
+			else {
+				command="SELECT * FROM appointment WHERE Note LIKE '%"+POut.String(tooManyNewLines.ToString())+"%'";
+				DataTable tableAppts=Db.GetTable(command);
+				long numfixed=0;
+				if(tableAppts.Rows.Count>0 || verbose) {
+					for(int i=0;i<tableAppts.Rows.Count;i++) {
+						long aptNum=PIn.Long(tableAppts.Rows[i]["AptNum"].ToString());
+						Appointment oldApt=Appointments.GetOneApt(aptNum);
+						Appointment apt=oldApt.Clone();
+						apt.Note=Regex.Replace(oldApt.Note,POut.String(tooManyNewLines.ToString())+"[\r\n]*","\r\n");
+						Appointments.Update(apt,oldApt);
+						numfixed++;
+					}
+					log+=Lans.g("FormDatabaseMaintenance","Appoinment notes with too many new lines fixed: ")+numfixed.ToString()+"\r\n";
 				}
 			}
 			return log;
