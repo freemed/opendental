@@ -22,7 +22,7 @@ namespace OpenDentBusiness {
 	}
 
 	public enum PatRace {
-		///<summary>0</summary>
+		///<summary>0 - Hidden for EHR.</summary>
 		Aboriginal,
 		///<summary>1</summary>
 		AfricanAmerican,
@@ -30,21 +30,17 @@ namespace OpenDentBusiness {
 		AmericanIndian,
 		///<summary>3</summary>
 		Asian,
-		///<summary>4</summary>
+		///<summary>4 - Our hard-coded option for EHR reporting.</summary>
 		DeclinedToSpecify,
 		///<summary>5</summary>
 		HawaiiOrPacIsland,
-		///<summary>6</summary>
+		///<summary>6 - If EHR is turned on, our UI will force this to be supplemental to a base 'race'.</summary>
 		Hispanic,
-		///<summary>7</summary>
+		///<summary>7 - We had to keep this for backward compatibility.  Hidden for EHR.</summary>
 		Multiracial,
-		///<summary>8</summary>
-		NotHispanic,
-		///<summary>9</summary>
+		///<summary>8 - Hidden for EHR.</summary>
 		Other,
-		///<summary>10</summary>
-		Unknown,
-		///<summary>11</summary>
+		///<summary>9</summary>
 		White
 	}
 }
