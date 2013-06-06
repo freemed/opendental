@@ -255,6 +255,7 @@
     <Compile Include="Crud\PatFieldDefCrud.cs" />
     <Compile Include="Crud\PatientCrud.cs" />
     <Compile Include="Crud\PatientNoteCrud.cs" />
+    <Compile Include="Crud\PatientRaceCrud.cs" />
     <Compile Include="Crud\PatPlanCrud.cs" />
     <Compile Include="Crud\PaymentCrud.cs" />
     <Compile Include="Crud\PayPeriodCrud.cs" />
@@ -760,6 +761,7 @@
     <Compile Include="TableTypes\AllergyDef.cs" />
     <Compile Include="TableTypes\Allergy.cs" />
     <Compile Include="TableTypes\CentralConnection.cs" />
+    <Compile Include="TableTypes\PatientRace.cs" />
     <Compile Include="TableTypes\ResellerService.cs" />
     <Compile Include="TableTypes\Reseller.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />

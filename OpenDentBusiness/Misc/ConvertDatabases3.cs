@@ -336,6 +336,30 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'LanguagesIndicateNone','Declined to Specify')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS patientrace";
+					Db.NonQ(command);
+					command=@"CREATE TABLE patientrace (
+						PatientRaceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						Race tinyint NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE patientrace'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE patientrace (
+						PatientRaceNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						Race number(3) NOT NULL,
+						CONSTRAINT patientrace_PatientRaceNum PRIMARY KEY (PatientRaceNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX patientrace_PatNum ON patientrace (PatNum)";
+					Db.NonQ(command);
+				}
 
 
 				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -357,4 +381,3 @@ namespace OpenDentBusiness {
 
 
 
-				
