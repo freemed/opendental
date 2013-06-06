@@ -561,7 +561,11 @@ namespace OpenDentBusiness{
 						else if(prefixChars.Contains("#")) {
 							strb.Append("</ol>\r\n");
 						}
-						s=s.Replace(blockOriginal,strb.ToString());
+						//manually replace just the first occurance of the identified list.
+						s=s.Substring(0,s.IndexOf(blockOriginal))
+							+strb.ToString()
+							+s.Substring(s.IndexOf(blockOriginal)+blockOriginal.Length);
+						//s=s.Replace(blockOriginal,strb.ToString()); //old strategy, buggy.
 						blockOriginal=null;
 					}
 				}
