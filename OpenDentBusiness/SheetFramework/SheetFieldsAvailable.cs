@@ -81,7 +81,7 @@ namespace OpenDentBusiness{
 					retVal.Add("Fulltime");
 					return retVal;
 				case "Race":
-					stringAr=Enum.GetNames(typeof(PatientRace));
+					stringAr=Enum.GetNames(typeof(PatientRaceOld));
 					break;
 			}
 			for(int i=0;i<stringAr.Length;i++) {
