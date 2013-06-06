@@ -334,6 +334,7 @@
     <Compile Include="Eclaims\Canadian.cs" />
     <Compile Include="Eclaims\CanadianOutput.cs" />
     <Compile Include="Eclaims\ClaimX.cs" />
+    <Compile Include="Eclaims\NHS.cs" />
     <Compile Include="Eclaims\EmdeonMedical.cs" />
     <Compile Include="Eclaims\DentiCal.cs" />
     <Compile Include="Eclaims\MercuryDE.cs" />

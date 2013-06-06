@@ -851,6 +851,8 @@ namespace OpenDentBusiness{
 		EmdeonMedical,
 		///<summary>15 Canadian clearinghouse.</summary>
 		Claimstream,
+		///<summary>16 UK clearinghouse.</summary>
+		NHS
 	}
 
 	///<summary></summary>
