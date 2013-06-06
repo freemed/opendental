@@ -360,6 +360,132 @@ namespace OpenDentBusiness {
 					command=@"CREATE INDEX patientrace_PatNum ON patientrace (PatNum)";
 					Db.NonQ(command);
 				}
+				//Create Custom Language "DeclinedToSpecify" ----------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
+					table=Db.GetTable(command);
+					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
+						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+							+" WHERE PrefName='LanguagesUsedByPatients'";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
+					table=Db.GetTable(command);
+					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
+						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+							+" WHERE PrefName='LanguagesUsedByPatients'";
+						Db.NonQ(command);
+					}
+				}
+				//update Race and Ethnicity for EHR.---------------------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT PatNum, Race FROM patient";
+					table=Db.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+						switch((PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString())) {
+							case PatientRaceOld.Unknown://0
+								//Do nothing.  No entry means "Unknown", the old default.
+								continue;
+							case PatientRaceOld.Multiracial://1
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Multiracial;
+								break;
+							case PatientRaceOld.HispanicLatino://2
+								//MySQL can handle multiple insert statements with this syntax.
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White+"),(";
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								break;
+							case PatientRaceOld.AfricanAmerican://3
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican;
+								break;
+							case PatientRaceOld.White://4
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White;
+								break;
+							case PatientRaceOld.HawaiiOrPacIsland://5
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.HawaiiOrPacIsland;
+								break;
+							case PatientRaceOld.AmericanIndian://6
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AmericanIndian;
+								break;
+							case PatientRaceOld.Asian://7
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Asian;
+								break;
+							case PatientRaceOld.Other://8
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Other;
+								break;
+							case PatientRaceOld.Aboriginal://9
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Aboriginal;
+								break;
+							case PatientRaceOld.BlackHispanic://10
+								//MySQL can handle multiple insert statements with this syntax.
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican+"),(";
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								break;
+							default:
+								//should never happen, useful for debugging.
+								continue;
+						}
+						command+=")";
+						Db.NonQ(command);//"continue" statements above prevent this from running without values.
+					}
+				}
+				else {//oracle
+					command="SELECT PatNum, Race FROM patient";
+					table=Db.GetTable(command);
+					for(int i=0;i<table.Rows.Count;i++) {
+						command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+						switch((PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString())) {
+							case PatientRaceOld.Unknown://0
+								//Do nothing.  No entry means "Unknown", the old default.
+								continue;
+							case PatientRaceOld.Multiracial://1
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Multiracial;
+								break;
+							case PatientRaceOld.HispanicLatino://2
+								//Oracle multiple insert statements require a different syntax.
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White+")";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								break;
+							case PatientRaceOld.AfricanAmerican://3
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican;
+								break;
+							case PatientRaceOld.White://4
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White;
+								break;
+							case PatientRaceOld.HawaiiOrPacIsland://5
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.HawaiiOrPacIsland;
+								break;
+							case PatientRaceOld.AmericanIndian://6
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AmericanIndian;
+								break;
+							case PatientRaceOld.Asian://7
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Asian;
+								break;
+							case PatientRaceOld.Other://8
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Other;
+								break;
+							case PatientRaceOld.Aboriginal://9
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Aboriginal;
+								break;
+							case PatientRaceOld.BlackHispanic://10
+								//Oracle multiple insert statements require a different syntax.
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican+")";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								break;
+							default:
+								//should never happen, useful for debugging.
+								continue;
+						}
+						command+=")";
+						Db.NonQ(command);//"continue" statements above prevent this from running without values.
+					}
+				}
 
 
 				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
