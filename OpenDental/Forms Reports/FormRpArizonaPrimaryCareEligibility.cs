@@ -82,9 +82,9 @@ namespace OpenDental {
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
 						"WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
-					"CASE p.Race WHEN "+((int)PatientRace.Asian)+" THEN 'A' WHEN "+((int)PatientRace.HispanicLatino)+" THEN 'H' "+
-						"WHEN "+((int)PatientRace.HawaiiOrPacIsland)+" THEN 'P' WHEN "+((int)PatientRace.AfricanAmerican)+" THEN 'B' "+
-						"WHEN "+((int)PatientRace.AmericanIndian)+" THEN 'I' WHEN "+((int)PatientRace.White)+" THEN 'W' ELSE 'O' END PatRace,"+
+					"CASE p.Race WHEN "+((int)PatientRaceOld.Asian)+" THEN 'A' WHEN "+((int)PatientRaceOld.HispanicLatino)+" THEN 'H' "+
+						"WHEN "+((int)PatientRaceOld.HawaiiOrPacIsland)+" THEN 'P' WHEN "+((int)PatientRaceOld.AfricanAmerican)+" THEN 'B' "+
+						"WHEN "+((int)PatientRaceOld.AmericanIndian)+" THEN 'I' WHEN "+((int)PatientRaceOld.White)+" THEN 'W' ELSE 'O' END PatRace,"+
 					"CONCAT(CONCAT(TRIM(p.Address),' '),TRIM(p.Address2)) HouseholdAddress,"+//Patient address
 					"p.City HouseholdCity,"+//Household residence city
 					"p.State HouseholdState,"+//Household residence state

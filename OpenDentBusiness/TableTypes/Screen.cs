@@ -22,8 +22,8 @@ namespace OpenDentBusiness{
 		public string ProvName;
 		///<summary>Enum:PatientGender</summary>
 		public PatientGender Gender;
-		///<summary>Enum:PatientRace and ethnicity.</summary>
-		public PatientRace Race;
+		///<summary>Enum:PatientRaceOld and ethnicity.</summary>
+		public PatientRaceOld Race;
 		///<summary>Enum:PatientGrade</summary>
 		public PatientGrade GradeLevel;
 		///<summary>Age of patient at the time the screening was done. Faster than recording birthdates.</summary>

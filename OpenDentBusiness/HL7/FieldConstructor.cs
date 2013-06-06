@@ -171,19 +171,19 @@ namespace OpenDentBusiness.HL7 {
 
 		private static string gRace(Patient pat) {
 			switch(pat.Race) {
-				case PatientRace.AmericanIndian:
+				case PatientRaceOld.AmericanIndian:
 					return "American Indian Or Alaska Native";
-				case PatientRace.Asian:
+				case PatientRaceOld.Asian:
 					return "Asian";
-				case PatientRace.HawaiiOrPacIsland:
+				case PatientRaceOld.HawaiiOrPacIsland:
 					return "Native Hawaiian or Other Pacific";
-				case PatientRace.AfricanAmerican:
+				case PatientRaceOld.AfricanAmerican:
 					return "Black or African American";
-				case PatientRace.White:
+				case PatientRaceOld.White:
 					return "White";
-				case PatientRace.HispanicLatino:
+				case PatientRaceOld.HispanicLatino:
 					return "Hispanic";
-				case PatientRace.Other:
+				case PatientRaceOld.Other:
 					return "Other Race";
 				default:
 					return "Other Race";

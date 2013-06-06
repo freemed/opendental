@@ -1037,7 +1037,7 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
-						if(pat.Race==PatientRace.Unknown) {
+						if(pat.Race==PatientRaceOld.Unknown) {
 							if(explanation!="") {
 								explanation+=", ";
 							}

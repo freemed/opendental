@@ -1972,38 +1972,38 @@ namespace OpenDental{
 						comboRace.SelectedIndex=1;//white
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.Aboriginal:
-					case PatientRace.Multiracial:
-					case PatientRace.Other:
-					case PatientRace.White:
+					case PatientRaceOld.Aboriginal:
+					case PatientRaceOld.Multiracial:
+					case PatientRaceOld.Other:
+					case PatientRaceOld.White:
 						comboRace.SelectedIndex=1;//white
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.AfricanAmerican:
+					case PatientRaceOld.AfricanAmerican:
 						comboRace.SelectedIndex=2;//black
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.Asian:
+					case PatientRaceOld.Asian:
 						comboRace.SelectedIndex=3;//Asian
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.BlackHispanic:
+					case PatientRaceOld.BlackHispanic:
 						comboRace.SelectedIndex=2;//Black
 						comboEthnicity.SelectedIndex=1;//hispanic
 						break;
-					case PatientRace.HawaiiOrPacIsland:
+					case PatientRaceOld.HawaiiOrPacIsland:
 						comboRace.SelectedIndex=4;//Hawaii
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.AmericanIndian:
+					case PatientRaceOld.AmericanIndian:
 						comboRace.SelectedIndex=5;//AmericanIndian
 						comboEthnicity.SelectedIndex=0;//not hispanic
 						break;
-					case PatientRace.HispanicLatino:
+					case PatientRaceOld.HispanicLatino:
 						comboRace.SelectedIndex=1;//white
 						comboEthnicity.SelectedIndex=1;//hispanic
 						break;
-					case PatientRace.Unknown:
+					case PatientRaceOld.Unknown:
 						comboRace.SelectedIndex=0;//unknown
 						comboEthnicity.SelectedIndex=-1;//empty
 						break;
@@ -2012,7 +2012,7 @@ namespace OpenDental{
 			else {
 				labelEthnicity.Visible=false;
 				comboEthnicity.Visible=false;
-				string[] enumRace=Enum.GetNames(typeof(PatientRace));
+				string[] enumRace=Enum.GetNames(typeof(PatientRaceOld));
 				for(int i=0;i<enumRace.Length;i++) {
 					comboRace.Items.Add(Lan.g("enumRace",enumRace[i]));
 				}
@@ -2967,37 +2967,37 @@ namespace OpenDental{
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				switch(comboRace.SelectedIndex) {
 					case 0://unknown
-						PatCur.Race=PatientRace.Unknown;
+						PatCur.Race=PatientRaceOld.Unknown;
 						break;
 					case 1://white
 						if(comboEthnicity.SelectedIndex==1) {//hispanic
-							PatCur.Race=PatientRace.HispanicLatino;
+							PatCur.Race=PatientRaceOld.HispanicLatino;
 						}
 						else{
-							PatCur.Race=PatientRace.White;
+							PatCur.Race=PatientRaceOld.White;
 						}
 						break;
 					case 2://black
 						if(comboEthnicity.SelectedIndex==1) {//hispanic
-							PatCur.Race=PatientRace.BlackHispanic;
+							PatCur.Race=PatientRaceOld.BlackHispanic;
 						}
 						else{
-							PatCur.Race=PatientRace.AfricanAmerican;
+							PatCur.Race=PatientRaceOld.AfricanAmerican;
 						}
 						break;
 					case 3://asian
-						PatCur.Race=PatientRace.Asian;
+						PatCur.Race=PatientRaceOld.Asian;
 						break;
 					case 4://hawaii
-						PatCur.Race=PatientRace.HawaiiOrPacIsland;
+						PatCur.Race=PatientRaceOld.HawaiiOrPacIsland;
 						break;
 					case 5://native american
-						PatCur.Race=PatientRace.AmericanIndian;
+						PatCur.Race=PatientRaceOld.AmericanIndian;
 						break;
 				}
 			}
 			else {
-				PatCur.Race=(PatientRace)comboRace.SelectedIndex;
+				PatCur.Race=(PatientRaceOld)comboRace.SelectedIndex;
 			}
 			PatCur.County=textCounty.Text;
 			//site set when user picks from list.
