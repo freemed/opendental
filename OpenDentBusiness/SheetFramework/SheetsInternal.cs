@@ -683,7 +683,7 @@ By signing below you acknowledge that you understand the information presented, 
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.length",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.providers",sheet.FontSize,sheet.FontName,false,x,y,500,rowH,GrowthBehaviorEnum.DownGlobal));
-			y+=rowH-2;
+			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Procedures:",sheet.FontSize,sheet.FontName,false,x,y,500,rowH));
 			y+=rowH;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewOutput("appt.procedures",sheet.FontSize,sheet.FontName,false,x+10,y,490,rowH,GrowthBehaviorEnum.DownGlobal));
@@ -719,7 +719,7 @@ By signing below you acknowledge that you understand the information presented, 
 			y+=3;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Primary Insurance",sheet.FontSize,sheet.FontName,true,x,y,360,19));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Secondary Insurance",sheet.FontSize,sheet.FontName,true,x+365,y,360,19));
-			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+362,y,0,124));
+			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x+362,y,0,133));
 			y+=19;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
 @"[carrierName]
@@ -727,20 +727,21 @@ Subscriber: [subscriberNameFL]
 Annual Max: [insAnnualMax], Pending: [insPending], Used: [insUsed]
 Deductible: [insDeductible], Ded Used: [insDeductibleUsed]
 [insPercentages]"
-				,sheet.FontSize,sheet.FontName,false,x,y,360,105,GrowthBehaviorEnum.DownGlobal));
+				,sheet.FontSize,sheet.FontName,false,x,y,360,114,GrowthBehaviorEnum.DownGlobal));
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
 @"[carrier2Name]
 Subscriber: [subscriber2NameFL]
 Annual Max: [ins2AnnualMax], Pending: [ins2Pending], Used: [ins2Used]
 Deductible: [ins2Deductible], Ded Used: [ins2DeductibleUsed]
 [ins2Percentages]"
-				,sheet.FontSize,sheet.FontName,false,x+365,y,360,105,GrowthBehaviorEnum.DownGlobal));
-			y+=105;
+				,sheet.FontSize,sheet.FontName,false,x+365,y,360,114,GrowthBehaviorEnum.DownGlobal));
+			y+=114;
+			y+=3;
 			//Account Info---------------------------------------------------------------------------------------------
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
 			y+=3;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Account Info",sheet.FontSize,sheet.FontName,true,x,y,500,19));
-			y+=rowH;
+			y+=19;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText(
 				@"Guarantor: [guarantorNameFL]
 Balance: [balTotal]
@@ -748,14 +749,14 @@ Balance: [balTotal]
 =Total: [balTotalMinusInsEst]
 Aging: 0-30:[bal_0_30]  31-60:[bal_31_60]  61-90:[bal_61_90]  90+:[balOver90]
 Fam Urgent Fin Note: [famFinUrgNote]"
-				,sheet.FontSize,sheet.FontName,false,x,y,725,rowH,GrowthBehaviorEnum.DownGlobal));
-			y+=rowH;
+				,sheet.FontSize,sheet.FontName,false,x,y,725,98,GrowthBehaviorEnum.DownGlobal));
+			y+=98;
 			y+=3;
 			//Insurance Info---------------------------------------------------------------------------------------------
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewLine(x,y,725,0));
 			y+=3;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("Treatment Plan",sheet.FontSize,sheet.FontName,true,x,y,500,19,GrowthBehaviorEnum.DownGlobal));
-			y+=rowH;
+			y+=19;
 			sheet.SheetFieldDefs.Add(SheetFieldDef.NewStaticText("[treatmentPlanProcs]",sheet.FontSize,sheet.FontName,false,x,y,500,19,GrowthBehaviorEnum.DownGlobal));
 			y+=rowH;
 			return sheet;
