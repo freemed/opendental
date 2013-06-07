@@ -390,38 +390,38 @@ namespace OpenDentBusiness {
 								//Do nothing.  No entry means "Unknown", the old default.
 								continue;
 							case PatientRaceOld.Multiracial://1
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Multiracial;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Multiracial);
 								break;
 							case PatientRaceOld.HispanicLatino://2
 								//MySQL can handle multiple insert statements with this syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White+"),(";
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White)+"),(";
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
 								break;
 							case PatientRaceOld.AfricanAmerican://3
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican);
 								break;
 							case PatientRaceOld.White://4
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White);
 								break;
 							case PatientRaceOld.HawaiiOrPacIsland://5
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.HawaiiOrPacIsland;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.HawaiiOrPacIsland);
 								break;
 							case PatientRaceOld.AmericanIndian://6
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AmericanIndian;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AmericanIndian);
 								break;
 							case PatientRaceOld.Asian://7
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Asian;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Asian);
 								break;
 							case PatientRaceOld.Other://8
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Other;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Other);
 								break;
 							case PatientRaceOld.Aboriginal://9
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Aboriginal;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Aboriginal);
 								break;
 							case PatientRaceOld.BlackHispanic://10
 								//MySQL can handle multiple insert statements with this syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican+"),(";
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican)+"),(";
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
 								break;
 							default:
 								//should never happen, useful for debugging.
@@ -441,42 +441,42 @@ namespace OpenDentBusiness {
 								//Do nothing.  No entry means "Unknown", the old default.
 								continue;
 							case PatientRaceOld.Multiracial://1
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Multiracial;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Multiracial);
 								break;
 							case PatientRaceOld.HispanicLatino://2
 								//Oracle multiple insert statements require a different syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White+")";
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White)+")";
 								Db.NonQ(command);
 								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
 								break;
 							case PatientRaceOld.AfricanAmerican://3
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican);
 								break;
 							case PatientRaceOld.White://4
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.White;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White);
 								break;
 							case PatientRaceOld.HawaiiOrPacIsland://5
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.HawaiiOrPacIsland;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.HawaiiOrPacIsland);
 								break;
 							case PatientRaceOld.AmericanIndian://6
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AmericanIndian;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AmericanIndian);
 								break;
 							case PatientRaceOld.Asian://7
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Asian;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Asian);
 								break;
 							case PatientRaceOld.Other://8
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Other;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Other);
 								break;
 							case PatientRaceOld.Aboriginal://9
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Aboriginal;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Aboriginal);
 								break;
 							case PatientRaceOld.BlackHispanic://10
 								//Oracle multiple insert statements require a different syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.AfricanAmerican+")";
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican)+")";
 								Db.NonQ(command);
 								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-								command+=table.Rows[i]["PatNum"].ToString()+","+PatRace.Hispanic;
+								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
 								break;
 							default:
 								//should never happen, useful for debugging.
