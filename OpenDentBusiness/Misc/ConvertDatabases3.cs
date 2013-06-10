@@ -486,6 +486,82 @@ namespace OpenDentBusiness {
 						Db.NonQ(command);//"continue" statements above prevent this from running without values.
 					}
 				}
+				//Apex clearinghouse.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ('Apex','"+POut.String(@"C:\ONETOUCH\")+"','','5','ZZ','870578776','ZZ','99999','P','','','0','',0,0,'','Apex','8008409152','99999','','','','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"INSERT INTO clearinghouse(ClearinghouseNum,Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Apex','"+POut.String(@"C:\ONETOUCH\")+"','','5','ZZ','870578776','ZZ','99999','P','','','0','',0,0,'','Apex','8008409152','99999','','','','','')";
+					Db.NonQ(command);
+				}
+				//Insert Guru Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"'Guru', "
+				    +"'Guru from guru.waziweb.com', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Guru image path', "
+				    +"'C:\')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'Guru')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramNum)+1 FROM program),"
+				    +"'Guru', "
+				    +"'Guru from guru.waziweb.com/', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Guru image path', "
+				    +"'C:\')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'Guru')";
+					Db.NonQ(command);
+				}//end Guru bridge
 
 
 				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
