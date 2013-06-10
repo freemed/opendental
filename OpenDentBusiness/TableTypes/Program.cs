@@ -56,6 +56,7 @@ namespace OpenDentBusiness{
 		EvaSoft,
 		EwooEZDent,
 		FloridaProbe,
+		Guru,
 		HouseCalls,
 		IAP,
 		iCat,

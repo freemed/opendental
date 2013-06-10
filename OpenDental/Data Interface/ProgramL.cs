@@ -113,6 +113,10 @@ namespace OpenDental{
 				FloridaProbe.SendData(prog,pat);
 				return;
 			}
+			else if(prog.ProgName==ProgramName.Guru.ToString()) {
+				Guru.SendData(prog,pat);
+				return;
+			}
 			else if(prog.ProgName==ProgramName.HouseCalls.ToString()) {
 				FormHouseCalls FormHC=new FormHouseCalls();
 				FormHC.ProgramCur=prog;
