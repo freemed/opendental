@@ -563,6 +563,7 @@ namespace OpenDentBusiness {
 			//Procedures------------------------------------------------------------------------------------------
 			command="SELECT "
 				+"(SELECT SUM(AdjAmt) FROM adjustment WHERE procedurelog.ProcNum=adjustment.ProcNum "
+				+"AND adjustment.ProcNum<>0 "//Prevents long load time in a patient with thousands of entries.  Example: customer was using a dummy patient.
 				+"AND adjustment.PatNum IN ("+familyPatNums+")"
 				+") adj_, "
 				+"procedurelog.BaseUnits,procedurelog.BillingNote,procedurelog.ClinicNum,procedurecode.CodeNum,Descript,"
@@ -575,6 +576,7 @@ namespace OpenDentBusiness {
 				+") insPayEst_,"//only include estimates for pending claims
 				+"LaymanTerm,procedurelog.MedicalCode,MAX(cp1.NoBillIns) noBillIns_,procedurelog.PatNum,"
 				+"(SELECT SUM(paysplit.SplitAmt) FROM paysplit WHERE procedurelog.ProcNum=paysplit.ProcNum "
+				+"AND paysplit.ProcNum<>0 "//Prevents long load time in a patient with thousands of entries.
 				+"AND paysplit.PatNum IN ("+familyPatNums+")"
 				+") patPay_,"
 				+"ProcCode,"+DbHelper.DateColumn("procedurelog.ProcDate")+" procDate_,ProcFee,procedurelog.ProcNum,procedurelog.ProcNumLab,"
