@@ -184,7 +184,7 @@ namespace OpenDental{
 				Prefs.UpdateBool(PrefName.CorruptedDatabase,false,true);//more forceful refresh in order to properly change flag
 			}
 			if(!silent) {
-				MsgBox.Show(this,"Conversion successful");
+				MsgBox.Show(this,"Database update successful");
 			}
 			Cache.Refresh(InvalidType.Prefs);
 			return true;
