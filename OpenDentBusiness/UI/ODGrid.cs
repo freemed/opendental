@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
+using System.Globalization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 
@@ -618,6 +619,10 @@ namespace OpenDental.UI {
 		///<summary>Draws the background, lines, and text for all rows that are visible.</summary>
 		private void DrawRows(Graphics g) {
 			Font cellFont=new Font(FontFamily.GenericSansSerif,cellFontSize);
+			if(CultureInfo.CurrentCulture.Name.EndsWith("IN")) {
+				cellFont.Dispose();
+				cellFont=new Font("Arial",cellFontSize);
+			}
 			try {
 				for(int i=0;i<rows.Count;i++) {
 					if(-vScroll.Value+RowLocs[i]+RowHeights[i]+NoteHeights[i]<0) {
