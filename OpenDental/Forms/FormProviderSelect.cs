@@ -590,7 +590,8 @@ namespace OpenDental{
 			}			
 			Provider provFrom=Providers.GetProv(PIn.Long(table.Rows[gridMain.SelectedIndices[0]]["ProvNum"].ToString()));
 			Provider provTo=ProviderC.ListShort[comboProv.SelectedIndex];
-			if(MsgBox.Show(this,MsgBoxButtons.OKCancel,"Move all patients from "+provFrom.GetLongDesc()+" to "+provTo.GetLongDesc()+"?")) {
+			string msg=Lan.g(this,"Move all patients from")+" "+provFrom.GetLongDesc()+" "+Lan.g(this,"to")+" "+provTo.GetLongDesc()+"?";
+			if(MessageBox.Show(msg,"",MessageBoxButtons.OKCancel)==DialogResult.OK) {
 				Patients.ChangeProviders(provFrom.ProvNum,provTo.ProvNum);
 			}
 			changed=true;
