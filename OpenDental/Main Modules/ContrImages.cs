@@ -631,6 +631,7 @@ namespace OpenDental{
 			}
 			ToolBarPaint.Buttons.Add(new ODToolBarButton("",8,Lan.g(this,"Zoom In"),"ZoomIn"));
 			ToolBarPaint.Buttons.Add(new ODToolBarButton("",9,Lan.g(this,"Zoom Out"),"ZoomOut"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("100",-1,Lan.g(this,"Zoom 100"),"Zoom100"));
 			if(ClaimPaymentNum==0) {
 				ToolBarPaint.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				button=new ODToolBarButton(Lan.g(this,"Rotate:"),-1,"","");
@@ -765,6 +766,7 @@ namespace OpenDental{
 			}
 			ToolBarPaint.Buttons["ZoomIn"].Enabled=zoomIn;
 			ToolBarPaint.Buttons["ZoomOut"].Enabled=zoomOut;
+			ToolBarPaint.Buttons["Zoom100"].Enabled=zoomOut;
 			if(ToolBarPaint.Buttons["Flip"]!=null) {
 				ToolBarPaint.Buttons["Flip"].Enabled=flip;
 			}
@@ -1174,6 +1176,9 @@ namespace OpenDental{
 						break;
 					case "ZoomOut":
 						ToolBarZoomOut_Click();
+						break;
+					case "Zoom100":
+						ToolBarZoom100_Click();
 						break;
 					case "Flip":
 						ToolBarFlip_Click();
@@ -2418,6 +2423,14 @@ namespace OpenDental{
 			PointF p=new PointF(c.X-PointTranslation.X,c.Y-PointTranslation.Y);
 			PointTranslation=new PointF(PointTranslation.X+p.X/2.0f,PointTranslation.Y+p.Y/2.0f);
 			ZoomOverall=(float)Math.Pow(2,ZoomLevel);
+			InvalidateSettings(ImageSettingFlags.NONE,false);//Refresh display.
+		}
+
+		///<summary>This button is disabled for mounts, in which case this code is never called.</summary>
+		private void ToolBarZoom100_Click() {
+			ZoomLevel=0;
+			ZoomOverall=1;
+			ZoomImage=1;
 			InvalidateSettings(ImageSettingFlags.NONE,false);//Refresh display.
 		}
 
