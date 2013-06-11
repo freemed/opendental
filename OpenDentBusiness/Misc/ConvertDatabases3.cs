@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.TaskEdit)+")";
+							+"VALUES("+POut.Long(groupNum)+",66)";//POut.Int((int)Permissions.TaskEdit)
 						Db.NonQ(command);
 					}
 				}
@@ -26,18 +26,18 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.TaskEdit)+")";
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+",66)";//POut.Int((int)Permissions.TaskEdit)
 						Db.NonQ(command);
 					}
 				}
 				//add WikiListSetup permissions for users that have security admin------------------------------------------------------
-				command="SELECT UserGroupNum FROM grouppermission WHERE PermType="+POut.Int((int)Permissions.SecurityAdmin);
+				command="SELECT UserGroupNum FROM grouppermission WHERE PermType=24";//POut.Int((int)Permissions.SecurityAdmin)
 				table=Db.GetTable(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup);
 						Db.NonQ32(command);
 					}
 				}
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDate,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup)
 						Db.NonQ32(command);
 					}
 				}
@@ -159,7 +159,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge MODIFY CopyNoteToProc NOT NULL";
 					Db.NonQ(command);
-				} 
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS xchargetransaction";
 					Db.NonQ(command);
@@ -280,17 +280,17 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//Oracle compatible
-				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
+				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus=5";//+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
+				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus=4";//+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
+				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus=3";//+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
+				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus=2";//+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
+				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus=1";//+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
+				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus=0";//+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
 				Db.NonQ(command);
 				command="ALTER TABLE patient DROP COLUMN SmokeStatus";
 				Db.NonQ(command);
@@ -305,7 +305,7 @@ namespace OpenDentBusiness {
 				command="UPDATE eduresource,icd9 SET eduresource.ICD9Code=icd9.ICD9Code WHERE eduresource.ICD9Num=icd9.ICD9Num";
 				Db.NonQ(command);
 				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
-				Db.NonQ(command); 
+				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar(255) NOT NULL";
 					Db.NonQ(command);
@@ -313,7 +313,7 @@ namespace OpenDentBusiness {
 				else {//oracle
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar2(255)";
 					Db.NonQ(command);
-				}			
+				}
 				command="INSERT INTO diseasedef(DiseaseName,ICD9Code) SELECT Description,ICD9Code FROM icd9,disease WHERE icd9.ICD9Num=disease.ICD9Num";
 				Db.NonQ(command);
 				command="UPDATE disease,diseasedef,icd9 SET disease.DiseaseDefNum=diseasedef.DiseaseDefNum WHERE disease.ICD9Num=icd9.ICD9Num and icd9.ICD9Code=diseasedef.ICD9Code";
@@ -380,111 +380,58 @@ namespace OpenDentBusiness {
 					}
 				}
 				//update Race and Ethnicity for EHR.---------------------------------------------------------------------------------------------------------------------
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="SELECT PatNum, Race FROM patient";
-					table=Db.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++) {
-						command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-						switch((PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString())) {
-							case PatientRaceOld.Unknown://0
-								//Do nothing.  No entry means "Unknown", the old default.
-								continue;
-							case PatientRaceOld.Multiracial://1
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Multiracial);
-								break;
-							case PatientRaceOld.HispanicLatino://2
-								//MySQL can handle multiple insert statements with this syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White)+"),(";
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
-								break;
-							case PatientRaceOld.AfricanAmerican://3
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican);
-								break;
-							case PatientRaceOld.White://4
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White);
-								break;
-							case PatientRaceOld.HawaiiOrPacIsland://5
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.HawaiiOrPacIsland);
-								break;
-							case PatientRaceOld.AmericanIndian://6
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AmericanIndian);
-								break;
-							case PatientRaceOld.Asian://7
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Asian);
-								break;
-							case PatientRaceOld.Other://8
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Other);
-								break;
-							case PatientRaceOld.Aboriginal://9
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Aboriginal);
-								break;
-							case PatientRaceOld.BlackHispanic://10
-								//MySQL can handle multiple insert statements with this syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican)+"),(";
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
-								break;
-							default:
-								//should never happen, useful for debugging.
-								continue;
-						}
-						command+=")";
-						Db.NonQ(command);//"continue" statements above prevent this from running without values.
+				//Get a list of patients that have a race set.
+				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
+				table=Db.GetTable(command);
+				for(int i=0;i<table.Rows.Count;i++) {
+					command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+					switch(PIn.Int(table.Rows[i]["Race"].ToString())) {//PatientRaceOld
+						case 0://PatientRaceOld.Unknown
+							//Do nothing.  No entry means "Unknown", the old default.
+							continue;
+						case 1://PatientRaceOld.Multiracial
+							command+=table.Rows[i]["PatNum"].ToString()+",7";
+							break;
+						case 2://PatientRaceOld.HispanicLatino
+							command+=table.Rows[i]["PatNum"].ToString()+",9)";//White
+							Db.NonQ(command);
+							command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+							command+=table.Rows[i]["PatNum"].ToString()+",6";//Hispanic
+							break;
+						case 3://PatientRaceOld.AfricanAmerican
+							command+=table.Rows[i]["PatNum"].ToString()+",1";
+							break;
+						case 4://PatientRaceOld.White
+							command+=table.Rows[i]["PatNum"].ToString()+",9";
+							break;
+						case 5://PatientRaceOld.HawaiiOrPacIsland
+							command+=table.Rows[i]["PatNum"].ToString()+",5";
+							break;
+						case 6://PatientRaceOld.AmericanIndian
+							command+=table.Rows[i]["PatNum"].ToString()+",2";
+							break;
+						case 7://PatientRaceOld.Asian
+							command+=table.Rows[i]["PatNum"].ToString()+",3";
+							break;
+						case 8://PatientRaceOld.Other
+							command+=table.Rows[i]["PatNum"].ToString()+",8";
+							break;
+						case 9://PatientRaceOld.Aboriginal
+							command+=table.Rows[i]["PatNum"].ToString()+",0";
+							break;
+						case 10://PatientRaceOld.BlackHispanic
+							//MySQL can handle multiple insert statements with this syntax.
+							command+=table.Rows[i]["PatNum"].ToString()+",1)";//AfricanAmerican
+							Db.NonQ(command);
+							command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+							command+=table.Rows[i]["PatNum"].ToString()+",6";//Hispanic
+							break;
+						default:
+							//should never happen, useful for debugging.
+							continue;
 					}
-				}
-				else {//oracle
-					command="SELECT PatNum, Race FROM patient";
-					table=Db.GetTable(command);
-					for(int i=0;i<table.Rows.Count;i++) {
-						command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-						switch((PatientRaceOld)PIn.Int(table.Rows[i]["Race"].ToString())) {
-							case PatientRaceOld.Unknown://0
-								//Do nothing.  No entry means "Unknown", the old default.
-								continue;
-							case PatientRaceOld.Multiracial://1
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Multiracial);
-								break;
-							case PatientRaceOld.HispanicLatino://2
-								//Oracle multiple insert statements require a different syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White)+")";
-								Db.NonQ(command);
-								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
-								break;
-							case PatientRaceOld.AfricanAmerican://3
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican);
-								break;
-							case PatientRaceOld.White://4
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.White);
-								break;
-							case PatientRaceOld.HawaiiOrPacIsland://5
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.HawaiiOrPacIsland);
-								break;
-							case PatientRaceOld.AmericanIndian://6
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AmericanIndian);
-								break;
-							case PatientRaceOld.Asian://7
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Asian);
-								break;
-							case PatientRaceOld.Other://8
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Other);
-								break;
-							case PatientRaceOld.Aboriginal://9
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Aboriginal);
-								break;
-							case PatientRaceOld.BlackHispanic://10
-								//Oracle multiple insert statements require a different syntax.
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.AfricanAmerican)+")";
-								Db.NonQ(command);
-								command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-								command+=table.Rows[i]["PatNum"].ToString()+","+POut.Long((long)PatRace.Hispanic);
-								break;
-							default:
-								//should never happen, useful for debugging.
-								continue;
-						}
-						command+=")";
-						Db.NonQ(command);//"continue" statements above prevent this from running without values.
-					}
+					command+=")";
+					Db.NonQ(command);//"continue" statements above prevent this from running without values.
 				}
 				//Apex clearinghouse.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
@@ -525,7 +472,7 @@ namespace OpenDentBusiness {
 					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
 				    +"VALUES ("
 				    +"'"+POut.Long(programNum)+"', "
-				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'2', "//ToolBarsAvail.ChartModule
 				    +"'Guru')";
 					Db.NonQ(command);
 				}
@@ -558,7 +505,7 @@ namespace OpenDentBusiness {
 				    +"VALUES ("
 				    +"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
 				    +"'"+POut.Long(programNum)+"', "
-				    +"'"+POut.Int(((int)ToolBarsAvail.ChartModule))+"', "
+				    +"'2', "//ToolBarsAvail.ChartModule
 				    +"'Guru')";
 					Db.NonQ(command);
 				}//end Guru bridge
