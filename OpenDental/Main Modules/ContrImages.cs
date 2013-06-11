@@ -3007,6 +3007,10 @@ namespace OpenDental{
 		}
 
 		private void MountMenu_Opening(object sender,CancelEventArgs e) {
+			if(treeDocuments.SelectedNode==null) {
+				e.Cancel=true;
+				return;
+			}
 			ImageNodeId nodeId=(ImageNodeId)treeDocuments.SelectedNode.Tag;
 			if(nodeId.NodeType!=ImageNodeType.Mount) {
 				e.Cancel=true;
