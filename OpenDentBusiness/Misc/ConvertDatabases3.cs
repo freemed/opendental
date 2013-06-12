@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 
 namespace OpenDentBusiness {
 	public partial class ConvertDatabases {
@@ -383,56 +384,57 @@ namespace OpenDentBusiness {
 				//Get a list of patients that have a race set.
 				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
 				table=Db.GetTable(command);
+				//Using a string builder for performance.
+				StringBuilder strBuildCmd=new StringBuilder();
 				for(int i=0;i<table.Rows.Count;i++) {
-					command="INSERT INTO patientrace (PatNum,Race) VALUES (";
+					string insertStr="";
+					string patNum=table.Rows[i]["PatNum"].ToString();
 					switch(PIn.Int(table.Rows[i]["Race"].ToString())) {//PatientRaceOld
 						case 0://PatientRaceOld.Unknown
 							//Do nothing.  No entry means "Unknown", the old default.
 							continue;
 						case 1://PatientRaceOld.Multiracial
-							command+=table.Rows[i]["PatNum"].ToString()+",7";
+							insertStr+=patNum+",7";
 							break;
 						case 2://PatientRaceOld.HispanicLatino
-							command+=table.Rows[i]["PatNum"].ToString()+",9)";//White
-							Db.NonQ(command);
-							command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-							command+=table.Rows[i]["PatNum"].ToString()+",6";//Hispanic
+							insertStr+=patNum+",9);\r\n";//White
+							insertStr+="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6";//Hispanic
 							break;
 						case 3://PatientRaceOld.AfricanAmerican
-							command+=table.Rows[i]["PatNum"].ToString()+",1";
+							insertStr+=patNum+",1";
 							break;
 						case 4://PatientRaceOld.White
-							command+=table.Rows[i]["PatNum"].ToString()+",9";
+							insertStr+=patNum+",9";
 							break;
 						case 5://PatientRaceOld.HawaiiOrPacIsland
-							command+=table.Rows[i]["PatNum"].ToString()+",5";
+							insertStr+=patNum+",5";
 							break;
 						case 6://PatientRaceOld.AmericanIndian
-							command+=table.Rows[i]["PatNum"].ToString()+",2";
+							insertStr+=patNum+",2";
 							break;
 						case 7://PatientRaceOld.Asian
-							command+=table.Rows[i]["PatNum"].ToString()+",3";
+							insertStr+=patNum+",3";
 							break;
 						case 8://PatientRaceOld.Other
-							command+=table.Rows[i]["PatNum"].ToString()+",8";
+							insertStr+=patNum+",8";
 							break;
 						case 9://PatientRaceOld.Aboriginal
-							command+=table.Rows[i]["PatNum"].ToString()+",0";
+							insertStr+=patNum+",0";
 							break;
 						case 10://PatientRaceOld.BlackHispanic
 							//MySQL can handle multiple insert statements with this syntax.
-							command+=table.Rows[i]["PatNum"].ToString()+",1)";//AfricanAmerican
-							Db.NonQ(command);
-							command="INSERT INTO patientrace (PatNum,Race) VALUES (";
-							command+=table.Rows[i]["PatNum"].ToString()+",6";//Hispanic
+							insertStr+=patNum+",1);\r\n";//AfricanAmerican
+							insertStr+="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6";//Hispanic
 							break;
 						default:
 							//should never happen, useful for debugging.
 							continue;
 					}
-					command+=")";
-					Db.NonQ(command);//"continue" statements above prevent this from running without values.
+					if(insertStr!="") {
+						strBuildCmd.Append("INSERT INTO patientrace (PatNum,Race) VALUES ("+insertStr+");\r\n");
+					}
 				}
+				Db.NonQ(strBuildCmd.ToString());
 				//Apex clearinghouse.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
