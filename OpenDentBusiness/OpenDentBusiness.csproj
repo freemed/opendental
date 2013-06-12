@@ -367,6 +367,7 @@
     <Compile Include="Data Interface\Automations.cs" />
     <Compile Include="Data Interface\CentralConnections.cs" />
     <Compile Include="Data Interface\ChartViews.cs" />
+    <Compile Include="Data Interface\PatientRaces.cs" />
     <Compile Include="Data Interface\Resellers.cs" />
     <Compile Include="Data Interface\ResellerServices.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
