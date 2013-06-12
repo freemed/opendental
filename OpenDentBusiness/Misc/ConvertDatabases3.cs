@@ -384,8 +384,6 @@ namespace OpenDentBusiness {
 				//Get a list of patients that have a race set.
 				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
 				table=Db.GetTable(command);
-				//Using a string builder for performance.
-				StringBuilder strBuildCmd=new StringBuilder();
 				bool hasFirstInsert=false;//Used for Oracle compatibility.
 				//MySQL requires the table be aliased because we are inserting on the same table that we are selecting from.
 				string maxPkStr="(SELECT MAX(PatientRaceNum+1) FROM patientrace pr)";//Used for Oracle compatibility.
@@ -443,9 +441,9 @@ namespace OpenDentBusiness {
 						patientRaceNum="1";
 						hasFirstInsert=true;
 					}
-					strBuildCmd.Append("INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+patientRaceNum+","+patNumAndRace+");\r\n");
+					command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+patientRaceNum+","+patNumAndRace+");";
+					Db.NonQ(command);
 				}
-				Db.NonQ(strBuildCmd.ToString());
 				//Apex clearinghouse.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
