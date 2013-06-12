@@ -386,53 +386,64 @@ namespace OpenDentBusiness {
 				table=Db.GetTable(command);
 				//Using a string builder for performance.
 				StringBuilder strBuildCmd=new StringBuilder();
+				bool hasFirstInsert=false;//Used for Oracle compatibility.
+				//MySQL requires the table be aliased because we are inserting on the same table that we are selecting from.
+				string maxPkStr="(SELECT MAX(PatientRaceNum+1) FROM patientrace pr)";//Used for Oracle compatibility.
 				for(int i=0;i<table.Rows.Count;i++) {
-					string insertStr="";
+					string patNumAndRace="";
 					string patNum=table.Rows[i]["PatNum"].ToString();
 					switch(PIn.Int(table.Rows[i]["Race"].ToString())) {//PatientRaceOld
 						case 0://PatientRaceOld.Unknown
 							//Do nothing.  No entry means "Unknown", the old default.
 							continue;
 						case 1://PatientRaceOld.Multiracial
-							insertStr+=patNum+",7";
+							patNumAndRace+=patNum+",7";
 							break;
 						case 2://PatientRaceOld.HispanicLatino
-							insertStr+=patNum+",9);\r\n";//White
-							insertStr+="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6";//Hispanic
+							patNumAndRace+=patNum+",9);\r\n";//White
+							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
 							break;
 						case 3://PatientRaceOld.AfricanAmerican
-							insertStr+=patNum+",1";
+							patNumAndRace+=patNum+",1";
 							break;
 						case 4://PatientRaceOld.White
-							insertStr+=patNum+",9";
+							patNumAndRace+=patNum+",9";
 							break;
 						case 5://PatientRaceOld.HawaiiOrPacIsland
-							insertStr+=patNum+",5";
+							patNumAndRace+=patNum+",5";
 							break;
 						case 6://PatientRaceOld.AmericanIndian
-							insertStr+=patNum+",2";
+							patNumAndRace+=patNum+",2";
 							break;
 						case 7://PatientRaceOld.Asian
-							insertStr+=patNum+",3";
+							patNumAndRace+=patNum+",3";
 							break;
 						case 8://PatientRaceOld.Other
-							insertStr+=patNum+",8";
+							patNumAndRace+=patNum+",8";
 							break;
 						case 9://PatientRaceOld.Aboriginal
-							insertStr+=patNum+",0";
+							patNumAndRace+=patNum+",0";
 							break;
 						case 10://PatientRaceOld.BlackHispanic
 							//MySQL can handle multiple insert statements with this syntax.
-							insertStr+=patNum+",1);\r\n";//AfricanAmerican
-							insertStr+="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6";//Hispanic
+							patNumAndRace+=patNum+",1);\r\n";//AfricanAmerican
+							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
 							break;
 						default:
 							//should never happen, useful for debugging.
 							continue;
 					}
-					if(insertStr!="") {
-						strBuildCmd.Append("INSERT INTO patientrace (PatNum,Race) VALUES ("+insertStr+");\r\n");
+					if(patNumAndRace=="") {//Just in case.
+						continue;
 					}
+					//We will manually set the PK for Oracle compatibility.
+					string patientRaceNum=maxPkStr;
+					if(!hasFirstInsert) {
+						//There hasn't been an entry in the patient race table yet so we cant use maxPkStr.  We'll hard code 1 for the first insert.
+						patientRaceNum="1";
+						hasFirstInsert=true;
+					}
+					strBuildCmd.Append("INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+patientRaceNum+","+patNumAndRace+");\r\n");
 				}
 				Db.NonQ(strBuildCmd.ToString());
 				//Apex clearinghouse.
