@@ -362,24 +362,11 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//Create Custom Language "DeclinedToSpecify" ----------------------------------------------------------------------------------------------------------
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
-					table=Db.GetTable(command);
-					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
-						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
-							+" WHERE PrefName='LanguagesUsedByPatients'";
-						Db.NonQ(command);
-					}
-				}
-				else {//oracle
-					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
-					table=Db.GetTable(command);
-					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
-						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
-							+" WHERE PrefName='LanguagesUsedByPatients'";
-						Db.NonQ(command);
-					}
-				}
+				command="SELECT ValueString FROM preference WHERE PrefName = 'LanguagesUsedByPatients'";
+				string valueString=Db.GetScalar(command);
+				command="UPDATE preference SET ValueString='"+(POut.String(valueString)+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+					+" WHERE PrefName='LanguagesUsedByPatients'";
+				Db.NonQ(command);
 				//update Race and Ethnicity for EHR.---------------------------------------------------------------------------------------------------------------------
 				//Get a list of patients that have a race set.
 				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
