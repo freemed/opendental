@@ -35,9 +35,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				if(eduResourceList[i].DiseaseDefNum!=0) {
 					row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).DiseaseName);
-				}
-				else if(eduResourceList[i].ICD9Code!="") {
-					row.Cells.Add("ICD9: "+ICD9s.GetByCode(eduResourceList[i].ICD9Code).Description);
+					//row.Cells.Add("ICD9: "+DiseaseDefs.GetItem(eduResourceList[i].DiseaseDefNum).ICD9Code);
 				}
 				else if(eduResourceList[i].MedicationNum!=0) {
 					row.Cells.Add("Medication: "+Medications.GetDescription(eduResourceList[i].MedicationNum));

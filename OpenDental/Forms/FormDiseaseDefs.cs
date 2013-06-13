@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using OpenDental.UI;
 using OpenDentBusiness;
 
 namespace OpenDental{
@@ -11,7 +12,6 @@ namespace OpenDental{
 	/// </summary>
 	public class FormDiseaseDefs:System.Windows.Forms.Form {
 		private OpenDental.UI.Button butClose;
-		private System.Windows.Forms.ListBox listMain;
 		private OpenDental.UI.Button butAdd;
 		private System.ComponentModel.IContainer components;
 		private Label label1;
@@ -27,6 +27,7 @@ namespace OpenDental{
 		public long SelectedDiseaseDefNum;
 		///<summary>If IsMultiSelect, then this will contain a list of numbers when closing with OK.</summary>
 		public List<long> SelectedDiseaseDefNums;
+		private ODGrid gridMain;
 		private bool IsChanged;
 
 		///<summary></summary>
@@ -63,23 +64,15 @@ namespace OpenDental{
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDiseaseDefs));
-			this.listMain = new System.Windows.Forms.ListBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.label1 = new System.Windows.Forms.Label();
-			this.butClose = new OpenDental.UI.Button();
-			this.butAdd = new OpenDental.UI.Button();
+			this.gridMain = new OpenDental.UI.ODGrid();
+			this.butOK = new OpenDental.UI.Button();
 			this.butDown = new OpenDental.UI.Button();
 			this.butUp = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
+			this.butClose = new OpenDental.UI.Button();
+			this.butAdd = new OpenDental.UI.Button();
 			this.SuspendLayout();
-			// 
-			// listMain
-			// 
-			this.listMain.Location = new System.Drawing.Point(18, 34);
-			this.listMain.Name = "listMain";
-			this.listMain.Size = new System.Drawing.Size(265, 628);
-			this.listMain.TabIndex = 2;
-			this.listMain.DoubleClick += new System.EventHandler(this.listMain_DoubleClick);
 			// 
 			// label1
 			// 
@@ -90,71 +83,20 @@ namespace OpenDental{
 			this.label1.Text = "This is a list of medical problems that patients might have. ";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
-			// butClose
+			// gridMain
 			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(349, 637);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(79, 26);
-			this.butClose.TabIndex = 1;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(349, 394);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(79, 26);
-			this.butAdd.TabIndex = 7;
-			this.butAdd.Text = "&Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butDown
-			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(349, 501);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79, 26);
-			this.butDown.TabIndex = 14;
-			this.butDown.Text = "&Down";
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
-			// 
-			// butUp
-			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butUp.Autosize = true;
-			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUp.CornerRadius = 4F;
-			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(349, 469);
-			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(79, 26);
-			this.butUp.TabIndex = 13;
-			this.butUp.Text = "&Up";
-			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.gridMain.HScrollVisible = false;
+			this.gridMain.Location = new System.Drawing.Point(18, 35);
+			this.gridMain.Name = "gridMain";
+			this.gridMain.ScrollValue = 0;
+			this.gridMain.Size = new System.Drawing.Size(467, 628);
+			this.gridMain.TabIndex = 16;
+			this.gridMain.Title = null;
+			this.gridMain.TranslationName = null;
+			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 
@@ -164,22 +106,88 @@ namespace OpenDental{
 			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
 			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(349, 605);
+			this.butOK.Location = new System.Drawing.Point(503, 605);
 			this.butOK.Name = "butOK";
 			this.butOK.Size = new System.Drawing.Size(79, 26);
 			this.butOK.TabIndex = 15;
 			this.butOK.Text = "OK";
 			this.butOK.Click += new System.EventHandler(this.butOK_Click);
 			// 
+			// butDown
+			// 
+			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butDown.Autosize = true;
+			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDown.CornerRadius = 4F;
+			this.butDown.Image = global::OpenDental.Properties.Resources.down;
+			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butDown.Location = new System.Drawing.Point(503, 464);
+			this.butDown.Name = "butDown";
+			this.butDown.Size = new System.Drawing.Size(79, 26);
+			this.butDown.TabIndex = 14;
+			this.butDown.Text = "&Down";
+			this.butDown.Click += new System.EventHandler(this.butDown_Click);
+			// 
+			// butUp
+			// 
+			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
+			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butUp.Autosize = true;
+			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butUp.CornerRadius = 4F;
+			this.butUp.Image = global::OpenDental.Properties.Resources.up;
+			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butUp.Location = new System.Drawing.Point(503, 432);
+			this.butUp.Name = "butUp";
+			this.butUp.Size = new System.Drawing.Size(79, 26);
+			this.butUp.TabIndex = 13;
+			this.butUp.Text = "&Up";
+			this.butUp.Click += new System.EventHandler(this.butUp_Click);
+			// 
+			// butClose
+			// 
+			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butClose.Autosize = true;
+			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.CornerRadius = 4F;
+			this.butClose.Location = new System.Drawing.Point(503, 637);
+			this.butClose.Name = "butClose";
+			this.butClose.Size = new System.Drawing.Size(79, 26);
+			this.butClose.TabIndex = 1;
+			this.butClose.Text = "Close";
+			this.butClose.Click += new System.EventHandler(this.butClose_Click);
+			// 
+			// butAdd
+			// 
+			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
+			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butAdd.Autosize = true;
+			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.CornerRadius = 4F;
+			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
+			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.butAdd.Location = new System.Drawing.Point(503, 357);
+			this.butAdd.Name = "butAdd";
+			this.butAdd.Size = new System.Drawing.Size(79, 26);
+			this.butAdd.TabIndex = 7;
+			this.butAdd.Text = "&Add";
+			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
+			// 
 			// FormDiseaseDefs
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(447, 675);
+			this.ClientSize = new System.Drawing.Size(601, 675);
+			this.Controls.Add(this.gridMain);
 			this.Controls.Add(this.butOK);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
 			this.Controls.Add(this.label1);
-			this.Controls.Add(this.listMain);
 			this.Controls.Add(this.butClose);
 			this.Controls.Add(this.butAdd);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -203,49 +211,69 @@ namespace OpenDental{
 			else{
 				butOK.Visible=false;
 			}
-			if(IsMultiSelect) { 
-				listMain.SelectionMode=SelectionMode.MultiExtended;
-			}
 			FillGrid();
 		}
 
 		private void FillGrid(){
 			DiseaseDefs.RefreshCache();
-			listMain.Items.Clear();
-			string s;
-			for(int i=0;i<DiseaseDefs.ListLong.Length;i++){
-				s=DiseaseDefs.ListLong[i].DiseaseName;
-				if(DiseaseDefs.ListLong[i].IsHidden){
-					s+=" "+Lan.g(this,"(hidden)");
-				}
-				listMain.Items.Add(s);
-				if(DiseaseDefs.ListLong[i].ItemOrder!=i) {//index is wrong, so fix it
-					DiseaseDefs.ListLong[i].ItemOrder=i;
-					DiseaseDefs.Update(DiseaseDefs.ListLong[i]);
+			//listMain.SelectionMode=SelectionMode.MultiExtended;
+			gridMain.BeginUpdate();
+			gridMain.Columns.Clear();
+			ODGridColumn col;
+			col=new ODGridColumn(Lan.g(this,"ICD-9"),50);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Snomed Code"),100);
+			gridMain.Columns.Add(col);
+			col=new ODGridColumn(Lan.g(this,"Description"),160);
+			gridMain.Columns.Add(col);
+			if(IsSelectionMode) {
+				col=new ODGridColumn(Lan.g(this,"Hidden"),40);
+				gridMain.Columns.Add(col);
+			}
+			gridMain.Rows.Clear();
+			ODGridRow row;
+			if(IsSelectionMode) {
+				for(int i=0;i<DiseaseDefs.List.Length;i++) {
+					row=new ODGridRow();
+					row.Cells.Add(DiseaseDefs.List[i].ICD9Code);
+					row.Cells.Add(DiseaseDefs.List[i].SnomedCode);
+					row.Cells.Add(DiseaseDefs.List[i].DiseaseName);
+					gridMain.Rows.Add(row);
 				}
 			}
+			else {//Not selection mode - show hidden
+				for(int i=0;i<DiseaseDefs.ListLong.Length;i++) {
+					row=new ODGridRow();
+					row.Cells.Add(DiseaseDefs.ListLong[i].ICD9Code);
+					row.Cells.Add(DiseaseDefs.ListLong[i].SnomedCode);
+					row.Cells.Add(DiseaseDefs.ListLong[i].DiseaseName);
+					row.Cells.Add(DiseaseDefs.ListLong[i].IsHidden?"X":"");
+					gridMain.Rows.Add(row);
+				}
+			}
+			gridMain.EndUpdate();
 		}
 
-		private void listMain_DoubleClick(object sender, System.EventArgs e) {
+		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(!IsSelectionMode && !Security.IsAuthorized(Permissions.ProblemEdit)) {//trying to double click to edit, but no permission.
 				return;
 			}
-			if(listMain.SelectedIndex==-1){
+			if(gridMain.SelectedIndices.Length==0) {
 				return;
 			}
-			if(IsSelectionMode){
+			if(IsSelectionMode) {
 				if(IsMultiSelect) {
 					SelectedDiseaseDefNums=new List<long>();
-					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum);
+					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum);
 				}
 				else {
-					SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+					SelectedDiseaseDefNum=DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum;
 				}
 				DialogResult=DialogResult.OK;
 				return;
 			}
 			//everything below this point is _not_ selection mode.  User guaranteed to have permission for ProblemEdit.
-			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(DiseaseDefs.ListLong[listMain.SelectedIndex]);
+			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(DiseaseDefs.ListLong[gridMain.GetSelectedIndex()]);
 			FormD.ShowDialog();
 			//Security log entry made inside that form.
 			if(FormD.DialogResult!=DialogResult.OK) {
@@ -274,9 +302,9 @@ namespace OpenDental{
 
 		private void butUp_Click(object sender,EventArgs e) {
 			//These aren't yet optimized for multiselection.
-			int selected=listMain.SelectedIndex;
+			int selected=gridMain.GetSelectedIndex();
 			try{
-				DiseaseDefs.MoveUp(listMain.SelectedIndex);
+				DiseaseDefs.MoveUp(gridMain.GetSelectedIndex());
 			}
 			catch(ApplicationException ex){
 				MessageBox.Show(ex.Message);
@@ -284,19 +312,19 @@ namespace OpenDental{
 			}
 			FillGrid();
 			if(selected==0) {
-				listMain.SelectedIndex=0;
+				gridMain.SetSelected(0,true);
 			}
 			else{
-				listMain.SelectedIndex=selected-1;
+				gridMain.SetSelected(selected-1,true);
 			}
 			IsChanged=true;
 		}
 
 		private void butDown_Click(object sender,EventArgs e) {
 			//These aren't yet optimized for multiselection.
-			int selected=listMain.SelectedIndex;
+			int selected=gridMain.GetSelectedIndex();
 			try {
-				DiseaseDefs.MoveDown(listMain.SelectedIndex);
+				DiseaseDefs.MoveDown(gridMain.GetSelectedIndex());
 			}
 			catch(ApplicationException ex) {
 				MessageBox.Show(ex.Message);
@@ -304,28 +332,28 @@ namespace OpenDental{
 			}
 			FillGrid();
 			if(selected==DiseaseDefs.ListLong.Length-1) {
-				listMain.SelectedIndex=selected;
+				gridMain.GetSelectedIndex();
 			}
 			else{
-				listMain.SelectedIndex=selected+1;
+				gridMain.SetSelected(selected+1,true);
 			}
 			IsChanged=true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
 			//not even visible unless IsSelectionMode
-			if(listMain.SelectedIndices.Count==0){
+			if(gridMain.SelectedIndices.Length==0){
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
 			if(IsMultiSelect) {
 				SelectedDiseaseDefNums=new List<long>();
-				for(int i=0;i<listMain.SelectedIndices.Count;i++) {
-					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[listMain.SelectedIndices[i]].DiseaseDefNum);
+				for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
+					SelectedDiseaseDefNums.Add(DiseaseDefs.ListLong[gridMain.SelectedIndices[i]].DiseaseDefNum);
 				}
 			}
 			else {
-				SelectedDiseaseDefNum=DiseaseDefs.ListLong[listMain.SelectedIndex].DiseaseDefNum;
+				SelectedDiseaseDefNum=DiseaseDefs.ListLong[gridMain.GetSelectedIndex()].DiseaseDefNum;
 			}
 			DialogResult=DialogResult.OK;
 		}

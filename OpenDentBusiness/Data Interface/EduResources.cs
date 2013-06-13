@@ -25,9 +25,9 @@ namespace OpenDentBusiness{
 						}
 					}
 				}
-				else if(eduResourceListAll[i].ICD9Code!="") {//checks against same list as Diseases/Problems
+				else if(eduResourceListAll[i].DiseaseDefNum!=0) {//checks against same list as Diseases/Problems
 					for(int j=0;j<diseaseList.Count;j++) {
-						if(eduResourceListAll[i].ICD9Code==DiseaseDefs.GetItem(diseaseList[j].DiseaseDefNum).ICD9Code) {
+						if(eduResourceListAll[i].DiseaseDefNum==diseaseList[j].DiseaseDefNum) {
 							retVal.Add(eduResourceListAll[i]);
 						}
 					}

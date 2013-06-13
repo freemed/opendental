@@ -53,7 +53,6 @@ namespace OpenDentBusiness.Crud{
 				eduResource.LabResultName   = PIn.String(table.Rows[i]["LabResultName"].ToString());
 				eduResource.LabResultCompare= PIn.String(table.Rows[i]["LabResultCompare"].ToString());
 				eduResource.ResourceUrl     = PIn.String(table.Rows[i]["ResourceUrl"].ToString());
-				eduResource.ICD9Code        = PIn.String(table.Rows[i]["Icd9Code"].ToString());
 				retVal.Add(eduResource);
 			}
 			return retVal;
@@ -94,7 +93,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EduResourceNum,";
 			}
-			command+="DiseaseDefNum,MedicationNum,LabResultID,LabResultName,LabResultCompare,ResourceUrl,Icd9Code) VALUES(";
+			command+="DiseaseDefNum,MedicationNum,LabResultID,LabResultName,LabResultCompare,ResourceUrl) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(eduResource.EduResourceNum)+",";
 			}
@@ -104,8 +103,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(eduResource.LabResultID)+"',"
 				+"'"+POut.String(eduResource.LabResultName)+"',"
 				+"'"+POut.String(eduResource.LabResultCompare)+"',"
-				+"'"+POut.String(eduResource.ResourceUrl)+"',"
-				+"'"+POut.String(eduResource.ICD9Code)+"')";
+				+"'"+POut.String(eduResource.ResourceUrl)+"')";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -123,8 +121,7 @@ namespace OpenDentBusiness.Crud{
 				+"LabResultID     = '"+POut.String(eduResource.LabResultID)+"', "
 				+"LabResultName   = '"+POut.String(eduResource.LabResultName)+"', "
 				+"LabResultCompare= '"+POut.String(eduResource.LabResultCompare)+"', "
-				+"ResourceUrl     = '"+POut.String(eduResource.ResourceUrl)+"', "
-				+"Icd9Code        = '"+POut.String(eduResource.ICD9Code)+"' "
+				+"ResourceUrl     = '"+POut.String(eduResource.ResourceUrl)+"' "
 				+"WHERE EduResourceNum = "+POut.Long(eduResource.EduResourceNum);
 			Db.NonQ(command);
 		}
@@ -155,10 +152,6 @@ namespace OpenDentBusiness.Crud{
 			if(eduResource.ResourceUrl != oldEduResource.ResourceUrl) {
 				if(command!=""){ command+=",";}
 				command+="ResourceUrl = '"+POut.String(eduResource.ResourceUrl)+"'";
-			}
-			if(eduResource.ICD9Code != oldEduResource.ICD9Code) {
-				if(command!=""){ command+=",";}
-				command+="Icd9Code = '"+POut.String(eduResource.ICD9Code)+"'";
 			}
 			if(command==""){
 				return;
