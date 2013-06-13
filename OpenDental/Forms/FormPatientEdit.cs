@@ -1974,6 +1974,56 @@ namespace OpenDental{
 				labelClinic.Visible=false;
 			}
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+				//comboBoxMultiRace.Items.Add("Aboriginal");//0 Hidden for EHR
+				comboBoxMultiRace.Items.Add("AfricanAmerican");//1
+				comboBoxMultiRace.Items.Add("AmericanIndian");//2
+				comboBoxMultiRace.Items.Add("Asian");//3
+				comboBoxMultiRace.Items.Add("DeclinedToSpecify");//4
+				comboBoxMultiRace.Items.Add("HawaiiOrPacIsland");//5
+				//comboBoxMultiRace.Items.Add("Hispanic");//6 Hidden for EHR
+				//comboBoxMultiRace.Items.Add("Multiracial");//7 Hidden for EHR
+				//comboBoxMultiRace.Items.Add("Other");//8 Hidden for EHR
+				comboBoxMultiRace.Items.Add("White");//9
+			}
+			else {//EHR not enabled
+				comboBoxMultiRace.Items.Add("Aboriginal");//0
+				comboBoxMultiRace.Items.Add("AfricanAmerican");//1
+				comboBoxMultiRace.Items.Add("AmericanIndian");//2
+				comboBoxMultiRace.Items.Add("Asian");//3
+				comboBoxMultiRace.Items.Add("DeclinedToSpecify");//4
+				comboBoxMultiRace.Items.Add("HawaiiOrPacIsland");//5
+				comboBoxMultiRace.Items.Add("Hispanic");//6
+				comboBoxMultiRace.Items.Add("Multiracial");//7
+				comboBoxMultiRace.Items.Add("Other");//8
+				comboBoxMultiRace.Items.Add("White");//9
+			}
+			List<PatientRace> listPatientRaces = PatientRaces.GetForPatient(PatCur.PatNum);
+			bool ehrEnabled=PrefC.GetBool(PrefName.ShowFeatureEhr);//cached to reduce number of checks and to make code more human readable
+			for(int i=0;i<listPatientRaces.Count;i++) {
+				//Switch to determine if the selected race is a legitimate race based on EHR being enabled or not.
+				switch(listPatientRaces[i].Race) {
+					case PatRace.AfricanAmerican:
+					case PatRace.AmericanIndian:
+					case PatRace.Asian:
+					case PatRace.DeclinedToSpecify:
+					case PatRace.HawaiiOrPacIsland:
+					case PatRace.White:
+						//allowed races
+						break;
+					case PatRace.Aboriginal:	//Hidden/ignored if EHR enabled.
+					case PatRace.Hispanic:		//Hidden/ignored if EHR enabled.
+					case PatRace.Multiracial:	//Hidden/ignored if EHR enabled.
+					case PatRace.Other:				//Hidden/ignored if EHR enabled.
+						if(ehrEnabled) { continue; }
+						//allowed races if ehrEnabled==false
+						break;
+					default://Should never happen. Skip processing race.
+						continue;
+				}
+				//selects indice based on the actual name of the enum.
+				comboBoxMultiRace.SetSelected(comboBoxMultiRace.Items.IndexOf(Enum.GetNames(typeof(PatRace))[(int)listPatientRaces[i].Race].ToString()),true);
+			}
+			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				labelRaceEthnicity.Text="Race";
 				comboRace.Items.Add("unknown");//0
 				comboRace.Items.Add("White");//1
@@ -2980,6 +3030,12 @@ namespace OpenDental{
 			else{
 				PatCur.ClinicNum=Clinics.List[comboClinic.SelectedIndex-1].ClinicNum;
 			}
+			List<PatRace> listPatRaces = new List<PatRace>();
+			for(int i=0;i<comboBoxMultiRace.SelectedIndices.Count;i++) {
+				listPatRaces.Add((PatRace)Enum.Parse(typeof(PatRace),comboBoxMultiRace.Items[PIn.Int(comboBoxMultiRace.SelectedIndices[i].ToString())].ToString()));
+			}
+			PatientRaces.Reconcile(PatCur.PatNum,listPatRaces);//Insert, Update, Delete if needed.
+			//TODO: Ethnicity...
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
 				switch(comboRace.SelectedIndex) {
 					case 0://unknown

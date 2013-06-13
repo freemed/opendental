@@ -17,6 +17,7 @@ namespace OpenDental {
 		public WikiPage WikiPageCur;
 		///<summary>Need a reference to the form where this was launched from so that we can tell it to refresh later.</summary>
 		public FormWiki OwnerForm;
+		private bool closingIsSave;//used to differentiate what action caused the form to close.
 		private string AggregateContent;
 		private int ScrollTop;
 		
@@ -335,7 +336,8 @@ namespace OpenDental {
 			if(formWiki!=null && !formWiki.IsDisposed) {
 				formWiki.RefreshPage(WikiPageCur.PageTitle);
 			}
-			Close();
+			closingIsSave=true;
+			Close();//should be dialog result??
 		}
 
 		private void Cancel_Click() {
@@ -736,11 +738,11 @@ namespace OpenDental {
 		}
 
 		private void FormWikiEdit_FormClosing(object sender,FormClosingEventArgs e) {
-			//handles both the Cancel button and the user clicking on the x
-			if(DialogResult==DialogResult.OK) {
+			//handles both the Cancel button and the user clicking on the x, and also the save button.
+			if(closingIsSave) {
 				return;
 			}
-			if(textContent.Text!=WikiPageCur.PageContent){
+			if(textContent.Text!=WikiPageCur.PageContent){//why is this line of code here, why is it important?--Ryan
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Unsaved changes will be lost. Would you like to continue?")) {
 					e.Cancel=true;
 				}
