@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Text;
 
 namespace OpenDentBusiness {
 	public partial class ConvertDatabases {
@@ -18,7 +19,7 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (UserGroupNum,PermType) "
-							+"VALUES("+POut.Long(groupNum)+","+POut.Int((int)Permissions.TaskEdit)+")";
+							+"VALUES("+POut.Long(groupNum)+",66)";//POut.Int((int)Permissions.TaskEdit)
 						Db.NonQ(command);
 					}
 				}
@@ -26,18 +27,18 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i]["UserGroupNum"].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDays,UserGroupNum,PermType) "
-							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+","+POut.Int((int)Permissions.TaskEdit)+")";
+							+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),0,"+POut.Long(groupNum)+",66)";//POut.Int((int)Permissions.TaskEdit)
 						Db.NonQ(command);
 					}
 				}
 				//add WikiListSetup permissions for users that have security admin------------------------------------------------------
-				command="SELECT UserGroupNum FROM grouppermission WHERE PermType="+POut.Int((int)Permissions.SecurityAdmin);
+				command="SELECT UserGroupNum FROM grouppermission WHERE PermType=24";//POut.Int((int)Permissions.SecurityAdmin)
 				table=Db.GetTable(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (NewerDate,UserGroupNum,PermType) "
-						+"VALUES('0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						+"VALUES('0001-01-01',"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup);
 						Db.NonQ32(command);
 					}
 				}
@@ -45,7 +46,7 @@ namespace OpenDentBusiness {
 					for(int i=0;i<table.Rows.Count;i++) {
 						groupNum=PIn.Long(table.Rows[i][0].ToString());
 						command="INSERT INTO grouppermission (GroupPermNum,NewerDate,UserGroupNum,PermType) "
-						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+","+POut.Int((int)Permissions.WikiListSetup)+")";
+						+"VALUES((SELECT MAX(GroupPermNum)+1 FROM grouppermission),'0001-01-01',"+POut.Long(groupNum)+",67)";//POut.Int((int)Permissions.WikiListSetup)
 						Db.NonQ32(command);
 					}
 				}
@@ -159,7 +160,7 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 					command="ALTER TABLE repeatcharge MODIFY CopyNoteToProc NOT NULL";
 					Db.NonQ(command);
-				} 
+				}
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="DROP TABLE IF EXISTS xchargetransaction";
 					Db.NonQ(command);
@@ -280,19 +281,31 @@ namespace OpenDentBusiness {
 					Db.NonQ(command);
 				}
 				//Oracle compatible
-				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
+				command="UPDATE patient SET SmokingSnoMed='449868002' WHERE SmokeStatus=5";//+POut.Int((int)SmokingStatus.CurrentEveryDay_Recode1);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
+				command="UPDATE patient SET SmokingSnoMed='428041000124106' WHERE SmokeStatus=4";//+POut.Int((int)SmokingStatus.CurrentSomeDay_Recode2);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
+				command="UPDATE patient SET SmokingSnoMed='8517006' WHERE SmokeStatus=3";//+POut.Int((int)SmokingStatus.FormerSmoker_Recode3);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
+				command="UPDATE patient SET SmokingSnoMed='266919005' WHERE SmokeStatus=2";//+POut.Int((int)SmokingStatus.NeverSmoked_Recode4);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
+				command="UPDATE patient SET SmokingSnoMed='77176002' WHERE SmokeStatus=1";//+POut.Int((int)SmokingStatus.SmokerUnknownCurrent_Recode5);
 				Db.NonQ(command);
-				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus="+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
+				command="UPDATE patient SET SmokingSnoMed='266927001' WHERE SmokeStatus=0";//+POut.Int((int)SmokingStatus.UnknownIfEver_Recode9);
 				Db.NonQ(command);
 				command="ALTER TABLE patient DROP COLUMN SmokeStatus";
+				Db.NonQ(command);
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE eduresource ADD ICD9Code varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE eduresource ADD ICD9Code varchar2(255)";
+					Db.NonQ(command);
+				}
+				command="UPDATE eduresource,icd9 SET eduresource.ICD9Code=icd9.ICD9Code WHERE eduresource.ICD9Num=icd9.ICD9Num";
+				Db.NonQ(command);
+				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
 				Db.NonQ(command);
 				if(DataConnection.DBtype==DatabaseType.MySql) {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar(255) NOT NULL";
@@ -302,29 +315,9 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD ICD9Code varchar2(255)";
 					Db.NonQ(command);
 				}
-				command="SELECT MAX(ItemOrder) FROM DiseaseDef";
-				int itemOrderCur=PIn.Int(Db.GetScalar(command));
-				command="SELECT DISTINCT Description,ICD9Code,icd9.ICD9Num FROM icd9,eduresource,disease WHERE icd9.ICD9Num=eduresource.ICD9Num OR icd9.ICD9Num=disease.ICD9Num";
-				table=Db.GetTable(command);
-				DataTable tableUpdate;
-				for(int i=0;i<table.Rows.Count;i++) {
-					itemOrderCur++;
-					command="INSERT INTO DiseaseDef(DiseaseName,ItemOrder,ICD9Code) VALUES('"+table.Rows[i]["Description"]+"',"+POut.Int(itemOrderCur)+",'"+table.Rows[i]["ICD9Code"]+"')";
-					long defNum=Db.NonQ(command,true);
-					command="SELECT EduResourceNum FROM eduresource WHERE ICD9Num="+table.Rows[i]["ICD9Num"];
-					tableUpdate=Db.GetTable(command);
-					for(int j=0;j<tableUpdate.Rows.Count;j++) {
-						command="UPDATE eduresource SET DiseaseDefNum="+POut.Long(defNum)+" WHERE EduResourceNum="+tableUpdate.Rows[j]["EduResourceNum"];
-						Db.NonQ(command);
-					}
-					command="SELECT DiseaseNum FROM disease WHERE ICD9Num="+table.Rows[i]["ICD9Num"];
-					tableUpdate=Db.GetTable(command);
-					for(int j=0;j<tableUpdate.Rows.Count;j++) {
-						command="UPDATE disease SET DiseaseDefNum="+POut.Long(defNum)+" WHERE DiseaseNum="+tableUpdate.Rows[j]["DiseaseNum"];
-						Db.NonQ(command);
-					}
-				}
-				command="ALTER TABLE eduresource DROP COLUMN ICD9Num";
+				command="INSERT INTO diseasedef(DiseaseName,ICD9Code) SELECT Description,ICD9Code FROM icd9,disease WHERE icd9.ICD9Num=disease.ICD9Num";
+				Db.NonQ(command);
+				command="UPDATE disease,diseasedef,icd9 SET disease.DiseaseDefNum=diseasedef.DiseaseDefNum WHERE disease.ICD9Num=icd9.ICD9Num and icd9.ICD9Code=diseasedef.ICD9Code";
 				Db.NonQ(command);
 				command="ALTER TABLE disease DROP COLUMN ICD9Num";
 				Db.NonQ(command);
@@ -336,6 +329,197 @@ namespace OpenDentBusiness {
 					command="ALTER TABLE diseasedef ADD SnomedCode varchar2(255)";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('LanguagesIndicateNone','Declined to Specify')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'LanguagesIndicateNone','Declined to Specify')";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="DROP TABLE IF EXISTS patientrace";
+					Db.NonQ(command);
+					command=@"CREATE TABLE patientrace (
+						PatientRaceNum bigint NOT NULL auto_increment PRIMARY KEY,
+						PatNum bigint NOT NULL,
+						Race tinyint NOT NULL,
+						INDEX(PatNum)
+						) DEFAULT CHARSET=utf8";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="BEGIN EXECUTE IMMEDIATE 'DROP TABLE patientrace'; EXCEPTION WHEN OTHERS THEN NULL; END;";
+					Db.NonQ(command);
+					command=@"CREATE TABLE patientrace (
+						PatientRaceNum number(20) NOT NULL,
+						PatNum number(20) NOT NULL,
+						Race number(3) NOT NULL,
+						CONSTRAINT patientrace_PatientRaceNum PRIMARY KEY (PatientRaceNum)
+						)";
+					Db.NonQ(command);
+					command=@"CREATE INDEX patientrace_PatNum ON patientrace (PatNum)";
+					Db.NonQ(command);
+				}
+				//Create Custom Language "DeclinedToSpecify" ----------------------------------------------------------------------------------------------------------
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
+					table=Db.GetTable(command);
+					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
+						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+							+" WHERE PrefName='LanguagesUsedByPatients'";
+						Db.NonQ(command);
+					}
+				}
+				else {//oracle
+					command="SELECT * FROM preference WHERE prefname = 'LanguagesUsedByPatients'";
+					table=Db.GetTable(command);
+					if(!table.Rows[0]["ValueString"].ToString().Contains("Declined to Specify")) {
+						command="UPDATE preference SET ValueString='"+(table.Rows[0]["ValueString"].ToString()+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+							+" WHERE PrefName='LanguagesUsedByPatients'";
+						Db.NonQ(command);
+					}
+				}
+				//update Race and Ethnicity for EHR.---------------------------------------------------------------------------------------------------------------------
+				//Get a list of patients that have a race set.
+				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
+				table=Db.GetTable(command);
+				bool hasFirstInsert=false;//Used for Oracle compatibility.
+				//MySQL requires the table be aliased because we are inserting on the same table that we are selecting from.
+				string maxPkStr="(SELECT MAX(PatientRaceNum+1) FROM patientrace pr)";//Used for Oracle compatibility.
+				for(int i=0;i<table.Rows.Count;i++) {
+					string patNumAndRace="";
+					string patNum=table.Rows[i]["PatNum"].ToString();
+					switch(PIn.Int(table.Rows[i]["Race"].ToString())) {//PatientRaceOld
+						case 0://PatientRaceOld.Unknown
+							//Do nothing.  No entry means "Unknown", the old default.
+							continue;
+						case 1://PatientRaceOld.Multiracial
+							patNumAndRace+=patNum+",7";
+							break;
+						case 2://PatientRaceOld.HispanicLatino
+							patNumAndRace+=patNum+",9);\r\n";//White
+							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
+							break;
+						case 3://PatientRaceOld.AfricanAmerican
+							patNumAndRace+=patNum+",1";
+							break;
+						case 4://PatientRaceOld.White
+							patNumAndRace+=patNum+",9";
+							break;
+						case 5://PatientRaceOld.HawaiiOrPacIsland
+							patNumAndRace+=patNum+",5";
+							break;
+						case 6://PatientRaceOld.AmericanIndian
+							patNumAndRace+=patNum+",2";
+							break;
+						case 7://PatientRaceOld.Asian
+							patNumAndRace+=patNum+",3";
+							break;
+						case 8://PatientRaceOld.Other
+							patNumAndRace+=patNum+",8";
+							break;
+						case 9://PatientRaceOld.Aboriginal
+							patNumAndRace+=patNum+",0";
+							break;
+						case 10://PatientRaceOld.BlackHispanic
+							//MySQL can handle multiple insert statements with this syntax.
+							patNumAndRace+=patNum+",1);\r\n";//AfricanAmerican
+							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
+							break;
+						default:
+							//should never happen, useful for debugging.
+							continue;
+					}
+					if(patNumAndRace=="") {//Just in case.
+						continue;
+					}
+					//We will manually set the PK for Oracle compatibility.
+					string patientRaceNum=maxPkStr;
+					if(!hasFirstInsert) {
+						//There hasn't been an entry in the patient race table yet so we cant use maxPkStr.  We'll hard code 1 for the first insert.
+						patientRaceNum="1";
+						hasFirstInsert=true;
+					}
+					command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+patientRaceNum+","+patNumAndRace+");";
+					Db.NonQ(command);
+				}
+				//Apex clearinghouse.
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command=@"INSERT INTO clearinghouse(Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ('Apex','"+POut.String(@"C:\ONETOUCH\")+"','','5','ZZ','870578776','ZZ','99999','P','','','0','',0,0,'','Apex','8008409152','99999','','','','','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command=@"INSERT INTO clearinghouse(ClearinghouseNum,Description,ExportPath,Payors,Eformat,ISA05,SenderTin,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,
+						LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment) 
+						VALUES ((SELECT MAX(ClearinghouseNum+1) FROM clearinghouse),'Apex','"+POut.String(@"C:\ONETOUCH\")+"','','5','ZZ','870578776','ZZ','99999','P','','','0','',0,0,'','Apex','8008409152','99999','','','','','')";
+					Db.NonQ(command);
+				}
+				//Insert Guru Bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO program (ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"'Guru', "
+				    +"'Guru from guru.waziweb.com', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Guru image path', "
+				    +"'C:\')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'2', "//ToolBarsAvail.ChartModule
+				    +"'Guru')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO program (ProgramNum,ProgName,ProgDesc,Enabled,Path,CommandLine,Note"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramNum)+1 FROM program),"
+				    +"'Guru', "
+				    +"'Guru from guru.waziweb.com/', "
+				    +"'0', "
+				    +"'',"
+				    +"'', "
+				    +"'')";
+					long programNum=Db.NonQ(command,true);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Enter 0 to use PatientNum, or 1 to use ChartNum', "
+				    +"'0')";
+					Db.NonQ(command);
+					command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue"
+				    +") VALUES("
+				    +"(SELECT MAX(ProgramPropertyNum+1) FROM programproperty),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'Guru image path', "
+				    +"'C:\')";
+					Db.NonQ(command);
+					command="INSERT INTO toolbutitem (ToolButItemNum,ProgramNum,ToolBar,ButtonText) "
+				    +"VALUES ("
+				    +"(SELECT MAX(ToolButItemNum)+1 FROM toolbutitem),"
+				    +"'"+POut.Long(programNum)+"', "
+				    +"'2', "//ToolBarsAvail.ChartModule
+				    +"'Guru')";
+					Db.NonQ(command);
+				}//end Guru bridge
 
 
 				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";
@@ -350,5 +534,10 @@ namespace OpenDentBusiness {
 
 	}
 }
+
+
+
+
+
 
 
