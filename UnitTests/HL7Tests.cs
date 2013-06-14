@@ -115,6 +115,7 @@ namespace UnitTests {
 			correctPat.LName="Smiths";
 			correctPat.Birthdate=new DateTime(1976,02,10);
 			correctPat.Gender=PatientGender.Male;
+			//TODO: Change from setting the race in the patient object to making an entry in the patientrace table for HispanicLatino.
 			correctPat.Race=PatientRaceOld.HispanicLatino;
 			correctPat.Address="421 Main Ave";
 			correctPat.Address2="Apt 7";
@@ -208,6 +209,7 @@ namespace UnitTests {
 			correctPat.LName="Smith";
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
+			//TODO: Same thing for this patient that was done on line 118 except for a race of White.
 			correctPat.Race=PatientRaceOld.White;
 			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";
@@ -477,6 +479,7 @@ namespace UnitTests {
 			correctPat.LName="Smith2";
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
+			//TODO: Same thing for this patient that was done on line 118 except for a race of White.
 			correctPat.Race=PatientRaceOld.White;
 			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";

@@ -1018,6 +1018,7 @@ namespace OpenDental{
 								=((DayOfWeek)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;
 						case "race":
+							//TODO: Update this to return the patient's race(s) in a comma delimited list.  Very important to bring this to Jordan's attention when reviewing.
 							tableOut.Rows[i][j]
 								=((PatientRaceOld)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							break;

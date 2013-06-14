@@ -1037,6 +1037,7 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
+						//TODO: Change the IF statement to check if the user has an entry in the patientrace table.  Patients with no enteries are considered "unknown" and the following logic should apply.
 						if(pat.Race==PatientRaceOld.Unknown) {
 							if(explanation!="") {
 								explanation+=", ";
