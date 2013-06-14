@@ -8,6 +8,8 @@ namespace OpenDentBusiness.HL7 {
 		private string originalMsgText;//We'll store this for now, but I don't think we'll use it.
 		public MessageTypeHL7 MsgType;
 		public EventTypeHL7 EventType;
+		public string ControlId;
+		public string AckCode;
 
 		///<summary>Only use this constructor when generating a message instead of parsing a message.</summary>
 		internal MessageHL7(MessageTypeHL7 msgType) {
@@ -15,16 +17,18 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		public MessageHL7(string msgtext) {
+			AckCode="";
+			ControlId="";
 			originalMsgText=msgtext;
 			Segments=new List<SegmentHL7>();
-			string[] rows=msgtext.Split(new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
+			string[] rows=msgtext.Split(new string[] { "\r","\n" },StringSplitOptions.RemoveEmptyEntries);
 			SegmentHL7 segment;
 			for(int i=0;i<rows.Length;i++) {
 				segment=new SegmentHL7(rows[i]);//this creates the field objects.
 				Segments.Add(segment);
 				if(i==0 && segment.Name==SegmentNameHL7.MSH) {
 //js 7/3/12 Make this more intelligent because we also now need the suffix
-					string msgtype=segment.GetFieldComponent(8,0);
+					string msgtype=segment.GetFieldComponent(8,0);//We force the user to leave the 'messageType' field in this position, position 8 of the MSH segment
 					string evnttype=segment.GetFieldComponent(8,1);
 					if(msgtype==MessageTypeHL7.ADT.ToString()) {
 						MsgType=MessageTypeHL7.ADT;

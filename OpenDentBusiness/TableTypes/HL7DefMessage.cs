@@ -62,6 +62,8 @@ namespace OpenDentBusiness {
 
 	///<summary>The items in this enumeration can be freely rearranged without damaging the database.  But can't change spelling or remove existing item.</summary>
 	public enum MessageTypeHL7 {
+		///<summary>Message Acknowledgment</summary>
+		ACK,
 		///<summary>Demographics - A01,A04,A08,A28,A31</summary>
 		ADT,
 		///<summary>Detailed Financial Transaction - P03</summary>

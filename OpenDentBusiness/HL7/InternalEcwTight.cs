@@ -39,8 +39,15 @@ namespace OpenDentBusiness.HL7 {
 			//eCW incoming patient information (ADT).
 			HL7DefMessage msg=new HL7DefMessage();
 			def.AddMessage(msg,MessageTypeHL7.ADT,EventTypeHL7.A04,InOutHL7.Incoming,0);
-			//PID segment------------------------------------------------------------------
+			//MSH segment------------------------------------------------------------------
 			HL7DefSegment seg=new HL7DefSegment();
+			msg.AddSegment(seg,0,SegmentNameHL7.MSH);
+			//MSH.8, Message Type
+			seg.AddField(8,"messageType");
+			//MSH.9, Message Control ID
+			seg.AddField(9,"messageControlId");
+			//PID segment------------------------------------------------------------------
+			seg=new HL7DefSegment();
 			msg.AddSegment(seg,2,SegmentNameHL7.PID);
 			//PID.2, Patient ID
 			seg.AddField(2,"pat.PatNum");
@@ -89,6 +96,13 @@ namespace OpenDentBusiness.HL7 {
 			//eCW incoming appointment information (SIU - Schedule information unsolicited).
 			msg=new HL7DefMessage();
 			def.AddMessage(msg,MessageTypeHL7.SIU,EventTypeHL7.S12,InOutHL7.Incoming,1);
+			//MSH segment------------------------------------------------------------------
+			seg=new HL7DefSegment();
+			msg.AddSegment(seg,0,SegmentNameHL7.MSH);
+			//MSH.8, Message Type
+			seg.AddField(8,"messageType");
+			//MSH.9, Message Control ID
+			seg.AddField(9,"messageControlId");
 			//PID segment------------------------------------------------------------------
 			seg=new HL7DefSegment();
 			msg.AddSegment(seg,2,SegmentNameHL7.PID);
@@ -136,9 +150,25 @@ namespace OpenDentBusiness.HL7 {
 			//PV1.7, Attending/Primary Care Doctor, UPIN^LastName^FirstName^MI
 			seg.AddField(7,"prov.provIdNameLFM");
 			//=======================================================================================================================
+			//Acknowledgment message (ACK)
+			msg=new HL7DefMessage();
+			def.AddMessage(msg,MessageTypeHL7.ACK,EventTypeHL7.A04,InOutHL7.Incoming,2);
+			//MSH segment------------------------------------------------------------------
+			seg=new HL7DefSegment();
+			msg.AddSegment(seg,0,SegmentNameHL7.MSH);
+			//MSH.8, Message Type
+			seg.AddField(8,"messageType");
+			//MSA (Message Acknowledgment) segment-----------------------------------------
+			seg=new HL7DefSegment();
+			msg.AddSegment(seg,1,SegmentNameHL7.MSA);
+			//MSA.1, Acknowledgment Code
+			seg.AddField(1,"ackCode");
+			//MSA.2, Message Control ID
+			seg.AddField(2,"messageControlId");
+			//=======================================================================================================================
 			//Detail financial transaction (DFT)
 			msg=new HL7DefMessage();
-			def.AddMessage(msg,MessageTypeHL7.DFT,EventTypeHL7.P03,InOutHL7.Outgoing,2);
+			def.AddMessage(msg,MessageTypeHL7.DFT,EventTypeHL7.P03,InOutHL7.Outgoing,3);
 			//MSH (Message Header) segment-------------------------------------------------
 			seg=new HL7DefSegment();
 			msg.AddSegment(seg,0,SegmentNameHL7.MSH);
@@ -152,6 +182,8 @@ namespace OpenDentBusiness.HL7 {
 			seg.AddField(6,"dateTime.Now");
 			//MSH.8, Message Type^Event Type, example DFT^P03
 			seg.AddField(8,"messageType");
+			//MSH.9, Message Control ID
+			seg.AddField(9,"messageControlId");
 			//MSH.10, Processing ID (P-production, T-test)
 			seg.AddFieldFixed(10,DataTypeHL7.PT,"P");
 			//MSH.11, Version ID
@@ -236,6 +268,36 @@ namespace OpenDentBusiness.HL7 {
 			seg.AddField(4,"pdfDescription");
 			//ZX1.5
 			seg.AddField(5,"pdfDataAsBase64");
+			//=======================================================================================================================
+			//Message Acknowledgment (ACK)
+			msg=new HL7DefMessage();
+			def.AddMessage(msg,MessageTypeHL7.ACK,EventTypeHL7.A04,InOutHL7.Outgoing,4);
+			//MSH (Message Header) segment-------------------------------------------------
+			seg=new HL7DefSegment();
+			msg.AddSegment(seg,0,SegmentNameHL7.MSH);
+			//MSH.1, Encoding Characters (DataType.ST)
+			seg.AddField(1,"separators^~\\&");
+			//MSH.2, Sending Application
+			seg.AddFieldFixed(2,DataTypeHL7.HD,"OD");
+			//MSH.4, Receiving Application
+			seg.AddFieldFixed(4,DataTypeHL7.HD,"ECW");
+			//MSH.6, Message Date and Time (YYYYMMDDHHMMSS)
+			seg.AddField(6,"dateTime.Now");
+			//MSH.8, Message Type^Event Type, example DFT^P03
+			seg.AddField(8,"messageType");
+			//MSH.9, Message Control ID
+			seg.AddField(9,"messageControlId");
+			//MSH.10, Processing ID (P-production, T-test)
+			seg.AddFieldFixed(10,DataTypeHL7.PT,"P");
+			//MSH.11, Version ID
+			seg.AddFieldFixed(11,DataTypeHL7.VID,"2.3");
+			//MSA (Message Acknowledgment) segment-----------------------------------------
+			seg=new HL7DefSegment();
+			msg.AddSegment(seg,1,SegmentNameHL7.MSA);
+			//MSA.1, Acknowledgment Code
+			seg.AddField(1,"ackCode");
+			//MSA.2, Message Control ID
+			seg.AddField(2,"messageControlId");
 			return def;
 		}
 

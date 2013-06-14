@@ -20,6 +20,9 @@ namespace OpenDentBusiness.HL7 {
 			//remember that the "field quantity" is one more than the last index, because 0-based.
 			//All fields are initially added with just one component
 			//This can all probably be removed now since we add fields dynamically as needed:
+			if(name==SegmentNameHL7.MSA) {
+				AddFields(3);
+			}
 			if(name==SegmentNameHL7.MSH) {
 				AddFields(12);
 			}

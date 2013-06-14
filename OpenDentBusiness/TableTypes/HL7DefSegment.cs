@@ -80,6 +80,8 @@ namespace OpenDentBusiness {
 		GT1,
 		///<summary>Insurance Information</summary>
 		IN1,
+		///<summary>Message Acknowledgment</summary>
+		MSA,
 		///<summary>Message Header</summary>
 		MSH,
 		///<summary>Observations Request</summary>

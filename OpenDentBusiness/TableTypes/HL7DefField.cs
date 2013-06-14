@@ -50,6 +50,7 @@ namespace OpenDentBusiness{
 
 		public static List<FieldNameAndType> GetFullList() {
 			List<FieldNameAndType> retVal=new List<FieldNameAndType>();
+			retVal.Add(new FieldNameAndType("ackCode",DataTypeHL7.ID,"0008"));
 			retVal.Add(new FieldNameAndType("apt.AptNum",DataTypeHL7.CX));
 			retVal.Add(new FieldNameAndType("apt.lengthStartEnd",DataTypeHL7.TQ));
 			retVal.Add(new FieldNameAndType("apt.Note",DataTypeHL7.CWE));
@@ -64,6 +65,7 @@ namespace OpenDentBusiness{
 			retVal.Add(new FieldNameAndType("guar.PatNum",DataTypeHL7.CX));
 			retVal.Add(new FieldNameAndType("guar.SSN",DataTypeHL7.ST));
 			retVal.Add(new FieldNameAndType("guar.WkPhone",DataTypeHL7.XTN));
+			retVal.Add(new FieldNameAndType("messageControlId",DataTypeHL7.ST));
 			retVal.Add(new FieldNameAndType("messageType",DataTypeHL7.MSG));
 			retVal.Add(new FieldNameAndType("pat.addressCityStateZip",DataTypeHL7.XAD));
 			retVal.Add(new FieldNameAndType("pat.birthdateTime",DataTypeHL7.DTM));
@@ -89,7 +91,6 @@ namespace OpenDentBusiness{
 			retVal.Add(new FieldNameAndType("prov.provIdName",DataTypeHL7.XCN));
 			retVal.Add(new FieldNameAndType("separators^~\\&",DataTypeHL7.ST));
 			retVal.Add(new FieldNameAndType("sequenceNum",DataTypeHL7.SI));
-			retVal.Add(new FieldNameAndType("uniqueGUID",DataTypeHL7.ST));
 			return retVal;
 		}
 

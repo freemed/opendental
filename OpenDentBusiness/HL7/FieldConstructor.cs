@@ -42,6 +42,8 @@ namespace OpenDentBusiness.HL7 {
 					return guar.SSN;
 				case "guar.WkPhone":
 					return gXTN(guar.WkPhone,10);
+				case "messageControlId":
+					return Guid.NewGuid().ToString("N");
 				case "messageType":
 					return gConcat(def.ComponentSeparator,"DFT",eventType.ToString());
 				case "pat.addressCityStateZip":
@@ -93,11 +95,37 @@ namespace OpenDentBusiness.HL7 {
 					return gSep(def);
 				case "sequenceNum":
 					return sequenceNum.ToString();
-				case "uniqueGUID":
-					return Guid.NewGuid().ToString("N");
 				default:
 					return "";
 			}
+		}
+
+		public static string GenerateACK(HL7Def def,string fieldName,EventTypeHL7 eventType,string controlId,bool isAck) {
+			//big long list of fieldnames that we support
+			switch(fieldName) {
+				case "ackCode":
+					return gAck(isAck);
+				case "dateTime.Now":
+					return gDTM(DateTime.Now,14);
+				case "messageControlId":
+					return controlId;
+				case "messageType":
+					return gConcat(def.ComponentSeparator,"ACK",eventType.ToString());
+				case "separators^~\\&":
+					return gSep(def);
+				default:
+					return "";
+			}
+		}
+
+		private static string gAck(bool isAck) {
+			if(isAck) {
+				return "AA";//Acknowledgment accept
+			}
+			else {
+				return "AE";//Acknowledgment error
+			}
+			//Ack reject is a third possible response that we don't currently support
 		}
 
 		//Send in component separator for this def and the values in the order they should be in the message.

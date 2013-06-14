@@ -161,9 +161,9 @@ namespace OpenDentHL7 {
 			}
 			else {//TCP/IP
 				CreateIncomingTcpListener();
-				//start a timer to poll the database and to send messages as needed.  Every 3 seconds.  If more frequently, it tries to send more than one message simultaneously, crashing the service.
+				//start a timer to poll the database and to send messages as needed.  Every 6 seconds.  We increased the time between polling the database from 3 seconds to 6 seconds because we are now waiting 5 seconds for a message acknowledgment from eCW.
 				TimerCallback timercallbackSendTCP=new TimerCallback(TimerCallbackSendTCP);
-				timerSendTCP=new System.Threading.Timer(timercallbackSendTCP,null,1800,3000);
+				timerSendTCP=new System.Threading.Timer(timercallbackSendTCP,null,1800,6000);
 			}
 		}
 
@@ -329,39 +329,40 @@ namespace OpenDentHL7 {
 				socketIncomingWorker.BeginReceive(dataBufferIncoming,0,dataBufferIncoming.Length,SocketFlags.None,new AsyncCallback(OnDataReceived),null);
 				return;//get another block
 			}
-			else {//full message, malformed or not, so send ACK/NACK
-				if(isMalformed) {
-					byte[] nackByteOutgoing=Encoding.ASCII.GetBytes(new char[] { MLLP_START_CHAR,MLLP_NACK_CHAR,MLLP_END_CHAR,MLLP_ENDMSG_CHAR });
-					socketIncomingWorker.Send(nackByteOutgoing);//this is a locking call
-				}
-				else {
-					byte[] ackByteOutgoing=Encoding.ASCII.GetBytes(new char[] { MLLP_START_CHAR,MLLP_ACK_CHAR,MLLP_END_CHAR,MLLP_ENDMSG_CHAR });
-					socketIncomingWorker.Send(ackByteOutgoing);//this is a locking call
-				}
-			}
-			//Prepare to save message to database
+			//Prepare to save message to database if malformed and not processed
 			HL7Msg hl7Msg=new HL7Msg();
 			hl7Msg.MsgText=strbFullMsg.ToString();		
 			strbFullMsg.Clear();//ready for the next message
+			bool isProcessed=true;
+			string messageControlId="";
+			EventTypeHL7 eventType=EventTypeHL7.A04;
 			if(isMalformed){
 				hl7Msg.HL7Status=HL7MessageStatus.InFailed;
 				hl7Msg.Note="This message is malformed so it was not processed.";
 				HL7Msgs.Insert(hl7Msg);
+				isProcessed=false;
 			}
 			else{
+				MessageHL7 messageHl7Object=new MessageHL7(hl7Msg.MsgText);//this creates an entire heirarchy of objects.
 				try {
-					MessageHL7 messageHl7Object=new MessageHL7(hl7Msg.MsgText);//this creates an entire heirarchy of objects.
-					MessageParser.Process(messageHl7Object,IsVerboseLogging);
+					MessageParser.Process(messageHl7Object,IsVerboseLogging);//also saves the message to the db
+					messageControlId=messageHl7Object.ControlId;
+					eventType=messageHl7Object.EventType;
 				}
 				catch(Exception ex) {
 					EventLog.WriteEntry("OpenDentHL7","Error in OnDataRecieved when processing message:\r\n"+ex.Message+"\r\n"+ex.StackTrace,EventLogEntryType.Error);
+					isProcessed=false;
 				}
 			}
+			MessageHL7 hl7Ack=MessageConstructor.GenerateACK(messageControlId,eventType,isProcessed);
+			byte[] ackByteOutgoing=Encoding.ASCII.GetBytes(MLLP_START_CHAR+hl7Ack.ToString()+MLLP_END_CHAR+MLLP_ENDMSG_CHAR);
+			socketIncomingWorker.Send(ackByteOutgoing);//this is a locking call
 		}
 		
 		private void TimerCallbackSendTCP(Object stateInfo) {
 			List<HL7Msg> list=HL7Msgs.GetOnePending();
 			for(int i=0;i<list.Count;i++) {//Right now, there will only be 0 or 1 item in the list.
+				string sendMsgControlId=HL7Msgs.GetControlId(list[i]);//could be empty string
 				Socket socket=new Socket(AddressFamily.InterNetwork,SocketType.Stream,ProtocolType.Tcp);
 				string[] strIpPort=HL7DefEnabled.OutgoingIpPort.Split(':');//this was already validated in the HL7DefEdit window.
 				IPAddress ipaddress=IPAddress.Parse(strIpPort[0]);//already validated
@@ -386,31 +387,74 @@ namespace OpenDentHL7 {
 					byte[] byteData=Encoding.ASCII.GetBytes(data);
 					socket.Send(byteData);//this is a blocking call
 					//For MLLP V2, do a blocking Receive here, along with a timeout.
-					byte[] ackBuffer=new byte[20];//plenty big enough to receive the entire ack/nack response
-					socket.ReceiveTimeout=2000;//2 second timeout
+					byte[] ackBuffer=new byte[256];//plenty big enough to receive the entire ack/nack response
+					socket.ReceiveTimeout=5000;//5 second timeout. Database is polled every 6 seconds for a new message to send, 5 second wait for acknowledgment
 					int byteCountReceived=socket.Receive(ackBuffer);//blocking Receive
 					char[] chars=new char[byteCountReceived];
 					Encoding.UTF8.GetDecoder().GetChars(ackBuffer,0,byteCountReceived,chars,0);
-					if(chars.Length<3) {//start char, ack/nack char, and end char (end message char is optional, so we will ignore if present)
-						//incomplete acknowledgement. Close the socket and try again in 3 seconds
-						return;//socket closed in finally
+					StringBuilder strbAckMsg=new StringBuilder();
+					strbAckMsg.Append(chars);
+					if(strbAckMsg.Length>0 && strbAckMsg[0]!=MLLP_START_CHAR) {
+						list[i].Note=list[i].Note+"Malformed acknowledgment.\r\n";
+						HL7Msgs.Update(list[i]);
+						throw new Exception("Malformed acknowledgment.");
 					}
-					else if(chars[1]==MLLP_ACK_CHAR) {//acknowledged received
-						list[i].Note=list[i].Note+"Message ACK (acknowledgment) received.\r\n";
+					else if(strbAckMsg.Length>=3
+						&& strbAckMsg[strbAckMsg.Length-1]==MLLP_ENDMSG_CHAR//last char is the endmsg char.
+						&& strbAckMsg[strbAckMsg.Length-2]==MLLP_END_CHAR)//the second-to-the-last char is the end char.
+					{
+						//we have a complete message
+						strbAckMsg.Remove(0,1);//strip off the start char
+						strbAckMsg.Remove(strbAckMsg.Length-2,2);//strip off the end chars
 					}
-					else if(chars[1]==MLLP_NACK_CHAR) {//negative acknowledgment received, try to send again
+					else if(strbAckMsg.Length>=2//so that the next line won't crash
+						&& strbAckMsg[strbAckMsg.Length-1]==MLLP_END_CHAR)//the last char is the end char.
+					{
+						//we will treat this as a complete message, because the endmsg char is optional.
+						strbAckMsg.Remove(0,1);//strip off the start char
+						strbAckMsg.Remove(strbFullMsg.Length-1,1);//strip off the end char
+					}
+					else {
+						list[i].Note=list[i].Note+"Malformed acknowledgment.\r\n";
+						HL7Msgs.Update(list[i]);
+						throw new Exception("Malformed acknowledgment.");
+					}
+					MessageHL7 ackMsg=new MessageHL7(strbAckMsg.ToString());
+					try {
+						MessageParser.ProcessAck(ackMsg,IsVerboseLogging);
+					}
+					catch(Exception ex) {
+						list[i].Note=list[i].Note+ackMsg.ToString()+"\r\nError processing acknowledgment.\r\n";
+						HL7Msgs.Update(list[i]);
+						throw new Exception("Error processing acknowledgment.\r\n"+ex.Message);
+					}
+					if(ackMsg.AckCode=="" || ackMsg.ControlId=="") {
+						list[i].Note=list[i].Note+ackMsg.ToString()+"\r\nInvalid ACK message.  Attempt to resend.\r\n";
+						HL7Msgs.Update(list[i]);
+						throw new Exception("Invalid ACK message received.");
+					}
+					if(ackMsg.ControlId==sendMsgControlId && ackMsg.AckCode=="AA") {//acknowledged received (Application acknowledgment: Accept)
+						list[i].Note=list[i].Note+ackMsg.ToString()+"\r\nMessage ACK (acknowledgment) received.\r\n";
+					}
+					else if(ackMsg.ControlId==sendMsgControlId && ackMsg.AckCode!="AA") {//ACK received for this message, but ack code was not acknowledgment accepted
 						if(list[i].Note.Contains("NACK4")) {//this is the 5th negative acknowledgment, don't try again
-							list[i].Note=list[i].Note+"This is NACK5, the message status has been changed to OutFailed. We will not attempt to send again.\r\n";
+							list[i].Note=list[i].Note+"Ack code: "+ackMsg.AckCode+"\r\nThis is NACK5, the message status has been changed to OutFailed. We will not attempt to send again.\r\n";
 							list[i].HL7Status=HL7MessageStatus.OutFailed;
 						}
 						else if(list[i].Note.Contains("NACK")) {//failed sending at least once already
-							list[i].Note=list[i].Note+"NACK"+list[i].Note.Split(new string[] { "NACK" },StringSplitOptions.None).Length+"\r\n";
+							list[i].Note=list[i].Note+"Ack code: "+ackMsg.AckCode+"\r\nNACK"+list[i].Note.Split(new string[] { "NACK" },StringSplitOptions.None).Length+"\r\n";
 						}
 						else {
-							list[i].Note=list[i].Note+"Message NACK (negative acknowlegment) received. We will try to send again.\r\n";
+							list[i].Note=list[i].Note+"Ack code: "+ackMsg.AckCode+"\r\nMessage NACK (negative acknowlegment) received. We will try to send again.\r\n";
 						}
 						HL7Msgs.Update(list[i]);//Add NACK note to hl7msg table entry
 						return;//socket closed in finally
+					}
+					else {//ack received for control ID that does not match the control ID of message just sent
+						list[i].Note=list[i].Note+"Sent message control ID: "+sendMsgControlId+"\r\nAck message control ID: "+ackMsg.ControlId
+							+"\r\nAck received for message other than message just sent.  We will try to send again.\r\n";
+						HL7Msgs.Update(list[i]);
+						return;
 					}
 				}
 				catch(SocketException ex) {

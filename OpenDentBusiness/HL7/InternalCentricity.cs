@@ -52,7 +52,7 @@ namespace OpenDentBusiness.HL7 {
 			//MSH.8, Message Type^Event Type, example DFT^P03
 			seg.AddField(8,"messageType");
 			//MSH.9, Message Control ID
-			seg.AddField(9,"uniqueGUID");
+			seg.AddField(9,"messageControlId");
 			//MSH.10, Processing ID (P-production, T-test)
 			seg.AddFieldFixed(10,DataTypeHL7.PT,"P");
 			//MSH.11, Version ID

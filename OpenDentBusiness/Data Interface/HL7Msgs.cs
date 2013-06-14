@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Reflection;
+using OpenDentBusiness.HL7;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -32,6 +33,50 @@ namespace OpenDentBusiness{
 			}
 			command+="ORDER BY hl7msg.DateTStamp";
 			return Crud.HL7MsgCrud.SelectMany(command);
+		}
+
+		///<summary>Gets the message control ID of the message we are attempting to send, for TCP/IP acknowledgment.</summary>
+		public static string GetControlId(HL7Msg msg) {
+			string retval="";
+			if(msg==null) {
+				return retval;
+			}
+			int controlIdOrder=0;
+			MessageHL7 msgHl7=new MessageHL7(msg.MsgText);//creates the segments
+			HL7Def def=HL7Defs.GetOneDeepEnabled();
+			if(def==null) {
+				return retval;
+			}
+			HL7DefMessage hl7defmsg=null;
+			for(int i=0;i<def.hl7DefMessages.Count;i++) {
+				if(def.hl7DefMessages[i].MessageType==msgHl7.MsgType) {
+					hl7defmsg=def.hl7DefMessages[i];
+					break;
+				}
+			}
+			if(hl7defmsg==null) {//No message definition for this type of message in the enabled def
+				return retval;
+			}
+			for(int s=0;s<hl7defmsg.hl7DefSegments.Count;s++) {//get MSH segment
+				if(hl7defmsg.hl7DefSegments[s].SegmentName==SegmentNameHL7.MSH) {
+					for(int f=0;f<hl7defmsg.hl7DefSegments[s].hl7DefFields.Count;f++) {//find messageControlId field in MSH segment def
+						if(hl7defmsg.hl7DefSegments[s].hl7DefFields[f].FieldName=="messageControlId") {
+							controlIdOrder=hl7defmsg.hl7DefSegments[s].hl7DefFields[f].OrdinalPos;
+							break;
+						}
+					}
+					break;
+				}
+			}
+			if(controlIdOrder==0) {//No messageControlId defined for this MSH segment
+				return retval;
+			}
+			for(int i=0;i<msgHl7.Segments.Count;i++) {//get control ID from message located in MSH segment with field determined above
+				if(msgHl7.Segments[i].Name==SegmentNameHL7.MSH) {
+					retval=msgHl7.Segments[i].Fields[controlIdOrder].ToString();
+				}
+			}
+			return retval;
 		}
 
 		///<summary></summary>

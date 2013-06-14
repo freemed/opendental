@@ -25,6 +25,7 @@ namespace OpenDentBusiness.HL7 {
 			if(hl7Existing.Count>0) {//This message is already in the db
 				HL7MsgCur.HL7MsgNum=hl7Existing[0].HL7MsgNum;
 				HL7Msgs.UpdateDateTStamp(HL7MsgCur);
+				msg.ControlId=HL7Msgs.GetControlId(HL7MsgCur);
 				return;
 			}
 			else {
@@ -37,7 +38,7 @@ namespace OpenDentBusiness.HL7 {
 			if(def==null) {
 				HL7MsgCur.Note="Could not process HL7 message.  No HL7 definition is enabled.";
 				HL7Msgs.Update(HL7MsgCur);
-				return;
+				throw new Exception("Could not process HL7 message.  No HL7 definition is enabled.");
 			}
 			HL7DefMessage hl7defmsg=null;
 			for(int i=0;i<def.hl7DefMessages.Count;i++) {
@@ -48,7 +49,7 @@ namespace OpenDentBusiness.HL7 {
 			if(hl7defmsg==null) {//No message definition matches this message's MessageType and EventType
 				HL7MsgCur.Note="Could not process HL7 message.  No definition for this type of message in the enabled HL7Def.";
 				HL7Msgs.Update(HL7MsgCur);
-				return;
+				throw new Exception("Could not process HL7 message.  No definition for this type of message in the enabled HL7Def.");
 			}
 			string chartNum=null;
 			long patNum=0;
@@ -92,7 +93,7 @@ namespace OpenDentBusiness.HL7 {
 			if(!isExistingPID) {
 				HL7MsgCur.Note="Could not process the HL7 message due to missing PID segment.";
 				HL7Msgs.Update(HL7MsgCur);
-				return;
+				throw new Exception("Could not process HL7 message.  Could not process the HL7 message due to missing PID segment.");
 			}
 			//We now have patnum, chartnum, patname, and/or birthdate so locate pat
 			Patient pat=null;
@@ -172,7 +173,7 @@ namespace OpenDentBusiness.HL7 {
 				try {
 					SegmentHL7 seg=msg.GetSegment(hl7defmsg.hl7DefSegments[i].SegmentName,!hl7defmsg.hl7DefSegments[i].IsOptional);
 					if(seg!=null) {//null if segment was not found but is optional
-						ProcessSeg(pat,aptNum,hl7defmsg.hl7DefSegments[i],seg);
+						ProcessSeg(pat,aptNum,hl7defmsg.hl7DefSegments[i],seg,msg);
 					}
 				}
 				catch(ApplicationException ex) {//Required segment was missing, or other error.
@@ -185,6 +186,8 @@ namespace OpenDentBusiness.HL7 {
 			if(pat.FName=="" || pat.LName=="") {
 				EventLog.WriteEntry("OpenDentHL7","Patient demographics not processed due to missing first or last name. PatNum:"+pat.PatNum.ToString()
 					,EventLogEntryType.Information);
+				HL7MsgCur.Note="Patient demographics not processed due to missing first or last name. PatNum:"+pat.PatNum.ToString();
+				HL7Msgs.Update(HL7MsgCur);
 				return;
 			}
 			if(IsNewPat) {
@@ -206,7 +209,36 @@ namespace OpenDentBusiness.HL7 {
 			HL7Msgs.Update(HL7MsgCur);
 		}
 
-		public static void ProcessSeg(Patient pat,long aptNum,HL7DefSegment segDef,SegmentHL7 seg) {
+		public static void ProcessAck(MessageHL7 msg,bool isVerboseLogging) {
+			IsVerboseLogging=isVerboseLogging;
+			HL7Def def=HL7Defs.GetOneDeepEnabled();
+			if(def==null) {
+				throw new Exception("Could not process ACK.  No HL7 definition is enabled.");
+			}
+			HL7DefMessage hl7defmsg=null;
+			for(int i=0;i<def.hl7DefMessages.Count;i++) {
+				if(def.hl7DefMessages[i].MessageType==MessageTypeHL7.ACK && def.hl7DefMessages[i].InOrOut==InOutHL7.Incoming) {
+					hl7defmsg=def.hl7DefMessages[i];
+					break;
+				}
+			}
+			if(hl7defmsg==null) {//No incoming ACK defined, do nothing with it
+				throw new Exception("Could not process HL7 ACK message.  No definition for this type of message in the enabled HL7Def.");
+			}
+			for(int i=0;i<hl7defmsg.hl7DefSegments.Count;i++) {
+				try {
+					SegmentHL7 seg=msg.GetSegment(hl7defmsg.hl7DefSegments[i].SegmentName,!hl7defmsg.hl7DefSegments[i].IsOptional);
+					if(seg!=null) {//null if segment was not found but is optional
+						ProcessSeg(null,0,hl7defmsg.hl7DefSegments[i],seg,msg);
+					}
+				}
+				catch(ApplicationException ex) {//Required segment was missing, or other error.
+					throw new Exception("Could not process HL7 message.  "+ex);
+				}
+			}
+		}
+
+		public static void ProcessSeg(Patient pat,long aptNum,HL7DefSegment segDef,SegmentHL7 seg,MessageHL7 msg) {
 			switch(segDef.SegmentName) {
 				case SegmentNameHL7.AIG:
 					ProcessAIG(pat,aptNum,segDef,seg);
@@ -216,6 +248,12 @@ namespace OpenDentBusiness.HL7 {
 					return;
 				case SegmentNameHL7.IN1:
 					//ProcessIN1();
+					return;
+				case SegmentNameHL7.MSA:
+					ProcessMSA(segDef,seg,msg);
+					return;
+				case SegmentNameHL7.MSH:
+					ProcessMSH(segDef,seg,msg);
 					return;
 				case SegmentNameHL7.PD1:
 					//ProcessPD1();
@@ -430,6 +468,44 @@ namespace OpenDentBusiness.HL7 {
 		//public static void ProcessIN1() {
 		//	return;
 		//}
+
+		public static void ProcessMSA(HL7DefSegment segDef,SegmentHL7 seg,MessageHL7 msg) {
+			int ackCodeOrder=0;
+			int msgControlIdOrder=0;
+			//find position of AckCode in segDef for MSA seg
+			for(int i=0;i<segDef.hl7DefFields.Count;i++) {
+				if(segDef.hl7DefFields[i].FieldName=="ackCode") {
+					ackCodeOrder=segDef.hl7DefFields[i].OrdinalPos;
+				}
+				if(segDef.hl7DefFields[i].FieldName=="messageControlId") {
+					msgControlIdOrder=segDef.hl7DefFields[i].OrdinalPos;
+				}
+			}
+			if(ackCodeOrder==0) {//no ackCode defined for this def of MSA, do nothing with it?
+				return;
+			}
+			if(msgControlIdOrder==0) {//no messageControlId defined for this def of MSA, do nothing with it?
+				return;
+			}
+			//set msg.AckCode to value in position located in def of ackcode in seg
+			msg.AckCode=seg.Fields[ackCodeOrder].ToString();
+			msg.ControlId=seg.Fields[msgControlIdOrder].ToString();
+		}
+
+		public static void ProcessMSH(HL7DefSegment segDef,SegmentHL7 seg,MessageHL7 msg) {
+			int msgControlIdOrder=0;
+			//find position of messageControlId in segDef for MSH seg
+			for(int i=0;i<segDef.hl7DefFields.Count;i++) {
+				if(segDef.hl7DefFields[i].FieldName=="messageControlId") {
+					msgControlIdOrder=segDef.hl7DefFields[i].OrdinalPos;
+					break;
+				}
+			}
+			if(msgControlIdOrder==0) {
+				return;
+			}
+			msg.ControlId=seg.Fields[msgControlIdOrder].ToString();
+		}
 
 		//public static void ProcessPD1() {
 		//	return;
