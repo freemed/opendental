@@ -23,6 +23,7 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,listPatRaces);
 				return;
 			}
+			//DELETE all for the patient if listPatRaces is empty.  Return.
 			List<PatientRace> listPatientRaces;
 			string command = "SELECT * FROM patientrace WHERE PatNum = "+POut.Long(patNum);
 			listPatientRaces = Crud.PatientRaceCrud.SelectMany(command);
