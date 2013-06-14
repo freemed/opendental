@@ -2594,7 +2594,20 @@ namespace OpenDental{
 			//no security
 			string pdfDataStr=GenerateProceduresIntoPdf();
 			if(HL7Defs.IsExistingHL7Enabled()) {
-				MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				MessageHL7 messageHL7=MessageConstructor.GenerateDFT(procs,EventTypeHL7.P03,pat,Patients.GetPat(pat.Guarantor),AptCur.AptNum,"progressnotes",pdfDataStr);
+				if(messageHL7==null) {
+					MsgBox.Show(this,"There is no DFT message type defined for the enabled HL7 definition.");
+					return;
+				}
+				HL7Msg hl7Msg=new HL7Msg();
+				hl7Msg.AptNum=AptCur.AptNum;
+				hl7Msg.HL7Status=HL7MessageStatus.OutPending;//it will be marked outSent by the HL7 service.
+				hl7Msg.MsgText=messageHL7.ToString();
+				hl7Msg.PatNum=pat.PatNum;
+				HL7Msgs.Insert(hl7Msg);
+#if DEBUG
+				MessageBox.Show(this,messageHL7.ToString());
+#endif
 			}
 			else {
 				Bridges.ECW.SendHL7(AptCur.AptNum,AptCur.ProvNum,pat,pdfDataStr,"progressnotes",true);
