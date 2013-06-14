@@ -117,6 +117,14 @@ namespace OpenDental {
 			HL7DefSegCur.CanRepeat=checkCanRepeat.Checked;
 			HL7DefSegCur.IsOptional=checkIsOptional.Checked;
 			HL7DefSegCur.Note=textNote.Text;
+			if(HL7DefSegCur.ItemOrder==0 && HL7DefSegCur.SegmentName==SegmentNameHL7.MSH) {
+				for(int i=0;i<HL7DefSegCur.hl7DefFields.Count;i++) {
+					if(HL7DefSegCur.hl7DefFields[i].FieldName=="messageType" && HL7DefSegCur.hl7DefFields[i].OrdinalPos!=8) {//we force messageType to be in field 8 of the message header segment or we will not be able to retrieve a definition for this type of message when processing
+						MsgBox.Show(this,"The messageType field must be in position 8 of the message header segment.");
+						return;
+					}
+				}
+			}
 			if(HL7DefSegCur.IsNew) {
 				HL7DefSegments.Insert(HL7DefSegCur);
 			}
