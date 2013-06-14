@@ -364,7 +364,7 @@ namespace OpenDentBusiness {
 				//Create Custom Language "DeclinedToSpecify" ----------------------------------------------------------------------------------------------------------
 				command="SELECT ValueString FROM preference WHERE PrefName = 'LanguagesUsedByPatients'";
 				string valueString=Db.GetScalar(command);
-				command="UPDATE preference SET ValueString='"+(POut.String(valueString)+",Declined to Specify)".Trim(','))+"'"//trim ,(comma) off
+				command="UPDATE preference SET ValueString='"+(POut.String(valueString)+",Declined to Specify").Trim(',')+"'"//trim ,(comma) off
 					+" WHERE PrefName='LanguagesUsedByPatients'";
 				Db.NonQ(command);
 				//update Race and Ethnicity for EHR.---------------------------------------------------------------------------------------------------------------------
