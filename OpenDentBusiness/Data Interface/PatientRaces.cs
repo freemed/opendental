@@ -7,47 +7,10 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class PatientRaces{
-		#region CachePattern
-		//This region can be eliminated if this is not a table type with cached data.
-		//If leaving this region in place, be sure to add RefreshCache and FillCache 
-		//to the Cache.cs file with all the other Cache types.
 
-		///<summary>A list of all PatientRaces.</summary>
-		private static List<PatientRace> listt;
-
-		///<summary>A list of all PatientRaces.</summary>
-		public static List<PatientRace> Listt{
-			get {
-				if(listt==null) {
-					RefreshCache();
-				}
-				return listt;
-			}
-			set {
-				listt=value;
-			}
-		}
-
-		///<summary></summary>
-		public static DataTable RefreshCache(){
-			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
-			string command="SELECT * FROM patientrace ORDER BY ItemOrder";//stub query probably needs to be changed
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="PatientRace";
-			FillCache(table);
-			return table;
-		}
-
-		///<summary></summary>
-		public static void FillCache(DataTable table){
-			//No need to check RemotingRole; no call to db.
-			listt=Crud.PatientRaceCrud.TableToList(table);
-		}
-		#endregion
-
-		///<summary>Gets one PatientRace from the db.</summary>
-		public static List<PatientRace> GetForPatient(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
+		///<summary>Gets all PatientRace enteries from the db.</summary>
+		public static List<PatientRace> GetForPatient(long patNum) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PatientRace>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string command = "SELECT * FROM patientrace WHERE PatNum = "+POut.Long(patNum);
@@ -55,7 +18,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Inserts or Deletes neccesary PatientRace entries for the specified patient given the list of PatRaces provided.</summary>
-		public static void Reconcile(long patNum, List<PatRace> listPatRaces){
+		public static void Reconcile(long patNum,List<PatRace> listPatRaces) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,listPatRaces);
 				return;
@@ -65,7 +28,7 @@ namespace OpenDentBusiness{
 			listPatientRaces = Crud.PatientRaceCrud.SelectMany(command);
 			//delete excess rows
 			for(int i=0;i<listPatientRaces.Count;i++) {
-				if(!listPatRaces.Contains((PatRace)listPatientRaces[i].Race)){//if there is a PatientRace row that does not match the new list of PatRaces, delete it
+				if(!listPatRaces.Contains((PatRace)listPatientRaces[i].Race)) {//if there is a PatientRace row that does not match the new list of PatRaces, delete it
 					Crud.PatientRaceCrud.Delete(listPatientRaces[i].PatientRaceNum);
 				}
 			}
