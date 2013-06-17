@@ -10,7 +10,7 @@ namespace OpenDentBusiness {
 		///<summary>Generates a list of all the quality measures.  Performs all calculations and manipulations.  Returns list for viewing/output.</summary>
 		public static List<QualityMeasure> GetAll(DateTime dateStart,DateTime dateEnd,long provNum) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<QualityMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd);
+				return Meth.GetObject<List<QualityMeasure>>(MethodBase.GetCurrentMethod(),dateStart,dateEnd,provNum);
 			}
 			List<QualityMeasure> list=new List<QualityMeasure>();
 			//add one of each type
