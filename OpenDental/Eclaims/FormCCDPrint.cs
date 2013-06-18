@@ -222,8 +222,16 @@ namespace OpenDental.Eclaims {
 				CCDField fieldPayTo=formData.GetFieldById("F01");
 				if(fieldPayTo!=null) {
 					bool paySubscriber=(fieldPayTo.valuestr=="1");//same for version 02 and version 04
-					if(AssignmentOfBenefits()==paySubscriber) {
-						MsgBox.Show("Canadian","The carrier changed the payee.");
+					//Typically, insurance companies in Canada prefer to pay the subscriber instead of the dentist.
+					if(AssignmentOfBenefits()) {//The insurance plan is set to pay the dentist
+						if(paySubscriber) {//The carrier has decided to pay the subscriber.
+							MsgBox.Show("Canadian","INFORMATION: The carrier changed the payee from the dentist to the subscriber.");//This check was required for certification.
+						}
+					}
+					else {//The insurance plan is set to pay the subscriber
+						if(!paySubscriber) {//The carrier has decided to pay the dentist.
+							MsgBox.Show("Canadian","INFORMATION: The carrier changed the payee from the subscriber to the dentist.");//This check was required for certification.
+						}
 					}
 				}
 				CCDField paymentAdjustmentAmount=formData.GetFieldById("G33");
