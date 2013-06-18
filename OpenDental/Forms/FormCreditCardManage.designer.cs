@@ -30,6 +30,7 @@ namespace OpenDental{
 			this.butUp = new OpenDental.UI.Button();
 			this.butAdd = new OpenDental.UI.Button();
 			this.labelXChargeWarning = new System.Windows.Forms.Label();
+			this.butMoveTo = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
 			// butClose
@@ -68,7 +69,7 @@ namespace OpenDental{
 			this.butDown.CornerRadius = 4F;
 			this.butDown.Image = global::OpenDental.Properties.Resources.down;
 			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(210,100);
+			this.butDown.Location = new System.Drawing.Point(210,113);
 			this.butDown.Name = "butDown";
 			this.butDown.Size = new System.Drawing.Size(82,26);
 			this.butDown.TabIndex = 37;
@@ -84,7 +85,7 @@ namespace OpenDental{
 			this.butUp.CornerRadius = 4F;
 			this.butUp.Image = global::OpenDental.Properties.Resources.up;
 			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(210,68);
+			this.butUp.Location = new System.Drawing.Point(210,84);
 			this.butUp.Name = "butUp";
 			this.butUp.Size = new System.Drawing.Size(82,26);
 			this.butUp.TabIndex = 38;
@@ -119,10 +120,26 @@ namespace OpenDental{
     "bers\" in order to start using tokens.";
 			this.labelXChargeWarning.Visible = false;
 			// 
+			// butMoveTo
+			// 
+			this.butMoveTo.AdjustImageLocation = new System.Drawing.Point(0,0);
+			this.butMoveTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.butMoveTo.Autosize = true;
+			this.butMoveTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+			this.butMoveTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMoveTo.CornerRadius = 4F;
+			this.butMoveTo.Location = new System.Drawing.Point(210,41);
+			this.butMoveTo.Name = "butMoveTo";
+			this.butMoveTo.Size = new System.Drawing.Size(82,26);
+			this.butMoveTo.TabIndex = 40;
+			this.butMoveTo.Text = "Move To Pat";
+			this.butMoveTo.Click += new System.EventHandler(this.butMoveTo_Click);
+			// 
 			// FormCreditCardManage
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.ClientSize = new System.Drawing.Size(304,240);
+			this.Controls.Add(this.butMoveTo);
 			this.Controls.Add(this.labelXChargeWarning);
 			this.Controls.Add(this.butDown);
 			this.Controls.Add(this.butUp);
@@ -146,5 +163,6 @@ namespace OpenDental{
 		private UI.Button butUp;
 		private UI.Button butAdd;
 		private System.Windows.Forms.Label labelXChargeWarning;
+		private UI.Button butMoveTo;
 	}
 }

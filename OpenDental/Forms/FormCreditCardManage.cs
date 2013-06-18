@@ -167,6 +167,26 @@ namespace OpenDental {
 			}
 		}
 
+		private void butMoveTo_Click(object sender,EventArgs e) {
+			if(listCreditCards.SelectedIndex==-1) {
+				MsgBox.Show(this,"Please select a card first.");
+				return;
+			}
+			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Move this credit card information to a different patient account?")) {
+				return;
+			}
+			FormPatientSelect form=new FormPatientSelect();
+			if(form.ShowDialog()!=DialogResult.OK) {
+				return;
+			}
+			int selected=listCreditCards.SelectedIndex;
+			CreditCard creditCard=creditCards[selected];
+			creditCard.PatNum=form.SelectedPatNum;
+			CreditCards.Update(creditCard);
+			RefreshCardList();
+			MessageBox.Show("Credit card moved successfully");
+		}
+
 		private void butUp_Click(object sender,EventArgs e) {
 			int placement=listCreditCards.SelectedIndex;
 			if(placement==-1) {
