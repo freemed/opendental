@@ -371,65 +371,110 @@ namespace OpenDentBusiness {
 				//Get a list of patients that have a race set.
 				command="SELECT PatNum, Race FROM patient WHERE Race!=0";
 				table=Db.GetTable(command);
-				bool hasFirstInsert=false;//Used for Oracle compatibility.
-				//MySQL requires the table be aliased because we are inserting on the same table that we are selecting from.
-				string maxPkStr="(SELECT MAX(PatientRaceNum+1) FROM patientrace pr)";//Used for Oracle compatibility.
+				string maxPkStr="1";//Used for Orcale.  Oracle has to insert the first row manually setting the PK to 1.
 				for(int i=0;i<table.Rows.Count;i++) {
-					string patNumAndRace="";
 					string patNum=table.Rows[i]["PatNum"].ToString();
 					switch(PIn.Int(table.Rows[i]["Race"].ToString())) {//PatientRaceOld
 						case 0://PatientRaceOld.Unknown
 							//Do nothing.  No entry means "Unknown", the old default.
 							continue;
 						case 1://PatientRaceOld.Multiracial
-							patNumAndRace+=patNum+",7";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",7)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",7)";
+							}
 							break;
 						case 2://PatientRaceOld.HispanicLatino
-							patNumAndRace+=patNum+",9);\r\n";//White
-							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",9)";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",9)";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ((SELECT MAX(PatientRaceNum+1) FROM patientrace),"+patNum+",6)";
+							}
 							break;
 						case 3://PatientRaceOld.AfricanAmerican
-							patNumAndRace+=patNum+",1";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",1)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",1)";
+							}
 							break;
 						case 4://PatientRaceOld.White
-							patNumAndRace+=patNum+",9";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",9)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",9)";
+							}
 							break;
 						case 5://PatientRaceOld.HawaiiOrPacIsland
-							patNumAndRace+=patNum+",5";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",5)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",5)";
+							}
 							break;
 						case 6://PatientRaceOld.AmericanIndian
-							patNumAndRace+=patNum+",2";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",2)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",2)";
+							}
 							break;
 						case 7://PatientRaceOld.Asian
-							patNumAndRace+=patNum+",3";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",3)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",3)";
+							}
 							break;
 						case 8://PatientRaceOld.Other
-							patNumAndRace+=patNum+",8";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",8)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",8)";
+							}
 							break;
 						case 9://PatientRaceOld.Aboriginal
-							patNumAndRace+=patNum+",0";
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",0)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",0)";
+							}
 							break;
 						case 10://PatientRaceOld.BlackHispanic
-							//MySQL can handle multiple insert statements with this syntax.
-							patNumAndRace+=patNum+",1);\r\n";//AfricanAmerican
-							patNumAndRace+="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",6";//Hispanic
+							if(DataConnection.DBtype==DatabaseType.MySql) {
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",1)";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatNum,Race) VALUES ("+patNum+",6)";
+							}
+							else {//oracle
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+maxPkStr+","+patNum+",1)";
+								Db.NonQ(command);
+								command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ((SELECT MAX(PatientRaceNum+1) FROM patientrace),"+patNum+",6)";
+							}
 							break;
 						default:
 							//should never happen, useful for debugging.
 							continue;
-					}
-					if(patNumAndRace=="") {//Just in case.
-						continue;
-					}
-					//We will manually set the PK for Oracle compatibility.
-					string patientRaceNum=maxPkStr;
-					if(!hasFirstInsert) {
-						//There hasn't been an entry in the patient race table yet so we cant use maxPkStr.  We'll hard code 1 for the first insert.
-						patientRaceNum="1";
-						hasFirstInsert=true;
-					}
-					command="INSERT INTO patientrace (PatientRaceNum,PatNum,Race) VALUES ("+patientRaceNum+","+patNumAndRace+");";
+					}//end switch
 					Db.NonQ(command);
+					if(DataConnection.DBtype==DatabaseType.Oracle && maxPkStr=="1") {
+						//At least one row has been entered.  Set the pk string to the auto-increment SQL for Oracle.
+						maxPkStr="(SELECT MAX(PatientRaceNum+1) FROM patientrace)";
+					}
 				}
 				//Apex clearinghouse.
 				if(DataConnection.DBtype==DatabaseType.MySql) {
