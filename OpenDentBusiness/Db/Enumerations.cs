@@ -1271,6 +1271,26 @@ namespace OpenDentBusiness{
 		//HeavySmoker
 	}
 
+	///<summary></summary>
+	public enum SmokingSnoMed {
+		///<summary>0 - UnknownIfEver_Recode9</summary>
+		_266927001,
+		///<summary>1 - SmokerUnknownCurrent_Recode5</summary>
+		_77176002,
+		///<summary>2 - NeverSmoked_Recode4</summary>
+		_266919005,
+		///<summary>3 - FormerSmoker_Recode3</summary>
+		_8517006,
+		///<summary>4 - CurrentSomeDay_Recode2</summary>
+		_428041000124106,
+		///<summary>5 - CurrentEveryDay_Recode1</summary>
+		_449868002,
+		///<summary>6 - LightSmoker</summary>
+		_428061000124105,
+		///<summary>7 - HeavySmoker</summary>
+		_428071000124103
+	}
+
 	///<summary>0=Active, 1=Resolved, 2=Inactive</summary>
 	public enum ProblemStatus{
 		/// <summary>0</summary>

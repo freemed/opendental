@@ -739,38 +739,9 @@ namespace OpenDentBusiness{
 						break;
 					case EhrMeasureType.Smoking:
 						//SmokingStatus smokeStatus=(SmokingStatus)PIn.Int(tableRaw.Rows[i]["SmokeStatus"].ToString());
-						SmokingStatus smokeStatus;
-						switch(PIn.String(tableRaw.Rows[i]["SmokingSnoMed"].ToString())) {
-							//uncomment the two cases when we hear from proctor
-							//case "428061000124105":
-							//  smokeStatus=SmokingStatus.LightSmoker;
-							//  break;
-							case "449868002":
-								smokeStatus=SmokingStatus.CurrentEveryDay_Recode1;
-								break;
-							case "428041000124106":
-								smokeStatus=SmokingStatus.CurrentSomeDay_Recode2;
-								break;
-							case "8517006":
-								smokeStatus=SmokingStatus.FormerSmoker_Recode3;
-								break;
-							case "266919005":
-								smokeStatus=SmokingStatus.NeverSmoked_Recode4;
-								break;
-							case "77176002":
-								smokeStatus=SmokingStatus.SmokerUnknownCurrent_Recode5;
-								break;
-							case "266927001":
-								smokeStatus=SmokingStatus.UnknownIfEver_Recode9;
-								break;
-							//case "428071000124103":
-							//  smokeStatus=SmokingStatus.HeavySmoker;
-							//  break;
-							default:
-								smokeStatus=SmokingStatus.UnknownIfEver_Recode9;
-								break;
-						}
-						if(smokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
+						//if(smokeStatus==SmokingStatus.UnknownIfEver_Recode9) {
+						string smokeSnoMed=PIn.String(tableRaw.Rows[i]["SmokingSnoMed"].ToString());
+						if(smokeSnoMed=="266927001" || smokeSnoMed=="") {
 							explanation+="Smoking status not entered.";
 						}
 						else{
