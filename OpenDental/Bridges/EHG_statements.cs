@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Windows.Forms;
 using OpenDentBusiness;
@@ -72,13 +73,16 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//Rendering provider
 		}
 
-		///<summary>Adds the xml for one statement.</summary>
+		///<summary>Adds the xml for one statement. Validation is performed here. Throws an exception if there is a validation failure.</summary>
 		public static void GenerateOneStatement(XmlWriter writer,Statement stmt,Patient pat,Family fam,DataSet dataSet){
+			Patient guar=fam.ListPats[0];
+			if(!Regex.IsMatch(guar.State,"^[A-Z]{2}$")) {
+				throw new ApplicationException(Lan.g("EHG_Statements","Guarantor state must be two uppercase characters.")+" "+guar.FName+" "+guar.LName+" #"+guar.PatNum);
+			}
 			writer.WriteStartElement("EisStatement");
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
 			writer.WriteAttributeString("CreditCardChoice",PrefC.GetString(PrefName.BillingElectCreditCardChoices));
 			writer.WriteStartElement("Patient");
-			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
 			writer.WriteElementString("Account",guar.PatNum.ToString());
 			writer.WriteElementString("Address1",guar.Address);
