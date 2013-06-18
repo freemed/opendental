@@ -103,6 +103,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\CDT.dll</HintPath>
     </Reference>
+    <Reference Include="Health.Direct.Agent">
+      <HintPath>..\Required dlls\Health.Direct.Agent.dll</HintPath>
+    </Reference>
+    <Reference Include="Health.Direct.Common">
+      <HintPath>..\Required dlls\Health.Direct.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Interop.Word, Version=8.2.0.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Interop.Word.dll</HintPath>
@@ -493,6 +499,7 @@
     <Compile Include="InternalTools\Phones\TableTypes\PhoneMetric.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
     <Compile Include="Misc\ConvertDatabases3.cs" />
+    <Compile Include="Misc\EhrEmail.cs" />
     <Compile Include="Misc\InnoDb.cs" />
     <Compile Include="Misc\ConvertDatabases2.cs" />
     <Compile Include="Misc\ConvertDatabases1.cs" />
