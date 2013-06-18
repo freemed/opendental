@@ -552,6 +552,22 @@ namespace OpenDentBusiness {
 				    +"'Guru')";
 					Db.NonQ(command);
 				}//end Guru bridge
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="INSERT INTO preference(PrefName,ValueString) VALUES('NewCropPartnerName','')";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'NewCropPartnerName','')";
+					Db.NonQ(command);
+				}
+
+
+
+
+
+
+
+
 
 
 				command="UPDATE preference SET ValueString = '13.2.0.0' WHERE PrefName = 'DataBaseVersion'";

@@ -237,6 +237,8 @@ namespace OpenDentBusiness {
 		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
 		NewCropName,
 		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
+		NewCropPartnerName,
+		/// <summary>There is no UI for user to change this. For resellers, this is part of the credentials.  OD credentials are not stored here, but are hard-coded.</summary>
 		NewCropPassword,
 		OpenDentalVendor,
 		OracleInsertId,

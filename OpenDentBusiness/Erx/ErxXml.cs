@@ -12,7 +12,13 @@ namespace OpenDentBusiness {
 	public class ErxXml {
 
 		public static string NewCropPartnerName {
-			get { return "OpenDental"; } //Assigned by NewCrop. Used globally for all customers.
+			get {
+				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				if(newCropName=="") { //Resellers use this field to send different credentials. Thus, if blank, then send OD credentials.
+					return "OpenDental";
+				}
+				return PrefC.GetString(PrefName.NewCropPartnerName);//Reseller.
+			}
 		}
 
 		public static string NewCropAccountName {
