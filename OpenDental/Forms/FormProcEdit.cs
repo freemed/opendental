@@ -3569,11 +3569,47 @@ namespace OpenDental{
 		}
 
 		private void comboProcStatus_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboProcStatus.SelectedIndex==0){
+			if(comboProcStatus.SelectedIndex==0) {//fee starts out 0 if EO, EC, etc.  This updates fee if changing to TP so it won't stay 0.
 				ProcCur.ProcStatus=ProcStat.TP;
-				//fee starts out 0 if EO, EC, etc.  This updates fee if changing to TP so it won't stay 0.
 				if(ProcCur.ProcFee==0) {
-					ProcCur.ProcFee=Fees.GetAmount0(ProcCur.CodeNum,Fees.GetFeeSched(PatCur,PlanList,PatPlanList,SubList));
+					double insfee=0;
+					bool isMed=false;
+					if(ProcCur.MedicalCode!=null && ProcCur.MedicalCode!="") {
+						isMed=true;
+					}
+					//Get fee schedule for medical or dental.
+					long feeSch;
+					if(isMed) {
+						feeSch=Fees.GetMedFeeSched(PatCur,PlanList,PatPlanList,SubList);
+					}
+					else {
+						feeSch=Fees.GetFeeSched(PatCur,PlanList,PatPlanList,SubList);
+					}
+					//Get the fee amount for medical or dental.
+					if(PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && isMed) {
+						insfee=Fees.GetAmount0(ProcedureCodes.GetProcCode(ProcCur.MedicalCode).CodeNum,feeSch);
+					}
+					else {
+						insfee=Fees.GetAmount0(ProcCur.CodeNum,feeSch);
+					}
+					InsPlan priplan=null;
+					InsSub prisub=null;
+					if(PatPlanList.Count>0) {
+						prisub=InsSubs.GetSub(PatPlanList[0].InsSubNum,SubList);
+						priplan=InsPlans.GetPlan(prisub.PlanNum,PlanList);
+					}
+					if(priplan!=null && priplan.PlanType=="p") {//PPO
+						double standardfee=Fees.GetAmount0(ProcCur.CodeNum,Providers.GetProv(Patients.GetProvNum(PatCur)).FeeSched);
+						if(standardfee>insfee) {
+							ProcCur.ProcFee=standardfee;
+						}
+						else {
+							ProcCur.ProcFee=insfee;
+						}
+					}
+					else {
+						ProcCur.ProcFee=insfee;
+					}
 					textProcFee.Text=ProcCur.ProcFee.ToString("f");
 				}
 			}

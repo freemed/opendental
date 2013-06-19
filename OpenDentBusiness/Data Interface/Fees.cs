@@ -122,7 +122,9 @@ namespace OpenDentBusiness{
 			return -1;//code not found
 		}
 
-		///<summary>Almost the same as GetAmount.  But never returns -1;  Returns an amount if a fee has been entered.  Returns 0 if code can't be found.</summary>
+		///<summary>Almost the same as GetAmount.  But never returns -1;  Returns an amount if a fee has been entered.  Returns 0 if code can't be found.
+		///TODO: =js 6/19/13 There are many places where this is used to get the fee for a proc.  This results in approx 12 identical chunks of code throughout the program.
+		///We need to build a method to eliminate all those identical sections.  This will prevent bugs from cropping up when these sections get out of synch.</summary>
 		public static double GetAmount0(long codeNum,long feeSched) {
 			//No need to check RemotingRole; no call to db.
 			double retVal=GetAmount(codeNum,feeSched);
