@@ -49,7 +49,7 @@ namespace OpenDentBusiness.HL7 {
 			//we assume that dob is always valid because eCW should always pass us a dob.
 			seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
 			seg.SetField(8,ConvertGender(pat.Gender));
-			seg.SetField(10,ConvertRace(pat.Race));
+			seg.SetField(10,ConvertRace(PatientRaces.GetPatientRaceOldFromPatientRaces(pat.PatNum)));//Passes in the depricated PatientRaceOld enum retrieved from the PatientRace table.
 			seg.SetField(11,pat.Address,pat.Address2,pat.City,pat.State,pat.Zip);
 			seg.SetField(13,ConvertPhone(pat.HmPhone));
 			seg.SetField(14,ConvertPhone(pat.WkPhone));
@@ -150,6 +150,7 @@ namespace OpenDentBusiness.HL7 {
 		//This set of methods is ONLY for ECW, and will have to be renamed and grouped if any other DFT bridge is built.
 		//=======================================================================================================================================
 
+		///<summary>Convert the patient race entries to the depricated PatientRaceOld enum before calling this method.</summary>
 		private string ConvertRace(PatientRaceOld race) {
 			switch(race) {
 				case PatientRaceOld.AmericanIndian:

@@ -17,6 +17,102 @@ namespace OpenDentBusiness{
 			return Crud.PatientRaceCrud.SelectMany(command);
 		}
 
+		///<summary>Gets all patintrace entries for the patient and returns all of their races as a list of ints.  The list of ints corresponds to the PatRace enum.</summary>
+		public static List<int> GetPatRaceList(long patNum) {
+			//No need to check RemotingRole; no call to db.
+			List<PatientRace> patEntries=GetForPatient(patNum);
+			List<int> listPatRace=new List<int>();
+			for(int i=0;i<patEntries.Count;i++) {
+				listPatRace.Add((int)patEntries[i].Race);
+			}
+			return listPatRace;
+		}
+
+		///<summary>Returns the PatientRaceOld enum based on the PatientRace entries for the patient passed in.  Calls GetPatRaceList to get the list of races.</summary>
+		public static PatientRaceOld GetPatientRaceOldFromPatientRaces(long patNum) {
+			//No need to check RemotingRole; no call to db.
+			List<int> races=GetPatRaceList(patNum);
+			if(races.Count==0) {
+				return(PatientRaceOld.Unknown);//Unknown is default for PatientRaceOld
+			}
+			if(races.Contains((int)PatRace.White)) {
+				if(races.Contains((int)PatRace.Hispanic)) {
+					return PatientRaceOld.HispanicLatino;
+				}
+				return PatientRaceOld.White;
+			}
+			if(races.Contains((int)PatRace.AfricanAmerican)) {
+				if(races.Contains((int)PatRace.Hispanic)) {
+					return PatientRaceOld.BlackHispanic;
+				}
+				return PatientRaceOld.AfricanAmerican;
+			}
+			if(races.Contains((int)PatRace.Aboriginal)) {
+				return PatientRaceOld.Aboriginal;
+			}
+			if(races.Contains((int)PatRace.AmericanIndian)) {
+				return PatientRaceOld.AmericanIndian;
+			}
+			if(races.Contains((int)PatRace.Asian)) {
+				return PatientRaceOld.Asian;
+			}
+			if(races.Contains((int)PatRace.HawaiiOrPacIsland)) {
+				return PatientRaceOld.HawaiiOrPacIsland;
+			}
+			if(races.Contains((int)PatRace.Multiracial)) {
+				return PatientRaceOld.Multiracial;
+			}
+			if(races.Contains((int)PatRace.Other)) {
+				return PatientRaceOld.Other;
+			}
+			//Hispanic
+			//DeclinedToSpecify
+			return PatientRaceOld.Unknown;
+		}
+
+		///<summary>Gets a list of PatRaces that corrispond to a PatientRaceOld enum.</summary>
+		public static List<PatRace> GetPatRacesFromPatientRaceOld(PatientRaceOld raceOld) {
+			List<PatRace> retVal=new List<PatRace>();
+			switch(raceOld) {
+				case PatientRaceOld.Unknown:
+					//Do nothing.  No entry means "Unknown", the old default.
+					break;
+				case PatientRaceOld.Multiracial:
+					retVal.Add(PatRace.Multiracial);
+					break;
+				case PatientRaceOld.HispanicLatino:
+					retVal.Add(PatRace.White);
+					retVal.Add(PatRace.Hispanic);
+					break;
+				case PatientRaceOld.AfricanAmerican:
+					retVal.Add(PatRace.AfricanAmerican);
+					break;
+				case PatientRaceOld.White:
+					retVal.Add(PatRace.White);
+					break;
+				case PatientRaceOld.HawaiiOrPacIsland:
+					retVal.Add(PatRace.HawaiiOrPacIsland);
+					break;
+				case PatientRaceOld.AmericanIndian:
+					retVal.Add(PatRace.AmericanIndian);
+					break;
+				case PatientRaceOld.Asian:
+					retVal.Add(PatRace.Asian);
+					break;
+				case PatientRaceOld.Other:
+					retVal.Add(PatRace.Other);
+					break;
+				case PatientRaceOld.Aboriginal:
+					retVal.Add(PatRace.Aboriginal);
+					break;
+				case PatientRaceOld.BlackHispanic:
+					retVal.Add(PatRace.AfricanAmerican);
+					retVal.Add(PatRace.Hispanic);
+					break;
+			}
+			return retVal;
+		}
+
 		///<summary>Inserts or Deletes neccesary PatientRace entries for the specified patient given the list of PatRaces provided.</summary>
 		public static void Reconcile(long patNum,List<PatRace> listPatRaces) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {

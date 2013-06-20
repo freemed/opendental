@@ -81,6 +81,7 @@ namespace OpenDentBusiness{
 					retVal.Add("Fulltime");
 					return retVal;
 				case "Race":
+					//Sheets use PatientRaceOld for display purposes only.  They are not imported.  Therefore, the patientrace table does not need to be used here.
 					stringAr=Enum.GetNames(typeof(PatientRaceOld));
 					break;
 			}

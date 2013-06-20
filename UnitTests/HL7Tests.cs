@@ -115,8 +115,11 @@ namespace UnitTests {
 			correctPat.LName="Smiths";
 			correctPat.Birthdate=new DateTime(1976,02,10);
 			correctPat.Gender=PatientGender.Male;
-			//TODO: Change from setting the race in the patient object to making an entry in the patientrace table for HispanicLatino.
-			correctPat.Race=PatientRaceOld.HispanicLatino;
+			//correctPat.Race=PatientRaceOld.HispanicLatino;
+			List<PatRace> races=new List<PatRace>();
+			races.Add(PatRace.White);
+			races.Add(PatRace.Hispanic);
+			PatientRaces.Reconcile(correctPat.PatNum,races);
 			correctPat.Address="421 Main Ave";
 			correctPat.Address2="Apt 7";
 			correctPat.City="Salem";
@@ -209,8 +212,10 @@ namespace UnitTests {
 			correctPat.LName="Smith";
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
-			//TODO: Same thing for this patient that was done on line 118 except for a race of White.
-			correctPat.Race=PatientRaceOld.White;
+			//correctPat.Race=PatientRaceOld.White;
+			List<PatRace> races=new List<PatRace>();
+			races.Add(PatRace.White);
+			PatientRaces.Reconcile(correctPat.PatNum,races);
 			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";
 			correctPat.City="Dallas";
@@ -479,8 +484,10 @@ namespace UnitTests {
 			correctPat.LName="Smith2";
 			correctPat.Birthdate=new DateTime(1976,02,05);
 			correctPat.Gender=PatientGender.Female;
-			//TODO: Same thing for this patient that was done on line 118 except for a race of White.
-			correctPat.Race=PatientRaceOld.White;
+			//correctPat.Race=PatientRaceOld.White;
+			List<PatRace> races=new List<PatRace>();
+			races.Add(PatRace.White);
+			PatientRaces.Reconcile(correctPat.PatNum,races);
 			correctPat.Address="421 Main St";
 			correctPat.Address2="Apt 17";
 			correctPat.City="Dallas";
@@ -1243,9 +1250,22 @@ namespace UnitTests {
 				retval+="Patient Gender should be "+correctPat.Gender.ToString()+" and is "+pat.Gender.ToString()+".\r\n";
 				retval+="Guarantor Gender should be "+correctGuar.Gender.ToString()+" and is "+guar.Gender.ToString()+".\r\n";
 			}
-			if(pat.Race!=correctPat.Race) {
-				retval+="Patient Race should be "+correctPat.Race.ToString()+" and is "+pat.Race.ToString()+".\r\n";
+			List<int> listPatRace=PatientRaces.GetPatRaceList(pat.PatNum);
+			List<int> listPatCorRace=PatientRaces.GetPatRaceList(correctPat.PatNum);
+			if(listPatRace.Count!=listPatCorRace.Count) {
+				retval+="Patient Races do not match.\r\n";
 			}
+			else {
+				for(int i=0;i<listPatRace.Count;i++) {
+					if(!listPatCorRace.Contains(listPatRace[i])) {
+						retval+="Patient Races do not match.\r\n";
+						break;
+					}
+				}
+			}
+			//if(PatientRaces.GetForPatient(pat.PatNum)!=correctPat.Race) {
+			//	retval+="Patient Races should be "+listCorRaces.ToString()+" and is "+listPatRaces.ToString()+".\r\n";
+			//}
 			if(pat.Address!=correctPat.Address || pat.Address2!=correctPat.Address2 || pat.City!=correctPat.City || pat.State!=correctPat.State || pat.Zip!=correctPat.Zip) {
 				retval+="Patient Address should be "+correctPat.Address+" "+correctPat.Address2+" "+correctPat.City+", "+correctPat.State+" "+correctPat.Zip;
 				retval+=" and is "+pat.Address+" "+pat.Address2+" "+pat.City+", "+pat.State+" "+pat.Zip+".\r\n";

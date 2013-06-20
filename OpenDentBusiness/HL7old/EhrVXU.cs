@@ -69,10 +69,10 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 				seg.SetField(7,pat.Birthdate.ToString("yyyyMMdd"));
 			}
 			seg.SetField(8,ConvertGender(pat.Gender));
-			seg.SetField(10,ConvertRace(pat.Race));
+			seg.SetField(10,ConvertRace(PatientRaces.GetPatientRaceOldFromPatientRaces(pat.PatNum)));//Converts entries from PatientRace table to depricated PatientRaceOld for call.
 			seg.SetField(11,pat.Address,pat.Address2,pat.City,pat.State,pat.Zip,"","M");//M is for mailing.
 			seg.SetField(13,ConvertPhone(pat.HmPhone));
-			seg.SetField(22,ConvertEthnicGroup(pat.Race));
+			seg.SetField(22,ConvertEthnicGroup(PatientRaces.GetPatientRaceOldFromPatientRaces(pat.PatNum)));//Converts entries from PatientRace table to depricated PatientRaceOld for call.
 			msg.Segments.Add(seg);
 		}
 
@@ -126,6 +126,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 			return "U";
 		}
 
+		///<summary>Uses depricated PatientRaceOld enum which should be converted from PatientRace entries before this function is called.</summary>
 		private string ConvertRace(PatientRaceOld race) {
 			switch(race) {
 				case PatientRaceOld.AmericanIndian:
@@ -145,6 +146,7 @@ RXA|0|1|201007011330|201007011330|03^Measles Mumps Rubella^HL70292|999||||||||||
 			}
 		}
 
+		///<summary>Uses depricated PatientRaceOld enum which should be converted from PatientRace entries before this function is called.</summary>
 		private string ConvertEthnicGroup(PatientRaceOld race) {
 			switch(race) {
 				case PatientRaceOld.HispanicLatino:

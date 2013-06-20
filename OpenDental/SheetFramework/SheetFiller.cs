@@ -1637,7 +1637,7 @@ namespace OpenDental{
 						field.FieldValue=pat.Preferred;
 						break;
 					case "Race":
-						if(field.RadioButtonValue==pat.Race.ToString()) {
+						if(field.RadioButtonValue==PatientRaces.GetPatientRaceOldFromPatientRaces(pat.PatNum).ToString()) { //==pat.Race.ToString()) {
 							field.FieldValue="X";
 						}
 						break;

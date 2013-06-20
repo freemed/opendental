@@ -151,6 +151,7 @@ namespace OpenDentBusiness.HL7 {
 			return prov.ProvNum;
 		}
 
+		///<summary>Returns the depricated PatientRaceOld enum.  It gets converted to new patient race entries where it's called.</summary>
 		public static PatientRaceOld RaceParse(string str) {
 			switch(str) {
 				case "American Indian Or Alaska Native":

@@ -26,7 +26,9 @@ namespace OpenDentBusiness.HL7 {
 			pat.MiddleI=seg.GetFieldComponent(5,2);
 			pat.Birthdate=DateParse(seg.GetFieldFullText(7));
 			pat.Gender=GenderParse(seg.GetFieldFullText(8));
-			pat.Race=RaceParse(seg.GetFieldFullText(10));
+			PatientRaceOld patientRaceOld=RaceParse(seg.GetFieldFullText(10));
+			//Converts PatientRaceOld to new Patient Races, and adds them o the PatientRace table.
+			PatientRaces.Reconcile(pat.PatNum,PatientRaces.GetPatRacesFromPatientRaceOld(patientRaceOld));
 			pat.Address=seg.GetFieldComponent(11,0);
 			pat.Address2=seg.GetFieldComponent(11,1);
 			pat.City=seg.GetFieldComponent(11,2);
@@ -165,6 +167,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 		}
 
+		///<summary>Returns the depricated PatientRaceOld enum.  Converting the old enum to patientrace entries needs to happen after this function is called.</summary>
 		public static PatientRaceOld RaceParse(string str) {
 			switch(str) {
 				case "American Indian Or Alaska Native":

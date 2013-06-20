@@ -665,7 +665,7 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
-						if(tableRaw.Rows[i]["Race"].ToString()=="0") {
+						if(PatientRaces.GetForPatient(PIn.Long(row["PatNum"].ToString())).Count==0) {
 							if(explanation!="") {
 								explanation+=", ";
 							}
@@ -1008,8 +1008,7 @@ namespace OpenDentBusiness{
 							}
 							explanation+="gender";
 						}
-						//TODO: Change the IF statement to check if the user has an entry in the patientrace table.  Patients with no enteries are considered "unknown" and the following logic should apply.
-						if(pat.Race==PatientRaceOld.Unknown) {
+						if(PatientRaces.GetForPatient(pat.PatNum).Count==0) {
 							if(explanation!="") {
 								explanation+=", ";
 							}

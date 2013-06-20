@@ -548,7 +548,9 @@ namespace OpenDentBusiness.HL7 {
 						pat.Position=FieldParser.MaritalStatusParse(seg.GetFieldComponent(itemOrder));
 						continue;
 					case "pat.Race":
-						pat.Race=FieldParser.RaceParse(seg.GetFieldComponent(itemOrder));
+						PatientRaceOld patientRaceOld=FieldParser.RaceParse(seg.GetFieldComponent(itemOrder));
+						//Converts deprecated PatientRaceOld enum to list of PatRaces, and adds them to the PatientRaces table for the patient.
+						PatientRaces.Reconcile(pat.PatNum,PatientRaces.GetPatRacesFromPatientRaceOld(patientRaceOld));
 						continue;
 					case "pat.SSN":
 						pat.SSN=seg.GetFieldComponent(itemOrder);

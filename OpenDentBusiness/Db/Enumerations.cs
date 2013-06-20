@@ -639,7 +639,7 @@ namespace OpenDentBusiness{
 		CAL
 	}
 
-	///<summary>Race and ethnicity for patient. Used by public health.  The problem is that everyone seems to want different choices.  If we give these choices their own table, then we also need to include mapping functions.  These are currently used in ArizonaReports, HL7 w ECW, and EHR.  Foreign users would like their own mappings.</summary>
+	///<summary>Deprecated, use patientrace table instead.  Temporarily used for converting old patient races to patientrace entries and screening.  Race and ethnicity for patient. Used by public health.  The problem is that everyone seems to want different choices.  If we give these choices their own table, then we also need to include mapping functions.  These are currently used in ArizonaReports, HL7 w ECW, and EHR.  Foreign users would like their own mappings.</summary>
 	public enum PatientRaceOld {
 		///<summary>0</summary>
 		Unknown,

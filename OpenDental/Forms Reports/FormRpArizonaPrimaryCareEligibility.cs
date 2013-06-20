@@ -82,9 +82,9 @@ namespace OpenDental {
 					"p.BirthDate,"+
 					"CASE p.Position WHEN "+((int)PatientPosition.Single)+" THEN 1 "+
 						"WHEN "+((int)PatientPosition.Married)+" THEN 2 ELSE 3 END MaritalStatus,"+//Marital status
-					"CASE p.Race WHEN "+((int)PatientRaceOld.Asian)+" THEN 'A' WHEN "+((int)PatientRaceOld.HispanicLatino)+" THEN 'H' "+
-						"WHEN "+((int)PatientRaceOld.HawaiiOrPacIsland)+" THEN 'P' WHEN "+((int)PatientRaceOld.AfricanAmerican)+" THEN 'B' "+
-						"WHEN "+((int)PatientRaceOld.AmericanIndian)+" THEN 'I' WHEN "+((int)PatientRaceOld.White)+" THEN 'W' ELSE 'O' END PatRace,"+
+					//"CASE p.Race WHEN "+((int)PatientRaceOld.Asian)+" THEN 'A' WHEN "+((int)PatientRaceOld.HispanicLatino)+" THEN 'H' "+
+					//  "WHEN "+((int)PatientRaceOld.HawaiiOrPacIsland)+" THEN 'P' WHEN "+((int)PatientRaceOld.AfricanAmerican)+" THEN 'B' "+
+					//  "WHEN "+((int)PatientRaceOld.AmericanIndian)+" THEN 'I' WHEN "+((int)PatientRaceOld.White)+" THEN 'W' ELSE 'O' END PatRace,"+
 					"CONCAT(CONCAT(TRIM(p.Address),' '),TRIM(p.Address2)) HouseholdAddress,"+//Patient address
 					"p.City HouseholdCity,"+//Household residence city
 					"p.State HouseholdState,"+//Household residence state
@@ -130,7 +130,31 @@ namespace OpenDental {
 				outputRow+=siteId;
 				outputRow+=PIn.Date(primaryCareReportRow.Rows[0]["Birthdate"].ToString()).ToString("MMddyyyy");//Patient's Date of Birth
 				outputRow+=POut.Long(PIn.Long(primaryCareReportRow.Rows[0]["MaritalStatus"].ToString()));
-				outputRow+=primaryCareReportRow.Rows[0]["PatRace"].ToString();
+				//outputRow+=primaryCareReportRow.Rows[0]["PatRace"].ToString();
+				//Gets the old patient race enum based on the PatientRace entries in the db and displays the corresponding letters.
+				switch (PatientRaces.GetPatientRaceOldFromPatientRaces(PIn.Long(patNum))) {
+					case PatientRaceOld.Asian:
+						outputRow+='A';
+						break;
+					case PatientRaceOld.HispanicLatino:
+						outputRow+='H';
+						break;
+					case PatientRaceOld.HawaiiOrPacIsland:
+						outputRow+='P';
+						break;
+					case PatientRaceOld.AfricanAmerican:
+						outputRow+='B';
+						break;
+					case PatientRaceOld.AmericanIndian:
+						outputRow+='I';
+						break;
+					case PatientRaceOld.White:
+						outputRow+='W';
+						break;
+					default:
+						outputRow+='O';
+						break;
+				}
 				//Household residence address
 				string householdAddress=POut.String(PIn.String(primaryCareReportRow.Rows[0]["HouseholdAddress"].ToString()));
 				if(householdAddress.Length>29) {

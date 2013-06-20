@@ -198,7 +198,7 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private static string gRace(Patient pat) {
-			switch(pat.Race) {
+			switch(PatientRaces.GetPatientRaceOldFromPatientRaces(pat.PatNum)) { //Uses the deprecated PatientRaceOld enum converted from PatientRaces.GetPatientRaceOldFromPatientRaces()
 				case PatientRaceOld.AmericanIndian:
 					return "American Indian Or Alaska Native";
 				case PatientRaceOld.Asian:
