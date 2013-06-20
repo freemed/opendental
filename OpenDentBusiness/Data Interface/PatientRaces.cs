@@ -119,9 +119,14 @@ namespace OpenDentBusiness{
 				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,listPatRaces);
 				return;
 			}
-			//DELETE all for the patient if listPatRaces is empty.  Return.
+			string command;
+			if(listPatRaces.Count==0) { //DELETE all for the patient if listPatRaces is empty.
+				command="DELETE FROM patientrace WHERE PatNum = "+POut.Long(patNum);
+				Db.NonQ(command);
+				return;
+			}
 			List<PatientRace> listPatientRaces;//Rename this variable and the listPatRaces variable so it is easier to indicate which is the "selected" list and which is the db list.
-			string command = "SELECT * FROM patientrace WHERE PatNum = "+POut.Long(patNum);
+			command = "SELECT * FROM patientrace WHERE PatNum = "+POut.Long(patNum);
 			listPatientRaces = Crud.PatientRaceCrud.SelectMany(command);
 			//delete excess rows
 			for(int i=0;i<listPatientRaces.Count;i++) {
