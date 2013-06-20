@@ -845,12 +845,12 @@ namespace OpenDental{
 			try{
 			  using(StreamWriter sw=new StreamWriter(saveFileDialog2.FileName,false))
 				{
-					String line="";  
-					for(int i=0;i<gridMain.Columns.Count;i++){
+					String line="";
+					for(int i=0;i<table.Columns.Count;i++) {
 						if(i>0) {
 							line+="\t";
 						}
-					  line+=gridMain.Columns[i].Heading;
+						line+=table.Columns[i].ColumnName;//Not translated with current code.
 					}
 					sw.WriteLine(line);
 					string cell;
