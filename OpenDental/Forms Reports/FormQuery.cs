@@ -1264,6 +1264,9 @@ namespace OpenDental{
 					yPos+=4;
 					for(int iCol=0;iCol<report.TableQ.Columns.Count;iCol++){
 						if(report.ColAlign[iCol]==HorizontalAlignment.Right){
+							if(report.TableQ.Columns[iCol].Caption.ToLower().StartsWith("count(")) {//"=="count(*)") {
+								continue;
+							}
 							float textWidth=(float)(ev.Graphics.MeasureString
 								(report.ColTotal[iCol].ToString("n"),subtitleFont).Width);
 							ev.Graphics.DrawString(report.ColTotal[iCol].ToString("n")
