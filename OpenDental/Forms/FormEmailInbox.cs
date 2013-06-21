@@ -15,7 +15,7 @@ namespace OpenDental {
 			Lan.F(this);
 		}
 
-		private void menuItemSettings_Click(object sender,EventArgs e) {
+		private void menuItemSetup_Click(object sender,EventArgs e) {
 			FormEmailAddresses formEA=new FormEmailAddresses();
 			formEA.ShowDialog();
 		}
