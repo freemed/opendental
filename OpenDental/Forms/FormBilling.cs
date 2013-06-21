@@ -989,7 +989,7 @@ namespace OpenDental{
 				msg+=Lan.g(this,"Skipped due to missing or bad email address: ")+skipped.ToString()+"\r\n";
 			}
 			if(skippedElect>0) {
-				msg+=Lan.g(this,"Skipped due to missing or mailing address: ")+skippedElect.ToString()+"\r\n";
+				msg+=Lan.g(this,"Skipped due to missing or bad mailing address: ")+skippedElect.ToString()+"\r\n";
 			}
 			msg+=Lan.g(this,"Printed: ")+printed.ToString()+"\r\n"
 				+Lan.g(this,"E-mailed: ")+emailed.ToString()+"\r\n"

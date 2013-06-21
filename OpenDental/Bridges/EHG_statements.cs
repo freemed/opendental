@@ -314,6 +314,14 @@ namespace OpenDental.Bridges {
 			finally {
 				sr.Dispose();
 			}
+			if(PrefC.GetBool(PrefName.BillingElectSaveHistory)) {
+				string strHistoryDir=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EHG_History");
+				if(!Directory.Exists(strHistoryDir)) {
+					Directory.CreateDirectory(strHistoryDir);
+				}
+				string strHistoryFile=CodeBase.ODFileUtils.CreateRandomFile(strHistoryDir,".txt");
+				File.WriteAllText(strHistoryFile,data);
+			}
 			//Step 1: Post authentication request:
 			Version myVersion=new Version(Application.ProductVersion);
 			HttpWebRequest webReq;
