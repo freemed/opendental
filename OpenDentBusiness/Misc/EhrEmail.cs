@@ -43,15 +43,9 @@ namespace OpenDentBusiness {
 			attach.Dispose();
 		}
 
-		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>
-		public static string Receive() {
-			if(PrefC.GetString(PrefName.EHREmailToAddress)=="") {//this pref is hidden, so no practical way for user to turn this on.
-				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
-			}
-			if(PrefC.GetString(PrefName.EHREmailPOPserver)=="") {
-				throw new ApplicationException("No POP server set up.");
-			}
-			string retVal="";
+		///<summary>Receives one email from the inbox.  Will throw an exception if anything goes wrong, so surround with a try-catch.  Never returns null.</summary>
+		public static EmailMessage ReceiveFromInbox(EmailAddress emailAddress) {
+			EmailMessage retVal=null;
 			string Data="";
 			bool disconnect=false;
 			byte[] sendData;
@@ -61,20 +55,20 @@ namespace OpenDentBusiness {
 			StreamReader RdStrm=null;
 			string error="";
 			try {
-				TcpClient Server=new TcpClient(PrefC.GetString(PrefName.EHREmailPOPserver),PrefC.GetInt(PrefName.EHREmailPort));
+				TcpClient Server=new TcpClient(emailAddress.SMTPserverIncoming,emailAddress.ServerPortIncoming);
 				NetStrm=Server.GetStream();
 				RdStrm=new StreamReader(Server.GetStream());
 				disconnect=true;//Always dispose of the streams unless TcpClient fails
 				RdStrm.ReadLine();//Will hang if connecting to SSL
-				Data="USER "+PrefC.GetString(PrefName.EHREmailFromAddress)+"\r\n";
+				Data="USER "+emailAddress.EmailUsername+"\r\n";
 				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
 				NetStrm.Write(sendData,0,sendData.Length);
 				RdStrm.ReadLine();//Moves reader position.
-				Data="PASS "+PrefC.GetString(PrefName.EHREmailPassword)+"\r\n";
+				Data="PASS "+emailAddress.EmailPassword+"\r\n";
 				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
 				NetStrm.Write(sendData,0,sendData.Length);
 				if(!RdStrm.ReadLine().StartsWith("+")) {
-					throw new ApplicationException("Password incorrect.");
+					throw new ApplicationException("Username or password incorrect.");
 				}
 				//Display message
 				int lastEmail=1;//Cannot be 0
@@ -108,13 +102,27 @@ namespace OpenDentBusiness {
 					emailMsg+=readData+"\r\n";
 					readData=RdStrm.ReadLine();
 				}
+				retVal=new EmailMessage();
+				retVal.IsNew=true;
+				retVal.SentOrReceived=EmailSentOrReceived.Received;
 				if(emailMsg.Contains("application/pkcs7-mime")) {//The email MIME/body is encrypted (known as S/MIME).
-					//Use Direct to decrypt the message.
-					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent("opendental.com");
+					Health.Direct.Agent.DirectAgent agent=new Health.Direct.Agent.DirectAgent("opendental.com");//TODO: We probably need a UI textbox for this.
 					Health.Direct.Agent.IncomingMessage inMsg=agent.ProcessIncoming(emailMsg);
-					emailBody=inMsg.Message.Body.Text;
+					retVal.FromAddress=inMsg.Message.FromValue;					
+					retVal.PatNum=0;//TODO: Set for some Direct messages.
+					retVal.MsgDateTime=PIn.DateT(inMsg.Message.DateValue);//Server time	
+					retVal.Subject=inMsg.Message.SubjectValue;
+					retVal.ToAddress=inMsg.Message.ToValue;
+					retVal.BodyText=ExtractMimeAttach(inMsg.Message.Body.Text);
 				}
-				retVal=ExtractMimeAttach(emailBody);
+				else {//Unencrypted email.
+					//retVal.FromAddress=;//TODO:
+					retVal.PatNum=0;
+					//retVal.MsgDateTime=;//TODO: Server time	
+					//retVal.Subject=;//TODO: 
+					retVal.ToAddress=emailAddress.EmailUsername;
+					retVal.BodyText=ExtractMimeAttach(emailBody);
+				}				
 				//Delete the message on the mail server.
 				Data="DELE "+lastEmail+"\r\n";
 				sendData=System.Text.Encoding.ASCII.GetBytes(Data.ToCharArray());
@@ -138,6 +146,22 @@ namespace OpenDentBusiness {
 			return retVal;
 		}
 
+		///<summary>Receives one email from the inbox, and returns the contents of the attachment as a string.  Will throw an exception if anything goes wrong, so surround with a try-catch.</summary>
+		public static string Receive() {
+			if(PrefC.GetString(PrefName.EHREmailToAddress)=="") {//this pref is hidden, so no practical way for user to turn this on.
+				throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
+			}
+			if(PrefC.GetString(PrefName.EHREmailPOPserver)=="") {
+				throw new ApplicationException("No POP server set up.");
+			}
+			EmailAddress emailAddress=new EmailAddress();
+			emailAddress.SMTPserverIncoming=PrefC.GetString(PrefName.EHREmailPOPserver);
+			emailAddress.ServerPortIncoming=PrefC.GetInt(PrefName.EHREmailPort);
+			emailAddress.EmailUsername=PrefC.GetString(PrefName.EHREmailFromAddress);
+			emailAddress.EmailPassword=PrefC.GetString(PrefName.EHREmailPassword);
+			return ReceiveFromInbox(emailAddress).BodyText;
+		}
+
 		private static string ExtractMimeAttach(string fullMsg) {
 			fullMsg=fullMsg.Trim();//removes any extra lines at the end, too.
 			//break the message into lines
@@ -159,18 +183,21 @@ namespace OpenDentBusiness {
 				//--------------070304090505090508040909
 				break;
 			}
-			if(boundary=="") {
-				throw new ApplicationException("Boundary not found in MIME message.");
+			string attach="";
+			if(boundary!="") {
+				//find the last section of the message, which will certainly be the attachment.
+				fullMsg=fullMsg.TrimEnd('-');
+				separator=new string[1];
+				separator[0]=boundary;
+				string[] sections=fullMsg.Split(separator,StringSplitOptions.RemoveEmptyEntries);
+				if(sections.Length==0) {
+					throw new ApplicationException("No sections found in MIME message.");
+				}
+				attach=sections[sections.Length-1];
 			}
-			//find the last section of the message, which will certainly be the attachment.
-			fullMsg=fullMsg.TrimEnd('-');
-			separator=new string[1];
-			separator[0]=boundary;
-			string[] sections=fullMsg.Split(separator,StringSplitOptions.RemoveEmptyEntries);
-			if(sections.Length==0) {
-				throw new ApplicationException("No sections found in MIME message.");
+			else {
+				attach=fullMsg;//Some unencrypted emails do not have mime boundries. For example, Godaddy email messages in html format.
 			}
-			string attach=sections[sections.Length-1];
 			separator=new string[1];
 			separator[0]="\r\n";
 			lines=attach.Split(separator,StringSplitOptions.None);//keep blank lines

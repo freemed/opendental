@@ -20,6 +20,14 @@ namespace OpenDentBusiness{
 			return message;
 		}
 
+		public static List<EmailMessage> GetReceivedForAddress(string emailAddress) {
+			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
+				return Meth.GetObject<List <EmailMessage>>(MethodBase.GetCurrentMethod(),emailAddress);
+			}
+			string command="SELECT * FROM emailmessage WHERE SentOrReceived="+POut.Int((int)EmailSentOrReceived.Received)+" AND ToAddress='"+POut.String(emailAddress)+"'";
+			return Crud.EmailMessageCrud.SelectMany(command);
+		}
+
 		///<summary></summary>
 		public static void Update(EmailMessage message){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
