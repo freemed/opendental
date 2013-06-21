@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 				}
 				claimNums+=claimsAttached[i].ClaimNum;
 			}
-			command+=claimNums+")";
+			command+=claimNums+") AND ProcNum!=0";
 			//List<ClaimProc> tempClaimProcs=ClaimProcCrud.SelectMany(command);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -135,15 +135,8 @@ namespace OpenDentBusiness{
 				+" FROM claimproc"
 				+" JOIN claim ON claimproc.ClaimNum=claim.ClaimNum"
 				+" WHERE ProcNum IN (";
-			bool firstEntry=true;
 			for(int i=0;i<table.Rows.Count;i++) {
-				if(table.Rows[i]["ProcNum"].ToString()=="0") {
-					continue;
-				}
-				if(firstEntry) {
-					firstEntry=false;
-				}
-				else {
+				if(i>0) {
 					command+=",";
 				}
 				command+=table.Rows[i]["ProcNum"].ToString();
