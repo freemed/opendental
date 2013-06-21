@@ -553,11 +553,11 @@ namespace OpenDental{
 				return;
 			}
 			//prepare the xml document to send--------------------------------------------------------------------------------------
-			XmlWriterSettings settings = new XmlWriterSettings();
-			settings.Indent = true;
-			settings.IndentChars = ("    ");
+			XmlWriterSettings settings=new XmlWriterSettings();
+			settings.Indent=true;
+			settings.IndentChars=("    ");
 			StringBuilder strbuild=new StringBuilder();
-			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
+			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 				writer.WriteStartElement("PracticeTitleReset");
 					writer.WriteStartElement("RegistrationKey");
 						writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
@@ -571,7 +571,7 @@ namespace OpenDental{
 				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
 			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
+				IWebProxy proxy=new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
 				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
