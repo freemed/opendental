@@ -15,12 +15,16 @@ namespace OpenDentBusiness {
 		public string EmailUsername;
 		///<summary>.</summary>
 		public string EmailPassword;
-		///<summary>Usually 587, sometimes 25</summary>
+		///<summary>Usually 587, sometimes 25 or 465.</summary>
 		public int ServerPort;
 		///<summary>.</summary>
 		public bool UseSSL;
 		///<summary>The email address of the sender as it should appear to the recipient.</summary>
 		public string SenderAddress;
+		///<summary>For example pop.gmail.com</summary>
+		public string SMTPserverIncoming;
+		///<summary>Usuall 110, sometimes 995.</summary>
+		public int ServerPortIncoming;
 
 		///<summary></summary>
 		public EmailAddress Clone() {

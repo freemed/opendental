@@ -560,6 +560,26 @@ namespace OpenDentBusiness {
 					command="INSERT INTO preference(PrefNum,PrefName,ValueString) VALUES((SELECT MAX(PrefNum)+1 FROM preference),'NewCropPartnerName','')";
 					Db.NonQ(command);
 				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailaddress ADD SMTPserverIncoming varchar(255) NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailaddress ADD SMTPserverIncoming varchar2(255)";
+					Db.NonQ(command);
+				}
+				if(DataConnection.DBtype==DatabaseType.MySql) {
+					command="ALTER TABLE emailaddress ADD ServerPortIncoming int NOT NULL";
+					Db.NonQ(command);
+				}
+				else {//oracle
+					command="ALTER TABLE emailaddress ADD ServerPortIncoming number(11)";
+					Db.NonQ(command);
+					command="UPDATE emailaddress SET ServerPortIncoming = 0 WHERE ServerPortIncoming IS NULL";
+					Db.NonQ(command);
+					command="ALTER TABLE emailaddress MODIFY ServerPortIncoming NOT NULL";
+					Db.NonQ(command);
+				}
 
 
 

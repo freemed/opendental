@@ -46,13 +46,15 @@ namespace OpenDentBusiness.Crud{
 			EmailAddress emailAddress;
 			for(int i=0;i<table.Rows.Count;i++) {
 				emailAddress=new EmailAddress();
-				emailAddress.EmailAddressNum= PIn.Long  (table.Rows[i]["EmailAddressNum"].ToString());
-				emailAddress.SMTPserver     = PIn.String(table.Rows[i]["SMTPserver"].ToString());
-				emailAddress.EmailUsername  = PIn.String(table.Rows[i]["EmailUsername"].ToString());
-				emailAddress.EmailPassword  = PIn.String(table.Rows[i]["EmailPassword"].ToString());
-				emailAddress.ServerPort     = PIn.Int   (table.Rows[i]["ServerPort"].ToString());
-				emailAddress.UseSSL         = PIn.Bool  (table.Rows[i]["UseSSL"].ToString());
-				emailAddress.SenderAddress  = PIn.String(table.Rows[i]["SenderAddress"].ToString());
+				emailAddress.EmailAddressNum   = PIn.Long  (table.Rows[i]["EmailAddressNum"].ToString());
+				emailAddress.SMTPserver        = PIn.String(table.Rows[i]["SMTPserver"].ToString());
+				emailAddress.EmailUsername     = PIn.String(table.Rows[i]["EmailUsername"].ToString());
+				emailAddress.EmailPassword     = PIn.String(table.Rows[i]["EmailPassword"].ToString());
+				emailAddress.ServerPort        = PIn.Int   (table.Rows[i]["ServerPort"].ToString());
+				emailAddress.UseSSL            = PIn.Bool  (table.Rows[i]["UseSSL"].ToString());
+				emailAddress.SenderAddress     = PIn.String(table.Rows[i]["SenderAddress"].ToString());
+				emailAddress.SMTPserverIncoming= PIn.String(table.Rows[i]["SMTPserverIncoming"].ToString());
+				emailAddress.ServerPortIncoming= PIn.Int   (table.Rows[i]["ServerPortIncoming"].ToString());
 				retVal.Add(emailAddress);
 			}
 			return retVal;
@@ -93,7 +95,7 @@ namespace OpenDentBusiness.Crud{
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+="EmailAddressNum,";
 			}
-			command+="SMTPserver,EmailUsername,EmailPassword,ServerPort,UseSSL,SenderAddress) VALUES(";
+			command+="SMTPserver,EmailUsername,EmailPassword,ServerPort,UseSSL,SenderAddress,SMTPserverIncoming,ServerPortIncoming) VALUES(";
 			if(useExistingPK || PrefC.RandomKeys) {
 				command+=POut.Long(emailAddress.EmailAddressNum)+",";
 			}
@@ -103,7 +105,9 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(emailAddress.EmailPassword)+"',"
 				+    POut.Int   (emailAddress.ServerPort)+","
 				+    POut.Bool  (emailAddress.UseSSL)+","
-				+"'"+POut.String(emailAddress.SenderAddress)+"')";
+				+"'"+POut.String(emailAddress.SenderAddress)+"',"
+				+"'"+POut.String(emailAddress.SMTPserverIncoming)+"',"
+				+    POut.Int   (emailAddress.ServerPortIncoming)+")";
 			if(useExistingPK || PrefC.RandomKeys) {
 				Db.NonQ(command);
 			}
@@ -116,12 +120,14 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Updates one EmailAddress in the database.</summary>
 		public static void Update(EmailAddress emailAddress){
 			string command="UPDATE emailaddress SET "
-				+"SMTPserver     = '"+POut.String(emailAddress.SMTPserver)+"', "
-				+"EmailUsername  = '"+POut.String(emailAddress.EmailUsername)+"', "
-				+"EmailPassword  = '"+POut.String(emailAddress.EmailPassword)+"', "
-				+"ServerPort     =  "+POut.Int   (emailAddress.ServerPort)+", "
-				+"UseSSL         =  "+POut.Bool  (emailAddress.UseSSL)+", "
-				+"SenderAddress  = '"+POut.String(emailAddress.SenderAddress)+"' "
+				+"SMTPserver        = '"+POut.String(emailAddress.SMTPserver)+"', "
+				+"EmailUsername     = '"+POut.String(emailAddress.EmailUsername)+"', "
+				+"EmailPassword     = '"+POut.String(emailAddress.EmailPassword)+"', "
+				+"ServerPort        =  "+POut.Int   (emailAddress.ServerPort)+", "
+				+"UseSSL            =  "+POut.Bool  (emailAddress.UseSSL)+", "
+				+"SenderAddress     = '"+POut.String(emailAddress.SenderAddress)+"', "
+				+"SMTPserverIncoming= '"+POut.String(emailAddress.SMTPserverIncoming)+"', "
+				+"ServerPortIncoming=  "+POut.Int   (emailAddress.ServerPortIncoming)+" "
 				+"WHERE EmailAddressNum = "+POut.Long(emailAddress.EmailAddressNum);
 			Db.NonQ(command);
 		}
@@ -152,6 +158,14 @@ namespace OpenDentBusiness.Crud{
 			if(emailAddress.SenderAddress != oldEmailAddress.SenderAddress) {
 				if(command!=""){ command+=",";}
 				command+="SenderAddress = '"+POut.String(emailAddress.SenderAddress)+"'";
+			}
+			if(emailAddress.SMTPserverIncoming != oldEmailAddress.SMTPserverIncoming) {
+				if(command!=""){ command+=",";}
+				command+="SMTPserverIncoming = '"+POut.String(emailAddress.SMTPserverIncoming)+"'";
+			}
+			if(emailAddress.ServerPortIncoming != oldEmailAddress.ServerPortIncoming) {
+				if(command!=""){ command+=",";}
+				command+="ServerPortIncoming = "+POut.Int(emailAddress.ServerPortIncoming)+"";
 			}
 			if(command==""){
 				return;
